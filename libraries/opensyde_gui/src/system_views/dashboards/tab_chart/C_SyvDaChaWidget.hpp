@@ -47,7 +47,6 @@ public:
    void SetDashboardIndex(const uint32_t ou32_Value) override;
 
    void SetEditMode(const bool oq_Active) override;
-   void SetDarkMode(const bool oq_Active) override;
    void SetDrawingActive(const bool oq_Active) override;
    void Save(void) override;
 
@@ -89,7 +88,6 @@ protected:
 private:
    Ui::C_SyvDaChaWidget * mpc_Ui;
    bool mq_InitialStyleCall;
-   bool mq_DarkMode;
    bool mq_DrawingActive;
    bool mq_EditMode;
    bool mq_IsConnected;

@@ -54,85 +54,40 @@ C_SyvDaItTaDelegate::C_SyvDaItTaDelegate(QObject * const opc_Parent) :
 /*! \brief   Apply style
 
    \param[in] oe_Style    New style type
-   \param[in] oq_DarkMode Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItTaDelegate::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode)
+void C_SyvDaItTaDelegate::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
    switch (oe_Style)
    {
    case C_PuiSvDbWidgetBase::eOPENSYDE:
-      if (oq_DarkMode == true)
-      {
-         this->mc_BarColor = mc_STYLE_GUIDE_COLOR_24;
-         this->mc_BackgroundColorDefault = mc_STYLE_GUIDE_COLOR_36;
-         this->mc_BackgroundColorAlternating = mc_STYLE_GUIDE_COLOR_8;
-         this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_2_50P;
-         this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_2;
-      }
-      else
-      {
-         this->mc_BarColor = mc_STYLE_GUIDE_COLOR_23;
-         this->mc_BackgroundColorDefault = mc_STYLE_GUIDE_COLOR_12;
-         this->mc_BackgroundColorAlternating = mc_STYLE_GUIDE_COLOR_11;
-         this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_10;
-         this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_7;
-      }
+      this->mc_BarColor = mc_STYLE_GUIDE_COLOR_23;
+      this->mc_BackgroundColorDefault = mc_STYLE_GUIDE_COLOR_12;
+      this->mc_BackgroundColorAlternating = mc_STYLE_GUIDE_COLOR_11;
+      this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_10;
+      this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_7;
       break;
 
    case C_PuiSvDbWidgetBase::eFLAT:
-      if (oq_DarkMode == true)
-      {
-         this->mc_BarColor = mc_STYLE_GUIDE_COLOR_23;
-         this->mc_BackgroundColorDefault = mc_STYLE_GUIDE_COLOR_39;
-         this->mc_BackgroundColorAlternating = mc_STYLE_GUIDE_COLOR_34;
-         this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_9;
-         this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_9;
-      }
-      else
-      {
-         this->mc_BarColor = mc_STYLE_GUIDE_COLOR_24;
-         this->mc_BackgroundColorDefault = mc_STYLE_GUIDE_COLOR_11;
-         this->mc_BackgroundColorAlternating = mc_STYLE_GUIDE_COLOR_38;
-         this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_26_40P;
-         this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_26_40P;
-      }
+      this->mc_BarColor = mc_STYLE_GUIDE_COLOR_24;
+      this->mc_BackgroundColorDefault = mc_STYLE_GUIDE_COLOR_11;
+      this->mc_BackgroundColorAlternating = mc_STYLE_GUIDE_COLOR_38;
+      this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_26_40P;
+      this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_26_40P;
       break;
    case C_PuiSvDbWidgetBase::eSKEUOMORPH:
-      if (oq_DarkMode == true)
-      {
-         this->mc_BarColor = mc_STYLE_GUIDE_COLOR_23;
-         this->mc_BackgroundColorDefault = mc_STYLE_GUIDE_COLOR_34;
-         this->mc_BackgroundColorAlternating = mc_STYLE_GUIDE_COLOR_33;
-         this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_9;
-         this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_9;
-      }
-      else
-      {
-         this->mc_BarColor = mc_STYLE_GUIDE_COLOR_23;
-         this->mc_BackgroundColorDefault = mc_STYLE_GUIDE_COLOR_11;
-         this->mc_BackgroundColorAlternating = mc_STYLE_GUIDE_COLOR_37;
-         this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_35;
-         this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_35;
-      }
+      this->mc_BarColor = mc_STYLE_GUIDE_COLOR_23;
+      this->mc_BackgroundColorDefault = mc_STYLE_GUIDE_COLOR_11;
+      this->mc_BackgroundColorAlternating = mc_STYLE_GUIDE_COLOR_37;
+      this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_35;
+      this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_35;
       break;
    case C_PuiSvDbWidgetBase::eOPENSYDE_2:
-      if (oq_DarkMode == true)
-      {
-         this->mc_BarColor = mc_STYLE_GUIDE_COLOR_23;
-         this->mc_BackgroundColorDefault = Qt::transparent;     //mc_STYLE_GUIDE_COLOR_34;//50;
-         this->mc_BackgroundColorAlternating = Qt::transparent; //mc_STYLE_GUIDE_COLOR_34;//50;
-         this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_9;
-         this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_9;
-      }
-      else
-      {
-         this->mc_BarColor = mc_STYLE_GUIDE_COLOR_23;
-         this->mc_BackgroundColorDefault = Qt::transparent;     //mc_STYLE_GUIDE_COLOR_38;//45;
-         this->mc_BackgroundColorAlternating = Qt::transparent; //mc_STYLE_GUIDE_COLOR_38;//45;
-         this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_25;
-         this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_25;
-      }
+      this->mc_BarColor = mc_STYLE_GUIDE_COLOR_23;
+      this->mc_BackgroundColorDefault = Qt::transparent;
+      this->mc_BackgroundColorAlternating = Qt::transparent;
+      this->mc_BackgroundColorSelection = mc_STYLE_GUIDE_COLOR_25;
+      this->mc_BorderColorHover = mc_STYLE_GUIDE_COLOR_25;
       break;
 
    default:

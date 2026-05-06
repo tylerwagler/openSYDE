@@ -33,7 +33,7 @@ class C_SyvDaPePieChart :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaPePieChart(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode);
+   explicit C_SyvDaPePieChart(C_SyvDaPeBase & orc_Parent);
    ~C_SyvDaPePieChart(void) override;
 
    void InitStaticNames(void) const;

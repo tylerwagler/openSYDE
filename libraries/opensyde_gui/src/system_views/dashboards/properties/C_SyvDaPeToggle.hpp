@@ -35,7 +35,7 @@ class C_SyvDaPeToggle :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaPeToggle(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode);
+   explicit C_SyvDaPeToggle(C_SyvDaPeBase & orc_Parent);
    ~C_SyvDaPeToggle(void) override;
 
    void InitStaticNames(void) const;

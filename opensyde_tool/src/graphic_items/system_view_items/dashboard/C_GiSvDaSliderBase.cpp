@@ -103,14 +103,13 @@ int32_t C_GiSvDaSliderBase::type(void) const
 /*! \brief   Apply style
 
    \param[in]  oe_Style       New style type
-   \param[in]  oq_DarkMode    Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaSliderBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode)
+void C_GiSvDaSliderBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
-   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style, oq_DarkMode);
+   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style);
 
-   this->mpc_SliderWidget->SetCurrentStyle(oe_Style, oq_DarkMode);
+   this->mpc_SliderWidget->SetCurrentStyle(oe_Style);
    if (this->ms32_Index >= 0)
    {
       const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
@@ -336,8 +335,8 @@ bool C_GiSvDaSliderBase::CallProperties(void)
          }
 
          pc_Dialog = new C_SyvDaPeBase(*c_New, this->mu32_ViewIndex, this->mu32_DashboardIndex, "Slider", c_ElementId,
-                                       c_Scaling, true, c_FormatterConfig, false, this->mq_DarkMode);
-         pc_PropertiesWidget = new C_SyvDaPeSlider(*pc_Dialog, this->mq_DarkMode);
+                                       c_Scaling, true, c_FormatterConfig, false);
+         pc_PropertiesWidget = new C_SyvDaPeSlider(*pc_Dialog);
 
          pc_Dialog->SetWidget(pc_PropertiesWidget);
          pc_Dialog->SetTheme(pc_Box->e_DisplayStyle);
@@ -409,7 +408,7 @@ bool C_GiSvDaSliderBase::CallProperties(void)
 
             //Update style after data update
             {
-               this->SetDisplayStyle(this->me_Style, this->mq_DarkMode);
+               this->SetDisplayStyle(this->me_Style);
                this->mpc_SliderWidget->SetShowMinMax(c_Box.q_ShowMinMax);
                this->ReInitializeSize();
             }

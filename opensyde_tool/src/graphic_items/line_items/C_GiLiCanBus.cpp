@@ -92,7 +92,7 @@ bool C_GiLiCanBus::OpenStyleDialog(void)
    QGraphicsView * const pc_View = this->scene()->views().at(0);
 
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(pc_View, pc_View);
-   C_GiSyBaseWidget * const pc_Dialog = new C_GiSyBaseWidget(*c_New, "CAN Bus", false);
+   C_GiSyBaseWidget * const pc_Dialog = new C_GiSyBaseWidget(*c_New, "CAN Bus");
    C_GiSyLineWidget * const pc_SettingsWidget = new C_GiSyLineWidget(C_GiSyLineWidget::E_Type::eCAN_BUS, *pc_Dialog);
 
    const QSize c_SIZE(880, 506);

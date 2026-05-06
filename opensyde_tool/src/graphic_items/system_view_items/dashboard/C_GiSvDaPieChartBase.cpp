@@ -96,12 +96,11 @@ int32_t C_GiSvDaPieChartBase::type(void) const
 /*! \brief   Apply style
 
    \param[in] oe_Style    New style type
-   \param[in] oq_DarkMode Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaPieChartBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode)
+void C_GiSvDaPieChartBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
-   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style, oq_DarkMode);
+   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style);
 
    if (this->ms32_Index >= 0)
    {
@@ -112,7 +111,7 @@ void C_GiSvDaPieChartBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe
          tgl_assert(pc_Box != NULL);
          if (pc_Box != NULL)
          {
-            this->mpc_PieChartWidget->SetDisplayStyle(oe_Style, oq_DarkMode, pc_Box->q_ShowUnit, pc_Box->q_ShowValue);
+            this->mpc_PieChartWidget->SetDisplayStyle(oe_Style, pc_Box->q_ShowUnit, pc_Box->q_ShowValue);
          }
       }
    }
@@ -142,7 +141,7 @@ void C_GiSvDaPieChartBase::LoadData(void)
       if (pc_Box != NULL)
       {
          this->LoadSvBasicData(*pc_Box);
-         this->mpc_PieChartWidget->SetDisplayStyle(this->me_Style, this->mq_DarkMode, pc_Box->q_ShowUnit,
+         this->mpc_PieChartWidget->SetDisplayStyle(this->me_Style, pc_Box->q_ShowUnit,
                                                    pc_Box->q_ShowValue);
          this->m_UpdateStaticValues();
       }
@@ -281,8 +280,8 @@ bool C_GiSvDaPieChartBase::CallProperties(void)
             C_SyvDaPePieChart * pc_PropertiesWidget;
 
             pc_Dialog = new C_SyvDaPeBase(*c_New, this->mu32_ViewIndex, this->mu32_DashboardIndex, "Pie Chart",
-                                          c_ElementId, c_Scaling, true, c_FormatterConfig, true, this->mq_DarkMode);
-            pc_PropertiesWidget = new C_SyvDaPePieChart(*pc_Dialog, this->mq_DarkMode);
+                                          c_ElementId, c_Scaling, true, c_FormatterConfig, true);
+            pc_PropertiesWidget = new C_SyvDaPePieChart(*pc_Dialog);
 
             pc_Dialog->SetWidget(pc_PropertiesWidget);
             pc_Dialog->SetTheme(pc_Box->e_DisplayStyle);
@@ -315,10 +314,10 @@ bool C_GiSvDaPieChartBase::CallProperties(void)
                //Force update
                this->mq_InitialStyleCall = true;
                //Apply
-               this->SetDisplayStyle(this->me_Style, this->mq_DarkMode);
+               this->SetDisplayStyle(this->me_Style);
                if (this->mpc_PieChartWidget != NULL)
                {
-                  this->mpc_PieChartWidget->SetDisplayStyle(this->me_Style, this->mq_DarkMode, c_Box.q_ShowUnit,
+                  this->mpc_PieChartWidget->SetDisplayStyle(this->me_Style, c_Box.q_ShowUnit,
                                                             c_Box.q_ShowValue);
                }
                this->ClearDataPoolElements();
@@ -362,7 +361,7 @@ void C_GiSvDaPieChartBase::UpdateTypePe(const bool oq_ShowUnit, const bool oq_Sh
 {
    if (this->mpc_PieChartWidget != NULL)
    {
-      this->mpc_PieChartWidget->SetDisplayStyle(this->me_Style, this->mq_DarkMode, oq_ShowUnit, oq_ShowValue);
+      this->mpc_PieChartWidget->SetDisplayStyle(this->me_Style, oq_ShowUnit, oq_ShowValue);
    }
 }
 

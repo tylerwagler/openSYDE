@@ -39,17 +39,15 @@ using namespace stw::opensyde_gui_logic;
 
    \param[in,out] opc_Scene   Pointer to currently active scene
    \param[in]     orc_Ids     Affected unique IDs
-   \param[in]     oq_DarkMode Optional flag if dark mode is active
    \param[in,out] opc_Parent  Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoSetupStyleCommand::C_SebUnoSetupStyleCommand(QGraphicsScene * const opc_Scene,
-                                                     const std::vector<uint64_t> & orc_Ids, const bool oq_DarkMode,
+                                                     const std::vector<uint64_t> & orc_Ids,
                                                      QUndoCommand * const opc_Parent) :
    C_SebUnoBaseCommand(opc_Scene, orc_Ids, "Change drawing element(s) style", opc_Parent),
    mpc_PreviousState(new C_PuiBsElements()),
-   mpc_NextState(new C_PuiBsElements()),
-   mq_DarkMode(oq_DarkMode)
+   mpc_NextState(new C_PuiBsElements())
 {
 }
 
@@ -159,16 +157,8 @@ void C_SebUnoSetupStyleCommand::m_Restore(const QMap<uint64_t, C_PuiBsTemporaryD
                //Content
                {
                   const C_PuiBsBoundary & rc_UiBoundary = opc_Snapshot->c_Boundaries[c_Entry.value().u32_Index];
-                  if (this->mq_DarkMode == true)
-                  {
-                     pc_Boundary->SetBorderColor(rc_UiBoundary.c_UiBorderColorDark);
-                     pc_Boundary->SetBackgroundColor(rc_UiBoundary.c_UiBackgroundColorDark);
-                  }
-                  else
-                  {
-                     pc_Boundary->SetBorderColor(rc_UiBoundary.c_UiBorderColorBright);
-                     pc_Boundary->SetBackgroundColor(rc_UiBoundary.c_UiBackgroundColorBright);
-                  }
+                  pc_Boundary->SetBorderColor(rc_UiBoundary.c_UiBorderColorBright);
+                  pc_Boundary->SetBackgroundColor(rc_UiBoundary.c_UiBackgroundColorBright);
                   pc_Boundary->SetBorderWidth(rc_UiBoundary.s32_UiBorderWidth);
                }
             }
@@ -184,16 +174,7 @@ void C_SebUnoSetupStyleCommand::m_Restore(const QMap<uint64_t, C_PuiBsTemporaryD
                //Content
                {
                   const C_PuiBsTextElement & rc_UiTextElement = opc_Snapshot->c_TextElements[c_Entry.value().u32_Index];
-                  QColor c_Color;
-                  if (this->mq_DarkMode == true)
-                  {
-                     c_Color = rc_UiTextElement.c_UiFontColorDark;
-                  }
-                  else
-                  {
-                     c_Color = rc_UiTextElement.c_UiFontColorBright;
-                  }
-                  pc_TextElement->ApplyStyle(rc_UiTextElement.c_UiFontStyle, c_Color);
+                  pc_TextElement->ApplyStyle(rc_UiTextElement.c_UiFontStyle, rc_UiTextElement.c_UiFontColorBright);
                }
             }
          }
@@ -256,16 +237,8 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
             //Content
             {
                C_PuiBsBoundary & rc_UiBoundary = opc_Snapshot->c_Boundaries[u32_Index];
-               if (this->mq_DarkMode == true)
-               {
-                  rc_UiBoundary.c_UiBackgroundColorDark = pc_Boundary->GetBackgroundColor();
-                  rc_UiBoundary.c_UiBorderColorDark = pc_Boundary->GetBorderColor();
-               }
-               else
-               {
-                  rc_UiBoundary.c_UiBackgroundColorBright = pc_Boundary->GetBackgroundColor();
-                  rc_UiBoundary.c_UiBorderColorBright = pc_Boundary->GetBorderColor();
-               }
+               rc_UiBoundary.c_UiBackgroundColorBright = pc_Boundary->GetBackgroundColor();
+               rc_UiBoundary.c_UiBorderColorBright = pc_Boundary->GetBorderColor();
                rc_UiBoundary.s32_UiBorderWidth = pc_Boundary->GetBorderWidth();
             }
          }
@@ -283,14 +256,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
             //Content
             {
                C_PuiBsTextElement & rc_UiTextElement = opc_Snapshot->c_TextElements[u32_Index];
-               if (this->mq_DarkMode)
-               {
-                  rc_UiTextElement.c_UiFontColorDark = pc_TextElement->GetFontColor();
-               }
-               else
-               {
-                  rc_UiTextElement.c_UiFontColorBright = pc_TextElement->GetFontColor();
-               }
+               rc_UiTextElement.c_UiFontColorBright = pc_TextElement->GetFontColor();
                rc_UiTextElement.c_UiFontStyle = pc_TextElement->GetFontStyle();
             }
          }

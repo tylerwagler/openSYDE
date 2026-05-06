@@ -96,13 +96,7 @@ void C_GiSvDaArrow::LoadData(void)
                pc_Dashboard->GetLineArrow(static_cast<uint32_t>(this->ms32_Index));
             if (pc_Item != NULL)
             {
-               C_PuiBsLineArrow c_Copy = *pc_Item;
-               //Dark mode work around
-               if (pc_View->GetDarkModeActive() == true)
-               {
-                  c_Copy.c_UiColor = c_Copy.c_UiColorDark;
-               }
-               m_LoadFromData(c_Copy);
+               m_LoadFromData(*pc_Item);
             }
          }
       }
@@ -131,13 +125,6 @@ void C_GiSvDaArrow::UpdateData(void)
                C_PuiBsLineArrow c_Item = *pc_Item;
 
                m_UpdateData(c_Item);
-
-               //Dark mode work around
-               if (pc_View->GetDarkModeActive() == true)
-               {
-                  c_Item.c_UiColorDark = c_Item.c_UiColor;
-                  c_Item.c_UiColor = pc_Item->c_UiColor;
-               }
 
                C_PuiSvHandler::h_GetInstance()->SetDashboardLineArrow(this->mu32_ViewIndex, this->mu32_DashboardIndex,
                                                                       static_cast<uint32_t>(this->ms32_Index), c_Item);

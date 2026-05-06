@@ -53,51 +53,27 @@ C_OgeDashboardProgressBar::C_OgeDashboardProgressBar(QWidget * const opc_Parent)
 /*! \brief   Apply style
 
    \param[in] oe_Style    New style type
-   \param[in] oq_DarkMode Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeDashboardProgressBar::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode)
+void C_OgeDashboardProgressBar::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
    this->me_Style = oe_Style;
-   if (oq_DarkMode == false)
+   switch (oe_Style)
    {
-      switch (oe_Style)
-      {
-      case C_PuiSvDbWidgetBase::eOPENSYDE:
-         this->mc_BackgroundColor = mc_STYLE_GUIDE_COLOR_10;
-         this->mc_ProgressColor = mc_STYLE_GUIDE_COLOR_7;
-         this->ms32_Offset = 1;
-         break;
-      case C_PuiSvDbWidgetBase::eFLAT:
-         this->mc_BackgroundColor = mc_STYLE_GUIDE_COLOR_10;
-         this->mc_ProgressColor = mc_STYLE_GUIDE_COLOR_26;
-         this->ms32_Offset = 1;
-         break;
-      case C_PuiSvDbWidgetBase::eSKEUOMORPH:
-      case C_PuiSvDbWidgetBase::eOPENSYDE_2:
-      default:
-         break;
-      }
-   }
-   else
-   {
-      switch (oe_Style)
-      {
-      case C_PuiSvDbWidgetBase::eOPENSYDE:
-         this->mc_BackgroundColor = mc_STYLE_GUIDE_COLOR_36;
-         this->mc_ProgressColor = mc_STYLE_GUIDE_COLOR_2;
-         this->ms32_Offset = 1;
-         break;
-      case C_PuiSvDbWidgetBase::eFLAT:
-         this->mc_BackgroundColor = mc_STYLE_GUIDE_COLOR_32;
-         this->mc_ProgressColor = mc_STYLE_GUIDE_COLOR_26;
-         this->ms32_Offset = 1;
-         break;
-      case C_PuiSvDbWidgetBase::eSKEUOMORPH:
-      case C_PuiSvDbWidgetBase::eOPENSYDE_2:
-      default:
-         break;
-      }
+   case C_PuiSvDbWidgetBase::eOPENSYDE:
+      this->mc_BackgroundColor = mc_STYLE_GUIDE_COLOR_10;
+      this->mc_ProgressColor = mc_STYLE_GUIDE_COLOR_7;
+      this->ms32_Offset = 1;
+      break;
+   case C_PuiSvDbWidgetBase::eFLAT:
+      this->mc_BackgroundColor = mc_STYLE_GUIDE_COLOR_10;
+      this->mc_ProgressColor = mc_STYLE_GUIDE_COLOR_26;
+      this->ms32_Offset = 1;
+      break;
+   case C_PuiSvDbWidgetBase::eSKEUOMORPH:
+   case C_PuiSvDbWidgetBase::eOPENSYDE_2:
+   default:
+      break;
    }
 }
 
@@ -343,9 +319,7 @@ void C_OgeDashboardProgressBar::resizeEvent(QResizeEvent * const opc_Event)
    if (this->orientation() == Qt::Horizontal)
    {
       const QString c_Border =
-         static_cast<QString>("stw--opensyde_gui_elements--C_OgeDashboardProgressBar[Style=\"SKEUOMORPH_DARK\"],"
-                              "stw--opensyde_gui_elements--C_OgeDashboardProgressBar[Style=\"SKEUOMORPH_DARK\"]::chunk,"
-                              "stw--opensyde_gui_elements--C_OgeDashboardProgressBar[Style=\"SKEUOMORPH_BRIGHT\"],"
+         static_cast<QString>("stw--opensyde_gui_elements--C_OgeDashboardProgressBar[Style=\"SKEUOMORPH_BRIGHT\"],"
                               "stw--opensyde_gui_elements--C_OgeDashboardProgressBar[Style=\"SKEUOMORPH_BRIGHT\"]::chunk"
                               "{border-radius:%1px;}").arg((this->size().height() * 3) / 10);
       this->setStyleSheet(c_Border);
@@ -353,9 +327,7 @@ void C_OgeDashboardProgressBar::resizeEvent(QResizeEvent * const opc_Event)
    else
    {
       const QString c_Border =
-         static_cast<QString>("stw--opensyde_gui_elements--C_OgeDashboardProgressBar[Style=\"SKEUOMORPH_DARK\"],"
-                              "stw--opensyde_gui_elements--C_OgeDashboardProgressBar[Style=\"SKEUOMORPH_DARK\"]::chunk,"
-                              "stw--opensyde_gui_elements--C_OgeDashboardProgressBar[Style=\"SKEUOMORPH_BRIGHT\"],"
+         static_cast<QString>("stw--opensyde_gui_elements--C_OgeDashboardProgressBar[Style=\"SKEUOMORPH_BRIGHT\"],"
                               "stw--opensyde_gui_elements--C_OgeDashboardProgressBar[Style=\"SKEUOMORPH_BRIGHT\"]::chunk"
                               "{border-radius:%1px;}").arg((this->size().width() * 25) / 1000);
       this->setStyleSheet(c_Border);

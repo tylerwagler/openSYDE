@@ -218,27 +218,6 @@ void C_OgeWiDashboardTab::DeactivateAdditionalActions(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set dark mode active
-
-   \param[in]  oq_Active   Dark mode active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OgeWiDashboardTab::SetDarkMode(const bool oq_Active)
-{
-   C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this, "DarkMode", oq_Active);
-   this->mpc_Ui->pc_PushButtonClose->SetDarkMode(oq_Active);
-
-   if (oq_Active == true)
-   {
-      this->mpc_Ui->pc_LabelChartIcon->SetSvg("://images/system_views/dashboards/tab_chart/IconChartTabDark.svg");
-   }
-   else
-   {
-      this->mpc_Ui->pc_LabelChartIcon->SetSvg("://images/system_views/dashboards/tab_chart/IconChartTab.svg");
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Function activate or deactivate interaction
 
    \param[in]  oq_Active   Flag if interaction available

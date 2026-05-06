@@ -51,8 +51,7 @@ C_OgePubSvgIconWithTextBase::C_OgePubSvgIconWithTextBase(QWidget * const opc_Par
    ms32_BottomBorderDisabledWidth(0),
    mq_IconLeft(true),
    ms32_MarginLeft(0),
-   ms32_MarginInBetween(0),
-   mq_Dark(false)
+   ms32_MarginInBetween(0)
 {
 }
 
@@ -195,14 +194,7 @@ void C_OgePubSvgIconWithTextBase::paintEvent(QPaintEvent * const opc_Event)
       //====
       if (this->isEnabled() == true)
       {
-         if (this->mq_Dark == true)
-         {
-            c_TextColor = this->mc_TextColorDarkMode;
-         }
-         else
-         {
-            c_TextColor = this->mc_TextColorEnabled;
-         }
+         c_TextColor = this->mc_TextColorEnabled;
       }
       else
       {
@@ -221,17 +213,6 @@ void C_OgePubSvgIconWithTextBase::paintEvent(QPaintEvent * const opc_Event)
       }
       c_Painter.drawText(c_TextRect, this->text(), c_Option);
    }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set dark flag value
-
-   \param[in]  oq_Active   New dark flag value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OgePubSvgIconWithTextBase::SetDarkMode(const bool oq_Active)
-{
-   this->mq_Dark = oq_Active;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

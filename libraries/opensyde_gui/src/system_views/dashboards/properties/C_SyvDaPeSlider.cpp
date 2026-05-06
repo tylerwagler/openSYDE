@@ -44,11 +44,10 @@ const int32_t C_SyvDaPeSlider::mhs32_INDEX_STYLE_TYPE2 = 1;
    Set up GUI with all elements.
 
    \param[in,out]  orc_Parent    Parent widget
-   \param[in]      oq_DarkMode   Flag for dark mode
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvDaPeSlider::C_SyvDaPeSlider(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode) :
-   C_SyvDaPePanelBase(orc_Parent, oq_DarkMode),
+C_SyvDaPeSlider::C_SyvDaPeSlider(C_SyvDaPeBase & orc_Parent) :
+   C_SyvDaPePanelBase(orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPeSlider)
 {
    mpc_Ui->setupUi(this);
@@ -223,7 +222,7 @@ void C_SyvDaPeSlider::m_UpdatePreview(void)
       (static_cast<float64_t>(c_ViewSize.height()) - c_ItemSize.height()) / 2.0);
 
    pc_Item->ApplySizeChange(c_ItemPos, c_ItemSize);
-   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme(), this->mq_DarkMode);
+   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme());
    pc_Item->UpdateTypePe(this->GetType(), this->GetShowMinMax());
    pc_Item->SetValuePe(75, 0, 100);
 

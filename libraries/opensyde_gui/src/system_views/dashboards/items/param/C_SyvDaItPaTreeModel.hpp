@@ -50,7 +50,6 @@ public:
 
    bool IsEmpty(void) const;
    void ReloadSetValues(void);
-   void SetDark(const bool oq_Value);
    void SetEditMode(const bool oq_EditMode);
    void SetConnected(const bool oq_Connected);
    void SetLoadSaveActive(const bool oq_Active);
@@ -113,7 +112,6 @@ public:
 
 private:
    C_PuiSvDbDataElementHandler * mpc_DataWidget;
-   bool mq_DarkMode;
    bool mq_EditMode;
    bool mq_Connected;
    bool mq_SaveLoadActive;

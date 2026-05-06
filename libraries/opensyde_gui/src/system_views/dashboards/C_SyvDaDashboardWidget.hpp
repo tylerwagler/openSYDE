@@ -49,7 +49,6 @@ public:
    QString GetName(void) const;
 
    void SetEditMode(const bool oq_Active);
-   void SetDarkMode(const bool oq_Active);
    void SetDrawingActive(const bool oq_Active) const;
    void Save(void) const;
 

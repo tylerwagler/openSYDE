@@ -52,8 +52,7 @@ public:
    bool IsMousePosRelevantForProxyWidgetInteraction(const QPointF & orc_ScenePos) const;
    bool IsOverrideCursorNecessary(const QPointF & orc_ScenePos, Qt::CursorShape & ore_Cursor) const;
 
-   virtual void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style,
-                                const bool oq_DarkMode);
+   virtual void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style);
    void SetDefaultCursor(const QCursor & orc_Value) override;
    virtual void ReInitializeSize(void) = 0;
 
@@ -150,7 +149,6 @@ protected:
    bool mq_AutoWriteOnConnect;
    stw::opensyde_gui_logic::C_PuiSvDbWriteWidgetBase::E_WriteMode me_WriteMode;
    stw::opensyde_gui_logic::C_PuiSvDbWriteWidgetBase::E_InitialValueModeType me_WriteInitialValueMode;
-   bool mq_DarkMode;
    float64_t mf64_WriteValue;
    QMap<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId, QString> mc_CommmunicationErrors;
    QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId, uint8_t> mc_InvalidDlcSignals;

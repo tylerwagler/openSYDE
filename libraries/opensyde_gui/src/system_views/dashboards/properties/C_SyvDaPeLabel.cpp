@@ -41,11 +41,10 @@ const int32_t C_SyvDaPeLabel::mhs32_INDEX_STYLE_TYPE_TRANSPARENT = 1;
    Set up GUI with all elements.
 
    \param[in,out]  orc_Parent    Parent widget
-   \param[in]      oq_DarkMode   Flag for dark mode
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvDaPeLabel::C_SyvDaPeLabel(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode) :
-   C_SyvDaPePanelBase(orc_Parent, oq_DarkMode),
+C_SyvDaPeLabel::C_SyvDaPeLabel(C_SyvDaPeBase & orc_Parent) :
+   C_SyvDaPePanelBase(orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPeLabel)
 {
    mpc_Ui->setupUi(this);
@@ -237,7 +236,7 @@ void C_SyvDaPeLabel::m_UpdatePreview(void)
 
    C_SyvDaPeBase::h_GetIdealItemRect(c_ItemPos, c_ItemSize, pc_Item);
 
-   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme(), this->mq_DarkMode);
+   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme());
    pc_Item->UpdateTypePe(this->GetType(), this->GetShowCaption(), this->GetShowUnit());
    pc_Item->SetCaptionPe("Temperature");
    pc_Item->SetUnitPe("°C");

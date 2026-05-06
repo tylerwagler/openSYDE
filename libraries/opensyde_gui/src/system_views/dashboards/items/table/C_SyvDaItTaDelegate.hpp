@@ -31,7 +31,7 @@ class C_SyvDaItTaDelegate :
 public:
    C_SyvDaItTaDelegate(QObject * const opc_Parent = NULL);
 
-   void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode);
+   void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style);
 
    void paint(QPainter * const opc_Painter, const QStyleOptionViewItem & orc_Option,
               const QModelIndex & orc_Index) const override;

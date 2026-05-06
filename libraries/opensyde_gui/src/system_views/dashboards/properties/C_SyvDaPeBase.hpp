@@ -44,7 +44,7 @@ public:
                           const stw::opensyde_gui_logic::C_PuiSvDbDataElementScaling & orc_Scaling,
                           const bool oq_UseFormatterConfig,
                           const stw::opensyde_gui_logic::C_PuiSvDbDataElementDisplayFormatter & orc_FormatterConfig,
-                          const bool oq_ReadElement, const bool oq_DarkMode,
+                          const bool oq_ReadElement,
                           const bool oq_ShowWidgetSpecificPart = true, const bool oq_AllowChangeOfDataElement = true,
                           const QString & orc_DisplayName = "");
    ~C_SyvDaPeBase(void) noexcept override;

@@ -94,10 +94,9 @@ int32_t C_GiSvDaLabelBase::type(void) const
 /*! \brief   Apply style
 
    \param[in] oe_Style    New style type
-   \param[in] oq_DarkMode Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaLabelBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode)
+void C_GiSvDaLabelBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
    // Apply style before calling the base function (required so size call can work properly)
    if (this->ms32_Index >= 0)
@@ -114,7 +113,7 @@ void C_GiSvDaLabelBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_St
       }
    }
 
-   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style, oq_DarkMode);
+   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -296,8 +295,8 @@ bool C_GiSvDaLabelBase::CallProperties(void)
 
          pc_Dialog = new C_SyvDaPeBase(*c_New, this->mu32_ViewIndex, this->mu32_DashboardIndex, "Value Label",
                                        c_ElementId,
-                                       c_Scaling, true, c_FormatterConfig, true, this->mq_DarkMode);
-         pc_PropertiesWidget = new C_SyvDaPeLabel(*pc_Dialog, this->mq_DarkMode);
+                                       c_Scaling, true, c_FormatterConfig, true);
+         pc_PropertiesWidget = new C_SyvDaPeLabel(*pc_Dialog);
 
          pc_Dialog->SetWidget(pc_PropertiesWidget);
          pc_Dialog->SetTheme(pc_Box->e_DisplayStyle);
@@ -340,7 +339,7 @@ bool C_GiSvDaLabelBase::CallProperties(void)
                                                                            static_cast<uint32_t>(this->ms32_Index),
                                                                            &c_Box, this->me_Type) == C_NO_ERR);
             //Apply
-            this->SetDisplayStyle(this->me_Style, this->mq_DarkMode);
+            this->SetDisplayStyle(this->me_Style);
             m_UpdateCaption(c_Box);
             this->UpdateTypePe(c_Box.e_Type, c_Box.q_ShowCaption, c_Box.q_ShowUnit);
             this->ClearDataPoolElements();

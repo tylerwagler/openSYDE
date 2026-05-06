@@ -97,12 +97,11 @@ int32_t C_GiSvDaProgressBarBase::type(void) const
 /*! \brief   Apply style
 
    \param[in] oe_Style    New style type
-   \param[in] oq_DarkMode Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaProgressBarBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode)
+void C_GiSvDaProgressBarBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
-   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style, oq_DarkMode);
+   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style);
 
    if (this->ms32_Index >= 0)
    {
@@ -115,7 +114,7 @@ void C_GiSvDaProgressBarBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style
          tgl_assert(pc_Box != NULL);
          if (pc_Box != NULL)
          {
-            this->mpc_ProgressBarWidget->SetDisplayStyle(oe_Style, pc_Box->e_Type, pc_Box->e_Alignment, oq_DarkMode);
+            this->mpc_ProgressBarWidget->SetDisplayStyle(oe_Style, pc_Box->e_Type, pc_Box->e_Alignment);
          }
       }
    }
@@ -150,8 +149,7 @@ void C_GiSvDaProgressBarBase::LoadData(void)
          this->LoadSvBasicData(*pc_Box);
          if (this->mpc_ProgressBarWidget != NULL)
          {
-            this->mpc_ProgressBarWidget->SetDisplayStyle(pc_Box->e_DisplayStyle, pc_Box->e_Type, pc_Box->e_Alignment,
-                                                         this->mq_DarkMode);
+            this->mpc_ProgressBarWidget->SetDisplayStyle(pc_Box->e_DisplayStyle, pc_Box->e_Type, pc_Box->e_Alignment);
             this->mpc_ProgressBarWidget->SetShowMinMax(pc_Box->q_ShowMinMax);
          }
          this->m_UpdateStaticValues();
@@ -275,8 +273,8 @@ bool C_GiSvDaProgressBarBase::CallProperties(void)
          }
 
          pc_Dialog = new C_SyvDaPeBase(*c_New, this->mu32_ViewIndex, this->mu32_DashboardIndex, "Bar",
-                                       c_ElementId, c_Scaling, true, c_FormatterConfig, true, this->mq_DarkMode);
-         pc_PropertiesWidget = new C_SyvDaPeProgressBar(*pc_Dialog, this->mq_DarkMode);
+                                       c_ElementId, c_Scaling, true, c_FormatterConfig, true);
+         pc_PropertiesWidget = new C_SyvDaPeProgressBar(*pc_Dialog);
 
          pc_Dialog->SetWidget(pc_PropertiesWidget);
          pc_Dialog->SetTheme(pc_Box->e_DisplayStyle);
@@ -311,7 +309,7 @@ bool C_GiSvDaProgressBarBase::CallProperties(void)
             //Force update
             this->mq_InitialStyleCall = true;
             //Apply
-            this->SetDisplayStyle(this->me_Style, this->mq_DarkMode);
+            this->SetDisplayStyle(this->me_Style);
             this->UpdateTypePe(c_Box.e_Type, c_Box.e_Alignment, c_Box.q_ShowMinMax);
             this->ClearDataPoolElements();
             if (c_Tmp.c_ElementId.GetIsValid())
@@ -359,7 +357,7 @@ void C_GiSvDaProgressBarBase::UpdateTypePe(const C_PuiSvDbProgressBar::E_Type oe
    {
       // helping value to remember the old type
       const C_PuiSvDbProgressBar::E_Type e_TypeOld = mpc_ProgressBarWidget->GetType();
-      this->mpc_ProgressBarWidget->SetDisplayStyle(this->me_Style, oe_Type, oe_Alignment, this->mq_DarkMode);
+      this->mpc_ProgressBarWidget->SetDisplayStyle(this->me_Style, oe_Type, oe_Alignment);
       this->mpc_ProgressBarWidget->SetShowMinMax(oq_ShowMinMax);
       // setting up the size of the progressbar on type-change
       switch (oe_Type)

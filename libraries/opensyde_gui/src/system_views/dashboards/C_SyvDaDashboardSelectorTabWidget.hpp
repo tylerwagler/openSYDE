@@ -93,7 +93,7 @@ private:
    void m_WidgetComeBack(C_SyvDaTearOffWidget * const opc_Widget);
    void m_MakeScreenshot(const int32_t os32_Index);
    void m_InitTabStyle(const uint32_t ou32_Index, const QString & orc_Name, const QString & orc_Comment,
-                       const bool oq_Active, const bool oq_Dark);
+                       const bool oq_Active);
    void m_CurrentChanged(const int32_t os32_CurrentIndex) const;
    void m_OnAddClicked(void);
    void m_RepositionAddButton(void);

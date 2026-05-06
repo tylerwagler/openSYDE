@@ -43,7 +43,6 @@ public:
    void SetActive(const bool oq_Value);
    void SetCloseButtonVisibility(const bool oq_Visibility);
    void DeactivateAdditionalActions(void);
-   void SetDarkMode(const bool oq_Active);
    void SetInteractive(const bool oq_Active);
    void SetTabIconVisibility(const bool oq_Visibility) const;
 

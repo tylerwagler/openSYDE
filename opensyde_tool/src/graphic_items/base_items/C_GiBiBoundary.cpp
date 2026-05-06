@@ -119,19 +119,17 @@ int32_t C_GiBiBoundary::type(void) const
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Open style dialog
 
-   \param[in] oq_DarkMode Optional dark mode flag
-
    \retval true   style dialog was accepted
    \retval false  style dialog was rejected
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_GiBiBoundary::OpenStyleDialog(const bool oq_DarkMode)
+bool C_GiBiBoundary::OpenStyleDialog(void)
 {
    bool q_Retval;
    QGraphicsView * const pc_View = this->scene()->views().at(0);
 
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(pc_View, pc_View);
-   C_GiSyBaseWidget * const pc_Dialog = new C_GiSyBaseWidget(*c_New, C_GtGetText::h_GetText("Boundary"), oq_DarkMode);
+   C_GiSyBaseWidget * const pc_Dialog = new C_GiSyBaseWidget(*c_New, C_GtGetText::h_GetText("Boundary"));
    C_GiSyBoundaryWidget * const pc_SettingsWidget = new C_GiSyBoundaryWidget(*pc_Dialog);
 
    const QSize c_SIZE(880, 506);
@@ -279,22 +277,13 @@ void C_GiBiBoundary::m_ResizeUpdateItems(const float64_t of64_DiffWidth, const f
 /*! \brief  Load from internal data
 
    \param[in] orc_Data    Boundary data
-   \param[in] oq_DarkMode Optional dark mode flag
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiBiBoundary::m_LoadFromData(const C_PuiBsBoundary & orc_Data, const bool oq_DarkMode)
+void C_GiBiBoundary::m_LoadFromData(const C_PuiBsBoundary & orc_Data)
 {
    this->LoadBasicData(orc_Data);
-   if (oq_DarkMode == true)
-   {
-      this->SetBackgroundColor(orc_Data.c_UiBackgroundColorDark);
-      this->SetBorderColor(orc_Data.c_UiBorderColorDark);
-   }
-   else
-   {
-      this->SetBackgroundColor(orc_Data.c_UiBackgroundColorBright);
-      this->SetBorderColor(orc_Data.c_UiBorderColorBright);
-   }
+   this->SetBackgroundColor(orc_Data.c_UiBackgroundColorBright);
+   this->SetBorderColor(orc_Data.c_UiBorderColorBright);
    this->SetBorderWidth(orc_Data.s32_UiBorderWidth);
 }
 
@@ -302,22 +291,13 @@ void C_GiBiBoundary::m_LoadFromData(const C_PuiBsBoundary & orc_Data, const bool
 /*! \brief  Update internal data
 
    \param[in] orc_Data    Boundary data
-   \param[in] oq_DarkMode Optional dark mode flag
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiBiBoundary::m_UpdateData(C_PuiBsBoundary & orc_Data, const bool oq_DarkMode) const
+void C_GiBiBoundary::m_UpdateData(C_PuiBsBoundary & orc_Data) const
 {
    this->UpdateBasicData(orc_Data);
 
-   if (oq_DarkMode == true)
-   {
-      orc_Data.c_UiBorderColorDark = this->GetBorderColor();
-      orc_Data.c_UiBackgroundColorDark = this->GetBackgroundColor();
-   }
-   else
-   {
-      orc_Data.c_UiBorderColorBright = this->GetBorderColor();
-      orc_Data.c_UiBackgroundColorBright = this->GetBackgroundColor();
-   }
+   orc_Data.c_UiBorderColorBright = this->GetBorderColor();
+   orc_Data.c_UiBackgroundColorBright = this->GetBackgroundColor();
    orc_Data.s32_UiBorderWidth = this->GetBorderWidth();
 }

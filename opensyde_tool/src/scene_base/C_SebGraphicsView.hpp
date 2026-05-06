@@ -62,9 +62,6 @@ public:
                     const QString & orc_ImageCaption = "");
    void HideToolTip(void);
 
-   //Dark mode
-   void SetDarkMode(const bool oq_DarkMode);
-
    //Scene
    void SetSceneAndConnect(QGraphicsScene * const opc_Scene);
    void ScrollTo(const QPointF & orc_ScenePosition, const QSizeF & orc_Size);
@@ -115,7 +112,6 @@ private:
    bool mq_ViewPortPosHorSet;
    bool mq_ViewPortPosVerSet;
    bool mq_ScrollingActive;
-   bool mq_DarkMode;
    QPoint mc_LastMouseEventPos;
    QPointF mc_DragMoveDistance;
 
@@ -128,7 +124,6 @@ private:
    bool mq_SubtleSurroundGradient;
    bool mq_DrawBackground;
    static const QColor mhc_GRADIENT_COLOR_LIGHT;
-   static const QColor mhc_GRADIENT_COLOR_DARK;
 
    // tool tip
    C_NagToolTipWithImage mc_ToolTip;

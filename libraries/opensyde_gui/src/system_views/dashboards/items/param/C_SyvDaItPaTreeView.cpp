@@ -212,17 +212,6 @@ void C_SyvDaItPaTreeView::RemoveValuesChangedFlag(const std::vector<C_OscNodeDat
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set dark flag value
-
-   \param[in]  oq_Value    New dark flag value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaTreeView::SetDark(const bool oq_Value)
-{
-   this->mc_Model.SetDark(oq_Value);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set edit mode status
 
    \param[in]  oq_EditMode    Edit mode active

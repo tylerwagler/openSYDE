@@ -81,13 +81,12 @@ void C_SyvDaUnoManager::DoDelete(const QList<QGraphicsItem *> & orc_Items)
    \param[in] oru64_UniqueId            Unique ID
    \param[in] orc_NewPos                Position
    \param[in] of64_ZetValue               Z value
-   \param[in] orq_DarkModeDefault       Dark mode flag
    \param[in] orc_AdditionalInformation Additional string information
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaUnoManager::DoAddGeneric(const C_PuiSvDbDataElement::E_Type & ore_Type, const uint64_t & oru64_UniqueId,
                                      const QPointF & orc_NewPos, const float64_t of64_ZetValue,
-                                     const bool & orq_DarkModeDefault, const QString & orc_AdditionalInformation)
+                                     const QString & orc_AdditionalInformation)
 {
    std::vector<uint64_t> c_Ids;
    C_SyvDaUnoAddCommand * pc_AddCommand;
@@ -95,7 +94,7 @@ void C_SyvDaUnoManager::DoAddGeneric(const C_PuiSvDbDataElement::E_Type & ore_Ty
    c_Ids.push_back(oru64_UniqueId);
    pc_AddCommand = new C_SyvDaUnoAddCommand(this->mpc_Scene, c_Ids, ore_Type, orc_NewPos, of64_ZetValue,
                                             orc_AdditionalInformation,
-                                            NULL, false, orq_DarkModeDefault);
+                                            NULL, false);
    this->DoPush(pc_AddCommand);
 }
 

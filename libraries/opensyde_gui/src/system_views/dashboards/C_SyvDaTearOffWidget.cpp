@@ -294,25 +294,6 @@ void C_SyvDaTearOffWidget::SetEditMode(const bool oq_Active)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Sets the dark mode
-
-   \param[in]  oq_Active   Dark mode active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaTearOffWidget::SetDarkMode(const bool oq_Active)
-{
-   if (this->mpc_Dashboard != NULL)
-   {
-      this->mpc_Dashboard->SetDarkMode(oq_Active);
-   }
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_GroupBox, "DarkMode", oq_Active);
-   this->mpc_Ui->pc_WidgetTab->SetDarkMode(oq_Active);
-   this->m_AdaptSpaceHolderWidgetColor();
-
-   mpc_ScreenshotDashboardTab->SetDarkModeActive(oq_Active);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Sets the confirm button enabled or disabled
 
    \param[in]  oq_Enabled  Flag for enabled

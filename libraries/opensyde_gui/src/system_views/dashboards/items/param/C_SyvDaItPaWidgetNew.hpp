@@ -49,7 +49,6 @@ public:
    void SetSyvComDriver(stw::opensyde_gui_logic::C_SyvComDriverDiag & orc_ComDriver);
    void UpdateEcuValues(void) const;
    bool HandleManualOperationFinished(const int32_t os32_Result, const uint8_t ou8_Nrc);
-   void SetDark(const bool oq_Value) const;
 
    void ButtonAddClicked(void);
 

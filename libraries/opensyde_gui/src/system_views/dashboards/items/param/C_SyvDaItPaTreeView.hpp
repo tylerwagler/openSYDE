@@ -46,7 +46,6 @@ public:
    void PrepareChangedValues(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds) const;
    void RemoveValuesChangedFlag(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds)
    const;
-   void SetDark(const bool oq_Value);
    void SetEditMode(const bool oq_EditMode);
    void SetCursorHandlingActive(const bool oq_Active);
    void SetConnected(const bool oq_Connected);

@@ -49,23 +49,20 @@ using namespace stw::opensyde_gui_logic;
    \param[in]     orc_AdditionalInformation         Additional string information
    \param[in,out] opc_Parent                        Optional pointer to parent
    \param[in]     orq_ForceUseAdditionalInformation Optional flag to force use of additional string information
-   \param[in]     orq_DarkModeDefault               Optional flag to change default values
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaUnoAddCommand::C_SyvDaUnoAddCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
                                            const C_PuiSvDbDataElement::E_Type & ore_Type, const QPointF & orc_NewPos,
                                            const float64_t of64_ZetValue, const QString & orc_AdditionalInformation,
                                            QUndoCommand * const opc_Parent,
-                                           const bool & orq_ForceUseAdditionalInformation,
-                                           const bool & orq_DarkModeDefault) :
+                                           const bool & orq_ForceUseAdditionalInformation) :
    C_SyvDaUnoAddBaseCommand(opc_Scene, orc_Ids, "Add drawing element(s)",
                             opc_Parent),
    me_Type(ore_Type),
    mc_NewPos(orc_NewPos),
    mf64_ZetValue(of64_ZetValue),
    mc_AdditionalInformation(orc_AdditionalInformation),
-   mq_ForceUseAdditionalInformation(orq_ForceUseAdditionalInformation),
-   mq_DarkModeDefault(orq_DarkModeDefault)
+   mq_ForceUseAdditionalInformation(orq_ForceUseAdditionalInformation)
 {
 }
 

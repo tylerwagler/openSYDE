@@ -193,17 +193,6 @@ void C_SyvDaDashboardWidget::SetEditMode(const bool oq_Active)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Sets the dark mode
-
-   \param[in]  oq_Active   Dark mode active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardWidget::SetDarkMode(const bool oq_Active)
-{
-   this->mpc_Content->SetDarkMode(oq_Active);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Function to activate or deactivate drawing of performance heavy widgets
 
    \param[in]  oq_Active   Flag if widgets should currently be drawn

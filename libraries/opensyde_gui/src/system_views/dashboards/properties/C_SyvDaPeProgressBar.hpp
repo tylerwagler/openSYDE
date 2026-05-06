@@ -36,7 +36,7 @@ class C_SyvDaPeProgressBar :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaPeProgressBar(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode);
+   explicit C_SyvDaPeProgressBar(C_SyvDaPeBase & orc_Parent);
    ~C_SyvDaPeProgressBar(void) override;
 
    void InitStaticNames(void) const;

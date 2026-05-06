@@ -110,7 +110,6 @@ C_GiSvDaRectBaseGroup::C_GiSvDaRectBaseGroup(const uint32_t & oru32_ViewIndex, c
    mq_AutoWriteOnConnect(false),
    me_WriteMode(C_PuiSvDbWriteWidgetBase::eWM_MANUAL),
    me_WriteInitialValueMode(C_PuiSvDbWriteWidgetBase::eIVM_DISABLED),
-   mq_DarkMode(false),
    mf64_WriteValue(0.0),
    mq_InitialStyleCall(true),
    mq_EditModeActive(false),
@@ -207,66 +206,33 @@ bool C_GiSvDaRectBaseGroup::IsOverrideCursorNecessary(const QPointF & orc_SceneP
 /*! \brief   Apply style
 
    \param[in] oe_Style    New style type
-   \param[in] oq_DarkMode Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaRectBaseGroup::SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style,
-                                            const bool oq_DarkMode)
+void C_GiSvDaRectBaseGroup::SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
-   if (((this->mq_InitialStyleCall == true) || (this->me_Style != oe_Style)) || (this->mq_DarkMode != oq_DarkMode))
+   if ((this->mq_InitialStyleCall == true) || (this->me_Style != oe_Style))
    {
       this->mq_InitialStyleCall = false;
       this->me_Style = oe_Style;
-      this->mq_DarkMode = oq_DarkMode;
 
       if (this->mpc_Widget != NULL)
       {
          switch (oe_Style)
          {
          case C_PuiSvDbWidgetBase::eOPENSYDE:
-            if (oq_DarkMode == true)
-            {
-               C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style", "OPENSYDE_DARK");
-            }
-            else
-            {
-               C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style",
-                                                                            "OPENSYDE_BRIGHT");
-            }
+            C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style",
+                                                                         "OPENSYDE_BRIGHT");
             break;
          case C_PuiSvDbWidgetBase::eOPENSYDE_2:
-            if (oq_DarkMode == true)
-            {
-               C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style",
-                                                                            "OPENSYDE_2_DARK");
-            }
-            else
-            {
-               C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style",
-                                                                            "OPENSYDE_2_BRIGHT");
-            }
+            C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style",
+                                                                         "OPENSYDE_2_BRIGHT");
             break;
          case C_PuiSvDbWidgetBase::eFLAT:
-            if (oq_DarkMode == true)
-            {
-               C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style", "FLAT_DARK");
-            }
-            else
-            {
-               C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style", "FLAT_BRIGHT");
-            }
+            C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style", "FLAT_BRIGHT");
             break;
          case C_PuiSvDbWidgetBase::eSKEUOMORPH:
-            if (oq_DarkMode == true)
-            {
-               C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style",
-                                                                            "SKEUOMORPH_DARK");
-            }
-            else
-            {
-               C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style",
-                                                                            "SKEUOMORPH_BRIGHT");
-            }
+            C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_Widget, "Style",
+                                                                         "SKEUOMORPH_BRIGHT");
             break;
          default:
             //Use default Qt style

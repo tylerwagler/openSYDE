@@ -43,7 +43,6 @@ public:
    void SetDashboardIndex(const uint32_t ou32_Value) override;
 
    void SetEditMode(const bool oq_Active) override;
-   void SetDarkMode(const bool oq_Active) override;
    void SetDrawingActive(const bool oq_Active) override;
    void Save(void) override;
 

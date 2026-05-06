@@ -36,7 +36,7 @@ class C_SyvDaPeSlider :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaPeSlider(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode);
+   explicit C_SyvDaPeSlider(C_SyvDaPeBase & orc_Parent);
    ~C_SyvDaPeSlider(void) override;
 
    void InitStaticNames(void) const;

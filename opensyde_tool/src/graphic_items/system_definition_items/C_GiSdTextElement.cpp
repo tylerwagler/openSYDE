@@ -78,7 +78,7 @@ void C_GiSdTextElement::LoadData(void)
       const C_PuiBsTextElement & rc_UiTextElementData =
          C_PuiSdHandler::h_GetInstance()->c_Elements.c_TextElements[static_cast<uint32_t>(this->ms32_Index)];
 
-      this->m_LoadTextElementData(&rc_UiTextElementData, false);
+      this->m_LoadTextElementData(&rc_UiTextElementData);
       //Object name for test
       this->setObjectName(static_cast<QString>("Meta: %1").arg(rc_UiTextElementData.c_UiText));
    }
@@ -95,7 +95,7 @@ void C_GiSdTextElement::UpdateData(void)
       C_PuiBsTextElement * const pc_Item =
          &C_PuiSdHandler::h_GetInstance()->c_Elements.c_TextElements[this->ms32_Index];
 
-      this->m_UpdateTextElementData(pc_Item, false);
+      this->m_UpdateTextElementData(pc_Item);
    }
 }
 

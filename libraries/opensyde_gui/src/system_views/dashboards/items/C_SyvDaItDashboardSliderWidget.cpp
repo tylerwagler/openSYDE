@@ -75,13 +75,11 @@ C_SyvDaItDashboardSliderWidget::~C_SyvDaItDashboardSliderWidget(void)
 /*! \brief   Set current style
 
    \param[in]  oe_Style    Widget style
-   \param[in]  oq_IsDark   Dark mode active flag
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItDashboardSliderWidget::SetCurrentStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style,
-                                                     const bool oq_IsDark) const
+void C_SyvDaItDashboardSliderWidget::SetCurrentStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style) const
 {
-   this->mpc_Ui->pc_HorizontalSlider->SetCurrentStyle(oe_Style, oq_IsDark);
+   this->mpc_Ui->pc_HorizontalSlider->SetCurrentStyle(oe_Style);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

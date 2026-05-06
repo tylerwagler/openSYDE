@@ -126,7 +126,6 @@ C_SyvDaChaPlotHandlerWidget::C_SyvDaChaPlotHandlerWidget(QWidget * const opc_Par
    mpc_Ui(new Ui::C_SyvDaChaPlotHandlerWidget),
    mq_Initialized(false),
    mq_DrawingActive(true),
-   mq_DarkMode(false),
    mu32_MaximumDataElements(1U),
    mf64_MaxValue(5.0),
    mf64_MinValue(0.0),
@@ -368,6 +367,8 @@ void C_SyvDaChaPlotHandlerWidget::Init(const uint32_t ou32_MaximumDataElements)
            this, &C_SyvDaChaPlotHandlerWidget::m_DataItemSelected);
 
    this->mq_Initialized = true;
+
+   this->m_ApplyDefaultTheme();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -567,102 +568,55 @@ void C_SyvDaChaPlotHandlerWidget::SetDisplayFormatterConfig(
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Apply dark mode
-
-   \param[in]  oq_DarkMode    Flag if dark mode is active
+/*! \brief   Apply default theme to chart UI
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaChaPlotHandlerWidget::SetDarkMode(const bool oq_DarkMode)
+void C_SyvDaChaPlotHandlerWidget::m_ApplyDefaultTheme(void)
 {
    QBrush c_BackgroundBrush;
 
    c_BackgroundBrush.setStyle(Qt::SolidPattern);
 
-   this->mq_DarkMode = oq_DarkMode;
-   if (oq_DarkMode == true)
-   {
-      this->mpc_Ui->pc_ControlWidget->SetBackgroundColor(32);
+   this->mpc_Ui->pc_ControlWidget->SetBackgroundColor(11);
 
-      // Color for background
-      c_BackgroundBrush.setColor(mc_STYLE_GUIDE_COLOR_33);
-      this->mpc_Ui->pc_Plot->setBackground(c_BackgroundBrush);
+   // Color for background
+   c_BackgroundBrush.setColor(mc_STYLE_GUIDE_COLOR_0);
+   this->mpc_Ui->pc_Plot->setBackground(c_BackgroundBrush);
 
-      // Color for the splitter
-      this->mpc_Ui->pc_Splitter->SetColor(mc_STYLE_GUIDE_COLOR_8);
+   // Color for the splitter
+   this->mpc_Ui->pc_Splitter->SetColor(mc_STYLE_GUIDE_COLOR_10);
 
-      // frame boxes
-      this->mpc_Ui->pc_FrameLeft->SetBorderColor(1000); // rgb(0,0,0) is unfortunately not specified
-      this->mpc_Ui->pc_FrameLeft->SetBackgroundColor(33);
-      this->mpc_Ui->pc_FrameRight->SetBorderColor(1000);
-      this->mpc_Ui->pc_FrameRight->SetBackgroundColor(33);
+   // frame boxes
+   this->mpc_Ui->pc_FrameLeft->SetBorderColor(10);
+   this->mpc_Ui->pc_FrameLeft->SetBackgroundColor(12);
+   this->mpc_Ui->pc_FrameRight->SetBorderColor(10);
+   this->mpc_Ui->pc_FrameRight->SetBackgroundColor(12);
 
-      // Customize the x axis and the x axis gridline
-      mh_AdaptAxisColor(this->mpc_Ui->pc_Plot->xAxis, mc_STYLE_GUIDE_COLOR_10, oq_DarkMode);
-      // The label is the only color of the axis in dark mode one with different color
-      this->mpc_Ui->pc_Plot->xAxis->setLabelColor(mc_STYLE_GUIDE_COLOR_CH4);
-      // Adapt all y axes grids
-      this->m_AdaptAllVerticalAxisGridColors(oq_DarkMode);
+   // Customize the x axis and the x axis gridline
+   mh_AdaptAxisColor(this->mpc_Ui->pc_Plot->xAxis, mc_STYLE_GUIDE_COLOR_CH3);
+   // The tick label is the only color of the axis in bright mode one with different color
+   this->mpc_Ui->pc_Plot->xAxis->setTickLabelColor(mc_STYLE_GUIDE_COLOR_9);
+   // Adapt all y axes grids
+   this->m_AdaptAllVerticalAxisGridColors();
 
-      // Colors for the data element view
-      this->mpc_Ui->pc_WidgetTitle->SetBackgroundColor(32);
-      this->mpc_Ui->pc_LabelTitle->SetForegroundColor(0);
-      this->mpc_Ui->pc_WiInfoTitle->SetBackgroundColor(32);
-      this->mpc_Ui->pc_WiInfoContent->SetBackgroundColor(33);
-   }
-   else
-   {
-      this->mpc_Ui->pc_ControlWidget->SetBackgroundColor(11);
-
-      // Color for background
-      c_BackgroundBrush.setColor(mc_STYLE_GUIDE_COLOR_0);
-      this->mpc_Ui->pc_Plot->setBackground(c_BackgroundBrush);
-
-      // Color for the splitter
-      this->mpc_Ui->pc_Splitter->SetColor(mc_STYLE_GUIDE_COLOR_10);
-
-      // frame boxes
-      this->mpc_Ui->pc_FrameLeft->SetBorderColor(10);
-      this->mpc_Ui->pc_FrameLeft->SetBackgroundColor(12);
-      this->mpc_Ui->pc_FrameRight->SetBorderColor(10);
-      this->mpc_Ui->pc_FrameRight->SetBackgroundColor(12);
-
-      // Customize the x axis and the x axis gridline
-      mh_AdaptAxisColor(this->mpc_Ui->pc_Plot->xAxis, mc_STYLE_GUIDE_COLOR_CH3, oq_DarkMode);
-      // The tick label is the only color of the axis in bright mode one with different color
-      this->mpc_Ui->pc_Plot->xAxis->setTickLabelColor(mc_STYLE_GUIDE_COLOR_9);
-      // Adapt all y axes grids
-      this->m_AdaptAllVerticalAxisGridColors(oq_DarkMode);
-
-      // Colors for the data element view
-      this->mpc_Ui->pc_WidgetTitle->SetBackgroundColor(11);
-      this->mpc_Ui->pc_LabelTitle->SetForegroundColor(3);
-      this->mpc_Ui->pc_WiInfoTitle->SetBackgroundColor(27);
-      this->mpc_Ui->pc_WiInfoContent->SetBackgroundColor(11);
-   }
+   // Colors for the data element view
+   this->mpc_Ui->pc_WidgetTitle->SetBackgroundColor(11);
+   this->mpc_Ui->pc_LabelTitle->SetForegroundColor(3);
+   this->mpc_Ui->pc_WiInfoTitle->SetBackgroundColor(27);
+   this->mpc_Ui->pc_WiInfoContent->SetBackgroundColor(11);
 
    // Color for frame separators of info box
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_FrameSeperatorBottom, "HasColor1000Background", oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_FrameSeperatorBottom, "HasColor7Background", !oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_FrameSeperatorTop, "HasColor1000Background", oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_FrameSeperatorTop, "HasColor27Background", !oq_DarkMode);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_FrameSeperatorBottom, "HasColor7Background", true);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_FrameSeperatorTop, "HasColor27Background", true);
 
    // Color for frame separators of button panel
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator1, "HasColor10Background", !oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator2, "HasColor10Background", !oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator3, "HasColor10Background", !oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator4, "HasColor10Background", !oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator1, "HasColor39Background", oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator2, "HasColor39Background", oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator3, "HasColor39Background", oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator4, "HasColor39Background", oq_DarkMode);
-
-   // Color for menus
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_MenuZoomMode, "DarkMode", oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_MenuCursorMode, "DarkMode", oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_MenuOptions, "DarkMode", oq_DarkMode);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator1, "HasColor10Background", true);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator2, "HasColor10Background", true);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator3, "HasColor10Background", true);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator4, "HasColor10Background", true);
 
    // Color for buttons
-   this->m_SetButtonIcons(oq_DarkMode);
+   this->m_SetButtonIcons();
    this->m_OnChangeZoomMode(this->mc_Data.e_SettingZoomMode);
 
    this->m_RedrawGraph();
@@ -1280,7 +1234,7 @@ void C_SyvDaChaPlotHandlerWidget::RefreshColors(void)
             c_Pen.setColor(c_Color);
             pc_Graph->setPen(c_Pen);
 
-            mh_AdaptAxisColor(pc_Graph->valueAxis(), c_Color, this->mq_DarkMode);
+            mh_AdaptAxisColor(pc_Graph->valueAxis(), c_Color);
          }
       }
    }
@@ -1452,7 +1406,7 @@ void C_SyvDaChaPlotHandlerWidget::m_AddGraph(const uint32_t ou32_DataPoolElement
       this->m_UpdateVerticalAxisLabel(ou32_DataPoolElementConfigIndex);
 
       // Adapt all axis colors for this data element
-      mh_AdaptAxisColor(pc_VerticalAxis, c_Color, this->mq_DarkMode);
+      mh_AdaptAxisColor(pc_VerticalAxis, c_Color);
 
       if (this->mc_Data.e_SettingVerticalAxisMode == C_PuiSvDbTabChart::eSETTING_YA_ALL_VISIBLE)
       {
@@ -1665,163 +1619,82 @@ void C_SyvDaChaPlotHandlerWidget::m_RangeChangedHorizontalAxis(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set icons depending on current dark / bright mode
-
-   \param[in]  oq_DarkMode    Flag if dark mode is active
+/*! \brief  Set icons for the chart buttons
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaChaPlotHandlerWidget::m_SetButtonIcons(const bool oq_DarkMode)
+void C_SyvDaChaPlotHandlerWidget::m_SetButtonIcons(void)
 {
-   this->mpc_Ui->pc_ButtonAddData->SetDarkMode(oq_DarkMode);
+   this->mpc_Ui->pc_PushButtonManualRead->SetSvg(
+      "://images/system_views/dashboards/tab_chart/IconUpdateValue.svg",
+      "://images/system_views/dashboards/tab_chart/IconUpdateValueDisabled.svg");
+   this->mpc_Ui->pc_PushButtonManualAbort->SetSvg(
+      "://images/system_views/dashboards/tab_chart/IconUpdateValueCancel.svg",
+      "://images/system_views/dashboards/tab_chart/IconUpdateValueDisabledCancel.svg");
 
-   if (oq_DarkMode == true)
+   this->mpc_Ui->pc_PushButtonPause->SetSvg(
+      "://images/system_views/dashboards/tab_chart/IconPause.svg",
+      "://images/system_views/dashboards/tab_chart/IconPauseDisabled.svg", "",
+      "://images/system_views/dashboards/tab_chart/IconPlay.svg",
+      "://images/system_views/dashboards/tab_chart/IconPlayDisabled.svg", "", "", "");
+
+   this->mpc_ActionZoomSettingHorizontal->setIcon(
+      QIcon("://images/system_views/dashboards/tab_chart/IconZoomAdjustX.svg"));
+   this->mpc_ActionZoomSettingVertical->setIcon(
+      QIcon("://images/system_views/dashboards/tab_chart/IconZoomAdjustY.svg"));
+   this->mpc_ActionZoomSettingHorizontalVertical->setIcon(
+      QIcon("://images/system_views/dashboards/tab_chart/IconZoomAdjustXY.svg"));
+
+   this->mpc_Ui->pc_PushButtonZoomVsDragMode->SetSvg(
+      "://images/system_views/dashboards/tab_chart/IconZoomSelection.svg",
+      "://images/system_views/dashboards/tab_chart/IconZoomSelectionDisabled.svg");
+
+   this->mpc_Ui->pc_PushButtonFitXY->SetSvg(
+      "://images/system_views/dashboards/tab_chart/IconFitXY.svg",
+      "://images/system_views/dashboards/tab_chart/IconFitXYDisabled.svg");
+   this->mpc_Ui->pc_PushButtonFitY->SetSvg(
+      "://images/system_views/dashboards/tab_chart/IconFitY.svg",
+      "://images/system_views/dashboards/tab_chart/IconFitYDisabled.svg");
+   this->mpc_Ui->pc_PushButtonFitX->SetSvg(
+      "://images/system_views/dashboards/tab_chart/IconFitX.svg",
+      "://images/system_views/dashboards/tab_chart/IconFitXDisabled.svg");
+   this->mpc_Ui->pc_PushButtonExtractData->SetSvg(
+      "://images/system_views/dashboards/tab_chart/IconExportCSV.svg",
+      "://images/system_views/dashboards/tab_chart/IconExportCSVDisabled.svg");
+
+   switch (me_SettingCursorMode)
    {
-      this->mpc_Ui->pc_PushButtonManualRead->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconUpdateValueDark.svg",
-         "://images/system_views/dashboards/tab_chart/IconUpdateValueDisabled.svg");
-      this->mpc_Ui->pc_PushButtonManualAbort->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconUpdateValueDarkCancel.svg",
-         "://images/system_views/dashboards/tab_chart/IconUpdateValueDisabledCancel.svg");
+   case C_SyvDaChaPlotHandlerWidget::eSETTING_CM_MEASUREMENT_CURSOR:
+      this->mpc_Ui->pc_PushButtonCursor->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconCursorMeasurement.svg",
+         "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg");
+      break;
+   case C_SyvDaChaPlotHandlerWidget::eSETTING_CM_TWO_DIFF_CURSOR:
+      this->mpc_Ui->pc_PushButtonCursor->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconCursorDifference.svg",
+         "://images/system_views/dashboards/tab_chart/IconCursorDifferenceDisabled.svg");
+      break;
+   case C_SyvDaChaPlotHandlerWidget::eSETTING_CM_NO_CURSOR: // Default case
+   default:
 
-      this->mpc_Ui->pc_PushButtonPause->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconPauseDark.svg",
-         "://images/system_views/dashboards/tab_chart/IconPauseDisabled.svg", "",
-         "://images/system_views/dashboards/tab_chart/IconPlayDark.svg",
-         "://images/system_views/dashboards/tab_chart/IconPlayDisabled.svg", "", "", "");
-
-      this->mpc_ActionZoomSettingHorizontal->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconZoomAdjustXDark.svg"));
-      this->mpc_ActionZoomSettingVertical->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconZoomAdjustYDark.svg"));
-      this->mpc_ActionZoomSettingHorizontalVertical->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconZoomAdjustXYDark.svg"));
-
-      this->mpc_Ui->pc_PushButtonZoomVsDragMode->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconZoomSelectionDark.svg",
-         "://images/system_views/dashboards/tab_chart/IconZoomSelectionDisabled.svg");
-
-      this->mpc_Ui->pc_PushButtonFitXY->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconFitXYDark.svg",
-         "://images/system_views/dashboards/tab_chart/IconFitXYDisabled.svg");
-      this->mpc_Ui->pc_PushButtonFitY->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconFitYDark.svg",
-         "://images/system_views/dashboards/tab_chart/IconFitYDisabled.svg");
-      this->mpc_Ui->pc_PushButtonFitX->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconFitXDark.svg",
-         "://images/system_views/dashboards/tab_chart/IconFitXDisabled.svg");
-      this->mpc_Ui->pc_PushButtonExtractData->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconExportCSVDark.svg",
-         "://images/system_views/dashboards/tab_chart/IconExportCSVDisabled.svg");
-
-      switch (me_SettingCursorMode)
-      {
-      case C_SyvDaChaPlotHandlerWidget::eSETTING_CM_MEASUREMENT_CURSOR:
-         this->mpc_Ui->pc_PushButtonCursor->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDark.svg",
-            "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg");
-         break;
-      case C_SyvDaChaPlotHandlerWidget::eSETTING_CM_TWO_DIFF_CURSOR:
-         this->mpc_Ui->pc_PushButtonCursor->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconCursorDifferenceDark.svg",
-            "://images/system_views/dashboards/tab_chart/IconCursorDifferenceDisabled.svg");
-         break;
-      case C_SyvDaChaPlotHandlerWidget::eSETTING_CM_NO_CURSOR: // Default case
-      default:
-
-         this->mpc_Ui->pc_PushButtonCursor->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg",
-            "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg");
-         break;
-      }
-      this->mpc_ActionCursorNoCursor->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg"));
-      this->mpc_ActionCursorMeasurementCursor->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconCursorMeasurementDark.svg"));
-      this->mpc_ActionCursorTwoDiffCursor->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconCursorDifferenceDark.svg"));
-
-      this->mpc_Ui->pc_PushButtonOptions->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconChartOptionsDark.svg",
-         "://images/system_views/dashboards/tab_chart/IconChartOptionsDisabled.svg");
-      this->mpc_ActionToggleSamples->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconChartToggleSamplesDark.svg"));
-      this->mpc_ActionVerticalAxisSettingAllVisible->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconShowSeveralYAxisDark.svg"));
+      this->mpc_Ui->pc_PushButtonCursor->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg",
+         "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg");
+      break;
    }
-   else
-   {
-      this->mpc_Ui->pc_PushButtonManualRead->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconUpdateValue.svg",
-         "://images/system_views/dashboards/tab_chart/IconUpdateValueDisabled.svg");
-      this->mpc_Ui->pc_PushButtonManualAbort->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconUpdateValueCancel.svg",
-         "://images/system_views/dashboards/tab_chart/IconUpdateValueDisabledCancel.svg");
+   this->mpc_ActionCursorNoCursor->setIcon(
+      QIcon("://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg"));
+   this->mpc_ActionCursorMeasurementCursor->setIcon(
+      QIcon("://images/system_views/dashboards/tab_chart/IconCursorMeasurement.svg"));
+   this->mpc_ActionCursorTwoDiffCursor->setIcon(
+      QIcon("://images/system_views/dashboards/tab_chart/IconCursorDifference.svg"));
 
-      this->mpc_Ui->pc_PushButtonPause->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconPause.svg",
-         "://images/system_views/dashboards/tab_chart/IconPauseDisabled.svg", "",
-         "://images/system_views/dashboards/tab_chart/IconPlay.svg",
-         "://images/system_views/dashboards/tab_chart/IconPlayDisabled.svg", "", "", "");
-
-      this->mpc_ActionZoomSettingHorizontal->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconZoomAdjustX.svg"));
-      this->mpc_ActionZoomSettingVertical->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconZoomAdjustY.svg"));
-      this->mpc_ActionZoomSettingHorizontalVertical->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconZoomAdjustXY.svg"));
-
-      this->mpc_Ui->pc_PushButtonZoomVsDragMode->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconZoomSelection.svg",
-         "://images/system_views/dashboards/tab_chart/IconZoomSelectionDisabled.svg");
-
-      this->mpc_Ui->pc_PushButtonFitXY->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconFitXY.svg",
-         "://images/system_views/dashboards/tab_chart/IconFitXYDisabled.svg");
-      this->mpc_Ui->pc_PushButtonFitY->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconFitY.svg",
-         "://images/system_views/dashboards/tab_chart/IconFitYDisabled.svg");
-      this->mpc_Ui->pc_PushButtonFitX->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconFitX.svg",
-         "://images/system_views/dashboards/tab_chart/IconFitXDisabled.svg");
-      this->mpc_Ui->pc_PushButtonExtractData->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconExportCSV.svg",
-         "://images/system_views/dashboards/tab_chart/IconExportCSVDisabled.svg");
-
-      switch (me_SettingCursorMode)
-      {
-      case C_SyvDaChaPlotHandlerWidget::eSETTING_CM_MEASUREMENT_CURSOR:
-         this->mpc_Ui->pc_PushButtonCursor->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconCursorMeasurement.svg",
-            "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg");
-         break;
-      case C_SyvDaChaPlotHandlerWidget::eSETTING_CM_TWO_DIFF_CURSOR:
-         this->mpc_Ui->pc_PushButtonCursor->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconCursorDifference.svg",
-            "://images/system_views/dashboards/tab_chart/IconCursorDifferenceDisabled.svg");
-         break;
-      case C_SyvDaChaPlotHandlerWidget::eSETTING_CM_NO_CURSOR: // Default case
-      default:
-
-         this->mpc_Ui->pc_PushButtonCursor->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg",
-            "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg");
-         break;
-      }
-      this->mpc_ActionCursorNoCursor->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg"));
-      this->mpc_ActionCursorMeasurementCursor->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconCursorMeasurement.svg"));
-      this->mpc_ActionCursorTwoDiffCursor->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconCursorDifference.svg"));
-
-      this->mpc_Ui->pc_PushButtonOptions->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconChartOptions.svg",
-         "://images/system_views/dashboards/tab_chart/IconChartOptionsDisabled.svg");
-      this->mpc_ActionToggleSamples->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconChartToggleSamples.svg"));
-      this->mpc_ActionVerticalAxisSettingAllVisible->setIcon(
-         QIcon("://images/system_views/dashboards/tab_chart/IconShowSeveralYAxis.svg"));
-   }
+   this->mpc_Ui->pc_PushButtonOptions->SetSvg(
+      "://images/system_views/dashboards/tab_chart/IconChartOptions.svg",
+      "://images/system_views/dashboards/tab_chart/IconChartOptionsDisabled.svg");
+   this->mpc_ActionToggleSamples->setIcon(
+      QIcon("://images/system_views/dashboards/tab_chart/IconChartToggleSamples.svg"));
+   this->mpc_ActionVerticalAxisSettingAllVisible->setIcon(
+      QIcon("://images/system_views/dashboards/tab_chart/IconShowSeveralYAxis.svg"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2117,11 +1990,9 @@ void C_SyvDaChaPlotHandlerWidget::mh_AdaptVerticalAxisStyle(QCPAxis * const opc_
 
    \param[in]  opc_Axis    Axis for styling
    \param[in]  orc_Color   New color for axis
-   \param[in]  oq_DarkMode Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaChaPlotHandlerWidget::mh_AdaptAxisColor(QCPAxis * const opc_Axis, const QColor & orc_Color,
-                                                    const bool oq_DarkMode)
+void C_SyvDaChaPlotHandlerWidget::mh_AdaptAxisColor(QCPAxis * const opc_Axis, const QColor & orc_Color)
 {
    QPen c_Pen;
 
@@ -2139,21 +2010,19 @@ void C_SyvDaChaPlotHandlerWidget::mh_AdaptAxisColor(QCPAxis * const opc_Axis, co
    opc_Axis->setBasePen(c_Pen);
 
    // Adapt the grid of the y axis
-   mh_AdaptAxisGridColor(opc_Axis, oq_DarkMode);
+   mh_AdaptAxisGridColor(opc_Axis);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Styles all y axis grids
-
-   \param[in]  oq_DarkMode Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaChaPlotHandlerWidget::m_AdaptAllVerticalAxisGridColors(const bool oq_DarkMode)
+void C_SyvDaChaPlotHandlerWidget::m_AdaptAllVerticalAxisGridColors(void)
 {
    if (this->mc_DataElementConfigIndexToVerticalAxis.size() == 0)
    {
       // No data element with own y axis exist, adapt the default y axis
-      mh_AdaptAxisGridColor(this->mpc_Ui->pc_Plot->axisRect()->axis(QCPAxis::atLeft, 0), oq_DarkMode);
+      mh_AdaptAxisGridColor(this->mpc_Ui->pc_Plot->axisRect()->axis(QCPAxis::atLeft, 0));
    }
    else
    {
@@ -2161,7 +2030,7 @@ void C_SyvDaChaPlotHandlerWidget::m_AdaptAllVerticalAxisGridColors(const bool oq
 
       for (s32_Counter = 0; s32_Counter < this->mc_DataElementConfigIndexToVerticalAxis.size(); ++s32_Counter)
       {
-         mh_AdaptAxisGridColor(this->mc_DataElementConfigIndexToVerticalAxis.at(s32_Counter), oq_DarkMode);
+         mh_AdaptAxisGridColor(this->mc_DataElementConfigIndexToVerticalAxis.at(s32_Counter));
       }
    }
 }
@@ -2170,23 +2039,15 @@ void C_SyvDaChaPlotHandlerWidget::m_AdaptAllVerticalAxisGridColors(const bool oq
 /*! \brief   Styles an axis grid
 
    \param[in]  opc_Axis    Axis for styling
-   \param[in]  oq_DarkMode Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaChaPlotHandlerWidget::mh_AdaptAxisGridColor(const QCPAxis * const opc_Axis, const bool oq_DarkMode)
+void C_SyvDaChaPlotHandlerWidget::mh_AdaptAxisGridColor(const QCPAxis * const opc_Axis)
 {
    QPen c_Pen;
 
    opc_Axis->grid()->setVisible(true);
    c_Pen = opc_Axis->grid()->pen();
-   if (oq_DarkMode == false)
-   {
-      c_Pen.setColor(mc_STYLE_GUIDE_COLOR_11);
-   }
-   else
-   {
-      c_Pen.setColor(mc_STYLE_GUIDE_COLOR_52);
-   }
+   c_Pen.setColor(mc_STYLE_GUIDE_COLOR_11);
    c_Pen.setStyle(Qt::DashLine);
    opc_Axis->grid()->setPen(c_Pen);
 }
@@ -2595,79 +2456,39 @@ void C_SyvDaChaPlotHandlerWidget::m_SetZoomMode(const C_PuiSvDbTabChart::E_Setti
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::m_OnChangeZoomMode(const C_PuiSvDbTabChart::E_SettingZoomMode oe_SettingZoomMode)
 {
-   if (this->mq_DarkMode == true)
+   switch (oe_SettingZoomMode)
    {
-      switch (oe_SettingZoomMode)
-      {
-      case C_PuiSvDbTabChart::eSETTING_ZM_X:
-         this->mpc_Ui->pc_PushButtonZoomMode->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomAdjustXDark.svg");
-         this->mpc_Ui->pc_PushButtonZoomIn->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXPlusDark.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXPlusDisabled.svg");
-         this->mpc_Ui->pc_PushButtonZoomOut->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXMinusDark.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXMinusDisabled.svg");
-         break;
-      case C_PuiSvDbTabChart::eSETTING_ZM_Y:
-         this->mpc_Ui->pc_PushButtonZoomMode->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomAdjustYDark.svg");
-         this->mpc_Ui->pc_PushButtonZoomIn->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepYPlusDark.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepYPlusDisabled.svg");
-         this->mpc_Ui->pc_PushButtonZoomOut->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepYMinusDark.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepYMinusDisabled.svg");
-         break;
-      case C_PuiSvDbTabChart::eSETTING_ZM_XY: // Default case
-      default:
-         this->mpc_Ui->pc_PushButtonZoomMode->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomAdjustXYDark.svg");
-         this->mpc_Ui->pc_PushButtonZoomIn->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXYPlusDark.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXYPlusDisabled.svg");
-         this->mpc_Ui->pc_PushButtonZoomOut->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXYMinusDark.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXYMinusDisabled.svg");
-         break;
-      }
-   }
-   else
-   {
-      switch (oe_SettingZoomMode)
-      {
-      case C_PuiSvDbTabChart::eSETTING_ZM_X:
-         this->mpc_Ui->pc_PushButtonZoomMode->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomAdjustX.svg");
-         this->mpc_Ui->pc_PushButtonZoomIn->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXPlus.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXPlusDisabled.svg");
-         this->mpc_Ui->pc_PushButtonZoomOut->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXMinus.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXMinusDisabled.svg");
-         break;
-      case C_PuiSvDbTabChart::eSETTING_ZM_Y:
-         this->mpc_Ui->pc_PushButtonZoomMode->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomAdjustY.svg");
-         this->mpc_Ui->pc_PushButtonZoomIn->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepYPlus.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepYPlusDisabled.svg");
-         this->mpc_Ui->pc_PushButtonZoomOut->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepYMinus.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepYMinusDisabled.svg");
-         break;
-      case C_PuiSvDbTabChart::eSETTING_ZM_XY: // Default case
-      default:
-         this->mpc_Ui->pc_PushButtonZoomMode->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomAdjustXY.svg");
-         this->mpc_Ui->pc_PushButtonZoomIn->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXYPlus.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXYPlusDisabled.svg");
-         this->mpc_Ui->pc_PushButtonZoomOut->SetSvg(
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXYMinus.svg",
-            "://images/system_views/dashboards/tab_chart/IconZoomStepXYMinusDisabled.svg");
-         break;
-      }
+   case C_PuiSvDbTabChart::eSETTING_ZM_X:
+      this->mpc_Ui->pc_PushButtonZoomMode->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconZoomAdjustX.svg");
+      this->mpc_Ui->pc_PushButtonZoomIn->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconZoomStepXPlus.svg",
+         "://images/system_views/dashboards/tab_chart/IconZoomStepXPlusDisabled.svg");
+      this->mpc_Ui->pc_PushButtonZoomOut->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconZoomStepXMinus.svg",
+         "://images/system_views/dashboards/tab_chart/IconZoomStepXMinusDisabled.svg");
+      break;
+   case C_PuiSvDbTabChart::eSETTING_ZM_Y:
+      this->mpc_Ui->pc_PushButtonZoomMode->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconZoomAdjustY.svg");
+      this->mpc_Ui->pc_PushButtonZoomIn->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconZoomStepYPlus.svg",
+         "://images/system_views/dashboards/tab_chart/IconZoomStepYPlusDisabled.svg");
+      this->mpc_Ui->pc_PushButtonZoomOut->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconZoomStepYMinus.svg",
+         "://images/system_views/dashboards/tab_chart/IconZoomStepYMinusDisabled.svg");
+      break;
+   case C_PuiSvDbTabChart::eSETTING_ZM_XY: // Default case
+   default:
+      this->mpc_Ui->pc_PushButtonZoomMode->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconZoomAdjustXY.svg");
+      this->mpc_Ui->pc_PushButtonZoomIn->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconZoomStepXYPlus.svg",
+         "://images/system_views/dashboards/tab_chart/IconZoomStepXYPlusDisabled.svg");
+      this->mpc_Ui->pc_PushButtonZoomOut->SetSvg(
+         "://images/system_views/dashboards/tab_chart/IconZoomStepXYMinus.svg",
+         "://images/system_views/dashboards/tab_chart/IconZoomStepXYMinusDisabled.svg");
+      break;
    }
 
    this->mpc_Ui->pc_PushButtonZoomMode->repaint();
@@ -2876,18 +2697,9 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorModeMeasurementCursor(void)
    this->mpc_ActionCursorMeasurementCursor->setChecked(true);
    this->mpc_ActionCursorTwoDiffCursor->setChecked(false);
 
-   if (this->mq_DarkMode == true)
-   {
-      this->mpc_Ui->pc_PushButtonCursor->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDark.svg",
-         "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg");
-   }
-   else
-   {
-      this->mpc_Ui->pc_PushButtonCursor->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconCursorMeasurement.svg",
-         "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg");
-   }
+   this->mpc_Ui->pc_PushButtonCursor->SetSvg(
+      "://images/system_views/dashboards/tab_chart/IconCursorMeasurement.svg",
+      "://images/system_views/dashboards/tab_chart/IconCursorMeasurementDisabled.svg");
    this->mpc_Ui->pc_PushButtonCursor->repaint();
 }
 
@@ -2904,18 +2716,9 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorModeTwoDiffCursor(void)
    this->mpc_ActionCursorMeasurementCursor->setChecked(false);
    this->mpc_ActionCursorTwoDiffCursor->setChecked(true);
 
-   if (this->mq_DarkMode == true)
-   {
-      this->mpc_Ui->pc_PushButtonCursor->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconCursorDifferenceDark.svg",
-         "://images/system_views/dashboards/tab_chart/IconCursorDifferenceDisabled.svg");
-   }
-   else
-   {
-      this->mpc_Ui->pc_PushButtonCursor->SetSvg(
-         "://images/system_views/dashboards/tab_chart/IconCursorDifference.svg",
-         "://images/system_views/dashboards/tab_chart/IconCursorDifferenceDisabled.svg");
-   }
+   this->mpc_Ui->pc_PushButtonCursor->SetSvg(
+      "://images/system_views/dashboards/tab_chart/IconCursorDifference.svg",
+      "://images/system_views/dashboards/tab_chart/IconCursorDifferenceDisabled.svg");
    this->mpc_Ui->pc_PushButtonCursor->repaint();
 }
 

@@ -34,7 +34,7 @@ public:
    C_OgeSliDashboard(QWidget * const opc_Parent = NULL);
    ~C_OgeSliDashboard(void) override;
 
-   void SetCurrentStyle(const stw::opensyde_gui_logic::C_PuiSvDbSlider::E_Style oe_Style, const bool oq_IsDark);
+   void SetCurrentStyle(const stw::opensyde_gui_logic::C_PuiSvDbSlider::E_Style oe_Style);
    void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbSlider::E_Type oe_Type);
    void HandleResize(void);
 
@@ -44,7 +44,6 @@ protected:
 
 private:
    QSvgRenderer * mpc_SvgRenderer;
-   bool mq_IsDark;
    stw::opensyde_gui_logic::C_PuiSvDbSlider::E_Style me_Style;
    stw::opensyde_gui_logic::C_PuiSvDbSlider::E_Type me_Type;
 

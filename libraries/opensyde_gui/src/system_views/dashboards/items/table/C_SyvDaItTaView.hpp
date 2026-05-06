@@ -54,7 +54,7 @@ public:
    std::vector<int32_t> GetCurrentColumnWidths(void) const;
 
    void SetSelectionAvailable(const bool oq_Active, const bool oq_SelectFirst);
-   void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode);
+   void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style);
    void SetCursorHandlingActive(const bool oq_Active);
    void HideToolTip(void);
 

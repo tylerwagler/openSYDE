@@ -34,7 +34,7 @@ class C_SyvDaPeLabel :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaPeLabel(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode);
+   explicit C_SyvDaPeLabel(C_SyvDaPeBase & orc_Parent);
    ~C_SyvDaPeLabel(void) override;
 
    void InitStaticNames(void) const;

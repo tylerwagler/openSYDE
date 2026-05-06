@@ -41,11 +41,10 @@ using namespace stw::opensyde_gui_elements;
    Set up GUI with all elements.
 
    \param[in,out]  orc_Parent    Parent widget
-   \param[in]      oq_DarkMode   Flag for dark mode
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvDaPePieChart::C_SyvDaPePieChart(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode) :
-   C_SyvDaPePanelBase(orc_Parent, oq_DarkMode),
+C_SyvDaPePieChart::C_SyvDaPePieChart(C_SyvDaPeBase & orc_Parent) :
+   C_SyvDaPePanelBase(orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPePieChart)
 {
    mpc_Ui->setupUi(this);
@@ -156,7 +155,7 @@ void C_SyvDaPePieChart::m_UpdatePreview(void)
       ((static_cast<float64_t>(c_ViewSize.width()) - static_cast<float64_t>(c_ItemSize.width())) / 2.0) + 20.0,
       (static_cast<float64_t>(c_ViewSize.height()) - static_cast<float64_t>(c_ItemSize.height())) / 2.0);
 
-   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme(), this->mq_DarkMode);
+   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme());
    pc_Item->UpdateTypePe(this->GetShowUnit(), this->GetShowValue());
    pc_Item->SetUnitPe("%");
    pc_Item->SetValuePe("75", 1500000);

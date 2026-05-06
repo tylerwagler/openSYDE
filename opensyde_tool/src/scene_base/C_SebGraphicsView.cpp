@@ -42,7 +42,6 @@ const int32_t ms32_MAX_ZOOM_IN_PERCENT = 1000;
 const int32_t ms32_ZOOM_STEP_IN_PERCENT = 5;
 //Background
 const QColor C_SebGraphicsView::mhc_GRADIENT_COLOR_LIGHT = mc_STYLE_GUIDE_COLOR_0;
-const QColor C_SebGraphicsView::mhc_GRADIENT_COLOR_DARK = mc_STYLE_GUIDE_COLOR_52;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -67,7 +66,6 @@ C_SebGraphicsView::C_SebGraphicsView(QWidget * const opc_Parent) :
    mq_ViewPortPosHorSet(false),
    mq_ViewPortPosVerSet(false),
    mq_ScrollingActive(false),
-   mq_DarkMode(false),
    mc_LastMouseEventPos(QPoint()),
    mc_DragMoveDistance(0.0, 0.0),
    ms32_ZoomValue(100),
@@ -92,8 +90,7 @@ C_SebGraphicsView::C_SebGraphicsView(QWidget * const opc_Parent) :
    this->mpc_ZoomButton->setGeometry(0, 0, 190, 40);
    this->mpc_ZoomButton->setAttribute(Qt::WA_TransparentForMouseEvents);
 
-   //Init dark mode
-   this->SetDarkMode(false);
+   C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this, "DarkMode", false);
 
    //Rubber band style
    this->setStyle(new C_SebStyle(this->style()));
@@ -271,20 +268,6 @@ void C_SebGraphicsView::HideToolTip(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set dark mode state for scene
-
-   \param[in]  oq_DarkMode    Dark mode active flag
-                              true:  Dark mode
-                              false: Light mode
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SebGraphicsView::SetDarkMode(const bool oq_DarkMode)
-{
-   this->mq_DarkMode = oq_DarkMode;
-   C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this, "DarkMode", oq_DarkMode);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Sets the scene and connects with available signals
 
    For connecting to the signals it has to be a C_SebScene scene.
@@ -353,16 +336,8 @@ void C_SebGraphicsView::drawBackground(QPainter * const opc_Painter, const QRect
          f64_RectWidth = static_cast<float64_t>(ms32_WHITE_EDGE_WIDTH) / 2.0;
       }
 
-      if (this->mq_DarkMode == false)
-      {
-         c_GradientColorStart = C_SebGraphicsView::mhc_GRADIENT_COLOR_LIGHT;
-         c_GradientColorEnd = C_SebGraphicsView::mhc_GRADIENT_COLOR_LIGHT;
-      }
-      else
-      {
-         c_GradientColorStart = C_SebGraphicsView::mhc_GRADIENT_COLOR_DARK;
-         c_GradientColorEnd = C_SebGraphicsView::mhc_GRADIENT_COLOR_DARK;
-      }
+      c_GradientColorStart = C_SebGraphicsView::mhc_GRADIENT_COLOR_LIGHT;
+      c_GradientColorEnd = C_SebGraphicsView::mhc_GRADIENT_COLOR_LIGHT;
 
       // configure the colors
       c_Pen.setColor(QColor(0, 0, 0, 0));

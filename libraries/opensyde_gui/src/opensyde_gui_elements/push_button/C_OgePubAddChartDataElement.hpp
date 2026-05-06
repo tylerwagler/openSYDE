@@ -27,17 +27,13 @@ class C_OgePubAddChartDataElement :
 
 public:
    explicit C_OgePubAddChartDataElement(QWidget * const opc_Parent = NULL);
-   void SetDarkMode(const bool oq_DarkMode);
 
 protected:
    void paintEvent(QPaintEvent * const opc_Event) override;
 
 private:
-   bool mq_DarkMode;
    QIcon mc_IconEnabledBright;
    QIcon mc_IconDisabledBright;
-   QIcon mc_IconEnabledDark;
-   QIcon mc_IconDisabledDark;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

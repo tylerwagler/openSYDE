@@ -44,8 +44,7 @@ public:
 
    void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style,
                         const stw::opensyde_gui_logic::C_PuiSvDbProgressBar::E_Type oe_Type,
-                        const stw::opensyde_gui_logic::C_PuiSvDbProgressBar::E_Alignment oe_Alignment,
-                        const bool oq_DarkMode);
+                        const stw::opensyde_gui_logic::C_PuiSvDbProgressBar::E_Alignment oe_Alignment);
    void AdjustFontToSize(void);
    void SetValue(const int32_t os32_Value, const QString & orc_Value);
    void SetMin(const int32_t os32_Value, const QString & orc_Value);
@@ -67,9 +66,6 @@ private:
    void m_SetStyle(QPainter & orc_Painter, QPen & orc_Pen) const;
    void m_SetBarMargins(void);
 
-   //-------Set Styling-------------------------------------------------------------------------------------------------
-   void m_SetDarkModeStyle(QPainter & orc_Painter, QPen & orc_Pen) const;
-   void m_SetBrightModeStyle(QPainter & orc_Painter, QPen & orc_Pen) const;
    void m_SetMinimumProgressbarSize(void);
 
    //-------Variables---------------------------------------------------------------------------------------------------
@@ -83,7 +79,6 @@ private:
    QString mc_Unit;
    stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style me_Style;
    bool mq_ShowMinMax;
-   bool mq_DarkMode;
    int32_t ms32_Transparency;
 
    //-------Constants---------------------------------------------------------------------------------------------------

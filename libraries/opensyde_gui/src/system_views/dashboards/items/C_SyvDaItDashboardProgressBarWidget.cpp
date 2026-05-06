@@ -56,13 +56,11 @@ C_SyvDaItDashboardProgressBarWidget::C_SyvDaItDashboardProgressBarWidget(QWidget
    mc_MaxValue("100"),
    me_Style(C_PuiSvDbWidgetBase::eOPENSYDE),
    mq_ShowMinMax(true),
-   mq_DarkMode(false),
    ms32_Transparency(255)
 {
    mpc_Ui->setupUi(this);
 
-   this->SetDisplayStyle(C_PuiSvDbWidgetBase::eOPENSYDE, C_PuiSvDbProgressBar::eTYPE_1, C_PuiSvDbProgressBar::eTOP,
-                         false);
+   this->SetDisplayStyle(C_PuiSvDbWidgetBase::eOPENSYDE, C_PuiSvDbProgressBar::eTYPE_1, C_PuiSvDbProgressBar::eTOP);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -85,20 +83,17 @@ C_SyvDaItDashboardProgressBarWidget::~C_SyvDaItDashboardProgressBarWidget(void)
    \param[in]       oe_Style     Defines the style
    \param[out]      oe_Type      Defines the type
    \param[in]   oe_Alignment     Defines the alignment type
-   \param[in]   oq_DarkMode      Defines the displayed mode
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItDashboardProgressBarWidget::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style,
                                                           const C_PuiSvDbProgressBar::E_Type oe_Type,
-                                                          const C_PuiSvDbProgressBar::E_Alignment oe_Alignment,
-                                                          const bool oq_DarkMode)
+                                                          const C_PuiSvDbProgressBar::E_Alignment oe_Alignment)
 {
    this->me_Style = oe_Style;
    this->me_Type = oe_Type;
    this->me_Alignment = oe_Alignment;
-   this->mq_DarkMode = oq_DarkMode;
 
-   this->mpc_Ui->pc_ProgressBar->SetDisplayStyle(oe_Style, oq_DarkMode);
+   this->mpc_Ui->pc_ProgressBar->SetDisplayStyle(oe_Style);
 
    switch (this->me_Type)
    {
@@ -407,8 +402,7 @@ void C_SyvDaItDashboardProgressBarWidget::paintEvent(QPaintEvent * const opc_Eve
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set label color, brush, and alpha for the progress bar elements for the specific displayed mode
-            (dark/bright)
+/*! \brief  Set label color, brush, and alpha for the progress bar elements
 
    \param[in]       orc_Painter          Painter needed for set the necessary options
    \param[in]       orc_Pen              Pen needed to set the color of the labels
@@ -416,14 +410,17 @@ void C_SyvDaItDashboardProgressBarWidget::paintEvent(QPaintEvent * const opc_Eve
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItDashboardProgressBarWidget::m_SetStyle(QPainter & orc_Painter, QPen & orc_Pen) const
 {
-   if (mq_DarkMode)
-   {
-      this->m_SetDarkModeStyle(orc_Painter, orc_Pen);
-   }
-   else
-   {
-      this->m_SetBrightModeStyle(orc_Painter, orc_Pen);
-   }
+   QColor c_HelpingColorVariable = (me_Style == stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::eOPENSYDE_2) ?
+                                   (mc_STYLE_GUIDE_COLOR_6) :
+                                   (mc_STYLE_GUIDE_COLOR_34);
+
+   c_HelpingColorVariable.setAlpha(ms32_Transparency);
+
+   //set brush color and transparency to have a color inside arrow
+   orc_Painter.setBrush(static_cast<QBrush>(c_HelpingColorVariable));
+
+   //Set pen color
+   orc_Pen.setColor(c_HelpingColorVariable);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -467,49 +464,6 @@ void C_SyvDaItDashboardProgressBarWidget::m_SetBarMargins(void)
    else
    {
    }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set Dark mode style
-
-   \param[in]       orc_Painter          Painter needed for set the necessary options
-   \param[in]       orc_Pen              Pen to define the color for the labels
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItDashboardProgressBarWidget::m_SetDarkModeStyle(QPainter & orc_Painter, QPen & orc_Pen) const
-{
-   QColor c_HelpingColorVariable;
-
-   c_HelpingColorVariable = mc_STYLE_GUIDE_COLOR_0;
-   c_HelpingColorVariable.setAlpha(ms32_Transparency); // Color for Value has to get more transparent some times
-
-   //set brush color and transparency to have a color inside arrow
-   orc_Painter.setBrush(static_cast<QBrush>(c_HelpingColorVariable));
-
-   //set pen color
-   orc_Pen.setColor(c_HelpingColorVariable);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set Dark mode style
-
-   \param[in]       orc_Painter          Painter needed for set the necessary options
-   \param[in]       orc_Pen              Pen to define the color for the labels
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItDashboardProgressBarWidget::m_SetBrightModeStyle(QPainter & orc_Painter, QPen & orc_Pen) const
-{
-   QColor c_HelpingColorVariable = (me_Style == stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::eOPENSYDE_2) ?
-                                   (mc_STYLE_GUIDE_COLOR_6) :
-                                   (mc_STYLE_GUIDE_COLOR_34);
-
-   c_HelpingColorVariable.setAlpha(ms32_Transparency);
-
-   //set brush color and transparency to have a color inside arrow
-   orc_Painter.setBrush(static_cast<QBrush>(c_HelpingColorVariable));
-
-   //Set pen color
-   orc_Pen.setColor(c_HelpingColorVariable);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

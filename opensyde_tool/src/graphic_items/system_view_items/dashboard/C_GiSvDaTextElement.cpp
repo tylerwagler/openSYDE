@@ -94,7 +94,7 @@ void C_GiSvDaTextElement::LoadData(void)
                static_cast<uint32_t>(this->ms32_Index));
             if (pc_Item != NULL)
             {
-               this->m_LoadTextElementData(pc_Item, pc_View->GetDarkModeActive());
+               this->m_LoadTextElementData(pc_Item);
             }
          }
       }
@@ -122,7 +122,7 @@ void C_GiSvDaTextElement::UpdateData(void)
             {
                C_PuiBsTextElement c_Item = *pc_Item;
 
-               this->m_UpdateTextElementData(&c_Item, pc_View->GetDarkModeActive());
+               this->m_UpdateTextElementData(&c_Item);
 
                C_PuiSvHandler::h_GetInstance()->SetDashboardTextElement(this->mu32_ViewIndex, this->mu32_DashboardIndex,
                                                                         static_cast<uint32_t>(this->ms32_Index),

@@ -28,7 +28,7 @@ class C_SdManUnoTopologySetupStyleCommand :
 {
 public:
    C_SdManUnoTopologySetupStyleCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                                       const bool oq_DarkMode, QUndoCommand * const opc_Parent = NULL);
+                                       QUndoCommand * const opc_Parent = NULL);
    ~C_SdManUnoTopologySetupStyleCommand(void) override;
 
 protected:

@@ -44,10 +44,9 @@ using namespace stw::opensyde_gui_elements;
 
    \param[in,out] orc_Parent  Reference to parent
    \param[in]     orc_Name    Name of the bus for the title
-   \param[in]     oq_DarkMode Optional flag if dark mode active
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiSyBaseWidget::C_GiSyBaseWidget(C_OgePopUpDialog & orc_Parent, const QString & orc_Name, const bool oq_DarkMode) :
+C_GiSyBaseWidget::C_GiSyBaseWidget(C_OgePopUpDialog & orc_Parent, const QString & orc_Name) :
    QWidget(&orc_Parent),
    mpc_Ui(new Ui::C_GiSyBaseWidget()),
    mpc_ParentDialog(&orc_Parent)
@@ -73,11 +72,9 @@ C_GiSyBaseWidget::C_GiSyBaseWidget(C_OgePopUpDialog & orc_Parent, const QString 
    this->mpc_Ui->pc_GraphicsView->setScene(this->mpc_Scene);
    this->mpc_Ui->pc_GraphicsView->setEnabled(false);
    this->mpc_Ui->pc_GraphicsView->SetSubtleSurroundGradient(true);
-   this->mpc_Scene->SetDarkModeActive(oq_DarkMode);
-   this->mpc_Ui->pc_GraphicsView->SetDarkMode(oq_DarkMode);
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_GroupBox, "Edit", true);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_GroupBox, "DarkMode", oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_PreviewFrame, "NoBorder", oq_DarkMode);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_GroupBox, "DarkMode", false);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_PreviewFrame, "NoBorder", false);
 
    InitStaticNames();
 

@@ -55,7 +55,6 @@ public:
    C_SyvDaDashboardWidget * GetWidget(void);
 
    void SetEditMode(const bool oq_Active);
-   void SetDarkMode(const bool oq_Active);
    void SetEnabled(const bool oq_Enabled) const;
    void Save(void) const;
    void HandleManualOperationFinished(const int32_t os32_Result, const uint8_t ou8_Nrc) const;

@@ -30,7 +30,7 @@ class C_OgeWiDashboardPieChart :
 public:
    explicit C_OgeWiDashboardPieChart(QWidget * const opc_Parent = NULL);
 
-   void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode,
+   void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style,
                         const bool oq_ShowUnit, const bool oq_ShowValue);
    void ReInitSize(void);
    void SetValue(const QString & orc_Value, const int32_t os32_Progress2000000);
@@ -64,7 +64,6 @@ private:
    int32_t ms32_Transparency;
    bool mq_TransparentBackground;
    stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style me_Style;
-   bool mq_DarkMode;
    void m_SetPie(QPainter & orc_Painter, const QBrush oc_PieBrush, const Qt::PenCapStyle oe_CapStyle,
                  const QRect & orc_PieCircleRect, const float32_t of32_PieWidth, const float32_t of32_TotalPixels,
                  const float32_t of32_Progress) const;

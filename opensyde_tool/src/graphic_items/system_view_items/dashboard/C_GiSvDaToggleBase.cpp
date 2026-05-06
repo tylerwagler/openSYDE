@@ -96,12 +96,11 @@ int32_t C_GiSvDaToggleBase::type(void) const
 /*! \brief   Apply style
 
    \param[in] oe_Style    New style type
-   \param[in] oq_DarkMode Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaToggleBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode)
+void C_GiSvDaToggleBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
-   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style, oq_DarkMode);
+   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style);
 
    if (this->ms32_Index >= 0)
    {
@@ -298,8 +297,8 @@ bool C_GiSvDaToggleBase::CallProperties(void)
             C_SyvDaPeToggle * pc_PropertiesWidget;
 
             pc_Dialog = new C_SyvDaPeBase(*c_New, this->mu32_ViewIndex, this->mu32_DashboardIndex, "Toggle",
-                                          c_ElementId, c_Scaling, false, c_FormatterConfig, false, this->mq_DarkMode);
-            pc_PropertiesWidget = new C_SyvDaPeToggle(*pc_Dialog, this->mq_DarkMode);
+                                          c_ElementId, c_Scaling, false, c_FormatterConfig, false);
+            pc_PropertiesWidget = new C_SyvDaPeToggle(*pc_Dialog);
 
             pc_Dialog->SetWidget(pc_PropertiesWidget);
             pc_Dialog->SetTheme(pc_Box->e_DisplayStyle);
@@ -340,7 +339,7 @@ bool C_GiSvDaToggleBase::CallProperties(void)
                this->me_WriteMode = pc_Dialog->GetWriteMode();
                this->me_WriteInitialValueMode = c_Box.e_InitialValueMode;
                this->mq_AutoWriteOnConnect = c_Box.q_AutoWriteOnConnect;
-               this->SetDisplayStyle(this->me_Style, this->mq_DarkMode);
+               this->SetDisplayStyle(this->me_Style);
                this->UpdateType(c_Box.e_Type);
                this->ClearDataPoolElements();
                if (c_Tmp.c_ElementId.GetIsValid())
@@ -441,40 +440,16 @@ void C_GiSvDaToggleBase::UpdateType(const C_PuiSvDbToggle::E_Type oe_Type)
          switch (oe_Type)
          {
          case C_PuiSvDbToggle::eTYPE1:
-            if (this->mq_DarkMode == false)
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleStwOffT1Bright.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleStwOnT1Bright.svg";
-            }
-            else
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleStwOffT1Dark.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleStwOnT1Dark.svg";
-            }
+            c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleStwOffT1Bright.svg";
+            c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleStwOnT1Bright.svg";
             break;
          case C_PuiSvDbToggle::eTYPE2:
-            if (this->mq_DarkMode == false)
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleStwOffT2Bright.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleStwOnT2Bright.svg";
-            }
-            else
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleStwOffT2Dark.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleStwOnT2Dark.svg";
-            }
+            c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleStwOffT2Bright.svg";
+            c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleStwOnT2Bright.svg";
             break;
          case C_PuiSvDbToggle::eTYPE3:
-            if (this->mq_DarkMode == false)
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleStwOffT3Bright.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleStwOnT3Bright.svg";
-            }
-            else
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleStwOffT3Dark.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleStwOnT3Dark.svg";
-            }
+            c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleStwOffT3Bright.svg";
+            c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleStwOnT3Bright.svg";
             break;
          default:
             break;
@@ -485,40 +460,16 @@ void C_GiSvDaToggleBase::UpdateType(const C_PuiSvDbToggle::E_Type oe_Type)
          switch (oe_Type)
          {
          case C_PuiSvDbToggle::eTYPE1:
-            if (this->mq_DarkMode == false)
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OffT1Bright.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OnT1Bright.svg";
-            }
-            else
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OffT1Dark.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OnT1Dark.svg";
-            }
+            c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OffT1Bright.svg";
+            c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OnT1Bright.svg";
             break;
          case C_PuiSvDbToggle::eTYPE2:
-            if (this->mq_DarkMode == false)
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OffT2Bright.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OnT2Bright.svg";
-            }
-            else
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OffT2Dark.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OnT2Dark.svg";
-            }
+            c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OffT2Bright.svg";
+            c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OnT2Bright.svg";
             break;
          case C_PuiSvDbToggle::eTYPE3:
-            if (this->mq_DarkMode == false)
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OffT3Bright.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OnT3Bright.svg";
-            }
-            else
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OffT3Dark.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OnT3Dark.svg";
-            }
+            c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OffT3Bright.svg";
+            c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleOpenSyde2OnT3Bright.svg";
             break;
          default:
             break;
@@ -529,40 +480,16 @@ void C_GiSvDaToggleBase::UpdateType(const C_PuiSvDbToggle::E_Type oe_Type)
          switch (oe_Type)
          {
          case C_PuiSvDbToggle::eTYPE1:
-            if (this->mq_DarkMode == false)
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleFlatOffT1Bright.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleFlatOnT1Bright.svg";
-            }
-            else
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleFlatOffT1Dark.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleFlatOnT1Dark.svg";
-            }
+            c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleFlatOffT1Bright.svg";
+            c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleFlatOnT1Bright.svg";
             break;
          case C_PuiSvDbToggle::eTYPE2:
-            if (this->mq_DarkMode == false)
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleFlatOffT2Bright.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleFlatOnT2Bright.svg";
-            }
-            else
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleFlatOffT2Dark.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleFlatOnT2Dark.svg";
-            }
+            c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleFlatOffT2Bright.svg";
+            c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleFlatOnT2Bright.svg";
             break;
          case C_PuiSvDbToggle::eTYPE3:
-            if (this->mq_DarkMode == false)
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleFlatOffT3Bright.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleFlatOnT3Bright.svg";
-            }
-            else
-            {
-               c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleFlatOffT3Dark.svg";
-               c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleFlatOnT3Dark.svg";
-            }
+            c_SvgUrlUnchecked = "://images/system_views/dashboards/icons/ToggleFlatOffT3Bright.svg";
+            c_SvgUrlChecked = "://images/system_views/dashboards/icons/ToggleFlatOnT3Bright.svg";
             break;
          default:
             break;

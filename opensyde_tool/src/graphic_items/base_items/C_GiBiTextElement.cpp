@@ -151,14 +151,12 @@ int32_t C_GiBiTextElement::type() const
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Open style dialog
 
-   \param[in] oq_DarkMode Optional dark mode flag
-
    \return
    true     Ok was clicked
    false    Cancel was clicked
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_GiBiTextElement::OpenStyleDialog(const bool oq_DarkMode)
+bool C_GiBiTextElement::OpenStyleDialog(void)
 {
    bool q_Retval;
 
@@ -166,7 +164,7 @@ bool C_GiBiTextElement::OpenStyleDialog(const bool oq_DarkMode)
 
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(pc_View, pc_View);
    C_GiSyBaseWidget * const pc_Dialog =
-      new C_GiSyBaseWidget(*c_New, C_GtGetText::h_GetText("Text Element"), oq_DarkMode);
+      new C_GiSyBaseWidget(*c_New, C_GtGetText::h_GetText("Text Element"));
    C_GiSyTextElementWidget * const pc_SettingsWidget = new C_GiSyTextElementWidget(*pc_Dialog);
 
    const QSize c_SIZE(880, 506);
@@ -335,21 +333,13 @@ void C_GiBiTextElement::SetEditable(const bool oq_Editable)
 /*! \brief  Function for initially loading internal data
 
    \param[in,out] opc_Data    Text element data
-   \param[in]     oq_DarkMode Optional flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiBiTextElement::m_LoadTextElementData(const C_PuiBsTextElement * const opc_Data, const bool oq_DarkMode)
+void C_GiBiTextElement::m_LoadTextElementData(const C_PuiBsTextElement * const opc_Data)
 {
    this->LoadBasicData(*opc_Data);
 
-   if (oq_DarkMode == true)
-   {
-      this->SetFontColor(opc_Data->c_UiFontColorDark);
-   }
-   else
-   {
-      this->SetFontColor(opc_Data->c_UiFontColorBright);
-   }
+   this->SetFontColor(opc_Data->c_UiFontColorBright);
    this->SetFontStyle(opc_Data->c_UiFontStyle);
    this->SetText(opc_Data->c_UiText);
    this->ApplySizeChange(opc_Data->c_UiPosition, QSizeF(opc_Data->f64_Width, opc_Data->f64_Height));
@@ -359,21 +349,13 @@ void C_GiBiTextElement::m_LoadTextElementData(const C_PuiBsTextElement * const o
 /*! \brief  Slot function for updating internal data
 
    \param[in,out] opc_Data    Text element data
-   \param[in]     oq_DarkMode Optional flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiBiTextElement::m_UpdateTextElementData(C_PuiBsTextElement * const opc_Data, const bool oq_DarkMode) const
+void C_GiBiTextElement::m_UpdateTextElementData(C_PuiBsTextElement * const opc_Data) const
 {
    this->UpdateBasicData(*opc_Data);
 
-   if (oq_DarkMode == true)
-   {
-      opc_Data->c_UiFontColorDark = this->GetFontColor();
-   }
-   else
-   {
-      opc_Data->c_UiFontColorBright = this->GetFontColor();
-   }
+   opc_Data->c_UiFontColorBright = this->GetFontColor();
    opc_Data->c_UiFontStyle = this->GetFontStyle();
    opc_Data->c_UiText = this->GetText();
 }

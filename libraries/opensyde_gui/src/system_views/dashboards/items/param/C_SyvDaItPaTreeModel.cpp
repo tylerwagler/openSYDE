@@ -61,7 +61,6 @@ const QString C_SyvDaItPaTreeModel::mhc_ECU_VALUE_INIT_STRING = "N/A";
 C_SyvDaItPaTreeModel::C_SyvDaItPaTreeModel(QObject * const opc_Parent) :
    C_TblTreModel(opc_Parent),
    mpc_DataWidget(NULL),
-   mq_DarkMode(false),
    mq_EditMode(false),
    mq_Connected(false),
    mq_SaveLoadActive(true),
@@ -120,17 +119,6 @@ void C_SyvDaItPaTreeModel::ReloadSetValues(void)
    Q_EMIT this->dataChanged(this->index(0, s32_ColSet), this->index(this->rowCount() - 1, s32_ColSet), c_Roles);
    //Trigger "*" update
    Q_EMIT this->dataChanged(this->index(0, s32_ColTree), this->index(this->rowCount() - 1, s32_ColTree), c_Roles);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set dark flag value
-
-   \param[in]  oq_Value    New dark flag value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaTreeModel::SetDark(const bool oq_Value)
-{
-   this->mq_DarkMode = oq_Value;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2000,16 +1988,8 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
       QColor c_Default;
       const QColor c_ERROR = mc_STYLE_GUIDE_COLOR_24;
       const E_Columns e_Col = h_ColumnToEnum(orc_Index.column());
-      if (this->mq_DarkMode == true)
-      {
-         c_DefaultNonInteractive = mc_STYLE_GUIDE_COLOR_2;
-         c_Default = mc_STYLE_GUIDE_COLOR_1;
-      }
-      else
-      {
-         c_DefaultNonInteractive = mc_STYLE_GUIDE_COLOR_34;
-         c_Default = mc_STYLE_GUIDE_COLOR_31;
-      }
+      c_DefaultNonInteractive = mc_STYLE_GUIDE_COLOR_34;
+      c_Default = mc_STYLE_GUIDE_COLOR_31;
       c_Retval = c_DefaultNonInteractive;
       if (e_Col == C_SyvDaItPaTreeModel::eSET)
       {

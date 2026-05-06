@@ -86,8 +86,7 @@ public:
                           const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_NewProperties);
 
 protected:
-   C_SebUnoSetupStyleCommand * m_GetNewStyleCommand(const std::vector<uint64_t> & orc_Items,
-                                                    const bool oq_DarkMode) override;
+   C_SebUnoSetupStyleCommand * m_GetNewStyleCommand(const std::vector<uint64_t> & orc_Items) override;
 
 private:
    void m_MergeWithPrev(QUndoCommand * const opc_Command);

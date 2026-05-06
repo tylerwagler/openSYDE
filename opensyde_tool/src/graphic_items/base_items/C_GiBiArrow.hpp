@@ -38,7 +38,7 @@ public:
    QPainterPath shape(void) const override;
    void SetWidth(const int32_t & ors32_Width) override;
    int32_t type() const override;
-   bool OpenStyleDialog(const bool oq_DarkMode);
+   bool OpenStyleDialog(void);
    void CopyStyle(const QGraphicsItem * const opc_GuidelineItem) override;
    void ApplyStyle(const QColor & orc_LineColor, const int32_t os32_Width,
                    const stw::opensyde_gui_logic::C_PuiBsLineArrow::E_LineType oe_LineType,

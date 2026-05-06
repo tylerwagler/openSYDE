@@ -39,15 +39,13 @@ using namespace std;
 
    \param[in,out] opc_Scene   Pointer to currently active scene
    \param[in]     orc_Ids     Affected unique IDs
-   \param[in]     oq_DarkMode Optional flag if dark mode is active
    \param[in,out] opc_Parent  Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologySetupStyleCommand::C_SdManUnoTopologySetupStyleCommand(QGraphicsScene * const opc_Scene,
                                                                          const std::vector<uint64_t> & orc_Ids,
-                                                                         const bool oq_DarkMode,
                                                                          QUndoCommand * const opc_Parent) :
-   C_SebUnoSetupStyleCommand(opc_Scene, orc_Ids, oq_DarkMode, opc_Parent)
+   C_SebUnoSetupStyleCommand(opc_Scene, orc_Ids, opc_Parent)
 {
    delete (this->mpc_PreviousState);
    delete (this->mpc_NextState);

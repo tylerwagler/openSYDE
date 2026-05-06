@@ -4,10 +4,10 @@
    \brief       Shared base for the dashboard widget-property panels (implementation)
 
    The six dashboard widget-property panels (Label, PieChart, ProgressBar, Slider, SpinBox,
-   Toggle) all hold a reference to the same C_SyvDaPeBase host plus a dark-mode flag, and
-   their m_UpdatePreview methods all end with the same scene clear / addItem / clearSelection
-   block. This base captures that shared shell so each subclass only has to declare its
-   per-type config getters/setters and the middle of m_UpdatePreview.
+   Toggle) all hold a reference to the same C_SyvDaPeBase host, and their m_UpdatePreview
+   methods all end with the same scene clear / addItem / clearSelection block. This base
+   captures that shared shell so each subclass only has to declare its per-type config
+   getters/setters and the middle of m_UpdatePreview.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
@@ -37,14 +37,12 @@ using namespace stw::opensyde_gui;
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
 
-   \param[in,out]  orc_Parent    Parent host (owns the preview scene and theme/dark-mode state)
-   \param[in]      oq_DarkMode   Flag for dark mode rendering
+   \param[in,out]  orc_Parent    Parent host (owns the preview scene and theme state)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvDaPePanelBase::C_SyvDaPePanelBase(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode) :
+C_SyvDaPePanelBase::C_SyvDaPePanelBase(C_SyvDaPeBase & orc_Parent) :
    QWidget(&orc_Parent),
-   mrc_ParentDialog(orc_Parent),
-   mq_DarkMode(oq_DarkMode)
+   mrc_ParentDialog(orc_Parent)
 {
 }
 

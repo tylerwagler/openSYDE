@@ -692,12 +692,10 @@ void C_SyvDaDashboardSelectorTabWidget::m_MakeScreenshot(const int32_t os32_Inde
    \param[in]  orc_Name       Tab name
    \param[in]  orc_Comment    Tab comment
    \param[in]  oq_Active      Tab active
-   \param[in]  oq_Dark        Dark mode active
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSelectorTabWidget::m_InitTabStyle(const uint32_t ou32_Index, const QString & orc_Name,
-                                                       const QString & orc_Comment, const bool oq_Active,
-                                                       const bool oq_Dark)
+                                                       const QString & orc_Comment, const bool oq_Active)
 {
    C_OgeWiDashboardTab * const pc_DrawingWidget = new C_OgeWiDashboardTab(NULL, true);
    QGroupBox * const pc_GroupBox = new QGroupBox();
@@ -738,7 +736,6 @@ void C_SyvDaDashboardSelectorTabWidget::m_InitTabStyle(const uint32_t ou32_Index
    connect(pc_DrawingWidget, &C_OgeWiDashboardTab::SigEditPropertiesAction, this,
            &C_SyvDaDashboardSelectorTabWidget::m_OnEditProperties);
 
-   pc_DrawingWidget->SetDarkMode(oq_Dark);
    this->tabBar()->setTabButton(static_cast<int32_t>(ou32_Index),
                                 C_SyvDaDashboardSelectorTabWidget::mhe_TAB_CONTENT_POSITION, pc_DrawingWidget);
    //After add (AND display!)
@@ -942,7 +939,6 @@ void C_SyvDaDashboardSelectorTabWidget::m_AddSpecificTab(const uint32_t ou32_Dat
          }
 
          pc_Widget->SetEditMode(this->mq_EditMode);
-         pc_Widget->SetDarkMode(pc_View->GetDarkModeActive());
 
          //Check for insert vs add action
          if ((os32_TabIndex >= 0) && (os32_TabIndex <= this->count()))
@@ -957,7 +953,7 @@ void C_SyvDaDashboardSelectorTabWidget::m_AddSpecificTab(const uint32_t ou32_Dat
          }
          this->me_DashboardTabType = pc_Dashboard->GetType();
          m_InitTabStyle(static_cast<uint32_t>(s32_Index), pc_Dashboard->GetName(), pc_Dashboard->GetComment(),
-                        pc_Dashboard->GetActive(), pc_View->GetDarkModeActive());
+                        pc_Dashboard->GetActive());
          m_Connect(pc_Widget);
       } //lint !e429 !e593 //no memory leak because of the parent of pc_Widget and the Qt memory management
    }
@@ -1272,7 +1268,6 @@ void C_SyvDaDashboardSelectorTabWidget::m_TearOffWidget(const uint32_t ou32_Data
          pc_Widget->SetEditMode(this->mq_EditMode);
          pc_Widget->SetEnabled(!this->mq_Connected);
          pc_Widget->ConnectionActiveChanged(this->mq_Connected, c_MappingNodeToTrafficEncryptionStatus, true);
-         pc_Widget->SetDarkMode(pc_View->GetDarkModeActive());
          //Window title
          pc_Widget->setWindowTitle("openSYDE - " + pc_DashBoard->GetName());
          if (oq_TornOffWindowMinimized == true)

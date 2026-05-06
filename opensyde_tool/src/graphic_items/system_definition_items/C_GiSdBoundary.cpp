@@ -59,7 +59,7 @@ void C_GiSdBoundary::LoadData(void)
 {
    if (C_PuiSdHandler::h_GetInstance()->c_Elements.c_Boundaries.size() > static_cast<uint32_t>(this->ms32_Index))
    {
-      m_LoadFromData(C_PuiSdHandler::h_GetInstance()->c_Elements.c_Boundaries[this->ms32_Index], false);
+      m_LoadFromData(C_PuiSdHandler::h_GetInstance()->c_Elements.c_Boundaries[this->ms32_Index]);
    }
    //Object name for test
    this->setObjectName("Meta: Boundary");
@@ -73,7 +73,7 @@ void C_GiSdBoundary::UpdateData(void)
 {
    if (C_PuiSdHandler::h_GetInstance()->c_Elements.c_Boundaries.size() > static_cast<uint32_t>(this->ms32_Index))
    {
-      m_UpdateData(C_PuiSdHandler::h_GetInstance()->c_Elements.c_Boundaries[this->ms32_Index], false);
+      m_UpdateData(C_PuiSdHandler::h_GetInstance()->c_Elements.c_Boundaries[this->ms32_Index]);
    }
 }
 

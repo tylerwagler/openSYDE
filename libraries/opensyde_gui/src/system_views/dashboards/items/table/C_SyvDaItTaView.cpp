@@ -305,14 +305,12 @@ void C_SyvDaItTaView::SetSelectionAvailable(const bool oq_Active, const bool oq_
 /*! \brief   Apply style
 
    \param[in]  oe_Style       New style type
-   \param[in]  oq_DarkMode    Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItTaView::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode)
+void C_SyvDaItTaView::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
-   this->mc_Delegate.SetDisplayStyle(oe_Style, oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this, "DarkMode", oq_DarkMode);
-   this->mc_Model.SetDisplayStyle(oe_Style, oq_DarkMode);
+   this->mc_Delegate.SetDisplayStyle(oe_Style);
+   this->mc_Model.SetDisplayStyle(oe_Style);
    switch (oe_Style)
    {
    case C_PuiSvDbWidgetBase::eOPENSYDE:

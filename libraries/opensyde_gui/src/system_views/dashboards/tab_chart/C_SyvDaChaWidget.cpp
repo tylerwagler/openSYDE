@@ -67,7 +67,6 @@ C_SyvDaChaWidget::C_SyvDaChaWidget(const uint32_t ou32_ViewIndex, const uint32_t
                                mhu32_MAXIMUM_DATA_ELEMENTS, true),
    mpc_Ui(new Ui::C_SyvDaChaWidget),
    mq_InitialStyleCall(true),
-   mq_DarkMode(false),
    mq_DrawingActive(true),
    mq_EditMode(false),
    mq_IsConnected(false),
@@ -126,32 +125,6 @@ void C_SyvDaChaWidget::SetDashboardIndex(const uint32_t ou32_Value)
 void C_SyvDaChaWidget::SetEditMode(const bool oq_Active)
 {
    this->mq_EditMode = oq_Active;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Sets the dark mode
-
-   \param[in]  oq_Active   Dark mode active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaChaWidget::SetDarkMode(const bool oq_Active)
-{
-   if ((this->mq_InitialStyleCall == true) ||
-       (this->mq_DarkMode != oq_Active))
-   {
-      this->mq_InitialStyleCall = false;
-      this->mq_DarkMode = oq_Active;
-      if (oq_Active == true)
-      {
-         C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this, "Style", "OPENSYDE_DARK");
-      }
-      else
-      {
-         C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this, "Style", "OPENSYDE_BRIGHT");
-      }
-
-      this->mpc_Ui->pc_ChartWidget->SetDarkMode(oq_Active);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -770,8 +743,8 @@ void C_SyvDaChaWidget::m_AddNewDataElement(void)
 
       //Force update
       this->mq_InitialStyleCall = true;
-      // Update the whole styling, because of new added gui elements
-      this->SetDarkMode(this->mq_DarkMode);
+      // Apply bright style to any newly added gui elements
+      C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this, "Style", "OPENSYDE_BRIGHT");
 
       if (c_New != NULL)
       {
@@ -931,7 +904,7 @@ void C_SyvDaChaWidget::m_CallProperties(void)
          c_DisplayName = rc_Box.c_DataPoolElementsConfig[u32_ConfigIndex].c_DisplayName;
 
          pc_Dialog = new C_SyvDaPeBase(*c_New, this->mu32_ViewIndex, this->mu32_DashboardIndex, "Chart",
-                                       c_ElementId, c_Scaling, true, c_FormatterConfig, true, this->mq_DarkMode, false,
+                                       c_ElementId, c_Scaling, true, c_FormatterConfig, true, false,
                                        false, c_DisplayName);
 
          pc_Dialog->SetTheme(rc_Box.e_DisplayStyle);

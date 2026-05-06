@@ -61,9 +61,6 @@ public:
                                    NULL);
    void DeleteItem(QGraphicsItem * const opc_Item);
 
-   void SetDarkModeActive(const bool oq_Value) override;
-   void SetDarkModeInitialized(void);
-
    void UpdateBoundaries(void) const;
 
    //lint -e{1735} Suppression, because default parameters are identical
@@ -162,8 +159,6 @@ private:
    bool mq_EditMode;
    const uint32_t mu32_ViewIndex;
    uint32_t mu32_DashboardIndex;
-   bool mq_LastKnownDarkMode;
-   bool mq_DarkModeInitialized;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

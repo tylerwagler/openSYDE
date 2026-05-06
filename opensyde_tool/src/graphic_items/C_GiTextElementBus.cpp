@@ -133,7 +133,7 @@ void C_GiTextElementBus::LoadData(void)
       C_PuiSdTextElementBus & rc_UiTextElementData =
          C_PuiSdHandler::h_GetInstance()->c_BusTextElements[static_cast<uint32_t>(this->ms32_Index)];
 
-      this->m_LoadTextElementData(&rc_UiTextElementData, false);
+      this->m_LoadTextElementData(&rc_UiTextElementData);
 
       this->mu32_BusIndex = rc_UiTextElementData.u32_BusIndex;
    }
@@ -149,7 +149,7 @@ void C_GiTextElementBus::UpdateData(void)
    {
       C_PuiSdTextElementBus * const pc_Item = &C_PuiSdHandler::h_GetInstance()->c_BusTextElements[this->ms32_Index];
 
-      this->m_UpdateTextElementData(pc_Item, false);
+      this->m_UpdateTextElementData(pc_Item);
 
       pc_Item->u32_BusIndex = this->mu32_BusIndex;
    }

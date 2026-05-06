@@ -116,16 +116,15 @@ int32_t C_GiSvDaTableBase::type(void) const
 /*! \brief   Apply style
 
    \param[in]  oe_Style       New style type
-   \param[in]  oq_DarkMode    Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaTableBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode)
+void C_GiSvDaTableBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
-   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style, oq_DarkMode);
+   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style);
    tgl_assert(this->mpc_TableWidget != NULL);
    if (this->mpc_TableWidget != NULL)
    {
-      this->mpc_TableWidget->SetDisplayStyle(oe_Style, oq_DarkMode);
+      this->mpc_TableWidget->SetDisplayStyle(oe_Style);
    }
 }
 
@@ -298,7 +297,7 @@ void C_GiSvDaTableBase::EditElementProperties(void)
 
                pc_Dialog = new C_SyvDaPeBase(*c_New, this->mu32_ViewIndex, this->mu32_DashboardIndex,
                                              "Table", c_ElementId, c_Scaling, true, c_FormatterConfig, true,
-                                             this->mq_DarkMode, false, false,
+                                             false, false,
                                              c_DisplayName);
 
                //Resize

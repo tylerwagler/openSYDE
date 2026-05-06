@@ -30,7 +30,6 @@ class C_OgePubTabClose :
 
 public:
    C_OgePubTabClose(QWidget * const opc_Parent = NULL);
-   void SetDarkMode(const bool oq_Active);
 
 protected:
    bool event(QEvent * const opc_Event) override;
@@ -41,10 +40,6 @@ private:
    QIcon mc_Default;
    QIcon mc_Hovered;
    QIcon mc_Clicked;
-   QIcon mc_DefaultDark;
-   QIcon mc_HoveredDark;
-   QIcon mc_ClickedDark;
-   bool mq_DarkMode;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

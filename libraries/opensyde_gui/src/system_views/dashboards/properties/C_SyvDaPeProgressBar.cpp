@@ -51,11 +51,10 @@ const int32_t C_SyvDaPeProgressBar::mhs32_INDEX_ALIGNMENT_BOTTOM = 1;
    Set up GUI with all elements.
 
    \param[in,out]  orc_Parent    Parent widget
-   \param[in]      oq_DarkMode   Flag for dark mode
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvDaPeProgressBar::C_SyvDaPeProgressBar(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode) :
-   C_SyvDaPePanelBase(orc_Parent, oq_DarkMode),
+C_SyvDaPeProgressBar::C_SyvDaPeProgressBar(C_SyvDaPeBase & orc_Parent) :
+   C_SyvDaPePanelBase(orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPeProgressBar)
 {
    mpc_Ui->setupUi(this);
@@ -308,7 +307,7 @@ void C_SyvDaPeProgressBar::m_UpdatePreview(void)
                                        &c_ItemPosition);
 
    pc_Item->SetValuePe(s32_DEFAULT_VALUE);
-   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme(), this->mq_DarkMode);
+   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme());
    pc_Item->UpdateTypePe(this->GetType(), this->GetAlignment(), this->GetShowMinMax());
    pc_Item->ApplySizeChange(c_ItemPosition, c_ItemSize);
 

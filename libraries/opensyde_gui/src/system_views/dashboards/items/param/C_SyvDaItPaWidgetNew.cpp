@@ -405,28 +405,6 @@ bool C_SyvDaItPaWidgetNew::HandleManualOperationFinished(const int32_t os32_Resu
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set dark flag value
-
-   \param[in]  oq_Value    New dark flag value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaWidgetNew::SetDark(const bool oq_Value) const
-{
-   this->mpc_Ui->pc_TreeView->SetDark(oq_Value);
-   this->mpc_Ui->pc_PushButtonAdd->SetDarkMode(oq_Value);
-
-   if (oq_Value == true)
-   {
-      this->mpc_Ui->pc_PushButtonAdd->SetSvg("://images/IconAddEnabledDarkMode.svg",
-                                             "://images/IconAddDisabled.svg");
-   }
-   else
-   {
-      this->mpc_Ui->pc_PushButtonAdd->SetSvg("://images/IconAddEnabled.svg", "://images/IconAddDisabled.svg");
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Handle add button click
 */
 //----------------------------------------------------------------------------------------------------------------------

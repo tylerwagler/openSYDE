@@ -40,7 +40,7 @@ public:
    explicit C_SyvDaItDashboardSliderWidget(QWidget * const opc_Parent = NULL);
    ~C_SyvDaItDashboardSliderWidget(void) override;
 
-   void SetCurrentStyle(const stw::opensyde_gui_logic::C_PuiSvDbSlider::E_Style oe_Style, const bool oq_IsDark) const;
+   void SetCurrentStyle(const stw::opensyde_gui_logic::C_PuiSvDbSlider::E_Style oe_Style) const;
    void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbSlider::E_Type oe_Type) const;
    void AdjustFontToSize(void);
    void SetMinMax(const int32_t os32_MinValue, const QString & orc_MinString, const int32_t os32_MaxValue,

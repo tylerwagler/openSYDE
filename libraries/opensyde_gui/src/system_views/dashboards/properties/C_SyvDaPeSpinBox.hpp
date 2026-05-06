@@ -35,7 +35,7 @@ class C_SyvDaPeSpinBox :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaPeSpinBox(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode);
+   explicit C_SyvDaPeSpinBox(C_SyvDaPeBase & orc_Parent);
    ~C_SyvDaPeSpinBox(void) override;
 
    void InitStaticNames(void) const;

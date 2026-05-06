@@ -34,8 +34,7 @@ public:
    ~C_GiSvDaLabelBase(void) override;
 
    int32_t type(void) const override;
-   void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style,
-                        const bool oq_DarkMode) override;
+   void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style) override;
    void ReInitializeSize(void) override;
 
    void LoadData(void) override;

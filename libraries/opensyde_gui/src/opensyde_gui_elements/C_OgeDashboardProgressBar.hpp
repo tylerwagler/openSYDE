@@ -32,7 +32,7 @@ class C_OgeDashboardProgressBar :
 public:
    C_OgeDashboardProgressBar(QWidget * const opc_Parent = NULL);
 
-   void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode);
+   void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style);
 
 protected:
    void paintEvent(QPaintEvent * const opc_Event) override;

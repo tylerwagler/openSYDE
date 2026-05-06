@@ -49,7 +49,6 @@ using namespace stw::opensyde_gui_elements;
 C_OgeSliDashboard::C_OgeSliDashboard(QWidget * const opc_Parent) :
    C_OgeSliToolTipBase(opc_Parent),
    mpc_SvgRenderer(NULL),
-   mq_IsDark(false),
    me_Style(C_PuiSvDbSlider::eOPENSYDE),
    me_Type(C_PuiSvDbSlider::eTYPE_SMALL_COLOR_1)
 {
@@ -71,13 +70,11 @@ C_OgeSliDashboard::~C_OgeSliDashboard(void)
 /*! \brief   Set current style
 
    \param[in]  oe_Style    Widget style
-   \param[in]  oq_IsDark   Dark mode active flag
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeSliDashboard::SetCurrentStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_IsDark)
+void C_OgeSliDashboard::SetCurrentStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
    this->me_Style = oe_Style;
-   this->mq_IsDark = oq_IsDark;
    m_ReinitStyle();
 }
 
@@ -257,14 +254,7 @@ void C_OgeSliDashboard::m_ReinitStyle(void)
       switch (this->me_Style)
       {
       case C_PuiSvDbSlider::eOPENSYDE:
-         if (this->mq_IsDark == false)
-         {
-            this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleOpenSYDEBright1.svg");
-         }
-         else
-         {
-            this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleOpenSYDEDark1.svg");
-         }
+         this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleOpenSYDEBright1.svg");
          break;
       case C_PuiSvDbSlider::eOPENSYDE_2:
          this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleOpenSYDE2Bright1.svg");
@@ -273,14 +263,7 @@ void C_OgeSliDashboard::m_ReinitStyle(void)
          this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleFlat1.svg");
          break;
       case C_PuiSvDbSlider::eSKEUOMORPH:
-         if (this->mq_IsDark == false)
-         {
-            this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleSkeuomorphBright1.svg");
-         }
-         else
-         {
-            this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleSkeuomorphDark1.svg");
-         }
+         this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleSkeuomorphBright1.svg");
          break;
       default:
          tgl_assert(false);
@@ -292,37 +275,16 @@ void C_OgeSliDashboard::m_ReinitStyle(void)
       switch (this->me_Style)
       {
       case C_PuiSvDbSlider::eOPENSYDE:
-         if (this->mq_IsDark == false)
-         {
-            this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleOpenSYDEBright2.svg");
-         }
-         else
-         {
-            this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleOpenSYDEDark2.svg");
-         }
+         this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleOpenSYDEBright2.svg");
          break;
       case C_PuiSvDbSlider::eOPENSYDE_2:
-         if (this->mq_IsDark == false)
-         {
-            this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleOpenSYDE2Bright2.svg");
-         }
-         else
-         {
-            this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleOpenSYDE2Dark2.svg");
-         }
+         this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleOpenSYDE2Bright2.svg");
          break;
       case C_PuiSvDbSlider::eFLAT:
          this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleFlat2.svg");
          break;
       case C_PuiSvDbSlider::eSKEUOMORPH:
-         if (this->mq_IsDark == false)
-         {
-            this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleSkeuomorphBright2.svg");
-         }
-         else
-         {
-            this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleSkeuomorphDark2.svg");
-         }
+         this->m_SetSvg("://images/system_views/dashboards/icons/SliderHandleSkeuomorphBright2.svg");
          break;
       default:
          tgl_assert(false);

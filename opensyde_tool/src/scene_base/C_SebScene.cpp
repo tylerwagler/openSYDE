@@ -71,14 +71,12 @@ C_SebScene::C_SebScene(QObject * const opc_Parent) :
    mq_RubberBandActive(false),
    mq_LeftButtonPressed(false),
    mq_DrawCustomBackground(true),
-   mq_DarkModeActive(false),
    mc_LastKnownMouseScenePosition(0.0, 0.0)
 {
    connect(this, &QGraphicsScene::changed, this, &C_SebScene::m_AdaptSceneRect);
 
    // configure background drawing
    this->mc_ImgDrawBackground.load(":images/DrawBackground.png");
-   this->mc_ImgDrawBackgroundDark.load("://images/DrawBackgroundDark.png");
    m_HandleBackground();
 
    //Timers
@@ -326,18 +324,6 @@ void C_SebScene::UpdateTransform(const QTransform & orc_Transform)
          pc_Rect->UpdateTransform(orc_Transform);
       }
    }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set dark mode active
-
-   \param[in]  oq_Value    Dark mode active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SebScene::SetDarkModeActive(const bool oq_Value)
-{
-   this->mq_DarkModeActive = oq_Value;
-   m_HandleBackground();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1596,7 +1582,7 @@ bool C_SebScene::m_CallSetupStyle(QGraphicsItem * const opc_Item) const
 
    if (pc_Boundary != NULL)
    {
-      q_Retval = pc_Boundary->OpenStyleDialog(this->mq_DarkModeActive);
+      q_Retval = pc_Boundary->OpenStyleDialog();
    }
    else
    {
@@ -1604,7 +1590,7 @@ bool C_SebScene::m_CallSetupStyle(QGraphicsItem * const opc_Item) const
 
       if (pc_TextElement != NULL)
       {
-         q_Retval = pc_TextElement->OpenStyleDialog(this->mq_DarkModeActive);
+         q_Retval = pc_TextElement->OpenStyleDialog();
       }
       else
       {
@@ -1612,7 +1598,7 @@ bool C_SebScene::m_CallSetupStyle(QGraphicsItem * const opc_Item) const
 
          if (pc_Arrow != NULL)
          {
-            q_Retval = pc_Arrow->OpenStyleDialog(this->mq_DarkModeActive);
+            q_Retval = pc_Arrow->OpenStyleDialog();
          }
       }
    }
@@ -1867,7 +1853,7 @@ void C_SebScene::m_SetupStyle(QGraphicsItem * const opc_Item)
       const QList<QGraphicsItem *> c_SelectedItems = this->selectedItems();
 
       //Undo
-      pc_UndoManager->SaveStyleInformation(c_SelectedItems, this->mq_DarkModeActive);
+      pc_UndoManager->SaveStyleInformation(c_SelectedItems);
 
       q_Apply = m_CallSetupStyle(opc_Item);
 
@@ -1898,25 +1884,11 @@ void C_SebScene::m_HandleBackground(void)
 {
    if (this->mq_DrawCustomBackground == true)
    {
-      if (this->mq_DarkModeActive == true)
-      {
-         this->setBackgroundBrush(this->mc_ImgDrawBackgroundDark);
-      }
-      else
-      {
-         this->setBackgroundBrush(this->mc_ImgDrawBackground);
-      }
+      this->setBackgroundBrush(this->mc_ImgDrawBackground);
    }
    else
    {
-      if (this->mq_DarkModeActive == true)
-      {
-         this->setBackgroundBrush(mc_STYLE_GUIDE_COLOR_52);
-      }
-      else
-      {
-         this->setBackgroundBrush(Qt::NoBrush);
-      }
+      this->setBackgroundBrush(Qt::NoBrush);
    }
 }
 

@@ -66,7 +66,6 @@ public:
       const stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId & orc_DataPoolElementId,
       const stw::opensyde_gui_logic::C_PuiSvDbDataElementDisplayFormatterConfig & orc_Config);
 
-   void SetDarkMode(const bool oq_DarkMode);
    void SetDrawingActive(const bool oq_Active);
 
    bool IsPaused(void) const;
@@ -140,7 +139,6 @@ private:
 
    bool mq_Initialized;
    bool mq_DrawingActive;
-   bool mq_DarkMode;
 
    uint32_t mu32_MaximumDataElements;
    static const int32_t mhs32_WIDTH_LINE_SELECTED;
@@ -199,7 +197,8 @@ private:
    void m_OnSplitterMoved(void);
    void m_CyclicUpdateHorizontalAxis(void);
    void m_RangeChangedHorizontalAxis(void);
-   void m_SetButtonIcons(const bool oq_DarkMode);
+   void m_SetButtonIcons(void);
+   void m_ApplyDefaultTheme(void);
 
    // Color functions
    uint8_t m_GetNextNotUsedColor(void);
@@ -211,9 +210,9 @@ private:
    QCPAxis * m_GetVerticalAxis(const uint32_t ou32_DataPoolElementConfigIndex) const;
    void m_UpdateVerticalAxisLabel(const uint32_t ou32_DataPoolElementConfigIndex);
    static void mh_AdaptVerticalAxisStyle(QCPAxis * const opc_Axis, const bool oq_Selected);
-   static void mh_AdaptAxisColor(QCPAxis * const opc_Axis, const QColor & orc_Color, const bool oq_DarkMode);
-   void m_AdaptAllVerticalAxisGridColors(const bool oq_DarkMode);
-   static void mh_AdaptAxisGridColor(const QCPAxis * const opc_Axis, const bool oq_DarkMode);
+   static void mh_AdaptAxisColor(QCPAxis * const opc_Axis, const QColor & orc_Color);
+   void m_AdaptAllVerticalAxisGridColors(void);
+   static void mh_AdaptAxisGridColor(const QCPAxis * const opc_Axis);
    void m_AdaptVerticalAxisWithSpace(QCPAxis * const opc_Axis);
 
    // Measurement cursor functions

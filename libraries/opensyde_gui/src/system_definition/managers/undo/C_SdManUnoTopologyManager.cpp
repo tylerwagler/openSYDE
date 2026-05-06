@@ -468,16 +468,14 @@ void C_SdManUnoTopologyManager::DoChangeInterface(const C_GiLiBusConnector * con
 /*! \brief   Get new style command (Destruction has to be handled by calling function)
 
    \param[in]  orc_Items      Item IDs
-   \param[in]  oq_DarkMode    Optional flag if dark mode active
 
    \return
    Valid pointer to new style command
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SebUnoSetupStyleCommand * C_SdManUnoTopologyManager::m_GetNewStyleCommand(const std::vector<uint64_t> & orc_Items,
-                                                                            const bool oq_DarkMode)
+C_SebUnoSetupStyleCommand * C_SdManUnoTopologyManager::m_GetNewStyleCommand(const std::vector<uint64_t> & orc_Items)
 {
-   return new C_SdManUnoTopologySetupStyleCommand(this->mpc_Scene, orc_Items, oq_DarkMode);
+   return new C_SdManUnoTopologySetupStyleCommand(this->mpc_Scene, orc_Items);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

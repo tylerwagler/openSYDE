@@ -75,9 +75,7 @@ C_SyvDaDashboardScene::C_SyvDaDashboardScene(const uint32_t ou32_ViewIndex, cons
    mc_UndoManager(this),
    mq_EditMode(false),
    mu32_ViewIndex(ou32_ViewIndex),
-   mu32_DashboardIndex(ou32_DashboardIndex),
-   mq_LastKnownDarkMode(false),
-   mq_DarkModeInitialized(false)
+   mu32_DashboardIndex(ou32_DashboardIndex)
 {
    // Init base scene. Initializing all parts which can not be initilized in the base constructor
    this->m_InitSceneContextMenuManager();
@@ -592,66 +590,6 @@ void C_SyvDaDashboardScene::DeleteItem(QGraphicsItem * const opc_Item)
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set dark mode active
-
-   \param[in]  oq_Value    Dark mode active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardScene::SetDarkModeActive(const bool oq_Value)
-{
-   const QList<QGraphicsItem *> & rc_Items = this->items();
-
-   if ((this->mq_DarkModeInitialized == true) && (this->mq_LastKnownDarkMode != oq_Value))
-   {
-      //Change dark mode state to save in last known state
-      C_PuiSvHandler::h_GetInstance()->SetViewDarkModeActive(this->mu32_ViewIndex, this->mq_LastKnownDarkMode);
-      this->Save();
-      C_PuiSvHandler::h_GetInstance()->SetViewDarkModeActive(this->mu32_ViewIndex, oq_Value);
-      this->mc_UndoManager.clear();
-      this->mq_LastKnownDarkMode = oq_Value;
-   }
-   C_SebScene::SetDarkModeActive(oq_Value);
-
-   // inform the items
-   for (QList<QGraphicsItem *>::const_iterator c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
-   {
-      // TODO Watch if parent necessary
-
-      C_GiSvDaRectBaseGroup * const pc_RectBase = dynamic_cast<C_GiSvDaRectBaseGroup *>(*c_ItItem);
-      if (pc_RectBase != NULL)
-      {
-         pc_RectBase->SetDisplayStyle(pc_RectBase->GetDisplayStyleType(), oq_Value);
-      }
-      else
-      {
-         C_PuiSvDbDataElement * const pc_OtherElement = dynamic_cast<C_PuiSvDbDataElement * const>(*c_ItItem);
-         //Reload data & dark mode for basic drawing items
-         if (pc_OtherElement != NULL)
-         {
-            pc_OtherElement->LoadData();
-         }
-      }
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Activate dark mode switch functionality
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardScene::SetDarkModeInitialized(void)
-{
-   if (this->mq_DarkModeInitialized == false)
-   {
-      const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-
-      if (pc_View != NULL)
-      {
-         this->mq_LastKnownDarkMode = pc_View->GetDarkModeActive();
-      }
-      this->mq_DarkModeInitialized = true;
-   }
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Update text
@@ -1200,7 +1138,7 @@ void C_SyvDaDashboardScene::m_AddImage(const QString & orc_Path, const QPointF &
    {
       this->mc_UndoManager.DoAddGeneric(C_PuiSvDbDataElement::eIMAGE,
                                         m_GetNewUniqueId(), orc_Position, this->GetHighestUsedZetValueList(
-                                           this->items()) + 1.0, pc_View->GetDarkModeActive(), orc_Path);
+                                           this->items()) + 1.0, orc_Path);
    }
 }
 
@@ -1339,7 +1277,7 @@ bool C_SyvDaDashboardScene::m_AddOfMime(const QMimeData * const opc_MimeData, co
          {
             this->mc_UndoManager.DoAddGeneric(e_Type, m_GetNewUniqueId(), orc_Position,
                                               this->GetHighestUsedZetValueList(this->items()) + 1.0,
-                                              pc_View->GetDarkModeActive(), c_Text);
+                                              c_Text);
          }
       }
       else
@@ -1912,7 +1850,7 @@ void C_SyvDaDashboardScene::m_LoadSubset(const QVector<uint32_t> & orc_OtherStar
                                             this->mu32_DashboardIndex, static_cast<int32_t>(u32_ItWidget),
                                             u64_CurUniqueId);
             pc_Item->LoadData();
-            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle, pc_View->GetDarkModeActive());
+            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle);
 
             m_AddWidgetToScene(pc_Item);
             if (orq_Selection == true)
@@ -1933,7 +1871,7 @@ void C_SyvDaDashboardScene::m_LoadSubset(const QVector<uint32_t> & orc_OtherStar
             pc_Item = new C_GiSvDaParam(this->mu32_ViewIndex, this->mu32_DashboardIndex,
                                         static_cast<int32_t>(u32_ItWidget), u64_CurUniqueId);
             pc_Item->LoadData();
-            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle, pc_View->GetDarkModeActive());
+            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle);
 
             m_AddParamWidgetToScene(pc_Item);
             if (orq_Selection == true)
@@ -1955,7 +1893,7 @@ void C_SyvDaDashboardScene::m_LoadSubset(const QVector<uint32_t> & orc_OtherStar
                                                this->mu32_DashboardIndex, static_cast<int32_t>(u32_ItWidget),
                                                u64_CurUniqueId);
             pc_Item->LoadData();
-            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle, pc_View->GetDarkModeActive());
+            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle);
 
             m_AddWidgetToScene(pc_Item);
             if (orq_Selection == true)
@@ -1977,7 +1915,7 @@ void C_SyvDaDashboardScene::m_LoadSubset(const QVector<uint32_t> & orc_OtherStar
                                               this->mu32_DashboardIndex, static_cast<int32_t>(u32_ItWidget),
                                               u64_CurUniqueId);
             pc_Item->LoadData();
-            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle, pc_View->GetDarkModeActive());
+            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle);
 
             m_AddWidgetToScene(pc_Item);
             if (orq_Selection == true)
@@ -1999,7 +1937,7 @@ void C_SyvDaDashboardScene::m_LoadSubset(const QVector<uint32_t> & orc_OtherStar
                                              this->mu32_DashboardIndex, static_cast<int32_t>(u32_ItWidget),
                                              u64_CurUniqueId);
             pc_Item->LoadData();
-            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle, pc_View->GetDarkModeActive());
+            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle);
 
             m_AddWidgetToScene(pc_Item);
             if (orq_Selection == true)
@@ -2021,7 +1959,7 @@ void C_SyvDaDashboardScene::m_LoadSubset(const QVector<uint32_t> & orc_OtherStar
                                             this->mu32_DashboardIndex, static_cast<int32_t>(u32_ItWidget),
                                             u64_CurUniqueId);
             pc_Item->LoadData();
-            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle, pc_View->GetDarkModeActive());
+            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle);
 
             m_AddWidgetToScene(pc_Item);
             if (orq_Selection == true)
@@ -2043,7 +1981,7 @@ void C_SyvDaDashboardScene::m_LoadSubset(const QVector<uint32_t> & orc_OtherStar
                                                   this->mu32_DashboardIndex, static_cast<int32_t>(u32_ItWidget),
                                                   u64_CurUniqueId);
             pc_Item->LoadData();
-            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle, pc_View->GetDarkModeActive());
+            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle);
 
             m_AddWidgetToScene(pc_Item);
             if (orq_Selection == true)
@@ -2065,7 +2003,7 @@ void C_SyvDaDashboardScene::m_LoadSubset(const QVector<uint32_t> & orc_OtherStar
                                              this->mu32_DashboardIndex, static_cast<int32_t>(u32_ItWidget),
                                              u64_CurUniqueId);
             pc_Item->LoadData();
-            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle, pc_View->GetDarkModeActive());
+            pc_Item->SetDisplayStyle(rc_WidgetBase.e_DisplayStyle);
 
             m_AddWidgetToScene(pc_Item);
             if (orq_Selection == true)

@@ -45,11 +45,10 @@ const int32_t C_SyvDaPeSpinBox::mhs32_INDEX_STYLE_TYPE2 = 1;
    Set up GUI with all elements.
 
    \param[in,out]  orc_Parent    Parent widget
-   \param[in]      oq_DarkMode   Flag for dark mode
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvDaPeSpinBox::C_SyvDaPeSpinBox(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode) :
-   C_SyvDaPePanelBase(orc_Parent, oq_DarkMode),
+C_SyvDaPeSpinBox::C_SyvDaPeSpinBox(C_SyvDaPeBase & orc_Parent) :
+   C_SyvDaPePanelBase(orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPeSpinBox)
 {
    mpc_Ui->setupUi(this);
@@ -189,7 +188,7 @@ void C_SyvDaPeSpinBox::m_UpdatePreview(void)
       ((static_cast<float64_t>(c_ViewSize.width()) - c_ItemSize.width()) / 2.0) + (f64_IconOffset / 2.0),
       ((static_cast<float64_t>(c_ViewSize.height()) - c_ItemSize.height()) / 2.0) - 10.0);
 
-   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme(), this->mq_DarkMode);
+   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme());
    pc_Item->UpdateTypePe(this->GetType(), this->GetShowUnit());
    pc_Item->SetUnitPe("°C");
    pc_Item->SetValuePe(25);

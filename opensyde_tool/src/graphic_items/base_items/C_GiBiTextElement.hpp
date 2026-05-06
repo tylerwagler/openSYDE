@@ -40,7 +40,7 @@ public:
    ~C_GiBiTextElement() override;
 
    int32_t type() const override;
-   bool OpenStyleDialog(const bool oq_DarkMode);
+   bool OpenStyleDialog(void);
    void CopyStyle(const QGraphicsItem * const opc_GuidelineItem) override;
 
    void RestoreDefaultCursor(void) override;
@@ -65,10 +65,8 @@ Q_SIGNALS:
    void SigTextInteractionModeStateChanged(const bool & orq_On);
 
 protected:
-   void m_LoadTextElementData(const stw::opensyde_gui_logic::C_PuiBsTextElement * const opc_Data,
-                              const bool oq_DarkMode);
-   void m_UpdateTextElementData(stw::opensyde_gui_logic::C_PuiBsTextElement * const opc_Data,
-                                const bool oq_DarkMode) const;
+   void m_LoadTextElementData(const stw::opensyde_gui_logic::C_PuiBsTextElement * const opc_Data);
+   void m_UpdateTextElementData(stw::opensyde_gui_logic::C_PuiBsTextElement * const opc_Data) const;
 
    void m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight) override;
 

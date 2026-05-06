@@ -36,8 +36,7 @@ class C_GiSyBaseWidget :
    Q_OBJECT
 
 public:
-   explicit C_GiSyBaseWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent, const QString & orc_Name = "",
-                             const bool oq_DarkMode = false);
+   explicit C_GiSyBaseWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent, const QString & orc_Name = "");
    ~C_GiSyBaseWidget(void) override;
 
    void InitStaticNames(void);

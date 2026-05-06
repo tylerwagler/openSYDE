@@ -307,10 +307,9 @@ void C_SebUnoBaseManager::AdaptZetOrder(const QList<QGraphicsItem *> & orc_Selec
 /*! \brief  Save style information
 
    \param[in,out] orc_Items   Affected items
-   \param[in]     oq_DarkMode Optional flag if dark mode active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SebUnoBaseManager::SaveStyleInformation(const QList<QGraphicsItem *> & orc_Items, const bool oq_DarkMode)
+void C_SebUnoBaseManager::SaveStyleInformation(const QList<QGraphicsItem *> & orc_Items)
 {
    vector<uint64_t> c_Ids;
    if (this->mpc_StyleCommand != NULL)
@@ -320,7 +319,7 @@ void C_SebUnoBaseManager::SaveStyleInformation(const QList<QGraphicsItem *> & or
    }
 
    mh_MapItemToId(orc_Items, c_Ids); //new C_SdManUnoTopologySetupStyleCommand(this->mpc_Scene, c_Ids);
-   this->mpc_StyleCommand = this->m_GetNewStyleCommand(c_Ids, oq_DarkMode);
+   this->mpc_StyleCommand = this->m_GetNewStyleCommand(c_Ids);
    this->mpc_StyleCommand->InitPrevious();
 }
 
@@ -404,14 +403,12 @@ void C_SebUnoBaseManager::mh_MapItemToId(const QGraphicsItem * const opc_Item, u
 /*! \brief  Get new style command (Destruction has to be handled by calling function)
 
    \param[in] orc_Items   Item IDs
-   \param[in] oq_DarkMode Optional flag if dark mode active
 
    \return
    Valid pointer to new style command
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SebUnoSetupStyleCommand * C_SebUnoBaseManager::m_GetNewStyleCommand(const std::vector<uint64_t> & orc_Items,
-                                                                      const bool oq_DarkMode)
+C_SebUnoSetupStyleCommand * C_SebUnoBaseManager::m_GetNewStyleCommand(const std::vector<uint64_t> & orc_Items)
 {
-   return new C_SebUnoSetupStyleCommand(this->mpc_Scene, orc_Items, oq_DarkMode);
+   return new C_SebUnoSetupStyleCommand(this->mpc_Scene, orc_Items);
 }

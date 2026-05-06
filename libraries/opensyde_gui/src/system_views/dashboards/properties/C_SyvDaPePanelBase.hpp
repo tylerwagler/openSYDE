@@ -32,12 +32,11 @@ class C_SyvDaPePanelBase :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaPePanelBase(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode);
+   explicit C_SyvDaPePanelBase(C_SyvDaPeBase & orc_Parent);
 
 protected:
    //lint -e{1725} Reference member intentionally retained as the parent dialog outlives the panel.
    C_SyvDaPeBase & mrc_ParentDialog;
-   const bool mq_DarkMode;
 
    /// Helper used by every subclass at the end of its m_UpdatePreview: replace
    /// whatever is currently in the parent dialog's preview scene with opc_Item.

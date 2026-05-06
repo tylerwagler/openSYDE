@@ -47,10 +47,6 @@ const QString C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_ICON_LIGHT =
    "://images/system_views/IconScreenshot.svg";
 const QString C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_IN_ACTION_ICON_LIGHT =
    "://images/system_views/IconScreenshotInAction.svg";
-const QString C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_ICON_DARK =
-   "://images/system_views/IconScreenshotDark.svg";
-const QString C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_IN_ACTION_ICON_DARK =
-   "://images/system_views/IconScreenshotInActionDark.svg";
 const QString C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_WATERMARK_ICON =
    "://images/openSYDE_logo.ico";
 const QString C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_SUCCESS_GIF =
@@ -83,7 +79,6 @@ C_SyvDaDashboardScreenshot::C_SyvDaDashboardScreenshot(QWidget * const opc_Paren
    :
    QWidget(opc_Parent),
    mpc_ScreenshotPushButton(opc_ScreenshotPushButton),
-   mq_IsDarkModeActive(false),
    mq_IsMessageBoxToBeShown(false)
 {
    const bool q_ServiceModeActive = C_PuiSvHandler::h_GetInstance()->GetServiceModeActive();
@@ -218,14 +213,7 @@ void C_SyvDaDashboardScreenshot::m_GifTimeout()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardScreenshot::m_ChangeToDefaultScreenshotIcon()
 {
-   if (!mq_IsDarkModeActive)
-   {
-      this->mpc_ScreenshotPushButton->setIcon(QIcon(C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_ICON_LIGHT));
-   }
-   else
-   {
-      this->mpc_ScreenshotPushButton->setIcon(QIcon(C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_ICON_DARK));
-   }
+   this->mpc_ScreenshotPushButton->setIcon(QIcon(C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_ICON_LIGHT));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -244,16 +232,8 @@ void C_SyvDaDashboardScreenshot::m_ChangeToActionScreenshotIcon()
       }
    }
 
-   if (!mq_IsDarkModeActive)
-   {
-      this->mpc_ScreenshotPushButton->setIcon(QIcon(C_SyvDaDashboardScreenshot::
-                                                    mhc_SCREENSHOT_IN_ACTION_ICON_LIGHT));
-   }
-   else
-   {
-      this->mpc_ScreenshotPushButton->setIcon(QIcon(C_SyvDaDashboardScreenshot::
-                                                    mhc_SCREENSHOT_IN_ACTION_ICON_DARK));
-   }
+   this->mpc_ScreenshotPushButton->setIcon(QIcon(C_SyvDaDashboardScreenshot::
+                                                 mhc_SCREENSHOT_IN_ACTION_ICON_LIGHT));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -363,30 +343,6 @@ void C_SyvDaDashboardScreenshot::RepositionScreenshotIcon(const int32_t os32_Xpo
    if (this->mpc_ScreenshotPushButton != NULL)
    {
       this->mpc_ScreenshotPushButton->move(os32_Xpos, os32_Ypos);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set screenshot Icon to Dark/Light mode based on selection
-
-   \param[in]       oq_IsDarkModeActive     bool to check for darkmode/lightmode
-
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardScreenshot::SetDarkModeActive(const bool oq_IsDarkModeActive)
-{
-   mq_IsDarkModeActive = oq_IsDarkModeActive;
-
-   if (this->mpc_ScreenshotPushButton != NULL)
-   {
-      if (oq_IsDarkModeActive == true)
-      {
-         this->mpc_ScreenshotPushButton->setIcon(QIcon(C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_ICON_DARK));
-      }
-      else
-      {
-         this->mpc_ScreenshotPushButton->setIcon(QIcon(C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_ICON_LIGHT));
-      }
    }
 }
 

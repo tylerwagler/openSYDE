@@ -30,7 +30,7 @@ class C_SebUnoSetupStyleCommand :
 {
 public:
    C_SebUnoSetupStyleCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                             const bool oq_DarkMode, QUndoCommand * const opc_Parent = NULL);
+                             QUndoCommand * const opc_Parent = NULL);
    ~C_SebUnoSetupStyleCommand(void) override;
    void InitPrevious(void);
    void InitNext(void);
@@ -50,7 +50,6 @@ protected:
 private:
    QMap<uint64_t, C_PuiBsTemporaryDataId> mc_MapIdToTypeAndIndexPrevious;
    QMap<uint64_t, C_PuiBsTemporaryDataId> mc_MapIdToTypeAndIndexNext;
-   bool mq_DarkMode;
    //Avoid call
    C_SebUnoSetupStyleCommand(const C_SebUnoSetupStyleCommand &);
    C_SebUnoSetupStyleCommand & operator =(const C_SebUnoSetupStyleCommand &) &;

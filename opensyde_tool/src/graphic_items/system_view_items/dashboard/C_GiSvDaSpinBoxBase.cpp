@@ -348,8 +348,8 @@ bool C_GiSvDaSpinBoxBase::CallProperties(void)
          }
 
          pc_Dialog = new C_SyvDaPeBase(*c_New, this->mu32_ViewIndex, this->mu32_DashboardIndex, "Spin Box",
-                                       c_ElementId, c_Scaling, false, c_FormatterConfig, false, this->mq_DarkMode);
-         pc_PropertiesWidget = new C_SyvDaPeSpinBox(*pc_Dialog, this->mq_DarkMode);
+                                       c_ElementId, c_Scaling, false, c_FormatterConfig, false);
+         pc_PropertiesWidget = new C_SyvDaPeSpinBox(*pc_Dialog);
 
          pc_Dialog->SetWidget(pc_PropertiesWidget);
          pc_Dialog->SetTheme(pc_Box->e_DisplayStyle);
@@ -389,7 +389,7 @@ bool C_GiSvDaSpinBoxBase::CallProperties(void)
             this->me_WriteMode = pc_Dialog->GetWriteMode();
             this->me_WriteInitialValueMode = c_Box.e_InitialValueMode;
             this->mq_AutoWriteOnConnect = c_Box.q_AutoWriteOnConnect;
-            this->SetDisplayStyle(c_Box.e_DisplayStyle, this->mq_DarkMode);
+            this->SetDisplayStyle(c_Box.e_DisplayStyle);
             if (this->mpc_SpinBoxWidget != NULL)
             {
                this->mpc_SpinBoxWidget->SetDesignType(c_Box.e_Type);

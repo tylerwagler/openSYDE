@@ -63,7 +63,7 @@ public:
                 const E_Alignment & ore_Alignment);
    virtual void AdaptZetOrder(const QList<QGraphicsItem *> & orc_SelectedItems,
                               const QList<QGraphicsItem *> & orc_Items, const bool oq_BringToFront);
-   void SaveStyleInformation(const QList<QGraphicsItem *> & orc_Items, const bool oq_DarkMode);
+   void SaveStyleInformation(const QList<QGraphicsItem *> & orc_Items);
    void RegisterStyleChange(void);
 
    //The signals keyword is necessary for Qt signal slot functionality
@@ -77,8 +77,7 @@ Q_SIGNALS:
 protected:
    static void mh_MapItemToId(const QList<QGraphicsItem *> & orc_Items, std::vector<uint64_t> & orc_Ids);
    static void mh_MapItemToId(const QGraphicsItem * const opc_Item, uint64_t & oru64_Id);
-   virtual C_SebUnoSetupStyleCommand * m_GetNewStyleCommand(const std::vector<uint64_t> & orc_Items,
-                                                            const bool oq_DarkMode);
+   virtual C_SebUnoSetupStyleCommand * m_GetNewStyleCommand(const std::vector<uint64_t> & orc_Items);
 
    C_SebUnoSetupStyleCommand * mpc_StyleCommand;
    QGraphicsScene * const mpc_Scene;

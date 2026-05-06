@@ -38,7 +38,6 @@ public:
    virtual void SetDashboardIndex(const uint32_t ou32_Value) = 0;
 
    virtual void SetEditMode(const bool oq_Active) = 0;
-   virtual void SetDarkMode(const bool oq_Active) = 0;
    virtual void SetDrawingActive(const bool oq_Active) = 0;
    virtual void Save(void) = 0;
 

@@ -50,7 +50,6 @@ public:
    ~C_SyvDaDashboardScreenshot(void) override;
 
    void RepositionScreenshotIcon(const int32_t os32_Xpos, const int32_t os32_Ypos);
-   void SetDarkModeActive(const bool oq_IsDarkModeActive);
    void PerformScreenshotWithCtrlPress(void);
    void PerformScreenshotWithoutCtrlPress(void);
 
@@ -61,8 +60,6 @@ private:
    static const int32_t mhs32_SCREENSHOT_GIF_LABEL_HEIGHT;
    static const QString mhc_SCREENSHOT_ICON_LIGHT;
    static const QString mhc_SCREENSHOT_IN_ACTION_ICON_LIGHT;
-   static const QString mhc_SCREENSHOT_ICON_DARK;
-   static const QString mhc_SCREENSHOT_IN_ACTION_ICON_DARK;
    static const QString mhc_SCREENSHOT_WATERMARK_ICON;
    static const QString mhc_SCREENSHOT_SUCCESS_GIF;
    static const int32_t mhs32_SCREENSHOT_ICON_CHANGE_TIMEOUT;
@@ -80,7 +77,6 @@ private:
    void m_ShowMessageBox(QWidget * const opc_ParentWidget);
    void m_OpenScreenshotLocation(void) const;
 
-   bool mq_IsDarkModeActive;
    bool mq_IsMessageBoxToBeShown;
    int32_t ms32_ScreenshotSuccessGifTimeout;
 

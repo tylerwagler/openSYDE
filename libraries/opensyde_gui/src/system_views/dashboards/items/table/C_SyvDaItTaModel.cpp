@@ -90,55 +90,20 @@ C_SyvDaItTaModel::C_SyvDaItTaModel(C_PuiSvDbDataElementHandler * const opc_Data,
 /*! \brief   Apply style
 
    \param[in]  oe_Style       New style type
-   \param[in]  oq_DarkMode    Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItTaModel::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode)
+void C_SyvDaItTaModel::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
    switch (oe_Style)
    {
    case C_PuiSvDbWidgetBase::eOPENSYDE:
-      if (oq_DarkMode == true)
-      {
-         this->mc_TextColor = mc_STYLE_GUIDE_COLOR_2;
-      }
-      else
-      {
-         this->mc_TextColor = mc_STYLE_GUIDE_COLOR_34;
-      }
-      break;
-
    case C_PuiSvDbWidgetBase::eFLAT:
-      if (oq_DarkMode == true)
-      {
-         this->mc_TextColor = mc_STYLE_GUIDE_COLOR_0;
-      }
-      else
-      {
-         this->mc_TextColor = mc_STYLE_GUIDE_COLOR_34;
-      }
-      break;
-
    case C_PuiSvDbWidgetBase::eSKEUOMORPH:
-      if (oq_DarkMode == true)
-      {
-         this->mc_TextColor = mc_STYLE_GUIDE_COLOR_0;
-      }
-      else
-      {
-         this->mc_TextColor = mc_STYLE_GUIDE_COLOR_34;
-      }
+      this->mc_TextColor = mc_STYLE_GUIDE_COLOR_34;
       break;
 
    case C_PuiSvDbWidgetBase::eOPENSYDE_2:
-      if (oq_DarkMode == true)
-      {
-         this->mc_TextColor = mc_STYLE_GUIDE_COLOR_0;
-      }
-      else
-      {
-         this->mc_TextColor = mc_STYLE_GUIDE_COLOR_6;
-      }
+      this->mc_TextColor = mc_STYLE_GUIDE_COLOR_6;
       break;
    default:
       break;

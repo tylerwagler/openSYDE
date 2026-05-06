@@ -102,18 +102,11 @@ int32_t C_GiSvDaParam::type(void) const
 /*! \brief   Apply style
 
    \param[in]  oe_Style       New style type
-   \param[in]  oq_DarkMode    Flag if dark mode is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvDaParam::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode)
+void C_GiSvDaParam::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style)
 {
-   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style, oq_DarkMode);
-   if (this->mpc_ParamWidget != NULL)
-   {
-      this->mpc_ParamWidget->SetDark(oq_DarkMode);
-   }
-   //Reapply dark mode
-   C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this->mpc_ParamWidget, "DarkMode", oq_DarkMode);
+   C_GiSvDaRectBaseGroup::SetDisplayStyle(oe_Style);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

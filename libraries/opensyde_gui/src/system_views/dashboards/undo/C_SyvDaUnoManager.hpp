@@ -40,7 +40,7 @@ public:
 
    void DoDelete(const QList<QGraphicsItem *> & orc_Items) override;
    void DoAddGeneric(const C_PuiSvDbDataElement::E_Type & ore_Type, const uint64_t & oru64_UniqueId,
-                     const QPointF & orc_NewPos, const float64_t of64_ZetValue, const bool & orq_DarkModeDefault,
+                     const QPointF & orc_NewPos, const float64_t of64_ZetValue,
                      const QString & orc_AdditionalInformation = "");
    void DoAddSnapshot(const std::vector<uint64_t> & orc_UniqueIds, const C_SyvDaDashboardSnapshot & orc_Snapshot,
                       const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,

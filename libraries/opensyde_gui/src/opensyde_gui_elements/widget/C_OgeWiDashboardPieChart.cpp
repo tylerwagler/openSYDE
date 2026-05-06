@@ -56,8 +56,7 @@ C_OgeWiDashboardPieChart::C_OgeWiDashboardPieChart(QWidget * const opc_Parent) :
    mq_ShowValue(true),
    ms32_Transparency(ms32_TRANSPARENCY_END),
    mq_TransparentBackground(false),
-   me_Style(C_PuiSvDbWidgetBase::eOPENSYDE),
-   mq_DarkMode(false)
+   me_Style(C_PuiSvDbWidgetBase::eOPENSYDE)
 {
 }
 
@@ -65,16 +64,14 @@ C_OgeWiDashboardPieChart::C_OgeWiDashboardPieChart(QWidget * const opc_Parent) :
 /*! \brief   Apply style
 
    \param[in] oe_Style       New style type
-   \param[in] oq_DarkMode    Flag if dark mode is active
    \param[in] oq_ShowUnit    Show unit flag
    \param[in] oq_ShowValue   Show value flag
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OgeWiDashboardPieChart::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode,
+void C_OgeWiDashboardPieChart::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_Style,
                                                const bool oq_ShowUnit, const bool oq_ShowValue)
 {
    this->me_Style = oe_Style;
-   this->mq_DarkMode = oq_DarkMode;
 
    this->mq_ShowUnit = oq_ShowUnit;
    this->mq_ShowValue = oq_ShowValue;
@@ -218,76 +215,36 @@ void C_OgeWiDashboardPieChart::paintEvent(QPaintEvent * const opc_Event)
    switch (this->me_Style) // Different Dashboard-Styles
    {
    case C_PuiSvDbWidgetBase::eOPENSYDE: // Material (openSYDE)
+      f32_PieWidth = 7.0F;
+      f32_RimWidth = 6.0F;
+      f32_PieGap = (f32_PieWidth / 2.0F) + 2.0F;
+      f32_TotalPixels = 148.0F;
 
-      if (this->mq_DarkMode != 0) // openSYDE DARK
+      m_SetAllPieRects(c_InnerCircleRect, c_RimRect, c_PieRect, f32_PieGap, f32_PieWidth, f32_RimWidth,
+                       f32_TotalPixels);
+      // Pie--------------------------------------------------------------------------------
+      m_SetPie(c_Painter, static_cast<QBrush>(
+                  mc_STYLE_GUIDE_COLOR_13), Qt::RoundCap, c_PieRect, f32_PieWidth, f32_TotalPixels, f32_Progress);
+
+      // Rim--------------------------------------------------------------------------
+      m_SetPieRim(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_38), c_RimRect, f32_RimWidth, f32_TotalPixels);
+
+      // Inner circuit-------------------------------------------------------------------------
+      if (mq_TransparentBackground == false)
       {
-         f32_PieWidth = 8.0F;
-         f32_RimWidth = 8.0F;
-         f32_PieGap = (f32_PieWidth / 2.0F) + 2.0F;
-         f32_TotalPixels = 158.0F;
-
-         // Sizing the three rectangles dependent on the set variables above------------------------
-         m_SetAllPieRects(c_InnerCircleRect, c_RimRect, c_PieRect, f32_PieGap, f32_PieWidth, f32_RimWidth,
-                          f32_TotalPixels, 2.0F);
-
-         // Pie--------------------------------------------------------------------------------
-         m_SetPie(c_Painter, static_cast<QBrush>(
-                     mc_STYLE_GUIDE_COLOR_13), Qt::RoundCap, c_PieRect, f32_PieWidth, f32_TotalPixels, f32_Progress);
-
-         // Rim--------------------------------------------------------------------------
-         m_SetPieRim(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_2), c_RimRect, f32_RimWidth, f32_TotalPixels);
-
-         // Inner circuit-------------------------------------------------------------------------
-         if (mq_TransparentBackground == false) // Nicht transparent
-         {
-            m_SetInnerCircle(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_52), c_InnerCircleRect);
-         }
-         else // Transparent
-         {
-            m_SetInnerCircle(c_Painter, static_cast<QBrush>(static_cast<QColor>(Qt::transparent)), c_InnerCircleRect);
-         }
-
-         // Text-------------------------------------------------------------------------------
-         c_HelpingColor = mc_STYLE_GUIDE_COLOR_0;
-         c_HelpingColor.setAlpha(ms32_Transparency);
-         m_SetPieText(c_Painter, c_HelpingColor, c_InnerCircleRect, c_DisplayString);
-
-         QWidget::paintEvent(opc_Event);
+         m_SetInnerCircle(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_0), c_InnerCircleRect);
       }
-      else // openSYDE BRIGHT
+      else
       {
-         f32_PieWidth = 7.0F;
-         f32_RimWidth = 6.0F;
-         f32_PieGap = (f32_PieWidth / 2.0F) + 2.0F;
-         f32_TotalPixels = 148.0F;
-
-         m_SetAllPieRects(c_InnerCircleRect, c_RimRect, c_PieRect, f32_PieGap, f32_PieWidth, f32_RimWidth,
-                          f32_TotalPixels);
-         // Pie--------------------------------------------------------------------------------
-         m_SetPie(c_Painter, static_cast<QBrush>(
-                     mc_STYLE_GUIDE_COLOR_13), Qt::RoundCap, c_PieRect, f32_PieWidth, f32_TotalPixels, f32_Progress);
-
-         // Rim--------------------------------------------------------------------------
-         m_SetPieRim(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_38), c_RimRect, f32_RimWidth, f32_TotalPixels);
-
-         // Inner circuit-------------------------------------------------------------------------
-         if (mq_TransparentBackground == false)
-         {
-            m_SetInnerCircle(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_0), c_InnerCircleRect);
-         }
-         else
-         {
-            m_SetInnerCircle(c_Painter, static_cast<QBrush>(static_cast<QColor>(Qt::transparent)), c_InnerCircleRect);
-         }
-
-         // Text-------------------------------------------------------------------------------
-         c_HelpingColor = mc_STYLE_GUIDE_COLOR_34;
-         c_HelpingColor.setAlpha(ms32_Transparency);
-         m_SetPieText(c_Painter, c_HelpingColor, c_InnerCircleRect, c_DisplayString);
-         //         m_SetPieText(c_Painter, mc_STYLE_GUIDE_COLOR_34, c_InnerCircleRect, c_DisplayString);
-
-         QWidget::paintEvent(opc_Event);
+         m_SetInnerCircle(c_Painter, static_cast<QBrush>(static_cast<QColor>(Qt::transparent)), c_InnerCircleRect);
       }
+
+      // Text-------------------------------------------------------------------------------
+      c_HelpingColor = mc_STYLE_GUIDE_COLOR_34;
+      c_HelpingColor.setAlpha(ms32_Transparency);
+      m_SetPieText(c_Painter, c_HelpingColor, c_InnerCircleRect, c_DisplayString);
+
+      QWidget::paintEvent(opc_Event);
       break;
 
    case C_PuiSvDbWidgetBase::eFLAT: // Flat
@@ -301,46 +258,22 @@ void C_OgeWiDashboardPieChart::paintEvent(QPaintEvent * const opc_Event)
       // For smooth edges
       c_Painter.setRenderHint(QPainter::Antialiasing);
 
-      if (this->mq_DarkMode != 0) // Flat DARK
-      {
-         // Pie--------------------------------------------------------------------------------
-         m_SetPie(c_Painter, static_cast<QBrush>(
-                     mc_STYLE_GUIDE_COLOR_26), Qt::FlatCap, c_PieRect, f32_PieWidth, f32_TotalPixels, f32_Progress);
+      // Pie--------------------------------------------------------------------------------
+      m_SetPie(c_Painter, static_cast<QBrush>(
+                  mc_STYLE_GUIDE_COLOR_26), Qt::FlatCap, c_PieRect, f32_PieWidth, f32_TotalPixels, f32_Progress);
 
-         // Rim--------------------------------------------------------------------------
-         m_SetPieRim(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_32), c_RimRect, f32_RimWidth, f32_TotalPixels);
+      // Rim--------------------------------------------------------------------------
+      m_SetPieRim(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_10), c_RimRect, f32_RimWidth, f32_TotalPixels);
 
-         // Inner circuit-------------------------------------------------------------------------
-         m_SetInnerCircle(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_32), c_InnerCircleRect);
+      // Inner circuit-------------------------------------------------------------------------
+      m_SetInnerCircle(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_10), c_InnerCircleRect);
 
-         // Text-------------------------------------------------------------------------------
-         c_HelpingColor = mc_STYLE_GUIDE_COLOR_0;
-         c_HelpingColor.setAlpha(ms32_Transparency);
-         m_SetPieText(c_Painter, c_HelpingColor, c_InnerCircleRect, c_DisplayString);
-         //         m_SetPieText(c_Painter, mc_STYLE_GUIDE_COLOR_0, c_InnerCircleRect, c_DisplayString);
+      // Text-------------------------------------------------------------------------------
+      c_HelpingColor = mc_STYLE_GUIDE_COLOR_0;
+      c_HelpingColor.setAlpha(ms32_Transparency);
+      m_SetPieText(c_Painter, c_HelpingColor, c_InnerCircleRect, c_DisplayString);
 
-         QWidget::paintEvent(opc_Event);
-      }
-      else // Flat BRIGHT
-      {
-         // Pie--------------------------------------------------------------------------------
-         m_SetPie(c_Painter, static_cast<QBrush>(
-                     mc_STYLE_GUIDE_COLOR_26), Qt::FlatCap, c_PieRect, f32_PieWidth, f32_TotalPixels, f32_Progress);
-
-         // Rim--------------------------------------------------------------------------
-         m_SetPieRim(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_10), c_RimRect, f32_RimWidth, f32_TotalPixels);
-
-         // Inner circuit-------------------------------------------------------------------------
-         m_SetInnerCircle(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_10), c_InnerCircleRect);
-
-         // Text-------------------------------------------------------------------------------
-         c_HelpingColor = mc_STYLE_GUIDE_COLOR_0;
-         c_HelpingColor.setAlpha(ms32_Transparency);
-         m_SetPieText(c_Painter, c_HelpingColor, c_InnerCircleRect, c_DisplayString);
-         //         m_SetPieText(c_Painter, mc_STYLE_GUIDE_COLOR_0, c_InnerCircleRect, c_DisplayString);
-
-         QWidget::paintEvent(opc_Event);
-      }
+      QWidget::paintEvent(opc_Event);
       break;
 
    case C_PuiSvDbWidgetBase::eSKEUOMORPH: // Skeuomorph
@@ -355,17 +288,16 @@ void C_OgeWiDashboardPieChart::paintEvent(QPaintEvent * const opc_Event)
       // For smooth edges
       c_Painter.setRenderHint(QPainter::Antialiasing);
 
-      if (this->mq_DarkMode != 0) // Skeuomorph DARK
       {
          // Color Gradient of Pie
          QLinearGradient c_LinearGradient;
          QLinearGradient c_LinearGradient2;
-         c_LinearGradient.setColorAt(0.0, mc_STYLE_GUIDE_COLOR_33); // Farbe: 33
-         c_LinearGradient.setColorAt(1.0, mc_STYLE_GUIDE_COLOR_34); // Farbe: 34
+         c_LinearGradient.setColorAt(0.0, mc_STYLE_GUIDE_COLOR_37);
+         c_LinearGradient.setColorAt(1.0, mc_STYLE_GUIDE_COLOR_11);
          c_LinearGradient.setStart(c_InnerCircleRect.topLeft());
          c_LinearGradient.setFinalStop(c_InnerCircleRect.bottomLeft());
-         c_LinearGradient2.setColorAt(1.0, mc_STYLE_GUIDE_COLOR_33); // Farbe: 33
-         c_LinearGradient2.setColorAt(0.0, mc_STYLE_GUIDE_COLOR_34); // Farbe: 34
+         c_LinearGradient2.setColorAt(1.0, mc_STYLE_GUIDE_COLOR_37);
+         c_LinearGradient2.setColorAt(0.0, mc_STYLE_GUIDE_COLOR_11);
          c_LinearGradient2.setStart(c_RimRect.topLeft());
          c_LinearGradient2.setFinalStop(c_RimRect.bottomLeft());
 
@@ -373,42 +305,7 @@ void C_OgeWiDashboardPieChart::paintEvent(QPaintEvent * const opc_Event)
          m_SetPie(c_Painter, static_cast<QBrush>(
                      mc_STYLE_GUIDE_COLOR_24), Qt::FlatCap, c_PieRect, f32_PieWidth, f32_TotalPixels, f32_Progress);
 
-         // Optional Punkt auf Pie-------------------------------------------------------------
-         m_SetPieDot(c_Painter, mc_STYLE_GUIDE_COLOR_24, c_PieRect, f32_DotSize, f32_TotalPixels, f32_Progress);
-
-         // Rim--------------------------------------------------------------------------
-         m_SetPieRim(c_Painter, c_LinearGradient2, c_RimRect, f32_RimWidth, f32_TotalPixels);
-
-         // Inner circuit-------------------------------------------------------------------------
-         m_SetInnerCircle(c_Painter, c_LinearGradient, c_InnerCircleRect);
-
-         // Text-------------------------------------------------------------------------------
-         c_HelpingColor = mc_STYLE_GUIDE_COLOR_0;
-         c_HelpingColor.setAlpha(ms32_Transparency);
-         m_SetPieText(c_Painter, c_HelpingColor, c_InnerCircleRect, c_DisplayString);
-         //         m_SetPieText(c_Painter, mc_STYLE_GUIDE_COLOR_0, c_InnerCircleRect, c_DisplayString);
-
-         QWidget::paintEvent(opc_Event);
-      }
-      else // Skeuomorph BRIGHT
-      {
-         // Color Gradient of Pie
-         QLinearGradient c_LinearGradient;
-         QLinearGradient c_LinearGradient2;
-         c_LinearGradient.setColorAt(0.0, mc_STYLE_GUIDE_COLOR_37); // Farbe: 37
-         c_LinearGradient.setColorAt(1.0, mc_STYLE_GUIDE_COLOR_11); // Farbe: 11
-         c_LinearGradient.setStart(c_InnerCircleRect.topLeft());
-         c_LinearGradient.setFinalStop(c_InnerCircleRect.bottomLeft());
-         c_LinearGradient2.setColorAt(1.0, mc_STYLE_GUIDE_COLOR_37); // Farbe: 37
-         c_LinearGradient2.setColorAt(0.0, mc_STYLE_GUIDE_COLOR_11); // Farbe: 11
-         c_LinearGradient2.setStart(c_RimRect.topLeft());
-         c_LinearGradient2.setFinalStop(c_RimRect.bottomLeft());
-
-         // Pie--------------------------------------------------------------------------------
-         m_SetPie(c_Painter, static_cast<QBrush>(
-                     mc_STYLE_GUIDE_COLOR_24), Qt::FlatCap, c_PieRect, f32_PieWidth, f32_TotalPixels, f32_Progress);
-
-         // Optional Punkt auf Pie-------------------------------------------------------------
+         // Optional dot on the pie---------------------------------------------------------
          m_SetPieDot(c_Painter, mc_STYLE_GUIDE_COLOR_24, c_PieRect, f32_DotSize, f32_TotalPixels, f32_Progress);
 
          // Rim--------------------------------------------------------------------------
@@ -421,96 +318,49 @@ void C_OgeWiDashboardPieChart::paintEvent(QPaintEvent * const opc_Event)
          c_HelpingColor = mc_STYLE_GUIDE_COLOR_34;
          c_HelpingColor.setAlpha(ms32_Transparency);
          m_SetPieText(c_Painter, c_HelpingColor, c_InnerCircleRect, c_DisplayString);
-         //         m_SetPieText(c_Painter, mc_STYLE_GUIDE_COLOR_34, c_InnerCircleRect, c_DisplayString);
-
-         QWidget::paintEvent(opc_Event);
       }
+
+      QWidget::paintEvent(opc_Event);
       break;
 
    case C_PuiSvDbWidgetBase::eOPENSYDE_2: // Gradation (openSyde_2)
-      if (this->mq_DarkMode != 0)         // Gradation DARK
+      f32_PieWidth = 6.0F;
+      f32_RimWidth = 6.0F;
+      f32_PieGap = (f32_PieWidth / 2.0F) + 2.0F;
+      f32_TotalPixels = 146.0F;
+
+      m_SetAllPieRects(c_InnerCircleRect, c_RimRect, c_PieRect, f32_PieGap, f32_PieWidth, f32_RimWidth,
+                       f32_TotalPixels, 2.0F);
+
+      // For smooth edges
+      c_Painter.setRenderHint(QPainter::Antialiasing);
+
+      // Pie--------------------------------------------------------------------------------
+      c_Gradient.setCenter(c_InnerCircleRect.center());
+      c_Gradient.setAngle(static_cast<qreal>(90));
+      c_Gradient.setColorAt(1.0, mc_STYLE_GUIDE_COLOR_38);
+      c_Gradient.setColorAt((1.0 - static_cast<float64_t>(f32_Progress)), mc_STYLE_GUIDE_COLOR_13);
+      m_SetPie(c_Painter, c_Gradient, Qt::FlatCap, c_PieRect, f32_PieWidth, f32_TotalPixels, f32_Progress);
+
+      // Rim--------------------------------------------------------------------------
+      m_SetPieRim(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_38), c_RimRect, f32_RimWidth, f32_TotalPixels);
+
+      // Inner circuit-------------------------------------------------------------------------
+      if (mq_TransparentBackground == false)
       {
-         f32_PieWidth = 7.0F;
-         f32_RimWidth = 7.0F;
-         f32_PieGap = (f32_PieWidth / 2.0F) + 2.0F;
-         f32_TotalPixels = 150.0F;
-
-         m_SetAllPieRects(c_InnerCircleRect, c_RimRect, c_PieRect, f32_PieGap, f32_PieWidth, f32_RimWidth,
-                          f32_TotalPixels, 3.0F);
-
-         // For smooth edges
-         c_Painter.setRenderHint(QPainter::Antialiasing);
-
-         // Pie--------------------------------------------------------------------------------
-         c_Gradient.setCenter(c_InnerCircleRect.center());
-         c_Gradient.setAngle(static_cast<qreal>(90));
-         c_Gradient.setColorAt(1.0, mc_STYLE_GUIDE_COLOR_33);                                          // Farbe: 33
-         c_Gradient.setColorAt((1.0 - static_cast<float64_t>(f32_Progress)), mc_STYLE_GUIDE_COLOR_13); // Farbe: 13
-         m_SetPie(c_Painter, c_Gradient, Qt::FlatCap, c_PieRect, f32_PieWidth, f32_TotalPixels, f32_Progress);
-
-         // Rim--------------------------------------------------------------------------
-         m_SetPieRim(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_32), c_RimRect, f32_RimWidth, f32_TotalPixels,
-                     2.0F);
-
-         // Inner circuit-------------------------------------------------------------------------
-         if (mq_TransparentBackground == false)
-         {
-            m_SetInnerCircle(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_52), c_InnerCircleRect);
-         }
-         else
-         {
-            m_SetInnerCircle(c_Painter, static_cast<QBrush>(static_cast<QColor>(Qt::transparent)), c_InnerCircleRect);
-         }
-
-         // Text-------------------------------------------------------------------------------
-         c_HelpingColor = mc_STYLE_GUIDE_COLOR_0;
-         c_HelpingColor.setAlpha(ms32_Transparency);
-         m_SetPieText(c_Painter, c_HelpingColor, c_InnerCircleRect, c_DisplayString);
-         //         m_SetPieText(c_Painter, mc_STYLE_GUIDE_COLOR_0, c_InnerCircleRect, c_DisplayString);
-
-         QWidget::paintEvent(opc_Event);
+         m_SetInnerCircle(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_0), c_InnerCircleRect);
       }
-      else // Gradation BRIGHT
+      else
       {
-         f32_PieWidth = 6.0F;
-         f32_RimWidth = 6.0F;
-         f32_PieGap = (f32_PieWidth / 2.0F) + 2.0F;
-         f32_TotalPixels = 146.0F;
-
-         m_SetAllPieRects(c_InnerCircleRect, c_RimRect, c_PieRect, f32_PieGap, f32_PieWidth, f32_RimWidth,
-                          f32_TotalPixels, 2.0F);
-
-         // For smooth edges
-         c_Painter.setRenderHint(QPainter::Antialiasing);
-
-         // Pie--------------------------------------------------------------------------------
-         c_Gradient.setCenter(c_InnerCircleRect.center());
-         c_Gradient.setAngle(static_cast<qreal>(90));
-         c_Gradient.setColorAt(1.0, mc_STYLE_GUIDE_COLOR_38);                                          // Farbe: 38
-         c_Gradient.setColorAt((1.0 - static_cast<float64_t>(f32_Progress)), mc_STYLE_GUIDE_COLOR_13); // Farbe: 13
-         m_SetPie(c_Painter, c_Gradient, Qt::FlatCap, c_PieRect, f32_PieWidth, f32_TotalPixels, f32_Progress);
-
-         // Rim--------------------------------------------------------------------------
-         m_SetPieRim(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_38), c_RimRect, f32_RimWidth, f32_TotalPixels);
-
-         // Inner circuit-------------------------------------------------------------------------
-         if (mq_TransparentBackground == false)
-         {
-            m_SetInnerCircle(c_Painter, static_cast<QBrush>(mc_STYLE_GUIDE_COLOR_0), c_InnerCircleRect);
-         }
-         else
-         {
-            m_SetInnerCircle(c_Painter, static_cast<QBrush>(static_cast<QColor>(Qt::transparent)), c_InnerCircleRect);
-         }
-
-         // Text-------------------------------------------------------------------------------
-         c_HelpingColor = mc_STYLE_GUIDE_COLOR_6;
-         c_HelpingColor.setAlpha(ms32_Transparency);
-         m_SetPieText(c_Painter, c_HelpingColor, c_InnerCircleRect, c_DisplayString);
-         //         m_SetPieText(c_Painter, mc_STYLE_GUIDE_COLOR_6, c_InnerCircleRect, c_DisplayString);
-
-         QWidget::paintEvent(opc_Event);
+         m_SetInnerCircle(c_Painter, static_cast<QBrush>(static_cast<QColor>(Qt::transparent)), c_InnerCircleRect);
       }
+
+      // Text-------------------------------------------------------------------------------
+      c_HelpingColor = mc_STYLE_GUIDE_COLOR_6;
+      c_HelpingColor.setAlpha(ms32_Transparency);
+      m_SetPieText(c_Painter, c_HelpingColor, c_InnerCircleRect, c_DisplayString);
+
+      QWidget::paintEvent(opc_Event);
       break;
 
    default:

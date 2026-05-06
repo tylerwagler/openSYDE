@@ -67,8 +67,6 @@ public:
 
    virtual void UpdateTransform(const QTransform & orc_Transform);
 
-   virtual void SetDarkModeActive(const bool oq_Value);
-
    //Bend line
    int32_t BendLine(QGraphicsItem * const opc_Item, const QPointF & orc_ScenePos,
                     const int32_t * const ops32_Index = NULL);
@@ -229,12 +227,10 @@ private:
    static QString mh_GetImageFileTypesFilter(void);
 
    QImage mc_ImgDrawBackground;
-   QImage mc_ImgDrawBackgroundDark;
    QRectF mc_MinimumSceneRect;
    bool mq_RubberBandActive;
    bool mq_LeftButtonPressed;
    bool mq_DrawCustomBackground;
-   bool mq_DarkModeActive;
    QPointF mc_LastKnownMouseScenePosition;
 
    QTimer mc_ToolTipTimer;

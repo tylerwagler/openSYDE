@@ -73,7 +73,7 @@ void C_GiSvDaBoundary::LoadData(void)
             const C_PuiBsBoundary * const pc_Item = pc_Dashboard->GetBoundary(static_cast<uint32_t>(this->ms32_Index));
             if (pc_Item != NULL)
             {
-               m_LoadFromData(*pc_Item, pc_View->GetDarkModeActive());
+               m_LoadFromData(*pc_Item);
             }
          }
       }
@@ -99,7 +99,7 @@ void C_GiSvDaBoundary::UpdateData(void)
             if (pc_Item != NULL)
             {
                C_PuiBsBoundary c_Item = *pc_Item;
-               m_UpdateData(c_Item, pc_View->GetDarkModeActive());
+               m_UpdateData(c_Item);
                C_PuiSvHandler::h_GetInstance()->SetDashboardBoundary(this->mu32_ViewIndex, this->mu32_DashboardIndex,
                                                                      static_cast<uint32_t>(this->ms32_Index), c_Item);
             }

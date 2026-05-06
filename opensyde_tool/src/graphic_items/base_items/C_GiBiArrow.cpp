@@ -153,20 +153,18 @@ int32_t C_GiBiArrow::type() const
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Open style dialog
 
-   \param[in] oq_DarkMode Optional dark mode flag
-
    \retval true   style dialog was accepted
    \retval false  style dialog was rejected
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_GiBiArrow::OpenStyleDialog(const bool oq_DarkMode)
+bool C_GiBiArrow::OpenStyleDialog(void)
 {
    bool q_Retval;
 
    QGraphicsView * const pc_View = this->scene()->views().at(0);
 
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(pc_View, pc_View);
-   C_GiSyBaseWidget * const pc_Dialog = new C_GiSyBaseWidget(*c_New, C_GtGetText::h_GetText("Line/Arrow"), oq_DarkMode);
+   C_GiSyBaseWidget * const pc_Dialog = new C_GiSyBaseWidget(*c_New, C_GtGetText::h_GetText("Line/Arrow"));
    C_GiSyLineWidget * const pc_SettingsWidget = new C_GiSyLineWidget(C_GiSyLineWidget::E_Type::eLINE, *pc_Dialog);
 
    const QSize c_SIZE(880, 506);

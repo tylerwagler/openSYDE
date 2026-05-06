@@ -92,7 +92,7 @@ bool C_GiLiEthernetBus::OpenStyleDialog(void)
 
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(pc_View, pc_View);
    C_GiSyBaseWidget * const pc_Dialog =
-      new C_GiSyBaseWidget(*c_New, stw::opensyde_gui_logic::C_GtGetText::h_GetText("Ethernet Bus"), false);
+      new C_GiSyBaseWidget(*c_New, stw::opensyde_gui_logic::C_GtGetText::h_GetText("Ethernet Bus"));
    C_GiSyLineWidget * const pc_SettingsWidget =
       new C_GiSyLineWidget(C_GiSyLineWidget::E_Type::eETHERNET_BUS, *pc_Dialog);
 

@@ -46,11 +46,10 @@ const int32_t C_SyvDaPeToggle::mhs32_INDEX_STYLE_TYPE3 = 2;
    Set up GUI with all elements.
 
    \param[in,out]  orc_Parent    Parent widget
-   \param[in]      oq_DarkMode   Flag for dark mode
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvDaPeToggle::C_SyvDaPeToggle(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode) :
-   C_SyvDaPePanelBase(orc_Parent, oq_DarkMode),
+C_SyvDaPeToggle::C_SyvDaPeToggle(C_SyvDaPeBase & orc_Parent) :
+   C_SyvDaPePanelBase(orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPeToggle)
 {
    mpc_Ui->setupUi(this);
@@ -169,7 +168,7 @@ void C_SyvDaPeToggle::m_UpdatePreview(void)
       ((static_cast<float64_t>(c_ViewSize.width()) - c_ITEM_SIZE.width()) / 2.0) + (f64_IconOffset / 2.0),
       ((static_cast<float64_t>(c_ViewSize.height()) - c_ITEM_SIZE.height()) / 2.0) + 20.0);
 
-   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme(), this->mq_DarkMode);
+   pc_Item->SetDisplayStyle(this->mrc_ParentDialog.GetTheme());
    pc_Item->UpdateType(this->GetType());
 
    pc_Item->ApplySizeChange(c_ItemPos, c_ITEM_SIZE);

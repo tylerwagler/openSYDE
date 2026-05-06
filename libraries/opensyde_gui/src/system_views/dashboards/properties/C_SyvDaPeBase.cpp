@@ -72,7 +72,6 @@ const int32_t C_SyvDaPeBase::mhs32_DASHBOARD_CONNECT_READSERVERVALUE = 2;
    \param[in]      oq_UseFormatterConfig        Flag if display formatter is available for the user
    \param[in]      orc_FormatterConfig          Formatter information for default initialization
    \param[in]      oq_ReadElement               Optional flag if dialog for read element
-   \param[in]      oq_DarkMode                  Optional flag if dark mode active
    \param[in]      oq_ShowWidgetSpecificPart    Optional flag if widget specific part is visible
    \param[in]      oq_AllowChangeOfDataElement  Optional flag if data element may be changed
    \param[in]      orc_DisplayName              Optional display name (only used if element name cannot be changed)
@@ -83,7 +82,7 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
                              const C_PuiSvDbNodeDataPoolListElementId & orc_Id,
                              const C_PuiSvDbDataElementScaling & orc_Scaling, const bool oq_UseFormatterConfig,
                              const C_PuiSvDbDataElementDisplayFormatter & orc_FormatterConfig,
-                             const bool oq_ReadElement, const bool oq_DarkMode, const bool oq_ShowWidgetSpecificPart,
+                             const bool oq_ReadElement, const bool oq_ShowWidgetSpecificPart,
                              const bool oq_AllowChangeOfDataElement, const QString & orc_DisplayName) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPeBase),
@@ -163,11 +162,7 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
    this->mpc_Ui->pc_GraphicsView->setScene(this->mpc_Scene);
    this->mpc_Ui->pc_GraphicsView->setEnabled(false);
    this->mpc_Ui->pc_GraphicsView->SetSubtleSurroundGradient(true);
-   this->mpc_Scene->SetDarkModeActive(oq_DarkMode);
-   this->mpc_Ui->pc_GraphicsView->SetDarkMode(oq_DarkMode);
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_GroupBox, "Edit", true);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_GroupBox, "DarkMode", oq_DarkMode);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_PreviewFrame, "NoBorder", oq_DarkMode);
 
    this->mpc_Ui->pc_GroupBoxWidgetSpecific->setVisible(oq_ShowWidgetSpecificPart);
    if (oq_AllowChangeOfDataElement == true)

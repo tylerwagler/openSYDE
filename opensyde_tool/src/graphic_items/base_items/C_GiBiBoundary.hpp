@@ -35,7 +35,7 @@ public:
    ~C_GiBiBoundary(void) override;
 
    int32_t type() const override;
-   bool OpenStyleDialog(const bool oq_DarkMode);
+   bool OpenStyleDialog(void);
    void CopyStyle(const QGraphicsItem * const opc_GuidelineItem) override;
 
    void SetBorderWidth(const int32_t & ors32_Width);
@@ -49,8 +49,8 @@ public:
 protected:
    void m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight) override;
 
-   void m_LoadFromData(const stw::opensyde_gui_logic::C_PuiBsBoundary & orc_Data, const bool oq_DarkMode);
-   void m_UpdateData(stw::opensyde_gui_logic::C_PuiBsBoundary & orc_Data, const bool oq_DarkMode) const;
+   void m_LoadFromData(const stw::opensyde_gui_logic::C_PuiBsBoundary & orc_Data);
+   void m_UpdateData(stw::opensyde_gui_logic::C_PuiBsBoundary & orc_Data) const;
 
    C_GiRect * mpc_Rectangle;
 
