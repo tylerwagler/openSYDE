@@ -490,6 +490,13 @@ int32_t C_CieExportDbc::mh_SetSignals(const std::vector<C_CieConverter::C_CieCan
       s32_Return = mh_SetSignalValues(rc_Element, c_DbcSignal);
       tgl_assert(s32_Return == C_NO_ERR);
 
+      // emit DBC value-table entries inline as VAL_ records (no VAL_TABLE_ deduplication)
+      for (std::map<int64_t, stw::scl::C_SclString>::const_iterator c_It = rc_CieSignal.c_ValueDescription.begin();
+           c_It != rc_CieSignal.c_ValueDescription.end(); ++c_It)
+      {
+         c_DbcSignal.valueDescriptions[c_It->first] = c_It->second.c_str();
+      }
+
       if (s32_Return == C_NO_ERR)
       {
          const std::unordered_set<std::string> c_ReceiverNodes(c_DbcSignal.receivers.begin(),

@@ -531,6 +531,7 @@ int32_t C_CieDataPoolListAdapter::h_ConvertToDbcImportMessage(const uint32_t ou3
             rc_CieElement.f64_Offset = pc_OscElement->f64_Offset;
             // set initial value which is the first and only element of c_DataSetValues
             rc_CieElement.c_DataSetValues.push_back(pc_OscElement->c_DataSetValues.at(0));
+            c_CurrentCieSignal.c_ValueDescription = pc_OscElement->c_ValueDescription;
 
             // store signal data
             orc_CieNodeMessage.c_CanMessage.c_Signals.push_back(c_CurrentCieSignal);
