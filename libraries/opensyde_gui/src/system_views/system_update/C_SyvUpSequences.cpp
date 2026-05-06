@@ -66,7 +66,6 @@ C_SyvUpSequences::C_SyvUpSequences(void) :
    me_Sequence(eNOT_ACTIVE),
    ms32_Result(C_NOACT)
 {
-   mpc_Lock = new stw::tgl::C_TglCriticalSection();
    mpc_Thread = new C_SyvComDriverThread(&C_SyvUpSequences::mh_ThreadFunc, this);
 }
 
@@ -97,8 +96,6 @@ C_SyvUpSequences::~C_SyvUpSequences(void)
    {
       this->mpc_ComDriver->PrepareForDestructionFlash();
    }
-
-   delete mpc_Lock;
 
     if (this->mpc_CanDllDispatcher != NULL)
     {
@@ -343,7 +340,7 @@ int32_t C_SyvUpSequences::GetLastUpdatePosition(uint32_t & oru32_NodeIndex, uint
 void C_SyvUpSequences::GetOsyDeviceInformation(std::vector<uint32_t> & orc_OsyNodeIndexes,
                                                std::vector<C_OscSuSequences::C_OsyDeviceInformation> & orc_OsyDeviceInformation)
 {
-   this->mpc_Lock->Acquire();
+   this->mc_Lock.lock();
 
    tgl_assert(this->mc_ReportOsyDeviceInformationNodeIndex.size() == this->mc_ReportOsyDeviceInformation.size());
 
@@ -353,7 +350,7 @@ void C_SyvUpSequences::GetOsyDeviceInformation(std::vector<uint32_t> & orc_OsyNo
    this->mc_ReportOsyDeviceInformationNodeIndex.clear();
    this->mc_ReportOsyDeviceInformation.clear();
 
-   this->mpc_Lock->Release();
+   this->mc_Lock.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -369,7 +366,7 @@ void C_SyvUpSequences::GetOsyDeviceInformation(std::vector<uint32_t> & orc_OsyNo
 void C_SyvUpSequences::GetXflDeviceInformation(std::vector<uint32_t> & orc_XflNodeIndexes,
                                                std::vector<C_OscSuSequences::C_XflDeviceInformation> & orc_XflDeviceInformation)
 {
-   this->mpc_Lock->Acquire();
+   this->mc_Lock.lock();
 
    tgl_assert(this->mc_ReportXflDeviceInformationNodeIndex.size() == this->mc_ReportXflDeviceInformation.size());
 
@@ -379,7 +376,7 @@ void C_SyvUpSequences::GetXflDeviceInformation(std::vector<uint32_t> & orc_XflNo
    this->mc_ReportXflDeviceInformationNodeIndex.clear();
    this->mc_ReportXflDeviceInformation.clear();
 
-   this->mpc_Lock->Release();
+   this->mc_Lock.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1047,10 +1044,10 @@ void C_SyvUpSequences::m_ReportOpenSydeFlashloaderInformationRead(const C_OsyDev
 {
    // Save the device information
    // Using the signals only for primitive data types when using multi-threading
-   this->mpc_Lock->Acquire();
+   this->mc_Lock.lock();
    this->mc_ReportOsyDeviceInformationNodeIndex.push_back(ou32_NodeIndex);
    this->mc_ReportOsyDeviceInformation.push_back(orc_Info);
-   this->mpc_Lock->Release();
+   this->mc_Lock.unlock();
 
    Q_EMIT (this->SigReportOpenSydeFlashloaderInformationRead());
 }
@@ -1070,10 +1067,10 @@ void C_SyvUpSequences::m_ReportStwFlashloaderInformationRead(const C_XflDeviceIn
 {
    // Save the device information
    // Using the signals only for primitive data types when using multi-threading
-   this->mpc_Lock->Acquire();
+   this->mc_Lock.lock();
    this->mc_ReportXflDeviceInformationNodeIndex.push_back(ou32_NodeIndex);
    this->mc_ReportXflDeviceInformation.push_back(orc_Info);
-   this->mpc_Lock->Release();
+   this->mc_Lock.unlock();
 
    Q_EMIT (this->SigReportStwFlashloaderInformationRead());
 }

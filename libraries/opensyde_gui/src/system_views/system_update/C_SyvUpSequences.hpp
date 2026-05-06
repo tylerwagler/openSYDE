@@ -13,8 +13,9 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QObject>
+#include <QMutex>
+
 #include "C_Can.hpp"
-#include "TglTasks.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_SyvComDriverThread.hpp"
 #include "C_OscIpDispatcherPlatform.hpp"
@@ -111,7 +112,7 @@ private:
    static void mh_WriteLog(const C_OscSuSequences::E_ProgressStep oe_Step, const stw::scl::C_SclString & orc_Text);
 
    C_SyvComDriverThread * mpc_Thread;
-   stw::tgl::C_TglCriticalSection * mpc_Lock;
+   QMutex mc_Lock;
    stw::can::C_Can * mpc_CanDllDispatcher;
    stw::opensyde_core::C_OscIpDispatcherWinSock * mpc_EthernetDispatcher;
    bool mq_AbortFlag;
