@@ -881,8 +881,6 @@ void C_SyvDaItPaTreeView::m_HandleLinkClicked(const QModelIndex & orc_Index)
             pc_ParamWidget->SetParamItem(c_Copy);
          }
 
-         //TODO?
-         //OnErrorChangePossible();
          if (c_Dialog != NULL)
          {
             c_Dialog->HideOverlay();

@@ -2371,7 +2371,6 @@ const
             //Data pool type
             //2: Invisible item
             //1: Node item
-            //TODO ?
          }
       }
       else
@@ -2379,7 +2378,6 @@ const
          //Node
          //1: Invisible item
          //No valid parent
-         //TODO ?
       }
    }
    return c_Retval;
@@ -2492,7 +2490,6 @@ const
                //3: Invisible item
                //2: Node item
                //1: Data pool type item
-               //TODO ?
             }
          }
          else
@@ -2500,7 +2497,6 @@ const
             //Data pool type
             //2: Invisible item
             //1: Node item
-            //TODO ?
          }
       }
       else
@@ -2508,7 +2504,6 @@ const
          //Node
          //1: Invisible item
          //No valid parent
-         //TODO ?
       }
    }
    return c_Retval;

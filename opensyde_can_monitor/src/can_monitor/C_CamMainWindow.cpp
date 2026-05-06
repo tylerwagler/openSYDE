@@ -231,7 +231,6 @@ C_CamMainWindow::~C_CamMainWindow()
 {
    if (mpc_CanThread->isRunning() == true)
    {
-      // TODO
       this->mpc_CanThread->requestInterruption();
       this->mpc_CanThread->wait(2000U);
    }

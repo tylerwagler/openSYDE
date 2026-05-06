@@ -92,8 +92,6 @@ protected:
 
    void m_MoveItem(const int32_t os32_SourceIndex, const int32_t os32_TargetIndex);
    void m_UpdateNumbers(void) const;
-   //void m_DelegateStartPaint(void);
-   //void m_DelegateStopPaint(void);
 
 private:
    //Avoid call

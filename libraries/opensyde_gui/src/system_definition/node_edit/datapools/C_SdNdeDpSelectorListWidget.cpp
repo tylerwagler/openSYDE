@@ -1265,23 +1265,6 @@ void C_SdNdeDpSelectorListWidget::m_UpdateNumbers(void) const
    }
 }
 
-// TODO BAY:
-////----------------------------------------------------------------------------------------------------------------------
-//void C_SdNdeDpSelectorListWidget::m_DelegateStartPaint(void)
-//{
-//
-//   C_SdNdeDpSelectorItemWidget * const pc_ItemWidget =
-//      dynamic_cast<C_SdNdeDpSelectorItemWidget *>(this->itemWidget(this->item(this->currentIndex().row())));
-//
-//   this->mc_Delegate.StartPaint(this->currentIndex().row(), pc_ItemWidget);
-//}
-//
-////----------------------------------------------------------------------------------------------------------------------
-//void C_SdNdeDpSelectorListWidget::m_DelegateStopPaint(void)
-//{
-//   this->mc_Delegate.StopPaint();
-//}
-
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Opens the add Datapool selection dialog
 

@@ -9,6 +9,7 @@ For cross-cutting follow-ups that aren't tied to a code-line marker,
 see `docs/TODO.md`.
 
 **Counts at snapshot:** 62 markers — 60 `TODO`, 1 `HACK`, 0 `FIXME`, 0 `XXX`.
+**As of 2026-05-06 cleanup pass:** 53 markers remaining (9 deleted, 1 reworded — see strike-throughs below).
 
 ---
 
@@ -58,9 +59,9 @@ Lone question-mark TODOs with no context. Probably author-uncertainty
 that needs a code archaeologist to interpret. Each one is a few-minute
 investigation; collectively a half-day cleanup.
 
-- `libraries/opensyde_gui/src/table_base/tree_base/C_TblTreDataElementModel.cpp:2374,2382,2495,2503,2511`
-- `libraries/opensyde_gui/src/system_views/dashboards/items/param/C_SyvDaItPaTreeView.cpp:884`
-- `opensyde_can_monitor/src/can_monitor/C_CamMainWindow.cpp:234` (`// TODO`)
+- ~~`libraries/opensyde_gui/src/table_base/tree_base/C_TblTreDataElementModel.cpp:2374,2382,2495,2503,2511`~~ — markers removed; the surrounding tree-level comments already document the empty-result branches (2026-05-06 cleanup)
+- ~~`libraries/opensyde_gui/src/system_views/dashboards/items/param/C_SyvDaItPaTreeView.cpp:884`~~ — `//TODO?` + dead commented-out call removed (2026-05-06 cleanup)
+- ~~`opensyde_can_monitor/src/can_monitor/C_CamMainWindow.cpp:234` (`// TODO`)~~ — bare marker removed; `wait()`-after-`requestInterruption()` shutdown gap tracked separately (2026-05-06 cleanup)
 
 ### "Watch if parent necessary" (3 sites)
 
@@ -78,9 +79,9 @@ the suspicion. Worth resolving with proper ownership semantics.
 Short notes signed `BAY`. Worth pinging that person if still on the
 team to disambiguate.
 
-- `libraries/opensyde_gui/src/opensyde_gui_elements/C_OgeHorizontalListWidget.cpp:182` — drop-event painting won't stop
-- `libraries/opensyde_gui/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorListWidget.cpp:1268` — bare
-- `libraries/opensyde_gui/src/system_views/system_update/C_SyvUpInformationWidget.cpp:447` — Handle PEM files
+- ~~`libraries/opensyde_gui/src/opensyde_gui_elements/C_OgeHorizontalListWidget.cpp:182` — drop-event painting won't stop~~ — reworded as a plain note about cancel-path responsibility (2026-05-06 cleanup)
+- ~~`libraries/opensyde_gui/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorListWidget.cpp:1268` — bare~~ — TODO BAY + 16 lines of dead commented-out delegate-paint code removed; matching .hpp decls also removed (2026-05-06 cleanup)
+- ~~`libraries/opensyde_gui/src/system_views/system_update/C_SyvUpInformationWidget.cpp:447` — Handle PEM files~~ — `BAY` initials stripped; substantive `// TODO: Handle PEM files` retained as real outstanding scope (2026-05-06 cleanup)
 
 ### Icon states for icon-only buttons (3 sites)
 

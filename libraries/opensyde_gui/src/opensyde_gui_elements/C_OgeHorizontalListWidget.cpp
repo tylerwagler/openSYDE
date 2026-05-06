@@ -179,7 +179,7 @@ bool C_OgeHorizontalListWidget::h_CheckValidMoveAction(const int32_t os32_StartI
 void C_OgeHorizontalListWidget::dropEvent(QDropEvent * const opc_Event)
 {
    // deactivate the painting of the drag widget
-   // TODO BAY Painting will not be stopped if the drop event will not be triggered here
+   // (only fires on drop — cancel paths must call m_DelegateStopPaint() themselves)
    this->m_DelegateStopPaint();
    this->m_StopDragTimer();
 
