@@ -639,7 +639,7 @@ void C_SdNdeHalcWidget::m_OnUpdateClicked(void)
                   // Report update error
                   C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eERROR);
                   c_MessageResult.SetHeading(C_GtGetText::h_GetText("Load hardware description"));
-                  c_MessageResult.SetDescription(C_GtGetText::h_GetText("Error occured during update of existing "
+                  c_MessageResult.SetDescription(C_GtGetText::h_GetText("Error occurred during update of existing "
                                                                         "description."));
                   c_MessageResult.SetDetails(C_GtGetText::h_GetText(c_ErrorDetails.toStdString().c_str()));
                   c_MessageResult.SetCustomMinHeight(180, 250);
@@ -809,7 +809,7 @@ bool C_SdNdeHalcWidget::m_LoadHalcDefinitionFile(C_OscHalcConfig & orc_HalcConfi
          // report loading error
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
          c_Message.SetHeading(C_GtGetText::h_GetText("Load hardware description"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("Error occured loading hardware description file."));
+         c_Message.SetDescription(C_GtGetText::h_GetText("Error occurred loading hardware description file."));
          c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +
                               C_Uti::h_GetLink(C_GtGetText::h_GetText("log file."),  mc_STYLESHEET_GUIDE_COLOR_LINK,
                                                C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()));

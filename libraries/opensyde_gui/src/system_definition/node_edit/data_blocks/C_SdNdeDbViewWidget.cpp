@@ -296,7 +296,7 @@ void C_SdNdeDbViewWidget::AddFromTsp(const bool oq_IsNewNode)
          if (c_Details.isEmpty() == false)
          {
             c_Message.SetType(C_OgeWiCustomMessage::eWARNING);
-            c_Description += C_GtGetText::h_GetText(" Some warnings occured. See details for more information.");
+            c_Description += C_GtGetText::h_GetText(" Some warnings occurred. See details for more information.");
             c_Message.SetCustomMinHeight(180, 300);
             c_Message.SetDetails(c_Details);
          }

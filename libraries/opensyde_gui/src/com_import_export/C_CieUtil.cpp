@@ -522,7 +522,7 @@ void C_CieUtil::h_ReportEdsImportError(QWidget * const opc_ParentWidget, const i
       c_Message.SetCustomMinHeight(180, 270);
       break;
    case C_CONFIG:
-      c_Message.SetDescription(C_GtGetText::h_GetText("An error occured while parsing."));
+      c_Message.SetDescription(C_GtGetText::h_GetText("An error occurred while parsing."));
       //Update log file
       C_OscLoggingHandler::h_Flush();
       c_Message.SetDetails(static_cast<QString>(
@@ -949,7 +949,7 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
                   c_Message.SetCustomMinHeight(180, 270);
                   break;
                case C_CONFIG:
-                  c_Message.SetDescription(C_GtGetText::h_GetText("An error occured while parsing."));
+                  c_Message.SetDescription(C_GtGetText::h_GetText("An error occurred while parsing."));
                   //Update log file
                   C_OscLoggingHandler::h_Flush();
                   c_Message.SetDetails(static_cast<QString>(

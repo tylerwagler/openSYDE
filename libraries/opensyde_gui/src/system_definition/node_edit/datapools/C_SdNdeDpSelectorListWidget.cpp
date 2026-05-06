@@ -573,7 +573,7 @@ void C_SdNdeDpSelectorListWidget::AddNewDatapool(void)
                // show error message box and stop continuing
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
                c_Message.SetHeading(C_GtGetText::h_GetText("RAMView Import Failed"));
-               c_Message.SetDescription(C_GtGetText::h_GetText("Error occured loading RAMView project file."));
+               c_Message.SetDescription(C_GtGetText::h_GetText("Error occurred loading RAMView project file."));
                c_Message.SetDetails(
                   C_GtGetText::h_GetText("Could not load \"") + c_RamViewProjectPath + "\".<br>" +
                   static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +

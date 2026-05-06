@@ -508,7 +508,7 @@ void C_SdTopologyToolbox::m_ErrorHandlingUserFeedback(const QStringList & orc_Er
    else
    {
       // something went wrong. Wrong ini, broken xml, node already exists
-      c_Description = C_GtGetText::h_GetText("Errors occured! See details for further information.");
+      c_Description = C_GtGetText::h_GetText("Errors occurred! See details for further information.");
       for (int32_t s32_Error = 0; s32_Error < orc_Errors.size(); ++s32_Error)
       {
          c_Details += "* " + orc_Errors[s32_Error] + "<br/>";
