@@ -725,13 +725,12 @@ void C_SdBueSignalPropertiesWidget::m_InitValueDescriptionsTable(void) const
                              QAbstractItemView::AnyKeyPressed);
 
    pc_Table->horizontalHeader()->setStretchLastSection(true);
-   pc_Table->horizontalHeader()->setFixedHeight(35);
+   pc_Table->horizontalHeader()->setFixedHeight(27);
+   pc_Table->horizontalHeader()->setMinimumSectionSize(4);
    pc_Table->horizontalHeader()->resizeSection(0, 120);
 
    pc_Table->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-   pc_Table->verticalHeader()->setMinimumSectionSize(25);
-   pc_Table->verticalHeader()->setMaximumSectionSize(25);
-   pc_Table->verticalHeader()->setDefaultSectionSize(25);
+   pc_Table->verticalHeader()->setDefaultSectionSize(20);
    pc_Table->verticalHeader()->hide();
 }
 
