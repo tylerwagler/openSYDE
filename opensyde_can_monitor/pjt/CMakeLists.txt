@@ -110,6 +110,7 @@ set (OPENSYDE_INCLUDES
    ${OPENSYDE_GUI_ROOT}/src/gettext
    ${OPENSYDE_GUI_ROOT}/src/util
    ${PROJECT_ROOT}/src/precompiled_headers
+   ${OPENSYDE_GUI_ROOT}/src/precompiled_headers
    ${PROJECT_ROOT}/../libraries/flexlexer
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector

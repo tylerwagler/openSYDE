@@ -92,6 +92,7 @@ set (OPENSYDE_INCLUDES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tool_button
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget
    ${PROJECT_ROOT}/src/precompiled_headers
+   ${OPENSYDE_GUI_ROOT}/src/precompiled_headers
    ${OPENSYDE_GUI_ROOT}/src/project_operations
    ${PROJECT_ROOT}/src/syde_flash
    ${PROJECT_ROOT}/src/syde_flash/bottom_bar

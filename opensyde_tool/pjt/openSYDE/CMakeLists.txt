@@ -170,6 +170,7 @@ set (OPENSYDE_GUI_INCLUDES
    ${OPENSYDE_GUI_ROOT}/src/util
    ${PROJECT_ROOT}/src/util
    ${PROJECT_ROOT}/src/precompiled_headers/gui
+   ${OPENSYDE_GUI_ROOT}/src/precompiled_headers
 )
 
 # Include path with library modules
