@@ -119,6 +119,7 @@ set (OPENSYDE_GUI_INCLUDES
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration
    ${OPENSYDE_GUI_ROOT}/src/table_base
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base
+   ${PROJECT_ROOT}/src/table_base/tree_base
    ${OPENSYDE_GUI_ROOT}/src/project_operations
    ${OPENSYDE_GUI_ROOT}/src/user_settings
    ${PROJECT_ROOT}/src/graphic_items
@@ -141,6 +142,7 @@ set (OPENSYDE_GUI_INCLUDES
    ${OPENSYDE_GUI_ROOT}/src/help_engine
    ${OPENSYDE_GUI_ROOT}/src/gettext
    ${OPENSYDE_GUI_ROOT}/src/util
+   ${PROJECT_ROOT}/src/util
    ${PROJECT_ROOT}/src/precompiled_headers/gui
 )
 
@@ -285,7 +287,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityCertificatePackageDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacServiceUpdatePackageDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreMultiColumnLeafSortFilter.cpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreMultiColumnLeafSortFilter.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsHandler.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsFiler.cpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopListItem.cpp
@@ -512,7 +514,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalDeleteCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalMoveCommand.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebUtil.cpp
-   ${OPENSYDE_GUI_ROOT}/src/util/C_UtiUndoStack.cpp
+   ${PROJECT_ROOT}/src/util/C_UtiUndoStack.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeDisconnectCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectAndCreateCommand.cpp
@@ -685,7 +687,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableHeaderView.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSlider.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeProgressBar.cpp
-   ${OPENSYDE_GUI_ROOT}/src/util/C_UtiStyleSheets.cpp
+   ${PROJECT_ROOT}/src/util/C_UtiStyleSheets.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeComboBox.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeSyvSetup.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeSyvUpdate.cpp
@@ -834,8 +836,8 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbSelectDataPools.cpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementView.cpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementModel.cpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementView.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementSortFilter.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbAddNewProject.cpp
    ${PROJECT_ROOT}/src/implementation/C_ImpUtil.cpp
@@ -870,7 +872,7 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerData.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSnapshot.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpFileSizeInformation.cpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDelegateUtil.cpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDelegateUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsSystemViewNode.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolTipBase.cpp
@@ -927,7 +929,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubBackNavigation.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelDpPreviewPopUp.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListCommentDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementItem.cpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubPrevNavigation.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabExternalLink.cpp
@@ -948,7 +950,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconChart.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBaseCheckable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewCheckable.cpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreeModelCheckable.cpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreeModelCheckable.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamView.cpp
 )
 
@@ -1070,7 +1072,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityCertificatePackageDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacServiceUpdatePackageDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreMultiColumnLeafSortFilter.hpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreMultiColumnLeafSortFilter.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsHandler.hpp
    ${OPENSYDE_GUI_ROOT}/src/constants.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsFiler.hpp
@@ -1299,7 +1301,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalDeleteCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalMoveCommand.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebUtil.hpp
-   ${OPENSYDE_GUI_ROOT}/src/util/C_UtiUndoStack.hpp
+   ${PROJECT_ROOT}/src/util/C_UtiUndoStack.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeDisconnectCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectAndCreateCommand.hpp
@@ -1472,7 +1474,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableHeaderView.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSlider.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeProgressBar.hpp
-   ${OPENSYDE_GUI_ROOT}/src/util/C_UtiStyleSheets.hpp
+   ${PROJECT_ROOT}/src/util/C_UtiStyleSheets.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeComboBox.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeSyvSetup.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeSyvUpdate.hpp
@@ -1636,8 +1638,8 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbSelectDataPools.hpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementModel.hpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementView.hpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementSortFilter.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbAddNewProject.hpp
    ${PROJECT_ROOT}/src/implementation/C_ImpUtil.hpp
@@ -1672,7 +1674,7 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerData.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSnapshot.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpFileSizeInformation.hpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDelegateUtil.hpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDelegateUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsSystemViewNode.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolTipBase.hpp
@@ -1728,7 +1730,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubBackNavigation.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelDpPreviewPopUp.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListCommentDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementItem.hpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubPrevNavigation.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabExternalLink.hpp
@@ -1749,7 +1751,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconChart.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBaseCheckable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewCheckable.hpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreeModelCheckable.hpp
+   ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreeModelCheckable.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamView.hpp
 )
 
