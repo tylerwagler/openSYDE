@@ -103,20 +103,23 @@ set (OPENSYDE_GUI_INCLUDES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer
    ${OPENSYDE_GUI_ROOT}/src/system_views
+   ${PROJECT_ROOT}/src/system_views
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/array_editor
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/table
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo
-   ${OPENSYDE_GUI_ROOT}/src/system_views/routing
+   ${PROJECT_ROOT}/src/system_views/communication
+   ${PROJECT_ROOT}/src/system_views/dashboards
+   ${PROJECT_ROOT}/src/system_views/dashboards/items
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/table
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart
+   ${PROJECT_ROOT}/src/system_views/system_setup
+   ${PROJECT_ROOT}/src/system_views/system_update
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo
+   ${PROJECT_ROOT}/src/system_views/routing
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration
+   ${PROJECT_ROOT}/src/system_views/device_configuration
    ${OPENSYDE_GUI_ROOT}/src/table_base
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base
    ${PROJECT_ROOT}/src/table_base/tree_base
@@ -258,36 +261,36 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableView.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvHandlerWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaDashboardScreenshot.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpUpdateWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacConfig.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacConfigFiler.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacHexFileView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemDatablockWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemFileWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemParamSetWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemPemFileWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacNodeWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileAddPopUp.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfo.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoComparisonDescription.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoPopUp.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileEntry.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileInfoPopUp.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityOptionsPopUp.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesListWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeDatablockWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeFilesWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecureArchiveDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityCertificatePackageDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacServiceUpdatePackageDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/C_SyvHandlerWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaDashboardScreenshot.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpUpdateWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacConfig.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacConfigFiler.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacHexFileView.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListDelegate.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemDatablockWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemFileWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemParamSetWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemPemFileWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacNodeWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileAddPopUp.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfo.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoComparisonDescription.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoPopUp.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileEntry.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileInfoPopUp.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityOptionsPopUp.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesListWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeDatablockWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeFilesWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecureArchiveDialog.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityCertificatePackageDialog.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacServiceUpdatePackageDialog.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacWidget.cpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreMultiColumnLeafSortFilter.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsHandler.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsFiler.cpp
@@ -297,7 +300,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpContentBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPePanelBase.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPePanelBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStandard.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToolBar.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUseCase.cpp
@@ -498,13 +501,13 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/can/C_PuiSdNodeCanSignal.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerFiler.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/can/C_PuiSdNodeCanMessageSyncManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardsWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardsWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabWidget.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebScene.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebGraphicsView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardScene.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardToolbox.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardScene.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardToolbox.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageBaseCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoManager.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageAddCommand.cpp
@@ -521,15 +524,15 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectAndCreateCommand.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoBaseCommand.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoBaseManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoManager.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoManager.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebBaseContextMenuManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaContextMenuManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaTrafficEncryptionStatusHelper.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaContextMenuManager.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaTrafficEncryptionStatusHelper.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdClipBoardHelper.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoZetOrderCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSortHelper.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdUtil.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabBar.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabBar.cpp
    ${PROJECT_ROOT}/src/graphic_items/widgets/C_GiWiProxyBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableView.cpp
@@ -556,11 +559,11 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdNodeToNodeConnectionSetupWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabProperties.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebTopologyBaseScene.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvTopologyBaseScene.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeSetupWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeScene.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpScene.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpOverviewWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/C_SyvTopologyBaseScene.cpp
+   ${PROJECT_ROOT}/src/system_views/system_setup/C_SyvSeSetupWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_setup/C_SyvSeScene.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpScene.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpOverviewWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabFrameError.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiEditBackground.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandler.cpp
@@ -576,14 +579,14 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiBusConnectorBase.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/topology/C_SebUnoTopBaseManager.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/topology/C_SebUnoTopBusConnectorMoveCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaTearOffWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaTearOffWidget.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebTopologyBaseContextMenuManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeDllConfigurationDialog.cpp
+   ${PROJECT_ROOT}/src/system_views/system_setup/C_SyvSeDllConfigurationDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxGrayedEdit.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTabClose.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsSystemView.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsSystemViewDashboard.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/routing/C_SyvRoRouteCalculation.cpp
+   ${PROJECT_ROOT}/src/system_views/routing/C_SyvRoRouteCalculation.cpp
    ${PROJECT_ROOT}/src/project_gui/base/C_PuiBsBox.cpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiRectBaseGroup.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiRectBaseGroup.cpp
@@ -617,31 +620,31 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaBoundary.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaTextElement.cpp
    ${PROJECT_ROOT}/src/project_gui/base/C_PuiBsElementsFiler.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddDeleteBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoDeleteCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddSnapshotCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaCopyPasteManager.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddDeleteBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoDeleteCommand.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddCommand.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddSnapshotCommand.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaCopyPasteManager.cpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_UtiClipBoardHelper.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvClipBoardHelper.cpp
+   ${PROJECT_ROOT}/src/system_views/C_SyvClipBoardHelper.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoSetupStyleCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFontConfig.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxFontProperties.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebToolboxUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxHover.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaLabelBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardBaseWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardLabelWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardBaseWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardLabelWidget.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbWidgetBase.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbLabel.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabAdaptiveSize.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItUtil.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardLabelValue.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbSpinBox.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaSpinBoxBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardSliderWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardSliderWidget.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbSlider.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaSliderBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/slider/C_OgeSliDashboard.cpp
@@ -649,10 +652,10 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiDashboardSpinBoxGroup.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbProgressBar.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaProgressBarBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardProgressBarWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardProgressBarWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeDashboardProgressBar.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDataDealer.cpp
+   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDataDealer.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardDefault.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardProgressBarMaximum.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementContent.cpp
@@ -666,28 +669,28 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiDashboardPieChart.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbTable.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaTableBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaModel.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaView.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaDelegate.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaModel.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbNodeDataPoolListElementId.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeLabel.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeBase.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeLabel.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvReadDataConfiguration.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeDataElementBrowse.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeDataElementBrowse.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementScaling.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeConfiguration.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeNodeHeader.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTreeWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableDelegate.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeConfiguration.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeNodeHeader.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableModel.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTreeWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableDelegate.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbNodeDataElementConfig.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPePieChart.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeToggle.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSpinBox.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableHeaderView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSlider.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeProgressBar.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPePieChart.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableView.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeToggle.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSpinBox.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableHeaderView.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSlider.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeProgressBar.cpp
    ${PROJECT_ROOT}/src/util/C_UtiStyleSheets.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeComboBox.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeSyvSetup.cpp
@@ -696,54 +699,54 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvPcBusConnector.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbParam.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaParam.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImageRecordWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWriteWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImageRecordWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWriteWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiProgressBar.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiProgressBopperle.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArView.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArModel.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArDelegate.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArView.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpContentUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64AutoFix.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFix.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxAutoFixBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverDiag.cpp
+   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverDiag.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeDarkScrollArea.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComPollingThreadDiag.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcSequences.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeList.cpp
+   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComPollingThreadDiag.cpp
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcSequences.cpp
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeList.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubOptions.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableView.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeList.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverUtil.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpSequences.cpp
+   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverUtil.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSequences.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64Factor.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeContextMenuManager.cpp
+   ${PROJECT_ROOT}/src/system_views/system_setup/C_SyvSeContextMenuManager.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsNode.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsNodeDatapool.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvUtil.cpp
+   ${PROJECT_ROOT}/src/system_views/C_SyvUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewScroll.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeSyvBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUpdate.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeIpAddressConfigurationWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeHorizontalListWidget.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiInfo.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiOnlyBackground.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpProgressLog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpProgressLogEntry.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpNodePropertiesDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpDeviceInfo.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpProgressLog.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpProgressLogEntry.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpNodePropertiesDialog.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpDeviceInfo.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTabBar.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpPieChart.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpPieChart.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiSvgGraphicsItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeToolTipBase.cpp
@@ -779,16 +782,16 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieExportDbc.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeListWidgetToolTipBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvManager.cpp
+   ${PROJECT_ROOT}/src/system_views/C_SyvManager.cpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieExportReportWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxAllBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_RtfExportWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeModel.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeView.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreItem.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWidgetNew.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeDelegate.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWidgetNew.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipContent.cpp
@@ -808,7 +811,7 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/platform.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.cpp
@@ -846,10 +849,10 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePath.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbDataPoolEntry.cpp
    ${PROJECT_ROOT}/src/implementation/C_ImpCodeGenerationReportWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImportReport.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImportReport.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconWithText.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxParam.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaValuePairs.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaValuePairs.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeDelegate.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvCanBus.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvEthernetBus.cpp
@@ -862,17 +865,17 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddListWidget.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdSharedDatapools.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandlerFilerV1.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidgetSmall.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpInformationWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidgetSmall.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpInformationWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSystemCommissioningEdit.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconWithTextBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardInteraction.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverDiagConnect.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardInteraction.cpp
+   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverDiagConnect.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerBusLogic.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerNodeLogic.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerData.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSnapshot.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpFileSizeInformation.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSnapshot.cpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpFileSizeInformation.cpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDelegateUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsSystemViewNode.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeToolTipBase.cpp
@@ -883,7 +886,7 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoZetOrderSortHelper.cpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiBase.cpp
    ${PROJECT_ROOT}/src/project_gui/C_PuiUtil.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItTableHeaderView.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItTableHeaderView.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSectionSelected.cpp
@@ -937,15 +940,15 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFixCustomTrigger.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdCodeGenerationDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdCodeGenerationModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSceneWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardContentBaseWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataItemWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataSelectorWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlotHandlerWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSceneWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardContentBaseWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataItemWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataSelectorWidget.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlotHandlerWidget.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbTabChart.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tool_button/C_OgeTobToolTipBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlot.cpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlot.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubAddChartDataElement.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraGeneric.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconChart.cpp
@@ -1044,35 +1047,35 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableView.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvHandlerWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaDashboardScreenshot.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpUpdateWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacConfig.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacConfigFiler.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacHexFileView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemDatablockWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemFileWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemParamSetWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemPemFileWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacNodeWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileAddPopUp.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfo.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoComparisonDescription.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoPopUp.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileEntry.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileInfoPopUp.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityOptionsPopUp.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesListWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeDatablockWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeFilesWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecureArchiveDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityCertificatePackageDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacServiceUpdatePackageDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/C_SyvHandlerWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaDashboardScreenshot.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpUpdateWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacConfig.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacConfigFiler.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacHexFileView.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListDelegate.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemDatablockWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemFileWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemParamSetWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemPemFileWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacNodeWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileAddPopUp.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfo.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoComparisonDescription.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoPopUp.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileEntry.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileInfoPopUp.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityOptionsPopUp.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesListWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeDatablockWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeFilesWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecureArchiveDialog.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityCertificatePackageDialog.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacServiceUpdatePackageDialog.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacWidget.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreMultiColumnLeafSortFilter.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsHandler.hpp
    ${OPENSYDE_GUI_ROOT}/src/constants.hpp
@@ -1083,7 +1086,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpContentBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPePanelBase.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPePanelBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStandard.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToolBar.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUseCase.hpp
@@ -1285,13 +1288,13 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/can/C_PuiSdNodeCanSignal.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerFiler.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/can/C_PuiSdNodeCanMessageSyncManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardsWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardsWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabWidget.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebScene.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebGraphicsView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardScene.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardToolbox.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardScene.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardToolbox.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageBaseCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoManager.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageAddCommand.hpp
@@ -1308,15 +1311,15 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectAndCreateCommand.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoBaseCommand.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoBaseManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoManager.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoManager.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebBaseContextMenuManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaContextMenuManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaTrafficEncryptionStatusHelper.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaContextMenuManager.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaTrafficEncryptionStatusHelper.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdClipBoardHelper.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoZetOrderCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSortHelper.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdUtil.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabBar.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabBar.hpp
    ${PROJECT_ROOT}/src/graphic_items/widgets/C_GiWiProxyBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableView.hpp
@@ -1343,11 +1346,11 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdNodeToNodeConnectionSetupWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabProperties.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebTopologyBaseScene.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvTopologyBaseScene.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeSetupWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeScene.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpScene.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpOverviewWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/C_SyvTopologyBaseScene.hpp
+   ${PROJECT_ROOT}/src/system_views/system_setup/C_SyvSeSetupWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_setup/C_SyvSeScene.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpScene.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpOverviewWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabFrameError.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiEditBackground.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandler.hpp
@@ -1363,14 +1366,14 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiBusConnectorBase.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/topology/C_SebUnoTopBusConnectorMoveCommand.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/topology/C_SebUnoTopBaseManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaTearOffWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaTearOffWidget.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebTopologyBaseContextMenuManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeDllConfigurationDialog.hpp
+   ${PROJECT_ROOT}/src/system_views/system_setup/C_SyvSeDllConfigurationDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxGrayedEdit.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTabClose.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsSystemView.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsSystemViewDashboard.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/routing/C_SyvRoRouteCalculation.hpp
+   ${PROJECT_ROOT}/src/system_views/routing/C_SyvRoRouteCalculation.hpp
    ${PROJECT_ROOT}/src/project_gui/base/C_PuiBsBox.hpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiRectBaseGroup.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiRectBaseGroup.hpp
@@ -1404,31 +1407,31 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaBoundary.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaTextElement.hpp
    ${PROJECT_ROOT}/src/project_gui/base/C_PuiBsElementsFiler.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddDeleteBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoDeleteCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddSnapshotCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaCopyPasteManager.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddDeleteBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoDeleteCommand.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddCommand.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoAddSnapshotCommand.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaCopyPasteManager.hpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_UtiClipBoardHelper.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvClipBoardHelper.hpp
+   ${PROJECT_ROOT}/src/system_views/C_SyvClipBoardHelper.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoSetupStyleCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFontConfig.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxFontProperties.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebToolboxUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxHover.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaLabelBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardBaseWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardLabelWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardBaseWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardLabelWidget.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbWidgetBase.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbLabel.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabAdaptiveSize.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItUtil.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardLabelValue.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbSpinBox.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaSpinBoxBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardSliderWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardSliderWidget.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbSlider.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaSliderBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/slider/C_OgeSliDashboard.hpp
@@ -1436,10 +1439,10 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiDashboardSpinBoxGroup.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbProgressBar.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaProgressBarBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardProgressBarWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardProgressBarWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeDashboardProgressBar.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDataDealer.hpp
+   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDataDealer.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardDefault.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardProgressBarMaximum.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementContent.hpp
@@ -1453,28 +1456,28 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiDashboardPieChart.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbTable.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaTableBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaModel.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaView.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaDelegate.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaModel.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbNodeDataPoolListElementId.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeLabel.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeBase.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeLabel.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvReadDataConfiguration.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeDataElementBrowse.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeDataElementBrowse.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementScaling.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeConfiguration.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeNodeHeader.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTreeWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableDelegate.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeConfiguration.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeNodeHeader.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableModel.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTreeWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableDelegate.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbNodeDataElementConfig.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPePieChart.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeToggle.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSpinBox.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableHeaderView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSlider.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeProgressBar.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPePieChart.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableView.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeToggle.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSpinBox.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeTableHeaderView.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSlider.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeProgressBar.hpp
    ${PROJECT_ROOT}/src/util/C_UtiStyleSheets.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeComboBox.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeSyvSetup.hpp
@@ -1483,54 +1486,54 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvPcBusConnector.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbParam.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaParam.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImageRecordWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWriteWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImageRecordWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWriteWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiProgressBar.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiProgressBopperle.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArView.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArModel.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArDelegate.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArView.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpContentUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64AutoFix.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFix.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxAutoFixBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverDiag.hpp
+   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverDiag.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeDarkScrollArea.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComPollingThreadDiag.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcSequences.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeList.hpp
+   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComPollingThreadDiag.hpp
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcSequences.hpp
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeList.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubOptions.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableView.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeList.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverUtil.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpSequences.hpp
+   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverUtil.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSequences.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64Factor.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeContextMenuManager.hpp
+   ${PROJECT_ROOT}/src/system_views/system_setup/C_SyvSeContextMenuManager.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsNode.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsNodeDatapool.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvUtil.hpp
+   ${PROJECT_ROOT}/src/system_views/C_SyvUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewScroll.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeSyvBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUpdate.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeIpAddressConfigurationWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeHorizontalListWidget.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiInfo.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiOnlyBackground.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpProgressLog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpProgressLogEntry.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpNodePropertiesDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpDeviceInfo.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpProgressLog.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpProgressLogEntry.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpNodePropertiesDialog.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpDeviceInfo.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTabBar.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpPieChart.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpPieChart.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiSvgGraphicsItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeToolTipBase.hpp
@@ -1595,22 +1598,22 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieExportDbc.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeListWidgetToolTipBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvManager.hpp
+   ${PROJECT_ROOT}/src/system_views/C_SyvManager.hpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieExportReportWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxAllBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_RtfExportWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeModel.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeView.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreItem.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWidgetNew.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeDelegate.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWidgetNew.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipContent.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.hpp
@@ -1648,10 +1651,10 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePath.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbDataPoolEntry.hpp
    ${PROJECT_ROOT}/src/implementation/C_ImpCodeGenerationReportWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImportReport.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImportReport.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconWithText.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxParam.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaValuePairs.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaValuePairs.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeDelegate.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvCanBus.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvEthernetBus.hpp
@@ -1664,17 +1667,17 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddListWidget.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdSharedDatapools.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandlerFilerV1.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidgetSmall.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpInformationWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidgetSmall.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpInformationWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSystemCommissioningEdit.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconWithTextBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardInteraction.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverDiagConnect.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardInteraction.hpp
+   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverDiagConnect.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerBusLogic.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerNodeLogic.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerData.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSnapshot.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpFileSizeInformation.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSnapshot.hpp
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpFileSizeInformation.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDelegateUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsSystemViewNode.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeToolTipBase.hpp
@@ -1685,7 +1688,7 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoZetOrderSortHelper.hpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiBase.hpp
    ${PROJECT_ROOT}/src/project_gui/C_PuiUtil.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItTableHeaderView.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItTableHeaderView.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSectionSelected.hpp
@@ -1738,15 +1741,15 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFixCustomTrigger.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdCodeGenerationDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdCodeGenerationModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSceneWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardContentBaseWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataItemWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataSelectorWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlotHandlerWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSceneWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardContentBaseWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataItemWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataSelectorWidget.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlotHandlerWidget.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbTabChart.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tool_button/C_OgeTobToolTipBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlot.hpp
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlot.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubAddChartDataElement.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraGeneric.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconChart.hpp
@@ -1789,7 +1792,7 @@ set(OPENSYDE_FORMS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvHandlerWidget.ui
+   ${PROJECT_ROOT}/src/system_views/C_SyvHandlerWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiHover.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyToolbox.ui
@@ -1831,47 +1834,47 @@ set(OPENSYDE_FORMS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxListWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardsWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardToolbox.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardsWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardToolbox.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdNodeComIfSetupWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdNodeToNodeConnectionSetupWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeSetupWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpOverviewWidget.ui
+   ${PROJECT_ROOT}/src/system_views/system_setup/C_SyvSeSetupWidget.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpOverviewWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiDashboardTab.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaTearOffWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeDllConfigurationDialog.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaTearOffWidget.ui
+   ${PROJECT_ROOT}/src/system_views/system_setup/C_SyvSeDllConfigurationDialog.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFontConfig.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardLabelWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardBaseWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardSliderWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardLabelWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardBaseWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardSliderWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiSpinBoxGroup.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardProgressBarWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeBase.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeLabel.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeDataElementBrowse.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeConfiguration.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeNodeHeader.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPePieChart.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeToggle.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSpinBox.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSlider.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeProgressBar.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImageRecordWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWriteWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardProgressBarWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeBase.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeLabel.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeDataElementBrowse.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeConfiguration.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeUpdateModeNodeHeader.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPePieChart.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeToggle.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSpinBox.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeSlider.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeProgressBar.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImageRecordWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWriteWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArWidget.ui
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcWidget.ui
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.ui
+   ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidget.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeIpAddressConfigurationWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpProgressLog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpProgressLogEntry.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpNodePropertiesDialog.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpProgressLog.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpProgressLogEntry.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpNodePropertiesDialog.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxEntry.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxList.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeProgrammingOptions.ui
@@ -1881,8 +1884,8 @@ set(OPENSYDE_FORMS
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieImportReportWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieExportReportWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_RtfExportWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWidgetNew.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWidgetNew.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.ui
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopSaveAsDialogWidget.ui
    ${PROJECT_ROOT}/src/navigable_gui/C_NagViewItem.ui
@@ -1894,11 +1897,11 @@ set(OPENSYDE_FORMS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbProperties.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbDataPoolEntry.ui
    ${PROJECT_ROOT}/src/implementation/C_ImpCodeGenerationReportWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImportReport.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImportReport.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidgetSmall.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpInformationWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardInteraction.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidgetSmall.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpInformationWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardInteraction.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxDatapoolEntry.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxTimeoutConfig.ui
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieImportDatapoolSelectWidget.ui
@@ -1915,26 +1918,26 @@ set(OPENSYDE_FORMS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelDpPreviewPopUp.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListCommentDialog.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdCodeGenerationDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSceneWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataItemWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataSelectorWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlotHandlerWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpUpdateWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacHexFileView.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacNodeWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileAddPopUp.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoPopUp.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileEntry.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileInfoPopUp.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityOptionsPopUp.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecureArchiveDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityCertificatePackageDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacServiceUpdatePackageDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSceneWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataItemWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataSelectorWidget.ui
+   ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlotHandlerWidget.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpUpdateWidget.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacHexFileView.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacListNodeItemWidget.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacNodeWidget.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileAddPopUp.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoPopUp.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileEntry.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileInfoPopUp.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityOptionsPopUp.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesWidget.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeWidget.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecureArchiveDialog.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityCertificatePackageDialog.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacServiceUpdatePackageDialog.ui
+   ${PROJECT_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacWidget.ui
 )
 
 # --- COMPILER FLAGS AND LIBRARIES -------------------------------------------------------------------------------------
