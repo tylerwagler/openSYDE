@@ -83,26 +83,29 @@ set (OPENSYDE_GUI_INCLUDES
    ${PROJECT_ROOT}/src/scene_base/undo
    ${PROJECT_ROOT}/src/scene_base/undo/topology
    ${OPENSYDE_GUI_ROOT}/src/system_definition
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo
+   ${PROJECT_ROOT}/src/system_definition
+   ${PROJECT_ROOT}/src/system_definition/managers
+   ${PROJECT_ROOT}/src/system_definition/managers/undo
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/copy_paste
+   ${PROJECT_ROOT}/src/system_definition/node_edit
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/copy_paste
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/array_editor
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/canopen
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/j1939
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/array_editor
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set
+   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options
+   ${PROJECT_ROOT}/src/system_definition/bus_edit
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/canopen
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer
    ${OPENSYDE_GUI_ROOT}/src/system_views
    ${PROJECT_ROOT}/src/system_views
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication
@@ -212,58 +215,58 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/project_operations/C_PopCreateServiceProjDialogWidget.cpp
    ${PROJECT_ROOT}/src/project_operations/C_PopPasswordDialogWidget.cpp
    ${PROJECT_ROOT}/src/project_operations/C_PopServiceProjSettingsModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueImportCommMessagesWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeWidgetItem.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogTreeModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogTreeView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939PgPropertiesDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeLeIpAddressWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesTabContentWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoAddDeviceDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceUpdateEdsDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobGeneralSettingsWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobOvDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobPropertiesWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvTableModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvTableView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalTabContentWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalTriggerCheckHelper.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopClipBoardHelper.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopElementIdCrcGroup.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopElementIdCrcGroupBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpEditWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceConfigWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceEdsWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoManagerIntfWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewTableModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewTableView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueImportCommMessagesWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeWidgetItem.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsDialog.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsView.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogDialog.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogTreeModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogTreeView.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939PgPropertiesDialog.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeLeIpAddressWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesTabContentWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoAddDeviceDialog.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceUpdateEdsDialog.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerDialog.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobGeneralSettingsWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobOvDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobPropertiesWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvTableModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvTableView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalTabContentWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalTriggerCheckHelper.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopClipBoardHelper.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopElementIdCrcGroup.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopElementIdCrcGroupBase.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpEditWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceConfigWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceEdsWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoManagerIntfWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewTableModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewTableView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.cpp
    ${PROJECT_ROOT}/src/system_views/C_SyvHandlerWidget.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaDashboardScreenshot.cpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpUpdateWidget.cpp
@@ -309,11 +312,11 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUseCase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUseCaseNav.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubGenericTextWithBackground.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyToolbox.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyToolbox.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiPort.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiNode.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyListWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyScene.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyListWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyScene.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiCustomFunctions.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLine.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineConnection.cpp
@@ -339,7 +342,7 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/project_gui/C_PuiProject.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiPointInteraction.cpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomMouseItem.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdContextMenuEntry.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdContextMenuEntry.cpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomToolTip.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.cpp
@@ -359,59 +362,59 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconMenu.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyLineWidget.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiImage.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/C_SdManTopologyContextMenuManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/C_SdManTopologyCopyPasteManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/C_SdManTopologyContextMenuManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/C_SdManTopologyCopyPasteManager.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoMoveCommand.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiUnique.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoAlignCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyZetOrderCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyDeleteCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddDeleteBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyZetOrderCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyDeleteCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddDeleteBaseCommand.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdCompleteBusConnectionData.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoMoveCommandGroup.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddSnapshotCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectNodeCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/C_SdManTopologyBusConnectorReconnectManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBusCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologySetupStyleCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddSnapshotCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectNodeCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/C_SdManTopologyBusConnectorReconnectManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBusCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologySetupStyleCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyChangeInterfaceCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpProperties.cpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyChangeInterfaceCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpProperties.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeConnectionId.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeDataPool.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeDataPoolList.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeDataPoolListElement.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxEditProperties.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListHeaderWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListMoveCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListPasteCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListDeleteCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListAddDeleteBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListAddCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeNodeEditWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorListWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementDeleteCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementMoveCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementPasteCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoUtil.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListHeaderWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListMoveCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListPasteCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListDeleteCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListAddDeleteBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListAddCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeNodeEditWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorListWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementDeleteCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementMoveCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementPasteCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeListHeader.cpp
@@ -427,77 +430,77 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiProgressLog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiBopperle.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableView.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTableWidgetComIf.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeComIfSettingsTableDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeComIfSettingsTableDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_Uti.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddSpecificCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemUsageWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewUsageWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpUtil.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdHandlerWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddSpecificCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemUsageWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewUsageWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpUtil.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdHandlerWidget.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdUtil.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxFactor.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedTable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementDataChangeCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableHeaderView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementDataChangeCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableHeaderView.cpp
    ${PROJECT_ROOT}/src/project_operations/C_PopUtil.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListDataChangeCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListDataChangeCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListDeleteCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListMoveCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddSpecificCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListDataChangeCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListDataChangeCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListDeleteCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListMoveCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddSpecificCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetView.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearch.cpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagToolBarSearchResults.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdSearchTreeWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdSearchTreeWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearchItemWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearchItemDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListModelViewManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/array_editor/C_SdNdeUnoAedDataPoolListDataChangeCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/array_editor/C_SdNdeUnoAedDataPoolListManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListModelViewManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/array_editor/C_SdNdeUnoAedDataPoolListDataChangeCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/array_editor/C_SdNdeUnoAedDataPoolListManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditPropertiesWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueComIfDescriptionWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditPropertiesWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueComIfDescriptionWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tab_widget/C_OgeTawSelector.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalEditWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessagePropertiesWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSignalPropertiesWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalEditWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessagePropertiesWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSignalPropertiesWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTreeWidgetRoot.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxListWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxListWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiBorder.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultSmall.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectDisconnectBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvGraphicsView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvGraphicsScene.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvEmptyItem.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvBaseItem.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvBorderItem.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalItem.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalResizeItem.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectDisconnectBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvGraphicsView.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvGraphicsScene.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvEmptyItem.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvBaseItem.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvBorderItem.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalItem.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalResizeItem.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalManager.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/can/C_PuiSdNodeCanProtocol.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/can/C_PuiSdNodeCanMessage.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/can/C_PuiSdNodeCanMessageContainer.cpp
@@ -511,38 +514,38 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/scene_base/C_SebGraphicsView.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardScene.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardToolbox.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageAddCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageAddDeleteBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageDeleteCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalAddCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalAddDeleteBaseCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalDeleteCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalMoveCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageAddCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageAddDeleteBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageDeleteCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalAddCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalAddDeleteBaseCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalDeleteCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalMoveCommand.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebUtil.cpp
    ${PROJECT_ROOT}/src/util/C_UtiUndoStack.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeDisconnectCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectAndCreateCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeDisconnectCommand.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectAndCreateCommand.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoBaseCommand.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoBaseManager.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoManager.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebBaseContextMenuManager.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaContextMenuManager.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaTrafficEncryptionStatusHelper.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdClipBoardHelper.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdClipBoardHelper.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoZetOrderCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSortHelper.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdUtil.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSortHelper.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdUtil.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabBar.cpp
    ${PROJECT_ROOT}/src/graphic_items/widgets/C_GiWiProxyBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyDataSnapshot.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableView.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableView.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyDataSnapshot.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebBaseCopyPasteManager.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiTextElementBus.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubOpen.cpp
@@ -551,15 +554,15 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdTextElementBus.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedElided.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeToolTipBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableErrorManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListErrorManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetHeaderView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeSingleHeaderView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListHeaderUsageWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableErrorManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListErrorManager.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetHeaderView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeSingleHeaderView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListHeaderUsageWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiWithToolTip.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdNodeComIfSetupWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdNodeToNodeConnectionSetupWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdNodeComIfSetupWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdNodeToNodeConnectionSetupWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabProperties.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebTopologyBaseScene.cpp
    ${PROJECT_ROOT}/src/system_views/C_SyvTopologyBaseScene.cpp
@@ -722,10 +725,10 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.cpp
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeList.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubOptions.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableDelegate.cpp
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeList.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeWidget.cpp
@@ -740,7 +743,7 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeSyvBase.cpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUpdate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeIpAddressConfigurationWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeIpAddressConfigurationWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeHorizontalListWidget.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiInfo.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiOnlyBackground.cpp
@@ -760,19 +763,19 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToolTipBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxList.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxEntry.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxList.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxEntry.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tab_widget/C_OgeTawToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeProgrammingOptions.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeProgrammingOptions.cpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieImportDbc.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiCustomMessage.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiSpinBoxGroupProperties.cpp
    ${PROJECT_ROOT}/src/user_settings/C_UsCommunication.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxItemWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxItemWidget.cpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieDataPoolListAdapter.cpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieUtil.cpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieDcfEdsImportNodeSelectWidget.cpp
@@ -838,34 +841,34 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeNavigation.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDashboard.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDoubleClick.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbSelectDataPools.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbSelectDataPools.cpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementModel.cpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementView.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementSortFilter.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbAddNewProject.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbAddNewProject.cpp
    ${PROJECT_ROOT}/src/implementation/C_ImpUtil.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbProperties.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbProperties.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePath.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbDataPoolEntry.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbDataPoolEntry.cpp
    ${PROJECT_ROOT}/src/implementation/C_ImpCodeGenerationReportWidget.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImportReport.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconWithText.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxParam.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaValuePairs.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeDelegate.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvCanBus.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvEthernetBus.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvTextElementBus.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxResizingView.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblModelAction.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTooltipUtil.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddWidget.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerFilerV2.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddListWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddListWidget.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdSharedDatapools.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandlerFilerV1.cpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidgetSmall.cpp
@@ -893,15 +896,15 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSectionSelected.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxDatapoolEntry.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxTimeoutConfig.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxDatapoolEntry.cpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxTimeoutConfig.cpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieImportDatapoolSelectWidget.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyColorSelectWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeView.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyScreenColorPickingEventFilter.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyColorBrightnessPicker.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyColorPicker.cpp
@@ -910,39 +913,39 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/com_import_export/C_CieDbcImportNodeAssignmentItemWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubColor.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerHalc.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblEditLineEditBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFixPosition.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLePlaceholderVar.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelCopyPaste.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcDefUpdateDialog.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportDialog.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelCopyPaste.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcDefUpdateDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelect.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableHalc.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxTableHalc.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelectTableHalc.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeTableHalc.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListEditWidget.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListEditWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubBackNavigation.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelDpPreviewPopUp.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListCommentDialog.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelDpPreviewPopUp.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListCommentDialog.cpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubPrevNavigation.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabExternalLink.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFixCustomTrigger.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdCodeGenerationDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdCodeGenerationModel.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdCodeGenerationDialog.cpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdCodeGenerationModel.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSceneWidget.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardContentBaseWidget.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaWidget.cpp
@@ -958,7 +961,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBaseCheckable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewCheckable.cpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreeModelCheckable.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamView.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamView.cpp
 )
 
 set(OPENSYDE_HEADERS
@@ -998,58 +1001,58 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/project_operations/C_PopCreateServiceProjDialogWidget.hpp
    ${PROJECT_ROOT}/src/project_operations/C_PopPasswordDialogWidget.hpp
    ${PROJECT_ROOT}/src/project_operations/C_PopServiceProjSettingsModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueImportCommMessagesWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeWidgetItem.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogTreeModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogTreeView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939PgPropertiesDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeLeIpAddressWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesTabContentWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoAddDeviceDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceUpdateEdsDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobGeneralSettingsWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobOvDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobPropertiesWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvTableModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvTableView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalTabContentWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalTriggerCheckHelper.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopClipBoardHelper.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopElementIdCrcGroup.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopElementIdCrcGroupBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpEditWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceConfigWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceEdsWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoManagerIntfWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewTableModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewTableView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueImportCommMessagesWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeWidgetItem.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsDialog.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsView.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogDialog.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogTreeModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogTreeView.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939PgPropertiesDialog.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeLeIpAddressWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesTabContentWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoAddDeviceDialog.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoConfigTreeView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceUpdateEdsDialog.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerDialog.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionTableView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobGeneralSettingsWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobOvDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobPropertiesWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsListView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvTableModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvTableView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalTabContentWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalTriggerCheckHelper.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopClipBoardHelper.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopElementIdCrcGroup.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/copy_paste/C_SdNdeDalCopElementIdCrcGroupBase.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpEditWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceConfigWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceEdsWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoManagerIntfWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewTableModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewTableView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.hpp
    ${PROJECT_ROOT}/src/system_views/C_SyvHandlerWidget.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaDashboardScreenshot.hpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpUpdateWidget.hpp
@@ -1095,11 +1098,11 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUseCase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUseCaseNav.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubGenericTextWithBackground.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyToolbox.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyToolbox.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiPort.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiNode.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyListWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyScene.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyListWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyScene.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiCustomFunctions.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLine.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineConnection.hpp
@@ -1126,7 +1129,7 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/project_gui/C_PuiProject.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiPointInteraction.hpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomMouseItem.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdContextMenuEntry.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdContextMenuEntry.hpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomToolTip.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.hpp
@@ -1146,59 +1149,59 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconMenu.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyLineWidget.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiImage.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/C_SdManTopologyContextMenuManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/C_SdManTopologyCopyPasteManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/C_SdManTopologyContextMenuManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/C_SdManTopologyCopyPasteManager.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoMoveCommand.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiUnique.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoAlignCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyZetOrderCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyDeleteCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddDeleteBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyZetOrderCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyDeleteCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddDeleteBaseCommand.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdCompleteBusConnectionData.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoMoveCommandGroup.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddSnapshotCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectNodeCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/C_SdManTopologyBusConnectorReconnectManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBusCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologySetupStyleCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddSnapshotCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyAddBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectNodeCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/C_SdManTopologyBusConnectorReconnectManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBusCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologySetupStyleCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyChangeInterfaceCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpProperties.hpp
+   ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyChangeInterfaceCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpProperties.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeConnectionId.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeDataPool.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeDataPoolList.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeDataPoolListElement.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxEditProperties.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListHeaderWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListMoveCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListPasteCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListDeleteCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListAddDeleteBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListAddCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeNodeEditWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorListWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementDeleteCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementMoveCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementPasteCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoUtil.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListHeaderWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListMoveCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListPasteCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListDeleteCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListAddDeleteBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListAddCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeNodeEditWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorListWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementDeleteCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementMoveCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementPasteCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeListHeader.hpp
@@ -1214,77 +1217,77 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiProgressLog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiBopperle.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableView.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTableWidgetComIf.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeComIfSettingsTableDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeComIfSettingsTableDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_Uti.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddSpecificCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemUsageWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewUsageWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpUtil.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdHandlerWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddSpecificCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemUsageWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewUsageWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpUtil.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdHandlerWidget.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdUtil.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxFactor.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedTable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementDataChangeCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableHeaderView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementDataChangeCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableHeaderView.hpp
    ${PROJECT_ROOT}/src/project_operations/C_PopUtil.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListDataChangeCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListDataChangeCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListDeleteCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListMoveCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddSpecificCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListDataChangeCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListDataChangeCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListDeleteCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListMoveCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListAddSpecificCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set/C_SdNdeUnoDasDataPoolListManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetView.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearch.hpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagToolBarSearchResults.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdSearchTreeWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdSearchTreeWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearchItemWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearchItemDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListModelViewManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/array_editor/C_SdNdeUnoAedDataPoolListDataChangeCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/array_editor/C_SdNdeUnoAedDataPoolListManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListModelViewManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/array_editor/C_SdNdeUnoAedDataPoolListDataChangeCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/undo/array_editor/C_SdNdeUnoAedDataPoolListManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditPropertiesWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueComIfDescriptionWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorTreeWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditPropertiesWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueComIfDescriptionWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tab_widget/C_OgeTawSelector.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalEditWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessagePropertiesWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSignalPropertiesWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalEditWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessagePropertiesWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSignalPropertiesWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTreeWidgetRoot.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxListWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxListWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiBorder.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultSmall.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectDisconnectBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvGraphicsView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvGraphicsScene.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvEmptyItem.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvBaseItem.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvBorderItem.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalItem.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalResizeItem.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectDisconnectBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvGraphicsView.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvGraphicsScene.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvEmptyItem.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvBaseItem.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvBorderItem.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalItem.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalResizeItem.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvSignalManager.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/can/C_PuiSdNodeCanProtocol.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/can/C_PuiSdNodeCanMessage.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/can/C_PuiSdNodeCanMessageContainer.hpp
@@ -1298,38 +1301,38 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/scene_base/C_SebGraphicsView.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardScene.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardToolbox.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageAddCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageAddDeleteBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageDeleteCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalAddCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalAddDeleteBaseCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalDeleteCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalMoveCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageAddCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageAddDeleteBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoMessageDeleteCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalAddCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalAddDeleteBaseCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalDeleteCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoSignalMoveCommand.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebUtil.hpp
    ${PROJECT_ROOT}/src/util/C_UtiUndoStack.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeDisconnectCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectAndCreateCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeDisconnectCommand.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectAndCreateCommand.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoBaseCommand.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoBaseManager.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoManager.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebBaseContextMenuManager.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaContextMenuManager.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaTrafficEncryptionStatusHelper.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdClipBoardHelper.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdClipBoardHelper.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoZetOrderCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSortHelper.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdUtil.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSortHelper.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdUtil.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabBar.hpp
    ${PROJECT_ROOT}/src/graphic_items/widgets/C_GiWiProxyBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyDataSnapshot.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableView.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableView.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyDataSnapshot.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebBaseCopyPasteManager.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiTextElementBus.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubOpen.hpp
@@ -1338,15 +1341,15 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdTextElementBus.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedElided.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeToolTipBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableErrorManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListErrorManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetHeaderView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeSingleHeaderView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListHeaderUsageWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableErrorManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListErrorManager.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetHeaderView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeSingleHeaderView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListHeaderUsageWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiWithToolTip.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdNodeComIfSetupWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdNodeToNodeConnectionSetupWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdNodeComIfSetupWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdNodeToNodeConnectionSetupWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabProperties.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebTopologyBaseScene.hpp
    ${PROJECT_ROOT}/src/system_views/C_SyvTopologyBaseScene.hpp
@@ -1509,10 +1512,10 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.hpp
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeList.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubOptions.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableDelegate.hpp
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeList.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeWidget.hpp
@@ -1527,7 +1530,7 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeSyvBase.hpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUpdate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeIpAddressConfigurationWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeIpAddressConfigurationWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeHorizontalListWidget.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiInfo.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiOnlyBackground.hpp
@@ -1547,13 +1550,13 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToolTipBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxEntry.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxList.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxEntry.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxList.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tab_widget/C_OgeTawToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeProgrammingOptions.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeProgrammingOptions.hpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieConverter.hpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieImportDbc.hpp
    ${PROJECT_ROOT}/../libraries/flexlexer/FlexLexer.h
@@ -1587,7 +1590,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiSpinBoxGroupProperties.hpp
    ${PROJECT_ROOT}/src/user_settings/C_UsCommunication.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxItemWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxItemWidget.hpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieDataPoolListAdapter.hpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieDataPoolListStructure.hpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieUtil.hpp
@@ -1640,34 +1643,34 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeNavigation.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDashboard.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDoubleClick.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbSelectDataPools.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbSelectDataPools.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementView.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementSortFilter.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbAddNewProject.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbAddNewProject.hpp
    ${PROJECT_ROOT}/src/implementation/C_ImpUtil.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbProperties.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbProperties.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePath.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbDataPoolEntry.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbDataPoolEntry.hpp
    ${PROJECT_ROOT}/src/implementation/C_ImpCodeGenerationReportWidget.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImportReport.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconWithText.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxParam.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaValuePairs.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeDelegate.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvCanBus.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvEthernetBus.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvTextElementBus.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxResizingView.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblModelAction.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTooltipUtil.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddWidget.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerFilerV2.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddListWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddListWidget.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdSharedDatapools.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandlerFilerV1.hpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidgetSmall.hpp
@@ -1695,15 +1698,15 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSectionSelected.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxDatapoolEntry.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxTimeoutConfig.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxDatapoolEntry.hpp
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxTimeoutConfig.hpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieImportDatapoolSelectWidget.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyColorSelectWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeView.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyScreenColorPickingEventFilter.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyColorBrightnessPicker.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyColorPicker.hpp
@@ -1712,38 +1715,38 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/com_import_export/C_CieDbcImportNodeAssignmentItemWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubColor.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerHalc.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblEditLineEditBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFixPosition.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLePlaceholderVar.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelCopyPaste.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcDefUpdateDialog.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportDialog.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelCopyPaste.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcDefUpdateDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelect.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelTreeDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableHalc.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxTableHalc.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelectTableHalc.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListEditWidget.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListEditWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubBackNavigation.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelDpPreviewPopUp.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListCommentDialog.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelDpPreviewPopUp.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListCommentDialog.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreDataElementItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubPrevNavigation.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabExternalLink.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFixCustomTrigger.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdCodeGenerationDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdCodeGenerationModel.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdCodeGenerationDialog.hpp
+   ${PROJECT_ROOT}/src/system_definition/C_SdCodeGenerationModel.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSceneWidget.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardContentBaseWidget.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaWidget.hpp
@@ -1759,7 +1762,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBaseCheckable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewCheckable.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreeModelCheckable.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamView.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamView.hpp
 )
 
 set(OPENSYDE_FORMS
@@ -1770,35 +1773,35 @@ set(OPENSYDE_FORMS
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesPopUpDialog.ui
    ${PROJECT_ROOT}/src/project_operations/C_PopCreateServiceProjDialogWidget.ui
    ${PROJECT_ROOT}/src/project_operations/C_PopPasswordDialogWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueImportCommMessagesWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939PgPropertiesDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeLeIpAddressWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesTabContentWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoAddDeviceDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceUpdateEdsDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobPropertiesWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalTabContentWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpEditWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceConfigWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceEdsWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoManagerIntfWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueImportCommMessagesWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/canopen/C_SdBueCoAddSignalsDialog.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939AddMessagesFromCatalogDialog.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939/C_SdBueJ1939PgPropertiesDialog.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeLeIpAddressWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesTabContentWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoAddDeviceDialog.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceUpdateEdsDialog.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobPropertiesWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalTabContentWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobAdditionalTriggerDialog.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpEditWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceConfigWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceEdsWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoManagerIntfWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.ui
    ${PROJECT_ROOT}/src/system_views/C_SyvHandlerWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiHover.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyToolbox.ui
+   ${PROJECT_ROOT}/src/system_definition/C_SdTopologyToolbox.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiPieChart.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiProgressLog.ui
    ${PROJECT_ROOT}/src/navigable_gui/C_NagMainWidget.ui
@@ -1812,37 +1815,37 @@ set(OPENSYDE_FORMS
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBoundaryWidget.ui
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyTextElementWidget.ui
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyLineWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpProperties.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListHeaderWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeNodeEditWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdHandlerWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpProperties.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListHeaderWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeNodeEditWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/C_SdHandlerWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetWidget.ui
    ${PROJECT_ROOT}/src/navigable_gui/C_NagToolBarSearchResults.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearchItemWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditPropertiesWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueComIfDescriptionWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalEditWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessagePropertiesWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSignalPropertiesWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxListWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditPropertiesWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueComIfDescriptionWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalEditWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSignalTableWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessagePropertiesWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueSignalPropertiesWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageSelectorWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxListWidget.ui
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardsWidget.ui
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardWidget.ui
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardToolbox.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdNodeComIfSetupWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdNodeToNodeConnectionSetupWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.ui
+   ${PROJECT_ROOT}/src/system_definition/C_SdNodeComIfSetupWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/C_SdNodeToNodeConnectionSetupWidget.ui
    ${PROJECT_ROOT}/src/system_views/system_setup/C_SyvSeSetupWidget.ui
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpOverviewWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiDashboardTab.ui
@@ -1870,19 +1873,19 @@ set(OPENSYDE_FORMS
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArWidget.ui
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcWidget.ui
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.ui
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeWidget.ui
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeIpAddressConfigurationWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeIpAddressConfigurationWidget.ui
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpProgressLog.ui
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpProgressLogEntry.ui
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpNodePropertiesDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxEntry.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxList.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeProgrammingOptions.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxEntry.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxList.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeProgrammingOptions.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiCustomMessage.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxItemWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxItemWidget.ui
    ${PROJECT_ROOT}/src/com_import_export/C_CieDcfEdsImportNodeSelectWidget.ui
    ${PROJECT_ROOT}/src/com_import_export/C_CieImportReportWidget.ui
    ${PROJECT_ROOT}/src/com_import_export/C_CieExportReportWidget.ui
@@ -1893,34 +1896,34 @@ set(OPENSYDE_FORMS
    ${PROJECT_ROOT}/src/project_operations/C_PopSaveAsDialogWidget.ui
    ${PROJECT_ROOT}/src/navigable_gui/C_NagViewItem.ui
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagAboutDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbSelectDataPools.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbAddNewProject.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbProperties.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbDataPoolEntry.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbSelectDataPools.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbAddNewProject.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbProperties.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbDataPoolEntry.ui
    ${PROJECT_ROOT}/src/implementation/C_ImpCodeGenerationReportWidget.ui
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImportReport.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddWidget.ui
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidgetSmall.ui
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpInformationWidget.ui
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardInteraction.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxDatapoolEntry.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxTimeoutConfig.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxDatapoolEntry.ui
+   ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxTimeoutConfig.ui
    ${PROJECT_ROOT}/src/com_import_export/C_CieImportDatapoolSelectWidget.ui
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyColorSelectWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcWidget.ui
    ${PROJECT_ROOT}/src/com_import_export/C_CieDbcImportNodeAssignmentWidget.ui
    ${PROJECT_ROOT}/src/com_import_export/C_CieDbcImportNodeAssignmentItemWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFixPosition.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcDefUpdateDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListEditWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelDpPreviewPopUp.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListCommentDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdCodeGenerationDialog.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportDialog.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcDefUpdateDialog.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListEditWidget.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelDpPreviewPopUp.ui
+   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListCommentDialog.ui
+   ${PROJECT_ROOT}/src/system_definition/C_SdCodeGenerationDialog.ui
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSceneWidget.ui
    ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaWidget.ui
    ${PROJECT_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaDataItemWidget.ui
