@@ -1,23 +1,20 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Precompiled header (header)
+   \brief       Shared precompiled-header base for all Qt GUI targets
 
-   To use this precompiled-header in a Qt project add the following to your .pro file:
-
-   CONFIG   += precompile_header
-   PRECOMPILED_HEADER = ../src/precomp_headers.h
-
-   Contains a list of header files to be pre-compiled.
-   see http://doc.qt.io/qt-5/qmake-precompiledheaders.html for details
+   Pre-includes the C++ stdlib + Qt headers that every GUI target uses. Each target has its own
+   small precomp_headers.hpp wrapper that #includes this file via the include path; the openSYDE
+   tool's wrapper additionally pre-includes its own STW project headers (stwtypes, C_PuiSdHandler,
+   etc.). Targets wire up their wrapper via target_precompile_headers(<target> PRIVATE ...).
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef  PRECOMP_HEADERS_GUI_HPP
-#define  PRECOMP_HEADERS_GUI_HPP
+#ifndef  PRECOMP_HEADERS_COMMON_HPP
+#define  PRECOMP_HEADERS_COMMON_HPP
 
-//lint -esym(766,"precomp_headers.hpp")   effectively not used in lint "builds"; but that's exactly what we want
+//lint -esym(766,"precomp_headers_common.hpp")   effectively not used in lint "builds"; but that's exactly what we want
 #ifndef _lint //speed up linting: don't include all of the headers for each linted .cpp file
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
@@ -69,20 +66,7 @@
 #include <QVariant>
 #include <QVector>
 #include <QWidget>
-/*
-//Qt modules
-#include <QtGui>
-#include <QtCore>
-#include <QtWidgets>
 
-// STW includes
-#include "stwtypes.hpp"
-#include "C_PuiProject.hpp"
-#include "C_PuiSdHandler.hpp"
-#include "C_SdTopologyScene.hpp"
-#include "C_GtGetText.hpp"
-#include "C_SclChecksums.hpp"
-*/
 #endif
 
 #endif
