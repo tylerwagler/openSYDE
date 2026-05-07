@@ -131,7 +131,8 @@ set (OPENSYDE_GUI_INCLUDES
    ${PROJECT_ROOT}/src/graphic_items/system_view_items
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/unused_project_files
+   ${PROJECT_ROOT}/src/navigable_gui
+   ${PROJECT_ROOT}/src/navigable_gui/unused_project_files
    ${PROJECT_ROOT}/src/project_gui
    ${PROJECT_ROOT}/src/project_gui/base
    ${PROJECT_ROOT}/src/project_gui/system_views
@@ -175,16 +176,16 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/C_GiProgressBarUtil.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeData.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvSubNodeData.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagProjectSettingsPopupDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolSettingsPopupDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagServiceModeInfo.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolTipWithImage.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagTopTreeDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagTopTreeModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagTopTreeView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesPopUpDialog.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableView.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagProjectSettingsPopupDialog.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolSettingsPopupDialog.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagServiceModeInfo.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolTipWithImage.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagTopTreeDelegate.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagTopTreeModel.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagTopTreeView.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesPopUpDialog.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableModel.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableView.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericWithContextMenu.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeIpAddress.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconEvents.cpp
@@ -312,12 +313,12 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineConnection.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiInteractionPoint.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiEthernetBus.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagMainWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagMainWindow.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagNaviBarWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolBarWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagUseCaseViewWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagUseCaseWidget.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagMainWidget.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagMainWindow.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagNaviBarWidget.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolBarWidget.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagUseCaseViewWidget.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagUseCaseWidget.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiCanBus.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiBus.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiSimpleLine.cpp
@@ -455,7 +456,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetView.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearch.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolBarSearchResults.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolBarSearchResults.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdSearchTreeWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearchItemWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearchItemDelegate.cpp
@@ -812,16 +813,16 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewList.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewListDelegate.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagViewList.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagViewListDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopSaveAsDialogWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewItem.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagViewItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagAboutDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationTab.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSection.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeListViewToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopFileTableDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewListModel.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagViewListModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiHorizontalNavigation.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiVerticalNavi.cpp
@@ -961,16 +962,16 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/C_GiProgressBarUtil.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvNodeData.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvSubNodeData.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagProjectSettingsPopupDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolSettingsPopupDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagServiceModeInfo.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolTipWithImage.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagTopTreeDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagTopTreeModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagTopTreeView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesPopUpDialog.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableView.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagProjectSettingsPopupDialog.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolSettingsPopupDialog.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagServiceModeInfo.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolTipWithImage.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagTopTreeDelegate.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagTopTreeModel.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagTopTreeView.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesPopUpDialog.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableModel.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableView.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericWithContextMenu.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeIpAddress.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconEvents.hpp
@@ -1098,12 +1099,12 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineConnection.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiInteractionPoint.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiEthernetBus.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagMainWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagMainWindow.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagNaviBarWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolBarWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagUseCaseViewWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagUseCaseWidget.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagMainWidget.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagMainWindow.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagNaviBarWidget.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolBarWidget.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagUseCaseViewWidget.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagUseCaseWidget.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiCanBus.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiBus.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiSimpleLine.hpp
@@ -1242,7 +1243,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetView.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearch.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolBarSearchResults.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolBarSearchResults.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdSearchTreeWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearchItemWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearchItemDelegate.hpp
@@ -1614,16 +1615,16 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewList.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewListDelegate.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagViewList.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagViewListDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopSaveAsDialogWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewItem.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagViewItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagAboutDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationTab.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSection.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeListViewToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopFileTableDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewListModel.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagViewListModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiHorizontalNavigation.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiVerticalNavi.hpp
@@ -1756,11 +1757,11 @@ set(OPENSYDE_HEADERS
 )
 
 set(OPENSYDE_FORMS
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagProjectSettingsPopupDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolSettingsPopupDialog.ui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagServiceModeInfo.ui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolTipWithImage.ui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesPopUpDialog.ui
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagProjectSettingsPopupDialog.ui
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolSettingsPopupDialog.ui
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagServiceModeInfo.ui
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolTipWithImage.ui
+   ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesPopUpDialog.ui
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopCreateServiceProjDialogWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopPasswordDialogWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueImportCommMessagesWidget.ui
@@ -1794,11 +1795,11 @@ set(OPENSYDE_FORMS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTopologyToolbox.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiPieChart.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiProgressLog.ui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagMainWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagMainWindow.ui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagNaviBarWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolBarWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagUseCaseViewWidget.ui
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagMainWidget.ui
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagMainWindow.ui
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagNaviBarWidget.ui
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolBarWidget.ui
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagUseCaseViewWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiError.ui
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBaseWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolTip.ui
@@ -1817,7 +1818,7 @@ set(OPENSYDE_FORMS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdHandlerWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolBarSearchResults.ui
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagToolBarSearchResults.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeWidgetToolBarSearchItemWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListArrayEditWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditPropertiesWidget.ui
@@ -1884,7 +1885,7 @@ set(OPENSYDE_FORMS
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.ui
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopSaveAsDialogWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewItem.ui
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagViewItem.ui
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagAboutDialog.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.ui
