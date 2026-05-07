@@ -58,9 +58,11 @@ set (OPENSYDE_INCLUDES
    ${PROJECT_ROOT}/src/can_monitor/data_base
    ${PROJECT_ROOT}/src/can_monitor/project
    ${PROJECT_ROOT}/src/can_monitor/user_settings
+   ${PROJECT_ROOT}/src/can_monitor/communication
    ${OPENSYDE_GUI_ROOT}/src/user_settings
    ${PROJECT_ROOT}/src/can_monitor/message_trace
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings
    ${PROJECT_ROOT}/src/can_monitor/message_generator
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements
@@ -68,8 +70,9 @@ set (OPENSYDE_INCLUDES
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/group_box
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/label
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/menu
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/splitter
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/spin_box
@@ -77,6 +80,7 @@ set (OPENSYDE_INCLUDES
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget
    ${PROJECT_ROOT}/src/can_monitor/table_base
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util
+   ${PROJECT_ROOT}/src/can_monitor/util
    ${OPENSYDE_GUI_ROOT}/src/help_engine
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box
@@ -125,12 +129,12 @@ endif()
 set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariablesBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingsBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDllWidgetLogic.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDllWidgetLogic.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiGeneric.cpp
    ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.cpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_Uti.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComMessageMonitor.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComMessageLoggerFileBlf.cpp
+   ${PROJECT_ROOT}/src/can_monitor/communication/C_SyvComMessageMonitor.cpp
+   ${PROJECT_ROOT}/src/can_monitor/communication/C_SyvComMessageLoggerFileBlf.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieImportDbc.cpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieConverter.cpp
@@ -191,13 +195,13 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetStatusBarWidget.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetControlBarWidget.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosWidget.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDllWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosLoggingWidget.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterWidget.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseWidget.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosLoggingWidget.cpp
    ${PROJECT_ROOT}/src/can_monitor/C_CamTitleBarWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiStyleSheets.cpp
+   ${PROJECT_ROOT}/src/can_monitor/util/C_CamUtiStyleSheets.cpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_UtiClipBoardHelper.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetClipBoardHelper.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/splitter/C_CamOgeSpi.cpp
@@ -220,7 +224,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubProjOp.cpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProClipBoardHelper.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblModelAction.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterItemWidget.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterItemWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewScroll.cpp
@@ -231,7 +235,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblEditLineEditBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxResizingView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterPopup.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterPopup.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedPropertiesComment.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedContextMenuBase.cpp
@@ -240,16 +244,16 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProFilterData.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableModel.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableView.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableModel.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableView.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableModel.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewInteraction.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetTreeLoggerData.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseItemWidget.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseItemWidget.cpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProDatabaseData.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseBusSelectionPopup.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseBusSelectionPopup.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableDelegate.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenKeySelect.cpp
@@ -276,19 +280,19 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementSortFilter.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTooltipUtil.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionPopup.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionView.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionModel.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionPopup.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionView.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxTableSmall.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/tool_button/C_CamOgeTobRecentProjects.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tool_button/C_OgeTobToolTipBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUti.cpp
+   ${PROJECT_ROOT}/src/can_monitor/util/C_CamUti.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenTableDelegate.cpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblDelegateUtil.cpp
+   ${PROJECT_ROOT}/src/can_monitor/table_base/C_TblDelegateUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeToolTipBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariables.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariables.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePathBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeFilePath.cpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeFilePath.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/menu/C_OgeMuSections.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.cpp
@@ -310,12 +314,12 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/precompiled_headers/precomp_headers.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariablesBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingsBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDllWidgetLogic.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDllWidgetLogic.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiGeneric.hpp
    ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.hpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_Uti.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComMessageMonitor.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComMessageLoggerFileBlf.hpp
+   ${PROJECT_ROOT}/src/can_monitor/communication/C_SyvComMessageMonitor.hpp
+   ${PROJECT_ROOT}/src/can_monitor/communication/C_SyvComMessageLoggerFileBlf.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
    ${PROJECT_ROOT}/../libraries/flexlexer/FlexLexer.h
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC.h
@@ -390,13 +394,13 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetStatusBarWidget.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetControlBarWidget.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosWidget.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDllWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosLoggingWidget.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterWidget.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseWidget.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosLoggingWidget.hpp
    ${PROJECT_ROOT}/src/can_monitor/C_CamTitleBarWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiStyleSheets.hpp
+   ${PROJECT_ROOT}/src/can_monitor/util/C_CamUtiStyleSheets.hpp
    ${OPENSYDE_GUI_ROOT}/src/constants.hpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_UtiClipBoardHelper.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetClipBoardHelper.hpp
@@ -420,7 +424,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubProjOp.hpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProClipBoardHelper.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblModelAction.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterItemWidget.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterItemWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewScroll.hpp
@@ -431,7 +435,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblEditLineEditBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxResizingView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterPopup.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterPopup.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedPropertiesComment.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedContextMenuBase.hpp
@@ -440,16 +444,16 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProFilterData.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableModel.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableView.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableModel.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableView.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableModel.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewInteraction.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetTreeLoggerData.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseItemWidget.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseItemWidget.hpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProDatabaseData.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseBusSelectionPopup.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseBusSelectionPopup.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableDelegate.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenKeySelect.hpp
@@ -476,19 +480,19 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreDataElementSortFilter.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTooltipUtil.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionPopup.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionView.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionModel.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionPopup.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionView.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxTableSmall.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/tool_button/C_CamOgeTobRecentProjects.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tool_button/C_OgeTobToolTipBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUti.hpp
+   ${PROJECT_ROOT}/src/can_monitor/util/C_CamUti.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenTableDelegate.hpp
-   ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblDelegateUtil.hpp
+   ${PROJECT_ROOT}/src/can_monitor/table_base/C_TblDelegateUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeToolTipBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariables.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariables.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePathBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeFilePath.hpp
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeFilePath.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/menu/C_OgeMuSections.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.hpp
@@ -516,23 +520,23 @@ set(OPENSYDE_FORMS
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetStatusBarWidget.ui
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetControlBarWidget.ui
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosWidget.ui
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDllWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosLoggingWidget.ui
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterWidget.ui
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseWidget.ui
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosLoggingWidget.ui
    ${PROJECT_ROOT}/src/can_monitor/C_CamTitleBarWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSectionHeader.ui
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingSubSection.ui
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenMessagesWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterItemWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterPopup.ui
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterItemWidget.ui
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterPopup.ui
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseItemWidget.ui
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseBusSelectionPopup.ui
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseItemWidget.ui
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseBusSelectionPopup.ui
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenKeySelect.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiSpinBoxGroup.ui
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionPopup.ui
+   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseSelectionPopup.ui
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetSettingsPopup.ui
 )
 
