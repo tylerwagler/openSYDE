@@ -37,9 +37,11 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_CieImportDbc.hpp"
+#include "C_CieExportDbc.hpp"
 #include "C_CieDataPoolListAdapter.hpp"
 #include "C_CieImportDataAssignment.hpp"
 #include "C_CieUtil.hpp"
+#include "C_CieConverter.hpp"
 #include "C_SdNdeDbcSync.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -294,7 +296,7 @@ QString C_SdNdeDbcSync::h_ComputeFileSha256(const QString & orc_FilePath)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Sync the per-interface DBC for the given (node, interface) pair.
+/*! \brief  Pull the per-interface DBC for the given (node, interface) pair into the project.
 
    Validates that:
    - the node has an associated device definition
@@ -304,8 +306,8 @@ QString C_SdNdeDbcSync::h_ComputeFileSha256(const QString & orc_FilePath)
 
    On success: parses the DBC, imports its first DBC node's TX/RX messages onto
    the openSYDE node's Layer 2 COMM datapool (auto-creating the datapool if the
-   node has none), then computes and stores the SHA-256 fingerprint of the DBC
-   file on the project's per-interface settings (`c_LastSyncedDbcSha256`).
+   node has none), then computes and stores both the DBC SHA-256 and the
+   project-side message-container CRC fingerprints on the per-interface settings.
 
    v1 LIMITATIONS:
    - Protocol type is hard-coded to `C_OscCanProtocol::eLAYER2`. Devices whose DBC
@@ -328,7 +330,7 @@ QString C_SdNdeDbcSync::h_ComputeFileSha256(const QString & orc_FilePath)
    C_RD_WR     DBC file does not exist, could not be read, or could not be parsed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeDbcSync::h_SyncInterface(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
+int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
                                         QString & orc_ErrorMessage)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -509,6 +511,193 @@ int32_t C_SdNdeDbcSync::h_SyncInterface(const uint32_t ou32_NodeIndex, const uin
                      rc_Interface.c_LastSyncedDbcSha256 = c_DbcHash.toStdString().c_str();
                      const QString c_ProjectHash = h_ComputeProjectMessagesHash(ou32_NodeIndex, ou32_InterfaceIndex);
                      rc_Interface.c_LastSyncedProjectMsgHash = c_ProjectHash.toStdString().c_str();
+                  }
+               }
+            }
+         }
+      }
+   }
+
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Push the project's per-interface CAN messages back out to the device's DBC file.
+
+   Builds a single-node `C_CieCommDefinition` from the project's existing TX/RX messages
+   on the (node, interface) pair, then calls `C_CieExportDbc::h_ExportNetwork` to write
+   it to the device's `<device_name>_CAN<n>.dbc` file (overwriting any previous content).
+   Both fingerprints are stamped on success so the next reload sees this as the new
+   in-sync baseline.
+
+   v1 LIMITATIONS (mirror Pull):
+   - Protocol type is hard-coded to `C_OscCanProtocol::eLAYER2`. Pushing from a node
+     that has messages on a different protocol's COMM datapool will silently miss them.
+   - The exported DBC carries one node named after the openSYDE device. Multi-node DBC
+     export (representing other peers on the bus) is not in scope for the per-interface
+     sync model.
+
+   \param[in]   ou32_NodeIndex      Index of the node in the system definition
+   \param[in]   ou32_InterfaceIndex Index of the node's CAN interface
+   \param[out]  orc_ErrorMessage    User-facing error message on failure; empty on success
+
+   \return
+   C_NO_ERR    push completed; DBC written and fingerprints stamped
+   C_RANGE     node/interface index out of range, or interface is not CAN
+   C_CONFIG    node has no device definition / no Layer 2 COMM datapool /
+               interface not connected to a bus
+   C_RD_WR     DBC file could not be written or re-read for fingerprinting
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
+                                        QString & orc_ErrorMessage)
+{
+   int32_t s32_Retval = C_NO_ERR;
+
+   orc_ErrorMessage = "";
+
+   C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNode(ou32_NodeIndex);
+
+   if (pc_Node == NULL)
+   {
+      orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText("Node index %1 out of range.")).arg(
+         ou32_NodeIndex);
+      s32_Retval = C_RANGE;
+   }
+   else if (pc_Node->pc_DeviceDefinition == NULL)
+   {
+      orc_ErrorMessage = C_GtGetText::h_GetText("Node has no associated device definition.");
+      s32_Retval = C_CONFIG;
+   }
+   else if (ou32_InterfaceIndex >= pc_Node->c_Properties.c_ComInterfaces.size())
+   {
+      orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText("Interface index %1 out of range.")).arg(
+         ou32_InterfaceIndex);
+      s32_Retval = C_RANGE;
+   }
+   else
+   {
+      C_OscNodeComInterfaceSettings & rc_Interface = pc_Node->c_Properties.c_ComInterfaces[ou32_InterfaceIndex];
+
+      if (rc_Interface.e_InterfaceType != C_OscSystemBus::eCAN)
+      {
+         orc_ErrorMessage = C_GtGetText::h_GetText("Interface is not a CAN interface.");
+         s32_Retval = C_RANGE;
+      }
+      else if (rc_Interface.GetBusConnected() == false)
+      {
+         orc_ErrorMessage = C_GtGetText::h_GetText("Interface is not connected to a bus.");
+         s32_Retval = C_CONFIG;
+      }
+      else
+      {
+         const QString c_DbcPath = h_GetExpectedDbcPath(ou32_NodeIndex, ou32_InterfaceIndex);
+         if (c_DbcPath.isEmpty())
+         {
+            orc_ErrorMessage = C_GtGetText::h_GetText("Could not derive a DBC path for this interface.");
+            s32_Retval = C_RANGE;
+         }
+         else
+         {
+            const C_OscCanProtocol::E_Type e_Protocol = C_OscCanProtocol::eLAYER2;
+
+            int32_t s32_DatapoolIndex = -1;
+            for (uint32_t u32_It = 0U; u32_It < pc_Node->c_DataPools.size(); ++u32_It)
+            {
+               if ((pc_Node->c_DataPools[u32_It].e_Type == C_OscNodeDataPool::eCOM) &&
+                   (C_PuiSdUtil::h_GetRelatedCanProtocolType(ou32_NodeIndex, u32_It) == e_Protocol))
+               {
+                  s32_DatapoolIndex = static_cast<int32_t>(u32_It);
+                  break;
+               }
+            }
+
+            if (s32_DatapoolIndex < 0)
+            {
+               orc_ErrorMessage = C_GtGetText::h_GetText(
+                  "Node has no Layer 2 COMM datapool to push from.");
+               s32_Retval = C_CONFIG;
+            }
+            else
+            {
+               const C_OscCanMessageContainer * const pc_Container =
+                  C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainer(
+                     ou32_NodeIndex, e_Protocol, ou32_InterfaceIndex,
+                     static_cast<uint32_t>(s32_DatapoolIndex));
+
+               if (pc_Container == NULL)
+               {
+                  orc_ErrorMessage = C_GtGetText::h_GetText(
+                     "Could not access the per-interface message container.");
+                  s32_Retval = C_CONFIG;
+               }
+               else
+               {
+                  // Build a one-node CieCommDefinition from the project's messages.
+                  C_CieConverter::C_CieCommDefinition c_CommDef;
+                  const C_OscSystemBus * const pc_Bus =
+                     C_PuiSdHandler::h_GetInstance()->GetOscBus(rc_Interface.u32_BusIndex);
+                  if (pc_Bus != NULL)
+                  {
+                     c_CommDef.c_Bus.c_Name = pc_Bus->c_Name;
+                     c_CommDef.c_Bus.c_Comment = pc_Bus->c_Comment;
+                  }
+
+                  C_CieConverter::C_CieNode c_CieNode;
+                  c_CieNode.c_Properties.c_Name = pc_Node->pc_DeviceDefinition->c_DeviceName;
+                  c_CieNode.c_Properties.c_Comment = pc_Node->c_Properties.c_Comment;
+
+                  stw::scl::C_SclStringList c_ConvertWarnings;
+
+                  const std::vector<C_OscCanMessage> & rc_TxMsgs = pc_Container->GetMessagesConst(true);
+                  for (uint32_t u32_It = 0U; u32_It < rc_TxMsgs.size(); ++u32_It)
+                  {
+                     C_CieConverter::C_CieNodeMessage c_Cnv;
+                     C_CieDataPoolListAdapter::h_ConvertToDbcImportMessage(
+                        rc_Interface.u32_BusIndex, e_Protocol, rc_TxMsgs[u32_It], c_Cnv, c_ConvertWarnings);
+                     c_CieNode.c_TxMessages.push_back(c_Cnv);
+                  }
+                  const std::vector<C_OscCanMessage> & rc_RxMsgs = pc_Container->GetMessagesConst(false);
+                  for (uint32_t u32_It = 0U; u32_It < rc_RxMsgs.size(); ++u32_It)
+                  {
+                     C_CieConverter::C_CieNodeMessage c_Cnv;
+                     C_CieDataPoolListAdapter::h_ConvertToDbcImportMessage(
+                        rc_Interface.u32_BusIndex, e_Protocol, rc_RxMsgs[u32_It], c_Cnv, c_ConvertWarnings);
+                     c_CieNode.c_RxMessages.push_back(c_Cnv);
+                  }
+                  c_CommDef.c_Nodes.push_back(c_CieNode);
+
+                  // Write the DBC.
+                  stw::scl::C_SclStringList c_ExportWarnings;
+                  stw::scl::C_SclString c_ExportError;
+                  const int32_t s32_Export = C_CieExportDbc::h_ExportNetwork(
+                     c_DbcPath.toStdString().c_str(), c_CommDef, c_ExportWarnings, c_ExportError);
+
+                  if ((s32_Export != C_NO_ERR) && (s32_Export != C_WARN))
+                  {
+                     orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
+                                                                "Could not write DBC %1: %2")).arg(
+                        c_DbcPath, c_ExportError.c_str());
+                     s32_Retval = C_RD_WR;
+                  }
+                  else
+                  {
+                     // Stamp both fingerprints from the freshly-written file + project state.
+                     const QString c_DbcHash = h_ComputeFileSha256(c_DbcPath);
+                     if (c_DbcHash.isEmpty() == true)
+                     {
+                        orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
+                                                                   "DBC written, but the file could not be re-read "
+                                                                   "to record its fingerprint: %1")).arg(c_DbcPath);
+                        s32_Retval = C_RD_WR;
+                     }
+                     else
+                     {
+                        rc_Interface.c_LastSyncedDbcSha256 = c_DbcHash.toStdString().c_str();
+                        const QString c_ProjectHash = h_ComputeProjectMessagesHash(ou32_NodeIndex,
+                                                                                   ou32_InterfaceIndex);
+                        rc_Interface.c_LastSyncedProjectMsgHash = c_ProjectHash.toStdString().c_str();
+                     }
                   }
                }
             }

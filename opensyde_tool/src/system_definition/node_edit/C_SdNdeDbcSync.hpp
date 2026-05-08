@@ -43,7 +43,16 @@ public:
    static QString h_ComputeFileSha256(const QString & orc_FilePath);
    static QString h_ComputeProjectMessagesHash(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex);
    static E_SyncState h_GetSyncState(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex);
-   static int32_t h_SyncInterface(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
+
+   /// Pull: import the device's DBC file onto the project's per-interface CAN messages.
+   /// Existing same-ID messages are updated in place; new messages are added.
+   /// Both fingerprints are stamped on success.
+   static int32_t h_PullInterface(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
+                                  QString & orc_ErrorMessage);
+
+   /// Push: write the project's per-interface CAN messages back out to the device's DBC
+   /// file (overwrites the file). Both fingerprints are stamped on success.
+   static int32_t h_PushInterface(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
                                   QString & orc_ErrorMessage);
 
 private:

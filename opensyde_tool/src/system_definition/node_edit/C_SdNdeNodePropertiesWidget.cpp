@@ -14,6 +14,7 @@
 #include <QSpinBox>
 #include <QFile>
 #include <QFileInfo>
+#include <QMessageBox>
 #include <QPushButton>
 
 #include "C_Uti.hpp"
@@ -970,17 +971,22 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                        &QCheckBox::checkStateChanged, this, &C_SdNdeNodePropertiesWidget::m_RegisterChange);
 
                /**********************************************************************************************************/
-               //SYNC DBC
+               //SYNC DBC — bidirectional. Button label/tooltip and click action both come from
+               //the live sync state (see C_SdNdeDbcSync::E_SyncState).
                {
-                  QPushButton * const pc_BtnSync = new QPushButton(C_GtGetText::h_GetText("Sync"), this);
+                  QPushButton * const pc_BtnSync = new QPushButton(this);
                   const QString c_DbcPath = C_SdNdeDbcSync::h_GetExpectedDbcPath(this->mu32_NodeIndex,
                                                                                  static_cast<uint32_t>(u8_ComIfCnt));
                   const bool q_IsCanIface = u8_ComIfCnt < pc_DevDef->u8_NumCanBusses;
                   const bool q_BusConnected =
                      pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt].GetBusConnected();
-                  const bool q_DbcExists = (c_DbcPath.isEmpty() == false) && QFile::exists(c_DbcPath);
 
-                  pc_BtnSync->setEnabled(q_IsCanIface && q_BusConnected && q_DbcExists);
+                  // Enable when CAN + bus connected. The state determines whether the click does
+                  // Pull, Push, or pops a conflict-resolution prompt; even with a missing DBC the
+                  // user can Push to (re)create the file from the project's messages.
+                  pc_BtnSync->setEnabled(q_IsCanIface && q_BusConnected);
+                  pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
+
                   if (q_IsCanIface == false)
                   {
                      pc_BtnSync->setToolTip(C_GtGetText::h_GetText(
@@ -991,40 +997,51 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                      pc_BtnSync->setToolTip(C_GtGetText::h_GetText(
                                                "Sync DBC requires the interface to be connected to a bus."));
                   }
-                  else if (q_DbcExists == false)
-                  {
-                     pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                    "No bundled DBC at %1.")).arg(c_DbcPath));
-                  }
                   else
                   {
-                     // DBC present and ready: distinguish never-synced / in-sync / out-of-sync
-                     // by comparing the live SHA-256 against the stored fingerprint.
-                     const QString c_StoredHash =
-                        pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt].c_LastSyncedDbcSha256.c_str();
-                     if (c_StoredHash.isEmpty() == true)
+                     const C_SdNdeDbcSync::E_SyncState e_State = C_SdNdeDbcSync::h_GetSyncState(
+                        this->mu32_NodeIndex, static_cast<uint32_t>(u8_ComIfCnt));
+                     switch (e_State)
                      {
+                     case C_SdNdeDbcSync::eNEVER_SYNCED:
+                        pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
                         pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "Never synced. Click to import messages from %1 "
-                                                                       "onto the connected bus.")).arg(c_DbcPath));
-                     }
-                     else
-                     {
-                        const QString c_CurrentHash = C_SdNdeDbcSync::h_ComputeFileSha256(c_DbcPath);
-                        if (c_CurrentHash != c_StoredHash)
-                        {
-                           // Out of sync — surface in the button text and tooltip.
-                           pc_BtnSync->setText(C_GtGetText::h_GetText("Sync (out of sync)"));
-                           pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "DBC at %1 has changed since the last sync. "
-                                                                          "Click to re-sync.")).arg(c_DbcPath));
-                        }
-                        else
-                        {
-                           pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "In sync with %1. Click to re-sync.")).arg(
-                                                     c_DbcPath));
-                        }
+                                                                       "Never synced. Click to import messages from %1.")).
+                                               arg(c_DbcPath));
+                        break;
+                     case C_SdNdeDbcSync::eIN_SYNC:
+                        pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
+                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                       "In sync with %1. Click to re-pull.")).arg(
+                                                  c_DbcPath));
+                        break;
+                     case C_SdNdeDbcSync::eDBC_DRIFTED:
+                        pc_BtnSync->setText(C_GtGetText::h_GetText("Pull"));
+                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                       "DBC at %1 has changed since the last sync. "
+                                                                       "Click to pull DBC into the project.")).arg(
+                                                  c_DbcPath));
+                        break;
+                     case C_SdNdeDbcSync::ePROJECT_DRIFTED:
+                        pc_BtnSync->setText(C_GtGetText::h_GetText("Push"));
+                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                       "Project messages have changed since the last "
+                                                                       "sync. Click to push them back to %1.")).arg(
+                                                  c_DbcPath));
+                        break;
+                     case C_SdNdeDbcSync::eCONFLICT:
+                        pc_BtnSync->setText(C_GtGetText::h_GetText("Resolve"));
+                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                       "Both DBC %1 and the project's messages have "
+                                                                       "changed since the last sync. Click to choose "
+                                                                       "which side wins.")).arg(c_DbcPath));
+                        break;
+                     case C_SdNdeDbcSync::eDBC_MISSING:
+                        pc_BtnSync->setText(C_GtGetText::h_GetText("Push"));
+                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                       "DBC %1 is missing. Click to (re)create it "
+                                                                       "from the project's messages.")).arg(c_DbcPath));
+                        break;
                      }
                   }
 
@@ -1035,34 +1052,101 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   connect(pc_BtnSync, &QPushButton::clicked, this,
                           [this, pc_BtnSync, u32_CapturedNode, u32_CapturedInterface, c_DbcPath]()
                   {
-                     QString c_ErrorMessage;
-                     const int32_t s32_SyncResult = C_SdNdeDbcSync::h_SyncInterface(u32_CapturedNode,
-                                                                                    u32_CapturedInterface,
-                                                                                    c_ErrorMessage);
-                     if (s32_SyncResult == stw::errors::C_NO_ERR)
+                     // Re-evaluate state at click time (cheap; lets the button respond to any
+                     // file or project change since the row was last filled).
+                     C_SdNdeDbcSync::E_SyncState e_State = C_SdNdeDbcSync::h_GetSyncState(u32_CapturedNode,
+                                                                                          u32_CapturedInterface);
+                     enum E_Action { ePULL_ACT, ePUSH_ACT, eABORT_ACT };
+                     E_Action e_Action = ePULL_ACT;
+
+                     if (e_State == C_SdNdeDbcSync::eCONFLICT)
                      {
-                        // Reset the visual state so an out-of-sync row doesn't keep its warning text
-                        // until the next table refresh.
-                        pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
-                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "In sync with %1. Click to re-sync.")).arg(
-                                                  c_DbcPath));
-                        C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eINFORMATION);
-                        c_Msg.SetHeading(C_GtGetText::h_GetText("Sync DBC"));
-                        c_Msg.SetDescription(C_GtGetText::h_GetText(
-                                                "DBC messages imported and fingerprint stored.\n\n"
-                                                "Existing same-ID messages were updated in place; "
-                                                "new messages were added to the node's Layer 2 COMM datapool. "
-                                                "If the device's DBC has been edited since this sync, the row "
-                                                "will be flagged as out-of-sync on the next project reload."));
-                        c_Msg.Execute();
+                        QMessageBox c_Box(this);
+                        c_Box.setWindowTitle(C_GtGetText::h_GetText("DBC Sync Conflict"));
+                        c_Box.setIcon(QMessageBox::Warning);
+                        c_Box.setText(C_GtGetText::h_GetText(
+                                         "Both the DBC file and the project's messages have changed "
+                                         "since the last sync.\n\nChoose which side to keep:"));
+                        QPushButton * const pc_PullBtn =
+                           c_Box.addButton(C_GtGetText::h_GetText("Pull (use DBC)"), QMessageBox::AcceptRole);
+                        QPushButton * const pc_PushBtn =
+                           c_Box.addButton(C_GtGetText::h_GetText("Push (use project)"),
+                                           QMessageBox::DestructiveRole);
+                        c_Box.addButton(QMessageBox::Cancel);
+                        c_Box.exec();
+                        if (c_Box.clickedButton() == pc_PullBtn)
+                        {
+                           e_Action = ePULL_ACT;
+                        }
+                        else if (c_Box.clickedButton() == pc_PushBtn)
+                        {
+                           e_Action = ePUSH_ACT;
+                        }
+                        else
+                        {
+                           e_Action = eABORT_ACT;
+                        }
+                     }
+                     else if ((e_State == C_SdNdeDbcSync::ePROJECT_DRIFTED) ||
+                              (e_State == C_SdNdeDbcSync::eDBC_MISSING))
+                     {
+                        e_Action = ePUSH_ACT;
                      }
                      else
                      {
-                        C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eERROR);
-                        c_Msg.SetHeading(C_GtGetText::h_GetText("Sync DBC failed"));
-                        c_Msg.SetDescription(c_ErrorMessage);
-                        c_Msg.Execute();
+                        // eNEVER_SYNCED, eIN_SYNC, eDBC_DRIFTED — pull is the action.
+                        e_Action = ePULL_ACT;
+                     }
+
+                     if (e_Action == eABORT_ACT)
+                     {
+                        // user cancelled the conflict dialog
+                     }
+                     else
+                     {
+                        QString c_ErrorMessage;
+                        int32_t s32_Result;
+                        QString c_Heading;
+                        QString c_SuccessDescription;
+                        if (e_Action == ePULL_ACT)
+                        {
+                           s32_Result = C_SdNdeDbcSync::h_PullInterface(u32_CapturedNode, u32_CapturedInterface,
+                                                                        c_ErrorMessage);
+                           c_Heading = C_GtGetText::h_GetText("Pull DBC");
+                           c_SuccessDescription = C_GtGetText::h_GetText(
+                              "DBC messages imported into the project. Existing same-ID messages were "
+                              "updated in place; new messages were added to the node's Layer 2 COMM "
+                              "datapool.");
+                        }
+                        else
+                        {
+                           s32_Result = C_SdNdeDbcSync::h_PushInterface(u32_CapturedNode, u32_CapturedInterface,
+                                                                        c_ErrorMessage);
+                           c_Heading = C_GtGetText::h_GetText("Push DBC");
+                           c_SuccessDescription = C_GtGetText::h_GetText(
+                              "Project messages exported to the DBC file. The DBC now matches the "
+                              "current state of the node's Layer 2 COMM datapool.");
+                        }
+
+                        if (s32_Result == stw::errors::C_NO_ERR)
+                        {
+                           // Reset the button to its in-sync visual state.
+                           pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
+                           pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                          "In sync with %1. Click to re-pull.")).arg(
+                                                     c_DbcPath));
+                           C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eINFORMATION);
+                           c_Msg.SetHeading(c_Heading);
+                           c_Msg.SetDescription(c_SuccessDescription);
+                           c_Msg.Execute();
+                        }
+                        else
+                        {
+                           C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eERROR);
+                           c_Msg.SetHeading(c_Heading + C_GtGetText::h_GetText(" failed"));
+                           c_Msg.SetDescription(c_ErrorMessage);
+                           c_Msg.Execute();
+                        }
                      }
                   });
                }
