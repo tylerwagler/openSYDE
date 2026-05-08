@@ -31,6 +31,7 @@
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
 #include "C_SdNdeDpUtil.hpp"
+#include "C_SdNdeDbcSync.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscNodeDataPoolContentUtil.hpp"
 #include "C_SdBueUnoBusProtNodeConnectCommand.hpp"
@@ -1718,6 +1719,69 @@ int32_t C_SdUtil::h_GetErrorToolTipNode(const uint32_t & oru32_NodeIndex, QStrin
                if (q_CoPdoCountInvalid == true)
                {
                   orc_Text += C_GtGetText::h_GetText("Too many PDOs in a CANopen Manager configuration detected.\n");
+               }
+            }
+         }
+
+         // DBC sync drift surfaces here so the existing topology icon and nav-bar red-name
+         // machinery picks it up. eDBC_DRIFTED / ePROJECT_DRIFTED / eCONFLICT / eDBC_MISSING
+         // count as node-level error states; eIN_SYNC and eNEVER_SYNCED stay quiet.
+         {
+            const C_OscNode * const pc_DriftCheckNode =
+               C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndices[u32_ItNode]);
+            if (pc_DriftCheckNode != NULL)
+            {
+               bool q_AnyDrift = false;
+               QString c_DriftDetails;
+               for (uint32_t u32_ItIface = 0U;
+                    u32_ItIface < pc_DriftCheckNode->c_Properties.c_ComInterfaces.size(); ++u32_ItIface)
+               {
+                  const C_OscNodeComInterfaceSettings & rc_Iface =
+                     pc_DriftCheckNode->c_Properties.c_ComInterfaces[u32_ItIface];
+                  if (rc_Iface.e_InterfaceType == C_OscSystemBus::eCAN)
+                  {
+                     const C_SdNdeDbcSync::E_SyncState e_State =
+                        C_SdNdeDbcSync::h_GetSyncState(c_NodeIndices[u32_ItNode], u32_ItIface);
+                     QString c_Label;
+                     switch (e_State)
+                     {
+                     case C_SdNdeDbcSync::eDBC_DRIFTED:
+                        c_Label = C_GtGetText::h_GetText("DBC drifted");
+                        break;
+                     case C_SdNdeDbcSync::ePROJECT_DRIFTED:
+                        c_Label = C_GtGetText::h_GetText("project drifted");
+                        break;
+                     case C_SdNdeDbcSync::eCONFLICT:
+                        c_Label = C_GtGetText::h_GetText("conflict (both sides drifted)");
+                        break;
+                     case C_SdNdeDbcSync::eDBC_MISSING:
+                        c_Label = C_GtGetText::h_GetText("DBC file missing");
+                        break;
+                     case C_SdNdeDbcSync::eNEVER_SYNCED:
+                     case C_SdNdeDbcSync::eIN_SYNC:
+                     default:
+                        // not a drift state
+                        break;
+                     }
+                     if (c_Label.isEmpty() == false)
+                     {
+                        q_AnyDrift = true;
+                        c_DriftDetails += static_cast<QString>("  CAN%1: %2\n").arg(
+                           static_cast<uint32_t>(rc_Iface.u8_InterfaceNumber) + 1U).arg(c_Label);
+                     }
+                  }
+               }
+               if (q_AnyDrift == true)
+               {
+                  if (q_IsMulti)
+                  {
+                     orc_Text += pc_DriftCheckNode->c_Properties.c_Name.c_str();
+                     orc_Text += "\n";
+                  }
+                  orq_ErrorDetected = true;
+                  orc_Text += C_GtGetText::h_GetText("DBC sync drift:\n");
+                  orc_Text += c_DriftDetails;
+                  orc_Text += "\n";
                }
             }
          }
