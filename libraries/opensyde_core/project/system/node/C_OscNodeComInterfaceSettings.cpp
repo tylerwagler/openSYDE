@@ -50,6 +50,7 @@ C_OscNodeComInterfaceSettings::C_OscNodeComInterfaceSettings(void) :
    q_IsDiagnosisEnabled(false),
    u32_BusIndex(0),
    c_LastSyncedDbcSha256(""),
+   c_LastSyncedProjectMsgHash(""),
    mq_IsBusConnected(false),
    mq_IsInterfaceConnectedInDevice(true)
 {
@@ -89,6 +90,8 @@ void C_OscNodeComInterfaceSettings::CalcHash(uint32_t & oru32_HashValue) const
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_BusIndex, sizeof(this->u32_BusIndex), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(this->c_LastSyncedDbcSha256.c_str(),
                                        this->c_LastSyncedDbcSha256.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_LastSyncedProjectMsgHash.c_str(),
+                                       this->c_LastSyncedProjectMsgHash.Length(), oru32_HashValue);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

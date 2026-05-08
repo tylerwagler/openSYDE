@@ -62,10 +62,15 @@ public:
    ///< (index in system definition)
    ///< Only valid if bus flag q_IsBusConnected is true
 
-   stw::scl::C_SclString c_LastSyncedDbcSha256; ///< SHA-256 hex of the device's per-interface DBC at the last
-                                                ///< user-triggered sync; empty if never synced. On project reload,
-                                                ///< compared against the on-disk DBC's current hash to flag the
-                                                ///< interface as out-of-sync.
+   stw::scl::C_SclString c_LastSyncedDbcSha256;   ///< SHA-256 hex of the device's per-interface DBC at the last
+                                                  ///< user-triggered sync; empty if never synced. Compared against the
+                                                  ///< on-disk DBC's current hash to detect that the DBC drifted.
+   stw::scl::C_SclString c_LastSyncedProjectMsgHash; ///< CRC32 hex of the project's CAN message container for this
+                                                     ///< interface at the last sync; empty if never synced. Compared
+                                                     ///< against the live container hash to detect that the project's
+                                                     ///< messages drifted away from the synced baseline. The pair of
+                                                     ///< fingerprints together gives a four-state model: in-sync,
+                                                     ///< DBC-drifted, project-drifted, or both-drifted (conflict).
 
    void AddConnection(const uint32_t & oru32_BusIndex);
    void RemoveConnection(void);

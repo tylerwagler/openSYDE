@@ -149,6 +149,127 @@ QString C_SdNdeDbcSync::h_GetExpectedDbcPath(const uint32_t ou32_NodeIndex, cons
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Compute a stable hash of the project's CAN messages on a (node, interface) pair.
+
+   Pulls the per-interface message container from the Layer 2 COMM datapool (matching the
+   protocol used by the Pull/Push paths) and runs `C_OscCanMessageContainer::CalcHash` to
+   get a 32-bit CRC of all message + signal fields. The hex of that CRC is the project-side
+   fingerprint stored on the per-interface settings as `c_LastSyncedProjectMsgHash`.
+
+   Returns an empty QString when the node has no Layer 2 COMM datapool yet (never-synced
+   case) or when the indices are out of range. An empty fingerprint plus an empty stored
+   fingerprint counts as "matches" in the state detector below — both sides agree there
+   are no project messages to track.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_SdNdeDbcSync::h_ComputeProjectMessagesHash(const uint32_t ou32_NodeIndex,
+                                                     const uint32_t ou32_InterfaceIndex)
+{
+   QString c_Result;
+
+   const C_OscCanProtocol::E_Type e_Protocol = C_OscCanProtocol::eLAYER2;
+   const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
+
+   if (pc_Node != NULL)
+   {
+      int32_t s32_DatapoolIndex = -1;
+      for (uint32_t u32_It = 0U; u32_It < pc_Node->c_DataPools.size(); ++u32_It)
+      {
+         if ((pc_Node->c_DataPools[u32_It].e_Type == C_OscNodeDataPool::eCOM) &&
+             (C_PuiSdUtil::h_GetRelatedCanProtocolType(ou32_NodeIndex, u32_It) == e_Protocol))
+         {
+            s32_DatapoolIndex = static_cast<int32_t>(u32_It);
+            break;
+         }
+      }
+
+      if (s32_DatapoolIndex >= 0)
+      {
+         const C_OscCanMessageContainer * const pc_Container =
+            C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainer(
+               ou32_NodeIndex, e_Protocol, ou32_InterfaceIndex,
+               static_cast<uint32_t>(s32_DatapoolIndex));
+         if (pc_Container != NULL)
+         {
+            uint32_t u32_Hash = 0U;
+            pc_Container->CalcHash(u32_Hash);
+            c_Result = QString::number(u32_Hash, 16);
+         }
+      }
+   }
+
+   return c_Result;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Determine the current sync state for a (node, interface) pair.
+
+   See `E_SyncState` for the per-state semantics. Resolution order:
+   - empty stored DBC fingerprint                    -> eNEVER_SYNCED
+   - DBC file gone from the expected path            -> eDBC_MISSING
+   - DBC file hash diff + project msg hash diff      -> eCONFLICT
+   - DBC file hash diff (project unchanged)          -> eDBC_DRIFTED
+   - project msg hash diff (DBC unchanged)           -> ePROJECT_DRIFTED
+   - everything matches                              -> eIN_SYNC
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_SdNdeDbcSync::E_SyncState C_SdNdeDbcSync::h_GetSyncState(const uint32_t ou32_NodeIndex,
+                                                           const uint32_t ou32_InterfaceIndex)
+{
+   E_SyncState e_State = eNEVER_SYNCED;
+
+   const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
+
+   if ((pc_Node != NULL) && (ou32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
+   {
+      const C_OscNodeComInterfaceSettings & rc_Interface =
+         pc_Node->c_Properties.c_ComInterfaces[ou32_InterfaceIndex];
+      const QString c_StoredDbcHash = rc_Interface.c_LastSyncedDbcSha256.c_str();
+
+      if (c_StoredDbcHash.isEmpty() == true)
+      {
+         e_State = eNEVER_SYNCED;
+      }
+      else
+      {
+         const QString c_DbcPath = h_GetExpectedDbcPath(ou32_NodeIndex, ou32_InterfaceIndex);
+         if (c_DbcPath.isEmpty() || (QFile::exists(c_DbcPath) == false))
+         {
+            e_State = eDBC_MISSING;
+         }
+         else
+         {
+            const QString c_CurrentDbcHash = h_ComputeFileSha256(c_DbcPath);
+            const QString c_StoredProjectHash = rc_Interface.c_LastSyncedProjectMsgHash.c_str();
+            const QString c_CurrentProjectHash = h_ComputeProjectMessagesHash(ou32_NodeIndex, ou32_InterfaceIndex);
+
+            const bool q_DbcDrifted = (c_CurrentDbcHash != c_StoredDbcHash);
+            const bool q_ProjectDrifted = (c_CurrentProjectHash != c_StoredProjectHash);
+
+            if (q_DbcDrifted && q_ProjectDrifted)
+            {
+               e_State = eCONFLICT;
+            }
+            else if (q_DbcDrifted)
+            {
+               e_State = eDBC_DRIFTED;
+            }
+            else if (q_ProjectDrifted)
+            {
+               e_State = ePROJECT_DRIFTED;
+            }
+            else
+            {
+               e_State = eIN_SYNC;
+            }
+         }
+      }
+   }
+
+   return e_State;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Compute the lowercase-hex SHA-256 of the given file's contents.
 
    Returns an empty QString on read failure (file missing, permission denied, etc.).
@@ -372,9 +493,11 @@ int32_t C_SdNdeDbcSync::h_SyncInterface(const uint32_t ou32_NodeIndex, const uin
                   // messages get updated in place rather than left untouched.
                   C_CieUtil::h_InsertMessages(c_Assignments, e_Protocol, false);
 
-                  // Step 4: stamp the per-interface fingerprint.
-                  const QString c_Hash = h_ComputeFileSha256(c_DbcPath);
-                  if (c_Hash.isEmpty() == true)
+                  // Step 4: stamp the per-interface fingerprints. We record both the DBC file
+                  // hash AND the project-message hash so the state detector can tell DBC drift
+                  // and project drift apart on the next reload.
+                  const QString c_DbcHash = h_ComputeFileSha256(c_DbcPath);
+                  if (c_DbcHash.isEmpty() == true)
                   {
                      orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
                                                                 "Messages imported, but the DBC could not be re-read "
@@ -383,7 +506,9 @@ int32_t C_SdNdeDbcSync::h_SyncInterface(const uint32_t ou32_NodeIndex, const uin
                   }
                   else
                   {
-                     rc_Interface.c_LastSyncedDbcSha256 = c_Hash.toStdString().c_str();
+                     rc_Interface.c_LastSyncedDbcSha256 = c_DbcHash.toStdString().c_str();
+                     const QString c_ProjectHash = h_ComputeProjectMessagesHash(ou32_NodeIndex, ou32_InterfaceIndex);
+                     rc_Interface.c_LastSyncedProjectMsgHash = c_ProjectHash.toStdString().c_str();
                   }
                }
             }
