@@ -979,6 +979,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   QPushButton * const pc_BtnSync = new QPushButton(this);
                   const QString c_DbcPath = C_SdNdeDbcSync::h_GetExpectedDbcPath(this->mu32_NodeIndex,
                                                                                  static_cast<uint32_t>(u8_ComIfCnt));
+                  const QString c_DisplayPath = C_SdNdeDbcSync::h_GetDisplayDbcPath(c_DbcPath);
                   const bool q_IsCanIface = u8_ComIfCnt < pc_DevDef->u8_NumCanBusses;
                   const bool q_BusConnected =
                      pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt].GetBusConnected();
@@ -1008,41 +1009,43 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                      case C_SdNdeDbcSync::eNEVER_SYNCED:
                         pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
                         pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "Never synced. Click to import messages from %1.")).
-                                               arg(c_DbcPath));
+                                                                       "Never synced: %1\n"
+                                                                       "Click to import messages from the DBC.")).arg(
+                                                  c_DisplayPath));
                         break;
                      case C_SdNdeDbcSync::eIN_SYNC:
                         pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
                         pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "In sync with %1. Click to re-pull.")).arg(
-                                                  c_DbcPath));
+                                                                       "In sync with %1\n"
+                                                                       "Click to re-pull.")).arg(c_DisplayPath));
                         break;
                      case C_SdNdeDbcSync::eDBC_DRIFTED:
                         pc_BtnSync->setText(C_GtGetText::h_GetText("Pull"));
                         pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "DBC at %1 has changed since the last sync. "
+                                                                       "DBC drifted: %1\n"
                                                                        "Click to pull DBC into the project.")).arg(
-                                                  c_DbcPath));
+                                                  c_DisplayPath));
                         break;
                      case C_SdNdeDbcSync::ePROJECT_DRIFTED:
                         pc_BtnSync->setText(C_GtGetText::h_GetText("Push"));
                         pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "Project messages have changed since the last "
-                                                                       "sync. Click to push them back to %1.")).arg(
-                                                  c_DbcPath));
+                                                                       "Project drifted from %1\n"
+                                                                       "Click to push project messages to the DBC.")).arg(
+                                                  c_DisplayPath));
                         break;
                      case C_SdNdeDbcSync::eCONFLICT:
                         pc_BtnSync->setText(C_GtGetText::h_GetText("Resolve"));
                         pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "Both DBC %1 and the project's messages have "
-                                                                       "changed since the last sync. Click to choose "
-                                                                       "which side wins.")).arg(c_DbcPath));
+                                                                       "Conflict: %1\n"
+                                                                       "Both DBC and project drifted. Click to choose "
+                                                                       "Pull or Push.")).arg(c_DisplayPath));
                         break;
                      case C_SdNdeDbcSync::eDBC_MISSING:
                         pc_BtnSync->setText(C_GtGetText::h_GetText("Push"));
                         pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "DBC %1 is missing. Click to (re)create it "
-                                                                       "from the project's messages.")).arg(c_DbcPath));
+                                                                       "DBC missing: %1\n"
+                                                                       "Click to (re)create it from the project's "
+                                                                       "messages.")).arg(c_DisplayPath));
                         break;
                      }
                   }
@@ -1052,7 +1055,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   const uint32_t u32_CapturedNode = this->mu32_NodeIndex;
                   const uint32_t u32_CapturedInterface = static_cast<uint32_t>(u8_ComIfCnt);
                   connect(pc_BtnSync, &QPushButton::clicked, this,
-                          [this, pc_BtnSync, u32_CapturedNode, u32_CapturedInterface, c_DbcPath]()
+                          [this, pc_BtnSync, u32_CapturedNode, u32_CapturedInterface, c_DisplayPath]()
                   {
                      // Re-evaluate state at click time (cheap; lets the button respond to any
                      // file or project change since the row was last filled).
@@ -1135,8 +1138,8 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                            // Reset the button to its in-sync visual state.
                            pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
                            pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "In sync with %1. Click to re-pull.")).arg(
-                                                     c_DbcPath));
+                                                                          "In sync with %1\n"
+                                                                          "Click to re-pull.")).arg(c_DisplayPath));
                            C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eINFORMATION);
                            c_Msg.SetHeading(c_Heading);
                            c_Msg.SetDescription(c_SuccessDescription);
@@ -1794,11 +1797,24 @@ void C_SdNdeNodePropertiesWidget::m_GetInterfaceStatus(const uint32_t ou32_NodeI
          os32_InterfaceIndex,
          ou8_NodeId);
 
-   //check if ip is valid
-   orq_IpValid =
-      C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().CheckIpAddressIsValid(
-         ou32_NodeIndex,
-         os32_InterfaceIndex, orc_Ip);
+   //check if ip is valid — only Ethernet interfaces have meaningful IPs. CAN rows default
+   //to 0.0.0.0 and would otherwise collide with each other in CheckIpAddressIsValid,
+   //producing a spurious "Interface: IP Address invalid" tooltip on every CAN row.
+   const C_OscNode * const pc_NodeForType = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
+   if ((pc_NodeForType != NULL) &&
+       (static_cast<uint32_t>(os32_InterfaceIndex) < pc_NodeForType->c_Properties.c_ComInterfaces.size()) &&
+       (pc_NodeForType->c_Properties.c_ComInterfaces[os32_InterfaceIndex].e_InterfaceType ==
+        C_OscSystemBus::eETHERNET))
+   {
+      orq_IpValid =
+         C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().CheckIpAddressIsValid(
+            ou32_NodeIndex,
+            os32_InterfaceIndex, orc_Ip);
+   }
+   else
+   {
+      orq_IpValid = true;
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1950,6 +1966,55 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(const int32_t os32_Inter
          }
       }
    }
+
+   // DBC sync drift on this interface — surface it on the same Interface cell as a
+   // warning when there's no higher-severity ID/IP error already overwriting the
+   // tooltip. The button column already changes its label per state, but the row-level
+   // marker on the Interface cell mirrors the topology icon so the user can see at a
+   // glance which interface is causing a node to be flagged.
+   if (q_ShowIcon == false)
+   {
+      const C_SdNdeDbcSync::E_SyncState e_DriftState = C_SdNdeDbcSync::h_GetSyncState(
+         this->mu32_NodeIndex, static_cast<uint32_t>(os32_InterfaceIndex));
+      QString c_DriftHeading;
+      QString c_DriftBody;
+      switch (e_DriftState)
+      {
+      case C_SdNdeDbcSync::eDBC_DRIFTED:
+         c_DriftHeading = C_GtGetText::h_GetText("DBC drifted");
+         c_DriftBody = C_GtGetText::h_GetText(
+            "The bundled DBC has changed since the last sync. Pull on the Sync DBC button to import the new content.");
+         break;
+      case C_SdNdeDbcSync::ePROJECT_DRIFTED:
+         c_DriftHeading = C_GtGetText::h_GetText("Project drifted");
+         c_DriftBody = C_GtGetText::h_GetText(
+            "The project's messages have changed since the last sync. Push on the Sync DBC button to write them back.");
+         break;
+      case C_SdNdeDbcSync::eCONFLICT:
+         c_DriftHeading = C_GtGetText::h_GetText("DBC sync conflict");
+         c_DriftBody = C_GtGetText::h_GetText(
+            "Both the DBC file and the project's messages have changed. Resolve via the Sync DBC button.");
+         break;
+      case C_SdNdeDbcSync::eDBC_MISSING:
+         c_DriftHeading = C_GtGetText::h_GetText("DBC missing");
+         c_DriftBody = C_GtGetText::h_GetText(
+            "The expected DBC file is gone. Push on the Sync DBC button to re-create it from the project's messages.");
+         break;
+      case C_SdNdeDbcSync::eNEVER_SYNCED:
+      case C_SdNdeDbcSync::eIN_SYNC:
+      default:
+         break;
+      }
+      if (c_DriftHeading.isEmpty() == false)
+      {
+         q_ShowIcon = true;
+         this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipAt(
+            os32_InterfaceIndex,
+            static_cast<uint32_t>(C_SdNdeComIfSettingsTableDelegate::eINTERFACE),
+            c_DriftHeading, c_DriftBody, C_NagToolTip::eWARNING);
+      }
+   }
+
    //handle invalid icon
    dynamic_cast<QCheckBox *> (this->mpc_Ui->pc_TableWidgetComIfSettings
                               ->cellWidget(os32_InterfaceIndex,

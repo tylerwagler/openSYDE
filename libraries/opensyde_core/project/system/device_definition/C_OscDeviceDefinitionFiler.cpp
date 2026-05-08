@@ -19,7 +19,6 @@
 #include "TglUtils.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscDeviceDefinitionFiler.hpp"
-#include "C_OscDeviceDefinitionFilerV1.hpp"
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscLoggingHandler.hpp"
 
@@ -1307,10 +1306,6 @@ int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDef
                   if (u16_FileVersion == mhu16_FILE_VERSION)
                   {
                      s32_Return = C_OscDeviceDefinitionFiler::mh_Load(orc_DeviceDefinition, c_Xml, orc_Path);
-                  }
-                  else if (u16_FileVersion == 1)
-                  {
-                     s32_Return = C_OscDeviceDefinitionFilerV1::h_Load(orc_DeviceDefinition, c_Xml, orc_Path);
                   }
                   else
                   {

@@ -274,7 +274,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemFilerUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinition.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinitionFiler.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinitionFilerV1.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSupportedCanInterfaceFeatures.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSubDeviceDefinition.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackage.cpp
@@ -378,7 +377,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemFilerUtil.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinition.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinitionFiler.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinitionFilerV1.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSupportedCanInterfaceFeatures.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSubDeviceDefinition.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackage.hpp

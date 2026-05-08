@@ -23,6 +23,7 @@
 #include "precomp_headers.hpp"
 
 #include <QCryptographicHash>
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 
@@ -37,6 +38,7 @@
 #include "C_OscSystemBus.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
+#include "C_UsHandler.hpp"
 #include "C_CieImportDbc.hpp"
 #include "C_CieExportDbc.hpp"
 #include "C_CieDataPoolListAdapter.hpp"
@@ -229,48 +231,101 @@ C_SdNdeDbcSync::E_SyncState C_SdNdeDbcSync::h_GetSyncState(const uint32_t ou32_N
       const C_OscNodeComInterfaceSettings & rc_Interface =
          pc_Node->c_Properties.c_ComInterfaces[ou32_InterfaceIndex];
       const QString c_StoredDbcHash = rc_Interface.c_LastSyncedDbcSha256.c_str();
+      const QString c_DbcPath = h_GetExpectedDbcPath(ou32_NodeIndex, ou32_InterfaceIndex);
+      const bool q_DbcExists = (c_DbcPath.isEmpty() == false) && QFile::exists(c_DbcPath);
 
       if (c_StoredDbcHash.isEmpty() == true)
       {
-         e_State = eNEVER_SYNCED;
-      }
-      else
-      {
-         const QString c_DbcPath = h_GetExpectedDbcPath(ou32_NodeIndex, ou32_InterfaceIndex);
-         if (c_DbcPath.isEmpty() || (QFile::exists(c_DbcPath) == false))
+         // Never synced. If the project already has messages on this interface but no DBC
+         // file exists, the natural first action is Push (create the DBC from project state)
+         // — return eDBC_MISSING so the click dispatcher routes to Push instead of failing
+         // a Pull on a non-existent file.
+         if ((q_DbcExists == false) &&
+             (h_ComputeProjectMessagesHash(ou32_NodeIndex, ou32_InterfaceIndex).isEmpty() == false))
          {
             e_State = eDBC_MISSING;
          }
          else
          {
-            const QString c_CurrentDbcHash = h_ComputeFileSha256(c_DbcPath);
-            const QString c_StoredProjectHash = rc_Interface.c_LastSyncedProjectMsgHash.c_str();
-            const QString c_CurrentProjectHash = h_ComputeProjectMessagesHash(ou32_NodeIndex, ou32_InterfaceIndex);
+            e_State = eNEVER_SYNCED;
+         }
+      }
+      else if (q_DbcExists == false)
+      {
+         e_State = eDBC_MISSING;
+      }
+      else
+      {
+         const QString c_CurrentDbcHash = h_ComputeFileSha256(c_DbcPath);
+         const QString c_StoredProjectHash = rc_Interface.c_LastSyncedProjectMsgHash.c_str();
+         const QString c_CurrentProjectHash = h_ComputeProjectMessagesHash(ou32_NodeIndex, ou32_InterfaceIndex);
 
-            const bool q_DbcDrifted = (c_CurrentDbcHash != c_StoredDbcHash);
-            const bool q_ProjectDrifted = (c_CurrentProjectHash != c_StoredProjectHash);
+         const bool q_DbcDrifted = (c_CurrentDbcHash != c_StoredDbcHash);
+         const bool q_ProjectDrifted = (c_CurrentProjectHash != c_StoredProjectHash);
 
-            if (q_DbcDrifted && q_ProjectDrifted)
-            {
-               e_State = eCONFLICT;
-            }
-            else if (q_DbcDrifted)
-            {
-               e_State = eDBC_DRIFTED;
-            }
-            else if (q_ProjectDrifted)
-            {
-               e_State = ePROJECT_DRIFTED;
-            }
-            else
-            {
-               e_State = eIN_SYNC;
-            }
+         if (q_DbcDrifted && q_ProjectDrifted)
+         {
+            e_State = eCONFLICT;
+         }
+         else if (q_DbcDrifted)
+         {
+            e_State = eDBC_DRIFTED;
+         }
+         else if (q_ProjectDrifted)
+         {
+            e_State = ePROJECT_DRIFTED;
+         }
+         else
+         {
+            e_State = eIN_SYNC;
          }
       }
    }
 
    return e_State;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Strip the matching configured device root from an absolute path.
+
+   Iterates the user's configured device-root list (the same list the scanner walks at
+   startup), finds the root that the absolute path lives under, and returns the trailing
+   segment with forward slashes — e.g. `Sensors/temp_sensor/temp_sensor_CAN1.dbc` for an
+   install at `/home/tyler/.local/opt/openSYDE/devices/Sensors/temp_sensor/...`.
+
+   Falls back to returning the absolute path unchanged if no configured root contains it
+   (e.g., the bundle was added from a custom location that's not in the roots list, or
+   the helper is called before settings load).
+
+   For error popups where the user might want to copy the path into a shell, prefer the
+   absolute form. This helper is intended for tooltips and other space-constrained UI.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_SdNdeDbcSync::h_GetDisplayDbcPath(const QString & orc_AbsolutePath)
+{
+   QString c_Result = orc_AbsolutePath;
+
+   if (orc_AbsolutePath.isEmpty() == false)
+   {
+      const QString c_AbsClean = QDir::cleanPath(orc_AbsolutePath);
+      const QStringList c_Roots = C_UsHandler::h_GetInstance()->GetDeviceRootPaths();
+
+      for (int32_t s32_It = 0; s32_It < c_Roots.size(); ++s32_It)
+      {
+         const QString c_RootClean = QDir::cleanPath(c_Roots.at(s32_It));
+         if (c_RootClean.isEmpty() == false)
+         {
+            const QString c_RootWithSlash = c_RootClean + "/";
+            if (c_AbsClean.startsWith(c_RootWithSlash) == true)
+            {
+               c_Result = c_AbsClean.mid(c_RootWithSlash.length());
+               break;
+            }
+         }
+      }
+   }
+
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
