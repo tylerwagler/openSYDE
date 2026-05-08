@@ -1329,6 +1329,11 @@
           <string>_Diagnostic</string>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string>_SyncDbc</string>
+         </property>
+        </column>
        </widget>
       </item>
       <item>

@@ -12,7 +12,9 @@
 
 #include <QCheckBox>
 #include <QSpinBox>
+#include <QFile>
 #include <QFileInfo>
+#include <QPushButton>
 
 #include "C_Uti.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -23,6 +25,7 @@
 #include "C_GtGetText.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SdNdeComIfSettingsTableDelegate.hpp"
+#include "C_SdNdeDbcSync.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "TglUtils.hpp"
 #include "C_SdUtil.hpp"
@@ -135,6 +138,9 @@ C_SdNdeNodePropertiesWidget::C_SdNdeNodePropertiesWidget(QWidget * const opc_Par
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(static_cast<int32_t> (
                                                                       C_SdNdeComIfSettingsTableDelegate::eDIAGNOSTIC))->
    setTextAlignment(static_cast<int32_t> (Qt::AlignHCenter));
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(static_cast<int32_t> (
+                                                                      C_SdNdeComIfSettingsTableDelegate::eSYNC_DBC))->
+   setTextAlignment(static_cast<int32_t> (Qt::AlignHCenter));
 
    //set min column width (necessary for "Linked to..." strech column
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeader()->setMinimumSectionSize(150);
@@ -187,6 +193,13 @@ C_SdNdeNodePropertiesWidget::C_SdNdeNodePropertiesWidget(QWidget * const opc_Par
                                                                                        QHeaderView::Fixed);
    this->mpc_Ui->pc_TableWidgetComIfSettings->setColumnWidth(static_cast<int32_t> (C_SdNdeComIfSettingsTableDelegate::
                                                                                    eDIAGNOSTIC), 150);
+
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeader()->setSectionResizeMode(static_cast<int32_t> (
+                                                                                          C_SdNdeComIfSettingsTableDelegate
+                                                                                          ::eSYNC_DBC),
+                                                                                       QHeaderView::Fixed);
+   this->mpc_Ui->pc_TableWidgetComIfSettings->setColumnWidth(static_cast<int32_t> (C_SdNdeComIfSettingsTableDelegate::
+                                                                                   eSYNC_DBC), 150);
 
    //Name restriction
    this->mpc_Ui->pc_LineEditNodeName->setMaxLength(C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit());
@@ -244,6 +257,7 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
    const int32_t s32_COL_UPDATE = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eUPDATE);
    const int32_t s32_COL_ROUTING = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eROUTING);
    const int32_t s32_COL_DIAGNOSTIC = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eDIAGNOSTIC);
+   const int32_t s32_COL_SYNC_DBC = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eSYNC_DBC);
 
    this->mpc_Ui->pc_LabSubNodeTitle->setText(C_GtGetText::h_GetText("Sub-Node"));
    this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
@@ -288,6 +302,8 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
                                                                                                 "Usable for Routing"));
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_DIAGNOSTIC)->setText(C_GtGetText::h_GetText(
                                                                                                    "Usable for Dashboard"));
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_SYNC_DBC)->setText(C_GtGetText::h_GetText(
+                                                                                                 "Sync DBC"));
 
    this->mpc_Ui->pc_TextEditComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
 
@@ -388,6 +404,16 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
                                                                      "SYSTEM COMMISSIONING - Dashboards.\n\nThis "
                                                                      "property is just a configuration for openSYDE tool, "
                                                                      "it is NOT configured on device."));
+
+   this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipHeadingAt(s32_COL_SYNC_DBC, Qt::Horizontal,
+                                                                  C_GtGetText::h_GetText("Sync DBC"),
+                                                                  C_GtGetText::h_GetText(
+                                                                     "Pull the device's bundled DBC file (named "
+                                                                     "<device_name>_CAN<n>.dbc, sibling of device.syd) "
+                                                                     "and add its messages onto the connected bus. "
+                                                                     "Stores a SHA-256 fingerprint of the DBC at sync "
+                                                                     "time so the project can flag the interface as "
+                                                                     "out-of-sync if the DBC content drifts."));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -652,6 +678,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                const int32_t s32_COL_UPDATE = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eUPDATE);
                const int32_t s32_COL_ROUTING = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eROUTING);
                const int32_t s32_COL_DIAGNOSTIC = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eDIAGNOSTIC);
+               const int32_t s32_COL_SYNC_DBC = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eSYNC_DBC);
                bool q_IsUpdateAvailable;
                bool q_IsRoutingAvailable;
                bool q_IsDiagnosisAvailable;
@@ -941,6 +968,72 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                connect(dynamic_cast<C_OgeChxTristateBase *> (
                           this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u8_ComIfCnt, s32_COL_DIAGNOSTIC)),
                        &QCheckBox::checkStateChanged, this, &C_SdNdeNodePropertiesWidget::m_RegisterChange);
+
+               /**********************************************************************************************************/
+               //SYNC DBC
+               {
+                  QPushButton * const pc_BtnSync = new QPushButton(C_GtGetText::h_GetText("Sync"), this);
+                  const QString c_DbcPath = C_SdNdeDbcSync::h_GetExpectedDbcPath(this->mu32_NodeIndex,
+                                                                                 static_cast<uint32_t>(u8_ComIfCnt));
+                  const bool q_IsCanIface = u8_ComIfCnt < pc_DevDef->u8_NumCanBusses;
+                  const bool q_BusConnected =
+                     pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt].GetBusConnected();
+                  const bool q_DbcExists = (c_DbcPath.isEmpty() == false) && QFile::exists(c_DbcPath);
+
+                  pc_BtnSync->setEnabled(q_IsCanIface && q_BusConnected && q_DbcExists);
+                  if (q_IsCanIface == false)
+                  {
+                     pc_BtnSync->setToolTip(C_GtGetText::h_GetText(
+                                               "Sync DBC is only available for CAN interfaces."));
+                  }
+                  else if (q_BusConnected == false)
+                  {
+                     pc_BtnSync->setToolTip(C_GtGetText::h_GetText(
+                                               "Sync DBC requires the interface to be connected to a bus."));
+                  }
+                  else if (q_DbcExists == false)
+                  {
+                     pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                    "No bundled DBC at %1.")).arg(c_DbcPath));
+                  }
+                  else
+                  {
+                     pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                    "Sync messages from %1 onto the connected bus.")).arg(
+                                               c_DbcPath));
+                  }
+
+                  this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(u8_ComIfCnt, s32_COL_SYNC_DBC, pc_BtnSync);
+
+                  const uint32_t u32_CapturedNode = this->mu32_NodeIndex;
+                  const uint32_t u32_CapturedInterface = static_cast<uint32_t>(u8_ComIfCnt);
+                  connect(pc_BtnSync, &QPushButton::clicked, this,
+                          [this, u32_CapturedNode, u32_CapturedInterface]()
+                  {
+                     QString c_ErrorMessage;
+                     const int32_t s32_SyncResult = C_SdNdeDbcSync::h_SyncInterface(u32_CapturedNode,
+                                                                                    u32_CapturedInterface,
+                                                                                    c_ErrorMessage);
+                     if (s32_SyncResult == stw::errors::C_NO_ERR)
+                     {
+                        C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eINFORMATION);
+                        c_Msg.SetHeading(C_GtGetText::h_GetText("Sync DBC"));
+                        c_Msg.SetDescription(C_GtGetText::h_GetText(
+                                                "DBC fingerprint stored.\n\n"
+                                                "(Message import into the bus is not yet wired in this build; "
+                                                "this scaffold validates the DBC and records its hash for "
+                                                "out-of-sync detection on project reload.)"));
+                        c_Msg.Execute();
+                     }
+                     else
+                     {
+                        C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eERROR);
+                        c_Msg.SetHeading(C_GtGetText::h_GetText("Sync DBC failed"));
+                        c_Msg.SetDescription(c_ErrorMessage);
+                        c_Msg.Execute();
+                     }
+                  });
+               }
 
                //hide rows if they are not connected (necessary for sub nodes)
 

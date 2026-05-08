@@ -42,6 +42,7 @@ public:
       eUPDATE,
       eDIAGNOSTIC,
       eROUTING,
+      eSYNC_DBC,
       //eCOMLAYER2,
       //eCOMECES,
       //eCOMECOS,
