@@ -998,9 +998,34 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   }
                   else
                   {
-                     pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                    "Sync messages from %1 onto the connected bus.")).arg(
-                                               c_DbcPath));
+                     // DBC present and ready: distinguish never-synced / in-sync / out-of-sync
+                     // by comparing the live SHA-256 against the stored fingerprint.
+                     const QString c_StoredHash =
+                        pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt].c_LastSyncedDbcSha256.c_str();
+                     if (c_StoredHash.isEmpty() == true)
+                     {
+                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                       "Never synced. Click to import messages from %1 "
+                                                                       "onto the connected bus.")).arg(c_DbcPath));
+                     }
+                     else
+                     {
+                        const QString c_CurrentHash = C_SdNdeDbcSync::h_ComputeFileSha256(c_DbcPath);
+                        if (c_CurrentHash != c_StoredHash)
+                        {
+                           // Out of sync — surface in the button text and tooltip.
+                           pc_BtnSync->setText(C_GtGetText::h_GetText("Sync (out of sync)"));
+                           pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                          "DBC at %1 has changed since the last sync. "
+                                                                          "Click to re-sync.")).arg(c_DbcPath));
+                        }
+                        else
+                        {
+                           pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                          "In sync with %1. Click to re-sync.")).arg(
+                                                     c_DbcPath));
+                        }
+                     }
                   }
 
                   this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(u8_ComIfCnt, s32_COL_SYNC_DBC, pc_BtnSync);
@@ -1008,7 +1033,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   const uint32_t u32_CapturedNode = this->mu32_NodeIndex;
                   const uint32_t u32_CapturedInterface = static_cast<uint32_t>(u8_ComIfCnt);
                   connect(pc_BtnSync, &QPushButton::clicked, this,
-                          [this, u32_CapturedNode, u32_CapturedInterface]()
+                          [this, pc_BtnSync, u32_CapturedNode, u32_CapturedInterface, c_DbcPath]()
                   {
                      QString c_ErrorMessage;
                      const int32_t s32_SyncResult = C_SdNdeDbcSync::h_SyncInterface(u32_CapturedNode,
@@ -1016,6 +1041,12 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                                                                                     c_ErrorMessage);
                      if (s32_SyncResult == stw::errors::C_NO_ERR)
                      {
+                        // Reset the visual state so an out-of-sync row doesn't keep its warning text
+                        // until the next table refresh.
+                        pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
+                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
+                                                                       "In sync with %1. Click to re-sync.")).arg(
+                                                  c_DbcPath));
                         C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eINFORMATION);
                         c_Msg.SetHeading(C_GtGetText::h_GetText("Sync DBC"));
                         c_Msg.SetDescription(C_GtGetText::h_GetText(
