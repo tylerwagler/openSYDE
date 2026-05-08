@@ -62,6 +62,11 @@ public:
    ///< (index in system definition)
    ///< Only valid if bus flag q_IsBusConnected is true
 
+   stw::scl::C_SclString c_LastSyncedDbcSha256; ///< SHA-256 hex of the device's per-interface DBC at the last
+                                                ///< user-triggered sync; empty if never synced. On project reload,
+                                                ///< compared against the on-disk DBC's current hash to flag the
+                                                ///< interface as out-of-sync.
+
    void AddConnection(const uint32_t & oru32_BusIndex);
    void RemoveConnection(void);
 

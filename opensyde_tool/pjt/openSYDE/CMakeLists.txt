@@ -452,6 +452,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTableWidgetComIf.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeComIfSettingsTableDelegate.cpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeDbcSync.cpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_Uti.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddSpecificCommand.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemUsageWidget.cpp
@@ -1239,6 +1240,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTableWidgetComIf.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeComIfSettingsTableDelegate.hpp
+   ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeDbcSync.hpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_Uti.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddSpecificCommand.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemUsageWidget.hpp

@@ -841,6 +841,10 @@ int32_t C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSet
          c_ComInterface.q_IsUpdateEnabled = orc_XmlParser.GetAttributeBool("update-available");
          c_ComInterface.q_IsRoutingEnabled = orc_XmlParser.GetAttributeBool("routing-available");
          c_ComInterface.q_IsDiagnosisEnabled = orc_XmlParser.GetAttributeBool("diagnosis-available");
+         if (orc_XmlParser.AttributeExists("dbc-sha256") == true)
+         {
+            c_ComInterface.c_LastSyncedDbcSha256 = orc_XmlParser.GetAttributeString("dbc-sha256");
+         }
 
          //IP address
          if ((orc_XmlParser.SelectNodeChild("ip-address") == "ip-address") && (s32_Retval == C_NO_ERR))
@@ -961,6 +965,10 @@ void C_OscNodeFiler::mh_SaveComInterface(const std::vector<C_OscNodeComInterface
       orc_XmlParser.SetAttributeBool("update-available", rc_CurComInterface.q_IsUpdateEnabled);
       orc_XmlParser.SetAttributeBool("routing-available", rc_CurComInterface.q_IsRoutingEnabled);
       orc_XmlParser.SetAttributeBool("diagnosis-available", rc_CurComInterface.q_IsDiagnosisEnabled);
+      if (rc_CurComInterface.c_LastSyncedDbcSha256.IsEmpty() == false)
+      {
+         orc_XmlParser.SetAttributeString("dbc-sha256", rc_CurComInterface.c_LastSyncedDbcSha256);
+      }
       if (rc_CurComInterface.e_InterfaceType == C_OscSystemBus::eETHERNET)
       {
          orc_XmlParser.CreateAndSelectNodeChild("ip-address");
