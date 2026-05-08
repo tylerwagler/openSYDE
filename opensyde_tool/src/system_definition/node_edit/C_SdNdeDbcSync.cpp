@@ -29,6 +29,7 @@
 #include "stwerrors.hpp"
 #include "C_GtGetText.hpp"
 #include "C_OscNode.hpp"
+#include "C_OscNodeCommFiler.hpp"
 #include "C_OscNodeDataPool.hpp"
 #include "C_OscCanProtocol.hpp"
 #include "C_OscCanMessage.hpp"
@@ -169,11 +170,12 @@ QString C_SdNdeDbcSync::h_ComputeProjectMessagesHash(const uint32_t ou32_NodeInd
 {
    QString c_Result;
 
-   const C_OscCanProtocol::E_Type e_Protocol = C_OscCanProtocol::eLAYER2;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if ((pc_Node != NULL) && (ou32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
    {
+      const C_OscCanProtocol::E_Type e_Protocol =
+         pc_Node->c_Properties.c_ComInterfaces[ou32_InterfaceIndex].e_DbcProtocol;
       int32_t s32_DatapoolIndex = -1;
       for (uint32_t u32_It = 0U; u32_It < pc_Node->c_DataPools.size(); ++u32_It)
       {
@@ -381,8 +383,8 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
          }
          else
          {
-            // v1 default protocol; see function-level v1 LIMITATIONS doc.
-            const C_OscCanProtocol::E_Type e_Protocol = C_OscCanProtocol::eLAYER2;
+            // Per-interface project setting; defaults to Layer 2.
+            const C_OscCanProtocol::E_Type e_Protocol = rc_Interface.e_DbcProtocol;
 
             // Step 1: parse DBC headlessly.
             C_CieConverter::C_CieCommDefinition c_CommDef;
@@ -418,8 +420,10 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
                         ou32_NodeIndex, e_Protocol);
                      if (s32_Add != C_NO_ERR)
                      {
-                        orc_ErrorMessage = C_GtGetText::h_GetText(
-                           "Could not auto-create a Layer 2 COMM datapool on the node.");
+                        orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
+                                                                   "Could not auto-create a %1 COMM datapool "
+                                                                   "on the node.")).arg(
+                           C_OscNodeCommFiler::h_CommunicationProtocolToString(e_Protocol).c_str());
                         s32_Retval = C_CONFIG;
                      }
                   }
@@ -440,8 +444,10 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
                   }
                   if (s32_DatapoolIndex < 0)
                   {
-                     orc_ErrorMessage = C_GtGetText::h_GetText(
-                        "Could not locate a Layer 2 COMM datapool after auto-creation.");
+                     orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
+                                                                "Could not locate a %1 COMM datapool "
+                                                                "after auto-creation.")).arg(
+                        C_OscNodeCommFiler::h_CommunicationProtocolToString(e_Protocol).c_str());
                      s32_Retval = C_CONFIG;
                   }
                }
@@ -599,7 +605,8 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
          }
          else
          {
-            const C_OscCanProtocol::E_Type e_Protocol = C_OscCanProtocol::eLAYER2;
+            // Per-interface project setting; defaults to Layer 2.
+            const C_OscCanProtocol::E_Type e_Protocol = rc_Interface.e_DbcProtocol;
 
             int32_t s32_DatapoolIndex = -1;
             for (uint32_t u32_It = 0U; u32_It < pc_Node->c_DataPools.size(); ++u32_It)
@@ -614,8 +621,9 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
 
             if (s32_DatapoolIndex < 0)
             {
-               orc_ErrorMessage = C_GtGetText::h_GetText(
-                  "Node has no Layer 2 COMM datapool to push from.");
+               orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
+                                                          "Node has no %1 COMM datapool to push from.")).arg(
+                  C_OscNodeCommFiler::h_CommunicationProtocolToString(e_Protocol).c_str());
                s32_Retval = C_CONFIG;
             }
             else

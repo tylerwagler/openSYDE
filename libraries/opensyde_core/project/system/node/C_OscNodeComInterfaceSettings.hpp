@@ -16,6 +16,7 @@
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
 #include "C_OscSystemBus.hpp"
+#include "C_OscCanProtocol.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -71,6 +72,11 @@ public:
                                                      ///< messages drifted away from the synced baseline. The pair of
                                                      ///< fingerprints together gives a four-state model: in-sync,
                                                      ///< DBC-drifted, project-drifted, or both-drifted (conflict).
+   C_OscCanProtocol::E_Type e_DbcProtocol; ///< Target COMM protocol for the DBC sync action on this interface.
+                                           ///< Defaults to Layer 2 for backward compat. Determines which COMM
+                                           ///< datapool (auto-creating one if needed) the Pull writes into and
+                                           ///< the Push reads from. Project-side setting; not derived from the
+                                           ///< device manifest.
 
    void AddConnection(const uint32_t & oru32_BusIndex);
    void RemoveConnection(void);

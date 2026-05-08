@@ -14,6 +14,8 @@
 #include <QSpinBox>
 #include <QFile>
 #include <QFileInfo>
+#include <QAction>
+#include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
 
@@ -1147,6 +1149,73 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                            c_Msg.SetDescription(c_ErrorMessage);
                            c_Msg.Execute();
                         }
+                     }
+                  });
+
+                  // Right-click protocol selector. Layer 2 and J1939 are the realistic DBC
+                  // targets — CANopen has its own EDS/DCF import flow, and ECeS / CANopen-Safety
+                  // are too niche to expose here.
+                  pc_BtnSync->setContextMenuPolicy(Qt::CustomContextMenu);
+                  connect(pc_BtnSync, &QWidget::customContextMenuRequested, this,
+                          [this, pc_BtnSync, u32_CapturedNode, u32_CapturedInterface](const QPoint & orc_Pos)
+                  {
+                     const C_OscNode * const pc_NodeRo =
+                        C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_CapturedNode);
+                     if ((pc_NodeRo != NULL) &&
+                         (u32_CapturedInterface < pc_NodeRo->c_Properties.c_ComInterfaces.size()))
+                     {
+                        const C_OscCanProtocol::E_Type e_Current =
+                           pc_NodeRo->c_Properties.c_ComInterfaces[u32_CapturedInterface].e_DbcProtocol;
+                        QMenu c_Menu(pc_BtnSync);
+                        QAction * const pc_Header = c_Menu.addAction(C_GtGetText::h_GetText("DBC sync protocol"));
+                        pc_Header->setEnabled(false);
+                        c_Menu.addSeparator();
+
+                        struct T_Option
+                        {
+                           C_OscCanProtocol::E_Type e_Type;
+                           QString c_Label;
+                        };
+                        const std::vector<T_Option> c_Options = {
+                           {C_OscCanProtocol::eLAYER2, C_GtGetText::h_GetText("Layer 2 (raw CAN)")},
+                           {C_OscCanProtocol::eJ1939, C_GtGetText::h_GetText("J1939")}
+                        };
+
+                        for (uint32_t u32_OptIt = 0U; u32_OptIt < c_Options.size(); ++u32_OptIt)
+                        {
+                           const T_Option & rc_Option = c_Options[u32_OptIt];
+                           QAction * const pc_Act = c_Menu.addAction(rc_Option.c_Label);
+                           pc_Act->setCheckable(true);
+                           pc_Act->setChecked(e_Current == rc_Option.e_Type);
+                           const C_OscCanProtocol::E_Type e_Selected = rc_Option.e_Type;
+                           connect(pc_Act, &QAction::triggered, this,
+                                   [this, u32_CapturedNode, u32_CapturedInterface, e_Selected, pc_BtnSync]()
+                           {
+                              C_OscNode * const pc_MutNode =
+                                 C_PuiSdHandler::h_GetInstance()->GetOscNode(u32_CapturedNode);
+                              if ((pc_MutNode != NULL) &&
+                                  (u32_CapturedInterface < pc_MutNode->c_Properties.c_ComInterfaces.size()))
+                              {
+                                 C_OscNodeComInterfaceSettings & rc_If =
+                                    pc_MutNode->c_Properties.c_ComInterfaces[u32_CapturedInterface];
+                                 if (rc_If.e_DbcProtocol != e_Selected)
+                                 {
+                                    // Switching protocol invalidates the prior sync baseline; the
+                                    // user starts fresh on the new protocol.
+                                    rc_If.e_DbcProtocol = e_Selected;
+                                    rc_If.c_LastSyncedDbcSha256 = "";
+                                    rc_If.c_LastSyncedProjectMsgHash = "";
+                                    this->m_RegisterChange();
+                                    pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
+                                    pc_BtnSync->setToolTip(C_GtGetText::h_GetText(
+                                                              "Protocol changed. Click to perform the first "
+                                                              "sync on the new protocol."));
+                                 }
+                              }
+                           });
+                        }
+
+                        c_Menu.exec(pc_BtnSync->mapToGlobal(orc_Pos));
                      }
                   });
                }

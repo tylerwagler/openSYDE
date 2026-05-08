@@ -849,6 +849,13 @@ int32_t C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSet
          {
             c_ComInterface.c_LastSyncedProjectMsgHash = orc_XmlParser.GetAttributeString("dbc-project-msg-hash");
          }
+         if (orc_XmlParser.AttributeExists("dbc-protocol") == true)
+         {
+            // Errors fall through to the eLAYER2 default; an unknown protocol string in an
+            // older project shouldn't fail the whole load.
+            (void)C_OscNodeCommFiler::h_StringToCommunicationProtocol(
+               orc_XmlParser.GetAttributeString("dbc-protocol"), c_ComInterface.e_DbcProtocol);
+         }
 
          //IP address
          if ((orc_XmlParser.SelectNodeChild("ip-address") == "ip-address") && (s32_Retval == C_NO_ERR))
@@ -976,6 +983,13 @@ void C_OscNodeFiler::mh_SaveComInterface(const std::vector<C_OscNodeComInterface
       if (rc_CurComInterface.c_LastSyncedProjectMsgHash.IsEmpty() == false)
       {
          orc_XmlParser.SetAttributeString("dbc-project-msg-hash", rc_CurComInterface.c_LastSyncedProjectMsgHash);
+      }
+      // Only persist when non-default to keep older project files clean.
+      if (rc_CurComInterface.e_DbcProtocol != C_OscCanProtocol::eLAYER2)
+      {
+         orc_XmlParser.SetAttributeString("dbc-protocol",
+                                          C_OscNodeCommFiler::h_CommunicationProtocolToString(
+                                             rc_CurComInterface.e_DbcProtocol));
       }
       if (rc_CurComInterface.e_InterfaceType == C_OscSystemBus::eETHERNET)
       {
