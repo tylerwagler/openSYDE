@@ -3,7 +3,11 @@
    \file
    \brief       Manager for all device descriptions (implementation)
 
-   Manager for all device descriptions
+   Discovers device definitions by recursively walking one or more root directories on
+   the filesystem. A device folder is any folder containing a "device.syd" manifest;
+   the folder hierarchy from each root becomes the group hierarchy in the toolbox
+   (encoded as forward-slash path strings on the group name). Duplicate device names
+   across roots resolve as first-root-wins, with a warning logged.
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
@@ -12,12 +16,14 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <filesystem>
+#include <map>
+#include <set>
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscDeviceManager.hpp"
-#include "C_SclIniFile.hpp"
-#include "TglUtils.hpp"
-#include "TglFile.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscDeviceDefinitionFiler.hpp"
 
@@ -26,9 +32,13 @@
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::scl;
-using namespace stw::tgl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
+
+namespace
+{
+const char * const mhc_MANIFEST_FILENAME = "device.syd";
+}
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -39,6 +49,15 @@ using namespace stw::tgl;
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Default constructor
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_OscDeviceManager::C_OscDeviceManager(void) :
+   mq_WasLoaded(false)
+{
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Search for device with specified name
@@ -74,188 +93,6 @@ const C_OscDeviceDefinition * C_OscDeviceManager::LookForDevice(const C_SclStrin
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Add device to device group
-
-   Add a new device with the user device definition file to
-   a existing device group or to a new device group when no
-   device group is available and save it to an .ini file.
-
-   \param[in]      orc_DeviceDefinitionFile  Relative path of device definition file
-   \param[in]      orc_DeviceGroup           Name of device group where device will be added
-   \param[in,out]  orc_IniFile               Path of .ini file where user devices will be saved
-
-   \return
-   C_NO_ERR     Device added without problems
-   C_RD_WR      Could not add device
-   C_OVERFLOW   Device already exists, won't be added
-   C_NOACT      Specified file is invalid (invalid XML file)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceManager::AddDevice(const stw::scl::C_SclString & orc_DeviceDefinitionFile,
-                                      const stw::scl::C_SclString & orc_DeviceGroup,
-                                      const stw::scl::C_SclString & orc_IniFile)
-{
-   int32_t s32_Return;
-
-   C_OscDeviceDefinition c_DeviceDefinition;
-
-   // Ini with toolbox structure definition
-   C_SclIniFile c_Ini(orc_IniFile);
-
-   if (TglFileExists(orc_IniFile) == false)
-   {
-      c_Ini.WriteInteger("DeviceTypes", "NumTypes", 1);
-      c_Ini.WriteString("DeviceTypes", "TypeName1", orc_DeviceGroup);
-      c_Ini.WriteInteger(orc_DeviceGroup, "DeviceCount", 0);
-      c_Ini.UpdateFile();
-   }
-
-   // Load device definition for name checking
-   s32_Return = C_OscDeviceDefinitionFiler::h_Load(c_DeviceDefinition, orc_DeviceDefinitionFile);
-   if (s32_Return == C_NO_ERR)
-   {
-      // Compare new device definition file with existing
-      // If the file exists, the device won't add
-      // Otherwise it will be add to the selected device group
-      for (uint32_t u32_GroupCounter = 0U; u32_GroupCounter < this->mc_DeviceGroups.size(); u32_GroupCounter++)
-      {
-         // Check if the device name and the device alias name already exist
-         if (this->mc_DeviceGroups[u32_GroupCounter].PreCheckDevice(c_DeviceDefinition.c_DeviceName,
-                                                                    c_DeviceDefinition.c_DeviceNameAlias,
-                                                                    c_DeviceDefinition.c_FilePath) == true)
-         {
-            s32_Return = C_OVERFLOW;
-            osc_write_log_error("Adding device definition",
-                                "Device \"" + c_DeviceDefinition.c_FilePath + "\" already exists.");
-            break;
-         }
-      }
-   }
-
-   if (s32_Return == C_NO_ERR)
-   {
-      bool q_NewGroupNecessary = true;
-
-      // Check number of devices in group
-      const int32_t s32_NumDevices = c_Ini.ReadInteger(orc_DeviceGroup, "DeviceCount", 0);
-
-      // Write device count in the list in order
-      c_Ini.WriteInteger(orc_DeviceGroup, "DeviceCount", s32_NumDevices + 1);
-
-      // Write device in the list in order
-      c_Ini.WriteString(orc_DeviceGroup, "Device" + C_SclString::IntToStr(s32_NumDevices + 1),
-                        orc_DeviceDefinitionFile);
-
-      for (uint32_t u32_DeviceGroupCounter = 0U; u32_DeviceGroupCounter < this->mc_DeviceGroups.size();
-           ++u32_DeviceGroupCounter)
-      {
-         if (this->mc_DeviceGroups[u32_DeviceGroupCounter].GetGroupName() == orc_DeviceGroup)
-         {
-            s32_Return =
-               this->mc_DeviceGroups[u32_DeviceGroupCounter].LoadGroup(c_Ini, TglExtractFilePath(orc_IniFile));
-            q_NewGroupNecessary = false;
-            break;
-         }
-      }
-
-      if (q_NewGroupNecessary == true)
-      {
-         // Set group name
-         C_OscDeviceGroup c_Group;
-         c_Group.SetGroupName(c_Ini.ReadString("DeviceTypes", "TypeName1", "").c_str());
-         s32_Return = c_Group.LoadGroup(c_Ini, TglExtractFilePath(orc_IniFile));
-         this->mc_DeviceGroups.push_back(c_Group);
-      }
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Delete device from device group
-
-   Delete a device from .ini file and set
-   the rest of device definitions new.
-
-   \param[in]      orc_Devices      List of device definitions
-   \param[in]      orc_DeviceGroup  Name of device group where device will be added
-   \param[in,out]  orc_IniFile      Path of .ini file where devices will be saved
-
-   \return
-   C_NO_ERR   Device deleted without problems
-   C_WARN     No error, last device deleted
-   C_CONFIG   Device group not found
-   C_RD_WR    Could not delete device
-              Could not load information
-   C_RANGE    No devices in group to delete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceManager::ChangeDevices(std::vector<C_OscDeviceDefinition> & orc_Devices,
-                                          const stw::scl::C_SclString & orc_DeviceGroup,
-                                          const stw::scl::C_SclString & orc_IniFile)
-{
-   int32_t s32_Return = C_CONFIG;
-
-   uint32_t u32_DeviceGroupCounter;
-
-   for (u32_DeviceGroupCounter = 0U; u32_DeviceGroupCounter < this->mc_DeviceGroups.size();
-        ++u32_DeviceGroupCounter)
-   {
-      if (this->mc_DeviceGroups[u32_DeviceGroupCounter].GetGroupName() == orc_DeviceGroup)
-      {
-         s32_Return = C_NO_ERR;
-         break;
-      }
-   }
-
-   // Ini with toolbox structure definition
-   C_SclIniFile c_Ini(orc_IniFile);
-
-   if (TglFileExists(orc_IniFile) == false)
-   {
-      osc_write_log_error("Delete device definitions", "File \"" + orc_IniFile + "\" does not exist.");
-      s32_Return = C_RD_WR;
-   }
-
-   if (s32_Return == C_NO_ERR)
-   {
-      // Check number of devices in group bevor deleting a device
-      const int32_t s32_NumDevicesBeforeChanges = c_Ini.ReadInteger(orc_DeviceGroup, "DeviceCount", 0);
-
-      if (s32_NumDevicesBeforeChanges > 0)
-      {
-         c_Ini.EraseSection(orc_DeviceGroup);
-
-         // Write device count in the list in order
-         c_Ini.WriteInteger(orc_DeviceGroup, "DeviceCount", static_cast<int32_t>(orc_Devices.size()));
-
-         for (uint32_t u32_ItDevice = 0; u32_ItDevice < orc_Devices.size(); ++u32_ItDevice)
-         {
-            // Write device in the list in order
-            c_Ini.WriteString(orc_DeviceGroup, "Device" + C_SclString::IntToStr(u32_ItDevice + 1),
-                              orc_Devices[u32_ItDevice].c_FilePath.c_str());
-         }
-
-         s32_Return =
-            this->mc_DeviceGroups[u32_DeviceGroupCounter].LoadGroup(c_Ini, TglExtractFilePath(orc_IniFile));
-
-         // Check number of devices in group after deleting a device
-         if (c_Ini.ReadInteger(orc_DeviceGroup, "DeviceCount", 0) == 0)
-         {
-            s32_Return = C_WARN;
-         }
-      }
-      else
-      {
-         // No devices in group to delete
-         s32_Return = C_RANGE;
-      }
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get all device groups
 
    \return
@@ -270,8 +107,7 @@ std::vector<C_OscDeviceGroup> C_OscDeviceManager::GetDeviceGroups(void) const
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get "WasLoaded" flag
 
-   Flag will be set after loading device definitions.
-   Can be used to prevent multiple loading.
+   Set after LoadFromPaths runs.
 
    \return
    status of flag
@@ -283,87 +119,131 @@ bool C_OscDeviceManager::WasLoaded(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load all known devices
+/*! \brief   Discover devices by recursively scanning the given root paths
 
-   \param[in]     orc_File           Ini file path
-   \param[in]     oq_Optional        If user_devices.ini: Type of log entry when file is missing is set to "INFO".
-                                      Otherwise: "ERROR".
-   \param[in,out] ops32_DeviceCount  Optional parameter: can be used to keep track of how many devices are listed in
-                                      an ini file
+   For each root, walks the directory tree (depth-unlimited) looking for files literally
+   named "device.syd". Each such file is parsed as a device-definition manifest. The
+   folder hierarchy from the scan root to the device folder's parent (joined by "/")
+   becomes the device's group name; top-level device folders end up in an unnamed group.
+
+   On a duplicate device name (same c_DeviceName already registered from an earlier root
+   or earlier folder), the first-seen device wins and a warning is logged.
+
+   Per-device parse failures and per-root access failures are logged but do not stop the
+   overall scan.
+
+   \param[in]  orc_RootPaths   Root directories to scan, in priority order
 
    \return
-   C_NO_ERR   all information loaded without problems
-   C_RD_WR    could not load information
+   C_NO_ERR  Scan completed (with or without devices found)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceManager::LoadFromFile(const C_SclString & orc_File, const bool oq_Optional,
-                                         int32_t * const ops32_DeviceCount)
+int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<C_SclString> & orc_RootPaths)
 {
-   int32_t s32_Return = C_NO_ERR;
+   namespace fs = std::filesystem;
 
-   if (TglFileExists(orc_File) == false)
+   this->mc_DeviceGroups.clear();
+   this->mq_WasLoaded = false;
+
+   std::set<C_SclString> c_KnownDeviceNames;
+   // std::map gives a deterministic alphabetical group ordering at flatten time.
+   std::map<C_SclString, C_OscDeviceGroup> c_GroupsByName;
+
+   for (uint32_t u32_ItRoot = 0U; u32_ItRoot < orc_RootPaths.size(); ++u32_ItRoot)
    {
-      if (oq_Optional == true)
+      const C_SclString & rc_RootStr = orc_RootPaths[u32_ItRoot];
+      const fs::path c_RootPath(rc_RootStr.c_str());
+
+      std::error_code c_Ec;
+      if (fs::is_directory(c_RootPath, c_Ec) == false)
       {
-         osc_write_log_info("Loading user device definitions", "File \"" + orc_File + "\" does not exist. (optional)");
+         osc_write_log_warning("Loading device definitions",
+                               "Configured device root \"" + rc_RootStr +
+                               "\" does not exist or is not a directory; skipping.");
+         continue;
       }
-      else
+
+      fs::recursive_directory_iterator c_It(c_RootPath, fs::directory_options::follow_directory_symlink, c_Ec);
+      if (c_Ec)
       {
-         osc_write_log_error("Loading device definitions", "File \"" + orc_File + "\" does not exist.");
+         osc_write_log_warning("Loading device definitions",
+                               "Failed to open device root \"" + rc_RootStr + "\": " +
+                               C_SclString(c_Ec.message().c_str()));
+         continue;
       }
 
-      s32_Return = C_RD_WR;
-   }
-
-   //Ini with toolbox structure definition
-   C_SclIniFile c_Ini(orc_File);
-   const int32_t s32_NumTypes = c_Ini.ReadInteger("DeviceTypes", "NumTypes", 0);
-
-   //Parse groups
-   for (int32_t s32_ItType = 0; s32_ItType < s32_NumTypes; ++s32_ItType)
-   {
-      //Get group name
-      C_OscDeviceGroup c_Group;
-      const C_SclString c_GroupName = c_Ini.ReadString("DeviceTypes", "TypeName" + C_SclString::IntToStr(
-                                                          s32_ItType + 1), "");
-
-      // special case user_devices.ini. We accept only one format. If an ini-file contains [User Nodes], the
-      // number of types [NumTypes] has to be 1
-      if (c_GroupName == "User Nodes")
+      const fs::recursive_directory_iterator c_End;
+      for (; c_It != c_End; c_It.increment(c_Ec))
       {
-         if (s32_NumTypes > 1)
+         if (c_Ec)
          {
-            osc_write_log_error("Loading from ini file", "File \"" + orc_File + "\" should only contain User Nodes.");
-            break;
+            osc_write_log_warning("Loading device definitions",
+                                  "Filesystem walk error under \"" + rc_RootStr + "\": " +
+                                  C_SclString(c_Ec.message().c_str()));
+            c_Ec.clear();
+            continue;
          }
-         // optional parameter (see above): sends number of files listed in ini to GUI layer for user feedback.
-         if (ops32_DeviceCount != NULL)
+
+         std::error_code c_FileEc;
+         if ((c_It->is_regular_file(c_FileEc) == false) ||
+             (c_It->path().filename() != mhc_MANIFEST_FILENAME))
          {
-            *ops32_DeviceCount += c_Ini.ReadInteger("User Nodes", "DeviceCount", 0);
+            continue;
          }
-      }
 
-      c_Group.SetGroupName(c_GroupName.c_str());
-      s32_Return = c_Group.LoadGroup(c_Ini, TglExtractFilePath(orc_File));
-      this->mc_DeviceGroups.push_back(c_Group);
+         const fs::path c_ManifestPath = c_It->path();
+         const fs::path c_DeviceFolder = c_ManifestPath.parent_path();
 
-      if (s32_Return != C_NO_ERR)
-      {
-         s32_Return = C_RD_WR;
+         // Group name = path from root to the device folder's parent, "/"-separated.
+         // Top-level device folders (parent == root) yield an empty group name.
+         std::error_code c_RelEc;
+         const fs::path c_GroupRel = fs::relative(c_DeviceFolder.parent_path(), c_RootPath, c_RelEc);
+         C_SclString c_GroupName;
+         if (c_RelEc || c_GroupRel.empty() || (c_GroupRel == fs::path(".")))
+         {
+            c_GroupName = "";
+         }
+         else
+         {
+            c_GroupName = c_GroupRel.generic_string().c_str();
+         }
+
+         C_OscDeviceDefinition c_Device;
+         const C_SclString c_ManifestStr(c_ManifestPath.string().c_str());
+         const int32_t s32_LoadResult = C_OscDeviceDefinitionFiler::h_Load(c_Device, c_ManifestStr);
+         if (s32_LoadResult != C_NO_ERR)
+         {
+            osc_write_log_error("Loading device definitions",
+                                "Failed to parse manifest \"" + c_ManifestStr + "\".");
+            continue;
+         }
+
+         if (c_KnownDeviceNames.count(c_Device.c_DeviceName) > 0U)
+         {
+            osc_write_log_warning("Loading device definitions",
+                                  "Duplicate device name \"" + c_Device.c_DeviceName +
+                                  "\" found at \"" + c_ManifestStr + "\"; first occurrence wins.");
+            continue;
+         }
+
+         c_KnownDeviceNames.insert(c_Device.c_DeviceName);
+
+         C_OscDeviceGroup & rc_Group = c_GroupsByName[c_GroupName];
+         if (rc_Group.GetGroupName().IsEmpty() && (c_GroupName.IsEmpty() == false))
+         {
+            rc_Group.SetGroupName(c_GroupName);
+         }
+         rc_Group.AddDevice(c_Device);
       }
    }
-   if (s32_Return == C_NO_ERR)
+
+   this->mc_DeviceGroups.reserve(c_GroupsByName.size());
+   for (std::map<C_SclString, C_OscDeviceGroup>::iterator c_ItGroup = c_GroupsByName.begin();
+        c_ItGroup != c_GroupsByName.end(); ++c_ItGroup)
    {
-      mq_WasLoaded = true;
+      this->mc_DeviceGroups.push_back(c_ItGroup->second);
    }
-   return s32_Return;
-}
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Default constructor
-*/
-//----------------------------------------------------------------------------------------------------------------------
-C_OscDeviceManager::C_OscDeviceManager(void) :
-   mq_WasLoaded(false)
-{
+   this->mq_WasLoaded = true;
+   return C_NO_ERR;
 }

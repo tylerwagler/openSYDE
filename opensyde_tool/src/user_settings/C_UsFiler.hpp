@@ -52,6 +52,7 @@ private:
    static void mh_SaveColors(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings);
    static void mh_SaveNextRecentColorButtonNumber(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings);
    static void mh_SaveRecentProjects(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings);
+   static void mh_SaveDeviceRoots(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings);
    static void mh_SaveProjectIndependentSection(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings);
    static void mh_SaveProjectDependentSection(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings,
                                               const QString & orc_ActiveProject);
@@ -79,6 +80,7 @@ private:
    static void mh_LoadColors(C_UsHandler & orc_UserSettings, QSettings & orc_Ini);
    static void mh_LoadNextRecentColorButtonNumber(C_UsHandler & orc_UserSettings, QSettings & orc_Ini);
    static void mh_LoadRecentProjects(C_UsHandler & orc_UserSettings, QSettings & orc_Ini);
+   static void mh_LoadDeviceRoots(C_UsHandler & orc_UserSettings, QSettings & orc_Ini);
    static void mh_LoadProjectIndependentSection(C_UsHandler & orc_UserSettings, QSettings & orc_Ini);
    static void mh_LoadProjectDependentSection(C_UsHandler & orc_UserSettings, QSettings & orc_Ini,
                                               const QString & orc_ActiveProject);

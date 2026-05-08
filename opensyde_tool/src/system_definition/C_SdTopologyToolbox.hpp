@@ -12,8 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QWidget>
-#include <QLabel>
-#include <QSpacerItem>
 #include "C_SdTopologyListWidget.hpp"
 #include "C_OscDeviceDefinition.hpp"
 
@@ -48,9 +46,6 @@ public:
 protected:
    void enterEvent(QEnterEvent * const opc_Event) override;
    void leaveEvent(QEvent * const opc_Event) override;
-   void dragEnterEvent(QDragEnterEvent * const opc_Event) override;
-   void dragMoveEvent(QDragMoveEvent * const opc_Event) override;
-   void dropEvent(QDropEvent * const opc_Event) override;
 
 private:
    //Avoid call
@@ -62,23 +57,10 @@ private:
 
    QIcon mc_Icon;
    C_SdTopologyListWidget * mpc_List;
-   QSpacerItem * mpc_Spacer;
-   QLabel * mpc_Label;
 
    void m_FillToolboxDynamic(void);
    void m_FillToolboxStatic(void);
    void m_FillToolboxWithDynamicNodes(const stw::opensyde_core::C_OscDeviceDefinition & orc_Device);
-   void m_IconClearAllClicked(void);
-   void m_ErrorHandlingUserFeedback(const QStringList & orc_Errors, const int32_t & ors32_AddDeviceCount,
-                                    const int32_t & ors32_DeviceCount);
-   void m_FileBrowseDialog(void);
-   void m_LoadUserDeviceDefinitionPaths(const QString & orc_Path, QStringList & orc_UserDeviceDefPaths,
-                                        QStringList & orc_Errors, int32_t & ors32_DeviceCount) const;
-   int32_t m_AddUserNodesToIni (const QStringList & orc_UserDeviceDefPaths, QStringList & orc_Errors);
-   void m_AddUserNodesToToolbox(void);
-
-   int32_t m_DeleteUserNode(const QPoint & orc_Pos);
-   int32_t m_ClearAllUserNodes(void);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

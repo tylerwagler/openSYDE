@@ -141,6 +141,8 @@ void C_UsHandler::SetDefault(void)
    ms32_ScreenshotGifSucessTimeout = 3000;
    mc_PathHandlingSelection = "";
    mc_SkipTspImportSelection = "";
+
+   this->mc_DeviceRootPaths = QStringList{C_Uti::h_GetAbsolutePathFromExe("../devices")};
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -177,6 +179,18 @@ bool C_UsHandler::GetPerformanceActive() const
 QStringList C_UsHandler::GetRecentProjects(void) const
 {
    return this->mc_RecentProjects;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get configured device-bundle search roots
+
+   \return
+   Resolved device root paths in priority order
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QStringList C_UsHandler::GetDeviceRootPaths(void) const
+{
+   return this->mc_DeviceRootPaths;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1076,6 +1090,17 @@ void C_UsHandler::SetPerformanceActive(const bool oq_Active)
 void C_UsHandler::SetRecentProjects(const QStringList & orc_New)
 {
    this->mc_RecentProjects = orc_New;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set configured device-bundle search roots
+
+   \param[in]  orc_New  New root paths in priority order
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_UsHandler::SetDeviceRootPaths(const QStringList & orc_New)
+{
+   this->mc_DeviceRootPaths = orc_New;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

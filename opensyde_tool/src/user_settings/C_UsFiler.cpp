@@ -94,6 +94,7 @@ int32_t C_UsFiler::h_Save(const C_UsHandler & orc_UserSettings, const QString & 
          {
             const QSet<QString> c_KnownSections = {
                "Common", "Environment", "RecentColors", "RecentProjects",
+               "DeviceRoots",
                "Screen", "SdTopologyToolbox", "SdNodeEdit", "SdBusEdit",
                "Projects", "Update"
             };
@@ -112,6 +113,7 @@ int32_t C_UsFiler::h_Save(const C_UsHandler & orc_UserSettings, const QString & 
          mh_SaveColors(c_Ini, orc_UserSettings);
          mh_SaveNextRecentColorButtonNumber(c_Ini, orc_UserSettings);
          mh_SaveRecentProjects(c_Ini, orc_UserSettings);
+         mh_SaveDeviceRoots(c_Ini, orc_UserSettings);
          mh_SaveProjectIndependentSection(c_Ini, orc_UserSettings);
          mh_SaveProjectDependentSection(c_Ini, orc_UserSettings, orc_ActiveProject);
          c_Ini.sync();
@@ -168,6 +170,7 @@ int32_t C_UsFiler::h_Load(C_UsHandler & orc_UserSettings, const QString & orc_Pa
             // (else it was already added to RecentProjects and hence a call to LoadRecentProjects would overwrite it)
             mh_LoadRecentProjects(orc_UserSettings, c_Ini);
          }
+         mh_LoadDeviceRoots(orc_UserSettings, c_Ini);
          mh_LoadProjectIndependentSection(orc_UserSettings, c_Ini);
          mh_LoadProjectDependentSection(orc_UserSettings, c_Ini, orc_ActiveProject);
       }
@@ -539,6 +542,26 @@ void C_UsFiler::mh_SaveRecentProjects(QSettings & orc_Ini, const C_UsHandler & o
 
    orc_Ini.remove("RecentProjects");
    orc_Ini.beginGroup("RecentProjects");
+   h_SaveArray(orc_Ini, "Items", c_List, [&orc_Ini] (auto c_It)
+   {
+      orc_Ini.setValue("Path", *c_It);
+   });
+   orc_Ini.endGroup();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save device-root search paths
+
+   \param[in,out]  orc_Ini             Open QSettings instance
+   \param[in]      orc_UserSettings    User settings
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_UsFiler::mh_SaveDeviceRoots(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings)
+{
+   const QStringList c_List = orc_UserSettings.GetDeviceRootPaths();
+
+   orc_Ini.remove("DeviceRoots");
+   orc_Ini.beginGroup("DeviceRoots");
    h_SaveArray(orc_Ini, "Items", c_List, [&orc_Ini] (auto c_It)
    {
       orc_Ini.setValue("Path", *c_It);
@@ -1354,6 +1377,50 @@ void C_UsFiler::mh_LoadRecentProjects(C_UsHandler & orc_UserSettings, QSettings 
    orc_Ini.endGroup();
 
    orc_UserSettings.SetRecentProjects(c_List);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load device-root search paths
+
+   Falls back to the SetDefault-provided list if the section is absent or empty
+   (i.e. on a fresh install).
+
+   \param[in,out]  orc_UserSettings    User settings to load into
+   \param[in,out]  orc_Ini             Open QSettings instance
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_UsFiler::mh_LoadDeviceRoots(C_UsHandler & orc_UserSettings, QSettings & orc_Ini)
+{
+   QStringList c_List;
+
+   orc_Ini.beginGroup("DeviceRoots");
+   const int32_t s32_Size = orc_Ini.beginReadArray("Items");
+   for (int32_t s32_It = 0; s32_It < s32_Size; ++s32_It)
+   {
+      orc_Ini.setArrayIndex(s32_It);
+      const QString c_Cur = orc_Ini.value("Path", "").toString();
+      if (c_Cur.isEmpty() == false)
+      {
+         QFileInfo c_Dir;
+         if (c_Cur.startsWith(".") == true)
+         {
+            c_Dir.setFile(C_Uti::h_GetExePath() + c_Cur);
+         }
+         else
+         {
+            c_Dir.setFile(c_Cur);
+         }
+         c_List.append(c_Dir.absoluteFilePath());
+      }
+   }
+   orc_Ini.endArray();
+   orc_Ini.endGroup();
+
+   if (c_List.isEmpty() == false)
+   {
+      orc_UserSettings.SetDeviceRootPaths(c_List);
+   }
+   // else: keep the default set by SetDefault() — happens on fresh installs.
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -28,23 +28,17 @@ namespace opensyde_core
 class C_OscDeviceManager
 {
 public:
+   C_OscDeviceManager(void);
+
    const C_OscDeviceDefinition * LookForDevice(const stw::scl::C_SclString & orc_Name,
                                                const stw::scl::C_SclString & orc_MainDeviceName,
                                                uint32_t & oru32_SubDeviceIndex) const;
 
-   int32_t AddDevice(const stw::scl::C_SclString & orc_DeviceDefinitionFile,
-                     const stw::scl::C_SclString & orc_DeviceGroup, const stw::scl::C_SclString & orc_IniFile);
-
-   int32_t ChangeDevices(std::vector<C_OscDeviceDefinition> & orc_Devices,
-                         const stw::scl::C_SclString & orc_DeviceGroup, const stw::scl::C_SclString & orc_IniFile);
-
    std::vector<C_OscDeviceGroup> GetDeviceGroups(void) const;
 
    bool WasLoaded(void) const;
-   int32_t LoadFromFile(const stw::scl::C_SclString & orc_File, const bool oq_Optional,
-                        int32_t * const ops32_DeviceCount);
 
-   C_OscDeviceManager(void);
+   int32_t LoadFromPaths(const std::vector<stw::scl::C_SclString> & orc_RootPaths);
 
 private:
    bool mq_WasLoaded;

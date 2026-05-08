@@ -51,6 +51,7 @@ public:
    QString GetLanguage(void) const;
    bool GetPerformanceActive(void) const;
    QStringList GetRecentProjects(void) const;
+   QStringList GetDeviceRootPaths(void) const;
    QPoint GetScreenPos(void) const;
    QSize GetAppSize(void) const;
    bool GetAppMaximized(void) const;
@@ -124,6 +125,7 @@ public:
    int32_t SetLanguage(const QString & orc_Lang);
    void SetPerformanceActive(const bool oq_Active);
    void SetRecentProjects(const QStringList & orc_New);
+   void SetDeviceRootPaths(const QStringList & orc_New);
    void SetScreenPos(const QPoint & orc_New);
    void SetAppSize(const QSize & orc_New);
    void SetAppMaximized(const bool oq_New);
@@ -305,6 +307,7 @@ private:
    QVector<QColor> mc_RecentColors;           ///< Recent colors from color picker
    int32_t ms32_NextRecentColorButtonNumber;  ///< Next recent color button for color from color picker
    QStringList mc_RecentProjects;             ///< Unique history of recent projects
+   QStringList mc_DeviceRootPaths;            ///< Configured device-bundle search roots (absolute paths)
    QPoint mc_ScreenPos;                       ///< History of last known screen position
    QSize mc_AppSize;                          ///< History of last known openSyde window size
    bool mq_AppMaximized;                      ///< History of openSyde window state

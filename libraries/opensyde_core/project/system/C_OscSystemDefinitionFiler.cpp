@@ -585,7 +585,10 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
    if ((oq_UseDeviceDefinitions == true) &&
        (C_OscSystemDefinition::hc_Devices.WasLoaded() == false))
    {
-      s32_Retval = C_OscSystemDefinition::hc_Devices.LoadFromFile(orc_PathDeviceDefinitions, false, NULL);
+      // orc_PathDeviceDefinitions is interpreted as a device-bundle root directory
+      // for the filesystem scanner.
+      const std::vector<stw::scl::C_SclString> c_Roots = {orc_PathDeviceDefinitions};
+      s32_Retval = C_OscSystemDefinition::hc_Devices.LoadFromPaths(c_Roots);
       if (s32_Retval != C_NO_ERR)
       {
          osc_write_log_error("Loading System Definition", "Could not load Device definitions.");

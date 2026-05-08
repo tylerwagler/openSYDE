@@ -107,13 +107,17 @@ C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
    this->mpc_Ui->pc_Splitter->setStretchFactor(1, 1);
 
    // load devices so they are known to UI
-   //lint -e{1938}  static const is guaranteed preinitialized before main
-   stw::opensyde_core::C_OscSystemDefinition::hc_Devices.LoadFromFile(
-      C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString().c_str(), false, NULL);
-
-   //lint -e{1938}  static const is guaranteed preinitialized before main
-   stw::opensyde_core::C_OscSystemDefinition::hc_Devices.LoadFromFile(
-      C_Uti::h_GetAbsolutePathFromExe("../devices/user_devices.ini").toStdString().c_str(), true, NULL);
+   {
+      const QStringList c_RootPaths = C_UsHandler::h_GetInstance()->GetDeviceRootPaths();
+      std::vector<stw::scl::C_SclString> c_StwPaths;
+      c_StwPaths.reserve(static_cast<size_t>(c_RootPaths.size()));
+      for (const QString & rc_Path : c_RootPaths)
+      {
+         c_StwPaths.emplace_back(rc_Path.toStdString().c_str());
+      }
+      //lint -e{1938}  static const is guaranteed preinitialized before main
+      stw::opensyde_core::C_OscSystemDefinition::hc_Devices.LoadFromPaths(c_StwPaths);
+   }
 
    this->mpc_MainWidget = new C_NagMainWidget(this->mpc_Ui->pc_workAreaWidget);
    this->mpc_UseCaseWidget = new C_NagUseCaseViewWidget(this->mpc_Ui->pc_workAreaWidget);
