@@ -66,11 +66,7 @@ public:
                                    stw::scl::C_SclString & orc_ErrorMessage);
 
 private:
-   static const stw::scl::C_SclString mhc_INI_DEV;
-
-   static int32_t mh_CreateDeviceIniFile(const stw::scl::C_SclString & orc_Path,
-                                         const std::set<stw::scl::C_SclString> & orc_DeviceDefinitionPaths,
-                                         stw::scl::C_SclString & orc_ErrorMessage);
+   C_OscSpaServicePackageCreateUtil(void);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -54,7 +54,6 @@ const C_SclString C_OscSupServiceUpdatePackageBase::mhc_PACKAGE_EXT_TMP = ".syde
                                                                                            // before creating zip
                                                                                            // archive
 const C_SclString C_OscSupServiceUpdatePackageBase::mhc_SUP_SYSDEF = "sup_system_definition.syde_sysdef";
-const C_SclString C_OscSupServiceUpdatePackageBase::mhc_INI_DEV = "devices.ini";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 

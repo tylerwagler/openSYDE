@@ -31,7 +31,6 @@ public:
    static const stw::scl::C_SclString hc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
    static const stw::scl::C_SclString hc_XCFG_SYSDEF;
    static const stw::scl::C_SclString hc_XCFG_SYSDEF_FOLDER;
-   static const stw::scl::C_SclString hc_INI_DEV;
    static const stw::scl::C_SclString hc_INI_DEV_FOLDER;
 
 protected:

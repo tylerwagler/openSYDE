@@ -26,7 +26,6 @@ const C_SclString C_OscXcoBase::hc_PACKAGE_EXT_TMP = ".syde_xcfg_tmp"; // interm
                                                                        // archive
 const C_SclString C_OscXcoBase::hc_XCFG_SYSDEF = "xcfg_system_definition.syde_sysdef";
 const C_SclString C_OscXcoBase::hc_XCFG_SYSDEF_FOLDER = "system_definition";
-const C_SclString C_OscXcoBase::hc_INI_DEV = "devices.ini";
 const C_SclString C_OscXcoBase::hc_INI_DEV_FOLDER = "device_definitions";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */

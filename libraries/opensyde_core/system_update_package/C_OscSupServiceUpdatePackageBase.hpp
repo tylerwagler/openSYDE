@@ -43,7 +43,6 @@ protected:
    static const stw::scl::C_SclString mhc_PACKAGE_EXT;
    static const stw::scl::C_SclString mhc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
    static const stw::scl::C_SclString mhc_SUP_SYSDEF;
-   static const stw::scl::C_SclString mhc_INI_DEV;
 
    static stw::scl::C_SclStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
                                                          // not available

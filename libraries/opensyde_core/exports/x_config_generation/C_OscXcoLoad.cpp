@@ -94,7 +94,8 @@ int32_t C_OscXcoLoad::h_ProcessPackage(const C_SclString & orc_PackagePath, cons
       // report system definition and device definition paths
       orc_SystemDefinitionPath = c_TargetUnzipPath + TglFileIncludeTrailingDelimiter(hc_XCFG_SYSDEF_FOLDER) +
                                  hc_XCFG_SYSDEF;
-      orc_DeviceDefinitionPath = c_TargetUnzipPath + TglFileIncludeTrailingDelimiter(hc_INI_DEV_FOLDER) + hc_INI_DEV;
+      // Device-bundles live in the device_definitions/ subfolder; the scanner walks the folder.
+      orc_DeviceDefinitionPath = c_TargetUnzipPath + TglFileIncludeTrailingDelimiter(hc_INI_DEV_FOLDER);
 
       const stw::scl::C_SclString c_ManifestPath = c_TargetUnzipPath + C_OscXcoManifestFiler::hc_FILE_NAME;
       s32_Return = C_OscXcoManifestFiler::h_LoadFile(orc_Manifest, c_ManifestPath);
@@ -172,22 +173,15 @@ int32_t C_OscXcoLoad::mh_CheckXcfgFiles(const stw::scl::C_SclString & orc_Packag
 
    std::vector<stw::scl::C_SclString> c_NecessaryFilesTop;    //those are the files we look for
    std::vector<stw::scl::C_SclString> c_NecessaryFilesSysDef; //those are the files we look for
-   std::vector<stw::scl::C_SclString> c_NecessaryFilesDevDef; //those are the files we look for
 
    c_NecessaryFilesTop.push_back(C_OscXcoManifestFiler::hc_FILE_NAME); //".syde_pkg"
    c_NecessaryFilesSysDef.push_back(hc_XCFG_SYSDEF);                   //".syde_sysdef"
-   c_NecessaryFilesDevDef.push_back(hc_INI_DEV);                       //"devices.ini"
 
    s32_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath, c_NecessaryFilesTop);
    if (s32_Return == C_NO_ERR)
    {
       s32_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath + hc_XCFG_SYSDEF_FOLDER,
                                                                        c_NecessaryFilesSysDef);
-   }
-   if (s32_Return == C_NO_ERR)
-   {
-      s32_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath + hc_INI_DEV_FOLDER,
-                                                                       c_NecessaryFilesDevDef);
    }
 
    return s32_Return;

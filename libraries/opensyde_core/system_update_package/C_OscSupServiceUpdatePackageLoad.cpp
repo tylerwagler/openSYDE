@@ -249,12 +249,12 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const C_SclString & o
             }
             else
             {
-               // load system definition (has constant name) for active nodes
+               // load system definition (has constant name) for active nodes; the unzip
+               // directory is itself the device-bundle root that the scanner walks.
                const C_SclString c_SysDefPath = c_TargetUnzipPath + mhc_SUP_SYSDEF;
-               const C_SclString c_DevIniPath = c_TargetUnzipPath + mhc_INI_DEV;
 
                s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(orc_SystemDefinition, c_SysDefPath,
-                                                                                   c_DevIniPath, true, NULL,
+                                                                                   c_TargetUnzipPath, true, NULL,
                                                                                    &orc_ActiveNodes,
                                                                                    true); // skip content
                if (s32_Return == C_NO_ERR)
@@ -338,7 +338,6 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_CheckSupFiles(const C_SclString & o
 
    c_NecessaryFiles.push_back(C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF); //".syde_supdef"
    c_NecessaryFiles.push_back(mhc_SUP_SYSDEF);                                 //".syde_sysdef"
-   c_NecessaryFiles.push_back(mhc_INI_DEV);                                    //"devices.ini"
 
    s32_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath, c_NecessaryFiles);
 

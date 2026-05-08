@@ -12,6 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <filesystem>
+#include <map>
+#include <system_error>
+
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -28,7 +32,6 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const C_SclString C_OscSpaServicePackageCreateUtil::mhc_INI_DEV = "devices.ini";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -303,54 +306,61 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
    const C_SclString & orc_UsedTempPath, const C_SclString & orc_OutFilePrefix,
    std::set<C_SclString> & orc_AllCreatedFiles, C_SclString & orc_ErrorMessage)
 {
-   int32_t s32_Return;
+   namespace fs = std::filesystem;
+   int32_t s32_Return = C_NO_ERR;
 
-   std::set<C_SclString> c_DeviceDefinitionFiles; // unique container to store
-                                                  // full device definitions file
-                                                  // paths
-                                                  // go through nodes in system definition to get device definition
-                                                  // names and paths
-   // extract information of system definition for device.ini and device definition files
-   for (uint32_t u32_Pos = 0; u32_Pos < orc_SystemDefinition.c_Nodes.size(); u32_Pos++)
+   // Collect unique device manifests, keyed by source file path so duplicate uses across
+   // multiple nodes only produce one bundle. Value is the device's canonical name, which
+   // becomes the bundle folder name in the package.
+   std::map<C_SclString, C_SclString> c_DevicesByPath;
+   for (uint32_t u32_Pos = 0U; u32_Pos < orc_SystemDefinition.c_Nodes.size(); ++u32_Pos)
    {
       const C_OscDeviceDefinition * const pc_DeviceDefinition =
          orc_SystemDefinition.c_Nodes[u32_Pos].pc_DeviceDefinition;
       tgl_assert(pc_DeviceDefinition != NULL);
       if (pc_DeviceDefinition != NULL)
       {
-         const C_SclString c_DevDefPath = pc_DeviceDefinition->c_FilePath;
-         c_DeviceDefinitionFiles.insert(c_DevDefPath);
+         c_DevicesByPath[pc_DeviceDefinition->c_FilePath] = pc_DeviceDefinition->c_DeviceName;
       }
    }
 
-   // * device.ini file
-   // create and store specific devices.ini
-   s32_Return = mh_CreateDeviceIniFile(orc_UsedTempPath, c_DeviceDefinitionFiles, orc_ErrorMessage);
+   const C_SclString c_TempPathTrailing = TglFileIncludeTrailingDelimiter(orc_UsedTempPath);
 
-   // * device definition files
-   // copy device definition files (is safer than using device definition filer):
-   // we have to store all device definition files of current system definition
-   // because of routing functionality
-   if (s32_Return == C_NO_ERR)
+   // For each unique device, write a folder bundle: <device_name>/device.syd
+   for (std::map<C_SclString, C_SclString>::const_iterator c_It = c_DevicesByPath.begin();
+        (c_It != c_DevicesByPath.end()) && (s32_Return == C_NO_ERR);
+        ++c_It)
    {
-      std::set<C_SclString>::const_iterator c_Iter;
-      for (c_Iter = c_DeviceDefinitionFiles.begin();
-           (c_Iter != c_DeviceDefinitionFiles.end()) && (s32_Return == C_NO_ERR);
-           ++c_Iter)
+      const C_SclString & rc_SrcPath = c_It->first;
+      const C_SclString & rc_DeviceName = c_It->second;
+
+      const C_SclString c_TargetDir = c_TempPathTrailing + rc_DeviceName;
+      const C_SclString c_TargetFile = c_TargetDir + "/device.syd";
+
+      std::error_code c_Ec;
+      fs::create_directories(fs::path(c_TargetDir.c_str()), c_Ec);
+      if (c_Ec)
       {
-         const C_SclString c_TargetFileName = TglExtractFileName(*c_Iter);
-         const C_SclString c_TargetFilePath = orc_UsedTempPath + c_TargetFileName;
-         orc_AllCreatedFiles.insert(orc_OutFilePrefix + c_TargetFileName);
-         s32_Return = C_OscUtils::h_CopyFile(*c_Iter, c_TargetFilePath, NULL, &orc_ErrorMessage);
-         if (s32_Return != C_NO_ERR)
-         {
-            orc_ErrorMessage = "Could not save device definition file \"" +
-                               TglExtractFileName(c_TargetFilePath) + "\" to path \"" + orc_UsedTempPath + "\".";
-            osc_write_log_error(orc_UseCase, orc_ErrorMessage);
-            s32_Return = C_RD_WR;
-         }
+         orc_ErrorMessage = "Could not create device-bundle folder \"" + c_TargetDir +
+                            "\": " + C_SclString(c_Ec.message().c_str());
+         osc_write_log_error(orc_UseCase, orc_ErrorMessage);
+         s32_Return = C_RD_WR;
+         continue;
       }
+
+      s32_Return = C_OscUtils::h_CopyFile(rc_SrcPath, c_TargetFile, NULL, &orc_ErrorMessage);
+      if (s32_Return != C_NO_ERR)
+      {
+         orc_ErrorMessage = "Could not save device manifest for \"" + rc_DeviceName +
+                            "\" from \"" + rc_SrcPath + "\" to \"" + c_TargetFile + "\".";
+         osc_write_log_error(orc_UseCase, orc_ErrorMessage);
+         s32_Return = C_RD_WR;
+         continue;
+      }
+
+      orc_AllCreatedFiles.insert(orc_OutFilePrefix + rc_DeviceName + "/device.syd");
    }
+
    return s32_Return;
 }
 
@@ -417,68 +427,3 @@ void C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder(const C_SclString & o
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Creates specific device definition (internal function).
-
-   C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile needs device definition.
-   Because we don't want a generic device definition of all devices in the service update
-   package, a specific one is created.
-
-   Assumptions:
-   * write permission of target folder
-   * valid path (should be OK for an internal function)
-
-   \param[in]      orc_Path                     destination path
-   \param[in]      orc_DeviceDefinitionPaths    container of full device definition file paths
-   \param[in,out]  orc_ErrorMessage             Error message
-
-   \return
-   C_NO_ERR    success
-   C_RD_WR     read/write error (see log file)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageCreateUtil::mh_CreateDeviceIniFile(const C_SclString & orc_Path,
-                                                                 const std::set<C_SclString> & orc_DeviceDefinitionPaths,
-                                                                 C_SclString & orc_ErrorMessage)
-{
-   int32_t s32_Return = C_NO_ERR;
-
-   const C_SclString c_HEAD_SECTION = "DeviceTypes"; //                      -"-
-   const C_SclString c_FIRST_KEY = "NumTypes";       //                      -"-
-   const int32_t s32_FIRST_VALUE = 1;                //                      -"-
-   const C_SclString c_SECOND_KEY = "TypeName1";     //                      -"-
-   const C_SclString c_DEVICE_SECTION = "UsedDevices";
-   const C_SclString c_DEVICE_COUNT = "DeviceCount";
-   const C_SclString c_DEVICE_KEY = "Device";
-   const C_SclString c_IniDevPath = TglFileIncludeTrailingDelimiter(orc_Path) + mhc_INI_DEV;
-
-   // build up devices.ini --> device definitions are in the same folder
-   try
-   {
-      C_SclIniFile c_IniFile(c_IniDevPath); // devices.ini
-      uint32_t u32_DeviceCounter = 1;
-      // write header section
-      c_IniFile.WriteInteger(c_HEAD_SECTION, c_FIRST_KEY, s32_FIRST_VALUE);
-      c_IniFile.WriteString(c_HEAD_SECTION, c_SECOND_KEY, c_DEVICE_SECTION);
-
-      // write content section
-      c_IniFile.WriteInteger(c_DEVICE_SECTION, c_DEVICE_COUNT, static_cast<int32_t>(orc_DeviceDefinitionPaths.size()));
-      // fill up with device definitions
-      std::set<C_SclString>::const_iterator c_Iter;
-      for (c_Iter = orc_DeviceDefinitionPaths.begin(); c_Iter != orc_DeviceDefinitionPaths.end(); ++c_Iter)
-      {
-         const C_SclString c_Key = c_DEVICE_KEY + C_SclString::IntToStr(u32_DeviceCounter);
-         const C_SclString c_Value = TglExtractFileName(*c_Iter);
-         c_IniFile.WriteString(c_DEVICE_SECTION, c_Key, c_Value);
-         u32_DeviceCounter++;
-      }
-      c_IniFile.UpdateFile(); // make data persistent
-   }
-   catch (...)
-   {
-      orc_ErrorMessage = "Could not write devices.ini to path \"" + orc_Path + "\"";
-      osc_write_log_error("Creating Update Package", orc_ErrorMessage);
-      s32_Return = C_RD_WR;
-   }
-   return s32_Return;
-}

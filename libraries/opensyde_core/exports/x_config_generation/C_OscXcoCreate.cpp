@@ -101,7 +101,6 @@ int32_t C_OscXcoCreate::h_CreatePackage(const stw::scl::C_SclString & orc_Packag
                                                            // relative file paths for zip
                                                            // archive
    // fill with constant file names
-   c_XcfgFiles.insert(TglFileIncludeTrailingDelimiter(hc_INI_DEV_FOLDER) + hc_INI_DEV);
    c_XcfgFiles.insert(TglFileIncludeTrailingDelimiter(hc_XCFG_SYSDEF_FOLDER) + hc_XCFG_SYSDEF);
    c_XcfgFiles.insert(C_OscXcoManifestFiler::hc_FILE_NAME);
    // precondition checks

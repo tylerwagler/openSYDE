@@ -236,7 +236,6 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const C_SclString & 
                                                                                         // relative file paths for zip
                                                                                         // archive
    // fill with constant file names
-   c_SupFiles.insert(mhc_INI_DEV);
    c_SupFiles.insert(mhc_SUP_SYSDEF);
    c_SupFiles.insert(C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF);
 
