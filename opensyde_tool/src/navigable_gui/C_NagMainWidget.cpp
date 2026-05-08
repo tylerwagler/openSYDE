@@ -12,6 +12,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <algorithm>
+
 #include <QPainter>
 
 #include "stwerrors.hpp"
@@ -746,8 +748,12 @@ void C_NagMainWidget::m_SettingsClicked()
 
    new C_NagToolSettingsPopupDialog(*c_New);
 
-   //Resize
-   c_New->SetSize(QSize(700, 400));
+   //Auto-size to content; clamp to screen via SetSize() with a generous upper limit.
+   c_New->adjustSize();
+   {
+      const QSize c_Hint = c_New->size();
+      c_New->SetSize(QSize(std::max(720, c_Hint.width()), std::max(720, c_Hint.height())));
+   }
 
    c_New->exec();
 

@@ -45,6 +45,11 @@ private:
    void m_OkClicked(void);
    void m_CancelClicked(void);
    void m_InitEnvironmentSection(void);
+   void m_InitDeviceRootsSection(void);
+   void m_AddDeviceRoot(void);
+   void m_RemoveDeviceRoot(void);
+   void m_MoveDeviceRootUp(void);
+   void m_MoveDeviceRootDown(void);
 
    //Avoid call
    C_NagToolSettingsPopupDialog(const C_NagToolSettingsPopupDialog &);
