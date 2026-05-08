@@ -29,13 +29,23 @@
 #include "stwerrors.hpp"
 #include "C_GtGetText.hpp"
 #include "C_OscNode.hpp"
+#include "C_OscNodeDataPool.hpp"
+#include "C_OscCanProtocol.hpp"
+#include "C_OscCanMessage.hpp"
+#include "C_OscCanMessageContainer.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_PuiSdHandler.hpp"
+#include "C_PuiSdUtil.hpp"
+#include "C_CieImportDbc.hpp"
+#include "C_CieDataPoolListAdapter.hpp"
+#include "C_CieImportDataAssignment.hpp"
+#include "C_CieUtil.hpp"
 #include "C_SdNdeDbcSync.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -47,6 +57,51 @@ using namespace stw::opensyde_gui_logic;
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+
+namespace
+{
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Find an existing CAN message on (node, interface, protocol) that matches an incoming DBC message.
+
+   Returns `(datapool_index, message_index)` of the existing message that should be overridden by the
+   incoming one, or `(-1, -1)` if no match was found (i.e. the incoming message should be added as new).
+
+   Match criterion is `(CanId, IsExtended)`. We deliberately ignore message name so that re-syncing a DBC
+   in which a message's name has been edited still updates the existing entry — without that, a rename
+   would create a new entry with a duplicate ID alongside the old one.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+std::pair<int32_t, int32_t> mh_FindOverrideTarget(const C_OscNode & orc_Node, const uint32_t ou32_InterfaceIndex,
+                                                  const C_OscCanProtocol::E_Type oe_Protocol, const bool oq_Tx,
+                                                  const C_OscCanMessage & orc_Incoming)
+{
+   std::pair<int32_t, int32_t> c_Result(-1, -1);
+
+   const std::vector<const C_OscCanProtocol *> c_Protocols = orc_Node.GetCanProtocolsConst(oe_Protocol);
+   for (std::vector<const C_OscCanProtocol *>::const_iterator c_It = c_Protocols.begin();
+        (c_It != c_Protocols.end()) && (c_Result.first < 0); ++c_It)
+   {
+      const C_OscCanProtocol * const pc_Protocol = *c_It;
+      if ((pc_Protocol != NULL) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
+      {
+         const C_OscCanMessageContainer & rc_Container = pc_Protocol->c_ComMessages[ou32_InterfaceIndex];
+         const std::vector<C_OscCanMessage> & rc_Messages = rc_Container.GetMessagesConst(oq_Tx);
+         for (uint32_t u32_It = 0U; u32_It < rc_Messages.size(); ++u32_It)
+         {
+            const C_OscCanMessage & rc_Existing = rc_Messages[u32_It];
+            if ((rc_Existing.u32_CanId == orc_Incoming.u32_CanId) &&
+                (rc_Existing.q_IsExtended == orc_Incoming.q_IsExtended))
+            {
+               c_Result = std::make_pair(static_cast<int32_t>(pc_Protocol->u32_DataPoolIndex),
+                                         static_cast<int32_t>(u32_It));
+               break;
+            }
+         }
+      }
+   }
+   return c_Result;
+}
+} // namespace
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
@@ -126,24 +181,30 @@ QString C_SdNdeDbcSync::h_ComputeFileSha256(const QString & orc_FilePath)
    - the expected DBC file (`<device_name>_CAN<n>.dbc` next to the manifest) exists
      and is readable
 
-   On success: computes the SHA-256 of the DBC file and writes it to the project's
-   per-interface settings (`c_LastSyncedDbcSha256`). Returns C_NO_ERR.
+   On success: parses the DBC, imports its first DBC node's TX/RX messages onto
+   the openSYDE node's Layer 2 COMM datapool (auto-creating the datapool if the
+   node has none), then computes and stores the SHA-256 fingerprint of the DBC
+   file on the project's per-interface settings (`c_LastSyncedDbcSha256`).
 
-   v1 SCAFFOLD: actual message-import-into-bus is not yet wired. This function
-   currently performs only the validation + fingerprint update steps. The sync
-   button will reflect the new fingerprint immediately, and on next project load
-   the out-of-sync detector will recognize the file as unchanged. Adding messages
-   to the bus's COMM datapool is the next follow-up.
+   v1 LIMITATIONS:
+   - Protocol type is hard-coded to `C_OscCanProtocol::eLAYER2`. Devices whose DBC
+     belongs on a different protocol (e.g. J1939) will need a follow-up that lets
+     the manifest declare or the user choose the target protocol.
+   - The insertion uses `oq_UniqueAddRequested = true`, so re-syncing won't
+     duplicate same-ID messages but also won't update an existing message's
+     signal layout if the DBC version drifts. A "replace existing" mode is a
+     follow-up.
 
    \param[in]   ou32_NodeIndex      Index of the node in the system definition
    \param[in]   ou32_InterfaceIndex Index of the node's CAN interface (per-node, mixed types)
    \param[out]  orc_ErrorMessage    User-facing error message on failure; empty on success
 
    \return
-   C_NO_ERR    sync completed; fingerprint stored
+   C_NO_ERR    sync completed; messages imported and fingerprint stored
    C_RANGE     node/interface index out of range, or interface is not CAN
-   C_CONFIG    node has no device definition, or interface not connected to a bus
-   C_RD_WR     DBC file does not exist or could not be read
+   C_CONFIG    node has no device definition, interface not connected to a bus,
+               DBC has no nodes, or the COMM datapool could not be located/created
+   C_RD_WR     DBC file does not exist, could not be read, or could not be parsed
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdNdeDbcSync::h_SyncInterface(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
@@ -197,20 +258,134 @@ int32_t C_SdNdeDbcSync::h_SyncInterface(const uint32_t ou32_NodeIndex, const uin
          }
          else
          {
-            const QString c_Hash = h_ComputeFileSha256(c_DbcPath);
-            if (c_Hash.isEmpty() == true)
+            // v1 default protocol; see function-level v1 LIMITATIONS doc.
+            const C_OscCanProtocol::E_Type e_Protocol = C_OscCanProtocol::eLAYER2;
+
+            // Step 1: parse DBC headlessly.
+            C_CieConverter::C_CieCommDefinition c_CommDef;
+            stw::scl::C_SclStringList c_Warnings;
+            stw::scl::C_SclString c_ParseError;
+            const int32_t s32_ParseResult =
+               C_CieImportDbc::h_ImportNetwork(c_DbcPath.toStdString().c_str(),
+                                               c_CommDef, c_Warnings, c_ParseError, true);
+
+            if ((s32_ParseResult != C_NO_ERR) && (s32_ParseResult != C_WARN))
             {
                orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "Could not read DBC file: %1")).arg(c_DbcPath);
+                                                          "Could not parse DBC %1: %2")).arg(c_DbcPath,
+                                                                                             c_ParseError.c_str());
                s32_Retval = C_RD_WR;
+            }
+            else if (c_CommDef.c_Nodes.empty() == true)
+            {
+               orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
+                                                          "DBC %1 contains no nodes.")).arg(c_DbcPath);
+               s32_Retval = C_CONFIG;
             }
             else
             {
-               // TODO(task 15b): parse the DBC via C_CieImportDbc::h_ImportNetwork, build a
-               //                 C_CieImportDataAssignment, and call C_CieUtil::h_InsertMessages
-               //                 to materialize the device's messages onto the connected bus's
-               //                 COMM datapool. For now we only update the fingerprint.
-               rc_Interface.c_LastSyncedDbcSha256 = c_Hash.toStdString().c_str();
+               // Step 2: resolve / auto-create the target COMM datapool of the chosen protocol.
+               int32_t s32_DatapoolIndex = -1;
+               {
+                  const std::vector<const C_OscNodeDataPool *> c_CommDps =
+                     C_PuiSdHandler::h_GetInstance()->GetOscCanDataPools(ou32_NodeIndex, e_Protocol);
+                  if (c_CommDps.empty() == true)
+                  {
+                     const int32_t s32_Add = C_PuiSdHandler::h_GetInstance()->AddAutoGenCommDataPool(
+                        ou32_NodeIndex, e_Protocol);
+                     if (s32_Add != C_NO_ERR)
+                     {
+                        orc_ErrorMessage = C_GtGetText::h_GetText(
+                           "Could not auto-create a Layer 2 COMM datapool on the node.");
+                        s32_Retval = C_CONFIG;
+                     }
+                  }
+               }
+
+               if (s32_Retval == C_NO_ERR)
+               {
+                  for (uint32_t u32_It = 0U; u32_It < pc_Node->c_DataPools.size(); ++u32_It)
+                  {
+                     if (pc_Node->c_DataPools[u32_It].e_Type == C_OscNodeDataPool::eCOM)
+                     {
+                        if (C_PuiSdUtil::h_GetRelatedCanProtocolType(ou32_NodeIndex, u32_It) == e_Protocol)
+                        {
+                           s32_DatapoolIndex = static_cast<int32_t>(u32_It);
+                           break;
+                        }
+                     }
+                  }
+                  if (s32_DatapoolIndex < 0)
+                  {
+                     orc_ErrorMessage = C_GtGetText::h_GetText(
+                        "Could not locate a Layer 2 COMM datapool after auto-creation.");
+                     s32_Retval = C_CONFIG;
+                  }
+               }
+
+               if (s32_Retval == C_NO_ERR)
+               {
+                  // Step 3: build the assignment and call the existing converter.
+                  // The user's stated convention is "one DBC file = one device interface,"
+                  // so we take the first DBC node and ignore the rest.
+                  C_CieImportDataAssignment c_Assignment;
+                  c_Assignment.u32_OsyNodeIndex = ou32_NodeIndex;
+                  c_Assignment.u32_OsyInterfaceIndex = ou32_InterfaceIndex;
+                  c_Assignment.c_ImportData =
+                     C_CieDataPoolListAdapter::h_GetStructureFromDbcFileImport(c_CommDef.c_Nodes[0]);
+                  c_Assignment.s32_DatapoolIndexForNew = s32_DatapoolIndex;
+                  // Populate per-message override indices so re-syncing replaces existing same-ID
+                  // messages instead of creating duplicates. Match is by (CanId, IsExtended); name
+                  // is ignored intentionally — see mh_FindOverrideTarget.
+                  uint32_t u32_NewCount = 0U;
+                  for (uint32_t u32_It = 0U;
+                       u32_It < c_Assignment.c_ImportData.c_Core.c_OscTxMessageData.size(); ++u32_It)
+                  {
+                     const std::pair<int32_t, int32_t> c_OverrideInfo = mh_FindOverrideTarget(
+                        *pc_Node, ou32_InterfaceIndex, e_Protocol, true,
+                        c_Assignment.c_ImportData.c_Core.c_OscTxMessageData[u32_It]);
+                     c_Assignment.c_TxMessageOverrideIndices.push_back(c_OverrideInfo);
+                     if (c_OverrideInfo.first < 0)
+                     {
+                        ++u32_NewCount;
+                     }
+                  }
+                  for (uint32_t u32_It = 0U;
+                       u32_It < c_Assignment.c_ImportData.c_Core.c_OscRxMessageData.size(); ++u32_It)
+                  {
+                     const std::pair<int32_t, int32_t> c_OverrideInfo = mh_FindOverrideTarget(
+                        *pc_Node, ou32_InterfaceIndex, e_Protocol, false,
+                        c_Assignment.c_ImportData.c_Core.c_OscRxMessageData[u32_It]);
+                     c_Assignment.c_RxMessageOverrideIndices.push_back(c_OverrideInfo);
+                     if (c_OverrideInfo.first < 0)
+                     {
+                        ++u32_NewCount;
+                     }
+                  }
+                  c_Assignment.u32_NewMessageCount = u32_NewCount;
+
+                  std::vector<C_CieImportDataAssignment> c_Assignments;
+                  c_Assignments.push_back(c_Assignment);
+
+                  C_CieUtil::h_AdaptImportMessages(c_Assignments, e_Protocol, false);
+                  // oq_UniqueAddRequested = false: respect the override indices so existing same-ID
+                  // messages get updated in place rather than left untouched.
+                  C_CieUtil::h_InsertMessages(c_Assignments, e_Protocol, false);
+
+                  // Step 4: stamp the per-interface fingerprint.
+                  const QString c_Hash = h_ComputeFileSha256(c_DbcPath);
+                  if (c_Hash.isEmpty() == true)
+                  {
+                     orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
+                                                                "Messages imported, but the DBC could not be re-read "
+                                                                "to record its fingerprint: %1")).arg(c_DbcPath);
+                     s32_Retval = C_RD_WR;
+                  }
+                  else
+                  {
+                     rc_Interface.c_LastSyncedDbcSha256 = c_Hash.toStdString().c_str();
+                  }
+               }
             }
          }
       }

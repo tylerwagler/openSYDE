@@ -1050,10 +1050,11 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                         C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eINFORMATION);
                         c_Msg.SetHeading(C_GtGetText::h_GetText("Sync DBC"));
                         c_Msg.SetDescription(C_GtGetText::h_GetText(
-                                                "DBC fingerprint stored.\n\n"
-                                                "(Message import into the bus is not yet wired in this build; "
-                                                "this scaffold validates the DBC and records its hash for "
-                                                "out-of-sync detection on project reload.)"));
+                                                "DBC messages imported and fingerprint stored.\n\n"
+                                                "Existing same-ID messages were updated in place; "
+                                                "new messages were added to the node's Layer 2 COMM datapool. "
+                                                "If the device's DBC has been edited since this sync, the row "
+                                                "will be flagged as out-of-sync on the next project reload."));
                         c_Msg.Execute();
                      }
                      else
