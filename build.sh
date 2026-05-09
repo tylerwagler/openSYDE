@@ -11,6 +11,7 @@
 #   syde_x_gen      X-config generator
 #   syde_coder_c    C code generator
 #   flash_tool      Command-line flash tool
+#   tsp_convert     V2-to-V3 Target Support Package converter
 #   all             Build all tools (default)
 #
 # Options:
@@ -93,6 +94,7 @@ TOOL_DEFS=(
     "syde_x_gen|opensyde_syde_x_gen/pjt||no|syde_x_gen/syde_x_gen|connectors/syde_x_gen/syde_x_gen"
     "syde_coder_c|opensyde_syde_coder_c/pjt||no|syde_coder_c/osy_syde_coder_c|connectors/syde_coder_c/osy_syde_coder_c"
     "flash_tool|opensyde_cmd_line_flash_tool/pjt||no|cmd_line_flash_tool/osy_cmd_line_flash_tool|utilities/cmd_line_flash_tool/osy_cmd_line_flash_tool"
+    "tsp_convert|opensyde_tsp_convert/pjt||no|tsp_convert/osy_tsp_convert|utilities/tsp_convert/osy_tsp_convert"
 )
 
 ALL_TOOL_NAMES=()
