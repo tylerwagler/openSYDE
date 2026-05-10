@@ -14,7 +14,7 @@
 #     PROTOCOL_DRIVERS_SYSTEM    communication protocol drivers system update
 #     PROTOCOL_DRIVERS_MONITOR   communication protocol drivers monitor (openSYDE CAN Monitor basics)
 #     PROTOCOL_DRIVERS_COMMON    communication protocol drivers common
-#                                (openSYDE, STW Flashloader, KEFEX, Data Dealer, Dispatcher interface)
+#                                (openSYDE, STW Flashloader, Data Dealer, Dispatcher interface)
 #     PROTOCOL_LOGGING           protocol logging
 #     X_CONFIG_GENERATION        X-App configuration generation functionality
 #     X_CERTIFICATES_GENERATION  X-App certificate generation functionality
