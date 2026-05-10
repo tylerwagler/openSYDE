@@ -33,7 +33,6 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_PuiSvHandlerFiler.hpp"
 #include "C_PuiSdHandlerFiler.hpp"
-#include "C_PuiSvHandlerFilerV1.hpp"
 #include "C_SyvRoRouteCalculation.hpp"
 #include "C_OscRoutingCalculation.hpp"
 #include "C_OscHalcMagicianUtil.hpp"
@@ -122,8 +121,9 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_UseDe
          c_XmlParser.CreateAndSelectNodeChild("opensyde-system-views");
          if (oq_UseDeprecatedV1Format == true)
          {
-            c_XmlParser.CreateNodeChild("file-version", "1");
-            C_PuiSvHandlerFilerV1::h_SaveViews(this->mc_Views, c_XmlParser);
+            osc_write_log_error("Saving views",
+                                "Saving in deprecated V1 system-views file format is no longer supported.");
+            s32_Return = C_CONFIG;
          }
          else
          {
@@ -137,7 +137,6 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_UseDe
             s32_Return = C_PuiSvHandlerFiler::h_SaveViews(this->mc_Views, c_XmlParser, &c_BasePath);
 
             C_PuiSdHandlerFiler::h_SaveLastKnownHalcCrcs(this->mc_LastKnownHalcCrcs, c_XmlParser);
-            //Only update hash in non deprecated mode
             //calculate the hash value and save it for comparing
             if (oq_UpdateInternalState)
             {
@@ -3351,8 +3350,14 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
                {
                   osc_write_log_info("Loading views", "Value of \"file-version\": " +
                                      stw::scl::C_SclString::IntToStr(s32_FileVersion));
-                  //Check file version
-                  if ((s32_FileVersion != 1) && (s32_FileVersion != 2))
+                  if (s32_FileVersion == 1)
+                  {
+                     osc_write_log_error("Loading views",
+                                         "Legacy V1 system-views file format is no longer supported. "
+                                         "Re-save the project with a current openSYDE.");
+                     s32_Retval = C_CONFIG;
+                  }
+                  else if (s32_FileVersion != 2)
                   {
                      osc_write_log_error("Loading views",
                                          "Version defined by \"file-version\" is not supported.");
@@ -3368,46 +3373,39 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
                if (s32_Retval == C_NO_ERR)
                {
                   tgl_assert(c_XmlParser.SelectNodeParent() == "opensyde-system-views");
-                  if (s32_FileVersion == 1)
+                  if (c_XmlParser.SelectNodeChild("service-mode") == "service-mode")
                   {
-                     s32_Retval = C_PuiSvHandlerFilerV1::h_LoadViews(this->mc_Views, c_XmlParser);
-                  }
-                  else
-                  {
-                     if (c_XmlParser.SelectNodeChild("service-mode") == "service-mode")
+                     if (c_XmlParser.AttributeExists("active"))
                      {
-                        if (c_XmlParser.AttributeExists("active"))
-                        {
-                           this->SetServiceModeActive(c_XmlParser.GetAttributeBool("active"));
-                        }
-                        else
-                        {
-                           s32_Retval = C_CONFIG;
-                           osc_write_log_error("Loading views",
-                                               "Attribute \"active\" not found in node \"service-mode\".");
-                        }
-                        tgl_assert(c_XmlParser.SelectNodeParent() == "opensyde-system-views");
+                        this->SetServiceModeActive(c_XmlParser.GetAttributeBool("active"));
                      }
                      else
                      {
-                        //Default
-                        this->SetServiceModeActive(false);
+                        s32_Retval = C_CONFIG;
+                        osc_write_log_error("Loading views",
+                                            "Attribute \"active\" not found in node \"service-mode\".");
                      }
+                     tgl_assert(c_XmlParser.SelectNodeParent() == "opensyde-system-views");
+                  }
+                  else
+                  {
+                     //Default
+                     this->SetServiceModeActive(false);
+                  }
+                  if (s32_Retval == C_NO_ERR)
+                  {
+                     const QFileInfo c_Info(orc_Path);
+                     const QDir c_BasePath = c_Info.dir();
+                     s32_Retval = C_PuiSvHandlerFiler::h_LoadViews(this->mc_Views, orc_OscNodes,
+                                                                   c_XmlParser, &c_BasePath);
                      if (s32_Retval == C_NO_ERR)
                      {
-                        const QFileInfo c_Info(orc_Path);
-                        const QDir c_BasePath = c_Info.dir();
-                        s32_Retval = C_PuiSvHandlerFiler::h_LoadViews(this->mc_Views, orc_OscNodes,
-                                                                      c_XmlParser, &c_BasePath);
+                        s32_Retval = C_PuiSdHandlerFiler::h_LoadLastKnownHalcCrcs(this->mc_LastKnownHalcCrcs,
+                                                                                  c_XmlParser);
                         if (s32_Retval == C_NO_ERR)
                         {
-                           s32_Retval = C_PuiSdHandlerFiler::h_LoadLastKnownHalcCrcs(this->mc_LastKnownHalcCrcs,
-                                                                                     c_XmlParser);
-                           if (s32_Retval == C_NO_ERR)
-                           {
-                              //calculate the hash value and save it for comparing (only for new file version!)
-                              this->mu32_CalculatedHashSystemViews = this->m_CalcHashSystemViews();
-                           }
+                           //calculate the hash value and save it for comparing (only for new file version!)
+                           this->mu32_CalculatedHashSystemViews = this->m_CalcHashSystemViews();
                         }
                      }
                   }

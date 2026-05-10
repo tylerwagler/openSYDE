@@ -887,7 +887,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddWidget.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddListWidget.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdSharedDatapools.cpp
-   ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandlerFilerV1.cpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidgetSmall.cpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpInformationWidget.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSystemCommissioningEdit.cpp
@@ -1689,7 +1688,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddWidget.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddListWidget.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdSharedDatapools.hpp
-   ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandlerFilerV1.hpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidgetSmall.hpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpInformationWidget.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSystemCommissioningEdit.hpp
