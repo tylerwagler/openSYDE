@@ -78,35 +78,6 @@ public:
 };
 
 //----------------------------------------------------------------------------------------------------------------------
-//Common base for KEFEX-style variable-based protocols
-///Adds functionality to link in an opened KEFEX project in order to decode variable indexes from CAN messages.
-class C_CanMonProtocolKefexIva :
-   public C_CanMonProtocolBase
-{
-private:
-   C_CanMonProtocolKefexIva(const C_CanMonProtocolKefexIva & orc_Source); //not implemented -> prevent
-   // copying
-   C_CanMonProtocolKefexIva & operator = (const C_CanMonProtocolKefexIva & orc_Source); //not implemented -> prevent
-   // assignment
-
-protected:
-   uint16_t mu16_KfxListOffset;
-#ifdef CMONPROTOCOL_ALLOW_RAMVIEW_PROJECT_MAPPING
-   const stw::diag_lib::C_KFXVariableLists * mpc_KfxLists;
-#endif
-
-   //used by KFX and IVA:
-   stw::scl::C_SclString m_KfxIndexToString(const uint16_t ou16_Index, bool oq_IsKefexVarIndex = true) const;
-   stw::scl::C_SclString m_KfxTextAndIndexToString(const char_t * const opcn_Text, const uint16_t ou16_Index) const;
-
-public:
-   C_CanMonProtocolKefexIva(void);
-#ifdef CMONPROTOCOL_ALLOW_RAMVIEW_PROJECT_MAPPING
-   void SetVariableInfo(const stw::diag_lib::C_KFXVariableLists * const opc_Lists, const uint16_t ou16_ListOffset);
-#endif
-};
-
-//----------------------------------------------------------------------------------------------------------------------
 }
 }
 

@@ -14,11 +14,7 @@
 #include "C_CanMonProtocolTarget.hpp"
 #include "C_CanMonProtocolBase.hpp"
 #include "C_CanMonProtocolCanOpen.hpp"
-#include "C_CanMonProtocolKefex.hpp"
-#include "C_CanMonProtocolShipIpIva.hpp"
 #include "C_CanMonProtocolGd.hpp"
-#include "C_CanMonProtocolStwFf.hpp"
-#include "C_CanMonProtocolXfl.hpp"
 #include "C_CanMonProtocolL2.hpp"
 #include "C_CanMonProtocolJ1939.hpp"
 #include "C_CanMonProtocolOpenSyde.hpp"
@@ -32,17 +28,13 @@ namespace cmon_protocol
 {
 //----------------------------------------------------------------------------------------------------------------------
 
-const int32_t gs32_KFX_CMON_NUM_PROTOCOLS = 9;
+const int32_t gs32_KFX_CMON_NUM_PROTOCOLS = 5;
 
 enum e_CanMonL7Protocols
 {
    eCMON_L7_PROTOCOL_NONE = 0, //L2 only
    eCMON_L7_PROTOCOL_CAN_OPEN,
-   eCMON_L7_PROTOCOL_KEFEX,
-   eCMON_L7_PROTOCOL_XFL,
-   eCMON_L7_PROTOCOL_STW_FF,
    eCMON_L7_PROTOCOL_GD,
-   eCMON_L7_PROTOCOL_SHIP_IP_IVA,
    eCMON_L7_PROTOCOL_J1939,
    eCMON_L7_PROTOCOL_OPEN_SYDE
 };
@@ -56,11 +48,7 @@ private:
 
    C_CanMonProtocolL2 mc_ProtocolL2;
    C_CanMonProtocolCanOpen mc_ProtocolCanOpen;
-   C_CanMonProtocolKefex mc_ProtocolKefex;
-   C_CanMonProtocolXfl mc_ProtocolXfl;
-   C_CanMonProtocolStwFf mc_ProtocolStwFf;
    C_CanMonProtocolGd mc_ProtocolGd;
-   C_CanMonProtocolShipIpIva mc_ProtocolShipIpIva;
    C_CanMonProtocolJ1939 mc_ProtocolJ1939;
    C_CanMonProtocolOpenSyde mc_ProtocolOpenSyde;
 
@@ -80,7 +68,6 @@ public:
    e_CanMonL7Protocols GetProtocolMode(void) const;
 
    int32_t GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, stw::scl::C_SclString & orc_Description) const;
-   bool GetProtocolHasParameters(const e_CanMonL7Protocols oe_L7Protocol) const;
 
    int32_t SetDecimalMode(const bool oq_Decimal);
    bool GetDecimalMode(void) const;
@@ -101,18 +88,6 @@ public:
                                        const stw::scl::C_SclString & orc_Section) const;
    int32_t LoadProtocolParametersFromIni(const stw::scl::C_SclString & orc_FileName,
                                          const stw::scl::C_SclString & orc_Section) const;
-
-   //KEFEX protocol parameters:
-#ifdef CMONPROTOCOL_ALLOW_RAMVIEW_PROJECT_MAPPING
-   int32_t KFXSetVariableInfo(const stw::diag_lib::C_KFXVariableLists * const opc_Lists,
-                              const uint16_t ou16_ListOffset);
-#endif
-   uint16_t KfxGetBaseId(void) const;
-   void KdxSetBaseId(const uint16_t ou16_BaseId);
-
-   //STW Flashloader ("XFL") protocol parameters:
-   uint32_t XflGetSendId(void) const;
-   void XflSetSendId(const uint32_t ou32_SendId);
 };
 
 //----------------------------------------------------------------------------------------------------------------------

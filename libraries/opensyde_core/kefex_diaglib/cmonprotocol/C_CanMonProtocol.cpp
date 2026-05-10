@@ -6,11 +6,7 @@
 #include "stwerrors.hpp"
 #include "C_CanMonProtocol.hpp"
 #include "C_CanMonProtocolCanOpen.hpp"
-#include "C_CanMonProtocolKefex.hpp"
-#include "C_CanMonProtocolShipIpIva.hpp"
 #include "C_CanMonProtocolGd.hpp"
-#include "C_CanMonProtocolStwFf.hpp"
-#include "C_CanMonProtocolXfl.hpp"
 #include "C_CanMonProtocolL2.hpp"
 #include "C_CanMonProtocolJ1939.hpp"
 #include "C_CanMonProtocolOpenSyde.hpp"
@@ -165,15 +161,11 @@ C_CanMonProtocols::C_CanMonProtocols() :
    me_ActiveProtocol(eCMON_L7_PROTOCOL_NONE)
 {
    //set shortcut pointers to be able to iterate:
-   mapc_Protocols[eCMON_L7_PROTOCOL_NONE]         = &mc_ProtocolL2;
-   mapc_Protocols[eCMON_L7_PROTOCOL_CAN_OPEN]      = &mc_ProtocolCanOpen;
-   mapc_Protocols[eCMON_L7_PROTOCOL_KEFEX]        = &mc_ProtocolKefex;
-   mapc_Protocols[eCMON_L7_PROTOCOL_XFL]          = &mc_ProtocolXfl;
-   mapc_Protocols[eCMON_L7_PROTOCOL_STW_FF]        = &mc_ProtocolStwFf;
-   mapc_Protocols[eCMON_L7_PROTOCOL_GD]           = &mc_ProtocolGd;
-   mapc_Protocols[eCMON_L7_PROTOCOL_SHIP_IP_IVA] = &mc_ProtocolShipIpIva;
-   mapc_Protocols[eCMON_L7_PROTOCOL_J1939]        = &mc_ProtocolJ1939;
-   mapc_Protocols[eCMON_L7_PROTOCOL_OPEN_SYDE]     = &mc_ProtocolOpenSyde;
+   mapc_Protocols[eCMON_L7_PROTOCOL_NONE]      = &mc_ProtocolL2;
+   mapc_Protocols[eCMON_L7_PROTOCOL_CAN_OPEN]  = &mc_ProtocolCanOpen;
+   mapc_Protocols[eCMON_L7_PROTOCOL_GD]        = &mc_ProtocolGd;
+   mapc_Protocols[eCMON_L7_PROTOCOL_J1939]     = &mc_ProtocolJ1939;
+   mapc_Protocols[eCMON_L7_PROTOCOL_OPEN_SYDE] = &mc_ProtocolOpenSyde;
 }
 
 //---------------------------------------------------------------------------
@@ -181,17 +173,6 @@ C_CanMonProtocols::C_CanMonProtocols() :
 C_CanMonProtocols::~C_CanMonProtocols(void)
 {
 }
-
-//---------------------------------------------------------------------------
-
-#ifdef CMONPROTOCOL_ALLOW_RAMVIEW_PROJECT_MAPPING
-sint32 C_CMONProtocols::KFXSetVariableInfo(const stw::diag_lib::C_KFXVariableLists * const opc_Lists,
-                                           const uint16 ou16_ListOffset)
-{
-   mc_ProtocolKEFEX.SetVariableInfo(opc_Lists, ou16_ListOffset);
-   return C_NO_ERR;
-}
-#endif
 
 //---------------------------------------------------------------------------
 
@@ -354,76 +335,6 @@ C_SclString C_CanMonProtocols::FormatTimeStamp(const uint64_t ou64_TimeStampUs, 
    }
    (void)c_Time.Insert(".", 11);
    return c_Time;
-}
-
-//---------------------------------------------------------------------------
-
-bool C_CanMonProtocols::GetProtocolHasParameters(const e_CanMonL7Protocols oe_L7Protocol) const
-{
-   bool q_HasParams;
-
-   switch (oe_L7Protocol)
-   {
-   case eCMON_L7_PROTOCOL_NONE:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_CAN_OPEN:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_KEFEX:
-      q_HasParams = true;
-      break;
-   case eCMON_L7_PROTOCOL_XFL:
-      q_HasParams = true;
-      break;
-   case eCMON_L7_PROTOCOL_STW_FF:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_GD:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_SHIP_IP_IVA:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_J1939:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_OPEN_SYDE:
-      q_HasParams = false;
-      break;
-   default:
-      q_HasParams = false;
-      break;
-   }
-   return q_HasParams;
-}
-
-//---------------------------------------------------------------------------
-
-uint16_t C_CanMonProtocols::KfxGetBaseId(void) const
-{
-   return mc_ProtocolKefex.GetBaseId();
-}
-
-//---------------------------------------------------------------------------
-
-void C_CanMonProtocols::KdxSetBaseId(const uint16_t ou16_BaseId)
-{
-   mc_ProtocolKefex.SetBaseId(ou16_BaseId);
-}
-
-//---------------------------------------------------------------------------
-
-uint32_t C_CanMonProtocols::XflGetSendId(void) const
-{
-   return mc_ProtocolXfl.GetSendId();
-}
-
-//---------------------------------------------------------------------------
-
-void C_CanMonProtocols::XflSetSendId(const uint32_t ou32_SendId)
-{
-   mc_ProtocolXfl.SetSendId(ou32_SendId);
 }
 
 //---------------------------------------------------------------------------

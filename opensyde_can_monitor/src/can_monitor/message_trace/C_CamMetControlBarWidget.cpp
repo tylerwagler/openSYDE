@@ -172,9 +172,6 @@ void C_CamMetControlBarWidget::InitStaticNames() const
    this->mpc_Ui->pc_ComboBoxProtocol->addItem("L7-Protocol: CAN Layer 2");
    this->mpc_Ui->pc_ComboBoxProtocol->addItem("L7-Protocol: STW openSYDE");
    this->mpc_Ui->pc_ComboBoxProtocol->addItem("L7-Protocol: CANopen");
-   this->mpc_Ui->pc_ComboBoxProtocol->addItem("L7-Protocol: STW KEFEX");
-   this->mpc_Ui->pc_ComboBoxProtocol->addItem("L7-Protocol: STW Flashloader");
-   this->mpc_Ui->pc_ComboBoxProtocol->addItem("L7-Protocol: STW SHIP-IP!/IVA");
    this->mpc_Ui->pc_ComboBoxProtocol->addItem("L7-Protocol: SAE J1939 06/2006");
 
    this->mpc_Ui->pc_PushButtonTogglePlay->SetToolTipInformation(
@@ -417,15 +414,6 @@ stw::cmon_protocol::e_CanMonL7Protocols C_CamMetControlBarWidget::mh_GetProtocol
       e_Retval = stw::cmon_protocol::eCMON_L7_PROTOCOL_CAN_OPEN;
       break;
    case 3:
-      e_Retval = stw::cmon_protocol::eCMON_L7_PROTOCOL_KEFEX;
-      break;
-   case 4:
-      e_Retval = stw::cmon_protocol::eCMON_L7_PROTOCOL_XFL;
-      break;
-   case 5:
-      e_Retval = stw::cmon_protocol::eCMON_L7_PROTOCOL_SHIP_IP_IVA;
-      break;
-   case 6:
       e_Retval = stw::cmon_protocol::eCMON_L7_PROTOCOL_J1939;
       break;
    default:

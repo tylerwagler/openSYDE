@@ -169,19 +169,10 @@ else()
    set(OPENSYDE_CORE_IMPORTS_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/imports/C_OscImportEdsDcf.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/imports/C_OscImportEdsDcf.hpp
-
-      #classes from legacy DiagLib are required by the KEFEX/IVA cmon-protocol decoders:
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXVariableBase.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXVariableBase.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXVariableListBase.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXVariableListBase.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXVariableLists.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXVariableLists.hpp
    )
 
    set(OPENSYDE_CORE_IMPORTS_INCLUDE_DIRECTORIES
       ${CMAKE_CURRENT_SOURCE_DIR}/imports
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex
    )
 
 endif()
@@ -669,12 +660,8 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolCanOpen.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolGd.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolJ1939.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolKefex.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolL2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolOpenSyde.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolShipIpIva.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolStwFf.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolXfl.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocolOpenSyde.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocols.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComMessageLogger.cpp
@@ -687,12 +674,8 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolCanOpen.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolGd.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolJ1939.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolKefex.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolL2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolOpenSyde.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolShipIpIva.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolStwFf.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolXfl.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/C_CanMonProtocolTarget.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocolOpenSyde.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocols.hpp
