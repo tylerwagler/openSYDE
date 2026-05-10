@@ -79,7 +79,6 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
       {
          uint16_t u16_FileVersion;
          this->Clear(false);
-         //We need to use the old format to improve loading performance in compatibility mode
          s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
             mc_CoreDefinition, c_XmlParser,
             C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString().c_str(),
@@ -213,44 +212,41 @@ int32_t C_PuiSdHandlerData::SaveToFile(const stw::scl::C_SclString & orc_Path, c
    }
    if (s32_Return == C_NO_ERR)
    {
+      s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(this->mc_CoreDefinition, orc_Path);
+      if (s32_Return == C_NO_ERR)
       {
-         s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(this->mc_CoreDefinition, orc_Path);
+         QString c_FilePath = C_PuiSdHandlerFiler::h_GetSystemDefinitionUiFilePath(orc_Path.c_str());
+         //New files for UI
+         s32_Return = C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(c_FilePath, this->mc_CoreDefinition,
+                                                                        this->mc_UiNodes, this->mc_UiBuses,
+                                                                        this->c_BusTextElements,
+                                                                        this->c_Elements,
+                                                                        this->mc_LastKnownHalcCrcs);
+
+         // Saving shared Datapool configuration
          if (s32_Return == C_NO_ERR)
          {
-            QString c_FilePath = C_PuiSdHandlerFiler::h_GetSystemDefinitionUiFilePath(orc_Path.c_str());
-            //New files for UI
-            s32_Return = C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(c_FilePath, this->mc_CoreDefinition,
-                                                                           this->mc_UiNodes, this->mc_UiBuses,
-                                                                           this->c_BusTextElements,
-                                                                           this->c_Elements,
-                                                                           this->mc_LastKnownHalcCrcs);
+            c_FilePath = C_PuiSdHandlerFiler::h_GetSharedDatapoolUiFilePath(orc_Path.c_str());
+            s32_Return = C_PuiSdHandlerFiler::h_SaveSharedDatapoolsFile(c_FilePath, this->mc_SharedDatapools);
 
-            // Saving shared Datapool configuration
-            if (s32_Return == C_NO_ERR)
+            if (s32_Return != C_NO_ERR)
             {
-               c_FilePath = C_PuiSdHandlerFiler::h_GetSharedDatapoolUiFilePath(orc_Path.c_str());
-               s32_Return = C_PuiSdHandlerFiler::h_SaveSharedDatapoolsFile(c_FilePath, this->mc_SharedDatapools);
-
-               if (s32_Return != C_NO_ERR)
-               {
-                  osc_write_log_error("Saving shared Datapool configuration UI",
-                                      "Could not write to file \"" + orc_Path + "\".");
-                  s32_Return = C_RD_WR;
-               }
-            }
-            else
-            {
-               osc_write_log_error("Saving System Definition UI",
+               osc_write_log_error("Saving shared Datapool configuration UI",
                                    "Could not write to file \"" + orc_Path + "\".");
                s32_Return = C_RD_WR;
             }
          }
-         //Only update hash in non deprecated mode
-         //calculate the hash value and save it for comparing
-         if (oq_UpdateInternalState)
+         else
          {
-            this->mu32_CalculatedHashSystemDefinition = this->CalcHashSystemDefinition();
+            osc_write_log_error("Saving System Definition UI",
+                                "Could not write to file \"" + orc_Path + "\".");
+            s32_Return = C_RD_WR;
          }
+      }
+      //calculate the hash value and save it for comparing
+      if (oq_UpdateInternalState)
+      {
+         this->mu32_CalculatedHashSystemDefinition = this->CalcHashSystemDefinition();
       }
    }
 

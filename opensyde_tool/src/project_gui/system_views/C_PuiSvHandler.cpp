@@ -117,22 +117,20 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_Updat
       {
          C_OscXmlParser c_XmlParser;
          c_XmlParser.CreateAndSelectNodeChild("opensyde-system-views");
+         c_XmlParser.CreateNodeChild("file-version", "2");
+         if (this->mq_IsServiceModeActive)
          {
-            c_XmlParser.CreateNodeChild("file-version", "2");
-            if (this->mq_IsServiceModeActive)
-            {
-               tgl_assert(c_XmlParser.CreateAndSelectNodeChild("service-mode") == "service-mode");
-               c_XmlParser.SetAttributeBool("active", this->mq_IsServiceModeActive);
-               c_XmlParser.SelectNodeParent();
-            }
-            s32_Return = C_PuiSvHandlerFiler::h_SaveViews(this->mc_Views, c_XmlParser, &c_BasePath);
+            tgl_assert(c_XmlParser.CreateAndSelectNodeChild("service-mode") == "service-mode");
+            c_XmlParser.SetAttributeBool("active", this->mq_IsServiceModeActive);
+            c_XmlParser.SelectNodeParent();
+         }
+         s32_Return = C_PuiSvHandlerFiler::h_SaveViews(this->mc_Views, c_XmlParser, &c_BasePath);
 
-            C_PuiSdHandlerFiler::h_SaveLastKnownHalcCrcs(this->mc_LastKnownHalcCrcs, c_XmlParser);
-            //calculate the hash value and save it for comparing
-            if (oq_UpdateInternalState)
-            {
-               this->mu32_CalculatedHashSystemViews = this->m_CalcHashSystemViews();
-            }
+         C_PuiSdHandlerFiler::h_SaveLastKnownHalcCrcs(this->mc_LastKnownHalcCrcs, c_XmlParser);
+         //calculate the hash value and save it for comparing
+         if (oq_UpdateInternalState)
+         {
+            this->mu32_CalculatedHashSystemViews = this->m_CalcHashSystemViews();
          }
          if (s32_Return == C_NO_ERR)
          {
