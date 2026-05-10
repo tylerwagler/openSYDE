@@ -17,7 +17,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_SclString.hpp"
-#include "C_OscSupServiceUpdatePackageV1.hpp"
 #include "C_OscSupServiceUpdatePackageLoad.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemDefinition.hpp"
@@ -231,13 +230,10 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const C_SclString & o
       {
          if (u32_FileVersion == 1U)
          {
-            s32_Return = C_OscSupServiceUpdatePackageV1::h_ProcessPackage(orc_PackagePath, orc_TargetUnzipPath,
-                                                                          orc_SystemDefinition, oru32_ActiveBusIndex,
-                                                                          orc_ActiveNodes,
-                                                                          orc_NodesUpdateOrder,
-                                                                          orc_ApplicationsToWrite,
-                                                                          orc_WarningMessages,
-                                                                          orc_ErrorMessage, oq_IsZip);
+            mhc_ErrorMessage =
+               "V1 service update packages are no longer supported. Re-create the package with a current openSYDE.";
+            osc_write_log_error("Processing Update Package", mhc_ErrorMessage);
+            s32_Return = C_CONFIG;
          }
          else if ((u32_FileVersion == 2U) || (u32_FileVersion == 0x102U))
          {

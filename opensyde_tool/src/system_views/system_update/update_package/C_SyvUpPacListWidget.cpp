@@ -31,7 +31,7 @@
 #include "C_SyvUpPacConfig.hpp"
 #include "C_SyvUpPacConfigFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_OscSupServiceUpdatePackageV1.hpp"
+#include "C_OscSupServiceUpdatePackageBase.hpp"
 #include "C_OscSupServiceUpdatePackageCreate.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_ImpUtil.hpp"
@@ -720,41 +720,25 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
       c_DefaultFilename = pc_ViewData->GetName().c_str();
    }
 
-   // User has the option to save the update package in the new or old version
+   // V1 SUP packages are no longer supported; always emit a V2 .syde_sup zip.
+   (void)oc_CurrentSelectedVersion;
    if (oq_SaveAsFile)
    {
-      if (oc_CurrentSelectedVersion == "Version 1")
-      {
-         c_FilterName =
-            static_cast<QString>(C_GtGetText::h_GetText("openSYDE Service Update Package File (Version 1)")) +
-            " (*" +
-            static_cast<QString>(C_GtGetText::h_GetText(C_OscSupServiceUpdatePackageV1::
-                                                        h_GetPackageExtension().
-                                                        c_str())) + ")";
-      }
-      else if (oc_CurrentSelectedVersion == "Version 2")
-      {
-         c_FilterName =
-            static_cast<QString>(C_GtGetText::h_GetText("openSYDE Service Update Package File")) +
-            " (*" +
-            static_cast<QString>(C_GtGetText::h_GetText(C_OscSupServiceUpdatePackageV1::
-                                                        h_GetPackageExtension().
-                                                        c_str())) + ")";
-      }
-      else
-      {
-         c_FilterName = "*";
-      }
+      c_FilterName =
+         static_cast<QString>(C_GtGetText::h_GetText("openSYDE Service Update Package File")) +
+         " (*" +
+         static_cast<QString>(C_GtGetText::h_GetText(
+                                 C_OscSupServiceUpdatePackageBase::h_GetPackageExtension().c_str())) + ")";
 
       c_DefaultFilename += C_GtGetText::h_GetText("_ServiceUpdatePackage");
 
-      // Add a suffix for secure archive file
       if (oq_SecureFile)
       {
          c_DefaultFilename += C_GtGetText::h_GetText("_Secure");
       }
 
-      c_DefaultFilename += static_cast<QString>(C_OscSupServiceUpdatePackageV1::h_GetPackageExtension().c_str());
+      c_DefaultFilename +=
+         static_cast<QString>(C_OscSupServiceUpdatePackageBase::h_GetPackageExtension().c_str());
    }
    else
    {
@@ -833,68 +817,42 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
                   c_NodeActiveFlags[u32_NodeCounter] = 0U;
                }
             }
-            // Save package to directory
+            // V2 SUP packages are zip-only — folder output was a V1 affordance and is gone with V1.
             if (oq_SaveAsFile == false)
             {
-               s32_Return = C_OscSupServiceUpdatePackageV1::h_CreatePackage(c_FullPackagePath.toStdString().c_str(),
-                                                                            rc_SystemDefinition,
-                                                                            u32_ActiveBusIndex,
-                                                                            c_NodeActiveFlags,
-                                                                            c_NodesUpdateOrder,
-                                                                            c_ApplicationsToWrite,
-                                                                            c_Warnings,
-                                                                            c_Error, false, oq_SaveAsFile);
+               c_Error = "Saving service update packages to a directory is no longer supported. "
+                         "Save as a .syde_sup file instead.";
+               s32_Return = C_CONFIG;
             }
-            // Save package as archive file (or secure archive file)
-            else
+            else if (oq_SecureFile == true)
             {
                // pem files specified, it is a secure update package
-               if (oq_SecureFile == true)
-               {
-                  s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(
-                     c_FullPackagePath.toStdString().c_str(),
-                     rc_SystemDefinition,
-                     u32_ActiveBusIndex,
-                     c_NodeActiveFlags,
-                     c_NodesUpdateOrder,
-                     c_ApplicationsToWrite,
-                     c_Warnings,
-                     c_Error, "",
-                     orc_EncryptNodes,
-                     orc_EncryptNodesPassword, orc_AddSignatureNodes, orc_NodeSignaturePemFiles);
-               }
-               // if no pem files specified, it is a normal (unencrypted) update package
-               else
-               {
-                  // If user selects the older version for saving the package (Version 1)
-                  if ((c_SelectedFilterName.contains(C_GtGetText::h_GetText("Version 1"),
-                                                     Qt::CaseInsensitive)) == true)
-                  {
-                     s32_Return = C_OscSupServiceUpdatePackageV1::h_CreatePackage(
-                        c_FullPackagePath.toStdString().c_str(),
-                        rc_SystemDefinition,
-                        u32_ActiveBusIndex,
-                        c_NodeActiveFlags,
-                        c_NodesUpdateOrder,
-                        c_ApplicationsToWrite,
-                        c_Warnings,
-                        c_Error, false, oq_SaveAsFile);
-                  }
-                  else
-                  {
-                     s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackage(
-                        c_FullPackagePath.toStdString().c_str(),
-                        rc_SystemDefinition,
-                        u32_ActiveBusIndex,
-                        c_NodeActiveFlags,
-                        c_NodesUpdateOrder,
-                        c_ApplicationsToWrite,
-                        c_Warnings,
-                        c_Error, "",
-                        orc_EncryptNodes,
-                        orc_EncryptNodesPassword);
-                  }
-               }
+               s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(
+                  c_FullPackagePath.toStdString().c_str(),
+                  rc_SystemDefinition,
+                  u32_ActiveBusIndex,
+                  c_NodeActiveFlags,
+                  c_NodesUpdateOrder,
+                  c_ApplicationsToWrite,
+                  c_Warnings,
+                  c_Error, "",
+                  orc_EncryptNodes,
+                  orc_EncryptNodesPassword, orc_AddSignatureNodes, orc_NodeSignaturePemFiles);
+            }
+            else
+            {
+               // unencrypted V2 update package
+               s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackage(
+                  c_FullPackagePath.toStdString().c_str(),
+                  rc_SystemDefinition,
+                  u32_ActiveBusIndex,
+                  c_NodeActiveFlags,
+                  c_NodesUpdateOrder,
+                  c_ApplicationsToWrite,
+                  c_Warnings,
+                  c_Error, "",
+                  orc_EncryptNodes,
+                  orc_EncryptNodesPassword);
             }
          }
 

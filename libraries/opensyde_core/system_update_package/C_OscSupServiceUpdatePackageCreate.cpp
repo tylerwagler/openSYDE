@@ -17,7 +17,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_SclString.hpp"
-#include "C_OscSupServiceUpdatePackageV1.hpp"
 #include "C_OscSupServiceUpdatePackageCreate.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemDefinition.hpp"

@@ -22,7 +22,6 @@
 #include "stwerrors.hpp"
 #include "C_SclString.hpp"
 #include "C_SydeSup.hpp"
-#include "C_OscSupServiceUpdatePackageV1.hpp"
 #include "C_OscSupServiceUpdatePackageLoad.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "TglTime.hpp"

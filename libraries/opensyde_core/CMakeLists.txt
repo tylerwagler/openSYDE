@@ -604,7 +604,6 @@ else()
    set(OPENSYDE_CORE_PROTOCOL_DRIVERS_SYSTEM_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/system_update/C_OscSuSequences.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/system_update/C_OscSuSequencesNodeStates.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageV1.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageLoad.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageBase.cpp
@@ -626,7 +625,6 @@ else()
 
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/system_update/C_OscSuSequences.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/system_update/C_OscSuSequencesNodeStates.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageV1.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageCreate.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageLoad.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageBase.hpp

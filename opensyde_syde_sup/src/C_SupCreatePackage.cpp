@@ -20,8 +20,7 @@
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_OscSupServiceUpdatePackageV1.hpp"
-// TODO GS #include "C_OscSupServiceUpdatePackageCreate.hpp"
+#include "C_OscSupServiceUpdatePackageCreate.hpp"
 #include "C_OscViewData.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
@@ -182,21 +181,13 @@ C_SydeSup::E_Result C_SupCreatePackage::Create()
          }
       }
 
-      // Now we have all data collected and can create the package
-      s32_Return = C_OscSupServiceUpdatePackageV1::h_CreatePackage(mc_SupFilePath, c_SystemDefinition,
-                                                                   c_View.GetOscPcData().GetBusIndex(),
-                                                                   c_NodeActiveFlags, c_NodesUpdateOrder,
-                                                                   c_ApplicationsToWrite,
-                                                                   c_Warnings, c_Error, false, true, mc_TempDir);
-      // We use V1 because the create package functionality was only made for very special customer purposes
-      // that had no need for security features. If it gets ordered somewhen, take the money and use:
-      // (okay, maybe some interface for password and Co. is needed too)
-      /*s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackage(mc_SupFilePath, c_SystemDefinition,
+      // Now we have all data collected and can create the package (V2 zip; encryption/signing not surfaced
+      // through the SYDEsup CLI yet — pass empty defaults for those parameters).
+      s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackage(mc_SupFilePath, c_SystemDefinition,
                                                                        c_View.GetOscPcData().GetBusIndex(),
                                                                        c_NodeActiveFlags, c_NodesUpdateOrder,
                                                                        c_ApplicationsToWrite, c_Warnings,
-                                                                       c_Error, mc_TempDir, {}, {}
-                                                                       );*/
+                                                                       c_Error, mc_TempDir);
 
       // File writing issues
       if ((s32_Return == C_RD_WR) || (s32_Return == C_RANGE) || (s32_Return == C_BUSY))
