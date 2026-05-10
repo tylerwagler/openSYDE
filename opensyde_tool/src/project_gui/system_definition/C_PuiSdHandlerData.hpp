@@ -38,8 +38,7 @@ class C_PuiSdHandlerData :
 public:
    int32_t LoadFromFile(const stw::scl::C_SclString & orc_Path, uint16_t * const opu16_FileVersion,
                         std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices);
-   int32_t SaveToFile(const stw::scl::C_SclString & orc_Path, const bool oq_UseDeprecatedFileFormatV2,
-                      const bool oq_UpdateInternalState = true);
+   int32_t SaveToFile(const stw::scl::C_SclString & orc_Path, const bool oq_UpdateInternalState = true);
    bool HasHashChanged(void) const;
    uint32_t CalcHashSystemDefinition(void) const;
    virtual void Clear(const bool oq_TriggerSyncSignals);

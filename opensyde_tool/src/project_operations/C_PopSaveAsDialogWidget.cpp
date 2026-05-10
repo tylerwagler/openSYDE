@@ -37,8 +37,6 @@ using namespace stw::opensyde_gui_elements;
 using namespace stw::errors;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const int32_t C_PopSaveAsDialogWidget::mhs32_VERSION_INDEX_V2 = 1;
-const int32_t C_PopSaveAsDialogWidget::mhs32_VERSION_INDEX_V3 = 0;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -110,8 +108,10 @@ void C_PopSaveAsDialogWidget::InitStaticNames(void) const
    this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Project Name"));
    this->mpc_Ui->pc_LabelPath->setText(C_GtGetText::h_GetText("Path"));
    this->mpc_Ui->pc_LabelVersion->setText(C_GtGetText::h_GetText("File Format"));
-   this->mpc_Ui->pc_ComboBoxVersion->addItem(C_GtGetText::h_GetText("V3 (default)"));
-   this->mpc_Ui->pc_ComboBoxVersion->addItem(C_GtGetText::h_GetText("V2"));
+   // V2 was dropped together with the V2 system-definition filer; V3 is now the only output format.
+   this->mpc_Ui->pc_ComboBoxVersion->addItem(C_GtGetText::h_GetText("V3"));
+   this->mpc_Ui->pc_LabelVersion->setVisible(false);
+   this->mpc_Ui->pc_ComboBoxVersion->setVisible(false);
    this->mpc_Ui->pc_LineEditName->setPlaceholderText(C_GtGetText::h_GetText(""));
    this->mpc_Ui->pc_LineEditPath->setPlaceholderText(C_GtGetText::h_GetText(""));
    this->mpc_Ui->pc_PushButtonSave->setText(C_GtGetText::h_GetText("Save"));
@@ -125,9 +125,7 @@ void C_PopSaveAsDialogWidget::InitStaticNames(void) const
                                                         "Path to create the new folder for the new project in"));
    this->mpc_Ui->pc_LabelVersion->SetToolTipInformation(C_GtGetText::h_GetText("File Format"),
                                                         C_GtGetText::h_GetText(
-                                                           "File format to use when saving this project.\n"
-                                                           "V3 (default): Project split into multiple files to improve support for multi user edit of any system definition properties\n"
-                                                           "V2: Compatibility mode for previous versions of provided tools (not recommended as this does not save all supported project properties)"));
+                                                           "Projects are saved in the V3 file format."));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -167,14 +165,13 @@ void C_PopSaveAsDialogWidget::m_InitDefaultProjectName(void) const
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Save project to file
 
-   \param[in] orc_File                     File
-   \param[in] oq_UseDeprecatedFileFormatV2 Flag to enable saving using the deprecated V2 file format
+   \param[in] orc_File   File
 
    \return
    see C_PuiProject::h_GetInstance()->Save(...) for return values
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PopSaveAsDialogWidget::m_SaveToFile(const QString & orc_File, const bool oq_UseDeprecatedFileFormatV2) const
+int32_t C_PopSaveAsDialogWidget::m_SaveToFile(const QString & orc_File) const
 {
    int32_t s32_Return;
 
@@ -183,11 +180,10 @@ int32_t C_PopSaveAsDialogWidget::m_SaveToFile(const QString & orc_File, const bo
 
    // try to save and return errors else
    C_PuiProject::h_GetInstance()->SetPath(orc_File);
-   s32_Return = C_PuiProject::h_GetInstance()->Save(true, oq_UseDeprecatedFileFormatV2);
+   s32_Return = C_PuiProject::h_GetInstance()->Save(true);
    C_PopErrorHandling::h_ProjectSaveErr(s32_Return, this->parentWidget());
 
-   //Only use new path if not saved in deprecated format
-   if ((s32_Return == C_NO_ERR) && (oq_UseDeprecatedFileFormatV2 == false))
+   if (s32_Return == C_NO_ERR)
    {
       // use real path for active project and recent projects
       const QString c_Path = C_PuiProject::h_GetInstance()->GetPath();
@@ -264,36 +260,10 @@ void C_PopSaveAsDialogWidget::m_OnSave(void)
       if (c_Dir.exists() == false)
       {
          c_Dir.mkdir(c_Path);
-         if (this->mpc_Ui->pc_ComboBoxVersion->currentIndex() == C_PopSaveAsDialogWidget::mhs32_VERSION_INDEX_V2)
+         if (m_SaveToFile(c_FilePathAndName) == C_NO_ERR)
          {
-            C_OgeWiCustomMessage c_Box(this, C_OgeWiCustomMessage::eINFORMATION);
-            c_Box.SetHeading(C_GtGetText::h_GetText("Project save as \"V2\""));
-            c_Box.SetDescription(C_GtGetText::h_GetText("Project is exported in file format \"V2\" "
-                                                        "as a copy of the current project.\n"
-                                                        "You are still working on current project."));
-            c_Box.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-            c_Box.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
-            c_Box.SetCustomMinHeight(180, 180);
-            if (c_Box.Execute() == C_OgeWiCustomMessage::eOK)
-            {
-               if (m_SaveToFile(c_FilePathAndName, true) == C_NO_ERR)
-               {
-                  // accept dialog if successfully saved
-                  this->mrc_ParentDialog.accept();
-               }
-            }
-            else
-            {
-               c_Dir.rmdir(c_Path);
-            }
-         }
-         else
-         {
-            if (m_SaveToFile(c_FilePathAndName, false) == C_NO_ERR)
-            {
-               // accept dialog if successfully saved
-               this->mrc_ParentDialog.accept();
-            }
+            // accept dialog if successfully saved
+            this->mrc_ParentDialog.accept();
          }
          QApplication::restoreOverrideCursor();
       }

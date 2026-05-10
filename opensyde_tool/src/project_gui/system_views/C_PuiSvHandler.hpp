@@ -35,8 +35,7 @@ class C_PuiSvHandler :
 public:
    //File
    int32_t LoadFromFile(const QString & orc_Path);
-   int32_t SaveToFile(const QString & orc_Path, const bool oq_UseDeprecatedV1Format,
-                      const bool oq_UpdateInternalState = true);
+   int32_t SaveToFile(const QString & orc_Path, const bool oq_UpdateInternalState = true);
    bool HasHashChanged(void) const;
 
    //Get

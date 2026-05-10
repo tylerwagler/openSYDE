@@ -44,11 +44,9 @@ public:
 
 private:
    Ui::C_PopSaveAsDialogWidget * mpc_Ui;
-   static const int32_t mhs32_VERSION_INDEX_V2;
-   static const int32_t mhs32_VERSION_INDEX_V3;
 
    void m_InitDefaultProjectName(void) const;
-   int32_t m_SaveToFile(const QString & orc_File, const bool oq_UseDeprecatedFileFormatV2) const;
+   int32_t m_SaveToFile(const QString & orc_File) const;
    QString m_GetValidPath(const QString & orc_Path) const;
    void m_OnBrowse(void);
    void m_OnSave(void);

@@ -85,7 +85,6 @@ int32_t C_PuiSvHandler::LoadFromFile(const QString & orc_Path)
    Save UI data part of system views to XML file.
 
    \param[in]  orc_Path                   Path to system views file
-   \param[in]  oq_UseDeprecatedV1Format   Optional flag to save in deprecated V1 format
    \param[in]  oq_UpdateInternalState     Allow update of internal state (only if no export or similar action)
 
    \return
@@ -93,8 +92,7 @@ int32_t C_PuiSvHandler::LoadFromFile(const QString & orc_Path)
    C_RD_WR    problems accessing file system (e.g. could not erase pre-existing file before saving)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_UseDeprecatedV1Format,
-                                   const bool oq_UpdateInternalState)
+int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_UpdateInternalState)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -119,13 +117,6 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_UseDe
       {
          C_OscXmlParser c_XmlParser;
          c_XmlParser.CreateAndSelectNodeChild("opensyde-system-views");
-         if (oq_UseDeprecatedV1Format == true)
-         {
-            osc_write_log_error("Saving views",
-                                "Saving in deprecated V1 system-views file format is no longer supported.");
-            s32_Return = C_CONFIG;
-         }
-         else
          {
             c_XmlParser.CreateNodeChild("file-version", "2");
             if (this->mq_IsServiceModeActive)

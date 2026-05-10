@@ -180,13 +180,12 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save system definition (V2 file format)
+/*! \brief   Save system definition.
 
    Save UI data part of system definition to XML file.
 
-   \param[in]  orc_Path                      Path to system definition file
-   \param[in]  oq_UseDeprecatedFileFormatV2  Flag to enable saving using the deprecated V2 file format
-   \param[in]  oq_UpdateInternalState        Allow update of internal state (only if no export or similar action)
+   \param[in]  orc_Path                Path to system definition file
+   \param[in]  oq_UpdateInternalState  Allow update of internal state (only if no export or similar action)
 
    \return
    C_NO_ERR   data saved
@@ -194,8 +193,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
    C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSdHandlerData::SaveToFile(const stw::scl::C_SclString & orc_Path, const bool oq_UseDeprecatedFileFormatV2,
-                                       const bool oq_UpdateInternalState)
+int32_t C_PuiSdHandlerData::SaveToFile(const stw::scl::C_SclString & orc_Path, const bool oq_UpdateInternalState)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -215,13 +213,6 @@ int32_t C_PuiSdHandlerData::SaveToFile(const stw::scl::C_SclString & orc_Path, c
    }
    if (s32_Return == C_NO_ERR)
    {
-      if (oq_UseDeprecatedFileFormatV2)
-      {
-         osc_write_log_error("Saving System Definition",
-                             "Saving in deprecated V2 file format is no longer supported.");
-         s32_Return = C_CONFIG;
-      }
-      else
       {
          s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(this->mc_CoreDefinition, orc_Path);
          if (s32_Return == C_NO_ERR)

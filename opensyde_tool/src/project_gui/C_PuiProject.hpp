@@ -31,7 +31,7 @@ class C_PuiProject :
 public:
    ~C_PuiProject(void) noexcept override;
 
-   int32_t Save(const bool oq_ForceSaveAll = false, const bool oq_UseDeprecatedFileFormatV2 = false);
+   int32_t Save(const bool oq_ForceSaveAll = false);
    int32_t SaveCurrentProjectForServiceMode(const QString & orc_FilePath, const QString & orc_Password,
                                             const std::vector<std::array<bool, 3> > & orc_ViewConfigs);
    int32_t Load(uint16_t * const opu16_FileVersion,
@@ -54,7 +54,7 @@ public:
    bool IsEmptyProject(void) const;
    static void h_HandlePendingEvents(void);
    static void h_AdaptProjectPathToSystemDefinition(const QString & orc_ProjectPath, QString & orc_SystemDefintionPath);
-   int32_t SaveAsWithoutInternalChange(const QString & orc_FilePath, const bool oq_UseDeprecatedFileFormatV2);
+   int32_t SaveAsWithoutInternalChange(const QString & orc_FilePath);
 
 private:
    static C_PuiProject * mhpc_Singleton;
@@ -71,15 +71,14 @@ private:
 
    uint32_t m_CalcHashProject(void) const;
 
-   int32_t m_Save(const bool oq_ForceSaveAll, const bool oq_UseDeprecatedFileFormatV2);
+   int32_t m_Save(const bool oq_ForceSaveAll);
    int32_t m_SaveServiceModeProject(const QString & orc_FilePath, const QString & orc_Password);
    int32_t m_LoadProject(uint16_t * const opu16_FileVersion,
                          std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices);
    int32_t m_LoadServiceModeProject(const QString & orc_Password, uint16_t * const opu16_FileVersion,
                                     std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices);
    bool m_IsServiceModeProject(void) const;
-   int32_t m_SaveAs(const QString & orc_FilePath, const bool oq_ForceSaveAll, const bool oq_UseDeprecatedFileFormatV2,
-                    const bool oq_UpdateInternalState);
+   int32_t m_SaveAs(const QString & orc_FilePath, const bool oq_ForceSaveAll, const bool oq_UpdateInternalState);
 
    static void mh_AdaptProjectPathToSystemViews(const QString & orc_ProjectPath, QString & orc_SystemViewsPath);
    static void mh_AdaptProjectPathToSystemViewsV1(const QString & orc_ProjectPath, QString & orc_SystemViewsPath);

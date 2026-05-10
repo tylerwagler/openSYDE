@@ -59,7 +59,6 @@ C_PuiProject * C_PuiProject::mhpc_Singleton = NULL;
 /*! \brief   Save project
 
    \param[in]  oq_ForceSaveAll               Optional flag if all files should be saved
-   \param[in]  oq_UseDeprecatedFileFormatV2  Flag to enable saving using the deprecated V2 file format
 
    \return
    C_NO_ERR   data saved
@@ -69,13 +68,13 @@ C_PuiProject * C_PuiProject::mhpc_Singleton = NULL;
    C_NOACT    Could not create project directory
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiProject::Save(const bool oq_ForceSaveAll, const bool oq_UseDeprecatedFileFormatV2)
+int32_t C_PuiProject::Save(const bool oq_ForceSaveAll)
 {
    int32_t s32_Retval;
 
    if (this->m_IsServiceModeProject() == false)
    {
-      s32_Retval = this->m_Save(oq_ForceSaveAll, oq_UseDeprecatedFileFormatV2);
+      s32_Retval = this->m_Save(oq_ForceSaveAll);
    }
    else
    {
@@ -612,7 +611,6 @@ void C_PuiProject::h_AdaptProjectPathToSystemDefinition(const QString & orc_Proj
 /*! \brief   Save project
 
    \param[in]  orc_FilePath                  File path
-   \param[in]  oq_UseDeprecatedFileFormatV2  Flag to enable saving using the deprecated V2 file format
 
    \return
    C_NO_ERR   data saved
@@ -622,9 +620,9 @@ void C_PuiProject::h_AdaptProjectPathToSystemDefinition(const QString & orc_Proj
    C_NOACT    Could not create project directory
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiProject::SaveAsWithoutInternalChange(const QString & orc_FilePath, const bool oq_UseDeprecatedFileFormatV2)
+int32_t C_PuiProject::SaveAsWithoutInternalChange(const QString & orc_FilePath)
 {
-   return this->m_SaveAs(orc_FilePath, true, oq_UseDeprecatedFileFormatV2, false);
+   return this->m_SaveAs(orc_FilePath, true, false);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -649,7 +647,6 @@ uint32_t C_PuiProject::m_CalcHashProject(void) const
 /*! \brief   Save project
 
    \param[in]  oq_ForceSaveAll               Optional flag if all files should be saved
-   \param[in]  oq_UseDeprecatedFileFormatV2  Flag to enable saving using the deprecated V2 file format
 
    \return
    C_NO_ERR   data saved
@@ -659,9 +656,9 @@ uint32_t C_PuiProject::m_CalcHashProject(void) const
    C_NOACT    Could not create project directory
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiProject::m_Save(const bool oq_ForceSaveAll, const bool oq_UseDeprecatedFileFormatV2)
+int32_t C_PuiProject::m_Save(const bool oq_ForceSaveAll)
 {
-   return this->m_SaveAs(this->mc_Path, oq_ForceSaveAll, oq_UseDeprecatedFileFormatV2, true);
+   return this->m_SaveAs(this->mc_Path, oq_ForceSaveAll, true);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -700,7 +697,7 @@ int32_t C_PuiProject::m_SaveServiceModeProject(const QString & orc_FilePath, con
 
    // Save the entire project to a temporary folder
    this->SetPath(c_TemporaryProjectPath);
-   s32_Retval = this->Save(true, false);
+   s32_Retval = this->Save(true);
    // Revert path configuration in any case
    this->SetPath(c_CurrentProjectPath);
 
@@ -916,7 +913,6 @@ bool C_PuiProject::m_IsServiceModeProject(void) const
 
    \param[in]  orc_FilePath                  File path
    \param[in]  oq_ForceSaveAll               Optional flag if all files should be saved
-   \param[in]  oq_UseDeprecatedFileFormatV2  Flag to enable saving using the deprecated V2 file format
    \param[in]  oq_UpdateInternalState        Allow update of internal state (only if no export or similar action)
 
    \return
@@ -928,7 +924,7 @@ bool C_PuiProject::m_IsServiceModeProject(void) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_ForceSaveAll,
-                               const bool oq_UseDeprecatedFileFormatV2, const bool oq_UpdateInternalState)
+                               const bool oq_UpdateInternalState)
 {
    int32_t s32_Retval;
    const QFileInfo c_File(orc_FilePath);
@@ -947,15 +943,7 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
          if ((C_PuiSdHandler::h_GetInstance()->HasHashChanged() == true) || (oq_ForceSaveAll == true))
          {
             QString c_SystemDefintionPath;
-            //Each format uses different folders!
-            if (oq_UseDeprecatedFileFormatV2)
-            {
-               mh_AdaptProjectPathToSystemDefinitionV2(orc_FilePath, c_SystemDefintionPath);
-            }
-            else
-            {
-               h_AdaptProjectPathToSystemDefinition(orc_FilePath, c_SystemDefintionPath);
-            }
+            h_AdaptProjectPathToSystemDefinition(orc_FilePath, c_SystemDefintionPath);
             {
                const QFileInfo c_RefFile(c_SystemDefintionPath);
                const QDir c_Dir = c_RefFile.dir();
@@ -965,8 +953,7 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
                {
                   s32_Retval =
                      C_PuiSdHandler::h_GetInstance()->SaveToFile(
-                        c_SystemDefintionPath.toStdString().c_str(), oq_UseDeprecatedFileFormatV2,
-                        oq_UpdateInternalState);
+                        c_SystemDefintionPath.toStdString().c_str(), oq_UpdateInternalState);
                }
                else
                {
@@ -984,15 +971,7 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
             if ((C_PuiSvHandler::h_GetInstance()->HasHashChanged() == true) || (oq_ForceSaveAll == true))
             {
                QString c_SystemViewsPath;
-               //Each format uses different folders!
-               if (oq_UseDeprecatedFileFormatV2)
-               {
-                  mh_AdaptProjectPathToSystemViewsV1(orc_FilePath, c_SystemViewsPath);
-               }
-               else
-               {
-                  mh_AdaptProjectPathToSystemViews(orc_FilePath, c_SystemViewsPath);
-               }
+               mh_AdaptProjectPathToSystemViews(orc_FilePath, c_SystemViewsPath);
                {
                   const QFileInfo c_RefFile(c_SystemViewsPath);
                   const QDir c_Dir = c_RefFile.dir();
@@ -1000,7 +979,7 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
                   if (c_Dir.mkpath(".") == true)
                   {
                      s32_Retval = C_PuiSvHandler::h_GetInstance()->SaveToFile(
-                        c_SystemViewsPath.toStdString().c_str(), oq_UseDeprecatedFileFormatV2, oq_UpdateInternalState);
+                        c_SystemViewsPath.toStdString().c_str(), oq_UpdateInternalState);
                   }
                   else
                   {
@@ -1015,8 +994,7 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
       }
       if (s32_Retval == C_NO_ERR)
       {
-         //Only update hash in non deprecated mode
-         if ((oq_UseDeprecatedFileFormatV2 == false) && (oq_UpdateInternalState == true))
+         if (oq_UpdateInternalState == true)
          {
             //calculate the hash value and save it for comparing
             this->mu32_CalculatedProjectHash = this->m_CalcHashProject();

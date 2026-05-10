@@ -131,7 +131,7 @@ void C_NagUnUsedProjectFilesPopUpDialog::ShowAllUnusedFiles()
    if (!c_DeleteTempDir.exists())
    {
       c_DeleteTempDir.mkpath(".");
-      C_PuiProject::h_GetInstance()->SaveAsWithoutInternalChange(c_TempFolderPath, false);
+      C_PuiProject::h_GetInstance()->SaveAsWithoutInternalChange(c_TempFolderPath);
    }
    c_OriginalProjectfolderFiles = m_GetAllFilesInDirectory(
       C_PuiProject::h_GetInstance()->GetFolderPath());
