@@ -6,7 +6,7 @@
 #     COMMON_SOURCES             basic infrastructure (also requires a target layer, e.g. for Windows or a
 #                                                      corresponding implementation for e.g. Linux)
 #     ZIPPING                    zip/unzip functionality
-#     IMPORTS                    imports: EDS, DCF, RamView
+#     IMPORTS                    imports: EDS, DCF
 #     CODE_GENERATION            source code generation
 #     PROJECT_HANDLING           project handling (including all aspects of System Definition)
 #     PARAM_SET                  parameter set handling (reading and writing syde_psi files)
@@ -170,16 +170,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/imports/C_OscImportEdsDcf.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/imports/C_OscImportEdsDcf.hpp
 
-      ${CMAKE_CURRENT_SOURCE_DIR}/imports/C_OscImportRamView.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/imports/C_OscImportRamView.hpp
-      #classes from legacy DiagLib are required to load KEFEX RAMView projects:
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXVariableLists.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXDATFile.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXDATFile.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXDEFProject.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXDEFProject.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXProjectOptions.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXProjectOptions.hpp
+      #classes from legacy DiagLib are required by the KEFEX/IVA cmon-protocol decoders:
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXVariableBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXVariableBase.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_kefex/CKFXVariableListBase.cpp

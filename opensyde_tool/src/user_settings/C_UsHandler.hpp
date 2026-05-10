@@ -97,7 +97,6 @@ public:
    QString GetLastKnownHalcImportPath(void) const;
    QString GetLastKnownHalcExportPath(void) const;
    QString GetLastKnownServiceProjectPath(void) const;
-   QString GetLastKnownRamViewProjectPath(void) const;
    QString GetLastKnownJ1939CatalogPath(void) const;
    QString GetLastKnownCsvExportPath(void) const;
    QString GetLastKnownAddPemFilePath(void) const;
@@ -170,7 +169,6 @@ public:
    void SetLastKnownHalcImportPath(const QString & orc_NewPath);
    void SetLastKnownHalcExportPath(const QString & orc_NewPath);
    void SetLastKnownServiceProjectPath(const QString & orc_NewPath);
-   void SetLastKnownRamViewProjectPath(const QString & orc_NewPath);
    void SetLastKnownJ1939CatalogPath(const QString & orc_NewPath);
    void SetLastKnownCsvExportPath(const QString & orc_NewPath);
    void SetLastKnownAddPemFilePath(const QString & orc_NewPath);
@@ -346,7 +344,6 @@ private:
    QString mc_LastKnownHalcImportPath;                   ///< History of last known HALC import file path
    QString mc_LastKnownHalcExportPath;                   ///< History of last known HALC export file path
    QString mc_LastKnownServiceProjectPath;               ///< History of last known service project path
-   QString mc_LastKnownRamViewProjectPath;               ///< History of last known RAMView project import path
    QString mc_LastKnownJ1939CatalogPath;                 ///< History of last known J1939 catalog import path
    QString mc_LastKnownCsvExportPath;                    ///< History of last known CSV export path
    QString mc_LastKnownPrivateKeyPath;                   ///< History of last known private key path (PEM file for

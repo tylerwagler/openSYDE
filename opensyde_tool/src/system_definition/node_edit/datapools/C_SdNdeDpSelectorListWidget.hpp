@@ -100,8 +100,7 @@ private:
 
    bool m_OpenDataPoolSelectDialog(stw::opensyde_core::C_OscNodeDataPool & orc_OscDataPool,
                                    C_SdNdeDpSelectorAddWidget::E_SelectionResult & ore_DialogResult,
-                                   stw::opensyde_core::C_OscNodeDataPoolId & orc_SharedDatapoolId,
-                                   QString & orc_RamViewFilePath);
+                                   stw::opensyde_core::C_OscNodeDataPoolId & orc_SharedDatapoolId);
    bool m_OpenDataPoolDialog(stw::opensyde_core::C_OscNodeDataPool & orc_OscDataPool,
                              stw::opensyde_gui_logic::C_PuiSdNodeDataPool & orc_UiDataPool,
                              const stw::opensyde_core::C_OscNodeDataPoolId * const opc_SharedDatapoolId,

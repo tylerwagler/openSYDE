@@ -19,9 +19,6 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_PuiProject.hpp"
-#include "C_Uti.hpp"
-#include "C_UsHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -57,8 +54,7 @@ C_SdNdeDpSelectorAddWidget::C_SdNdeDpSelectorAddWidget(stw::opensyde_gui_element
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeDpSelectorAddWidget),
    mu32_NodeIndex(ou32_NodeIndex),
-   mrc_OscDataPool(orc_OscDataPool),
-   mc_RamViewFilePath("")
+   mrc_OscDataPool(orc_OscDataPool)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -79,8 +75,6 @@ C_SdNdeDpSelectorAddWidget::C_SdNdeDpSelectorAddWidget(stw::opensyde_gui_element
            &C_SdNdeDpSelectorAddWidget::m_DisableSharedSection);
    connect(this->mpc_Ui->pc_RadioButtonShared, &stw::opensyde_gui_elements::C_OgeRabProperties::toggled, this,
            &C_SdNdeDpSelectorAddWidget::m_EnableSharedSection);
-   connect(this->mpc_Ui->pc_RadiButtonRamViewImport, &stw::opensyde_gui_elements::C_OgeRabProperties::toggled, this,
-           &C_SdNdeDpSelectorAddWidget::m_DisableSharedSection);
 
    //lint -e{929}  Qt interface
    connect(this->mpc_Ui->pc_ComboBoxSharedDatapool,
@@ -109,7 +103,6 @@ void C_SdNdeDpSelectorAddWidget::InitStaticNames(void) const
 
    this->mpc_Ui->pc_RadioButtonStandAlone->setText(C_GtGetText::h_GetText("Stand-alone Datapool"));
    this->mpc_Ui->pc_RadioButtonShared->setText(C_GtGetText::h_GetText("Shared Datapool"));
-   this->mpc_Ui->pc_RadiButtonRamViewImport->setText(C_GtGetText::h_GetText("Import from RAMView Project"));
 
    this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Continue"));
    this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
@@ -126,11 +119,6 @@ void C_SdNdeDpSelectorAddWidget::InitStaticNames(void) const
                                                                 "A Datapool with relationship to other Datapools.\n"
                                                                 "Datapool configuration and properties are synchronized"
                                                                 "within shared Datapools."));
-   this->mpc_Ui->pc_RadiButtonRamViewImport->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                                      "Import from RAMView Project"),
-                                                                   C_GtGetText::h_GetText(
-                                                                      "A Datapool that gets imported from a RAMView "
-                                                                      "project by loading Datapool lists from a *.def file."));
 
    this->mpc_Ui->pc_LabelSharedDatapool->SetToolTipInformation(C_GtGetText::h_GetText("Share with"),
                                                                C_GtGetText::h_GetText("Select share partner Datapool."));
@@ -146,14 +134,13 @@ void C_SdNdeDpSelectorAddWidget::InitStaticNames(void) const
 
    \param[out]  orc_SharedDatapoolId   Datapool ID of selected shared datapool partner to the new datapool
                                        Will be filled if at least one shareable datapool is available
-   \param[out]  orc_RamViewFilePath    RAMView project file name (*.def)
 
    \return
-   Dialog result: Stand-alone Datapool or shared Datapool or Datapool to import from a RAMView project
+   Dialog result: Stand-alone Datapool or shared Datapool
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeDpSelectorAddWidget::E_SelectionResult C_SdNdeDpSelectorAddWidget::GetDialogResult(
-   C_OscNodeDataPoolId & orc_SharedDatapoolId, QString & orc_RamViewFilePath) const
+   C_OscNodeDataPoolId & orc_SharedDatapoolId) const
 {
    E_SelectionResult e_Result = eSTANDALONE;
 
@@ -165,11 +152,6 @@ C_SdNdeDpSelectorAddWidget::E_SelectionResult C_SdNdeDpSelectorAddWidget::GetDia
    {
       e_Result = eSHARED;
       this->m_GetSelectedSharedDatapool(orc_SharedDatapoolId);
-   }
-   else if (this->mpc_Ui->pc_RadiButtonRamViewImport->isChecked())
-   {
-      e_Result = eRAMVIEWIMPORT;
-      orc_RamViewFilePath = this->mc_RamViewFilePath;
    }
    else
    {
@@ -252,43 +234,7 @@ void C_SdNdeDpSelectorAddWidget::m_InitFromData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpSelectorAddWidget::m_OkClicked(void)
 {
-   bool q_Continue = true;
-
-   if (this->mpc_Ui->pc_RadiButtonRamViewImport->isChecked() == true)
-   {
-      QString c_Folder = C_UsHandler::h_GetInstance()->GetLastKnownRamViewProjectPath();
-
-      // use project folder path if no path is known
-      if (c_Folder.isEmpty() == true)
-      {
-         c_Folder = C_PuiProject::h_GetInstance()->GetFolderPath();
-      }
-
-      // default to exe if path is empty (i.e. project is not saved yet)
-      if (c_Folder.isEmpty() == true)
-      {
-         c_Folder = C_Uti::h_GetExePath();
-      }
-
-      mc_RamViewFilePath = C_OgeWiUtil::h_GetOpenFileName(this, C_GtGetText::h_GetText("Select RAMView project"),
-                                                          c_Folder, "*.def", "*.def");
-
-      // return to dialog if user canceled file selection
-      if (mc_RamViewFilePath.isEmpty() == true)
-      {
-         q_Continue = false;
-      }
-      else
-      {
-         // remember user setting
-         C_UsHandler::h_GetInstance()->SetLastKnownRamViewProjectPath(mc_RamViewFilePath);
-      }
-   }
-
-   if (q_Continue == true)
-   {
-      this->mrc_ParentDialog.accept();
-   }
+   this->mrc_ParentDialog.accept();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

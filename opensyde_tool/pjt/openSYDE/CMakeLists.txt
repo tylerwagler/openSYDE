@@ -283,7 +283,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewTableView.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableModel.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableView.cpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.cpp
    ${PROJECT_ROOT}/src/system_views/C_SyvHandlerWidget.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaDashboardScreenshot.cpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpUpdateWidget.cpp
@@ -976,7 +975,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBaseCheckable.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewCheckable.cpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreeModelCheckable.cpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamView.cpp
 )
 
 set(OPENSYDE_HEADERS
@@ -1067,7 +1065,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewTableView.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableModel.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoTableView.hpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.hpp
    ${PROJECT_ROOT}/src/system_views/C_SyvHandlerWidget.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/undo/C_SyvDaDashboardScreenshot.hpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpUpdateWidget.hpp
@@ -1775,7 +1772,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBaseCheckable.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewCheckable.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreeModelCheckable.hpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamView.hpp
 )
 
 set(OPENSYDE_FORMS
@@ -1810,7 +1806,6 @@ set(OPENSYDE_FORMS
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoManagerIntfWidget.ui
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoOverviewWidget.ui
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoPdoWidget.ui
-   ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpImportRamViewReport.ui
    ${PROJECT_ROOT}/src/system_views/C_SyvHandlerWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.ui
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiHover.ui

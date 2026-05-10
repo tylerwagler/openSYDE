@@ -42,8 +42,7 @@ public:
    enum E_SelectionResult ///< Flag for result of selection result of dialog
    {
       eSTANDALONE = 0, ///< Stand alone Datapool
-      eSHARED,         ///< Shared Datapool
-      eRAMVIEWIMPORT   ///< Datapool imported from a RAMView project
+      eSHARED          ///< Shared Datapool
    };
 
    explicit C_SdNdeDpSelectorAddWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
@@ -53,8 +52,7 @@ public:
 
    void InitStaticNames(void) const;
 
-   E_SelectionResult GetDialogResult(stw::opensyde_core::C_OscNodeDataPoolId & orc_SharedDatapoolId,
-                                     QString & orc_RamViewFilePath) const;
+   E_SelectionResult GetDialogResult(stw::opensyde_core::C_OscNodeDataPoolId & orc_SharedDatapoolId) const;
 
 
 private:
@@ -63,7 +61,6 @@ private:
    const uint32_t mu32_NodeIndex;
    //lint -e{1725} Only problematic if copy or assignment is allowed
    stw::opensyde_core::C_OscNodeDataPool & mrc_OscDataPool;
-   QString mc_RamViewFilePath;
 
    std::map<QString, stw::opensyde_core::C_OscNodeDataPoolId> mc_AvailableDatapools;
 

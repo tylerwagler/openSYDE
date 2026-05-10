@@ -706,7 +706,6 @@ void C_UsFiler::mh_SaveProjectDependentSection(QSettings & orc_Ini, const C_UsHa
       orc_Ini.setValue("ProjSd_last_known_halc_import_path", orc_UserSettings.GetLastKnownHalcImportPath());
       orc_Ini.setValue("ProjSd_last_known_halc_export_path", orc_UserSettings.GetLastKnownHalcExportPath());
       orc_Ini.setValue("ProjSd_last_known_service_project_path", orc_UserSettings.GetLastKnownServiceProjectPath());
-      orc_Ini.setValue("ProjSd_last_known_ramview_project_path", orc_UserSettings.GetLastKnownRamViewProjectPath());
       orc_Ini.setValue("ProjSd_last_known_j1939_catalog_path", orc_UserSettings.GetLastKnownJ1939CatalogPath());
       orc_Ini.setValue("ProjSd_last_known_csv_export_path", orc_UserSettings.GetLastKnownCsvExportPath());
 
@@ -1543,8 +1542,6 @@ void C_UsFiler::mh_LoadProjectDependentSection(C_UsHandler & orc_UserSettings, Q
             orc_Ini.value("ProjSd_last_known_halc_export_path", "").toString());
          orc_UserSettings.SetLastKnownServiceProjectPath(
             orc_Ini.value("ProjSd_last_known_service_project_path", "").toString());
-         orc_UserSettings.SetLastKnownRamViewProjectPath(
-            orc_Ini.value("ProjSd_last_known_ramview_project_path", "").toString());
          orc_UserSettings.SetLastKnownJ1939CatalogPath(
             orc_Ini.value("ProjSd_last_known_j1939_catalog_path", "").toString());
          orc_UserSettings.SetLastKnownCsvExportPath(

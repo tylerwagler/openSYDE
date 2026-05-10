@@ -30,8 +30,6 @@
 #include "TglUtils.hpp"
 #include "C_PuiSdSharedDatapools.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SdNdeDpImportRamView.hpp"
-#include "C_SdNdeDpImportRamViewReport.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -495,7 +493,6 @@ void C_SdNdeDpSelectorListWidget::AddNewDatapool(void)
          C_SdNdeDpSelectorAddWidget::E_SelectionResult e_SelectionDialogResult =
             C_SdNdeDpSelectorAddWidget::eSTANDALONE;
          C_OscNodeDataPoolId c_SharedDatapoolId;
-         QString c_RamViewProjectPath;
          bool q_ContinueFromSelection = false;
 
          // the type must be initialized
@@ -506,84 +503,13 @@ void C_SdNdeDpSelectorListWidget::AddNewDatapool(void)
          //Handle default NVM size (as soon as possible)
          C_SdNdeDpSelectorListWidget::mh_HandleDefaultNvmSize(c_NewDatapool);
 
-         // ask for sharing or RAMView import if possible
-         // (only if it is a DIAG or NVM Datapool - no sharing between and no import of COMM and HAL Datapools)
+         // ask for sharing if possible
+         // (only if it is a DIAG or NVM Datapool - no sharing between COMM and HAL Datapools)
          if ((this->me_DataPoolType == C_OscNodeDataPool::eDIAG) ||
              (this->me_DataPoolType == C_OscNodeDataPool::eNVM))
          {
             q_ContinueFromSelection =
-               this->m_OpenDataPoolSelectDialog(c_NewDatapool, e_SelectionDialogResult, c_SharedDatapoolId,
-                                                c_RamViewProjectPath);
-         }
-
-         if ((q_ContinueFromSelection == true) &&
-             (e_SelectionDialogResult == C_SdNdeDpSelectorAddWidget::eRAMVIEWIMPORT))
-         {
-            stw::scl::C_SclStringList c_ImportInfo;
-            QApplication::setOverrideCursor(Qt::WaitCursor);
-            const int32_t s32_ImportResult = C_SdNdeDpImportRamView::h_ImportDataPoolFromRamViewDefProject(
-               c_RamViewProjectPath.toStdString().c_str(), c_NewDatapool, c_UiDataPool, c_ImportInfo);
-            QApplication::restoreOverrideCursor();
-
-            if (s32_ImportResult == C_NO_ERR)
-            {
-               // check if we found at least one list for the specified Datapool type
-               // we do not need to check if the list has any element, because we assume it is a valid RAMView project
-               if (c_NewDatapool.c_Lists.empty() == true)
-               {
-                  // show error message box and stop continuing
-                  const QString c_RamOrEeprom = (c_NewDatapool.e_Type == C_OscNodeDataPool::eNVM) ? "EEPROM" : "RAM";
-                  C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-
-                  c_Message.SetHeading(C_GtGetText::h_GetText("RAMView Import"));
-                  c_Message.SetDescription(C_GtGetText::h_GetText("No lists of type ") + c_RamOrEeprom +
-                                           C_GtGetText::h_GetText(" found. A ") +
-                                           C_PuiSdUtil::h_ConvertDataPoolTypeToString(c_NewDatapool.e_Type) +
-                                           C_GtGetText::h_GetText(" Datapool cannot be created without a list."));
-                  c_Message.SetDetails(
-                     C_GtGetText::h_GetText("RAMView project \"") + c_RamViewProjectPath +
-                     C_GtGetText::h_GetText("\" does not contain any list of type ") + c_RamOrEeprom + ".");
-                  c_Message.Execute();
-
-                  q_ContinueFromSelection = false;
-               }
-               else
-               {
-                  // show report
-                  const QPointer<C_OgePopUpDialog> c_PopUpDialogReport = new C_OgePopUpDialog(this, this);
-                  C_SdNdeDpImportRamViewReport * const pc_ReportDialogWidget =
-                     new C_SdNdeDpImportRamViewReport(*c_PopUpDialogReport, c_RamViewProjectPath,
-                                                      c_NewDatapool, c_ImportInfo);
-                  Q_UNUSED(pc_ReportDialogWidget)
-                  c_PopUpDialogReport->SetSize(mc_POPUP_REPORT_SIZE);
-
-                  if (c_PopUpDialogReport->exec() != static_cast<int32_t>(QDialog::Accepted))
-                  {
-                     q_ContinueFromSelection = false;
-                  }
-                  if (c_PopUpDialogReport != NULL)
-                  {
-                     c_PopUpDialogReport->HideOverlay();
-                     c_PopUpDialogReport->deleteLater();
-                  }
-               } //lint !e429  //no memory leak because of the parent of pc_Dialog and the Qt memory management
-            }
-            else
-            {
-               // show error message box and stop continuing
-               C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-               c_Message.SetHeading(C_GtGetText::h_GetText("RAMView Import Failed"));
-               c_Message.SetDescription(C_GtGetText::h_GetText("Error occurred loading RAMView project file."));
-               c_Message.SetDetails(
-                  C_GtGetText::h_GetText("Could not load \"") + c_RamViewProjectPath + "\".<br>" +
-                  static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +
-                  C_Uti::h_GetLink(C_GtGetText::h_GetText("log file."), mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                   C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()));
-               C_OscLoggingHandler::h_Flush(); // update log file
-               c_Message.Execute();
-
-               q_ContinueFromSelection = false;
-            }
+               this->m_OpenDataPoolSelectDialog(c_NewDatapool, e_SelectionDialogResult, c_SharedDatapoolId);
          }
 
          if ((this->me_DataPoolType == C_OscNodeDataPool::eCOM) ||
@@ -1268,14 +1194,13 @@ void C_SdNdeDpSelectorListWidget::m_UpdateNumbers(void) const
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Opens the add Datapool selection dialog
 
-   Opens the add Datapool dialog where the user can select if to add a standalone Datapool, import a Datapool from
-   a RAMView project or add a shared Datapool incl. configuration.
+   Opens the add Datapool dialog where the user can select if to add a standalone Datapool or
+   a shared Datapool incl. configuration.
 
    \param[in,out] orc_OscDataPool         Reference to the actual core datapool object
-   \param[out]    ore_DialogResult        Flag for stand-alone vs shared vs. RAMView imported Datapool
+   \param[out]    ore_DialogResult        Flag for stand-alone vs shared Datapool
                                           Following parameters are only valid in particular result cases
    \param[out]    orc_SharedDatapoolId    Datapool ID of selected shared datapool partner to the new datapool
-   \param[out]    orc_RamViewFilePath     RAMView project file path (*.def)
 
    \return
    User accepted dialog
@@ -1283,8 +1208,7 @@ void C_SdNdeDpSelectorListWidget::m_UpdateNumbers(void) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SdNdeDpSelectorListWidget::m_OpenDataPoolSelectDialog(C_OscNodeDataPool & orc_OscDataPool,
-                                                             C_SdNdeDpSelectorAddWidget::E_SelectionResult & ore_DialogResult, C_OscNodeDataPoolId & orc_SharedDatapoolId,
-                                                             QString & orc_RamViewFilePath)
+                                                             C_SdNdeDpSelectorAddWidget::E_SelectionResult & ore_DialogResult, C_OscNodeDataPoolId & orc_SharedDatapoolId)
 {
    bool q_Return = false;
 
@@ -1301,7 +1225,7 @@ bool C_SdNdeDpSelectorListWidget::m_OpenDataPoolSelectDialog(C_OscNodeDataPool &
    if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
       q_Return = true;
-      ore_DialogResult = pc_Dialog->GetDialogResult(orc_SharedDatapoolId, orc_RamViewFilePath);
+      ore_DialogResult = pc_Dialog->GetDialogResult(orc_SharedDatapoolId);
    }
 
    c_New->HideOverlay();

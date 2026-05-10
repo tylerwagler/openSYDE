@@ -307,28 +307,6 @@
           </item>
          </layout>
         </item>
-        <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeRabProperties" name="pc_RadiButtonRamViewImport">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>RAMViewImport</string>
-          </property>
-          <attribute name="buttonGroup">
-           <string notr="true">buttonGroup</string>
-          </attribute>
-         </widget>
-        </item>
        </layout>
       </item>
      </layout>
