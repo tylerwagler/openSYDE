@@ -27,7 +27,6 @@ public:
    C_SupSuSequences(void);
    void SetQuiet(const bool & orq_Quiet);
    const std::vector<C_OsyDeviceInformation> & GetActiveOsyDeviceInformation(std::vector<uint16_t> & orc_Indexes) const;
-   const std::vector<C_XflDeviceInformation> & GetActiveXflDeviceInformation(std::vector<uint16_t> & orc_Indexes) const;
    void ClearActiveDeviceInformation(void); //call before ReadDeviceInformation(...)
 protected:
    virtual bool m_ReportProgress(const E_ProgressStep oe_Step, const int32_t os32_Result,
@@ -39,8 +38,6 @@ protected:
                                  const stw::scl::C_SclString & orc_Information);
    virtual void m_ReportOpenSydeFlashloaderInformationRead(const C_OsyDeviceInformation & orc_Info,
                                                             const uint32_t ou32_NodeIndex);
-   virtual void m_ReportStwFlashloaderInformationRead(const C_XflDeviceInformation & orc_Info,
-                                                      const uint32_t ou32_NodeIndex);
 
 private:
    bool mq_Quiet;
@@ -50,8 +47,6 @@ private:
 
    std::vector<uint16_t> mc_OsyDeviceInformationIndexes; //absolute index of device as reported by virtual function
    std::vector<C_OsyDeviceInformation> mc_ActiveOsyDeviceInformation;
-   std::vector<uint16_t> mc_XflDeviceInformationIndexes; //absolute index of device as reported by virtual function
-   std::vector<C_XflDeviceInformation> mc_ActiveXflDeviceInformation;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

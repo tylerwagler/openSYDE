@@ -98,15 +98,6 @@ public:
    E_OscSuSequencesNodeState e_DebuggerFlagSent;
 };
 
-class C_OscSuSequencesNodeStwFlHexFileStates :
-   public C_OscSuSequencesNodeFileStates
-{
-public:
-   C_OscSuSequencesNodeStwFlHexFileStates(void);
-
-   E_OscSuSequencesNodeState e_FileSent;
-};
-
 // Generic states of node
 class C_OscSuSequencesNodeStates
 {
@@ -156,9 +147,6 @@ public:
    std::vector<C_OscSuSequencesNodeOtherFileStates> c_StateOtherFiles;
    std::vector<C_OscSuSequencesNodePsiFileStates> c_StatePsiFiles;
    C_OscSuSequencesNodeSecuritySettingsStates c_StateSecuritySettings;
-
-   // STW flashloader specific
-   std::vector<C_OscSuSequencesNodeStwFlHexFileStates> c_StateStwFlHexFiles;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

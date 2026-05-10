@@ -57,8 +57,6 @@ public:
 
    void GetOsyDeviceInformation(std::vector<uint32_t> & orc_OsyNodeIndexes,
                                 std::vector<C_OsyDeviceInformation> & orc_OsyDeviceInformation);
-   void GetXflDeviceInformation(std::vector<uint32_t> & orc_XflNodeIndexes,
-                                std::vector<C_XflDeviceInformation> & orc_XflDeviceInformation);
    QString GetStepName(const E_ProgressStep oe_Step) const;
 
    void AbortCurrentProgress(void);
@@ -88,7 +86,6 @@ Q_SIGNALS:
                                    const uint8_t ou8_BusIdentifier, const uint8_t ou8_NodeIdentifier) const;
 
    void SigReportOpenSydeFlashloaderInformationRead(void);
-   void SigReportStwFlashloaderInformationRead(void);
 
 protected:
    bool m_ReportProgress(const E_ProgressStep oe_Step, const int32_t os32_Result, const uint8_t ou8_Progress,
@@ -98,8 +95,6 @@ protected:
                          const stw::scl::C_SclString & orc_Information) override;
    void m_ReportOpenSydeFlashloaderInformationRead(const C_OsyDeviceInformation & orc_Info,
                                                    const uint32_t ou32_NodeIndex) override;
-   void m_ReportStwFlashloaderInformationRead(const C_XflDeviceInformation & orc_Info,
-                                              const uint32_t ou32_NodeIndex) override;
 
 private:
    //Avoid call
@@ -130,10 +125,6 @@ private:
    //results of openSYDE device information scans:
    std::vector<uint32_t> mc_ReportOsyDeviceInformationNodeIndex;
    std::vector<C_OsyDeviceInformation> mc_ReportOsyDeviceInformation;
-
-   //results of STW Flashloader device information scans:
-   std::vector<uint32_t> mc_ReportXflDeviceInformationNodeIndex;
-   std::vector<C_XflDeviceInformation> mc_ReportXflDeviceInformation;
 
    // Security PEM database
    stw::opensyde_core::C_OscSecurityPemDatabase mc_PemDatabase;

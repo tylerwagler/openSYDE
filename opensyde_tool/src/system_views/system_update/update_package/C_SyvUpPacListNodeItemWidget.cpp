@@ -53,7 +53,6 @@ using namespace stw::opensyde_core;
    \param[in]      ou32_NodeIndex      Node index
    \param[in]      orc_DeviceName      Name of device for comparing with application block
    \param[in]      oq_FileBased        Flag if node is a file based device
-   \param[in]      oq_StwFlashloader   Flag if node has not an openSYDE Flashloader but a STW Flashloader
    \param[in,out]  opc_Parent          Pointer to parent and the list which holds the widget. The original parent could
                                        be replaced by the layout handling of Qt. This must be the list widget which
                                        holds all items (base class must be C_SyvUpPackageSectionNodeWidget).
@@ -61,7 +60,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpPacListNodeItemWidget::C_SyvUpPacListNodeItemWidget(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
                                                            const QString & orc_DeviceName, const bool oq_FileBased,
-                                                           const bool oq_StwFlashloader, QWidget * const opc_Parent) :
+                                                           QWidget * const opc_Parent) :
    C_OgeWiOnlyBackground(opc_Parent),
    mpc_Ui(new Ui::C_SyvUpPacListNodeItemWidget),
    mu32_ViewIndex(ou32_ViewIndex),
@@ -70,7 +69,6 @@ C_SyvUpPacListNodeItemWidget::C_SyvUpPacListNodeItemWidget(const uint32_t ou32_V
    mc_AppDeviceType(""),
    mq_AppInfoAmbiguous(false),
    mq_FileBased(oq_FileBased),
-   mq_StwFlashloader(oq_StwFlashloader),
    mq_SkipOfUpdateFile(false),
    mc_OwnerSectionName("Title"),
    mu32_Number(0U),

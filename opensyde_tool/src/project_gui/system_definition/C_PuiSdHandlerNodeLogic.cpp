@@ -370,34 +370,6 @@ C_OscNodeSquad * C_PuiSdHandlerNodeLogic::GetOscNodeSquad(const uint32_t & oru32
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set STW flashloader settings
-
-   \param[in]  ou32_Index     Node index
-   \param[in]  orc_Settings   Settings
-
-   \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSdHandlerNodeLogic::SetStwFlashloaderSettings(const uint32_t ou32_Index,
-                                                           const C_OscNodeStwFlashloaderSettings & orc_Settings)
-{
-   int32_t s32_Retval = C_NO_ERR;
-
-   if (ou32_Index < this->mc_CoreDefinition.c_Nodes.size())
-   {
-      C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_Index];
-      rc_Node.c_Properties.c_StwFlashloaderSettings = orc_Settings;
-   }
-   else
-   {
-      s32_Retval = C_RANGE;
-   }
-   return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set node openSYDE server settings
 
    \param[in]  ou32_Index     Node index
@@ -1371,8 +1343,7 @@ bool C_PuiSdHandlerNodeLogic::HasNodeAnAvailableFlashloader(const uint32_t ou32_
          tgl_assert(u32_SubDeviceIndex < pc_Device->c_SubDevices.size());
          if (u32_SubDeviceIndex < pc_Device->c_SubDevices.size())
          {
-            if (((pc_Device->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderStwCan == false) &&
-                 (pc_Device->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeCan == false)) &&
+            if ((pc_Device->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeCan == false) &&
                 (pc_Device->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeEthernet == false))
             {
                q_Retval = false;

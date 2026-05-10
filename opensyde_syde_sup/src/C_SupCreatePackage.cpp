@@ -20,6 +20,7 @@
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_OscUtils.hpp"
 #include "C_OscSupServiceUpdatePackageCreate.hpp"
 #include "C_OscViewData.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"

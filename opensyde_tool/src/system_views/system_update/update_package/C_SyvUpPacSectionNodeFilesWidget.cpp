@@ -89,7 +89,7 @@ void C_SyvUpPacSectionNodeFilesWidget::AddFile(const QString & orc_File)
          // Add the file
          C_SyvUpPacListNodeItemFileWidget * const pc_FileWidget =
             new C_SyvUpPacListNodeItemFileWidget(this->mu32_ViewIndex, this->mu32_NodeIndex, this->mc_DeviceType,
-                                                 this->mq_FileBased, this->mq_StwFlashloader, this);
+                                                 this->mq_FileBased, this);
 
          // Pre initialization of the size. If this is not set, the eliding of the path label will cause a
          // visible resizing
@@ -119,7 +119,7 @@ void C_SyvUpPacSectionNodeFilesWidget::AddFile(const QString & orc_File)
          C_SyvUpPacListNodeItemPemFileWidget * const pc_PemWidget =
             new C_SyvUpPacListNodeItemPemFileWidget(this->mu32_ViewIndex, this->mu32_NodeIndex,
                                                     this->mc_DeviceType,
-                                                    this->mq_FileBased, this->mq_StwFlashloader, this);
+                                                    this->mq_FileBased, this);
 
          pc_PemWidget->SetAppFile(orc_File, false);
          pc_PemWidget->SetAppNumber(0U);
@@ -156,7 +156,6 @@ void C_SyvUpPacSectionNodeFilesWidget::AddFile(const QString & orc_File)
             new C_SyvUpPacListNodeItemParamSetWidget(this->mu32_ViewIndex, this->mu32_NodeIndex,
                                                      this->mc_DeviceType,
                                                      this->mq_FileBased,
-                                                     this->mq_StwFlashloader,
                                                      this);
 
          // add file
@@ -590,7 +589,7 @@ void C_SyvUpPacSectionNodeFilesWidget::m_InitSpecificItem(const stw::opensyde_co
       C_SyvUpPacListNodeItemPemFileWidget * const pc_PemWidget =
          new C_SyvUpPacListNodeItemPemFileWidget(this->mu32_ViewIndex, this->mu32_NodeIndex,
                                                  this->mc_DeviceType,
-                                                 this->mq_FileBased, this->mq_StwFlashloader, this);
+                                                 this->mq_FileBased, this);
 
       pc_PemWidget->SetAppFile(c_ViewPemPath, false);
       pc_PemWidget->SetSkipOfUpdateFile(q_ViewPemSkipFlag);
@@ -614,7 +613,7 @@ void C_SyvUpPacSectionNodeFilesWidget::m_InitSpecificItem(const stw::opensyde_co
       C_SyvUpPacListNodeItemParamSetWidget * const pc_ParamWidget =
          new C_SyvUpPacListNodeItemParamSetWidget(this->mu32_ViewIndex, this->mu32_NodeIndex,
                                                   this->mc_DeviceType,
-                                                  this->mq_FileBased, this->mq_StwFlashloader, this);
+                                                  this->mq_FileBased, this);
 
       pc_ParamWidget->SetAppFile(rc_FileInfo.GetPath().c_str(), false);
       pc_ParamWidget->SetSkipOfUpdateFile(c_ViewParamSetSkipFlags[u32_Counter]);
@@ -635,7 +634,7 @@ void C_SyvUpPacSectionNodeFilesWidget::m_InitSpecificItem(const stw::opensyde_co
       C_SyvUpPacListNodeItemFileWidget * const pc_AppWidget =
          new C_SyvUpPacListNodeItemFileWidget(this->mu32_ViewIndex, this->mu32_NodeIndex,
                                               this->mc_DeviceType,
-                                              this->mq_FileBased, this->mq_StwFlashloader, this);
+                                              this->mq_FileBased, this);
 
       pc_AppWidget->SetAppFile(c_ViewAppPaths[u32_Counter].c_str(), false);
       pc_AppWidget->SetSkipOfUpdateFile(c_ViewFileSkipFlags[u32_Counter]);

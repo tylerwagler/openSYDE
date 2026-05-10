@@ -204,12 +204,8 @@ void C_SyvDcWidget::CleanUp(void)
       disconnect(this->mpc_DcSequences, &C_SyvDcSequences::SigRunConfEthOpenSydeDevicesProgress, this,
                  &C_SyvDcWidget::m_UpdateProgressOfOpenSydeConfig);
 
-      disconnect(this->mpc_DcSequences, &C_SyvDcSequences::SigRunConfCanStwFlashloaderDevicesProgress, this,
-                 &C_SyvDcWidget::m_UpdateProgressOfStwFlashloaderConfig);
       disconnect(this->mpc_DcSequences, &C_SyvDcSequences::SigRunConfOpenSydeDevicesState, this,
                  &C_SyvDcWidget::m_UpdateStateOfOpenSydeConfig);
-      disconnect(this->mpc_DcSequences, &C_SyvDcSequences::SigRunConfCanStwFlashloaderDevicesState, this,
-                 &C_SyvDcWidget::m_UpdateStateOfStwFlashloaderConfig);
    }
 
    //Stop timer just in case
@@ -342,12 +338,8 @@ int32_t C_SyvDcWidget::m_InitSequence(void)
       connect(this->mpc_DcSequences, &C_SyvDcSequences::SigRunConfEthOpenSydeDevicesProgress, this,
               &C_SyvDcWidget::m_UpdateProgressOfOpenSydeConfig, Qt::QueuedConnection);
 
-      connect(this->mpc_DcSequences, &C_SyvDcSequences::SigRunConfCanStwFlashloaderDevicesProgress, this,
-              &C_SyvDcWidget::m_UpdateProgressOfStwFlashloaderConfig, Qt::QueuedConnection);
       connect(this->mpc_DcSequences, &C_SyvDcSequences::SigRunConfOpenSydeDevicesState, this,
               &C_SyvDcWidget::m_UpdateStateOfOpenSydeConfig, Qt::QueuedConnection);
-      connect(this->mpc_DcSequences, &C_SyvDcSequences::SigRunConfCanStwFlashloaderDevicesState, this,
-              &C_SyvDcWidget::m_UpdateStateOfStwFlashloaderConfig, Qt::QueuedConnection);
    }
 
    if (this->mpc_DcSequences != NULL) // required anyway by PC lint
@@ -774,7 +766,6 @@ void C_SyvDcWidget::m_StartConfigProper(void)
          this->mpc_Ui->pc_ListWidgetExistingNodesAssignment->GetConfigs();
       //Prepare
       this->mc_OpenSydeDeviceConfigurations.clear();
-      this->mc_StwFlashloaderDeviceConfigurations.clear();
 
       //Append
       for (uint32_t u32_ItConfig = 0; (u32_ItConfig < c_Configs.size()) && (s32_Result == C_NO_ERR); ++u32_ItConfig)
@@ -784,16 +775,8 @@ void C_SyvDcWidget::m_StartConfigProper(void)
          s32_Result = this->mpc_DcSequences->FillDeviceConfig(rc_Config, e_Flashloader);
          if (s32_Result == C_NO_ERR)
          {
-            if (e_Flashloader == C_OscNodeProperties::eFL_OPEN_SYDE)
-            {
-               this->mc_OpenSydeDeviceConfigurations.push_back(rc_Config);
-            }
-            else
-            {
-               //Flashloader type "none" is supported by the device structure, but not the UI
-               tgl_assert(e_Flashloader == C_OscNodeProperties::eFL_STW);
-               this->mc_StwFlashloaderDeviceConfigurations.push_back(rc_Config);
-            }
+            tgl_assert(e_Flashloader == C_OscNodeProperties::eFL_OPEN_SYDE);
+            this->mc_OpenSydeDeviceConfigurations.push_back(rc_Config);
          }
       }
 
@@ -806,58 +789,28 @@ void C_SyvDcWidget::m_StartConfigProper(void)
          if ((s32_Result == C_NO_ERR) ||
              (s32_Result == C_NOACT)) // No openSYDE devices to configure
          {
-            if (this->mpc_DcSequences->IsAtLeastOneStwFlashloaderNodeActiveOnLocalBus() == true)
+            // Run and check the openSYDE configuration
+            if (this->me_BusType == C_OscSystemBus::eCAN)
             {
-               if (this->me_BusType == C_OscSystemBus::eCAN)
-               {
-                  // Run and check the STW flashloader configuration
-                  s32_Result =
-                     this->mpc_DcSequences->ConfCanStwFlashloaderDevices(this->mc_StwFlashloaderDeviceConfigurations);
-
-                  if (s32_Result != C_NO_ERR)
-                  {
-                     C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                     c_Message.SetDescription(C_GtGetText::h_GetText("Could not configure STW Flashloader devices."));
-                     c_Message.SetCustomMinHeight(180, 180);
-                     c_Message.Execute();
-                  }
-               }
-               else
-               {
-                  C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                  c_Message.SetDescription(C_GtGetText::h_GetText(
-                                              "Could not configure STW Flashloader devices over Ethernet."));
-                  c_Message.SetCustomMinHeight(180, 180);
-                  c_Message.Execute();
-
-                  s32_Result = C_NOACT;
-               }
+               s32_Result =
+                  this->mpc_DcSequences->ConfCanOpenSydeDevices(this->mc_OpenSydeDeviceConfigurations,
+                                                                this->m_AreAllInterfacesToConfigure(),
+                                                                this->mq_SecurityFeatureUsed);
             }
             else
             {
-               // No STW flashloader devices. Run and check the openSYDE configuration
-               if (this->me_BusType == C_OscSystemBus::eCAN)
-               {
-                  s32_Result =
-                     this->mpc_DcSequences->ConfCanOpenSydeDevices(this->mc_OpenSydeDeviceConfigurations,
-                                                                   this->m_AreAllInterfacesToConfigure(),
-                                                                   this->mq_SecurityFeatureUsed);
-               }
-               else
-               {
-                  s32_Result =
-                     this->mpc_DcSequences->ConfEthOpenSydeDevices(this->mc_OpenSydeDeviceConfigurations,
-                                                                   this->m_AreAllInterfacesToConfigure(),
-                                                                   this->mq_SecurityFeatureUsed);
-               }
+               s32_Result =
+                  this->mpc_DcSequences->ConfEthOpenSydeDevices(this->mc_OpenSydeDeviceConfigurations,
+                                                                this->m_AreAllInterfacesToConfigure(),
+                                                                this->mq_SecurityFeatureUsed);
+            }
 
-               if (s32_Result != C_NO_ERR)
-               {
-                  C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                  c_Message.SetDescription(C_GtGetText::h_GetText("Could not configure openSYDE devices."));
-                  c_Message.SetCustomMinHeight(180, 180);
-                  c_Message.Execute();
-               }
+            if (s32_Result != C_NO_ERR)
+            {
+               C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
+               c_Message.SetDescription(C_GtGetText::h_GetText("Could not configure openSYDE devices."));
+               c_Message.SetCustomMinHeight(180, 180);
+               c_Message.Execute();
             }
 
             if (s32_Result == C_NO_ERR)
@@ -874,14 +827,7 @@ void C_SyvDcWidget::m_StartConfigProper(void)
                //Start
                if (this->me_BusType == C_OscSystemBus::eCAN)
                {
-                  if (this->mpc_DcSequences->IsAtLeastOneStwFlashloaderNodeActiveOnLocalBus() == true)
-                  {
-                     this->me_Step = eCONFCANSTWFLASHLOADERDEVICES;
-                  }
-                  else
-                  {
-                     this->me_Step = eCONFCANOPENSYDEDEVICES;
-                  }
+                  this->me_Step = eCONFCANOPENSYDEDEVICES;
                }
                else
                {
@@ -973,22 +919,7 @@ void C_SyvDcWidget::m_ShowConfigResult(void)
       }
    }
 
-   u32_DeviceMaxCount = static_cast<uint32_t>(c_SortedOpenSydeDeviceInfos.size() +
-                                              this->mc_StwFlashloaderDeviceConfigurations.size());
-
-   // Show configuration for all STW flashloader devices
-   for (u32_ConfigCounter = 0U; u32_ConfigCounter < this->mc_StwFlashloaderDeviceConfigurations.size();
-        ++u32_ConfigCounter)
-   {
-      std::vector<C_SyvDcDeviceConfiguation> c_StwNode;
-      c_StwNode.push_back(this->mc_StwFlashloaderDeviceConfigurations[u32_ConfigCounter]);
-
-      this->m_ShowConfigInfoOfDevice(c_StwNode,
-                                     u32_DeviceMaxCount, u32_DeviceCounter, c_Text);
-      ++u32_DeviceCounter;
-
-      c_Text += "<br>";
-   }
+   u32_DeviceMaxCount = static_cast<uint32_t>(c_SortedOpenSydeDeviceInfos.size());
 
    // Show configuration for all openSYDE flashloader devices grouped by normal and squad nodes
    for (u32_ConfigCounter = 0U; u32_ConfigCounter < c_SortedOpenSydeDeviceInfos.size();
@@ -1230,18 +1161,6 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
                      this->m_ShowConfigInfoOfInterface(rc_IntfSettingFirstNode, c_FirstServerId, c_FirstServerId,
                                                        true, q_NodeSquad, "",
                                                        orc_Text, false,
-                                                       false);
-                  }
-                  else if ((pc_FirstNode->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW) &&
-                           (((static_cast<uint8_t>(rc_IntfSettingFirstNode.u32_BusIndex) == this->mu32_BusIndex) &&
-                             (rc_IntfSettingFirstNode.u8_NodeId != c_FirstServerId.u8_NodeIdentifier)) ||
-                            (static_cast<uint8_t>(rc_IntfSettingFirstNode.u32_BusIndex) != this->mu32_BusIndex)))
-                  {
-                     // Any other interface than the communication interface of a STW flashloader device
-                     // Can not be configured by the device configuration and can not be part of a node squad
-                     this->m_ShowConfigInfoOfInterface(rc_IntfSettingFirstNode, c_FirstServerId, c_FirstServerId,
-                                                       true, q_NodeSquad, "",
-                                                       orc_Text, true,
                                                        false);
                   }
                   else
@@ -1494,23 +1413,12 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
    if (this->mpc_DcSequences != NULL)
    {
       int32_t s32_Return;
-      bool q_Manual = false;
+      const bool q_Manual = false;
       uint32_t u32_NewBitrate;
       std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> c_OsyNodes;
       std::vector<bool> c_OsyNodesSnrExtFormat;
-      std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> c_StwNodes;
-      const QString c_Details = C_GtGetText::h_GetText("Your system uses at least one node with the STW Flashloader \n"
-                                                       "and the bitrate of the CAN bus has changed. \n"
-                                                       "In this case the reset cannot be performed automatically.");
+      const QString c_Details;
       uint32_t u32_WaitTime = 0U;
-
-      if ((this->mc_StwFlashloaderDeviceConfigurations.size() > 0) &&
-          (oq_SameBitrate == false))
-      {
-         // System with STW flashloader devices.
-         // A reset of STW flashloader with changed bitrates is not reliable to get them back in flashloader
-         q_Manual = true;
-      }
 
       if (q_Manual == false)
       {
@@ -1532,7 +1440,7 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
          this->m_ResetNetwork(true);
       }
 
-      s32_Return = this->m_GetRelevantConfigInfo(c_OsyNodes, c_OsyNodesSnrExtFormat, c_StwNodes, u32_NewBitrate);
+      s32_Return = this->m_GetRelevantConfigInfo(c_OsyNodes, c_OsyNodesSnrExtFormat, u32_NewBitrate);
 
       if ((s32_Return == C_NO_ERR) &&
           (oq_SameBitrate == false))
@@ -1634,7 +1542,7 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
          if (this->me_BusType == C_OscSystemBus::eCAN)
          {
             this->me_Step = eREADBACKCAN;
-            s32_Return = this->mpc_DcSequences->ReadBackCan(c_OsyNodes, c_OsyNodesSnrExtFormat, c_StwNodes);
+            s32_Return = this->mpc_DcSequences->ReadBackCan(c_OsyNodes, c_OsyNodesSnrExtFormat);
          }
          else
          {
@@ -1665,7 +1573,6 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
 
    \param[out]  orc_OpenSydeIds           IDs of openSYDE devices for configuration
    \param[out]  orc_OpenSydeSnrExtFormat  Flags for openSYDE devices if standard or extended format is used
-   \param[out]  orc_StwIds                IDs of STW flashloader devices for configuration
    \param[out]  oru32_Bitrate             Bitrate for current configuration
 
    \return
@@ -1678,7 +1585,6 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvDcWidget::m_GetRelevantConfigInfo(std::vector<C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
                                                std::vector<bool> & orc_OpenSydeSnrExtFormat,
-                                               std::vector<C_OscProtocolDriverOsyNode> & orc_StwIds,
                                                uint32_t & oru32_Bitrate)
 {
    uint32_t u32_Counter;
@@ -1688,7 +1594,6 @@ int32_t C_SyvDcWidget::m_GetRelevantConfigInfo(std::vector<C_OscProtocolDriverOs
    oru32_Bitrate = 0U;
    orc_OpenSydeIds.clear();
    orc_OpenSydeSnrExtFormat.clear();
-   orc_StwIds.clear();
 
    // Check all CAN openSYDE devices
    for (u32_Counter = 0U; u32_Counter < this->mc_OpenSydeDeviceConfigurations.size(); ++u32_Counter)
@@ -1731,39 +1636,6 @@ int32_t C_SyvDcWidget::m_GetRelevantConfigInfo(std::vector<C_OscProtocolDriverOs
       }
    }
 
-   if ((this->mpc_DcSequences != NULL) &&
-       (s32_Return == C_NO_ERR))
-   {
-      // Check all STW flashloader devices
-      if (this->me_BusType == C_OscSystemBus::eCAN)
-      {
-         for (u32_Counter = 0U; u32_Counter < this->mc_StwFlashloaderDeviceConfigurations.size(); ++u32_Counter)
-         {
-            const C_SyvDcDeviceConfiguation & rc_Config = this->mc_StwFlashloaderDeviceConfigurations[u32_Counter];
-
-            if ((rc_Config.c_NodeIds.size() > 0) &&
-                (rc_Config.c_BusIds.size() > 0) &&
-                (rc_Config.c_CanBitrates.size() > 0))
-            {
-               // The first entries must be the used communication interface
-               c_Id.u8_NodeIdentifier = rc_Config.c_NodeIds[0];
-               c_Id.u8_BusIdentifier = rc_Config.c_BusIds[0];
-               orc_StwIds.push_back(c_Id);
-
-               if (oru32_Bitrate == 0U)
-               {
-                  oru32_Bitrate = rc_Config.c_CanBitrates[0] / 1000U;
-               }
-            }
-            else
-            {
-               s32_Return = C_RANGE;
-               break;
-            }
-         }
-      }
-   }
-
    return s32_Return;
 }
 
@@ -1789,12 +1661,6 @@ void C_SyvDcWidget::m_ResetNetwork(const bool oq_ToFlashloader)
       {
          // CAN openSYDE flashloader
          this->mpc_DcSequences->ResetOpenSydeDevices(oq_ToFlashloader);
-      }
-
-      if (this->mc_StwFlashloaderDeviceConfigurations.size() > 0)
-      {
-         // STW flashloader
-         this->mpc_DcSequences->ResetCanStwFlashloaderDevices();
       }
    }
 }
@@ -1826,8 +1692,7 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
          }
          else
          {
-            u32_DeviceTotal = static_cast<uint32_t>(this->mc_OpenSydeDeviceConfigurations.size() +
-                                                    this->mc_StwFlashloaderDeviceConfigurations.size());
+            u32_DeviceTotal = static_cast<uint32_t>(this->mc_OpenSydeDeviceConfigurations.size());
          }
 
          for (u32_DeviceCounter = 0U; u32_DeviceCounter < c_DeviceInfos.size(); ++u32_DeviceCounter)
@@ -1930,7 +1795,6 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
             c_Text += "<b>" + static_cast<QString>(C_GtGetText::h_GetText("Missing node(s) or subnode(s):")) +
                       "</b><br/>";
             //Add missing STW devices
-            m_HandleMissingDevices(this->mc_StwFlashloaderDeviceConfigurations, c_DeviceInfos, c_Text);
             //Add missing openSYDE devices
             m_HandleMissingDevices(this->mc_OpenSydeDeviceConfigurations, c_DeviceInfos, c_Text);
             c_Text += static_cast<QString>(C_GtGetText::h_GetText("For more details see "));
@@ -1953,30 +1817,6 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Slot for reporting the progress of the STW flashloader configuration sequence
-
-   \param[in]  ou32_Progress  Progress of sequence
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDcWidget::m_UpdateProgressOfStwFlashloaderConfig(const uint32_t ou32_Progress) const
-{
-   uint32_t u32_ShowProgress;
-
-   if ((this->mpc_DcSequences != NULL) &&
-       (this->mpc_DcSequences->IsAtLeastOneOpenSydeNodeActive() == true))
-   {
-      // Both sequences necessary. It is only half of it.
-      u32_ShowProgress = (ou32_Progress / 2U);
-   }
-   else
-   {
-      u32_ShowProgress = ou32_Progress;
-   }
-
-   this->mpc_Ui->pc_ProgressConfig->SetProgress(u32_ShowProgress, (u32_ShowProgress == 100U));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Slot for reporting the progress of the openSYDE flashloader configuration sequence
 
    \param[in]  ou32_Progress  Progress of sequence
@@ -1984,40 +1824,7 @@ void C_SyvDcWidget::m_UpdateProgressOfStwFlashloaderConfig(const uint32_t ou32_P
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::m_UpdateProgressOfOpenSydeConfig(const uint32_t ou32_Progress) const
 {
-   uint32_t u32_ShowProgress;
-
-   if ((this->mpc_DcSequences != NULL) &&
-       (this->mpc_DcSequences->IsAtLeastOneStwFlashloaderNodeActiveOnLocalBus() == true))
-   {
-      // Both sequences necessary. It is the second half.
-      u32_ShowProgress = 50U + (ou32_Progress / 2U);
-   }
-   else
-   {
-      u32_ShowProgress = ou32_Progress;
-   }
-
-   this->mpc_Ui->pc_ProgressConfig->SetProgress(u32_ShowProgress, (u32_ShowProgress == 100U));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Saves the state of a concrete step of openSYDE configuration sequence
-
-   \param[in]  ou32_Step            Step of node configuration
-                                    - hu32_SETNODEID
-                                    - hu32_SETCANBITRATE
-                                    - hu32_SETIPADDRESS
-   \param[in]  os32_Result          Result of service
-   \param[in]  ou8_BusIdentifier    Configured bus id of server interface
-   \param[in]  ou8_NodeIdentifier   Configured node id of server interface
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDcWidget::m_UpdateStateOfStwFlashloaderConfig(const uint32_t ou32_Step, const int32_t os32_Result,
-                                                        const uint8_t ou8_BusIdentifier,
-                                                        const uint8_t ou8_NodeIdentifier)
-{
-   // STW flashloader interface will be detected on an other position
-   this->m_UpdateStateOfOpenSydeConfig(ou32_Step, os32_Result, ou8_BusIdentifier, ou8_NodeIdentifier, 0U, 0U);
+   this->mpc_Ui->pc_ProgressConfig->SetProgress(ou32_Progress, (ou32_Progress == 100U));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2520,38 +2327,18 @@ void C_SyvDcWidget::m_Timer(void)
          case eSCANCANENTERFLASHLOADER:
             if (s32_SequenceResult == C_NO_ERR)
             {
-               if (this->mpc_DcSequences->IsAtLeastOneStwFlashloaderNodeActiveOnLocalBus() == true)
-               {
-                  this->me_Step = eSCANCANGETINFOFROMSTWFLASHLOADERDEVICES;
-                  s32_Result = this->mpc_DcSequences->ScanCanGetInfoFromStwFlashloaderDevices();
+               this->me_Step = eSCANCANGETINFOFROMOPENSYDEDEVICES;
+               s32_Result = this->mpc_DcSequences->ScanCanGetInfoFromOpenSydeDevices();
 
-                  if (s32_Result != C_NO_ERR)
-                  {
-                     C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                     c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
-                     c_Message.SetDescription(C_GtGetText::h_GetText("Could not continue with step: Reading information"
-                                                                     " from STW Flashloader devices"));
-                     m_CleanUpScan();
-                     c_Message.SetCustomMinHeight(180, 180);
-                     c_Message.Execute();
-                  }
-               }
-               else
+               if (s32_Result != C_NO_ERR)
                {
-                  // No STW flashloader
-                  this->me_Step = eSCANCANGETINFOFROMOPENSYDEDEVICES;
-                  s32_Result = this->mpc_DcSequences->ScanCanGetInfoFromOpenSydeDevices();
-
-                  if (s32_Result != C_NO_ERR)
-                  {
-                     C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                     c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
-                     c_Message.SetDescription(C_GtGetText::h_GetText("Could not continue with step: Reading information"
-                                                                     " from openSYDE devices."));
-                     m_CleanUpScan();
-                     c_Message.SetCustomMinHeight(180, 180);
-                     c_Message.Execute();
-                  }
+                  C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
+                  c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
+                  c_Message.SetDescription(C_GtGetText::h_GetText("Could not continue with step: Reading information"
+                                                                  " from openSYDE devices."));
+                  m_CleanUpScan();
+                  c_Message.SetCustomMinHeight(180, 180);
+                  c_Message.Execute();
                }
 
                //Continue with next step?
@@ -2566,59 +2353,6 @@ void C_SyvDcWidget::m_Timer(void)
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
                c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
                c_Message.SetDescription(C_GtGetText::h_GetText("Could not transfer all devices into Flashloader mode."));
-               m_CleanUpScan();
-               c_Message.SetCustomMinHeight(180, 180);
-               c_Message.Execute();
-            }
-            break;
-         case eSCANCANGETINFOFROMSTWFLASHLOADERDEVICES:
-            if (s32_SequenceResult == C_NO_ERR)
-            {
-               std::vector<C_OscDcDeviceInformation> c_DeviceInfo;
-               this->mpc_DcSequences->GetDeviceInfosResult(c_DeviceInfo);
-
-               this->mc_FoundDevices.reserve(this->mc_FoundDevices.size() + c_DeviceInfo.size());
-
-               for (uint32_t u32_SnCounter = 0U; u32_SnCounter < c_DeviceInfo.size(); ++u32_SnCounter)
-               {
-                  this->mc_FoundDevices.push_back(c_DeviceInfo[u32_SnCounter]);
-               }
-
-               if (this->mpc_DcSequences->IsAtLeastOneOpenSydeNodeActive() == true)
-               {
-                  // At least one openSYDE device is active
-                  this->me_Step = eSCANCANGETINFOFROMOPENSYDEDEVICES;
-                  s32_Result = this->mpc_DcSequences->ScanCanGetInfoFromOpenSydeDevices();
-
-                  //Continue with next step?
-                  if (s32_Result != C_NO_ERR)
-                  {
-                     C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                     c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
-                     c_Message.SetDescription(C_GtGetText::h_GetText("Could not continue with step: Reading information"
-                                                                     " from openSYDE Devices"));
-                     m_CleanUpScan();
-                     c_Message.SetCustomMinHeight(180, 180);
-                     c_Message.Execute();
-                  }
-                  else
-                  {
-                     this->mpc_Ui->pc_ProgressScan->SetProgress(75, false);
-                     this->mc_Timer.start();
-                  }
-               }
-               else
-               {
-                  // No openSYDE device active
-                  this->m_ScanFinished();
-               }
-            }
-            else
-            {
-               C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-               c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
-               c_Message.SetDescription(C_GtGetText::h_GetText("Failed while getting all information"
-                                                               " from STW Flashloader Devices."));
                m_CleanUpScan();
                c_Message.SetCustomMinHeight(180, 180);
                c_Message.Execute();
@@ -2662,47 +2396,6 @@ void C_SyvDcWidget::m_Timer(void)
                }
                m_CleanUpScan();
                c_Message.Execute();
-            }
-            break;
-         case eCONFCANSTWFLASHLOADERDEVICES:
-            if ((s32_SequenceResult == C_NO_ERR) ||
-                (s32_SequenceResult == C_NOACT)) // No STW flashloader devices to configure
-            {
-               if (this->mpc_DcSequences->IsAtLeastOneOpenSydeNodeActive() == true)
-               {
-                  this->me_Step = eCONFCANOPENSYDEDEVICES;
-                  s32_Result = this->mpc_DcSequences->ConfCanOpenSydeDevices(this->mc_OpenSydeDeviceConfigurations,
-                                                                             this->m_AreAllInterfacesToConfigure(),
-                                                                             this->mq_SecurityFeatureUsed);
-
-                  if (s32_Result == C_NO_ERR)
-                  {
-                     this->mc_Timer.start();
-                  }
-                  else
-                  {
-                     C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                     c_Message.SetDescription(C_GtGetText::h_GetText(
-                                                 "Error occurred during openSYDE device configuration."));
-                     c_Message.SetCustomMinHeight(180, 180);
-                     c_Message.Execute();
-                  }
-               }
-               else
-               {
-                  // No openSYDE devices. Finished
-                  this->m_ShowConfigResult();
-                  // Finish the process. No waiting for reset necessary.
-                  this->m_ResetFlashloaderAfterConfig(this->mq_SameBitrates);
-               }
-            }
-            else
-            {
-               this->m_ShowConfigResult();
-
-               q_ShowFinalErrorMessage = true;
-               c_ErrorDescription =
-                  C_GtGetText::h_GetText("Error occurred during STW Flashloader device configuration.");
             }
             break;
          case eCONFCANOPENSYDEDEVICES: // Same result
@@ -2997,7 +2690,6 @@ void C_SyvDcWidget::m_DoCompleteDisconnect(void)
              (pc_Bus != NULL))
          {
             bool q_Osy = false;
-            bool q_Stw = false;
             bool q_StartedAnything = false;
             std::vector<uint32_t> c_NodeIndexes;
             std::vector<uint32_t> c_InterfaceIndexes;
@@ -3039,14 +2731,6 @@ void C_SyvDcWidget::m_DoCompleteDisconnect(void)
                         {
                            q_Osy = true;
                         }
-                        else if (pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW)
-                        {
-                           q_Stw = true;
-                        }
-                        else
-                        {
-                           // do nothing
-                        }
                      }
                      else
                      {
@@ -3059,16 +2743,6 @@ void C_SyvDcWidget::m_DoCompleteDisconnect(void)
                      }
                   }
                }
-            }
-
-            if (q_Stw == true)
-            {
-               while (this->mpc_DcSequences->ResetCanStwFlashloaderDevices() == C_BUSY)
-               {
-                  //In case it takes longer do process events to handle cursor and proper show of message box
-                  QApplication::processEvents(QEventLoop::AllEvents, 50);
-               }
-               q_StartedAnything = true;
             }
 
             if (q_Osy == true)

@@ -45,12 +45,10 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscComSequencesBase::C_OscComSequencesBase(const bool oq_RoutingActive, const bool oq_UpdateRoutingMode) :
-   mpc_ComDriver(new C_OscComDriverFlash(oq_RoutingActive, oq_UpdateRoutingMode, &mh_MyXflReportProgress, this)),
+   mpc_ComDriver(new C_OscComDriverFlash(oq_RoutingActive, oq_UpdateRoutingMode)),
    mpc_SystemDefinition(NULL),
    mu32_ActiveBusIndex(0U),
-   mq_OpenSydeDevicesActive(false),
-   mq_StwFlashloaderDevicesActive(false),
-   mq_StwFlashloaderDevicesActiveOnLocalBus(false)
+   mq_OpenSydeDevicesActive(false)
 {
 }
 
@@ -127,14 +125,9 @@ int32_t C_OscComSequencesBase::Init(C_OscSystemDefinition & orc_SystemDefinition
       if (s32_Return == C_NO_ERR)
       {
          this->mq_OpenSydeDevicesActive = this->m_IsAtLeastOneOpenSydeNodeActive();
-         this->mq_StwFlashloaderDevicesActive = this->m_IsAtLeastOneStwFlashloaderNodeActive();
-         this->mq_StwFlashloaderDevicesActiveOnLocalBus = this->m_IsAtLeastOneStwFlashloaderNodeOnLocalBusActive(
-            this->mc_StwFlashloaderDeviceOnLocalBus);
 
-         // Either no devices are active or only STW flashloader devices which need routing to get reached are active
-         if (((this->mq_OpenSydeDevicesActive == false) && (this->mq_StwFlashloaderDevicesActive == false)) ||
-             ((this->mq_OpenSydeDevicesActive == false) && (this->mq_StwFlashloaderDevicesActiveOnLocalBus == false) &&
-              (this->mq_StwFlashloaderDevicesActive == true)))
+         // No openSYDE devices are active
+         if (this->mq_OpenSydeDevicesActive == false)
          {
             s32_Return = C_CONFIG;
          }
@@ -186,36 +179,6 @@ bool C_OscComSequencesBase::GetNodeIndex(const C_OscProtocolDriverOsyNode & orc_
 bool C_OscComSequencesBase::IsAtLeastOneOpenSydeNodeActive(void) const
 {
    return this->mq_OpenSydeDevicesActive;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Gets the information if at least one STW flashloader device is active
-
-   Init function must be called first.
-
-   \return
-   true     At least one device found
-   false    No device found
-*/
-//----------------------------------------------------------------------------------------------------------------------
-bool C_OscComSequencesBase::IsAtLeastOneStwFlashloaderNodeActive(void) const
-{
-   return this->mq_StwFlashloaderDevicesActive;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Gets the information if at least one STW flashloader device is on the local bus active
-
-   Init function must be called first.
-
-   \return
-   true     At least one device found
-   false    No device found
-*/
-//----------------------------------------------------------------------------------------------------------------------
-bool C_OscComSequencesBase::IsAtLeastOneStwFlashloaderNodeActiveOnLocalBus(void) const
-{
-   return this->mq_StwFlashloaderDevicesActiveOnLocalBus;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -314,48 +277,6 @@ bool C_OscComSequencesBase::m_IsNodeReachable(const uint32_t ou32_NodeIndex) con
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   report progress of STW Flashloader operation to application
-
-   Report progress information from STW Flashloader driver via virtual function.
-
-   \param[in]   opv_Instance           instance the callback was installed with
-   \param[in]   ou8_Progress           progress of operation (from 0 to 100)
-                                       progress invalid: 255
-   \param[in]   orc_AdditionalText     textual information about progress
-
-   \return
-   C_NO_ERR    continue operation
-   else        abort operation (not honored at each position)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComSequencesBase::mh_MyXflReportProgress(void * const opv_Instance, const uint8_t ou8_Progress,
-                                                      const C_SclString & orc_Text)
-{
-   //lint -e{9079}  This class is the only one which registers itself at the caller of this function. It must match.
-   return reinterpret_cast<C_OscComSequencesBase *>(opv_Instance)->m_MyXflReportProgress(ou8_Progress, orc_Text);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   report progress of STW Flashloader operation to application
-
-   Report progress information from STW Flashloader driver via virtual function.
-
-   \param[in]   ou8_Progress           progress of operation (from 0 to 100)
-                                       progress invalid: 255
-   \param[in]   orc_AdditionalText     textual information about progress
-
-   \return
-   C_NO_ERR    continue operation
-   else        abort operation (not honored at each position)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComSequencesBase::m_MyXflReportProgress(const uint8_t ou8_Progress, const C_SclString & orc_Text)
-{
-   //invoke virtual function:
-   return this->m_XflReportProgress(ou8_Progress, orc_Text);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Gets the information if at least one openSYDE device is active
 
    \return
@@ -387,96 +308,3 @@ bool C_OscComSequencesBase::m_IsAtLeastOneOpenSydeNodeActive(void) const
    return q_Return;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Gets the information if at least one STW flashloader device is active
-
-   \return
-   true     At least one device found
-   false    No device found
-*/
-//----------------------------------------------------------------------------------------------------------------------
-bool C_OscComSequencesBase::m_IsAtLeastOneStwFlashloaderNodeActive(void) const
-{
-   bool q_Return = false;
-
-   if (this->mpc_SystemDefinition != NULL)
-   {
-      for (uint32_t u32_Counter = 0U; u32_Counter < this->mc_ActiveNodes.size(); ++u32_Counter)
-      {
-         if ((u32_Counter < this->mpc_SystemDefinition->c_Nodes.size()) && (this->mc_ActiveNodes[u32_Counter] == 1U))
-         {
-            const C_OscNode & rc_Node = this->mpc_SystemDefinition->c_Nodes[u32_Counter];
-
-            if (rc_Node.c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW)
-            {
-               q_Return = true;
-               break;
-            }
-         }
-      }
-   }
-
-   return q_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Gets the information if at least one STW flashloader device is active on the local bus
-
-   \param[out]    orc_StwFlashloaderDeviceOnLocalBus     The first found STW flashloader node on the local bus
-
-   \return
-   true     At least one device found
-   false    No device found
-*/
-//----------------------------------------------------------------------------------------------------------------------
-bool C_OscComSequencesBase::m_IsAtLeastOneStwFlashloaderNodeOnLocalBusActive(
-   C_OscProtocolDriverOsyNode & orc_StwFlashloaderDeviceOnLocalBus) const
-{
-   bool q_Return = false;
-
-   if (this->mpc_SystemDefinition != NULL)
-   {
-      for (uint32_t u32_Counter = 0U; u32_Counter < this->mc_ActiveNodes.size(); ++u32_Counter)
-      {
-         if ((u32_Counter < this->mpc_SystemDefinition->c_Nodes.size()) && (this->mc_ActiveNodes[u32_Counter] == 1U))
-         {
-            const C_OscNode & rc_Node = this->mpc_SystemDefinition->c_Nodes[u32_Counter];
-
-            if (rc_Node.c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW)
-            {
-               uint32_t u32_IntfCounter;
-
-               // Check all interfaces of node if connected to the bus which is connected to the client
-               for (u32_IntfCounter = 0U; u32_IntfCounter < rc_Node.c_Properties.c_ComInterfaces.size();
-                    ++u32_IntfCounter)
-               {
-                  const C_OscNodeComInterfaceSettings & rc_ComIntf =
-                     rc_Node.c_Properties.c_ComInterfaces[u32_IntfCounter];
-
-                  if ((rc_ComIntf.u32_BusIndex == this->mu32_ActiveBusIndex) &&
-                      (rc_ComIntf.GetBusConnected() == true))
-                  {
-                     tgl_assert(this->mu32_ActiveBusIndex < this->mpc_SystemDefinition->c_Buses.size());
-
-                     // Save the node identifier for a local STW flashloader device to get easy access
-                     // to the protocol for the local bus and not server specific services
-                     orc_StwFlashloaderDeviceOnLocalBus.u8_NodeIdentifier = rc_ComIntf.u8_NodeId;
-                     orc_StwFlashloaderDeviceOnLocalBus.u8_BusIdentifier =
-                        this->mpc_SystemDefinition->c_Buses[this->mu32_ActiveBusIndex].u8_BusId;
-
-                     q_Return = true;
-                     break;
-                  }
-               }
-
-               if (q_Return == true)
-               {
-                  break;
-               }
-            }
-         }
-      }
-   }
-
-   return q_Return;
-}

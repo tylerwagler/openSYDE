@@ -228,57 +228,6 @@ void C_OscSuSequences::m_ReportOpenSydeFlashloaderInformationRead(const C_OsyDev
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Reports information read from STW flashloader server node
-
-   Called by ReadDeviceInformation() after it has read information from an STW flashloader node.
-   Default implementation here: print read information to console; checksum block or sector information is not printed
-
-   \param[in]     orc_Info         Information read from node
-   \param[in]     ou32_NodeIndex   Index of node within mpc_SystemDefinition
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscSuSequences::m_ReportStwFlashloaderInformationRead(const C_XflDeviceInformation & orc_Info,
-                                                             const uint32_t ou32_NodeIndex)
-{
-   C_SclStringList c_Text;
-
-   h_StwFlashloaderInformationToText(orc_Info, c_Text);
-
-   std::cout << "STW Flashloader device information found for node with index " << ou32_NodeIndex << "\n";
-   for (uint32_t u32_Line = 0U; u32_Line < c_Text.GetCount(); u32_Line++)
-   {
-      std::cout << c_Text.Strings[u32_Line].c_str() << "\n";
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   report progress of STW Flashloader operation to application
-
-   Report progress information from STW Flashloader driver via virtual function.
-
-   \param[in]   ou8_Progress     progress of operation (from 0 to 100)
-                                 progress invalid: 255
-   \param[in]   orc_Text         textual information about progress
-
-   \return
-   C_NO_ERR    continue operation
-   else        abort operation (not honored at each position)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSuSequences::m_XflReportProgress(const uint8_t ou8_Progress, const C_SclString & orc_Text)
-{
-   int32_t s32_Return = C_NO_ERR;
-
-   //add node information:
-   const bool q_Return = this->m_ReportProgress(eXFL_PROGRESS, C_NO_ERR, ou8_Progress, mc_CurrentNode, orc_Text);
-
-   if (q_Return == true)
-   {
-      s32_Return = C_BUSY; //abort
-   }
-   return s32_Return;
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Flash one openSYDE address based node
@@ -1882,74 +1831,6 @@ int32_t C_OscSuSequences::m_WriteFingerPrintOsy(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Flash one STW Flashloader based node
-
-   Flash one or more files.
-
-   Assumptions/prerequisites (not explicitly checked by this function):
-   * mc_CurrentNode contains ID of node to work with
-   * server node must be in Flashloader mode
-   * list of files must be > 0
-   * files must be present and in Intel or Motorola hex format
-   * node is active
-
-   * Reports progress from 0..100 for the overall process
-   * Reports 0..100 for each file being flashed
-
-   \param[in]     orc_FilesToFlash              Files to flash
-   \param[out]    orc_StateHexFiles             States of all handled hex files
-
-   \return
-   C_NO_ERR    flashed all files
-   C_COM       error flashing (see log for details)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSuSequences::m_FlashNodeXfl(const std::vector<C_SclString> & orc_FilesToFlash,
-                                         std::vector<C_OscSuSequencesNodeStwFlHexFileStates> & orc_StateHexFiles)
-{
-   int32_t s32_Return = C_NO_ERR;
-
-   (void)m_ReportProgress(eUPDATE_SYSTEM_XFL_NODE_START, C_NO_ERR, 0U, mc_CurrentNode,
-                          "Flashing node ...");
-
-   for (uint32_t u32_File = 0U; u32_File < orc_FilesToFlash.size(); u32_File++)
-   {
-      // Save file index
-      this->mu32_CurrentFile = u32_File;
-
-      (void)m_ReportProgress(eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_START, C_NO_ERR, 0U, mc_CurrentNode,
-                             "Flashing HEX file ...");
-
-      // Loading errors can not be detected on this layer separated from the sending process
-      orc_StateHexFiles[u32_File].e_FileLoaded = eSUSEQ_STATE_NOT_NEEDED;
-
-      s32_Return = this->mpc_ComDriver->SendStwDoFlash(mc_CurrentNode, orc_FilesToFlash[u32_File]);
-      if (s32_Return != C_NO_ERR)
-      {
-         (void)m_ReportProgress(eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_ERROR, C_NO_ERR, 100U, mc_CurrentNode,
-                                "Flashing HEX file finished.");
-
-         orc_StateHexFiles[u32_File].e_FileSent = eSUSEQ_STATE_ERROR;
-         s32_Return = C_COM;
-         break;
-      }
-      else
-      {
-         orc_StateHexFiles[u32_File].e_FileSent = eSUSEQ_STATE_NO_ERR;
-      }
-
-      (void)m_ReportProgress(eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_FINISHED, C_NO_ERR, 100U, mc_CurrentNode,
-                             "Flashing HEX file finished.");
-   }
-   if (s32_Return == C_NO_ERR)
-   {
-      (void)m_ReportProgress(eUPDATE_SYSTEM_XFL_NODE_FINISHED, C_NO_ERR, 100U, mc_CurrentNode,
-                             "Flashing node finished.");
-   }
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Read information of openSYDE server node
 
    Utility function used to read openSYDE information from server node and report it.
@@ -2137,67 +2018,6 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
    {
       orc_NodeState.e_InformationRead = eSUSEQ_STATE_ERROR;
    }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Read information of STW flashloader server node
-
-   Utility function used to read STW flashloader information from server node and report it.
-   See documentation of ReadDeviceInformation() for full description.
-
-   \param[in]     ou8_ProgressToReport    progress value to report when invoking virtual reporting function
-   \param[in]     ou32_NodeIndex          Index of node within mpc_SystemDefinition
-   \param[in,out] orc_NodeState           Connect states of node
-
-   \return
-   C_COM      communication driver reported problem (details will be written to log file)
-   C_NO_ERR   information read
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSuSequences::m_ReadDeviceInformationStwFlashloader(const uint8_t ou8_ProgressToReport,
-                                                                const uint32_t ou32_NodeIndex, C_OscSuSequencesNodeConnectStates &
-                                                                orc_NodeState)
-{
-   int32_t s32_Return;
-   C_XflDeviceInformation c_Information;
-
-   //bring device into wakeup state ...
-   s32_Return = this->mpc_ComDriver->SendStwWakeupLocalId(mc_CurrentNode, NULL);
-   if (s32_Return != C_NO_ERR)
-   {
-      (void)m_ReportProgress(eREAD_DEVICE_INFO_XFL_WAKEUP_ERROR, s32_Return, ou8_ProgressToReport, mc_CurrentNode,
-                             "Could not perform node wakeup.");
-      s32_Return = C_COM;
-   }
-   else
-   {
-      //read everything we can get ...
-      (void)m_ReportProgress(eREAD_DEVICE_INFO_XFL_READING_INFORMATION_START, C_NO_ERR, ou8_ProgressToReport,
-                             mc_CurrentNode, "Reading information from node ...");
-      s32_Return =
-         this->mpc_ComDriver->SendStwReadDeviceInformation(mc_CurrentNode, c_Information.c_BasicInformation,
-                                                           c_Information.c_ChecksumInformation);
-      if (s32_Return != C_NO_ERR)
-      {
-         (void)m_ReportProgress(eREAD_DEVICE_INFO_XFL_READING_INFORMATION_ERROR, s32_Return, ou8_ProgressToReport,
-                                mc_CurrentNode, "Could not read information from node.");
-
-         s32_Return = C_COM;
-      }
-      else
-      {
-         //report findings to application:
-         this->m_ReportStwFlashloaderInformationRead(c_Information, ou32_NodeIndex);
-      }
-   }
-
-   //no security options available for this protocol
-   orc_NodeState.q_AuthenticationNecessary = false;
-   orc_NodeState.q_TrafficEncryptionNecessary = false;
-   orc_NodeState.q_SecurityOptionsActiveSet = true;
-   orc_NodeState.e_InformationRead = (s32_Return == C_NO_ERR) ? eSUSEQ_STATE_NO_ERR : eSUSEQ_STATE_ERROR;
 
    return s32_Return;
 }
@@ -2695,52 +2515,44 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
             // Continue with nodes without routing
             if (s32_Return == C_NOACT)
             {
-               // STW Flashloader does not have a request programming flag
-               if (e_ProtocolType == C_OscNodeProperties::eFL_OPEN_SYDE)
+               (void)e_ProtocolType;
+               s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode);
+
+               if (s32_Return != C_NO_ERR)
                {
-                  s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode);
+                  // In this case, the node did not connect.
+                  // Errors in case of not reachable nodes will be handled when
+                  // the state eACTIVATE_FLASHLOADER_OSY_BC_PING_START was set the first time to have
+                  // the same process sequence like using CAN.
+                  // Therefore do not abort and send only a warning as progress information.
+                  // This can only happen in case of Ethernet. The node is not connected, so the next
+                  // request did not make any sense to send and will be skipped till the
+                  // "EnterPreProgrammingSession" broadcasts. By skipping the other request,
+                  // further sending errors will be avoided which would occur a "real" sending error.
+                  (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_RECONNECT_WARNING, s32_Return,
+                                         10U, mc_CurrentNode,
+                                         "Device does not respond to RequestProgramming request.");
+
+                  s32_Return = C_NO_ERR;
+               }
+               else
+               {
+                  // Set the request programming flag to bring the server into flashloader
+                  s32_Return = this->mpc_ComDriver->SendOsyRequestProgramming(mc_CurrentNode);
+
+                  this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
 
                   if (s32_Return != C_NO_ERR)
                   {
-                     // In this case, the node did not connect.
-                     // Errors in case of not reachable nodes will be handled when
-                     // the state eACTIVATE_FLASHLOADER_OSY_XFL_BC_PING_START was set the first time to have
-                     // the same process sequence like using CAN.
+                     // In this case, the node does not respond and maybe the next step can help to bring
+                     // it into the flashloader by sending EnterPreProgrammingSession as broadcast
                      // Therefore do not abort and send only a warning as progress information.
-                     // This can only happen in case of Ethernet. The node is not connected, so the next
-                     // request did not make any sense to send and will be skipped till the
-                     // "EnterPreProgrammingSession" broadcasts. By skipping the other request,
-                     // further sending errors will be avoided which would occur a "real" sending error.
-                     (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_RECONNECT_WARNING, s32_Return,
+                     (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_WARNING, s32_Return,
                                             10U, mc_CurrentNode,
                                             "Device does not respond to RequestProgramming request.");
 
                      s32_Return = C_NO_ERR;
                   }
-                  else
-                  {
-                     // Set the request programming flag to bring the server into flashloader
-                     s32_Return = this->mpc_ComDriver->SendOsyRequestProgramming(mc_CurrentNode);
-
-                     this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
-
-                     if (s32_Return != C_NO_ERR)
-                     {
-                        // In this case, the node does not respond and maybe the next step can help to bring
-                        // it into the flashloader by sending EnterPreProgrammingSession as broadcast
-                        // Therefore do not abort and send only a warning as progress information.
-                        (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_WARNING, s32_Return,
-                                               10U, mc_CurrentNode,
-                                               "Device does not respond to RequestProgramming request.");
-
-                        s32_Return = C_NO_ERR;
-                     }
-                  }
-               }
-               else
-               {
-                  // No error, nothing to do for STW Flashloader nodes here, reset the error code
-                  s32_Return = C_NO_ERR;
                }
             }
          }
@@ -2762,75 +2574,44 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                // Continue with nodes without routing
                if (s32_Return == C_NOACT)
                {
-                  if (e_ProtocolType == C_OscNodeProperties::eFL_OPEN_SYDE)
+                  (void)e_ProtocolType;
+                  s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode);
+
+                  if (s32_Return != C_NO_ERR)
                   {
-                     s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode);
+                     // In this case, the node did not connect.
+                     // Errors in case of not reachable nodes will be handled when
+                     // the state eACTIVATE_FLASHLOADER_OSY_BC_PING_START was set the first time to have
+                     // the same process sequence like using CAN.
+                     // Therefore do not abort and send only a warning as progress information.
+                     // This can only happen in case of Ethernet. The node is not connected, so the next
+                     // request did not make any sense to send and will be skipped till the
+                     // "EnterPreProgrammingSession" broadcasts. By skipping the other request,
+                     // further sending errors will be avoided which would occur a "real" sending error.
+                     (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_RECONNECT_WARNING, s32_Return,
+                                            15U, mc_CurrentNode,
+                                            "Device does not respond to RequestProgramming request.");
 
-                     if (s32_Return != C_NO_ERR)
-                     {
-                        // In this case, the node did not connect.
-                        // Errors in case of not reachable nodes will be handled when
-                        // the state eACTIVATE_FLASHLOADER_OSY_XFL_BC_PING_START was set the first time to have
-                        // the same process sequence like using CAN.
-                        // Therefore do not abort and send only a warning as progress information.
-                        // This can only happen in case of Ethernet. The node is not connected, so the next
-                        // request did not make any sense to send and will be skipped till the
-                        // "EnterPreProgrammingSession" broadcasts. By skipping the other request,
-                        // further sending errors will be avoided which would occur a "real" sending error.
-                        (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_RECONNECT_WARNING, s32_Return,
-                                               15U, mc_CurrentNode,
-                                               "Device does not respond to RequestProgramming request.");
-
-                        s32_Return = C_NO_ERR;
-                     }
-                     else
-                     {
-                        s32_Return = this->mpc_ComDriver->SendOsyEcuReset(
-                           mc_CurrentNode,
-                           C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
-
-                        this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
-
-                        if (s32_Return != C_NO_ERR)
-                        {
-                           // In this case, the node will not get the request, maybe the next step can help to bring
-                           // it into the flashloader by sending EnterPreProgrammingSession as broadcast
-                           // Therefore do not abort and send only a warning as progress information.
-                           (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_ECU_RESET_WARNING, s32_Return,
-                                                  10U, mc_CurrentNode,
-                                                  "EcuReset request for device failed.");
-
-                           s32_Return = C_NO_ERR;
-                        }
-                     }
+                     s32_Return = C_NO_ERR;
                   }
                   else
                   {
-                     //STW Flashloader node
-                     s32_Return = this->mpc_ComDriver->SendStwRequestNodeReset(this->mc_CurrentNode);
+                     s32_Return = this->mpc_ComDriver->SendOsyEcuReset(
+                        mc_CurrentNode,
+                        C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
+
+                     this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
+
                      if (s32_Return != C_NO_ERR)
                      {
-                        if (s32_Return == C_NOACT)
-                        {
-                           // No reset message configured. The next step can help to bring
-                           // it into the flashloader by sending STW Flashloader "FLASH"
-                           // Therefore do not abort and send only a warning as progress information.
-                           // All other errors are errors which can not be "healed" by the next step
-                           (void)m_ReportProgress(eACTIVATE_FLASHLOADER_XFL_ECU_RESET_WARNING, s32_Return, 15U,
-                                                  mc_CurrentNode,
-                                                  "No EcuReset message configured.");
+                        // In this case, the node will not get the request, maybe the next step can help to bring
+                        // it into the flashloader by sending EnterPreProgrammingSession as broadcast
+                        // Therefore do not abort and send only a warning as progress information.
+                        (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_ECU_RESET_WARNING, s32_Return,
+                                               10U, mc_CurrentNode,
+                                               "EcuReset request for device failed.");
 
-                           s32_Return = C_NO_ERR;
-                        }
-                        else
-                        {
-                           // All other errors are errors which can not be "healed" by the next step
-                           (void)m_ReportProgress(eACTIVATE_FLASHLOADER_XFL_ECU_RESET_ERROR, s32_Return, 15U,
-                                                  mc_CurrentNode,
-                                                  "Sending EcuReset request failed.");
-
-                           s32_Return = C_COM;
-                        }
+                        s32_Return = C_NO_ERR;
                      }
                   }
                }
@@ -2854,7 +2635,7 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                u32_WaitTime = u32_SCAN_TIME_MS;
             }
 
-            (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_XFL_BC_ENTER_FLASHLOADER_START, C_NO_ERR, 20U,
+            (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_BC_ENTER_FLASHLOADER_START, C_NO_ERR, 20U,
                                    "Broadcasting enter Flashloader request ...");
             do
             {
@@ -2867,19 +2648,6 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                      (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_BC_ENTER_PRE_PROGRAMMING_ERROR, s32_Return,
                                             20U,
                                             "EnterPreProgramming broadcast failed.");
-                     s32_Return = C_COM;
-                  }
-               }
-
-               if ((this->mq_StwFlashloaderDevicesActiveOnLocalBus == true) &&
-                   (s32_Return == C_NO_ERR))
-               {
-                  // send STW Flashloader "FLASH" in parallel:
-                  s32_Return = this->mpc_ComDriver->SendStwSendFlash(this->mc_StwFlashloaderDeviceOnLocalBus);
-                  if (s32_Return != C_NO_ERR)
-                  {
-                     (void)m_ReportProgress(eACTIVATE_FLASHLOADER_XFL_BC_FLASH_ERROR, s32_Return, 20U,
-                                            "Send \"FLASH\" broadcast failed.");
                      s32_Return = C_COM;
                   }
                }
@@ -2907,7 +2675,7 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
       //use simple read service for all nodes that are expected to be present (as "ping")
       if (s32_Return == C_NO_ERR)
       {
-         (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_XFL_BC_PING_START, C_NO_ERR, 30U,
+         (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_BC_PING_START, C_NO_ERR, 30U,
                                 "Checking node states ...");
 
          for (uint16_t u16_Node = 0U; u16_Node < this->mpc_SystemDefinition->c_Nodes.size(); u16_Node++)
@@ -2919,7 +2687,7 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
 
             if (q_Return == true)
             {
-               (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_XFL_BC_PING_START, C_NO_ERR, 30U, mc_CurrentNode,
+               (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_BC_PING_START, C_NO_ERR, 30U, mc_CurrentNode,
                                       "Checking node state ...");
 
                s32_Return = this->mpc_ComDriver->IsRoutingNecessary(u16_Node);
@@ -2927,81 +2695,59 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                // Continue with nodes without routing
                if (s32_Return == C_NOACT)
                {
-                  if (e_ProtocolType == C_OscNodeProperties::eFL_OPEN_SYDE)
-                  {
-                     //if connected via Ethernet we need to reconnect as the reset will break the active TCP
-                     // connection
-                     s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode);
+                  (void)e_ProtocolType;
+                  //if connected via Ethernet we need to reconnect as the reset will break the active TCP
+                  // connection
+                  s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode);
 
+                  if (s32_Return != C_NO_ERR)
+                  {
+                     (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_RECONNECT_ERROR, s32_Return, 30U,
+                                            mc_CurrentNode,
+                                            "Could not reconnect to node");
+
+                     // Node is not reachable
+                     this->mc_TimeoutNodes[u16_Node] = static_cast<uint8_t>(s32_Return == C_BUSY);
+
+                     s32_Return = C_COM;
+                  }
+                  if (s32_Return == C_NO_ERR)
+                  {
+                     //If we are on Ethernet the node is in flashloader but not in programming mode yet
+                     // we need to send one EnterPreProgramming request to get it there
+                     //If we're on CAN one more of this services does not hurt as well :-)
+                     //We want to confirm the device is in flashloader anyway.
+                     //So we use this service (it will fail if the node is in the application
+                     // as there is no "PreProgramming" session there.
+                     s32_Return =
+                        this->mpc_ComDriver->SendOsySetPreProgrammingMode(mc_CurrentNode, true, &u8_NrCode);
                      if (s32_Return != C_NO_ERR)
                      {
-                        (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_RECONNECT_ERROR, s32_Return, 30U,
-                                               mc_CurrentNode,
-                                               "Could not reconnect to node");
+                        (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR, s32_Return, 30U,
+                                               mc_CurrentNode, "Request to set active session failed. Details:" +
+                                               C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
+                                                                                                        u8_NrCode));
 
                         // Node is not reachable
-                        this->mc_TimeoutNodes[u16_Node] = static_cast<uint8_t>(s32_Return == C_BUSY);
+                        this->mc_TimeoutNodes[u16_Node] = static_cast<uint8_t>(s32_Return == C_TIMEOUT);
 
-                        s32_Return = C_COM;
-                     }
-                     if (s32_Return == C_NO_ERR)
-                     {
-                        //If we are on Ethernet the node is in flashloader but not in programming mode yet
-                        // we need to send one EnterPreProgramming request to get it there
-                        //If we're on CAN one more of this services does not hurt as well :-)
-                        //We want to confirm the device is in flashloader anyway.
-                        //So we use this service (it will fail if the node is in the application
-                        // as there is no "PreProgramming" session there.
-                        s32_Return =
-                           this->mpc_ComDriver->SendOsySetPreProgrammingMode(mc_CurrentNode, true, &u8_NrCode);
-                        if (s32_Return != C_NO_ERR)
+                        if (s32_Return != C_CHECKSUM)
                         {
-                           (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR, s32_Return, 30U,
-                                                  mc_CurrentNode, "Request to set active session failed. Details:" +
-                                                  C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
-                                                                                                           u8_NrCode));
-
-                           // Node is not reachable
-                           this->mc_TimeoutNodes[u16_Node] = static_cast<uint8_t>(s32_Return == C_TIMEOUT);
-
-                           if (s32_Return != C_CHECKSUM)
-                           {
-                              s32_Return = C_COM;
-                           }
-                           else
-                           {
-                              this->mc_ConnectStatesNodes[u16_Node].q_SecurityAccessError = true;
-                           }
+                           s32_Return = C_COM;
                         }
                         else
                         {
-                           //looks good ...
-                           //node is active and flashable directly on the bus that the client is connected to
+                           this->mc_ConnectStatesNodes[u16_Node].q_SecurityAccessError = true;
                         }
                      }
-
-                     this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
-                  }
-                  else
-                  {
-                     //STW Flashloader node
-                     //it should be in Sleep state now. The only service that we can use is wakeup.
-                     //will not cause any problems as the node will go back to sleep if another node is addressed
-                     // later
-                     // on
-                     s32_Return = this->mpc_ComDriver->SendStwWakeupLocalId(mc_CurrentNode, NULL);
-                     if (s32_Return != C_NO_ERR)
+                     else
                      {
-                        (void)m_ReportProgress(eACTIVATE_FLASHLOADER_XFL_WAKEUP_ERROR, s32_Return, 30U,
-                                               mc_CurrentNode,
-                                               "Could not perform node wakeup.");
-
-                        // Node is not reachable
-                        this->mc_TimeoutNodes[u16_Node] = 1U;
-
-                        s32_Return = C_COM;
+                        //looks good ...
+                        //node is active and flashable directly on the bus that the client is connected to
                      }
                   }
+
+                  this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
                   if (s32_Return != C_NO_ERR)
                   {
                      q_AtLeastOneError = true;
@@ -3037,7 +2783,7 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                {
                   const bool q_IsNodeReachable = this->m_IsNodeReachable(u16_Node);
 
-                  (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_XFL_BC_PING_START, C_NO_ERR, 30U, mc_CurrentNode,
+                  (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_BC_PING_START, C_NO_ERR, 30U, mc_CurrentNode,
                                          "Checking node state ...");
 
                   if (q_IsNodeReachable == true)
@@ -3051,204 +2797,142 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
 
                      if (s32_Return == C_NO_ERR)
                      {
-                        if (e_ProtocolType == C_OscNodeProperties::eFL_OPEN_SYDE)
+                        (void)e_ProtocolType;
+                        // Set the request programming flag to bring the server into flashloader
+                        s32_Return = this->mpc_ComDriver->SendOsyRequestProgramming(mc_CurrentNode);
+
+                        // Reset the server
+                        if (s32_Return == C_NO_ERR)
                         {
-                           // Set the request programming flag to bring the server into flashloader
-                           s32_Return = this->mpc_ComDriver->SendOsyRequestProgramming(mc_CurrentNode);
+                           s32_Return = this->mpc_ComDriver->SendOsyEcuReset(
+                              mc_CurrentNode,
+                              C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
 
-                           // Reset the server
-                           if (s32_Return == C_NO_ERR)
+                           (void)this->m_DisconnectFromTargetServer();
+
+                           if (s32_Return != C_NO_ERR)
                            {
-                              s32_Return = this->mpc_ComDriver->SendOsyEcuReset(
-                                 mc_CurrentNode,
-                                 C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
-
-                              (void)this->m_DisconnectFromTargetServer();
-
-                              if (s32_Return != C_NO_ERR)
-                              {
-                                 (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_ECU_RESET_ERROR, s32_Return,
-                                                        50U, mc_CurrentNode,
-                                                        "EcuReset request for routing device failed.");
-                                 s32_Return = C_COM;
-                              }
-                           }
-                           else
-                           {
-                              (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_ERROR, s32_Return,
+                              (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_ECU_RESET_ERROR, s32_Return,
                                                      50U, mc_CurrentNode,
-                                                     "RequestProgramming request for routing device failed.");
-
-                              // Node is not reachable
-                              this->mc_TimeoutNodes[u16_Node] = static_cast<uint8_t>(s32_Return == C_TIMEOUT);
-
+                                                     "EcuReset request for routing device failed.");
                               s32_Return = C_COM;
-                           }
-
-                           if (s32_Return == C_NO_ERR)
-                           {
-                              uint32_t u32_StartTime;
-                              uint32_t u32_CurrentTime;
-                              uint32_t u32_LastSentTesterPresent;
-                              uint32_t u32_WaitTime;
-                              C_OscSystemBus::E_Type e_TargetInterfaceType = C_OscSystemBus::eCAN;
-                              C_OscComDriverFlash::E_MinimumFlashloaderResetWaitTimeType e_WaitType;
-                              stw::opensyde_core::C_OscProtocolDriverOsyNode c_LastRouter;
-
-                              // Check what interface is used of target (not the local bus)
-                              tgl_assert(this->mpc_ComDriver->GetRoutingTargetInterfaceType(
-                                            u16_Node, e_TargetInterfaceType) == C_NO_ERR);
-                              if (e_TargetInterfaceType == C_OscSystemBus::eCAN)
-                              {
-                                 e_WaitType = C_OscComDriverFlash::eNO_CHANGES_CAN;
-                              }
-                              else
-                              {
-                                 e_WaitType = C_OscComDriverFlash::eNO_CHANGES_ETHERNET;
-                              }
-
-                              tgl_assert(this->GetMinimumFlashloaderResetWaitTime(e_WaitType,
-                                                                                  this->mc_CurrentNode,
-                                                                                  u32_WaitTime) == C_NO_ERR);
-
-                              tgl_assert(this->mpc_ComDriver->GetServerIdOfLastRouter(u16_Node,
-                                                                                      c_LastRouter) == C_NO_ERR);
-
-                              u32_StartTime = stw::tgl::TglGetTickCount();
-                              u32_LastSentTesterPresent = u32_StartTime;
-
-                              // Give the targets some time to reset and initialize their interfaces
-                              // and wait the minimum time
-                              do
-                              {
-                                 u32_CurrentTime = stw::tgl::TglGetTickCount();
-
-                                 // Tester present is only necessary in case of CAN. In case of Ethernet the entire
-                                 // routing will be restarted anyway by m_ReconnectToTargetServer
-                                 if ((e_TargetInterfaceType == C_OscSystemBus::eCAN) &&
-                                     (u32_CurrentTime > (u32_LastSentTesterPresent + u32_INTERVAL_TESTER_PRESENT)))
-                                 {
-                                    // We need TesterPresent to keep the routing connection alive
-                                    // Send it to the last routing point
-                                    s32_Return = this->mpc_ComDriver->SendTesterPresent(c_LastRouter);
-
-                                    if (s32_Return != C_NO_ERR)
-                                    {
-                                       (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_RECONNECT_ERROR, s32_Return,
-                                                              50U,
-                                                              this->mc_CurrentNode,
-                                                              "Sending Tester Present to router node failed.");
-                                       s32_Return = C_COM;
-                                       break;
-                                    }
-
-                                    u32_LastSentTesterPresent = u32_CurrentTime;
-                                 }
-
-                                 TglSleep(5);
-                              }
-                              while (u32_CurrentTime < (u32_WaitTime + u32_StartTime));
-
-                              if (s32_Return == C_NO_ERR)
-                              {
-                                 s32_Return = this->m_ReconnectToTargetServer(true, u16_Node);
-                              }
-                           }
-
-                           if (s32_Return == C_NO_ERR)
-                           {
-                              //If we are on Ethernet the node is in flashloader but not in programming mode yet
-                              // we need to send one EnterPreProgramming request to get it there
-                              //If we're on CAN one more of this services does not hurt as well :-)
-                              //We want to confirm the device is in flashloader anyway.
-                              //So we use this service (it will fail if the node is in the application
-                              // as there is no "PreProgramming" session there.
-                              s32_Return =
-                                 this->mpc_ComDriver->SendOsySetPreProgrammingMode(mc_CurrentNode, true, &u8_NrCode);
-
-                              if (s32_Return != C_NO_ERR)
-                              {
-                                 (void)m_ReportProgress(
-                                    eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR, s32_Return, 50U,
-                                    mc_CurrentNode,
-                                    "Request to set active session for routing device failed. Details:" +
-                                    C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NrCode));
-
-                                 // Node is not reachable
-                                 this->mc_TimeoutNodes[u16_Node] = static_cast<uint8_t>(s32_Return == C_TIMEOUT);
-
-                                 if (s32_Return != C_CHECKSUM)
-                                 {
-                                    s32_Return = C_COM;
-                                 }
-                                 else
-                                 {
-                                    this->mc_ConnectStatesNodes[u16_Node].q_SecurityAccessError = true;
-                                 }
-                              }
-
-                              (void)this->m_DisconnectFromTargetServer(false);
                            }
                         }
                         else
                         {
-                           //STW Flashloader node
-                           s32_Return = this->mpc_ComDriver->SendStwRequestNodeReset(this->mc_CurrentNode);
-                           if (s32_Return != C_NO_ERR)
-                           {
-                              (void)m_ReportProgress(eACTIVATE_FLASHLOADER_XFL_ECU_RESET_ERROR, s32_Return, 50U,
-                                                     mc_CurrentNode,
-                                                     "Sending request failed.");
+                           (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_ERROR, s32_Return,
+                                                  50U, mc_CurrentNode,
+                                                  "RequestProgramming request for routing device failed.");
 
-                              s32_Return = C_COM;
+                           // Node is not reachable
+                           this->mc_TimeoutNodes[u16_Node] = static_cast<uint8_t>(s32_Return == C_TIMEOUT);
+
+                           s32_Return = C_COM;
+                        }
+
+                        if (s32_Return == C_NO_ERR)
+                        {
+                           uint32_t u32_StartTime;
+                           uint32_t u32_CurrentTime;
+                           uint32_t u32_LastSentTesterPresent;
+                           uint32_t u32_WaitTime;
+                           C_OscSystemBus::E_Type e_TargetInterfaceType = C_OscSystemBus::eCAN;
+                           C_OscComDriverFlash::E_MinimumFlashloaderResetWaitTimeType e_WaitType;
+                           stw::opensyde_core::C_OscProtocolDriverOsyNode c_LastRouter;
+
+                           // Check what interface is used of target (not the local bus)
+                           tgl_assert(this->mpc_ComDriver->GetRoutingTargetInterfaceType(
+                                         u16_Node, e_TargetInterfaceType) == C_NO_ERR);
+                           if (e_TargetInterfaceType == C_OscSystemBus::eCAN)
+                           {
+                              e_WaitType = C_OscComDriverFlash::eNO_CHANGES_CAN;
+                           }
+                           else
+                           {
+                              e_WaitType = C_OscComDriverFlash::eNO_CHANGES_ETHERNET;
                            }
 
-                           if (s32_Return == C_NO_ERR)
+                           tgl_assert(this->GetMinimumFlashloaderResetWaitTime(e_WaitType,
+                                                                               this->mc_CurrentNode,
+                                                                               u32_WaitTime) == C_NO_ERR);
+
+                           tgl_assert(this->mpc_ComDriver->GetServerIdOfLastRouter(u16_Node,
+                                                                                   c_LastRouter) == C_NO_ERR);
+
+                           u32_StartTime = stw::tgl::TglGetTickCount();
+                           u32_LastSentTesterPresent = u32_StartTime;
+
+                           // Give the targets some time to reset and initialize their interfaces
+                           // and wait the minimum time
+                           do
                            {
-                              const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
-                              uint32_t u32_WaitTime;
+                              u32_CurrentTime = stw::tgl::TglGetTickCount();
 
-                              // Get the minimum wait time of the concrete routing node
-                              tgl_assert(this->GetMinimumFlashloaderResetWaitTime(
-                                            C_OscComDriverFlash::eNO_CHANGES_CAN,
-                                            this->mc_CurrentNode,
-                                            u32_WaitTime) == C_NO_ERR);
-
-                              do
+                              // Tester present is only necessary in case of CAN. In case of Ethernet the entire
+                              // routing will be restarted anyway by m_ReconnectToTargetServer
+                              if ((e_TargetInterfaceType == C_OscSystemBus::eCAN) &&
+                                  (u32_CurrentTime > (u32_LastSentTesterPresent + u32_INTERVAL_TESTER_PRESENT)))
                               {
-                                 s32_Return = this->mpc_ComDriver->SendStwSendFlash(this->mc_CurrentNode);
+                                 // We need TesterPresent to keep the routing connection alive
+                                 // Send it to the last routing point
+                                 s32_Return = this->mpc_ComDriver->SendTesterPresent(c_LastRouter);
 
                                  if (s32_Return != C_NO_ERR)
                                  {
-                                    (void)m_ReportProgress(eACTIVATE_FLASHLOADER_XFL_BC_FLASH_ERROR, s32_Return, 50U,
-                                                           mc_CurrentNode,
-                                                           "Send \"FLASH\" broadcast failed.");
+                                    (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_RECONNECT_ERROR, s32_Return,
+                                                           50U,
+                                                           this->mc_CurrentNode,
+                                                           "Sending Tester Present to router node failed.");
                                     s32_Return = C_COM;
                                     break;
                                  }
 
-                                 stw::tgl::TglSleep(5);
+                                 u32_LastSentTesterPresent = u32_CurrentTime;
                               }
-                              while (stw::tgl::TglGetTickCount() < (u32_WaitTime + u32_StartTime));
 
-                              if (s32_Return == C_NO_ERR)
+                              TglSleep(5);
+                           }
+                           while (u32_CurrentTime < (u32_WaitTime + u32_StartTime));
+
+                           if (s32_Return == C_NO_ERR)
+                           {
+                              s32_Return = this->m_ReconnectToTargetServer(true, u16_Node);
+                           }
+                        }
+
+                        if (s32_Return == C_NO_ERR)
+                        {
+                           //If we are on Ethernet the node is in flashloader but not in programming mode yet
+                           // we need to send one EnterPreProgramming request to get it there
+                           //If we're on CAN one more of this services does not hurt as well :-)
+                           //We want to confirm the device is in flashloader anyway.
+                           //So we use this service (it will fail if the node is in the application
+                           // as there is no "PreProgramming" session there.
+                           s32_Return =
+                              this->mpc_ComDriver->SendOsySetPreProgrammingMode(mc_CurrentNode, true, &u8_NrCode);
+
+                           if (s32_Return != C_NO_ERR)
+                           {
+                              (void)m_ReportProgress(
+                                 eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR, s32_Return, 50U,
+                                 mc_CurrentNode,
+                                 "Request to set active session for routing device failed. Details:" +
+                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NrCode));
+
+                              // Node is not reachable
+                              this->mc_TimeoutNodes[u16_Node] = static_cast<uint8_t>(s32_Return == C_TIMEOUT);
+
+                              if (s32_Return != C_CHECKSUM)
                               {
-                                 //it should be in Sleep state now. The only service that we can use is wakeup.
-                                 //will not cause any problems as the node will go back to sleep if another node is
-                                 // addressed later on
-                                 s32_Return = this->mpc_ComDriver->SendStwWakeupLocalId(mc_CurrentNode, NULL);
-
-                                 if (s32_Return != C_NO_ERR)
-                                 {
-                                    (void)m_ReportProgress(
-                                       eACTIVATE_FLASHLOADER_XFL_WAKEUP_ERROR, s32_Return, 50U,
-                                       mc_CurrentNode, "Could not perform node wakeup for routing device.");
-
-                                    // Node is not reachable
-                                    this->mc_TimeoutNodes[u16_Node] = 1U;
-                                 }
+                                 s32_Return = C_COM;
+                              }
+                              else
+                              {
+                                 this->mc_ConnectStatesNodes[u16_Node].q_SecurityAccessError = true;
                               }
                            }
+
+                           (void)this->m_DisconnectFromTargetServer(false);
                         }
                      }
                      else
@@ -3349,10 +3033,8 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
    openSYDE nodes in another function or vice versa.
    But for routing it makes sense to set it up sequentially and handle the system bus by bus.
 
-   So this function reports found information via virtual functions:
-   It calls either
-   * m_ReportStwFlashloaderInformationRead or
-   * m_ReportOpenSydeFlashloaderInformationRead
+   So this function reports found information via the virtual function
+   m_ReportOpenSydeFlashloaderInformationRead.
 
    The sequence for routing is the same as in "ActivateFlashloader".
 
@@ -3368,15 +3050,6 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
    * ReadDataById(ProtocolVersion)
    * ReadDataById(FlashloaderProtocolVersion)
    * ReadDataById(FlashCount)
-
-   Services for STW Flashloader
-   * service get_device_id
-   * services get_device_info_address and subsequent read_flash
-   * <V3: not supported
-   * >V3 <V3.03: one application info block supported
-   * >=V3.03: up to 32 application info blocks supported
-   * Use "C_XFLActions::Read*" functions; basically most of the stuff that WinFlash displays in the "Configure Node"
-      dialog
 
    \param[in]   oq_FailOnFirstError   true: abort all further communication if communication with one device fails
                                       false: try to continue with other devices in this case
@@ -3454,34 +3127,17 @@ int32_t C_OscSuSequences::ReadDeviceInformation(const bool oq_FailOnFirstError)
                   const bool q_Return = m_IsNodeActive(u16_Node, u32_BusIndex, e_ProtocolType, mc_CurrentNode);
                   if (q_Return == true)
                   {
-                     if (e_ProtocolType == C_OscNodeProperties::eFL_OPEN_SYDE)
-                     {
-                        (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_START, C_NO_ERR, u8_Progress, mc_CurrentNode,
-                                               "Reading openSYDE device information ...");
-                        s32_Return = this->m_ReadDeviceInformationOpenSyde(u8_Progress, u16_Node,
-                                                                           this->mc_ConnectStatesNodes[u16_Node]);
+                     (void)e_ProtocolType;
+                     (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_START, C_NO_ERR, u8_Progress, mc_CurrentNode,
+                                            "Reading openSYDE device information ...");
+                     s32_Return = this->m_ReadDeviceInformationOpenSyde(u8_Progress, u16_Node,
+                                                                        this->mc_ConnectStatesNodes[u16_Node]);
 
-                        if (s32_Return == C_NO_ERR)
-                        {
-                           (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FINISHED, C_NO_ERR, u8_Progress,
-                                                  mc_CurrentNode,
-                                                  "openSYDE device information read.");
-                        }
-                     }
-                     else
+                     if (s32_Return == C_NO_ERR)
                      {
-                        (void)m_ReportProgress(eREAD_DEVICE_INFO_XFL_START, C_NO_ERR, u8_Progress, mc_CurrentNode,
-                                               "Reading STW Flashloader device information ...");
-                        s32_Return = this->m_ReadDeviceInformationStwFlashloader(u8_Progress, u16_Node,
-                                                                                 this->mc_ConnectStatesNodes[u16_Node
-                                                                                 ]);
-
-                        if (s32_Return == C_NO_ERR)
-                        {
-                           (void)m_ReportProgress(eREAD_DEVICE_INFO_XFL_FINISHED, C_NO_ERR, u8_Progress,
-                                                  mc_CurrentNode,
-                                                  "STW Flashloader device information read.");
-                        }
+                        (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FINISHED, C_NO_ERR, u8_Progress,
+                                               mc_CurrentNode,
+                                               "openSYDE device information read.");
                      }
                   } //end node active
                }
@@ -3647,16 +3303,6 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
             // PSI files
             rc_State.c_StatePsiFiles.resize(orc_ApplicationsToWrite[u16_Node].c_FilesToWriteToNvm.size());
          }
-         else if (this->mpc_SystemDefinition->c_Nodes[u16_Node].c_Properties.e_FlashLoader ==
-                  C_OscNodeProperties::eFL_STW)
-         {
-            // STW Flashloader
-            rc_State.c_StateStwFlHexFiles.resize(orc_ApplicationsToWrite[u16_Node].c_FilesToFlash.size());
-         }
-         else
-         {
-            // Nothing to do
-         }
 
          if (orc_ApplicationsToWrite[u16_Node].IsAnyActionRequired() == true)
          {
@@ -3700,10 +3346,6 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
                      else if (rc_State.c_StateOtherFiles.size() > 0)
                      {
                         pc_FileState = &rc_State.c_StateOtherFiles[u32_File];
-                     }
-                     else if (rc_State.c_StateStwFlHexFiles.size() > 0)
-                     {
-                        pc_FileState = &rc_State.c_StateStwFlHexFiles[u32_File];
                      }
                      else
                      {
@@ -3892,7 +3534,7 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
                const bool q_Return = m_IsNodeActive(u32_NodeIndex, u32_BusIndex, e_ProtocolType, mc_CurrentNode);
                if (q_Return == true)
                {
-                  if (e_ProtocolType == C_OscNodeProperties::eFL_OPEN_SYDE)
+                  (void)e_ProtocolType;
                   {
                      const C_OscDeviceDefinition * const pc_DeviceDefinition =
                         this->mpc_SystemDefinition->c_Nodes[u32_NodeIndex].pc_DeviceDefinition;
@@ -4008,20 +3650,6 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
                                                "Finishing device update ...");
                      }
                   }
-                  else
-                  {
-                     //flash STW Flashloader nodes
-                     s32_Return = m_FlashNodeXfl(orc_ApplicationsToWrite[u32_NodeIndex].c_FilesToFlash,
-                                                 rc_NodeUpdateStates.c_StateStwFlHexFiles);
-
-                     if ((s32_Return == C_NO_ERR) &&
-                         ((orc_ApplicationsToWrite[u32_NodeIndex].c_FilesToWriteToNvm.size() > 0) ||
-                          (orc_ApplicationsToWrite[u32_NodeIndex].c_PemFile != "")))
-                     {
-                        //writing to NVM and PEM files are not supported by STW Flashloader
-                        s32_Return = C_CONFIG;
-                     }
-                  }
                }
             }
 
@@ -4092,7 +3720,6 @@ int32_t C_OscSuSequences::ResetSystem(void)
    {
       const uint32_t u32_LongestRoute = this->mpc_ComDriver->GetRoutingPointMaximum();
       int32_t s32_RouteSizeCounter;
-      std::set<uint32_t> c_XflResetSentForBus;
 
       (void)m_ReportProgress(eRESET_SYSTEM_START, C_NO_ERR, 0U, "Resetting System ...");
 
@@ -4142,28 +3769,16 @@ int32_t C_OscSuSequences::ResetSystem(void)
                      q_Return = m_IsNodeActive(u32_Node, u32_BusIndex, e_ProtocolType, mc_CurrentNode);
                      if (q_Return == true)
                      {
-                        if (e_ProtocolType == C_OscNodeProperties::eFL_OPEN_SYDE)
-                        {
-                           s32_Return = this->m_ReconnectToTargetServer();
+                        (void)e_ProtocolType;
+                        s32_Return = this->m_ReconnectToTargetServer();
 
-                           if (s32_Return == C_NO_ERR)
-                           {
-                              s32_Return = this->mpc_ComDriver->SendOsyEcuReset(
-                                 mc_CurrentNode,
-                                 C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON);
-
-                              (void)this->m_DisconnectFromTargetServer();
-                           }
-                        }
-                        else
+                        if (s32_Return == C_NO_ERR)
                         {
-                           //send reset broadcast (only required once per network):
-                           if (c_XflResetSentForBus.find(u32_BusIndex) == c_XflResetSentForBus.end())
-                           {
-                              // In case of routing, we need a concrete device for the reset
-                              s32_Return = this->mpc_ComDriver->SendStwNetReset(this->mc_CurrentNode);
-                              c_XflResetSentForBus.insert(u32_BusIndex);
-                           }
+                           s32_Return = this->mpc_ComDriver->SendOsyEcuReset(
+                              mc_CurrentNode,
+                              C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON);
+
+                           (void)this->m_DisconnectFromTargetServer();
                         }
                      }
                      if (s32_Return != C_NO_ERR)
@@ -4349,315 +3964,6 @@ void C_OscSuSequences::h_OpenSydeFlashloaderInformationToText(const C_OsyDeviceI
       orc_Text.Add(" Additional information: " + orc_Info.c_Applications[u8_Application].c_AdditionalInformation);
    }
    orc_Text.AddStrings(&c_MoreInformation);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Convert information read from STW Flashloader server node to string list
-
-   Can be used by the application for a no-frills approach to get a textual representation of the information
-   reported by m_ReportStwFlashloaderInformationRead.
-   Checksum block or sector information is not added to the text.
-
-   \param[in]     orc_Info         STW Flashloader server node information
-   \param[out]    orc_Text         textual representation of read information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscSuSequences::h_StwFlashloaderInformationToText(const C_XflDeviceInformation & orc_Info,
-                                                         C_SclStringList & orc_Text)
-{
-   C_SclString c_Line;
-
-   orc_Text.Clear();
-
-   if (orc_Info.c_BasicInformation.q_DeviceIDValid == true)
-   {
-      orc_Text.Add("Device name: " + orc_Info.c_BasicInformation.c_DeviceId);
-   }
-   else
-   {
-      orc_Text.Add("Device name: unknown");
-   }
-
-   if (orc_Info.c_BasicInformation.q_DeviceInfoAddressesValid == true)
-   {
-      tgl_assert(orc_Info.c_BasicInformation.c_DeviceInfoAddresses.GetLength() ==
-                 orc_Info.c_BasicInformation.c_DeviceInfoBlocks.GetLength());
-      tgl_assert(orc_Info.c_BasicInformation.c_DeviceInfoAddresses.GetLength() ==
-                 orc_Info.c_BasicInformation.c_DeviceInfoBlocksValid.GetLength());
-
-      orc_Text.Add("Number of applications: " +
-                   C_SclString::IntToStr(orc_Info.c_BasicInformation.c_DeviceInfoAddresses.GetLength()));
-      for (uint8_t u8_Application = 0U;
-           u8_Application < orc_Info.c_BasicInformation.c_DeviceInfoAddresses.GetLength();
-           u8_Application++)
-      {
-         orc_Text.Add("Application " + C_SclString::IntToStr(u8_Application));
-         orc_Text.Add(" Device info address: 0x" +
-                      C_SclString::IntToHex(static_cast<int64_t>(orc_Info.c_BasicInformation.c_DeviceInfoAddresses[
-                                                                    u8_Application]), 8));
-         orc_Info.c_BasicInformation.c_DeviceInfoBlocks[u8_Application].AddInfoToList(orc_Text);
-         orc_Text.Add("\n");
-      }
-   }
-   else
-   {
-      orc_Text.Add("Number of applications: unknown");
-   }
-
-   if (orc_Info.c_BasicInformation.q_FlashloaderVersionValid == true)
-   {
-      c_Line = orc_Info.c_BasicInformation.c_FlashloaderVersion;
-   }
-   else
-   {
-      c_Line = "unknown";
-   }
-   orc_Text.Add("Flashloader software version: " + c_Line);
-
-   if (orc_Info.c_BasicInformation.q_ProtocolVersionValid == true)
-   {
-      c_Line.PrintFormatted("V%x.%x%xr%x\n",
-                            (static_cast<uint16_t>(orc_Info.c_BasicInformation.u16_ProtocolVersion >> 12U) & 0x0FU),
-                            (static_cast<uint16_t>(orc_Info.c_BasicInformation.u16_ProtocolVersion >> 8U) & 0x0FU),
-                            (static_cast<uint16_t>(orc_Info.c_BasicInformation.u16_ProtocolVersion >> 4U) & 0x0FU),
-                            (static_cast<uint16_t>(orc_Info.c_BasicInformation.u16_ProtocolVersion) & 0x0FU));
-   }
-   else
-   {
-      c_Line = "unknown (< V3.00r0)";
-   }
-   orc_Text.Add("Protocol version: " + c_Line);
-
-   if (orc_Info.c_BasicInformation.q_EraseCountValid == true)
-   {
-      c_Line = C_SclString::IntToStr(orc_Info.c_BasicInformation.u32_EraseCount);
-   }
-   else
-   {
-      c_Line = "unknown";
-   }
-   orc_Text.Add("Flash count: " + c_Line);
-
-   if (orc_Info.c_BasicInformation.q_SerialNumberValid == true)
-   {
-      c_Line = orc_Info.c_BasicInformation.c_SerialNumber;
-   }
-   else
-   {
-      c_Line = "unknown";
-   }
-   orc_Text.Add("Device serial number: " + c_Line);
-
-   //finger print data:
-   if (orc_Info.c_BasicInformation.c_AvailableFeatures.q_FingerPrint == false)
-   {
-      orc_Text.Add("Flash fingerprint: not supported by this device");
-   }
-   else
-   {
-      if (orc_Info.c_BasicInformation.c_FingerPrintData.q_SupportedIndexesValid == false)
-      {
-         orc_Text.Add("Flash fingerprint: unknown");
-      }
-      else
-      {
-         if ((orc_Info.c_BasicInformation.c_FingerPrintData.c_SupportedIndexes.q_ProgrammingDate == true) &&
-             (orc_Info.c_BasicInformation.c_FingerPrintData.q_ProgrammingDateValid == true))
-         {
-            c_Line.PrintFormatted("%02d-%02d-%02d (yy-mm-dd)",
-                                  orc_Info.c_BasicInformation.c_FingerPrintData.u8_ProgrammingDateYear,
-                                  orc_Info.c_BasicInformation.c_FingerPrintData.u8_ProgrammingDateMonth,
-                                  orc_Info.c_BasicInformation.c_FingerPrintData.u8_ProgrammingDateDay);
-         }
-         else
-         {
-            c_Line = "unknown";
-         }
-         orc_Text.Add("Flash fingerprint date: " + c_Line);
-
-         if ((orc_Info.c_BasicInformation.c_FingerPrintData.c_SupportedIndexes.q_ProgrammingTime == true) &&
-             (orc_Info.c_BasicInformation.c_FingerPrintData.q_ProgrammingTimeValid == true))
-         {
-            c_Line.PrintFormatted("%02d:%02d:%02d",
-                                  orc_Info.c_BasicInformation.c_FingerPrintData.u8_ProgrammingTimeHour,
-                                  orc_Info.c_BasicInformation.c_FingerPrintData.u8_ProgrammingTimeMinute,
-                                  orc_Info.c_BasicInformation.c_FingerPrintData.u8_ProgrammingTimeSecond);
-         }
-         else
-         {
-            c_Line = "unknown";
-         }
-         orc_Text.Add("Flash fingerprint time: " + c_Line);
-
-         if ((orc_Info.c_BasicInformation.c_FingerPrintData.c_SupportedIndexes.q_UsernamePart1 == true) &&
-             (orc_Info.c_BasicInformation.c_FingerPrintData.q_UserNameValid == true))
-         {
-            c_Line = orc_Info.c_BasicInformation.c_FingerPrintData.c_UserName;
-         }
-         else
-         {
-            c_Line = "unknown";
-         }
-         orc_Text.Add("Flash fingerprint username: " + c_Line);
-
-         if ((orc_Info.c_BasicInformation.c_FingerPrintData.c_SupportedIndexes.q_ApplicationCheckSum == true) &&
-             (orc_Info.c_BasicInformation.c_FingerPrintData.q_ChecksumValid == true))
-         {
-            c_Line.PrintFormatted("Flash fingerprint checksum: 0x%08x",
-                                  orc_Info.c_BasicInformation.c_FingerPrintData.u32_Checksum);
-         }
-         else
-         {
-            c_Line = "Flash fingerprint checksum: unknown";
-         }
-         orc_Text.Add(c_Line);
-      }
-   }
-
-   orc_Text.Add("Flash memory information:");
-
-   if (orc_Info.c_BasicInformation.q_SectorCountValid == true)
-   {
-      c_Line = C_SclString::IntToStr(orc_Info.c_BasicInformation.u16_SectorCount);
-   }
-   else
-   {
-      c_Line = "unknown";
-   }
-   orc_Text.Add(" Number of flash sectors: " + c_Line);
-
-   if (orc_Info.c_BasicInformation.q_FlashloaderVersionValid == true)
-   {
-      int32_t s32_Index;
-      C_XFLFlashSectors c_SectorTable;
-      uint32_t u32_TotalSize = 0U;
-      uint32_t u32_TotalSizeWriteable = 0U;
-
-      const C_XFLFlashInformation & rc_FlashInfo = orc_Info.c_BasicInformation.c_FlashMappingInformation;
-
-      orc_Text.Add(" Flash memory details:");
-
-      //print whole flash information data:
-      //first raw information:
-      if (rc_FlashInfo.c_ProtectedSectors.GetLength() == 0)
-      {
-         orc_Text.Add("  No protected sectors.");
-      }
-      for (s32_Index = 0; s32_Index < rc_FlashInfo.c_ProtectedSectors.GetLength(); s32_Index++)
-      {
-         c_Line.PrintFormatted("  Protected sector: IC %03d, Sector %05d",
-                               rc_FlashInfo.c_ProtectedSectors[s32_Index].u8_ICIndex,
-                               rc_FlashInfo.c_ProtectedSectors[s32_Index].u16_SectorNumber);
-         orc_Text.Add(c_Line);
-      }
-
-      orc_Text.Add("  Number of flash ICs: " + C_SclString::IntToStr(rc_FlashInfo.c_ICs.GetLength()));
-
-      for (s32_Index = 0; s32_Index < rc_FlashInfo.c_ICs.GetLength(); s32_Index++)
-      {
-         c_Line.PrintFormatted(
-            "  IC %03d: size: 0x%08X; sec0: 0x%08X; regions: 0x%02X; erasetime: %ums; progtime: %ums",
-            s32_Index,
-            rc_FlashInfo.c_ICs[s32_Index].u32_TotalSize,
-            rc_FlashInfo.c_ICs[s32_Index].u32_Sector0Offset,
-            static_cast<uint32_t>(rc_FlashInfo.c_ICs[s32_Index].c_Regions.GetLength()),
-            rc_FlashInfo.c_ICs[s32_Index].u32_SectorEraseTime,
-            rc_FlashInfo.c_ICs[s32_Index].u32_ProgrammingTime);
-         orc_Text.Add(c_Line);
-         for (int32_t s32_RegionIndex = 0; s32_RegionIndex < rc_FlashInfo.c_ICs[s32_Index].c_Regions.GetLength();
-              s32_RegionIndex++)
-         {
-            c_Line.PrintFormatted("  IC %03d, region 0x%02X: blocksize: 0x%08X; numblocks: 0x%04X",
-                                  s32_Index,
-                                  static_cast<uint32_t>(s32_RegionIndex),
-                                  rc_FlashInfo.c_ICs[s32_Index].c_Regions[s32_RegionIndex].u32_BlockSize,
-                                  static_cast<uint32_t>(rc_FlashInfo.c_ICs[s32_Index].c_Regions[s32_RegionIndex].
-                                                        u16_NumBlocks));
-            orc_Text.Add(c_Line);
-         }
-      }
-
-      //then linearized information
-      //match hexfile to address areas
-      orc_Text.Add("  Linear sector map:\n");
-
-      rc_FlashInfo.ConvertToFlashSectorTable(c_SectorTable);
-
-      for (s32_Index = 0; s32_Index < c_SectorTable.GetLength(); s32_Index++)
-      {
-         uint32_t u32_SectorSize;
-
-         //was there a gap before this sector:
-         if (s32_Index > 0)
-         {
-            if (c_SectorTable[s32_Index].u32_LowestAddress > (c_SectorTable[s32_Index - 1].u32_HighestAddress + 1))
-            {
-               //gap of at least one byte !
-               c_Line.PrintFormatted("  Gap: Start: 0x%08X; Size: 0x%08X",
-                                     c_SectorTable[s32_Index - 1].u32_HighestAddress + 1,
-                                     c_SectorTable[s32_Index].u32_LowestAddress -
-                                     (c_SectorTable[s32_Index - 1].u32_HighestAddress + 1));
-               orc_Text.Add(c_Line);
-            }
-         }
-
-         u32_SectorSize =
-            (c_SectorTable[s32_Index].u32_HighestAddress - c_SectorTable[s32_Index].u32_LowestAddress) +
-            1;
-         u32_TotalSize += u32_SectorSize;
-         if (c_SectorTable[s32_Index].q_IsProtected == false)
-         {
-            u32_TotalSizeWriteable += u32_SectorSize;
-         }
-
-         c_Line.PrintFormatted("  Sector %05d: Start: 0x%08X; Size: 0x%08X; IC: %03d; Read: yes; Write: %s",
-                               s32_Index,
-                               c_SectorTable[s32_Index].u32_LowestAddress,
-                               u32_SectorSize,
-                               c_SectorTable[s32_Index].u8_ICIndex,
-                               (c_SectorTable[s32_Index].q_IsProtected == true) ? "no" : "yes");
-         orc_Text.Add(c_Line);
-      }
-      orc_Text.Add("\n");
-      c_Line.PrintFormatted("  Total size: 0x%08X", u32_TotalSize);
-      orc_Text.Add(c_Line);
-      c_Line.PrintFormatted("  Total non-protected size: 0x%08X", u32_TotalSizeWriteable);
-      orc_Text.Add(c_Line);
-
-      //Aliased memory
-      if (rc_FlashInfo.c_Aliases.GetLength() != 0)
-      {
-         orc_Text.Add("\n");
-         orc_Text.Add("  Number of aliased memory regions: " +
-                      C_SclString::IntToStr(rc_FlashInfo.c_Aliases.GetLength()));
-         for (s32_Index = 0; s32_Index < rc_FlashInfo.c_Aliases.GetLength(); s32_Index++)
-         {
-            c_Line.PrintFormatted("  Aliased region %03d: Physical: 0x%08X; Aliased: 0x%08X; Size: 0x%08X",
-                                  s32_Index,
-                                  rc_FlashInfo.c_Aliases[s32_Index].u32_PhysicalAddress,
-                                  rc_FlashInfo.c_Aliases[s32_Index].u32_AliasedAddress,
-                                  rc_FlashInfo.c_Aliases[s32_Index].u32_Size);
-            orc_Text.Add(c_Line);
-         }
-      }
-   }
-   else
-   {
-      orc_Text.Add(" Flash memory details: not available");
-   }
-
-   if (orc_Info.c_BasicInformation.q_ImplementationInformationHexFileInformationValid == true)
-   {
-      orc_Text.Add(" HEX file: Maximum record length: " +
-                   C_SclString::IntToStr(orc_Info.c_BasicInformation.u8_ImplementationInformationMaxHexRecordLength));
-      orc_Text.Add(" HEX file: Granularity: " +
-                   C_SclString::IntToStr(orc_Info.c_BasicInformation.u8_ImplementationInformationHexRecordGranularity));
-   }
-   else
-   {
-      orc_Text.Add(" HEX file: Maximum record length: unknown");
-      orc_Text.Add(" HEX file: Granularity: unknown");
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

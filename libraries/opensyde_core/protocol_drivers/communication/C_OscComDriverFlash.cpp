@@ -3,8 +3,7 @@
    \file
    \brief       Core communication driver for flashloader protocols (implementation)
 
-   Adds functionality to the base class:
-   * flashloader protocol instances for openSYDE and STW Flashloader protocols
+   Adds functionality to the base class: flashloader protocol instance for the openSYDE protocol.
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
@@ -25,7 +24,6 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::can;
 using namespace stw::scl;
-using namespace stw::diag_lib;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -36,7 +34,6 @@ using namespace stw::diag_lib;
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
-extern void XFLSetInternalKey(const uint16_t ou16_Key); //lint !e526 !e2701 !e8001 //very special case here
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
@@ -45,46 +42,21 @@ extern void XFLSetInternalKey(const uint16_t ou16_Key); //lint !e526 !e2701 !e80
 
    \param[in]  oq_RoutingActive              Flag for activating routing
    \param[in]  oq_UpdateRoutingMode          Flag for update specific routing or generic routing (m_GetRoutingMode)
-   \param[in]  opr_XflReportProgress         function to call if STW Flashloader driver has something to report
-   \param[in]  opv_XflReportProgressInstance Instance pointer to pass when invoking opv_XflReportProgressInstance
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscComDriverFlash::C_OscComDriverFlash(const bool oq_RoutingActive, const bool oq_UpdateRoutingMode,
-                                         const C_OscFlashProtocolStwFlashloader::PR_ReportProgress opr_XflReportProgress,
-                                         void * const opv_XflReportProgressInstance) :
+C_OscComDriverFlash::C_OscComDriverFlash(const bool oq_RoutingActive, const bool oq_UpdateRoutingMode) :
    C_OscComDriverProtocol(),
-   pr_XflReportProgress(opr_XflReportProgress),
-   pv_XflReportProgressInstance(opv_XflReportProgressInstance),
    mq_RoutingActive(oq_RoutingActive),
    mq_UpdateRoutingMode(oq_UpdateRoutingMode)
 {
-   mc_CompanyId.u8_NumBytes = 2U;
-   mc_CompanyId.au8_Data[0] = static_cast<uint8_t>('Y');
-   mc_CompanyId.au8_Data[1] = static_cast<uint8_t>('*');
-
-   //configure STW Flashloader protocol engine to accept wildcard company ID:
-   XFLSetInternalKey(0x3472U);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default destructor
-
-   Clean up.
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscComDriverFlash::~C_OscComDriverFlash(void)
 {
-   uint32_t u32_Counter;
-
-   for (u32_Counter = 0U; u32_Counter < this->mc_StwFlashProtocols.size(); ++u32_Counter)
-   {
-      delete this->mc_StwFlashProtocols[u32_Counter];
-      this->mc_StwFlashProtocols[u32_Counter] = NULL;
-   }
-   this->mc_StwFlashProtocols.clear();
-
-   pr_XflReportProgress = NULL;
-   pv_XflReportProgressInstance = NULL;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2190,587 +2162,6 @@ int32_t C_OscComDriverFlash::SendOsyFactoryModeMasterReset(const C_OscProtocolDr
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Send reset request for all STW flashloader by specific reset message
-
-   \return
-   C_NO_ERR    Reset request sent
-   C_RANGE     Reset message is invalid
-   C_COM       Error on sending reset request
-   C_CONFIG    Not initialized or not valid
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwRequestNodeReset(void)
-{
-   int32_t s32_Return = C_CONFIG;
-
-   if (this->mq_Initialized == true)
-   {
-      uint32_t u32_Counter;
-      std::vector<T_STWCAN_Msg_TX> c_ResetMsgs;
-
-      s32_Return = C_NO_ERR;
-
-      // Get all relevant reset messages
-      for (u32_Counter = 0U; u32_Counter < this->m_GetActiveNodeCount(); ++u32_Counter)
-      {
-         if (this->mc_ActiveNodesIndexes[u32_Counter] < this->mpc_SysDef->c_Nodes.size())
-         {
-            T_STWCAN_Msg_TX c_ResetMsg;
-
-            s32_Return = this->m_GetStwResetMessage(this->mc_ActiveNodesIndexes[u32_Counter], c_ResetMsg);
-
-            if (s32_Return == C_NO_ERR)
-            {
-               c_ResetMsgs.push_back(c_ResetMsg);
-            }
-            else if (s32_Return == C_NOACT)
-            {
-               s32_Return = C_NO_ERR;
-            }
-            else
-            {
-               // Error
-               break;
-            }
-         }
-      }
-
-      if (s32_Return == C_NO_ERR)
-      {
-         // Send the service with the first STW flashloader protocol
-         for (u32_Counter = 0U; u32_Counter < this->m_GetActiveNodeCount(); ++u32_Counter)
-         {
-            if (this->mc_StwFlashProtocols[u32_Counter] != NULL)
-            {
-               uint32_t u32_MsgCounter;
-
-               // Send all reset messages with the same protocol. No dependency to the concrete node id
-               for (u32_MsgCounter = 0U; u32_MsgCounter < c_ResetMsgs.size(); ++u32_MsgCounter)
-               {
-                  s32_Return = this->mc_StwFlashProtocols[u32_Counter]->RequestNodeReset(&c_ResetMsgs[u32_MsgCounter]);
-
-                  if (s32_Return != C_NO_ERR)
-                  {
-                     s32_Return = C_COM;
-                     break;
-                  }
-               }
-               break;
-            }
-         }
-      }
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Send reset request for one STW flashloader by specific reset message
-
-   \param[in]     orc_ServerId             Server id for communication
-
-   \return
-   C_NO_ERR    Reset request sent
-   C_RANGE     Reset message is invalid
-   C_COM       Error on sending reset request
-   C_CONFIG    Not initialized or not valid
-   C_NOACT     No reset message configured or node has no STW flashloader
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwRequestNodeReset(const C_OscProtocolDriverOsyNode & orc_ServerId)
-{
-   int32_t s32_Return = C_CONFIG;
-
-   if (this->mq_Initialized == true)
-   {
-      uint32_t u32_NodeIndex;
-      if (this->GetNodeIndex(orc_ServerId, u32_NodeIndex) == true)
-      {
-         T_STWCAN_Msg_TX c_ResetMsg;
-         C_OscFlashProtocolStwFlashloader c_StwProtocol(pr_XflReportProgress, pv_XflReportProgressInstance);
-         C_OscFlashProtocolStwFlashloader * pc_ExistingProtocol = this->m_GetStwFlashloaderProtocol(orc_ServerId);
-
-         if (pc_ExistingProtocol == NULL)
-         {
-            // No device with this server id with STW protocol exists. We need a temporary protocol.
-            this->m_InitFlashProtocolStw(&c_StwProtocol, orc_ServerId.u8_NodeIdentifier);
-            pc_ExistingProtocol = &c_StwProtocol;
-         }
-
-         s32_Return = this->m_GetStwResetMessage(u32_NodeIndex, c_ResetMsg);
-         if (s32_Return == C_NO_ERR)
-         {
-            s32_Return = pc_ExistingProtocol->RequestNodeReset(&c_ResetMsg);
-
-            if (s32_Return != C_NO_ERR)
-            {
-               s32_Return = C_COM;
-            }
-         }
-      }
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Send "FLASH" requests
-
-   Send the "FLASH" request for one time.
-
-   \param[in]     orc_ServerId             Server id for communication
-
-   \return
-   C_NO_ERR      finished sending "FLASH"   \n
-   C_DEFAULT     aborted by user
-   C_CONFIG      no STW flashloader protocol initialized
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwSendFlash(const C_OscProtocolDriverOsyNode & orc_ServerId)
-{
-   int32_t s32_Return;
-   C_OscFlashProtocolStwFlashloader c_StwProtocol(pr_XflReportProgress, pv_XflReportProgressInstance);
-   C_OscFlashProtocolStwFlashloader * pc_ExistingProtocol = this->m_GetStwFlashloaderProtocol(orc_ServerId);
-
-   if (pc_ExistingProtocol == NULL)
-   {
-      // No device with this server id with STW protocol exists. We need a temporary protocol.
-      this->m_InitFlashProtocolStw(&c_StwProtocol, orc_ServerId.u8_NodeIdentifier);
-      pc_ExistingProtocol = &c_StwProtocol;
-   }
-
-   s32_Return = pc_ExistingProtocol->SendFLASH(0, 0);
-
-   if (s32_Return != C_NO_ERR)
-   {
-      s32_Return = C_COM;
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Scan for nodes in the network.
-
-   \param[out]     orau8_LocalIds     Number of responses for each ID.
-                                       e.g. orau8_LocalIds[1] contains the number of responding
-                                       controllers on Local ID 1 after call.
-   \param[out]     oru8_NodeFounds    Total number of found nodes
-
-   \return
-   C_NO_ERR    all ok
-   C_COM       error on sending
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwSearchId(uint8_t (&orau8_LocalIds)[XFL_NUM_DIFFERENT_LOCAL_IDS],
-                                             uint8_t & oru8_NodeFounds)
-{
-   C_OscFlashProtocolStwFlashloader c_StwProtocol(pr_XflReportProgress, pv_XflReportProgressInstance);
-
-   // No concrete device. We need a temporary protocol.
-   this->m_InitFlashProtocolStw(&c_StwProtocol, 0);
-
-   // Send "FLASH" will be handled separately. Minimum parameter.
-   return c_StwProtocol.SearchId(orau8_LocalIds, &oru8_NodeFounds, 0, 0);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Perform a wakeup with local ID
-
-   \param[in]     orc_ServerId      Server id for communication
-   \param[out]    opu8_NodesFound   Number of found nodes (optional)
-
-   \return
-   C_NO_ERR           no errors
-   C_COM              no response from server
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwWakeupLocalId(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                                  uint8_t * const opu8_NodesFound)
-{
-   int32_t s32_Return;
-   C_OscFlashProtocolStwFlashloader * const pc_ExistingProtocol = this->m_GetStwFlashloaderProtocol(orc_ServerId);
-
-   C_XFLCompanyID c_ReceivedCompanyId;
-
-   if (opu8_NodesFound != NULL)
-   {
-      *opu8_NodesFound = 0U;
-   }
-
-   if (pc_ExistingProtocol != NULL)
-   {
-      s32_Return = pc_ExistingProtocol->WakeupLocalId(this->mc_CompanyId, opu8_NodesFound, &c_ReceivedCompanyId);
-   }
-   else
-   {
-      C_OscFlashProtocolStwFlashloader c_StwProtocol(pr_XflReportProgress, pv_XflReportProgressInstance);
-
-      // No device with this server id with STW protocol exist. We need a temporary protocol.
-      this->m_InitFlashProtocolStw(&c_StwProtocol, orc_ServerId.u8_NodeIdentifier);
-      s32_Return = c_StwProtocol.WakeupLocalId(this->mc_CompanyId, opu8_NodesFound, &c_ReceivedCompanyId);
-   }
-
-   if (s32_Return == C_WARN)
-   {
-      // An other company id
-      stw::scl::C_SclString c_CompanyId;
-
-      C_OscFlashProtocolStwFlashloader::CompIDStructToString(c_ReceivedCompanyId, c_CompanyId);
-
-      osc_write_log_info("SendStwWakeupLocalId", "Other company id found: " + c_CompanyId);
-
-      // An other company id is no error
-      s32_Return = C_NO_ERR;
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Perform a wakeup with serial number
-
-   \param[in]     orc_SerialNumber     Serial number to send
-   \param[out]    oru8_LocalId         Local id of server with the SN
-
-   \return
-   C_NO_ERR           no errors
-   C_COM              no response from server
-   C_RANGE            invalid serial number
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwWakeupLocalSerialNumber(const C_OscProtocolSerialNumber & orc_SerialNumber,
-                                                            uint8_t & oru8_LocalId)
-{
-   int32_t s32_Return = C_RANGE;
-
-   if ((orc_SerialNumber.q_IsValid == true) &&
-       (orc_SerialNumber.q_FsnSerialNumber == false) &&
-       (orc_SerialNumber.q_ExtFormatUsed == false))
-   {
-      C_XFLCompanyID c_ReceivedCompanyId;
-
-      C_OscFlashProtocolStwFlashloader c_StwProtocol(pr_XflReportProgress, pv_XflReportProgressInstance);
-
-      // No concrete device. We need a temporary protocol.
-      this->m_InitFlashProtocolStw(&c_StwProtocol, 0U);
-
-      s32_Return = c_StwProtocol.WakeupSerialNumber(orc_SerialNumber.au8_SerialNumber, this->mc_CompanyId, oru8_LocalId,
-                                                    &c_ReceivedCompanyId);
-
-      if (s32_Return == C_WARN)
-      {
-         // An other company id
-         stw::scl::C_SclString c_CompanyId;
-
-         C_OscFlashProtocolStwFlashloader::CompIDStructToString(c_ReceivedCompanyId, c_CompanyId);
-
-         osc_write_log_info("SendStwWakeupLocalId", "Other company id found: " + c_CompanyId);
-
-         // An other company id is no error
-         s32_Return = C_NO_ERR;
-      }
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Read the SNR(s) from the controller(s) specified by LocalId
-
-   \param[in]     orc_ServerId             Server id for communication
-   \param[out]    opu8_SerialNumbers       Returns the received SNR(s), each 6 bytes
-                                              the calling function has to provide a buffer large enough
-                                              Set to NULL if only interested in the number of responses.
-   \param[in]     ou8_NumMax               Maximum number of answers to record to prevent overflow in opu8_SerialNumbers
-   \param[in,out] oru8_NumFound            Number of responses
-
-   \return
-   C_NO_ERR       no errors
-   C_COM          no response
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwGetSerialNumbers(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                                     uint8_t * const opu8_SerialNumbers, const uint8_t ou8_NumMax,
-                                                     uint8_t & oru8_NumFound)
-{
-   int32_t s32_Return;
-   C_OscFlashProtocolStwFlashloader c_StwProtocol(pr_XflReportProgress, pv_XflReportProgressInstance);
-   C_OscFlashProtocolStwFlashloader * pc_ExistingProtocol = this->m_GetStwFlashloaderProtocol(orc_ServerId);
-
-   if (pc_ExistingProtocol == NULL)
-   {
-      // No device with this server id with STW protocol exists. We need a temporary protocol.
-      this->m_InitFlashProtocolStw(&c_StwProtocol, orc_ServerId.u8_NodeIdentifier);
-      pc_ExistingProtocol = &c_StwProtocol;
-   }
-
-   s32_Return = pc_ExistingProtocol->GetSNRExt(opu8_SerialNumbers, ou8_NumMax, oru8_NumFound);
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Read device-ID from server node
-
-   \param[in]     orc_ServerId         Server id for communication
-   \param[out]    orc_DeviceName       Device id/name (max.16 characters)
-
-   \return
-   C_NO_ERR           no errors
-   C_COM              no response from server
-   C_NOACT            error response from server
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwGetDeviceId(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                                C_SclString & orc_DeviceName)
-{
-   int32_t s32_Return;
-   C_OscFlashProtocolStwFlashloader c_StwProtocol(pr_XflReportProgress, pv_XflReportProgressInstance);
-   C_OscFlashProtocolStwFlashloader * pc_ExistingProtocol = this->m_GetStwFlashloaderProtocol(orc_ServerId);
-   uint16_t u16_ProtocolVersion;
-   bool q_LongId;
-
-   if (pc_ExistingProtocol == NULL)
-   {
-      // No device with this server id with STW protocol exists. We need a temporary protocol.
-      this->m_InitFlashProtocolStw(&c_StwProtocol, orc_ServerId.u8_NodeIdentifier);
-      pc_ExistingProtocol = &c_StwProtocol;
-   }
-
-   //check for supported version of service depending on the protocol version:
-   s32_Return = pc_ExistingProtocol->GetImplementationInformationProtocolVersion(u16_ProtocolVersion);
-
-   //no response or error response: we have to assume we have a version <= V3.00r0
-   q_LongId = ((s32_Return == C_NO_ERR) && (u16_ProtocolVersion >= mhu16_STW_FLASHLOADER_PROTOCOL_VERSION_3_00));
-   orc_DeviceName = "";
-   s32_Return = pc_ExistingProtocol->GetDeviceID(q_LongId, orc_DeviceName);
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   short description of function
-
-   long description of function within several lines
-
-   \param[in]     orc_ServerId             Server id for communication
-   \param[in]     ou8_NewLocalId           New local id for server
-
-   \return
-   C_NO_ERR     no errors
-   C_COM        no response
-   C_NOACT      error response
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwSetLocalId(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                               const uint8_t ou8_NewLocalId)
-{
-   int32_t s32_Return;
-
-   C_OscFlashProtocolStwFlashloader c_StwProtocol(pr_XflReportProgress, pv_XflReportProgressInstance);
-
-   // We change the server Id and do not want to change the server Id of existing protocols.
-   // We need a temporary protocol.
-   this->m_InitFlashProtocolStw(&c_StwProtocol, orc_ServerId.u8_NodeIdentifier);
-
-   s32_Return = c_StwProtocol.SetLocalID(ou8_NewLocalId);
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Change the flash bitrate of a node
-
-   \param[in]     orc_ServerId             Server id for communication
-   \param[in]     ou32_Bitrate             New bitrate for server in Bits/s
-
-   \return
-   C_NO_ERR   no errors
-   C_COM      no response
-   C_NOACT    error response
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwSetBitrateCan(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                                  const uint32_t ou32_Bitrate)
-{
-   int32_t s32_Return;
-   C_OscFlashProtocolStwFlashloader c_StwProtocol(pr_XflReportProgress, pv_XflReportProgressInstance);
-   C_OscFlashProtocolStwFlashloader * pc_ExistingProtocol = this->m_GetStwFlashloaderProtocol(orc_ServerId);
-
-   if (pc_ExistingProtocol == NULL)
-   {
-      // No device with this server id with STW protocol exists. We need a temporary protocol.
-      this->m_InitFlashProtocolStw(&c_StwProtocol, orc_ServerId.u8_NodeIdentifier);
-      pc_ExistingProtocol = &c_StwProtocol;
-   }
-
-   // We support only 16 bit bitrate for STW flashloader -> bitrate resolution kbit/second
-   s32_Return = pc_ExistingProtocol->SetBitrateCAN(ou32_Bitrate / 1000U, false);
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Sends net reset request for STW flashloader devices for a specific device
-
-   \param[in]     orc_ServerId             Server id for communication
-
-   \return
-   C_NO_ERR    Net reset request sent
-   C_COM       Error on sending reset request
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwNetReset(const C_OscProtocolDriverOsyNode & orc_ServerId)
-{
-   int32_t s32_Return;
-   C_OscFlashProtocolStwFlashloader c_StwProtocol(pr_XflReportProgress, pv_XflReportProgressInstance);
-   C_OscFlashProtocolStwFlashloader * pc_ExistingProtocol = this->m_GetStwFlashloaderProtocol(orc_ServerId);
-
-   if (pc_ExistingProtocol == NULL)
-   {
-      // No device with this server id with STW protocol exists. We need a temporary protocol.
-      this->m_InitFlashProtocolStw(&c_StwProtocol, orc_ServerId.u8_NodeIdentifier);
-      pc_ExistingProtocol = &c_StwProtocol;
-   }
-
-   s32_Return = pc_ExistingProtocol->NetReset();
-
-   if (s32_Return != C_NO_ERR)
-   {
-      s32_Return = C_COM;
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Sends net reset request for STW flashloader devices
-
-   \return
-   C_NO_ERR    Net reset request sent
-   C_COM       Error on sending reset request
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwNetReset(void)
-{
-   int32_t s32_Return;
-
-   C_OscFlashProtocolStwFlashloader c_StwProtocol(pr_XflReportProgress, pv_XflReportProgressInstance);
-
-   // No concrete device. We need a temporary protocol.
-   this->m_InitFlashProtocolStw(&c_StwProtocol, 0);
-
-   // Send "FLASH" will be handled separately. Minimum parameter.
-   s32_Return = c_StwProtocol.NetReset();
-
-   if (s32_Return != C_NO_ERR)
-   {
-      s32_Return = C_COM;
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Read all kinds of information from STW flashloader
-
-   Uses protocol services to read information about target device
-
-   \param[in]     orc_ServerId             Server id for communication
-   \param[out]    orc_Information          basic information
-   \param[out]    orc_ChecksumInformation  information about block or sector checksums
-
-   \return
-   C_NO_ERR    information read
-   C_COM       communication error
-   C_CONFIG    node identified by orc_ServerId is unknown or does not speak STW Flashloader
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwReadDeviceInformation(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                                          C_XFLInformationFromServer & orc_Information,
-                                                          C_XFLChecksumAreas & orc_ChecksumInformation) const
-{
-   int32_t s32_Return = C_CONFIG;
-   C_OscFlashProtocolStwFlashloader * const pc_ExistingProtocol = this->m_GetStwFlashloaderProtocol(orc_ServerId);
-
-   if (pc_ExistingProtocol != NULL)
-   {
-      //always returns C_NO_ERR
-      (void)pc_ExistingProtocol->ReadServerInformation(orc_Information);
-
-      if ((orc_Information.c_AvailableFeatures.q_BlockBasedCRCsEEPROM == true) ||
-          (orc_Information.c_AvailableFeatures.q_BlockBasedCRCsFlash == true))
-      {
-         s32_Return = pc_ExistingProtocol->ReadServerBlockChecksumInformation(orc_ChecksumInformation);
-      }
-      else
-      {
-         s32_Return = pc_ExistingProtocol->ReadServerSectorChecksumInformation(orc_Information.u16_SectorCount,
-                                                                               orc_ChecksumInformation);
-      }
-      if (s32_Return != C_NO_ERR)
-      {
-         s32_Return = C_COM;
-      }
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Write one hex file to an STW Flashloader node
-
-   Prerequisites:
-   * node is already in flashloader (no "FLASH" sequence will be performed)
-
-   \param[in]     orc_ServerId             Server id to write the hex file to
-   \param[in]     orc_HexFilePath          path to hex file to flash
-
-   \return
-   C_NO_ERR    hex file written
-   C_CONFIG    node identified by orc_ServerId is unknown or does not speak STW Flashloader
-   else        problem during flashing; details can be seen in the progress log
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::SendStwDoFlash(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                            const stw::scl::C_SclString & orc_HexFilePath) const
-{
-   int32_t s32_Return = C_CONFIG;
-   C_OscFlashProtocolStwFlashloader * const pc_ExistingProtocol = this->m_GetStwFlashloaderProtocol(orc_ServerId);
-
-   if (pc_ExistingProtocol != NULL)
-   {
-      C_XFLFlashWriteParameters c_Params;
-      c_Params.u16_Version = CXFLFLASHWRITE_VERSION;
-      c_Params.c_HexFile = orc_HexFilePath;
-      c_Params.c_WakeupConfig.e_WakeupMode = eXFL_WAKEUP_MODE_LID;
-      s32_Return = C_XFLActions::CompIDStructToString(this->mc_CompanyId, c_Params.c_WakeupConfig.c_CompanyID);
-      tgl_assert(s32_Return == C_NO_ERR);                  //no plausible reason for this
-      c_Params.c_WakeupConfig.q_SendFLASHRequired = false; //we are already in flashloader
-      c_Params.c_WakeupConfig.q_SendResetRQ = false;       //we are already in flashloader
-      c_Params.c_WakeupConfig.u8_LocalID = orc_ServerId.u8_NodeIdentifier;
-      c_Params.e_EraseMode = eXFL_ERASE_MODE_AUTOMATIC; //only automatic mode supported
-      c_Params.e_FlashFinishedAction =
-         eXFL_FLASH_FINISHED_ACTION_NODE_SLEEP;   //go back to sleep after flashing
-      c_Params.u16_InterFrameDelayUs = 0U;        //don't consider ancient hardware and targets
-      c_Params.u8_HexRecordLength = 0U;           //keep hex record length as it is (unless we have the V3.x mechanisms)
-      c_Params.q_XtdID       = mhq_XFL_ID_XTD;    //fixed IDs
-      c_Params.u32_SendID    = mhu32_XFL_ID_TX;   //fixed IDs
-      c_Params.u32_ReceiveID = mhu32_XFL_ID_RX;   //fixed IDs
-      c_Params.q_DivertStream = false;            //no legacy support for ESX2 BBBs
-      c_Params.q_WriteCRCsIfSupported = true;     //update CRCs
-      c_Params.q_VerboseMode = true;              //give us some more progress information
-      c_Params.q_XFLExchange = false;             //regular flashing
-      c_Params.u8_IgnoreInvalidHexfileError = 0U; //always fail if the hex file is invalid
-
-      c_Params.e_DevTypeCheck = eXFL_DEV_TYPE_CHECK_NONE; //no check performed
-
-      s32_Return = pc_ExistingProtocol->ExecuteWrite(c_Params);
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Prepare for shutting down class
 
    To be called by child classes on shutdown, before they destroy all owned class instances
@@ -2779,14 +2170,6 @@ int32_t C_OscComDriverFlash::SendStwDoFlash(const C_OscProtocolDriverOsyNode & o
 void C_OscComDriverFlash::PrepareForDestructionFlash(void)
 {
    this->PrepareForDestruction();
-   for (uint32_t u32_Counter = 0U; u32_Counter < this->mc_StwFlashProtocols.size(); ++u32_Counter)
-   {
-      C_OscFlashProtocolStwFlashloader * const pc_FlashProtocol = this->mc_StwFlashProtocols[u32_Counter];
-      if (pc_FlashProtocol != NULL)
-      {
-         pc_FlashProtocol->CfgSetCommDispatcher(NULL);
-      }
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2837,14 +2220,8 @@ uint8_t C_OscComDriverFlash::m_GetRoutingSessionId(void) const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscComDriverFlash::m_IsRoutingSpecificNecessary(const C_OscNode & orc_Node) const
 {
-   bool q_Return = false;
-
-   if (orc_Node.c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW)
-   {
-      q_Return = true;
-   }
-
-   return q_Return;
+   (void)orc_Node;
+   return false;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2868,35 +2245,12 @@ int32_t C_OscComDriverFlash::m_StartRoutingSpecific(const uint32_t ou32_ActiveNo
                                                     C_OscProtocolDriverOsy * const opc_ProtocolOsyOfLastNodeOfRouting,
                                                     C_OscCanDispatcherOsyRouter ** const oppc_RoutingDispatcher)
 {
-   int32_t s32_Return = C_NOACT;
-
-   if (opc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW)
-   {
-      C_OscFlashProtocolStwFlashloader * const pc_StwFlashloader =
-         dynamic_cast<C_OscFlashProtocolStwFlashloader *>(this->mc_StwFlashProtocols[ou32_ActiveNode]);
-
-      if ((pc_StwFlashloader != NULL) &&
-          (opc_ProtocolOsyOfLastNodeOfRouting != NULL))
-      {
-         (*oppc_RoutingDispatcher) = new C_OscCanDispatcherOsyRouter(*opc_ProtocolOsyOfLastNodeOfRouting);
-
-         // Only 0x52 for Rx is relevant
-         (*oppc_RoutingDispatcher)->SetFilterParameters(orc_LastNodeOfRouting.u8_OutInterfaceNumber, 0x00000052,
-                                                        0x000007FF);
-
-         this->mc_LegacyRouterDispatchers[ou32_ActiveNode] = (*oppc_RoutingDispatcher);
-         // Set the new dispatcher
-         pc_StwFlashloader->CfgSetCommDispatcher(*oppc_RoutingDispatcher);
-
-         s32_Return = C_NO_ERR;
-      }
-      else
-      {
-         s32_Return = C_CONFIG;
-      }
-   }
-
-   return s32_Return;
+   (void)ou32_ActiveNode;
+   (void)opc_Node;
+   (void)orc_LastNodeOfRouting;
+   (void)opc_ProtocolOsyOfLastNodeOfRouting;
+   (void)oppc_RoutingDispatcher;
+   return C_NOACT;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2907,20 +2261,6 @@ int32_t C_OscComDriverFlash::m_StartRoutingSpecific(const uint32_t ou32_ActiveNo
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComDriverFlash::m_StopRoutingSpecific(const uint32_t ou32_ActiveNode)
 {
-   const C_OscNode * const pc_Node = &this->mpc_SysDef->c_Nodes[this->mc_ActiveNodesIndexes[ou32_ActiveNode]];
-
-   if (pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW)
-   {
-      C_OscFlashProtocolStwFlashloader * const pc_StwFlashloader =
-         dynamic_cast<C_OscFlashProtocolStwFlashloader *>(this->mc_StwFlashProtocols[ou32_ActiveNode]);
-
-      if (pc_StwFlashloader != NULL)
-      {
-         // Reset to 'normal' dispatcher
-         pc_StwFlashloader->CfgSetCommDispatcher(this->m_GetCanDispatcher());
-      }
-   }
-
    C_OscComDriverProtocol::m_StopRoutingSpecific(ou32_ActiveNode);
 }
 
@@ -2951,53 +2291,6 @@ bool C_OscComDriverFlash::m_CheckInterfaceForFunctions(const C_OscNodeComInterfa
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Returns the pointer to the STW flashloader protocol of specific server id
-
-   \param[in]     orc_ServerId             Server id for communication
-
-   \return
-   Valid pointer  Protocol for server found
-   NULL           No protocol for server found
-*/
-//----------------------------------------------------------------------------------------------------------------------
-C_OscFlashProtocolStwFlashloader * C_OscComDriverFlash::m_GetStwFlashloaderProtocol(
-   const C_OscProtocolDriverOsyNode & orc_ServerId) const
-{
-   C_OscFlashProtocolStwFlashloader * pc_Return = NULL;
-
-   for (uint32_t u32_Counter = 0U; u32_Counter < this->mc_ServerIds.size(); ++u32_Counter)
-   {
-      if (orc_ServerId == this->mc_ServerIds[u32_Counter])
-      {
-         // Index found
-         if ((u32_Counter < this->mc_StwFlashProtocols.size()) &&
-             (this->mc_StwFlashProtocols[u32_Counter] != NULL))
-         {
-            pc_Return = this->mc_StwFlashProtocols[u32_Counter];
-            break;
-         }
-      }
-   }
-
-   return pc_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscComDriverFlash::m_InitFlashProtocolStw(C_OscFlashProtocolStwFlashloader * const opc_FlashProtocolStw,
-                                                 const uint8_t ou8_LocalId)
-{
-   opc_FlashProtocolStw->CfgSetCommDispatcher(this->m_GetCanDispatcher());
-   // Send and received id have a fixed value here. It is not configurable.
-   opc_FlashProtocolStw->CfgSetFlashId(mhu32_XFL_ID_TX, mhu32_XFL_ID_RX); //SendId, ReceiveId
-   opc_FlashProtocolStw->CfgSetXtdId(mhq_XFL_ID_XTD);
-   // local id equals node id of openSYDE protocol
-   opc_FlashProtocolStw->CfgSetLocalId(ou8_LocalId);
-   // The bitrate configuration is not necessary. It will be used for calculation of defined busload which is
-   // insignificant
-   opc_FlashProtocolStw->CfgSetBitrate(0U);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Initialize flash protocols
 
    The functions fills the vector mc_OsyProtocols of the base class too.
@@ -3021,7 +2314,6 @@ int32_t C_OscComDriverFlash::m_InitFlashProtocol(void)
       //Init protocol driver
       // The last protocol is for broadcasts
       this->mc_OsyProtocols.resize(u32_ActiveNodeCount, NULL);
-      this->mc_StwFlashProtocols.resize(u32_ActiveNodeCount, NULL);
 
       for (u32_ActiveNodeCounter = 0U; u32_ActiveNodeCounter < this->mc_ActiveNodesIndexes.size();
            ++u32_ActiveNodeCounter)
@@ -3031,7 +2323,6 @@ int32_t C_OscComDriverFlash::m_InitFlashProtocol(void)
             const C_OscNode * const pc_Node =
                &this->mpc_SysDef->c_Nodes[this->mc_ActiveNodesIndexes[u32_ActiveNodeCounter]];
             C_OscProtocolDriverOsy * pc_ProtocolOsy;
-            C_OscFlashProtocolStwFlashloader * pc_ProtocolStw;
 
             switch (pc_Node->c_Properties.e_FlashLoader)
             {
@@ -3055,13 +2346,6 @@ int32_t C_OscComDriverFlash::m_InitFlashProtocol(void)
                   s32_Return = C_OVERFLOW;
                }
                this->mc_OsyProtocols[u32_ActiveNodeCounter] = pc_ProtocolOsy;
-               break;
-            case C_OscNodeProperties::eFL_STW:
-               pc_ProtocolStw = new C_OscFlashProtocolStwFlashloader(pr_XflReportProgress,
-                                                                     pv_XflReportProgressInstance);
-               this->m_InitFlashProtocolStw(pc_ProtocolStw,
-                                            this->mc_ServerIds[u32_ActiveNodeCounter].u8_NodeIdentifier);
-               this->mc_StwFlashProtocols[u32_ActiveNodeCounter] = pc_ProtocolStw;
                break;
             case C_OscNodeProperties::eFL_NONE:
             default:
@@ -3107,55 +2391,6 @@ int32_t C_OscComDriverFlash::m_PrepareTemporaryOsyProtocol(const C_OscProtocolDr
          {
             s32_Return = orc_OsyProtocol.SetNodeIdentifiers(this->GetClientId(), orc_ServerId);
          }
-      }
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverFlash::m_GetStwResetMessage(const uint32_t ou32_NodeIndex, T_STWCAN_Msg_TX & orc_Message) const
-{
-   const C_OscNode * const pc_Node = &this->mpc_SysDef->c_Nodes[ou32_NodeIndex];
-   int32_t s32_Return = C_NOACT;
-
-   if ((pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW) &&
-       (pc_Node->c_Properties.c_StwFlashloaderSettings.q_ResetMessageActive == true))
-   {
-      // Get all values for the reset messages
-      const C_OscNodeStwFlashloaderSettings & rc_StwFlSettings =
-         pc_Node->c_Properties.c_StwFlashloaderSettings;
-
-      orc_Message.u32_ID = rc_StwFlSettings.u32_ResetMessageId;
-      if (rc_StwFlSettings.q_ResetMessageExtendedId == false)
-      {
-         orc_Message.u8_XTD = 0U;
-      }
-      else
-      {
-         orc_Message.u8_XTD = 1U;
-      }
-
-      orc_Message.u8_RTR = 0U;
-
-      if (rc_StwFlSettings.u8_ResetMessageDlc <= 8)
-      {
-         orc_Message.u8_DLC = rc_StwFlSettings.u8_ResetMessageDlc;
-
-         if (rc_StwFlSettings.c_Data.size() >= orc_Message.u8_DLC)
-         {
-            (void)std::memcpy(&orc_Message.au8_Data[0], &rc_StwFlSettings.c_Data[0], orc_Message.u8_DLC);
-
-            s32_Return = C_NO_ERR;
-         }
-         else
-         {
-            s32_Return = C_RANGE;
-         }
-      }
-      else
-      {
-         s32_Return = C_RANGE;
       }
    }
 

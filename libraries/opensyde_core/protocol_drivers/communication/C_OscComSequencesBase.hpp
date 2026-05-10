@@ -47,8 +47,6 @@ public:
                      uint32_t & oru32_NodeIndex) const;
 
    bool IsAtLeastOneOpenSydeNodeActive(void) const;
-   bool IsAtLeastOneStwFlashloaderNodeActive(void) const;
-   bool IsAtLeastOneStwFlashloaderNodeActiveOnLocalBus(void) const;
 
    bool IsEthToEthRoutingNecessary(const uint32_t ou32_RouterNodeIndex) const;
    uint32_t GetMinimumFlashloaderResetWaitTime(const C_OscComDriverFlash::E_MinimumFlashloaderResetWaitTimeType oe_Type)
@@ -67,27 +65,15 @@ protected:
    std::vector<uint8_t> mc_TimeoutNodes; // Flag if a node had a timeout and is not reachable
 
    bool mq_OpenSydeDevicesActive;
-   bool mq_StwFlashloaderDevicesActive;
-   bool mq_StwFlashloaderDevicesActiveOnLocalBus;
-   C_OscProtocolDriverOsyNode mc_StwFlashloaderDeviceOnLocalBus;
 
    bool m_IsNodeReachable(const uint32_t ou32_NodeIndex) const;
-   virtual int32_t m_XflReportProgress(const uint8_t ou8_Progress, const stw::scl::C_SclString & orc_Text) = 0;
 
 private:
-   static int32_t mh_MyXflReportProgress(void * const opv_Instance, const uint8_t ou8_Progress,
-                                         const stw::scl::C_SclString & orc_Text);
-   int32_t m_MyXflReportProgress(const uint8_t ou8_Progress, const stw::scl::C_SclString & orc_Text);
-
    C_OscComSequencesBase(const C_OscComSequencesBase & orc_Source);               //not implemented -> prevent copying
    C_OscComSequencesBase & operator = (const C_OscComSequencesBase & orc_Source); //not implemented -> prevent
                                                                                   // assignment
 
    bool m_IsAtLeastOneOpenSydeNodeActive(void) const;
-   bool m_IsAtLeastOneStwFlashloaderNodeActive(void) const;
-   bool m_IsAtLeastOneStwFlashloaderNodeOnLocalBusActive(
-      C_OscProtocolDriverOsyNode & orc_StwFlashloaderDeviceOnLocalBus)
-   const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -116,7 +116,6 @@ set (OPENSYDE_GUI_INCLUDES
    ${PROJECT_ROOT}/src/system_definition/node_edit/undo/array_editor
    ${PROJECT_ROOT}/src/system_definition/node_edit/undo/list_element
    ${PROJECT_ROOT}/src/system_definition/node_edit/undo/data_set
-   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options
    ${PROJECT_ROOT}/src/system_definition/bus_edit
    ${PROJECT_ROOT}/src/system_definition/bus_edit/canopen
    ${PROJECT_ROOT}/src/system_definition/bus_edit/j1939
@@ -741,10 +740,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.cpp
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeList.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubOptions.cpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.cpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableView.cpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableModel.cpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableDelegate.cpp
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeList.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeWidget.cpp
@@ -1524,10 +1519,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.hpp
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeList.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubOptions.hpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.hpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableView.hpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableModel.hpp
-   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeSfoResetMessageTableDelegate.hpp
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeList.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeWidget.hpp
@@ -1881,7 +1872,6 @@ set(OPENSYDE_FORMS
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArWidget.ui
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcWidget.ui
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeWidget.ui
-   ${PROJECT_ROOT}/src/system_definition/node_edit/stw_flashloader_options/C_SdNdeStwFlashloaderOptions.ui
    ${PROJECT_ROOT}/src/system_views/device_configuration/C_SyvDcExistingNodeDropAreaWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_views/device_configuration/C_SyvDcConnectedNodeWidget.ui
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpSummaryWidget.ui

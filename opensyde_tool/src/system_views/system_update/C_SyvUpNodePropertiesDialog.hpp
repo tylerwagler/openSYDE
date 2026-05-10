@@ -46,7 +46,6 @@ public:
    void SetStatus(const C_GiSvNodeData & orc_NodeData);
    void CopyInitialStatus(C_GiSvNodeData & orc_NodeData) const;
    void CopyUpdateStatus(C_GiSvNodeData & orc_NodeData) const;
-   void CopyStwDeviceInfo(C_GiSvNodeData & orc_NodeData) const;
    void CopyOpenSydeDeviceInfo(C_GiSvNodeData & orc_NodeData) const;
    void CopyDiscardedStatus(C_GiSvNodeData & orc_NodeData) const;
 
@@ -73,12 +72,6 @@ private:
                                             QString & orc_FileProjectName, QString & orc_DeviceProjectName,
                                             QString & orc_FileVersion, QString & orc_DeviceFileVersion,
                                             QString & orc_FileBuildDate, QString & orc_DeviceBuildDate);
-   static void mh_ExtractStwDeviceInformation(const C_GiSvSubNodeData & orc_NodeInfo,
-                                              const QString & orc_FileProjectName, QString & orc_DeviceProjectName,
-                                              const QString & orc_FileVersion, QString & orc_DeviceFileVersion,
-                                              const QString & orc_FileBuildDate, QString & orc_DeviceBuildDate,
-                                              QString & orc_DeviceValidStatus, bool & orq_MissingStatus,
-                                              bool & orq_MatchStatus);
    static void mh_ExtractOpenSydeDeviceInformation(const C_GiSvSubNodeData & orc_NodeInfo,
                                                    const QString & orc_FileProjectName, QString & orc_DeviceProjectName,
                                                    const QString & orc_FileVersion, QString & orc_DeviceFileVersion,

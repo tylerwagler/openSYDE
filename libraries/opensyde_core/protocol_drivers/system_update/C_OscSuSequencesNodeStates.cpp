@@ -95,16 +95,6 @@ C_OscSuSequencesNodeSecuritySettingsStates::C_OscSuSequencesNodeSecuritySettings
 /*! \brief   Default constructor
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscSuSequencesNodeStwFlHexFileStates::C_OscSuSequencesNodeStwFlHexFileStates(void) :
-   C_OscSuSequencesNodeFileStates(),
-   e_FileSent(eSUSEQ_STATE_NOT_EXECUTED)
-{
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Default constructor
-*/
-//----------------------------------------------------------------------------------------------------------------------
 C_OscSuSequencesNodeStates::C_OscSuSequencesNodeStates(void) :
    q_Timeout(false),
    q_SecurityAccessError(false),

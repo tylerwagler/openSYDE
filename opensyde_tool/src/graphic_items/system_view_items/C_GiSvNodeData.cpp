@@ -338,24 +338,6 @@ void C_GiSvNodeData::CopyUpdateStatus(C_GiSvNodeData & orc_NodeData) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Copy STW device info
-
-   \param[in,out]  orc_NodeData  Node data
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_GiSvNodeData::CopyStwDeviceInfo(C_GiSvNodeData & orc_NodeData) const
-{
-   tgl_assert(this->mc_SubNodes.size() == orc_NodeData.mc_SubNodes.size());
-   if (this->mc_SubNodes.size() == orc_NodeData.mc_SubNodes.size())
-   {
-      for (uint32_t u32_It = 0UL; u32_It < this->mc_SubNodes.size(); ++u32_It)
-      {
-         this->mc_SubNodes[u32_It].CopyStwDeviceInfo(orc_NodeData.mc_SubNodes[u32_It]);
-      }
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Copy OSY device info
 
    \param[in,out]  orc_NodeData  Node data

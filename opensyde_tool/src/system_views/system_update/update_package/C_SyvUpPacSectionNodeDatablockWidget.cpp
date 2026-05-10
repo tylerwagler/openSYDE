@@ -135,8 +135,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(const QString & orc_File,
                {
                   const QString c_AppDeviceType = c_FileApplicationInfo.GetDeviceID().Trim().UpperCase().c_str();
                   // No check with Alias necessary due to check with real device type defined with target integration
-                  if ((this->mq_StwFlashloader == true) ||
-                      (QString::compare(this->mc_DeviceType.trimmed(), c_AppDeviceType, Qt::CaseInsensitive) == 0))
+                  if ((QString::compare(this->mc_DeviceType.trimmed(), c_AppDeviceType, Qt::CaseInsensitive) == 0))
                   {
                      q_FileIsOk = true;
                   }
@@ -504,10 +503,6 @@ void C_SyvUpPacSectionNodeDatablockWidget::UpdateDeviceInformation(const C_SyvUp
    {
       u32_AppCountOnTarget = static_cast<uint32_t>(orc_DeviceInformation.pc_OpenSydeDevice->c_Applications.size());
    }
-   else if (orc_DeviceInformation.pc_StwDevice != NULL)
-   {
-      u32_AppCountOnTarget = orc_DeviceInformation.pc_StwDevice->c_BasicInformation.c_DeviceInfoBlocks.GetLength();
-   }
    else
    {
       // Nothing to do
@@ -549,19 +544,6 @@ void C_SyvUpPacSectionNodeDatablockWidget::UpdateDeviceInformation(const C_SyvUp
                   c_AppBuildDate = rc_FlashBlockInfo.c_BuildDate.c_str();
 
                   q_Valid = (rc_FlashBlockInfo.u8_SignatureValid == 0U);
-               }
-               else
-               {
-                  //STW flashloader device
-                  const stw::diag_lib::C_XFLECUInformation & rc_DeviceInfoBlock =
-                     orc_DeviceInformation.pc_StwDevice->c_BasicInformation.c_DeviceInfoBlocks[u32_AppCounter];
-                  c_AppName = rc_DeviceInfoBlock.GetProjectName().c_str();
-                  c_AppVersion = rc_DeviceInfoBlock.GetProjectVersion().c_str();
-                  c_AppBuildTime = rc_DeviceInfoBlock.GetTime().c_str();
-                  c_AppBuildDate = rc_DeviceInfoBlock.GetDate().c_str();
-
-                  // No application valid flag
-                  q_Valid = true;
                }
                if ((q_Valid == true) &&
                    (pc_File->IsFileIdentical(c_AppName, c_AppVersion, c_AppBuildTime, c_AppBuildDate) == true))
@@ -699,7 +681,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::m_InitSpecificItem(const stw::opensyd
          C_SyvUpPacListNodeItemDatablockWidget * const pc_FileWidget =
             new C_SyvUpPacListNodeItemDatablockWidget(this->mu32_ViewIndex, this->mu32_NodeIndex,
                                                       this->mc_DeviceType,
-                                                      this->mq_FileBased, this->mq_StwFlashloader, this);
+                                                      this->mq_FileBased, this);
 
          tgl_assert(rc_Datablock.c_ResultPaths.size() == 1);
          tgl_assert(this->mu32_DataBlockPathNumber < c_ViewDatablockPaths.size());
@@ -756,7 +738,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::m_InitSpecificItem(const stw::opensyd
             C_SyvUpPacListNodeItemParamSetWidget * const pc_ParamWidget =
                new C_SyvUpPacListNodeItemParamSetWidget(this->mu32_ViewIndex, this->mu32_NodeIndex,
                                                         this->mc_DeviceType,
-                                                        this->mq_FileBased, this->mq_StwFlashloader, this);
+                                                        this->mq_FileBased, this);
             const QString c_DefaultPath = C_PuiUtil::h_MakeIndependentOfDbProjectPath(
                rc_Datablock.c_ProjectPath.c_str(),
                rc_Datablock.c_ResultPaths[u32_ParamSetFileCounter].c_str());

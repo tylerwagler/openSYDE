@@ -119,7 +119,6 @@ protected:
    QString mc_SectionName; // In case of a datablock the datablock name
    QString mc_DeviceType;
    bool mq_FileBased;
-   bool mq_StwFlashloader;
    uint32_t mu32_FileCount;           // Count of all files
    uint32_t mu32_PrimaryFileCount;    // Count of all section specific files without param set and PEM files
    uint32_t mu32_ParamSetFileCount;   // Count of all param set files in the section

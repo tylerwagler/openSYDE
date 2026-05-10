@@ -1350,7 +1350,6 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
    if (mq_OnlyNecessaryFiles == true)
    {
       std::vector<C_OscSuSequences::C_OsyDeviceInformation> c_ActiveOsyDeviceInformation;
-      std::vector<C_OscSuSequences::C_XflDeviceInformation> c_ActiveXflDeviceInformation;
       std::vector<uint8_t> c_ActiveNodesTypes = this->m_GetActiveNodeTypes(orc_SystemDefinition,
                                                                            orc_ActiveNodes);
 
@@ -1364,12 +1363,10 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
       if (s32_Result == C_NO_ERR)
       {
          std::vector<uint16_t> c_OsyDeviceIndexes;
-         std::vector<uint16_t> c_XflDeviceIndexes;
 
          // Get server application information of active devices.
          // At this point we will get all openSYDE devices (file based and address based):
          c_ActiveOsyDeviceInformation = orc_Sequence.GetActiveOsyDeviceInformation(c_OsyDeviceIndexes);
-         c_ActiveXflDeviceInformation = orc_Sequence.GetActiveXflDeviceInformation(c_XflDeviceIndexes);
 
          //Fill in information about openSYDE devices into collector list:
          for (uint16_t u16_IterActiveOsyDevices = 0; u16_IterActiveOsyDevices < c_ActiveOsyDeviceInformation.size();
@@ -1395,35 +1392,6 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
 
             // store server side application info
             c_NodeApplicationsHelperStruct[c_OsyDeviceIndexes[u16_IterActiveOsyDevices]].c_ServerSideApplications =
-               c_ServerSideApplications;
-         }
-         //Fill in information about STW Flashloader devices into collector list:
-         for (uint16_t u16_IterActiveXflDevices = 0; u16_IterActiveXflDevices < c_ActiveXflDeviceInformation.size();
-              ++u16_IterActiveXflDevices)
-         {
-            std::vector<C_OscSuSequences::C_ApplicationProperties> c_ServerSideApplications; // of current node
-
-            // remember all reported application blocks in common data structure:
-            for (int32_t s32_Application = 0U;
-                 s32_Application <
-                 c_ActiveXflDeviceInformation[u16_IterActiveXflDevices].c_BasicInformation.c_DeviceInfoBlocks.GetLength();
-                 s32_Application++)
-            {
-               const stw::diag_lib::C_XFLECUInformation & rc_Application =
-                  c_ActiveXflDeviceInformation[u16_IterActiveXflDevices].c_BasicInformation.c_DeviceInfoBlocks[
-                     s32_Application];
-               C_OscSuSequences::C_ApplicationProperties c_Temp;
-
-               c_Temp.c_Name = rc_Application.acn_ProjectName;
-               c_Temp.c_Version = rc_Application.acn_ProjectVersion;
-               c_Temp.c_BuildDate = rc_Application.acn_Date;
-               c_Temp.c_BuildTime = rc_Application.acn_Time;
-
-               c_ServerSideApplications.push_back(c_Temp);
-            }
-
-            // store server side application info
-            c_NodeApplicationsHelperStruct[c_XflDeviceIndexes[u16_IterActiveXflDevices]].c_ServerSideApplications =
                c_ServerSideApplications;
          }
 
@@ -1594,12 +1562,11 @@ std::vector<uint8_t> C_SydeSup::m_GetActiveNodeTypes(const C_OscSystemDefinition
          {
             const uint32_t u32_SubDeviceIndex = orc_SystemDefinition.c_Nodes[u16_Node].u32_SubDeviceIndex;
             //Do we have one of the Flashloader types that support version checking ?
-            if ((pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderStwCan == true) ||
-                (((pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeCan == true) ||
-                  (pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeEthernet == true)) &&
-                 (pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeIsFileBased == false)))
+            if (((pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeCan == true) ||
+                 (pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeEthernet == true)) &&
+                (pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeIsFileBased == false))
             {
-               // node has address based openSYDE Flashloader or STW Flashloader
+               // node has address based openSYDE Flashloader
                c_ActiveNodeTypes[u16_Node] = 1U;
             }
             else if (((pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeCan == true) ||

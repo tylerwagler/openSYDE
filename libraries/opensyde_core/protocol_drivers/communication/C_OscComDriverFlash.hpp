@@ -18,7 +18,6 @@
 #include "C_OscComDriverProtocol.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
 #include "C_OscComFlashloaderInformation.hpp"
-#include "C_OscFlashProtocolStwFlashloader.hpp"
 #include "C_SclString.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -45,12 +44,7 @@ public:
       eFUNDAMENTAL_COM_CHANGES_ETHERNET
    };
 
-   C_OscFlashProtocolStwFlashloader::PR_ReportProgress pr_XflReportProgress;
-   void * pv_XflReportProgressInstance;
-
-   C_OscComDriverFlash(const bool oq_RoutingActive, const bool oq_UpdateRoutingMode,
-                       const C_OscFlashProtocolStwFlashloader::PR_ReportProgress opr_XflReportProgress,
-                       void * const opv_XflReportProgressInstance);
+   C_OscComDriverFlash(const bool oq_RoutingActive, const bool oq_UpdateRoutingMode);
    virtual ~C_OscComDriverFlash(void);
 
    virtual int32_t Init(const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex,
@@ -220,29 +214,6 @@ public:
    int32_t SendOsyFactoryModeMasterReset(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                          uint8_t * const opu8_NrCode = NULL) const;
 
-   // STW Flashloader services
-   int32_t SendStwRequestNodeReset(void);
-   int32_t SendStwRequestNodeReset(const C_OscProtocolDriverOsyNode & orc_ServerId);
-   int32_t SendStwSendFlash(const C_OscProtocolDriverOsyNode & orc_ServerId);
-   int32_t SendStwSearchId(uint8_t(&orau8_LocalIds)[stw::diag_lib::XFL_NUM_DIFFERENT_LOCAL_IDS],
-                           uint8_t & oru8_NodeFounds);
-   int32_t SendStwWakeupLocalId(const C_OscProtocolDriverOsyNode & orc_ServerId, uint8_t * const opu8_NodesFound);
-   int32_t SendStwWakeupLocalSerialNumber(const C_OscProtocolSerialNumber & orc_SerialNumber, uint8_t & oru8_LocalId);
-
-   int32_t SendStwGetSerialNumbers(const C_OscProtocolDriverOsyNode & orc_ServerId, uint8_t * const opu8_SerialNumbers,
-                                   const uint8_t ou8_NumMax, uint8_t & oru8_NumFound);
-   int32_t SendStwGetDeviceId(const C_OscProtocolDriverOsyNode & orc_ServerId, stw::scl::C_SclString & orc_DeviceName);
-
-   int32_t SendStwSetLocalId(const C_OscProtocolDriverOsyNode & orc_ServerId, const uint8_t ou8_NewLocalId);
-   int32_t SendStwSetBitrateCan(const C_OscProtocolDriverOsyNode & orc_ServerId, const uint32_t ou32_Bitrate);
-   int32_t SendStwNetReset(const C_OscProtocolDriverOsyNode & orc_ServerId);
-   int32_t SendStwNetReset(void);
-   int32_t SendStwReadDeviceInformation(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                        stw::diag_lib::C_XFLInformationFromServer & orc_Information,
-                                        stw::diag_lib::C_XFLChecksumAreas & orc_ChecksumInformation) const;
-   int32_t SendStwDoFlash(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                          const stw::scl::C_SclString & orc_HexFilePath) const;
-
    void PrepareForDestructionFlash(void);
 
 protected:
@@ -257,39 +228,24 @@ protected:
    virtual void m_StopRoutingSpecific(const uint32_t ou32_ActiveNode);
    virtual bool m_CheckInterfaceForFunctions(const C_OscNodeComInterfaceSettings & orc_ComItfSettings) const;
 
-   C_OscFlashProtocolStwFlashloader * m_GetStwFlashloaderProtocol(
-      const C_OscProtocolDriverOsyNode & orc_ServerId) const;
-
 private:
-   //constants for STW flashloader:
-   static const uint32_t mhu32_XFL_ID_TX = 0x51U;
-   static const uint32_t mhu32_XFL_ID_RX = 0x52U;
-   static const bool mhq_XFL_ID_XTD = false;
-
    //Avoid call
    C_OscComDriverFlash(const C_OscComDriverFlash &);
    C_OscComDriverFlash & operator =(const C_OscComDriverFlash &); //lint !e1511 //we want to hide the base function
 
-   void m_InitFlashProtocolStw(C_OscFlashProtocolStwFlashloader * const opc_FlashProtocolStw,
-                               const uint8_t ou8_LocalId);
    int32_t m_InitFlashProtocol(void);
 
    int32_t m_PrepareTemporaryOsyProtocol(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                          C_OscProtocolDriverOsy & orc_OsyProtocol,
                                          C_OscProtocolDriverOsyTpCan & orc_CanTransportProtocol);
-   int32_t m_GetStwResetMessage(const uint32_t ou32_NodeIndex, stw::can::T_STWCAN_Msg_TX & orc_Message) const;
    int32_t m_GetMinimumFlashloaderResetWaitTime(const E_MinimumFlashloaderResetWaitTimeType oe_Type,
                                                 const uint32_t ou32_NodeIndex, uint32_t & oru32_TimeValue) const;
 
    static void mh_HandleWaitTime(void * const opv_Instance);
    void m_HandleWaitTime(void);
 
-   std::vector<C_OscFlashProtocolStwFlashloader *> mc_StwFlashProtocols;
-   stw::diag_lib::C_XFLCompanyID mc_CompanyId;
-
    const bool mq_RoutingActive;
    const bool mq_UpdateRoutingMode;
-   static const uint16_t mhu16_STW_FLASHLOADER_PROTOCOL_VERSION_3_00 = 0x3000U;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

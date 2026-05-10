@@ -55,7 +55,6 @@ public:
 
    void CopyInitialStatus(C_GiSvNodeData & orc_NodeData) const;
    void CopyUpdateStatus(C_GiSvNodeData & orc_NodeData) const;
-   void CopyStwDeviceInfo(C_GiSvNodeData & orc_NodeData) const;
    void CopyOsyDeviceInfo(C_GiSvNodeData & orc_NodeData) const;
    void CopyDiscardedStatus(C_GiSvNodeData & orc_NodeData) const;
 

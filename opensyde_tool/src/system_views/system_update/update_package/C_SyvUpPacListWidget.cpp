@@ -1334,7 +1334,7 @@ void C_SyvUpPacListWidget::m_OnCustomContextMenuRequested(const QPoint & orc_Pos
       // add action shall be shown only if no item concrete was clicked
       if ((c_Current.isValid() == true) && (c_Current.parent().isValid() == false) && (pc_WidgetItem != NULL))
       {
-         const bool q_IsStwFlashloader = pc_WidgetItem->IsStwFlashloader();
+         const bool q_IsStwFlashloader = false;
          this->mpc_SelectedNode = pc_WidgetItem;
          this->mpc_SelectedSection = pc_WidgetItem->GetSectionList(orc_Pos);
          this->mpc_SelectedApp = pc_WidgetItem->GetAndSelectApplication(orc_Pos);
@@ -1465,7 +1465,7 @@ void C_SyvUpPacListWidget::m_SetupContextMenu(void)
 void C_SyvUpPacListWidget::m_AddFileAction(void)
 {
    if ((this->mpc_SelectedNode != NULL) &&
-       (this->mpc_SelectedNode->IsStwFlashloader() == false))
+       (true))
    {
       if (this->mpc_SelectedNode->IsFileBased() == false)
       {

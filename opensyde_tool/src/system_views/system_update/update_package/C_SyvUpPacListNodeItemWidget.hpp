@@ -40,7 +40,7 @@ class C_SyvUpPacListNodeItemWidget :
 public:
    explicit C_SyvUpPacListNodeItemWidget(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
                                          const QString & orc_DeviceName, const bool oq_FileBased,
-                                         const bool oq_StwFlashloader, QWidget * const opc_Parent = NULL);
+                                         QWidget * const opc_Parent = NULL);
    ~C_SyvUpPacListNodeItemWidget() override;
 
    QWidget * GetListParent(void);
@@ -102,7 +102,6 @@ protected:
    QString mc_AppDeviceType;
    bool mq_AppInfoAmbiguous;
    const bool mq_FileBased;
-   bool mq_StwFlashloader;
    bool mq_SkipOfUpdateFile;
 
    QString mc_OwnerSectionName;

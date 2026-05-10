@@ -57,7 +57,6 @@ using namespace stw::opensyde_core;
    \param[in]      ou32_NodeIndex      Node index
    \param[in]      orc_DeviceName      Name of device for comparing with application block
    \param[in]      oq_FileBased        Flag if node is a file based device
-   \param[in]      oq_StwFlashloader   Flag if node has not an openSYDE Flashloader but a STW Flashloader
    \param[in,out]  opc_Parent          Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -65,10 +64,9 @@ C_SyvUpPacListNodeItemDatablockWidget::C_SyvUpPacListNodeItemDatablockWidget(con
                                                                              const uint32_t ou32_NodeIndex,
                                                                              const QString & orc_DeviceName,
                                                                              const bool oq_FileBased,
-                                                                             const bool oq_StwFlashloader,
                                                                              QWidget * const opc_Parent) :
    C_SyvUpPacListNodeItemWidget(ou32_ViewIndex, ou32_NodeIndex, orc_DeviceName, oq_FileBased,
-                                oq_StwFlashloader, opc_Parent),
+                                opc_Parent),
    mc_ProjectName("NA"),
    mc_Version("")
 {
@@ -238,7 +236,7 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                if (QString::compare(this->mc_NodeDeviceType.trimmed(), this->mc_AppDeviceType,
                                     Qt::CaseInsensitive) != 0)
                {
-                  if (this->mq_StwFlashloader == true)
+                  if (false)
                   {
                      // STW Flashloader must not match but show a warning text
                      orq_FlashwareWarning = true;

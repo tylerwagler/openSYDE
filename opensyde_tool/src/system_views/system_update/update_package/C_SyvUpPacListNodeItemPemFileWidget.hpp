@@ -27,7 +27,7 @@ class C_SyvUpPacListNodeItemPemFileWidget :
 public:
    C_SyvUpPacListNodeItemPemFileWidget(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
                                        const QString & orc_DeviceName, const bool oq_FileBased,
-                                       const bool oq_StwFlashloader, QWidget * const opc_Parent = NULL);
+                                       QWidget * const opc_Parent = NULL);
 
    uint32_t GetType(void) const override;
    void ViewFileInfo(void) override;

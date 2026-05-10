@@ -233,8 +233,7 @@ void C_SdTopologyScene::AddNode(const QString & orc_NodeType, const QPointF & or
 
       //TSP shortcut -> no 3rd Party TSP Shortcut
       if ((pc_MainDevice->c_SubDevices[0].q_FlashloaderOpenSydeEthernet == true) ||
-          (pc_MainDevice->c_SubDevices[0].q_FlashloaderOpenSydeCan == true) ||
-          (pc_MainDevice->c_SubDevices[0].q_FlashloaderStwCan == true))
+          (pc_MainDevice->c_SubDevices[0].q_FlashloaderOpenSydeCan == true))
       {
          const uint8_t u8_TIMER_THRESHOLD_IN_MSEC = 100;
          QString c_NodeName = pc_MainDevice->GetDisplayName().c_str();
@@ -3912,11 +3911,6 @@ void C_SdTopologyScene::m_InitNodeComIfSettings(C_OscNode & orc_OscNode, const Q
          {
             //open SYDE
             orc_OscNode.c_Properties.e_FlashLoader = C_OscNodeProperties::eFL_OPEN_SYDE;
-         }
-         else if (pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderStwCan == true)
-         {
-            //STW
-            orc_OscNode.c_Properties.e_FlashLoader = C_OscNodeProperties::eFL_STW;
          }
          else
          {

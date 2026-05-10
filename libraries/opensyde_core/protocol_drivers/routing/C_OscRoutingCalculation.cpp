@@ -309,8 +309,7 @@ int32_t C_OscRoutingCalculation::m_CheckTargetNodeConfig(void) const
          // But with one exception: A node without any functionality like a third party device. This must be handled
          // without functionality and without error. All other nodes must be checked
          if ((rc_SubDevDef.q_FlashloaderOpenSydeEthernet == true) ||
-             (rc_SubDevDef.q_FlashloaderOpenSydeCan == true) ||
-             (rc_SubDevDef.q_FlashloaderStwCan == true))
+             (rc_SubDevDef.q_FlashloaderOpenSydeCan == true))
          {
             uint32_t u32_Counter;
             for (u32_Counter = 0U; u32_Counter < pc_Node->c_Properties.c_ComInterfaces.size(); ++u32_Counter)

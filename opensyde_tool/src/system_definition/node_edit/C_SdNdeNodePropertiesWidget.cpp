@@ -22,7 +22,6 @@
 #include "C_Uti.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "stwerrors.hpp"
-#include "C_SdNdeStwFlashloaderOptions.hpp"
 #include "C_SdNdeNodePropertiesWidget.hpp"
 #include "ui_C_SdNdeNodePropertiesWidget.h"
 #include "C_GtGetText.hpp"
@@ -56,8 +55,7 @@ using namespace stw::tgl;
 const uint16_t mu16_NODE_IMG_WIDTH = 300;
 
 const uint8_t mu8_FL_INDEX_OS = 0;
-const uint8_t mu8_FL_INDEX_STW = 1;
-const uint8_t mu8_FL_INDEX_NOSUPPORT = 2;
+const uint8_t mu8_FL_INDEX_NOSUPPORT = 1;
 
 const int32_t C_SdNdeNodePropertiesWidget::mhs32_PR_INDEX_DISABLED = 0;
 const int32_t C_SdNdeNodePropertiesWidget::mhs32_PR_INDEX_ENABLED = 1;
@@ -494,7 +492,6 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
          {
             QFileInfo c_FileInfoDevImg;
             bool q_FileExists;
-            bool q_StwFlashloaderActive = false;
             uint32_t u32_NodeSquadIndex;
 
             //node name
@@ -519,36 +516,10 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
 
             //protocol
             if ((pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeEthernet == true) ||
-                (pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeCan == true) ||
-                (pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderStwCan == true))
+                (pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeCan == true))
             {
-               if (pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_OPEN_SYDE)
-               {
-                  //openSYDE
-                  this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_OS);
-               }
-               else if (pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW)
-               {
-                  //STW
-                  this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_STW);
-                  q_StwFlashloaderActive = true;
-               }
-               else
-               {
-                  //having "none" as flashloader is supported by the device definition structures;
-                  // but not by the UI (yet)
-                  tgl_assert(false);
-               }
-
-               if (((pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeEthernet == true) ||
-                    (pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeCan == true)) &&
-                   (pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderStwCan == true))
-               {
-                  // Hybrid node. Both variants are possible.
-                  this->mpc_Ui->pc_ComboBoxProtocol->setEnabled(true);
-                  // No support is not supported on node with protocol support
-                  this->mpc_Ui->pc_ComboBoxProtocol->removeItem(mu8_FL_INDEX_NOSUPPORT);
-               }
+               tgl_assert(pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_OPEN_SYDE);
+               this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_OS);
             }
             else
             {
@@ -556,8 +527,8 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_NOSUPPORT);
             }
 
-            //activate STW flashloader button (options)
-            this->mpc_Ui->pc_PushButtonFlashloaderOptions->setVisible(q_StwFlashloaderActive);
+            //STW flashloader button is no longer supported
+            this->mpc_Ui->pc_PushButtonFlashloaderOptions->setVisible(false);
 
             //programming
             if (pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_ProgrammingSupport == true)
@@ -873,8 +844,8 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   //defensive move
                   if ((pc_DevDef->u8_NumCanBusses) > 0)
                   {
-                     // if Protocol Cbx is KEFEX and we got ETH interfaces update shall be disabled
-                     if ((q_StwFlashloaderActive == true) && (u8_ComIfCnt >= (pc_DevDef->u8_NumCanBusses)))
+                     // STW flashloader removed; this gate no longer applies
+                     if (false)
                      {
                         this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u8_ComIfCnt,
                                                                               s32_COL_UPDATE)->setEnabled(false);
@@ -1351,10 +1322,6 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
                e_FlashLoader = C_OscNodeProperties::eFL_OPEN_SYDE;
                e_DiagnosticServer = C_OscNodeProperties::eDS_OPEN_SYDE;
                break;
-            case mu8_FL_INDEX_STW:
-               e_FlashLoader = C_OscNodeProperties::eFL_STW;
-               e_DiagnosticServer = C_OscNodeProperties::eDS_NONE;
-               break;
             default:
                //Not supported
                e_FlashLoader = C_OscNodeProperties::eFL_NONE;
@@ -1470,9 +1437,8 @@ void C_SdNdeNodePropertiesWidget::m_SupportedProtocolChange(void)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   // Update the visibility of the STW flashloader specific option button
-   this->mpc_Ui->pc_PushButtonFlashloaderOptions->setVisible(
-      this->mpc_Ui->pc_ComboBoxProtocol->currentIndex() == mu8_FL_INDEX_STW);
+   // STW flashloader removed; the legacy options button is permanently hidden
+   this->mpc_Ui->pc_PushButtonFlashloaderOptions->setVisible(false);
 
    // Save the data
    this->m_RegisterChange();
@@ -1516,21 +1482,10 @@ void C_SdNdeNodePropertiesWidget::m_SupportedProtocolChange(void)
                this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u16_ComIfCnt, s32_COL_DIAGNOSTIC)->setEnabled(
                   q_IsDiagAvailable);
 
-               // if KEFEX is set update shall be disabled for eth interfaces
-               if ((rc_CurInterface.e_InterfaceType == C_OscSystemBus::eETHERNET) &&
-                   (c_NodeProp.e_FlashLoader == C_OscNodeProperties::eFL_STW))
-               {
-                  this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u16_ComIfCnt,
-                                                                        s32_COL_UPDATE)->setEnabled(false);
-                  pc_TristateRouting->setChecked(false);
-                  pc_TristateUpdate->setChecked(false);
-               }
-               // if protocol switches to opensyde enable and check update for eth interfaces again
-               else
-               {
-                  this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u16_ComIfCnt, s32_COL_UPDATE)->setEnabled(true);
-                  pc_TristateUpdate->setChecked(true);
-               }
+               // STW flashloader removed; protocol is always openSYDE here
+               this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u16_ComIfCnt, s32_COL_UPDATE)->setEnabled(true);
+               pc_TristateUpdate->setChecked(true);
+               (void)c_NodeProp;
 
                if (q_IsRoutingAvailable == true)
                {
@@ -2148,37 +2103,11 @@ void C_SdNdeNodePropertiesWidget::m_OpenBus(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Slot of flashloader options button
+/*! \brief   Slot of flashloader options button (no longer wired up; STW flashloader removed)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodePropertiesWidget::m_FlashloaderOptions(void) const
 {
-   const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-
-   if (pc_Node != NULL)
-   {
-      const C_OscNodeStwFlashloaderSettings c_Copy = pc_Node->c_Properties.c_StwFlashloaderSettings;
-      //Set parent for better hierarchy handling via window manager
-      const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this->parentWidget(), this->parentWidget());
-      C_SdNdeStwFlashloaderOptions * const pc_Dialog = new C_SdNdeStwFlashloaderOptions(*c_New, this->mu32_NodeIndex);
-
-      Q_UNUSED(pc_Dialog)
-
-      //Resize
-      c_New->SetSize(QSize(780, 480));
-
-      if (c_New->exec() != static_cast<int32_t>(QDialog::Accepted))
-      {
-         //Revert
-         C_PuiSdHandler::h_GetInstance()->SetStwFlashloaderSettings(this->mu32_NodeIndex, c_Copy);
-      }
-      //Hide overlay after dialog is not relevant anymore
-      if (c_New.isNull() == false)
-      {
-         c_New->HideOverlay();
-         c_New->deleteLater();
-      }
-   } //lint !e429  //no memory leak because of the parent of pc_New and pc_Dialog and the Qt memory management
 }
 
 //----------------------------------------------------------------------------------------------------------------------

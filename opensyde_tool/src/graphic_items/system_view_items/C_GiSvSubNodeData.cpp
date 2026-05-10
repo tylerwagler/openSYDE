@@ -70,10 +70,6 @@ C_GiSvSubNodeData::C_GiSvSubNodeData(const uint32_t ou32_ViewIndex, const uint32
 //----------------------------------------------------------------------------------------------------------------------
 C_GiSvSubNodeData::~C_GiSvSubNodeData(void) noexcept
 {
-   if (this->mc_DeviceInfo.pc_StwDevice != NULL)
-   {
-      delete mc_DeviceInfo.pc_StwDevice;
-   }
    if (this->mc_DeviceInfo.pc_OpenSydeDevice != NULL)
    {
       delete mc_DeviceInfo.pc_OpenSydeDevice;
@@ -106,11 +102,6 @@ void C_GiSvSubNodeData::SetConnected(const bool oq_Active)
       this->mc_ParamFileInfos.clear();
       this->mc_FileInfos.clear();
       this->mc_PemFileInfo = "";
-      if (this->mc_DeviceInfo.pc_StwDevice != NULL)
-      {
-         delete (mc_DeviceInfo.pc_StwDevice);
-         this->mc_DeviceInfo.pc_StwDevice = NULL;
-      }
       if (this->mc_DeviceInfo.pc_OpenSydeDevice != NULL)
       {
          delete (mc_DeviceInfo.pc_OpenSydeDevice);
@@ -253,11 +244,6 @@ void C_GiSvSubNodeData::UpdateInitialPackageStatus(const C_SyvUpDeviceInfo & orc
    this->mc_ParamFileInfos.clear();
    this->mc_FileInfos.clear();
    this->mc_PemFileInfo = "";
-   if (this->mc_DeviceInfo.pc_StwDevice != NULL)
-   {
-      delete (mc_DeviceInfo.pc_StwDevice);
-      this->mc_DeviceInfo.pc_StwDevice = NULL;
-   }
    if (this->mc_DeviceInfo.pc_OpenSydeDevice != NULL)
    {
       delete (mc_DeviceInfo.pc_OpenSydeDevice);
@@ -269,15 +255,6 @@ void C_GiSvSubNodeData::UpdateInitialPackageStatus(const C_SyvUpDeviceInfo & orc
    {
       this->mc_DeviceInfo.pc_OpenSydeDevice =
          new C_OscSuSequences::C_OsyDeviceInformation(*orc_DeviceApplicationInfos.pc_OpenSydeDevice);
-   }
-   else if (orc_DeviceApplicationInfos.pc_StwDevice != NULL)
-   {
-      this->mc_DeviceInfo.pc_StwDevice =
-         new C_OscSuSequences::C_XflDeviceInformation(*orc_DeviceApplicationInfos.pc_StwDevice);
-   }
-   else
-   {
-      //Unexpected
    }
 
    if (this->CheckUpdateDisabledState() == false)
@@ -330,12 +307,6 @@ bool C_GiSvSubNodeData::CheckUpdateDisabledState(void) const
             else
             {
                tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
-               if (pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].q_FlashloaderStwCan == true)
-               {
-                  //STW flashloader with no data block
-                  q_Retval = true;
-               }
-               else
                {
                   const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
                   if (pc_View != NULL)
@@ -493,26 +464,6 @@ void C_GiSvSubNodeData::CopyUpdateStatus(C_GiSvSubNodeData & orc_NodeData) const
    orc_NodeData.mc_ConnectStates = this->mc_ConnectStates;
    orc_NodeData.mc_UpdateStates = this->mc_UpdateStates;
    orc_NodeData.mc_PreconditionErrors = this->mc_PreconditionErrors;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Copy STW device info
-
-   \param[in,out]  orc_NodeData  Node data
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_GiSvSubNodeData::CopyStwDeviceInfo(C_GiSvSubNodeData & orc_NodeData) const
-{
-   // We need a real copy of the element
-   stw::opensyde_core::C_OscSuSequences::C_XflDeviceInformation * pc_Copy = NULL;
-
-   if (this->mc_DeviceInfo.pc_StwDevice != NULL)
-   {
-      pc_Copy = new stw::opensyde_core::C_OscSuSequences::C_XflDeviceInformation();
-      *pc_Copy = *this->mc_DeviceInfo.pc_StwDevice;
-   }
-
-   orc_NodeData.mc_DeviceInfo.pc_StwDevice = pc_Copy;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -876,8 +827,7 @@ void C_GiSvSubNodeData::m_CheckThirdParty(void)
          tgl_assert(u32_SubDeviceIndex < pc_Device->c_SubDevices.size());
          if (u32_SubDeviceIndex < pc_Device->c_SubDevices.size())
          {
-            if (((pc_Device->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderStwCan == false) &&
-                 (pc_Device->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeCan == false)) &&
+            if ((pc_Device->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeCan == false) &&
                 (pc_Device->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeEthernet == false))
             {
                this->me_InitialStatus = C_SyvUtil::eI_UPDATE_DISABLED;
@@ -1104,53 +1054,6 @@ void C_GiSvSubNodeData::m_InitStatusFromPackage(
             this->me_InitialStatus = C_SyvUtil::eI_TO_BE_UPDATED;
             this->me_UpdateStatus = C_SyvUtil::eU_WAITING;
          }
-      }
-   }
-   else if ((orc_Node.c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW) &&
-            (orc_DeviceApplicationInfos.pc_StwDevice != NULL))
-   {
-      bool q_AllApplicationsMatch = true;
-      for (uint32_t u32_ItFile = 0; u32_ItFile < this->mc_HexFileInfos.size(); ++u32_ItFile)
-      {
-         bool q_Found = false;
-         // only search if application information is not ambiguous
-         if (this->mc_HexAppInfoAmbiguous[u32_ItFile] == false)
-         {
-            const stw::diag_lib::C_XFLECUInformation & rc_FileInfo =
-               this->mc_HexFileInfos[u32_ItFile];
-            for (int32_t s32_ItDeviceInfoBlock = 0;
-                 s32_ItDeviceInfoBlock <
-                 orc_DeviceApplicationInfos.pc_StwDevice->c_BasicInformation.c_DeviceInfoBlocks.GetLength();
-                 ++s32_ItDeviceInfoBlock)
-            {
-               const stw::diag_lib::C_XFLECUInformation & rc_StwDeviceInfo =
-                  orc_DeviceApplicationInfos.pc_StwDevice->c_BasicInformation.c_DeviceInfoBlocks[s32_ItDeviceInfoBlock];
-               //Search for match
-               if ((rc_StwDeviceInfo.GetProjectName().Trim() == rc_FileInfo.GetProjectName().Trim()) &&
-                   (rc_StwDeviceInfo.GetProjectVersion().Trim() == rc_FileInfo.GetProjectVersion().Trim()) &&
-                   (rc_StwDeviceInfo.GetDate().Trim() == rc_FileInfo.GetDate().Trim()) &&
-                   (rc_StwDeviceInfo.GetTime().Trim() == rc_FileInfo.GetTime().Trim()))
-               {
-                  q_Found = true;
-                  break;
-               }
-            }
-         }
-         if (q_Found == false)
-         {
-            q_AllApplicationsMatch = false;
-            break;
-         }
-      }
-      if (q_AllApplicationsMatch == true)
-      {
-         this->me_InitialStatus = C_SyvUtil::eI_APPLICATION_MATCH;
-         this->me_UpdateStatus = C_SyvUtil::eU_UP_TO_DATE;
-      }
-      else
-      {
-         this->me_InitialStatus = C_SyvUtil::eI_TO_BE_UPDATED;
-         this->me_UpdateStatus = C_SyvUtil::eU_WAITING;
       }
    }
    else

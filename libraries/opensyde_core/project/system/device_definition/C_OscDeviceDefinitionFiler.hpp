@@ -36,7 +36,6 @@ private:
    static void mh_ParseOpenSydeFlashloaderParameter(const C_OscXmlParser & orc_Parser,
                                                     uint32_t & oru32_RequestDownloadTimeout,
                                                     uint32_t & oru32_TransferDataTimeout, bool & orq_IsFileBased);
-   static void mh_ParseStwFlashloaderAvailability(const C_OscXmlParser & orc_Parser, bool & orq_ProtocolSupportedCan);
 
    static int32_t mh_Load(C_OscDeviceDefinition & orc_DeviceDefinition, C_OscXmlParser & orc_Parser,
                           const stw::scl::C_SclString & orc_Path);

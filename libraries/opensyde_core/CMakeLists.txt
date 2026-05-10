@@ -280,7 +280,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeOpenSydeServerSettings.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeProperties.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeStwFlashloaderSettings.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeCommFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolId.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessage.cpp
@@ -379,7 +378,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeOpenSydeServerSettings.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeProperties.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeStwFlashloaderSettings.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessage.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageUniqueId.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageContainer.hpp
@@ -503,11 +501,7 @@ else()
    set(OPENSYDE_CORE_PROTOCOL_DRIVERS_COMMON_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpCan.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLHexFile.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLActions.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLECUInformation.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLFlashWrite.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLFlashWriteParameters.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLProtocol.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/hexfile/C_HexFile.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.cpp
@@ -520,7 +514,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscCanDispatcherOsyRouter.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscDiagProtocolBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscDiagProtocolOsy.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscFlashProtocolStwFlashloader.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpIp.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscUpdateUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComFlashloaderInformation.cpp
@@ -530,11 +523,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/stw_can.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpCan.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLHexFile.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLActions.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLECUInformation.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLFlashWrite.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLFlashWriteParameters.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLProtocol.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/hexfile/C_HexFile.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher/C_OscIpDispatcher.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.hpp
@@ -547,7 +536,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscCanDispatcherOsyRouter.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscDiagProtocolBase.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscDiagProtocolOsy.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscFlashProtocolStwFlashloader.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpIp.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscUpdateUtil.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComFlashloaderInformation.hpp

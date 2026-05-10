@@ -15,7 +15,6 @@
 
 #include <vector>
 #include "C_SclString.hpp"
-#include "C_OscNodeStwFlashloaderSettings.hpp"
 #include "C_OscNodeComInterfaceSettings.hpp"
 #include "C_OscNodeOpenSydeServerSettings.hpp"
 #include "C_OscDeviceDefinition.hpp"
@@ -61,7 +60,6 @@ public:
    enum E_FlashLoaderProtocol
    {
       eFL_NONE,     ///< No Flash loader available
-      eFL_STW,      ///< Flash loader protocol type STW Flashloader
       eFL_OPEN_SYDE ///< Flash loader protocol type openSYDE
    };
 
@@ -71,7 +69,6 @@ public:
    E_FlashLoaderProtocol e_FlashLoader;                        ///< Selected flash loader
    std::vector<C_OscNodeComInterfaceSettings> c_ComInterfaces; ///< List of all present com interfaces
    C_OscNodeOpenSydeServerSettings c_OpenSydeServerSettings;   ///< Optional openSYDE server settings
-   C_OscNodeStwFlashloaderSettings c_StwFlashloaderSettings;   ///< Optional STW flashloader settings
    C_OscNodeCodeExportSettings c_CodeExportSettings;           ///< Optional code export settings
    bool q_XappSupport;                                         ///< Flag to indicate X_App support of node
 

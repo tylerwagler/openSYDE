@@ -74,7 +74,6 @@ C_SyvUpPacSectionNodeWidget::C_SyvUpPacSectionNodeWidget(QWidget * const opc_Par
    mc_NodeName(""),
    mc_DeviceType(""),
    mq_FileBased(false),
-   mq_StwFlashloader(false),
    mu32_FileCount(0U),
    mu32_PrimaryFileCount(0U),
    mu32_ParamSetFileCount(0U),
@@ -1502,7 +1501,6 @@ void C_SyvUpPacSectionNodeWidget::m_InitItems(void)
       tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
       this->mq_FileBased =
          pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].q_FlashloaderOpenSydeIsFileBased;
-      this->mq_StwFlashloader = (pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW);
 
       if (pc_View != NULL)
       {

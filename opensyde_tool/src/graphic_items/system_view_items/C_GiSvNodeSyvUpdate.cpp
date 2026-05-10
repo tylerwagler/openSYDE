@@ -282,7 +282,6 @@ void C_GiSvNodeSyvUpdate::ShowInfo(void)
       //Get new info
       this->mpc_InfoDialog->CopyInitialStatus(this->mc_NodeData);
       this->mpc_InfoDialog->CopyUpdateStatus(this->mc_NodeData);
-      this->mpc_InfoDialog->CopyStwDeviceInfo(this->mc_NodeData);
       this->mpc_InfoDialog->CopyOpenSydeDeviceInfo(this->mc_NodeData);
 
       //Trigger icon update if necessary

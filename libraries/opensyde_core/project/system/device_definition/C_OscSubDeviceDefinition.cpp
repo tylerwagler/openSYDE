@@ -50,7 +50,6 @@ void C_OscSubDeviceDefinition::Clear()
    q_ProgrammingSupport = false;
    q_DiagnosticProtocolOpenSydeCan = false;
    q_DiagnosticProtocolOpenSydeEthernet = false;
-   q_FlashloaderStwCan = false;
    q_FlashloaderOpenSydeCan = false;
    q_FlashloaderOpenSydeEthernet = false;
    q_FlashloaderOpenSydeIsFileBased = false;
@@ -76,7 +75,7 @@ bool C_OscSubDeviceDefinition::IsUpdateAvailable(const C_OscSystemBus::E_Type oe
    switch (oe_Type)
    {
    case C_OscSystemBus::eCAN:
-      if (this->q_FlashloaderOpenSydeCan || this->q_FlashloaderStwCan)
+      if (this->q_FlashloaderOpenSydeCan)
       {
          q_Retval = true;
       }

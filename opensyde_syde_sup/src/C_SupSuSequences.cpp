@@ -78,24 +78,6 @@ GetActiveOsyDeviceInformation(std::vector<uint16_t> & orc_Indexes) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Getter to return information about active STW Flashloader devices
-
-   Important: Call ClearActiveOsyDeviceInformation(...) and ReadDeviceInformation(...) first.
-
-   \param[out]  orc_Indexes   absolute index of elements of returned vector in list of all devices
-
-   \return
-   list of active STW Flashloader devices (server side)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const std::vector<stw::opensyde_core::C_OscSuSequences::C_XflDeviceInformation> & C_SupSuSequences::
-GetActiveXflDeviceInformation(std::vector<uint16_t> & orc_Indexes) const
-{
-   orc_Indexes = mc_XflDeviceInformationIndexes;
-   return this->mc_ActiveXflDeviceInformation;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Empties vectors of active devices
 
   Important: Call before ReadDeviceInformation(...)
@@ -105,9 +87,7 @@ GetActiveXflDeviceInformation(std::vector<uint16_t> & orc_Indexes) const
 void C_SupSuSequences::ClearActiveDeviceInformation()
 {
    this->mc_OsyDeviceInformationIndexes.clear();
-   this->mc_XflDeviceInformationIndexes.clear();
    this->mc_ActiveOsyDeviceInformation.clear();
-   this->mc_ActiveXflDeviceInformation.clear();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -185,21 +165,7 @@ bool C_SupSuSequences::m_ReportProgress(const stw::opensyde_core::C_OscSuSequenc
                                         const stw::scl::C_SclString & orc_Information)
 {
    (void) ou8_Progress; // progress numbers not interesting for console application
-   bool q_PrintLine = true;
 
-   // suppress often occurring lines
-   if ((oe_Step == C_OscSuSequences::eXFL_PROGRESS) && (os32_Result == static_cast<int32_t>(C_NO_ERR)))
-   {
-      if ((orc_Information == "Information: Sending FLASH request ...") ||
-          (orc_Information == "Information: <<<CLRALL") ||
-          (orc_Information == "Information: <<<CLRLINE") ||
-          (orc_Information == "Information: Writing to Flash ..."))
-      {
-         q_PrintLine = false;
-      }
-   }
-
-   if (q_PrintLine == true)
    {
       const bool q_Error = m_CheckErrorCase(oe_Step);
       C_SclString c_Text = "";
@@ -256,38 +222,6 @@ void C_SupSuSequences::m_ReportOpenSydeFlashloaderInformationRead(
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Reports information read from STW flashloader server node
-
-   Override method.
-   Here: Write to log and remember information.
-
-   Called by ReadDeviceInformation() after it has read information from an STW flashloader node.
-
-   \param[in]     orc_Info         Information read from node
-   \param[in]     ou32_NodeIndex   Index of node within mpc_SystemDefinition
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SupSuSequences::m_ReportStwFlashloaderInformationRead(
-   const stw::opensyde_core::C_OscSuSequences::C_XflDeviceInformation & orc_Info, const uint32_t ou32_NodeIndex)
-{
-   C_SclStringList c_Text;
-   C_SclString c_Message = "STW Flashloader device information found for node with index " +
-                           C_SclString::IntToStr(ou32_NodeIndex) + "\n";
-
-   h_StwFlashloaderInformationToText(orc_Info, c_Text);
-   for (uint32_t u32_Line = 0U; u32_Line < c_Text.GetCount(); u32_Line++)
-   {
-      c_Message += c_Text.Strings[u32_Line] + "\n";
-   }
-
-   this->m_WriteLog(c_Message);
-
-   // store current device information of openSYDE node
-   this->mc_XflDeviceInformationIndexes.push_back(static_cast<uint16_t>(ou32_NodeIndex));
-   this->mc_ActiveXflDeviceInformation.push_back(orc_Info);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Check if step belongs to an error case.
 
    Check step to differentiate between error and information.
@@ -309,12 +243,9 @@ bool C_SupSuSequences::m_CheckErrorCase(const C_OscSuSequences::E_ProgressStep o
    {
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_ECU_RESET_ERROR:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_XFL_ECU_RESET_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_BC_ENTER_PRE_PROGRAMMING_ERROR:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_XFL_BC_FLASH_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_RECONNECT_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_XFL_WAKEUP_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_ROUTING_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_ROUTING_AVAILABLE_FEATURE_ERROR:
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_RECONNECT_ERROR:
@@ -324,8 +255,6 @@ bool C_SupSuSequences::m_CheckErrorCase(const C_OscSuSequences::E_ProgressStep o
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_ERROR:
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FLASHLOADER_INFO_ERROR:
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FLASHLOADER_CHECK_DEBUGGER_ACTIVATION_ERROR:
-   case C_OscSuSequences::eREAD_DEVICE_INFO_XFL_WAKEUP_ERROR:
-   case C_OscSuSequences::eREAD_DEVICE_INFO_XFL_READING_INFORMATION_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_READ_FEATURE_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_HEX_OPEN_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_HEX_SIGNATURE_ERROR:
@@ -361,7 +290,6 @@ bool C_SupSuSequences::m_CheckErrorCase(const C_OscSuSequences::E_ProgressStep o
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_STATE_TRAFFIC_ENCRYPTION_WRITE_AVAILABLE_FEATURE_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_STATE_DEBUGGER_WRITE_SEND_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_STATE_DEBUGGER_WRITE_AVAILABLE_FEATURE_ERROR:
-   case C_OscSuSequences::eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_ERROR:
    case C_OscSuSequences::eRESET_SYSTEM_OSY_NODE_ERROR:
    case C_OscSuSequences::eRESET_SYSTEM_OSY_ROUTED_NODE_ERROR:
       q_Return = true;
@@ -369,10 +297,9 @@ bool C_SupSuSequences::m_CheckErrorCase(const C_OscSuSequences::E_ProgressStep o
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_START:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_WARNING:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_ECU_RESET_WARNING:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_XFL_ECU_RESET_WARNING:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_RECONNECT_WARNING:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_XFL_BC_ENTER_FLASHLOADER_START:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_XFL_BC_PING_START:
+   case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_BC_ENTER_FLASHLOADER_START:
+   case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_BC_PING_START:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_ROUTING_START:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_FINISHED:
    case C_OscSuSequences::eREAD_DEVICE_INFO_START:
@@ -383,9 +310,6 @@ bool C_SupSuSequences::m_CheckErrorCase(const C_OscSuSequences::E_ProgressStep o
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FLASHLOADER_INFO_START:
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FLASHLOADER_CHECK_DEBUGGER_ACTIVATION_START:
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FINISHED:
-   case C_OscSuSequences::eREAD_DEVICE_INFO_XFL_START:
-   case C_OscSuSequences::eREAD_DEVICE_INFO_XFL_READING_INFORMATION_START:
-   case C_OscSuSequences::eREAD_DEVICE_INFO_XFL_FINISHED:
    case C_OscSuSequences::eREAD_DEVICE_INFO_FINISHED:
    case C_OscSuSequences::eUPDATE_SYSTEM_START:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_START:
@@ -421,11 +345,6 @@ bool C_SupSuSequences::m_CheckErrorCase(const C_OscSuSequences::E_ProgressStep o
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FINISHED:
    case C_OscSuSequences::eUPDATE_SYSTEM_ABORTED:
    case C_OscSuSequences::eUPDATE_SYSTEM_FINISHED:
-   case C_OscSuSequences::eUPDATE_SYSTEM_XFL_NODE_START:
-   case C_OscSuSequences::eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_START:
-   case C_OscSuSequences::eXFL_PROGRESS:
-   case C_OscSuSequences::eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_FINISHED:
-   case C_OscSuSequences::eUPDATE_SYSTEM_XFL_NODE_FINISHED:
    case C_OscSuSequences::eRESET_SYSTEM_START:
    case C_OscSuSequences::eRESET_SYSTEM_FINISHED:
    default:
@@ -465,22 +384,13 @@ C_SclString C_SupSuSequences::m_GetStepName(const E_ProgressStep oe_Step) const
    case eACTIVATE_FLASHLOADER_OSY_ECU_RESET_ERROR:
       c_Text = "Activate Flashloader - ECU reset error";
       break;
-   case eACTIVATE_FLASHLOADER_XFL_ECU_RESET_WARNING:
-      c_Text = "Activate Flashloader - No ECU reset message configured";
-      break;
-   case eACTIVATE_FLASHLOADER_XFL_ECU_RESET_ERROR:
-      c_Text = "Activate Flashloader - Sending ECU reset requests error";
-      break;
-   case eACTIVATE_FLASHLOADER_OSY_XFL_BC_ENTER_FLASHLOADER_START:
+   case eACTIVATE_FLASHLOADER_OSY_BC_ENTER_FLASHLOADER_START:
       c_Text = "Activate Flashloader - Broadcast enter Flashloader start";
       break;
    case eACTIVATE_FLASHLOADER_OSY_BC_ENTER_PRE_PROGRAMMING_ERROR:
       c_Text = "Activate Flashloader - Broadcast enter pre programming error";
       break;
-   case eACTIVATE_FLASHLOADER_XFL_BC_FLASH_ERROR:
-      c_Text = "Activate Flashloader - Broadcast \"FLASH\" error";
-      break;
-   case eACTIVATE_FLASHLOADER_OSY_XFL_BC_PING_START:
+   case eACTIVATE_FLASHLOADER_OSY_BC_PING_START:
       c_Text = "Activate Flashloader - Ping devices start";
       break;
    case eACTIVATE_FLASHLOADER_OSY_RECONNECT_WARNING:
@@ -491,9 +401,6 @@ C_SclString C_SupSuSequences::m_GetStepName(const E_ProgressStep oe_Step) const
       break;
    case eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR:
       c_Text = "Activate Flashloader - Set session error";
-      break;
-   case eACTIVATE_FLASHLOADER_XFL_WAKEUP_ERROR:
-      c_Text = "Activate Flashloader - Perform wakeup error";
       break;
    case eACTIVATE_FLASHLOADER_ROUTING_START:
       c_Text = "Activate Flashloader - Start routing";
@@ -554,21 +461,6 @@ C_SclString C_SupSuSequences::m_GetStepName(const E_ProgressStep oe_Step) const
       break;
    case eREAD_DEVICE_INFO_OSY_FINISHED:
       c_Text = "Read openSYDE Device Information - Finished";
-      break;
-   case eREAD_DEVICE_INFO_XFL_START:
-      c_Text = "Read STW Flashloader Device Information - Started";
-      break;
-   case eREAD_DEVICE_INFO_XFL_FINISHED:
-      c_Text = "Read STW Flashloader Device Information - Finished";
-      break;
-   case eREAD_DEVICE_INFO_XFL_WAKEUP_ERROR:
-      c_Text = "Read Device Information - Connection with STW Flashloader device failed";
-      break;
-   case eREAD_DEVICE_INFO_XFL_READING_INFORMATION_START:
-      c_Text = "Read Device Information - Start";
-      break;
-   case eREAD_DEVICE_INFO_XFL_READING_INFORMATION_ERROR:
-      c_Text = "Read Device Information - Could not read information from STW Flashloader device";
       break;
    case eUPDATE_SYSTEM_START:
       c_Text = "Update System - Start";
@@ -776,24 +668,6 @@ C_SclString C_SupSuSequences::m_GetStepName(const E_ProgressStep oe_Step) const
       break;
    case eUPDATE_SYSTEM_FINISHED:
       c_Text = "Update System - Finished";
-      break;
-   case eUPDATE_SYSTEM_XFL_NODE_START:
-      c_Text = "Update System - Node flash start";
-      break;
-   case eUPDATE_SYSTEM_XFL_NODE_FINISHED:
-      c_Text = "Update System - Node flash finished";
-      break;
-   case eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_START:
-      c_Text = "Update System - Node flash of HEX file start";
-      break;
-   case eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_ERROR:
-      c_Text = "Update System - Node flash of HEX file error";
-      break;
-   case eXFL_PROGRESS: //wrapped progress information from STW flashloader driver
-      c_Text = "Update System - STW Flashloader status";
-      break;
-   case eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_FINISHED:
-      c_Text = "Update System - Node flash of HEX file finished";
       break;
    case eRESET_SYSTEM_START:
       c_Text = "Reset System - Start";

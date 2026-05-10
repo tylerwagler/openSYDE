@@ -104,20 +104,6 @@ void C_OscDeviceDefinitionFiler::mh_ParseOpenSydeFlashloaderParameter(const C_Os
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-
-void C_OscDeviceDefinitionFiler::mh_ParseStwFlashloaderAvailability(const C_OscXmlParser & orc_Parser,
-                                                                    bool & orq_ProtocolSupportedCan)
-{
-   //no check for existence of entries: fall back to "not supported" in this case
-   bool q_Support;
-   bool q_Can;
-
-   q_Support  = orc_Parser.GetAttributeBool("support");
-   q_Can      = orc_Parser.GetAttributeBool("can");
-   orq_ProtocolSupportedCan = (q_Support && q_Can);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Load device definition
 
    Load data from specified file and place it in device definition instance
@@ -666,15 +652,10 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
          tgl_assert(c_Text == "protocols-flashloader");
       }
 
-      //get sub-node
+      //legacy "stw-flashloader" sub-node may exist in older device definitions; ignore silently
       c_Text = orc_Parser.SelectNodeChild("stw-flashloader");
-      if (c_Text != "stw-flashloader")
+      if (c_Text == "stw-flashloader")
       {
-         //Optional: Use default values
-      }
-      else
-      {
-         mh_ParseStwFlashloaderAvailability(orc_Parser, orc_SubDeviceDefinition.q_FlashloaderStwCan);
          c_Text = orc_Parser.SelectNodeParent(); //back to parent ...
          tgl_assert(c_Text == "protocols-flashloader");
       }
@@ -796,10 +777,6 @@ void C_OscDeviceDefinitionFiler::mh_SaveSubDevice(const C_OscSubDeviceDefinition
    orc_Parser.SetAttributeUint32("value",
                                  orc_SubDeviceDefinition.u32_FlashloaderResetWaitTimeFundamentalChangesEthernet);
    orc_Parser.SelectNodeParent();
-   orc_Parser.SelectNodeParent();
-   orc_Parser.CreateAndSelectNodeChild("stw-flashloader");
-   orc_Parser.SetAttributeBool("support", orc_SubDeviceDefinition.q_FlashloaderStwCan);
-   orc_Parser.SetAttributeBool("can", orc_SubDeviceDefinition.q_FlashloaderStwCan);
    orc_Parser.SelectNodeParent();
    orc_Parser.CreateAndSelectNodeChild("opensyde");
    orc_Parser.SetAttributeBool("support",

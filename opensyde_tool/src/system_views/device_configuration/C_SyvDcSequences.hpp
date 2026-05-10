@@ -78,26 +78,22 @@ public:
    int32_t ScanCanEnterFlashloader(const uint32_t ou32_UsedBitrate);
    int32_t ScanCanSendFlashloaderRequest(const uint32_t ou32_ScanTime, const bool oq_ScanEndless);
    void StopScanCanSendFlashloaderRequest(void);
-   int32_t ScanCanGetInfoFromStwFlashloaderDevices(void);
    int32_t ScanCanGetInfoFromOpenSydeDevices(void);
    int32_t ScanEthGetInfoFromOpenSydeDevices(void);
 
    int32_t CheckOpenSydeDevicesConfig(const std::vector<C_SyvDcDeviceConfiguation> & orc_DeviceConfig) const;
-   int32_t ConfCanStwFlashloaderDevices(const std::vector<C_SyvDcDeviceConfiguation> & orc_DeviceConfig);
    int32_t ConfCanOpenSydeDevices(const std::vector<C_SyvDcDeviceConfiguation> & orc_DeviceConfig,
                                   const bool oq_ConfigureAllInterfaces, const bool oq_SecurityFeatureUsed);
    int32_t ConfEthOpenSydeDevices(const std::vector<C_SyvDcDeviceConfiguation> & orc_DeviceConfig,
                                   const bool oq_ConfigureAllInterfaces, const bool oq_SecurityFeatureUsed);
 
    int32_t SendOsyBroadcastRequestProgramming(bool & orq_NotAccepted) const;
-   int32_t ResetCanStwFlashloaderDevices(void);
    int32_t ResetOpenSydeDevices(const bool oq_ToFlashloader) const;
 
    int32_t InitCanAndSetCanBitrate(const uint32_t ou32_Bitrate);
 
    int32_t ReadBackCan(const std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
-                       const std::vector<bool> & orc_OpenSydeSnrExtFormat,
-                       const std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_StwIds);
+                       const std::vector<bool> & orc_OpenSydeSnrExtFormat);
    int32_t ReadBackEth(const std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
                        const std::vector<bool> & orc_OpenSydeSnrExtFormat);
 
@@ -115,27 +111,17 @@ public:
 
 Q_SIGNALS:
    //lint -restore
-   void SigRunConfCanStwFlashloaderDevicesProgress(const uint32_t ou32_Progress);
    void SigRunConfCanOpenSydeDevicesProgress(const uint32_t ou32_Progress);
    void SigRunConfEthOpenSydeDevicesProgress(const uint32_t ou32_Progress);
 
-   void SigRunConfCanStwFlashloaderDevicesState(const uint32_t ou32_Step, const int32_t os32_Result,
-                                                const uint8_t ou8_BusIdentifier,
-                                                const uint8_t ou8_NodeIdentifier) const;
    void SigRunConfOpenSydeDevicesState(const uint32_t ou32_Step, const int32_t os32_Result,
                                        const uint8_t ou8_BusIdentifier, const uint8_t ou8_NodeIdentifier,
                                        const uint8_t ou8_InterfaceType, const uint8_t ou8_InterfaceNumber) const;
 
 protected:
-   int32_t m_XflReportProgress(const uint8_t ou8_Progress, const stw::scl::C_SclString & orc_Text) override;
-
-   void m_RunConfCanStwFlashloaderDevicesProgress(const uint32_t ou32_Progress);
    void m_RunConfCanOpenSydeDevicesProgress(const uint32_t ou32_Progress);
    void m_RunConfEthOpenSydeDevicesProgress(const uint32_t ou32_Progress);
 
-   void m_RunConfCanStwFlashloaderDevicesState(const uint32_t ou32_Step, const int32_t os32_Result,
-                                               const stw::opensyde_core::C_OscProtocolDriverOsyNode & orc_Server)
-   const;
    void m_RunConfOpenSydeDevicesState(const uint32_t ou32_Step, const int32_t os32_Result,
                                       const stw::opensyde_core::C_OscProtocolDriverOsyNode & orc_Server,
                                       const stw::opensyde_core::C_OscSystemBus::E_Type oe_InterfaceType,
@@ -153,10 +139,8 @@ private:
    {
       eSCANCANENTERFLASHLOADER,
       eSCANCANSENDFLASHLOADERREQUEST,
-      eSCANCANGETINFOFROMSTWFLASHLOADERDEVICES,
       eSCANCANGETINFOFROMOPENSYDEDEVICES,
       eSCANETHGETINFOFROMOPENSYDEDEVICES,
-      eCONFCANSTWFLASHLOADERDEVICES,
       eCONFCANOPENSYDEDEVICES,
       eCONFETHOPENSYDEDEVICES,
       eREADBACKCAN,
@@ -165,10 +149,7 @@ private:
 
    int32_t m_RunScanCanEnterFlashloader(const uint32_t ou32_CanBitrate);
    int32_t m_RunScanCanSendFlashloaderRequest(const uint32_t ou32_ScanTime);
-   int32_t m_RunScanCanGetInfoFromStwFlashloaderDevices(void);
-   int32_t m_RunScanCanGetInfoFromStwFlashloaderDevice(const uint8_t ou8_LocalId);
    int32_t m_RunScanCanGetInfoFromOpenSydeDevices(void);
-   int32_t m_RunConfCanStwFlashloaderDevices(void);
    int32_t m_RunConfCanOpenSydeDevices(void);
    int32_t m_RunConfCanOpenSydeDevicesWithBroadcasts(
       std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_UsedServerIds);
@@ -209,7 +190,6 @@ private:
    std::vector<C_SyvDcDeviceConfiguation> mc_DeviceConfiguration; ///< desired device configuration
    std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> mc_OpenSydeIds;
    std::vector<bool> mc_OpenSydeSnrExtFormat;
-   std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> mc_StwIds;
    uint32_t mu32_CanBitrate;
    bool mq_ConfigureAllInterfaces; ///< flag if the bitrate for all connected interfaces sould be configured or
    // only interfaces connected to the current bus

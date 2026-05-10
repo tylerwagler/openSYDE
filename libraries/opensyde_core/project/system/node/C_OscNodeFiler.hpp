@@ -53,10 +53,6 @@ public:
 private:
    static int32_t mh_LoadProperties(C_OscNodeProperties & orc_NodeProperties, C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveProperties(const C_OscNodeProperties & orc_NodeProperties, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadStwFlashloaderOptions(C_OscNodeStwFlashloaderSettings & orc_StwFlashloaderSettings,
-                                               C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveStwFlashloaderOptions(const C_OscNodeStwFlashloaderSettings & orc_StwFlashloaderSettings,
-                                            C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSettings> & orc_ComInterfaces,
                                       C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveComInterface(const std::vector<C_OscNodeComInterfaceSettings> & orc_ComInterfaces,

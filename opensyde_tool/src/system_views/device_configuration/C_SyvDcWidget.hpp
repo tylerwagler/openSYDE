@@ -113,16 +113,12 @@ private:
    void m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate);
    int32_t m_GetRelevantConfigInfo(std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
                                    std::vector<bool> & orc_OpenSydeSnrExtFormat,
-                                   std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_StwIds,
                                    uint32_t & oru32_Bitrate);
    void m_ResetNetwork(const bool oq_ToFlashloader);
    void m_ShowReadInfo(const int32_t os32_ActualResult);
 
-   void m_UpdateProgressOfStwFlashloaderConfig(const uint32_t ou32_Progress) const;
    void m_UpdateProgressOfOpenSydeConfig(const uint32_t ou32_Progress) const;
 
-   void m_UpdateStateOfStwFlashloaderConfig(const uint32_t ou32_Step, const int32_t os32_Result,
-                                            const uint8_t ou8_BusIdentifier, const uint8_t ou8_NodeIdentifier);
    void m_UpdateStateOfOpenSydeConfig(const uint32_t ou32_Step, const int32_t os32_Result,
                                       const uint8_t ou8_BusIdentifier, const uint8_t ou8_NodeIdentifier,
                                       const uint8_t ou8_InterfaceType, const uint8_t ou8_InterfaceNumber);
@@ -197,7 +193,6 @@ private:
    QString mc_ReportText;
    QMap<stw::opensyde_core::C_OscProtocolDriverOsyNode, std::vector<C_ServerConfStepResult> > mc_ServerStates;
 
-   std::vector<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> mc_StwFlashloaderDeviceConfigurations;
    std::vector<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> mc_OpenSydeDeviceConfigurations;
 
    static const int32_t mhs32_INDEX_CONFIGURATION_ALL_CONNECTED_INTERFACES;

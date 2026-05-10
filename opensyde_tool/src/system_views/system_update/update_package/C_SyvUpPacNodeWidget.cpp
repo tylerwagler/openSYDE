@@ -82,7 +82,6 @@ C_SyvUpPacNodeWidget::C_SyvUpPacNodeWidget(const uint32_t ou32_ViewIndex, const 
    mc_NodeName(orc_NodeName),
    mq_FileBased(false),
    mq_NvmHalcBased(false),
-   mq_StwFlashloader(false),
    mq_Connected(false),
    mq_EmptyOptionalSectionsVisible(true),
    mq_ShowAddSecurityButton(false),
@@ -500,7 +499,7 @@ void C_SyvUpPacNodeWidget::AddNewFile(const QString & orc_File, const bool oq_Pa
 {
    // compare all data block and file based files
    if ((this->mpc_FilesWidget != NULL) &&
-       (this->mq_StwFlashloader == false) &&
+       (true) &&
        ((this->mq_FileBased == true) || (oq_Paramset == true) || (oq_PemFile == true)) &&
        (this->m_CheckFileAlreadyContained(orc_File) == false))
    {
@@ -958,19 +957,6 @@ bool C_SyvUpPacNodeWidget::IsFileBased(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Returns the flag if the node has a STW flashloader
-
-   \return
-   true     Node has STW flashloader
-   false    Node has not STW flashloader
-*/
-//----------------------------------------------------------------------------------------------------------------------
-bool C_SyvUpPacNodeWidget::IsStwFlashloader(void) const
-{
-   return this->mq_StwFlashloader;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Creates and returns the update package with all information for the system update for the concrete node
 
    \param[out]  orc_ApplicationsToWrite   Vector with node update configuration
@@ -1412,7 +1398,6 @@ void C_SyvUpPacNodeWidget::m_Init(void)
       tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
       this->mq_FileBased =
          pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].q_FlashloaderOpenSydeIsFileBased;
-      this->mq_StwFlashloader = (pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW);
       this->mc_DeviceType = pc_Node->c_DeviceType.c_str();
 
       // Only relevant if the node has datablocks
@@ -1445,7 +1430,7 @@ void C_SyvUpPacNodeWidget::m_Init(void)
 
          // Add separator as long it is not the last widget
          if ((static_cast<uint32_t>(u32_DatablockCounter) < (pc_Node->c_Applications.size() - 1U)) ||
-             ((this->mq_StwFlashloader == false) && (this->mq_NvmHalcBased == false)))
+             ((true) && (this->mq_NvmHalcBased == false)))
          {
             this->m_AddSeparatorToScrollArea(static_cast<uint32_t>(u32_DatablockCounter) ==
                                              (pc_Node->c_Applications.size() - 1U));
@@ -1454,7 +1439,7 @@ void C_SyvUpPacNodeWidget::m_Init(void)
 
       // Check if an "Other files" section is necessary
       // It is only necessary for file based devices and can get psi files without restrictions
-      if (this->mq_StwFlashloader == false)
+      if (true)
       {
          tgl_assert(this->mpc_FilesWidget == NULL);
          this->mpc_FilesWidget = new C_SyvUpPacSectionNodeFilesWidget(this);

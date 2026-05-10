@@ -17,6 +17,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
+#include "C_HexFile.hpp"
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscComFlashloaderInformation.hpp"
 #include "C_OscComSequencesBase.hpp"
@@ -46,15 +47,6 @@ public:
       std::vector<C_OscProtocolDriverOsy::C_FlashBlockInfo> c_Applications; ///< list of applications present on the
                                                                             // device
       C_OscComFlashloaderInformation c_MoreInformation;                     ///< collection of additional information
-   };
-
-   ///basic information about status of one STW Flashloader device
-   class C_XflDeviceInformation
-   {
-   public:
-      stw::diag_lib::C_XFLInformationFromServer c_BasicInformation; ///< basic information from server
-      stw::diag_lib::C_XFLChecksumAreas c_ChecksumInformation;      ///< information about sector or block based
-                                                                    // checksums
    };
 
    ///setting which files(s) to flash for one node and all flash parameters for each node
@@ -109,16 +101,12 @@ public:
       eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_WARNING,
       eACTIVATE_FLASHLOADER_OSY_ECU_RESET_WARNING,
       eACTIVATE_FLASHLOADER_OSY_ECU_RESET_ERROR,
-      eACTIVATE_FLASHLOADER_XFL_ECU_RESET_WARNING,
-      eACTIVATE_FLASHLOADER_XFL_ECU_RESET_ERROR,
-      eACTIVATE_FLASHLOADER_OSY_XFL_BC_ENTER_FLASHLOADER_START,
+      eACTIVATE_FLASHLOADER_OSY_BC_ENTER_FLASHLOADER_START,
       eACTIVATE_FLASHLOADER_OSY_BC_ENTER_PRE_PROGRAMMING_ERROR,
-      eACTIVATE_FLASHLOADER_XFL_BC_FLASH_ERROR,
-      eACTIVATE_FLASHLOADER_OSY_XFL_BC_PING_START,
+      eACTIVATE_FLASHLOADER_OSY_BC_PING_START,
       eACTIVATE_FLASHLOADER_OSY_RECONNECT_WARNING,
       eACTIVATE_FLASHLOADER_OSY_RECONNECT_ERROR,
       eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR,
-      eACTIVATE_FLASHLOADER_XFL_WAKEUP_ERROR,
       eACTIVATE_FLASHLOADER_ROUTING_START,
       eACTIVATE_FLASHLOADER_ROUTING_ERROR,
       eACTIVATE_FLASHLOADER_ROUTING_AVAILABLE_FEATURE_ERROR, // problem with available features of flashloader
@@ -139,11 +127,6 @@ public:
       eREAD_DEVICE_INFO_OSY_FLASHLOADER_CHECK_DEBUGGER_ACTIVATION_START,
       eREAD_DEVICE_INFO_OSY_FLASHLOADER_CHECK_DEBUGGER_ACTIVATION_ERROR,
       eREAD_DEVICE_INFO_OSY_FINISHED,
-      eREAD_DEVICE_INFO_XFL_START,
-      eREAD_DEVICE_INFO_XFL_WAKEUP_ERROR,
-      eREAD_DEVICE_INFO_XFL_READING_INFORMATION_START,
-      eREAD_DEVICE_INFO_XFL_READING_INFORMATION_ERROR,
-      eREAD_DEVICE_INFO_XFL_FINISHED,
       eREAD_DEVICE_INFO_FINISHED,
 
       eUPDATE_SYSTEM_START,
@@ -227,13 +210,6 @@ public:
       eUPDATE_SYSTEM_ABORTED,
       eUPDATE_SYSTEM_FINISHED,
 
-      eUPDATE_SYSTEM_XFL_NODE_START,
-      eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_START,
-      eXFL_PROGRESS, //wrapped progress information from STW flashloader driver
-      eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_ERROR,
-      eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_FINISHED,
-      eUPDATE_SYSTEM_XFL_NODE_FINISHED,
-
       eRESET_SYSTEM_START,
       eRESET_SYSTEM_OSY_NODE_ERROR,
       eRESET_SYSTEM_OSY_ROUTED_NODE_ERROR,
@@ -269,8 +245,6 @@ public:
       const C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger, C_OscSuSequences::C_DoFlash & orc_DoFlash);
    static void h_OpenSydeFlashloaderInformationToText(const C_OsyDeviceInformation & orc_Info,
                                                       stw::scl::C_SclStringList & orc_Text);
-   static void h_StwFlashloaderInformationToText(const C_XflDeviceInformation & orc_Info,
-                                                 stw::scl::C_SclStringList & orc_Text);
 
 protected:
    //functions we use to report to application:
@@ -282,11 +256,6 @@ protected:
 
    virtual void m_ReportOpenSydeFlashloaderInformationRead(const C_OsyDeviceInformation & orc_Info,
                                                            const uint32_t ou32_NodeIndex);
-   virtual void m_ReportStwFlashloaderInformationRead(const C_XflDeviceInformation & orc_Info,
-                                                      const uint32_t ou32_NodeIndex);
-
-   //functions from base class that we implement to parse incoming reports:
-   virtual int32_t m_XflReportProgress(const uint8_t ou8_Progress, const stw::scl::C_SclString & orc_Text);
 
    uint32_t mu32_CurrentNode; ///< index of currently addressed node within System Definition
    uint32_t mu32_CurrentFile;
@@ -336,13 +305,8 @@ private:
 
    int32_t m_WriteFingerPrintOsy(void);
 
-   int32_t m_FlashNodeXfl(const std::vector<stw::scl::C_SclString> & orc_FilesToFlash,
-                          std::vector<C_OscSuSequencesNodeStwFlHexFileStates> & orc_StateHexFiles);
-
    int32_t m_ReadDeviceInformationOpenSyde(const uint8_t ou8_ProgressToReport, const uint32_t ou32_NodeIndex,
                                            C_OscSuSequencesNodeConnectStates & orc_NodeState);
-   int32_t m_ReadDeviceInformationStwFlashloader(const uint8_t ou8_ProgressToReport, const uint32_t ou32_NodeIndex,
-                                                 C_OscSuSequencesNodeConnectStates & orc_NodeState);
 
    bool m_IsNodeActive(const uint32_t ou32_NodeIndex, const uint32_t ou32_BusIndex,
                        C_OscNodeProperties::E_FlashLoaderProtocol & ore_ProtocolType,

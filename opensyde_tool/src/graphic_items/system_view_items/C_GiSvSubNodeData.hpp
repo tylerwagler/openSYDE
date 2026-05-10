@@ -57,7 +57,6 @@ public:
 
    void CopyInitialStatus(C_GiSvSubNodeData & orc_NodeData) const;
    void CopyUpdateStatus(C_GiSvSubNodeData & orc_NodeData) const;
-   void CopyStwDeviceInfo(C_GiSvSubNodeData & orc_NodeData) const;
    void CopyOpenSydeDeviceInfo(C_GiSvSubNodeData & orc_NodeData) const;
    void CopyDiscardedStatus(C_GiSvSubNodeData & orc_NodeData) const;
 

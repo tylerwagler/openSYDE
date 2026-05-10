@@ -47,8 +47,6 @@ public:
    int32_t GetSortedOscNodeConst(const uint32_t & oru32_Index, stw::opensyde_core::C_OscNode & orc_Node) const;
    stw::opensyde_core::C_OscNode * GetOscNode(const uint32_t & oru32_Index);
    stw::opensyde_core::C_OscNodeSquad * GetOscNodeSquad(const uint32_t & oru32_Index);
-   int32_t SetStwFlashloaderSettings(const uint32_t ou32_Index,
-                                     const stw::opensyde_core::C_OscNodeStwFlashloaderSettings & orc_Settings);
    int32_t SetNodeOpenSydeServerSettings(const uint32_t ou32_Index,
                                          const stw::opensyde_core::C_OscNodeOpenSydeServerSettings & orc_Settings);
    int32_t SetNodeCodeExportSettings(const uint32_t ou32_Index,

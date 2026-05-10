@@ -24,7 +24,6 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
-using namespace stw::diag_lib;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
@@ -166,17 +165,6 @@ void C_SyvUpNodePropertiesDialog::CopyInitialStatus(C_GiSvNodeData & orc_NodeDat
 void C_SyvUpNodePropertiesDialog::CopyUpdateStatus(C_GiSvNodeData & orc_NodeData) const
 {
    this->mc_NodeData.CopyUpdateStatus(orc_NodeData);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Copy STW device info
-
-   \param[in,out]  orc_NodeData  Node data
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpNodePropertiesDialog::CopyStwDeviceInfo(C_GiSvNodeData & orc_NodeData) const
-{
-   this->mc_NodeData.CopyStwDeviceInfo(orc_NodeData);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -412,7 +400,7 @@ void C_SyvUpNodePropertiesDialog::mh_GetApplicationDataForNode(const C_GiSvSubNo
                                                                QString & orc_FileBuildDate,
                                                                QString & orc_DeviceBuildDate)
 {
-   const C_XFLECUInformation * const pc_FileInfo = orc_NodeInfo.GetHexFileInfo(ou32_ApplicationIndex);
+   const stw::diag_lib::C_XFLECUInformation * const pc_FileInfo = orc_NodeInfo.GetHexFileInfo(ou32_ApplicationIndex);
    bool q_Missing = true;
    bool q_Match = true;
    const C_SyvUpDeviceInfo c_DeviceInfo = orc_NodeInfo.GetDeviceInfo();
@@ -438,8 +426,7 @@ void C_SyvUpNodePropertiesDialog::mh_GetApplicationDataForNode(const C_GiSvSubNo
    //If error happened also skip this
    if (((((orc_NodeInfo.GetInitialStatus() == C_SyvUtil::eI_APPLICATION_MATCH) ||
           (orc_NodeInfo.GetUpdateSuccessStatus())) &&
-         ((c_DeviceInfo.pc_OpenSydeDevice != NULL) ||
-          (c_DeviceInfo.pc_StwDevice != NULL))) &&
+         (c_DeviceInfo.pc_OpenSydeDevice != NULL)) &&
         (orc_NodeInfo.GetUpdateFailedStatus() == false)) &&
        (orc_NodeInfo.IsDeviceInfoDiscarded() == false))
    {
@@ -465,14 +452,7 @@ void C_SyvUpNodePropertiesDialog::mh_GetApplicationDataForNode(const C_GiSvSubNo
       orc_DeviceProjectName = orc_FileProjectName;
       orc_DeviceFileVersion = orc_FileVersion;
       orc_DeviceBuildDate = orc_FileBuildDate;
-      if (c_DeviceInfo.pc_StwDevice != NULL)
-      {
-         orc_DeviceValidStatus = C_GtGetText::h_GetText("Valid");
-      }
-      else
-      {
-         orc_DeviceValidStatus = C_GtGetText::h_GetText("Not available");
-      }
+      orc_DeviceValidStatus = C_GtGetText::h_GetText("Not available");
       q_Missing = false;
    }
    else if (((orc_NodeInfo.GetUpdateFailedStatus() == true) &&
@@ -491,15 +471,7 @@ void C_SyvUpNodePropertiesDialog::mh_GetApplicationDataForNode(const C_GiSvSubNo
    }
    else
    {
-      if (c_DeviceInfo.pc_StwDevice != NULL)
-      {
-         C_SyvUpNodePropertiesDialog::mh_ExtractStwDeviceInformation(orc_NodeInfo, orc_FileProjectName,
-                                                                     orc_DeviceProjectName,
-                                                                     orc_FileVersion, orc_DeviceFileVersion,
-                                                                     orc_FileBuildDate, orc_DeviceBuildDate,
-                                                                     orc_DeviceValidStatus, q_Missing, q_Match);
-      }
-      else if (c_DeviceInfo.pc_OpenSydeDevice != NULL)
+      if (c_DeviceInfo.pc_OpenSydeDevice != NULL)
       {
          C_SyvUpNodePropertiesDialog::mh_ExtractOpenSydeDeviceInformation(orc_NodeInfo, orc_FileProjectName,
                                                                           orc_DeviceProjectName,
@@ -533,60 +505,6 @@ void C_SyvUpNodePropertiesDialog::mh_GetApplicationDataForNode(const C_GiSvSubNo
       }
    }
    orc_ApplicationStateIcon += "style=\"vertical-align: middle;\"/>";
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Extract STW device information
-
-   \param[in]      orc_NodeInfo           Node info
-   \param[in]      orc_FileProjectName    File project name
-   \param[in,out]  orc_DeviceProjectName  Device project name
-   \param[in]      orc_FileVersion        File version
-   \param[in,out]  orc_DeviceFileVersion  Device file version
-   \param[in]      orc_FileBuildDate      File build date
-   \param[in,out]  orc_DeviceBuildDate    Device build date
-   \param[in,out]  orc_DeviceValidStatus  Device valid status
-   \param[in,out]  orq_MissingStatus      Missing status
-   \param[in,out]  orq_MatchStatus        Match status
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpNodePropertiesDialog::mh_ExtractStwDeviceInformation(const C_GiSvSubNodeData & orc_NodeInfo,
-                                                                 const QString & orc_FileProjectName,
-                                                                 QString & orc_DeviceProjectName,
-                                                                 const QString & orc_FileVersion,
-                                                                 QString & orc_DeviceFileVersion,
-                                                                 const QString & orc_FileBuildDate,
-                                                                 QString & orc_DeviceBuildDate,
-                                                                 QString & orc_DeviceValidStatus,
-                                                                 bool & orq_MissingStatus, bool & orq_MatchStatus)
-{
-   const C_SyvUpDeviceInfo c_DeviceInfo = orc_NodeInfo.GetDeviceInfo();
-
-   for (int32_t s32_ItDeviceInfoBlock = 0;
-        s32_ItDeviceInfoBlock < c_DeviceInfo.pc_StwDevice->c_BasicInformation.c_DeviceInfoBlocks.GetLength();
-        ++s32_ItDeviceInfoBlock)
-   {
-      const C_XFLECUInformation & rc_StwDeviceInfo =
-         c_DeviceInfo.pc_StwDevice->c_BasicInformation.c_DeviceInfoBlocks[s32_ItDeviceInfoBlock];
-      //Search for name match
-      if (orc_FileProjectName.compare(rc_StwDeviceInfo.GetProjectName().Trim().c_str()) == 0)
-      {
-         //Signal found
-         orq_MissingStatus = false;
-         //Apply
-         orc_DeviceProjectName = rc_StwDeviceInfo.GetProjectName().c_str();
-         orc_DeviceFileVersion = rc_StwDeviceInfo.GetProjectVersion().c_str();
-         orc_DeviceBuildDate = (rc_StwDeviceInfo.GetDate() + " " + rc_StwDeviceInfo.GetTime()).c_str();
-         //Highlighting
-         orq_MatchStatus = C_SyvUpNodePropertiesDialog::mh_HandleHighlighting(orc_FileProjectName,
-                                                                              orc_DeviceProjectName,
-                                                                              orc_FileVersion, orc_DeviceFileVersion,
-                                                                              orc_FileBuildDate, orc_DeviceBuildDate);
-
-         // Valid flag is not available for STW Flashloader
-         orc_DeviceValidStatus = C_GtGetText::h_GetText("Not available");
-      }
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -929,14 +847,6 @@ void C_SyvUpNodePropertiesDialog::mh_InitFlashloaderTableForNode(const C_GiSvSub
    if (c_DeviceInfo.pc_OpenSydeDevice != NULL)
    {
       C_OscSuSequences::h_OpenSydeFlashloaderInformationToText(*c_DeviceInfo.pc_OpenSydeDevice, c_List);
-   }
-   else if (c_DeviceInfo.pc_StwDevice != NULL)
-   {
-      C_OscSuSequences::h_StwFlashloaderInformationToText(*c_DeviceInfo.pc_StwDevice, c_List);
-   }
-   else
-   {
-      //Unexpected
    }
    if (c_List.Strings.GetLength() > 1)
    {
@@ -1314,31 +1224,6 @@ QString C_SyvUpNodePropertiesDialog::mh_GetProgressLogUpdateStatesStringForSubNo
          c_Text += mh_GetTableLineForBrowser(
             C_GtGetText::h_GetText("Sending transfer exit request"),
             mh_GetSuSequenceNodeStateString(rc_FileState.e_RequestTransferAddressExitSent),
-            2);
-      }
-
-      // STW flashloader files
-      for (u32_FileCounter = 0U; u32_FileCounter < rc_States.c_StateStwFlHexFiles.size(); ++u32_FileCounter)
-      {
-         const C_OscSuSequencesNodeStwFlHexFileStates & rc_FileState = rc_States.c_StateStwFlHexFiles[u32_FileCounter];
-
-         q_AtLeastOneFile = true;
-
-         c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("File ") + static_cast<QString>(rc_FileState.c_FileName.c_str())  + ":",
-            "",
-            1);
-
-         // STW flashloader file states have no information about the loading of the file
-         c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Checking file"),
-            mh_GetSuSequenceNodeStateString(rc_FileState.e_FileExists),
-            2);
-
-         // Transfers
-         c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Sending file"),
-            mh_GetSuSequenceNodeStateString(rc_FileState.e_FileSent),
             2);
       }
 

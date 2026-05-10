@@ -51,8 +51,6 @@ public:
    ///is the openSYDE protocol supported on ethernet ?
    bool q_DiagnosticProtocolOpenSydeEthernet;
 
-   ///is the STW flashloader available (on CAN bus) ?
-   bool q_FlashloaderStwCan;
    ///is the openSYDE flashloader available on CAN bus ?
    bool q_FlashloaderOpenSydeCan;
    ///is the openSYDE flashloader available on ethernet ?

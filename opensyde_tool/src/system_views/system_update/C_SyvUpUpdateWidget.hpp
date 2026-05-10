@@ -90,7 +90,6 @@ private:
                                   const uint8_t ou8_BusIdentifier, const uint8_t ou8_NodeIdentifier);
 
    void m_ReportOpenSydeFlashloaderInformationRead(void);
-   void m_ReportStwFlashloaderInformationRead(void);
 
    void m_CheckOpenSydeFlashloaderInformation(const std::vector<uint32_t> & orc_OsyNodeIndexes,
                                               const std::vector<stw::opensyde_core::C_OscSuSequences::C_OsyDeviceInformation> & orc_OsyDeviceInformation);

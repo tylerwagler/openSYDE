@@ -27,7 +27,6 @@ class C_SyvUpDeviceInfo
 {
 public:
    C_SyvUpDeviceInfo(void);
-   const stw::opensyde_core::C_OscSuSequences::C_XflDeviceInformation * pc_StwDevice;
    const stw::opensyde_core::C_OscSuSequences::C_OsyDeviceInformation * pc_OpenSydeDevice;
 };
 

@@ -321,20 +321,8 @@ int32_t C_SyvDcSequences::FillDeviceConfig(C_SyvDcDeviceConfiguation & orc_Confi
             }
             else
             {
-               //Flashloader type "none" is supported by the device structure, but not the UI
-               tgl_assert(ore_Flashloader == C_OscNodeProperties::eFL_STW);
-
-               if (pc_UsedBus->e_Type == C_OscSystemBus::eCAN)
-               {
-                  // STW Flashloader can only be configured on the current used interface
-                  orc_Config.c_BusIds.push_back(0);
-                  orc_Config.c_CanBitrates.push_back(static_cast<uint32_t>(pc_UsedBus->u64_BitRate));
-               }
-               else
-               {
-                  // Error: STW flashloader does not support Ethernet
-                  s32_Return = C_CONFIG;
-               }
+               // Only the openSYDE flashloader is supported; any other flashloader is an error.
+               s32_Return = C_CONFIG;
             }
          }
       }
@@ -429,32 +417,6 @@ void C_SyvDcSequences::StopScanCanSendFlashloaderRequest(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Starts thread to read information from STW Flashloader devices.
-
-   Result of sequence can be get by calling GetDeviceInfosResult
-
-   \return
-   C_NO_ERR   started sequence
-   C_BUSY     previously started sequence still going on
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::ScanCanGetInfoFromStwFlashloaderDevices(void)
-{
-   int32_t s32_Return = C_NO_ERR;
-
-   if (this->mpc_Thread->isRunning() == true)
-   {
-      s32_Return = C_BUSY;
-   }
-   else
-   {
-      this->me_Sequence = eSCANCANGETINFOFROMSTWFLASHLOADERDEVICES;
-      this->mpc_Thread->start();
-   }
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Starts thread to read information from openSYDE devices.
 
    Supports openSYDE CAN-TP protocol.
@@ -535,41 +497,6 @@ int32_t C_SyvDcSequences::CheckOpenSydeDevicesConfig(const std::vector<C_SyvDcDe
 const
 {
    return this->m_CheckConfOpenSydeDevices(orc_DeviceConfig);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Starts thread to write new configuration to STW Flashloader devices.
-
-   This function shall be called after calling CheckCanOpenSydeDevicesConfig and before ConfCanOpenSydeDevices.
-   When the calling order is
-   1. CheckCanOpenSydeDevicesConfig
-   2. ConfCanStwFlashloaderDevices (Checks the configuration itself)
-   3. ConfCanOpenSydeDevices
-   no changes will be made on the server if minimum one configuration is invalid.
-
-   \param[in]  orc_DeviceConfig  Configuration for all STW flashloader devices
-
-   \return
-   C_NO_ERR   started sequence
-   C_BUSY     previously started sequence still going on
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::ConfCanStwFlashloaderDevices(const std::vector<C_SyvDcDeviceConfiguation> & orc_DeviceConfig)
-{
-   int32_t s32_Return = C_NO_ERR;
-
-   if (this->mpc_Thread->isRunning() == true)
-   {
-      s32_Return = C_BUSY;
-   }
-   else
-   {
-      this->me_Sequence = eCONFCANSTWFLASHLOADERDEVICES;
-      this->mc_DeviceConfiguration.clear();
-      this->mc_DeviceConfiguration = orc_DeviceConfig;
-      this->mpc_Thread->start();
-   }
-   return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -694,48 +621,6 @@ int32_t C_SyvDcSequences::SendOsyBroadcastRequestProgramming(bool & orq_NotAccep
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Resets all STW flashloader devices
-
-   Function returns immediately with the result. It will not be run in the separate thread.
-
-   The client bitrate of the bus will be reset to the purposed bitrate.
-   The initialization of the CAN bus will be made by ReadBackCan and ScanCanEnterFlashloader.
-
-   This function shall be called only, if only STW flashloader devices are connected to the bus.
-
-   \return
-   C_NO_ERR    Net reset request sent
-   C_BUSY      Previously started sequence still going on
-   C_COM       Error on sending reset request
-   C_CONFIG    No com driver installed
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::ResetCanStwFlashloaderDevices(void)
-{
-   int32_t s32_Return = C_NO_ERR;
-
-   if (this->mpc_Thread->isRunning() == true)
-   {
-      s32_Return = C_BUSY;
-   }
-   else
-   {
-      s32_Return = this->mpc_ComDriver->SendStwNetReset();
-
-      if (s32_Return == C_NO_ERR)
-      {
-         osc_write_log_info("Configure CAN openSYDE devices", "openSYDE broadcast ECU reset sent.");
-      }
-      else
-      {
-         osc_write_log_error("Configure CAN openSYDE devices",
-                             "openSYDE broadcast ECU reset failed with error: " + C_SclString::IntToStr(s32_Return));
-      }
-   }
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Resets all openSYDE devices
 
    Function returns immediately with the result. It will not be run in the separate thread.
@@ -837,7 +722,6 @@ int32_t C_SyvDcSequences::InitCanAndSetCanBitrate(const uint32_t ou32_Bitrate)
 
    \param[in]  orc_OpenSydeIds           Ids for openSYDE flashloader to read
    \param[in]  orc_OpenSydeSnrExtFormat  Flags for openSYDE devices if standard or extended format is used
-   \param[in]  orc_StwIds                Ids for STW flashloader to read
 
    \return
    C_NO_ERR   started sequence
@@ -845,8 +729,7 @@ int32_t C_SyvDcSequences::InitCanAndSetCanBitrate(const uint32_t ou32_Bitrate)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvDcSequences::ReadBackCan(const std::vector<C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
-                                      const std::vector<bool> & orc_OpenSydeSnrExtFormat,
-                                      const std::vector<C_OscProtocolDriverOsyNode> & orc_StwIds)
+                                      const std::vector<bool> & orc_OpenSydeSnrExtFormat)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -859,10 +742,8 @@ int32_t C_SyvDcSequences::ReadBackCan(const std::vector<C_OscProtocolDriverOsyNo
       this->me_Sequence = eREADBACKCAN;
       this->mc_OpenSydeIds.clear();
       this->mc_OpenSydeSnrExtFormat.clear();
-      this->mc_StwIds.clear();
       this->mc_OpenSydeIds = orc_OpenSydeIds;
       this->mc_OpenSydeSnrExtFormat = orc_OpenSydeSnrExtFormat;
-      this->mc_StwIds = orc_StwIds;
 
       this->mpc_Thread->start();
    }
@@ -896,7 +777,6 @@ int32_t C_SyvDcSequences::ReadBackEth(const std::vector<C_OscProtocolDriverOsyNo
       this->me_Sequence = eREADBACKETH;
       this->mc_OpenSydeIds.clear();
       this->mc_OpenSydeSnrExtFormat.clear();
-      this->mc_StwIds.clear();
       this->mc_OpenSydeIds = orc_OpenSydeIds;
       this->mc_OpenSydeSnrExtFormat = orc_OpenSydeSnrExtFormat;
       this->mpc_Thread->start();
@@ -1010,37 +890,6 @@ int32_t C_SyvDcSequences::GetSecurityFeatureUsageResult(bool & orq_SecurityFeatu
    return s32_Return;
 }
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle reports from STW Flashloader driver
-
-   The functions we use for the device configuration is not necessary.
-   "Sending FLASH request" would spam the log file.
-
-   \param[in]  ou8_Progress   reported progress of operation (0..100)
-   \param[in]  orc_Text       reported information
-
-   \return
-   C_NO_ERR       continue with procedure
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::m_XflReportProgress(const uint8_t ou8_Progress, const C_SclString & orc_Text)
-{
-   (void)ou8_Progress;
-   (void)orc_Text;
-   return C_NO_ERR;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Reports the progress of the STW flashloader configuration sequence
-
-   \param[in]  ou32_Progress  Progress of sequence
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDcSequences::m_RunConfCanStwFlashloaderDevicesProgress(const uint32_t ou32_Progress)
-{
-   Q_EMIT (this->SigRunConfCanStwFlashloaderDevicesProgress(ou32_Progress));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Reports the progress of the openSYDE CAN configuration sequence
 
    \param[in]  ou32_Progress  Progress of sequence
@@ -1060,24 +909,6 @@ void C_SyvDcSequences::m_RunConfCanOpenSydeDevicesProgress(const uint32_t ou32_P
 void C_SyvDcSequences::m_RunConfEthOpenSydeDevicesProgress(const uint32_t ou32_Progress)
 {
    Q_EMIT (this->SigRunConfEthOpenSydeDevicesProgress(ou32_Progress));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Reports the state of a concrete step of STW flashloader configuration sequence
-
-   \param[in]  ou32_Step      Step of node configuration
-                              - hu32_SETNODEID
-                              - hu32_SETCANBITRATE
-                              - hu32_SETIPADDRESS
-   \param[in]  os32_Result    Result of service
-   \param[in]  orc_Server     Configured server
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDcSequences::m_RunConfCanStwFlashloaderDevicesState(const uint32_t ou32_Step, const int32_t os32_Result,
-                                                              const C_OscProtocolDriverOsyNode & orc_Server) const
-{
-   Q_EMIT (this->SigRunConfCanStwFlashloaderDevicesState(ou32_Step, os32_Result, orc_Server.u8_BusIdentifier,
-                                                         orc_Server.u8_NodeIdentifier));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1131,17 +962,11 @@ void C_SyvDcSequences::m_ThreadFunc(void)
       case eSCANCANSENDFLASHLOADERREQUEST:
          this->ms32_Result = this->m_RunScanCanSendFlashloaderRequest(this->mu32_ScanTime);
          break;
-      case eSCANCANGETINFOFROMSTWFLASHLOADERDEVICES:
-         this->ms32_Result = this->m_RunScanCanGetInfoFromStwFlashloaderDevices();
-         break;
       case eSCANCANGETINFOFROMOPENSYDEDEVICES:
          this->ms32_Result = this->m_RunScanCanGetInfoFromOpenSydeDevices();
          break;
       case eSCANETHGETINFOFROMOPENSYDEDEVICES:
          this->ms32_Result = this->m_RunScanEthGetInfoFromOpenSydeDevices();
-         break;
-      case eCONFCANSTWFLASHLOADERDEVICES:
-         this->ms32_Result = this->m_RunConfCanStwFlashloaderDevices();
          break;
       case eCONFCANOPENSYDEDEVICES:
          this->ms32_Result = this->m_RunConfCanOpenSydeDevices();
@@ -1235,21 +1060,7 @@ int32_t C_SyvDcSequences::m_RunScanCanEnterFlashloader(const uint32_t ou32_CanBi
                   C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
             }
 
-            if (s32_Return == C_NO_ERR)
-            {
-               if (this->mq_StwFlashloaderDevicesActiveOnLocalBus == true)
-               {
-                  // send STW Flashloader reset messages
-                  s32_Return = this->mpc_ComDriver->SendStwRequestNodeReset();
-               }
-
-               if (s32_Return != C_NO_ERR)
-               {
-                  osc_write_log_error("Scan CAN enter Flashloader",
-                                      "STW request node reset failed with error: " + C_SclString::IntToStr(s32_Return));
-               }
-            }
-            else
+            if (s32_Return != C_NO_ERR)
             {
                osc_write_log_error("Scan CAN enter Flashloader", "openSYDE ECU reset broadcast failed with error: " +
                                    C_SclString::IntToStr(s32_Return));
@@ -1303,10 +1114,10 @@ int32_t C_SyvDcSequences::m_RunScanCanEnterFlashloader(const uint32_t ou32_CanBi
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Sending of "Flash" and "PreProgrammingSession" request
+/*! \brief   Sending of "PreProgrammingSession" request
 
-   Sending the STW flashloader request "FLASH" and the openSYDE broadcast service PreProgrammingSession
-   till at least the scan time is over and the flag mq_RunScanSendFlashloaderRequestEndless is set to false.
+   Sending the openSYDE broadcast service PreProgrammingSession until at least the scan time is over
+   and the flag mq_RunScanSendFlashloaderRequestEndless is set to false.
 
    \param[in]  ou32_ScanTime  Time till stop sending the requests in ms
 
@@ -1328,24 +1139,10 @@ int32_t C_SyvDcSequences::m_RunScanCanSendFlashloaderRequest(const uint32_t ou32
 
    do
    {
-      // send STW Flashloader "FLASH" and
-      if (this->mq_StwFlashloaderDevicesActiveOnLocalBus == true)
+      if (this->mq_OpenSydeDevicesActive == true)
       {
-         s32_Return = this->mpc_ComDriver->SendStwSendFlash(this->mc_StwFlashloaderDeviceOnLocalBus);
-      }
-
-      if (s32_Return == C_NO_ERR)
-      {
-         if (this->mq_OpenSydeDevicesActive == true)
-         {
-            // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast for 5 seconds every 5 milliseconds
-            s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastEnterPreProgrammingSession();
-         }
-      }
-      else
-      {
-         osc_write_log_error("Scan CAN enter Flashloader",
-                             "STW send flash failed with error: " + C_SclString::IntToStr(s32_Return));
+         // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast for the duration of the scan
+         s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastEnterPreProgrammingSession();
       }
 
       QThread::msleep(5);
@@ -1372,179 +1169,6 @@ int32_t C_SyvDcSequences::m_RunScanCanSendFlashloaderRequest(const uint32_t ou32
    }
    while ((q_RunEndless == true) ||
           (s64_Elapsed < ou32_ScanTime));
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Read information from STW Flashloader devices.
-
-   Assumptions:
-   * All devices are in flashloader mode.
-   * The com driver passed as parameter is initialized and has set up protocol instances for all STW Flashloader nodes
-
-   Sequence
-   * send "node_wakeup(localId)" with local IDs 0x00 to 0xFE
-   * check for responses
-   * for all nodes with responses:
-   ** perform "node_wakeup(localId)"
-   ** perform "node_companyid(Y*)"
-   ** perform "get_serial_number"; collect all responses
-   ** for all nodes with responses do:
-   *** perform "node_wakeup(serial_number)"
-   *** perform "node_companyid(Y*)"
-   *** perform "get_device_id"
-
-   As a result we'll have the SNRs, Node-IDs, device-names
-
-   \return
-   C_NO_ERR   information successfully read
-   C_COM      error on sending
-   C_NOACT    error response from server
-   C_CONFIG   no com driver installed
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::m_RunScanCanGetInfoFromStwFlashloaderDevices(void)
-{
-   int32_t s32_Return = C_CONFIG;
-
-   osc_write_log_info("Scan CAN get info from STW Flashloader devices", "Sequence started");
-
-   // Clear old results
-   this->mc_DeviceInfoResult.clear();
-
-   if (this->mpc_ComDriver != NULL)
-   {
-      uint8_t au8_LocalIdsFound[stw::diag_lib::XFL_NUM_DIFFERENT_LOCAL_IDS];
-      uint8_t u8_FoundNodes = 0;
-
-      // * send "node_wakeup(localId)" with local IDs 0x00 to 0xFE
-      s32_Return = this->mpc_ComDriver->SendStwSearchId(au8_LocalIdsFound, u8_FoundNodes);
-
-      if (s32_Return == C_NO_ERR)
-      {
-         osc_write_log_info("Scan CAN get info from STW Flashloader devices",
-                            "Nodes found: " + C_SclString::IntToStr(u8_FoundNodes));
-
-         for (uint16_t u16_LocalIdCounter = 0U;
-              u16_LocalIdCounter < stw::diag_lib::XFL_NUM_DIFFERENT_LOCAL_IDS;
-              ++u16_LocalIdCounter)
-         {
-            if (au8_LocalIdsFound[u16_LocalIdCounter] > 0)
-            {
-               s32_Return = this->m_RunScanCanGetInfoFromStwFlashloaderDevice(static_cast<uint8_t>(u16_LocalIdCounter));
-
-               if (s32_Return != C_NO_ERR)
-               {
-                  break;
-               }
-            }
-         }
-      }
-      else
-      {
-         osc_write_log_error("Scan CAN get info from STW Flashloader devices",
-                             "STW Flashloader search id failed with error: " + C_SclString::IntToStr(s32_Return));
-      }
-   }
-
-   if (s32_Return == C_NO_ERR)
-   {
-      osc_write_log_info("Scan CAN get info from STW Flashloader devices", "Sequence finished");
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::m_RunScanCanGetInfoFromStwFlashloaderDevice(const uint8_t ou8_LocalId)
-{
-   int32_t s32_Return = C_CONFIG;
-
-   if (this->mpc_ComDriver != NULL)
-   {
-      // We need the correct bus id for the SyvComDriver.
-      C_OscProtocolDriverOsyNode c_ServerId = this->mpc_ComDriver->GetClientId();
-
-      c_ServerId.u8_NodeIdentifier = ou8_LocalId;
-      // ** perform "node_wakeup(localId)"
-      //** perform "node_companyid(Y*)"
-      s32_Return = this->mpc_ComDriver->SendStwWakeupLocalId(c_ServerId, NULL);
-
-      if (s32_Return == C_NO_ERR)
-      {
-         //maximum allowed: 100 ECU with same ID, really should be enough
-         const uint8_t u8_MAX_NUM_ECUS_PER_LOCAL_ID = 100U;
-         uint8_t aau8_Snrs[u8_MAX_NUM_ECUS_PER_LOCAL_ID][6];
-         uint8_t u8_NodesFound = 0;
-
-         //** perform "get_serial_number"; collect all responses
-         s32_Return = this->mpc_ComDriver->SendStwGetSerialNumbers(c_ServerId, &aau8_Snrs[0][0],
-                                                                   u8_MAX_NUM_ECUS_PER_LOCAL_ID, u8_NodesFound);
-
-         if (s32_Return == C_NO_ERR)
-         {
-            for (uint8_t u8_NodeCounter = 0U; u8_NodeCounter < u8_NodesFound; ++u8_NodeCounter)
-            {
-               C_OscProtocolSerialNumber c_SerialNumber;
-               uint8_t u8_LocalId;
-
-               c_SerialNumber.SetPosSerialNumber(aau8_Snrs[u8_NodeCounter]);
-
-               //*** perform "node_wakeup(serial_number)"
-               //*** perform "node_companyid(Y*)"
-               s32_Return = this->mpc_ComDriver->SendStwWakeupLocalSerialNumber(c_SerialNumber, u8_LocalId);
-
-               if (s32_Return == C_NO_ERR)
-               {
-                  C_SclString c_DeviceName;
-                  c_ServerId.u8_NodeIdentifier = u8_LocalId;
-
-                  //*** perform "get_device_id"
-                  s32_Return = this->mpc_ComDriver->SendStwGetDeviceId(c_ServerId, c_DeviceName);
-
-                  if (s32_Return == C_NO_ERR)
-                  {
-                     C_OscDcDeviceInformation c_DeviceInfo;
-                     c_DeviceInfo.SetNodeId(c_ServerId.u8_NodeIdentifier);
-                     c_DeviceInfo.SetSerialNumber(c_SerialNumber);
-                     c_DeviceInfo.SetDeviceName(c_DeviceName);
-                     this->mc_DeviceInfoResult.push_back(c_DeviceInfo);
-                  }
-                  else
-                  {
-                     osc_write_log_error("Scan CAN get info from STW Flashloader devices",
-                                         "STW Flashloader get device id failed with error: " +
-                                         C_SclString::IntToStr(s32_Return));
-                  }
-               }
-               else
-               {
-                  osc_write_log_error("Scan CAN get info from STW Flashloader devices",
-                                      "STW Flashloader wakeup with serial number failed with error: " + C_SclString::IntToStr(
-                                         s32_Return));
-               }
-
-               if (s32_Return != C_NO_ERR)
-               {
-                  break;
-               }
-            }
-         }
-         else
-         {
-            osc_write_log_error("Scan CAN get info from STW Flashloader devices",
-                                "STW Flashloader get serial number failed with error: " +
-                                C_SclString::IntToStr(s32_Return));
-         }
-      }
-      else
-      {
-         osc_write_log_error("Scan CAN get info from STW Flashloader devices",
-                             "STW Flashloader wakeup with local id failed with error: " +
-                             C_SclString::IntToStr(s32_Return));
-      }
-   }
 
    return s32_Return;
 }
@@ -2587,166 +2211,6 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
          osc_write_log_info("Configure ETH openSYDE devices", "Sequence finished");
          this->m_RunConfEthOpenSydeDevicesProgress(100U);
       }
-   }
-
-   return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Write new configuration to STW Flashloader devices.
-
-   Assumptions:
-   * All devices are in flashloader mode.
-   * The com driver passed as parameter is initialized and has set up protocol instances for all STW Flashloader nodes
-
-   Sequence:
-   * for all devices
-   ** perform "node_wakeup(serial_number)"
-   ** perform "node_companyid(Y*)"
-   ** perform "SetLocalId(newnodeid)"
-   ** perform "SetBitrateCan(newbitrate)"
-
-   \return
-   C_NO_ERR    all devices are configured
-   C_NOACT     no device configurations exist
-   C_RANGE     device configuration is invalid
-   C_CONFIG    no com driver installed
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::m_RunConfCanStwFlashloaderDevices(void)
-{
-   int32_t s32_Return = C_CONFIG;
-
-   this->m_RunConfCanStwFlashloaderDevicesProgress(0U);
-
-   if (this->mpc_ComDriver != NULL)
-   {
-      s32_Return = C_NOACT;
-
-      uint32_t u32_DeviceCounter;
-      // We need the correct bus id for the SyvComDriver.
-      C_OscProtocolDriverOsyNode c_ServerId = this->mpc_ComDriver->GetClientId();
-
-      osc_write_log_info("Configure CAN STW Flashloader devices", "Sequence started");
-
-      // In the first step, adapt all local ids
-      for (u32_DeviceCounter = 0U; u32_DeviceCounter < this->mc_DeviceConfiguration.size(); ++u32_DeviceCounter)
-      {
-         const C_SyvDcDeviceConfiguation & rc_CurConfig = this->mc_DeviceConfiguration[u32_DeviceCounter];
-
-         // Progress calculation for sequence 0% - 50%
-         this->m_RunConfCanStwFlashloaderDevicesProgress(
-            (u32_DeviceCounter * 50U) / static_cast<uint32_t>(this->mc_DeviceConfiguration.size()));
-
-         tgl_assert(rc_CurConfig.c_NodeIds.size() == rc_CurConfig.c_BusIds.size());
-         tgl_assert(rc_CurConfig.c_NodeIds.size() == rc_CurConfig.c_CanBitrates.size());
-         // No bus-id in STW flashloader protocol.
-         // We can change only the connected bus interface with the STW flashloader
-         tgl_assert(rc_CurConfig.c_BusIds.size() == 1);
-
-         if ((rc_CurConfig.c_SerialNumber.q_ExtFormatUsed == false) && // STW Flashloader must be standard format
-             (rc_CurConfig.c_NodeIds.size() == rc_CurConfig.c_BusIds.size()) &&
-             (rc_CurConfig.c_NodeIds.size() == rc_CurConfig.c_CanBitrates.size()) &&
-             (rc_CurConfig.c_BusIds.size() == 1))
-         {
-            uint8_t u8_LocalId;
-            // ** perform "node_wakeup(serial_number)"
-            // ** perform "node_companyid(Y*)"
-            s32_Return = this->mpc_ComDriver->SendStwWakeupLocalSerialNumber(rc_CurConfig.c_SerialNumber, u8_LocalId);
-
-            if (s32_Return == C_NO_ERR)
-            {
-               // The request needs the old identifier
-               c_ServerId.u8_NodeIdentifier = u8_LocalId;
-
-               // ** perform "SetLocalId(newnodeid)"
-               s32_Return = this->mpc_ComDriver->SendStwSetLocalId(c_ServerId, rc_CurConfig.c_NodeIds[0]);
-
-               // Send state with new node id
-               this->m_RunConfCanStwFlashloaderDevicesState(hu32_SETNODEID, s32_Return,
-                                                            C_OscProtocolDriverOsyNode(c_ServerId.u8_BusIdentifier,
-                                                                                       rc_CurConfig.c_NodeIds[0]));
-
-               if (s32_Return != C_NO_ERR)
-               {
-                  osc_write_log_error("Configure CAN STW Flashloader devices",
-                                      "STW Flashloader set new local id failed with error: " +
-                                      C_SclString::IntToStr(s32_Return));
-               }
-            }
-            else
-            {
-               osc_write_log_error("Configure CAN STW Flashloader devices",
-                                   "STW Flashloader wakeup with serial number failed with error: " +
-                                   C_SclString::IntToStr(s32_Return));
-            }
-         }
-         else
-         {
-            s32_Return = C_RANGE;
-            osc_write_log_error("Configure CAN STW Flashloader devices",
-                                "device configuration is invalid.");
-         }
-
-         if (s32_Return != C_NO_ERR)
-         {
-            break;
-         }
-      }
-
-      // In the second step, adapt all bitrates
-      if (s32_Return == C_NO_ERR)
-      {
-         for (u32_DeviceCounter = 0U; u32_DeviceCounter < this->mc_DeviceConfiguration.size(); ++u32_DeviceCounter)
-         {
-            uint8_t u8_LocalId;
-            const C_SyvDcDeviceConfiguation & rc_CurConfig = this->mc_DeviceConfiguration[u32_DeviceCounter];
-
-            // Progress calculation for sequence 50% - 100%
-            this->m_RunConfCanStwFlashloaderDevicesProgress(
-               50U + ((u32_DeviceCounter * 50U) / static_cast<uint32_t>(this->mc_DeviceConfiguration.size())));
-
-            // ** perform "node_wakeup(serial_number)"
-            // ** perform "node_companyid(Y*)"
-            s32_Return = this->mpc_ComDriver->SendStwWakeupLocalSerialNumber(rc_CurConfig.c_SerialNumber, u8_LocalId);
-
-            if (s32_Return == C_NO_ERR)
-            {
-               // Use the new local id
-               c_ServerId.u8_NodeIdentifier = u8_LocalId;
-
-               // ** perform "SetBitrateCan(newbitrate)"
-               s32_Return = this->mpc_ComDriver->SendStwSetBitrateCan(c_ServerId,
-                                                                      rc_CurConfig.c_CanBitrates[0]);
-
-               this->m_RunConfCanStwFlashloaderDevicesState(hu32_SETCANBITRATE, s32_Return, c_ServerId);
-
-               if (s32_Return != C_NO_ERR)
-               {
-                  osc_write_log_error("Configure CAN STW Flashloader devices",
-                                      "STW Flashloader set new bitrate failed with error: " +
-                                      C_SclString::IntToStr(s32_Return));
-               }
-            }
-            else
-            {
-               osc_write_log_error("Configure CAN STW Flashloader devices",
-                                   "STW Flashloader wakeup with serial number failed with error: " +
-                                   C_SclString::IntToStr(s32_Return));
-            }
-
-            if (s32_Return != C_NO_ERR)
-            {
-               break;
-            }
-         }
-      }
-   }
-
-   if (s32_Return == C_NO_ERR)
-   {
-      osc_write_log_info("Configure CAN STW Flashloader devices", "Sequence finished");
-      this->m_RunConfCanStwFlashloaderDevicesProgress(100U);
    }
 
    return s32_Return;
@@ -3894,87 +3358,6 @@ int32_t C_SyvDcSequences::m_ReadBack(void)
          }
       }
 
-      if (s32_Return == C_NO_ERR)
-      {
-         // * for all STW flashloader nodes:
-         for (u32_DeviceCounter = 0U; u32_DeviceCounter < this->mc_StwIds.size(); ++u32_DeviceCounter)
-         {
-            C_OscDcDeviceInformation c_StwInfo;
-            stw::opensyde_core::C_OscProtocolDriverOsyNode & rc_StwServerId = this->mc_StwIds[u32_DeviceCounter];
-
-            c_StwInfo.SetNodeId(rc_StwServerId.u8_NodeIdentifier);
-
-            // ** perform "node_wakeup(localId)"
-            // ** perform "node_companyid(Y*)"
-            s32_Return = this->mpc_ComDriver->SendStwWakeupLocalId(rc_StwServerId, NULL);
-
-            if (s32_Return == C_NO_ERR)
-            {
-               uint8_t u8_NodesFound = 0U;
-               uint8_t au8_SerialNumber[6];
-               C_OscProtocolSerialNumber c_SerialNumber;
-
-               // ** perform "get_serial_number"
-               s32_Return = this->mpc_ComDriver->SendStwGetSerialNumbers(rc_StwServerId, &au8_SerialNumber[0],
-                                                                         1, u8_NodesFound);
-
-               if ((s32_Return == C_NO_ERR) &&
-                   (u8_NodesFound == 1U))
-               {
-                  C_SclString c_StwDeviceName;
-
-                  c_SerialNumber.SetPosSerialNumber(au8_SerialNumber);
-                  c_StwInfo.SetSerialNumber(c_SerialNumber);
-
-                  // ** perform "get_device_id"
-                  s32_Return = this->mpc_ComDriver->SendStwGetDeviceId(rc_StwServerId, c_StwDeviceName);
-
-                  if (s32_Return == C_NO_ERR)
-                  {
-                     c_StwInfo.SetDeviceName(c_StwDeviceName);
-
-                     // All information for device ready
-                     this->mc_DeviceInfoResult.push_back(c_StwInfo);
-                  }
-                  else
-                  {
-                     osc_write_log_error("Read back devices",
-                                         "STW Flashloader get device id failed with error: " +
-                                         C_SclString::IntToStr(s32_Return));
-                  }
-               }
-               else
-               {
-                  C_SclString c_Text;
-                  c_Text.PrintFormatted("STW Flashloader get serial number failed with error: %d "
-                                        "(Number of nodes found : %d", s32_Return, u8_NodesFound);
-                  osc_write_log_error("Read back CAN devices", c_Text);
-               }
-            }
-            else
-            {
-               osc_write_log_error("Read back devices",
-                                   "STW Flashloader node wakeup failed with error: " +
-                                   C_SclString::IntToStr(s32_Return));
-            }
-
-            if (s32_Return != C_NO_ERR)
-            {
-               // Remapping of error codes to openSYDE service interpretation
-               if (s32_Return == C_COM)
-               {
-                  // C_COM              no response from server
-                  s32_Return = C_TIMEOUT;
-               }
-               if (s32_Return == C_NOACT)
-               {
-                  // C_NOACT            error response from server
-                  s32_Return = C_WARN;
-               }
-               break;
-            }
-         }
-      }
    }
 
    if (s32_Return == C_NO_ERR)

@@ -574,10 +574,13 @@ int32_t C_OscNodeFiler::mh_LoadProperties(C_OscNodeProperties & orc_NodeProperti
          s32_Retval = mh_LoadOsyServerSettings(orc_NodeProperties.c_OpenSydeServerSettings, orc_XmlParser);
       }
 
-      //Flashloader settings
+      //Flashloader settings (legacy STW Flashloader; ignore if present in old projects)
       if (s32_Retval == C_NO_ERR)
       {
-         s32_Retval = mh_LoadStwFlashloaderOptions(orc_NodeProperties.c_StwFlashloaderSettings, orc_XmlParser);
+         if (orc_XmlParser.SelectNodeChild("stw-flashloader-settings") == "stw-flashloader-settings")
+         {
+            tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
+         }
       }
 
       //Code export settings
@@ -643,9 +646,6 @@ void C_OscNodeFiler::mh_SaveProperties(const C_OscNodeProperties & orc_NodePrope
    //openSYDE server settings
    mh_SaveOsyServerSettings(orc_NodeProperties.c_OpenSydeServerSettings, orc_XmlParser);
 
-   //Flashloader options
-   mh_SaveStwFlashloaderOptions(orc_NodeProperties.c_StwFlashloaderSettings, orc_XmlParser);
-
    //Code export settings
    orc_XmlParser.CreateAndSelectNodeChild("code-export-settings");
    orc_XmlParser.CreateNodeChild("scaling-support",
@@ -657,149 +657,6 @@ void C_OscNodeFiler::mh_SaveProperties(const C_OscNodeProperties & orc_NodePrope
 
    //Return
    tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node STW flashloader settings
-
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to "properties"
-   post-condition: the passed XML parser has the active node set to the same "properties"
-
-   \param[out]     orc_StwFlashloaderSettings   data storage
-   \param[in,out]  orc_XmlParser                XML with core active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadStwFlashloaderOptions(C_OscNodeStwFlashloaderSettings & orc_StwFlashloaderSettings,
-                                                     C_OscXmlParserBase & orc_XmlParser)
-{
-   int32_t s32_Retval = C_NO_ERR;
-
-   if (orc_XmlParser.SelectNodeChild("stw-flashloader-settings") == "stw-flashloader-settings")
-   {
-      if (orc_XmlParser.SelectNodeChild("reset-message") == "reset-message")
-      {
-         if (orc_XmlParser.AttributeExists("active") == true)
-         {
-            orc_StwFlashloaderSettings.q_ResetMessageActive = orc_XmlParser.GetAttributeBool("active");
-         }
-         else
-         {
-            osc_write_log_error("Loading node definition",
-                                "Could not find \"active\" attribute in \"reset-message\" node.");
-            s32_Retval = C_CONFIG;
-         }
-         if (orc_XmlParser.AttributeExists("extended") == true)
-         {
-            orc_StwFlashloaderSettings.q_ResetMessageExtendedId = orc_XmlParser.GetAttributeBool("extended");
-         }
-         else
-         {
-            orc_StwFlashloaderSettings.q_ResetMessageExtendedId = false;
-         }
-         if (orc_XmlParser.AttributeExists("id") == true)
-         {
-            orc_StwFlashloaderSettings.u32_ResetMessageId = orc_XmlParser.GetAttributeUint32("id");
-         }
-         else
-         {
-            orc_StwFlashloaderSettings.u32_ResetMessageId = 0;
-         }
-         if (orc_XmlParser.AttributeExists("dlc") == true)
-         {
-            orc_StwFlashloaderSettings.u8_ResetMessageDlc =
-               static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("dlc"));
-         }
-         else
-         {
-            orc_StwFlashloaderSettings.u8_ResetMessageDlc = 8;
-         }
-         orc_StwFlashloaderSettings.c_Data.clear();
-         if (orc_XmlParser.SelectNodeChild("data-bytes") == "data-bytes")
-         {
-            C_SclString c_CurNode = orc_XmlParser.SelectNodeChild("data-byte");
-            if (c_CurNode == "data-byte")
-            {
-               do
-               {
-                  if (orc_XmlParser.AttributeExists("value") == true)
-                  {
-                     const uint8_t u8_DataByte = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("value"));
-                     orc_StwFlashloaderSettings.c_Data.push_back(u8_DataByte);
-                  }
-                  else
-                  {
-                     osc_write_log_error("Loading node definition",
-                                         "Could not find \"value\" attribute in \"data-byte\" node.");
-                     s32_Retval = C_CONFIG;
-                  }
-                  c_CurNode = orc_XmlParser.SelectNodeNext("data-byte");
-               }
-               while ((c_CurNode == "data-byte") && (s32_Retval == C_NO_ERR));
-               //Return
-               tgl_assert(orc_XmlParser.SelectNodeParent() == "data-bytes");
-            }
-            //Return
-            tgl_assert(orc_XmlParser.SelectNodeParent() == "reset-message");
-         }
-         //Return
-         tgl_assert(orc_XmlParser.SelectNodeParent() == "stw-flashloader-settings");
-      }
-      else
-      {
-         osc_write_log_error("Loading node definition", "Could not find \"reset-message\" node.");
-         s32_Retval = C_CONFIG;
-      }
-      //Return
-      tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
-   }
-   else
-   {
-      osc_write_log_error("Loading node definition", "Could not find \"stw-flashloader-settings\" node.");
-      s32_Retval = C_CONFIG;
-   }
-   return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node STW flashloader settings
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to "properties"
-   post-condition: the passed XML parser has the active node set to the same "properties"
-
-   \param[in]      orc_StwFlashloaderSettings   data storage
-   \param[in,out]  orc_XmlParser                XML with core active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeFiler::mh_SaveStwFlashloaderOptions(const C_OscNodeStwFlashloaderSettings & orc_StwFlashloaderSettings,
-                                                  C_OscXmlParserBase & orc_XmlParser)
-{
-   orc_XmlParser.CreateAndSelectNodeChild("stw-flashloader-settings");
-   orc_XmlParser.CreateAndSelectNodeChild("reset-message");
-   orc_XmlParser.SetAttributeBool("active", orc_StwFlashloaderSettings.q_ResetMessageActive);
-   orc_XmlParser.SetAttributeBool("extended", orc_StwFlashloaderSettings.q_ResetMessageExtendedId);
-   orc_XmlParser.SetAttributeUint32("id", orc_StwFlashloaderSettings.u32_ResetMessageId);
-   orc_XmlParser.SetAttributeUint32("dlc", static_cast<uint32_t>(orc_StwFlashloaderSettings.u8_ResetMessageDlc));
-   orc_XmlParser.CreateAndSelectNodeChild("data-bytes");
-   for (uint32_t u32_ItDataByte = 0; u32_ItDataByte < orc_StwFlashloaderSettings.c_Data.size(); ++u32_ItDataByte)
-   {
-      orc_XmlParser.CreateAndSelectNodeChild("data-byte");
-      orc_XmlParser.SetAttributeUint32("value",
-                                       static_cast<uint32_t>(orc_StwFlashloaderSettings.c_Data[u32_ItDataByte]));
-      //Return
-      tgl_assert(orc_XmlParser.SelectNodeParent() == "data-bytes");
-   }
-   //Return
-   tgl_assert(orc_XmlParser.SelectNodeParent() == "reset-message");
-   //Return
-   tgl_assert(orc_XmlParser.SelectNodeParent() == "stw-flashloader-settings");
-   //Return
-   tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2072,9 +1929,6 @@ C_SclString C_OscNodeFiler::mh_FlashLoaderToString(const C_OscNodeProperties::E_
    case C_OscNodeProperties::eFL_OPEN_SYDE:
       c_Retval = "open-syde";
       break;
-   case C_OscNodeProperties::eFL_STW:
-      c_Retval = "stw";
-      break;
    case C_OscNodeProperties::eFL_NONE:
       c_Retval = "none";
       break;
@@ -2103,7 +1957,8 @@ int32_t C_OscNodeFiler::mh_StringToFlashLoader(const C_SclString & orc_String,
 
    if (orc_String == "stw")
    {
-      ore_Type = C_OscNodeProperties::eFL_STW;
+      // Legacy STW Flashloader entry; silently demote to "none"
+      ore_Type = C_OscNodeProperties::eFL_NONE;
    }
    else if (orc_String == "open-syde")
    {

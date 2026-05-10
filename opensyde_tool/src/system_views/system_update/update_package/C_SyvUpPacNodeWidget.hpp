@@ -88,7 +88,6 @@ public:
    uint32_t GetPositionNumber(void) const;
 
    bool IsFileBased(void) const;
-   bool IsStwFlashloader(void) const;
 
    int32_t GetUpdatePackage(stw::opensyde_core::C_OscSuSequences::C_DoFlash & orc_ApplicationsToWrite,
                             stw::opensyde_core::C_OscSuSequences::C_DoFlash * const opc_AllApplications);
@@ -116,7 +115,6 @@ private:
 
    bool mq_FileBased;
    bool mq_NvmHalcBased;
-   bool mq_StwFlashloader;
    bool mq_Connected;
    bool mq_EmptyOptionalSectionsVisible;
    bool mq_ShowAddSecurityButton;

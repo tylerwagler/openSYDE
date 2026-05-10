@@ -554,8 +554,6 @@ int32_t C_SyvUpUpdateWidget::m_InitSequence(void)
               &C_SyvUpUpdateWidget::m_ReportProgressForServer, Qt::QueuedConnection);
       connect(this->mpc_UpSequences, &C_SyvUpSequences::SigReportOpenSydeFlashloaderInformationRead, this,
               &C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead);
-      connect(this->mpc_UpSequences, &C_SyvUpSequences::SigReportStwFlashloaderInformationRead, this,
-              &C_SyvUpUpdateWidget::m_ReportStwFlashloaderInformationRead);
    }
 
    if (this->mpc_UpSequences->IsInitialized() == false)
@@ -670,8 +668,6 @@ void C_SyvUpUpdateWidget::m_CleanUpSequence(void)
                  &C_SyvUpUpdateWidget::m_ReportProgressForServer);
       disconnect(this->mpc_UpSequences, &C_SyvUpSequences::SigReportOpenSydeFlashloaderInformationRead, this,
                  &C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead);
-      disconnect(this->mpc_UpSequences, &C_SyvUpSequences::SigReportStwFlashloaderInformationRead, this,
-                 &C_SyvUpUpdateWidget::m_ReportStwFlashloaderInformationRead);
 
       delete mpc_UpSequences;
       this->mpc_UpSequences = NULL;
@@ -889,7 +885,6 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
          {
          case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_TRANSFER_START: // The normal flash progress
          case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_TRANSFER_START:     // The normal flash progress
-         case C_OscSuSequences::eXFL_PROGRESS:                                         // The normal flash progress
             if (ou8_Progress != 0xFF)
             {
                this->mpc_Ui->pc_WiUpdateInformation->SetNodeProgress(u32_NodeIndex, ou8_Progress);
@@ -1081,58 +1076,6 @@ void C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead(void)
 
       // Check for problems
       this->m_CheckOpenSydeFlashloaderInformation(c_NodeIndexes, c_DeviceInformation);
-
-      //Signal scene
-      if (this->mpc_Scene != NULL)
-      {
-         this->mpc_Scene->UpdateDeviceInformation(c_NodeIndexes, c_Devices);
-      }
-      // Signal update package
-      this->mpc_Ui->pc_WiUpdateInformation->UpdateDeviceInformation(c_NodeIndexes, c_Devices);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Reporting slot for read STW flashloader information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpUpdateWidget::m_ReportStwFlashloaderInformationRead(void)
-{
-   if (this->mpc_UpSequences != NULL)
-   {
-      std::vector<uint32_t> c_NodeIndexes;
-      std::vector<C_OscSuSequences::C_XflDeviceInformation> c_DeviceInformation;
-      std::vector<C_SyvUpDeviceInfo> c_Devices;
-      uint32_t u32_Counter;
-
-      this->mpc_UpSequences->GetXflDeviceInformation(c_NodeIndexes, c_DeviceInformation);
-
-      for (u32_Counter = 0U; u32_Counter < c_NodeIndexes.size(); ++u32_Counter)
-      {
-         C_SclStringList c_Strings;
-
-         this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText(
-                                    "STW Flashloader device information found for node with index %1")).arg(
-               c_NodeIndexes[u32_Counter]));
-
-         C_OscSuSequences::h_StwFlashloaderInformationToText(c_DeviceInformation[u32_Counter], c_Strings);
-
-         for (uint32_t u32_StringIndex = 0U; u32_StringIndex < c_Strings.GetCount(); u32_StringIndex++)
-         {
-            this->m_UpdateReportText(c_Strings.Strings[u32_StringIndex].c_str());
-         }
-      }
-
-      //Convert to same basic class
-      c_Devices.reserve(c_DeviceInformation.size());
-      for (uint32_t u32_ItDevice = 0; u32_ItDevice < c_DeviceInformation.size(); ++u32_ItDevice)
-      {
-         C_SyvUpDeviceInfo c_NewDevice;
-         const C_OscSuSequences::C_XflDeviceInformation & rc_Info = c_DeviceInformation[u32_ItDevice];
-         c_NewDevice.pc_StwDevice = &rc_Info;
-         c_Devices.push_back(c_NewDevice);
-      }
 
       //Signal scene
       if (this->mpc_Scene != NULL)
@@ -2687,7 +2630,7 @@ bool C_SyvUpUpdateWidget::mh_IsConnectionStart(const C_OscSuSequences::E_Progres
 {
    bool q_Retval;
 
-   if (oe_Step == C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_XFL_BC_PING_START)
+   if (oe_Step == C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_BC_PING_START)
    {
       q_Retval = true;
    }
@@ -2715,7 +2658,6 @@ bool C_SyvUpUpdateWidget::mh_IsConnectionSuccess(const C_OscSuSequences::E_Progr
    switch (oe_Step) //lint !e788 //we do not handle all steps here
    {
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FINISHED:
-   case C_OscSuSequences::eREAD_DEVICE_INFO_XFL_FINISHED:
       q_Retval = true;
       break;
    default:
@@ -2743,12 +2685,9 @@ bool C_SyvUpUpdateWidget::mh_IsConnectionFailure(const C_OscSuSequences::E_Progr
    {
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_ECU_RESET_ERROR:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_XFL_ECU_RESET_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_BC_ENTER_PRE_PROGRAMMING_ERROR:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_XFL_BC_FLASH_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_RECONNECT_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_XFL_WAKEUP_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_ROUTING_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_ROUTING_AVAILABLE_FEATURE_ERROR:
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_RECONNECT_ERROR:
@@ -2758,8 +2697,6 @@ bool C_SyvUpUpdateWidget::mh_IsConnectionFailure(const C_OscSuSequences::E_Progr
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_ERROR:
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FLASHLOADER_INFO_ERROR:
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FLASHLOADER_CHECK_DEBUGGER_ACTIVATION_ERROR:
-   case C_OscSuSequences::eREAD_DEVICE_INFO_XFL_WAKEUP_ERROR:
-   case C_OscSuSequences::eREAD_DEVICE_INFO_XFL_READING_INFORMATION_ERROR:
       q_Retval = true;
       break;
    default:
@@ -2790,7 +2727,6 @@ bool C_SyvUpUpdateWidget::mh_IsUpdateAppStart(const C_OscSuSequences::E_Progress
    {
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_START:  // Application start state
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_START: // Application start state
-   case C_OscSuSequences::eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_START:  // Application start state
       q_Retval = true;
       orq_IsParam = false;
       orq_IsPemFile = false;
@@ -2835,7 +2771,6 @@ bool C_SyvUpUpdateWidget::mh_IsUpdateAppSuccess(const C_OscSuSequences::E_Progre
    {
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_FINISHED:  // Finished application state
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_FINISHED: // Finished application state
-   case C_OscSuSequences::eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_FINISHED:  // Finished application state
       orq_IsParam = false;
       q_Retval = true;
       orq_IsPemFile = false;
@@ -2876,7 +2811,6 @@ bool C_SyvUpUpdateWidget::mh_IsUpdateNodeStart(const C_OscSuSequences::E_Progres
    switch (oe_Step) //lint !e788 //we do not handle all steps here
    {
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_START: // Application start state
-   case C_OscSuSequences::eUPDATE_SYSTEM_XFL_NODE_START: // Application start state
       q_Retval = true;
       break;
    default:
@@ -2903,7 +2837,6 @@ bool C_SyvUpUpdateWidget::mh_IsUpdateNodeSuccess(const C_OscSuSequences::E_Progr
    switch (oe_Step) //lint !e788 //we do not handle all steps here
    {
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_FINISHED: // Finished application state
-   case C_OscSuSequences::eUPDATE_SYSTEM_XFL_NODE_FINISHED: // Finished application state
       q_Retval = true;
       break;
    default:
@@ -2964,7 +2897,6 @@ bool C_SyvUpUpdateWidget::mh_IsUpdateFailure(const C_OscSuSequences::E_ProgressS
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_STATE_TRAFFIC_ENCRYPTION_WRITE_AVAILABLE_FEATURE_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_STATE_DEBUGGER_WRITE_SEND_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_STATE_DEBUGGER_WRITE_AVAILABLE_FEATURE_ERROR:
-   case C_OscSuSequences::eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_ERROR:
       q_Retval = true;
       break;
    default:

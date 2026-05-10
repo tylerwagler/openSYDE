@@ -356,32 +356,6 @@ void C_SyvUpSequences::GetOsyDeviceInformation(std::vector<uint32_t> & orc_OsyNo
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Returns the reported results of StartReadDeviceInformation for STW Flashloader nodes
-
-   If the both vectors have a different size an tgl assert will be reported.
-   After reading the information, the vectors will be cleared.
-
-   \param[out]    orc_XflNodeIndexes         All node indexes
-   \param[out]    orc_XflDeviceInformation   All device information associated to the node index in the same order
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpSequences::GetXflDeviceInformation(std::vector<uint32_t> & orc_XflNodeIndexes,
-                                               std::vector<C_OscSuSequences::C_XflDeviceInformation> & orc_XflDeviceInformation)
-{
-   this->mc_Lock.lock();
-
-   tgl_assert(this->mc_ReportXflDeviceInformationNodeIndex.size() == this->mc_ReportXflDeviceInformation.size());
-
-   // Copy all elements
-   orc_XflNodeIndexes = this->mc_ReportXflDeviceInformationNodeIndex;
-   orc_XflDeviceInformation = this->mc_ReportXflDeviceInformation;
-   this->mc_ReportXflDeviceInformationNodeIndex.clear();
-   this->mc_ReportXflDeviceInformation.clear();
-
-   this->mc_Lock.unlock();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Returns the name of the current step
 
    \param[in]     oe_Step         Step of node configuration
@@ -411,22 +385,15 @@ QString C_SyvUpSequences::GetStepName(const E_ProgressStep oe_Step) const
    case eACTIVATE_FLASHLOADER_OSY_ECU_RESET_ERROR:
       c_Text = C_GtGetText::h_GetText("Activate Flashloader: ECU reset error");
       break;
-   case eACTIVATE_FLASHLOADER_XFL_ECU_RESET_WARNING:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: No ECU reset message configured");
-      break;
-   case eACTIVATE_FLASHLOADER_XFL_ECU_RESET_ERROR:
       c_Text = C_GtGetText::h_GetText("Activate Flashloader: Sending ECU reset request error");
       break;
-   case eACTIVATE_FLASHLOADER_OSY_XFL_BC_ENTER_FLASHLOADER_START:
+   case eACTIVATE_FLASHLOADER_OSY_BC_ENTER_FLASHLOADER_START:
       c_Text = C_GtGetText::h_GetText("Activate Flashloader: Broadcast enter Flashloader start");
       break;
    case eACTIVATE_FLASHLOADER_OSY_BC_ENTER_PRE_PROGRAMMING_ERROR:
       c_Text = C_GtGetText::h_GetText("Activate Flashloader: Broadcast enter pre programming error");
       break;
-   case eACTIVATE_FLASHLOADER_XFL_BC_FLASH_ERROR:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Broadcast \"FLASH\" error");
-      break;
-   case eACTIVATE_FLASHLOADER_OSY_XFL_BC_PING_START:
+   case eACTIVATE_FLASHLOADER_OSY_BC_PING_START:
       c_Text = C_GtGetText::h_GetText("Activate Flashloader: Ping devices start");
       break;
    case eACTIVATE_FLASHLOADER_OSY_RECONNECT_WARNING:
@@ -437,9 +404,6 @@ QString C_SyvUpSequences::GetStepName(const E_ProgressStep oe_Step) const
       break;
    case eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR:
       c_Text = C_GtGetText::h_GetText("Activate Flashloader: Set session error");
-      break;
-   case eACTIVATE_FLASHLOADER_XFL_WAKEUP_ERROR:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Perform wakeup error");
       break;
    case eACTIVATE_FLASHLOADER_ROUTING_START:
       c_Text = C_GtGetText::h_GetText("Activate Flashloader: Start routing");
@@ -501,21 +465,9 @@ QString C_SyvUpSequences::GetStepName(const E_ProgressStep oe_Step) const
    case eREAD_DEVICE_INFO_OSY_FINISHED:
       c_Text = C_GtGetText::h_GetText("Read openSYDE Device Information: Finished");
       break;
-   case eREAD_DEVICE_INFO_XFL_START:
-      c_Text = C_GtGetText::h_GetText("Read STW Flashloader Device Information: Started");
-      break;
-   case eREAD_DEVICE_INFO_XFL_FINISHED:
       c_Text = C_GtGetText::h_GetText("Read STW Flashloader Device Information: Finished");
       break;
-   case eREAD_DEVICE_INFO_XFL_WAKEUP_ERROR:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Connection with STW Flashloader device failed");
-      break;
-   case eREAD_DEVICE_INFO_XFL_READING_INFORMATION_START:
       c_Text = C_GtGetText::h_GetText("Read Device Information: Start");
-      break;
-   case eREAD_DEVICE_INFO_XFL_READING_INFORMATION_ERROR:
-      c_Text =
-         C_GtGetText::h_GetText("Read Device Information: Could not read information from STW Flashloader device");
       break;
    case eUPDATE_SYSTEM_START:
       c_Text = C_GtGetText::h_GetText("Update System: Start");
@@ -725,22 +677,10 @@ QString C_SyvUpSequences::GetStepName(const E_ProgressStep oe_Step) const
    case eUPDATE_SYSTEM_FINISHED:
       c_Text = C_GtGetText::h_GetText("Update System: Finished");
       break;
-   case eUPDATE_SYSTEM_XFL_NODE_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash start");
-      break;
-   case eUPDATE_SYSTEM_XFL_NODE_FINISHED:
       c_Text = C_GtGetText::h_GetText("Update System: Node flash finished");
       break;
-   case eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash of HEX file start");
-      break;
-   case eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_ERROR:
       c_Text = C_GtGetText::h_GetText("Update System: Node flash of HEX file error");
       break;
-   case eXFL_PROGRESS: //wrapped progress information from STW flashloader driver
-      c_Text = C_GtGetText::h_GetText("Update System: STW Flashloader status");
-      break;
-   case eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_FINISHED:
       c_Text = C_GtGetText::h_GetText("Update System: Node flash of HEX file finished");
       break;
    case eRESET_SYSTEM_START:
@@ -809,8 +749,6 @@ int32_t C_SyvUpSequences::StartReadDeviceInformation(void)
    {
       this->mc_ReportOsyDeviceInformationNodeIndex.clear();
       this->mc_ReportOsyDeviceInformation.clear();
-      this->mc_ReportXflDeviceInformationNodeIndex.clear();
-      this->mc_ReportXflDeviceInformation.clear();
       this->mq_AbortFlag = false;
 
       this->me_Sequence = eREAD_DEVICE_INFORMATION;
@@ -971,8 +909,6 @@ bool C_SyvUpSequences::m_ReportProgress(const E_ProgressStep oe_Step, const int3
 {
    C_SclString c_Text;
 
-   if ((oe_Step != C_SyvUpSequences::eXFL_PROGRESS) ||
-       (orc_Information.Pos(TGL_LoadStr(STR_FDL_TXT_WR_FLASH_RQ)) == 0))
    {
       c_Text =  ("Step: " + this->GetStepName(oe_Step)).toStdString().c_str();
       c_Text += " Progress: " + C_SclString::IntToStr(ou8_Progress);
@@ -1010,8 +946,6 @@ bool C_SyvUpSequences::m_ReportProgress(const E_ProgressStep oe_Step, const int3
 {
    C_SclString c_Text;
 
-   if ((oe_Step != C_SyvUpSequences::eXFL_PROGRESS) ||
-       (orc_Information.Pos(TGL_LoadStr(STR_FDL_TXT_WR_FLASH_RQ)) == 0))
    {
       c_Text =  ("Step: " + this->GetStepName(oe_Step)).toStdString().c_str();
       c_Text += " Progress: " + C_SclString::IntToStr(ou8_Progress);
@@ -1052,29 +986,6 @@ void C_SyvUpSequences::m_ReportOpenSydeFlashloaderInformationRead(const C_OsyDev
    this->mc_Lock.unlock();
 
    Q_EMIT (this->SigReportOpenSydeFlashloaderInformationRead());
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Reports information read from STW Flashloader server node
-
-   Called by ReadDeviceInformation() after it has read information from an STW Flashloader node.
-   Here: save device information
-
-   \param[in]     orc_Info          Information read from node
-   \param[in]     ou32_NodeIndex   Index of node within mpc_SystemDefinition
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpSequences::m_ReportStwFlashloaderInformationRead(const C_XflDeviceInformation & orc_Info,
-                                                             const uint32_t ou32_NodeIndex)
-{
-   // Save the device information
-   // Using the signals only for primitive data types when using multi-threading
-   this->mc_Lock.lock();
-   this->mc_ReportXflDeviceInformationNodeIndex.push_back(ou32_NodeIndex);
-   this->mc_ReportXflDeviceInformation.push_back(orc_Info);
-   this->mc_Lock.unlock();
-
-   Q_EMIT (this->SigReportStwFlashloaderInformationRead());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1149,12 +1060,9 @@ void C_SyvUpSequences::mh_WriteLog(const C_OscSuSequences::E_ProgressStep oe_Ste
    {
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_ECU_RESET_ERROR:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_XFL_ECU_RESET_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_BC_ENTER_PRE_PROGRAMMING_ERROR:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_XFL_BC_FLASH_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_RECONNECT_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR:
-   case C_OscSuSequences::eACTIVATE_FLASHLOADER_XFL_WAKEUP_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_ROUTING_ERROR:
    case C_OscSuSequences::eACTIVATE_FLASHLOADER_ROUTING_AVAILABLE_FEATURE_ERROR:
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_RECONNECT_ERROR:
@@ -1164,8 +1072,6 @@ void C_SyvUpSequences::mh_WriteLog(const C_OscSuSequences::E_ProgressStep oe_Ste
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_ERROR:
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FLASHLOADER_INFO_ERROR:
    case C_OscSuSequences::eREAD_DEVICE_INFO_OSY_FLASHLOADER_CHECK_DEBUGGER_ACTIVATION_ERROR:
-   case C_OscSuSequences::eREAD_DEVICE_INFO_XFL_WAKEUP_ERROR:
-   case C_OscSuSequences::eREAD_DEVICE_INFO_XFL_READING_INFORMATION_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_READ_FEATURE_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_HEX_OPEN_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_HEX_SIGNATURE_ERROR:
@@ -1201,7 +1107,6 @@ void C_SyvUpSequences::mh_WriteLog(const C_OscSuSequences::E_ProgressStep oe_Ste
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_STATE_TRAFFIC_ENCRYPTION_WRITE_SEND_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_STATE_TRAFFIC_ENCRYPTION_WRITE_AVAILABLE_FEATURE_ERROR:
    case C_OscSuSequences::eUPDATE_SYSTEM_OSY_NODE_STATE_DEBUGGER_WRITE_AVAILABLE_FEATURE_ERROR:
-   case C_OscSuSequences::eUPDATE_SYSTEM_XFL_NODE_FLASH_HEX_ERROR:
    case C_OscSuSequences::eRESET_SYSTEM_OSY_NODE_ERROR:
    case C_OscSuSequences::eRESET_SYSTEM_OSY_ROUTED_NODE_ERROR:
       osc_write_log_error("Update Node", orc_Text);
