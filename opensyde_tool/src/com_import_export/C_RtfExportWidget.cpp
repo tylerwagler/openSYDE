@@ -354,7 +354,7 @@ int32_t C_RtfExportWidget::ExportToRtf(const C_SclString & orc_RtfPath, const C_
    QDir c_DirDocuCreatorTmp(c_DocuCreatorPath);
    tgl_assert(c_DirDocuCreatorTmp.cdUp() == true);                      // go one directory up
    c_DocuCreatorPath = c_DirDocuCreatorTmp.absolutePath();              // get current path
-   c_DocuCreatorPath += "/connectors/DocuCreator/osy_docu_creator.exe"; // add DocuCreator location
+   c_DocuCreatorPath += "/connectors/DocuCreator/" + C_Uti::h_GetExeBasename("osy_docu_creator");
    const C_SclString c_SclStringDocuCreatorPath = c_DocuCreatorPath.toStdString().c_str();
    C_SclString c_SclStringDocuCreatorConfigPath = c_DirDocuCreatorTmp.absolutePath().toStdString().c_str();
    c_SclStringDocuCreatorConfigPath += "/connectors/DocuCreator/config.xml";

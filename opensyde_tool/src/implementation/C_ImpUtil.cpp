@@ -562,7 +562,7 @@ int32_t C_ImpUtil::h_OpenIde(const QString & orc_IdeExeCall)
 //----------------------------------------------------------------------------------------------------------------------
 QString C_ImpUtil::h_GetSydeCoderCePath()
 {
-   return "../connectors/syde_coder_c/osy_syde_coder_c.exe";
+   return "../connectors/syde_coder_c/" + C_Uti::h_GetExeBasename("osy_syde_coder_c");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -574,7 +574,7 @@ QString C_ImpUtil::h_GetSydeCoderCePath()
 //----------------------------------------------------------------------------------------------------------------------
 QString C_ImpUtil::h_GetSydeXgenPath(void)
 {
-   return "../connectors/syde_x_gen/syde_x_gen.exe";
+   return "../connectors/syde_x_gen/" + C_Uti::h_GetExeBasename("syde_x_gen");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -1827,18 +1827,7 @@ void C_SyvUpPacListWidget::m_ShowInExplorer(void) const
    // analogue to Qt Creator functionality "Show in Explorer" but Windows only
    if (this->mpc_SelectedApp != NULL)
    {
-      const QFileInfo c_FileInfo(this->mpc_SelectedApp->GetAppAbsoluteFilePath());
-      if (c_FileInfo.exists() == true)
-      {
-         QStringList c_Param;
-
-         if (c_FileInfo.isDir() == false)
-         {
-            c_Param += QLatin1String("/select,");
-         }
-         c_Param += QDir::toNativeSeparators(c_FileInfo.canonicalFilePath());
-         QProcess::startDetached("explorer.exe", c_Param);
-      }
+      C_Uti::h_RevealInFileManager(this->mpc_SelectedApp->GetAppAbsoluteFilePath());
    }
 }
 

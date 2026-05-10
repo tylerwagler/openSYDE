@@ -54,6 +54,9 @@ public:
                                   const Qt::KeyboardModifier & ore_CheckKeyModifier);
    static bool h_CheckStyleState(const QStyle::State & orc_ActiveState, const QStyle::StateFlag & ore_CheckState);
    static QString h_GetExePath(void);
+   static QString h_GetExeSuffix(void);
+   static QString h_GetExeBasename(const QString & orc_Stem);
+   static bool h_RevealInFileManager(const QString & orc_Path);
    static void h_SetCurrentDirectoryToExeDirectory(void);
    static QString h_GetPemDbPath(void);
    static QString h_GetApplicationVersion(const bool oq_UseStwFormat = true);

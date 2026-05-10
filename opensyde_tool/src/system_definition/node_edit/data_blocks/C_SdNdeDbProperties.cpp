@@ -350,8 +350,8 @@ void C_SdNdeDbProperties::InitStaticNames(void) const
                              "Absolute or relative to *.syde."));
    this->mpc_Ui->pc_LabelCodeGenerator->SetToolTipInformation(
       C_GtGetText::h_GetText("Generator"),
-      C_GtGetText::h_GetText("Location of file generator executable (*.exe / *.bat). "
-                             "Absolute or relative to openSYDE.exe."));
+      C_GtGetText::h_GetText("Location of file generator executable. "
+                             "Absolute or relative to the openSYDE binary."));
    this->mpc_Ui->pc_LabelCodeStructure->SetToolTipInformation(
       C_GtGetText::h_GetText("Structure Version"),
       static_cast<QString>(C_GtGetText::h_GetText(

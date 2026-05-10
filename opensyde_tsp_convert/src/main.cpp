@@ -52,8 +52,12 @@ using namespace stw::opensyde_core;
 static const C_SclString mhc_TOOL_NAME = "osy_tsp_convert";
 // V2 TSPs encode the standard SYDE Coder C as q_IsStandardSydeCoderCe=true with empty c_CodeGeneratorPath.
 // V3 nodes carry an explicit path string (the V2 importer in the GUI resolved it the same way).
-// Mirror C_ImpUtil::h_GetSydeCoderCePath() (opensyde_tool/src/implementation/C_ImpUtil.cpp:565).
+// Mirror C_ImpUtil::h_GetSydeCoderCePath() — Windows uses .exe, every other platform doesn't.
+#ifdef _WIN32
 static const C_SclString mhc_STANDARD_SYDE_CODER_C_PATH = "../connectors/syde_coder_c/osy_syde_coder_c.exe";
+#else
+static const C_SclString mhc_STANDARD_SYDE_CODER_C_PATH = "../connectors/syde_coder_c/osy_syde_coder_c";
+#endif
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 

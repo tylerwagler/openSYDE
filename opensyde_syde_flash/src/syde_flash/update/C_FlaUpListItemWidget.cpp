@@ -363,19 +363,7 @@ void C_FlaUpListItemWidget::m_ShowInExplorer() const
 {
    if (this->pc_HexFileInfo != NULL)
    {
-      const QFileInfo c_FileInfo(this->pc_HexFileInfo->c_HexFileInfo.c_FilePath);
-
-      if (c_FileInfo.exists() == true)
-      {
-         QStringList c_Param;
-
-         if (c_FileInfo.isDir() == false)
-         {
-            c_Param += QLatin1String("/select,");
-         }
-         c_Param += QDir::toNativeSeparators(c_FileInfo.canonicalFilePath());
-         QProcess::startDetached("explorer.exe", c_Param);
-      }
+      C_Uti::h_RevealInFileManager(this->pc_HexFileInfo->c_HexFileInfo.c_FilePath);
    }
 }
 

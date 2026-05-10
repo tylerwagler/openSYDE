@@ -17,8 +17,11 @@
 #include <limits>
 
 #include <QApplication>
+#include <QDir>
 #include <QFileInfo>
+#include <QProcess>
 #include <QStorageInfo>
+#include <QStringList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -531,6 +534,78 @@ bool C_Uti::h_CheckStyleState(const QStyle::State & orc_ActiveState, const QStyl
 QString C_Uti::h_GetExePath(void)
 {
    return QCoreApplication::applicationDirPath();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Platform-correct executable suffix.
+
+   The openSYDE codebase historically hardcoded ".exe" in paths it wrote into project files (sibling
+   tools like syde_coder_c, syde_x_gen, openSYDE_CAN_Monitor). On Linux those binaries have no
+   extension, so the saved paths point at non-existent files.
+
+   \return  ".exe" on Windows, "" on every other platform.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_Uti::h_GetExeSuffix(void)
+{
+#ifdef _WIN32
+   return ".exe";
+#else
+   return "";
+#endif
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Append the platform-correct executable suffix to a binary stem.
+
+   Convenience for sites that previously wrote `"foo.exe"` literally:
+   `h_GetExeBasename("foo")` returns `"foo.exe"` on Windows, `"foo"` elsewhere.
+
+   \param[in]  orc_Stem  Filename without extension.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_Uti::h_GetExeBasename(const QString & orc_Stem)
+{
+   return orc_Stem + C_Uti::h_GetExeSuffix();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Open a file or folder in the platform's file manager.
+
+   On Windows this used to be `QProcess::startDetached("explorer.exe", "/select," + path)`. On Linux
+   xdg-open lacks a file-select equivalent, so we open the parent directory instead. On macOS,
+   `open -R` reveals the file in Finder.
+
+   \param[in]  orc_Path  File or folder to reveal.
+
+   \return     true if the launcher was invoked successfully.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+bool C_Uti::h_RevealInFileManager(const QString & orc_Path)
+{
+   const QFileInfo c_Info(orc_Path);
+
+   if (c_Info.exists() == false)
+   {
+      return false;
+   }
+
+#ifdef _WIN32
+   QStringList c_Args;
+   if (c_Info.isDir() == false)
+   {
+      c_Args += QLatin1String("/select,");
+   }
+   c_Args += QDir::toNativeSeparators(c_Info.canonicalFilePath());
+   return QProcess::startDetached("explorer.exe", c_Args);
+#elif defined(__APPLE__)
+   return QProcess::startDetached("open", QStringList() << "-R" << c_Info.canonicalFilePath());
+#else
+   // xdg-open has no "select this file" verb; open the containing directory instead so the user
+   // can spot the file in their file manager.
+   const QString c_Target = c_Info.isDir() ? c_Info.canonicalFilePath() : c_Info.canonicalPath();
+   return QProcess::startDetached("xdg-open", QStringList() << c_Target);
+#endif
 }
 
 //----------------------------------------------------------------------------------------------------------------------
