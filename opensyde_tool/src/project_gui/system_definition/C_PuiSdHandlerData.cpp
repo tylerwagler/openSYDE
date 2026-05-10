@@ -24,9 +24,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_PuiSdHandlerFiler.hpp"
 #include "C_PuiBsElementsFiler.hpp"
-#include "C_PuiSdHandlerFilerV2.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
-#include "C_OscSystemDefinitionFilerV2.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -94,49 +92,10 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
          {
             if ((u16_FileVersion == 1U) || (u16_FileVersion == 2U))
             {
-               //Deprecated version: reuse same XML parser
-               tgl_assert(c_XmlParser.SelectRoot() == "opensyde-system-definition");
-               tgl_assert(c_XmlParser.SelectNodeChild("nodes") == "nodes");
-
-               s32_Return = C_PuiSdHandlerFilerV2::h_LoadNodes(this->mc_UiNodes, c_XmlParser,
-                                                               &this->mc_CoreDefinition.c_Nodes);
-
-               if (s32_Return == C_NO_ERR)
-               {
-                  //Return
-                  tgl_assert(c_XmlParser.SelectNodeParent() == "opensyde-system-definition");
-                  //Bus
-                  tgl_assert(c_XmlParser.SelectNodeChild("buses") == "buses");
-                  s32_Return = C_PuiSdHandlerFilerV2::h_LoadBuses(this->mc_UiBuses, c_XmlParser);
-               }
-               //GUI items
-               if (s32_Return == C_NO_ERR)
-               {
-                  //Return
-                  tgl_assert(c_XmlParser.SelectNodeParent() == "opensyde-system-definition");
-                  if (c_XmlParser.SelectNodeChild("gui-only") == "gui-only")
-                  {
-                     //bus text elements
-                     if (c_XmlParser.SelectNodeChild("bus-text-elements") == "bus-text-elements")
-                     {
-                        s32_Return = C_PuiSdHandlerFilerV2::h_LoadBusTextElements(this->c_BusTextElements, c_XmlParser);
-                        tgl_assert(c_XmlParser.SelectNodeParent() == "gui-only");
-                     }
-                     else
-                     {
-                        s32_Return = C_CONFIG;
-                     }
-                     if (s32_Return == C_NO_ERR)
-                     {
-                        //Base elements
-                        s32_Return = C_PuiBsElementsFiler::h_LoadBaseElements(this->c_Elements, c_XmlParser);
-                     }
-                  }
-                  else
-                  {
-                     s32_Return = C_CONFIG;
-                  }
-               }
+               osc_write_log_error("Loading System Definition",
+                                   "Legacy file-version " + stw::scl::C_SclString::IntToStr(u16_FileVersion) +
+                                   " is no longer supported. Re-save the project with a current openSYDE.");
+               s32_Return = C_CONFIG;
             }
             else
             {
@@ -258,37 +217,9 @@ int32_t C_PuiSdHandlerData::SaveToFile(const stw::scl::C_SclString & orc_Path, c
    {
       if (oq_UseDeprecatedFileFormatV2)
       {
-         C_OscXmlParser c_XmlParser;
-         C_OscSystemDefinitionFilerV2::h_SaveSystemDefinition(this->mc_CoreDefinition, c_XmlParser);
-         //Reuse same XML parser for deprecated file format
-         tgl_assert(c_XmlParser.SelectRoot() == "opensyde-system-definition");
-         tgl_assert(c_XmlParser.SelectNodeChild("nodes") == "nodes");
-
-         C_PuiSdHandlerFilerV2::h_SaveNodes(this->mc_UiNodes, c_XmlParser);
-         tgl_assert(c_XmlParser.SelectNodeParent() == "opensyde-system-definition"); //back up
-
-         //Bus
-         tgl_assert(c_XmlParser.SelectNodeChild("buses") == "buses");
-         C_PuiSdHandlerFilerV2::h_SaveBuses(this->mc_UiBuses, c_XmlParser);
-         tgl_assert(c_XmlParser.SelectNodeParent() == "opensyde-system-definition"); //back up
-
-         //GUI items
-         c_XmlParser.CreateAndSelectNodeChild("gui-only");
-
-         //Bus text elements
-         c_XmlParser.CreateAndSelectNodeChild("bus-text-elements");
-         C_PuiSdHandlerFilerV2::h_SaveBusTextElements(this->c_BusTextElements, c_XmlParser);
-         tgl_assert(c_XmlParser.SelectNodeParent() == "gui-only"); //back up
-
-         //Base elements
-         C_PuiBsElementsFiler::h_SaveBaseElements(this->c_Elements, c_XmlParser);
-
-         s32_Return = c_XmlParser.SaveToFile(orc_Path);
-         if (s32_Return != C_NO_ERR)
-         {
-            osc_write_log_error("Saving System Definition", "Could not write to file \"" + orc_Path + "\".");
-            s32_Return = C_RD_WR;
-         }
+         osc_write_log_error("Saving System Definition",
+                             "Saving in deprecated V2 file format is no longer supported.");
+         s32_Return = C_CONFIG;
       }
       else
       {

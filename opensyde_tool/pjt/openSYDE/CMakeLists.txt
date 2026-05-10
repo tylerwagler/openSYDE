@@ -885,7 +885,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblModelAction.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTooltipUtil.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddWidget.cpp
-   ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerFilerV2.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddListWidget.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdSharedDatapools.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandlerFilerV1.cpp
@@ -1688,7 +1687,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblModelAction.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTooltipUtil.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddWidget.hpp
-   ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerFilerV2.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorAddListWidget.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdSharedDatapools.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandlerFilerV1.hpp

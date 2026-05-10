@@ -21,7 +21,6 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
-#include "C_OscSystemDefinitionFilerV2.hpp"
 #include "C_OscDeviceDefinition.hpp"
 #include "C_OscDeviceDefinitionFiler.hpp"
 #include "C_OscSuSequences.hpp"

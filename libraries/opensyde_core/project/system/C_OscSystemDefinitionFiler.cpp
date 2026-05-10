@@ -17,7 +17,6 @@
 #include "stwerrors.hpp"
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscSystemFilerUtil.hpp"
-#include "C_OscSystemDefinitionFilerV2.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
@@ -598,7 +597,6 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
 
    if (orc_XmlParser.SelectRoot() == "opensyde-system-definition")
    {
-      bool q_UseV2Filer = false;
       bool q_UseV3Filer = false;
       //File version
       if (orc_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -624,13 +622,16 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
             osc_write_log_info("Loading System Definition", "Value of \"file-version\": " +
                                C_SclString::IntToStr(u16_FileVersion));
             //Check which loader needs to be used
-            if ((u16_FileVersion == hu16_FILE_VERSION_1) || (u16_FileVersion == hu16_FILE_VERSION_2))
-            {
-               q_UseV2Filer = true;
-            }
-            else if (u16_FileVersion == hu16_FILE_VERSION_3)
+            if (u16_FileVersion == hu16_FILE_VERSION_3)
             {
                q_UseV3Filer = true;
+            }
+            else if ((u16_FileVersion == hu16_FILE_VERSION_1) || (u16_FileVersion == hu16_FILE_VERSION_2))
+            {
+               osc_write_log_error("Loading System Definition",
+                                   "Legacy file-version " + C_SclString::IntToStr(u16_FileVersion) +
+                                   " is no longer supported. Re-save the project with a current openSYDE.");
+               s32_Retval = C_CONFIG;
             }
             else
             {
@@ -651,16 +652,6 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
       //Only continue if no error so far
       if (s32_Retval == C_NO_ERR)
       {
-         if (q_UseV2Filer)
-         {
-            //Unselect root
-            tgl_assert(orc_XmlParser.SelectNodeParent() == "");
-            //Completely rely on V2 loader
-            s32_Retval = C_OscSystemDefinitionFilerV2::h_LoadSystemDefinition(orc_SystemDefinition, orc_XmlParser,
-                                                                              orc_PathDeviceDefinitions,
-                                                                              oq_UseDeviceDefinitions,
-                                                                              opc_ErrorDetailsMissingDevices);
-         }
          if (q_UseV3Filer)
          {
             //Completely rely on V3 loader
