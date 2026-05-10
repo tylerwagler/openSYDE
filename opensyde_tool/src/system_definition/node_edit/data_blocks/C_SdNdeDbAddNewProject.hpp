@@ -14,7 +14,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_OgePopUpContentBase.hpp"
 #include "C_OscNodeApplication.hpp"
-#include "C_OscTargetSupportPackageV2.hpp"
 #include "C_OscNode.hpp"
 #include "C_PuiSdNode.hpp"
 #include "C_OscTargetSupportPackage.hpp"
@@ -48,21 +47,12 @@ public:
    void InitStaticNames(void) const;
    QString GetTspPath(void) const;
    void SetTspPath(const QString & orc_New);
-   uint32_t GetTspApplicationCount(void) const;
-   void AddSelectedProject(const uint32_t ou32_TspIndex, stw::opensyde_core::C_OscNodeApplication & orc_Application,
-                           QString & orc_Warnings) const;
-   void HandleCodeGenerationConfig(void) const;
-   QString GetHalcDefinitionFileName(void);
-   QString GetProcessedHalcDefinitionPath(void);
    void ApplyV3Content(void);
-   bool q_IsVersion3;
-
 
 private:
    Ui::C_SdNdeDbAddNewProject * mpc_Ui;
    int32_t ms32_TspReadResult;
    const uint32_t mu32_NodeIndex;
-   stw::opensyde_core::C_OscTargetSupportPackageV2 mc_Package;
    //lint -e{1725} Only problematic if copy or assignment is allowed
    stw::opensyde_core::C_OscTargetSupportPackage mc_Tsp;
    static const QString mhc_START_TD;
@@ -79,8 +69,6 @@ private:
    void m_OnDroppedCreatinPath(void);
    void m_SetCreateInPath(const QString & orc_New);
    void m_OnLoadTsp(void);
-   void m_AddTopSection(QString & orc_Content) const;
-   void m_AddTemplateSection(QString & orc_Content) const;
    void m_AddV3TopSection(QString & orc_Content) const;
    void m_AddV3TemplateSection(QString & orc_Content) const;
    void m_Init(const uint32_t ou32_NodeIndex) const;

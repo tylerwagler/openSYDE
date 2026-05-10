@@ -278,8 +278,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSubDeviceDefinition.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackage.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageFiler.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2Filer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeDataPoolFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemBusFilerV2.cpp
@@ -381,8 +379,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSubDeviceDefinition.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackage.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageFiler.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2Filer.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeDataPoolFilerV2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeFilerV2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemBusFilerV2.hpp

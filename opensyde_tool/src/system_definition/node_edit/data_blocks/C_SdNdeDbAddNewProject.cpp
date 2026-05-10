@@ -31,7 +31,6 @@
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_SdNdeDbAddNewProject.hpp"
 #include "ui_C_SdNdeDbAddNewProject.h"
-#include "C_OscTargetSupportPackageV2Filer.hpp"
 #include "C_PuiTargetSupportPackageFiler.hpp"
 #include "C_SdNdeNodePropertiesTabContentWidget.hpp"
 
@@ -72,7 +71,6 @@ C_SdNdeDbAddNewProject::C_SdNdeDbAddNewProject(const uint32_t ou32_NodeIndex,
                                                stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                                const bool oq_IsCurrentNodeNew) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
-   q_IsVersion3(false),
    mpc_Ui(new Ui::C_SdNdeDbAddNewProject),
    ms32_TspReadResult(-1),
    mu32_NodeIndex(ou32_NodeIndex),
@@ -176,160 +174,21 @@ void C_SdNdeDbAddNewProject::SetTspPath(const QString & orc_New)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get number of applications in current TSP
-
-   \return
-   Number of applications in current TSP
-*/
-//----------------------------------------------------------------------------------------------------------------------
-uint32_t C_SdNdeDbAddNewProject::GetTspApplicationCount(void) const
-{
-   return static_cast<uint32_t>(this->mc_Package.c_Applications.size());
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Add selected project to application
-
-   \param[in]     ou32_TspIndex     Application index in TSP
-   \param[in,out] orc_Application   Application to apply new properties to
-   \param[out]    orc_Warnings      Warnings that occured
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDbAddNewProject::AddSelectedProject(const uint32_t ou32_TspIndex, C_OscNodeApplication & orc_Application,
-                                                QString & orc_Warnings) const
-{
-   if (ou32_TspIndex < this->mc_Package.c_Applications.size())
-   {
-      QString c_CodeGeneratorPath;
-      const C_OscTspApplication & rc_SelectedApp = this->mc_Package.c_Applications[ou32_TspIndex];
-      const QString c_ProjectPath =
-         C_Uti::h_ConcatPathIfNecessary(this->mpc_Ui->pc_LineEditCreateIn->GetPath(),
-                                        rc_SelectedApp.c_ProjectFolder.c_str());
-      orc_Application.c_Name = rc_SelectedApp.c_Name;
-      orc_Application.c_Comment = rc_SelectedApp.c_Comment;
-      orc_Application.c_GeneratePath = rc_SelectedApp.c_GeneratePath;
-      orc_Application.c_ResultPaths = rc_SelectedApp.c_ResultPaths;
-      orc_Application.u8_ProcessId = rc_SelectedApp.u8_ProcessId;
-      // do not concatenate project path with syde-file path because we support relative paths here
-      orc_Application.c_ProjectPath = c_ProjectPath.toStdString().c_str();
-      orc_Application.c_IdeCall = rc_SelectedApp.c_IdeCall;
-      orc_Application.u16_GenCodeVersion = rc_SelectedApp.u16_GenCodeVersion;
-
-      // for psi generation the generation path can not be edited and therefore should be empty;
-      // its functionality is taken over by the project path.
-      if (rc_SelectedApp.q_GeneratesPsiFiles == true)
-      {
-         orc_Application.c_GeneratePath = "";
-         orc_Application.c_ProjectPath =
-            C_Uti::h_ConcatPathIfNecessary(c_ProjectPath, rc_SelectedApp.c_GeneratePath.c_str()).toStdString().c_str();
-      }
-
-      //do not allow to save higher value as highest known code structure version
-      if (orc_Application.u16_GenCodeVersion > mu16_HIGHEST_KNOWN_CODE_STRUCTURE_VERSION)
-      {
-         orc_Application.u16_GenCodeVersion = mu16_HIGHEST_KNOWN_CODE_STRUCTURE_VERSION;
-         orc_Warnings.append(static_cast<QString>(C_GtGetText::h_GetText(
-                                                     "Code structure version of application %1 is unknown and "
-                                                     "therefore set to most recent version %2.\n")).
-                             arg(orc_Application.c_Name.c_str()).arg(mu16_HIGHEST_KNOWN_CODE_STRUCTURE_VERSION));
-      }
-
-      //Handle default file generator flag
-      if (rc_SelectedApp.q_IsStandardSydeCoderCe == true)
-      {
-         c_CodeGeneratorPath = C_ImpUtil::h_GetSydeCoderCePath();
-      }
-      else
-      {
-         c_CodeGeneratorPath = rc_SelectedApp.c_CodeGeneratorPath.c_str();
-      }
-      orc_Application.c_CodeGeneratorPath = c_CodeGeneratorPath.toStdString().c_str();
-
-      // Handle file generation flags
-      if (rc_SelectedApp.q_IsProgrammable == true)
-      {
-         orc_Application.e_Type = C_OscNodeApplication::ePROGRAMMABLE_APPLICATION;
-      }
-      else
-      {
-         if (rc_SelectedApp.q_GeneratesPsiFiles == true)
-         {
-            orc_Application.e_Type = C_OscNodeApplication::ePARAMETER_SET_HALC;
-         }
-         else
-         {
-            orc_Application.e_Type = C_OscNodeApplication::eBINARY;
-         }
-      }
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle file generation configuration
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDbAddNewProject::HandleCodeGenerationConfig(void) const
-{
-   C_OscNodeOpenSydeServerSettings c_DdpSettings;
-   const C_OscNodeCodeExportSettings c_GeneralSettings = this->mc_Package.c_CodeExportSettings;
-
-   c_DdpSettings.s16_DpdDataBlockIndex = static_cast<uint16_t>(this->mc_Package.u8_ApplicationIndex);
-   c_DdpSettings.u16_MaxMessageBufferTx = this->mc_Package.u16_MaxMessageBufferTx;
-   c_DdpSettings.u16_MaxRoutingMessageBufferRx = this->mc_Package.u16_MaxRoutingMessageBufferRx;
-   c_DdpSettings.u8_MaxParallelTransmissions = this->mc_Package.u8_MaxParallelTransmissions;
-
-   C_PuiSdHandler::h_GetInstance()->SetNodeOpenSydeServerSettings(this->mu32_NodeIndex, c_DdpSettings);
-   C_PuiSdHandler::h_GetInstance()->SetNodeCodeExportSettings(this->mu32_NodeIndex, c_GeneralSettings);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  returns path to halc def as it is in TSP
-
-   \retval   QString   path to syde_halc_def file
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_SdNdeDbAddNewProject::GetHalcDefinitionFileName()
-{
-   QString c_HalcDefPath = mc_Package.c_HalcDefPath.c_str();
-
-   return c_HalcDefPath.remove(0, 2);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  returns path to halc def file at location user chose in Import Dialog
-
-   \retval   QString   path to syde_halc_def file
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_SdNdeDbAddNewProject::GetProcessedHalcDefinitionPath(void)
-{
-   const QString c_Path = this->mpc_Ui->pc_LineEditCreateIn->GetPath();
-   QString c_HalcDefPath = mc_Package.c_HalcDefPath.c_str();
-
-   c_HalcDefPath.remove(0, 1);
-   c_HalcDefPath = c_Path + c_HalcDefPath;
-
-   return c_HalcDefPath;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Apply v3 content
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbAddNewProject::ApplyV3Content()
 {
-   if (this->q_IsVersion3 == true)
+   const C_OscNode * const pc_Core = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
+   const C_PuiSdNode * const pc_Ui = C_PuiSdHandler::h_GetInstance()->GetUiNode(this->mu32_NodeIndex);
+
+   tgl_assert((pc_Core != NULL) && (pc_Ui != NULL));
+   if ((pc_Core != NULL) && (pc_Ui != NULL))
    {
-      const C_OscNode * const pc_Core = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-      const C_PuiSdNode * const pc_Ui = C_PuiSdHandler::h_GetInstance()->GetUiNode(this->mu32_NodeIndex);
-      tgl_assert((pc_Core != NULL) && (pc_Ui != NULL));
-      if ((pc_Core != NULL) && (pc_Ui != NULL))
-      {
-         C_SdNdeDbAddNewProject::mh_KeepTspProperties(*pc_Core, this->mc_OscNode, *pc_Ui, this->mc_UiNode);
-         m_ApplyV2PathAdaptationToV3();
-         C_PuiSdHandler::h_GetInstance()->ReplaceNode(this->mu32_NodeIndex, this->mc_OscNode,
-                                                      this->mc_UiNode);
-      }
+      C_SdNdeDbAddNewProject::mh_KeepTspProperties(*pc_Core, this->mc_OscNode, *pc_Ui, this->mc_UiNode);
+      m_ApplyV2PathAdaptationToV3();
+      C_PuiSdHandler::h_GetInstance()->ReplaceNode(this->mu32_NodeIndex, this->mc_OscNode,
+                                                   this->mc_UiNode);
    }
 }
 
@@ -380,15 +239,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
       {
          // no error on parsing TSP (see m_OnLoadTSP())
          q_ValidTsp = true;
-         stw::scl::C_SclString c_DeviceName;
-         if (this->q_IsVersion3 == false)
-         {
-            c_DeviceName = this->mc_Package.c_DeviceName;
-         }
-         else
-         {
-            c_DeviceName = this->mc_Tsp.c_DeviceName;
-         }
+         const stw::scl::C_SclString c_DeviceName = this->mc_Tsp.c_DeviceName;
          if (c_DeviceName != pc_Node->c_DeviceType)
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
@@ -428,51 +279,15 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
          c_Warning.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
          c_Warning.SetCancelButtonText(C_GtGetText::h_GetText("Cancel"));
 
-         // Currently there are datablocks for this node and the TSP contains datablocks AND additionally
-         // there is a current halc config and TSP contains a halc config -> both gets deleted
-         if (this->q_IsVersion3 == false)
+         if (this->mq_IsCurrentNodeNew == false)
          {
-            if (((pc_Node->c_Applications.empty() == false) && (mc_Package.c_Applications.size() > 0)) &&
-                ((pc_Node->c_HalcConfig.IsClear() == false) && (mc_Package.c_HalcDefPath != "")))
-            {
-               c_Warning.SetDescription(C_GtGetText::h_GetText(
-                                           "All existing Data Blocks will be deleted and the hardware configuration will be cleared. Do you really want to continue?"));
-            }
-            // Currently there are datablocks for this node and the TSP contains datablocks. (No check for halc -> see
-            // case
-            // above)
-            else if ((pc_Node->c_Applications.empty() == false) && (mc_Package.c_Applications.size() > 0))
-            {
-               c_Warning.SetDescription(C_GtGetText::h_GetText(
-                                           "All existing Data Blocks will be deleted. Do you really want to continue?"));
-            }
-            // Currently there is a halc def and TSP contains halc def.
-            else if ((pc_Node->c_HalcConfig.IsClear() == false) && (mc_Package.c_HalcDefPath != ""))
-            {
-               c_Warning.SetDescription(C_GtGetText::h_GetText(
-                                           "The existing hardware configuration will be cleared. Do you really want to continue?"));
-            }
-            // Cases this else gets reached (no warning needed):
-            // No current datablocks or halc
-            // There is a current halc, but none in TSP
-            // There are current datablocks, but none in TSP
-            else
-            {
-               q_IsWarningSet = false;
-            }
-         } //Version 3
+            c_Warning.SetDescription(C_GtGetText::h_GetText(
+                                        "All existing node configuration will be deleted. Do you really want to continue?"));
+            q_IsWarningSet = true;
+         }
          else
          {
-            if (this->mq_IsCurrentNodeNew == false)
-            {
-               c_Warning.SetDescription(C_GtGetText::h_GetText(
-                                           "All existing node configuration will be deleted. Do you really want to continue?"));
-               q_IsWarningSet = true;
-            }
-            else
-            {
-               q_IsWarningSet = false;
-            }
+            q_IsWarningSet = false;
          }
 
          if (q_IsWarningSet == true)
@@ -488,7 +303,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
 
       if (q_Continue == true)
       {
-         if ((!this->mc_Tsp.c_TemplatePath.IsEmpty()) || (this->q_IsVersion3 == false))
+         if (!this->mc_Tsp.c_TemplatePath.IsEmpty())
          {
             if ((c_CreateInFolder.exists() == true) &&
                 (c_CreateInFolder.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries).count() != 0))
@@ -547,17 +362,8 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
                stw::scl::C_SclString c_ErrorText;
                QString c_Path;
 
-               if (this->q_IsVersion3 == false)
-               {
-                  c_Path =
-                     QDir::cleanPath(c_TspFileInfo.absoluteDir().absoluteFilePath(
-                                        this->mc_Package.c_TemplatePath.c_str()));
-               }
-               else
-               {
-                  c_Path = QDir::cleanPath(c_TspFileInfo.absoluteDir().absoluteFilePath(
-                                              this->mc_Tsp.c_TemplatePath.c_str()));
-               }
+               c_Path = QDir::cleanPath(c_TspFileInfo.absoluteDir().absoluteFilePath(
+                                           this->mc_Tsp.c_TemplatePath.c_str()));
                QApplication::setOverrideCursor(Qt::WaitCursor);
                if (C_OscZipFile::h_UnpackZipFile(c_Path.toStdString().c_str(),
                                                  C_PuiUtil::h_GetAbsolutePathFromProject(
@@ -698,9 +504,8 @@ void C_SdNdeDbAddNewProject::m_OnLoadTsp(void)
 {
    this->ms32_TspReadResult =
       C_PuiTargetSupportPackageFiler::h_LoadTspV3(C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditTSP
-                                                                                          ->
-                                                                                          GetPath()), mc_Tsp, this->mc_OscNode,
-                                                  this->mc_UiNode);
+                                                                                          ->GetPath()),
+                                                  mc_Tsp, this->mc_OscNode, this->mc_UiNode);
    this->mpc_Ui->pc_LabelCreateIn->setText(C_GtGetText::h_GetText("Template Project Extract Directory"));
    this->mpc_Ui->pc_LabelCreateIn->SetToolTipInformation(
       C_GtGetText::h_GetText("Template Project Extract Directory"),
@@ -708,19 +513,10 @@ void C_SdNdeDbAddNewProject::m_OnLoadTsp(void)
          "Location where the openSYDE Target Support Package content (e.g.: Target project, Flashware, ...) should be extracted at."));
    if (this->ms32_TspReadResult == C_NO_ERR)
    {
-      q_IsVersion3 = true;
-      if (!this->mc_Tsp.c_TemplatePath.IsEmpty())
-      {
-         this->mpc_Ui->pc_LabelCreateIn->setDisabled(false);
-         this->mpc_Ui->pc_LineEditCreateIn->setDisabled(false);
-         this->mpc_Ui->pc_PushButtonCreateIn->setDisabled(false);
-      }
-      else
-      {
-         this->mpc_Ui->pc_LabelCreateIn->setDisabled(true);
-         this->mpc_Ui->pc_LineEditCreateIn->setDisabled(true);
-         this->mpc_Ui->pc_PushButtonCreateIn->setDisabled(true);
-      }
+      const bool q_HaveTemplate = !this->mc_Tsp.c_TemplatePath.IsEmpty();
+      this->mpc_Ui->pc_LabelCreateIn->setDisabled(!q_HaveTemplate);
+      this->mpc_Ui->pc_LineEditCreateIn->setDisabled(!q_HaveTemplate);
+      this->mpc_Ui->pc_PushButtonCreateIn->setDisabled(!q_HaveTemplate);
 
       QString c_Text = "<html><body>";
       m_AddV3TopSection(c_Text);
@@ -728,120 +524,12 @@ void C_SdNdeDbAddNewProject::m_OnLoadTsp(void)
       c_Text += "</body></html>";
       this->mpc_Ui->pc_TextEditTSPDescription->setHtml(c_Text);
    }
-   else if (C_PuiTargetSupportPackageFiler::h_LoadTspV3(C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->
-                                                                                                pc_LineEditTSP->GetPath()),
-                                                        mc_Tsp, this->mc_OscNode, this->mc_UiNode) == C_BUSY)
-   {
-      q_IsVersion3 = false;
-      this->mpc_Ui->pc_LabelCreateIn->setDisabled(false);
-      this->mpc_Ui->pc_LineEditCreateIn->setDisabled(false);
-      this->mpc_Ui->pc_PushButtonCreateIn->setDisabled(false);
-      this->ms32_TspReadResult = C_OscTargetSupportPackageV2Filer::h_Load(
-         this->mc_Package,
-         C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditTSP->GetPath()).toStdString().c_str());
-
-      if (this->ms32_TspReadResult == C_NO_ERR)
-      {
-         QString c_Text = "<html><body>";
-         m_AddTopSection(c_Text);
-         m_AddTemplateSection(c_Text);
-         c_Text += "</body></html>";
-         this->mpc_Ui->pc_TextEditTSPDescription->setHtml(c_Text);
-      }
-   }
    else
    {
-      q_IsVersion3 = false;
+      // C_BUSY here used to dispatch to the V2 reader; V2 TSPs are no longer supported by the GUI
+      // (use osy_tsp_convert to upgrade legacy TSPs to V3).
       this->mpc_Ui->pc_TextEditTSPDescription->setPlainText(C_GtGetText::h_GetText(
                                                                "<openSYDE Target Support Package description>"));
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle top section of TSP description
-
-   \param[in,out] orc_Content Text to append to
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDbAddNewProject::m_AddTopSection(QString & orc_Content) const
-{
-   orc_Content += "<h3>" + static_cast<QString>(C_GtGetText::h_GetText("openSYDE Target Support Package")) + "</h3>";
-   orc_Content += "<table>";
-   orc_Content += "<tr>";
-   orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-   orc_Content += C_GtGetText::h_GetText("Description:");
-   orc_Content += "</td>";
-   orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-   orc_Content += this->mc_Package.c_Comment.c_str();
-   orc_Content += "</td>";
-   orc_Content += "</tr>";
-   orc_Content += "<tr>";
-   orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-   orc_Content += C_GtGetText::h_GetText("Number of Data Blocks:");
-   orc_Content += "</td>";
-   orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-   orc_Content += QString::number(this->mc_Package.c_Applications.size());
-   orc_Content += "</td>";
-   orc_Content += "</tr>";
-   orc_Content += "</table>";
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle template section of TSP description
-
-   \param[in,out] orc_Content Text to append to
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDbAddNewProject::m_AddTemplateSection(QString & orc_Content) const
-{
-   for (uint32_t u32_ItTemplate = 0UL; u32_ItTemplate < this->mc_Package.c_Applications.size(); ++u32_ItTemplate)
-   {
-      const C_OscTspApplication & rc_Template = this->mc_Package.c_Applications[u32_ItTemplate];
-      orc_Content += "<h4>" + static_cast<QString>(C_GtGetText::h_GetText("Data Block %1")).arg(u32_ItTemplate + 1) +
-                     "</h4>";
-      orc_Content += "<table>";
-      orc_Content += "<tr>";
-      orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-      orc_Content += C_GtGetText::h_GetText("Name:");
-      orc_Content += "</td>";
-      orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-      orc_Content += rc_Template.c_Name.c_str();
-      orc_Content += "</td>";
-      orc_Content += "</tr>";
-      orc_Content += "<tr>";
-      orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-      orc_Content += C_GtGetText::h_GetText("Comment:");
-      orc_Content += "</td>";
-      orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-      orc_Content += rc_Template.c_Comment.c_str();
-      orc_Content += "</td>";
-      orc_Content += "</tr>";
-      orc_Content += "</table>";
-   }
-
-   // if we have a HALC Config in TSP we want to display the path to the halc_def-file and a comment
-   if ((mc_Package.c_HalcDefPath != "") && (mc_Package.c_HalcComment != ""))
-   {
-      orc_Content += "<h4>" + static_cast<QString>(C_GtGetText::h_GetText("Hardware Configuration")) +
-                     "</h4>";
-      orc_Content += "<table>";
-      orc_Content += "<tr>";
-      orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-      orc_Content += C_GtGetText::h_GetText("HALC definition file:");
-      orc_Content += "</td>";
-      orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-      orc_Content += this->mc_Package.c_HalcDefPath.c_str();
-      orc_Content += "</td>";
-      orc_Content += "</tr>";
-      orc_Content += "<tr>";
-      orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-      orc_Content += C_GtGetText::h_GetText("Comment: ");
-      orc_Content += "</td>";
-      orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-      orc_Content += this->mc_Package.c_HalcComment.c_str();
-      orc_Content += "</td>";
-      orc_Content += "</tr>";
-      orc_Content += "</table>";
    }
 }
 

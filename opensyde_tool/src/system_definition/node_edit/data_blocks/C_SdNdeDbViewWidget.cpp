@@ -236,7 +236,6 @@ void C_SdNdeDbViewWidget::AddFromTsp(const bool oq_IsNewNode)
 
    pc_Dialog->SetTspPath(c_LAST_KNOWN_TSP_PATH);
 
-   C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNode(this->mu32_NodeIndex);
    //Help
    //connect(pc_New, &C_OgePopUpDialog::SigHelp, pc_SettingsWidget, &C_GiSyLineWidget::HandleHelp);
 
@@ -249,80 +248,19 @@ void C_SdNdeDbViewWidget::AddFromTsp(const bool oq_IsNewNode)
 
    if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
-      if (pc_Dialog->q_IsVersion3 == false)
-      {
-         const QString c_HalcFileName = pc_Dialog->GetHalcDefinitionFileName();
-         C_OgeWiCustomMessage c_Message(this);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Import TSP"));
-         QString c_Description = "";
-         if (c_HalcFileName == "")
-         {
-            c_Description = static_cast<QString>(C_GtGetText::h_GetText("Successfully created %1 Data Block(s).")).
-                            arg(pc_Dialog->GetTspApplicationCount());
-         }
-         else
-         {
-            c_Description = static_cast<QString>(C_GtGetText::h_GetText("Successfully created %1 Data Block(s).\n"
-                                                                        "Hardware Configurator: Hardware Definition File (%2) selected."))
-                            .arg(pc_Dialog->GetTspApplicationCount()).arg(c_HalcFileName);
-         }
-         QString c_Details = "";
-         c_Message.SetCustomMinHeight(180, 180);
-         c_Message.SetCustomMinWidth(650);
+      C_OgeWiCustomMessage c_Message(this);
+      const QString c_Details = "";
+      pc_Dialog->ApplyV3Content();
+      this->m_UpdateTrigger(false);
+      c_Message.SetHeading(C_GtGetText::h_GetText("Import TSP"));
 
-         // check if there are existing datablocks
-         if ((pc_Node != NULL) && (pc_Node->c_Applications.empty() == false))
-         {
-            m_DeleteAllDatablocks(mu32_NodeIndex, pc_Node->c_Applications);
-         }
-         //Always disable X-App support (before adding data blocks)
-         C_PuiSdHandler::h_GetInstance()->SetOscNodePropertyXappSupport(this->mu32_NodeIndex, false);
-         //Ensure new properties are visible
-         this->m_UpdateTrigger(true);
-
-         for (uint32_t u32_It = 0; u32_It < pc_Dialog->GetTspApplicationCount(); ++u32_It)
-         {
-            C_OscNodeApplication c_Tmp;
-            c_Tmp.e_Type = C_OscNodeApplication::ePROGRAMMABLE_APPLICATION;
-            c_Tmp.q_Active = true;
-            pc_Dialog->AddSelectedProject(u32_It, c_Tmp, c_Details);
-
-            m_AddApplication(c_Tmp);
-         }
-         pc_Dialog->HandleCodeGenerationConfig();
-         // last step, import halc definition from TSP
-         AddHalcDefFromTsp(pc_Dialog);
-         // Add warnings if any
-         if (c_Details.isEmpty() == false)
-         {
-            c_Message.SetType(C_OgeWiCustomMessage::eWARNING);
-            c_Description += C_GtGetText::h_GetText(" Some warnings occurred. See details for more information.");
-            c_Message.SetCustomMinHeight(180, 300);
-            c_Message.SetDetails(c_Details);
-         }
-
-         c_Message.SetDescription(c_Description);
-         c_Message.Execute();
-      }
-      else //Version 3
-      {
-         C_OgeWiCustomMessage c_Message(this);
-         QString c_Description = "";
-         const QString c_Details = "";
-         pc_Dialog->ApplyV3Content();
-         this->m_UpdateTrigger(false);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Import TSP"));
-
-         c_Description = static_cast<QString>(C_GtGetText::h_GetText("Node definition successfully imported."));
-
-         c_Message.SetCustomMinHeight(180, 180);
-         c_Message.SetCustomMinWidth(650);
-         c_Message.SetType(C_OgeWiCustomMessage::eINFORMATION);
-         c_Message.SetCustomMinHeight(180, 300);
-         c_Message.SetDetails(c_Details);
-         c_Message.SetDescription(c_Description);
-         c_Message.Execute();
-      }
+      c_Message.SetCustomMinHeight(180, 180);
+      c_Message.SetCustomMinWidth(650);
+      c_Message.SetType(C_OgeWiCustomMessage::eINFORMATION);
+      c_Message.SetCustomMinHeight(180, 300);
+      c_Message.SetDetails(c_Details);
+      c_Message.SetDescription(C_GtGetText::h_GetText("Node definition successfully imported."));
+      c_Message.Execute();
    }
 
    if (c_New != NULL)
@@ -333,79 +271,6 @@ void C_SdNdeDbViewWidget::AddFromTsp(const bool oq_IsNewNode)
    }
 } //lint !e593  //no memory leak because of the parent of pc_Dialog and the Qt memory management
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  imports HALC definition from TSP
-
- *          Loads syde_halc_def from TSP, loads it, clears HALC config, if there is any and then
- *          sets the new config. Emits a signal to C_SdNdeNodeEditWidget to run the magician and update datapool
- *          and HALC tab.
-
-   \param[in]  opc_Dialog  TSP Import dialog widget
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDbViewWidget::AddHalcDefFromTsp(C_SdNdeDbAddNewProject * const opc_Dialog)
-{
-   bool q_IsClear = false;
-
-   const QString c_HalcPath = C_PuiProject::h_GetInstance()->GetFolderPath() +
-                              opc_Dialog->GetProcessedHalcDefinitionPath();
-
-   tgl_assert(C_PuiSdHandler::h_GetInstance()->IsHalcClear(this->mu32_NodeIndex, q_IsClear) == C_NO_ERR);
-
-   uint32_t u32_NotHalcDpCount = 0UL;
-   {
-      const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-      if (pc_Node != NULL)
-      {
-         for (uint32_t u32_ItDp = 0UL; u32_ItDp < pc_Node->c_DataPools.size(); ++u32_ItDp)
-         {
-            const C_OscNodeDataPool & rc_Dp = pc_Node->c_DataPools[u32_ItDp];
-            if (rc_Dp.e_Type != C_OscNodeDataPool::eHALC)
-            {
-               ++u32_NotHalcDpCount;
-            }
-         }
-      }
-   }
-   if (u32_NotHalcDpCount > (C_OscNode::hu32_MAX_NUMBER_OF_DATA_POOLS_PER_NODE - 2UL))
-   {
-      C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eERROR);
-
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Select Hardware Description"));
-      c_MessageBox.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "Cannot select hardware description,\n"
-                                                          "because HAL Datapools may not be created,\n"
-                                                          "as the max Datapool count (%1) would be exceeded.")).arg(
-                                     C_OscNode::hu32_MAX_NUMBER_OF_DATA_POOLS_PER_NODE));
-      c_MessageBox.SetCustomMinHeight(200, 270);
-      c_MessageBox.Execute();
-   }
-   else
-   {
-      C_OscHalcConfig c_HalcConfig;
-
-      const int32_t s32_LoadResult = C_OscHalcDefFiler::h_LoadFile(c_HalcConfig, c_HalcPath.toStdString().c_str());
-
-      if (s32_LoadResult == C_NO_ERR)
-      {
-         // clean up if necessary
-         if (q_IsClear == false)
-         {
-            // Clear configuration
-            tgl_assert(C_PuiSdHandler::h_GetInstance()->ClearHalcConfig(this->mu32_NodeIndex) == C_NO_ERR);
-
-            // Remove HAL Datapools
-            tgl_assert(C_PuiSdHandler::h_GetInstance()->HalcRemoveDatapools(this->mu32_NodeIndex) == C_NO_ERR);
-         }
-
-         // set the HALC definition
-         tgl_assert(C_PuiSdHandler::h_GetInstance()->SetHalcConfig(this->mu32_NodeIndex, c_HalcConfig) == C_NO_ERR);
-
-         // run HALC magician and update GUI
-         Q_EMIT (this->SigHalcLoadedFromTsp());
-      }
-   }
-}
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Show/hide no data blocks declared label
 */
@@ -567,21 +432,6 @@ void C_SdNdeDbViewWidget::m_OnDelete(const uint32_t ou32_NodeIndex, const uint32
    \param[in]  orc_Applications  Array of the node's applications
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDbViewWidget::m_DeleteAllDatablocks(const uint32_t ou32_NodeIndex,
-                                                const std::vector<C_OscNodeApplication> & orc_Applications)
-{
-   tgl_assert(this->mu32_NodeIndex == ou32_NodeIndex);
-   while (orc_Applications.size() > 0)
-   {
-      // as the vector gets smaller, we just remove the first element till it's empty
-      tgl_assert(C_PuiSdHandler::h_GetInstance()->RemoveApplication(ou32_NodeIndex, 0) == C_NO_ERR);
-   }
-   this->SetNodeIndex(ou32_NodeIndex);
-
-   // inform about changes of owned Datapools because they are now not assigned anymore
-   Q_EMIT (this->SigOwnedDataPoolsChanged());
-}
-
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Update data block count
 */

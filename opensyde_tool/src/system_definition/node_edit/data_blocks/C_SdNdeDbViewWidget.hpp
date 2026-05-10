@@ -46,7 +46,6 @@ public:
    void AddApp(void);
    void UpdateApplications(void) const;
    void AddFromTsp(const bool oq_IsNewNode);
-   void AddHalcDefFromTsp(stw::opensyde_gui::C_SdNdeDbAddNewProject * const opc_Dialog);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
@@ -64,8 +63,6 @@ private:
    C_SdNdeDbViewWidget & operator =(const C_SdNdeDbViewWidget &) &;
 
    void m_OnDelete(const uint32_t ou32_NodeIndex, const uint32_t ou32_ApplicationIndex);
-   void m_DeleteAllDatablocks(const uint32_t ou32_NodeIndex,
-                              const std::vector<stw::opensyde_core::C_OscNodeApplication> & orc_Applications);
    void m_OnAppDisplay() const;
    void m_HandleNoDatablocksLabel() const;
    void m_UpdateCount(void) const;

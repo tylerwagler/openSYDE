@@ -12,6 +12,7 @@ set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 # Set include directories before dragging in core; the core needs the "precomp_headers.hpp" and files included by it
 include_directories(
    ${PROJECT_ROOT}/src
+   ${PROJECT_ROOT}/src/v2_filer
 )
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    find_package(OpenSSL REQUIRED)
@@ -69,6 +70,12 @@ endif()
 # --- Project source file ----------------------------------------------------------------------------------------------
 set(OSY_TSP_CONVERT_SOURCES
    ${PROJECT_ROOT}/src/main.cpp
+   # V2 TSP filer lives here (moved out of opensyde_core when V3 became canonical) — only this
+   # converter still reads V2 files, so keeping the legacy reader scoped to one binary.
+   ${PROJECT_ROOT}/src/v2_filer/C_OscTargetSupportPackageV2.cpp
+   ${PROJECT_ROOT}/src/v2_filer/C_OscTargetSupportPackageV2Filer.cpp
+   ${PROJECT_ROOT}/src/v2_filer/C_OscTargetSupportPackageV2.hpp
+   ${PROJECT_ROOT}/src/v2_filer/C_OscTargetSupportPackageV2Filer.hpp
 )
 
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
