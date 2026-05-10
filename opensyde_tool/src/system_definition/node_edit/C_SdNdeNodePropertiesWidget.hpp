@@ -72,7 +72,6 @@ private:
    void m_BusBitrateClick(const uint32_t ou32_Row);
    void m_OpenBus(void);
    void m_LoadFromData(void);
-   void m_FlashloaderOptions(void) const;
    void m_XappSupportChange(const int32_t os32_Index);
 
    //The signals keyword is necessary for Qt signal slot functionality

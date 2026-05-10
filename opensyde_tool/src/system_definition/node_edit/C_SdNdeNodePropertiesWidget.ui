@@ -631,7 +631,7 @@
                <number>0</number>
               </property>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_22" stretch="0,0,0,0">
+               <layout class="QHBoxLayout" name="horizontalLayout_22" stretch="0,0,0">
                 <property name="topMargin">
                  <number>3</number>
                 </property>
@@ -669,25 +669,6 @@
                    </size>
                   </property>
                  </spacer>
-                </item>
-                <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgePubOptions" name="pc_PushButtonFlashloaderOptions">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string>PushButton</string>
-                  </property>
-                 </widget>
                 </item>
                 <item>
                  <spacer name="horizontalSpacer_12">
@@ -1389,11 +1370,6 @@
    <class>stw::opensyde_gui_elements::C_OgeTableWidgetComIf</class>
    <extends>QTableWidget</extends>
    <header>C_OgeTableWidgetComIf.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubOptions</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubOptions.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabExternalLink</class>

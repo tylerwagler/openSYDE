@@ -85,8 +85,6 @@ C_SdNdeNodePropertiesWidget::C_SdNdeNodePropertiesWidget(QWidget * const opc_Par
    mu32_BusIndex(0),
    mc_BusName("")
 {
-   QSizePolicy c_SizePolicy;
-
    // init UI
    mpc_Ui->setupUi(this);
 
@@ -100,20 +98,6 @@ C_SdNdeNodePropertiesWidget::C_SdNdeNodePropertiesWidget(QWidget * const opc_Par
 
    //allow to open link to manufacturer page in system standard browser
    this->mpc_Ui->pc_LabelProductPageLink->setOpenExternalLinks(true);
-
-   //Options buttons
-   this->mpc_Ui->pc_PushButtonFlashloaderOptions->SetCustomIcon("://images/SettingsIcon.svg",
-                                                                "://images/SettingsIconDisabled.svg");
-   this->mpc_Ui->pc_PushButtonFlashloaderOptions->setIconSize(mc_ICON_SIZE_24);
-
-   //set explicit min width to allow the layout to cut off parts of the button (necessary to free space for smaller
-   // screen resolutions)
-   this->mpc_Ui->pc_PushButtonFlashloaderOptions->setMinimumWidth(52);
-
-   //retain size when hidden
-   c_SizePolicy = this->mpc_Ui->pc_PushButtonFlashloaderOptions->sizePolicy();
-   c_SizePolicy.setRetainSizeWhenHidden(true);
-   this->mpc_Ui->pc_PushButtonFlashloaderOptions->setSizePolicy(c_SizePolicy);
 
    InitStaticNames();
 
@@ -215,8 +199,6 @@ C_SdNdeNodePropertiesWidget::C_SdNdeNodePropertiesWidget(QWidget * const opc_Par
 
    connect(this->mpc_Ui->pc_TableWidgetComIfSettings, &QTableWidget::cellClicked, this,
            &C_SdNdeNodePropertiesWidget::m_HandleCellClick);
-   connect(this->mpc_Ui->pc_PushButtonFlashloaderOptions, &C_OgePubOptions::clicked, this,
-           &C_SdNdeNodePropertiesWidget::m_FlashloaderOptions);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_ComboBoxProtocol,
            static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged), this,
@@ -270,7 +252,6 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
    this->mpc_Ui->pc_LabelComIfSettings->setText(C_GtGetText::h_GetText("Communication Interfaces Settings"));
 
    this->mpc_Ui->pc_ComboBoxProtocol->addItem(C_GtGetText::h_GetText("openSYDE"));
-   this->mpc_Ui->pc_ComboBoxProtocol->addItem(C_GtGetText::h_GetText("KEFEX"));
    this->mpc_Ui->pc_ComboBoxProtocol->addItem(C_GtGetText::h_GetText("None"));
 
    this->mpc_Ui->pc_ComboBoxProgramming->addItem(C_GtGetText::h_GetText("Disabled"));
@@ -278,10 +259,6 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
 
    this->mpc_Ui->pc_ComboBoxXAppSupport->addItem(C_GtGetText::h_GetText("Disabled"));
    this->mpc_Ui->pc_ComboBoxXAppSupport->addItem(C_GtGetText::h_GetText("Enabled"));
-
-   //Add space because of spacing issue between icon and text
-   this->mpc_Ui->pc_PushButtonFlashloaderOptions->setText(static_cast<QString>(' ') +
-                                                          C_GtGetText::h_GetText("STW Flashloader Settings"));
 
    //table column text
    //fake padding with Spaces. No other solution known so far
@@ -344,7 +321,6 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
                                                             "Type of Flashloader and diagnostic server.\n"
                                                             "Options:\n"
                                                             "   - openSYDE: openSYDE server and openSYDE Flashloader support\n"
-                                                            "   - KEFEX: STW Flashloader support\n"
                                                             "   - none: no STW protocol support (e.g.: 3rd party node)\n"
                                                             "\nSupported protocols defined in read only "
                                                             "*.syde_devdef file."));
@@ -526,9 +502,6 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                //not supported
                this->mpc_Ui->pc_ComboBoxProtocol->setCurrentIndex(mu8_FL_INDEX_NOSUPPORT);
             }
-
-            //STW flashloader button is no longer supported
-            this->mpc_Ui->pc_PushButtonFlashloaderOptions->setVisible(false);
 
             //programming
             if (pc_DevDef->c_SubDevices[u32_SubDeviceIndex].q_ProgrammingSupport == true)
@@ -844,22 +817,9 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   //defensive move
                   if ((pc_DevDef->u8_NumCanBusses) > 0)
                   {
-                     // STW flashloader removed; this gate no longer applies
-                     if (false)
-                     {
-                        this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u8_ComIfCnt,
-                                                                              s32_COL_UPDATE)->setEnabled(false);
-
-                        dynamic_cast<C_OgeChxTristateBase *> (this->mpc_Ui->pc_TableWidgetComIfSettings
-                                                          ->cellWidget(u8_ComIfCnt, s32_COL_UPDATE))
-                        ->setChecked(false);
-                     }
-                     else
-                     {
-                        dynamic_cast<C_OgeChxTristateBase *> (this->mpc_Ui->pc_TableWidgetComIfSettings
-                                                          ->cellWidget(u8_ComIfCnt, s32_COL_UPDATE))
-                        ->setChecked(pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt].q_IsUpdateEnabled);
-                     }
+                     dynamic_cast<C_OgeChxTristateBase *> (this->mpc_Ui->pc_TableWidgetComIfSettings
+                                                       ->cellWidget(u8_ComIfCnt, s32_COL_UPDATE))
+                     ->setChecked(pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt].q_IsUpdateEnabled);
                   }
                   else
                   {
@@ -1429,16 +1389,11 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void)
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Reacts on changing protocol
-
-   Adapts the visibility of the STW flashloader options button
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodePropertiesWidget::m_SupportedProtocolChange(void)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-
-   // STW flashloader removed; the legacy options button is permanently hidden
-   this->mpc_Ui->pc_PushButtonFlashloaderOptions->setVisible(false);
 
    // Save the data
    this->m_RegisterChange();
@@ -1482,7 +1437,6 @@ void C_SdNdeNodePropertiesWidget::m_SupportedProtocolChange(void)
                this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u16_ComIfCnt, s32_COL_DIAGNOSTIC)->setEnabled(
                   q_IsDiagAvailable);
 
-               // STW flashloader removed; protocol is always openSYDE here
                this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u16_ComIfCnt, s32_COL_UPDATE)->setEnabled(true);
                pc_TristateUpdate->setChecked(true);
                (void)c_NodeProp;
@@ -2100,14 +2054,6 @@ void C_SdNdeNodePropertiesWidget::m_BusBitrateClick(const uint32_t ou32_Row)
 void C_SdNdeNodePropertiesWidget::m_OpenBus(void)
 {
    Q_EMIT (this->SigBusBitrateClicked(this->mu32_BusIndex, this->mc_BusName));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Slot of flashloader options button (no longer wired up; STW flashloader removed)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeNodePropertiesWidget::m_FlashloaderOptions(void) const
-{
 }
 
 //----------------------------------------------------------------------------------------------------------------------
