@@ -503,13 +503,6 @@ void C_SyvSeScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * const opc_Ev
             // different handling because of interaction elements in the setup nodes (checkbox)
             // the original event has to be handled first
             C_SyvTopologyBaseScene::mouseDoubleClickEvent(opc_Event);
-
-            if (opc_Event->isAccepted() == false)
-            {
-               //SSI 16.08.18 disabled. Deprecated with new navi bar.
-               //Will be removed completely with SC pages redesign in future
-               //this->m_ShowInfo(pc_Parent);
-            }
          }
       }
    }
