@@ -668,7 +668,6 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
                   rc_List.GetCrcAsLittleEndianBlob(c_CrcData);
                }
 
-               // TODO: KEFEX position of CRC can be different
                s32_Return = this->mpc_DiagProtocol->NvmWrite(rc_List.u32_NvmStartAddress, c_CrcData, opu8_NrCode);
 
                if (s32_Return != C_NO_ERR)

@@ -8,6 +8,4 @@
 //we can find those in stw_can.h
 #include "stw_can.hpp"
 
-//#define CMONPROTOCOL_ALLOW_RAMVIEW_PROJECT_MAPPING
-
 #endif

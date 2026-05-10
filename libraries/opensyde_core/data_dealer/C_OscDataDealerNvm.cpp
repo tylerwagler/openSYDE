@@ -235,8 +235,6 @@ int32_t C_OscDataDealerNvm::m_NvmReadListRaw(const C_OscNodeDataPoolList & orc_L
       orc_Values.resize(u32_NumBytesToRead);
 
       // Read the entire list
-      // TODO: KEFEX Protocol dependent count of calls necessary and problems with fragmented lists im NVM memory
-      // TODO: KEFEX Protocol dependent position of CRC!
       s32_Return = this->mpc_DiagProtocol->NvmRead(orc_List.u32_NvmStartAddress, orc_Values, opu8_NrCode);
 
       // Adapt return value
@@ -278,7 +276,6 @@ int32_t C_OscDataDealerNvm::m_SaveDumpToList(const std::vector<uint8_t> & orc_Va
          uint16_t u16_CalcCrc;
 
          c_CrcData.resize(2);
-         // TODO: KEFEX position of CRC can be different
          (void)std::memcpy(&c_CrcData[0], &orc_Values[0], 2);
 
          if (this->mpc_DiagProtocol->GetEndianness() == C_OscDiagProtocolBase::mhu8_ENDIANNESS_BIG)
