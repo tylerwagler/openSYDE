@@ -3399,7 +3399,6 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
                      }
                   }
                   m_FixInvalidRailConfig();
-                  m_HandleCompatibilityChart();
                }
                else
                {
@@ -4153,18 +4152,6 @@ void C_PuiSvHandler::m_FixInvalidRailConfig(void)
    for (uint32_t u32_Counter = 0U; u32_Counter < this->mc_Views.size(); ++u32_Counter)
    {
       this->mc_Views[u32_Counter].FixInvalidRailConfig();
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Handle compatibility chart
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvHandler::m_HandleCompatibilityChart(void)
-{
-   for (uint32_t u32_Counter = 0U; u32_Counter < this->mc_Views.size(); ++u32_Counter)
-   {
-      this->mc_Views[u32_Counter].HandleCompatibilityChart();
    }
 }
 

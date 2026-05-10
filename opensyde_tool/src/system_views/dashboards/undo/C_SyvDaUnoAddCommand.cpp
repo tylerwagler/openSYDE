@@ -219,7 +219,6 @@ void C_SyvDaUnoAddCommand::m_AddNew(void)
                c_InitialData.AddImage(c_ImageData);
             }
             break;
-         case C_PuiSvDbDataElement::eCHART: // do not create deprecated chart
          case C_PuiSvDbDataElement::eUNKNOWN:
          case C_PuiSvDbDataElement::eTAB_CHART:
          default:

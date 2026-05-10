@@ -15,7 +15,6 @@
 #include <vector>
 #include <set>
 #include <QString>
-#include "C_PuiSvDbChart.hpp"
 #include "C_PuiSvDbLabel.hpp"
 #include "C_PuiSvDbPieChart.hpp"
 #include "C_PuiSvDbSpinBox.hpp"
@@ -63,11 +62,8 @@ public:
    void SetActive(const bool oq_Value);
    int32_t GetTabIndex(void) const;
    void SetTabIndex(const int32_t os32_Value);
-   const std::vector<C_PuiSvDbChart> & GetCharts(void) const;
-   void SetCharts(const std::vector<C_PuiSvDbChart> & orc_Value);
    const C_PuiSvDbTabChart & GetTabChart(void) const;
    void SetTabChart(const C_PuiSvDbTabChart & orc_Value);
-   const C_PuiSvDbChart * GetChart(const uint32_t ou32_Index) const;
    const std::vector<C_PuiSvDbLabel> & GetLabels(void) const;
    void SetLabels(const std::vector<C_PuiSvDbLabel> & orc_Value);
    const C_PuiSvDbLabel * GetLabel(const uint32_t ou32_Index) const;
@@ -201,7 +197,6 @@ public:
 
    //Util
    bool DiscardInvalidIndices(void);
-   void HandleCompatibilityChart(std::vector<C_PuiSvDashboard> & orc_NewCharts);
    void FixDashboardWriteContentType();
    static C_PuiSvDbDataElement::E_Type h_GetWidgetType(const C_PuiSvDbWidgetBase * const opc_Box);
 
@@ -210,7 +205,6 @@ public:
    uint32_t Count(void) const override;
 
 protected:
-   std::vector<C_PuiSvDbChart> mc_Charts; // deprecated but needed for loading old projects
    std::vector<C_PuiSvDbLabel> mc_Labels;
    std::vector<C_PuiSvDbPieChart> mc_PieCharts;
    std::vector<C_PuiSvDbProgressBar> mc_ProgressBars;

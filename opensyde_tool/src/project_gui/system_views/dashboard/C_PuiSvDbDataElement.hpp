@@ -29,7 +29,6 @@ class C_PuiSvDbDataElement :
 public:
    enum E_Type ///< Type of dashboard data element
    {
-      eCHART,        ///< Data element for chart (deprecated but kept for compatibility reasons)
       eTAB_CHART,    ///< Data element for chart tab
       eLABEL,        ///< Data element for label
       ePIE_CHART,    ///< Data element for pie chart

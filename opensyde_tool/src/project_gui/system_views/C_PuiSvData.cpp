@@ -2876,25 +2876,6 @@ void C_PuiSvData::FixInvalidRailConfig(const bool oq_PrintLog)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Handle compatibility chart
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvData::HandleCompatibilityChart(void)
-{
-   std::vector<C_PuiSvDashboard> c_NewDashboards;
-
-   for (C_PuiSvDashboard & rc_Dashboard : this->mc_Dashboards)
-   {
-      rc_Dashboard.HandleCompatibilityChart(c_NewDashboards);
-   }
-   this->mc_Dashboards.reserve(this->mc_Dashboards.size() + c_NewDashboards.size());
-   for (const C_PuiSvDashboard & rc_Dashboard : c_NewDashboards)
-   {
-      this->mc_Dashboards.push_back(rc_Dashboard);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Fix dashboard write content type
 */
 //----------------------------------------------------------------------------------------------------------------------

@@ -301,7 +301,6 @@ private:
    //Other
    uint32_t m_CalcHashSystemViews(void) const;
    void m_FixInvalidRailConfig(void);
-   void m_HandleCompatibilityChart(void);
    void m_FixDashboardWriteContentType(void);
    int32_t m_CheckRoutingDetails(const uint32_t ou32_ViewIndex, const std::vector<uint8_t> & orc_CheckedNodeActiveFlags,
                                  std::map<uint32_t,

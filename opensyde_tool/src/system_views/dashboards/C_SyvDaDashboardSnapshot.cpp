@@ -54,12 +54,6 @@ void C_SyvDaDashboardSnapshot::SetDataPositionOffset(const QPointF & orc_NewPos)
       C_PuiSvDbLabel & rc_Data = this->mc_Labels[u32_ItItem];
       rc_Data.c_UiPosition += orc_NewPos;
    }
-   //Charts
-   for (uint32_t u32_ItItem = 0UL; u32_ItItem < this->mc_Charts.size(); ++u32_ItItem)
-   {
-      C_PuiSvDbChart & rc_Data = this->mc_Charts[u32_ItItem];
-      rc_Data.c_UiPosition += orc_NewPos;
-   }
    //Param widgets
    for (uint32_t u32_ItItem = 0UL; u32_ItItem < this->mc_ParamWidgets.size(); ++u32_ItItem)
    {
@@ -117,12 +111,6 @@ void C_SyvDaDashboardSnapshot::SetDataZetOffset(const float64_t of64_HighestUsed
    for (uint32_t u32_ItItem = 0UL; u32_ItItem < this->mc_Labels.size(); ++u32_ItItem)
    {
       C_PuiSvDbLabel & rc_Data = this->mc_Labels[u32_ItItem];
-      rc_Data.f64_ZetOrder += of64_HighestUsedZetValue;
-   }
-   //Charts
-   for (uint32_t u32_ItItem = 0UL; u32_ItItem < this->mc_Charts.size(); ++u32_ItItem)
-   {
-      C_PuiSvDbChart & rc_Data = this->mc_Charts[u32_ItItem];
       rc_Data.f64_ZetOrder += of64_HighestUsedZetValue;
    }
    //Param widgets

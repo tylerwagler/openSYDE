@@ -40,8 +40,7 @@ public:
                                     stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
 
 private:
-   static int32_t mh_LoadCharts(std::vector<C_PuiSvDbChart> & orc_Widgets,
-                                stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
+   static void mh_SkipDeprecatedCharts(stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadTabChart(C_PuiSvDbTabChart & orc_Widget,
                                   stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadLabels(std::vector<C_PuiSvDbLabel> & orc_Widgets,
@@ -86,8 +85,6 @@ private:
                                                                      4> > & orc_ScreenRegion,
                                               stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
 
-   static void mh_SaveCharts(const std::vector<C_PuiSvDbChart> & orc_Widgets,
-                             stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveTabChart(const C_PuiSvDbTabChart & orc_Widget,
                                stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveLabels(const std::vector<C_PuiSvDbLabel> & orc_Widgets,
@@ -149,8 +146,6 @@ private:
    static int32_t mh_StringToProgressBarType(const QString & orc_String, C_PuiSvDbProgressBar::E_Type & ore_Type);
    static int32_t mh_StringToProgressBarAlignmentType(const QString & orc_String,
                                                       C_PuiSvDbProgressBar::E_Alignment & ore_Alignment);
-   static int32_t mh_StringToChartSettingZoomMode(const QString & orc_String,
-                                                  C_PuiSvDbChart::E_SettingZoomMode & ore_ZoomMode);
    static int32_t mh_StringToTabChartSettingZoomMode(const QString & orc_String,
                                                      C_PuiSvDbTabChart::E_SettingZoomMode & ore_ZoomMode);
    static int32_t mh_StringToTabChartSettingVerticalAxisMode(const QString & orc_String,

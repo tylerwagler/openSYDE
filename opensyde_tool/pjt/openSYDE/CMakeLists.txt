@@ -685,7 +685,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementContent.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementHandler.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparentDashboard.cpp
-   ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbChart.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbToggle.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaToggleBase.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbPieChart.cpp
@@ -1471,7 +1470,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementContent.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementHandler.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparentDashboard.hpp
-   ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbChart.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbToggle.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaToggleBase.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbPieChart.hpp

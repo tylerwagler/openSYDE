@@ -209,7 +209,6 @@ public:
    //Other
    void ActivateAllRelevantSubDevices(void);
    void FixInvalidRailConfig(const bool oq_PrintLog = true);
-   void HandleCompatibilityChart(void);
    void FixDashboardWriteContentType();
    void InitFromSystemDefinition(void);
    bool CheckDashboardName(const QString & orc_Proposal, const uint32_t * const opu32_DashboardIndex) const;

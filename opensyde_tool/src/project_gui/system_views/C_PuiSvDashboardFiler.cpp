@@ -89,13 +89,8 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
 
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_PuiSvDbChart> c_Widgets;
-      s32_Retval = mh_LoadCharts(c_Widgets, orc_XmlParser);
-      orc_Dashboard.SetCharts(c_Widgets);
-      if (oq_IgnoreMostErrorCases == true)
-      {
-         s32_Retval = C_NO_ERR;
-      }
+      // Old projects may carry a <charts> element of deprecated chart widgets; consume and discard.
+      mh_SkipDeprecatedCharts(orc_XmlParser);
    }
    if (s32_Retval == C_NO_ERR)
    {
@@ -235,7 +230,6 @@ void C_PuiSvDashboardFiler::h_SaveDashboard(const C_PuiSvDashboard & orc_Dashboa
                                        orc_Dashboard.GetType()).toStdString().c_str());
    orc_XmlParser.CreateNodeChild("name", orc_Dashboard.GetName().toStdString().c_str());
    orc_XmlParser.CreateNodeChild("comment", orc_Dashboard.GetComment().toStdString().c_str());
-   mh_SaveCharts(orc_Dashboard.GetCharts(), orc_XmlParser);
    mh_SaveLabels(orc_Dashboard.GetLabels(), orc_XmlParser);
    mh_SaveParams(orc_Dashboard.GetParams(), orc_XmlParser);
    mh_SavePieCharts(orc_Dashboard.GetPieCharts(), orc_XmlParser);
@@ -401,94 +395,21 @@ int32_t C_PuiSvDashboardFiler::h_LoadSliderValue(C_PuiSvDbSlider & orc_Slider, C
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load widget elements
+/*! \brief   Skip the deprecated <charts> element from old project files.
 
-   \param[in,out]  orc_Widgets      Widget elements (Cleared if necessary)
+   The chart-widget data element has been removed. Old .syde_sysview files may still carry a <charts>
+   element under the dashboard; consume it (without parsing the contents) so the rest of the dashboard
+   loads. Newly written files no longer emit this element.
+
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
-
-   \return
-   C_NO_ERR    information loaded
-   C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadCharts(std::vector<C_PuiSvDbChart> & orc_Widgets,
-                                             C_OscXmlParserBase & orc_XmlParser)
+void C_PuiSvDashboardFiler::mh_SkipDeprecatedCharts(C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
-
-   //Clear last widgets
-   orc_Widgets.clear();
    if (orc_XmlParser.SelectNodeChild("charts") == "charts")
    {
-      C_SclString c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("chart");
-      if (c_CurrentWidgetNode == "chart")
-      {
-         do
-         {
-            C_PuiSvDbChart c_Box;
-            s32_Retval = C_PuiSvDashboardFiler::mh_LoadWidgetBase(c_Box, orc_XmlParser);
-            if (orc_XmlParser.SelectNodeChild("active-flags") == "active-flags")
-            {
-               C_SclString c_CurrentWidgetNode2 = orc_XmlParser.SelectNodeChild("active-flag");
-               if (c_CurrentWidgetNode2 == "active-flag")
-               {
-                  do
-                  {
-                     if (orc_XmlParser.AttributeExists("state") == true)
-                     {
-                        c_Box.c_DataPoolElementsActive.push_back(orc_XmlParser.GetAttributeBool("state"));
-                     }
-                     else
-                     {
-                        s32_Retval = C_CONFIG;
-                     }
-                     //Next
-                     c_CurrentWidgetNode2 = orc_XmlParser.SelectNodeNext("active-flag");
-                  }
-                  while ((c_CurrentWidgetNode2 == "active-flag") && (s32_Retval == C_NO_ERR));
-
-                  //Return
-                  tgl_assert(orc_XmlParser.SelectNodeParent() == "active-flags");
-               }
-               //Return
-               tgl_assert(orc_XmlParser.SelectNodeParent() == "chart");
-            }
-
-            if (c_Box.c_DataPoolElementsActive.size() != c_Box.c_DataPoolElementsConfig.size())
-            {
-               // Size shall be identical
-               c_Box.c_DataPoolElementsActive.resize(c_Box.c_DataPoolElementsConfig.size(), true);
-            }
-
-            if (orc_XmlParser.SelectNodeChild("zoom-mode") == "zoom-mode")
-            {
-               if (C_PuiSvDashboardFiler::mh_StringToChartSettingZoomMode(orc_XmlParser.GetNodeContent().c_str(),
-                                                                          c_Box.e_SettingZoomMode) != C_NO_ERR)
-               {
-                  s32_Retval = C_CONFIG;
-               }
-
-               //Return
-               tgl_assert(orc_XmlParser.SelectNodeParent() == "chart");
-            }
-
-            orc_Widgets.push_back(c_Box);
-            //Next
-            c_CurrentWidgetNode = orc_XmlParser.SelectNodeNext("chart");
-         }
-         while ((c_CurrentWidgetNode == "chart") && (s32_Retval == C_NO_ERR));
-         //Return
-         tgl_assert(orc_XmlParser.SelectNodeParent() == "charts");
-      }
-      //Return
-      orc_XmlParser.SelectNodeParent();
+      tgl_assert(orc_XmlParser.SelectNodeParent() == "dashboard");
    }
-   else
-   {
-      s32_Retval = C_CONFIG;
-   }
-
-   return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1823,25 +1744,6 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChartScreenRegion(std::vector<std::arra
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save chart dummy
-
-   For loading compatibility we keep an empty "charts" node.
-
-   \param[in]      orc_Widgets      Widget elements
-   \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveCharts(const std::vector<C_PuiSvDbChart> & orc_Widgets,
-                                          C_OscXmlParserBase & orc_XmlParser)
-{
-   Q_UNUSED(orc_Widgets)
-
-   orc_XmlParser.CreateAndSelectNodeChild("charts");
-   //Return
-   orc_XmlParser.SelectNodeParent();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Save tab chart
 
    \param[in]      orc_Widget       Tab chart
@@ -3155,43 +3057,6 @@ int32_t C_PuiSvDashboardFiler::mh_StringToProgressBarAlignmentType(const QString
    {
       //Default
       ore_Alignment = C_PuiSvDbProgressBar::eTOP;
-      s32_Retval = C_RANGE;
-   }
-   return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Transform string to source type
-
-   \param[in]   orc_String    String to interpret
-   \param[out]  ore_ZoomMode  Zoom mode
-
-   \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_StringToChartSettingZoomMode(const QString & orc_String,
-                                                               C_PuiSvDbChart::E_SettingZoomMode & ore_ZoomMode)
-{
-   int32_t s32_Retval = C_NO_ERR;
-
-   if (orc_String.compare("setting_zm_xy") == 0)
-   {
-      ore_ZoomMode = C_PuiSvDbChart::eSETTING_ZM_XY;
-   }
-   else if (orc_String.compare("setting_zm_x") == 0)
-   {
-      ore_ZoomMode = C_PuiSvDbChart::eSETTING_ZM_X;
-   }
-   else if (orc_String.compare("setting_zm_y") == 0)
-   {
-      ore_ZoomMode = C_PuiSvDbChart::eSETTING_ZM_Y;
-   }
-   else
-   {
-      //Default
-      ore_ZoomMode = C_PuiSvDbChart::eSETTING_ZM_XY;
       s32_Retval = C_RANGE;
    }
    return s32_Retval;
