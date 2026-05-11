@@ -29,6 +29,7 @@
 #include "C_SupSuSequences.hpp"
 #include "C_SupCreatePackage.hpp"
 #include "C_OscUtilBinaryHash.hpp"
+#include "C_OscUtils.hpp"
 #include "C_OscHexFile.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -1416,7 +1417,7 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
                   const uint32_t u32_Result = c_HexFile.LoadFromFile(c_Path.c_str());
                   if (u32_Result == stw::hex_file::NO_ERR)
                   {
-                     stw::diag_lib::C_XFLECUInformation c_FileApplicationInfo;
+                     stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
                      s32_Result = c_HexFile.ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo);
                      if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
                      {

@@ -31,7 +31,6 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_SyvUpSequences.hpp"
 #include "C_SyvComDriverUtil.hpp"
-#include "DLLocalize.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;

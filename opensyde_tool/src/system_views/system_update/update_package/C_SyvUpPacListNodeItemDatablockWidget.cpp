@@ -195,7 +195,7 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
          // File information
          if (pc_HexFile->LoadFromFile(this->mc_AbsoluteFilePath.toStdString().c_str()) == stw::hex_file::NO_ERR)
          {
-            stw::diag_lib::C_XFLECUInformation c_FileApplicationInfo;
+            stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
             const int32_t s32_Result = pc_HexFile->ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo);
 
             if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))

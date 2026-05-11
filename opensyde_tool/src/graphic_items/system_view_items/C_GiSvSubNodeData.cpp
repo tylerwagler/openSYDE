@@ -642,9 +642,9 @@ uint32_t C_GiSvSubNodeData::GetFailedApplicationIndex() const
    Hex file info
 */
 //----------------------------------------------------------------------------------------------------------------------
-const stw::diag_lib::C_XFLECUInformation * C_GiSvSubNodeData::GetHexFileInfo(const uint32_t ou32_ApplicationIndex) const
+const stw::opensyde_core::C_OscApplicationInfoBlock * C_GiSvSubNodeData::GetHexFileInfo(const uint32_t ou32_ApplicationIndex) const
 {
-   const stw::diag_lib::C_XFLECUInformation * pc_Retval = NULL;
+   const stw::opensyde_core::C_OscApplicationInfoBlock * pc_Retval = NULL;
 
    if (ou32_ApplicationIndex < this->mc_HexFileInfos.size())
    {
@@ -933,7 +933,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
       u32_Result = c_HexFile.LoadFromFile(c_Path.c_str());
       if (u32_Result == stw::hex_file::NO_ERR)
       {
-         stw::diag_lib::C_XFLECUInformation c_FileApplicationInfo;
+         stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
          const int32_t s32_Result = c_HexFile.ScanApplicationInformationBlockFromHexFile(
             c_FileApplicationInfo);
          if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
@@ -1012,7 +1012,7 @@ void C_GiSvSubNodeData::m_InitStatusFromPackage(
             // only search if application information is not ambiguous
             if (this->mc_HexAppInfoAmbiguous[u32_ItFile] == false)
             {
-               const stw::diag_lib::C_XFLECUInformation & rc_FileInfo =
+               const stw::opensyde_core::C_OscApplicationInfoBlock & rc_FileInfo =
                   this->mc_HexFileInfos[u32_ItFile];
 
                //Skip first application because this is the flashloader (OSY ONLY!)

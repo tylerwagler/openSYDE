@@ -245,8 +245,8 @@ void C_SyvUpPacHexFileView::mh_AddDataInformation(C_OscHexFile & orc_HexFile, QS
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexFile, QString & orc_Content)
 {
-   C_SclDynamicArray<stw::diag_lib::C_XFLECUInformation> c_InfoBlocks;
-   orc_HexFile.GetECUInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
+   C_SclDynamicArray<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
+   orc_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
    orc_Content += "<h3>" + static_cast<QString>(C_GtGetText::h_GetText("File Information Blocks")) + "</h3>";
    orc_Content += "<table>";
    orc_Content += "<tr>";
@@ -260,7 +260,7 @@ void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexF
    orc_Content += "</table>";
    for (int32_t s32_ItAppl = 0UL; s32_ItAppl < c_InfoBlocks.GetLength(); ++s32_ItAppl)
    {
-      const stw::diag_lib::C_XFLECUInformation & rc_CurInfo = c_InfoBlocks[s32_ItAppl];
+      const stw::opensyde_core::C_OscApplicationInfoBlock & rc_CurInfo = c_InfoBlocks[s32_ItAppl];
       orc_Content += "<h3>" +
                      static_cast<QString>(C_GtGetText::h_GetText("Block %1")).arg(s32_ItAppl + 1, 2, 10,
                                                                                   static_cast<QChar>('0')) +

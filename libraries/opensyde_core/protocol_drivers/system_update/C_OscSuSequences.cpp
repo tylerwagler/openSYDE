@@ -36,7 +36,6 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::scl;
 using namespace stw::tgl;
-using namespace stw::diag_lib;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 

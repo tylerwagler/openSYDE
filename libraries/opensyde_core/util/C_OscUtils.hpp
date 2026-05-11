@@ -16,7 +16,6 @@
 
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
-#include "C_SclResourceStrings.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -50,7 +49,6 @@ public:
                                                           const stw::scl::C_SclString & orc_RawSerialNumber);
    static void h_FileToString(const stw::scl::C_SclString & orc_FilePath, stw::scl::C_SclString & orc_OutputString);
    static void h_RangeCheckFloat(float64_t & orf64_Value);
-   static stw::scl::C_SclString h_LoadString(const uint16_t ou16_StringIndex);
    static int32_t h_CopyFile(const stw::scl::C_SclString & orc_SourceFile, const stw::scl::C_SclString & orc_TargetFile,
                              stw::scl::C_SclString * const opc_ErrorPath = NULL,
                              stw::scl::C_SclString * const opc_ErrorMessage = NULL);
@@ -84,7 +82,6 @@ public:
 
 private:
    static const float64_t mhf64_EPSILON;
-   static stw::scl::C_SCLResourceStrings mhc_ResourceStrings;
 
    static void mh_GetBaseNameAndCurrentConflictNumberFromString(const stw::scl::C_SclString & orc_ConflictingValue,
                                                                 const stw::scl::C_SclString & orc_SkipName,

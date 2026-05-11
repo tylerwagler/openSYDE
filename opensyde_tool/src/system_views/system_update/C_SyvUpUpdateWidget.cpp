@@ -27,7 +27,6 @@
 #include "C_PuiSvHandler.hpp"
 #include "C_PuiSvData.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "DLLocalize.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

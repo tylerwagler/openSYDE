@@ -794,9 +794,9 @@ int32_t C_OscBuSequences::h_ReadHexFile(const C_SclString & orc_HexFilePath, C_O
    }
    else
    {
-      C_SclDynamicArray<stw::diag_lib::C_XFLECUInformation> c_InfoBlocks;
+      C_SclDynamicArray<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
       //no return value that can cause trouble for us
-      (void)orc_HexFile.GetECUInformationBlocks(c_InfoBlocks, 0, false, false, false);
+      (void)orc_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0, false, false, false);
 
       osc_write_log_info(c_LogActivity, "Number of application information blocks in HEX file: " +
                          C_SclString::IntToStr(c_InfoBlocks.GetLength()));

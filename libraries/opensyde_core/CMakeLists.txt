@@ -79,8 +79,6 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilBinaryHash.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilChecksummedIniFile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtils.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_string_resources/C_SclResourceStrings.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_string_resources/DLStrings.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/stwcompid/stwcompid.c
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.cpp
@@ -98,8 +96,6 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilChecksummedIniFile.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtils.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/DiagLib_config.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_string_resources/C_SclResourceStrings.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_string_resources/DLStrings.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/stwcompid/stwcompid.h
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.hpp
@@ -124,7 +120,6 @@ set(OPENSYDE_CORE_COMMON_SOURCES
 set(OPENSYDE_CORE_COMMON_INCLUDE_DIRECTORIES
    ${CMAKE_CURRENT_SOURCE_DIR}
    ${CMAKE_CURRENT_SOURCE_DIR}/conf_file_handler
-   ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_string_resources
    ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/stwcompid
    ${CMAKE_CURRENT_SOURCE_DIR}/logging
    ${CMAKE_CURRENT_SOURCE_DIR}/md5
@@ -500,8 +495,6 @@ else()
 
    set(OPENSYDE_CORE_PROTOCOL_DRIVERS_COMMON_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpCan.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLHexFile.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLECUInformation.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/hexfile/C_HexFile.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.cpp
@@ -511,6 +504,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolSecuritySubLayer.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscHexFile.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscApplicationInfoBlock.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscCanDispatcherOsyRouter.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscDiagProtocolBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscDiagProtocolOsy.cpp
@@ -522,8 +516,6 @@ else()
 
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/stw_can.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpCan.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLHexFile.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash/CXFLECUInformation.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/hexfile/C_HexFile.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher/C_OscIpDispatcher.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.hpp
@@ -533,6 +525,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpBase.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolSecuritySubLayer.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscHexFile.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscApplicationInfoBlock.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscCanDispatcherOsyRouter.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscDiagProtocolBase.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscDiagProtocolOsy.hpp
@@ -549,7 +542,6 @@ else()
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/device_config
-       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_stwflash
        ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/hexfile
        ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher
        ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_pool

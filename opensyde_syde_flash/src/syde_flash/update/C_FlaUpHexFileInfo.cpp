@@ -62,14 +62,14 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
    C_OscHexFile c_HexFile;
    uint32_t u32_Result;
 
-   C_SclDynamicArray<stw::diag_lib::C_XFLECUInformation> c_InfoBlocks;
+   C_SclDynamicArray<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
 
    c_BlockInfo.resize(0);
    c_HexFileInfo.s32_NumberOfBlocks = 0;
    c_HexFileInfo.c_FileName = c_FileInfo.fileName();
 
    u32_Result = c_HexFile.LoadFromFile(orc_File.toStdString().c_str());
-   c_HexFile.GetECUInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
+   c_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
 
    if (u32_Result == stw::hex_file::NO_ERR)
    {
@@ -92,7 +92,7 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
          c_BlockInfo.resize(c_InfoBlocks.GetLength());
          for (int32_t s32_ItAppl = 0UL; s32_ItAppl < c_InfoBlocks.GetLength(); ++s32_ItAppl)
          {
-            const stw::diag_lib::C_XFLECUInformation & rc_CurInfo = c_InfoBlocks[s32_ItAppl];
+            const stw::opensyde_core::C_OscApplicationInfoBlock & rc_CurInfo = c_InfoBlocks[s32_ItAppl];
             c_BlockInfo.at(s32_ItAppl).c_BlockType = rc_CurInfo.GetInfoLevelAsString().c_str();
             c_BlockInfo.at(s32_ItAppl).c_Version = QString::number(rc_CurInfo.u8_StructVersion);
             if (rc_CurInfo.ContainsDeviceID() == true)

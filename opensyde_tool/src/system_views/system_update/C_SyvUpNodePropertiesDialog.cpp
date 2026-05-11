@@ -400,7 +400,7 @@ void C_SyvUpNodePropertiesDialog::mh_GetApplicationDataForNode(const C_GiSvSubNo
                                                                QString & orc_FileBuildDate,
                                                                QString & orc_DeviceBuildDate)
 {
-   const stw::diag_lib::C_XFLECUInformation * const pc_FileInfo = orc_NodeInfo.GetHexFileInfo(ou32_ApplicationIndex);
+   const stw::opensyde_core::C_OscApplicationInfoBlock * const pc_FileInfo = orc_NodeInfo.GetHexFileInfo(ou32_ApplicationIndex);
    bool q_Missing = true;
    bool q_Match = true;
    const C_SyvUpDeviceInfo c_DeviceInfo = orc_NodeInfo.GetDeviceInfo();

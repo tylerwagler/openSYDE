@@ -73,7 +73,7 @@ public:
    stw::opensyde_gui_logic::C_SyvUtil::E_NodeUpdateInitialStatus GetInitialStatus(void) const;
    stw::opensyde_gui_logic::C_SyvUtil::E_NodeUpdateStatus GetUpdateStatus(void) const;
    uint32_t GetFailedApplicationIndex(void) const;
-   const stw::diag_lib::C_XFLECUInformation * GetHexFileInfo(const uint32_t ou32_ApplicationIndex) const;
+   const stw::opensyde_core::C_OscApplicationInfoBlock * GetHexFileInfo(const uint32_t ou32_ApplicationIndex) const;
    uint32_t GetHexFileInfosCount(void) const;
    uint32_t GetParamFileInfosCount(void) const;
    uint32_t GetFileInfosCount(void) const;
@@ -110,7 +110,7 @@ private:
    uint32_t mu32_FailedApplicationIndex;
 
    bool mq_AnyDatablockFound;
-   std::vector<stw::diag_lib::C_XFLECUInformation> mc_HexFileInfos;
+   std::vector<stw::opensyde_core::C_OscApplicationInfoBlock> mc_HexFileInfos;
    std::vector<QString> mc_ParamFileInfos;
    std::vector<QString> mc_FileInfos;
    QString mc_PemFileInfo;

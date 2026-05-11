@@ -22,9 +22,6 @@
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
 #include "TglFile.hpp"
-#include "C_SclResourceStrings.hpp"
-#define STR_TABLE_INCLUDE //we really want the symbols from the DLStrings.h header
-#include "DLStrings.hpp"
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -36,7 +33,6 @@ using namespace stw::tgl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const float64_t C_OscUtils::mhf64_EPSILON = 1e-5;
-stw::scl::C_SCLResourceStrings C_OscUtils::mhc_ResourceStrings;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -671,35 +667,6 @@ void C_OscUtils::h_RangeCheckFloat(float64_t & orf64_Value)
 {
    orf64_Value = std::min(orf64_Value, std::numeric_limits<float64_t>::max());
    orf64_Value = std::max(orf64_Value, -std::numeric_limits<float64_t>::max());
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   load resource string
-
-   Load resource strings from resource table.
-   We use a string table using the C_SCLResourceStrings class
-    and fill a singleton of it with the application strings.
-
-   Note: this is only useful for application using an numeric-index-based localization approach.
-   This is for example not compatible with string-index-based approaches like gettext.
-
-   \param[in]    ou16_StringIndex     Index of string
-
-   \return
-   string
-*/
-//----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_LoadString(const uint16_t ou16_StringIndex)
-{
-   static bool hq_Initialized = false;
-
-   if (hq_Initialized == false)
-   {
-      mhc_ResourceStrings.SetStringTable(&gac_DIAG_LIB_RESOURCE_STRINGS[0], gu16_DIAGLIB_NR_RES_STRNGS);
-      hq_Initialized = true;
-   }
-
-   return mhc_ResourceStrings.LoadStr(ou16_StringIndex);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
