@@ -14,6 +14,7 @@
 
 #include "stwerrors.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_OscCanAdapterFactory.hpp"
 #include "C_HeHandler.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_UsHandler.hpp"
@@ -750,17 +751,39 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
 
    if (this->mpc_CanDispatcher == NULL)
    {
-      const std::string c_DllPath = this->mpc_Ui->pc_SettingsWidget->GetCanDllPath().toStdString();
-      this->mpc_CanDispatcher = new stw::can::C_Can();
+      const QString c_PersistedPath = this->mpc_Ui->pc_SettingsWidget->GetCanDllPath();
+      const int32_t s32_Bitrate = this->mpc_Ui->pc_GeneralPropertiesWidget->GetBitrate();
 
-      osc_write_log_info("Initialization", "CAN DLL path used: " + c_DllPath);
-
-      this->mpc_CanDispatcher->SetDLLName(c_DllPath);
-      s32_Return = this->mpc_CanDispatcher->DLL_Open();
-      if (s32_Return == C_NO_ERR)
+      stw::opensyde_core::C_OscCanAdapterConfig c_Config =
+         stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
+#ifndef _WIN32
+      if (c_PersistedPath.isEmpty() == false)
       {
-         osc_write_log_info("Initialization", "CAN DLL loaded.");
-         s32_Return = this->mpc_CanDispatcher->CAN_Init(this->mpc_Ui->pc_GeneralPropertiesWidget->GetBitrate());
+         const QString c_Lower = c_PersistedPath.toLower();
+         const bool q_LooksWindowsy = c_Lower.endsWith(".dll") || c_PersistedPath.contains("\\");
+         if (q_LooksWindowsy == false)
+         {
+            c_Config.c_SocketCanInterface = stw::scl::C_SclString(c_PersistedPath.toStdString().c_str());
+         }
+      }
+#endif
+      c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(s32_Bitrate);
+
+      osc_write_log_info("Initialization",
+                         "Adapter type: " +
+                         stw::opensyde_core::C_OscCanAdapterFactory::h_GetAdapterTypeDisplayName(c_Config.e_Type) +
+                         ", value: " + c_PersistedPath.toStdString());
+
+      stw::scl::C_SclString c_Error;
+      this->mpc_CanDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
+      if (this->mpc_CanDispatcher == NULL)
+      {
+         osc_write_log_error("Initialization", "Could not create CAN adapter: " + c_Error);
+         s32_Return = C_CONFIG;
+      }
+      else
+      {
+         s32_Return = this->mpc_CanDispatcher->CAN_Init(s32_Bitrate);
          if (s32_Return == C_NO_ERR)
          {
             osc_write_log_info("Initialization", "CAN interface initialized.");
@@ -769,12 +792,6 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
          {
             osc_write_log_error("Initialization", "Could not initialize the CAN interface!");
          }
-      }
-      else
-      {
-         const std::string c_Bitness = QString::number(8 * sizeof(size_t)).toStdString();
-         osc_write_log_error("Initialization",
-                             "Could not load the CAN DLL! Make sure to use a " + c_Bitness + "-bit DLL.");
       }
    }
 
@@ -808,12 +825,9 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
 
    if (s32_Return != C_NO_ERR)
    {
-      const uint32_t u32_BITNESS = 8 * sizeof(size_t);
       C_OgeWiCustomMessage c_Message(this->mpc_Ui->pc_TitleBarWidget, C_OgeWiCustomMessage::eERROR);
       c_Message.SetHeading(C_GtGetText::h_GetText("Initialization failed"));
-      c_Message.SetDescription(
-         static_cast<QString>(C_GtGetText::h_GetText("Failed to initialize CAN interface. "
-                                                     "Make sure to use a %1-bit DLL.")).arg(u32_BITNESS));
+      c_Message.SetDescription(C_GtGetText::h_GetText("Failed to initialize CAN interface."));
       c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +
                            C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLESHEET_GUIDE_COLOR_LINK,
                                             C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) + ".");
@@ -852,17 +866,10 @@ void C_FlaMainWindow::m_CleanupUpdateSequence(void)
 
    if (this->mpc_CanDispatcher != NULL)
    {
-      if (this->mpc_CanDispatcher->DLL_Close() == C_NO_ERR)
-      {
-         osc_write_log_info("Teardown", "CAN DLL closed.");
-      }
-      else
-      {
-         osc_write_log_info("Teardown", "Failed to close CAN DLL.");
-      }
-
+      (void)this->mpc_CanDispatcher->CAN_Exit();
       delete this->mpc_CanDispatcher;
       this->mpc_CanDispatcher = NULL;
+      osc_write_log_info("Teardown", "CAN adapter closed.");
    }
 }
 

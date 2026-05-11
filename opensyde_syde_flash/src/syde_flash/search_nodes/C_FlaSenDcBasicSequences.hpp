@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QObject>
 #include "C_SclString.hpp"
-#include "C_Can.hpp"
+#include "C_CanDispatcher.hpp"
 #include "C_OscDcBasicSequences.hpp"
 #include "C_SyvComDriverThread.hpp"
 
@@ -81,7 +81,7 @@ private:
 
    // Sequence execution parameter
    E_Sequence me_Sequence;
-   stw::can::C_Can mc_CanDispatcher;
+   stw::can::C_CanDispatcher * mpc_CanDispatcher;
 
    // Input parameter for sequence
    uint32_t mu32_FlashloaderResetWaitTime;

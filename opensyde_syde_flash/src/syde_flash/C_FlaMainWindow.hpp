@@ -13,7 +13,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 
-#include "C_Can.hpp"
+#include "C_CanDispatcher.hpp"
 #include "C_FlaSenDcBasicSequences.hpp"
 #include "C_FlaUpSequences.hpp"
 
@@ -90,7 +90,7 @@ private:
    void m_SetTotalHexFileSizeInBytes(const uint64_t ou64_TotalHexFileSizeInBytes);
 
    stw::opensyde_gui_logic::C_FlaUpSequences * mpc_UpSequences;
-   stw::can::C_Can * mpc_CanDispatcher;
+   stw::can::C_CanDispatcher * mpc_CanDispatcher;
    QTimer mc_TimerUpdate;
    QTimer mc_SecTimer;
    QElapsedTimer mc_ElapsedTimer;

@@ -12,6 +12,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_OscCanAdapterFactory.hpp"
 #include "C_FlaSenDcBasicSequences.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -40,6 +41,7 @@ C_FlaSenDcBasicSequences::C_FlaSenDcBasicSequences(void) :
    QObject(),
    C_OscDcBasicSequences(),
    me_Sequence(eNOT_ACTIVE),
+   mpc_CanDispatcher(NULL),
    mu32_FlashloaderResetWaitTime(1000),
    mu8_CurrentNodeId(0),
    mu8_NewNodeId(0),
@@ -78,13 +80,11 @@ C_FlaSenDcBasicSequences::~C_FlaSenDcBasicSequences(void) noexcept
    this->PrepareForDestruction();
    try
    {
-      if (mc_CanDispatcher.DLL_Close() == C_NO_ERR)
+      if (this->mpc_CanDispatcher != NULL)
       {
-         osc_write_log_info("Teardown", "CAN DLL closed.");
-      }
-      else
-      {
-         osc_write_log_info("Teardown", "Failed to close CAN DLL.");
+         (void)this->mpc_CanDispatcher->CAN_Exit();
+         delete this->mpc_CanDispatcher;
+         this->mpc_CanDispatcher = NULL;
       }
    }
    catch (...)
@@ -108,14 +108,45 @@ int32_t C_FlaSenDcBasicSequences::InitDcSequences(const C_SclString & orc_CanDll
    int32_t s32_Return;
    const C_SclString c_LogActivity = "Initialization";
 
-   osc_write_log_info(c_LogActivity, "CAN DLL path used: " + orc_CanDllPath);
-
-   mc_CanDispatcher.SetDLLName(orc_CanDllPath);
-   s32_Return = mc_CanDispatcher.DLL_Open();
-   if (s32_Return == C_NO_ERR)
+   if (this->mpc_CanDispatcher != NULL)
    {
-      osc_write_log_info(c_LogActivity, "CAN DLL loaded.");
-      s32_Return = mc_CanDispatcher.CAN_Init(os32_CanBitrate);
+      (void)this->mpc_CanDispatcher->CAN_Exit();
+      delete this->mpc_CanDispatcher;
+      this->mpc_CanDispatcher = NULL;
+   }
+
+   C_OscCanAdapterConfig c_Config = C_OscCanAdapterConfig::h_GetPlatformDefault();
+#ifndef _WIN32
+   if (orc_CanDllPath.IsEmpty() == false)
+   {
+      const C_SclString c_Lower = orc_CanDllPath.LowerCase();
+      const bool q_LooksWindowsy = (orc_CanDllPath.Pos("\\") > 0U) ||
+                                   ((c_Lower.Length() >= 4U) &&
+                                    (c_Lower.SubString(c_Lower.Length() - 3U, 4U) == ".dll"));
+      if (q_LooksWindowsy == false)
+      {
+         c_Config.c_SocketCanInterface = orc_CanDllPath;
+      }
+   }
+#else
+   (void)orc_CanDllPath; // Windows currently always uses PEAK channel 1 (UI follow-up will expose channel)
+#endif
+   c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(os32_CanBitrate);
+
+   osc_write_log_info(c_LogActivity, "Adapter type: " +
+                      C_OscCanAdapterFactory::h_GetAdapterTypeDisplayName(c_Config.e_Type) +
+                      ", value: " + orc_CanDllPath);
+
+   C_SclString c_Error;
+   this->mpc_CanDispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
+   if (this->mpc_CanDispatcher == NULL)
+   {
+      osc_write_log_error(c_LogActivity, "Could not create CAN adapter: " + c_Error);
+      s32_Return = C_CONFIG;
+   }
+   else
+   {
+      s32_Return = this->mpc_CanDispatcher->CAN_Init(os32_CanBitrate);
       if (s32_Return == C_NO_ERR)
       {
          osc_write_log_info(c_LogActivity, "CAN interface initialized.");
@@ -125,16 +156,10 @@ int32_t C_FlaSenDcBasicSequences::InitDcSequences(const C_SclString & orc_CanDll
          osc_write_log_error(c_LogActivity, "Could not initialize the CAN interface!");
       }
    }
-   else
-   {
-      const std::string c_Bitness = QString::number(8 * sizeof(size_t)).toStdString();
-      osc_write_log_error(c_LogActivity,
-                          "Could not load the CAN DLL! Make sure to use a " + c_Bitness + "-bit DLL.");
-   }
 
    if (s32_Return == C_NO_ERR)
    {
-      s32_Return = this->Init(&this->mc_CanDispatcher);
+      s32_Return = this->Init(this->mpc_CanDispatcher);
    }
 
    return s32_Return;
