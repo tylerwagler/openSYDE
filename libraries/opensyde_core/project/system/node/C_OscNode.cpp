@@ -2185,8 +2185,7 @@ bool C_OscNode::IsAnyUpdateAvailable(void) const
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Checks if the node supports routing
 
-   Special case: Hybrid nodes can be used with openSYDE or KEFEX server,
-   but routing is available with the openSYDE server only.
+   Routing is available with the openSYDE server only.
 
    \param[in]  oe_Type  Interface type
 
@@ -2212,8 +2211,7 @@ bool C_OscNode::IsRoutingAvailable(const C_OscSystemBus::E_Type oe_Type) const
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Checks if the node supports protocol diagnostics
 
-   Special case: Hybrid nodes can be used with openSYDE or KEFEX server,
-   but diagnosis is available with the openSYDE server only.
+   Diagnosis is available with the openSYDE server only.
 
    \param[in]  oe_Type  Interface type
 

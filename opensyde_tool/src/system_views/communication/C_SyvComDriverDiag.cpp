@@ -5,7 +5,7 @@
 
    Add functionality for diagnostics to the base class:
    * drivers for accessing data pool elements ("DataDealers")
-   * diagnostic protocols via openSYDE or KEFEX protocols
+   * diagnostic protocols via openSYDE
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
@@ -1505,8 +1505,8 @@ bool C_SyvComDriverDiag::m_IsRoutingSpecificNecessary(const C_OscNode & orc_Node
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Prepares the routing for a specific server.
 
-    Currently no specific server supported. Was originally for KEFEX diagnostic server which we never implemented.
-    But we keep the interface to insert such. Therefore just an empty implementation here.
+    No specific server currently supported. Empty implementation kept so the interface
+    is available if a non-openSYDE diagnostic server is ever added.
 
    \param[in]   ou32_ActiveNode                       Active node index of vector mc_ActiveNodes
    \param[in]   opc_Node                              Pointer to current node
@@ -1911,11 +1911,9 @@ int32_t C_SyvComDriverDiag::m_InitDataDealer(void)
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Initialize the necessary routing configuration to start the routing for diagnosis
 
-   Prepares all active nodes with its routing configurations if necessary
-   Three different types of routing:
-   - openSYDE routing for a openSYDE server
-   - legacy routing for a KEFEX server
-   - legacy routing for a KEFEX server after openSYDE routing to a openSYDE server
+   Prepares all active nodes with its routing configurations if necessary.
+   Only openSYDE routing for an openSYDE server is currently supported; the legacy-routing
+   hooks remain available for future non-openSYDE diagnostic servers.
 
    \param[in]   orc_ErrorDetails       Details for current error
    \param[out]  orc_ErrorActiveNodes   All active node indexes of nodes which can not be reached

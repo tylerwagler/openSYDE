@@ -52,7 +52,6 @@ const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME = "%{COMP
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  CheckValidCName
 
-   Function adapted from KEFEX to openSYDE (KFXCheckValidCName)
    Check if orc_Name follows C language naming conventions:
    -> must not be empty
    -> only alphanumeric characters + "_"

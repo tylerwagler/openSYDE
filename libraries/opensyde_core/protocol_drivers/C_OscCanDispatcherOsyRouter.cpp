@@ -6,7 +6,7 @@
    Implementation of C_CAN_Dispatcher interface to provide "CAN"-like communication via
    an openSYDE server that provides routing of legacy protocols.
    The application instances this class instead of using a "physical" CAN dispatcher and
-   registers it with the legacy protocol driver (e.g. KEFEX protocol driver).
+   registers it with a legacy protocol driver.
    Thus the requests and responses send and received by the protocol driver will not be sent
    directly on CAN but be communicated to the openSYDE server node using the routing services.
 

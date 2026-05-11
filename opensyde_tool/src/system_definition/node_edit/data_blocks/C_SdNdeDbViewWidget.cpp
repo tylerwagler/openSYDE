@@ -299,7 +299,7 @@ void C_SdNdeDbViewWidget::m_HandleNoDatablocksLabel(void) const
    {
       this->mpc_Ui->pc_LabelNoDatablocks->setVisible(true);
       this->mpc_Ui->pc_LabelNoDatablocks->setText(C_GtGetText::h_GetText(
-                                                     "No openSYDE/KEFEX protocol support. \nData Blocks cannot be added."));
+                                                     "No openSYDE protocol support. \nData Blocks cannot be added."));
    }
 }
 

@@ -514,7 +514,7 @@ uint8_t C_SdUtil::h_GetNodeIdMaximum(const uint32_t & oru32_NodeIndex)
       }
       else
       {
-         //STW FL / KEFEX (+ no diag protocol support) max id
+         //no diag protocol support max id
          u8_Retval = mu8_MAX_NODE_ID_STW;
       }
    }

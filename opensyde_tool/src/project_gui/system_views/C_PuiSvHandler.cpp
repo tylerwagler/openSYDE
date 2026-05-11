@@ -4325,7 +4325,7 @@ const
                {
                   // Nothing to do
                   // All three calculations returned C_NOACT. This scenario is a node without any openSYDE
-                  // or STW Flashloade/KEFEX functionality like a third party device. No error and not relevant
+                  // functionality like a third party device. No error and not relevant
                   // for the protocol specific communication
                }
             }

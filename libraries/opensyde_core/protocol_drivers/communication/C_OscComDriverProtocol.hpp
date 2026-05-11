@@ -95,7 +95,7 @@ protected:
    std::vector<C_OscNodeComInterfaceSettings::C_IpAddress> mc_ServerIpAddresses;
    ///Holds created instances of either CAN or IP TP. Length matches number of active nodes.
    std::vector<C_OscProtocolDriverOsyTpBase *> mc_TransportProtocols;
-   ///Holds created instances of routing dispatcher (one for each routed KEFEX diagnostic server).
+   ///Holds created instances of routing dispatcher for legacy-protocol routing.
    ///Length matches number of active nodes.
    std::vector<C_OscCanDispatcherOsyRouter *> mc_LegacyRouterDispatchers;
 
