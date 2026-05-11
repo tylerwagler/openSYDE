@@ -24,6 +24,10 @@
 #include "C_OscCanSocketCanAdapter.hpp"
 #endif
 
+#if defined(_WIN32) && defined(OPENSYDE_HAVE_PEAK_ADAPTER)
+#include "C_OscCanPeakAdapter.hpp"
+#endif
+
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::scl;
@@ -70,7 +74,14 @@ C_CanDispatcher * C_OscCanAdapterFactory::h_CreateAdapter(const C_OscCanAdapterC
 #endif
       break;
    case eCAN_ADAPTER_PEAK:
-      orc_ErrorDescription = "PEAK adapter is not yet implemented.";
+#if defined(_WIN32) && defined(OPENSYDE_HAVE_PEAK_ADAPTER)
+      pc_Adapter = new C_OscCanPeakAdapter(orc_Config.u16_PeakChannel, orc_Config.u32_PeakBitrateKbits);
+#elif defined(_WIN32)
+      orc_ErrorDescription = "PEAK adapter not compiled in (OPENSYDE_ENABLE_PEAK_ADAPTER=OFF).";
+#else
+      orc_ErrorDescription = "PEAK native adapter is not available on Linux. "
+                             "Use SocketCAN with the PEAK kernel driver instead.";
+#endif
       break;
    default:
       orc_ErrorDescription = "Unknown CAN adapter type.";
@@ -102,7 +113,7 @@ bool C_OscCanAdapterFactory::h_IsAdapterTypeAvailable(const E_CanAdapterType oe_
 #endif
       break;
    case eCAN_ADAPTER_PEAK:
-#ifdef _WIN32
+#if defined(_WIN32) && defined(OPENSYDE_HAVE_PEAK_ADAPTER)
       q_Available = true;
 #endif
       break;

@@ -759,6 +759,59 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock
    )
+
+   # PEAK native adapter via PCANBasic SDK. Default ON on Windows; opt-out with
+   # -DOPENSYDE_ENABLE_PEAK_ADAPTER=OFF when building without the PEAK SDK installed.
+   option(OPENSYDE_ENABLE_PEAK_ADAPTER "Compile the PEAK native CAN adapter (requires PCANBasic SDK)" ON)
+   if(WIN32 AND OPENSYDE_ENABLE_PEAK_ADAPTER)
+      find_path(PCANBASIC_INCLUDE_DIR
+         NAMES PCANBasic.h
+         PATHS
+            "$ENV{PROGRAMFILES}/PEAK-System/PEAK-Drivers 4/Include"
+            "$ENV{PROGRAMFILES\(X86\)}/PEAK-System/PEAK-Drivers 4/Include"
+            "C:/Program Files/PEAK-System/PEAK-Drivers 4/Include"
+            "C:/Program Files (x86)/PEAK-System/PEAK-Drivers 4/Include"
+      )
+      find_library(PCANBASIC_LIBRARY
+         NAMES PCANBasic
+         PATHS
+            "$ENV{PROGRAMFILES}/PEAK-System/PEAK-Drivers 4/x64/VC_LIB"
+            "$ENV{PROGRAMFILES\(X86\)}/PEAK-System/PEAK-Drivers 4/x64/VC_LIB"
+            "C:/Program Files/PEAK-System/PEAK-Drivers 4/x64/VC_LIB"
+            "C:/Program Files (x86)/PEAK-System/PEAK-Drivers 4/x64/VC_LIB"
+      )
+
+      if(PCANBASIC_INCLUDE_DIR AND PCANBASIC_LIBRARY)
+         message("PCANBasic SDK found at ${PCANBASIC_INCLUDE_DIR}")
+
+         set(OPENSYDE_CORE_PEAK_ADAPTER_SOURCES
+            ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/peak/C_OscCanPeakAdapter.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/peak/C_OscCanPeakAdapter.hpp
+         )
+         set(OPENSYDE_CORE_PEAK_ADAPTER_INCLUDE_DIRECTORIES
+            ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/peak
+            ${PCANBASIC_INCLUDE_DIR}
+         )
+         set(OPENSYDE_CORE_PEAK_ADAPTER_LIBRARIES ${PCANBASIC_LIBRARY})
+
+         set(OPENSYDE_CORE_WINDOWS_DRIVERS_SOURCES
+            ${OPENSYDE_CORE_WINDOWS_DRIVERS_SOURCES}
+            ${OPENSYDE_CORE_PEAK_ADAPTER_SOURCES}
+         )
+         set(OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES
+            ${OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES}
+            ${OPENSYDE_CORE_PEAK_ADAPTER_INCLUDE_DIRECTORIES}
+         )
+
+         add_compile_definitions(OPENSYDE_HAVE_PEAK_ADAPTER=1)
+      else()
+         message(FATAL_ERROR
+            "OPENSYDE_ENABLE_PEAK_ADAPTER is ON but PCANBasic SDK was not found. "
+            "Install PEAK-Drivers from https://www.peak-system.com (the PCAN-Basic API "
+            "ships with that installer), or pass -DOPENSYDE_ENABLE_PEAK_ADAPTER=OFF "
+            "to skip the PEAK adapter (you'll lose Windows native CAN support).")
+      endif()
+   endif()
 endif()
 
 # windows target glue layer
@@ -935,3 +988,9 @@ target_precompile_headers(opensyde_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/preco
 # Skip precompiled headers for C source files (the PCH only has C++ content)
 file(GLOB_RECURSE OPENSYDE_CORE_C_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.c")
 set_source_files_properties(${OPENSYDE_CORE_C_SOURCES} PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+
+# Link PCANBasic.lib (Windows native PEAK adapter). PUBLIC so executables that link
+# against opensyde_core inherit the PCANBasic dependency transitively.
+if(WIN32 AND OPENSYDE_CORE_PEAK_ADAPTER_LIBRARIES)
+   target_link_libraries(opensyde_core PUBLIC ${OPENSYDE_CORE_PEAK_ADAPTER_LIBRARIES})
+endif()
