@@ -384,8 +384,6 @@ QString C_SyvUpSequences::GetStepName(const E_ProgressStep oe_Step) const
    case eACTIVATE_FLASHLOADER_OSY_ECU_RESET_ERROR:
       c_Text = C_GtGetText::h_GetText("Activate Flashloader: ECU reset error");
       break;
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Sending ECU reset request error");
-      break;
    case eACTIVATE_FLASHLOADER_OSY_BC_ENTER_FLASHLOADER_START:
       c_Text = C_GtGetText::h_GetText("Activate Flashloader: Broadcast enter Flashloader start");
       break;
@@ -463,10 +461,6 @@ QString C_SyvUpSequences::GetStepName(const E_ProgressStep oe_Step) const
       break;
    case eREAD_DEVICE_INFO_OSY_FINISHED:
       c_Text = C_GtGetText::h_GetText("Read openSYDE Device Information: Finished");
-      break;
-      c_Text = C_GtGetText::h_GetText("Read STW Flashloader Device Information: Finished");
-      break;
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Start");
       break;
    case eUPDATE_SYSTEM_START:
       c_Text = C_GtGetText::h_GetText("Update System: Start");
@@ -675,12 +669,6 @@ QString C_SyvUpSequences::GetStepName(const E_ProgressStep oe_Step) const
       break;
    case eUPDATE_SYSTEM_FINISHED:
       c_Text = C_GtGetText::h_GetText("Update System: Finished");
-      break;
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash finished");
-      break;
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash of HEX file error");
-      break;
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash of HEX file finished");
       break;
    case eRESET_SYSTEM_START:
       c_Text = C_GtGetText::h_GetText("Reset System: Start");
