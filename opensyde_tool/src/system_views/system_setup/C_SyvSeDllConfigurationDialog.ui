@@ -256,7 +256,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLeFilePath" name="pc_LineEditCustomDllPath">
+               <widget class="QComboBox" name="pc_ComboBoxAdapterValue">
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -268,6 +268,9 @@
                   <width>16777215</width>
                   <height>30</height>
                  </size>
+                </property>
+                <property name="editable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -593,7 +596,7 @@
   <tabstop>pc_RadioButtonPeak</tabstop>
   <tabstop>pc_RadioButtonVector</tabstop>
   <tabstop>pc_RadioButtonOther</tabstop>
-  <tabstop>pc_LineEditCustomDllPath</tabstop>
+  <tabstop>pc_ComboBoxAdapterValue</tabstop>
   <tabstop>pc_PushButtonVariables</tabstop>
   <tabstop>pc_PushButtonBrowse</tabstop>
   <tabstop>pc_PushButtonConfigureDll</tabstop>

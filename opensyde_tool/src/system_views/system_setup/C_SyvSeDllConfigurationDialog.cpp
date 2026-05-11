@@ -18,8 +18,6 @@
 
 #include <QDir>
 #include <QFile>
-#include <QTextStream>
-#include <QHBoxLayout>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -57,7 +55,6 @@ using namespace stw::can;
 C_SyvSeDllConfigurationDialog::C_SyvSeDllConfigurationDialog(C_OgePopUpDialog & orc_Parent) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvSeDllConfigurationDialog),
-   mpc_SocketCanCombo(NULL),
    mc_AdapterConfig(C_OscCanAdapterConfig::h_GetPlatformDefault()),
    mu64_Bitrate(0U)
 {
@@ -107,7 +104,7 @@ void C_SyvSeDllConfigurationDialog::InitText(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::m_ApplyPlatformLayout(void)
+void C_SyvSeDllConfigurationDialog::m_ApplyPlatformLayout(void) const
 {
    // Hide the legacy PEAK/Vector/Other radio buttons. Only adapter type per platform is supported now;
    // the .ui file still has the widgets but they're inert.
@@ -121,33 +118,12 @@ void C_SyvSeDllConfigurationDialog::m_ApplyPlatformLayout(void)
    this->mpc_Ui->pc_PushButtonVariables->setVisible(false);
 
    this->mpc_Ui->pc_LabelCustomDllPath->setVisible(true);
+   this->mpc_Ui->pc_ComboBoxAdapterValue->setVisible(true);
 
-#ifdef _WIN32
-   // Windows: use the existing line edit for the PEAK channel number.
-   this->mpc_Ui->pc_LineEditCustomDllPath->setVisible(true);
-#else
-   // Linux: replace the line edit with an editable QComboBox populated with discovered SocketCAN
-   // interfaces. The combo stays editable so users can also type a name the kernel will create
-   // shortly (e.g. before `ip link add dev vcan0 type vcan && ip link set up vcan0`).
-   this->mpc_Ui->pc_LineEditCustomDllPath->setVisible(false);
-
-   if (this->mpc_SocketCanCombo == NULL)
-   {
-      this->mpc_SocketCanCombo = new QComboBox(this);
-      this->mpc_SocketCanCombo->setEditable(true);
-      this->mpc_SocketCanCombo->setMinimumHeight(30);
-      this->mpc_SocketCanCombo->setMaximumHeight(30);
-
-      // Insert immediately after the now-hidden line edit in its parent layout.
-      QHBoxLayout * const pc_Layout =
-         qobject_cast<QHBoxLayout *>(this->mpc_Ui->pc_LineEditCustomDllPath->parentWidget()->layout());
-      if (pc_Layout != NULL)
-      {
-         const int32_t s32_Index = pc_Layout->indexOf(this->mpc_Ui->pc_LineEditCustomDllPath);
-         pc_Layout->insertWidget(s32_Index + 1, this->mpc_SocketCanCombo);
-      }
-   }
-
+#ifndef _WIN32
+   // Linux: populate the combo with discovered SocketCAN interfaces. The combo stays editable so
+   // users can also type a name the kernel will create shortly (e.g. before
+   // `ip link add dev vcan0 type vcan && ip link set up vcan0`).
    this->m_PopulateSocketCanInterfaces();
 #endif
 }
@@ -155,29 +131,24 @@ void C_SyvSeDllConfigurationDialog::m_ApplyPlatformLayout(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeDllConfigurationDialog::m_PopulateSocketCanInterfaces(void) const
 {
-   if (this->mpc_SocketCanCombo == NULL)
-   {
-      return;
-   }
-
-   const QString c_Current = this->mpc_SocketCanCombo->currentText();
-   this->mpc_SocketCanCombo->clear();
+   const QString c_Current = this->mpc_Ui->pc_ComboBoxAdapterValue->currentText();
+   this->mpc_Ui->pc_ComboBoxAdapterValue->clear();
    const QStringList c_Interfaces = mh_DiscoverSocketCanInterfaces();
    for (int32_t s32_Idx = 0; s32_Idx < c_Interfaces.size(); ++s32_Idx)
    {
-      this->mpc_SocketCanCombo->addItem(c_Interfaces.at(s32_Idx));
+      this->mpc_Ui->pc_ComboBoxAdapterValue->addItem(c_Interfaces.at(s32_Idx));
    }
 
    if (c_Current.isEmpty() == false)
    {
-      const int32_t s32_Existing = this->mpc_SocketCanCombo->findText(c_Current);
+      const int32_t s32_Existing = this->mpc_Ui->pc_ComboBoxAdapterValue->findText(c_Current);
       if (s32_Existing >= 0)
       {
-         this->mpc_SocketCanCombo->setCurrentIndex(s32_Existing);
+         this->mpc_Ui->pc_ComboBoxAdapterValue->setCurrentIndex(s32_Existing);
       }
       else
       {
-         this->mpc_SocketCanCombo->setEditText(c_Current);
+         this->mpc_Ui->pc_ComboBoxAdapterValue->setEditText(c_Current);
       }
    }
 }
@@ -218,22 +189,19 @@ void C_SyvSeDllConfigurationDialog::SetAdapterConfig(const C_OscCanAdapterConfig
    this->mc_AdapterConfig = orc_Config;
 
 #ifdef _WIN32
-   this->mpc_Ui->pc_LineEditCustomDllPath->setText(QString::number(orc_Config.u16_PeakChannel));
+   this->mpc_Ui->pc_ComboBoxAdapterValue->setEditText(QString::number(orc_Config.u16_PeakChannel));
 #else
    const QString c_Display = orc_Config.c_SocketCanInterface.IsEmpty() ?
                              QString("can0") :
                              QString(orc_Config.c_SocketCanInterface.c_str());
-   if (this->mpc_SocketCanCombo != NULL)
+   const int32_t s32_Existing = this->mpc_Ui->pc_ComboBoxAdapterValue->findText(c_Display);
+   if (s32_Existing >= 0)
    {
-      const int32_t s32_Existing = this->mpc_SocketCanCombo->findText(c_Display);
-      if (s32_Existing >= 0)
-      {
-         this->mpc_SocketCanCombo->setCurrentIndex(s32_Existing);
-      }
-      else
-      {
-         this->mpc_SocketCanCombo->setEditText(c_Display);
-      }
+      this->mpc_Ui->pc_ComboBoxAdapterValue->setCurrentIndex(s32_Existing);
+   }
+   else
+   {
+      this->mpc_Ui->pc_ComboBoxAdapterValue->setEditText(c_Display);
    }
 #endif
 }
@@ -248,9 +216,9 @@ void C_SyvSeDllConfigurationDialog::SetBitrate(const uint64_t ou64_Bitrate)
 C_OscCanAdapterConfig C_SyvSeDllConfigurationDialog::GetAdapterConfig(void) const
 {
    C_OscCanAdapterConfig c_Result = this->mc_AdapterConfig;
+   const QString c_Field = this->mpc_Ui->pc_ComboBoxAdapterValue->currentText().trimmed();
 
 #ifdef _WIN32
-   const QString c_Field = this->mpc_Ui->pc_LineEditCustomDllPath->text().trimmed();
    c_Result.e_Type = eCAN_ADAPTER_PEAK;
    bool q_Ok = false;
    const uint32_t u32_Channel = c_Field.toUInt(&q_Ok);
@@ -260,9 +228,6 @@ C_OscCanAdapterConfig C_SyvSeDllConfigurationDialog::GetAdapterConfig(void) cons
                                    static_cast<uint32_t>(this->mu64_Bitrate / 1000U) :
                                    c_Result.u32_PeakBitrateKbits;
 #else
-   const QString c_Field = (this->mpc_SocketCanCombo != NULL) ?
-                           this->mpc_SocketCanCombo->currentText().trimmed() :
-                           QString();
    c_Result.e_Type = eCAN_ADAPTER_SOCKET_CAN;
    c_Result.c_SocketCanInterface = c_Field.isEmpty() ?
                                    stw::scl::C_SclString("can0") :
