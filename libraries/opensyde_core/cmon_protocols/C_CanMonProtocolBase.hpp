@@ -10,7 +10,7 @@
 #define CCMONPROTOCOLBASEHPP
 
 #include "stwtypes.hpp"
-#include "C_CanMonProtocolTarget.hpp"
+#include "stw_can.hpp"
 #include "C_SclString.hpp"
 #include "C_SclIniFile.hpp"
 

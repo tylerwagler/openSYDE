@@ -11,7 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_CanMonProtocolTarget.hpp"
+#include "stw_can.hpp"
 #include "C_CanMonProtocolBase.hpp"
 #include "C_CanMonProtocolCanOpen.hpp"
 #include "C_CanMonProtocolGd.hpp"

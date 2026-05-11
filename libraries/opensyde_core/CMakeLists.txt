@@ -651,7 +651,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolJ1939.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolL2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolOpenSyde.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolTarget.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocolOpenSyde.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocols.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComMessageLogger.hpp

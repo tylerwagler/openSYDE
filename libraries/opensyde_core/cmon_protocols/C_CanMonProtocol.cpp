@@ -1,7 +1,7 @@
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include <cstring>
-#include "C_CanMonProtocolTarget.hpp"
+#include "stw_can.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocol.hpp"

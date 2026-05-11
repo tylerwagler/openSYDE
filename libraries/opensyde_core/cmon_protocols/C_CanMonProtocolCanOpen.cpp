@@ -1,6 +1,6 @@
 #include "precomp_headers.hpp" //pre-compiled headers
 
-#include "C_CanMonProtocolTarget.hpp"
+#include "stw_can.hpp"
 
 #include "stwtypes.hpp"
 #include "C_CanMonProtocolCanOpen.hpp"
