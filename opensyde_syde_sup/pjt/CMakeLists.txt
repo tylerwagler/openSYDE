@@ -35,7 +35,7 @@ endif()
 include_directories(${SYDESUP_COMMON_INCLUDE_DIRECTORIES})
 
 set(SYDESUP_LINUX_INCLUDE_DIRECTORIES
-   ${PROJECT_ROOT}/../libraries/opensyde_core/kefex_diaglib/tgl_linux
+   ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux
    ${PROJECT_ROOT}/../libraries/opensyde_core/can_dispatcher/target_linux_socket_can
    ${PROJECT_ROOT}/../libraries/opensyde_core/ip_dispatcher/target_linux_sock
    )
@@ -58,10 +58,10 @@ set(SYDESUP_LINUX_SOURCES
    )
 
 set(SYDESUP_LINUX_LIB_SOURCES
-   ${PROJECT_ROOT}/../libraries/opensyde_core/kefex_diaglib/tgl_linux/TglFile.cpp
-   ${PROJECT_ROOT}/../libraries/opensyde_core/kefex_diaglib/tgl_linux/TglTasks.cpp
-   ${PROJECT_ROOT}/../libraries/opensyde_core/kefex_diaglib/tgl_linux/TglTime.cpp
-   ${PROJECT_ROOT}/../libraries/opensyde_core/kefex_diaglib/tgl_linux/TglUtils.cpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglFile.cpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglTasks.cpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglTime.cpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglUtils.cpp
    ${PROJECT_ROOT}/../libraries/opensyde_core/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.cpp
    ${PROJECT_ROOT}/../libraries/opensyde_core/can_dispatcher/target_linux_socket_can/C_Can.cpp
    )
