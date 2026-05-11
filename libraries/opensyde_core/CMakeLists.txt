@@ -79,7 +79,7 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilBinaryHash.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilChecksummedIniFile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtils.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/stwcompid/stwcompid.c
+   ${CMAKE_CURRENT_SOURCE_DIR}/stw_compid/stwcompid.c
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.cpp
@@ -96,7 +96,7 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtilChecksummedIniFile.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/util/C_OscUtils.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/DiagLib_config.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/stwcompid/stwcompid.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/stw_compid/stwcompid.h
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.hpp
@@ -120,7 +120,7 @@ set(OPENSYDE_CORE_COMMON_SOURCES
 set(OPENSYDE_CORE_COMMON_INCLUDE_DIRECTORIES
    ${CMAKE_CURRENT_SOURCE_DIR}
    ${CMAKE_CURRENT_SOURCE_DIR}/conf_file_handler
-   ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/stwcompid
+   ${CMAKE_CURRENT_SOURCE_DIR}/stw_compid
    ${CMAKE_CURRENT_SOURCE_DIR}/logging
    ${CMAKE_CURRENT_SOURCE_DIR}/md5
    ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers
@@ -495,7 +495,7 @@ else()
 
    set(OPENSYDE_CORE_PROTOCOL_DRIVERS_COMMON_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpCan.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/hexfile/C_HexFile.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/hex_file/C_HexFile.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsy.cpp
@@ -515,7 +515,7 @@ else()
 
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/stw_can.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpCan.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/hexfile/C_HexFile.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/hex_file/C_HexFile.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher/C_OscIpDispatcher.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.hpp
@@ -540,7 +540,7 @@ else()
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/device_config
-       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/hexfile
+       ${CMAKE_CURRENT_SOURCE_DIR}/hex_file
        ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher
    )
 endif()
@@ -602,8 +602,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/routing
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/system_update
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols
    )
 endif()
 
@@ -632,13 +631,13 @@ else()
    message("OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING not detected ... dragging in package")
 
    set (OPENSYDE_CORE_PROTOCOL_LOGGING_SOURCES
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocol.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolBase.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolCanOpen.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolGd.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolJ1939.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolL2.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolOpenSyde.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocol.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolBase.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolCanOpen.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolGd.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolJ1939.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolL2.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolOpenSyde.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocolOpenSyde.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocols.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComMessageLogger.cpp
@@ -646,14 +645,14 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComMessageLoggerFileAsc.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComMessageLoggerFileBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComMessageLoggerOsySysDefConfig.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocol.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolBase.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolCanOpen.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolGd.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolJ1939.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolL2.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol/C_CanMonProtocolOpenSyde.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/C_CanMonProtocolTarget.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocol.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolBase.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolCanOpen.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolGd.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolJ1939.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolL2.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolOpenSyde.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolTarget.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocolOpenSyde.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocols.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComMessageLogger.hpp
@@ -663,8 +662,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComMessageLoggerOsySysDefConfig.hpp
    )
    set(OPENSYDE_CORE_PROTOCOL_LOGGING_INCLUDE_DIRECTORIES
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/cmonprotocol
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols
    )
 endif()
 
