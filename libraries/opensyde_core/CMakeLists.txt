@@ -512,7 +512,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscUpdateUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComFlashloaderInformation.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/device_config/C_OscDcDeviceInformation.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_pool/CDLReportEvents.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/stw_can.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpCan.hpp
@@ -533,7 +532,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscUpdateUtil.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComFlashloaderInformation.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/device_config/C_OscDcDeviceInformation.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_pool/CDLReportEvents.hpp
    )
 
    set(OPENSYDE_CORE_PROTOCOL_DRIVERS_COMMON_INCLUDE_DIRECTORIES
@@ -544,7 +542,6 @@ else()
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/device_config
        ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/hexfile
        ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher
-       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_pool
    )
 endif()
 
