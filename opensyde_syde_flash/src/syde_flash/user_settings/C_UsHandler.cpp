@@ -331,25 +331,10 @@ C_UsHandler::E_CanDllType C_UsHandler::GetCanDllType() const
 //----------------------------------------------------------------------------------------------------------------------
 QString C_UsHandler::GetCanDllPath() const
 {
-   QString c_Return;
-
-   switch (this->me_CanDllType)
-   {
-   case ePEAK:
-      c_Return = mc_DLL_PATH_PEAK_FLA;
-      break;
-   case eVECTOR:
-      c_Return = mc_DLL_PATH_VECTOR_FLA;
-      break;
-   case eOTHER:
-      c_Return = this->mc_CustomCanDllPath;
-      break;
-   default:
-      c_Return = mc_DLL_PATH_PEAK_FLA;
-      break;
-   }
-
-   return c_Return;
+   // After the libcan migration the STW CAN-DLL paths are dead — the factory takes
+   // C_OscCanAdapterConfig and ignores this string for everything except eOTHER (where it's
+   // reinterpreted as a SocketCAN ifname on Linux). Return the custom path or empty.
+   return (this->me_CanDllType == eOTHER) ? this->mc_CustomCanDllPath : QString();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
