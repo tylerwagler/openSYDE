@@ -195,7 +195,7 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const C_SclString & or
 
       if ((pc_ComProtocol != NULL) && (pc_DataPool != NULL))
       {
-         //check whether there is at least one message with signals defined; otherwise fail; KFXTCSWRSCC_474
+         //check whether there is at least one message with signals defined; otherwise fail
          bool q_NoSignals = true;
          const C_OscCanMessageContainer & rc_Messages = pc_ComProtocol->c_ComMessages[ou8_InterfaceIndex];
 
@@ -1249,7 +1249,6 @@ void C_OscExportCommunicationStack::mh_AddMessageDefinitions(C_SclStringList & o
    If a message is not multiplexed, count it as one. If it is multiplexed count number of multiplexed messages
    corresponding to this message, i.e. number of multiplex values. If the message has a multiplexer signal and
    therefore is multiplexed, but has no multiplexed signal at all, also count with one.
-   See KFXTCSWRSCC_380.
 
    \param[in]  orc_Messages   Original messages
 

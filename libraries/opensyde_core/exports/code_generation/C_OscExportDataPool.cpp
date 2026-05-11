@@ -1173,7 +1173,7 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
 
    orc_Data.Append("///Create Datapool instance data:");
 
-   //KFXTCSWRSCC_449: special macro from V5 on if local and NVM:
+   //special macro from V5 on if local and NVM:
    if ((ou16_GenCodeVersion >= 5U) && (oe_Linkage == eLOCAL) &&
        ((orc_DataPool.e_Type == C_OscNodeDataPool::eNVM) || (orc_DataPool.e_Type == C_OscNodeDataPool::eHALC_NVM)))
    {
@@ -1196,7 +1196,7 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
    }
    else
    {
-      //KFXTCSWRSCC_360: create instance data without "NVM buffer"
+      //create instance data without "NVM buffer"
       c_String = "OSY_DPA_CREATE_STATIC_DP_INSTANCE_DATA(mt_DpInstanceData, ";
       switch (oe_Linkage)
       {
@@ -1225,7 +1225,7 @@ void C_OscExportDataPool::mh_AddModuleGlobal(C_SclStringList & orc_Data, const C
    c_String = "   ";
    if (ou16_GenCodeVersion >= 4U)
    {
-      //KFXTCSWRSCC_516: add linkage information
+      //add linkage information
       c_String += "OSY_DPA_DATA_POOL_LINKAGE_" + C_OscExportDataPool::mh_ConvertLinkageToString(oe_Linkage) +
                   ",  ///< Datapool linkage";
    }
