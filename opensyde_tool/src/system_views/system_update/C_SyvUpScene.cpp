@@ -438,7 +438,7 @@ std::vector<uint32_t> C_SyvUpScene::GetActiveNoneThirdPartyNodeIndices(void) con
          if ((((pc_Node != NULL) && (pc_Node->GetIndex() >= 0)) && (pc_Node->IsActiveInView() == true)) &&
              (pc_Node->HasNodeAnAvailableFlashloader() == true))
          {
-            const std::vector<uint32_t> c_AllCurrent = pc_Node->GetAllActiveStwDeviceIndices();
+            const std::vector<uint32_t> c_AllCurrent = pc_Node->GetAllActiveFlashableSubNodeIndices();
             for (std::vector<uint32_t>::const_iterator c_It = c_AllCurrent.cbegin(); c_It != c_AllCurrent.end(); ++c_It)
             {
                c_Retval.push_back(*c_It);

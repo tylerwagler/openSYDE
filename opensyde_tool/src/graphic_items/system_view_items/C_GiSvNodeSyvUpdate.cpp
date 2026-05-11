@@ -335,13 +335,13 @@ bool C_GiSvNodeSyvUpdate::HasNoResponseAndIsActive(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get all active STW device indices
+/*! \brief  Get all active sub-node indices that have an openSYDE flashloader available
 
    \return
-   All active STW device indices
+   Indices of sub-nodes that are active in the view and declare openSYDE flashloader support
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_GiSvNodeSyvUpdate::GetAllActiveStwDeviceIndices() const
+std::vector<uint32_t> C_GiSvNodeSyvUpdate::GetAllActiveFlashableSubNodeIndices() const
 {
    std::vector<uint32_t> c_Retval;
    if (this->ms32_Index >= 0)
@@ -360,7 +360,7 @@ std::vector<uint32_t> C_GiSvNodeSyvUpdate::GetAllActiveStwDeviceIndices() const
          {
             if (c_NodeActiveFlags[c_NodeIndices[u32_ItNode]] == 1U)
             {
-               if (this->mc_NodeData.GetStwDeviceInfoByNodeIndex(c_NodeIndices[u32_ItNode]))
+               if (this->mc_NodeData.IsSubNodeFlashable(c_NodeIndices[u32_ItNode]))
                {
                   c_Retval.push_back(c_NodeIndices[u32_ItNode]);
                }

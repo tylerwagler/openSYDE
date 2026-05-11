@@ -79,7 +79,7 @@ public:
    uint32_t GetSubNodeCount(void) const;
    stw::opensyde_gui_logic::C_SyvUtil::E_NodeUpdateInitialStatus GetInitialStateByNodeIndex(
       const uint32_t ou32_NodeIndex) const;
-   bool GetStwDeviceInfoByNodeIndex(const uint32_t ou32_NodeIndex) const;
+   bool IsSubNodeFlashable(const uint32_t ou32_NodeIndex) const;
    const C_GiSvSubNodeData * GetSubNodeByNodeIndex(const uint32_t ou32_NodeIndex) const;
    const C_GiSvSubNodeData * GetSubNodeBySubNodeIndex(const uint32_t ou32_SubNodeIndex) const;
    bool IsNodeConnectStatesSet(void) const;

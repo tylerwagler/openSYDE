@@ -759,15 +759,16 @@ C_SyvUtil::E_NodeUpdateInitialStatus C_GiSvNodeData::GetInitialStateByNodeIndex(
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get STW device info by node index
+/*! \brief  Check if the sub-node with the given node index has an openSYDE flashloader available
 
    \param[in]  ou32_NodeIndex    Node index
 
    \return
-   STW device info by node index
+   True   Sub-node declares openSYDE flashloader support
+   False  Sub-node is third-party / not flashable
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_GiSvNodeData::GetStwDeviceInfoByNodeIndex(const uint32_t ou32_NodeIndex) const
+bool C_GiSvNodeData::IsSubNodeFlashable(const uint32_t ou32_NodeIndex) const
 {
    bool q_Retval = false;
    const uint32_t u32_SubDeviceIndex = this->m_GetCorrespondingSubNodeIndex(ou32_NodeIndex);

@@ -1323,8 +1323,8 @@ int32_t C_PuiSdHandlerNodeLogic::MapNodeIndexToName(const uint32_t ou32_NodeInde
    \param[in]  ou32_NodeIndex    Node index
 
    \return
-   True  STW device
-   False Third party
+   True  Device declares openSYDE flashloader support (CAN or Ethernet)
+   False Third-party / non-flashable device
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_PuiSdHandlerNodeLogic::HasNodeAnAvailableFlashloader(const uint32_t ou32_NodeIndex) const
