@@ -22,6 +22,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_OscCanAdapterFactory.hpp"
 
 #include "C_CamMainWindow.hpp"
 #include "ui_C_CamMainWindow.h"
@@ -190,11 +191,8 @@ C_CamMainWindow::C_CamMainWindow(QWidget * const opc_Parent) :
 
    mpc_CanThread = new stw::opensyde_gui_logic::C_SyvComDriverThread(&C_CamMainWindow::mh_ThreadFunc, this);
 
-   // Starting the real communication
-   mpc_CanDllDispatcher = new stw::can::C_Can();
-
-   // Prepare the COM driver for CAN message handling
-   this->mc_ComDriver.InitBase(this->mpc_CanDllDispatcher);
+   // Dispatcher is created lazily by m_InitCan(): see h_CreateAdapter call there. The COM driver
+   // receives the pointer once the user starts communication.
    this->mc_ComDriver.RegisterLogger(this->mpc_Ui->pc_TraceWidget->GetMessageMonitor());
 
    // Load initial project
@@ -638,106 +636,89 @@ void C_CamMainWindow::m_ClearData()
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
 {
-   int32_t s32_Return = C_RD_WR;
+   int32_t s32_Return;
 
-   // Initialize
    ors32_Bitrate = 0;
 
-#ifdef _WIN32
-   QString c_DllPath;
-   QFileInfo c_File;
+   // Build adapter config from the persisted CAN configuration. The legacy "DLL path" string is
+   // reinterpreted: on Linux it's the SocketCAN interface name; on Windows the PEAK adapter
+   // currently always uses channel 1 (a follow-up will surface channel selection in the UI).
+   const QString c_PersistedPath = C_CamProHandler::h_GetInstance()->GetCanDllPath();
+   stw::opensyde_core::C_OscCanAdapterConfig c_Config =
+      stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
 
-   // Get absolute DLL path (resolve variables and make absolute if it is relative ant not empty)
-   c_DllPath = C_CamProHandler::h_GetInstance()->GetCanDllPath();
-   if (c_DllPath.isEmpty() == false)
+#ifndef _WIN32
+   if (c_PersistedPath.isEmpty() == false)
    {
-      c_DllPath = C_CamUti::h_GetResolvedAbsolutePathFromExe(c_DllPath);
-   }
-   c_File.setFile(c_DllPath);
-
-   if ((c_File.exists() == true) &&
-       (c_File.isFile() == true))
-   {
-      // Open the DLL
-      c_DllPath = c_DllPath.replace("/", "\\");
-      s32_Return = this->mpc_CanDllDispatcher->DLL_Open(c_DllPath.toStdString().c_str());
-
-      if (s32_Return == C_NO_ERR)
+      // Heuristic: if the persisted value looks like a Windows DLL path (ends with .dll or contains
+      // a backslash), it's a leftover from a project authored on Windows — fall back to the default.
+      const QString c_Lower = c_PersistedPath.toLower();
+      const bool q_LooksWindowsy = c_Lower.endsWith(".dll") || c_PersistedPath.contains("\\");
+      if (q_LooksWindowsy == false)
       {
-         // Init the CAN with the current configured bitrate
-         s32_Return = this->mpc_CanDllDispatcher->CAN_Init();
-
-         if (s32_Return == C_NO_ERR)
-         {
-            stw::can::T_STWCAN_Status c_Status;
-
-            // Get the bitrate of the CAN DLL
-            s32_Return = this->mpc_CanDllDispatcher->CAN_Status(c_Status);
-            if (s32_Return == C_NO_ERR)
-            {
-               ors32_Bitrate = c_Status.iActBitrate;
-            }
-            else
-            {
-               s32_Return = C_WARN;
-               ors32_Bitrate = 0;
-            }
-         }
-         else
-         {
-            // Error
-            s32_Return = C_COM;
-         }
-      }
-      else
-      {
-         // Error
-         s32_Return = C_CONFIG;
+         c_Config.c_SocketCanInterface = stw::scl::C_SclString(c_PersistedPath.toStdString().c_str());
       }
    }
-#else
-   // On Linux, use SocketCAN. The "DLL path" field is repurposed as the interface name (e.g. "can0", "vcan0").
-   QString c_IfName = C_CamProHandler::h_GetInstance()->GetCanDllPath();
-   if (c_IfName.isEmpty())
+#endif
+
+   // Tear down the previous dispatcher (if any) and create a fresh one for this session.
+   if (this->mpc_CanDllDispatcher != NULL)
    {
-      c_IfName = "can0"; // default SocketCAN interface
+      this->mc_ComDriver.InitBase(NULL);
+      delete this->mpc_CanDllDispatcher;
+      this->mpc_CanDllDispatcher = NULL;
    }
 
-   s32_Return = this->mpc_CanDllDispatcher->CAN_Init(
-      stw::scl::C_SclString(c_IfName.toStdString().c_str()));
+   stw::scl::C_SclString c_Error;
+   this->mpc_CanDllDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
+   if (this->mpc_CanDllDispatcher == NULL)
+   {
+      osc_write_log_error("CAN Init", c_Error);
+      s32_Return = C_RD_WR;
+   }
+   else
+   {
+      this->mc_ComDriver.InitBase(this->mpc_CanDllDispatcher);
+      s32_Return = this->mpc_CanDllDispatcher->CAN_Init();
 
+      if (s32_Return != C_NO_ERR)
+      {
+         s32_Return = C_COM;
+      }
+   }
+
+#ifndef _WIN32
    if (s32_Return == C_NO_ERR)
    {
-      // Read bitrate from SocketCAN interface via 'ip' command
+      // SocketCAN doesn't expose bitrate through the dispatcher abstract API; query the kernel via
+      // `ip -details link show`. vcan interfaces report no bitrate — that's fine for monitoring.
       QProcess c_Process;
-      c_Process.start("ip", QStringList() << "-details" << "link" << "show" << c_IfName);
+      c_Process.start("ip", QStringList() << "-details" << "link" << "show" <<
+                      QString(c_Config.c_SocketCanInterface.c_str()));
       if (c_Process.waitForFinished(1000))
       {
          const QString c_Output = QString::fromUtf8(c_Process.readAllStandardOutput());
-         // Parse "bitrate 500000" from ip output
          const QRegularExpression c_Regex("bitrate\\s+(\\d+)");
          const QRegularExpressionMatch c_Match = c_Regex.match(c_Output);
-         if (c_Match.hasMatch())
+         if (c_Match.hasMatch() == true)
          {
             ors32_Bitrate = c_Match.captured(1).toInt();
-            s32_Return = C_NO_ERR;
          }
          else
          {
-            // vcan interfaces don't have a bitrate — that's OK
             s32_Return = C_WARN;
-            ors32_Bitrate = 0;
          }
       }
       else
       {
          s32_Return = C_WARN;
-         ors32_Bitrate = 0;
       }
    }
-   else
+#else
+   if (s32_Return == C_NO_ERR)
    {
-      s32_Return = C_COM;
+      // Bitrate is whatever was configured into the PEAK adapter via its constructor (default 500).
+      ors32_Bitrate = static_cast<int32_t>(c_Config.u32_PeakBitrateKbits);
    }
 #endif
 
@@ -750,8 +731,10 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMainWindow::m_CloseCan(void)
 {
-   this->mpc_CanDllDispatcher->CAN_Exit();
-   this->mpc_CanDllDispatcher->DLL_Close();
+   if (this->mpc_CanDllDispatcher != NULL)
+   {
+      this->mpc_CanDllDispatcher->CAN_Exit();
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1444,28 +1427,11 @@ void C_CamMainWindow::m_OnCanDllConfigChange(void)
 {
    if (this->mq_LoggingStarted == true)
    {
-      int32_t s32_Result;
-
-      stw::can::T_STWCAN_Status c_Status = {};
-      int32_t s32_Bitrate;
-
-      // Get the bitrate of the CAN DLL
-      s32_Result = this->mpc_CanDllDispatcher->CAN_Status(c_Status);
-      if (s32_Result == C_NO_ERR)
-      {
-         s32_Bitrate = c_Status.iActBitrate;
-      }
-      else
-      {
-         C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eERROR);
-         c_MessageBox.SetType(C_OgeWiCustomMessage::eWARNING);
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("Starting CAN monitoring"));
-         c_MessageBox.SetDescription(C_GtGetText::h_GetText("Used bitrate could not used for bus load calculation."
-                                                            " Bus load will not work."));
-         c_MessageBox.Execute();
-
-         s32_Bitrate = 0;
-      }
+      // Legacy signal path — was emitted by the Windows-only "Configure DLL" button (now hidden in
+      // the adapter-based design). Refresh bus-load bitrate via the existing init flow so callers
+      // still get a sensible value if this somehow fires.
+      int32_t s32_Bitrate = 0;
+      (void)this->m_InitCan(s32_Bitrate);
 
       this->mc_ComDriver.UpdateBitrate(s32_Bitrate);
       this->mpc_Ui->pc_TraceWidget->SetCanBitrate(s32_Bitrate);

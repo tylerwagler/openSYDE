@@ -17,7 +17,7 @@
 
 #include "C_CamComDriverBase.hpp"
 
-#include "C_Can.hpp"
+#include "C_CanDispatcher.hpp"
 #include "C_SyvComDriverThread.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -58,7 +58,7 @@ private:
    static const int32_t mhs32_MESSAGE_GEN_SPLITTER_MAX;
 
    stw::opensyde_gui_logic::C_CamComDriverBase mc_ComDriver;
-   stw::can::C_Can * mpc_CanDllDispatcher;
+   stw::can::C_CanDispatcher * mpc_CanDllDispatcher;
    stw::opensyde_gui_logic::C_SyvComDriverThread * mpc_CanThread;
    bool mq_LoggingStarted;
 
