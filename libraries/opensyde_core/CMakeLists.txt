@@ -497,6 +497,8 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/hex_file/C_HexFile.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscCanAdapterConfig.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscCanAdapterFactory.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsy.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolSerialNumber.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpBase.cpp
@@ -518,6 +520,8 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher/C_OscIpDispatcher.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscCanAdapterConfig.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscCanAdapterFactory.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsy.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolSerialNumber.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpBase.hpp
@@ -536,6 +540,7 @@ else()
    set(OPENSYDE_CORE_PROTOCOL_DRIVERS_COMMON_INCLUDE_DIRECTORIES
        ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher
        ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher
+       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/device_config
