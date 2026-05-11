@@ -45,6 +45,47 @@
 cmake_minimum_required(VERSION 3.16)
 project("opensyde_core")
 
+# --- libcan dependency -----------------------------------------------------------------------------------------------
+# opensyde_core's CAN abstraction (C_CanDispatcher) is now backed by libcan from the sibling
+# can-libraries project (https://...). The C_OscLibcanBackendAdapter shim wraps can::ICanBackend
+# instances behind the existing C_CanDispatcher interface, so all four backends (SocketCAN,
+# PCANBasic, Kvaser, Vector XL) are reachable from any opensyde_core consumer.
+#
+# Resolution order: prefer an installed CanLibraries package; fall back to add_subdirectory() of
+# a sibling source tree so a multi-repo workspace builds without an install step. Override
+# OPENSYDE_CANLIBS_SOURCE_DIR if the sibling layout differs.
+if(NOT TARGET CanLibraries::can)
+   find_package(CanLibraries QUIET)
+   if(NOT CanLibraries_FOUND)
+      set(OPENSYDE_CANLIBS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../can-libraries"
+          CACHE PATH "Path to the sibling can-libraries source tree (only used when CanLibraries isn't installed)")
+      if(NOT EXISTS "${OPENSYDE_CANLIBS_SOURCE_DIR}/CMakeLists.txt")
+         message(FATAL_ERROR
+            "opensyde_core: CanLibraries (libcan) not found. "
+            "Install it system-wide or set OPENSYDE_CANLIBS_SOURCE_DIR to the can-libraries "
+            "source tree (currently '${OPENSYDE_CANLIBS_SOURCE_DIR}').")
+      endif()
+      message(STATUS "opensyde_core: building CanLibraries from ${OPENSYDE_CANLIBS_SOURCE_DIR}")
+      # Keep CanLibraries from polluting our install / test registration. Also disable its bundled
+      # Vector_BLF/DBC/ASC submodules — opensyde ships its own vector_blf_static target and the
+      # names would otherwise collide (CMake CMP0002). Force static linkage too: libcan would
+      # otherwise inherit BUILD_SHARED_LIBS=ON and turn opensyde_core into a .so, which then
+      # can't resolve OpenSSL symbols at link time the way the static build does.
+      set(CANLIB_INSTALL OFF CACHE BOOL "" FORCE)
+      set(_OPENSYDE_BUILD_TESTING_SAVED ${BUILD_TESTING})
+      set(_OPENSYDE_BUILD_SHARED_LIBS_SAVED ${BUILD_SHARED_LIBS})
+      set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+      set(BUILD_SHARED_LIBS OFF)
+      set(CANLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+      set(CANLIB_USE_VECTOR_DBC OFF CACHE BOOL "" FORCE)
+      set(CANLIB_USE_VECTOR_BLF OFF CACHE BOOL "" FORCE)
+      set(CANLIB_USE_VECTOR_ASC OFF CACHE BOOL "" FORCE)
+      add_subdirectory(${OPENSYDE_CANLIBS_SOURCE_DIR} can-libraries-build)
+      set(BUILD_TESTING ${_OPENSYDE_BUILD_TESTING_SAVED} CACHE BOOL "" FORCE)
+      set(BUILD_SHARED_LIBS ${_OPENSYDE_BUILD_SHARED_LIBS_SAVED})
+   endif()
+endif()
+
 # --- Dependency checks ------------------------------------------------------------------------------------------------
 # Some packages depend on others. To make life simpler for applications we drag in required other packages
 #  even if "_SKIP_"ed.
@@ -499,6 +540,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscCanAdapterConfig.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscCanAdapterFactory.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscLibcanBackendAdapter.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsy.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolSerialNumber.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpBase.cpp
@@ -522,6 +564,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscCanAdapterConfig.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscCanAdapterFactory.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscLibcanBackendAdapter.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsy.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolSerialNumber.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpBase.hpp
@@ -740,78 +783,20 @@ else()
    )
 endif()
 
-# windows target drivers: CAN and Ethernet dispatchers
+# windows IP dispatcher (CAN backend moved to libcan; this only ships the WinSock IP support now)
 if(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS)
    message("OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS detected ... skipping package")
 else()
    message("OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS not detected ... dragging in package")
 
    set (OPENSYDE_CORE_WINDOWS_DRIVERS_SOURCES
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls/C_Can.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls/C_CanDll.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock/C_OscIpDispatcherWinSock.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls/C_Can.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls/C_CanDll.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock/C_OscIpDispatcherWinSock.hpp
    )
 
    set(OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock
    )
-
-   # PEAK native adapter via PCANBasic SDK. Default ON on Windows; opt-out with
-   # -DOPENSYDE_ENABLE_PEAK_ADAPTER=OFF when building without the PEAK SDK installed.
-   option(OPENSYDE_ENABLE_PEAK_ADAPTER "Compile the PEAK native CAN adapter (requires PCANBasic SDK)" ON)
-   if(WIN32 AND OPENSYDE_ENABLE_PEAK_ADAPTER)
-      find_path(PCANBASIC_INCLUDE_DIR
-         NAMES PCANBasic.h
-         PATHS
-            "$ENV{PROGRAMFILES}/PEAK-System/PEAK-Drivers 4/Include"
-            "$ENV{PROGRAMFILES\(X86\)}/PEAK-System/PEAK-Drivers 4/Include"
-            "C:/Program Files/PEAK-System/PEAK-Drivers 4/Include"
-            "C:/Program Files (x86)/PEAK-System/PEAK-Drivers 4/Include"
-      )
-      find_library(PCANBASIC_LIBRARY
-         NAMES PCANBasic
-         PATHS
-            "$ENV{PROGRAMFILES}/PEAK-System/PEAK-Drivers 4/x64/VC_LIB"
-            "$ENV{PROGRAMFILES\(X86\)}/PEAK-System/PEAK-Drivers 4/x64/VC_LIB"
-            "C:/Program Files/PEAK-System/PEAK-Drivers 4/x64/VC_LIB"
-            "C:/Program Files (x86)/PEAK-System/PEAK-Drivers 4/x64/VC_LIB"
-      )
-
-      if(PCANBASIC_INCLUDE_DIR AND PCANBASIC_LIBRARY)
-         message("PCANBasic SDK found at ${PCANBASIC_INCLUDE_DIR}")
-
-         set(OPENSYDE_CORE_PEAK_ADAPTER_SOURCES
-            ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/peak/C_OscCanPeakAdapter.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/peak/C_OscCanPeakAdapter.hpp
-         )
-         set(OPENSYDE_CORE_PEAK_ADAPTER_INCLUDE_DIRECTORIES
-            ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/peak
-            ${PCANBASIC_INCLUDE_DIR}
-         )
-         set(OPENSYDE_CORE_PEAK_ADAPTER_LIBRARIES ${PCANBASIC_LIBRARY})
-
-         set(OPENSYDE_CORE_WINDOWS_DRIVERS_SOURCES
-            ${OPENSYDE_CORE_WINDOWS_DRIVERS_SOURCES}
-            ${OPENSYDE_CORE_PEAK_ADAPTER_SOURCES}
-         )
-         set(OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES
-            ${OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES}
-            ${OPENSYDE_CORE_PEAK_ADAPTER_INCLUDE_DIRECTORIES}
-         )
-
-         add_compile_definitions(OPENSYDE_HAVE_PEAK_ADAPTER=1)
-      else()
-         message(FATAL_ERROR
-            "OPENSYDE_ENABLE_PEAK_ADAPTER is ON but PCANBasic SDK was not found. "
-            "Install PEAK-Drivers from https://www.peak-system.com (the PCAN-Basic API "
-            "ships with that installer), or pass -DOPENSYDE_ENABLE_PEAK_ADAPTER=OFF "
-            "to skip the PEAK adapter (you'll lose Windows native CAN support).")
-      endif()
-   endif()
 endif()
 
 # windows target glue layer
@@ -836,22 +821,16 @@ else()
    )
 endif()
 
-# linux target drivers: CAN (socket CAN) and Ethernet (Linux sockets) dispatchers
+# linux IP dispatcher (CAN backend moved to libcan; this only ships the Linux sockets IP support now)
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND NOT OPENSYDE_CORE_SKIP_LINUX_DRIVERS)
    message("Linux detected ... dragging in Linux drivers")
 
    set(OPENSYDE_CORE_LINUX_DRIVERS_SOURCES
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can/C_Can.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can/C_Can.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/socket_can/C_OscCanSocketCanAdapter.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/socket_can/C_OscCanSocketCanAdapter.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.hpp
    )
 
    set(OPENSYDE_CORE_LINUX_DRIVERS_INCLUDE_DIRECTORIES
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/socket_can
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock
    )
@@ -989,8 +968,8 @@ target_precompile_headers(opensyde_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/preco
 file(GLOB_RECURSE OPENSYDE_CORE_C_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.c")
 set_source_files_properties(${OPENSYDE_CORE_C_SOURCES} PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 
-# Link PCANBasic.lib (Windows native PEAK adapter). PUBLIC so executables that link
-# against opensyde_core inherit the PCANBasic dependency transitively.
-if(WIN32 AND OPENSYDE_CORE_PEAK_ADAPTER_LIBRARIES)
-   target_link_libraries(opensyde_core PUBLIC ${OPENSYDE_CORE_PEAK_ADAPTER_LIBRARIES})
+# Link libcan PUBLIC so consumers of opensyde_core can also use the can:: API directly if they
+# want (CAN Monitor's future bus-load/error-counter display, for instance).
+if(NOT OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_COMMON)
+   target_link_libraries(opensyde_core PUBLIC CanLibraries::can)
 endif()
