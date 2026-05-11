@@ -28,7 +28,7 @@ namespace cmon_protocol
 {
 //----------------------------------------------------------------------------------------------------------------------
 
-const int32_t gs32_KFX_CMON_NUM_PROTOCOLS = 5;
+const int32_t gs32_CMON_NUM_PROTOCOLS = 5;
 
 enum e_CanMonL7Protocols
 {
@@ -53,7 +53,7 @@ private:
    C_CanMonProtocolOpenSyde mc_ProtocolOpenSyde;
 
 protected:
-   C_CanMonProtocolBase * mapc_Protocols[gs32_KFX_CMON_NUM_PROTOCOLS];
+   C_CanMonProtocolBase * mapc_Protocols[gs32_CMON_NUM_PROTOCOLS];
    e_CanMonL7Protocols me_ActiveProtocol;
 
 public:

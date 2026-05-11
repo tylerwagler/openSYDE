@@ -61,7 +61,7 @@ C_SclString C_OscComLoggerProtocols::MessageToStringProtocolOnly(const T_STWCAN_
 {
    C_SclString c_Text = "";
 
-   if (static_cast<int32_t>(me_ActiveProtocol) < gs32_KFX_CMON_NUM_PROTOCOLS)
+   if (static_cast<int32_t>(me_ActiveProtocol) < gs32_CMON_NUM_PROTOCOLS)
    {
       c_Text = mapc_Protocols[me_ActiveProtocol]->MessageToString(orc_Msg);
    }

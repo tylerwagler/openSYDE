@@ -30,7 +30,7 @@ int32_t C_CanMonProtocols::GetProtocolName(const e_CanMonL7Protocols oe_L7Protoc
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (static_cast<int32_t>(oe_L7Protocol) < gs32_KFX_CMON_NUM_PROTOCOLS)
+   if (static_cast<int32_t>(oe_L7Protocol) < gs32_CMON_NUM_PROTOCOLS)
    {
       orc_Description = "L7-Protocol: " + mapc_Protocols[oe_L7Protocol]->GetProtocolName();
    }
@@ -129,7 +129,7 @@ C_SclString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) 
    C_SclString c_Text;
 
    c_Text = "";
-   if (static_cast<int32_t>(me_ActiveProtocol) < gs32_KFX_CMON_NUM_PROTOCOLS)
+   if (static_cast<int32_t>(me_ActiveProtocol) < gs32_CMON_NUM_PROTOCOLS)
    {
       c_Text = mapc_Protocols[me_ActiveProtocol]->MessageToString(orc_Msg);
    }
@@ -205,7 +205,7 @@ int32_t C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal)
    mq_Decimal = oq_Decimal;
 
    //set in all  protocol instances:
-   for (s32_Loop = 0; s32_Loop < gs32_KFX_CMON_NUM_PROTOCOLS; s32_Loop++)
+   for (s32_Loop = 0; s32_Loop < gs32_CMON_NUM_PROTOCOLS; s32_Loop++)
    {
       mapc_Protocols[s32_Loop]->SetDecimal(oq_Decimal);
    }
@@ -241,7 +241,7 @@ const
    {
       C_SclIniFile c_IniFile(orc_FileName);
       s32_Return = 0;
-      for (s32_Loop = 0; s32_Loop < gs32_KFX_CMON_NUM_PROTOCOLS; s32_Loop++)
+      for (s32_Loop = 0; s32_Loop < gs32_CMON_NUM_PROTOCOLS; s32_Loop++)
       {
          s32_Return += mapc_Protocols[s32_Loop]->SaveParamsToIni(c_IniFile, orc_Section);
       }
@@ -289,7 +289,7 @@ const
       C_SclIniFile c_IniFile(orc_FileName);
 
       s32_Return  = 0;
-      for (s32_Loop = 0; s32_Loop < gs32_KFX_CMON_NUM_PROTOCOLS; s32_Loop++)
+      for (s32_Loop = 0; s32_Loop < gs32_CMON_NUM_PROTOCOLS; s32_Loop++)
       {
          s32_Return += mapc_Protocols[s32_Loop]->LoadParamsFromIni(c_IniFile, orc_Section);
       }
