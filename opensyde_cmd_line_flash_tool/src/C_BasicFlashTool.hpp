@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
-#include "C_Can.hpp"
+#include "C_CanDispatcher.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -53,7 +53,7 @@ private:
    bool mq_ExitApplOnError;
    bool mq_StartAppl;
 
-   stw::can::C_Can * mpc_CanDispatcher;
+   stw::can::C_CanDispatcher * mpc_CanDispatcher;
 
    static stw::scl::C_SclString mh_GetApplicationVersion(const stw::scl::C_SclString & orc_FileName);
    void m_PrintHelp(void);

@@ -39,7 +39,7 @@ static int kbhit(void)
 #include "TglTime.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscUtilBinaryHash.hpp"
-#include "C_Can.hpp"
+#include "C_OscCanAdapterFactory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_BasicUpdateSequence.hpp"
 #include "C_BasicFlashTool.hpp"
@@ -88,17 +88,10 @@ C_BasicFlashTool::~C_BasicFlashTool()
 {
    if (this->mpc_CanDispatcher != NULL)
    {
-      if (this->mpc_CanDispatcher->DLL_Close() == C_NO_ERR)
-      {
-         osc_write_log_info("Teardown", "CAN DLL closed.");
-      }
-      else
-      {
-         osc_write_log_info("Teardown", "Failed to close CAN DLL.");
-      }
-
+      (void)this->mpc_CanDispatcher->CAN_Exit();
       delete this->mpc_CanDispatcher;
       this->mpc_CanDispatcher = NULL;
+      osc_write_log_info("Teardown", "CAN adapter closed.");
    }
 }
 
@@ -352,36 +345,51 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 {
    E_Result e_Result = eRESULT_OK;
    C_BasicUpdateSequence c_TheSequence;
-   stw::can::C_Can c_CanDispatcher;
    int32_t s32_Return;
 
-#ifdef _WIN32
-   // On Windows, mc_CanDriver is a path to a STW CAN DLL.
-   c_CanDispatcher.SetDLLName(mc_CanDriver);
-   s32_Return = c_CanDispatcher.DLL_Open();
-#else
-   // On Linux, mc_CanDriver is a SocketCAN interface name (e.g. "can0").
-   s32_Return = c_CanDispatcher.CAN_Init(mc_CanDriver, 0);
-#endif
-   if (s32_Return != C_NO_ERR)
+   // Build adapter config from the -d/--can-driver argument. On Linux that's a SocketCAN ifname
+   // (default "can0" if empty). On Windows that's currently ignored — PEAK channel 1 is assumed
+   // until the CLI gains explicit --peak-channel handling.
+   stw::opensyde_core::C_OscCanAdapterConfig c_Config =
+      stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
+#ifndef _WIN32
+   if (mc_CanDriver.IsEmpty() == false)
    {
+      c_Config.c_SocketCanInterface = mc_CanDriver;
+   }
+#endif
+   c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(ms32_CanBitrate);
+
+   stw::scl::C_SclString c_Error;
+   stw::can::C_CanDispatcher * const pc_LocalDispatcher =
+      stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
+   if (pc_LocalDispatcher == NULL)
+   {
+      osc_write_log_error("Initialization", "Could not create CAN adapter: " + c_Error);
       e_Result = eERR_INITIALIZATION_FAILED;
    }
    else
    {
-      s32_Return = c_TheSequence.Init(&c_CanDispatcher, ms32_CanBitrate, mu8_NodeId);
+      s32_Return = pc_LocalDispatcher->CAN_Init(ms32_CanBitrate);
       if (s32_Return != C_NO_ERR)
       {
+         delete pc_LocalDispatcher;
          e_Result = eERR_INITIALIZATION_FAILED;
       }
-   }
-
-   if (e_Result == eRESULT_OK)
-   {
-      s32_Return = c_TheSequence.Init(this->mpc_CanDispatcher, ms32_CanBitrate, mu8_NodeId);
-      if (s32_Return != C_NO_ERR)
+      else
       {
-         e_Result = eERR_INITIALIZATION_FAILED;
+         s32_Return = c_TheSequence.Init(pc_LocalDispatcher, ms32_CanBitrate, mu8_NodeId);
+         if (s32_Return != C_NO_ERR)
+         {
+            (void)pc_LocalDispatcher->CAN_Exit();
+            delete pc_LocalDispatcher;
+            e_Result = eERR_INITIALIZATION_FAILED;
+         }
+         else
+         {
+            // Hand ownership to the member so destructor cleans up.
+            this->mpc_CanDispatcher = pc_LocalDispatcher;
+         }
       }
    }
 
