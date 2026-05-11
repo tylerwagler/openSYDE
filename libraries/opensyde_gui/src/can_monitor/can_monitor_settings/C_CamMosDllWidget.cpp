@@ -19,7 +19,6 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_Can.hpp"
 #include "C_OscUtils.hpp"
 #include "C_GtGetText.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -29,12 +28,10 @@
 #include "C_CamUtiGeneric.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::tgl;
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::can;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -270,40 +267,9 @@ void C_CamMosDllWidget::m_LoadSpecifiedConfig(const E_CanDllType oe_DllType, con
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosDllWidget::m_ConfigureDllClicked(void)
 {
-   const QString c_Path = m_GetCurrentDllPath();
-
-   if (QFile::exists(c_Path) == true)
-   {
-      C_Can c_Can;
-      const int32_t s32_Return = c_Can.DLL_Open(c_Path.toStdString().c_str());
-
-      if (s32_Return == C_NO_ERR)
-      {
-         // let the user configure the DLL
-         c_Can.CAN_InteractiveSetup();
-
-         // inform about possible changes
-         Q_EMIT (this->SigCanDllConfigured());
-      }
-      else
-      {
-         const uint32_t u32_BITNESS = 8 * sizeof(size_t);
-         C_OgeWiCustomMessage c_MessageBox(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eWARNING);
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("PC CAN Interface configuration"));
-         c_MessageBox.SetDescription(
-            static_cast<QString>(C_GtGetText::h_GetText("CAN DLL initialization not successful. "
-                                                        "Make sure to use a %1-bit DLL.")).arg(u32_BITNESS));
-         c_MessageBox.Execute();
-      }
-      (void)c_Can.DLL_Close();
-   }
-   else
-   {
-      C_OgeWiCustomMessage c_MessageBox(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eWARNING);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("PC CAN Interface configuration"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("CAN DLL not found."));
-      c_MessageBox.Execute();
-   }
+   // The legacy STW CAN-DLL "Configure" path (CAN_InteractiveSetup) is gone — PCANBasic doesn't
+   // expose an equivalent interactive dialog through the new adapter abstraction. Button is hidden
+   // in the .ui follow-up; this slot remains for compatibility with the existing UI signal wiring.
 }
 
 //----------------------------------------------------------------------------------------------------------------------
