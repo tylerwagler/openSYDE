@@ -15,6 +15,7 @@
 #include "stwtypes.hpp"
 #include "C_PuiBsBox.hpp"
 #include "C_PuiBsLineBase.hpp"
+#include "C_OscCanAdapterConfig.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -29,33 +30,22 @@ class C_PuiSvPc :
    public C_PuiBsBox
 {
 public:
-   enum E_CanDllType
-   {
-      ePEAK = 0,
-      eVECTOR = 1,
-      eOTHER = 2
-   };
-
    C_PuiSvPc(void);
 
    void CalcHash(uint32_t & oru32_HashValue) const override;
 
    const C_PuiBsLineBase & GetConnectionData(void) const;
    void SetConnectionData(const C_PuiBsLineBase & orc_Value);
-   E_CanDllType GetCanDllType(void) const;
-   QString GetCanDll(void) const;
-   QString GetCustomCanDllPath(void) const;
-   QString GetCanDllAbsolute(void) const;
-   void SetCanDllType(const E_CanDllType oe_Type);
-   void SetCustomCanDllPath(const QString & orc_Path);
+
+   const stw::opensyde_core::C_OscCanAdapterConfig & GetAdapterConfig(void) const;
+   void SetAdapterConfig(const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config);
 
    //Specific setter
    void SetBox(const C_PuiBsBox & orc_Box);
 
 private:
-   C_PuiBsLineBase mc_ConnectionData; ///< Relevant connection UI data
-   E_CanDllType me_CanDllType;        ///< Type of CAN DLL
-   QString mc_CustomCanDllPath;       ///< Path to the custom CAN DLL
+   C_PuiBsLineBase mc_ConnectionData;                          ///< Relevant connection UI data
+   stw::opensyde_core::C_OscCanAdapterConfig mc_AdapterConfig; ///< CAN adapter (replaces legacy DLL fields)
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

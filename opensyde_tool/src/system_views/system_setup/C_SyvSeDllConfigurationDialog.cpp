@@ -1,16 +1,20 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Dialog for choosing and configuring the CAN communication DLL
+   \brief       Dialog for choosing and configuring the PC CAN adapter (implementation)
+
+   Replaces the legacy STW-CAN-DLL configuration dialog. On Linux the dialog exposes a single
+   SocketCAN interface name field (placeholder "can0"); on Windows it exposes a PEAK channel
+   number. The legacy PEAK/Vector/Other radio buttons are hidden via setVisible() — the
+   underlying .ui file is left unchanged for minimal-disruption migration; a future commit may
+   replace it with a purpose-built layout.
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#include "precomp_headers.hpp"
 
-#include <QFile>
-#include <QFileInfo>
-#include <QFileDialog>
+/* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -18,20 +22,17 @@
 #include "C_SyvSeDllConfigurationDialog.hpp"
 #include "ui_C_SyvSeDllConfigurationDialog.h"
 
-#include "C_OscUtils.hpp"
-#include "C_Uti.hpp"
 #include "C_GtGetText.hpp"
-#include "C_Can.hpp"
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_ImpUtil.hpp"
-#include "C_PuiUtil.hpp"
-#include "C_OgeWiUtil.hpp"
+#include "C_OscCanAdapterFactory.hpp"
+#include "C_OscLoggingHandler.hpp"
+#include "C_CanDispatcher.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
-using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 using namespace stw::can;
 
@@ -48,61 +49,30 @@ using namespace stw::can;
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Default constructor
-
-   Set up GUI with all elements.
-
-   \param[in,out] orc_Parent Optional pointer to parent
-*/
-//----------------------------------------------------------------------------------------------------------------------
-C_SyvSeDllConfigurationDialog::C_SyvSeDllConfigurationDialog(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent)
-   :
+C_SyvSeDllConfigurationDialog::C_SyvSeDllConfigurationDialog(C_OgePopUpDialog & orc_Parent) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvSeDllConfigurationDialog),
+   mc_AdapterConfig(C_OscCanAdapterConfig::h_GetPlatformDefault()),
    mu64_Bitrate(0U)
 {
    mpc_Ui->setupUi(this);
 
-   this->mpc_Ui->pc_LineEditCustomDllPath->SetDragAndDropActiveForFile("dll");
-
    this->mrc_ParentDialog.SetWidget(this);
 
    this->InitText();
+   this->m_ApplyPlatformLayout();
 
-   this->m_ShowCustomDllPath(false);
-
-   // Remove "..." and "ABC" string
    this->mpc_Ui->pc_PushButtonBrowse->setText("");
    this->mpc_Ui->pc_PushButtonVariables->setText("");
 
-   // connects
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked,
            this, &C_SyvSeDllConfigurationDialog::m_OkClicked);
    connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SyvSeDllConfigurationDialog::m_CancelClicked);
    connect(this->mpc_Ui->pc_PushButtonTestConnection, &QPushButton::clicked,
            this, &C_SyvSeDllConfigurationDialog::m_TestConnectionClicked);
-   connect(this->mpc_Ui->pc_PushButtonConfigureDll, &QPushButton::clicked,
-           this, &C_SyvSeDllConfigurationDialog::m_ConfigureDllClicked);
-   connect(this->mpc_Ui->pc_RadioButtonPeak, &stw::opensyde_gui_elements::C_OgeRabProperties::clicked,
-           this, &C_SyvSeDllConfigurationDialog::m_ConcretDllClicked);
-   connect(this->mpc_Ui->pc_RadioButtonVector, &stw::opensyde_gui_elements::C_OgeRabProperties::clicked,
-           this, &C_SyvSeDllConfigurationDialog::m_ConcretDllClicked);
-   connect(this->mpc_Ui->pc_RadioButtonOther, &stw::opensyde_gui_elements::C_OgeRabProperties::clicked,
-           this, &C_SyvSeDllConfigurationDialog::m_OtherDllClicked);
-   connect(this->mpc_Ui->pc_PushButtonBrowse, &C_OgePubOpen::clicked,
-           this, &C_SyvSeDllConfigurationDialog::m_OnBrowse);
-   connect(this->mpc_Ui->pc_PushButtonVariables, &C_OgePubPathVariables::SigVariableSelected,
-           this->mpc_Ui->pc_LineEditCustomDllPath, &C_OgeLeFilePath::InsertVariable);
-   connect(this->mpc_Ui->pc_LineEditCustomDllPath, &C_OgeLeFilePath::SigPathDropped,
-           this, &C_SyvSeDllConfigurationDialog::m_OnDroppedDllPath);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   default destructor
-
-   Clean up.
-*/
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvSeDllConfigurationDialog::~C_SyvSeDllConfigurationDialog()
 {
@@ -110,80 +80,60 @@ C_SyvSeDllConfigurationDialog::~C_SyvSeDllConfigurationDialog()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Initializes all visible strings on the widget
-*/
-//----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeDllConfigurationDialog::InitText(void) const
 {
    this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("PC CAN Interface"));
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Configuration"));
 
-   this->mpc_Ui->pc_LabelBusHeading->setText(C_GtGetText::h_GetText("Select Interface"));
    this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
    this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_PushButtonConfigureDll->setText(C_GtGetText::h_GetText("Configure"));
    this->mpc_Ui->pc_PushButtonTestConnection->setText(C_GtGetText::h_GetText("Test Connection"));
-   this->mpc_Ui->pc_LabelCustomDllPath->setText(C_GtGetText::h_GetText("DLL path"));
    this->mpc_Ui->pc_LabelBitrateInfo->setText(C_GtGetText::h_GetText(
                                                  "CAN bitrate will be applied automatically."));
-   this->mpc_Ui->pc_RadioButtonOther->setText(C_GtGetText::h_GetText("Other"));
 
-   this->mpc_Ui->pc_PushButtonBrowse->SetToolTipInformation(
-      C_GtGetText::h_GetText("Browse"),
-      C_GtGetText::h_GetText("Browse for custom DLL file."));
+#ifdef _WIN32
+   this->mpc_Ui->pc_LabelBusHeading->setText(C_GtGetText::h_GetText("PEAK USB Channel"));
+   this->mpc_Ui->pc_LabelCustomDllPath->setText(C_GtGetText::h_GetText("Channel (1-16)"));
+#else
+   this->mpc_Ui->pc_LabelBusHeading->setText(C_GtGetText::h_GetText("SocketCAN Interface"));
+   this->mpc_Ui->pc_LabelCustomDllPath->setText(C_GtGetText::h_GetText("Interface name"));
+#endif
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Sets the CAN DLL type.
-
-   \param[in]     oe_Type       CAN DLL type
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::SetDllType(const C_PuiSvPc::E_CanDllType oe_Type) const
+void C_SyvSeDllConfigurationDialog::m_ApplyPlatformLayout(void) const
 {
-   // toggle radio button depending on type
-   switch (oe_Type)
-   {
-   case C_PuiSvPc::ePEAK:
-      // PEAK
-      this->mpc_Ui->pc_RadioButtonPeak->setChecked(true);
-      this->m_ShowCustomDllPath(false);
-      break;
-   case C_PuiSvPc::eVECTOR:
-      // Vector
-      this->mpc_Ui->pc_RadioButtonVector->setChecked(true);
-      this->m_ShowCustomDllPath(false);
-      break;
-   case C_PuiSvPc::eOTHER:
-      // Other
-      this->mpc_Ui->pc_RadioButtonOther->setChecked(true);
-      this->m_ShowCustomDllPath(true);
-      break;
-   default:
-      // Default is PEAK
-      this->mpc_Ui->pc_RadioButtonPeak->setChecked(true);
-      this->m_ShowCustomDllPath(false);
-      break;
-   }
+   // Hide the legacy PEAK/Vector/Other radio buttons. Only adapter type per platform is supported now;
+   // the .ui file still has the widgets but they're inert.
+   this->mpc_Ui->pc_RadioButtonPeak->setVisible(false);
+   this->mpc_Ui->pc_RadioButtonVector->setVisible(false);
+   this->mpc_Ui->pc_RadioButtonOther->setVisible(false);
+
+   // Hide DLL-specific buttons that no longer apply.
+   this->mpc_Ui->pc_PushButtonConfigureDll->setVisible(false);
+   this->mpc_Ui->pc_PushButtonBrowse->setVisible(false);
+   this->mpc_Ui->pc_PushButtonVariables->setVisible(false);
+
+   // The single path/interface field stays visible — it's used as the value input on both platforms.
+   this->mpc_Ui->pc_LabelCustomDllPath->setVisible(true);
+   this->mpc_Ui->pc_LineEditCustomDllPath->setVisible(true);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Sets the custom CAN DLL path.
-
-   \param[in]     orc_Path       Path of the CAN DLL
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::SetCustomDllPath(const QString & orc_Path) const
+void C_SyvSeDllConfigurationDialog::SetAdapterConfig(const C_OscCanAdapterConfig & orc_Config)
 {
-   // set line edit text to last known custom path
-   this->mpc_Ui->pc_LineEditCustomDllPath->SetPath(orc_Path, C_Uti::h_GetExePath());
+   this->mc_AdapterConfig = orc_Config;
+
+#ifdef _WIN32
+   this->mpc_Ui->pc_LineEditCustomDllPath->setText(QString::number(orc_Config.u16_PeakChannel));
+#else
+   const QString c_Display = orc_Config.c_SocketCanInterface.IsEmpty() ?
+                             QString("can0") :
+                             QString(orc_Config.c_SocketCanInterface.c_str());
+   this->mpc_Ui->pc_LineEditCustomDllPath->setText(c_Display);
+#endif
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Sets the bitrate for the test connection in bit/s
-
-   \param[in]     ou64_Bitrate     Bitrate for test connection
-*/
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeDllConfigurationDialog::SetBitrate(const uint64_t ou64_Bitrate)
 {
@@ -191,61 +141,36 @@ void C_SyvSeDllConfigurationDialog::SetBitrate(const uint64_t ou64_Bitrate)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get CAN DLL type.
-
-   \return     CAN DLL type (PEAK/VECTOR/Other)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-C_PuiSvPc::E_CanDllType C_SyvSeDllConfigurationDialog::GetDllType(void) const
+C_OscCanAdapterConfig C_SyvSeDllConfigurationDialog::GetAdapterConfig(void) const
 {
-   C_PuiSvPc::E_CanDllType e_Type;
+   C_OscCanAdapterConfig c_Result = this->mc_AdapterConfig;
+   const QString c_Field = this->mpc_Ui->pc_LineEditCustomDllPath->text().trimmed();
 
-   if (this->mpc_Ui->pc_RadioButtonVector->isChecked() == true)
-   {
-      e_Type = C_PuiSvPc::E_CanDllType::eVECTOR;
-   }
-   else if (this->mpc_Ui->pc_RadioButtonOther->isChecked() == true)
-   {
-      e_Type = C_PuiSvPc::E_CanDllType::eOTHER;
-   }
-   else
-   {
-      e_Type = C_PuiSvPc::E_CanDllType::ePEAK;
-   }
+#ifdef _WIN32
+   c_Result.e_Type = eCAN_ADAPTER_PEAK;
+   bool q_Ok = false;
+   const uint32_t u32_Channel = c_Field.toUInt(&q_Ok);
+   c_Result.u16_PeakChannel = (q_Ok && (u32_Channel >= 1U) && (u32_Channel <= 16U)) ?
+                              static_cast<uint16_t>(u32_Channel) : static_cast<uint16_t>(1U);
+   c_Result.u32_PeakBitrateKbits = (this->mu64_Bitrate > 0U) ?
+                                   static_cast<uint32_t>(this->mu64_Bitrate / 1000U) :
+                                   c_Result.u32_PeakBitrateKbits;
+#else
+   c_Result.e_Type = eCAN_ADAPTER_SOCKET_CAN;
+   c_Result.c_SocketCanInterface = c_Field.isEmpty() ?
+                                   stw::scl::C_SclString("can0") :
+                                   stw::scl::C_SclString(c_Field.toStdString().c_str());
+#endif
 
-   return e_Type;
+   return c_Result;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get custom CAN DLL path.
-
-   \return     path of custom CAN DLL
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_SyvSeDllConfigurationDialog::GetCustomDllPath(void) const
-{
-   QString c_Path;
-
-   c_Path = this->mpc_Ui->pc_LineEditCustomDllPath->GetPath();
-
-   return c_Path;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Slot of OK button click
-*/
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeDllConfigurationDialog::m_OkClicked(void) const
 {
-   if (this->m_CheckCustomDllPath() == true)
-   {
-      this->mrc_ParentDialog.accept();
-   }
+   this->mrc_ParentDialog.accept();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Slot of Cancel button
-*/
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeDllConfigurationDialog::m_CancelClicked(void) const
 {
@@ -253,261 +178,45 @@ void C_SyvSeDllConfigurationDialog::m_CancelClicked(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::m_ConfigureDllClicked(void) const
-{
-   // check path for invalid signs for custom DLL
-   if (this->m_CheckCustomDllPath() == true)
-   {
-      const QString c_Path = this->m_GetAbsoluteDllPath();
-
-       if (QFile::exists(c_Path) == true)
-       {
-#ifdef _WIN32
-          // TODO: Implement Linux SocketCAN equivalent for DLL_Open
-          C_Can c_Can;
-          const int32_t s32_Return = c_Can.DLL_Open(c_Path.toStdString().c_str());
-
-          if (s32_Return == C_NO_ERR)
-          {
-             // let the user configure the DLL
-             // TODO: Implement Linux SocketCAN equivalent for CAN_InteractiveSetup
-             c_Can.CAN_InteractiveSetup();
-          }
-          else
-          {
-             const uint32_t u32_BITNESS = 8 * sizeof(size_t);
-             C_OgeWiCustomMessage c_MessageBox(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eWARNING);
-             c_MessageBox.SetHeading(C_GtGetText::h_GetText("PC CAN Interface configuration"));
-             c_MessageBox.SetDescription(
-                static_cast<QString>(C_GtGetText::h_GetText("CAN DLL initialization not successful. "
-                                                            "Make sure to use a %1-bit DLL.")).arg(u32_BITNESS));
-             c_MessageBox.SetCustomMinHeight(180, 180);
-             c_MessageBox.Execute();
-          }
-          // TODO: Implement Linux SocketCAN equivalent for DLL_Close
-          (void)c_Can.DLL_Close();
-#else
-          // TODO: Implement Linux SocketCAN equivalent for DLL configuration
-#endif
-       }
-      else
-      {
-         C_OgeWiCustomMessage c_MessageBox(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eWARNING);
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("PC CAN Interface configuration"));
-         c_MessageBox.SetDescription(C_GtGetText::h_GetText("CAN DLL not found."));
-         c_MessageBox.SetCustomMinHeight(180, 180);
-         c_MessageBox.Execute();
-      }
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeDllConfigurationDialog::m_TestConnectionClicked(void) const
 {
-   // check path for invalid signs for custom DLL
-   if (this->m_CheckCustomDllPath() == true)
+   C_OscCanAdapterConfig c_Config = this->GetAdapterConfig();
+
+   if (this->mu64_Bitrate > 0U)
    {
-      // 3 of 4 message cases are of type "failed"
-      C_OgeWiCustomMessage c_MessageBox(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eWARNING);
-      QString c_Description;
-      const QString c_Path = this->m_GetAbsoluteDllPath();
-      const QString c_Heading = C_GtGetText::h_GetText("PC CAN Interface configuration");
-
-       if (QFile::exists(c_Path) == true)
-       {
-#ifdef _WIN32
-          // TODO: Implement Linux SocketCAN equivalent for DLL_Open
-          C_Can c_Can;
-          int32_t s32_Return = c_Can.DLL_Open(c_Path.toStdString().c_str());
-          if (s32_Return == C_NO_ERR)
-          {
-             // Test the CAN
-             if (this->mu64_Bitrate > 0U)
-             {
-                const uint64_t u64_BitrateKbit = this->mu64_Bitrate / 1000U;
-                s32_Return = c_Can.CAN_Init(static_cast<int32_t>(u64_BitrateKbit));
-             }
-             else
-             {
-                s32_Return = c_Can.CAN_Init();
-             }
-
-             if (s32_Return == C_NO_ERR)
-             {
-                c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eINFORMATION);
-                c_Description = C_GtGetText::h_GetText("Connection test successful. CAN Interface is ready for use.");
-             }
-             else
-             {
-                c_Description =
-                   C_GtGetText::h_GetText("CAN bus initialization not successful: could not initialize bus.");
-             }
-             (void)c_Can.CAN_Exit();
-          }
-          else
-          {
-             const uint32_t u32_BITNESS = 8 * sizeof(size_t);
-             c_Description = static_cast<QString>(
-                C_GtGetText::h_GetText("CAN DLL initialization not successful. Make sure to use a %1-bit DLL.")).
-                             arg(u32_BITNESS);
-          }
-          // TODO: Implement Linux SocketCAN equivalent for DLL_Close
-          (void)c_Can.DLL_Close();
-#else
-          // TODO: Implement Linux SocketCAN equivalent for DLL configuration
-#endif
-       }
-      else
-      {
-         c_Description = C_GtGetText::h_GetText("CAN DLL not found.");
-      }
-
-      // Show the result
-      c_MessageBox.SetHeading(c_Heading);
-      c_MessageBox.SetDescription(c_Description);
-      c_MessageBox.SetCustomMinHeight(180, 180);
-      c_MessageBox.Execute();
+      c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(this->mu64_Bitrate / 1000U);
    }
-}
 
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::m_ConcretDllClicked(void) const
-{
-   this->m_ShowCustomDllPath(false);
-}
+   stw::scl::C_SclString c_Error;
+   C_CanDispatcher * const pc_Dispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
 
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::m_OtherDllClicked(void) const
-{
-   this->m_ShowCustomDllPath(true);
-   this->mpc_Ui->pc_LineEditCustomDllPath->setFocus();
-}
+   C_OgeWiCustomMessage c_MessageBox(this->parentWidget());
+   c_MessageBox.SetHeading(C_GtGetText::h_GetText("PC CAN Interface configuration"));
+   c_MessageBox.SetCustomMinHeight(180, 180);
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Slot for browse button click.
-
-   Browse for CAN DLL.
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::m_OnBrowse(void) const
-{
-   const QString c_Folder = C_PuiUtil::h_GetResolvedAbsPathFromExe(this->mpc_Ui->pc_LineEditCustomDllPath->GetPath());
-   const QString c_Filter = static_cast<QString>(C_GtGetText::h_GetText("CAN DLL ")) + "(*.dll)";
-   QFileDialog c_Dialog(this->parentWidget(), C_GtGetText::h_GetText("Select CAN DLL"), c_Folder, c_Filter);
-
-   c_Dialog.setDefaultSuffix(".dll");
-
-   if (c_Dialog.exec() == static_cast<int32_t>(QDialog::Accepted))
+   if (pc_Dispatcher == NULL)
    {
-      const QString c_Path = c_Dialog.selectedFiles().at(0);
-
-      if (c_Path != "")
-      {
-         this->m_SetCustomDllPath(c_Path);
-      }
+      c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eERROR);
+      c_MessageBox.SetDescription(QString(c_Error.c_str()));
    }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle a dropped folder path in line edit
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::m_OnDroppedDllPath(void)
-{
-   this->m_SetCustomDllPath(this->mpc_Ui->pc_LineEditCustomDllPath->GetPath());
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Setter for full create in path.
-
-   \param[in] orc_New New value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::m_SetCustomDllPath(const QString & orc_New) const
-{
-   // check if relative path is possible and appreciated
-   const QString c_Path = C_ImpUtil::h_AskUserToSaveRelativePath(this->parentWidget(), orc_New, C_Uti::h_GetExePath());
-
-   if (c_Path != "")
+   else
    {
-      this->mpc_Ui->pc_LineEditCustomDllPath->SetPath(c_Path, C_Uti::h_GetExePath());
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::m_ShowCustomDllPath(const bool oq_Active) const
-{
-   this->mpc_Ui->pc_LabelCustomDllPath->setVisible(oq_Active);
-   this->mpc_Ui->pc_LineEditCustomDllPath->setVisible(oq_Active);
-   this->mpc_Ui->pc_PushButtonBrowse->setVisible(oq_Active);
-   this->mpc_Ui->pc_PushButtonVariables->setVisible(oq_Active);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  If custom DLL is selected check if path contains invalid characters
-*/
-//----------------------------------------------------------------------------------------------------------------------
-bool C_SyvSeDllConfigurationDialog::m_CheckCustomDllPath(void) const
-{
-   bool q_Return = true;
-
-   if (this->GetDllType() == C_PuiSvPc::eOTHER)
-   {
-      const QString c_ResolvedPath =  C_PuiUtil::h_ResolvePlaceholderVariables(this->GetCustomDllPath());
-      if (c_ResolvedPath.isEmpty() == true)
+      const int32_t s32_Init =
+         pc_Dispatcher->CAN_Init(static_cast<int32_t>(this->mu64_Bitrate > 0U ? this->mu64_Bitrate / 1000U : 0U));
+      if (s32_Init == C_NO_ERR)
       {
-         C_OgeWiCustomMessage c_MessageBox(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eERROR);
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("PC CAN Interface configuration"));
-         c_MessageBox.SetDescription(C_GtGetText::h_GetText("CAN DLL path is empty. Please choose a valid path."));
-         c_MessageBox.SetCustomMinHeight(180, 180);
-         c_MessageBox.Execute();
-         q_Return = false;
+         c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eINFORMATION);
+         c_MessageBox.SetDescription(C_GtGetText::h_GetText("Connection test successful. CAN Interface is ready for use."));
+         (void)pc_Dispatcher->CAN_Exit();
       }
       else
       {
-         if (C_OscUtils::h_CheckValidFilePath(c_ResolvedPath.toStdString().c_str()) == false)
-         {
-            C_OgeWiUtil::h_ShowPathInvalidError(this->parentWidget(), c_ResolvedPath);
-            q_Return = false;
-         }
+         c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eWARNING);
+         c_MessageBox.SetDescription(C_GtGetText::h_GetText(
+                                        "CAN initialization failed. Verify adapter is connected and the interface is up."));
       }
+      delete pc_Dispatcher;
    }
 
-   return q_Return;
+   c_MessageBox.Execute();
 }
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Returns the absolute CAN DLL path of currently selected DLL.
-
-   \return
-   Absolute CAN DLL path
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_SyvSeDllConfigurationDialog::m_GetAbsoluteDllPath(void) const
-{
-   QString c_Return;
-
-   switch (this->GetDllType())
-   {
-   case C_PuiSvPc::ePEAK:
-      c_Return = stw::opensyde_gui::mc_DLL_PATH_PEAK;
-      break;
-   case C_PuiSvPc::eVECTOR:
-      c_Return = stw::opensyde_gui::mc_DLL_PATH_VECTOR;
-      break;
-   case C_PuiSvPc::eOTHER:
-      c_Return = this->GetCustomDllPath();
-      break;
-   default:
-      c_Return = stw::opensyde_gui::mc_DLL_PATH_PEAK;
-      break;
-   }
-
-   // resolve variables and make absolute if it is relative (only if not empty)
-   if (c_Return.isEmpty() == false)
-   {
-      c_Return = C_PuiUtil::h_GetResolvedAbsPathFromExe(c_Return);
-   }
-   return c_Return;
-}
-

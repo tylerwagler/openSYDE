@@ -21,7 +21,7 @@
 #include "C_SyvComDataDealer.hpp"
 #include "C_SyvComPollingThreadDiag.hpp"
 #include "C_SyvComDriverThread.hpp"
-#include "C_Can.hpp"
+#include "C_CanDispatcher.hpp"
 #include "C_OscIpDispatcherPlatform.hpp"
 #include "C_OscCanSignal.hpp"
 #include "C_OscSecurityPemDatabase.hpp"
@@ -167,7 +167,7 @@ private:
    std::vector<std::list<stw::opensyde_core::C_OscProtocolDriverOsy::C_DataPoolMetaData> > mc_ReadDatapoolMetadata;
 
    const uint32_t mu32_ViewIndex;
-   stw::can::C_Can * mpc_CanDllDispatcher;
+   stw::can::C_CanDispatcher * mpc_CanDllDispatcher;
    stw::opensyde_core::C_OscIpDispatcherWinSock * mpc_EthernetDispatcher;
 
    // Mapping from CAN-ID to registered widget and its used CAN message signal

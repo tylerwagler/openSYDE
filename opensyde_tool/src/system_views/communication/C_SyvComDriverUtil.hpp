@@ -15,7 +15,7 @@
 #include <vector>
 #include "C_OscSystemDefinition.hpp"
 #include "C_PuiSvHandler.hpp"
-#include "C_Can.hpp"
+#include "C_CanDispatcher.hpp"
 #include "C_OscIpDispatcherPlatform.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -32,7 +32,7 @@ class C_SyvComDriverUtil
 public:
    static int32_t h_GetOscComDriverParamFromView(const uint32_t ou32_ViewIndex, uint32_t & oru32_ActiveBusIndex,
                                                  std::vector<uint8_t> & orc_ActiveNodes,
-                                                 stw::can::C_Can ** const oppc_CanDispatcher,
+                                                 stw::can::C_CanDispatcher ** const oppc_CanDispatcher,
                                                  stw::opensyde_core::C_OscIpDispatcherWinSock ** const oppc_IpDispatcher, const bool oq_InitCan, const bool oq_IgnoreUpdateRoutingErrors, bool * const opq_DashboardRoutingErrors);
 };
 

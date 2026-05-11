@@ -27,6 +27,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_PuiSvDashboardFiler.hpp"
+#include "C_OscCanAdapterConfig.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;
@@ -592,38 +593,45 @@ int32_t C_PuiSvHandlerFiler::mh_LoadPc(C_PuiSvPc & orc_PuiPc, C_OscXmlParserBase
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (orc_XmlParser.SelectNodeChild("dll-path") == "dll-path")
+   if (orc_XmlParser.SelectNodeChild("can-adapter") == "can-adapter")
    {
-      QString c_Path = orc_XmlParser.GetNodeContent().c_str();
-      if (orc_XmlParser.AttributeExists("type"))
+      C_OscCanAdapterConfig c_Config;
+
+      if (orc_XmlParser.AttributeExists("type") == true)
       {
-         orc_PuiPc.SetCanDllType(static_cast<C_PuiSvPc::E_CanDllType>(orc_XmlParser.GetAttributeSint32("type")));
+         c_Config.e_Type = static_cast<E_CanAdapterType>(orc_XmlParser.GetAttributeSint32("type"));
       }
-      else
+      if (orc_XmlParser.AttributeExists("socketcan-interface") == true)
       {
-         // translate from path to type+path for compatibility reasons (type was not present in old openSYDE versions)
-         if ((c_Path == stw::opensyde_gui::mc_DLL_PATH_PEAK) || (c_Path.isEmpty() == true))
-         {
-            orc_PuiPc.SetCanDllType(C_PuiSvPc::E_CanDllType::ePEAK);
-            c_Path = "";
-         }
-         else if (c_Path == stw::opensyde_gui::mc_DLL_PATH_VECTOR)
-         {
-            orc_PuiPc.SetCanDllType(C_PuiSvPc::E_CanDllType::eVECTOR);
-            c_Path = "";
-         }
-         else
-         {
-            orc_PuiPc.SetCanDllType(C_PuiSvPc::E_CanDllType::eOTHER);
-         }
+         c_Config.c_SocketCanInterface = orc_XmlParser.GetAttributeString("socketcan-interface");
       }
-      orc_PuiPc.SetCustomCanDllPath(c_Path);
-      //Return
+      if (orc_XmlParser.AttributeExists("peak-channel") == true)
+      {
+         c_Config.u16_PeakChannel = static_cast<uint16_t>(orc_XmlParser.GetAttributeUint32("peak-channel"));
+      }
+      if (orc_XmlParser.AttributeExists("peak-bitrate-kbits") == true)
+      {
+         c_Config.u32_PeakBitrateKbits = orc_XmlParser.GetAttributeUint32("peak-bitrate-kbits");
+      }
+
+      orc_PuiPc.SetAdapterConfig(c_Config);
+      tgl_assert(orc_XmlParser.SelectNodeParent() == "pc");
+   }
+   else if (orc_XmlParser.SelectNodeChild("dll-path") == "dll-path")
+   {
+      // Legacy STW-DLL configuration. Discard it: persisted PEAK/Vector DLL paths cannot be migrated
+      // 1:1 to the new adapter abstraction (channel numbers don't appear in old format). Reset to the
+      // platform default and warn the user.
+      osc_write_log_warning("View load",
+                            "Legacy <dll-path> CAN configuration found; resetting to platform default. "
+                            "Please re-configure the CAN adapter in PC properties.");
+      orc_PuiPc.SetAdapterConfig(C_OscCanAdapterConfig::h_GetPlatformDefault());
       tgl_assert(orc_XmlParser.SelectNodeParent() == "pc");
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      osc_write_log_warning("View load", "No CAN adapter configuration found; using platform default.");
+      orc_PuiPc.SetAdapterConfig(C_OscCanAdapterConfig::h_GetPlatformDefault());
    }
    if ((orc_XmlParser.SelectNodeChild("box") == "box") && (s32_Retval == C_NO_ERR))
    {
@@ -836,11 +844,15 @@ void C_PuiSvHandlerFiler::mh_SavePc(const C_OscViewPc & orc_OscPc, const C_PuiSv
 {
    C_OscViewFiler::h_SavePc(orc_OscPc, orc_XmlParser);
 
-   orc_XmlParser.CreateAndSelectNodeChild("dll-path");
-   orc_XmlParser.SetAttributeSint32("type", static_cast<int32_t>(orc_PuiPc.GetCanDllType()));
-   orc_XmlParser.SetNodeContent(orc_PuiPc.GetCustomCanDllPath().toStdString().c_str());
-   //Return
-   tgl_assert(orc_XmlParser.SelectNodeParent() == "pc");
+   {
+      const C_OscCanAdapterConfig & rc_Config = orc_PuiPc.GetAdapterConfig();
+      orc_XmlParser.CreateAndSelectNodeChild("can-adapter");
+      orc_XmlParser.SetAttributeSint32("type", static_cast<int32_t>(rc_Config.e_Type));
+      orc_XmlParser.SetAttributeString("socketcan-interface", rc_Config.c_SocketCanInterface);
+      orc_XmlParser.SetAttributeUint32("peak-channel", static_cast<uint32_t>(rc_Config.u16_PeakChannel));
+      orc_XmlParser.SetAttributeUint32("peak-bitrate-kbits", rc_Config.u32_PeakBitrateKbits);
+      tgl_assert(orc_XmlParser.SelectNodeParent() == "pc");
+   }
    orc_XmlParser.CreateAndSelectNodeChild("box");
    C_PuiBsElementsFiler::h_SaveBoxBase(orc_PuiPc, orc_XmlParser);
    //Return

@@ -397,18 +397,17 @@ void C_GiSvPc::GenerateHint()
       const C_PuiSvPc c_PcData = pc_View->GetPuiPcData();
 
       // content
+      const stw::opensyde_core::C_OscCanAdapterConfig & rc_Config = c_PcData.GetAdapterConfig();
       c_ToolTipContent += C_GtGetText::h_GetText("CAN Interface: ");
-      switch (c_PcData.GetCanDllType())
+      switch (rc_Config.e_Type)
       {
-      case C_PuiSvPc::ePEAK:
-         c_ToolTipContent += "PEAK";
+      case stw::opensyde_core::eCAN_ADAPTER_SOCKET_CAN:
+         c_ToolTipContent += static_cast<QString>("SocketCAN (%1)").arg(
+            rc_Config.c_SocketCanInterface.c_str());
          break;
-      case C_PuiSvPc::eVECTOR:
-         c_ToolTipContent += "Vector";
-         break;
-      case C_PuiSvPc::eOTHER:
-         c_ToolTipContent += static_cast<QString>(C_GtGetText::h_GetText("Other (%1)")).arg(
-            c_PcData.GetCustomCanDllPath());
+      case stw::opensyde_core::eCAN_ADAPTER_PEAK:
+         c_ToolTipContent += static_cast<QString>("PEAK (channel %1, %2 kbit/s)").arg(
+            rc_Config.u16_PeakChannel).arg(rc_Config.u32_PeakBitrateKbits);
          break;
       default:
          break;
@@ -476,27 +475,21 @@ void C_GiSvPc::hoverLeaveEvent(QGraphicsSceneHoverEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 bool C_GiSvPc::m_OpenCanDllDialog(void) const
 {
-    bool q_Retval = false;
+   bool q_Retval = false;
+   const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-#ifdef _WIN32
-    // TODO: Implement Linux SocketCAN configuration UI
-    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-    if (pc_View != NULL)
-    {
-        const C_OscViewPc & rc_OscPcData = pc_View->GetOscPcData();
-        const C_PuiSvPc & rc_PcData = pc_View->GetPuiPcData();
-        QGraphicsView * const pc_GraphicsView = this->scene()->views().at(0);
-        const QPointer<C_OgePopUpDialog> c_DllDialog = new C_OgePopUpDialog(pc_GraphicsView, pc_GraphicsView);
-        C_SyvSeDllConfigurationDialog * const pc_DllWidget = new C_SyvSeDllConfigurationDialog(*c_DllDialog);
+   if (pc_View != NULL)
+   {
+      const C_OscViewPc & rc_OscPcData = pc_View->GetOscPcData();
+      const C_PuiSvPc & rc_PcData = pc_View->GetPuiPcData();
+      QGraphicsView * const pc_GraphicsView = this->scene()->views().at(0);
+      const QPointer<C_OgePopUpDialog> c_DllDialog = new C_OgePopUpDialog(pc_GraphicsView, pc_GraphicsView);
+      C_SyvSeDllConfigurationDialog * const pc_DllWidget = new C_SyvSeDllConfigurationDialog(*c_DllDialog);
 
-      // Resize
       const QSize c_SIZE(700, 490);
       c_DllDialog->SetSize(c_SIZE);
 
-      // Initialize the data
-      pc_DllWidget->SetDllType(rc_PcData.GetCanDllType());
-      pc_DllWidget->SetCustomDllPath(rc_PcData.GetCustomCanDllPath());
-      // Bitrate
+      pc_DllWidget->SetAdapterConfig(rc_PcData.GetAdapterConfig());
       if (rc_OscPcData.GetConnected() == true)
       {
          const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(rc_OscPcData.GetBusIndex());
@@ -509,27 +502,19 @@ bool C_GiSvPc::m_OpenCanDllDialog(void) const
 
       if (c_DllDialog->exec() == static_cast<int32_t>(QDialog::Accepted))
       {
-         // Update the data
-         C_PuiSvHandler::h_GetInstance()->SetViewPcCanDll(this->mu32_ViewIndex,
-                                                          pc_DllWidget->GetDllType(), pc_DllWidget->GetCustomDllPath());
+         C_PuiSvHandler::h_GetInstance()->SetViewPcCanAdapter(this->mu32_ViewIndex,
+                                                              pc_DllWidget->GetAdapterConfig());
          q_Retval = true;
       }
 
-    if (c_DllDialog != NULL)
-    {
-        c_DllDialog->HideOverlay();
-        c_DllDialog->deleteLater();
-    }
- } //lint !e429  //no memory leak because of the parent of pc_DllWidget and the Qt memory management
-#else
-    // Linux: Show message that DLL configuration is Windows-only
-    C_OgeWiCustomMessage c_Message(this->scene()->views().at(0));
-    c_Message.SetHeading(C_GtGetText::h_GetText("Configure PC CAN Interface"));
-    c_Message.SetDescription(C_GtGetText::h_GetText("DLL configuration is only available on Windows.\n\n"
-                                                    "On Linux, configure SocketCAN interfaces using system tools."));
-    c_Message.Execute();
-#endif
-    return q_Retval;
+      if (c_DllDialog != NULL)
+      {
+         c_DllDialog->HideOverlay();
+         c_DllDialog->deleteLater();
+      }
+   } //lint !e429  //no memory leak because of the parent of pc_DllWidget and the Qt memory management
+
+   return q_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

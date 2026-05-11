@@ -10,13 +10,13 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include <QFile>
-
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_Uti.hpp"
 #include "C_SyvComDriverUtil.hpp"
 #include "C_PuiSdHandler.hpp"
+#include "C_OscCanAdapterFactory.hpp"
+#include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -61,7 +61,7 @@ using namespace stw::opensyde_core;
 int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_ViewIndex,
                                                            uint32_t & oru32_ActiveBusIndex,
                                                            std::vector<uint8_t> & orc_ActiveNodes,
-                                                           stw::can::C_Can ** const oppc_CanDispatcher,
+                                                           stw::can::C_CanDispatcher ** const oppc_CanDispatcher,
                                                            C_OscIpDispatcherWinSock ** const oppc_IpDispatcher,
                                                            const bool oq_InitCan,
                                                            const bool oq_IgnoreUpdateRoutingErrors,
@@ -103,37 +103,35 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
             {
                if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
                {
-                  QFile c_File;
-                  QString c_FilePath;
                   //No ethernet
                   *oppc_IpDispatcher = NULL;
 
-                  c_FilePath = pc_View->GetPuiPcData().GetCanDllAbsolute();
+                  C_OscCanAdapterConfig c_Config = pc_View->GetPuiPcData().GetAdapterConfig();
+                  // PEAK adapter takes the bitrate from its own config; force it to match the bus
+                  // bitrate declared in the system definition so the two don't drift.
+                  c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(pc_Bus->u64_BitRate / 1000ULL);
 
-                  c_File.setFileName(c_FilePath);
-
-                   if (c_File.exists() == true)
-                   {
-                      *oppc_CanDispatcher = new stw::can::C_Can();
-
-                      if (oq_InitCan == true)
-                      {
-                         s32_Retval =
-                            (*oppc_CanDispatcher)->CAN_Init(static_cast<int32_t>(pc_Bus->u64_BitRate / 1000ULL));
-                      }
-                      else
-                      {
-                         s32_Retval = C_NO_ERR;
-                      }
-
+                  stw::scl::C_SclString c_Error;
+                  *oppc_CanDispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
+                  if (*oppc_CanDispatcher == NULL)
+                  {
+                     osc_write_log_error("CAN adapter init", c_Error);
+                     s32_Retval = C_RD_WR;
+                  }
+                  else if (oq_InitCan == true)
+                  {
+                     s32_Retval =
+                        (*oppc_CanDispatcher)->CAN_Init(static_cast<int32_t>(pc_Bus->u64_BitRate / 1000ULL));
                      if (s32_Retval != C_NO_ERR)
                      {
+                        delete *oppc_CanDispatcher;
+                        *oppc_CanDispatcher = NULL;
                         s32_Retval = C_COM;
                      }
                   }
                   else
                   {
-                     s32_Retval = C_RD_WR;
+                     s32_Retval = C_NO_ERR;
                   }
                }
                else

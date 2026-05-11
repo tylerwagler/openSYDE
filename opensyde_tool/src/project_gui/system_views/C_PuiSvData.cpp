@@ -1993,25 +1993,14 @@ void C_PuiSvData::SetPcConnection(const C_PuiBsLineBase & orc_Line)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set type of the CAN DLL
+/*! \brief   Set CAN adapter configuration
 
-   \param[in]  oe_DllType  CAN DLL type
+   \param[in]  orc_Config  Adapter type + per-type configuration
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvData::SetPcCanDllType(const C_PuiSvPc::E_CanDllType oe_DllType)
+void C_PuiSvData::SetPcCanAdapterConfig(const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config)
 {
-   this->mc_PuiPcData.SetCanDllType(oe_DllType);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set path for the CAN DLL
-
-   \param[in]  orc_DllPath    Path for the CAN DLL
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvData::SetPcCanDllPath(const QString & orc_DllPath)
-{
-   this->mc_PuiPcData.SetCustomCanDllPath(orc_DllPath);
+   this->mc_PuiPcData.SetAdapterConfig(orc_Config);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

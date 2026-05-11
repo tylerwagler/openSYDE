@@ -556,16 +556,15 @@ int32_t C_PuiSvHandler::SetViewPcConnected(const uint32_t ou32_Index, const bool
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvHandler::SetViewPcCanDll(const uint32_t ou32_Index, const C_PuiSvPc::E_CanDllType oe_Type,
-                                        const QString & orc_DllPath)
+int32_t C_PuiSvHandler::SetViewPcCanAdapter(const uint32_t ou32_Index,
+                                            const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config)
 {
    int32_t s32_Retval = C_RANGE;
 
    if (ou32_Index < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_Index];
-      rc_View.SetPcCanDllType(oe_Type);
-      rc_View.SetPcCanDllPath(orc_DllPath);
+      rc_View.SetPcCanAdapterConfig(orc_Config);
 
       s32_Retval = C_NO_ERR;
    }

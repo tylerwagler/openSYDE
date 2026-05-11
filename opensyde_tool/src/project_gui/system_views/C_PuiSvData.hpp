@@ -160,8 +160,7 @@ public:
    void SetNodeCheckedState(const uint32_t ou32_NodeIndex, const uint8_t ou8_Checked);
    void SetPcBox(const C_PuiBsBox & orc_Box);
    void SetPcConnection(const C_PuiBsLineBase & orc_Line);
-   void SetPcCanDllType(const C_PuiSvPc::E_CanDllType oe_DllType);
-   void SetPcCanDllPath(const QString & orc_DllPath);
+   void SetPcCanAdapterConfig(const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config);
    void SetAllowHashCache(const bool oq_NewValue);
 
    //Add

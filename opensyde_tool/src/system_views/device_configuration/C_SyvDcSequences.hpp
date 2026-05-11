@@ -19,7 +19,7 @@
 
 #include "C_SclString.hpp"
 
-#include "C_Can.hpp"
+#include "C_CanDispatcher.hpp"
 #include "C_OscComSequencesBase.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
 #include "C_OscDcDeviceInformation.hpp"
@@ -182,7 +182,7 @@ private:
 
    C_SyvComDriverThread * mpc_Thread;
    QMutex mc_CriticalSectionRequestEndless;
-   stw::can::C_Can * mpc_CanDllDispatcher;
+   stw::can::C_CanDispatcher * mpc_CanDllDispatcher;
    stw::opensyde_core::C_OscIpDispatcherWinSock * mpc_EthernetDispatcher;
    // Sequence execution parameter
    E_Sequence me_Sequence;

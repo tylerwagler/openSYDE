@@ -15,7 +15,7 @@
 #include <QObject>
 #include <QMutex>
 
-#include "C_Can.hpp"
+#include "C_CanDispatcher.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_SyvComDriverThread.hpp"
 #include "C_OscIpDispatcherPlatform.hpp"
@@ -108,7 +108,7 @@ private:
 
    C_SyvComDriverThread * mpc_Thread;
    QMutex mc_Lock;
-   stw::can::C_Can * mpc_CanDllDispatcher;
+   stw::can::C_CanDispatcher * mpc_CanDllDispatcher;
    stw::opensyde_core::C_OscIpDispatcherWinSock * mpc_EthernetDispatcher;
    bool mq_AbortFlag;
    uint32_t mu32_ViewIndex;

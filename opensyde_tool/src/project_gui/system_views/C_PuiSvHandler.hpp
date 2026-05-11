@@ -55,8 +55,8 @@ public:
    int32_t SetViewPcBox(const uint32_t ou32_Index, const C_PuiBsBox & orc_Box);
    int32_t SetViewPcConnection(const uint32_t ou32_Index, const C_PuiBsLineBase & orc_Line);
    int32_t SetViewPcConnected(const uint32_t ou32_Index, const bool oq_Connected, const uint32_t ou32_BusIndex);
-   int32_t SetViewPcCanDll(const uint32_t ou32_Index, const C_PuiSvPc::E_CanDllType oe_Type,
-                           const QString & orc_DllPath);
+   int32_t SetViewPcCanAdapter(const uint32_t ou32_Index,
+                               const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config);
    int32_t SetViewServiceModeActive(const uint32_t ou32_Index, const bool oq_NewValue);
    int32_t SetViewServiceModeSetupActive(const uint32_t ou32_Index, const bool oq_NewValue);
    int32_t SetViewServiceModeUpdateActive(const uint32_t ou32_Index, const bool oq_NewValue);

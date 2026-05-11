@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Dialog for choosing and configuring the CAN communication DLL
+   \brief       Dialog for choosing and configuring the PC CAN adapter
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
@@ -10,15 +10,11 @@
 #define C_SYVSEDLLCONFIGURATIONDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-
-
 #include "stwtypes.hpp"
-
-#include "C_PuiSvPc.hpp"
+#include "C_OscCanAdapterConfig.hpp"
 #include "C_OgePopUpContentBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
-
 namespace Ui
 {
 class C_SyvSeDllConfigurationDialog;
@@ -42,12 +38,9 @@ public:
    ~C_SyvSeDllConfigurationDialog() override;
 
    void InitText() const;
-   void SetDllType(const stw::opensyde_gui_logic::C_PuiSvPc::E_CanDllType oe_Type) const;
-   void SetCustomDllPath(const QString & orc_Path) const;
+   void SetAdapterConfig(const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config);
    void SetBitrate(const uint64_t ou64_Bitrate);
-   stw::opensyde_gui_logic::C_PuiSvPc::E_CanDllType GetDllType(void) const;
-   QString GetCustomDllPath(void) const;
-
+   stw::opensyde_core::C_OscCanAdapterConfig GetAdapterConfig(void) const;
 
 private:
    //Avoid call
@@ -56,20 +49,13 @@ private:
 
    void m_OkClicked(void) const;
    void m_CancelClicked(void) const;
-   void m_ConfigureDllClicked(void) const;
    void m_TestConnectionClicked(void) const;
-   void m_ConcretDllClicked(void) const;
-   void m_OtherDllClicked(void) const;
-   void m_OnBrowse(void) const;
-   void m_OnDroppedDllPath(void);
-   void m_SetCustomDllPath(const QString & orc_New) const;
 
-   void m_ShowCustomDllPath(const bool oq_Active) const;
-   bool m_CheckCustomDllPath(void) const;
-   QString m_GetAbsoluteDllPath(void) const;
+   void m_ApplyPlatformLayout(void) const;
 
    Ui::C_SyvSeDllConfigurationDialog * mpc_Ui;
 
+   stw::opensyde_core::C_OscCanAdapterConfig mc_AdapterConfig;
    uint64_t mu64_Bitrate;
 };
 }
