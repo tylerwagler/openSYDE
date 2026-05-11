@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       DiagLib Target Glue Layer: Time functions
+   \brief       Target Glue Layer: Time functions
 
    cf. header for details
 

@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       DiagLib Target Glue Layer: Utilities
+   \brief       Target Glue Layer: Utilities
 
    cf. header for details
 

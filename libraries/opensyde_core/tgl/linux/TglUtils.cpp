@@ -1,9 +1,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       DiagLib Target Glue Layer: Utilities
+   \brief       Target Glue Layer: Utilities
 
-   DiagLib Target Glue Layer module containing utilities
+   Target Glue Layer module containing utilities
    Implementation for Linux.
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.

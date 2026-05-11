@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       DiagLib Target Glue Layer: Task system related functionality
+   \brief       Target Glue Layer: Task system related functionality
 
    cf. header for details
 

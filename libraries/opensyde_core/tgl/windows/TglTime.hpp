@@ -1,9 +1,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       DiagLib Target Glue Layer: Time functions
+   \brief       Target Glue Layer: Time functions
 
-   DiagLib Target Glue Layer module containing time functions:
+   Target Glue Layer module containing time functions:
    - system timestamps
    - active delays
 

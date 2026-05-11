@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       DiagLib Target Glue Layer: File functions
+   \brief       Target Glue Layer: File functions
 
    Implementation for linux.
 

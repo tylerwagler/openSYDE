@@ -1,9 +1,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       DiagLib Target Glue Layer: Task system related functionality.
+   \brief       Target Glue Layer: Task system related functionality.
 
-   DiagLib Target Glue Layer module containing task system related functionality.
+   Target Glue Layer module containing task system related functionality.
 
    \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */

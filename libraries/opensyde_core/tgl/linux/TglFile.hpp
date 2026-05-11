@@ -1,9 +1,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       DiagLib Target Glue Layer: File functions
+   \brief       Target Glue Layer: File functions
 
-   DiagLib Target Glue Layer module containing file functions:
+   Target Glue Layer module containing file functions:
    - file timestamps
    - file size
    - file exists
