@@ -15,7 +15,7 @@
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
 #include "C_SupSuSequences.hpp"
-#include "C_Can.hpp"
+#include "C_CanDispatcher.hpp"
 #include "C_OscIpDispatcher.hpp"
 #include "C_OscSecurityPemDatabase.hpp"
 #include "C_OscSuSequences.hpp"
@@ -111,7 +111,7 @@ protected:
       std::vector<stw::opensyde_core::C_OscSuSequences::C_ApplicationProperties> c_ServerSideApplications;
    };
 
-   stw::can::C_Can * mpc_CanDispatcher;
+   stw::can::C_CanDispatcher * mpc_CanDispatcher;
    stw::opensyde_core::C_OscIpDispatcher * mpc_EthDispatcher;
    bool mq_Quiet;
    bool mq_OnlyNecessaryFiles;
@@ -132,9 +132,9 @@ protected:
    C_SydeSup::E_Result m_InitOptionalParameters(void);
 
 private:
-   // Update system with service update package
-   virtual void m_CloseCan(void) = 0;
-   virtual E_Result m_OpenCan(const stw::scl::C_SclString & orc_CanDriver, const uint64_t ou64_BitrateBps) = 0;
+   // Update system with service update package — common implementation via C_OscCanAdapterFactory.
+   void m_CloseCan(void);
+   E_Result m_OpenCan(const stw::scl::C_SclString & orc_CanDriver, const uint64_t ou64_BitrateBps);
    virtual E_Result m_OpenEthernet(void) = 0;
    virtual stw::scl::C_SclString m_GetApplicationVersion(const stw::scl::C_SclString & orc_ApplicationFileName) const =
       0;

@@ -24,6 +24,7 @@
 #include "C_SydeSup.hpp"
 #include "C_OscSupServiceUpdatePackageLoad.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_OscCanAdapterFactory.hpp"
 #include "TglTime.hpp"
 #include "TglFile.hpp"
 #include "C_SupSuSequences.hpp"
@@ -81,8 +82,77 @@ C_SydeSup::C_SydeSup(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_SydeSup::~C_SydeSup(void)
 {
-   mpc_CanDispatcher = NULL;
+   this->m_CloseCan();
    mpc_EthDispatcher = NULL;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Open the configured CAN adapter via C_OscCanAdapterFactory.
+
+   On Linux the orc_CanDriver argument is treated as a SocketCAN interface name (default "can0" if
+   empty). On Windows it currently maps to PEAK channel 1 — a future revision will introduce
+   --peak-channel and other adapter-specific options.
+
+   \param[in]  orc_CanDriver       Adapter input (SocketCAN ifname on Linux; ignored on Windows for now)
+   \param[in]  ou64_BitrateBps     Bus bitrate in bit/s (taken from system definition)
+
+   \return
+   eOK                       adapter opened and CAN_Init succeeded
+   eERR_CAN_IF_LOAD_FAILED   factory could not build the adapter (e.g. SDK not compiled in)
+   eERR_SEQUENCE_CAN_INIT    CAN_Init at the requested bitrate failed
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_SydeSup::E_Result C_SydeSup::m_OpenCan(const stw::scl::C_SclString & orc_CanDriver, const uint64_t ou64_BitrateBps)
+{
+   C_SydeSup::E_Result e_Result = eOK;
+
+   if (mpc_CanDispatcher != NULL)
+   {
+      this->m_CloseCan();
+   }
+
+   stw::opensyde_core::C_OscCanAdapterConfig c_Config =
+      stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
+#ifndef _WIN32
+   if (orc_CanDriver.IsEmpty() == false)
+   {
+      c_Config.c_SocketCanInterface = orc_CanDriver;
+   }
+#else
+   (void)orc_CanDriver;
+#endif
+   c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(ou64_BitrateBps / 1000ULL);
+
+   stw::scl::C_SclString c_Error;
+   mpc_CanDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
+   if (mpc_CanDispatcher == NULL)
+   {
+      h_WriteLog("OpenCan", "Could not create CAN adapter: " + c_Error, true);
+      e_Result = eERR_CAN_IF_LOAD_FAILED;
+   }
+   else
+   {
+      const int32_t s32_Return = mpc_CanDispatcher->CAN_Init(static_cast<int32_t>(ou64_BitrateBps / 1000ULL));
+      if (s32_Return != C_NO_ERR)
+      {
+         delete mpc_CanDispatcher;
+         mpc_CanDispatcher = NULL;
+         e_Result = eERR_SEQUENCE_CAN_INIT;
+      }
+   }
+
+   return e_Result;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void C_SydeSup::m_CloseCan(void)
+{
+   if (mpc_CanDispatcher != NULL)
+   {
+      (void)mpc_CanDispatcher->CAN_Exit();
+      delete mpc_CanDispatcher;
+      mpc_CanDispatcher = NULL;
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

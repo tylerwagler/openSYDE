@@ -40,8 +40,7 @@ using namespace stw::opensyde_core;
 C_SydeSupLinux::C_SydeSupLinux(void) :
    C_SydeSup(),
    mx_UpdateTaskHandle(0),
-   me_UpdateTaskResult(),
-   mq_CanDllLoaded(false)
+   me_UpdateTaskResult()
 {
 }
 
@@ -232,63 +231,6 @@ void * C_SydeSupLinux::mh_UpdateTask(void * const opv_Arg)
    pc_This->me_UpdateTaskResult = pc_This->Update();
 
    return NULL;
-}
-
-//-------------------------------------------------------------------------------------------------------------------
-/*! \brief   Initialize CAN driver.
-
-   The implementation shall
-   * initialize a specific implementation of C_CANDispatcher
-   * do whatever is required to set that dispatcher up (connect to CAN bus)
-   * set mpc_CanDispatcher to point to that dispatcher
-
-   \param[in]  orc_CanDriverPath    path to CAN driver as passed on command line
-   \param[in]  ou64_BitrateBps      bitrate to initialize CAN bus with
-
-   \return  error code
-   eOK                        driver initialized
-   eERR_CAN_IF_LOAD_FAILED    driver already open
-*/
-//----------------------------------------------------------------------------------------------------------------------
-C_SydeSup::E_Result C_SydeSupLinux::m_OpenCan(const C_SclString & orc_CanDriver, const uint64_t ou64_BitrateBps)
-{
-   C_SydeSup::E_Result e_Result = eOK;
-   int32_t s32_Return;
-
-   (void)ou64_BitrateBps; // Bitrate is set by interface settings outside
-
-   if (mpc_CanDispatcher == NULL)
-   {
-      mpc_CanDispatcher = &mc_CanDispatcher;
-   }
-
-   s32_Return = mc_CanDispatcher.CAN_Init(orc_CanDriver, 1);
-
-   if (s32_Return != C_NO_ERR)
-   {
-      e_Result = eERR_SEQUENCE_CAN_INIT;
-   }
-
-   return e_Result;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Close CAN interface
-
-   Disconnect from CAN bus and CAN driver
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SydeSupLinux::m_CloseCan(void)
-{
-   (void)mc_CanDispatcher.CAN_Exit();
-
-   if (mq_CanDllLoaded == true)
-   {
-      (void)mc_CanDispatcher;
-      mq_CanDllLoaded = false;
-   }
-
-   mpc_CanDispatcher = NULL; //not valid any more
 }
 
 //----------------------------------------------------------------------------------------------------------------------
