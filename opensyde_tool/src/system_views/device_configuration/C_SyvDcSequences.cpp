@@ -474,14 +474,12 @@ int32_t C_SyvDcSequences::ScanEthGetInfoFromOpenSydeDevices(void)
 
    Function returns immediately with the result. It will not be run in the separate thread.
 
-   This function shall be called before calling ConfCanStwFlashloaderDevices, ConfEthFlashloaderDevices,
-      ConfCanOpenSydeDevices.
+   This function shall be called before calling ConfCanOpenSydeDevices.
 
    For CAN:
    When the calling order is
    1. CheckOpenSydeDevicesConfig
-   2. ConfCanStwFlashloaderDevices (Checks the configuration itself)
-   3. ConfCanOpenSydeDevices
+   2. ConfCanOpenSydeDevices
    no changes will be made on the server if at least one configuration is invalid.
 
    \param[in]  orc_DeviceConfig  Configuration for all openSYDE devices and their communication interfaces
@@ -502,11 +500,10 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Starts thread to write new configuration to openSYDE devices via CAN-TP.
 
-   This function shall be called after calling CheckCanOpenSydeDevicesConfig and ConfCanStwFlashloaderDevices.
+   This function shall be called after calling CheckCanOpenSydeDevicesConfig.
    When the calling order is
    1. CheckCanOpenSydeDevicesConfig
-   2. ConfCanStwFlashloaderDevices (Checks the configuration itself)
-   3. ConfCanOpenSydeDevices
+   2. ConfCanOpenSydeDevices
    no changes will be made on the server if minimum one configuration is invalid.
 
    \param[in]  orc_DeviceConfig           Configuration for all openSYDE devices and its

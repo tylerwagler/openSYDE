@@ -1334,7 +1334,6 @@ void C_SyvUpPacListWidget::m_OnCustomContextMenuRequested(const QPoint & orc_Pos
       // add action shall be shown only if no item concrete was clicked
       if ((c_Current.isValid() == true) && (c_Current.parent().isValid() == false) && (pc_WidgetItem != NULL))
       {
-         const bool q_IsStwFlashloader = false;
          this->mpc_SelectedNode = pc_WidgetItem;
          this->mpc_SelectedSection = pc_WidgetItem->GetSectionList(orc_Pos);
          this->mpc_SelectedApp = pc_WidgetItem->GetAndSelectApplication(orc_Pos);
@@ -1381,7 +1380,7 @@ void C_SyvUpPacListWidget::m_OnCustomContextMenuRequested(const QPoint & orc_Pos
             this->mpc_RemoveAllNodeFilesAction->setVisible(true);
 
             // New file or new parameter set image file is possible with all openSYDE devices
-            this->mpc_AddFileAction->setVisible(!q_IsStwFlashloader);
+            this->mpc_AddFileAction->setVisible(true);
             this->mpc_ShowInExplorerAction->setVisible(false);
          }
          q_ShowContextMenu = true;
