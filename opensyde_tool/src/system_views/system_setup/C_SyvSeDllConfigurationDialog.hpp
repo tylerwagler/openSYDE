@@ -10,6 +10,8 @@
 #define C_SYVSEDLLCONFIGURATIONDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QComboBox>
+
 #include "stwtypes.hpp"
 #include "C_OscCanAdapterConfig.hpp"
 #include "C_OgePopUpContentBase.hpp"
@@ -51,9 +53,12 @@ private:
    void m_CancelClicked(void) const;
    void m_TestConnectionClicked(void) const;
 
-   void m_ApplyPlatformLayout(void) const;
+   void m_ApplyPlatformLayout(void);
+   void m_PopulateSocketCanInterfaces(void) const;
+   static QStringList mh_DiscoverSocketCanInterfaces(void);
 
    Ui::C_SyvSeDllConfigurationDialog * mpc_Ui;
+   QComboBox * mpc_SocketCanCombo; ///< Linux-only: dropdown of discovered ifaces (editable for custom)
 
    stw::opensyde_core::C_OscCanAdapterConfig mc_AdapterConfig;
    uint64_t mu64_Bitrate;
