@@ -656,7 +656,7 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
       const bool q_LooksWindowsy = c_Lower.endsWith(".dll") || c_PersistedPath.contains("\\");
       if (q_LooksWindowsy == false)
       {
-         c_Config.c_SocketCanInterface = stw::scl::C_SclString(c_PersistedPath.toStdString().c_str());
+         c_Config.c_ChannelId = c_PersistedPath.toStdString();
       }
    }
 #endif
@@ -694,7 +694,7 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
       // `ip -details link show`. vcan interfaces report no bitrate — that's fine for monitoring.
       QProcess c_Process;
       c_Process.start("ip", QStringList() << "-details" << "link" << "show" <<
-                      QString(c_Config.c_SocketCanInterface.c_str()));
+                      QString::fromStdString(c_Config.c_ChannelId));
       if (c_Process.waitForFinished(1000))
       {
          const QString c_Output = QString::fromUtf8(c_Process.readAllStandardOutput());
@@ -718,7 +718,7 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
    if (s32_Return == C_NO_ERR)
    {
       // Bitrate is whatever was configured into the PEAK adapter via its constructor (default 500).
-      ors32_Bitrate = static_cast<int32_t>(c_Config.u32_PeakBitrateKbits);
+      ors32_Bitrate = static_cast<int32_t>(c_Config.u32_BitrateBps / 1000U);
    }
 #endif
 

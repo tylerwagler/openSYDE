@@ -125,17 +125,17 @@ int32_t C_FlaSenDcBasicSequences::InitDcSequences(const C_SclString & orc_CanDll
                                     (c_Lower.SubString(c_Lower.Length() - 3U, 4U) == ".dll"));
       if (q_LooksWindowsy == false)
       {
-         c_Config.c_SocketCanInterface = orc_CanDllPath;
+         c_Config.c_ChannelId = orc_CanDllPath.c_str();
       }
    }
 #else
-   (void)orc_CanDllPath; // Windows currently always uses PEAK channel 1 (UI follow-up will expose channel)
+   (void)orc_CanDllPath; // Windows currently always uses PCAN_USBBUS1 (UI follow-up will surface picker)
 #endif
-   c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(os32_CanBitrate);
+   c_Config.u32_BitrateBps = static_cast<uint32_t>(os32_CanBitrate) * 1000U;
 
-   osc_write_log_info(c_LogActivity, "Adapter type: " +
-                      C_OscCanAdapterFactory::h_GetAdapterTypeDisplayName(c_Config.e_Type) +
-                      ", value: " + orc_CanDllPath);
+   osc_write_log_info(c_LogActivity, "Adapter: " +
+                      C_OscCanAdapterFactory::h_GetBackendDisplayName(c_Config.e_BackendKind) +
+                      ", channel: " + orc_CanDllPath);
 
    C_SclString c_Error;
    this->mpc_CanDispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);

@@ -355,10 +355,10 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 #ifndef _WIN32
    if (mc_CanDriver.IsEmpty() == false)
    {
-      c_Config.c_SocketCanInterface = mc_CanDriver;
+      c_Config.c_ChannelId = mc_CanDriver.c_str();
    }
 #endif
-   c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(ms32_CanBitrate);
+   c_Config.u32_BitrateBps = static_cast<uint32_t>(ms32_CanBitrate) * 1000U;
 
    stw::scl::C_SclString c_Error;
    stw::can::C_CanDispatcher * const pc_LocalDispatcher =

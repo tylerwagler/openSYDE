@@ -107,9 +107,10 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
                   *oppc_IpDispatcher = NULL;
 
                   C_OscCanAdapterConfig c_Config = pc_View->GetPuiPcData().GetAdapterConfig();
-                  // PEAK adapter takes the bitrate from its own config; force it to match the bus
-                  // bitrate declared in the system definition so the two don't drift.
-                  c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(pc_Bus->u64_BitRate / 1000ULL);
+                  // Force the adapter bitrate to match the bus declared in the system definition so
+                  // they don't drift; the PC's persisted bitrate is essentially advisory once the
+                  // bus owns the canonical value.
+                  c_Config.u32_BitrateBps = static_cast<uint32_t>(pc_Bus->u64_BitRate);
 
                   stw::scl::C_SclString c_Error;
                   *oppc_CanDispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);

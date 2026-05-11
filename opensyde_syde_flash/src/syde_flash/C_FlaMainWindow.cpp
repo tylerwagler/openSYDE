@@ -763,16 +763,16 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
          const bool q_LooksWindowsy = c_Lower.endsWith(".dll") || c_PersistedPath.contains("\\");
          if (q_LooksWindowsy == false)
          {
-            c_Config.c_SocketCanInterface = stw::scl::C_SclString(c_PersistedPath.toStdString().c_str());
+            c_Config.c_ChannelId = c_PersistedPath.toStdString();
          }
       }
 #endif
-      c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(s32_Bitrate);
+      c_Config.u32_BitrateBps = static_cast<uint32_t>(s32_Bitrate) * 1000U;
 
       osc_write_log_info("Initialization",
-                         "Adapter type: " +
-                         stw::opensyde_core::C_OscCanAdapterFactory::h_GetAdapterTypeDisplayName(c_Config.e_Type) +
-                         ", value: " + c_PersistedPath.toStdString());
+                         "Adapter: " +
+                         stw::opensyde_core::C_OscCanAdapterFactory::h_GetBackendDisplayName(c_Config.e_BackendKind) +
+                         ", channel: " + c_PersistedPath.toStdString());
 
       stw::scl::C_SclString c_Error;
       this->mpc_CanDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);

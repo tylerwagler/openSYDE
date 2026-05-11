@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Configuration data for opening a CAN adapter (header)
+   \brief       Persisted CAN adapter configuration (header)
 
    See cpp file for detailed description
 
@@ -12,8 +12,10 @@
 #define C_OSCCANADAPTERCONFIGHPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <string>
+
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include "can/i_can_backend.h"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -23,29 +25,18 @@ namespace opensyde_core
 /* -- Global Constants ---------------------------------------------------------------------------------------------- */
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
-///Identifies which CAN adapter implementation should service the bus.
-enum E_CanAdapterType
-{
-   eCAN_ADAPTER_SOCKET_CAN = 0, ///< Linux SocketCAN (raw). Used for every Linux adapter regardless of vendor.
-   eCAN_ADAPTER_PEAK       = 1  ///< PEAK PCANBasic native (Windows only).
-};
-
-///Flat configuration carrying every adapter-specific field. Unused fields for the active e_Type are ignored.
+///Flat record storing the user's CAN adapter selection across openSYDE projects / settings files.
+///Mirrors the inputs to C_OscCanAdapterFactory::h_CreateAdapter; one field per persisted attribute.
 class C_OscCanAdapterConfig
 {
 public:
    C_OscCanAdapterConfig(void);
 
-   E_CanAdapterType e_Type;
+   ::can::BackendKind e_BackendKind; ///< Which libcan backend (SocketCAN / PCAN / Kvaser / VectorXL)
+   std::string c_ChannelId;          ///< Backend-specific channel string (e.g. "can0", "PCAN_USBBUS1")
+   uint32_t u32_BitrateBps;          ///< Arbitration bitrate in bits per second
 
-   // eCAN_ADAPTER_SOCKET_CAN
-   stw::scl::C_SclString c_SocketCanInterface; ///< e.g. "can0", "vcan0"
-
-   // eCAN_ADAPTER_PEAK
-   uint16_t u16_PeakChannel;        ///< 1..16 (mapped to PCAN_USBBUS1..16 in the adapter)
-   uint32_t u32_PeakBitrateKbits;   ///< 125 / 250 / 500 / 1000 / ...
-
-   ///Platform-appropriate default: SocketCAN/can0 on Linux, PEAK/ch1/500kbit on Windows.
+   ///Platform-appropriate default: SocketCAN/can0 on Linux, PEAK/PCAN_USBBUS1 on Windows; 500 kbps.
    static C_OscCanAdapterConfig h_GetPlatformDefault(void);
 };
 

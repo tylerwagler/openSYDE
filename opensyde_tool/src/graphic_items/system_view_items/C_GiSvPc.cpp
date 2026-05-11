@@ -399,19 +399,9 @@ void C_GiSvPc::GenerateHint()
       // content
       const stw::opensyde_core::C_OscCanAdapterConfig & rc_Config = c_PcData.GetAdapterConfig();
       c_ToolTipContent += C_GtGetText::h_GetText("CAN Interface: ");
-      switch (rc_Config.e_Type)
-      {
-      case stw::opensyde_core::eCAN_ADAPTER_SOCKET_CAN:
-         c_ToolTipContent += static_cast<QString>("SocketCAN (%1)").arg(
-            rc_Config.c_SocketCanInterface.c_str());
-         break;
-      case stw::opensyde_core::eCAN_ADAPTER_PEAK:
-         c_ToolTipContent += static_cast<QString>("PEAK (channel %1, %2 kbit/s)").arg(
-            rc_Config.u16_PeakChannel).arg(rc_Config.u32_PeakBitrateKbits);
-         break;
-      default:
-         break;
-      }
+      c_ToolTipContent += static_cast<QString>("%1 (%2, %3 bps)").arg(
+         QString::fromStdString(::can::backendKindToString(rc_Config.e_BackendKind)),
+         QString::fromStdString(rc_Config.c_ChannelId)).arg(rc_Config.u32_BitrateBps);
 
       c_ToolTipContent += C_GtGetText::h_GetText("\nDouble click on PC to enter CAN interface settings.");
       this->SetDefaultToolTipContent(c_ToolTipContent);

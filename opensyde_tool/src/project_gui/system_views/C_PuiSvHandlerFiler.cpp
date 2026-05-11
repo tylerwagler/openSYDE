@@ -595,23 +595,26 @@ int32_t C_PuiSvHandlerFiler::mh_LoadPc(C_PuiSvPc & orc_PuiPc, C_OscXmlParserBase
 
    if (orc_XmlParser.SelectNodeChild("can-adapter") == "can-adapter")
    {
-      C_OscCanAdapterConfig c_Config;
+      C_OscCanAdapterConfig c_Config = C_OscCanAdapterConfig::h_GetPlatformDefault();
 
-      if (orc_XmlParser.AttributeExists("type") == true)
+      if (orc_XmlParser.AttributeExists("backend") == true)
       {
-         c_Config.e_Type = static_cast<E_CanAdapterType>(orc_XmlParser.GetAttributeSint32("type"));
+         // Backend is stored as a string (matches libcan's canonical name) for forward-compatibility
+         // when libcan grows new backend kinds. Unknown strings fall back to the platform default.
+         const stw::scl::C_SclString c_Name = orc_XmlParser.GetAttributeString("backend");
+         if (c_Name == "SocketCAN")      { c_Config.e_BackendKind = ::can::BackendKind::SocketCan; }
+         else if (c_Name == "PCANBasic") { c_Config.e_BackendKind = ::can::BackendKind::PcanBasic; }
+         else if (c_Name == "Kvaser")    { c_Config.e_BackendKind = ::can::BackendKind::Kvaser; }
+         else if (c_Name == "VectorXL")  { c_Config.e_BackendKind = ::can::BackendKind::VectorXL; }
+         else { /* keep platform default */ }
       }
-      if (orc_XmlParser.AttributeExists("socketcan-interface") == true)
+      if (orc_XmlParser.AttributeExists("channel-id") == true)
       {
-         c_Config.c_SocketCanInterface = orc_XmlParser.GetAttributeString("socketcan-interface");
+         c_Config.c_ChannelId = orc_XmlParser.GetAttributeString("channel-id").c_str();
       }
-      if (orc_XmlParser.AttributeExists("peak-channel") == true)
+      if (orc_XmlParser.AttributeExists("bitrate-bps") == true)
       {
-         c_Config.u16_PeakChannel = static_cast<uint16_t>(orc_XmlParser.GetAttributeUint32("peak-channel"));
-      }
-      if (orc_XmlParser.AttributeExists("peak-bitrate-kbits") == true)
-      {
-         c_Config.u32_PeakBitrateKbits = orc_XmlParser.GetAttributeUint32("peak-bitrate-kbits");
+         c_Config.u32_BitrateBps = orc_XmlParser.GetAttributeUint32("bitrate-bps");
       }
 
       orc_PuiPc.SetAdapterConfig(c_Config);
@@ -847,10 +850,9 @@ void C_PuiSvHandlerFiler::mh_SavePc(const C_OscViewPc & orc_OscPc, const C_PuiSv
    {
       const C_OscCanAdapterConfig & rc_Config = orc_PuiPc.GetAdapterConfig();
       orc_XmlParser.CreateAndSelectNodeChild("can-adapter");
-      orc_XmlParser.SetAttributeSint32("type", static_cast<int32_t>(rc_Config.e_Type));
-      orc_XmlParser.SetAttributeString("socketcan-interface", rc_Config.c_SocketCanInterface);
-      orc_XmlParser.SetAttributeUint32("peak-channel", static_cast<uint32_t>(rc_Config.u16_PeakChannel));
-      orc_XmlParser.SetAttributeUint32("peak-bitrate-kbits", rc_Config.u32_PeakBitrateKbits);
+      orc_XmlParser.SetAttributeString("backend", ::can::backendKindToString(rc_Config.e_BackendKind).c_str());
+      orc_XmlParser.SetAttributeString("channel-id", rc_Config.c_ChannelId.c_str());
+      orc_XmlParser.SetAttributeUint32("bitrate-bps", rc_Config.u32_BitrateBps);
       tgl_assert(orc_XmlParser.SelectNodeParent() == "pc");
    }
    orc_XmlParser.CreateAndSelectNodeChild("box");

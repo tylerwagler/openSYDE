@@ -116,12 +116,12 @@ C_SydeSup::E_Result C_SydeSup::m_OpenCan(const stw::scl::C_SclString & orc_CanDr
 #ifndef _WIN32
    if (orc_CanDriver.IsEmpty() == false)
    {
-      c_Config.c_SocketCanInterface = orc_CanDriver;
+      c_Config.c_ChannelId = orc_CanDriver.c_str();
    }
 #else
    (void)orc_CanDriver;
 #endif
-   c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(ou64_BitrateBps / 1000ULL);
+   c_Config.u32_BitrateBps = static_cast<uint32_t>(ou64_BitrateBps);
 
    stw::scl::C_SclString c_Error;
    mpc_CanDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);

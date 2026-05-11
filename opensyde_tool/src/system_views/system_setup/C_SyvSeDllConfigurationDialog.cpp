@@ -188,12 +188,9 @@ void C_SyvSeDllConfigurationDialog::SetAdapterConfig(const C_OscCanAdapterConfig
 {
    this->mc_AdapterConfig = orc_Config;
 
-#ifdef _WIN32
-   this->mpc_Ui->pc_ComboBoxAdapterValue->setEditText(QString::number(orc_Config.u16_PeakChannel));
-#else
-   const QString c_Display = orc_Config.c_SocketCanInterface.IsEmpty() ?
-                             QString("can0") :
-                             QString(orc_Config.c_SocketCanInterface.c_str());
+   const QString c_Display = orc_Config.c_ChannelId.empty() ?
+                             QString::fromStdString(C_OscCanAdapterConfig::h_GetPlatformDefault().c_ChannelId) :
+                             QString::fromStdString(orc_Config.c_ChannelId);
    const int32_t s32_Existing = this->mpc_Ui->pc_ComboBoxAdapterValue->findText(c_Display);
    if (s32_Existing >= 0)
    {
@@ -203,7 +200,6 @@ void C_SyvSeDllConfigurationDialog::SetAdapterConfig(const C_OscCanAdapterConfig
    {
       this->mpc_Ui->pc_ComboBoxAdapterValue->setEditText(c_Display);
    }
-#endif
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -218,21 +214,14 @@ C_OscCanAdapterConfig C_SyvSeDllConfigurationDialog::GetAdapterConfig(void) cons
    C_OscCanAdapterConfig c_Result = this->mc_AdapterConfig;
    const QString c_Field = this->mpc_Ui->pc_ComboBoxAdapterValue->currentText().trimmed();
 
-#ifdef _WIN32
-   c_Result.e_Type = eCAN_ADAPTER_PEAK;
-   bool q_Ok = false;
-   const uint32_t u32_Channel = c_Field.toUInt(&q_Ok);
-   c_Result.u16_PeakChannel = (q_Ok && (u32_Channel >= 1U) && (u32_Channel <= 16U)) ?
-                              static_cast<uint16_t>(u32_Channel) : static_cast<uint16_t>(1U);
-   c_Result.u32_PeakBitrateKbits = (this->mu64_Bitrate > 0U) ?
-                                   static_cast<uint32_t>(this->mu64_Bitrate / 1000U) :
-                                   c_Result.u32_PeakBitrateKbits;
-#else
-   c_Result.e_Type = eCAN_ADAPTER_SOCKET_CAN;
-   c_Result.c_SocketCanInterface = c_Field.isEmpty() ?
-                                   stw::scl::C_SclString("can0") :
-                                   stw::scl::C_SclString(c_Field.toStdString().c_str());
-#endif
+   if (c_Field.isEmpty() == false)
+   {
+      c_Result.c_ChannelId = c_Field.toStdString();
+   }
+   if (this->mu64_Bitrate > 0U)
+   {
+      c_Result.u32_BitrateBps = static_cast<uint32_t>(this->mu64_Bitrate);
+   }
 
    return c_Result;
 }
@@ -256,7 +245,7 @@ void C_SyvSeDllConfigurationDialog::m_TestConnectionClicked(void) const
 
    if (this->mu64_Bitrate > 0U)
    {
-      c_Config.u32_PeakBitrateKbits = static_cast<uint32_t>(this->mu64_Bitrate / 1000U);
+      c_Config.u32_BitrateBps = static_cast<uint32_t>(this->mu64_Bitrate);
    }
 
    stw::scl::C_SclString c_Error;

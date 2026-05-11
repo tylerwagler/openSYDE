@@ -57,7 +57,10 @@ set(CMAKE_C_FLAGS "-Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized 
    -Wunused-macros -Wcast-align -Wlogical-op -Wno-multichar -Wredundant-decls -Wnested-externs \
    -Wno-deprecated-declarations")
 # For C++ do not add "-Wdouble-promotion" as it causes a warning in tinyxml.cpp which we do not want to modify
-set(CMAKE_CXX_FLAGS "-std=c++98 -Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized -Wsign-compare  \
+# C++17 to match the other openSYDE apps and to satisfy libcan's INTERFACE cxx_std_14 minimum.
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized -Wsign-compare  \
    -Wmissing-include-dirs -Wshadow -Wlogical-op -Wno-multichar -Wredundant-decls -Wno-deprecated-declarations")
 
 # link standard libraries statically (fully static only on Windows)

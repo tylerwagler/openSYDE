@@ -43,14 +43,12 @@ C_PuiSvPc::C_PuiSvPc(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvPc::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mc_AdapterConfig.e_Type,
-                                       sizeof(this->mc_AdapterConfig.e_Type), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_AdapterConfig.c_SocketCanInterface.c_str(),
-                                       this->mc_AdapterConfig.c_SocketCanInterface.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mc_AdapterConfig.u16_PeakChannel,
-                                       sizeof(this->mc_AdapterConfig.u16_PeakChannel), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mc_AdapterConfig.u32_PeakBitrateKbits,
-                                       sizeof(this->mc_AdapterConfig.u32_PeakBitrateKbits), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(&this->mc_AdapterConfig.e_BackendKind,
+                                       sizeof(this->mc_AdapterConfig.e_BackendKind), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->mc_AdapterConfig.c_ChannelId.c_str(),
+                                       this->mc_AdapterConfig.c_ChannelId.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(&this->mc_AdapterConfig.u32_BitrateBps,
+                                       sizeof(this->mc_AdapterConfig.u32_BitrateBps), oru32_HashValue);
    this->mc_ConnectionData.CalcHash(oru32_HashValue);
 
    C_PuiBsBox::CalcHash(oru32_HashValue);

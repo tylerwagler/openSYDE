@@ -31,8 +31,8 @@ public:
    static stw::can::C_CanDispatcher * h_CreateAdapter(const C_OscCanAdapterConfig & orc_Config,
                                                       stw::scl::C_SclString & orc_ErrorDescription);
 
-   static bool h_IsAdapterTypeAvailable(const E_CanAdapterType oe_Type);
-   static stw::scl::C_SclString h_GetAdapterTypeDisplayName(const E_CanAdapterType oe_Type);
+   static bool h_IsBackendAvailable(const ::can::BackendKind oe_Kind);
+   static stw::scl::C_SclString h_GetBackendDisplayName(const ::can::BackendKind oe_Kind);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

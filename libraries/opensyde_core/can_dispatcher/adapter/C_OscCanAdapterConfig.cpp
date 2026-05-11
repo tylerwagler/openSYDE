@@ -1,11 +1,11 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Configuration data for opening a CAN adapter (implementation)
+   \brief       Persisted CAN adapter configuration (implementation)
 
-   Plain-data carrier for opening a CAN adapter. The active discriminator is e_Type; only the fields
-   corresponding to that type are read by the factory. The default constructor leaves all fields
-   zero/empty — call h_GetPlatformDefault() to obtain a usable starting configuration for the host OS.
+   Plain-data carrier for the user's CAN adapter selection. The factory consumes this directly:
+   e_BackendKind picks the libcan backend, c_ChannelId + u32_BitrateBps populate the
+   can::ChannelConfig.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
@@ -17,7 +17,6 @@
 #include "C_OscCanAdapterConfig.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -34,10 +33,9 @@ using namespace stw::opensyde_core;
 
 //----------------------------------------------------------------------------------------------------------------------
 C_OscCanAdapterConfig::C_OscCanAdapterConfig(void) :
-   e_Type(eCAN_ADAPTER_SOCKET_CAN),
-   c_SocketCanInterface(""),
-   u16_PeakChannel(0U),
-   u32_PeakBitrateKbits(0U)
+   e_BackendKind(::can::BackendKind::SocketCan),
+   c_ChannelId(),
+   u32_BitrateBps(500000U)
 {
 }
 
@@ -47,13 +45,13 @@ C_OscCanAdapterConfig C_OscCanAdapterConfig::h_GetPlatformDefault(void)
    C_OscCanAdapterConfig c_Config;
 
 #ifdef _WIN32
-   c_Config.e_Type = eCAN_ADAPTER_PEAK;
-   c_Config.u16_PeakChannel = 1U;
-   c_Config.u32_PeakBitrateKbits = 500U;
+   c_Config.e_BackendKind = ::can::BackendKind::PcanBasic;
+   c_Config.c_ChannelId = "PCAN_USBBUS1";
 #else
-   c_Config.e_Type = eCAN_ADAPTER_SOCKET_CAN;
-   c_Config.c_SocketCanInterface = "can0";
+   c_Config.e_BackendKind = ::can::BackendKind::SocketCan;
+   c_Config.c_ChannelId = "can0";
 #endif
+   c_Config.u32_BitrateBps = 500000U;
 
    return c_Config;
 }
