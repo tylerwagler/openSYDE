@@ -403,7 +403,7 @@ int32_t C_SyvDcWidget::m_InitSequence(void)
             c_Message =
                static_cast<QString>(
                   C_GtGetText::h_GetText(
-                     "Ethernet initialization failed. Check your Ethernet adapter settings in Windows system network configuration."));
+                     "Ethernet initialization failed. Check your Ethernet adapter settings."));
             c_MessageBox.SetCustomMinHeight(180, 180);
          }
          else

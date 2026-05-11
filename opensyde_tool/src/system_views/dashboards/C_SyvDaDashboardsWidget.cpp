@@ -781,8 +781,7 @@ int32_t C_SyvDaDashboardsWidget::m_InitOsyDriver(QString & orc_Message)
             orc_Message =
                static_cast<QString>(
                   C_GtGetText::h_GetText(
-                     "Ethernet initialization failed. Check your Ethernet adapter settings in Windows system network"
-                     " configuration."));
+                     "Ethernet initialization failed. Check your Ethernet adapter settings."));
          }
          else
          {
