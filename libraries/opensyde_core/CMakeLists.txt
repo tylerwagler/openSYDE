@@ -790,12 +790,15 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND NOT OPENSYDE_CORE_SKIP_LINUX_DRIVERS)
    set(OPENSYDE_CORE_LINUX_DRIVERS_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can/C_Can.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can/C_Can.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/socket_can/C_OscCanSocketCanAdapter.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/socket_can/C_OscCanSocketCanAdapter.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.hpp
    )
 
    set(OPENSYDE_CORE_LINUX_DRIVERS_INCLUDE_DIRECTORIES
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/socket_can
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock
    )

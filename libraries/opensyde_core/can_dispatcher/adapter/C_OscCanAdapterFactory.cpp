@@ -20,6 +20,10 @@
 #include "C_OscCanAdapterFactory.hpp"
 #include "stwerrors.hpp"
 
+#ifndef _WIN32
+#include "C_OscCanSocketCanAdapter.hpp"
+#endif
+
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::scl;
@@ -59,7 +63,11 @@ C_CanDispatcher * C_OscCanAdapterFactory::h_CreateAdapter(const C_OscCanAdapterC
    switch (orc_Config.e_Type)
    {
    case eCAN_ADAPTER_SOCKET_CAN:
-      orc_ErrorDescription = "SocketCAN adapter is not yet implemented.";
+#ifdef _WIN32
+      orc_ErrorDescription = "SocketCAN adapter is not available on Windows.";
+#else
+      pc_Adapter = new C_OscCanSocketCanAdapter(orc_Config.c_SocketCanInterface);
+#endif
       break;
    case eCAN_ADAPTER_PEAK:
       orc_ErrorDescription = "PEAK adapter is not yet implemented.";
