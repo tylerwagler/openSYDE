@@ -37,7 +37,7 @@ public:
    //TODO PTH: flashloader reset timeout as param
    explicit C_FlaConNodeConfigPopup(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent, const uint8_t ou8_NodeId,
                                     const uint32_t ou32_Bitrate, const uint32_t ou32_FlashloaderResetWaitTime,
-                                    const QString & orc_CanDllPath);
+                                    const QString & orc_CanChannelId);
    ~C_FlaConNodeConfigPopup(void) noexcept override;
 
    uint8_t GetNodeId(void) const;
@@ -60,7 +60,7 @@ private:
    uint8_t mu8_CurrentNodeId;              //original from properties widget
    uint32_t mu32_CurrentBitrate;           //original from properties widget
    uint32_t mu32_FlashloaderResetWaitTime; //from settings widget
-   const QString mc_CanDllPath;
+   const QString mc_CanChannelId;
    QTimer mc_Timer;
 
    void m_InitStaticNames(void) const;

@@ -51,13 +51,13 @@ using namespace stw::opensyde_gui_elements;
    \param[in]      ou8_NodeId                      Node ID to be set in this dialog as default
    \param[in]      ou32_Bitrate                    Bitrate to be set in this dialog as default
    \param[in]      ou32_FlashloaderResetWaitTime   Wait time for flashloader reset from settings widget
-   \param[in]      orc_CanDllPath                  CAN DLL file path
+   \param[in]      orc_CanChannelId                CAN adapter channel id (e.g. can0, PCAN_USBBUS1)
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_FlaConNodeConfigPopup::C_FlaConNodeConfigPopup(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                                  const uint8_t ou8_NodeId, const uint32_t ou32_Bitrate,
                                                  const uint32_t ou32_FlashloaderResetWaitTime,
-                                                 const QString & orc_CanDllPath) :
+                                                 const QString & orc_CanChannelId) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_FlaConNodeConfigPopup),
    mpc_DcSequences(NULL),
@@ -65,7 +65,7 @@ C_FlaConNodeConfigPopup::C_FlaConNodeConfigPopup(stw::opensyde_gui_elements::C_O
    mu8_CurrentNodeId(ou8_NodeId),
    mu32_CurrentBitrate(ou32_Bitrate),
    mu32_FlashloaderResetWaitTime(ou32_FlashloaderResetWaitTime),
-   mc_CanDllPath(orc_CanDllPath)
+   mc_CanChannelId(orc_CanChannelId)
 {
    //we save the index zero based but want to display it based on 1.
    const QString c_CbxText = "CAN " + QString::number(C_UsHandler::h_GetInstance()->GetNodeCfgInterfaceIndex() + 1);
@@ -257,7 +257,7 @@ int32_t C_FlaConNodeConfigPopup::m_InitDcSequence(void)
               this, &C_FlaConNodeConfigPopup::m_DeviceInfoRead);
    }
 
-   s32_Return = this->mpc_DcSequences->InitDcSequences(this->mc_CanDllPath.toStdString(), this->mu32_CurrentBitrate);
+   s32_Return = this->mpc_DcSequences->InitDcSequences(this->mc_CanChannelId.toStdString(), this->mu32_CurrentBitrate);
 
    if (s32_Return != C_NO_ERR)
    {

@@ -40,7 +40,7 @@ public:
    void SaveUserSettings(void) const;
    void ExpandSettings(const bool oq_Expand) const;
 
-   QString GetCanDllPath(void) const;
+   QString GetCanChannelId(void) const;
 
    void ClearProgress(void);
    void ShowProgress(const QString & orc_Text);

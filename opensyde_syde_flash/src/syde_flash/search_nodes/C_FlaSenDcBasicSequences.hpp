@@ -34,7 +34,7 @@ public:
    C_FlaSenDcBasicSequences(void);
    ~C_FlaSenDcBasicSequences(void) noexcept override;
 
-   int32_t InitDcSequences(const stw::scl::C_SclString & orc_CanDllPath, const int32_t os32_CanBitrate);
+   int32_t InitDcSequences(const stw::scl::C_SclString & orc_CanChannelId, const int32_t os32_CanBitrate);
    int32_t StartScanEnterFlashloader(const uint32_t ou32_FlashloaderResetWaitTime);
    int32_t StartScanGetInfo(void);
    int32_t StartResetSystem(void);

@@ -38,7 +38,7 @@ public:
    ~C_FlaSenSearchNodePopup(void) override;
 
    void InitStaticNames(void) const;
-   int32_t StartSearch(const QString & orc_CanDllPath, const int32_t os32_CanBitrate,
+   int32_t StartSearch(const QString & orc_CanChannelId, const int32_t os32_CanBitrate,
                        const uint32_t ou32_FlashloaderResetWaitTime);
    uint8_t GetSelectedNodeId(void) const;
 
@@ -56,7 +56,7 @@ private:
    stw::opensyde_gui_logic::C_FlaSenDcBasicSequences * mpc_DcSequences;
    QTimer mc_Timer;
 
-   int32_t m_InitDcSequence(const QString & orc_CanDllPath, const int32_t os32_CanBitrate);
+   int32_t m_InitDcSequence(const QString & orc_CanChannelId, const int32_t os32_CanBitrate);
    void m_CleanupDcSequence(void);
    void m_ApplyClicked(void);
    void m_OnCancel(void);

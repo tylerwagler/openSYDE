@@ -437,7 +437,7 @@ void C_FlaMainWindow::m_OnSearchNode()
    this->mpc_Ui->pc_SettingsWidget->ClearProgress();
    connect(pc_Dialog, &C_FlaSenSearchNodePopup::SigReportProgress, this, &C_FlaMainWindow::m_ShowProgress);
 
-   if (pc_Dialog->StartSearch(this->mpc_Ui->pc_SettingsWidget->GetCanDllPath(),
+   if (pc_Dialog->StartSearch(this->mpc_Ui->pc_SettingsWidget->GetCanChannelId(),
                               this->mpc_Ui->pc_GeneralPropertiesWidget->GetBitrate(),
                               this->mpc_Ui->pc_SettingsWidget->GetFlashloaderResetWaitTime()) == C_NO_ERR)
    {
@@ -474,14 +474,14 @@ void C_FlaMainWindow::m_OnConfigureNode()
    //get current values for dialog generation
    const uint8_t u8_NodeId = this->mpc_Ui->pc_GeneralPropertiesWidget->GetNodeId();
    const uint32_t u32_Bitrate = this->mpc_Ui->pc_GeneralPropertiesWidget->GetBitrate();
-   const QString & rc_CanDllPath = this->mpc_Ui->pc_SettingsWidget->GetCanDllPath();
+   const QString & rc_CanChannelId = this->mpc_Ui->pc_SettingsWidget->GetCanChannelId();
 
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
 
    C_FlaConNodeConfigPopup * const pc_Dialog =
       new C_FlaConNodeConfigPopup(*c_New, u8_NodeId, u32_Bitrate,
                                   this->mpc_Ui->pc_SettingsWidget->GetFlashloaderResetWaitTime(),
-                                  rc_CanDllPath);
+                                  rc_CanChannelId);
 
    //Resize
    const QSize c_SIZE(550, 400);
@@ -751,28 +751,21 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
 
    if (this->mpc_CanDispatcher == NULL)
    {
-      const QString c_PersistedPath = this->mpc_Ui->pc_SettingsWidget->GetCanDllPath();
+      const QString c_ChannelId = this->mpc_Ui->pc_SettingsWidget->GetCanChannelId();
       const int32_t s32_Bitrate = this->mpc_Ui->pc_GeneralPropertiesWidget->GetBitrate();
 
       stw::opensyde_core::C_OscCanAdapterConfig c_Config =
          stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
-#ifndef _WIN32
-      if (c_PersistedPath.isEmpty() == false)
+      if (c_ChannelId.isEmpty() == false)
       {
-         const QString c_Lower = c_PersistedPath.toLower();
-         const bool q_LooksWindowsy = c_Lower.endsWith(".dll") || c_PersistedPath.contains("\\");
-         if (q_LooksWindowsy == false)
-         {
-            c_Config.c_ChannelId = c_PersistedPath.toStdString();
-         }
+         c_Config.c_ChannelId = c_ChannelId.toStdString();
       }
-#endif
       c_Config.u32_BitrateBps = static_cast<uint32_t>(s32_Bitrate) * 1000U;
 
       osc_write_log_info("Initialization",
                          "Adapter: " +
                          stw::opensyde_core::C_OscCanAdapterFactory::h_GetBackendDisplayName(c_Config.e_BackendKind) +
-                         ", channel: " + c_PersistedPath.toStdString());
+                         ", channel: " + c_ChannelId.toStdString());
 
       stw::scl::C_SclString c_Error;
       this->mpc_CanDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);

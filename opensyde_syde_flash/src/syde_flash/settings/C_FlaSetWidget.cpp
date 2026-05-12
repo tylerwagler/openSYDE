@@ -146,18 +146,14 @@ void C_FlaSetWidget::ExpandSettings(const bool oq_Expand) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get selected CAN DLL file path
+/*! \brief  Get selected CAN adapter channel id
 
    \return
-   CAN DLL file path
+   Channel id (e.g. "can0", "PCAN_USBBUS1") from the persisted adapter config
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_FlaSetWidget::GetCanDllPath() const
+QString C_FlaSetWidget::GetCanChannelId() const
 {
-   // Legacy "DLL path" accessor surviving the libcan migration: returns the persisted adapter
-   // channel-id verbatim, which is what downstream code (C_FlaSenSearchNodePopup,
-   // C_FlaConNodeConfigPopup, C_FlaSenDcBasicSequences::InitDcSequences) interprets as the
-   // SocketCAN interface name on Linux. The name and call-chain wait for a follow-up rename.
    return QString::fromStdString(C_UsHandler::h_GetInstance()->GetAdapterConfig().c_ChannelId);
 }
 

@@ -114,7 +114,7 @@ void C_FlaSenSearchNodePopup::InitStaticNames(void) const
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Initialize sequence and start search if successful
 
-   \param[in]  orc_CanDllPath                   Path to CAN DLL file
+   \param[in]  orc_CanChannelId                 CAN adapter channel id (e.g. can0, PCAN_USBBUS1)
    \param[in]  os32_CanBitrate                  CAN Bitrate in kBit/s
    \param[in]  ou32_FlashloaderResetWaitTime    Flashloader reset wait time
 
@@ -123,12 +123,12 @@ void C_FlaSenSearchNodePopup::InitStaticNames(void) const
    C_COM       could not initialize sequence, see log file for details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_FlaSenSearchNodePopup::StartSearch(const QString & orc_CanDllPath, const int32_t os32_CanBitrate,
+int32_t C_FlaSenSearchNodePopup::StartSearch(const QString & orc_CanChannelId, const int32_t os32_CanBitrate,
                                              const uint32_t ou32_FlashloaderResetWaitTime)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (this->m_InitDcSequence(orc_CanDllPath, os32_CanBitrate) == C_NO_ERR)
+   if (this->m_InitDcSequence(orc_CanChannelId, os32_CanBitrate) == C_NO_ERR)
    {
       this->m_ScanNodes(ou32_FlashloaderResetWaitTime);
    }
@@ -165,7 +165,7 @@ void C_FlaSenSearchNodePopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Initialize sequence for search node
 
-   \param[in]  orc_CanDllPath    Path to CAN DLL file
+   \param[in]  orc_CanChannelId  CAN adapter channel id
    \param[in]  os32_CanBitrate   CAN Bitrate in kBit/s
 
    \return
@@ -173,7 +173,7 @@ void C_FlaSenSearchNodePopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
    else        error occurred, see log file for details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_FlaSenSearchNodePopup::m_InitDcSequence(const QString & orc_CanDllPath, const int32_t os32_CanBitrate)
+int32_t C_FlaSenSearchNodePopup::m_InitDcSequence(const QString & orc_CanChannelId, const int32_t os32_CanBitrate)
 {
    int32_t s32_Return;
 
@@ -187,7 +187,7 @@ int32_t C_FlaSenSearchNodePopup::m_InitDcSequence(const QString & orc_CanDllPath
               this, &C_FlaSenSearchNodePopup::m_DeviceInfoReceived);
    }
 
-   s32_Return = this->mpc_DcSequences->InitDcSequences(orc_CanDllPath.toStdString(), os32_CanBitrate);
+   s32_Return = this->mpc_DcSequences->InitDcSequences(orc_CanChannelId.toStdString(), os32_CanBitrate);
 
    if (s32_Return != C_NO_ERR)
    {

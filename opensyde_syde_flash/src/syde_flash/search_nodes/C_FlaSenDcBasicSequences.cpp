@@ -95,7 +95,7 @@ C_FlaSenDcBasicSequences::~C_FlaSenDcBasicSequences(void) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Initialize transport protocol, openSYDE protocol driver and CAN with given parameters.
 
-   \param[in]  orc_CanDllPath    Path to CAN DLL file
+   \param[in]  orc_CanChannelId  CAN adapter channel id (e.g. can0, PCAN_USBBUS1)
    \param[in]  os32_CanBitrate   CAN Bitrate in kBit/s
 
    \return
@@ -103,7 +103,7 @@ C_FlaSenDcBasicSequences::~C_FlaSenDcBasicSequences(void) noexcept
    else        error occurred, see log file for details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_FlaSenDcBasicSequences::InitDcSequences(const C_SclString & orc_CanDllPath, const int32_t os32_CanBitrate)
+int32_t C_FlaSenDcBasicSequences::InitDcSequences(const C_SclString & orc_CanChannelId, const int32_t os32_CanBitrate)
 {
    int32_t s32_Return;
    const C_SclString c_LogActivity = "Initialization";
@@ -116,26 +116,15 @@ int32_t C_FlaSenDcBasicSequences::InitDcSequences(const C_SclString & orc_CanDll
    }
 
    C_OscCanAdapterConfig c_Config = C_OscCanAdapterConfig::h_GetPlatformDefault();
-#ifndef _WIN32
-   if (orc_CanDllPath.IsEmpty() == false)
+   if (orc_CanChannelId.IsEmpty() == false)
    {
-      const C_SclString c_Lower = orc_CanDllPath.LowerCase();
-      const bool q_LooksWindowsy = (orc_CanDllPath.Pos("\\") > 0U) ||
-                                   ((c_Lower.Length() >= 4U) &&
-                                    (c_Lower.SubString(c_Lower.Length() - 3U, 4U) == ".dll"));
-      if (q_LooksWindowsy == false)
-      {
-         c_Config.c_ChannelId = orc_CanDllPath.c_str();
-      }
+      c_Config.c_ChannelId = orc_CanChannelId.c_str();
    }
-#else
-   (void)orc_CanDllPath; // Windows currently always uses PCAN_USBBUS1 (UI follow-up will surface picker)
-#endif
    c_Config.u32_BitrateBps = static_cast<uint32_t>(os32_CanBitrate) * 1000U;
 
    osc_write_log_info(c_LogActivity, "Adapter: " +
                       C_OscCanAdapterFactory::h_GetBackendDisplayName(c_Config.e_BackendKind) +
-                      ", channel: " + orc_CanDllPath);
+                      ", channel: " + orc_CanChannelId);
 
    C_SclString c_Error;
    this->mpc_CanDispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
