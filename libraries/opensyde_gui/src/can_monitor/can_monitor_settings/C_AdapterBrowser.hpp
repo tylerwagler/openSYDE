@@ -12,15 +12,25 @@
 #define C_ADAPTERBROWSERHPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include <vector>
 
 #include "C_OscCanAdapterConfig.hpp"
+#include "C_OgeWiOnlyBackground.hpp"
 #include "can/i_can_backend.h"
 
 class QComboBox;
+class QFrame;
 class QPushButton;
 class QTextBrowser;
+class QWidget;
+
+namespace stw
+{
+namespace opensyde_gui_elements
+{
+class C_CamOgeWiSettingSubSection;
+}
+}
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -31,10 +41,11 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 ///Inline picker for CAN backend + adapter + bitrate, fed by libcan's ICanBackend::enumerateAdapters().
+///Styled to match the other settings subsections (header strip + content card on dark background).
 ///Adapted from Elytron Defense's Qt_Template/AdapterBrowser; signal-driven so embedding settings
 ///widgets can save selections on change.
 class C_AdapterBrowser :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgeWiOnlyBackground
 {
    Q_OBJECT
 
@@ -46,7 +57,7 @@ public:
 
    //Drop-in compatibility with the legacy C_CamMosDllWidget interface so existing parent widgets
    //(C_CamMosWidget / C_FlaSetWidget) embed the new picker without their popup/expand plumbing
-   //needing changes. A follow-up can simplify the parent layout and drop these shims.
+   //needing changes.
    void LoadUserSettings(void) const;
    void PrepareForExpanded(const bool oq_Expand) const;
    void OnCommunicationStarted(const bool oq_Online) const;
@@ -70,14 +81,19 @@ private:
    C_AdapterBrowser(const C_AdapterBrowser &);
    C_AdapterBrowser & operator =(const C_AdapterBrowser &) &;
 
+   void m_BuildUi(void);
    void m_RefreshAdapters(void);
    void m_DisplaySelected(void);
    void m_EmitChanged(void);
+   void m_OnExpand(const bool oq_Expand);
 
+   stw::opensyde_gui_elements::C_CamOgeWiSettingSubSection * mpc_Header;
+   QWidget * mpc_Content;
    QComboBox * mpc_BackendCombo;
    QComboBox * mpc_AdapterCombo;
    QComboBox * mpc_BitrateCombo;
    QPushButton * mpc_RefreshBtn;
+   QFrame * mpc_DetailsFrame;
    QTextBrowser * mpc_Details;
 
    std::vector< ::can::AdapterInfo> mc_CurrentAdapters;

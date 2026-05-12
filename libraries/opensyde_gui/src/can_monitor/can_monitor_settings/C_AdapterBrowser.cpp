@@ -9,8 +9,11 @@
    C_OscCanAdapterConfig so consumers (CAN Monitor and SYDE Flash settings widgets) can
    save without polling.
 
-   The bottom panel renders the live AdapterInfo for the highlighted adapter — serial, firmware,
-   driver version, and any backend-specific extras. Refresh button re-runs enumerateAdapters().
+   Visually matches the other settings subsections (Database / Receive Filter / Logging): a
+   C_CamOgeWiSettingSubSection header with title + icon + expand chevron, sitting on the same
+   dark background as its siblings, and a content area below that hides/shows in response to
+   the header's expand toggle. Adapter info is rendered as a flat details panel — no white
+   inner card that would break the visual rhythm.
 
    Adapted from Elytron Defense's Qt_Template/AdapterBrowser. License-compatible (both GPL-3).
 
@@ -23,7 +26,7 @@
 
 #include <QComboBox>
 #include <QFormLayout>
-#include <QGroupBox>
+#include <QFrame>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -32,10 +35,16 @@
 #include <QVBoxLayout>
 
 #include "C_AdapterBrowser.hpp"
+#include "C_CamOgeWiSettingSubSection.hpp"
+#include "C_GtGetText.hpp"
+#include "C_OgeWiUtil.hpp"
+#include "C_UsHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_elements;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -55,7 +64,7 @@ QString h_Sanitize(const std::string & orc_Value)
 
 QString h_FormatAdapter(const ::can::AdapterInfo & orc_Info)
 {
-   QString c_Html = QStringLiteral("<table cellpadding='4'>");
+   QString c_Html = QStringLiteral("<table cellpadding='4' style='color:white;'>");
    const auto c_Row = [&](const char * const opcn_Key, const QString & orc_Value) {
       c_Html += QStringLiteral("<tr><td><b>%1</b></td><td><tt>%2</tt></td></tr>")
                 .arg(QString::fromUtf8(opcn_Key), orc_Value.toHtmlEscaped());
@@ -81,27 +90,56 @@ QString h_FormatAdapter(const ::can::AdapterInfo & orc_Info)
 
 //----------------------------------------------------------------------------------------------------------------------
 C_AdapterBrowser::C_AdapterBrowser(QWidget * const opc_Parent) :
-   QWidget(opc_Parent),
-   mpc_BackendCombo(new QComboBox(this)),
-   mpc_AdapterCombo(new QComboBox(this)),
-   mpc_BitrateCombo(new QComboBox(this)),
-   mpc_RefreshBtn(new QPushButton(tr("Refresh"), this)),
-   mpc_Details(new QTextBrowser(this))
+   C_OgeWiOnlyBackground(opc_Parent),
+   mpc_Header(NULL),
+   mpc_Content(NULL),
+   mpc_BackendCombo(NULL),
+   mpc_AdapterCombo(NULL),
+   mpc_BitrateCombo(NULL),
+   mpc_RefreshBtn(NULL),
+   mpc_DetailsFrame(NULL),
+   mpc_Details(NULL)
 {
-   const std::vector< ::can::BackendKind> c_Kinds = ::can::ICanBackend::availableBackends();
-   for (size_t s_Idx = 0U; s_Idx < c_Kinds.size(); ++s_Idx)
+   this->SetBackgroundColor(5);
+   this->m_BuildUi();
+   this->m_RefreshAdapters();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void C_AdapterBrowser::m_BuildUi(void)
+{
+   QVBoxLayout * const pc_Outer = new QVBoxLayout(this);
+   pc_Outer->setContentsMargins(0, 0, 0, 0);
+   pc_Outer->setSpacing(0);
+
+   mpc_Header = new C_CamOgeWiSettingSubSection(this);
+   mpc_Header->SetTitle(C_GtGetText::h_GetText("PC CAN Interface Configuration"));
+   mpc_Header->SetIcon("://images/IconConfig.svg");
+   mpc_Header->SetToggle(false);
+   pc_Outer->addWidget(mpc_Header);
+
+   mpc_Content = new QWidget(this);
+   QVBoxLayout * const pc_ContentLayout = new QVBoxLayout(mpc_Content);
+   pc_ContentLayout->setContentsMargins(10, 6, 10, 10);
+   pc_ContentLayout->setSpacing(6);
+
+   mpc_BackendCombo = new QComboBox(mpc_Content);
+   for (auto e_Kind : ::can::ICanBackend::availableBackends())
    {
-      mpc_BackendCombo->addItem(QString::fromStdString(::can::backendKindToString(c_Kinds[s_Idx])),
-                                static_cast<int>(c_Kinds[s_Idx]));
+      mpc_BackendCombo->addItem(QString::fromStdString(::can::backendKindToString(e_Kind)),
+                                static_cast<int>(e_Kind));
    }
    if (mpc_BackendCombo->count() == 0)
    {
       mpc_BackendCombo->addItem(tr("(no backends compiled in)"), -1);
       mpc_BackendCombo->setEnabled(false);
    }
+   mpc_BackendCombo->setMinimumHeight(26);
 
-   // Common classic-CAN bitrates. CAN-FD data-phase rates will land alongside when openSYDE
-   // grows FD support; for now arbitration-only.
+   mpc_AdapterCombo = new QComboBox(mpc_Content);
+   mpc_AdapterCombo->setMinimumHeight(26);
+
+   mpc_BitrateCombo = new QComboBox(mpc_Content);
    const struct {const char * pcn_Label; uint32_t u32_Bps;} c_Bitrates[] = {
       {"1 Mbps",   1000000U}, {"800 kbps", 800000U},  {"500 kbps", 500000U},
       {"250 kbps", 250000U},  {"125 kbps", 125000U},  {"100 kbps", 100000U},
@@ -111,28 +149,62 @@ C_AdapterBrowser::C_AdapterBrowser(QWidget * const opc_Parent) :
    {
       mpc_BitrateCombo->addItem(QString::fromUtf8(rc_B.pcn_Label), rc_B.u32_Bps);
    }
-   mpc_BitrateCombo->setCurrentIndex(2); // 500 kbps default — matches platform default
+   mpc_BitrateCombo->setCurrentIndex(2); // 500 kbps default
+   mpc_BitrateCombo->setMinimumHeight(26);
 
-   mpc_Details->setOpenExternalLinks(false);
+   mpc_RefreshBtn = new QPushButton(tr("Refresh"), mpc_Content);
+   mpc_RefreshBtn->setMinimumHeight(26);
 
    QFormLayout * const pc_Form = new QFormLayout;
-   pc_Form->addRow(tr("Backend:"), mpc_BackendCombo);
-   pc_Form->addRow(tr("Adapter:"), mpc_AdapterCombo);
-   pc_Form->addRow(tr("Bitrate:"), mpc_BitrateCombo);
+   pc_Form->setLabelAlignment(Qt::AlignRight | Qt::AlignVCenter);
+   pc_Form->setHorizontalSpacing(8);
+   pc_Form->setVerticalSpacing(6);
+   pc_Form->addRow(new QLabel(tr("Backend"),  mpc_Content), mpc_BackendCombo);
+   pc_Form->addRow(new QLabel(tr("Adapter"),  mpc_Content), mpc_AdapterCombo);
+   pc_Form->addRow(new QLabel(tr("Bitrate"),  mpc_Content), mpc_BitrateCombo);
+
+   // Style labels to match the other settings sections.
+   for (int32_t s32_Row = 0; s32_Row < pc_Form->rowCount(); ++s32_Row)
+   {
+      QLabel * const pc_Label = qobject_cast<QLabel *>(pc_Form->itemAt(s32_Row, QFormLayout::LabelRole)->widget());
+      if (pc_Label != NULL)
+      {
+         C_OgeWiUtil::h_ApplyStylesheetProperty(pc_Label, "ColorWhite", true);
+         pc_Label->setStyleSheet(QStringLiteral("color: rgba(255, 255, 255, 0.55);"));
+      }
+   }
 
    QHBoxLayout * const pc_Row = new QHBoxLayout;
-   pc_Row->addLayout(pc_Form);
-   pc_Row->addStretch();
-   pc_Row->addWidget(mpc_RefreshBtn);
+   pc_Row->addLayout(pc_Form, 1);
+   pc_Row->addWidget(mpc_RefreshBtn, 0, Qt::AlignTop);
+   pc_ContentLayout->addLayout(pc_Row);
 
-   QGroupBox * const pc_DetailsBox = new QGroupBox(tr("Adapter info"), this);
-   QVBoxLayout * const pc_DetailsLayout = new QVBoxLayout(pc_DetailsBox);
-   pc_DetailsLayout->addWidget(mpc_Details);
+   mpc_DetailsFrame = new QFrame(mpc_Content);
+   mpc_DetailsFrame->setFrameShape(QFrame::NoFrame);
+   QVBoxLayout * const pc_DetailsLayout = new QVBoxLayout(mpc_DetailsFrame);
+   pc_DetailsLayout->setContentsMargins(0, 6, 0, 0);
+   pc_DetailsLayout->setSpacing(4);
 
-   QVBoxLayout * const pc_MainLayout = new QVBoxLayout(this);
-   pc_MainLayout->addLayout(pc_Row);
-   pc_MainLayout->addWidget(pc_DetailsBox, 1);
+   QLabel * const pc_DetailsTitle = new QLabel(C_GtGetText::h_GetText("Adapter info"), mpc_DetailsFrame);
+   pc_DetailsTitle->setStyleSheet(QStringLiteral("color: rgba(255, 255, 255, 0.55); font-weight: bold;"));
+   pc_DetailsLayout->addWidget(pc_DetailsTitle);
 
+   mpc_Details = new QTextBrowser(mpc_DetailsFrame);
+   mpc_Details->setOpenExternalLinks(false);
+   mpc_Details->setFrameShape(QFrame::NoFrame);
+   mpc_Details->setStyleSheet(QStringLiteral(
+                                 "QTextBrowser { background-color: rgba(255, 255, 255, 0.04); "
+                                 "color: white; border: 1px solid rgba(255, 255, 255, 0.1); "
+                                 "border-radius: 4px; padding: 4px; }"));
+   pc_DetailsLayout->addWidget(mpc_Details, 1);
+   pc_ContentLayout->addWidget(mpc_DetailsFrame, 1);
+
+   pc_Outer->addWidget(mpc_Content);
+
+   connect(mpc_Header, &C_CamOgeWiSettingSubSection::SigExpandSection,
+           this, &C_AdapterBrowser::m_OnExpand);
+   connect(mpc_Header, &C_CamOgeWiSettingSubSection::SigHide,
+           this, &C_AdapterBrowser::SigHide);
    connect(mpc_BackendCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
            this, &C_AdapterBrowser::m_RefreshAdapters);
    connect(mpc_RefreshBtn, &QPushButton::clicked,
@@ -143,8 +215,6 @@ C_AdapterBrowser::C_AdapterBrowser(QWidget * const opc_Parent) :
            this, &C_AdapterBrowser::m_EmitChanged);
    connect(mpc_BitrateCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
            this, &C_AdapterBrowser::m_EmitChanged);
-
-   this->m_RefreshAdapters();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -173,7 +243,6 @@ void C_AdapterBrowser::SetAdapterConfig(const C_OscCanAdapterConfig & orc_Config
    {
       mpc_BackendCombo->setCurrentIndex(s32_BackendIdx);
    }
-   // m_RefreshAdapters was triggered by the backend change above; pick the right adapter entry.
    for (int32_t s32_Idx = 0; s32_Idx < static_cast<int32_t>(mc_CurrentAdapters.size()); ++s32_Idx)
    {
       if (mc_CurrentAdapters[s32_Idx].channel_id == orc_Config.c_ChannelId)
@@ -199,7 +268,7 @@ void C_AdapterBrowser::m_RefreshAdapters(void)
    const int32_t s32_KindInt = mpc_BackendCombo->currentData().toInt();
    if (s32_KindInt < 0)
    {
-      mpc_Details->setHtml(tr("<i>No backends compiled in.</i>"));
+      mpc_Details->setHtml(tr("<i style='color:white;'>No backends compiled in.</i>"));
       mpc_AdapterCombo->blockSignals(false);
       return;
    }
@@ -208,7 +277,7 @@ void C_AdapterBrowser::m_RefreshAdapters(void)
    const std::unique_ptr< ::can::ICanBackend> c_Backend = ::can::ICanBackend::create(e_Kind);
    if (c_Backend == NULL)
    {
-      mpc_Details->setHtml(tr("<i>Backend factory returned nullptr — check build configuration.</i>"));
+      mpc_Details->setHtml(tr("<i style='color:white;'>Backend factory returned nullptr — check build configuration.</i>"));
       mpc_AdapterCombo->blockSignals(false);
       return;
    }
@@ -218,7 +287,7 @@ void C_AdapterBrowser::m_RefreshAdapters(void)
    {
       mpc_AdapterCombo->addItem(tr("(no adapters found)"));
       mpc_AdapterCombo->setEnabled(false);
-      mpc_Details->setHtml(tr("<i>No adapters detected for this backend.</i>"));
+      mpc_Details->setHtml(tr("<i style='color:white;'>No adapters detected for this backend.</i>"));
    }
    else
    {
@@ -255,34 +324,34 @@ void C_AdapterBrowser::m_EmitChanged(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Compatibility shim: legacy widget hook for loading persisted state.
+void C_AdapterBrowser::m_OnExpand(const bool oq_Expand)
+{
+   mpc_Content->setVisible(oq_Expand);
+   C_UsHandler::h_GetInstance()->SetWiDllConfigExpanded(oq_Expand);
+}
 
-   The new browser loads its initial state via SetAdapterConfig() from the parent. This entry point
-   stays so existing parents (C_CamMosWidget / C_FlaSetWidget) that call LoadUserSettings() on the
-   embedded widget keep compiling. No-op here.
-*/
 //----------------------------------------------------------------------------------------------------------------------
 void C_AdapterBrowser::LoadUserSettings(void) const
 {
+   const bool q_Expanded = C_UsHandler::h_GetInstance()->GetWiDllConfigExpanded();
+   mpc_Header->SetExpanded(q_Expanded);
+   mpc_Content->setVisible(q_Expanded);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Compatibility shim: legacy widget reacted to settings-panel expand/collapse.
-
-   The new browser is always-visible; there's nothing to toggle. No-op.
-*/
 //----------------------------------------------------------------------------------------------------------------------
 void C_AdapterBrowser::PrepareForExpanded(const bool oq_Expand) const
 {
-   (void)oq_Expand;
+   if (oq_Expand == false)
+   {
+      mpc_Content->setVisible(true);
+   }
+   else
+   {
+      mpc_Content->setVisible(C_UsHandler::h_GetInstance()->GetWiDllConfigExpanded());
+   }
+   mpc_Header->ShowExpandButton(oq_Expand);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Compatibility shim: disable the picker while a CAN session is active.
-
-   Greys out the combos and the refresh button so the user can't change selection mid-session.
-   The legacy widget disabled radio buttons + line edit; here we disable the equivalent controls.
-*/
 //----------------------------------------------------------------------------------------------------------------------
 void C_AdapterBrowser::OnCommunicationStarted(const bool oq_Online) const
 {
