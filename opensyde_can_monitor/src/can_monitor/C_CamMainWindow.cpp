@@ -75,7 +75,7 @@ const int32_t C_CamMainWindow::mhs32_MESSAGE_GEN_SPLITTER_MAX = 120;
 C_CamMainWindow::C_CamMainWindow(QWidget * const opc_Parent) :
    QMainWindow(opc_Parent),
    mpc_Ui(new Ui::C_CamMainWindow),
-   mpc_CanDllDispatcher(NULL),
+   mpc_CanDispatcher(NULL),
    mq_LoggingStarted(false)
 {
    this->mpc_Ui->setupUi(this);
@@ -250,12 +250,12 @@ C_CamMainWindow::~C_CamMainWindow()
    delete mpc_CanThread;
    mpc_CanThread = NULL;
 
-   if (mpc_CanDllDispatcher != NULL)
+   if (mpc_CanDispatcher != NULL)
    {
       this->m_CloseCan();
 
-      delete mpc_CanDllDispatcher;
-      mpc_CanDllDispatcher = NULL;
+      delete mpc_CanDispatcher;
+      mpc_CanDispatcher = NULL;
    }
 
    delete this->mpc_Ui;
@@ -505,17 +505,12 @@ void C_CamMainWindow::m_StartLogging(void)
       switch (s32_Return)
       {
       case C_RD_WR:
-         c_Text = C_GtGetText::h_GetText("No valid CAN DLL found.");
+         c_Text = C_GtGetText::h_GetText("CAN adapter could not be opened. Check the configured adapter "
+                                         "is connected and the selected backend is available.");
          break;
-      case C_CONFIG:
-         {
-            const uint32_t u32_BITNESS = 8 * sizeof(size_t);
-            c_Text = static_cast<QString>(C_GtGetText::h_GetText("CAN DLL loading not successful. "
-                                                                 "Make sure to use a %1-bit DLL.")).arg(u32_BITNESS);
-            break;
-         }
       case C_COM:
-         c_Text = C_GtGetText::h_GetText("CAN DLL initialization not successful.");
+         c_Text = C_GtGetText::h_GetText("CAN adapter initialization failed. Check that the configured "
+                                         "bitrate matches the bus.");
          break;
       case C_WARN:
          c_MessageBox.SetType(C_OgeWiCustomMessage::eWARNING);
@@ -622,16 +617,15 @@ void C_CamMainWindow::m_ClearData()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Initialization of com driver and CAN DLL
+/*! \brief  Initialization of com driver and CAN adapter
 
-   \param[out]  ors32_Bitrate    Current set bitrate of CAN DLL
+   \param[out]  ors32_Bitrate    Current set bitrate of CAN adapter (0 if unknown)
 
    \return
    C_NO_ERR    CAN initialized
-   C_RD_WR     CAN DLL not found
-   C_CONFIG    Could not open DLL
-   C_COM       Could not initialize CAN
-   C_WARN      Bitrate could not be read
+   C_RD_WR     Adapter creation failed (backend unavailable / channel not found)
+   C_COM       CAN_Init() failed on the adapter
+   C_WARN      Bitrate could not be queried
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
@@ -644,24 +638,24 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
       C_CamProHandler::h_GetInstance()->GetAdapterConfig();
 
    // Tear down the previous dispatcher (if any) and create a fresh one for this session.
-   if (this->mpc_CanDllDispatcher != NULL)
+   if (this->mpc_CanDispatcher != NULL)
    {
       this->mc_ComDriver.InitBase(NULL);
-      delete this->mpc_CanDllDispatcher;
-      this->mpc_CanDllDispatcher = NULL;
+      delete this->mpc_CanDispatcher;
+      this->mpc_CanDispatcher = NULL;
    }
 
    stw::scl::C_SclString c_Error;
-   this->mpc_CanDllDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
-   if (this->mpc_CanDllDispatcher == NULL)
+   this->mpc_CanDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
+   if (this->mpc_CanDispatcher == NULL)
    {
       osc_write_log_error("CAN Init", c_Error);
       s32_Return = C_RD_WR;
    }
    else
    {
-      this->mc_ComDriver.InitBase(this->mpc_CanDllDispatcher);
-      s32_Return = this->mpc_CanDllDispatcher->CAN_Init();
+      this->mc_ComDriver.InitBase(this->mpc_CanDispatcher);
+      s32_Return = this->mpc_CanDispatcher->CAN_Init();
 
       if (s32_Return != C_NO_ERR)
       {
@@ -713,9 +707,9 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMainWindow::m_CloseCan(void)
 {
-   if (this->mpc_CanDllDispatcher != NULL)
+   if (this->mpc_CanDispatcher != NULL)
    {
-      this->mpc_CanDllDispatcher->CAN_Exit();
+      this->mpc_CanDispatcher->CAN_Exit();
    }
 }
 

@@ -177,7 +177,7 @@ void C_CamMetControlBarWidget::InitStaticNames() const
    this->mpc_Ui->pc_PushButtonTogglePlay->SetToolTipInformation(
       C_GtGetText::h_GetText("Start / Pause Measurement"),
       C_GtGetText::h_GetText("Start Measurement: \n"
-                             "   - Initialize CAN DLL, start CAN communication\n"
+                             "   - Open CAN adapter, start CAN communication\n"
                              "   - Display CAN messages in trace window\n"
                              "   - Send CAN messages configured in \"Message Generator\" window\n"
                              "Pause Measurement:\n"
