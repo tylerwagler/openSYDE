@@ -18,9 +18,7 @@
 #include "C_OgeWiOnlyBackground.hpp"
 #include "can/i_can_backend.h"
 
-class QComboBox;
 class QFrame;
-class QPushButton;
 class QTextBrowser;
 class QWidget;
 
@@ -28,7 +26,10 @@ namespace stw
 {
 namespace opensyde_gui_elements
 {
+class C_CamOgeCbxDark;
 class C_CamOgeWiSettingSubSection;
+class C_OgeLabGenericNoPaddingNoMargins;
+class C_OgePubToolTipBase;
 }
 }
 
@@ -89,10 +90,10 @@ private:
 
    stw::opensyde_gui_elements::C_CamOgeWiSettingSubSection * mpc_Header;
    QWidget * mpc_Content;
-   QComboBox * mpc_BackendCombo;
-   QComboBox * mpc_AdapterCombo;
-   QComboBox * mpc_BitrateCombo;
-   QPushButton * mpc_RefreshBtn;
+   stw::opensyde_gui_elements::C_CamOgeCbxDark * mpc_BackendCombo;
+   stw::opensyde_gui_elements::C_CamOgeCbxDark * mpc_AdapterCombo;
+   stw::opensyde_gui_elements::C_CamOgeCbxDark * mpc_BitrateCombo;
+   stw::opensyde_gui_elements::C_OgePubToolTipBase * mpc_RefreshBtn;
    QFrame * mpc_DetailsFrame;
    QTextBrowser * mpc_Details;
 

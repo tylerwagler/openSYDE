@@ -24,19 +24,19 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include <QComboBox>
 #include <QFormLayout>
 #include <QFrame>
 #include <QHBoxLayout>
-#include <QLabel>
-#include <QPushButton>
 #include <QTextBrowser>
 #include <QTextDocument>
 #include <QVBoxLayout>
 
 #include "C_AdapterBrowser.hpp"
+#include "C_CamOgeCbxDark.hpp"
 #include "C_CamOgeWiSettingSubSection.hpp"
 #include "C_GtGetText.hpp"
+#include "C_OgeLabGenericNoPaddingNoMargins.hpp"
+#include "C_OgePubToolTipBase.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_UsHandler.hpp"
 
@@ -123,7 +123,7 @@ void C_AdapterBrowser::m_BuildUi(void)
    pc_ContentLayout->setContentsMargins(10, 6, 10, 10);
    pc_ContentLayout->setSpacing(6);
 
-   mpc_BackendCombo = new QComboBox(mpc_Content);
+   mpc_BackendCombo = new C_CamOgeCbxDark(mpc_Content);
    for (auto e_Kind : ::can::ICanBackend::availableBackends())
    {
       mpc_BackendCombo->addItem(QString::fromStdString(::can::backendKindToString(e_Kind)),
@@ -134,12 +134,10 @@ void C_AdapterBrowser::m_BuildUi(void)
       mpc_BackendCombo->addItem(tr("(no backends compiled in)"), -1);
       mpc_BackendCombo->setEnabled(false);
    }
-   mpc_BackendCombo->setMinimumHeight(26);
 
-   mpc_AdapterCombo = new QComboBox(mpc_Content);
-   mpc_AdapterCombo->setMinimumHeight(26);
+   mpc_AdapterCombo = new C_CamOgeCbxDark(mpc_Content);
 
-   mpc_BitrateCombo = new QComboBox(mpc_Content);
+   mpc_BitrateCombo = new C_CamOgeCbxDark(mpc_Content);
    const struct {const char * pcn_Label; uint32_t u32_Bps;} c_Bitrates[] = {
       {"1 Mbps",   1000000U}, {"800 kbps", 800000U},  {"500 kbps", 500000U},
       {"250 kbps", 250000U},  {"125 kbps", 125000U},  {"100 kbps", 100000U},
@@ -150,29 +148,27 @@ void C_AdapterBrowser::m_BuildUi(void)
       mpc_BitrateCombo->addItem(QString::fromUtf8(rc_B.pcn_Label), rc_B.u32_Bps);
    }
    mpc_BitrateCombo->setCurrentIndex(2); // 500 kbps default
-   mpc_BitrateCombo->setMinimumHeight(26);
 
-   mpc_RefreshBtn = new QPushButton(tr("Refresh"), mpc_Content);
-   mpc_RefreshBtn->setMinimumHeight(26);
+   mpc_RefreshBtn = new C_OgePubToolTipBase(mpc_Content);
+   mpc_RefreshBtn->setText(tr("Refresh"));
+   mpc_RefreshBtn->setMinimumHeight(28);
+   mpc_RefreshBtn->setMinimumWidth(80);
+
+   const auto c_MakeLabel = [this](const char * const opcn_Text) -> C_OgeLabGenericNoPaddingNoMargins * {
+      C_OgeLabGenericNoPaddingNoMargins * const pc_Lab = new C_OgeLabGenericNoPaddingNoMargins(this->mpc_Content);
+      pc_Lab->setText(C_GtGetText::h_GetText(opcn_Text));
+      pc_Lab->SetForegroundColor(0);
+      pc_Lab->SetFontPixel(13);
+      return pc_Lab;
+   };
 
    QFormLayout * const pc_Form = new QFormLayout;
    pc_Form->setLabelAlignment(Qt::AlignRight | Qt::AlignVCenter);
    pc_Form->setHorizontalSpacing(8);
    pc_Form->setVerticalSpacing(6);
-   pc_Form->addRow(new QLabel(tr("Backend"),  mpc_Content), mpc_BackendCombo);
-   pc_Form->addRow(new QLabel(tr("Adapter"),  mpc_Content), mpc_AdapterCombo);
-   pc_Form->addRow(new QLabel(tr("Bitrate"),  mpc_Content), mpc_BitrateCombo);
-
-   // Style labels to match the other settings sections.
-   for (int32_t s32_Row = 0; s32_Row < pc_Form->rowCount(); ++s32_Row)
-   {
-      QLabel * const pc_Label = qobject_cast<QLabel *>(pc_Form->itemAt(s32_Row, QFormLayout::LabelRole)->widget());
-      if (pc_Label != NULL)
-      {
-         C_OgeWiUtil::h_ApplyStylesheetProperty(pc_Label, "ColorWhite", true);
-         pc_Label->setStyleSheet(QStringLiteral("color: rgba(255, 255, 255, 0.55);"));
-      }
-   }
+   pc_Form->addRow(c_MakeLabel("Backend"), mpc_BackendCombo);
+   pc_Form->addRow(c_MakeLabel("Adapter"), mpc_AdapterCombo);
+   pc_Form->addRow(c_MakeLabel("Bitrate"), mpc_BitrateCombo);
 
    QHBoxLayout * const pc_Row = new QHBoxLayout;
    pc_Row->addLayout(pc_Form, 1);
@@ -185,16 +181,19 @@ void C_AdapterBrowser::m_BuildUi(void)
    pc_DetailsLayout->setContentsMargins(0, 6, 0, 0);
    pc_DetailsLayout->setSpacing(4);
 
-   QLabel * const pc_DetailsTitle = new QLabel(C_GtGetText::h_GetText("Adapter info"), mpc_DetailsFrame);
-   pc_DetailsTitle->setStyleSheet(QStringLiteral("color: rgba(255, 255, 255, 0.55); font-weight: bold;"));
+   C_OgeLabGenericNoPaddingNoMargins * const pc_DetailsTitle =
+      new C_OgeLabGenericNoPaddingNoMargins(mpc_DetailsFrame);
+   pc_DetailsTitle->setText(C_GtGetText::h_GetText("Adapter info"));
+   pc_DetailsTitle->SetForegroundColor(0);
+   pc_DetailsTitle->SetFontPixel(13, true);
    pc_DetailsLayout->addWidget(pc_DetailsTitle);
 
    mpc_Details = new QTextBrowser(mpc_DetailsFrame);
    mpc_Details->setOpenExternalLinks(false);
    mpc_Details->setFrameShape(QFrame::NoFrame);
    mpc_Details->setStyleSheet(QStringLiteral(
-                                 "QTextBrowser { background-color: rgba(255, 255, 255, 0.04); "
-                                 "color: white; border: 1px solid rgba(255, 255, 255, 0.1); "
+                                 "QTextBrowser { background-color: rgba(0, 0, 0, 0.35); "
+                                 "color: white; border: 1px solid rgba(255, 255, 255, 0.08); "
                                  "border-radius: 4px; padding: 4px; }"));
    pc_DetailsLayout->addWidget(mpc_Details, 1);
    pc_ContentLayout->addWidget(mpc_DetailsFrame, 1);
@@ -205,15 +204,15 @@ void C_AdapterBrowser::m_BuildUi(void)
            this, &C_AdapterBrowser::m_OnExpand);
    connect(mpc_Header, &C_CamOgeWiSettingSubSection::SigHide,
            this, &C_AdapterBrowser::SigHide);
-   connect(mpc_BackendCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+   connect(mpc_BackendCombo, static_cast<void(C_CamOgeCbxDark::*)(int)>(&C_CamOgeCbxDark::currentIndexChanged),
            this, &C_AdapterBrowser::m_RefreshAdapters);
    connect(mpc_RefreshBtn, &QPushButton::clicked,
            this, &C_AdapterBrowser::m_RefreshAdapters);
-   connect(mpc_AdapterCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+   connect(mpc_AdapterCombo, static_cast<void(C_CamOgeCbxDark::*)(int)>(&C_CamOgeCbxDark::currentIndexChanged),
            this, &C_AdapterBrowser::m_DisplaySelected);
-   connect(mpc_AdapterCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+   connect(mpc_AdapterCombo, static_cast<void(C_CamOgeCbxDark::*)(int)>(&C_CamOgeCbxDark::currentIndexChanged),
            this, &C_AdapterBrowser::m_EmitChanged);
-   connect(mpc_BitrateCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+   connect(mpc_BitrateCombo, static_cast<void(C_CamOgeCbxDark::*)(int)>(&C_CamOgeCbxDark::currentIndexChanged),
            this, &C_AdapterBrowser::m_EmitChanged);
 }
 
