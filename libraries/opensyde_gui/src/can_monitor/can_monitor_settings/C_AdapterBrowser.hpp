@@ -19,7 +19,7 @@
 #include "can/i_can_backend.h"
 
 class QFrame;
-class QTextBrowser;
+class QLabel;
 class QWidget;
 
 namespace stw
@@ -95,7 +95,7 @@ private:
    stw::opensyde_gui_elements::C_CamOgeCbxDark * mpc_BitrateCombo;
    stw::opensyde_gui_elements::C_OgePubToolTipBase * mpc_RefreshBtn;
    QFrame * mpc_DetailsFrame;
-   QTextBrowser * mpc_Details;
+   QLabel * mpc_Details;
 
    std::vector< ::can::AdapterInfo> mc_CurrentAdapters;
 };

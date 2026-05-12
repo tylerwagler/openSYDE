@@ -27,8 +27,7 @@
 #include <QFormLayout>
 #include <QFrame>
 #include <QHBoxLayout>
-#include <QTextBrowser>
-#include <QTextDocument>
+#include <QLabel>
 #include <QVBoxLayout>
 
 #include "C_AdapterBrowser.hpp"
@@ -188,15 +187,18 @@ void C_AdapterBrowser::m_BuildUi(void)
    pc_DetailsTitle->SetFontPixel(13, true);
    pc_DetailsLayout->addWidget(pc_DetailsTitle);
 
-   mpc_Details = new QTextBrowser(mpc_DetailsFrame);
-   mpc_Details->setOpenExternalLinks(false);
-   mpc_Details->setFrameShape(QFrame::NoFrame);
+   mpc_Details = new QLabel(mpc_DetailsFrame);
+   mpc_Details->setTextFormat(Qt::RichText);
+   mpc_Details->setTextInteractionFlags(Qt::TextSelectableByMouse);
+   mpc_Details->setWordWrap(true);
+   mpc_Details->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+   mpc_Details->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
    mpc_Details->setStyleSheet(QStringLiteral(
-                                 "QTextBrowser { background-color: rgba(0, 0, 0, 0.35); "
+                                 "QLabel { background-color: rgba(0, 0, 0, 0.35); "
                                  "color: white; border: 1px solid rgba(255, 255, 255, 0.08); "
-                                 "border-radius: 4px; padding: 4px; }"));
-   pc_DetailsLayout->addWidget(mpc_Details, 1);
-   pc_ContentLayout->addWidget(mpc_DetailsFrame, 1);
+                                 "border-radius: 4px; padding: 6px; }"));
+   pc_DetailsLayout->addWidget(mpc_Details);
+   pc_ContentLayout->addWidget(mpc_DetailsFrame);
 
    pc_Outer->addWidget(mpc_Content);
 
@@ -267,7 +269,7 @@ void C_AdapterBrowser::m_RefreshAdapters(void)
    const int32_t s32_KindInt = mpc_BackendCombo->currentData().toInt();
    if (s32_KindInt < 0)
    {
-      mpc_Details->setHtml(tr("<i style='color:white;'>No backends compiled in.</i>"));
+      mpc_Details->setText(tr("<i style='color:white;'>No backends compiled in.</i>"));
       mpc_AdapterCombo->blockSignals(false);
       return;
    }
@@ -276,7 +278,7 @@ void C_AdapterBrowser::m_RefreshAdapters(void)
    const std::unique_ptr< ::can::ICanBackend> c_Backend = ::can::ICanBackend::create(e_Kind);
    if (c_Backend == NULL)
    {
-      mpc_Details->setHtml(tr("<i style='color:white;'>Backend factory returned nullptr — check build configuration.</i>"));
+      mpc_Details->setText(tr("<i style='color:white;'>Backend factory returned nullptr — check build configuration.</i>"));
       mpc_AdapterCombo->blockSignals(false);
       return;
    }
@@ -286,7 +288,7 @@ void C_AdapterBrowser::m_RefreshAdapters(void)
    {
       mpc_AdapterCombo->addItem(tr("(no adapters found)"));
       mpc_AdapterCombo->setEnabled(false);
-      mpc_Details->setHtml(tr("<i style='color:white;'>No adapters detected for this backend.</i>"));
+      mpc_Details->setText(tr("<i style='color:white;'>No adapters detected for this backend.</i>"));
    }
    else
    {
@@ -312,7 +314,7 @@ void C_AdapterBrowser::m_DisplaySelected(void)
    const int32_t s32_Idx = mpc_AdapterCombo->currentIndex();
    if ((s32_Idx >= 0) && (s32_Idx < static_cast<int32_t>(mc_CurrentAdapters.size())))
    {
-      mpc_Details->setHtml(h_FormatAdapter(mc_CurrentAdapters[s32_Idx]));
+      mpc_Details->setText(h_FormatAdapter(mc_CurrentAdapters[s32_Idx]));
    }
 }
 
