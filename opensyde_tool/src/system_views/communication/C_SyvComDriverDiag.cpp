@@ -62,7 +62,7 @@ C_SyvComDriverDiag::C_SyvComDriverDiag(const uint32_t ou32_ViewIndex) :
    QObject(),
    C_OscComDriverProtocol(),
    mu32_ViewIndex(ou32_ViewIndex),
-   mpc_CanDllDispatcher(NULL),
+   mpc_CanDispatcher(NULL),
    mpc_EthernetDispatcher(NULL)
 {
    mpc_AsyncThread = new C_SyvComDriverThread(&C_SyvComDriverDiag::mh_ThreadFunc, this);
@@ -115,12 +115,12 @@ C_SyvComDriverDiag::~C_SyvComDriverDiag(void)
       this->mc_DataDealers[u32_DealerIndex] = NULL;
    }
 
-    if (mpc_CanDllDispatcher != NULL)
+    if (mpc_CanDispatcher != NULL)
     {
-       this->mpc_CanDllDispatcher->CAN_Exit();
+       this->mpc_CanDispatcher->CAN_Exit();
 
-       delete mpc_CanDllDispatcher;
-       mpc_CanDllDispatcher = NULL;
+       delete mpc_CanDispatcher;
+       mpc_CanDispatcher = NULL;
     }
 
    delete this->mpc_EthernetDispatcher;
@@ -152,7 +152,7 @@ int32_t C_SyvComDriverDiag::InitDiag(void)
    std::vector<uint8_t> c_ActiveNodes;
 
    s32_Return = C_SyvComDriverUtil::h_GetOscComDriverParamFromView(this->mu32_ViewIndex, u32_ActiveBusIndex,
-                                                                   c_ActiveNodes, &this->mpc_CanDllDispatcher,
+                                                                   c_ActiveNodes, &this->mpc_CanDispatcher,
                                                                    &this->mpc_EthernetDispatcher, true, true,
                                                                    &q_NodeDiagRoutingError);
 
@@ -167,7 +167,7 @@ int32_t C_SyvComDriverDiag::InitDiag(void)
       mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
 
       s32_Return = C_OscComDriverProtocol::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst(),
-                                                u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDllDispatcher,
+                                                u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDispatcher,
                                                 this->mpc_EthernetDispatcher, &this->mc_PemDatabase);
    }
 

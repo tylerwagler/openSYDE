@@ -545,11 +545,10 @@ int32_t C_PuiSvHandler::SetViewPcConnected(const uint32_t ou32_Index, const bool
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set path for the CAN DLL
+/*! \brief   Set the PC CAN adapter configuration for a view
 
-   \param[in]  ou32_Index     View index
-   \param[in]  oe_Type        CAN DLL Type
-   \param[in]  orc_DllPath    Path for the CAN DLL
+   \param[in]  ou32_Index   View index
+   \param[in]  orc_Config   Adapter configuration (backend kind, channel id, bitrate)
 
    \return
    C_NO_ERR Operation success

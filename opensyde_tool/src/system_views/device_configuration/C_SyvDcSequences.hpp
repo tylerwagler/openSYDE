@@ -182,7 +182,7 @@ private:
 
    C_SyvComDriverThread * mpc_Thread;
    QMutex mc_CriticalSectionRequestEndless;
-   stw::can::C_CanDispatcher * mpc_CanDllDispatcher;
+   stw::can::C_CanDispatcher * mpc_CanDispatcher;
    stw::opensyde_core::C_OscIpDispatcherWinSock * mpc_EthernetDispatcher;
    // Sequence execution parameter
    E_Sequence me_Sequence;

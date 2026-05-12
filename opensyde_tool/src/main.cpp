@@ -76,7 +76,7 @@ int32_t main(int32_t os32_Argc, char_t * opacn_Argv[])
    QGuiApplication::setDesktopFileName("openSYDE");
 
    //If the binary is called with a current directory differing from the exe directory this can cause
-   // unexpected issues, e.g. win CAN DLL .ini search paths. Make sure the paths are identical.
+   // unexpected issues with relative path resolution (config files, fonts, log location).
    // Must be invoked after instancing QApplication.
    stw::opensyde_gui_logic::C_Uti::h_SetCurrentDirectoryToExeDirectory();
    {

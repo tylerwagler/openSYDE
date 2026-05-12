@@ -110,7 +110,7 @@ C_SyvDcDeviceConfiguation & C_SyvDcDeviceConfiguation::operator =(const C_SyvDcD
 C_SyvDcSequences::C_SyvDcSequences(void) :
    QObject(),
    C_OscComSequencesBase(false, false),
-   mpc_CanDllDispatcher(NULL),
+   mpc_CanDispatcher(NULL),
    mpc_EthernetDispatcher(NULL),
    // No routing for device configuration
    me_Sequence(eSCANCANENTERFLASHLOADER),
@@ -154,11 +154,11 @@ C_SyvDcSequences::~C_SyvDcSequences(void)
       this->mpc_ComDriver->PrepareForDestructionFlash();
    }
 
-    if (this->mpc_CanDllDispatcher != NULL)
+    if (this->mpc_CanDispatcher != NULL)
     {
-       this->mpc_CanDllDispatcher->CAN_Exit();
-       delete mpc_CanDllDispatcher;
-       mpc_CanDllDispatcher = NULL;
+       this->mpc_CanDispatcher->CAN_Exit();
+       delete mpc_CanDispatcher;
+       mpc_CanDispatcher = NULL;
     }
 
    delete mpc_EthernetDispatcher;
@@ -190,7 +190,7 @@ int32_t C_SyvDcSequences::InitDcSequences(const uint32_t ou32_ViewIndex)
 
    // No CAN initialization due to initialization in the sequences itself and ignore update routing errors
    s32_Return = C_SyvComDriverUtil::h_GetOscComDriverParamFromView(ou32_ViewIndex, u32_ActiveBusIndex, c_ActiveNodes,
-                                                                   &this->mpc_CanDllDispatcher,
+                                                                   &this->mpc_CanDispatcher,
                                                                    &this->mpc_EthernetDispatcher,
                                                                    false, true, NULL);
 
@@ -200,7 +200,7 @@ int32_t C_SyvDcSequences::InitDcSequences(const uint32_t ou32_ViewIndex)
       mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
 
       s32_Return = C_OscComSequencesBase::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinition(),
-                                               u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDllDispatcher,
+                                               u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDispatcher,
                                                this->mpc_EthernetDispatcher, &this->mc_PemDatabase);
    }
 

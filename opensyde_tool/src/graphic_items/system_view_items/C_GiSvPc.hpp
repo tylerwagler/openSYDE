@@ -77,7 +77,7 @@ private:
    C_GiSvPc(const C_GiSvPc &);
    C_GiSvPc & operator =(const C_GiSvPc &) &; //lint !e1511 //we want to hide the base func.
 
-   bool m_OpenCanDllDialog(void) const;
+   bool m_OpenCanAdapterDialog(void) const;
 
    static bool mh_GetIsLaptop(void);
    void m_InitConflictIcon(void);

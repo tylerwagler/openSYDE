@@ -279,7 +279,7 @@ bool C_GiSvPc::OpenDialog(void) const
          {
             if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
             {
-               q_Retval = this->m_OpenCanDllDialog();
+               q_Retval = this->m_OpenCanAdapterDialog();
             }
             // Ethernet has not a own dialog yet -> Do nothing
          }
@@ -456,14 +456,14 @@ void C_GiSvPc::hoverLeaveEvent(QGraphicsSceneHoverEvent * const opc_Event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Open CAN DLL dialog
+/*! \brief   Open the PC CAN adapter configuration dialog
 
    \return
    true     Ok was clicked
    false    Cancel was clicked
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_GiSvPc::m_OpenCanDllDialog(void) const
+bool C_GiSvPc::m_OpenCanAdapterDialog(void) const
 {
    bool q_Retval = false;
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);

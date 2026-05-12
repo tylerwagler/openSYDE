@@ -58,7 +58,7 @@ using namespace stw::opensyde_core;
 C_SyvUpSequences::C_SyvUpSequences(void) :
    QObject(),
    C_OscSuSequences(),
-   mpc_CanDllDispatcher(NULL),
+   mpc_CanDispatcher(NULL),
    mpc_EthernetDispatcher(NULL),
    mq_AbortFlag(false),
    mu32_ViewIndex(0U),
@@ -98,10 +98,10 @@ C_SyvUpSequences::~C_SyvUpSequences(void)
       this->mpc_ComDriver->PrepareForDestructionFlash();
    }
 
-    if (this->mpc_CanDllDispatcher != NULL)
+    if (this->mpc_CanDispatcher != NULL)
     {
-       this->mpc_CanDllDispatcher->CAN_Exit();
-       delete mpc_CanDllDispatcher;
+       this->mpc_CanDispatcher->CAN_Exit();
+       delete mpc_CanDispatcher;
     }
 
    delete mpc_EthernetDispatcher;
@@ -135,7 +135,7 @@ int32_t C_SyvUpSequences::InitUpSequences(const uint32_t ou32_ViewIndex)
 
    s32_Return = C_SyvComDriverUtil::h_GetOscComDriverParamFromView(ou32_ViewIndex, u32_ActiveBusIndex,
                                                                    c_ActiveNodes,
-                                                                   &this->mpc_CanDllDispatcher,
+                                                                   &this->mpc_CanDispatcher,
                                                                    &this->mpc_EthernetDispatcher, true, false, NULL);
 
    if (s32_Return == C_NO_ERR)
@@ -144,7 +144,7 @@ int32_t C_SyvUpSequences::InitUpSequences(const uint32_t ou32_ViewIndex)
       mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
 
       s32_Return = C_OscComSequencesBase::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinition(),
-                                               u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDllDispatcher,
+                                               u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDispatcher,
                                                this->mpc_EthernetDispatcher, &this->mc_PemDatabase);
    }
 
@@ -181,9 +181,9 @@ int32_t C_SyvUpSequences::ReinitDispatcher(void)
          {
             if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
             {
-               if (this->mpc_CanDllDispatcher != NULL)
+               if (this->mpc_CanDispatcher != NULL)
                {
-                  s32_Return = this->mpc_CanDllDispatcher->CAN_Init(
+                  s32_Return = this->mpc_CanDispatcher->CAN_Init(
                      static_cast<int32_t>(pc_Bus->u64_BitRate / 1000ULL));
 
                   if (s32_Return != C_NO_ERR)
@@ -217,9 +217,9 @@ int32_t C_SyvUpSequences::ReinitDispatcher(void)
 void C_SyvUpSequences::CloseDispatcher(void)
 {
    if ((this->IsInitialized() == true) &&
-       (this->mpc_CanDllDispatcher != NULL))
+       (this->mpc_CanDispatcher != NULL))
    {
-      this->mpc_CanDllDispatcher->CAN_Exit();
+      this->mpc_CanDispatcher->CAN_Exit();
    }
 }
 
