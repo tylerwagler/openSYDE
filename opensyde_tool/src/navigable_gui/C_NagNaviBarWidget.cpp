@@ -709,7 +709,8 @@ void C_NagNaviBarWidget::m_OpenCanMonitor(void)
 {
    const QString c_ExecutablePath = C_Uti::h_GetExePath() + "/CAN_Monitor/" +
                                     C_Uti::h_GetExeBasename("openSYDE_CAN_Monitor");
-   // Adapted working directory is necessary for the stwpeak2.ini
+   // Run with the CAN Monitor's install dir as CWD so its relative config paths
+   // (e.g. User/can_monitor_user_settings.ini) resolve correctly.
    const bool q_Temp = QProcess::startDetached(c_ExecutablePath, QStringList(),
                                                C_Uti::h_GetExePath() + "/CAN_Monitor");
    const QString c_ErrorMsg = static_cast<QString>(

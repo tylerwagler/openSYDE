@@ -513,7 +513,7 @@ void C_BasicFlashTool::m_PrintHelp(void)
    std::cout <<
       "-f          --hexfile                   Path to hex file                       <none>      -f D:\\myfile.hex\n";
    std::cout <<
-      "-i          --caninterface              Path to CAN DLL                        <none>      -i D:\\stwpeak2\\stwpeak2.dll\n";
+      "-i          --caninterface              CAN channel identifier                 <none>      -i can0 (Linux) | -i PCAN_USBBUS1 (Windows)\n";
    std::cout << "-b          --bitrate                   Bitrate in kBit/s                      125         -b 1000\n";
    std::cout << "-e          --dontexitonerror           Don't exit application on error        do exit     -e\n";
    std::cout << "-a          --dontstartapplication      Don't start application after update   do start    -a\n";
