@@ -21,6 +21,8 @@
 #include <QSize>
 #include <QMap>
 
+#include "C_OscCanAdapterConfig.hpp"
+
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
 namespace stw
@@ -40,13 +42,6 @@ public:
       eDLLCONFIG,
       eADVANCED_SETTINGS,
       ePROGRESS_LOG
-   };
-
-   enum E_CanDllType
-   {
-      ePEAK = 0,
-      eVECTOR = 1,
-      eOTHER = 2
    };
 
    static C_UsHandler * h_GetInstance(void);
@@ -74,9 +69,7 @@ public:
    QStringList GetLastKnownUpdateHexFilePaths(void) const;
    QStringList GetHexFilePathsAsRelativeOrAbsolute(void) const;
    QString GetLastKnownUpdateHexFileLocation(void) const;
-   E_CanDllType GetCanDllType(void) const;
-   QString GetCanDllPath(void) const;
-   QString GetCustomCanDllPath(void) const;
+   const stw::opensyde_core::C_OscCanAdapterConfig & GetAdapterConfig(void) const;
 
    //Set
    void SetScreenPos(const QPoint & orc_New);
@@ -98,8 +91,7 @@ public:
    void SetLastKnownUpdateHexFilePaths(const QStringList & orc_HexFilePaths);
    void SetHexFilePathsAsRelativeOrAbsolute(const QStringList & orc_HexFilePathsAsRelativeOrAbsolute);
    void SetLastKnownUpdateHexFileLocation(const QString & orc_NewPath);
-   void SetCanDllType(const E_CanDllType oe_NewValue);
-   void SetCustomCanDllPath(const QString & orc_NewValue);
+   void SetAdapterConfig(const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config);
 
    void Save(void) const;
 
@@ -137,8 +129,7 @@ private:
    QStringList mc_HexFilePaths;                     ///< History of last known Hex file paths
    QStringList mc_HexFilePathsAsRelativeOrAbsolute; ///< History of last known Hex file paths as relative or absolute
    QString mc_LastKnownUpdateHexFileLocation;       ///< History of last known Hex file location
-   E_CanDllType me_CanDllType;                      ///< History of last used CAN DLL type
-   QString mc_CustomCanDllPath;                     ///< History of last used custom CAN DLL path
+   stw::opensyde_core::C_OscCanAdapterConfig mc_AdapterConfig; ///< CAN adapter (libcan-backed)
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

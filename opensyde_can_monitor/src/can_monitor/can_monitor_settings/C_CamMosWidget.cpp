@@ -19,6 +19,7 @@
 #include "C_CamOgeWiSectionHeader.hpp"
 #include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
+#include "C_CamProHandler.hpp"
 #include "C_CamMosSectionPopup.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -74,7 +75,7 @@ C_CamMosWidget::C_CamMosWidget(QWidget * const opc_Parent) :
 
    // connect hide signal of widgets
    connect(this->mpc_Ui->pc_WiDatabase, &C_CamMosDatabaseWidget::SigHide, this, &C_CamMosWidget::m_HidePopupDatabase);
-   connect(this->mpc_Ui->pc_WiDllConfig, &C_CamMosDllWidget::SigHide, this, &C_CamMosWidget::m_HidePopupDllConfig);
+   connect(this->mpc_Ui->pc_WiDllConfig, &C_AdapterBrowser::SigHide, this, &C_CamMosWidget::m_HidePopupDllConfig);
    connect(this->mpc_Ui->pc_WiFilter, &C_CamMosFilterWidget::SigHide, this, &C_CamMosWidget::m_HidePopupFilter);
    connect(this->mpc_Ui->pc_WiLogging, &C_CamMosLoggingWidget::SigHide, this, &C_CamMosWidget::m_HidePopupLogging);
 
@@ -109,8 +110,15 @@ C_CamMosWidget::C_CamMosWidget(QWidget * const opc_Parent) :
            this, &C_CamMosWidget::SigAddLogFileBlf);
    connect(this->mpc_Ui->pc_WiLogging, &C_CamMosLoggingWidget::SigRemoveAllLogFiles,
            this, &C_CamMosWidget::SigRemoveAllLogFiles);
-   connect(this->mpc_Ui->pc_WiDllConfig, &C_CamMosDllWidget::SigCanDllConfigured,
+   connect(this->mpc_Ui->pc_WiDllConfig, &C_AdapterBrowser::SigCanDllConfigured,
            this, &C_CamMosWidget::SigCanDllConfigured);
+
+   // Persist the adapter selection through the project handler. Push the initial config from the
+   // handler down to the widget at LoadUserSettings(); save any subsequent user change directly.
+   connect(this->mpc_Ui->pc_WiDllConfig, &C_AdapterBrowser::SigConfigChanged,
+           this, [](const stw::opensyde_core::C_OscCanAdapterConfig & orc_Cfg) {
+      C_CamProHandler::h_GetInstance()->SetAdapterConfig(orc_Cfg);
+   });
    connect(this, &C_CamMosWidget::SigEmitAddFilterToChildWidget, this->mpc_Ui->pc_WiFilter,
            &C_CamMosFilterWidget::SetAddFilter);
    connect(this->mpc_Ui->pc_WiFilter, &C_CamMosFilterWidget::SigSendCanFilterMsgDroppedToParentWidget, this,
@@ -138,6 +146,7 @@ void C_CamMosWidget::LoadUserSettings(void)
 {
    this->mpc_Ui->pc_WiDatabase->LoadUserSettings();
    this->mpc_Ui->pc_WiDllConfig->LoadUserSettings();
+   this->mpc_Ui->pc_WiDllConfig->SetAdapterConfig(C_CamProHandler::h_GetInstance()->GetAdapterConfig());
    this->mpc_Ui->pc_WiFilter->LoadUserSettings();
    this->mpc_Ui->pc_WiLogging->LoadUserSettings();
 

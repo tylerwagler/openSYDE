@@ -181,7 +181,7 @@
        <widget class="stw::opensyde_gui::C_CamMosLoggingWidget" name="pc_WiLogging" native="true"/>
       </item>
       <item>
-       <widget class="stw::opensyde_gui::C_CamMosDllWidgetLogic" name="pc_WiDllConfig" native="true"/>
+       <widget class="stw::opensyde_gui::C_AdapterBrowser" name="pc_WiDllConfig" native="true"/>
       </item>
      </layout>
     </widget>
@@ -238,9 +238,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui::C_CamMosDllWidgetLogic</class>
+   <class>stw::opensyde_gui::C_AdapterBrowser</class>
    <extends>QWidget</extends>
-   <header>C_CamMosDllWidgetLogic.hpp</header>
+   <header>C_AdapterBrowser.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

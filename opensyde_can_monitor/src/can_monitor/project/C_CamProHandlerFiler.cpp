@@ -16,6 +16,7 @@
 #include "stwerrors.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_CamProHandlerFiler.hpp"
+#include "can/i_can_backend.h"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;
@@ -413,13 +414,16 @@ int32_t C_CamProHandlerFiler::h_LoadMessage(C_CamProMessageData & orc_Message, C
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProHandlerFiler::h_SaveSettings(const C_CamProHandler & orc_Handler, C_OscXmlParserBase & orc_XmlParser)
 {
-   // CAN DLL configuration
-   orc_XmlParser.CreateAndSelectNodeChild("can-dll-path");
-   orc_XmlParser.SetAttributeSint32("type", static_cast<int32_t>(orc_Handler.GetCanDllType()));
-   orc_XmlParser.SetNodeContent(orc_Handler.GetCustomCanDllPath().toStdString().c_str());
-
-   //Return
-   orc_XmlParser.SelectNodeParent();
+   // CAN adapter configuration (libcan-backed). Backend is stored as the canonical string
+   // ("SocketCAN", "PCANBasic", "Kvaser", "VectorXL") so adding a backend doesn't bump the schema.
+   {
+      const stw::opensyde_core::C_OscCanAdapterConfig & rc_Cfg = orc_Handler.GetAdapterConfig();
+      orc_XmlParser.CreateAndSelectNodeChild("can-adapter");
+      orc_XmlParser.SetAttributeString("backend", ::can::backendKindToString(rc_Cfg.e_BackendKind).c_str());
+      orc_XmlParser.SetAttributeString("channel-id", rc_Cfg.c_ChannelId.c_str());
+      orc_XmlParser.SetAttributeUint32("bitrate-bps", rc_Cfg.u32_BitrateBps);
+      orc_XmlParser.SelectNodeParent();
+   }
 
    // Filters
    orc_XmlParser.CreateAndSelectNodeChild("filters");
@@ -456,26 +460,44 @@ int32_t C_CamProHandlerFiler::h_LoadSettings(C_CamProHandler & orc_Handler, C_Os
 {
    int32_t s32_Return = C_NO_ERR;
 
-   // CAN DLL path
-   if (orc_XmlParser.SelectNodeChild("can-dll-path") == "can-dll-path")
+   // CAN adapter configuration. Legacy `<can-dll-path>` tags are dropped on read with a warning —
+   // hard break, matching the persistence policy adopted on this branch.
+   if (orc_XmlParser.SelectNodeChild("can-adapter") == "can-adapter")
    {
-      if (orc_XmlParser.AttributeExists("type"))
+      stw::opensyde_core::C_OscCanAdapterConfig c_Cfg =
+         stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
+      if (orc_XmlParser.AttributeExists("backend") == true)
       {
-         orc_Handler.SetCanDllType(static_cast<C_CamProHandler::E_CanDllType>(orc_XmlParser.GetAttributeSint32("type")));
+         const stw::scl::C_SclString c_Name = orc_XmlParser.GetAttributeString("backend");
+         if (c_Name == "SocketCAN")      { c_Cfg.e_BackendKind = ::can::BackendKind::SocketCan; }
+         else if (c_Name == "PCANBasic") { c_Cfg.e_BackendKind = ::can::BackendKind::PcanBasic; }
+         else if (c_Name == "Kvaser")    { c_Cfg.e_BackendKind = ::can::BackendKind::Kvaser; }
+         else if (c_Name == "VectorXL")  { c_Cfg.e_BackendKind = ::can::BackendKind::VectorXL; }
+         else { /* keep platform default */ }
       }
-      else
+      if (orc_XmlParser.AttributeExists("channel-id") == true)
       {
-         s32_Return = C_CONFIG;
+         c_Cfg.c_ChannelId = orc_XmlParser.GetAttributeString("channel-id").c_str();
       }
-
-      orc_Handler.SetCustomCanDllPath(orc_XmlParser.GetNodeContent().c_str());
-
-      //Return
+      if (orc_XmlParser.AttributeExists("bitrate-bps") == true)
+      {
+         c_Cfg.u32_BitrateBps = orc_XmlParser.GetAttributeUint32("bitrate-bps");
+      }
+      orc_Handler.SetAdapterConfig(c_Cfg);
+      orc_XmlParser.SelectNodeParent();
+   }
+   else if (orc_XmlParser.SelectNodeChild("can-dll-path") == "can-dll-path")
+   {
+      osc_write_log_warning("Project load",
+                            "Legacy <can-dll-path> CAN configuration found; resetting to platform default. "
+                            "Please re-configure the CAN adapter in Settings.");
+      orc_Handler.SetAdapterConfig(stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault());
       orc_XmlParser.SelectNodeParent();
    }
    else
    {
-      s32_Return = C_CONFIG;
+      osc_write_log_warning("Project load", "No CAN adapter configuration found; using platform default.");
+      orc_Handler.SetAdapterConfig(stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault());
    }
 
    // Filters

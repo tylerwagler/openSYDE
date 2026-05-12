@@ -640,26 +640,8 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
 
    ors32_Bitrate = 0;
 
-   // Build adapter config from the persisted CAN configuration. The legacy "DLL path" string is
-   // reinterpreted: on Linux it's the SocketCAN interface name; on Windows the PEAK adapter
-   // currently always uses channel 1 (a follow-up will surface channel selection in the UI).
-   const QString c_PersistedPath = C_CamProHandler::h_GetInstance()->GetCanDllPath();
-   stw::opensyde_core::C_OscCanAdapterConfig c_Config =
-      stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
-
-#ifndef _WIN32
-   if (c_PersistedPath.isEmpty() == false)
-   {
-      // Heuristic: if the persisted value looks like a Windows DLL path (ends with .dll or contains
-      // a backslash), it's a leftover from a project authored on Windows — fall back to the default.
-      const QString c_Lower = c_PersistedPath.toLower();
-      const bool q_LooksWindowsy = c_Lower.endsWith(".dll") || c_PersistedPath.contains("\\");
-      if (q_LooksWindowsy == false)
-      {
-         c_Config.c_ChannelId = c_PersistedPath.toStdString();
-      }
-   }
-#endif
+   const stw::opensyde_core::C_OscCanAdapterConfig c_Config =
+      C_CamProHandler::h_GetInstance()->GetAdapterConfig();
 
    // Tear down the previous dispatcher (if any) and create a fresh one for this session.
    if (this->mpc_CanDllDispatcher != NULL)

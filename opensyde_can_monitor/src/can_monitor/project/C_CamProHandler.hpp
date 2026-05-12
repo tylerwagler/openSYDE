@@ -21,6 +21,7 @@
 #include "C_CamProFilterData.hpp"
 #include "C_CamProDatabaseData.hpp"
 #include "C_CamProLoggingData.hpp"
+#include "C_OscCanAdapterConfig.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -37,20 +38,11 @@ class C_CamProHandler :
    Q_OBJECT
 
 public:
-   enum E_CanDllType
-   {
-      ePEAK = 0,
-      eVECTOR = 1,
-      eOTHER = 2
-   };
-
    //Get
    const std::vector<C_CamProMessageData> & GetMessages(void) const;
    const C_CamProMessageData * GetMessageConst(const uint32_t ou32_Index) const;
    const bool & GetCyclicMessageTransmitActive(void) const;
-   const QString GetCanDllPath(void) const;
-   const QString GetCustomCanDllPath(void) const;
-   E_CanDllType GetCanDllType(void) const;
+   const stw::opensyde_core::C_OscCanAdapterConfig & GetAdapterConfig(void) const;
    const std::vector<C_CamProFilterData> & GetFilters(void) const;
    const bool & GetFilterWidgetEnabled(void) const;
    const std::vector<C_CamProDatabaseData> & GetDatabases(void) const;
@@ -67,8 +59,7 @@ public:
    int32_t SetMessageKey(const uint32_t ou32_Index, const QString & orc_Key, const uint32_t ou32_Offset);
    int32_t SetMessageDataBytes(const uint32_t ou32_Index, const std::vector<uint8_t> & orc_DataBytes);
    void SetCyclicMessageTransmitActive(const bool oq_Active);
-   void SetCustomCanDllPath(const QString & orc_CanDllPath);
-   void SetCanDllType(const E_CanDllType oe_CanDllType);
+   void SetAdapterConfig(const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config);
    void SetFilters(const std::vector<C_CamProFilterData> & orc_Filters);
    int32_t SetFilter(const uint32_t ou32_Index, const C_CamProFilterData & orc_NewFilter);
    void SetFilterEnabled(const uint32_t ou32_Index, const bool oq_Enable);
@@ -140,8 +131,7 @@ private:
    std::vector<C_CamProFilterData> mc_Filters;
    bool mq_FiltersActive;
    std::vector<C_CamProDatabaseData> mc_Databases;
-   QString mc_CustomCanDllPath;
-   E_CanDllType me_CanDllType;
+   stw::opensyde_core::C_OscCanAdapterConfig mc_AdapterConfig;
    C_CamProLoggingData mc_LoggingData;
 
    C_CamProHandler(void);

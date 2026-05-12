@@ -141,7 +141,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="stw::opensyde_gui::C_FlaDllWidget" name="pc_WiDll" native="true"/>
+       <widget class="stw::opensyde_gui::C_AdapterBrowser" name="pc_WiDll" native="true"/>
       </item>
       <item>
        <widget class="stw::opensyde_gui::C_FlaSetAdvancedPropertiesWidget" name="pc_WiAdvancedProperties" native="true"/>
@@ -174,9 +174,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui::C_FlaDllWidget</class>
+   <class>stw::opensyde_gui::C_AdapterBrowser</class>
    <extends>QWidget</extends>
-   <header>C_FlaDllWidget.hpp</header>
+   <header>C_AdapterBrowser.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

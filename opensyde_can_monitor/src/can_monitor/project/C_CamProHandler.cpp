@@ -101,34 +101,9 @@ const bool & C_CamProHandler::GetCyclicMessageTransmitActive(void) const
    \return CAN DLL Path string (Peak/Vector/Custom)
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QString C_CamProHandler::GetCanDllPath() const
+const stw::opensyde_core::C_OscCanAdapterConfig & C_CamProHandler::GetAdapterConfig(void) const
 {
-   // After the libcan migration the STW CAN-DLL paths are dead — the factory takes
-   // C_OscCanAdapterConfig and ignores this string for everything except eOTHER (where it's
-   // reinterpreted as a SocketCAN ifname on Linux). Return the custom path or empty.
-   return (this->me_CanDllType == eOTHER) ? this->mc_CustomCanDllPath : QString();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get custom CAN DLL Path
-
-   \return CAN DLL Path string (custom)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const QString C_CamProHandler::GetCustomCanDllPath() const
-{
-   return this->mc_CustomCanDllPath;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get CAN Dll type.
-
-   \return   CAN Dll type
-*/
-//----------------------------------------------------------------------------------------------------------------------
-C_CamProHandler::E_CanDllType C_CamProHandler::GetCanDllType() const
-{
-   return this->me_CanDllType;
+   return this->mc_AdapterConfig;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -344,25 +319,14 @@ void C_CamProHandler::SetCyclicMessageTransmitActive(const bool oq_Active)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set CAN DLL Path.
+/*! \brief  Persist a new CAN adapter selection from the settings UI.
 
-   \param[in]  orc_CanDllPath    New CAN DLL path.
+   \param[in]  orc_Config  Adapter backend + channel + bitrate as the user picked it
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamProHandler::SetCustomCanDllPath(const QString & orc_CanDllPath)
+void C_CamProHandler::SetAdapterConfig(const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config)
 {
-   this->mc_CustomCanDllPath = orc_CanDllPath;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set DLL type. See get for type definition.
-
-   \param[in]  oe_CanDllType  CAN DLL type
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CamProHandler::SetCanDllType(const E_CanDllType oe_CanDllType)
-{
-   this->me_CanDllType = oe_CanDllType;
+   this->mc_AdapterConfig = orc_Config;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1115,8 +1079,7 @@ void C_CamProHandler::Clear(const bool oq_UpdateUserSettings)
    this->mq_FiltersActive = false;
    this->mc_Databases.clear();
    this->mc_File = "";
-   this->me_CanDllType = ePEAK;
-   this->mc_CustomCanDllPath = "";
+   this->mc_AdapterConfig = stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
    this->mc_LoggingData.Clear();
 
    this->mu32_FileHash = this->m_GetHash();
@@ -1150,7 +1113,7 @@ C_CamProHandler::C_CamProHandler(void) :
    mu32_FileHash(0UL),
    mq_CyclicMessageTransmitActive(true),
    mq_FiltersActive(false),
-   me_CanDllType(ePEAK)
+   mc_AdapterConfig(stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault())
 {
    //init hash
    Clear(false);
@@ -1191,10 +1154,13 @@ void C_CamProHandler::m_CalcHash(uint32_t & oru32_HashValue) const
    }
 
    // settings
-   // CAN DLL configuration
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_CustomCanDllPath.toStdString().c_str(),
-                                       static_cast<uint32_t>(this->mc_CustomCanDllPath.size()), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->me_CanDllType, sizeof(this->me_CanDllType), oru32_HashValue);
+   // CAN adapter configuration
+   stw::scl::C_SclChecksums::CalcCRC32(&this->mc_AdapterConfig.e_BackendKind,
+                                       sizeof(this->mc_AdapterConfig.e_BackendKind), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->mc_AdapterConfig.c_ChannelId.c_str(),
+                                       this->mc_AdapterConfig.c_ChannelId.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(&this->mc_AdapterConfig.u32_BitrateBps,
+                                       sizeof(this->mc_AdapterConfig.u32_BitrateBps), oru32_HashValue);
 
    // filters
    stw::scl::C_SclChecksums::CalcCRC32(&this->mq_FiltersActive, sizeof(this->mq_FiltersActive), oru32_HashValue);

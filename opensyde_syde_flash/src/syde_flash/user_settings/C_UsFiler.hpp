@@ -38,9 +38,6 @@ private:
 
    static void mh_SaveProjectIndependentSection(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings);
    static void mh_LoadProjectIndependentSection(C_UsHandler & orc_UserSettings, QSettings & orc_Ini);
-
-   static C_UsHandler::E_CanDllType mh_GetDllTypeFromString(const QString & orc_Value);
-   static QString mh_GetStringFromDllType(const C_UsHandler::E_CanDllType oe_Value);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

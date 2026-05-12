@@ -182,8 +182,11 @@ void C_UsFiler::mh_SaveProjectIndependentSection(QSettings & orc_Ini, const C_Us
    orc_Ini.setValue("AdvSettExpanded", orc_UserSettings.GetWiAdvSettExpanded());
    orc_Ini.setValue("DllExpanded", orc_UserSettings.GetWiDllConfigExpanded());
    orc_Ini.setValue("PopOpenSection", static_cast<int32_t>(orc_UserSettings.GetPopOpenSection()));
-   orc_Ini.setValue("CustomCanDllPath", orc_UserSettings.GetCustomCanDllPath());
-   orc_Ini.setValue("CanDllType", mh_GetStringFromDllType(orc_UserSettings.GetCanDllType()));
+   const stw::opensyde_core::C_OscCanAdapterConfig & rc_AdapterCfg = orc_UserSettings.GetAdapterConfig();
+   orc_Ini.setValue("CanAdapterBackend",
+                    QString::fromStdString(::can::backendKindToString(rc_AdapterCfg.e_BackendKind)));
+   orc_Ini.setValue("CanAdapterChannelId", QString::fromStdString(rc_AdapterCfg.c_ChannelId));
+   orc_Ini.setValue("CanAdapterBitrateBps", rc_AdapterCfg.u32_BitrateBps);
    orc_Ini.endGroup();
 
    orc_Ini.remove("Properties");
@@ -249,8 +252,27 @@ void C_UsFiler::mh_LoadProjectIndependentSection(C_UsHandler & orc_UserSettings,
                                          orc_Ini.value("PopOpenSection",
                                                        static_cast<int32_t>(C_UsHandler::E_SettingsSubSection::eNONE)).
                                          toInt()));
-   orc_UserSettings.SetCustomCanDllPath(orc_Ini.value("CustomCanDllPath", "").toString());
-   orc_UserSettings.SetCanDllType(mh_GetDllTypeFromString(orc_Ini.value("CanDllType", "").toString()));
+   {
+      stw::opensyde_core::C_OscCanAdapterConfig c_AdapterCfg =
+         stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
+      const QString c_BackendName = orc_Ini.value("CanAdapterBackend", "").toString();
+      if (c_BackendName == "SocketCAN")      { c_AdapterCfg.e_BackendKind = ::can::BackendKind::SocketCan; }
+      else if (c_BackendName == "PCANBasic") { c_AdapterCfg.e_BackendKind = ::can::BackendKind::PcanBasic; }
+      else if (c_BackendName == "Kvaser")    { c_AdapterCfg.e_BackendKind = ::can::BackendKind::Kvaser; }
+      else if (c_BackendName == "VectorXL")  { c_AdapterCfg.e_BackendKind = ::can::BackendKind::VectorXL; }
+      else { /* keep platform default */ }
+      const QString c_ChannelId = orc_Ini.value("CanAdapterChannelId", "").toString();
+      if (c_ChannelId.isEmpty() == false)
+      {
+         c_AdapterCfg.c_ChannelId = c_ChannelId.toStdString();
+      }
+      const uint32_t u32_Bitrate = orc_Ini.value("CanAdapterBitrateBps", 0U).toUInt();
+      if (u32_Bitrate > 0U)
+      {
+         c_AdapterCfg.u32_BitrateBps = u32_Bitrate;
+      }
+      orc_UserSettings.SetAdapterConfig(c_AdapterCfg);
+   }
    orc_Ini.endGroup();
 
    orc_Ini.beginGroup("Properties");
@@ -282,65 +304,3 @@ void C_UsFiler::mh_LoadProjectIndependentSection(C_UsHandler & orc_UserSettings,
    orc_Ini.endGroup();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get DLL type from string.
-
-   \param[in]  orc_Value   Value
-
-   \return
-   DLL type from string (defaults to ePEAK on unknown input)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-C_UsHandler::E_CanDllType C_UsFiler::mh_GetDllTypeFromString(const QString & orc_Value)
-{
-   C_UsHandler::E_CanDllType e_Retval;
-
-   if (orc_Value == "peak")
-   {
-      e_Retval = C_UsHandler::ePEAK;
-   }
-   else if (orc_Value == "vector")
-   {
-      e_Retval = C_UsHandler::eVECTOR;
-   }
-   else if (orc_Value == "other")
-   {
-      e_Retval = C_UsHandler::eOTHER;
-   }
-   else
-   {
-      e_Retval = C_UsHandler::ePEAK;
-   }
-   return e_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get string from DLL type.
-
-   \param[in]  oe_Value    Value
-
-   \return
-   String from DLL type (empty string on unknown enum)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_UsFiler::mh_GetStringFromDllType(const C_UsHandler::E_CanDllType oe_Value)
-{
-   QString c_Retval;
-
-   switch (oe_Value)
-   {
-   case C_UsHandler::ePEAK:
-      c_Retval = "peak";
-      break;
-   case C_UsHandler::eVECTOR:
-      c_Retval = "vector";
-      break;
-   case C_UsHandler::eOTHER:
-      c_Retval = "other";
-      break;
-   default:
-      c_Retval = "";
-      break;
-   }
-   return c_Retval;
-}

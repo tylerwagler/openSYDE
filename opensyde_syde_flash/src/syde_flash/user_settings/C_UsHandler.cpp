@@ -318,35 +318,9 @@ QString C_UsHandler::GetLastKnownUpdateHexFileLocation() const
    CAN DLL type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_UsHandler::E_CanDllType C_UsHandler::GetCanDllType() const
+const stw::opensyde_core::C_OscCanAdapterConfig & C_UsHandler::GetAdapterConfig() const
 {
-   return this->me_CanDllType;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get CAN DLL Path
-
-   \return CAN DLL Path string (Peak/Vector/Custom)
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_UsHandler::GetCanDllPath() const
-{
-   // After the libcan migration the STW CAN-DLL paths are dead — the factory takes
-   // C_OscCanAdapterConfig and ignores this string for everything except eOTHER (where it's
-   // reinterpreted as a SocketCAN ifname on Linux). Return the custom path or empty.
-   return (this->me_CanDllType == eOTHER) ? this->mc_CustomCanDllPath : QString();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get custom CAN DLL path
-
-   \return
-   CAN DLL path
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_UsHandler::GetCustomCanDllPath() const
-{
-   return this->mc_CustomCanDllPath;
+   return this->mc_AdapterConfig;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -559,25 +533,14 @@ void C_UsHandler::SetLastKnownUpdateHexFileLocation(const QString & orc_NewPath)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set CAN DLL type
+/*! \brief  Persist a new CAN adapter selection from the settings UI.
 
-   \param[in]  oe_NewValue    New value
+   \param[in]  orc_Config  Adapter backend + channel + bitrate as the user picked it
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsHandler::SetCanDllType(const C_UsHandler::E_CanDllType oe_NewValue)
+void C_UsHandler::SetAdapterConfig(const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config)
 {
-   this->me_CanDllType = oe_NewValue;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set CAN DLL path
-
-   \param[in]  orc_NewValue   New value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_UsHandler::SetCustomCanDllPath(const QString & orc_NewValue)
-{
-   this->mc_CustomCanDllPath = orc_NewValue;
+   this->mc_AdapterConfig = orc_Config;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -659,7 +622,7 @@ C_UsHandler::C_UsHandler(void) :
    mq_WiProgressExpanded(true),
    mq_WiDllConfigExpanded(true),
    me_PopOpenSection(E_SettingsSubSection::eNONE),
-   me_CanDllType(C_UsHandler::ePEAK)
+   mc_AdapterConfig(stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault())
 {
    // Load all project independent information
    C_UsFiler::h_Load(*this, mc_IniPathAndName);

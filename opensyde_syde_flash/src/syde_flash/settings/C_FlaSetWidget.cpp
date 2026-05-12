@@ -69,7 +69,7 @@ C_FlaSetWidget::C_FlaSetWidget(QWidget * const opc_Parent) :
 
    // connect hide signal of widgets
    connect(this->mpc_Ui->pc_WiProgress, &C_FlaSetProgressWidget::SigHide, this, &C_FlaSetWidget::m_HidePopupProgress);
-   connect(this->mpc_Ui->pc_WiDll, &C_CamMosDllWidget::SigHide, this, &C_FlaSetWidget::m_HidePopupDllConfig);
+   connect(this->mpc_Ui->pc_WiDll, &C_AdapterBrowser::SigHide, this, &C_FlaSetWidget::m_HidePopupDllConfig);
    connect(this->mpc_Ui->pc_WiAdvancedProperties, &C_FlaSetAdvancedPropertiesWidget::SigHide, this,
            &C_FlaSetWidget::m_HidePopupAdvSett);
 
@@ -78,8 +78,15 @@ C_FlaSetWidget::C_FlaSetWidget(QWidget * const opc_Parent) :
            this, &C_FlaSetWidget::m_OnExpandSettings);
 
    // forward information about new settings
-   connect(this->mpc_Ui->pc_WiDll, &C_CamMosDllWidget::SigCanDllConfigured,
+   connect(this->mpc_Ui->pc_WiDll, &C_AdapterBrowser::SigCanDllConfigured,
            this, &C_FlaSetWidget::SigCanDllConfigured);
+
+   // Persist the adapter selection through the user settings handler. Initial state is pushed
+   // down to the widget in LoadUserSettings(); subsequent user changes save through this lambda.
+   connect(this->mpc_Ui->pc_WiDll, &C_AdapterBrowser::SigConfigChanged,
+           this, [](const stw::opensyde_core::C_OscCanAdapterConfig & orc_Cfg) {
+      stw::opensyde_gui_logic::C_UsHandler::h_GetInstance()->SetAdapterConfig(orc_Cfg);
+   });
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -101,6 +108,7 @@ C_FlaSetWidget::~C_FlaSetWidget()
 void C_FlaSetWidget::LoadUserSettings()
 {
    this->mpc_Ui->pc_WiDll->LoadUserSettings();
+   this->mpc_Ui->pc_WiDll->SetAdapterConfig(stw::opensyde_gui_logic::C_UsHandler::h_GetInstance()->GetAdapterConfig());
    this->mpc_Ui->pc_WiAdvancedProperties->LoadUserSettings();
    this->mpc_Ui->pc_WiProgress->LoadUserSettings();
 
@@ -146,7 +154,11 @@ void C_FlaSetWidget::ExpandSettings(const bool oq_Expand) const
 //----------------------------------------------------------------------------------------------------------------------
 QString C_FlaSetWidget::GetCanDllPath() const
 {
-   return C_UsHandler::h_GetInstance()->GetCanDllPath();
+   // Legacy "DLL path" accessor surviving the libcan migration: returns the persisted adapter
+   // channel-id verbatim, which is what downstream code (C_FlaSenSearchNodePopup,
+   // C_FlaConNodeConfigPopup, C_FlaSenDcBasicSequences::InitDcSequences) interprets as the
+   // SocketCAN interface name on Linux. The name and call-chain wait for a follow-up rename.
+   return QString::fromStdString(C_UsHandler::h_GetInstance()->GetAdapterConfig().c_ChannelId);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

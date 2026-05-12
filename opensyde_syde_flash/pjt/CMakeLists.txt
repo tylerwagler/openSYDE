@@ -137,7 +137,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingSubSection.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingsBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSpinBoxGroupTable.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDllWidget.cpp
+   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_AdapterBrowser.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiGeneric.cpp
    ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.cpp
@@ -221,7 +221,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/syde_flash/properties/C_FlaPropWidget.cpp
    ${PROJECT_ROOT}/src/syde_flash/search_nodes/C_FlaSenDcBasicSequences.cpp
    ${PROJECT_ROOT}/src/syde_flash/search_nodes/C_FlaSenSearchNodePopup.cpp
-   ${PROJECT_ROOT}/src/syde_flash/settings/C_FlaDllWidget.cpp
    ${PROJECT_ROOT}/src/syde_flash/settings/C_FlaSetAdvancedPropertiesWidget.cpp
    ${PROJECT_ROOT}/src/syde_flash/settings/C_FlaSetProgressWidget.cpp
    ${PROJECT_ROOT}/src/syde_flash/settings/C_FlaSetWidget.cpp
@@ -270,7 +269,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingSubSection.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingsBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSpinBoxGroupTable.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDllWidget.hpp
+   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_AdapterBrowser.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiGeneric.hpp
    ${OPENSYDE_GUI_ROOT}/src/constants.hpp
@@ -355,7 +354,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/syde_flash/properties/C_FlaPropWidget.hpp
    ${PROJECT_ROOT}/src/syde_flash/search_nodes/C_FlaSenDcBasicSequences.hpp
    ${PROJECT_ROOT}/src/syde_flash/search_nodes/C_FlaSenSearchNodePopup.hpp
-   ${PROJECT_ROOT}/src/syde_flash/settings/C_FlaDllWidget.hpp
    ${PROJECT_ROOT}/src/syde_flash/settings/C_FlaSetAdvancedPropertiesWidget.hpp
    ${PROJECT_ROOT}/src/syde_flash/settings/C_FlaSetProgressWidget.hpp
    ${PROJECT_ROOT}/src/syde_flash/settings/C_FlaSetWidget.hpp
@@ -392,7 +390,6 @@ set(OPENSYDE_HEADERS
 set(OPENSYDE_FORMS
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSectionHeader.ui
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingSubSection.ui
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDllWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagAboutDialog.ui
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolTip.ui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.ui
