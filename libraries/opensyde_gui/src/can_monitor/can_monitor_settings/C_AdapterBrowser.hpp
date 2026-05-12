@@ -19,7 +19,7 @@
 #include "can/i_can_backend.h"
 
 class QFrame;
-class QLabel;
+class QGridLayout;
 class QWidget;
 
 namespace stw
@@ -94,8 +94,8 @@ private:
    stw::opensyde_gui_elements::C_CamOgeCbxDark * mpc_AdapterCombo;
    stw::opensyde_gui_elements::C_CamOgeCbxDark * mpc_BitrateCombo;
    stw::opensyde_gui_elements::C_OgePubToolTipBase * mpc_RefreshBtn;
-   QFrame * mpc_DetailsFrame;
-   QLabel * mpc_Details;
+   QWidget * mpc_DetailsContainer;
+   QGridLayout * mpc_DetailsGrid;
 
    std::vector< ::can::AdapterInfo> mc_CurrentAdapters;
 };

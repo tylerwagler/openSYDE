@@ -26,8 +26,10 @@
 
 #include <QFormLayout>
 #include <QFrame>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QLayoutItem>
 #include <QVBoxLayout>
 
 #include "C_AdapterBrowser.hpp"
@@ -60,29 +62,6 @@ QString h_Sanitize(const std::string & orc_Value)
 {
    return orc_Value.empty() ? QStringLiteral("—") : QString::fromStdString(orc_Value);
 }
-
-QString h_FormatAdapter(const ::can::AdapterInfo & orc_Info)
-{
-   QString c_Html = QStringLiteral("<table cellpadding='4' style='color:white;'>");
-   const auto c_Row = [&](const char * const opcn_Key, const QString & orc_Value) {
-      c_Html += QStringLiteral("<tr><td><b>%1</b></td><td><tt>%2</tt></td></tr>")
-                .arg(QString::fromUtf8(opcn_Key), orc_Value.toHtmlEscaped());
-   };
-   c_Row("backend",          QString::fromStdString(::can::backendKindToString(orc_Info.backend)));
-   c_Row("channel_id",       h_Sanitize(orc_Info.channel_id));
-   c_Row("device_name",      h_Sanitize(orc_Info.device_name));
-   c_Row("serial_number",    h_Sanitize(orc_Info.serial_number));
-   c_Row("firmware_version", h_Sanitize(orc_Info.firmware_version));
-   c_Row("driver_version",   h_Sanitize(orc_Info.driver_version));
-   c_Row("part_number",      h_Sanitize(orc_Info.hardware_part_number));
-   c_Row("channel_index",    QString::number(orc_Info.channel_index));
-   for (const auto & rc_Extra : orc_Info.extra)
-   {
-      c_Row(("extra." + rc_Extra.first).c_str(), QString::fromStdString(rc_Extra.second));
-   }
-   c_Html += QStringLiteral("</table>");
-   return c_Html;
-}
 } // anonymous
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
@@ -96,8 +75,8 @@ C_AdapterBrowser::C_AdapterBrowser(QWidget * const opc_Parent) :
    mpc_AdapterCombo(NULL),
    mpc_BitrateCombo(NULL),
    mpc_RefreshBtn(NULL),
-   mpc_DetailsFrame(NULL),
-   mpc_Details(NULL)
+   mpc_DetailsContainer(NULL),
+   mpc_DetailsGrid(NULL)
 {
    this->SetBackgroundColor(5);
    this->m_BuildUi();
@@ -152,6 +131,9 @@ void C_AdapterBrowser::m_BuildUi(void)
    mpc_RefreshBtn->setText(tr("Refresh"));
    mpc_RefreshBtn->setMinimumHeight(28);
    mpc_RefreshBtn->setMinimumWidth(80);
+   // styleRole "configure" pulls in the dark button look defined in the CAN Monitor's QSS
+   // (rgb(57,57,109) bg, white text, hover/pressed states) so this matches the rest of the panel.
+   mpc_RefreshBtn->setProperty("styleRole", "configure");
 
    const auto c_MakeLabel = [this](const char * const opcn_Text) -> C_OgeLabGenericNoPaddingNoMargins * {
       C_OgeLabGenericNoPaddingNoMargins * const pc_Lab = new C_OgeLabGenericNoPaddingNoMargins(this->mpc_Content);
@@ -174,31 +156,13 @@ void C_AdapterBrowser::m_BuildUi(void)
    pc_Row->addWidget(mpc_RefreshBtn, 0, Qt::AlignTop);
    pc_ContentLayout->addLayout(pc_Row);
 
-   mpc_DetailsFrame = new QFrame(mpc_Content);
-   mpc_DetailsFrame->setFrameShape(QFrame::NoFrame);
-   QVBoxLayout * const pc_DetailsLayout = new QVBoxLayout(mpc_DetailsFrame);
-   pc_DetailsLayout->setContentsMargins(0, 6, 0, 0);
-   pc_DetailsLayout->setSpacing(4);
-
-   C_OgeLabGenericNoPaddingNoMargins * const pc_DetailsTitle =
-      new C_OgeLabGenericNoPaddingNoMargins(mpc_DetailsFrame);
-   pc_DetailsTitle->setText(C_GtGetText::h_GetText("Adapter info"));
-   pc_DetailsTitle->SetForegroundColor(0);
-   pc_DetailsTitle->SetFontPixel(13, true);
-   pc_DetailsLayout->addWidget(pc_DetailsTitle);
-
-   mpc_Details = new QLabel(mpc_DetailsFrame);
-   mpc_Details->setTextFormat(Qt::RichText);
-   mpc_Details->setTextInteractionFlags(Qt::TextSelectableByMouse);
-   mpc_Details->setWordWrap(true);
-   mpc_Details->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-   mpc_Details->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-   mpc_Details->setStyleSheet(QStringLiteral(
-                                 "QLabel { background-color: rgba(0, 0, 0, 0.35); "
-                                 "color: white; border: 1px solid rgba(255, 255, 255, 0.08); "
-                                 "border-radius: 4px; padding: 6px; }"));
-   pc_DetailsLayout->addWidget(mpc_Details);
-   pc_ContentLayout->addWidget(mpc_DetailsFrame);
+   mpc_DetailsContainer = new QWidget(mpc_Content);
+   mpc_DetailsGrid = new QGridLayout(mpc_DetailsContainer);
+   mpc_DetailsGrid->setContentsMargins(0, 6, 0, 0);
+   mpc_DetailsGrid->setHorizontalSpacing(8);
+   mpc_DetailsGrid->setVerticalSpacing(4);
+   mpc_DetailsGrid->setColumnStretch(1, 1);
+   pc_ContentLayout->addWidget(mpc_DetailsContainer);
 
    pc_Outer->addWidget(mpc_Content);
 
@@ -269,7 +233,6 @@ void C_AdapterBrowser::m_RefreshAdapters(void)
    const int32_t s32_KindInt = mpc_BackendCombo->currentData().toInt();
    if (s32_KindInt < 0)
    {
-      mpc_Details->setText(tr("<i style='color:white;'>No backends compiled in.</i>"));
       mpc_AdapterCombo->blockSignals(false);
       return;
    }
@@ -278,7 +241,6 @@ void C_AdapterBrowser::m_RefreshAdapters(void)
    const std::unique_ptr< ::can::ICanBackend> c_Backend = ::can::ICanBackend::create(e_Kind);
    if (c_Backend == NULL)
    {
-      mpc_Details->setText(tr("<i style='color:white;'>Backend factory returned nullptr — check build configuration.</i>"));
       mpc_AdapterCombo->blockSignals(false);
       return;
    }
@@ -288,7 +250,6 @@ void C_AdapterBrowser::m_RefreshAdapters(void)
    {
       mpc_AdapterCombo->addItem(tr("(no adapters found)"));
       mpc_AdapterCombo->setEnabled(false);
-      mpc_Details->setText(tr("<i style='color:white;'>No adapters detected for this backend.</i>"));
    }
    else
    {
@@ -311,10 +272,54 @@ void C_AdapterBrowser::m_RefreshAdapters(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_AdapterBrowser::m_DisplaySelected(void)
 {
-   const int32_t s32_Idx = mpc_AdapterCombo->currentIndex();
-   if ((s32_Idx >= 0) && (s32_Idx < static_cast<int32_t>(mc_CurrentAdapters.size())))
+   // Clear any previous rows. Both the key label in column 0 and the value label in column 1
+   // are owned by the grid; takeAt() pops them in order and deleteLater() schedules deletion.
+   while (mpc_DetailsGrid->count() > 0)
    {
-      mpc_Details->setText(h_FormatAdapter(mc_CurrentAdapters[s32_Idx]));
+      QLayoutItem * const pc_Item = mpc_DetailsGrid->takeAt(0);
+      if ((pc_Item != NULL) && (pc_Item->widget() != NULL))
+      {
+         pc_Item->widget()->deleteLater();
+      }
+      delete pc_Item;
+   }
+
+   const int32_t s32_Idx = mpc_AdapterCombo->currentIndex();
+   if ((s32_Idx < 0) || (s32_Idx >= static_cast<int32_t>(mc_CurrentAdapters.size())))
+   {
+      return;
+   }
+
+   const ::can::AdapterInfo & rc_Info = mc_CurrentAdapters[s32_Idx];
+
+   const auto c_AddRow = [this](const char * const opcn_Key, const QString & orc_Value) {
+      const int32_t s32_Row = mpc_DetailsGrid->rowCount();
+      C_OgeLabGenericNoPaddingNoMargins * const pc_Key = new C_OgeLabGenericNoPaddingNoMargins(mpc_DetailsContainer);
+      pc_Key->setText(QString::fromUtf8(opcn_Key));
+      pc_Key->SetForegroundColor(0);
+      pc_Key->SetFontPixel(13, true);
+      C_OgeLabGenericNoPaddingNoMargins * const pc_Val = new C_OgeLabGenericNoPaddingNoMargins(mpc_DetailsContainer);
+      pc_Val->setText(orc_Value);
+      pc_Val->SetForegroundColor(0);
+      pc_Val->SetFontPixel(13);
+      pc_Val->setTextInteractionFlags(Qt::TextSelectableByMouse);
+      mpc_DetailsGrid->addWidget(pc_Key, s32_Row, 0, Qt::AlignLeft | Qt::AlignTop);
+      mpc_DetailsGrid->addWidget(pc_Val, s32_Row, 1, Qt::AlignLeft | Qt::AlignTop);
+   };
+
+   c_AddRow("Backend",  QString::fromStdString(::can::backendKindToString(rc_Info.backend)));
+   c_AddRow("Channel",  h_Sanitize(rc_Info.channel_id));
+   c_AddRow("Device",   h_Sanitize(rc_Info.device_name));
+   c_AddRow("Serial",   h_Sanitize(rc_Info.serial_number));
+   c_AddRow("Firmware", h_Sanitize(rc_Info.firmware_version));
+   c_AddRow("Driver",   h_Sanitize(rc_Info.driver_version));
+   if (rc_Info.hardware_part_number.empty() == false)
+   {
+      c_AddRow("Part number", QString::fromStdString(rc_Info.hardware_part_number));
+   }
+   for (const auto & rc_Extra : rc_Info.extra)
+   {
+      c_AddRow(rc_Extra.first.c_str(), QString::fromStdString(rc_Extra.second));
    }
 }
 
