@@ -174,11 +174,8 @@ set (OPENSYDE_GUI_INCLUDES
 
 # Include path with library modules
 set (OPENSYDE_GUI_LIB_INCLUDES
-   ${PROJECT_ROOT}/../libraries/flexlexer
    ${PROJECT_ROOT}/../libraries/qcustomplot
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC
+   # Vector DBC headers come transitively from CanLibraries::dbc
    ${PROJECT_ROOT}/../libraries/osy_git_data_model_monitor/includes
 )
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -812,20 +809,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipContent.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Scanner.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeDefinition.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeRelation.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeValueType.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/BitTiming.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/EnvironmentVariable.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Message.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Network.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Parser.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Signal.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/SignalGroup.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/SignalType.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ValueTable.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/platform.cpp
+   # Vector DBC sources are built by CanLibraries::dbc (can-libraries submodule)
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.cpp
@@ -1562,33 +1546,7 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeProgrammingOptions.hpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieConverter.hpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieImportDbc.hpp
-   ${PROJECT_ROOT}/../libraries/flexlexer/FlexLexer.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Attribute.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeDefinition.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeObjectType.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeRelation.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeValueType.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/BitTiming.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ByteOrder.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/EnvironmentVariable.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ExtendedMultiplexor.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Message.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Network.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Node.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Parser.hpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Scanner.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Signal.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/SignalGroup.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/SignalType.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ValueDescriptions.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ValueTable.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ValueType.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/location.hh
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/platform.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/position.hh
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/stack.hh
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/vector_dbc_export.h
+   # Vector DBC headers are provided by CanLibraries::dbc (can-libraries submodule)
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiCustomMessage.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiSpinBoxGroupProperties.hpp
@@ -1981,6 +1939,8 @@ set(OPENSYDE_LINK_LIBRARIES
    Qt6::SvgWidgets
    Qt6::PrintSupport
    opensyde_core
+   # Vector DBC, built from source via the can-libraries submodule
+   CanLibraries::dbc
 )
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    find_package(PkgConfig REQUIRED)

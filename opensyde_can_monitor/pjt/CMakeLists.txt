@@ -111,16 +111,11 @@ set (OPENSYDE_INCLUDES
    ${OPENSYDE_GUI_ROOT}/src/util
    ${PROJECT_ROOT}/src/precompiled_headers
    ${OPENSYDE_GUI_ROOT}/src/precompiled_headers
-   ${PROJECT_ROOT}/../libraries/flexlexer
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector
-   ${PROJECT_ROOT}/../libraries/vector_blf/src/Vector
+   # Vector DBC/BLF headers come transitively from CanLibraries::dbc / CanLibraries::blf
 )
 
 # Include path with library modules
-set (OPENSYDE_LIB_INCLUDES
-   ${PROJECT_ROOT}/../libraries/flexlexer
-)
+set (OPENSYDE_LIB_INCLUDES)
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
    list(APPEND OPENSYDE_LIB_INCLUDES ${PROJECT_ROOT}/../libraries/gettext)
 endif()
@@ -141,19 +136,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpContentUtil.cpp
    ${PROJECT_ROOT}/src/can_monitor/cam_main.cpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopErrorHandling.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeDefinition.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeRelation.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeValueType.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/BitTiming.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/EnvironmentVariable.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Message.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Network.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Parser.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Signal.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/SignalGroup.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/SignalType.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ValueTable.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/platform.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiCustomMessage.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiError.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpContentBase.cpp
@@ -307,7 +289,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/can_monitor/data_base/C_CamDbOsyMessageId.cpp
    ${PROJECT_ROOT}/src/can_monitor/data_base/C_CamDbOsyListId.cpp
    ${PROJECT_ROOT}/src/can_monitor/data_base/C_CamDbDbcUnmappedMessageId.cpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Scanner.cpp
 )
 
 set(OPENSYDE_HEADERS
@@ -320,33 +301,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/can_monitor/communication/C_SyvComMessageMonitor.hpp
    ${PROJECT_ROOT}/src/can_monitor/communication/C_SyvComMessageLoggerFileBlf.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
-   ${PROJECT_ROOT}/../libraries/flexlexer/FlexLexer.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Attribute.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeDefinition.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeObjectType.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeRelation.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/AttributeValueType.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/BitTiming.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ByteOrder.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/EnvironmentVariable.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ExtendedMultiplexor.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Message.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Network.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Node.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Parser.hpp
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Scanner.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/Signal.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/SignalGroup.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/SignalType.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ValueDescriptions.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ValueTable.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ValueType.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/location.hh
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/platform.h
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/position.hh
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/stack.hh
-   ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/vector_dbc_export.h
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieImportDbc.hpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieConverter.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpContentUtil.hpp
@@ -574,14 +528,14 @@ set(OPENSYDE_LINK_LIBRARIES
    Qt6::Svg
    Qt6::SvgWidgets
    opensyde_core
+   # Vector file-format libraries, built from source via the can-libraries submodule
+   CanLibraries::dbc
+   CanLibraries::blf
 )
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    find_package(PkgConfig REQUIRED)
    find_package(ZLIB REQUIRED)
-   # Build vector_blf as a static library (upstream hardcodes SHARED)
-   add_subdirectory(${PROJECT_ROOT}/../cmake/vector_blf_static ${CMAKE_BINARY_DIR}/vector_blf EXCLUDE_FROM_ALL)
    list(APPEND OPENSYDE_LINK_LIBRARIES
-      Vector_BLF
       ZLIB::ZLIB
    )
 else()
@@ -590,7 +544,6 @@ else()
       ws2_32   #WinSock
       Iphlpapi #IP helper API
       ${PROJECT_ROOT}/../libraries/gettext/libintl.a
-      ${PROJECT_ROOT}/../libraries/blf_driver_library/libvector_blf.a
       ${PROJECT_ROOT}/../libraries/zlib/libzlibstatic.a
    )
 endif()

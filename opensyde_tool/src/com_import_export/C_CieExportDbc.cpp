@@ -23,7 +23,7 @@
 #include "stwtypes.hpp"
 #include "C_CieExportDbc.hpp"
 #include "C_SclString.hpp"
-#include "DBC.h"
+#include <Vector/DBC.h>
 #include "C_CieConverter.hpp"
 #include "C_OscCanSignal.hpp"
 #include "C_OscNodeDataPoolContent.hpp"

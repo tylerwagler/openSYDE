@@ -46,19 +46,21 @@ cmake_minimum_required(VERSION 3.16)
 project("opensyde_core")
 
 # --- libcan dependency -----------------------------------------------------------------------------------------------
-# opensyde_core's CAN abstraction (C_CanDispatcher) is now backed by libcan from the sibling
-# can-libraries project (https://...). The C_OscLibcanBackendAdapter shim wraps can::ICanBackend
-# instances behind the existing C_CanDispatcher interface, so all four backends (SocketCAN,
-# PCANBasic, Kvaser, Vector XL) are reachable from any opensyde_core consumer.
+# opensyde_core's CAN abstraction (C_CanDispatcher) is now backed by libcan from the
+# can-libraries project, vendored as a git submodule at libraries/can-libraries. The
+# C_OscLibcanBackendAdapter shim wraps can::ICanBackend instances behind the existing
+# C_CanDispatcher interface, so all four backends (SocketCAN, PCANBasic, Kvaser, Vector XL)
+# are reachable from any opensyde_core consumer. can-libraries also vendors the Vector
+# file-format libraries (DBC/BLF/ASC) that openSYDE's CAN monitor / tool consume.
 #
-# Resolution order: prefer an installed CanLibraries package; fall back to add_subdirectory() of
-# a sibling source tree so a multi-repo workspace builds without an install step. Override
-# OPENSYDE_CANLIBS_SOURCE_DIR if the sibling layout differs.
+# Resolution order: prefer an installed CanLibraries package; fall back to add_subdirectory()
+# of the submodule source tree so a fresh checkout builds without an install step. Override
+# OPENSYDE_CANLIBS_SOURCE_DIR if the layout differs.
 if(NOT TARGET CanLibraries::can)
    find_package(CanLibraries QUIET)
    if(NOT CanLibraries_FOUND)
-      set(OPENSYDE_CANLIBS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../can-libraries"
-          CACHE PATH "Path to the sibling can-libraries source tree (only used when CanLibraries isn't installed)")
+      set(OPENSYDE_CANLIBS_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../can-libraries"
+          CACHE PATH "Path to the can-libraries submodule source tree (only used when CanLibraries isn't installed)")
       if(NOT EXISTS "${OPENSYDE_CANLIBS_SOURCE_DIR}/CMakeLists.txt")
          message(FATAL_ERROR
             "opensyde_core: CanLibraries (libcan) not found. "
@@ -66,19 +68,20 @@ if(NOT TARGET CanLibraries::can)
             "source tree (currently '${OPENSYDE_CANLIBS_SOURCE_DIR}').")
       endif()
       message(STATUS "opensyde_core: building CanLibraries from ${OPENSYDE_CANLIBS_SOURCE_DIR}")
-      # Keep CanLibraries from polluting our install / test registration. Also disable its bundled
-      # Vector_BLF/DBC/ASC submodules — opensyde ships its own vector_blf_static target and the
-      # names would otherwise collide (CMake CMP0002). Force static linkage too: libcan would
-      # otherwise inherit BUILD_SHARED_LIBS=ON and turn opensyde_core into a .so, which then
-      # can't resolve OpenSSL symbols at link time the way the static build does.
+      # Keep CanLibraries from polluting our install / test registration. Force static linkage:
+      # libcan would otherwise inherit BUILD_SHARED_LIBS=ON and turn opensyde_core into a .so,
+      # which then can't resolve OpenSSL symbols at link time the way the static build does.
+      # Enable the Vector_DBC + Vector_BLF targets: openSYDE's CAN monitor links CanLibraries::blf
+      # and CanLibraries::dbc, and the tool links CanLibraries::dbc, replacing the formerly
+      # in-tree vector_blf / dbc_driver_library copies. ASC stays off (unused by openSYDE).
       set(CANLIB_INSTALL OFF CACHE BOOL "" FORCE)
       set(_OPENSYDE_BUILD_TESTING_SAVED ${BUILD_TESTING})
       set(_OPENSYDE_BUILD_SHARED_LIBS_SAVED ${BUILD_SHARED_LIBS})
       set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
       set(BUILD_SHARED_LIBS OFF)
       set(CANLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-      set(CANLIB_USE_VECTOR_DBC OFF CACHE BOOL "" FORCE)
-      set(CANLIB_USE_VECTOR_BLF OFF CACHE BOOL "" FORCE)
+      set(CANLIB_USE_VECTOR_DBC ON CACHE BOOL "" FORCE)
+      set(CANLIB_USE_VECTOR_BLF ON CACHE BOOL "" FORCE)
       set(CANLIB_USE_VECTOR_ASC OFF CACHE BOOL "" FORCE)
       add_subdirectory(${OPENSYDE_CANLIBS_SOURCE_DIR} can-libraries-build)
       set(BUILD_TESTING ${_OPENSYDE_BUILD_TESTING_SAVED} CACHE BOOL "" FORCE)

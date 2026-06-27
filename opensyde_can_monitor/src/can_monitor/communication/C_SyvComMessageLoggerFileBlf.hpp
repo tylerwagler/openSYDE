@@ -15,7 +15,7 @@
 
 #include "C_OscComMessageLoggerFileBase.hpp"
 
-#include "BLF.h"
+#include <Vector/BLF.h>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

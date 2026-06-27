@@ -18,7 +18,7 @@
 #include "C_CieConverter.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
 
-#include "DBC.h"
+#include <Vector/DBC.h>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

@@ -18,7 +18,7 @@
 #include "C_OscSystemBus.hpp"
 #include "C_OscNode.hpp"
 
-#include "DBC.h"
+#include <Vector/DBC.h>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

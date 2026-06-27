@@ -1,3 +1,3 @@
-[submodule "vector_blf"]
-	path = libraries/vector_blf
-	url = https://github.com/Technica-Engineering/vector_blf.git
+[submodule "libraries/can-libraries"]
+	path = libraries/can-libraries
+	url = https://github.com/tylerwagler/can-libraries.git

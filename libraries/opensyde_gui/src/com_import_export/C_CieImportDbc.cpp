@@ -20,6 +20,8 @@
 
 #include "C_CieImportDbc.hpp"
 
+#include <Vector/DBC/LogHandler.h>
+
 #include <QByteArray>
 #include <QFile>
 #include <QFileInfo>
@@ -219,6 +221,13 @@ int32_t C_CieImportDbc::mh_ReadFile(const C_SclString & orc_File, Vector::DBC::N
 {
    int32_t s32_Return = C_NO_ERR;
    const QString c_QtPath = QString::fromLocal8Bit(orc_File.c_str());
+
+   // Route the Vector_DBC parser's warnings (formerly hardcoded to opensyde_core) into our log.
+   Vector::DBC::SetLogHandler(
+      [](const std::string & orc_Source, const std::string & orc_Message)
+      {
+         osc_write_log_warning(orc_Source.c_str(), orc_Message.c_str());
+      });
 
    if (orc_File == "")
    {
