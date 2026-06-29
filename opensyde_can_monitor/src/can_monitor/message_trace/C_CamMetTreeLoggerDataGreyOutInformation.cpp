@@ -35,6 +35,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_CamMetTreeLoggerDataGreyOutInformation::C_CamMetTreeLoggerDataGreyOutInformation(void) :
    s32_GrayOutValueMsg(0),
+   u32_LastRxTimeStampMs(0U),
    u32_DataChangedTimeStamp(0U)
 {
    // Handling of maximum 8 data bytes

@@ -1944,12 +1944,36 @@ set(OPENSYDE_LINK_LIBRARIES
 )
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    find_package(PkgConfig REQUIRED)
-   pkg_check_modules(QCUSTOMPLOT REQUIRED qcustomplot-qt6)
-   list(APPEND OPENSYDE_LINK_LIBRARIES
-      ${QCUSTOMPLOT_LIBRARIES}
-      OpenSSL::SSL
-      OpenSSL::Crypto
-   )
+   # Try pkg-config first (openSUSE), fall back to direct find (Ubuntu)
+   pkg_check_modules(QCUSTOMPLOT QUIET qcustomplot-qt6)
+   if(QCUSTOMPLOT_FOUND)
+      # pkg-config found it (openSUSE)
+      list(APPEND OPENSYDE_LINK_LIBRARIES
+         ${QCUSTOMPLOT_LIBRARIES}
+         OpenSSL::SSL
+         OpenSSL::Crypto
+      )
+   else()
+      # Ubuntu: find library and headers directly
+      find_library(QCUSTOMPLOT_LIBRARY
+         NAMES QCustomPlotQt6 QCustomPlot
+         PATHS /usr/lib/x86_64-linux-gnu /usr/lib /usr/local/lib
+      )
+      find_path(QCUSTOMPLOT_INCLUDE_DIR
+         NAMES qcustomplot.h
+         PATHS /usr/include /usr/local/include
+      )
+      if(QCUSTOMPLOT_LIBRARY AND QCUSTOMPLOT_INCLUDE_DIR)
+         list(APPEND OPENSYDE_LINK_LIBRARIES
+            ${QCUSTOMPLOT_LIBRARY}
+            OpenSSL::SSL
+            OpenSSL::Crypto
+         )
+         include_directories(${QCUSTOMPLOT_INCLUDE_DIR})
+      else()
+         message(FATAL_ERROR "QCustomPlot not found. Install libqcustomplot-dev or libqcustomplot2.1-qt6")
+      endif()
+   endif()
 else()
    list(PREPEND OPENSYDE_LINK_LIBRARIES
       ${PROJECT_ROOT}/../libraries/qcustomplot/libqcustomplot.a

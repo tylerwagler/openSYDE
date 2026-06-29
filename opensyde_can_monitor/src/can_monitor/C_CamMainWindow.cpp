@@ -678,7 +678,8 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
          const QRegularExpressionMatch c_Match = c_Regex.match(c_Output);
          if (c_Match.hasMatch() == true)
          {
-            ors32_Bitrate = c_Match.captured(1).toInt();
+             // ip reports bitrate in bits/sec; the bus load calculation expects kbit/s
+             ors32_Bitrate = c_Match.captured(1).toInt() / 1000;
          }
          else
          {

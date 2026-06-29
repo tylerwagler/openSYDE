@@ -985,24 +985,25 @@ void C_CamMetTreeView::m_UpdateUi(const std::list<C_CamMetTreeLoggerData> & orc_
    }
    else
    {
+      const int32_t s32_RowsBefore = this->mc_Model.rowCount();
+
       // In case of unique mode, adapt all messages for showing the signals in correct column size
       // It is possible that already existing messages got a signal interpretation
       // TODO: Is there a more efficient way?
       this->m_SetAllChildren();
 
-      // Explicitly re-sort after the batch update. dynamicSortFilter is kept OFF to avoid
-      // QTBUG-27289, so we trigger the sort manually here after all inserts are complete.
-      // Use sort() instead of invalidate() to avoid a full layout rebuild which can crash
-      // when the view holds persistent indices or expanded state.
-      if (this->mq_AllowSorting == true)
+      // Explicitly re-sort after the batch update, but only if new messages were added
+      // (existing message updates don't change ordering). dynamicSortFilter is kept OFF to
+      // avoid QTBUG-27289, so we trigger the sort manually here after all inserts are complete.
+      if ((this->mq_AllowSorting == true) &&
+          (this->mc_Model.rowCount() > s32_RowsBefore))
       {
          this->mc_SortProxyModel.sort(this->header()->sortIndicatorSection(),
                                       this->header()->sortIndicatorOrder());
       }
 
-      //update style (necessary so stylesheet sees changes -> necessary for expand and collapse icon update)
-      this->style()->unpolish(this);
-      this->style()->polish(this);
+      // Trigger a repaint so the expand/collapse branch icons reflect the current tree state
+      this->viewport()->update();
    }
    this->mc_MutexUpdate.unlock();
    //lint -restore

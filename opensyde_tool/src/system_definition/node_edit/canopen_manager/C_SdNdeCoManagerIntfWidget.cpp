@@ -591,17 +591,17 @@ void C_SdNdeCoManagerIntfWidget::m_LoadFromData(void)
               static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged), this,
               &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
 
-   disconnect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_OnSameAsOpensydeNodeIdChanged);
-   disconnect(this->mpc_Ui->pc_CheckBoxAutostart, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxAutostart, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   disconnect(this->mpc_Ui->pc_CheckBoxStartDevices, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxStartDevices, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   disconnect(this->mpc_Ui->pc_CheckBoxNMTStartAll, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxNMTStartAll, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   disconnect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_OnHeartbeatEnableChanged);
-   disconnect(this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_OnPdoSyncEnableChanged);
 
    if (pc_CanOpenManagerInfo != NULL)
@@ -689,17 +689,17 @@ void C_SdNdeCoManagerIntfWidget::m_LoadFromData(void)
            static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged), this,
            &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
 
-   connect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_OnSameAsOpensydeNodeIdChanged);
-   connect(this->mpc_Ui->pc_CheckBoxAutostart, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxAutostart, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   connect(this->mpc_Ui->pc_CheckBoxStartDevices, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxStartDevices, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   connect(this->mpc_Ui->pc_CheckBoxNMTStartAll, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxNMTStartAll, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   connect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_OnHeartbeatEnableChanged);
-   connect(this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_OnPdoSyncEnableChanged);
 }
 

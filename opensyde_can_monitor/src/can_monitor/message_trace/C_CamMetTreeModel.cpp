@@ -1849,8 +1849,11 @@ void C_CamMetTreeModel::m_HandleNewUniqueMessageForExistingUniqueMessage(const C
    const uint64_t u64_NewAbsoluteTimestampValue = orc_Message.u64_TimeStampAbsoluteStart;
    uint64_t u64_RelativeTimestamp;
 
-   const uint32_t u32_PrevMsgTimeStamp = static_cast<uint32_t>(rc_Message.c_CanMsg.u64_TimeStamp / 1000ULL);
-   const uint32_t u32_NewMsgTimeStamp = static_cast<uint32_t>(orc_Message.c_CanMsg.u64_TimeStamp / 1000ULL);
+   // Use system uptime for gray-out timestamps so the comparison against TglGetTickCountUs()
+   // in m_GrayOutTimer is valid regardless of whether the CAN adapter provides hardware timestamps.
+   const uint32_t u32_NowMs = static_cast<uint32_t>(TglGetTickCountUs() / 1000ULL);
+   const uint32_t u32_PrevMsgTimeStamp = u32_NowMs;
+   const uint32_t u32_NewMsgTimeStamp = u32_NowMs;
 
    // Save previous values which are not filled by C_SyvComMessageMonitor
    const C_CamMetTreeLoggerDataGreyOutInformation c_PreviousInfo =
@@ -1864,6 +1867,7 @@ void C_CamMetTreeModel::m_HandleNewUniqueMessageForExistingUniqueMessage(const C
 
    C_CamMetTreeModel::mh_ApplyPreviousGreyOutInformation(rc_Message, c_PreviousInfo, q_UpdateDataTimeStamp,
                                                          u32_PrevMsgTimeStamp);
+   rc_Message.c_GreyOutInformation.u32_LastRxTimeStampMs = u32_NowMs;
 
    //Handle relative timestamp value
    if (u64_NewAbsoluteTimestampValue > u64_PreviousAbsoluteTimestampValue)
@@ -1946,12 +1950,19 @@ void C_CamMetTreeModel::m_HandleNewUniqueMessage(const C_CamMetTreeLoggerData & 
       this->beginInsertRows(QModelIndex(), s32_EstimatedPosIndex, s32_EstimatedPosIndex);
    }
 
-   //Insert new item
-   this->mc_UniqueMessagesOrdering.insert(orc_Message.c_TimeStampAbsoluteStart, orc_Message.c_CanIdDec);
+   //Insert new item. Append CAN ID to timestamp to guarantee unique keys — multiple
+   // messages can share the same timestamp (same microsecond), and QMap::insert would
+   // silently overwrite entries with duplicate keys, causing phantom empty rows.
+   this->mc_UniqueMessagesOrdering.insert(orc_Message.c_TimeStampAbsoluteStart + "_" +
+                                          orc_Message.c_CanIdDec, orc_Message.c_CanIdDec);
    c_NewPos = this->mc_UniqueMessages.insert(orc_Message.c_CanIdDec, orc_Message);
-   // New message, new data. Update the timestamp of the CAN message data and its bytes
+   // New message, new data. Update the timestamp of the CAN message data and its bytes.
+   // Use system uptime so the gray-out comparison against TglGetTickCountUs() is valid
+   // regardless of whether the CAN adapter provides hardware timestamps.
+   c_NewPos->c_GreyOutInformation.u32_LastRxTimeStampMs =
+      static_cast<uint32_t>(TglGetTickCountUs() / 1000ULL);
    c_NewPos->c_GreyOutInformation.u32_DataChangedTimeStamp =
-      static_cast<uint32_t>(c_NewPos->c_CanMsg.u64_TimeStamp / 1000ULL);
+      c_NewPos->c_GreyOutInformation.u32_LastRxTimeStampMs;
    for (u8_DbCounter = 0; u8_DbCounter < c_NewPos->c_CanMsg.u8_DLC; ++u8_DbCounter)
    {
       c_NewPos->c_GreyOutInformation.c_DataBytesChangedTimeStamps[u8_DbCounter] =
@@ -2016,8 +2027,8 @@ void C_CamMetTreeModel::m_GrayOutTimer(void)
 
       for (c_It = this->mc_UniqueMessages.begin(); c_It != this->mc_UniqueMessages.end(); ++c_It)
       {
-         C_CamMetTreeLoggerData & rc_Data = c_It.value();
-         const uint32_t u32_DiffMsg = u32_CurrentTime - static_cast<uint32_t>(rc_Data.c_CanMsg.u64_TimeStamp / 1000ULL);
+          C_CamMetTreeLoggerData & rc_Data = c_It.value();
+          const uint32_t u32_DiffMsg = u32_CurrentTime - rc_Data.c_GreyOutInformation.u32_LastRxTimeStampMs;
          // TimeStamp for data is set by AddRows when new CAN messages are added to the model
          int32_t s32_TransparencyStepMsg;
          int32_t s32_CounterDataByte;
@@ -2208,14 +2219,15 @@ void C_CamMetTreeModel::m_UpdateTreeItemBasedOnMessage(C_TblTreSimpleItem * cons
       //Normal message
       if (opc_Item->c_Children.size() < orc_Message.c_Signals.size())
       {
-         if ((oq_SignalInsert) && (os32_MessageRow >= 0))
-         {
-            this->beginInsertRows(this->index(os32_MessageRow, 0), static_cast<int32_t>(opc_Item->c_Children.size()),
-                                  static_cast<int32_t>(opc_Item->c_Children.size() + orc_Message.c_Signals.size()));
-         }
-         //Add
-         for (uint32_t u32_ItSig = static_cast<uint32_t>(opc_Item->c_Children.size());
-              u32_ItSig < orc_Message.c_Signals.size(); ++u32_ItSig)
+          if ((oq_SignalInsert) && (os32_MessageRow >= 0))
+          {
+             // last is inclusive: children.size() to children.size() + signals.size() - 1
+             this->beginInsertRows(this->index(os32_MessageRow, 0), static_cast<int32_t>(opc_Item->c_Children.size()),
+                                   static_cast<int32_t>(opc_Item->c_Children.size() + orc_Message.c_Signals.size() - 1UL));
+          }
+          //Add
+          for (uint32_t u32_ItSig = static_cast<uint32_t>(opc_Item->c_Children.size());
+               u32_ItSig < orc_Message.c_Signals.size(); ++u32_ItSig)
          {
             opc_Item->AddChild(new C_TblTreSimpleItem());
          }

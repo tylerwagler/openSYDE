@@ -29,6 +29,7 @@ public:
    C_CamMetTreeLoggerDataGreyOutInformation(void);
 
    int32_t s32_GrayOutValueMsg;
+   uint32_t u32_LastRxTimeStampMs; ///< System uptime [ms] when this message was last received (for gray-out)
    uint32_t u32_DataChangedTimeStamp; ///< Time stamp of last
    // changed
    // data bytes of CAN

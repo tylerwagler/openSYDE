@@ -135,6 +135,9 @@ venv/
 .npm/
 .yarn/
 
+# OpenCode working directory
+.omo/
+
 # Local configuration (if any)
 .env
 .env.local
