@@ -16,9 +16,12 @@
 #include <QFileInfo>
 
 #include "C_OgeWiOnlyBackground.hpp"
+#include "C_OgeContextMenu.hpp"
 #include "C_CamProDatabaseData.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
+class QAction;
+
 namespace Ui
 {
 class C_CamMosDatabaseItemWidget;
@@ -89,13 +92,18 @@ private:
    QDateTime mc_FileTimeStamp;
    bool mq_ButtonPressed;
    bool mq_SuppressChangeSignal;
+   stw::opensyde_gui_elements::C_OgeContextMenu * mpc_ContextMenu;
+   QAction * mpc_ActionReload;
 
    //Avoid call
    C_CamMosDatabaseItemWidget(const C_CamMosDatabaseItemWidget &);
    C_CamMosDatabaseItemWidget & operator =(const C_CamMosDatabaseItemWidget &) &;
 
    void m_OnSelectBus(void);
+   void m_SetupContextMenu(void);
+   void m_OnMenuButton(void);
    void m_OnBrowse(void);
+   void m_OnReload(void);
    void m_OnRemove(void);
    void m_OnChxToggle(const bool & orq_Checked);
    void m_SetMinimizedPath(void) const;

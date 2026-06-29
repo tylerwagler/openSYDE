@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <QFileDialog>
+#include <QAction>
 
 #include "C_CamMosDatabaseItemWidget.hpp"
 #include "ui_C_CamMosDatabaseItemWidget.h"
@@ -63,7 +64,9 @@ C_CamMosDatabaseItemWidget::C_CamMosDatabaseItemWidget(const C_CamProDatabaseDat
    mq_AlreadyAskedUserReload(true),
    mq_AlreadyAskedUserDelete(false),
    mq_ButtonPressed(false),
-   mq_SuppressChangeSignal(false)
+   mq_SuppressChangeSignal(false),
+   mpc_ContextMenu(NULL),
+   mpc_ActionReload(NULL)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -98,9 +101,10 @@ C_CamMosDatabaseItemWidget::C_CamMosDatabaseItemWidget(const C_CamProDatabaseDat
 
    this->mpc_Ui->pc_PbSelectBus->SetToolTipInformation(C_GtGetText::h_GetText("Select Bus."),
                                                        C_GtGetText::h_GetText("Select bus for this database."));
-   this->mpc_Ui->pc_PbBrowse->SetToolTipInformation(C_GtGetText::h_GetText("Browse"),
-                                                    C_GtGetText::h_GetText("Choose database file "
-                                                                           "(*.syde_sysdef or *.dbc)."));
+   this->mpc_Ui->pc_PbBrowse->SetToolTipInformation(C_GtGetText::h_GetText("Options"),
+                                                    C_GtGetText::h_GetText("Browse for a new database file "
+                                                                           "(*.syde_sysdef or *.dbc) or "
+                                                                           "reload the current one from disk."));
    this->mpc_Ui->pc_PbRemove->SetToolTipInformation(C_GtGetText::h_GetText("Delete"),
                                                     C_GtGetText::h_GetText("Delete this database."));
    this->m_EnableCheckBoxTooltip(true); // set tooltip of pc_CheckBox
@@ -113,7 +117,8 @@ C_CamMosDatabaseItemWidget::C_CamMosDatabaseItemWidget(const C_CamProDatabaseDat
    // connects
    connect(this->mpc_Ui->pc_PbSelectBus, &C_OgePubSvgIconOnly::clicked, this,
            &C_CamMosDatabaseItemWidget::m_OnSelectBus);
-   connect(this->mpc_Ui->pc_PbBrowse, &C_OgePubSvgIconOnly::clicked, this, &C_CamMosDatabaseItemWidget::m_OnBrowse);
+   connect(this->mpc_Ui->pc_PbBrowse, &C_OgePubSvgIconOnly::clicked, this,
+           &C_CamMosDatabaseItemWidget::m_OnMenuButton);
    connect(this->mpc_Ui->pc_PbRemove, &C_OgePubSvgIconOnly::clicked, this, &C_CamMosDatabaseItemWidget::m_OnRemove);
    connect(this->mpc_Ui->pc_CheckBox, &QCheckBox::toggled, this, &C_CamMosDatabaseItemWidget::m_OnChxToggle);
 
@@ -129,6 +134,9 @@ C_CamMosDatabaseItemWidget::C_CamMosDatabaseItemWidget(const C_CamProDatabaseDat
            &C_CamMosDatabaseItemWidget::m_ButtonReleased);
    connect(this->mpc_Ui->pc_PbRemove, &C_OgePubSvgIconOnly::released, this,
            &C_CamMosDatabaseItemWidget::m_ButtonReleased);
+
+   // build the browse/reload drop-down for the options button
+   this->m_SetupContextMenu();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -626,6 +634,49 @@ void C_CamMosDatabaseItemWidget::m_OnSelectBus()
       c_New->HideOverlay();
    }
 } //lint !e429  no memory leak because of the parent of pc_Dialog and the Qt memory management
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Setup options drop-down menu for the browse button (browse / reload).
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CamMosDatabaseItemWidget::m_SetupContextMenu(void)
+{
+   this->mpc_ContextMenu = new C_OgeContextMenu(this);
+
+   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Browse..."), this,
+                                    &C_CamMosDatabaseItemWidget::m_OnBrowse);
+   this->mpc_ActionReload = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Reload"), this,
+                                                             &C_CamMosDatabaseItemWidget::m_OnReload);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Slot for options button: show the browse/reload drop-down below the button.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CamMosDatabaseItemWidget::m_OnMenuButton(void)
+{
+   // reload only makes sense once loading finished (independent of success)
+   this->mpc_ActionReload->setEnabled(this->me_State != eLOADING);
+
+   // pop up directly below the button
+   this->mpc_ContextMenu->popup(this->mpc_Ui->pc_PbBrowse->mapToGlobal(
+                                   QPoint(0, this->mpc_Ui->pc_PbBrowse->height())));
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Slot for reload action: re-read the current database file from disk.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CamMosDatabaseItemWidget::m_OnReload(void)
+{
+   // keep the timestamp in sync so the file-watch prompt does not fire afterwards
+   this->mc_FileTimeStamp =
+      static_cast<QFileInfo>(C_CamUti::h_GetAbsPathFromProj(this->mc_Database.c_Name)).lastModified();
+   this->mq_AlreadyAskedUserReload = true;
+
+   // reload using the existing remove + re-queue pipeline (oq_IsUpdate = true)
+   Q_EMIT (this->SigUpdateDatabasePath(this, this->mc_Database, true));
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Slot for browse button.
