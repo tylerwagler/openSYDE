@@ -10,11 +10,17 @@
 */
 //-----------------------------------------------------------------------------
 #include <windows.h>
+<<<<<<< HEAD:opensyde_syde_flash/src/syde_flash/fla_resources.rc
 #include "version_config.hpp"
 
 VS_VERSION_INFO VERSIONINFO
 // use version as defined in version_config.hpp:
 FILEVERSION PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR, PROJECT_VERSION_RELEASE, PROJECT_VERSION_BUILD
+=======
+
+VS_VERSION_INFO VERSIONINFO
+   FILEVERSION    1,31,0,0
+>>>>>>> master:opensyde_tool/src/syde_flash/fla_resources.rc
 BEGIN
    BLOCK "StringFileInfo"
 BEGIN

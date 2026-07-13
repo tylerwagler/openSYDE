@@ -49,6 +49,10 @@ public:
                                                           const stw::scl::C_SclString & orc_RawSerialNumber);
    static void h_FileToString(const stw::scl::C_SclString & orc_FilePath, stw::scl::C_SclString & orc_OutputString);
    static void h_RangeCheckFloat(float64_t & orf64_Value);
+<<<<<<<< HEAD:libraries/opensyde_core/util/C_OscUtils.hpp
+========
+   static stw::scl::C_SclString h_LoadString(const uint16_t ou16_StringIndex);
+>>>>>>>> master:opensyde_syde_coder_c/libs/osy_core/util/C_OscUtils.hpp
    static int32_t h_CopyFile(const stw::scl::C_SclString & orc_SourceFile, const stw::scl::C_SclString & orc_TargetFile,
                              stw::scl::C_SclString * const opc_ErrorPath = NULL,
                              stw::scl::C_SclString * const opc_ErrorMessage = NULL);
@@ -82,6 +86,10 @@ public:
 
 private:
    static const float64_t mhf64_EPSILON;
+<<<<<<<< HEAD:libraries/opensyde_core/util/C_OscUtils.hpp
+========
+   static stw::scl::C_SCLResourceStrings mhc_ResourceStrings;
+>>>>>>>> master:opensyde_syde_coder_c/libs/osy_core/util/C_OscUtils.hpp
 
    static void mh_GetBaseNameAndCurrentConflictNumberFromString(const stw::scl::C_SclString & orc_ConflictingValue,
                                                                 const stw::scl::C_SclString & orc_SkipName,

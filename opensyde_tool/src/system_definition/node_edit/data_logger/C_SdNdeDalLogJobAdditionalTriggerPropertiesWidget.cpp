@@ -563,7 +563,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_SetOperation(const QSt
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_DisconnectChangeTriggers() const
 {
-   disconnect(this->mpc_Ui->pc_ChkBoxAdditionalTrigger, &QCheckBox::stateChanged,
+   disconnect(this->mpc_Ui->pc_ChkBoxAdditionalTrigger, &QCheckBox::checkStateChanged,
               this, &C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_AdditionalTriggerEnabledChanged);
    disconnect(this->mpc_Ui->pc_ComboBoxOperation,
               static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged),
@@ -586,7 +586,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_DisconnectChangeTrigge
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_ReconnectChangeTriggers() const
 {
-   connect(this->mpc_Ui->pc_ChkBoxAdditionalTrigger, &QCheckBox::stateChanged,
+   connect(this->mpc_Ui->pc_ChkBoxAdditionalTrigger, &QCheckBox::checkStateChanged,
            this, &C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_AdditionalTriggerEnabledChanged);
    connect(this->mpc_Ui->pc_ComboBoxOperation,
            static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged),

@@ -835,7 +835,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                //connect to RegisterChange
                connect(dynamic_cast<C_OgeChxTristateBase *> (this->mpc_Ui->pc_TableWidgetComIfSettings
                                                          ->cellWidget(u8_ComIfCnt,
-                                                                      s32_COL_UPDATE)), &QCheckBox::stateChanged, this,
+                                                                      s32_COL_UPDATE)), &QCheckBox::checkStateChanged, this,
                        &C_SdNdeNodePropertiesWidget::m_RegisterChange);
 
                /**********************************************************************************************************/
@@ -871,7 +871,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                //connect to RegisterChange
                connect(dynamic_cast<C_OgeChxTristateBase *> (this->mpc_Ui->pc_TableWidgetComIfSettings
                                                          ->cellWidget(u8_ComIfCnt,
-                                                                      s32_COL_ROUTING)), &QCheckBox::stateChanged, this,
+                                                                      s32_COL_ROUTING)), &QCheckBox::checkStateChanged, this,
                        &C_SdNdeNodePropertiesWidget::m_RegisterChange);
 
                /**********************************************************************************************************/
@@ -901,7 +901,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                //connect to RegisterChange
                connect(dynamic_cast<C_OgeChxTristateBase *> (
                           this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u8_ComIfCnt, s32_COL_DIAGNOSTIC)),
-                       &QCheckBox::stateChanged, this, &C_SdNdeNodePropertiesWidget::m_RegisterChange);
+                       &QCheckBox::checkStateChanged, this, &C_SdNdeNodePropertiesWidget::m_RegisterChange);
 
                /**********************************************************************************************************/
                //SYNC DBC — bidirectional. Button label/tooltip and click action both come from
