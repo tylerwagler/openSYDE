@@ -46,7 +46,11 @@ C_CamProMessageData::C_CamProMessageData(void) :
    q_IsRtr(false),
    u16_Dlc(0U),
    u32_Id(0UL),
-   q_SetAutoSupportMode(false)
+    q_SetAutoSupportMode(false),
+    e_TxProtocol(C_CamProMessageData::eTX_CAN),
+    u8_UdsServiceId(0x10U),
+    u8_UdsSubFunction(0x01U),
+    u16_UdsDid(0xF186U)
 {
    //Start with 8 Bytes, initialize with zero
    c_Bytes.resize(8U, 0U);
@@ -73,9 +77,18 @@ void C_CamProMessageData::CalcHash(uint32_t & oru32_HashValue) const
    stw::scl::C_SclChecksums::CalcCRC32(&this->u16_Dlc, sizeof(this->u16_Dlc), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->c_Bytes[0UL], static_cast<uint32_t>(c_Bytes.size()), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_DoCyclicTrigger, sizeof(this->q_DoCyclicTrigger), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_SetAutoSupportMode, sizeof(this->q_SetAutoSupportMode),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_CyclicTriggerTime, sizeof(this->u32_CyclicTriggerTime),
+    stw::scl::C_SclChecksums::CalcCRC32(&this->q_SetAutoSupportMode, sizeof(this->q_SetAutoSupportMode),
+                                        oru32_HashValue);
+    stw::scl::C_SclChecksums::CalcCRC32(&this->e_TxProtocol, sizeof(this->e_TxProtocol), oru32_HashValue);
+    stw::scl::C_SclChecksums::CalcCRC32(&this->u8_UdsServiceId, sizeof(this->u8_UdsServiceId), oru32_HashValue);
+    stw::scl::C_SclChecksums::CalcCRC32(&this->u8_UdsSubFunction, sizeof(this->u8_UdsSubFunction), oru32_HashValue);
+    stw::scl::C_SclChecksums::CalcCRC32(&this->u16_UdsDid, sizeof(this->u16_UdsDid), oru32_HashValue);
+    if (this->c_UdsData.size() > 0UL)
+    {
+       stw::scl::C_SclChecksums::CalcCRC32(&this->c_UdsData[0UL], static_cast<uint32_t>(c_UdsData.size()),
+                                           oru32_HashValue);
+    }
+    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_CyclicTriggerTime, sizeof(this->u32_CyclicTriggerTime),
                                        oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(this->c_Key.c_str(), this->c_Key.Length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_KeyPressOffset, sizeof(this->u32_KeyPressOffset),
@@ -97,6 +110,8 @@ stw::can::T_STWCAN_Msg_TX C_CamProMessageData::ToCanMessage(void) const
    c_Retval.u8_XTD = C_CamProMessageData::h_GetBoolValue(this->q_IsExtended);
    c_Retval.u8_RTR = C_CamProMessageData::h_GetBoolValue(this->q_IsRtr);
    c_Retval.u8_DLC = static_cast<uint8_t>(this->u16_Dlc);
+   // Fill up to 8 bytes (standard CAN frame) — payloads >8 are handled
+   // by CAN-TP segmentation in the send path.
    for (uint8_t u8_ItByte = 0U; u8_ItByte < 8U; ++u8_ItByte)
    {
       if (u8_ItByte < this->u16_Dlc)
@@ -138,6 +153,18 @@ bool C_CamProMessageData::GetRtr(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get Tx protocol
+
+   \return
+   Current Tx protocol (CAN, CAN-TP, ...)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_CamProMessageData::E_TxProtocol C_CamProMessageData::GetTxProtocol(void) const
+{
+   return this->e_TxProtocol;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set message uint32_t value
 
    \param[in]  oe_Selector    Data specifier
@@ -152,9 +179,11 @@ void C_CamProMessageData::SetMessageUint32Value(const C_CamProMessageData::E_Gen
    case eGUIDS_ID:
       this->u32_Id = ou32_Value;
       break;
-   case eGUIDS_DLC:
-      this->u16_Dlc = static_cast<uint16_t>(ou32_Value);
-      break;
+    case eGUIDS_DLC:
+       this->u16_Dlc = static_cast<uint16_t>(ou32_Value);
+       // Resize byte vector to match DLC (trims if DLC decreased, extends if increased)
+       this->c_Bytes.resize(this->u16_Dlc, 0U);
+       break;
    case eGUIDS_DB0:
       this->c_Bytes[0UL] = static_cast<uint8_t>(ou32_Value);
       break;
@@ -243,18 +272,28 @@ int32_t C_CamProMessageData::SetMessageDataBytes(const std::vector<uint8_t> & or
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (orc_DataBytes.size() <= 8UL)
-   {
-      for (uint32_t u32_It = 0UL; u32_It < orc_DataBytes.size(); ++u32_It)
-      {
-         this->c_Bytes[u32_It] = orc_DataBytes[u32_It];
-      }
-   }
-   else
-   {
-      s32_Retval = C_RANGE;
-   }
+   this->c_Bytes = orc_DataBytes;
    return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set a single data byte at the given index
+*
+*   If the index is beyond the current vector size, the vector is
+*   extended with zeros.  This supports payloads larger than 8 bytes
+*   for CAN-TP multi-frame transmission.
+*
+*   \param[in]  ou32_Index  Byte index
+*   \param[in]  ou8_Value   Byte value
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CamProMessageData::SetMessageByte(const uint32_t ou32_Index, const uint8_t ou8_Value)
+{
+   if (static_cast<size_t>(ou32_Index) >= this->c_Bytes.size())
+   {
+      this->c_Bytes.resize(static_cast<size_t>(ou32_Index) + 1U, 0U);
+   }
+   this->c_Bytes[ou32_Index] = ou8_Value;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

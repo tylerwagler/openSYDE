@@ -17,7 +17,6 @@
 #include "C_SclString.hpp"
 #include "TglUtils.hpp"
 #include "C_Uti.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SyvUtil.hpp"
@@ -225,27 +224,24 @@ C_SyvUpUpdateWidget::~C_SyvUpUpdateWidget()
 void C_SyvUpUpdateWidget::InitText(void) const
 {
    // button text
-   this->mpc_Ui->pc_PbUpdate->setText(static_cast<QString>(C_GtGetText::h_GetText("Update System")));
-   this->mpc_Ui->pc_PbConnect->setText(static_cast<QString>(C_GtGetText::h_GetText("Enter Update Mode")));
-   this->mpc_Ui->pc_PbDisconnnect->setText(static_cast<QString>(C_GtGetText::h_GetText("Exit Update Mode")));
-   this->mpc_Ui->pc_PbCancel->setText(static_cast<QString>(C_GtGetText::h_GetText("Abort System Update")));
+   this->mpc_Ui->pc_PbUpdate->setText(static_cast<QString>("Update System"));
+   this->mpc_Ui->pc_PbConnect->setText(static_cast<QString>("Enter Update Mode"));
+   this->mpc_Ui->pc_PbDisconnnect->setText(static_cast<QString>("Exit Update Mode"));
+   this->mpc_Ui->pc_PbCancel->setText(static_cast<QString>("Abort System Update"));
 
    // tooltips
    this->mpc_Ui->pc_PbUpdate->SetToolTipInformation(
-      C_GtGetText::h_GetText("Update System"),
-      C_GtGetText::h_GetText("Updates all devices that have a different version compared to "
+      "Update System",
+      "Updates all devices that have a different version compared to "
                              "the version in the Update Package. \n"
-                             "Triggers automatically \"Enter Update Mode\" first, if not done yet."));
-   this->mpc_Ui->pc_PbConnect->SetToolTipInformation(C_GtGetText::h_GetText("Enter Update Mode"),
-                                                     C_GtGetText::h_GetText(
-                                                        "Puts all devices into flashloader mode and gets current "
-                                                        "versions of each device."));
-   this->mpc_Ui->pc_PbDisconnnect->SetToolTipInformation(C_GtGetText::h_GetText("Exit Update Mode"),
-                                                         C_GtGetText::h_GetText(
-                                                            "Puts all devices back into application mode."));
-   this->mpc_Ui->pc_PbCancel->SetToolTipInformation(C_GtGetText::h_GetText("Abort System Update"),
-                                                    C_GtGetText::h_GetText(
-                                                       "Forces the update to abort."));
+                             "Triggers automatically \"Enter Update Mode\" first, if not done yet.");
+   this->mpc_Ui->pc_PbConnect->SetToolTipInformation("Enter Update Mode",
+                                                     "Puts all devices into flashloader mode and gets current "
+                                                        "versions of each device.");
+   this->mpc_Ui->pc_PbDisconnnect->SetToolTipInformation("Exit Update Mode",
+                                                         "Puts all devices back into application mode.");
+   this->mpc_Ui->pc_PbCancel->SetToolTipInformation("Abort System Update",
+                                                    "Forces the update to abort.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -281,11 +277,11 @@ bool C_SyvUpUpdateWidget::PrepareToClose(void)
          C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
          C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
 
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("System Update abort"));
+         c_MessageBox.SetHeading("System Update abort");
          c_MessageBox.SetDescription(
-            C_GtGetText::h_GetText("System Update is running. Do you really want to abort the current System Update?"));
-         c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Continue Update"));
-         c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Abort Update"));
+            "System Update is running. Do you really want to abort the current System Update?");
+         c_MessageBox.SetOkButtonText("Continue Update");
+         c_MessageBox.SetNoButtonText("Abort Update");
          c_MessageBox.SetCustomMinWidth(650);
          c_MessageBox.SetCustomMinHeight(180, 180);
          e_ReturnMessageBox = c_MessageBox.Execute();
@@ -318,7 +314,7 @@ bool C_SyvUpUpdateWidget::PrepareToClose(void)
          if (s32_Result == C_NO_ERR)
          {
             int32_t s32_SequenceResult;
-            const QString c_Text =  C_GtGetText::h_GetText("Disconnect: Start");
+            const QString c_Text =  "Disconnect: Start";
 
             this->m_UpdateReportText(c_Text);
 
@@ -492,11 +488,11 @@ void C_SyvUpUpdateWidget::m_CheckError(void)
       this->mq_ErrorDetected = e_ToolTipType == C_NagToolTip::eERROR;
 
       this->mpc_Ui->pc_ErrorLabelIcon->SetSvg(c_IconPath);
-      this->mpc_Ui->pc_ErrorLabelIcon->SetToolTipInformation(C_GtGetText::h_GetText("Invalid"),
+      this->mpc_Ui->pc_ErrorLabelIcon->SetToolTipInformation("Invalid",
                                                              c_ErrorTextTooltip, e_ToolTipType);
       this->mpc_Ui->pc_ErrorLabelTitle->SetForegroundColor(s32_ColorId);
       this->mpc_Ui->pc_ErrorLabelTitle->setText(c_ErrorTextHeading);
-      this->mpc_Ui->pc_ErrorLabelTitle->SetToolTipInformation(C_GtGetText::h_GetText("Invalid"),
+      this->mpc_Ui->pc_ErrorLabelTitle->SetToolTipInformation("Invalid",
                                                               c_ErrorTextTooltip, e_ToolTipType);
       this->mpc_Ui->pc_ErrorLabel->SetForegroundColor(s32_ColorId);
       this->mpc_Ui->pc_ErrorLabel->SetCompleteText(c_ErrorText, c_ErrorTextTooltip, e_ToolTipType);
@@ -571,23 +567,21 @@ int32_t C_SyvUpUpdateWidget::m_InitSequence(void)
    case C_NO_ERR:
       break;
    case C_CONFIG:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Invalid SYSTEM DEFINITION/View configuration."));
+      c_Message = static_cast<QString>("Invalid SYSTEM DEFINITION/View configuration.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_RD_WR:
       c_Message =
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 "Configured communication DLL does not exist or DLL could not be opened."));
+         static_cast<QString>("Configured communication DLL does not exist or DLL could not be opened.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_OVERFLOW:
       c_Message =
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 "Unknown transport protocol or unknown diagnostic server for at least one node."));
+         static_cast<QString>("Unknown transport protocol or unknown diagnostic server for at least one node.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_NOACT:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("System View is invalid. Action cannot be performed."));
+      c_Message = static_cast<QString>("System View is invalid. Action cannot be performed.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_COM:
@@ -595,43 +589,40 @@ int32_t C_SyvUpUpdateWidget::m_InitSequence(void)
       {
          c_Message =
             static_cast<QString>(
-               C_GtGetText::h_GetText(
-                  "Ethernet initialization failed. Check your Ethernet adapter settings."));
+               "Ethernet initialization failed. Check your Ethernet adapter settings.");
          c_MessageBox.SetCustomMinHeight(180, 180);
       }
       else
       {
          c_Message =
-            static_cast<QString>(C_GtGetText::h_GetText(
-                                    "CAN initialization failed. Check your PC CAN interface configuration "
-                                    "(System View setup - double-click on PC)."));
+            static_cast<QString>("CAN initialization failed. Check your PC CAN interface configuration "
+                                    "(System View setup - double-click on PC).");
          c_MessageBox.SetCustomMinHeight(180, 180);
       }
       break;
    case C_CHECKSUM:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Internal buffer overflow detected."));
+      c_Message = static_cast<QString>("Internal buffer overflow detected.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_RANGE:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Routing configuration failed."));
+      c_Message = static_cast<QString>("Routing configuration failed.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_UNKNOWN_ERR:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Wrapped error of internal function call."));
+      c_Message = static_cast<QString>("Wrapped error of internal function call.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_WARN:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Internal error."));
+      c_Message = static_cast<QString>("Internal error.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_BUSY:
       c_Message = static_cast<QString>(
-         C_GtGetText::h_GetText(
-            "System View is invalid. Action cannot be performed. Fix the issues and retry."));
+         "System View is invalid. Action cannot be performed. Fix the issues and retry.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    default:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Unknown error: %1")).arg(C_Uti::h_StwError(s32_Retval));
+      c_Message = static_cast<QString>("Unknown error: %1").arg(C_Uti::h_StwError(s32_Retval));
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    }
@@ -640,7 +631,7 @@ int32_t C_SyvUpUpdateWidget::m_InitSequence(void)
    {
       c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eERROR);
       c_MessageBox.SetDescription(c_Message);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Enter update mode"));
+      c_MessageBox.SetHeading("Enter update mode");
       c_MessageBox.Execute();
 
       // Simplify return value
@@ -727,14 +718,13 @@ void C_SyvUpUpdateWidget::m_ReportProgress(const uint32_t ou32_Step, const int32
       }
       //Signal summary
       this->mpc_Ui->pc_WiUpdateInformation->SetHeading("://images/system_views/UpdateSummaryOk.svg",
-                                                       C_GtGetText::h_GetText(
-                                                          "System Update successful!"), false, true);
+                                                       "System Update successful!", false, true);
       this->mpc_Ui->pc_WiUpdateInformation->StopElapsedTimer();
       this->mpc_Ui->pc_WiUpdateInformation->UpdateProgress(100, true);
       //Signal progress log
       if (this->mpc_ProgressLogContent != NULL)
       {
-         this->mpc_ProgressLogContent->AddSubHeading(C_GtGetText::h_GetText("System Update successful!"));
+         this->mpc_ProgressLogContent->AddSubHeading("System Update successful!");
       }
    }
 }
@@ -801,7 +791,7 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
             const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
             if (pc_Node != NULL)
             {
-               const QString c_Text = static_cast<QString>(C_GtGetText::h_GetText("Update %1...")).arg(
+               const QString c_Text = static_cast<QString>("Update %1...").arg(
                   pc_Node->c_Properties.c_Name.c_str());
                this->mpc_ProgressLogContent->AddEntry(u32_NodeIndex, c_Text, true);
             }
@@ -812,7 +802,7 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
          //Signal progress log
          if (this->mpc_ProgressLogContent != NULL)
          {
-            this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, C_GtGetText::h_GetText("FAIL"), false);
+            this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, "FAIL", false);
          }
          //Signal scene
          if (this->mpc_Scene != NULL)
@@ -825,7 +815,7 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
          //Signal progress log
          if (this->mpc_ProgressLogContent != NULL)
          {
-            this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, C_GtGetText::h_GetText("OK"), false);
+            this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, "OK", false);
          }
       }
       else if (C_SyvUpUpdateWidget::mh_IsUpdateFailure(e_Step) == true)
@@ -835,7 +825,7 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
          //Signal progress log
          if (this->mpc_ProgressLogContent != NULL)
          {
-            this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, C_GtGetText::h_GetText("FAIL"), true);
+            this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, "FAIL", true);
          }
          //Signal scene
          if (this->mpc_Scene != NULL)
@@ -850,7 +840,7 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
          //Signal progress log
          if (this->mpc_ProgressLogContent != NULL)
          {
-            this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, C_GtGetText::h_GetText("USER CANCELED"), true);
+            this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, "USER CANCELED", true);
          }
          //Signal scene
          if (this->mpc_Scene != NULL)
@@ -859,7 +849,7 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
          }
          //Signal summary
          this->mpc_Ui->pc_WiUpdateInformation->SetHeading("://images/system_views/UpdateSummaryFailure.svg",
-                                                          C_GtGetText::h_GetText("System Update failed!"), true, false);
+                                                          "System Update failed!", true, false);
          this->mpc_Ui->pc_WiUpdateInformation->StopElapsedTimer();
       }
       else if (C_SyvUpUpdateWidget::mh_IsUpdateAppSuccess(e_Step, q_IsParam, q_IsPemFile) == true)
@@ -874,7 +864,7 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(const uint32_t ou32_Step, co
          //Signal progress log
          if (this->mpc_ProgressLogContent != NULL)
          {
-            this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, C_GtGetText::h_GetText("OK"), true);
+            this->mpc_ProgressLogContent->UpdateStatus(u32_NodeIndex, "OK", true);
          }
       }
       else if (this->me_Step == C_SyvUpSequences::eUPDATE_SYSTEM)
@@ -923,87 +913,84 @@ void C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead(void)
          QString c_Temp;
 
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText(
-                                    "openSYDE device information found for node with index %1")).arg(
+            static_cast<QString>("openSYDE device information found for node with index %1").arg(
                c_NodeIndexes[u32_Counter]));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText("Device name: %1")).arg(rc_Info.c_DeviceName.c_str()));
+            static_cast<QString>("Device name: %1").arg(rc_Info.c_DeviceName.c_str()));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText("Number of applications: %1")).arg(rc_Info.c_Applications.
+            static_cast<QString>("Number of applications: %1").arg(rc_Info.c_Applications.
                                                                                            size()));
 
          for (uint8_t u8_Application = 0U; u8_Application < rc_Info.c_Applications.size(); u8_Application++)
          {
             this->m_UpdateReportText(
-               static_cast<QString>(C_GtGetText::h_GetText("Application %1")).arg(static_cast<uint32_t>(u8_Application)));
+               static_cast<QString>("Application %1").arg(static_cast<uint32_t>(u8_Application)));
             this->m_UpdateReportText(
-               static_cast<QString>(C_GtGetText::h_GetText(" Name: %1")).arg(
+               static_cast<QString>(" Name: %1").arg(
                   rc_Info.c_Applications[u8_Application].c_ApplicationName.c_str()));
             this->m_UpdateReportText(
-               static_cast<QString>(C_GtGetText::h_GetText(" Version: %1")).arg(
+               static_cast<QString>(" Version: %1").arg(
                   rc_Info.c_Applications[u8_Application].c_ApplicationVersion.c_str()));
             this->m_UpdateReportText(
-               static_cast<QString>(C_GtGetText::h_GetText(" Build date: %1")).arg(
+               static_cast<QString>(" Build date: %1").arg(
                   rc_Info.c_Applications[u8_Application].c_BuildDate.c_str()));
             this->m_UpdateReportText(
-               static_cast<QString>(C_GtGetText::h_GetText(" Build time: %1")).arg(
+               static_cast<QString>(" Build time: %1").arg(
                   rc_Info.c_Applications[u8_Application].c_BuildTime.c_str()));
             this->m_UpdateReportText(
-               static_cast<QString>(C_GtGetText::h_GetText(" Block start address: 0x%1")).arg(
+               static_cast<QString>(" Block start address: 0x%1").arg(
                   QString::number(rc_Info.c_Applications[u8_Application].u32_BlockStartAddress, 16).rightJustified(
                      8, '0')));
             this->m_UpdateReportText(
-               static_cast<QString>(C_GtGetText::h_GetText(" Block end address: 0x%1")).arg(
+               static_cast<QString>(" Block end address: 0x%1").arg(
                   QString::number(rc_Info.c_Applications[u8_Application].u32_BlockEndAddress, 16).rightJustified(
                      8, '0')));
             this->m_UpdateReportText(
-               static_cast<QString>(C_GtGetText::h_GetText(" Signature valid: %1")).
+               static_cast<QString>(" Signature valid: %1").
                arg((rc_Info.c_Applications[u8_Application].u8_SignatureValid == 0) ? "yes" : "no"));
-            this->m_UpdateReportText(static_cast<QString>(C_GtGetText::h_GetText(" Additional information: %1")).arg(
+            this->m_UpdateReportText(static_cast<QString>(" Additional information: %1").arg(
                                         rc_Info.c_Applications[u8_Application].c_AdditionalInformation.c_str()));
          }
 
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText(
-                                    "Flashloader software version: V%1.%2r%3")).arg(
+            static_cast<QString>("Flashloader software version: V%1.%2r%3").arg(
                QString::number(rc_Info.c_MoreInformation.au8_FlashloaderSoftwareVersion[0]).rightJustified(2, '0'),
                QString::number(rc_Info.c_MoreInformation.au8_FlashloaderSoftwareVersion[1]).rightJustified(2, '0'),
                QString::number(rc_Info.c_MoreInformation.au8_FlashloaderSoftwareVersion[2]).rightJustified(2, '0')));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText(
-                                    "Flashloader protocol version: V%1.%2r%3")).arg(
+            static_cast<QString>("Flashloader protocol version: V%1.%2r%3").arg(
                QString::number(rc_Info.c_MoreInformation.au8_FlashloaderProtocolVersion[0]).rightJustified(2, '0'),
                QString::number(rc_Info.c_MoreInformation.au8_FlashloaderProtocolVersion[1]).rightJustified(2, '0'),
                QString::number(rc_Info.c_MoreInformation.au8_FlashloaderProtocolVersion[2]).rightJustified(2, '0')));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText("Protocol version: V%1.%2r%3")).arg(
+            static_cast<QString>("Protocol version: V%1.%2r%3").arg(
                QString::number(rc_Info.c_MoreInformation.au8_ProtocolVersion[0]).rightJustified(2, '0'),
                QString::number(rc_Info.c_MoreInformation.au8_ProtocolVersion[1]).rightJustified(2, '0'),
                QString::number(rc_Info.c_MoreInformation.au8_ProtocolVersion[2]).rightJustified(2, '0')));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText("Flash count: %1")).arg(rc_Info.c_MoreInformation.
+            static_cast<QString>("Flash count: %1").arg(rc_Info.c_MoreInformation.
                                                                                 u32_FlashCount));
          if (rc_Info.c_MoreInformation.c_AvailableFeatures.q_ExtendedSerialNumberModeImplemented == false)
          {
-            c_Temp = C_GtGetText::h_GetText("(Format: Standard)");
+            c_Temp = "(Format: Standard)";
          }
          else
          {
-            c_Temp = static_cast<QString>(C_GtGetText::h_GetText("(Format: Extended with Manufacturer Format %1)")).arg(
+            c_Temp = static_cast<QString>("(Format: Extended with Manufacturer Format %1)").arg(
                QString::number(static_cast<uint32_t>(rc_Info.c_MoreInformation.c_SerialNumber.
                                                      u8_SerialNumberManufacturerFormat)));
          }
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText("Device serial number: %1 %2")).arg(
+            static_cast<QString>("Device serial number: %1 %2").arg(
                rc_Info.c_MoreInformation.GetEcuSerialNumber().c_str(), c_Temp));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText("Device article number: %1")).arg(rc_Info.
+            static_cast<QString>("Device article number: %1").arg(rc_Info.
                                                                                           c_MoreInformation.
                                                                                           u32_EcuArticleNumber));
-         this->m_UpdateReportText(static_cast<QString>(C_GtGetText::h_GetText("Device article version: %1")).arg(
+         this->m_UpdateReportText(static_cast<QString>("Device article version: %1").arg(
                                      rc_Info.c_MoreInformation.c_EcuHardwareVersionNumber.c_str()));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText("Flash fingerprint date: %1-%2-%3 (yy-mm-dd)")).arg(
+            static_cast<QString>("Flash fingerprint date: %1-%2-%3 (yy-mm-dd)").arg(
                QString::number(static_cast<uint32_t>(
                                   rc_Info.c_MoreInformation.au8_FlashFingerprintDate[0])).rightJustified(2, '0'),
                QString::number(static_cast<uint32_t>(
@@ -1011,53 +998,50 @@ void C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead(void)
                QString::number(static_cast<uint32_t>(
                                   rc_Info.c_MoreInformation.au8_FlashFingerprintDate[2])).rightJustified(2, '0')));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText("Flash fingerprint time: %1:%2:%3")).arg(
+            static_cast<QString>("Flash fingerprint time: %1:%2:%3").arg(
                QString::number(static_cast<uint32_t>(rc_Info.c_MoreInformation.au8_FlashFingerprintTime[0])).
                rightJustified(2, '0'),
                QString::number(static_cast<uint32_t>(rc_Info.c_MoreInformation.au8_FlashFingerprintTime[1])).
                rightJustified(2, '0'),
                QString::number(static_cast<uint32_t>(rc_Info.c_MoreInformation.au8_FlashFingerprintTime[2])).
                rightJustified(2, '0')));
-         this->m_UpdateReportText(static_cast<QString>(C_GtGetText::h_GetText("Flash fingerprint username: %1")).arg(
+         this->m_UpdateReportText(static_cast<QString>("Flash fingerprint username: %1").arg(
                                      rc_Info.c_MoreInformation.c_FlashFingerprintUserName.c_str()));
 
          // Information about available flashloader features
-         this->m_UpdateReportText(static_cast<QString>(C_GtGetText::h_GetText("Available features:")));
+         this->m_UpdateReportText(static_cast<QString>("Available features:"));
          if (rc_Info.c_MoreInformation.c_AvailableFeatures.q_MaxNumberOfBlockLengthAvailable == true)
          {
             this->m_UpdateReportText(
-               static_cast<QString>(C_GtGetText::h_GetText(
-                                       " Maximum block size information available: 1 (%1 Bytes)")).arg(
+               static_cast<QString>(" Maximum block size information available: 1 (%1 Bytes)").arg(
                   QString::number(rc_Info.c_MoreInformation.u16_MaxNumberOfBlockLength)));
          }
          else
          {
-            this->m_UpdateReportText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                             " Maximum block size information available: 0")));
+            this->m_UpdateReportText(static_cast<QString>(" Maximum block size information available: 0"));
          }
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText(" NVM writing available: %1")).arg(
+            static_cast<QString>(" NVM writing available: %1").arg(
                QString::number(static_cast<uint8_t>(rc_Info.c_MoreInformation.c_AvailableFeatures.
                                                     q_FlashloaderCanWriteToNvm))));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText(" Security authentication supported: %1")).arg(
+            static_cast<QString>(" Security authentication supported: %1").arg(
                QString::number(static_cast<uint8_t>(rc_Info.c_MoreInformation.c_AvailableFeatures.
                                                     q_SupportsSecurityAuthentication))));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText(" Security traffic encryption supported: %1")).arg(
+            static_cast<QString>(" Security traffic encryption supported: %1").arg(
                QString::number(static_cast<uint8_t>(rc_Info.c_MoreInformation.c_AvailableFeatures.
                                                     q_SupportsSecurityTrafficEncryption))));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText(" Disabling debugger supported: %1")).arg(
+            static_cast<QString>(" Disabling debugger supported: %1").arg(
                QString::number(static_cast<uint8_t>(rc_Info.c_MoreInformation.c_AvailableFeatures.
                                                     q_SupportsDebuggerOff))));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText(" Enabling debugger supported: %1")).arg(
+            static_cast<QString>(" Enabling debugger supported: %1").arg(
                QString::number(static_cast<uint8_t>(rc_Info.c_MoreInformation.c_AvailableFeatures.
                                                     q_SupportsDebuggerOn))));
          this->m_UpdateReportText(
-            static_cast<QString>(C_GtGetText::h_GetText(
-                                    " Ethernet2Ethernet routing supported: %1")).arg(
+            static_cast<QString>(" Ethernet2Ethernet routing supported: %1").arg(
                QString::number(static_cast<uint8_t>(rc_Info.c_MoreInformation.c_AvailableFeatures.
                                                     q_EthernetToEthernetRoutingSupported))));
       }
@@ -1235,10 +1219,10 @@ void C_SyvUpUpdateWidget::m_Connect(void)
 
       if (this->mq_StartUpdateAfterConnect == false)
       {
-         this->mpc_ProgressLogContent->SetHeading(C_GtGetText::h_GetText("Enter Update Mode"));
+         this->mpc_ProgressLogContent->SetHeading("Enter Update Mode");
       }
       // Let the user know, when the tool is occupied with itself before communicating with the bus
-      this->mpc_ProgressLogContent->AddSubHeading(C_GtGetText::h_GetText("Initializing communication interface..."));
+      this->mpc_ProgressLogContent->AddSubHeading("Initializing communication interface...");
       this->mpc_ProgressLogContent->update();
       // For updating the progress log
       QApplication::processEvents();
@@ -1261,7 +1245,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
    if (s32_Return == C_NO_ERR)
    {
       //Signal summary
-      this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", C_GtGetText::h_GetText("Entering update mode..."));
+      this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", "Entering update mode...");
       //Signal scene
       if (this->mpc_Scene != NULL)
       {
@@ -1299,15 +1283,14 @@ void C_SyvUpUpdateWidget::m_Connect(void)
          {
             C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eWARNING);
             C_OgeWiCustomMessage::E_Outputs e_Output;
-            c_MessageBox.SetHeading(C_GtGetText::h_GetText("Transferring Secure Authentication"));
-            c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                           "The Update Package contains PEM file(s) or activates authentication for at "
+            c_MessageBox.SetHeading("Transferring Secure Authentication");
+            c_MessageBox.SetDescription("The Update Package contains PEM file(s) or activates authentication for at "
                                            "least one node. After transfer, access will only be possible with a valid "
                                            "private key.\n\n"
-                                           "Are you sure you want to continue?\n"));
+                                           "Are you sure you want to continue?\n");
             c_MessageBox.SetCustomMinHeight(240, 240);
-            c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-            c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+            c_MessageBox.SetOkButtonText("Continue");
+            c_MessageBox.SetNoButtonText("Cancel");
             e_Output = c_MessageBox.Execute();
             switch (e_Output)
             {
@@ -1351,41 +1334,41 @@ void C_SyvUpUpdateWidget::m_Connect(void)
             switch (s32_Return)
             {
             case C_CONFIG:
-               c_MessageText = C_GtGetText::h_GetText("View is invalid or initialization was not finished.");
+               c_MessageText = "View is invalid or initialization was not finished.";
                break;
             case C_OVERFLOW:
                c_MessageText =
-                  C_GtGetText::h_GetText("Number of applications to write or number of active nodes is invalid.");
+                  "Number of applications to write or number of active nodes is invalid.";
                break;
             case C_NOACT:
                c_MessageText =
-                  C_GtGetText::h_GetText("Update package contains at least one file for an inactive node or number of "
-                                         "files does not match number of Data Blocks.");
+                  "Update package contains at least one file for an inactive node or number of "
+                                         "files does not match number of Data Blocks.";
                break;
             case C_RANGE:
-               c_MessageText = C_GtGetText::h_GetText("File does not exist or target path does not "
-                                                      "end in \"\\\" or \"/\": \n") + c_ErrorPath;
+               c_MessageText = "File does not exist or target path does not "
+                                                      "end in \"\\\" or \"/\": \n" + c_ErrorPath;
                break;
             case C_BUSY:
-               c_MessageText = C_GtGetText::h_GetText("Could not erase pre-existing target path "
-                                                      "(can result in partially erased target path):\n") + c_ErrorPath;
+               c_MessageText = "Could not erase pre-existing target path "
+                                                      "(can result in partially erased target path):\n" + c_ErrorPath;
                break;
             case C_RD_WR:
-               c_MessageText =  C_GtGetText::h_GetText("Could not copy file:\n") + c_ErrorPath;
+               c_MessageText =  "Could not copy file:\n" + c_ErrorPath;
                break;
             case C_TIMEOUT:
-               c_MessageText =  C_GtGetText::h_GetText("Could not create target directory:\n") + c_ErrorPath;
+               c_MessageText =  "Could not create target directory:\n" + c_ErrorPath;
                break;
             default:
                c_MessageText =
-                  static_cast<QString>(C_GtGetText::h_GetText("Unknown: %1")).arg(C_Uti::h_StwError(s32_Return));
+                  static_cast<QString>("Unknown: %1").arg(C_Uti::h_StwError(s32_Return));
                break;
             }
             c_CompleteMessageText =
-               static_cast<QString>(C_GtGetText::h_GetText("Enter update mode: Error on creating temporary"
-                                                           " folder: %1")).arg(c_MessageText);
+               static_cast<QString>("Enter update mode: Error on creating temporary"
+                                                           " folder: %1").arg(c_MessageText);
             this->m_UpdateReportText(c_CompleteMessageText);
-            c_Message.SetHeading(C_GtGetText::h_GetText("System Update"));
+            c_Message.SetHeading("System Update");
             c_Message.SetDescription("Enter update mode: Error on creating temporary folder.");
             c_Message.SetDetails(c_MessageText);
             c_Message.SetCustomMinHeight(180, 250);
@@ -1404,15 +1387,14 @@ void C_SyvUpUpdateWidget::m_Connect(void)
       }
       else
       {
-         this->m_UpdateReportText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "Activate Flashloader: Cannot start. Error on creation temporary files: %1")).
+         this->m_UpdateReportText(static_cast<QString>("Activate Flashloader: Cannot start. Error on creation temporary files: %1").
                                   arg(C_Uti::h_StwError(s32_Return)));
       }
 
       if (s32_Return == C_NO_ERR)
       {
          // Start the connect sequence
-         this->m_UpdateReportText(C_GtGetText::h_GetText("Activate Flashloader: Started"));
+         this->m_UpdateReportText("Activate Flashloader: Started");
 
          s32_Return = this->mpc_UpSequences->StartActivateFlashloader();
 
@@ -1422,7 +1404,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
             if (this->mpc_ProgressLogContent != NULL)
             {
                // The thread was started, the communication is running...
-               this->mpc_ProgressLogContent->AddSubHeading(C_GtGetText::h_GetText("Entering update mode..."));
+               this->mpc_ProgressLogContent->AddSubHeading("Entering update mode...");
             }
 
             //Don't set step if timer still active
@@ -1439,8 +1421,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
          {
             //Thread access possible
             this->m_UpdateReportText(static_cast<QString>(
-                                        C_GtGetText::h_GetText(
-                                           "Activate Flashloader: Cannot start. Error on initialization: %1")).
+                                        "Activate Flashloader: Cannot start. Error on initialization: %1").
                                      arg(C_Uti::h_StwError(s32_Return)));
          }
       }
@@ -1451,7 +1432,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
          this->mq_StartUpdateAfterConnect = false;
 
          //Signal summary
-         this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", C_GtGetText::h_GetText("Disconnected!"));
+         this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", "Disconnected!");
          this->mpc_Ui->pc_WiUpdateInformation->SetDisconnected();
 
          //Signal scene
@@ -1465,8 +1446,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
    else
    {
       this->m_UpdateReportText(static_cast<QString>(
-                                  C_GtGetText::h_GetText(
-                                     "Activate Flashloader: Cannot start. Error on initialization: %1")).
+                                  "Activate Flashloader: Cannot start. Error on initialization: %1").
                                arg(C_Uti::h_StwError(s32_Return)));
    }
 
@@ -1475,7 +1455,7 @@ void C_SyvUpUpdateWidget::m_Connect(void)
       //Signal progress log
       if (this->mpc_ProgressLogContent != NULL)
       {
-         this->mpc_ProgressLogContent->AddSubHeading(C_GtGetText::h_GetText("Enter Update Mode failed!"));
+         this->mpc_ProgressLogContent->AddSubHeading("Enter Update Mode failed!");
          this->mpc_ProgressLogContent->AddLogHyperlink();
       }
 
@@ -1497,10 +1477,9 @@ void C_SyvUpUpdateWidget::m_Update(void)
    {
       // A connect was done and it failed
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("System Update"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "Update process cannot be started. There are active nodes, which are not responding. \n"
-                                  "Check the nodes connection and try again."));
+      c_Message.SetHeading("System Update");
+      c_Message.SetDescription("Update process cannot be started. There are active nodes, which are not responding. \n"
+                                  "Check the nodes connection and try again.");
       c_Message.SetCustomMinHeight(180, 180);
       c_Message.SetCustomMinWidth(650);
       c_Message.Execute();
@@ -1513,7 +1492,7 @@ void C_SyvUpUpdateWidget::m_Update(void)
       {
          // Reset summary
          this->mpc_Ui->pc_WiUpdateInformation->ResetSummary();
-         this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", C_GtGetText::h_GetText("Update mode active!"));
+         this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", "Update mode active!");
          if (this->mpc_UpSequences != NULL)
          {
             QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -1522,7 +1501,7 @@ void C_SyvUpUpdateWidget::m_Update(void)
             {
                int32_t s32_Return;
 
-               this->m_UpdateReportText(C_GtGetText::h_GetText("Update System started"));
+               this->m_UpdateReportText("Update System started");
 
                // Is a new update already possible
                while (this->mc_UpdateTimer.isValid() &&
@@ -1546,13 +1525,11 @@ void C_SyvUpUpdateWidget::m_Update(void)
                {
                   // No applications to update
                   C_OgeWiCustomMessage c_Message(this);
-                  c_Message.SetHeading(C_GtGetText::h_GetText("System Update"));
-                  c_Message.SetDescription(C_GtGetText::h_GetText(
-                                              "No System Update needed. All applications for the devices match the ones in the "
-                                              "Update Package. To update anyway see details."));
-                  c_Message.SetDetails(C_GtGetText::h_GetText(
-                                          "For updating a device nevertheless, there is an option to trigger a \"Force Update\" "
-                                          "in the \"Device Status Information\" dialog (double click on node)."));
+                  c_Message.SetHeading("System Update");
+                  c_Message.SetDescription("No System Update needed. All applications for the devices match the ones in the "
+                                              "Update Package. To update anyway see details.");
+                  c_Message.SetDetails("For updating a device nevertheless, there is an option to trigger a \"Force Update\" "
+                                          "in the \"Device Status Information\" dialog (double click on node).");
                   c_Message.SetCustomMinHeight(230, 270);
                   c_Message.Execute();
                }
@@ -1588,7 +1565,7 @@ void C_SyvUpUpdateWidget::m_Update(void)
                      //Signal progress log
                      if (this->mpc_ProgressLogContent != NULL)
                      {
-                        this->mpc_ProgressLogContent->SetHeading(C_GtGetText::h_GetText("System Update"));
+                        this->mpc_ProgressLogContent->SetHeading("System Update");
                      }
                      if (this->mq_ClearProgressLog == true)
                      {
@@ -1607,20 +1584,19 @@ void C_SyvUpUpdateWidget::m_Update(void)
                      }
                      if (this->mpc_ProgressLogContent != NULL)
                      {
-                        this->mpc_ProgressLogContent->AddSubHeading(C_GtGetText::h_GetText("Updating System..."));
+                        this->mpc_ProgressLogContent->AddSubHeading("Updating System...");
                      }
                      //Signal summary
                      //Reinit necessary if abort and update again
                      this->mpc_Ui->pc_WiUpdateInformation->InitUpdatePackage(this->mc_NodesToFlash, this->mc_NodesOrder,
                                                                              m_GetIsFileBasedFlagForEach(), true);
-                     this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", C_GtGetText::h_GetText("Updating System..."));
+                     this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", "Updating System...");
                      this->mpc_Ui->pc_WiUpdateInformation->StartElapsedTimer();
                   }
                   else
                   {
                      this->m_UpdateReportText(static_cast<QString>(
-                                                 C_GtGetText::h_GetText(
-                                                    "Update System: Cannot start. Thread is still busy.")).
+                                                 "Update System: Cannot start. Thread is still busy.").
                                               arg(C_Uti::h_StwError(s32_Return)));
 
                      m_HandleUpdateFailure();
@@ -1629,8 +1605,7 @@ void C_SyvUpUpdateWidget::m_Update(void)
             }
             else
             {
-               this->m_UpdateReportText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                "Update System: Cannot start. Error on System View.")));
+               this->m_UpdateReportText(static_cast<QString>("Update System: Cannot start. Error on System View."));
 
                m_HandleUpdateFailure();
             }
@@ -1643,7 +1618,7 @@ void C_SyvUpUpdateWidget::m_Update(void)
          //Signal progress log
          if (this->mpc_ProgressLogContent != NULL)
          {
-            this->mpc_ProgressLogContent->SetHeading(C_GtGetText::h_GetText("System Update"));
+            this->mpc_ProgressLogContent->SetHeading("System Update");
          }
          // Connect in the first step and start the update after the successful connecting sequence
          this->mq_StartUpdateAfterConnect = true;
@@ -1688,7 +1663,7 @@ void C_SyvUpUpdateWidget::m_DisconnectAction(void)
 
          this->mc_Timer.start();
 
-         this->m_UpdateReportText(C_GtGetText::h_GetText("Disconnect: Start"));
+         this->m_UpdateReportText("Disconnect: Start");
 
          //Signal scene
          if (this->mpc_Scene != NULL)
@@ -1703,12 +1678,11 @@ void C_SyvUpUpdateWidget::m_DisconnectAction(void)
 
          //Signal summary
          this->mpc_Ui->pc_WiUpdateInformation->ResetSummary();
-         this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", C_GtGetText::h_GetText("Exiting Update Mode..."));
+         this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", "Exiting Update Mode...");
       }
       else
       {
-         this->m_UpdateReportText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "Disconnect: Cannot start. Thread is still busy.")));
+         this->m_UpdateReportText(static_cast<QString>("Disconnect: Cannot start. Thread is still busy."));
          this->m_CleanUpSequence();
       }
    }
@@ -1726,11 +1700,10 @@ void C_SyvUpUpdateWidget::m_Cancel(void)
 
       C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
 
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("System Update"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                     "System Update is running. Do you really want to abort the current System Update?"));
-      c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Continue Update"));
-      c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Abort Update"));
+      c_MessageBox.SetHeading("System Update");
+      c_MessageBox.SetDescription("System Update is running. Do you really want to abort the current System Update?");
+      c_MessageBox.SetOkButtonText("Continue Update");
+      c_MessageBox.SetNoButtonText("Abort Update");
       c_MessageBox.SetCustomMinWidth(650);
       c_MessageBox.SetCustomMinHeight(180, 180);
       e_ReturnMessageBox = c_MessageBox.Execute();
@@ -1775,14 +1748,13 @@ void C_SyvUpUpdateWidget::m_Timer(void)
 
             if (s32_Result == C_NO_ERR)
             {
-               this->m_UpdateReportText(C_GtGetText::h_GetText("Read Device information: Start"));
+               this->m_UpdateReportText("Read Device information: Start");
 
                this->mc_Timer.start();
             }
             else
             {
-               this->m_UpdateReportText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                "Read Device information: Cannot start. Thread is still busy.")));
+               this->m_UpdateReportText(static_cast<QString>("Read Device information: Cannot start. Thread is still busy."));
             }
          }
          else
@@ -1827,7 +1799,7 @@ void C_SyvUpUpdateWidget::m_Timer(void)
             this->mpc_Ui->pc_PbUpdate->setEnabled(true);
 
             //Signal summary
-            this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", C_GtGetText::h_GetText("Update mode active!"));
+            this->mpc_Ui->pc_WiUpdateInformation->SetHeading("", "Update mode active!");
             //Signal scene
             if (this->mpc_Scene != NULL)
             {
@@ -1838,7 +1810,7 @@ void C_SyvUpUpdateWidget::m_Timer(void)
             //Signal progress log
             if (this->mpc_ProgressLogContent != NULL)
             {
-               this->mpc_ProgressLogContent->AddSubHeading(C_GtGetText::h_GetText("\nUpdate mode activated."));
+               this->mpc_ProgressLogContent->AddSubHeading("\nUpdate mode activated.");
             }
 
             if (this->mq_StartUpdateAfterConnect == true)
@@ -1881,12 +1853,10 @@ void C_SyvUpUpdateWidget::m_Timer(void)
                {
                   this->m_HandlePreconditionErrorType(
                      this->mc_NodePreconditionErrors.c_NvmWriteError,
-                     C_GtGetText::h_GetText(
-                        "Enter update mode failed.\n"
+                     "Enter update mode failed.\n"
                         "There are nodes, which do not support writing"
-                        " parameter set image files."),
-                     C_GtGetText::h_GetText(
-                        "Following node(s) do not support writing parameter set image files:\n"));
+                        " parameter set image files.",
+                     "Following node(s) do not support writing parameter set image files:\n");
                }
 
                // Error for PEM writing
@@ -1894,12 +1864,10 @@ void C_SyvUpUpdateWidget::m_Timer(void)
                {
                   this->m_HandlePreconditionErrorType(
                      this->mc_NodePreconditionErrors.c_PemWriteError,
-                     C_GtGetText::h_GetText(
-                        "Enter update mode failed.\n"
+                     "Enter update mode failed.\n"
                         "There are nodes, which do not support authentication"
-                        " and writing PEM files."),
-                     C_GtGetText::h_GetText(
-                        "Following node(s) do not support authentication and writing PEM files:\n"));
+                        " and writing PEM files.",
+                     "Following node(s) do not support authentication and writing PEM files:\n");
                }
 
                // Error for traffic encryption
@@ -1907,11 +1875,9 @@ void C_SyvUpUpdateWidget::m_Timer(void)
                {
                   this->m_HandlePreconditionErrorType(
                      this->mc_NodePreconditionErrors.c_TrafficEncryptionWriteError,
-                     C_GtGetText::h_GetText(
-                        "Enter update mode failed.\n"
-                        "There are nodes, which do not support traffic encryption."),
-                     C_GtGetText::h_GetText(
-                        "Following node(s) do not support traffic encryption:\n"));
+                     "Enter update mode failed.\n"
+                        "There are nodes, which do not support traffic encryption.",
+                     "Following node(s) do not support traffic encryption:\n");
                }
 
                // Error for debugger enabling
@@ -1919,12 +1885,10 @@ void C_SyvUpUpdateWidget::m_Timer(void)
                {
                   this->m_HandlePreconditionErrorType(
                      this->mc_NodePreconditionErrors.c_DebuggerEnableError,
-                     C_GtGetText::h_GetText(
-                        "Enter update mode failed.\n"
+                     "Enter update mode failed.\n"
                         "There are nodes, which do not support"
-                        " enabling the debugger."),
-                     C_GtGetText::h_GetText(
-                        "Following node(s) do not support enabling the debugger:\n"));
+                        " enabling the debugger.",
+                     "Following node(s) do not support enabling the debugger:\n");
                }
 
                // Error for debugger disabling
@@ -1932,12 +1896,10 @@ void C_SyvUpUpdateWidget::m_Timer(void)
                {
                   this->m_HandlePreconditionErrorType(
                      this->mc_NodePreconditionErrors.c_DebuggerDisableError,
-                     C_GtGetText::h_GetText(
-                        "Enter update mode failed.\n"
+                     "Enter update mode failed.\n"
                         "There are nodes, which do not support"
-                        " disabling the debugger."),
-                     C_GtGetText::h_GetText(
-                        "Following node(s) do not support disabling the debugger:\n"));
+                        " disabling the debugger.",
+                     "Following node(s) do not support disabling the debugger:\n");
                }
 
                // Error for Ethernet to Ethernet routing
@@ -1945,12 +1907,10 @@ void C_SyvUpUpdateWidget::m_Timer(void)
                {
                   this->m_HandlePreconditionErrorType(
                      this->mc_NodePreconditionErrors.c_EthToEthError,
-                     C_GtGetText::h_GetText(
-                        "Enter update mode failed.\n"
+                     "Enter update mode failed.\n"
                         "There are nodes, which do not support Ethernet"
-                        " to Ethernet routing."),
-                     C_GtGetText::h_GetText(
-                        "Following node(s) do not support Ethernet to Ethernet routing:\n"));
+                        " to Ethernet routing.",
+                     "Following node(s) do not support Ethernet to Ethernet routing:\n");
                }
             }
          }
@@ -1978,43 +1938,40 @@ void C_SyvUpUpdateWidget::m_Timer(void)
          switch (s32_SequenceResult)
          {
          case C_NO_ERR:
-            c_Message = C_GtGetText::h_GetText("Update successful.");
+            c_Message = "Update successful.";
             break;
          case C_CONFIG:
-            c_Message = C_GtGetText::h_GetText(
-               "Initialization of update mechanism invalid or no signature block found in file.");
+            c_Message = "Initialization of update mechanism invalid or no signature block found in file.";
             break;
          case C_OVERFLOW:
-            c_Message = C_GtGetText::h_GetText("Node configuration is invalid.");
+            c_Message = "Node configuration is invalid.";
             break;
          case C_NOACT:
-            c_Message = C_GtGetText::h_GetText("File configuration is invalid.");
+            c_Message = "File configuration is invalid.";
             break;
          case C_RD_WR:
-            c_Message = C_GtGetText::h_GetText("File does not exist.");
+            c_Message = "File does not exist.";
             break;
          case C_COM:
-            c_Message = C_GtGetText::h_GetText("Communication problem.");
+            c_Message = "Communication problem.";
             break;
          case C_BUSY:
-            c_Message = C_GtGetText::h_GetText("User aborted the update.");
+            c_Message = "User aborted the update.";
             break;
          case C_WARN:
-            c_Message = C_GtGetText::h_GetText("A PEM file could be extracted.");
+            c_Message = "A PEM file could be extracted.";
             break;
          case C_DEFAULT:
-            c_Message = C_GtGetText::h_GetText("At least one of the *.syde_psi file has an invalid checksum.");
+            c_Message = "At least one of the *.syde_psi file has an invalid checksum.";
             break;
          case C_RANGE:
-            c_Message = C_GtGetText::h_GetText(
-               "At least one necessary feature of the openSYDE Flashloader is not available for NVM writing.");
+            c_Message = "At least one necessary feature of the openSYDE Flashloader is not available for NVM writing.";
             break;
          case C_CHECKSUM:
-            c_Message = C_GtGetText::h_GetText(
-               "Authentication between openSYDE Tool and device(s) has failed. Access denied.");
+            c_Message = "Authentication between openSYDE Tool and device(s) has failed. Access denied.";
             break;
          default:
-            c_Message = C_GtGetText::h_GetText("Unknown error occurred.");
+            c_Message = "Unknown error occurred.";
             break;
          }
 
@@ -2068,7 +2025,7 @@ void C_SyvUpUpdateWidget::m_Timer(void)
             //Signal progress log
             if (this->mpc_ProgressLogContent != NULL)
             {
-               this->mpc_ProgressLogContent->UpdateStatus(u32_ErrorNodeIndex, C_GtGetText::h_GetText("FAIL"), true);
+               this->mpc_ProgressLogContent->UpdateStatus(u32_ErrorNodeIndex, "FAIL", true);
             }
             //Signal scene
             if (this->mpc_Scene != NULL)
@@ -2077,13 +2034,13 @@ void C_SyvUpUpdateWidget::m_Timer(void)
                this->mpc_Scene->StopProgressAnimation(true, this->mu32_ApplicationIndex, true);
             }
             // Need to be written before m_HandleUpdateFailure due to the link in the message box
-            this->m_UpdateReportText(static_cast<QString>(C_GtGetText::h_GetText("Update System: %1")).arg(c_Message));
+            this->m_UpdateReportText(static_cast<QString>("Update System: %1").arg(c_Message));
 
             m_HandleUpdateFailure();
          }
          else
          {
-            this->m_UpdateReportText(static_cast<QString>(C_GtGetText::h_GetText("Update System: %1")).arg(c_Message));
+            this->m_UpdateReportText(static_cast<QString>("Update System: %1").arg(c_Message));
          }
 
          this->mpc_Ui->pc_WiUpdateInformation->SetUpdateFinished();
@@ -2128,16 +2085,15 @@ void C_SyvUpUpdateWidget::m_Timer(void)
          C_OgeWiCustomMessage c_MessageAuth(this, C_OgeWiCustomMessage::E_Type::eERROR);
 
          C_OscLoggingHandler::h_Flush();
-         c_MessageAuth.SetHeading(C_GtGetText::h_GetText("System Update"));
-         c_MessageAuth.SetDescription(C_GtGetText::h_GetText(
-                                         "Authentication between openSYDE Tool and device(s) has failed. Access denied."));
-         c_MessageAuth.SetDetails(C_GtGetText::h_GetText("Possible reasons:<br/>"
+         c_MessageAuth.SetHeading("System Update");
+         c_MessageAuth.SetDescription("Authentication between openSYDE Tool and device(s) has failed. Access denied.");
+         c_MessageAuth.SetDetails("Possible reasons:<br/>"
                                                          "- Associated private key (*.pem) not found in /certificates folder (most common)<br/>"
                                                          "- Failure during authenfication process<br/>"
-                                                         "For more information see ") +
-                                  C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLESHEET_GUIDE_COLOR_LINK,
+                                                         "For more information see " +
+                                  C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
                                                    C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) +
-                                  C_GtGetText::h_GetText("."));
+                                  ".");
          c_MessageAuth.SetCustomMinHeight(200, 300);
          c_MessageAuth.Execute();
       }
@@ -2158,7 +2114,7 @@ void C_SyvUpUpdateWidget::m_HandlePreconditionErrorType(const std::vector<uint32
 {
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("System Update"));
+   c_Message.SetHeading("System Update");
    QString c_Details = orc_DetailsStart;
    uint32_t u32_NodeCounter;
 
@@ -2198,8 +2154,7 @@ void C_SyvUpUpdateWidget::m_HandleNodePreconditionError(QString & orc_ErrorText,
    //Signal progress log
    if (this->mpc_ProgressLogContent != NULL)
    {
-      this->mpc_ProgressLogContent->UpdateStatus(ou32_ErrorNodeIndex, C_GtGetText::h_GetText(
-                                                    "FAIL"), false);
+      this->mpc_ProgressLogContent->UpdateStatus(ou32_ErrorNodeIndex, "FAIL", false);
    }
    //Signal scene
    if (this->mpc_Scene != NULL)
@@ -2226,12 +2181,12 @@ void C_SyvUpUpdateWidget::m_HandleConnectionFailure(const bool oq_SuppressMessag
    if (this->mq_NodesPreconditionError == false)
    {
       this->mpc_Ui->pc_WiUpdateInformation->SetHeading("",
-                                                       C_GtGetText::h_GetText("Update mode active. Errors detected!"));
+                                                       "Update mode active. Errors detected!");
    }
    else
    {
       this->mpc_Ui->pc_WiUpdateInformation->SetHeading("",
-                                                       C_GtGetText::h_GetText("Update mode active. Nodes not capable!"));
+                                                       "Update mode active. Nodes not capable!");
    }
    //Signal progress log
    if (this->mpc_ProgressLogContent != NULL)
@@ -2300,7 +2255,7 @@ void C_SyvUpUpdateWidget::m_HandleConnectionFailure(const bool oq_SuppressMessag
             //Signal progress log
             m_AddProgressLogConnectEntry(ru32_CurActiveNodeIndex);
 
-            this->mpc_ProgressLogContent->UpdateStatus(ru32_CurActiveNodeIndex, C_GtGetText::h_GetText("FAIL"),
+            this->mpc_ProgressLogContent->UpdateStatus(ru32_CurActiveNodeIndex, "FAIL",
                                                        false);
 
             //Signal scene
@@ -2313,14 +2268,13 @@ void C_SyvUpUpdateWidget::m_HandleConnectionFailure(const bool oq_SuppressMessag
       {
          const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("System Update"));
-         c_Message.SetDescription(C_GtGetText::h_GetText(
-                                     "Enter update mode failed."
-                                     " Details see node progress log and log file."));
-         c_Message.SetDetails(C_GtGetText::h_GetText("For more information see ") +
-                              C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"),
+         c_Message.SetHeading("System Update");
+         c_Message.SetDescription("Enter update mode failed."
+                                     " Details see node progress log and log file.");
+         c_Message.SetDetails("For more information see " +
+                              C_Uti::h_GetLink("log file",
                                                mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                               c_Log) + C_GtGetText::h_GetText("."));
+                                               c_Log) + ".");
          c_Message.SetCustomMinHeight(180, 230);
          c_Message.Execute();
       }
@@ -2335,7 +2289,7 @@ void C_SyvUpUpdateWidget::m_HandleUpdateFailure(void)
 {
    //Signal summary
    this->mpc_Ui->pc_WiUpdateInformation->SetHeading("://images/system_views/UpdateSummaryFailure.svg",
-                                                    C_GtGetText::h_GetText("System Update failed!"), true, false);
+                                                    "System Update failed!", true, false);
    this->mpc_Ui->pc_WiUpdateInformation->StopElapsedTimer();
    //Signal progress log
    if (this->mpc_ProgressLogContent != NULL)
@@ -2347,14 +2301,13 @@ void C_SyvUpUpdateWidget::m_HandleUpdateFailure(void)
    {
       const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("System Update"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "Update failed."
-                                  " Details see node progress log and log file."));
-      c_Message.SetDetails(C_GtGetText::h_GetText("For more information see ") +
-                           C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"),
+      c_Message.SetHeading("System Update");
+      c_Message.SetDescription("Update failed."
+                                  " Details see node progress log and log file.");
+      c_Message.SetDetails("For more information see " +
+                           C_Uti::h_GetLink("log file",
                                             mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                            c_Log) + C_GtGetText::h_GetText("."));
+                                            c_Log) + ".");
       c_Message.SetCustomMinHeight(180, 230);
       c_Message.Execute();
    }
@@ -2381,7 +2334,7 @@ void C_SyvUpUpdateWidget::m_InitProgressLog(void)
    if (this->mpc_ProgressLog == NULL)
    {
       mpc_ProgressLogContent = new C_SyvUpProgressLog();
-      mpc_ProgressLog = new C_OgeWiHover(*mpc_ProgressLogContent, C_GtGetText::h_GetText("PROGRESS LOG"),
+      mpc_ProgressLog = new C_OgeWiHover(*mpc_ProgressLogContent, "PROGRESS LOG",
                                          ":images/system_views/IconProgressLog.svg", false, this->mpc_ProgressLogParent,
                                          this->mpc_ProgressLogParent);
    }
@@ -2389,7 +2342,7 @@ void C_SyvUpUpdateWidget::m_InitProgressLog(void)
    // create fix minimized progress log
    if (this->mpc_FixMinimizedProgressLog == NULL)
    {
-      this->mpc_FixMinimizedProgressLog = new C_OgeWiFixPosition(C_GtGetText::h_GetText("PROGRESS LOG"),
+      this->mpc_FixMinimizedProgressLog = new C_OgeWiFixPosition("PROGRESS LOG",
                                                                  ":images/system_views/IconProgressLog.svg",
                                                                  QRect(1449, 14, 190, 36), this->mpc_ProgressLogParent);
    }
@@ -2472,7 +2425,7 @@ void C_SyvUpUpdateWidget::m_AddProgressLogConnectEntry(const uint32_t ou32_NodeI
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
       if (pc_Node != NULL)
       {
-         const QString c_Text = static_cast<QString>(C_GtGetText::h_GetText("Get status from %1...")).arg(
+         const QString c_Text = static_cast<QString>("Get status from %1...").arg(
             pc_Node->c_Properties.c_Name.c_str());
          this->mpc_ProgressLogContent->AddEntry(ou32_NodeIndex, c_Text, false);
       }

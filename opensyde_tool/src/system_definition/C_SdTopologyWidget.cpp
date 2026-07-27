@@ -24,7 +24,6 @@
 #include "C_SebGraphicsView.hpp"
 #include "C_HeHandler.hpp"
 #include "C_SdTopologyToolbox.hpp"
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 #include "C_OgeWiUtil.hpp"
 
@@ -140,11 +139,11 @@ void C_SdTopologyWidget::SetParentHook(QWidget * const opc_Parent)
 
       pc_TopologyToolboxWidget = new C_SdTopologyToolbox();
       this->mpc_Toolbox =
-         new C_OgeWiHover(*pc_TopologyToolboxWidget, C_GtGetText::h_GetText("TOOLBOX"), ":images/IconToolbox.svg",
+         new C_OgeWiHover(*pc_TopologyToolboxWidget, "TOOLBOX", ":images/IconToolbox.svg",
                           true, opc_Parent, opc_Parent);
 
       // create fix minimized toolbox
-      this->mpc_FixMinimizedToolbox = new C_OgeWiFixPosition(C_GtGetText::h_GetText("TOOLBOX"),
+      this->mpc_FixMinimizedToolbox = new C_OgeWiFixPosition("TOOLBOX",
                                                              ":images/IconToolbox.svg",
                                                              QRect(1449, 14, 190, 36), opc_Parent);
       // check for saved default values for toolbox

@@ -17,7 +17,6 @@
 #include "stwtypes.hpp"
 #include "constants.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvDaDashboardScene.hpp"
 #include "C_SyvDaUnoAddCommand.hpp"
 
@@ -241,10 +240,10 @@ void C_SyvDaUnoAddCommand::m_AddNew(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaUnoAddCommand::mh_DecodeTheme(C_PuiSvDbWidgetBase & orc_Base, const QString & orc_Theme)
 {
-   const QString c_Theme1 = C_GtGetText::h_GetText("openSYDE");
-   const QString c_Theme2 = C_GtGetText::h_GetText("Material");
-   const QString c_Theme3 = C_GtGetText::h_GetText("Flat");
-   const QString c_Theme4 = C_GtGetText::h_GetText("Skeuomorphic");
+   const QString c_Theme1 = "openSYDE";
+   const QString c_Theme2 = "Material";
+   const QString c_Theme3 = "Flat";
+   const QString c_Theme4 = "Skeuomorphic";
 
    if (orc_Theme.compare(c_Theme1) == 0)
    {

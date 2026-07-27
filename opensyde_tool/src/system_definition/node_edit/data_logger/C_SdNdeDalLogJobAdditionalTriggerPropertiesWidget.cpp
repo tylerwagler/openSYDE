@@ -15,7 +15,6 @@
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_PuiSdUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
 #include "C_OscNodeDataPoolContentUtil.hpp"
@@ -132,30 +131,26 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::Save()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::InitStaticNames() const
 {
-   this->mpc_Ui->pc_ChkBoxAdditionalTrigger->setText(C_GtGetText::h_GetText("Enabled"));
-   this->mpc_Ui->pc_ChkBoxAdditionalTrigger->SetToolTipInformation(C_GtGetText::h_GetText("Additional Trigger"),
-                                                                   C_GtGetText::h_GetText(
-                                                                      "Activate additional data trigger for logging"));
-   this->mpc_Ui->pc_LabelDataElement->setText(C_GtGetText::h_GetText("Data Element"));
-   this->mpc_Ui->pc_LabelDataElement->SetToolTipInformation(C_GtGetText::h_GetText("Data Element"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Which data element changes should be used to trigger logging"));
-   this->mpc_Ui->pc_LabelOperation->setText(C_GtGetText::h_GetText("Operation"));
-   this->mpc_Ui->pc_LabelOperation->SetToolTipInformation(C_GtGetText::h_GetText("Operation"),
-                                                          C_GtGetText::h_GetText(
-                                                             "Which operation should be used for the threshold to trigger logging"));
-   this->mpc_Ui->pc_LabelThreshold->setText(C_GtGetText::h_GetText("Threshold"));
-   this->mpc_Ui->pc_LabelThreshold->SetToolTipInformation(C_GtGetText::h_GetText("Threshold"),
-                                                          C_GtGetText::h_GetText(
-                                                             "Threshold for configured data element to reach to trigger logging"));
+   this->mpc_Ui->pc_ChkBoxAdditionalTrigger->setText("Enabled");
+   this->mpc_Ui->pc_ChkBoxAdditionalTrigger->SetToolTipInformation("Additional Trigger",
+                                                                   "Activate additional data trigger for logging");
+   this->mpc_Ui->pc_LabelDataElement->setText("Data Element");
+   this->mpc_Ui->pc_LabelDataElement->SetToolTipInformation("Data Element",
+                                                            "Which data element changes should be used to trigger logging");
+   this->mpc_Ui->pc_LabelOperation->setText("Operation");
+   this->mpc_Ui->pc_LabelOperation->SetToolTipInformation("Operation",
+                                                          "Which operation should be used for the threshold to trigger logging");
+   this->mpc_Ui->pc_LabelThreshold->setText("Threshold");
+   this->mpc_Ui->pc_LabelThreshold->SetToolTipInformation("Threshold",
+                                                          "Threshold for configured data element to reach to trigger logging");
 
    this->mpc_Ui->pc_LabelExpertView->SetForegroundColor(4);
    this->mpc_Ui->pc_LabelExpertView->SetFontPixel(12, false, false);
-   this->mpc_Ui->pc_LabelExpertView->setText(C_GtGetText::h_GetText("Expert View"));
-   this->mpc_Ui->pc_LabelCondition->setText(C_GtGetText::h_GetText("Condition"));
-   this->mpc_Ui->pc_PubEdit->setText(C_GtGetText::h_GetText("Edit"));
-   this->mpc_Ui->pc_PushButtonDataElement->setText(C_GtGetText::h_GetText(""));
-   this->mpc_Ui->pc_LineEditDataElement->setText(C_GtGetText::h_GetText(""));
+   this->mpc_Ui->pc_LabelExpertView->setText("Expert View");
+   this->mpc_Ui->pc_LabelCondition->setText("Condition");
+   this->mpc_Ui->pc_PubEdit->setText("Edit");
+   this->mpc_Ui->pc_PushButtonDataElement->setText("");
+   this->mpc_Ui->pc_LineEditDataElement->setText("");
 
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_PubEdit, "Edit_Hyperlink", true);
    this->mpc_Ui->pc_PubEdit->setCursor(Qt::PointingHandCursor);
@@ -303,17 +298,15 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_InitSupportedOperation
 {
    this->mc_MapCoreOperationToUi.clear();
    this->mc_MapCoreOperationToUi.emplace_back(std::pair<QString, QString>("<",
-                                                                          C_GtGetText::h_GetText("<  (smaller than)")));
+                                                                          "<  (smaller than)"));
    this->mc_MapCoreOperationToUi.emplace_back(std::pair<QString, QString>("<=",
-                                                                          C_GtGetText::h_GetText(
-                                                                             "<= (smaller than or equal)")));
+                                                                          "<= (smaller than or equal)"));
    this->mc_MapCoreOperationToUi.emplace_back(std::pair<QString, QString>("==",
-                                                                          C_GtGetText::h_GetText("== (equal to)")));
+                                                                          "== (equal to)"));
    this->mc_MapCoreOperationToUi.emplace_back(std::pair<QString, QString>(">",
-                                                                          C_GtGetText::h_GetText(">  (greater than)")));
+                                                                          ">  (greater than)"));
    this->mc_MapCoreOperationToUi.emplace_back(std::pair<QString, QString>(">=",
-                                                                          C_GtGetText::h_GetText(
-                                                                             ">= (greater than or equal)")));
+                                                                          ">= (greater than or equal)"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -563,7 +556,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_SetOperation(const QSt
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_DisconnectChangeTriggers() const
 {
-   disconnect(this->mpc_Ui->pc_ChkBoxAdditionalTrigger, &QCheckBox::checkStateChanged,
+   disconnect(this->mpc_Ui->pc_ChkBoxAdditionalTrigger, &QCheckBox::stateChanged,
               this, &C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_AdditionalTriggerEnabledChanged);
    disconnect(this->mpc_Ui->pc_ComboBoxOperation,
               static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged),
@@ -586,7 +579,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_DisconnectChangeTrigge
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_ReconnectChangeTriggers() const
 {
-   connect(this->mpc_Ui->pc_ChkBoxAdditionalTrigger, &QCheckBox::checkStateChanged,
+   connect(this->mpc_Ui->pc_ChkBoxAdditionalTrigger, &QCheckBox::stateChanged,
            this, &C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_AdditionalTriggerEnabledChanged);
    connect(this->mpc_Ui->pc_ComboBoxOperation,
            static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged),
@@ -783,11 +776,10 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_ToggleExpertView()
          C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
 
          // Show message
-         c_Message.SetHeading(C_GtGetText::h_GetText("Trigger Condition"));
-         c_Message.SetDescription(C_GtGetText::h_GetText(
-                                     "Are you sure you want to switch to the simple view? Current condition will be deleted."));
-         c_Message.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-         c_Message.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+         c_Message.SetHeading("Trigger Condition");
+         c_Message.SetDescription("Are you sure you want to switch to the simple view? Current condition will be deleted.");
+         c_Message.SetOkButtonText("Continue");
+         c_Message.SetNoButtonText("Cancel");
          c_Message.SetCustomMinHeight(180, 270);
          e_ReturnMessageBox = c_Message.Execute();
 
@@ -795,8 +787,8 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_ToggleExpertView()
          if (e_ReturnMessageBox == C_OgeWiCustomMessage::eOK)
          {
             // Reset GUI texts and combobox index
-            this->mpc_Ui->pc_LineEditDataElement->setText(C_GtGetText::h_GetText(""));
-            this->mpc_Ui->pc_LineEditThreshold->setText(C_GtGetText::h_GetText(""));
+            this->mpc_Ui->pc_LineEditDataElement->setText("");
+            this->mpc_Ui->pc_LineEditThreshold->setText("");
             this->mpc_Ui->pc_ComboBoxOperation->setCurrentIndex(-1);
             this->mc_SelectedOptArrayId.MarkInvalid();
 
@@ -959,7 +951,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_ApplyTriggerConditionT
          c_Threshold = this->mpc_Ui->pc_WidgetThreshold->GetValue().toString();
       }
 
-      c_TriggerCondition = static_cast<QString>(C_GtGetText::h_GetText("%1 %2 %3")).arg(
+      c_TriggerCondition = static_cast<QString>("%1 %2 %3").arg(
          this->mpc_Ui->pc_LineEditDataElement->text(),
          m_GetOperationForCore(),
          c_Threshold);
@@ -1002,12 +994,11 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_SetExpertTriggerCondit
 
       if (c_ElidedText != c_OriginalText)
       {
-         this->mpc_Ui->pc_LabelConditionExp->SetToolTipInformation(C_GtGetText::h_GetText(""), c_OriginalText);
+         this->mpc_Ui->pc_LabelConditionExp->SetToolTipInformation("", c_OriginalText);
       }
       else
       {
-         this->mpc_Ui->pc_LabelConditionExp->SetToolTipInformation(C_GtGetText::h_GetText(""), C_GtGetText::h_GetText(
-                                                                      ""));
+         this->mpc_Ui->pc_LabelConditionExp->SetToolTipInformation("", "");
       }
    }
 }

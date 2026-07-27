@@ -16,7 +16,6 @@
 #include "ui_C_GiSyLineWidget.h"
 
 #include "C_HeHandler.hpp"
-#include "C_GtGetText.hpp"
 #include <QPushButton>
 #include "C_UtiStyleSheets.hpp"
 #include "C_GiLiLine.hpp"
@@ -170,12 +169,12 @@ C_GiSyLineWidget::~C_GiSyLineWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyLineWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelWidth->setText(C_GtGetText::h_GetText("Width"));
-   this->mpc_Ui->pc_LabelColor->setText(C_GtGetText::h_GetText("Color"));
-   this->mpc_Ui->pc_LabelColorInner->setText(C_GtGetText::h_GetText("Inner Line Color"));
-   this->mpc_Ui->pc_LabelLineStyle->setText(C_GtGetText::h_GetText("Dash Type"));
-   this->mpc_Ui->pc_LabelLineStartArrow->setText(C_GtGetText::h_GetText("Begin Type"));
-   this->mpc_Ui->pc_LabelLineEndArrow->setText(C_GtGetText::h_GetText("End Type"));
+   this->mpc_Ui->pc_LabelWidth->setText("Width");
+   this->mpc_Ui->pc_LabelColor->setText("Color");
+   this->mpc_Ui->pc_LabelColorInner->setText("Inner Line Color");
+   this->mpc_Ui->pc_LabelLineStyle->setText("Dash Type");
+   this->mpc_Ui->pc_LabelLineStartArrow->setText("Begin Type");
+   this->mpc_Ui->pc_LabelLineEndArrow->setText("End Type");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -12,7 +12,6 @@
 
 #include "C_SyvDaDashboardToolbox.hpp"
 #include "ui_C_SyvDaDashboardToolbox.h"
-#include "C_GtGetText.hpp"
 #include "C_SebToolboxUtil.hpp"
 #include "C_OgeWiUtil.hpp"
 
@@ -81,10 +80,10 @@ C_SyvDaDashboardToolbox::~C_SyvDaDashboardToolbox()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardToolbox::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(0, C_GtGetText::h_GetText("Widgets"));
-   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(1, C_GtGetText::h_GetText("Function Blocks"));
-   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(2, C_GtGetText::h_GetText("Meta"));
-   this->mpc_Ui->pc_LabelFreeElements->setText(C_GtGetText::h_GetText("Meta Information Elements"));
+   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(0, "Widgets");
+   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(1, "Function Blocks");
+   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(2, "Meta");
+   this->mpc_Ui->pc_LabelFreeElements->setText("Meta Information Elements");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -134,16 +133,16 @@ void C_SyvDaDashboardToolbox::m_FillToolboxStatic(void)
 
    //Function blocks
    //---------------
-   pc_List = C_SebToolboxUtil::h_AddNewList(C_GtGetText::h_GetText("Parametrization"), this->mpc_Ui->pc_VerticalLayout3,
+   pc_List = C_SebToolboxUtil::h_AddNewList("Parametrization", this->mpc_Ui->pc_VerticalLayout3,
                                             this->mc_ListWidgets, this);
    C_SebToolboxUtil::h_AddElementToList(pc_List,
-                                        C_GtGetText::h_GetText("Parametrization Widget"),
+                                        "Parametrization Widget",
                                         "://images/system_views/dashboards/function_blocks/PreviewParamWidget.svg",
                                         "://images/system_views/dashboards/function_blocks/PreviewParamWidgetDark.svg",
-                                        C_GtGetText::h_GetText("This widget is used to read data from and write data "
+                                        "This widget is used to read data from and write data "
                                                                "to the NVM memory of the ECU reference over the NVM "
-                                                               "Datapools."),
-                                        C_GtGetText::h_GetText("Parametrization Widget"));
+                                                               "Datapools.",
+                                        "Parametrization Widget");
 
    // add a final spacer
    C_SebToolboxUtil::h_AddFinalSpacer(this->mpc_Ui->pc_VerticalLayout3, pc_List);
@@ -164,18 +163,17 @@ void C_SyvDaDashboardToolbox::m_FillToolboxStatic(void)
 void C_SyvDaDashboardToolbox::m_AddWidgetItems(void)
 {
    //No global static variable because gettext needs to be initialized first
-   const QString c_Theme1 = C_GtGetText::h_GetText("openSYDE");
-   const QString c_Theme2 = C_GtGetText::h_GetText("Material");
-   const QString c_Theme3 = C_GtGetText::h_GetText("Flat");
-   const QString c_Theme4 = C_GtGetText::h_GetText("Skeuomorphic");
-   const QString c_ToolTipPrefix = C_GtGetText::h_GetText(" Theme");
+   const QString c_Theme1 = "openSYDE";
+   const QString c_Theme2 = "Material";
+   const QString c_Theme3 = "Flat";
+   const QString c_Theme4 = "Skeuomorphic";
+   const QString c_ToolTipPrefix = " Theme";
    C_SdTopologyListWidget * pc_List;
 
    this->mpc_FrameSeparatorReadingWidgets =
-      C_SebToolboxUtil::h_AddNewHeading(C_GtGetText::h_GetText("Reading Widgets"),
+      C_SebToolboxUtil::h_AddNewHeading("Reading Widgets",
                                         this->mpc_Ui->pc_VerticalLayout1, this, false);
-   pc_List = C_SebToolboxUtil::h_AddNewList(C_GtGetText::h_GetText(
-                                               "Value Label"), this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
+   pc_List = C_SebToolboxUtil::h_AddNewList("Value Label", this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
                                             this);
    C_SebToolboxUtil::h_AddElementToList(pc_List, c_Theme1, "://images/system_views/dashboards/ValueLabelStw.png",
                                         "://images/system_views/dashboards/ValueLabelStwDark.png",
@@ -190,8 +188,7 @@ void C_SyvDaDashboardToolbox::m_AddWidgetItems(void)
                                         "://images/system_views/dashboards/ValueLabelSkeuDark.png",
                                         c_Theme4 + c_ToolTipPrefix);
 
-   pc_List = C_SebToolboxUtil::h_AddNewList(C_GtGetText::h_GetText(
-                                               "Pie Chart"), this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
+   pc_List = C_SebToolboxUtil::h_AddNewList("Pie Chart", this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
                                             this);
    C_SebToolboxUtil::h_AddElementToList(pc_List, c_Theme1, "://images/system_views/dashboards/PieChartStw.png",
                                         "://images/system_views/dashboards/PieChartStwDark.png",
@@ -206,8 +203,7 @@ void C_SyvDaDashboardToolbox::m_AddWidgetItems(void)
                                         "://images/system_views/dashboards/PieChartSkeuDark.png",
                                         c_Theme4 + c_ToolTipPrefix);
 
-   pc_List = C_SebToolboxUtil::h_AddNewList(C_GtGetText::h_GetText(
-                                               "Bar"), this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
+   pc_List = C_SebToolboxUtil::h_AddNewList("Bar", this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
                                             this);
    C_SebToolboxUtil::h_AddElementToList(pc_List, c_Theme1, "://images/system_views/dashboards/ProgressBarHorStw.png",
                                         "://images/system_views/dashboards/ProgressBarHorStwDark.png",
@@ -222,8 +218,7 @@ void C_SyvDaDashboardToolbox::m_AddWidgetItems(void)
                                         "://images/system_views/dashboards/ProgressBarHorSkeuDark.png",
                                         c_Theme4 + c_ToolTipPrefix);
 
-   pc_List = C_SebToolboxUtil::h_AddNewList(C_GtGetText::h_GetText(
-                                               "Table"), this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
+   pc_List = C_SebToolboxUtil::h_AddNewList("Table", this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
                                             this);
    C_SebToolboxUtil::h_AddElementToList(pc_List, c_Theme1, "://images/system_views/dashboards/DataListStw.png",
                                         "://images/system_views/dashboards/DataListStwDark.png",
@@ -240,11 +235,10 @@ void C_SyvDaDashboardToolbox::m_AddWidgetItems(void)
 
    //add free space
    this->mpc_FrameSeparatorWritingWidgets =
-      C_SebToolboxUtil::h_AddNewHeading(C_GtGetText::h_GetText("Writing Widgets"),
+      C_SebToolboxUtil::h_AddNewHeading("Writing Widgets",
                                         this->mpc_Ui->pc_VerticalLayout1, this, true);
 
-   pc_List = C_SebToolboxUtil::h_AddNewList(C_GtGetText::h_GetText(
-                                               "Toggle"), this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
+   pc_List = C_SebToolboxUtil::h_AddNewList("Toggle", this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
                                             this);
    C_SebToolboxUtil::h_AddElementToList(pc_List, c_Theme1, "://images/system_views/dashboards/ToggleStw.png",
                                         "://images/system_views/dashboards/ToggleStwDark.png",
@@ -259,8 +253,7 @@ void C_SyvDaDashboardToolbox::m_AddWidgetItems(void)
                                         "://images/system_views/dashboards/ToggleSkeuDark.png",
                                         c_Theme4 + c_ToolTipPrefix);
 
-   pc_List = C_SebToolboxUtil::h_AddNewList(C_GtGetText::h_GetText(
-                                               "Slider"), this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
+   pc_List = C_SebToolboxUtil::h_AddNewList("Slider", this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
                                             this);
    C_SebToolboxUtil::h_AddElementToList(pc_List, c_Theme1, "://images/system_views/dashboards/SliderStw.png",
                                         "://images/system_views/dashboards/SliderStwDark.png",
@@ -275,8 +268,7 @@ void C_SyvDaDashboardToolbox::m_AddWidgetItems(void)
                                         "://images/system_views/dashboards/SliderSkeuDark.png",
                                         c_Theme4 + c_ToolTipPrefix);
 
-   pc_List = C_SebToolboxUtil::h_AddNewList(C_GtGetText::h_GetText(
-                                               "Spinbox"), this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
+   pc_List = C_SebToolboxUtil::h_AddNewList("Spinbox", this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets,
                                             this);
    C_SebToolboxUtil::h_AddElementToList(pc_List, c_Theme1, "://images/system_views/dashboards/SpinBoxStw.png",
                                         "://images/system_views/dashboards/SpinBoxStwDark.png",

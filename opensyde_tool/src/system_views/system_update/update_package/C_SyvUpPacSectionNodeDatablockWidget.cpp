@@ -21,7 +21,6 @@
 #include "C_SyvUpPacSectionNodeDatablockWidget.hpp"
 #include "ui_C_SyvUpPacSectionNodeWidget.h"
 #include "C_OscNodeApplication.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_SyvUpPacListNodeItemDatablockWidget.hpp"
@@ -76,7 +75,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(const QString & orc_File,
 {
    bool q_FileIsOk = false;
 
-   if (orc_File == C_GtGetText::h_GetText(mhc_REMOVE_PATH_TEXT.toStdString().c_str()))
+   if (orc_File == mhc_REMOVE_PATH_TEXT.toStdString().c_str())
    {
       // Special case. Removing file. No check necessary
       if (this->me_Type == C_OscNodeApplication::ePARAMETER_SET_HALC)
@@ -165,12 +164,11 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(const QString & orc_File,
                      if (q_FileIsOk == false)
                      {
                         C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                        c_Message.SetHeading(C_GtGetText::h_GetText("Update Package Configuration"));
-                        c_Message.SetDescription(C_GtGetText::h_GetText("Device type of selected HEX file does not "
-                                                                        "match the node type."));
+                        c_Message.SetHeading("Update Package Configuration");
+                        c_Message.SetDescription("Device type of selected HEX file does not "
+                                                                        "match the node type.");
                         c_Message.SetDetails(
-                           static_cast<QString>(C_GtGetText::h_GetText(
-                                                   "Device type of %1 does not match node type %2."))
+                           static_cast<QString>("Device type of %1 does not match node type %2.")
                            .arg(c_AppDeviceType.trimmed(), this->mc_DeviceType.trimmed()));
                         c_Message.SetCustomMinHeight(230, 250);
                         c_Message.Execute();
@@ -181,16 +179,16 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(const QString & orc_File,
                {
                   // HEX file application block information is invalid
                   C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                  c_Message.SetHeading(C_GtGetText::h_GetText("Update Package Configuration"));
+                  c_Message.SetHeading("Update Package Configuration");
                   if (s32_Result == C_OVERFLOW)
                   {
-                     c_Message.SetDescription(C_GtGetText::h_GetText("HEX file has multiple application information "
-                                                                     "blocks with non-equal device names!"));
+                     c_Message.SetDescription("HEX file has multiple application information "
+                                                                     "blocks with non-equal device names!");
                      c_Message.SetCustomMinHeight(180, 180);
                   }
                   else
                   {
-                     c_Message.SetDescription(C_GtGetText::h_GetText("HEX file has no application information block!"));
+                     c_Message.SetDescription("HEX file has no application information block!");
                      c_Message.SetCustomMinHeight(180, 180);
                   }
                   c_Message.Execute();
@@ -198,12 +196,12 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(const QString & orc_File,
             }
             else
             {
-               const QString c_Details = static_cast<QString>(C_GtGetText::h_GetText("File path: %1")).arg(
+               const QString c_Details = static_cast<QString>("File path: %1").arg(
                   c_AbsoluteFilePath);
                // Invalid file
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-               c_Message.SetHeading(C_GtGetText::h_GetText("Update Package configuration"));
-               c_Message.SetDescription(C_GtGetText::h_GetText("File is not a valid HEX file!"));
+               c_Message.SetHeading("Update Package configuration");
+               c_Message.SetDescription("File is not a valid HEX file!");
                c_Message.SetDetails(c_Details);
                c_Message.SetCustomMinHeight(180, 250);
                c_Message.Execute();
@@ -321,10 +319,9 @@ void C_SyvUpPacSectionNodeDatablockWidget::RevertFile(C_SyvUpPacListNodeItemWidg
          else
          {
             C_OgeWiCustomMessage c_Message(this);
-            c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                             "No default output file declared in properties of "
-                                                             "Data Block \"%1\". ")).arg(this->mc_SectionName));
-            c_Message.SetHeading(C_GtGetText::h_GetText("Revert to Default"));
+            c_Message.SetDescription(static_cast<QString>("No default output file declared in properties of "
+                                                             "Data Block \"%1\". ").arg(this->mc_SectionName));
+            c_Message.SetHeading("Revert to Default");
             c_Message.Execute();
          }
       }
@@ -341,7 +338,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::RevertFile(C_SyvUpPacListNodeItemWidg
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacSectionNodeDatablockWidget::RemoveFile(C_SyvUpPacListNodeItemWidget * const opc_App)
 {
-   this->AdaptFile(C_GtGetText::h_GetText(mhc_REMOVE_PATH_TEXT.toStdString().c_str()), opc_App);
+   this->AdaptFile(mhc_REMOVE_PATH_TEXT.toStdString().c_str(), opc_App);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -812,7 +809,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::m_UpdateTitle(void)
 {
    const QString c_Title = "%1 #%2 - %3";
 
-   this->mc_Title = c_Title.arg(static_cast<QString>(C_GtGetText::h_GetText("Data Block")),
+   this->mc_Title = c_Title.arg(static_cast<QString>("Data Block"),
                                 QString::number(this->mu32_SectionNumber + 1U),
                                 this->mc_SectionName);
 

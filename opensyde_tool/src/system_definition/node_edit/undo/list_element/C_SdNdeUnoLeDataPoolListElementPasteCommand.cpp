@@ -18,7 +18,6 @@
 #include "C_SdClipBoardHelper.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_SdNdeDpListTableView.hpp"
 
@@ -119,10 +118,10 @@ bool C_SdNdeUnoLeDataPoolListElementPasteCommand::InitialSetup(const uint32_t & 
                }
                else
                {
-                  c_Text = C_GtGetText::h_GetText("Data element");
+                  c_Text = "Data element";
                }
                c_MessageBox.SetDescription(
-                  static_cast<QString>(C_GtGetText::h_GetText("Only %1 %2s allowed per list.")).
+                  static_cast<QString>("Only %1 %2s allowed per list.").
                   arg(C_OscNode::hu32_MAX_NUMBER_OF_ELEMENTS_PER_LIST).arg(c_Text));
                c_MessageBox.SetCustomMinHeight(180, 180);
                c_MessageBox.Execute();

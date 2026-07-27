@@ -35,7 +35,6 @@
 #include "C_PuiSvHandler.hpp"
 #include "C_SyvDaDashboardScene.hpp"
 #include "C_SdTopologyListWidget.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvClipBoardHelper.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 
@@ -1167,38 +1166,38 @@ bool C_SyvDaDashboardScene::m_AddOfMime(const QMimeData * const opc_MimeData, co
 
          if (opc_MimeData->hasFormat(C_SdTopologyListWidget::hc_GROUP_NAME) == true)
          {
-            const QString c_Theme1 = C_GtGetText::h_GetText("openSYDE");
-            const QString c_Theme2 = C_GtGetText::h_GetText("Material");
-            const QString c_Theme3 = C_GtGetText::h_GetText("Flat");
-            const QString c_Theme4 = C_GtGetText::h_GetText("Skeuomorphic");
+            const QString c_Theme1 = "openSYDE";
+            const QString c_Theme2 = "Material";
+            const QString c_Theme3 = "Flat";
+            const QString c_Theme4 = "Skeuomorphic";
             if ((((c_Text == c_Theme1) || (c_Text == c_Theme2)) || (c_Text == c_Theme3)) || (c_Text == c_Theme4))
             {
                const QString c_Group = opc_MimeData->data(C_SdTopologyListWidget::hc_GROUP_NAME);
-               if (c_Group == C_GtGetText::h_GetText("Value Label"))
+               if (c_Group == "Value Label")
                {
                   e_Type = C_PuiSvDbDataElement::eLABEL;
                }
-               else if (c_Group == C_GtGetText::h_GetText("Spinbox"))
+               else if (c_Group == "Spinbox")
                {
                   e_Type = C_PuiSvDbDataElement::eSPIN_BOX;
                }
-               else if (c_Group == C_GtGetText::h_GetText("Slider"))
+               else if (c_Group == "Slider")
                {
                   e_Type = C_PuiSvDbDataElement::eSLIDER;
                }
-               else if (c_Group == C_GtGetText::h_GetText("Bar"))
+               else if (c_Group == "Bar")
                {
                   e_Type = C_PuiSvDbDataElement::ePROGRESS_BAR;
                }
-               else if (c_Group == C_GtGetText::h_GetText("Toggle"))
+               else if (c_Group == "Toggle")
                {
                   e_Type = C_PuiSvDbDataElement::eTOGGLE;
                }
-               else if (c_Group == C_GtGetText::h_GetText("Table"))
+               else if (c_Group == "Table")
                {
                   e_Type = C_PuiSvDbDataElement::eTABLE;
                }
-               else if (c_Group == C_GtGetText::h_GetText("Pie Chart"))
+               else if (c_Group == "Pie Chart")
                {
                   e_Type = C_PuiSvDbDataElement::ePIE_CHART;
                }
@@ -1207,7 +1206,7 @@ bool C_SyvDaDashboardScene::m_AddOfMime(const QMimeData * const opc_MimeData, co
                   //Ignore unknown type
                }
             }
-            else if (c_Text == C_GtGetText::h_GetText("Parametrization Widget"))
+            else if (c_Text == "Parametrization Widget")
             {
                e_Type = C_PuiSvDbDataElement::ePARAM;
             }
@@ -1368,10 +1367,10 @@ bool C_SyvDaDashboardScene::m_HandleDeleteUserConfirmation(const QList<QGraphics
       {
          C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
          C_OgeWiCustomMessage c_MessageBox(pc_View, C_OgeWiCustomMessage::E_Type::eQUESTION);
-         c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to delete the selected item(s)?"));
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("Items delete"));
-         c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-         c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+         c_MessageBox.SetDescription("Do you really want to delete the selected item(s)?");
+         c_MessageBox.SetHeading("Items delete");
+         c_MessageBox.SetOkButtonText("Delete");
+         c_MessageBox.SetNoButtonText("Keep");
          c_MessageBox.SetCustomMinHeight(180, 180);
          e_ReturnMessageBox = c_MessageBox.Execute();
 

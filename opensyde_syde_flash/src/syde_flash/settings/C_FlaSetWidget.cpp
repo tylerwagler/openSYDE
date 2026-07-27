@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 
 #include "C_UsHandler.hpp"
 #include "C_FlaSetWidget.hpp"
@@ -54,7 +53,7 @@ C_FlaSetWidget::C_FlaSetWidget(QWidget * const opc_Parent) :
 
    // initialize GUI elements
    this->SetBackgroundColor(5);
-   this->mpc_Ui->pc_WiTitle->SetTitle(C_GtGetText::h_GetText("Settings"));
+   this->mpc_Ui->pc_WiTitle->SetTitle("Settings");
    this->mpc_Ui->pc_WiTitle->SetIconType(C_CamOgeWiSectionHeader::E_ButtonType::eLEFTRIGHT);
 
    this->m_InitSettingsSection(this->mpc_PopupDllConfig, this->mpc_Ui->pc_PbDll, opc_Parent,

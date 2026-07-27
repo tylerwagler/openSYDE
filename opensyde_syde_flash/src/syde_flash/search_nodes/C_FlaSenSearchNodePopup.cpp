@@ -19,7 +19,6 @@
 #include "stwerrors.hpp"
 
 #include "C_OscLoggingHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_Uti.hpp"
 
@@ -103,12 +102,12 @@ C_FlaSenSearchNodePopup::~C_FlaSenSearchNodePopup(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaSenSearchNodePopup::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Search Node"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText(""));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Found Nodes"));
-   this->mpc_Ui->pc_LabelScanningNodes->setText(C_GtGetText::h_GetText("Scanning for nodes..."));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Apply"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetTitle("Search Node");
+   this->mrc_ParentDialog.SetSubTitle("");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Found Nodes");
+   this->mpc_Ui->pc_LabelScanningNodes->setText("Scanning for nodes...");
+   this->mpc_Ui->pc_PushButtonOk->setText("Apply");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -193,12 +192,12 @@ int32_t C_FlaSenSearchNodePopup::m_InitDcSequence(const QString & orc_CanChannel
    {
       const uint32_t u32_BITNESS = 8 * sizeof(size_t);
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Initialization failed"));
+      c_Message.SetHeading("Initialization failed");
       c_Message.SetDescription(
-         static_cast<QString>(C_GtGetText::h_GetText("Failed to initialize CAN interface. "
-                                                     "Make sure to use a %1-bit DLL.")).arg(u32_BITNESS));
-      c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +
-                           C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLESHEET_GUIDE_COLOR_LINK,
+         static_cast<QString>("Failed to initialize CAN interface. "
+                                                     "Make sure to use a %1-bit DLL.").arg(u32_BITNESS));
+      c_Message.SetDetails(static_cast<QString>("For details see ") +
+                           C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
                                             C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) + ".");
       C_OscLoggingHandler::h_Flush();
       c_Message.Execute();
@@ -314,8 +313,8 @@ void C_FlaSenSearchNodePopup::m_DeviceInfoReceived(
    }
    else
    {
-      const QString c_NodeCountText = C_GtGetText::h_GetText("Found Nodes (") + QString::number(
-         orc_DeviceInfoResult.size()) + C_GtGetText::h_GetText(")");
+      const QString c_NodeCountText = "Found Nodes (" + QString::number(
+         orc_DeviceInfoResult.size()) + ")";
 
       this->mpc_Ui->pc_LabelHeadingPreview->setText(c_NodeCountText);
 
@@ -393,8 +392,8 @@ void C_FlaSenSearchNodePopup::m_ShowErrorNoDevices(void)
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
 
    // Show message
-   c_Message.SetHeading(C_GtGetText::h_GetText("Device Configuration"));
-   c_Message.SetDescription(C_GtGetText::h_GetText("No devices found! Check connection of connected devices and retry."));
+   c_Message.SetHeading("Device Configuration");
+   c_Message.SetDescription("No devices found! Check connection of connected devices and retry.");
    c_Message.Execute();
 }
 

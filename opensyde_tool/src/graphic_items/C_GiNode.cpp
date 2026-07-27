@@ -21,7 +21,6 @@
 #include "C_GiLiBusConnector.hpp"
 #include "C_GiNodeBoundary.hpp"
 #include "C_GiNode.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdTopologyScene.hpp"
 #include "C_PuiSdDataElement.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -603,7 +602,7 @@ void C_GiNode::GenerateHint(void)
 {
    if (this->mq_ErrorIconHovered == true)
    {
-      this->SetDefaultToolTipHeading(C_GtGetText::h_GetText("Node has invalid content"));
+      this->SetDefaultToolTipHeading("Node has invalid content");
       this->SetDefaultToolTipContent(this->mc_ErrorText);
       this->SetDefaultToolTipType(C_NagToolTipWithImage::eERROR);
    }
@@ -639,7 +638,7 @@ void C_GiNode::GenerateHint(void)
                c_ToolTip.append("\n\n");
             }
 
-            c_ToolTip.append(C_GtGetText::h_GetText("Communication Interface Information:\n"));
+            c_ToolTip.append("Communication Interface Information:\n");
 
             //CAN
             if (pc_Device->u8_NumCanBusses > 0)
@@ -663,7 +662,7 @@ void C_GiNode::GenerateHint(void)
                                  rc_Conn.u32_BusIndex);
                               if (pc_Bus != NULL)
                               {
-                                 c_BusName = C_GtGetText::h_GetText("Linked to ");
+                                 c_BusName = "Linked to ";
                                  c_BusName.append(pc_Bus->c_Name.c_str());
                                  //Bus + Node Id Info
                                  if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
@@ -679,7 +678,7 @@ void C_GiNode::GenerateHint(void)
                   }
                   if (q_Found == false)
                   {
-                     c_BusName = C_GtGetText::h_GetText("-");
+                     c_BusName = "-";
                   }
                   //Translation: 1 = Interface number, 2 = Bus name
 
@@ -720,7 +719,7 @@ void C_GiNode::GenerateHint(void)
                                  rc_Conn.u32_BusIndex);
                               if (pc_Bus != NULL)
                               {
-                                 c_BusName = C_GtGetText::h_GetText("Linked to ");
+                                 c_BusName = "Linked to ";
                                  c_BusName.append(pc_Bus->c_Name.c_str());
 
                                  q_Found = true;
@@ -731,7 +730,7 @@ void C_GiNode::GenerateHint(void)
                   }
                   if (q_Found == false)
                   {
-                     c_BusName = C_GtGetText::h_GetText("-");
+                     c_BusName = "-";
                   }
                   //Translation: 1 = Interface number, 2 = Bus name
                   if (c_Entry.isEmpty() == true)

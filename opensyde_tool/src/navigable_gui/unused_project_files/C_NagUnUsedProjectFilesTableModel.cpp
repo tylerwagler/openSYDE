@@ -13,7 +13,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiProject.hpp"
 #include "C_NagUnUsedProjectFilesTableModel.hpp"
 
@@ -98,10 +97,10 @@ QVariant C_NagUnUsedProjectFilesTableModel::headerData(const int32_t os32_Sectio
          switch (e_Col)
          {
          case E_Columns::ePATH:
-            c_Retval = C_GtGetText::h_GetText("Path");
+            c_Retval = "Path";
             break;
          case E_Columns::eEXTENSION:
-            c_Retval = C_GtGetText::h_GetText("Extension");
+            c_Retval = "Extension";
             break;
          case E_Columns::eCOLUMNCOUNT:
             break;
@@ -118,10 +117,10 @@ QVariant C_NagUnUsedProjectFilesTableModel::headerData(const int32_t os32_Sectio
          switch (e_Col)
          {
          case E_Columns::ePATH:
-            c_Retval = C_GtGetText::h_GetText("Path for the file");
+            c_Retval = "Path for the file";
             break;
          case E_Columns::eEXTENSION:
-            c_Retval = C_GtGetText::h_GetText("Extension of the file");
+            c_Retval = "Extension of the file";
             break;
          case E_Columns::eCOLUMNCOUNT:
             break;
@@ -134,10 +133,10 @@ QVariant C_NagUnUsedProjectFilesTableModel::headerData(const int32_t os32_Sectio
          switch (e_Col)
          {
          case E_Columns::ePATH:
-            c_Retval = C_GtGetText::h_GetText("Path");
+            c_Retval = "Path";
             break;
          case E_Columns::eEXTENSION:
-            c_Retval = C_GtGetText::h_GetText("Extension");
+            c_Retval = "Extension";
             break;
          case E_Columns::eCOLUMNCOUNT:
             break;

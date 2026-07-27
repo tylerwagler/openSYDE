@@ -15,7 +15,6 @@
 #include "stwerrors.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscHalcMagicianUtil.hpp"
 #include "TglUtils.hpp"
 #include "C_OscRoutingCalculation.hpp"
@@ -98,10 +97,10 @@ QString C_PuiSdUtil::h_ConvertBusTypeToStringUppercase(const C_OscSystemBus::E_T
    switch (ore_Type)
    {
    case stw::opensyde_core::C_OscSystemBus::eCAN:
-      c_Retval = C_GtGetText::h_GetText("CAN");
+      c_Retval = "CAN";
       break;
    case stw::opensyde_core::C_OscSystemBus::eETHERNET:
-      c_Retval = C_GtGetText::h_GetText("ETHERNET");
+      c_Retval = "ETHERNET";
       break;
    default:
       //Does not exist yet
@@ -236,10 +235,10 @@ QString C_PuiSdUtil::h_GetInterfaceName(const C_OscSystemBus::E_Type oe_Type, co
    switch (oe_Type)
    {
    case C_OscSystemBus::eCAN:
-      c_Type = C_GtGetText::h_GetText("CAN");
+      c_Type = "CAN";
       break;
    case C_OscSystemBus::eETHERNET:
-      c_Type = C_GtGetText::h_GetText("ETHERNET");
+      c_Type = "ETHERNET";
       break;
    default:
       tgl_assert(false);
@@ -525,7 +524,7 @@ QString C_PuiSdUtil::h_GetNamespaceDatapoolElement(const C_OscNodeDataPoolListEl
       if (orc_Id.GetUseArrayElementIndex())
       {
          //Append array element index
-         c_Retval += static_cast<QString>(C_GtGetText::h_GetText("[%1]")).arg(orc_Id.GetArrayElementIndex());
+         c_Retval += static_cast<QString>("[%1]").arg(orc_Id.GetArrayElementIndex());
       }
    }
    return c_Retval;
@@ -587,7 +586,7 @@ QString C_PuiSdUtil::h_GetSignalNamespace(const C_OscNodeDataPoolListElementId &
 //----------------------------------------------------------------------------------------------------------------------
 QString C_PuiSdUtil::h_GetHalcNamespace(const C_PuiSvDbNodeDataPoolListElementId & orc_Id)
 {
-   QString c_Retval = C_GtGetText::h_GetText("Unknown HAL data element");
+   QString c_Retval = "Unknown HAL data element";
    uint32_t u32_DomainIndex;
    bool q_UseChannelIndex;
    uint32_t u32_ChannelIndex;

@@ -18,7 +18,6 @@
 #include "stwtypes.hpp"
 #include "constants.hpp"
 #include "C_CamMosFilterTableModel.hpp"
-#include "C_GtGetText.hpp"
 #include "C_CamProHandler.hpp"
 #include "C_CamDbHandler.hpp"
 #include "C_Uti.hpp"
@@ -74,19 +73,19 @@ QVariant C_CamMosFilterTableModel::headerData(const int32_t os32_Section, const 
          switch (e_Col)
          {
          case eENABLED:
-            c_Retval = C_GtGetText::h_GetText("Enabled");
+            c_Retval = "Enabled";
             break;
          case eTYPE:
-            c_Retval = C_GtGetText::h_GetText("Type");
+            c_Retval = "Type";
             break;
          case eMODE:
-            c_Retval = C_GtGetText::h_GetText("Mode");
+            c_Retval = "Mode";
             break;
          case eDETAILS:
-            c_Retval = C_GtGetText::h_GetText("Details");
+            c_Retval = "Details";
             break;
          case eREMOVE:
-            c_Retval = C_GtGetText::h_GetText("Remove");
+            c_Retval = "Remove";
             break;
          default:
             break;
@@ -101,19 +100,19 @@ QVariant C_CamMosFilterTableModel::headerData(const int32_t os32_Section, const 
          switch (e_Col)
          {
          case eENABLED:
-            c_Retval = C_GtGetText::h_GetText("Activate or deactivate filter item.");
+            c_Retval = "Activate or deactivate filter item.";
             break;
          case eTYPE:
-            c_Retval = C_GtGetText::h_GetText("Available types: CAN ID and CAN ID Range.");
+            c_Retval = "Available types: CAN ID and CAN ID Range.";
             break;
          case eMODE:
-            c_Retval = C_GtGetText::h_GetText("Pass or stop given CAN ID(s).");
+            c_Retval = "Pass or stop given CAN ID(s).";
             break;
          case eDETAILS:
-            c_Retval = C_GtGetText::h_GetText("CAN ID(s) to filter.");
+            c_Retval = "CAN ID(s) to filter.";
             break;
          case eREMOVE:
-            c_Retval = C_GtGetText::h_GetText("Remove selected filter item.");
+            c_Retval = "Remove selected filter item.";
             break;
          default:
             break;
@@ -181,10 +180,10 @@ QVariant C_CamMosFilterTableModel::data(const QModelIndex & orc_Index, const int
             switch (c_FilterItem.e_Type)
             {
             case C_CamProFilterItemData::eID_SINGLE:
-               c_Retval = C_GtGetText::h_GetText("CAN ID");
+               c_Retval = "CAN ID";
                break;
             case C_CamProFilterItemData::eID_RANGE:
-               c_Retval = C_GtGetText::h_GetText("CAN ID Range");
+               c_Retval = "CAN ID Range";
                break;
             default:
                break;
@@ -193,11 +192,11 @@ QVariant C_CamMosFilterTableModel::data(const QModelIndex & orc_Index, const int
          case eMODE:
             if (c_FilterItem.q_PassFilter == true)
             {
-               c_Retval = C_GtGetText::h_GetText("Pass");
+               c_Retval = "Pass";
             }
             else
             {
-               c_Retval = C_GtGetText::h_GetText("Stop");
+               c_Retval = "Stop";
             }
             break;
          case eDETAILS:
@@ -217,7 +216,7 @@ QVariant C_CamMosFilterTableModel::data(const QModelIndex & orc_Index, const int
             }
             else
             {
-               c_Retval = static_cast<QString>(C_GtGetText::h_GetText("From %1 to %2")).
+               c_Retval = static_cast<QString>("From %1 to %2").
                           arg(C_Uti::h_GetValueAsHex(c_FilterItem.u32_StartId) + c_TempExtended).
                           arg(C_Uti::h_GetValueAsHex(c_FilterItem.u32_EndId) + c_TempExtended);
             }

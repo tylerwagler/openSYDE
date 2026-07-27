@@ -18,7 +18,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdClipBoardHelper.hpp"
 #include "C_Uti.hpp"
 #include "C_NagToolTip.hpp"
@@ -129,10 +128,10 @@ QVariant C_SdNdeDpListDataSetModel::headerData(const int32_t os32_Section, const
          switch (e_Row)
          {
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          default:
             break;
@@ -308,7 +307,7 @@ QVariant C_SdNdeDpListDataSetModel::data(const QModelIndex & orc_Index, const in
          {
             if (this->data(orc_Index, ms32_USER_ROLE_ERROR).toBool() == true)
             {
-               c_Retval = C_GtGetText::h_GetText("Dataset Name");
+               c_Retval = "Dataset Name";
             }
          }
          else
@@ -353,11 +352,11 @@ QVariant C_SdNdeDpListDataSetModel::data(const QModelIndex & orc_Index, const in
                                              &q_NameInvalid);
                if (q_NameInvalid == true)
                {
-                  c_Output += C_GtGetText::h_GetText("- is empty or contains invalid characters\n");
+                  c_Output += "- is empty or contains invalid characters\n";
                }
                if (q_NameConflict == true)
                {
-                  c_Output += C_GtGetText::h_GetText("- is already in use\n");
+                  c_Output += "- is already in use\n";
                }
             }
             c_Retval = c_Output;

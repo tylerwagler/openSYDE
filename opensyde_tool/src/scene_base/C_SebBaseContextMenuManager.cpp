@@ -16,7 +16,6 @@
 
 #include "C_SebBaseContextMenuManager.hpp"
 
-#include "C_GtGetText.hpp"
 #include "gitypes.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -45,77 +44,68 @@ C_SebBaseContextMenuManager::C_SebBaseContextMenuManager() :
    mpc_ActiveItem(NULL)
 {
    // add all actions
-   this->mpc_ActionCut = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                           "Cut"), this, &C_SebBaseContextMenuManager::m_Cut,
+   this->mpc_ActionCut = this->mc_ContextMenu.addAction("Cut", this, &C_SebBaseContextMenuManager::m_Cut,
                                                         static_cast<int32_t>(Qt::CTRL) +
                                                         static_cast<int32_t>(Qt::Key_X));
 
-   this->mpc_ActionCopy = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                            "Copy"), this, &C_SebBaseContextMenuManager::m_Copy,
+   this->mpc_ActionCopy = this->mc_ContextMenu.addAction("Copy", this, &C_SebBaseContextMenuManager::m_Copy,
                                                          static_cast<int32_t>(Qt::CTRL) +
                                                          static_cast<int32_t>(Qt::Key_C));
 
    this->mpc_ActionCopySeparator = this->mc_ContextMenu.addSeparator();
 
-   this->mpc_ActionPaste = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                             "Paste"), this, &C_SebBaseContextMenuManager::m_Paste,
+   this->mpc_ActionPaste = this->mc_ContextMenu.addAction("Paste", this, &C_SebBaseContextMenuManager::m_Paste,
                                                           static_cast<int32_t>(Qt::CTRL) +
                                                           static_cast<int32_t>(Qt::Key_V));
 
-   this->mpc_ActionSetupStyle = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                  "Setup Style"), this,
+   this->mpc_ActionSetupStyle = this->mc_ContextMenu.addAction("Setup Style", this,
                                                                &C_SebBaseContextMenuManager::m_SetupStyle);
-   this->mpc_ActionBendLine = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                "Bend Line at cursor"), this,
+   this->mpc_ActionBendLine = this->mc_ContextMenu.addAction("Bend Line at cursor", this,
                                                              &C_SebBaseContextMenuManager::m_BendLine);
 
-   this->mpc_ActionRemoveBendLine = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                      "Straighten line at cursor"),
+   this->mpc_ActionRemoveBendLine = this->mc_ContextMenu.addAction("Straighten line at cursor",
                                                                    this,
                                                                    &C_SebBaseContextMenuManager::m_RemoveBendLine);
 
    //Alignment
-   this->mc_AlignmentContextMenu.setTitle(C_GtGetText::h_GetText("Alignment"));
+   this->mc_AlignmentContextMenu.setTitle("Alignment");
    this->mpc_ActionAlignment = this->mc_ContextMenu.addMenu(&mc_AlignmentContextMenu);
 
    // init and connect alignment actions
-   this->mpc_ActionAlignLeft = this->mc_AlignmentContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                          "Align Left"), this,
+   this->mpc_ActionAlignLeft = this->mc_AlignmentContextMenu.addAction("Align Left", this,
                                                                        &C_SebBaseContextMenuManager::m_AlignLeft);
 
    this->mpc_ActionAlignHorizontalCenter =
-      this->mc_AlignmentContextMenu.addAction(C_GtGetText::h_GetText("Align Horizontal Center"), this,
+      this->mc_AlignmentContextMenu.addAction("Align Horizontal Center", this,
                                               &C_SebBaseContextMenuManager::m_AlignHorizontalCenter);
 
-   this->mpc_ActionAlignRight = this->mc_AlignmentContextMenu.addAction(C_GtGetText::h_GetText("Align Right"), this,
+   this->mpc_ActionAlignRight = this->mc_AlignmentContextMenu.addAction("Align Right", this,
                                                                         &C_SebBaseContextMenuManager::m_AlignRight);
 
    this->mc_AlignmentContextMenu.addSeparator();
 
-   this->mpc_ActionAlignTop = this->mc_AlignmentContextMenu.addAction(C_GtGetText::h_GetText("Align Top"), this,
+   this->mpc_ActionAlignTop = this->mc_AlignmentContextMenu.addAction("Align Top", this,
                                                                       &C_SebBaseContextMenuManager::m_AlignTop);
 
    this->mpc_ActionAlignVerticalCenter =
-      this->mc_AlignmentContextMenu.addAction(C_GtGetText::h_GetText("Align Vertical Center"), this,
+      this->mc_AlignmentContextMenu.addAction("Align Vertical Center", this,
                                               &C_SebBaseContextMenuManager::m_AlignVerticalCenter);
 
-   this->mpc_ActionAlignBottom = this->mc_AlignmentContextMenu.addAction(C_GtGetText::h_GetText("Align Bottom"), this,
+   this->mpc_ActionAlignBottom = this->mc_AlignmentContextMenu.addAction("Align Bottom", this,
                                                                          &C_SebBaseContextMenuManager::m_AlignBottom);
 
    //Z order
    this->mpc_ActionOrderSeparator = this->mc_ContextMenu.addSeparator();
    // init and connect order objects actions
-   this->mpc_ActionBringToFront = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                    "Bring to Front"), this,
+   this->mpc_ActionBringToFront = this->mc_ContextMenu.addAction("Bring to Front", this,
                                                                  &C_SebBaseContextMenuManager::SigBringToFront);
 
-   this->mpc_ActionSendToBack = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                  "Send to Back"), this,
+   this->mpc_ActionSendToBack = this->mc_ContextMenu.addAction("Send to Back", this,
                                                                &C_SebBaseContextMenuManager::SigSendToBack);
 
    this->mpc_ActionDeleteSeparator = this->mc_ContextMenu.addSeparator();
 
-   this->mpc_ActionDelete = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText("Delete"), this,
+   this->mpc_ActionDelete = this->mc_ContextMenu.addAction("Delete", this,
                                                            &C_SebBaseContextMenuManager::m_Delete,
                                                            static_cast<int32_t>(Qt::Key_Delete));
 

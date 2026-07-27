@@ -26,7 +26,6 @@
 #include "constants.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_RtfExportWidget.hpp"
 #include "TglFile.hpp"

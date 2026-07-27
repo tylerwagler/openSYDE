@@ -13,7 +13,6 @@
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_SdCodeGenerationModel.hpp"
 #include "C_PuiSdHandler.hpp"
 
@@ -83,7 +82,7 @@ int32_t C_SdCodeGenerationModel::Init(const std::vector<uint32_t> & orc_ElementI
 
    this->mpc_InvisibleRootItem = new C_TblTreeModelCheckableItem();
 
-   pc_VisibleRootItem->c_Name = C_GtGetText::h_GetText("Network Topology");
+   pc_VisibleRootItem->c_Name = "Network Topology";
 
    for (uint32_t u32_NodeCounter = 0; u32_NodeCounter < rc_Nodes.size(); u32_NodeCounter++)
    {
@@ -130,23 +129,23 @@ int32_t C_SdCodeGenerationModel::Init(const std::vector<uint32_t> & orc_ElementI
                }
                c_ToolTip += rc_Application.c_Comment;
                c_ToolTip += "\n\n";
-               c_ToolTip += C_GtGetText::h_GetText("Data Block Properties:");
-               c_ToolTip += c_Indentation + C_GtGetText::h_GetText("File Generation: ");
+               c_ToolTip += "Data Block Properties:";
+               c_ToolTip += c_Indentation + "File Generation: ";
                if (rc_Application.q_Active == true)
                {
-                  c_ToolTip += C_GtGetText::h_GetText("active");
+                  c_ToolTip += "active";
                }
                else
                {
-                  c_ToolTip += C_GtGetText::h_GetText("inactive");
+                  c_ToolTip += "inactive";
                }
-               c_ToolTip += c_Indentation + C_GtGetText::h_GetText("Project Path: ");
+               c_ToolTip += c_Indentation + "Project Path: ";
                c_ToolTip += rc_Application.c_ProjectPath;
-               c_ToolTip += c_Indentation + C_GtGetText::h_GetText("Generation Directory: ");
+               c_ToolTip += c_Indentation + "Generation Directory: ";
                c_ToolTip += rc_Application.c_GeneratePath;
-               c_ToolTip += c_Indentation + C_GtGetText::h_GetText("Structure Version: ");
+               c_ToolTip += c_Indentation + "Structure Version: ";
                c_ToolTip += QString::number(rc_Application.u16_GenCodeVersion).toStdString().c_str();
-               c_ToolTip += c_Indentation + C_GtGetText::h_GetText("Output File: ");
+               c_ToolTip += c_Indentation + "Output File: ";
                if (rc_Application.c_ResultPaths.size() == 2)
                {
                   c_ToolTip += rc_Application.c_ResultPaths[0];
@@ -157,9 +156,9 @@ int32_t C_SdCodeGenerationModel::Init(const std::vector<uint32_t> & orc_ElementI
                {
                   c_ToolTip += rc_Application.c_ResultPaths[0];
                }
-               c_ToolTip += c_Indentation + C_GtGetText::h_GetText("File Generator: ");
+               c_ToolTip += c_Indentation + "File Generator: ";
                c_ToolTip += rc_Application.c_CodeGeneratorPath;
-               c_ToolTip += c_Indentation + C_GtGetText::h_GetText("IDE Call: ");
+               c_ToolTip += c_Indentation + "IDE Call: ";
                c_ToolTip += rc_Application.c_IdeCall;
 
                pc_ApplicationItem->c_ToolTipHeading = rc_Application.c_Name.c_str();

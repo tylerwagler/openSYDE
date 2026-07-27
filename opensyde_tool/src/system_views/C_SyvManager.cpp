@@ -16,7 +16,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_SyvUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 #include "C_SyvManager.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -201,12 +200,12 @@ void C_SyvManager::DeleteSysView(const uint32_t ou32_Index, const int32_t os32_S
       if (pc_View != NULL)
       {
          C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::E_Type::eQUESTION);
-         c_Message.SetHeading(C_GtGetText::h_GetText("View delete"));
+         c_Message.SetHeading("View delete");
          c_Message.SetDescription(
-            static_cast<QString>(C_GtGetText::h_GetText("Do you really want to delete this view (%1)?"))
+            static_cast<QString>("Do you really want to delete this view (%1)?")
             .arg(pc_View->GetName().c_str()));
-         c_Message.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-         c_Message.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+         c_Message.SetOkButtonText("Delete");
+         c_Message.SetNoButtonText("Keep");
          c_Message.SetCustomMinHeight(180, 180);
          if (c_Message.Execute() == C_OgeWiCustomMessage::eYES)
          {
@@ -241,8 +240,8 @@ void C_SyvManager::DeleteSysView(const uint32_t ou32_Index, const int32_t os32_S
    else
    {
       C_OgeWiCustomMessage c_MessageBox(opc_Parent, C_OgeWiCustomMessage::E_Type::eINFORMATION);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("View delete"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("You cannot delete the last view."));
+      c_MessageBox.SetHeading("View delete");
+      c_MessageBox.SetDescription("You cannot delete the last view.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       c_MessageBox.Execute();
    }

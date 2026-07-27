@@ -18,7 +18,6 @@
 
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdNdeCoAddDeviceDialog.hpp"
 #include "ui_C_SdNdeCoAddDeviceDialog.h"
 #include "C_PuiSdHandler.hpp"
@@ -102,7 +101,7 @@ C_SdNdeCoAddDeviceDialog::C_SdNdeCoAddDeviceDialog(stw::opensyde_gui_elements::C
    }
    else
    {
-      this->mpc_Ui->pc_CbxNode->addItem(C_GtGetText::h_GetText("<no Nodes available>"));
+      this->mpc_Ui->pc_CbxNode->addItem("<no Nodes available>");
    }
 
    // connect
@@ -129,13 +128,13 @@ C_SdNdeCoAddDeviceDialog::~C_SdNdeCoAddDeviceDialog(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoAddDeviceDialog::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Add CANopen Device"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Select EDS File"));
-   this->mpc_Ui->pc_LabelSelectNode->setText(C_GtGetText::h_GetText("1. Select Node"));
-   this->mpc_Ui->pc_LabelSelectEDSFile->setText(C_GtGetText::h_GetText("2. Select EDS File"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Continue"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_TedHtmlReport->setPlainText(C_GtGetText::h_GetText("<EDS file description>"));
+   this->mrc_ParentDialog.SetTitle("Add CANopen Device");
+   this->mrc_ParentDialog.SetSubTitle("Select EDS File");
+   this->mpc_Ui->pc_LabelSelectNode->setText("1. Select Node");
+   this->mpc_Ui->pc_LabelSelectEDSFile->setText("2. Select EDS File");
+   this->mpc_Ui->pc_PushButtonOk->setText("Continue");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_TedHtmlReport->setPlainText("<EDS file description>");
 }
 
 //-------------------------------------------------------------------------------------------f---------------------------
@@ -157,7 +156,7 @@ int32_t C_SdNdeCoAddDeviceDialog::GetNodeSelection(uint32_t & oru32_NodeIndex, u
    const int32_t s32_CurrentIndex = this->mpc_Ui->pc_CbxNode->currentIndex();
 
    if ((s32_CurrentIndex >= 0) && (this->mc_InterfaceIndexes.size() == this->mc_NodeIndexes.size()) &&
-       (this->mpc_Ui->pc_CbxNode->currentText().compare(C_GtGetText::h_GetText("<no Nodes available>")) != 0))
+       (this->mpc_Ui->pc_CbxNode->currentText().compare("<no Nodes available>") != 0))
    {
       if (s32_CurrentIndex < static_cast<int32_t>(this->mc_NodeIndexes.size()))
       {
@@ -197,7 +196,7 @@ QString C_SdNdeCoAddDeviceDialog::h_AskForCanOpenPath(QWidget * const opc_BaseWi
    QString c_Folder = C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownCanOpenEdsPath();
    QString c_FilePath = "";
    QFileInfo c_FileInfo;
-   const QString c_FilterName = static_cast<QString>(C_GtGetText::h_GetText("EDS/DCF file")) + " (*.eds *.dcf)";
+   const QString c_FilterName = static_cast<QString>("EDS/DCF file") + " (*.eds *.dcf)";
 
    //Replace default path if necessary
    if (c_Folder.compare("") == 0)
@@ -206,7 +205,7 @@ QString C_SdNdeCoAddDeviceDialog::h_AskForCanOpenPath(QWidget * const opc_BaseWi
    }
 
    c_FilePath =
-      C_OgeWiUtil::h_GetOpenFileName(opc_BaseWidget, C_GtGetText::h_GetText("Select EDS File"),
+      C_OgeWiUtil::h_GetOpenFileName(opc_BaseWidget, "Select EDS File",
                                      c_Folder, c_FilterName, C_SdNdeCoAddDeviceDialog::mhc_SUFFIX.at(0));
 
    c_FileInfo.setFile(c_FilePath);
@@ -366,7 +365,7 @@ void C_SdNdeCoAddDeviceDialog::m_FillUpComboBox(const uint32_t ou32_BusIndex, co
 
    if (this->mpc_Ui->pc_CbxNode->count() == 0)
    {
-      this->mpc_Ui->pc_CbxNode->addItem(C_GtGetText::h_GetText("<no Nodes available>"));
+      this->mpc_Ui->pc_CbxNode->addItem("<no Nodes available>");
    }
 }
 
@@ -450,13 +449,13 @@ void C_SdNdeCoAddDeviceDialog::m_OnLoadEds(void)
       else
       {
          q_Invalid = true;
-         this->mpc_Ui->pc_TedHtmlReport->setPlainText(C_GtGetText::h_GetText("<No readable file>"));
+         this->mpc_Ui->pc_TedHtmlReport->setPlainText("<No readable file>");
       }
    }
    else
    {
       q_Invalid = true;
-      this->mpc_Ui->pc_TedHtmlReport->setPlainText(C_GtGetText::h_GetText("<EDS file description>"));
+      this->mpc_Ui->pc_TedHtmlReport->setPlainText("<EDS file description>");
    }
 
    if ((QFile::exists(c_File.AsStdString()->c_str()) == true) &&

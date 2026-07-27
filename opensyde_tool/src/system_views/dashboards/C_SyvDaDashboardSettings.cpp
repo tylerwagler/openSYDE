@@ -12,7 +12,6 @@
 
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_SyvDaDashboardSettings.hpp"
 #include "ui_C_SyvDaDashboardSettings.h"
@@ -127,26 +126,23 @@ C_SyvDaDashboardSettings::~C_SyvDaDashboardSettings(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSettings::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Data Transmission"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Settings"));
-   this->mpc_Ui->pc_LabelHeading->setText(C_GtGetText::h_GetText("Cyclic Transmission Intervals"));
-   this->mpc_Ui->pc_LabelFast->setText(C_GtGetText::h_GetText("Fast"));
-   this->mpc_Ui->pc_LabelMedium->setText(C_GtGetText::h_GetText("Medium"));
-   this->mpc_Ui->pc_LabelSlow->setText(C_GtGetText::h_GetText("Slow"));
-   this->mpc_Ui->pc_SpinBoxFast->setSuffix(C_GtGetText::h_GetText(" ms"));
-   this->mpc_Ui->pc_SpinBoxMedium->setSuffix(C_GtGetText::h_GetText(" ms"));
-   this->mpc_Ui->pc_SpinBoxSlow->setSuffix(C_GtGetText::h_GetText(" ms"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetTitle("Data Transmission");
+   this->mrc_ParentDialog.SetSubTitle("Settings");
+   this->mpc_Ui->pc_LabelHeading->setText("Cyclic Transmission Intervals");
+   this->mpc_Ui->pc_LabelFast->setText("Fast");
+   this->mpc_Ui->pc_LabelMedium->setText("Medium");
+   this->mpc_Ui->pc_LabelSlow->setText("Slow");
+   this->mpc_Ui->pc_SpinBoxFast->setSuffix(" ms");
+   this->mpc_Ui->pc_SpinBoxMedium->setSuffix(" ms");
+   this->mpc_Ui->pc_SpinBoxSlow->setSuffix(" ms");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
    //Tooltips
-   this->mpc_Ui->pc_LabelFast->SetToolTipInformation(C_GtGetText::h_GetText("Fast"),
-                                                     C_GtGetText::h_GetText(
-                                                        "Data elements configured using the cyclic interval \"Fast\" will use this cyclic transmission time"));
-   this->mpc_Ui->pc_LabelMedium->SetToolTipInformation(C_GtGetText::h_GetText("Medium"), C_GtGetText::h_GetText(
-                                                          "Data elements configured using the cyclic interval \"Medium\" will use this cyclic transmission time"));
-   this->mpc_Ui->pc_LabelSlow->SetToolTipInformation(C_GtGetText::h_GetText("Slow"),
-                                                     C_GtGetText::h_GetText(
-                                                        "Data elements configured using the cyclic interval \"Slow\" will use this cyclic transmission time"));
+   this->mpc_Ui->pc_LabelFast->SetToolTipInformation("Fast",
+                                                     "Data elements configured using the cyclic interval \"Fast\" will use this cyclic transmission time");
+   this->mpc_Ui->pc_LabelMedium->SetToolTipInformation("Medium", "Data elements configured using the cyclic interval \"Medium\" will use this cyclic transmission time");
+   this->mpc_Ui->pc_LabelSlow->SetToolTipInformation("Slow",
+                                                     "Data elements configured using the cyclic interval \"Slow\" will use this cyclic transmission time");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

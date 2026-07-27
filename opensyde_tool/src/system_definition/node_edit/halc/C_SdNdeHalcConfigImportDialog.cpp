@@ -15,7 +15,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_SclString.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -92,11 +91,11 @@ C_SdNdeHalcConfigImportDialog::~C_SdNdeHalcConfigImportDialog(void) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcConfigImportDialog::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Hardware Configuration"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Import"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Import Configuration"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetTitle("Hardware Configuration");
+   this->mrc_ParentDialog.SetSubTitle("Import");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Import Configuration");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -131,22 +130,22 @@ int32_t C_SdNdeHalcConfigImportDialog::PrepareDialog(QString & orc_ErrorDetails)
          {
             s32_Return = C_CHECKSUM;
             orc_ErrorDetails =
-               C_GtGetText::h_GetText(("Imported Hardware configuration is not compatible to this device type.\n"
+               ("Imported Hardware configuration is not compatible to this device type.\n"
                                        "Current device type: " + pc_Config->c_DeviceName + "\n"
                                        "Device type of imported Hardware configuration: " +
-                                       this->mc_ImportConfig.c_DeviceType + "\n").c_str());
+                                       this->mc_ImportConfig.c_DeviceType + "\n").c_str();
          }
          else if (this->mc_ImportConfig.u32_DefinitionContentVersion != pc_Config->u32_ContentVersion)
          {
             s32_Return = C_CHECKSUM;
             orc_ErrorDetails =
-               C_GtGetText::h_GetText(("Imported Hardware configuration version does not match the current "
+               ("Imported Hardware configuration version does not match the current "
                                        "used Hardware configuration version of this node.\n"
                                        "Current used version: " +
                                        C_SclString::IntToStr(pc_Config->u32_ContentVersion) + "\n"
                                        "Version of imported Hardware configuration: " +
                                        C_SclString::IntToStr(this->mc_ImportConfig.u32_DefinitionContentVersion) +
-                                       "\n").c_str());
+                                       "\n").c_str();
          }
          else
          {
@@ -157,14 +156,14 @@ int32_t C_SdNdeHalcConfigImportDialog::PrepareDialog(QString & orc_ErrorDetails)
             {
                if (s32_Return == C_NOACT)
                {
-                  orc_ErrorDetails = C_GtGetText::h_GetText("Imported Hardware configuration does not have any elements "
+                  orc_ErrorDetails = "Imported Hardware configuration does not have any elements "
                                                             "which does match to the current configuration. "
-                                                            "Nothing to import.");
+                                                            "Nothing to import.";
                }
                else
                {
                   orc_ErrorDetails =
-                     static_cast<QString>(C_GtGetText::h_GetText("Unknown error: %1")).arg(C_Uti::h_StwError(s32_Return));
+                     static_cast<QString>("Unknown error: %1").arg(C_Uti::h_StwError(s32_Return));
                }
             }
 
@@ -177,8 +176,7 @@ int32_t C_SdNdeHalcConfigImportDialog::PrepareDialog(QString & orc_ErrorDetails)
                if (q_Consistent == false)
                {
                   s32_Return = C_CONFIG;
-                  orc_ErrorDetails = C_GtGetText::h_GetText(
-                     "Current Hardware configuration of node is invalid. File does not match the definition. Error:\n");
+                  orc_ErrorDetails = "Current Hardware configuration of node is invalid. File does not match the definition. Error:\n";
                   orc_ErrorDetails += c_ErrDetails;
                }
             }
@@ -189,25 +187,24 @@ int32_t C_SdNdeHalcConfigImportDialog::PrepareDialog(QString & orc_ErrorDetails)
          switch (s32_Return)
          {
          case C_RANGE:
-            orc_ErrorDetails = C_GtGetText::h_GetText("The selected file does not exist.");
+            orc_ErrorDetails = "The selected file does not exist.";
             break;
          case C_NOACT:
-            orc_ErrorDetails = C_GtGetText::h_GetText("The selected file does not match the expected format.");
+            orc_ErrorDetails = "The selected file does not match the expected format.";
             break;
          case C_CONFIG:
-            orc_ErrorDetails = C_GtGetText::h_GetText("The Hardware configuration content of the file is invalid.");
+            orc_ErrorDetails = "The Hardware configuration content of the file is invalid.";
             break;
          default:
             orc_ErrorDetails =
-               static_cast<QString>(C_GtGetText::h_GetText("Unknown error: %1")).arg(C_Uti::h_StwError(s32_Return));
+               static_cast<QString>("Unknown error: %1").arg(C_Uti::h_StwError(s32_Return));
             break;
          }
       }
    }
    else
    {
-      orc_ErrorDetails = C_GtGetText::h_GetText(
-         "Current Hardware configuration of node is invalid. File can not be imported");
+      orc_ErrorDetails = "Current Hardware configuration of node is invalid. File can not be imported";
       s32_Return = C_RANGE;
    }
 
@@ -232,14 +229,14 @@ int32_t C_SdNdeHalcConfigImportDialog::GetResult(QString & orc_ErrorDetails) con
       orc_ErrorDetails = "";
       break;
    case C_RANGE:
-      orc_ErrorDetails = C_GtGetText::h_GetText("The current node is invalid.");
+      orc_ErrorDetails = "The current node is invalid.";
       break;
    case C_NOACT:
-      orc_ErrorDetails = C_GtGetText::h_GetText("The import dialog was not accepted or opened.");
+      orc_ErrorDetails = "The import dialog was not accepted or opened.";
       break;
    default:
       orc_ErrorDetails =
-         static_cast<QString>(C_GtGetText::h_GetText("Unknown error: %1")).arg(C_Uti::h_StwError(this->ms32_Result));
+         static_cast<QString>("Unknown error: %1").arg(C_Uti::h_StwError(this->ms32_Result));
       break;
    }
 
@@ -258,13 +255,12 @@ void C_SdNdeHalcConfigImportDialog::m_OkClicked(void)
    if (this->mpc_Ui->pc_TreeView->IsSelectionOfLinkedChannelsValid(c_DomainIndices, c_MissingChannelIndices) == false)
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eQUESTION);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Invalid selection"));
+      c_Message.SetHeading("Invalid selection");
       c_Message.SetDescription(
-         C_GtGetText::h_GetText(
-            "Your selection contains channels that are or will get linked to another channel which is not selected. "
-            "Do you want to select all linked channels too?"));
-      c_Message.SetOkButtonText(C_GtGetText::h_GetText("Select Linked Channels"));
-      c_Message.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+         "Your selection contains channels that are or will get linked to another channel which is not selected. "
+            "Do you want to select all linked channels too?");
+      c_Message.SetOkButtonText("Select Linked Channels");
+      c_Message.SetNoButtonText("Cancel");
       if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
       {
          this->mpc_Ui->pc_TreeView->CheckChannels(c_DomainIndices, c_MissingChannelIndices);

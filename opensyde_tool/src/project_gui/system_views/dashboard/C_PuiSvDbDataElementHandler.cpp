@@ -15,7 +15,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSvDbDataElementHandler.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_PuiSvData.hpp"
@@ -1627,20 +1626,20 @@ void C_PuiSvDbDataElementHandler::m_GetErrorDescriptionForManualOperation(const 
    case C_RANGE:
    case C_RD_WR:
    case C_OVERFLOW:
-      orc_Description = C_GtGetText::h_GetText("Operation failed with an internal error.");
+      orc_Description = "Operation failed with an internal error.";
       //Update log file
       C_OscLoggingHandler::h_Flush();
       orc_Details = static_cast<QString>("%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.").
-                    arg(C_GtGetText::h_GetText("For details see ")).
+                    arg("For details see ").
                     arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()).
                     arg(stw::opensyde_gui::mc_STYLESHEET_GUIDE_COLOR_LINK).
-                    arg(C_GtGetText::h_GetText("log file"));
+                    arg("log file");
       break;
    case C_TIMEOUT:
-      orc_Description = C_GtGetText::h_GetText("Operation did not get a response within timeout interval.");
+      orc_Description = "Operation did not get a response within timeout interval.";
       break;
    case C_NOACT:
-      orc_Description = C_GtGetText::h_GetText("Operation could not send request (e.g. Tx buffer full).");
+      orc_Description = "Operation could not send request (e.g. Tx buffer full).";
       break;
    case C_WARN:
       if (this->mq_ReadItem == true)
@@ -1650,29 +1649,27 @@ void C_PuiSvDbDataElementHandler::m_GetErrorDescriptionForManualOperation(const 
          switch (ou8_Nrc)
          {
          case 0x13:
-            orc_Details = C_GtGetText::h_GetText("Incorrect length of request.");
+            orc_Details = "Incorrect length of request.";
 
             break;
          case 0x31:
-            orc_Details = C_GtGetText::h_GetText("Datapool element specified by data identifier is not available.");
+            orc_Details = "Datapool element specified by data identifier is not available.";
             break;
          case 0x22:
-            orc_Details = C_GtGetText::h_GetText("Access to Datapool element blocked by application.");
+            orc_Details = "Access to Datapool element blocked by application.";
             break;
          case 0x33:
-            orc_Details = C_GtGetText::h_GetText("Required security level was not unlocked.");
+            orc_Details = "Required security level was not unlocked.";
             break;
          case 0x14:
-            orc_Details = C_GtGetText::h_GetText(
-               "The total length of the response message exceeds the available buffer size.");
+            orc_Details = "The total length of the response message exceeds the available buffer size.";
             break;
          case 0x7F:
-            orc_Details = C_GtGetText::h_GetText(
-               "The requested service is not available in the currently active session.");
+            orc_Details = "The requested service is not available in the currently active session.";
             break;
          default:
             orc_Details =
-               static_cast<QString>(C_GtGetText::h_GetText("Unknown NRC: 0x%1")).arg(QString::number(ou8_Nrc,
+               static_cast<QString>("Unknown NRC: 0x%1").arg(QString::number(ou8_Nrc,
                                                                                                      16));
             break;
          }
@@ -1682,47 +1679,45 @@ void C_PuiSvDbDataElementHandler::m_GetErrorDescriptionForManualOperation(const 
          switch (ou8_Nrc)
          {
          case 0x13:
-            orc_Details = C_GtGetText::h_GetText("Incorrect length of request.\n"
+            orc_Details = "Incorrect length of request.\n"
                                                  "Specifically for this service: Size of payload data does not "
-                                                 "match size of Datapool element.");
+                                                 "match size of Datapool element.";
             ors32_TextHeight = 300;
             break;
          case 0x31:
-            orc_Details = C_GtGetText::h_GetText("Datapool element specified by data identifier is not available.");
+            orc_Details = "Datapool element specified by data identifier is not available.";
             ors32_TextHeight = 250;
             break;
          case 0x22:
-            orc_Details = C_GtGetText::h_GetText("Access to Datapool element blocked by application.");
+            orc_Details = "Access to Datapool element blocked by application.";
             ors32_TextHeight = 250;
             break;
          case 0x33:
-            orc_Details = C_GtGetText::h_GetText("Required security level was not unlocked.");
+            orc_Details = "Required security level was not unlocked.";
             ors32_TextHeight = 250;
             break;
          case 0x14:
-            orc_Details = C_GtGetText::h_GetText(
-               "The total length of the response message exceeds the available buffer size.");
+            orc_Details = "The total length of the response message exceeds the available buffer size.";
             ors32_TextHeight = 250;
             break;
          case 0x7F:
-            orc_Details = C_GtGetText::h_GetText(
-               "The requested service is not available in the currently active session.");
+            orc_Details = "The requested service is not available in the currently active session.";
             ors32_TextHeight = 250;
             break;
          default:
             orc_Details =
-               static_cast<QString>(C_GtGetText::h_GetText("Unknown NRC: 0x%1")).arg(QString::number(ou8_Nrc,
+               static_cast<QString>("Unknown NRC: 0x%1").arg(QString::number(ou8_Nrc,
                                                                                                      16));
             ors32_TextHeight = 250;
             break;
          }
       }
       orc_Description =
-         static_cast<QString>(C_GtGetText::h_GetText("Operation failed with error response (%1).")).arg(orc_Details);
+         static_cast<QString>("Operation failed with error response (%1).").arg(orc_Details);
       orc_Details = "";
       break;
    default:
-      orc_Description = C_GtGetText::h_GetText("Operation failure, cause unknown.");
+      orc_Description = "Operation failure, cause unknown.";
       ors32_TextHeight = 180;
       break;
    }

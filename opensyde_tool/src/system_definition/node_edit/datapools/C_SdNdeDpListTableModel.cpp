@@ -20,7 +20,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdClipBoardHelper.hpp"
 #include "C_Uti.hpp"
 #include "C_SdUtil.hpp"
@@ -150,34 +149,34 @@ QVariant C_SdNdeDpListTableModel::headerData(const int32_t os32_Section, const Q
             c_Retval = "";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eVALUE_TYPE:
-            c_Retval = C_GtGetText::h_GetText("Value type");
+            c_Retval = "Value type";
             break;
          case eARRAY_SIZE:
-            c_Retval = C_GtGetText::h_GetText("Array size");
+            c_Retval = "Array size";
             break;
          case eAUTO_MIN_MAX:
-            c_Retval = C_GtGetText::h_GetText("Auto\nMin/Max");
+            c_Retval = "Auto\nMin/Max";
             break;
          case eMIN:
-            c_Retval = C_GtGetText::h_GetText("Min");
+            c_Retval = "Min";
             break;
          case eMAX:
-            c_Retval = C_GtGetText::h_GetText("Max");
+            c_Retval = "Max";
             break;
          case eFACTOR:
-            c_Retval = C_GtGetText::h_GetText("Factor");
+            c_Retval = "Factor";
             break;
          case eOFFSET:
-            c_Retval = C_GtGetText::h_GetText("Offset");
+            c_Retval = "Offset";
             break;
          case eUNIT:
-            c_Retval = C_GtGetText::h_GetText("Unit");
+            c_Retval = "Unit";
             break;
          case eDATA_SET:
             if (s32_DataSetIndex >= 0)
@@ -188,23 +187,23 @@ QVariant C_SdNdeDpListTableModel::headerData(const int32_t os32_Section, const Q
                {
                   if (static_cast<uint32_t>(s32_DataSetIndex) < pc_List->c_DataSets.size())
                   {
-                     c_Retval = static_cast<QString>(C_GtGetText::h_GetText("Dataset -\n")) +
+                     c_Retval = static_cast<QString>("Dataset -\n") +
                                 static_cast<QString>(pc_List->c_DataSets[s32_DataSetIndex].c_Name.c_str());
                   }
                }
             }
             break;
          case eACCESS:
-            c_Retval = C_GtGetText::h_GetText("Access");
+            c_Retval = "Access";
             break;
          case eDATA_SIZE:
-            c_Retval = C_GtGetText::h_GetText("Data size");
+            c_Retval = "Data size";
             break;
          case eADDRESS:
-            c_Retval = C_GtGetText::h_GetText("Address");
+            c_Retval = "Address";
             break;
          case eEVENT_CALL:
-            c_Retval = C_GtGetText::h_GetText("Event call");
+            c_Retval = "Event call";
             break;
          case eUNKNOWN:
          default:
@@ -224,55 +223,55 @@ QVariant C_SdNdeDpListTableModel::headerData(const int32_t os32_Section, const Q
             //no tooltip
             break;
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("#");
+            c_Retval = "#";
             break;
          case eICON:
-            c_Retval = C_GtGetText::h_GetText("");
+            c_Retval = "";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eVALUE_TYPE:
-            c_Retval = C_GtGetText::h_GetText("Value type");
+            c_Retval = "Value type";
             break;
          case eARRAY_SIZE:
-            c_Retval = C_GtGetText::h_GetText("Array size");
+            c_Retval = "Array size";
             break;
          case eAUTO_MIN_MAX:
-            c_Retval = C_GtGetText::h_GetText("Auto Min/Max");
+            c_Retval = "Auto Min/Max";
             break;
          case eMIN:
-            c_Retval = C_GtGetText::h_GetText("Min");
+            c_Retval = "Min";
             break;
          case eMAX:
-            c_Retval = C_GtGetText::h_GetText("Max");
+            c_Retval = "Max";
             break;
          case eFACTOR:
-            c_Retval = C_GtGetText::h_GetText("Factor");
+            c_Retval = "Factor";
             break;
          case eOFFSET:
-            c_Retval = C_GtGetText::h_GetText("Offset");
+            c_Retval = "Offset";
             break;
          case eUNIT:
-            c_Retval = C_GtGetText::h_GetText("Unit");
+            c_Retval = "Unit";
             break;
          case eDATA_SET:
-            c_Retval = C_GtGetText::h_GetText("Dataset");
+            c_Retval = "Dataset";
             break;
          case eACCESS:
-            c_Retval = C_GtGetText::h_GetText("Access");
+            c_Retval = "Access";
             break;
          case eDATA_SIZE:
-            c_Retval = C_GtGetText::h_GetText("Data size");
+            c_Retval = "Data size";
             break;
          case eADDRESS:
-            c_Retval = C_GtGetText::h_GetText("Address");
+            c_Retval = "Address";
             break;
          case eEVENT_CALL:
-            c_Retval = C_GtGetText::h_GetText("Event call");
+            c_Retval = "Event call";
             break;
          case eUNKNOWN:
          default:
@@ -281,12 +280,12 @@ QVariant C_SdNdeDpListTableModel::headerData(const int32_t os32_Section, const Q
       }
       else if (os32_Role == ms32_USER_ROLE_TOOL_TIP_CONTENT)
       {
-         const QString c_PhysicalValueInfo = C_GtGetText::h_GetText("The raw value of a data element is the value as it is transmitted in the network."
+         const QString c_PhysicalValueInfo = "The raw value of a data element is the value as it is transmitted in the network."
                                                                     "\nThe physical value of a data element is the value of the physical quantity (e.g. speed, "
                                                                     "\nrpm, temperature, etc.) that represents the data element."
                                                                     "\nThe following conversion formula is used to transform the raw value "
                                                                     "\nto a physical value or in the reverse direction:"
-                                                                    "\n\n[Physical value] = ([Raw value] * [Factor]) + [Offset]");
+                                                                    "\n\n[Physical value] = ([Raw value] * [Factor]) + [Offset]";
          QString c_InfoText;
 
          switch (e_Col)
@@ -295,40 +294,38 @@ QVariant C_SdNdeDpListTableModel::headerData(const int32_t os32_Section, const Q
             //no tooltip
             break;
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Data element number.");
+            c_Retval = "Data element number.";
             break;
          case eICON:
             c_Retval = "Type of data element";
             break;
          case eNAME:
-            c_Retval =  static_cast<QString>(C_GtGetText::h_GetText(
-                                                "Symbolic data element name. Unique within a Datapool list."
+            c_Retval =  static_cast<QString>("Symbolic data element name. Unique within a Datapool list."
                                                 "\nFollowing C naming conventions are required:"
                                                 "\n - must not be empty"
                                                 "\n - only alphanumeric characters and \"_\""
-                                                "\n - should not be longer than %1 (= project setting) characters")).arg(
+                                                "\n - should not be longer than %1 (= project setting) characters").arg(
                C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit());
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment for this data element.");
+            c_Retval = "Comment for this data element.";
             break;
          case eVALUE_TYPE:
-            c_Retval = C_GtGetText::h_GetText("Data element value type");
+            c_Retval = "Data element value type";
             break;
          case eARRAY_SIZE:
-            c_Retval = C_GtGetText::h_GetText("Array size range: 1 - 500. 1 = no array.");
+            c_Retval = "Array size range: 1 - 500. 1 = no array.";
             break;
          case eAUTO_MIN_MAX:
-            c_InfoText = C_GtGetText::h_GetText(
-               "Minimum and Maximum are defined automatically depending on data element value type.\nValues are set as physical values.\n\n");
+            c_InfoText = "Minimum and Maximum are defined automatically depending on data element value type.\nValues are set as physical values.\n\n";
             c_Retval = c_InfoText.append(c_PhysicalValueInfo);
             break;
          case eMIN:
-            c_InfoText = C_GtGetText::h_GetText("Minimum is set as physical value.\n\n");
+            c_InfoText = "Minimum is set as physical value.\n\n";
             c_Retval = c_InfoText.append(c_PhysicalValueInfo);
             break;
          case eMAX:
-            c_InfoText = C_GtGetText::h_GetText("Maximum is set as physical value.\n\n");
+            c_InfoText = "Maximum is set as physical value.\n\n";
             c_Retval = c_InfoText.append(c_PhysicalValueInfo);
             break;
          case eFACTOR:
@@ -338,30 +335,29 @@ QVariant C_SdNdeDpListTableModel::headerData(const int32_t os32_Section, const Q
             c_Retval = c_PhysicalValueInfo;
             break;
          case eUNIT:
-            c_InfoText = C_GtGetText::h_GetText("Unit of the signals physical quantity\n\n");
+            c_InfoText = "Unit of the signals physical quantity\n\n";
             c_Retval = c_InfoText.append(c_PhysicalValueInfo);
             break;
          case eDATA_SET:
-            c_Retval = C_GtGetText::h_GetText("Dataset value");
+            c_Retval = "Dataset value";
             break;
          case eACCESS:
-            c_Retval = C_GtGetText::h_GetText("Data element access permission via diagnostic protocol. \n"
+            c_Retval = "Data element access permission via diagnostic protocol. \n"
                                               "RO = Read Only\n"
                                               "RW = Read / Write"
-                                              "\nUse case: Data element visualization in Dashboards");
+                                              "\nUse case: Data element visualization in Dashboards";
             break;
          case eDATA_SIZE:
-            c_Retval = C_GtGetText::h_GetText("Resulting NVM usage for this data element in bytes."
-                                              "\nDepends on value type and array size.");
+            c_Retval = "Resulting NVM usage for this data element in bytes."
+                                              "\nDepends on value type and array size.";
             break;
          case eADDRESS:
-            c_Retval = C_GtGetText::h_GetText("Start address where this data element \n"
+            c_Retval = "Start address where this data element \n"
                                               "is stored in non volatile memory (NVM).\n"
-                                              "<relative>(<absolute>)");
+                                              "<relative>(<absolute>)";
             break;
          case eEVENT_CALL:
-            c_Retval = C_GtGetText::h_GetText(
-               "Notify the application with a callback function when data elements are changed.");
+            c_Retval = "Notify the application with a callback function when data elements are changed.";
             break;
          case eUNKNOWN:
          default:
@@ -1920,7 +1916,7 @@ void C_SdNdeDpListTableModel::m_FillDpListElementInfo(const uint32_t ou32_Elemen
       // Value Type
       if (pc_OscElement->q_InterpretAsString == true)
       {
-         rc_Data.c_ValueType = C_GtGetText::h_GetText("string");
+         rc_Data.c_ValueType = "string";
       }
       else
       {
@@ -2197,7 +2193,7 @@ void C_SdNdeDpListTableModel::m_FillDpListElementInfo(const uint32_t ou32_Elemen
             QString c_Content;
 
             // Heading
-            rc_Data.c_InvalidToolTipHeading = static_cast<QString>(C_GtGetText::h_GetText("%1 has invalid content")).
+            rc_Data.c_InvalidToolTipHeading = static_cast<QString>("%1 has invalid content").
                                               arg(C_PuiSdHandlerNodeLogic::h_GetElementTypeName(e_DataPoolType));
 
             // Content
@@ -2205,29 +2201,28 @@ void C_SdNdeDpListTableModel::m_FillDpListElementInfo(const uint32_t ou32_Elemen
 
             if (((q_NameConflict == true) || (q_NameInvalid == true)) || (q_MinOverMax == true))
             {
-               c_Content += C_GtGetText::h_GetText("Invalid properties:\n");
+               c_Content += "Invalid properties:\n";
                if (q_NameConflict == true)
                {
                   c_Content +=
-                     static_cast<QString>(C_GtGetText::h_GetText("Duplicate %1 name detected.\n")).arg(
+                     static_cast<QString>("Duplicate %1 name detected.\n").arg(
                         c_Name);
                }
                if (q_NameInvalid == true)
                {
                   c_Content +=
-                     static_cast<QString>(C_GtGetText::h_GetText(
-                                             "%1 name is empty or contains invalid characters.\n"))
+                     static_cast<QString>("%1 name is empty or contains invalid characters.\n")
                      .arg(c_Name);
                }
                if (q_MinOverMax == true)
                {
-                  c_Content += C_GtGetText::h_GetText("Minimum value over maximum value\n");
+                  c_Content += "Minimum value over maximum value\n";
                }
                c_Content += "\n";
             }
             if (q_DataSetInvalid == true)
             {
-               c_Content += C_GtGetText::h_GetText("Data sets:\n");
+               c_Content += "Data sets:\n";
                for (uint32_t u32_ItAppl = 0;
                     (u32_ItAppl < c_InvalidDataSetIndices.size()) &&
                     (u32_ItAppl < mu32_TOOL_TIP_MAXIMUM_ITEMS);

@@ -16,7 +16,6 @@
 #include "stwerrors.hpp"
 #include "C_SclString.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDbWidget.hpp"
 #include "C_OgePopUpDialog.hpp"
@@ -152,20 +151,19 @@ C_SdNdeDbWidget::~C_SdNdeDbWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabOwned->setText(C_GtGetText::h_GetText("Owned\nDatapools"));
-   this->mpc_Ui->pc_LabOutput->setText(C_GtGetText::h_GetText("Output\nFiles"));
+   this->mpc_Ui->pc_LabOwned->setText("Owned\nDatapools");
+   this->mpc_Ui->pc_LabOutput->setText("Output\nFiles");
 
    //Tool tips
-   this->mpc_Ui->pc_PubOpenIde->SetToolTipInformation(C_GtGetText::h_GetText("Open IDE"),
-                                                      C_GtGetText::h_GetText(
-                                                         "Execute IDE Call specified in project properties."));
-   this->mpc_Ui->pc_PubEdit->SetToolTipInformation(C_GtGetText::h_GetText("Edit"),
-                                                   C_GtGetText::h_GetText("Edit Data Block properties."));
-   this->mpc_Ui->pc_PubDelete->SetToolTipInformation(C_GtGetText::h_GetText("Delete"),
-                                                     C_GtGetText::h_GetText("Delete Data Block."));
+   this->mpc_Ui->pc_PubOpenIde->SetToolTipInformation("Open IDE",
+                                                      "Execute IDE Call specified in project properties.");
+   this->mpc_Ui->pc_PubEdit->SetToolTipInformation("Edit",
+                                                   "Edit Data Block properties.");
+   this->mpc_Ui->pc_PubDelete->SetToolTipInformation("Delete",
+                                                     "Delete Data Block.");
    this->mpc_Ui->pc_PubComment->SetToolTipInformation(
-      C_GtGetText::h_GetText("Comment"),
-      C_GtGetText::h_GetText("Show or hide comment for this Data Block."));
+      "Comment",
+      "Show or hide comment for this Data Block.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -229,18 +227,18 @@ void C_SdNdeDbWidget::CheckProcessIdError(void) const
    {
       tgl_assert(pc_Node->CheckApplicationProcessIdValid(this->mu32_ApplicationIndex, q_Valid) == C_NO_ERR);
       c_Info =
-         C_SdUtil::h_InitUsedIdsString(c_UsedIds, pc_Node->c_Properties.c_Name.c_str(), C_GtGetText::h_GetText("node"));
+         C_SdUtil::h_InitUsedIdsString(c_UsedIds, pc_Node->c_Properties.c_Name.c_str(), "node");
    }
    this->mpc_Ui->pc_LabErrorIcon->setVisible(!q_Valid);
    if (q_Valid == false)
    {
-      const QString c_Heading = C_GtGetText::h_GetText("Data block: Process ID invalid");
+      const QString c_Heading = "Data block: Process ID invalid";
       this->mpc_Ui->pc_LabErrorIcon->SetToolTipInformation(c_Heading, c_Info, C_NagToolTip::eERROR);
    }
    else
    {
-      this->mpc_Ui->pc_LabErrorIcon->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                           C_GtGetText::h_GetText(""),
+      this->mpc_Ui->pc_LabErrorIcon->SetToolTipInformation("",
+                                                           "",
                                                            C_NagToolTip::eERROR);
    }
 }
@@ -276,7 +274,7 @@ void C_SdNdeDbWidget::m_LoadData(void)
                                         arg(pc_Application->c_Name.c_str()));
       if (pc_Application->c_Comment == "")
       {
-         this->mpc_Ui->pc_TedComment->setText(C_GtGetText::h_GetText("<No comment>"));
+         this->mpc_Ui->pc_TedComment->setText("<No comment>");
       }
       else
       {
@@ -285,7 +283,7 @@ void C_SdNdeDbWidget::m_LoadData(void)
 
       if (pc_Application->e_Type == C_OscNodeApplication::eBINARY)
       {
-         this->mpc_Ui->pc_LabFileGenActive->setText(C_GtGetText::h_GetText("File Generation: Disabled"));
+         this->mpc_Ui->pc_LabFileGenActive->setText("File Generation: Disabled");
          this->mpc_Ui->pc_LabFileGenActive->setDisabled(true);
          this->mpc_Ui->pc_LabOwned->setDisabled(true);
          this->mpc_Ui->pc_LabFileGenActive->SetForegroundColor(9);
@@ -299,14 +297,14 @@ void C_SdNdeDbWidget::m_LoadData(void)
          {
             if (pc_Node->c_Properties.q_XappSupport == true)
             {
-               this->mpc_Ui->pc_LabFileGenActive->setText(C_GtGetText::h_GetText("File Generation: X.App Configuration"));
+               this->mpc_Ui->pc_LabFileGenActive->setText("File Generation: X.App Configuration");
                this->mpc_Ui->pc_LabOwnedIcon->SetSvg("://images/system_definition/IconDataPoolOwnedDisabled.svg");
                this->mpc_Ui->pc_LabOwnedCount->SetForegroundColor(9);
                this->mpc_Ui->pc_LabOwned->SetForegroundColor(9);
             }
             else
             {
-               this->mpc_Ui->pc_LabFileGenActive->setText(C_GtGetText::h_GetText("File Generation: Source Code"));
+               this->mpc_Ui->pc_LabFileGenActive->setText("File Generation: Source Code");
                this->mpc_Ui->pc_LabOwnedIcon->SetSvg("://images/system_definition/IconDataPoolOwned.svg");
                this->mpc_Ui->pc_LabOwnedCount->SetForegroundColor(4);
                this->mpc_Ui->pc_LabOwned->SetForegroundColor(6);
@@ -314,7 +312,7 @@ void C_SdNdeDbWidget::m_LoadData(void)
          }
          else
          {
-            this->mpc_Ui->pc_LabFileGenActive->setText(C_GtGetText::h_GetText("File Generation: Parameter Set Image"));
+            this->mpc_Ui->pc_LabFileGenActive->setText("File Generation: Parameter Set Image");
             this->mpc_Ui->pc_LabOwnedIcon->SetSvg("://images/system_definition/IconDataPoolOwned.svg");
             this->mpc_Ui->pc_LabOwnedCount->SetForegroundColor(4);
             this->mpc_Ui->pc_LabOwned->SetForegroundColor(6);
@@ -328,7 +326,7 @@ void C_SdNdeDbWidget::m_LoadData(void)
       // File count
       this->mpc_Ui->pc_LabOutputCount->setText(QString::number(pc_Application->c_ResultPaths.size()));
       this->mpc_Ui->pc_WiOutput->SetToolTipInformation(
-         static_cast<QString>(C_GtGetText::h_GetText("Output Files (%1)")).arg(pc_Application->c_ResultPaths.size()),
+         static_cast<QString>("Output Files (%1)").arg(pc_Application->c_ResultPaths.size()),
          this->m_GetAllOutputFiles());
 
       // Datapool count
@@ -337,7 +335,7 @@ void C_SdNdeDbWidget::m_LoadData(void)
       if (u32_DpCount > 0)
       {
          this->mpc_Ui->pc_WiOwned->SetToolTipInformation(
-            static_cast<QString>(C_GtGetText::h_GetText("Owned Datapools (%1)")).arg(u32_DpCount),
+            static_cast<QString>("Owned Datapools (%1)").arg(u32_DpCount),
             this->m_GetAllAssociatedDataPoolNames());
       }
 
@@ -424,12 +422,11 @@ void C_SdNdeDbWidget::m_OnDelete(void)
       {
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
          //Detected change from programmable application to other type so ask user to confirm
-         c_Message.SetHeading(C_GtGetText::h_GetText("Data Block delete"));
-         c_Message.SetDescription(C_GtGetText::h_GetText(
-                                     "Do you really want to delete this Data Block?\n"
-                                     "All owned Datapools will become unassigned."));
-         c_Message.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-         c_Message.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+         c_Message.SetHeading("Data Block delete");
+         c_Message.SetDescription("Do you really want to delete this Data Block?\n"
+                                     "All owned Datapools will become unassigned.");
+         c_Message.SetOkButtonText("Delete");
+         c_Message.SetNoButtonText("Keep");
          c_Message.SetCustomMinHeight(180, 180);
          if (c_Message.Execute() == C_OgeWiCustomMessage::eYES)
          {
@@ -452,10 +449,10 @@ void C_SdNdeDbWidget::m_OnDelete(void)
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
       //Detected change from programmable application to other type so ask user to confirm
-      c_Message.SetHeading(C_GtGetText::h_GetText("Data Block delete "));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Do you really want to delete this Data Block?"));
-      c_Message.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-      c_Message.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+      c_Message.SetHeading("Data Block delete ");
+      c_Message.SetDescription("Do you really want to delete this Data Block?");
+      c_Message.SetOkButtonText("Delete");
+      c_Message.SetNoButtonText("Keep");
       c_Message.SetCustomMinHeight(180, 180);
       if (c_Message.Execute() == C_OgeWiCustomMessage::eYES)
       {
@@ -484,20 +481,19 @@ void C_SdNdeDbWidget::m_OnOpenIdeClicked(void)
       if (c_IdeCall == "")
       {
          C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eERROR,
-                                           C_GtGetText::h_GetText("No IDE provided. Edit Data Block properties and "
-                                                                  "insert an IDE call."));
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("Open IDE"));
+                                           "No IDE provided. Edit Data Block properties and "
+                                                                  "insert an IDE call.");
+         c_MessageBox.SetHeading("Open IDE");
          c_MessageBox.SetCustomMinHeight(180, 180);
          c_MessageBox.Execute();
       }
       else if (C_ImpUtil::h_OpenIde(c_IdeCall) != C_NO_ERR)
       {
          C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eERROR,
-                                           C_GtGetText::h_GetText("Could not start IDE. Possible reasons: "
-                                                                  "Insufficient permissions or missing executable."));
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("Open IDE"));
-         c_MessageBox.SetDetails(static_cast<QString>(C_GtGetText::h_GetText(
-                                                         "The following call returned an error: \n%1")).
+                                           "Could not start IDE. Possible reasons: "
+                                                                  "Insufficient permissions or missing executable.");
+         c_MessageBox.SetHeading("Open IDE");
+         c_MessageBox.SetDetails(static_cast<QString>("The following call returned an error: \n%1").
                                  arg(c_IdeCall));
          c_MessageBox.SetCustomMinHeight(200, 270);
          c_MessageBox.Execute();
@@ -618,7 +614,7 @@ QString C_SdNdeDbWidget::m_GetAllAssociatedDataPoolNames(void) const
             if (rc_DataPool.e_Type == C_OscNodeDataPool::eCOM)
             {
                c_Retval += ", ";
-               c_Retval += C_GtGetText::h_GetText("Protocol: ");
+               c_Retval += "Protocol: ";
                c_Retval += C_PuiSdUtil::h_ConvertProtocolTypeToString(C_PuiSdUtil::h_GetRelatedCanProtocolType(
                                                                          this->mu32_NodeIndex, u32_ItDataPool));
             }
@@ -649,7 +645,7 @@ QString C_SdNdeDbWidget::m_GetAllOutputFiles(void) const
       for (uint32_t u32_ItOutputFiles = 0; u32_ItOutputFiles < pc_Application->c_ResultPaths.size();
            u32_ItOutputFiles++)
       {
-         c_Retval += static_cast<QString>(C_GtGetText::h_GetText("Output File"));
+         c_Retval += static_cast<QString>("Output File");
          if (pc_Application->c_ResultPaths.size() > 1)
          {
             c_Retval += " ";

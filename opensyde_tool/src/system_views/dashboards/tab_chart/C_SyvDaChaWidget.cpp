@@ -21,7 +21,6 @@
 #include "C_Uti.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -277,7 +276,7 @@ void C_SyvDaChaWidget::HandleManualOperationFinished(const int32_t os32_Result, 
          }
          else
          {
-            c_Message.SetHeading(C_GtGetText::h_GetText("Transmission failure"));
+            c_Message.SetHeading("Transmission failure");
             c_Message.SetDescription(c_Description);
             c_Message.SetDetails(c_Details);
             c_Message.Execute();
@@ -324,15 +323,15 @@ void C_SyvDaChaWidget::RegisterDataPoolElementCyclicError(
 
       if (ou8_ErrorCode == 0x22U)
       {
-         c_AdditionalInfo = C_GtGetText::h_GetText("Access to element value failed (e.g. blocked by application)");
+         c_AdditionalInfo = "Access to element value failed (e.g. blocked by application)";
       }
       else
       {
          c_AdditionalInfo =
-            static_cast<QString>(C_GtGetText::h_GetText("Unknown NRC: 0x%1")).arg(QString::number(ou8_ErrorCode, 16));
+            static_cast<QString>("Unknown NRC: 0x%1").arg(QString::number(ou8_ErrorCode, 16));
       }
       c_Info =
-         static_cast<QString>(C_GtGetText::h_GetText("Cyclic service failed with error: %1")).arg(c_AdditionalInfo);
+         static_cast<QString>("Cyclic service failed with error: %1").arg(c_AdditionalInfo);
       this->mc_CommmunicationErrors.remove(orc_WidgetDataPoolElementId);
       this->mc_CommmunicationErrors.insert(orc_WidgetDataPoolElementId, c_Info);
       this->m_UpdateErrorIcon();
@@ -606,21 +605,21 @@ void C_SyvDaChaWidget::m_SetupContextMenu(void)
 {
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
 
-   this->mpc_ActionAdd = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Add data element(s)"),
+   this->mpc_ActionAdd = this->mpc_ContextMenu->addAction("Add data element(s)",
                                                           this, &C_SyvDaChaWidget::m_AddNewDataElement,
                                                           static_cast<int32_t>(Qt::CTRL) +
                                                           static_cast<int32_t>(Qt::Key_Plus));
    this->mpc_ContextMenu->addSeparator();
 
    this->mpc_ActionConfigDataElement =
-      this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Data element properties"),
+      this->mpc_ContextMenu->addAction("Data element properties",
                                        this, &C_SyvDaChaWidget::m_CallProperties);
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ActionRemove = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Remove"),
+   this->mpc_ActionRemove = this->mpc_ContextMenu->addAction("Remove",
                                                              this, &C_SyvDaChaWidget::m_RemoveDataElement,
                                                              static_cast<int32_t>(Qt::Key_Delete));
-   this->mpc_ActionRemoveAll = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Remove all"),
+   this->mpc_ActionRemoveAll = this->mpc_ContextMenu->addAction("Remove all",
                                                                 this, &C_SyvDaChaWidget::m_RemoveAllDataElements);
 
    this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -1052,7 +1051,7 @@ void C_SyvDaChaWidget::m_UpdateErrorIcon(void)
             {
                if (c_ItSigError.key() == c_Id)
                {
-                  const QString c_Text = static_cast<QString>(C_GtGetText::h_GetText("%1 had invalid DLC %2.")).
+                  const QString c_Text = static_cast<QString>("%1 had invalid DLC %2.").
                                          arg(C_PuiSdUtil::h_GetSignalNamespace(c_ItSigError.key())).
                                          arg(QString::number(c_ItSigError.value()));
                   //Set error

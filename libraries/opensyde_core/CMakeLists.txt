@@ -309,6 +309,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContentUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolDataSet.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolFiler.cpp
+     
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolList.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElement.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElementId.cpp
@@ -406,8 +407,9 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPool.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContent.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolDataSet.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolFiler.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolList.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolFiler.hpp
+      
+       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolList.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElement.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElementId.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElementOptArrayId.hpp
@@ -590,9 +592,9 @@ else()
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication
        ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/device_config
-       ${CMAKE_CURRENT_SOURCE_DIR}/hex_file
-       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher
-   )
+        ${CMAKE_CURRENT_SOURCE_DIR}/hex_file
+        ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher
+    )
 endif()
 
 #communication protocol drivers system update
@@ -688,6 +690,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolJ1939.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolL2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolOpenSyde.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolUds.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocolOpenSyde.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocols.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComMessageLogger.cpp
@@ -702,6 +705,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolJ1939.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolL2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolOpenSyde.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/cmon_protocols/C_CanMonProtocolUds.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocolOpenSyde.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComLoggerProtocols.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/communication/C_OscComMessageLogger.hpp

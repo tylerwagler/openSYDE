@@ -26,6 +26,15 @@
 #include "C_SyvComDriverThread.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_CieConverter.hpp"
+#include "C_CamCanTpDecoder.hpp"
+
+namespace stw
+{
+namespace opensyde_gui_logic
+{
+   class C_CamCanTpTransmitter;
+}
+}
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -92,6 +101,10 @@ public:
    uint32_t GetTxCount(void) const;
    uint32_t GetTxErrors(void) const;
 
+   // CAN-TP access
+   C_CamCanTpDecoder & GetCanTpDecoder(void);
+   void SetCanTpTransmitter(C_CamCanTpTransmitter * const opc_Transmitter);
+
    int32_t GetResults(int32_t & ors32_Result) const;
    int32_t GetResultBusses(std::vector<stw::opensyde_core::C_OscSystemBus> & orc_Busses) const;
 
@@ -157,6 +170,15 @@ private:
 
    // DBC files
    std::map<stw::scl::C_SclString, C_CieConverter::C_CieCommDefinition> mc_DbcFiles;
+
+   // CAN-TP (ISO 15765-2) decoder
+   C_CamCanTpDecoder mc_CanTpDecoder;
+   C_CamCanTpTransmitter * mpc_CanTpTransmitter;
+   void m_ApplyTpMetadata(stw::opensyde_core::C_OscComMessageLoggerData & orc_MessageData,
+                           const C_CamCanTpResult & orc_TpResult) const;
+
+   // Per-ID message counter for CAN-TP reconstructed messages
+   std::map<uint32_t, uint32_t> mc_MessageCounter;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

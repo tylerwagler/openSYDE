@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_OgeWiOnlyBackground.hpp"
+#include "C_CamGenTableView.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -46,6 +47,7 @@ public:
    void UpdateMessageData(const uint32_t ou32_MessageIndex) const;
    void TriggerModelUpdateCyclicMessage(const uint32_t ou32_MessageIndex, const bool oq_Active) const;
    void TriggerMessageReload(void);
+   C_CamGenTableView * GetTableView(void) const;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

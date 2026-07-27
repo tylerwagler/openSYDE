@@ -13,11 +13,12 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QCheckBox>
+
 #include "C_CamMosWidget.hpp"
 #include "ui_C_CamMosWidget.h"
 
 #include "C_CamOgeWiSectionHeader.hpp"
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 #include "C_CamProHandler.hpp"
 #include "C_CamMosSectionPopup.hpp"
@@ -59,7 +60,7 @@ C_CamMosWidget::C_CamMosWidget(QWidget * const opc_Parent) :
 
    // initialize GUI elements
    this->SetBackgroundColor(5);
-   this->mpc_Ui->pc_WiTitle->SetTitle(C_GtGetText::h_GetText("Settings"));
+   this->mpc_Ui->pc_WiTitle->SetTitle("Settings");
    this->mpc_Ui->pc_WiTitle->SetIconType(C_CamOgeWiSectionHeader::E_ButtonType::eLEFTRIGHT);
 
    this->m_InitSettingsSection(this->mpc_PopupDatabase, this->mpc_Ui->pc_PbDatabase, opc_Parent,
@@ -110,10 +111,10 @@ C_CamMosWidget::C_CamMosWidget(QWidget * const opc_Parent) :
            this, &C_CamMosWidget::SigAddLogFileBlf);
    connect(this->mpc_Ui->pc_WiLogging, &C_CamMosLoggingWidget::SigRemoveAllLogFiles,
            this, &C_CamMosWidget::SigRemoveAllLogFiles);
-   connect(this->mpc_Ui->pc_WiDllConfig, &C_AdapterBrowser::SigCanDllConfigured,
-           this, &C_CamMosWidget::SigCanDllConfigured);
+    connect(this->mpc_Ui->pc_WiDllConfig, &C_AdapterBrowser::SigCanDllConfigured,
+            this, &C_CamMosWidget::SigCanDllConfigured);
 
-   // Persist the adapter selection through the project handler. Push the initial config from the
+    // Persist the adapter selection through the project handler. Push the initial config from the
    // handler down to the widget at LoadUserSettings(); save any subsequent user change directly.
    connect(this->mpc_Ui->pc_WiDllConfig, &C_AdapterBrowser::SigConfigChanged,
            this, [](const stw::opensyde_core::C_OscCanAdapterConfig & orc_Cfg) {

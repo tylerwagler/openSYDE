@@ -22,7 +22,6 @@
 #include "TglUtils.hpp"
 #include "TglTime.hpp"
 #include "TglFile.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_OscUtils.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -168,17 +167,17 @@ C_SyvDaChaPlotHandlerWidget::C_SyvDaChaPlotHandlerWidget(QWidget * const opc_Par
 
    // Zoom setting
    this->mpc_ActionZoomSettingHorizontal =
-      this->mpc_MenuZoomMode->addAction(C_GtGetText::h_GetText("Adjust X-Axis"),
+      this->mpc_MenuZoomMode->addAction("Adjust X-Axis",
                                         this, &C_SyvDaChaPlotHandlerWidget::m_ZoomModeHorizontal);
    this->mpc_ActionZoomSettingHorizontal->setCheckable(true);
 
    this->mpc_ActionZoomSettingVertical =
-      this->mpc_MenuZoomMode->addAction(C_GtGetText::h_GetText("Adjust Y-Axis"),
+      this->mpc_MenuZoomMode->addAction("Adjust Y-Axis",
                                         this, &C_SyvDaChaPlotHandlerWidget::m_ZoomModeVertical);
    this->mpc_ActionZoomSettingVertical->setCheckable(true);
 
    this->mpc_ActionZoomSettingHorizontalVertical =
-      this->mpc_MenuZoomMode->addAction(C_GtGetText::h_GetText("Adjust All Directions"),
+      this->mpc_MenuZoomMode->addAction("Adjust All Directions",
                                         this, &C_SyvDaChaPlotHandlerWidget::m_ZoomModeHorizontalVertical);
    this->mpc_ActionZoomSettingHorizontalVertical->setCheckable(true);
 
@@ -186,15 +185,15 @@ C_SyvDaChaPlotHandlerWidget::C_SyvDaChaPlotHandlerWidget(QWidget * const opc_Par
 
    // Cursor setting
    this->mpc_ActionCursorNoCursor =
-      this->mpc_MenuCursorMode->addAction(C_GtGetText::h_GetText("No Cursor"),
+      this->mpc_MenuCursorMode->addAction("No Cursor",
                                           this, &C_SyvDaChaPlotHandlerWidget::m_CursorModeNoCursor);
    this->mpc_ActionCursorNoCursor->setCheckable(true);
    this->mpc_ActionCursorMeasurementCursor =
-      this->mpc_MenuCursorMode->addAction(C_GtGetText::h_GetText("Measurement Cursor"),
+      this->mpc_MenuCursorMode->addAction("Measurement Cursor",
                                           this, &C_SyvDaChaPlotHandlerWidget::m_CursorModeMeasurementCursor);
    this->mpc_ActionCursorMeasurementCursor->setCheckable(true);
    this->mpc_ActionCursorTwoDiffCursor =
-      this->mpc_MenuCursorMode->addAction(C_GtGetText::h_GetText("Difference Cursor"),
+      this->mpc_MenuCursorMode->addAction("Difference Cursor",
                                           this, &C_SyvDaChaPlotHandlerWidget::m_CursorModeTwoDiffCursor);
    this->mpc_ActionCursorTwoDiffCursor->setCheckable(true);
 
@@ -205,11 +204,11 @@ C_SyvDaChaPlotHandlerWidget::C_SyvDaChaPlotHandlerWidget(QWidget * const opc_Par
 
    // Options menu
    this->mpc_ActionToggleSamples =
-      this->mpc_MenuOptions->addAction(C_GtGetText::h_GetText("Toggle Samples"),
+      this->mpc_MenuOptions->addAction("Toggle Samples",
                                        this, &C_SyvDaChaPlotHandlerWidget::m_ShowSamplePoints);
    this->mpc_ActionToggleSamples->setCheckable(true);
    this->mpc_ActionVerticalAxisSettingAllVisible =
-      this->mpc_MenuOptions->addAction(C_GtGetText::h_GetText("Show All Y-Axes"),
+      this->mpc_MenuOptions->addAction("Show All Y-Axes",
                                        this, &C_SyvDaChaPlotHandlerWidget::m_VerticalAxisSettingAllVisible);
    this->mpc_ActionVerticalAxisSettingAllVisible->setCheckable(true);
 
@@ -293,9 +292,9 @@ C_SyvDaChaPlotHandlerWidget::~C_SyvDaChaPlotHandlerWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelTitle->setText(C_GtGetText::h_GetText("Data Elements (0)"));
-   this->mpc_Ui->pc_ButtonAddData->setText(C_GtGetText::h_GetText("Add Data Element"));
-   this->mpc_Ui->pc_LabelTitleMeas->setText(C_GtGetText::h_GetText("Cursor Information"));
+   this->mpc_Ui->pc_LabelTitle->setText("Data Elements (0)");
+   this->mpc_Ui->pc_ButtonAddData->setText("Add Data Element");
+   this->mpc_Ui->pc_LabelTitleMeas->setText("Cursor Information");
 
    // remove ui file strings
    this->mpc_Ui->pc_LabelMeasCursor1->setText("");
@@ -316,29 +315,28 @@ void C_SyvDaChaPlotHandlerWidget::InitStaticNames(void) const
    this->mpc_Ui->pc_PushButtonExtractData->setText("");
 
    // set tool tip information
-   this->mpc_Ui->pc_PushButtonPause->SetToolTipInformation(C_GtGetText::h_GetText("Play/Pause"),
-                                                           C_GtGetText::h_GetText("Pause/Resume Update"));
-   this->mpc_Ui->pc_PushButtonZoomMode->SetToolTipInformation(C_GtGetText::h_GetText("Zoom Mode"),
-                                                              C_GtGetText::h_GetText("Select Zoom Mode"));
-   this->mpc_Ui->pc_PushButtonZoomOut->SetToolTipInformation(C_GtGetText::h_GetText("Zoom Mode"),
-                                                             C_GtGetText::h_GetText("Zoom Out"));
-   this->mpc_Ui->pc_PushButtonZoomIn->SetToolTipInformation(C_GtGetText::h_GetText("Zoom Mode"),
-                                                            C_GtGetText::h_GetText("Zoom In"));
-   this->mpc_Ui->pc_PushButtonZoomVsDragMode->SetToolTipInformation(C_GtGetText::h_GetText("Zoom Mode"),
-                                                                    C_GtGetText::h_GetText(
-                                                                       "Activate/Deactivate Drag Zoom Mode"));
-   this->mpc_Ui->pc_PushButtonFitXY->SetToolTipInformation(C_GtGetText::h_GetText("All"),
-                                                           C_GtGetText::h_GetText("Fit All Data Series"));
-   this->mpc_Ui->pc_PushButtonFitY->SetToolTipInformation(C_GtGetText::h_GetText("Vertically"),
-                                                          C_GtGetText::h_GetText("Fit All Data Series Vertically"));
-   this->mpc_Ui->pc_PushButtonFitX->SetToolTipInformation(C_GtGetText::h_GetText("Horizontally"),
-                                                          C_GtGetText::h_GetText("Fit All Data Series Horizontally"));
-   this->mpc_Ui->pc_PushButtonCursor->SetToolTipInformation(C_GtGetText::h_GetText("Select"),
-                                                            C_GtGetText::h_GetText("Select Cursor"));
-   this->mpc_Ui->pc_PushButtonOptions->SetToolTipInformation(C_GtGetText::h_GetText("Select"),
-                                                             C_GtGetText::h_GetText("Select Other Options"));
-   this->mpc_Ui->pc_PushButtonExtractData->SetToolTipInformation(C_GtGetText::h_GetText("Extract Data"),
-                                                                 C_GtGetText::h_GetText("Extract chart data to .csv"));
+   this->mpc_Ui->pc_PushButtonPause->SetToolTipInformation("Play/Pause",
+                                                           "Pause/Resume Update");
+   this->mpc_Ui->pc_PushButtonZoomMode->SetToolTipInformation("Zoom Mode",
+                                                              "Select Zoom Mode");
+   this->mpc_Ui->pc_PushButtonZoomOut->SetToolTipInformation("Zoom Mode",
+                                                             "Zoom Out");
+   this->mpc_Ui->pc_PushButtonZoomIn->SetToolTipInformation("Zoom Mode",
+                                                            "Zoom In");
+   this->mpc_Ui->pc_PushButtonZoomVsDragMode->SetToolTipInformation("Zoom Mode",
+                                                                    "Activate/Deactivate Drag Zoom Mode");
+   this->mpc_Ui->pc_PushButtonFitXY->SetToolTipInformation("All",
+                                                           "Fit All Data Series");
+   this->mpc_Ui->pc_PushButtonFitY->SetToolTipInformation("Vertically",
+                                                          "Fit All Data Series Vertically");
+   this->mpc_Ui->pc_PushButtonFitX->SetToolTipInformation("Horizontally",
+                                                          "Fit All Data Series Horizontally");
+   this->mpc_Ui->pc_PushButtonCursor->SetToolTipInformation("Select",
+                                                            "Select Cursor");
+   this->mpc_Ui->pc_PushButtonOptions->SetToolTipInformation("Select",
+                                                             "Select Other Options");
+   this->mpc_Ui->pc_PushButtonExtractData->SetToolTipInformation("Extract Data",
+                                                                 "Extract chart data to .csv");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -456,7 +454,7 @@ void C_SyvDaChaPlotHandlerWidget::SetData(const C_PuiSvDbTabChart & orc_Data, co
          q_Invalid = true;
          c_InvalidNamePlaceholder = rc_Config.c_ElementId.GetInvalidNamePlaceholder();
          e_InvalidDataPoolTypePlaceholder = rc_Config.c_ElementId.GetInvalidTypePlaceholder();
-         c_ToolTipErrorTextHeading = C_GtGetText::h_GetText("Configuration warning");
+         c_ToolTipErrorTextHeading = "Configuration warning";
          c_ToolTipErrorText = rc_Config.c_ElementId.GetInvalidItemPlaceholderTooltip();
       }
       else
@@ -475,8 +473,8 @@ void C_SyvDaChaPlotHandlerWidget::SetData(const C_PuiSvDbTabChart & orc_Data, co
                {
                   // Node with data element is not active in current view
                   q_Warning = true;
-                  c_ToolTipErrorTextHeading = C_GtGetText::h_GetText("Configuration warning");
-                  c_ToolTipErrorText = C_GtGetText::h_GetText("There is a data element of an inactive node");
+                  c_ToolTipErrorTextHeading = "Configuration warning";
+                  c_ToolTipErrorText = "There is a data element of an inactive node";
                }
                else
                {
@@ -488,10 +486,9 @@ void C_SyvDaChaPlotHandlerWidget::SetData(const C_PuiSvDbTabChart & orc_Data, co
 
                   if (q_Warning == true)
                   {
-                     c_ToolTipErrorTextHeading = C_GtGetText::h_GetText("Configuration warning");
-                     c_ToolTipErrorText = C_GtGetText::h_GetText(
-                        "There is a data element of a node with "
-                        "disabled communication interface flags for Dashboard");
+                     c_ToolTipErrorTextHeading = "Configuration warning";
+                     c_ToolTipErrorText = "There is a data element of a node with "
+                        "disabled communication interface flags for Dashboard";
                   }
                }
             }
@@ -1513,7 +1510,7 @@ void C_SyvDaChaPlotHandlerWidget::m_UpdateElementCounter(void)
 {
    // update counter label text
    this->mpc_Ui->pc_LabelTitle->setText(
-      static_cast<QString>(C_GtGetText::h_GetText("Data Elements (%1)")).
+      static_cast<QString>("Data Elements (%1)").
       arg(this->mc_Data.c_DataPoolElementsConfig.size()));
 }
 
@@ -1563,13 +1560,13 @@ void C_SyvDaChaPlotHandlerWidget::m_OnSplitterMoved(void)
 {
    if (this->mpc_Ui->pc_ChartSelectorWidget->width() > 200)
    {
-      this->mpc_Ui->pc_ButtonAddData->setText(C_GtGetText::h_GetText("Add Data Element"));
+      this->mpc_Ui->pc_ButtonAddData->setText("Add Data Element");
       this->mpc_Ui->pc_ButtonAddData->setMaximumWidth(150);
       this->mpc_Ui->pc_ButtonAddData->setMinimumWidth(150);
    }
    else
    {
-      this->mpc_Ui->pc_ButtonAddData->setText(C_GtGetText::h_GetText("Add"));
+      this->mpc_Ui->pc_ButtonAddData->setText("Add");
       this->mpc_Ui->pc_ButtonAddData->setMaximumWidth(70);
       this->mpc_Ui->pc_ButtonAddData->setMinimumWidth(70);
    }
@@ -2210,7 +2207,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemMovedOnHorizontalAxis(
       for (u32_ElementCounter = 0UL; u32_ElementCounter < static_cast<uint32_t>(this->mc_ItemTracers.size());
            ++u32_ElementCounter)
       {
-         QString c_Value = C_GtGetText::h_GetText("NA");
+         QString c_Value = "NA";
          QCPItemTracer * const pc_Tracer = this->mc_ItemTracers.at(static_cast<int32_t>(u32_ElementCounter));
 
          if (pc_Tracer != NULL)
@@ -2249,7 +2246,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemMovedOnHorizontalAxis(
    // Update the labels with the absolute time of the cursor
    if (opc_CursorItem == this->mpc_FirstCursor)
    {
-      QString c_Text = static_cast<QString>(C_GtGetText::h_GetText("t1 = %1 ms")).arg(f64_TracerTimeSelectedElement);
+      QString c_Text = static_cast<QString>("t1 = %1 ms").arg(f64_TracerTimeSelectedElement);
       c_Text.replace(QLocale::c().decimalPoint(), QLocale::system().decimalPoint(), Qt::CaseInsensitive);
 
       this->mf64_MeasuredTimeFirstCursor = f64_TracerTimeSelectedElement;
@@ -2257,7 +2254,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemMovedOnHorizontalAxis(
    }
    else if (opc_CursorItem == this->mpc_SecondCursor)
    {
-      QString c_Text = static_cast<QString>(C_GtGetText::h_GetText("t2 = %1 ms")).arg(f64_TracerTimeSelectedElement);
+      QString c_Text = static_cast<QString>("t2 = %1 ms").arg(f64_TracerTimeSelectedElement);
       c_Text.replace(QLocale::c().decimalPoint(), QLocale::system().decimalPoint(), Qt::CaseInsensitive);
 
       this->mf64_MeasuredTimeSecondCursor = f64_TracerTimeSelectedElement;
@@ -2273,7 +2270,7 @@ void C_SyvDaChaPlotHandlerWidget::m_CursorItemMovedOnHorizontalAxis(
    {
       const float64_t f64_Diff = this->mf64_MeasuredTimeSecondCursor - this->mf64_MeasuredTimeFirstCursor;
 
-      QString c_Text = static_cast<QString>(C_GtGetText::h_GetText("dt = %1 ms")).arg(f64_Diff);
+      QString c_Text = static_cast<QString>("dt = %1 ms").arg(f64_Diff);
       c_Text.replace(QLocale::c().decimalPoint(), QLocale::system().decimalPoint(), Qt::CaseInsensitive);
 
       this->mpc_Ui->pc_LabelMeasDiff->setText(c_Text);
@@ -2842,7 +2839,7 @@ void C_SyvDaChaPlotHandlerWidget::m_ConfigureCursorMode(const E_SettingCursorMod
          {
             // Activate the second cursor
             this->m_CreateCursor(&this->mpc_FirstCursor, f64_InitHorizontalPosFirstCursor, mc_STYLE_GUIDE_COLOR_CH1,
-                                 static_cast<QString>(C_GtGetText::h_GetText(" t1 ")));
+                                 static_cast<QString>(" t1 "));
          }
 
          if (oe_SettingCursorMode == eSETTING_CM_TWO_DIFF_CURSOR)
@@ -2851,7 +2848,7 @@ void C_SyvDaChaPlotHandlerWidget::m_ConfigureCursorMode(const E_SettingCursorMod
             {
                // Activate the second cursor
                this->m_CreateCursor(&this->mpc_SecondCursor, f64_InitHorizontalPosSecondCursor,
-                                    mc_STYLE_GUIDE_COLOR_CH2, static_cast<QString>(C_GtGetText::h_GetText(" t2 ")));
+                                    mc_STYLE_GUIDE_COLOR_CH2, static_cast<QString>(" t2 "));
             }
          }
          else
@@ -3211,9 +3208,9 @@ void C_SyvDaChaPlotHandlerWidget::m_SetSaveLocationToCsv(void)
 
    const QString c_DefaultFilename = m_SaveCsvAs() + ".csv";
 
-   const QString c_FilterName = C_GtGetText::h_GetText("CSV (*.csv)");
+   const QString c_FilterName = "CSV (*.csv)";
    const QString c_ExtractCsvFilePath = C_OgeWiUtil::h_GetSaveFileName(
-      this, C_GtGetText::h_GetText("Save Export data as CSV"), c_Folder, c_FilterName, c_DefaultFilename,
+      this, "Save Export data as CSV", c_Folder, c_FilterName, c_DefaultFilename,
       QFileDialog::DontConfirmOverwrite); // overwrite is handled later
 
    if (!c_ExtractCsvFilePath.isEmpty())

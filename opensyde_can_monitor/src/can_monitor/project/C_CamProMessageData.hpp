@@ -45,7 +45,21 @@ public:
    uint16_t u16_Dlc;
    uint32_t u32_Id;
    std::vector<uint8_t> c_Bytes;
+   enum E_TxProtocol
+   {
+      eTX_CAN = 0,
+      eTX_CAN_TP,
+      eTX_UDS
+   };
+
    bool q_SetAutoSupportMode;
+   E_TxProtocol e_TxProtocol;
+
+   // UDS-specific fields (meaningful only when e_TxProtocol == eTX_UDS)
+   uint8_t u8_UdsServiceId;
+   uint8_t u8_UdsSubFunction;
+   uint16_t u16_UdsDid;
+   std::vector<uint8_t> c_UdsData;
 
    void CalcHash(uint32_t & oru32_HashValue) const;
    stw::can::T_STWCAN_Msg_TX ToCanMessage(void) const;
@@ -76,13 +90,15 @@ public:
    //Get
    bool GetExtended(void) const;
    bool GetRtr(void) const;
+   C_CamProMessageData::E_TxProtocol GetTxProtocol(void) const;
 
    //Set
    void SetMessageUint32Value(const C_CamProMessageData::E_GenericUint32DataSelector oe_Selector,
-                              const uint32_t ou32_Value);
+                               const uint32_t ou32_Value);
    void SetMessageBoolValue(const C_CamProMessageData::E_GenericBoolDataSelector oe_Selector, const bool oq_Value);
    void SetMessageKey(const QString & orc_Key, const uint32_t ou32_Offset);
    int32_t SetMessageDataBytes(const std::vector<uint8_t> & orc_DataBytes);
+   void SetMessageByte(const uint32_t ou32_Index, const uint8_t ou8_Value);
    static uint8_t h_GetBoolValue(const bool oq_Value);
 };
 

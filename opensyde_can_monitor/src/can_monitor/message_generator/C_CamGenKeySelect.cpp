@@ -14,7 +14,6 @@
 
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_CamProHandler.hpp"
 #include "C_CamGenKeySelect.hpp"
 #include "ui_C_CamGenKeySelect.h"
@@ -107,15 +106,15 @@ C_CamGenKeySelect::~C_CamGenKeySelect(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamGenKeySelect::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Trigger Key"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Configuration"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Settings"));
-   this->mpc_Ui->pc_LabelKey->setText(C_GtGetText::h_GetText("Trigger Key"));
-   this->mpc_Ui->pc_LineEditKey->setPlaceholderText(C_GtGetText::h_GetText("Enter a single character"));
-   this->mpc_Ui->pc_LabelOffset->setText(C_GtGetText::h_GetText("Trigger Offset"));
-   this->mpc_Ui->pc_SpinBoxOffset->setSuffix(C_GtGetText::h_GetText(" ms"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetTitle("Trigger Key");
+   this->mrc_ParentDialog.SetSubTitle("Configuration");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Settings");
+   this->mpc_Ui->pc_LabelKey->setText("Trigger Key");
+   this->mpc_Ui->pc_LineEditKey->setPlaceholderText("Enter a single character");
+   this->mpc_Ui->pc_LabelOffset->setText("Trigger Offset");
+   this->mpc_Ui->pc_SpinBoxOffset->setSuffix(" ms");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

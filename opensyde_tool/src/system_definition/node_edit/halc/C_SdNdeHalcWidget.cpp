@@ -18,7 +18,6 @@
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_UsHandler.hpp"
 #include "C_Uti.hpp"
@@ -175,50 +174,50 @@ void C_SdNdeHalcWidget::SaveUserSettings() const
 void C_SdNdeHalcWidget::InitStaticNames(void) const
 {
    // top section
-   this->mpc_Ui->pc_PubImportConfig->setText(C_GtGetText::h_GetText("Import"));
-   this->mpc_Ui->pc_PubExportConfig->setText(C_GtGetText::h_GetText("Export"));
+   this->mpc_Ui->pc_PubImportConfig->setText("Import");
+   this->mpc_Ui->pc_PubExportConfig->setText("Export");
    this->mpc_Ui->pc_PubImportConfig->
-   SetToolTipInformation(C_GtGetText::h_GetText("Import Configuration"),
-                         C_GtGetText::h_GetText("Import hardware configuration from file *.syde_halc_conf. "
+   SetToolTipInformation("Import Configuration",
+                         "Import hardware configuration from file *.syde_halc_conf. "
                                                 "Select the channels whose configuration should be set according "
                                                 "to the import source. Imported data must match the current "
-                                                "hardware description."));
+                                                "hardware description.");
    this->mpc_Ui->pc_PubExportConfig->
-   SetToolTipInformation(C_GtGetText::h_GetText("Export Configuration"),
-                         C_GtGetText::h_GetText("Export the current hardware configuration including custom channel "
+   SetToolTipInformation("Export Configuration",
+                         "Export the current hardware configuration including custom channel "
                                                 "names, use case configuration and parameter values. "
-                                                "Does not include the hardware description."));
+                                                "Does not include the hardware description.");
 
    // panel
-   this->mpc_Ui->pc_PubCleanUp->setText(C_GtGetText::h_GetText("Delete"));
-   this->mpc_Ui->pc_PubSelect->setText(C_GtGetText::h_GetText("Select"));
-   this->mpc_Ui->pc_PubUpdate->setText(C_GtGetText::h_GetText("Update"));
-   this->mpc_Ui->pc_LabFileTitle->setText(C_GtGetText::h_GetText("Hardware Description File:"));
+   this->mpc_Ui->pc_PubCleanUp->setText("Delete");
+   this->mpc_Ui->pc_PubSelect->setText("Select");
+   this->mpc_Ui->pc_PubUpdate->setText("Update");
+   this->mpc_Ui->pc_LabFileTitle->setText("Hardware Description File:");
    this->mpc_Ui->pc_PubCleanUp->
-   SetToolTipInformation(C_GtGetText::h_GetText("Delete Description and Configuration"),
-                         C_GtGetText::h_GetText("Delete the current hardware description, configuration and "
-                                                "corresponding Datapools."));
+   SetToolTipInformation("Delete Description and Configuration",
+                         "Delete the current hardware description, configuration and "
+                                                "corresponding Datapools.");
    this->mpc_Ui->pc_PubSelect->
-   SetToolTipInformation(C_GtGetText::h_GetText("Select Hardware Description"),
-                         C_GtGetText::h_GetText("Select hardware description file *.syde_halc_def that describes "
-                                                "domains, channels, use cases and parameters."));
+   SetToolTipInformation("Select Hardware Description",
+                         "Select hardware description file *.syde_halc_def that describes "
+                                                "domains, channels, use cases and parameters.");
    this->mpc_Ui->pc_PubUpdate->
-   SetToolTipInformation(C_GtGetText::h_GetText("Update Hardware Description"),
-                         C_GtGetText::h_GetText("Update the current hardware description to a new version by "
-                                                "selecting a new hardware description file *.syde_halc_def."));
+   SetToolTipInformation("Update Hardware Description",
+                         "Update the current hardware description to a new version by "
+                                                "selecting a new hardware description file *.syde_halc_def.");
    this->mpc_Ui->pc_LabFileTitle->
-   SetToolTipInformation(C_GtGetText::h_GetText("Hardware Description File"),
-                         C_GtGetText::h_GetText("The hardware description file *.syde_halc_def describes the "
+   SetToolTipInformation("Hardware Description File",
+                         "The hardware description file *.syde_halc_def describes the "
                                                 "node's hardware abstraction layer in words of domains, channels, "
                                                 "use cases and parameters. If the current node supports hardware "
                                                 "configuration, this file is part of the device's deployment "
-                                                "package."));
+                                                "package.");
 
    // overview
-   this->mpc_Ui->pc_PubOverview->setText(C_GtGetText::h_GetText("Channel Overview"));
+   this->mpc_Ui->pc_PubOverview->setText("Channel Overview");
    this->mpc_Ui->pc_PubOverview->
-   SetToolTipInformation(C_GtGetText::h_GetText("Channel Overview"),
-                         C_GtGetText::h_GetText("Show overview of all channels/domains."));
+   SetToolTipInformation("Channel Overview",
+                         "Show overview of all channels/domains.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -291,13 +290,13 @@ void C_SdNdeHalcWidget::m_OnImportConfigClicked(void)
 {
    const QString c_Folder =
       C_SdNdeHalcWidget::mh_GetDialogPath(C_UsHandler::h_GetInstance()->GetLastKnownHalcImportPath());
-   const QString c_Filter = static_cast<QString>(C_GtGetText::h_GetText("openSYDE Hardware Configuration File")) +
+   const QString c_Filter = static_cast<QString>("openSYDE Hardware Configuration File") +
                             "(*" +
                             mhc_CONFIG_FILE_TYPE + ")";
 
    const QString c_FileName =
       C_OgeWiUtil::h_GetOpenFileName(this->parentWidget(),
-                                     C_GtGetText::h_GetText("openSYDE Hardware Configuration Import"), c_Folder,
+                                     "openSYDE Hardware Configuration Import", c_Folder,
                                      c_Filter, mhc_CONFIG_FILE_TYPE);
 
    if (c_FileName != "")
@@ -329,9 +328,9 @@ void C_SdNdeHalcWidget::m_OnImportConfigClicked(void)
       {
          // Error message box
          C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_MessageResult.SetHeading(C_GtGetText::h_GetText("openSYDE Hardware Configuration Import"));
-         c_MessageResult.SetDescription(C_GtGetText::h_GetText("Import error occurred."));
-         c_MessageResult.SetDetails(C_GtGetText::h_GetText(c_ErrorDetails.toStdString().c_str()));
+         c_MessageResult.SetHeading("openSYDE Hardware Configuration Import");
+         c_MessageResult.SetDescription("Import error occurred.");
+         c_MessageResult.SetDetails(c_ErrorDetails);
          c_MessageResult.SetCustomMinHeight(180, 250);
          c_MessageResult.Execute();
 
@@ -371,9 +370,8 @@ void C_SdNdeHalcWidget::m_OnExportConfigClicked(void)
    }
 
    c_FileName =
-      C_OgeWiUtil::h_GetSaveFileName(this, C_GtGetText::h_GetText("openSYDE Hardware Configuration Export"), c_Folder,
-                                     static_cast<QString>(C_GtGetText::h_GetText(
-                                                             "openSYDE Hardware Configuration File")) +
+      C_OgeWiUtil::h_GetSaveFileName(this, "openSYDE Hardware Configuration Export", c_Folder,
+                                     static_cast<QString>("openSYDE Hardware Configuration File") +
                                      " (*" + mhc_CONFIG_FILE_TYPE + ")", c_DefaultName);
 
    if (c_FileName != "")
@@ -418,9 +416,9 @@ void C_SdNdeHalcWidget::m_OnExportConfigClicked(void)
       if (s32_Result != C_NO_ERR)
       {
          C_OgeWiCustomMessage c_MessageResultSave(this, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_MessageResultSave.SetHeading(C_GtGetText::h_GetText("openSYDE Hardware Configuration Export"));
-         c_MessageResultSave.SetDescription(C_GtGetText::h_GetText("Could not save the file."));
-         c_MessageResultSave.SetDetails(C_GtGetText::h_GetText("Error code: \n") + QString::number(s32_Result));
+         c_MessageResultSave.SetHeading("openSYDE Hardware Configuration Export");
+         c_MessageResultSave.SetDescription("Could not save the file.");
+         c_MessageResultSave.SetDetails("Error code: \n" + QString::number(s32_Result));
          c_MessageResultSave.SetCustomMinHeight(180, 250);
          c_MessageResultSave.Execute();
       }
@@ -435,13 +433,13 @@ void C_SdNdeHalcWidget::m_OnCleanUpClicked(void) const
 {
    C_OgeWiCustomMessage c_MessageBox(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eQUESTION);
 
-   c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to delete the hardware description?\n"
+   c_MessageBox.SetDescription("Do you really want to delete the hardware description?\n"
                                                       "Complete hardware configuration settings and corresponding "
                                                       "HAL Datapools of this node will also be deleted. Associated"
-                                                      "Data Blocks will be reset."));
-   c_MessageBox.SetHeading(C_GtGetText::h_GetText("Delete Hardware Description"));
-   c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-   c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+                                                      "Data Blocks will be reset.");
+   c_MessageBox.SetHeading("Delete Hardware Description");
+   c_MessageBox.SetOkButtonText("Delete");
+   c_MessageBox.SetNoButtonText("Keep");
    c_MessageBox.SetCustomMinHeight(220, 220);
    if (c_MessageBox.Execute() == C_OgeWiCustomMessage::eOK)
    {
@@ -476,16 +474,16 @@ void C_SdNdeHalcWidget::m_OnSelectClicked(void)
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
 
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Select Hardware Description"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("There already exists a hardware description. "
+      c_MessageBox.SetHeading("Select Hardware Description");
+      c_MessageBox.SetDescription("There already exists a hardware description. "
                                                          "Do you want to delete the current hardware description and "
-                                                         "load a new one?"));
-      c_MessageBox.SetDetails(C_GtGetText::h_GetText("Complete hardware configuration settings and corresponding "
+                                                         "load a new one?");
+      c_MessageBox.SetDetails("Complete hardware configuration settings and corresponding "
                                                      "HAL Datapools of this node will be lost.\n"
                                                      "For updating the hardware description please use the \"Update\" "
-                                                     "button."));
-      c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Delete and Load"));
-      c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+                                                     "button.");
+      c_MessageBox.SetOkButtonText("Delete and Load");
+      c_MessageBox.SetNoButtonText("Cancel");
       c_MessageBox.SetCustomMinHeight(200, 270);
       if (c_MessageBox.Execute() != C_OgeWiCustomMessage::eOK)
       {
@@ -514,11 +512,10 @@ void C_SdNdeHalcWidget::m_OnSelectClicked(void)
       {
          C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eERROR);
 
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("Select Hardware Description"));
-         c_MessageBox.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                             "Cannot select hardware description,\n"
+         c_MessageBox.SetHeading("Select Hardware Description");
+         c_MessageBox.SetDescription(static_cast<QString>("Cannot select hardware description,\n"
                                                              "because HAL Datapools may not be created,\n"
-                                                             "as the max Datapool count (%1) would be exceeded.")).arg(
+                                                             "as the max Datapool count (%1) would be exceeded.").arg(
                                         C_OscNode::hu32_MAX_NUMBER_OF_DATA_POOLS_PER_NODE));
          c_MessageBox.SetCustomMinHeight(200, 270);
          c_MessageBox.Execute();
@@ -575,14 +572,12 @@ void C_SdNdeHalcWidget::m_OnUpdateClicked(void)
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
             c_Message.SetHeading("Update Hardware Description");
-            c_Message.SetDescription(C_GtGetText::h_GetText(
-                                        "Cannot update hardware description. "
+            c_Message.SetDescription("Cannot update hardware description. "
                                         "The safety mode of the selected hardware description "
-                                        "differs from the safety mode of the current hardware description."));
-            c_Message.SetDetails(C_GtGetText::h_GetText(
-                                    "Hardware description update is only possible if the safety mode does not change. "
+                                        "differs from the safety mode of the current hardware description.");
+            c_Message.SetDetails("Hardware description update is only possible if the safety mode does not change. "
                                     "For using a hardware description file with changed safety mode, try the features "
-                                    "\'Select\' and \'Import\'."));
+                                    "\'Select\' and \'Import\'.");
             c_Message.Execute();
             q_Continue = false;
          }
@@ -593,13 +588,12 @@ void C_SdNdeHalcWidget::m_OnUpdateClicked(void)
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eQUESTION);
             c_Message.SetHeading("Update Hardware Description");
             c_Message.SetDescription(
-               static_cast<QString>(C_GtGetText::h_GetText(
-                                       "The content version '%1' of the selected hardware description "
+               static_cast<QString>("The content version '%1' of the selected hardware description "
                                        "equals the current hardware description version.\n"
-                                       "Do you want to update the hardware description anyway?")).
+                                       "Do you want to update the hardware description anyway?").
                arg(c_HalcConfig.u32_ContentVersion));
-            c_Message.SetOkButtonText(C_GtGetText::h_GetText("Update"));
-            c_Message.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+            c_Message.SetOkButtonText("Update");
+            c_Message.SetNoButtonText("Cancel");
             if (c_Message.Execute() != C_OgeWiCustomMessage::eOK)
             {
                q_Continue = false;
@@ -638,10 +632,10 @@ void C_SdNdeHalcWidget::m_OnUpdateClicked(void)
                {
                   // Report update error
                   C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                  c_MessageResult.SetHeading(C_GtGetText::h_GetText("Load hardware description"));
-                  c_MessageResult.SetDescription(C_GtGetText::h_GetText("Error occurred during update of existing "
-                                                                        "description."));
-                  c_MessageResult.SetDetails(C_GtGetText::h_GetText(c_ErrorDetails.toStdString().c_str()));
+                  c_MessageResult.SetHeading("Load hardware description");
+                  c_MessageResult.SetDescription("Error occurred during update of existing "
+                                                                        "description.");
+                  c_MessageResult.SetDetails(c_ErrorDetails);
                   c_MessageResult.SetCustomMinHeight(180, 250);
                   c_MessageResult.Execute();
 
@@ -763,7 +757,7 @@ bool C_SdNdeHalcWidget::m_LoadHalcDefinitionFile(C_OscHalcConfig & orc_HalcConfi
    bool q_Return = false;
    const QString c_Folder = mh_GetDialogPath(C_UsHandler::h_GetInstance()->GetLastKnownHalcDefPath());
 
-   orc_HalcDefPath = C_OgeWiUtil::h_GetOpenFileName(this, C_GtGetText::h_GetText("Select hardware description file"),
+   orc_HalcDefPath = C_OgeWiUtil::h_GetOpenFileName(this, "Select hardware description file",
                                                     c_Folder, "*.syde_halc_def", "");
 
    if (orc_HalcDefPath.isEmpty() == false)
@@ -790,13 +784,12 @@ bool C_SdNdeHalcWidget::m_LoadHalcDefinitionFile(C_OscHalcConfig & orc_HalcConfi
             else
             {
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eWARNING);
-               c_Message.SetHeading(C_GtGetText::h_GetText("Load hardware description"));
-               c_Message.SetDescription(C_GtGetText::h_GetText("The selected hardware description is intended for a "
-                                                               "different device type. Nothing was loaded."));
-               c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText(
-                                                            "The selected hardware description is for nodes "
+               c_Message.SetHeading("Load hardware description");
+               c_Message.SetDescription("The selected hardware description is intended for a "
+                                                               "different device type. Nothing was loaded.");
+               c_Message.SetDetails(static_cast<QString>("The selected hardware description is for nodes "
                                                             "of type: %1\n"
-                                                            "The current node is of type: %2")).
+                                                            "The current node is of type: %2").
                                     arg(orc_HalcConfig.c_DeviceName.c_str()).
                                     arg(pc_Node->pc_DeviceDefinition->c_DeviceName.c_str()));
                c_Message.SetCustomMinHeight(200, 250);
@@ -808,10 +801,10 @@ bool C_SdNdeHalcWidget::m_LoadHalcDefinitionFile(C_OscHalcConfig & orc_HalcConfi
       {
          // report loading error
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Load hardware description"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("Error occurred loading hardware description file."));
-         c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +
-                              C_Uti::h_GetLink(C_GtGetText::h_GetText("log file."),  mc_STYLESHEET_GUIDE_COLOR_LINK,
+         c_Message.SetHeading("Load hardware description");
+         c_Message.SetDescription("Error occurred loading hardware description file.");
+         c_Message.SetDetails(static_cast<QString>("For details see ") +
+                              C_Uti::h_GetLink("log file.",  mc_STYLESHEET_GUIDE_COLOR_LINK,
                                                C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()));
          C_OscLoggingHandler::h_Flush(); // update log file
          c_Message.SetCustomMinHeight(180, 300);
@@ -883,13 +876,12 @@ void C_SdNdeHalcWidget::m_UpdatePinCount(void) const
       }
       if (u32_PinCount > 0)
       {
-         this->mpc_Ui->pc_PubOverview->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "Channel Overview (%1)")).arg(
+         this->mpc_Ui->pc_PubOverview->setText(static_cast<QString>("Channel Overview (%1)").arg(
                                                   u32_PinCount));
       }
       else
       {
-         this->mpc_Ui->pc_PubOverview->setText(C_GtGetText::h_GetText("Channel Overview"));
+         this->mpc_Ui->pc_PubOverview->setText("Channel Overview");
       }
    }
 }
@@ -910,7 +902,7 @@ void C_SdNdeHalcWidget::m_UpdateDisplayedData(void) const
       // update displayed file name
       if (pc_Config->IsClear())
       {
-         this->mpc_Ui->pc_LabFileCurrent->setText(C_GtGetText::h_GetText("<none>"));
+         this->mpc_Ui->pc_LabFileCurrent->setText("<none>");
       }
       else
       {

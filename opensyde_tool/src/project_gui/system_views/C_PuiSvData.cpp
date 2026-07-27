@@ -19,7 +19,6 @@
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "C_PuiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSvData.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_SclChecksums.hpp"

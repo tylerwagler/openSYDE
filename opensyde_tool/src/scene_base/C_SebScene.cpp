@@ -24,7 +24,6 @@
 
 #include "C_SebScene.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_GiBiCustomMouseItem.hpp"
 #include "C_GiUnique.hpp"
 #include "TglUtils.hpp"
@@ -1201,7 +1200,7 @@ void C_SebScene::m_AddImage(const QString & orc_Path, const QPointF & orc_Positi
 void C_SebScene::m_AddImageWithFileDialog(const QPointF & orc_Pos)
 {
    const QString c_Filter =
-      static_cast<QString>(C_GtGetText::h_GetText("Images (%1)")).arg(C_SebScene::mh_GetImageFileTypesFilter());
+      static_cast<QString>("Images (%1)").arg(C_SebScene::mh_GetImageFileTypesFilter());
    const QString c_Dir = "";
    QString c_File;
    const QList<QGraphicsView *> & rc_Views = this->views();
@@ -1210,7 +1209,7 @@ void C_SebScene::m_AddImageWithFileDialog(const QPointF & orc_Pos)
    tgl_assert(rc_Views.size() > 0);
 
    // no file path check necessary here, because image load can handle crazy characters
-   c_File = QFileDialog::getOpenFileName(rc_Views[0], C_GtGetText::h_GetText("Load Image"), c_Dir, c_Filter);
+   c_File = QFileDialog::getOpenFileName(rc_Views[0], "Load Image", c_Dir, c_Filter);
 
    if (c_File.compare("") != 0)
    {

@@ -13,7 +13,6 @@
 #include "constants.hpp"
 #include "C_SdNdeDpListPopUp.hpp"
 #include "ui_C_SdNdeDpListPopUp.h"
-#include "C_GtGetText.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "TglUtils.hpp"
@@ -166,20 +165,20 @@ void C_SdNdeDpListPopUp::InitText(void) const
    {
       //Generic tooltips are used.
       //const QString c_Type = C_PuiSdHandler::h_GetElementTypeName(pc_DataPool->e_Type);
-      this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation(C_GtGetText::h_GetText("Add"),
-                                                            C_GtGetText::h_GetText("Add new item"));
-      this->mpc_Ui->pc_PushButtonCopy->SetToolTipInformation(C_GtGetText::h_GetText("Copy"),
-                                                             C_GtGetText::h_GetText("Copy selected item(s)"));
-      this->mpc_Ui->pc_PushButtonCut->SetToolTipInformation(C_GtGetText::h_GetText("Cut"),
-                                                            C_GtGetText::h_GetText("Cut selected item(s)"));
-      this->mpc_Ui->pc_PushButtonPaste->SetToolTipInformation(C_GtGetText::h_GetText("Paste"),
-                                                              C_GtGetText::h_GetText("Paste item(s)"));
-      this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation(C_GtGetText::h_GetText("Delete"),
-                                                               C_GtGetText::h_GetText("Delete selected item(s)"));
-      this->mpc_Ui->pc_PushButtonMoveDown->SetToolTipInformation(C_GtGetText::h_GetText("Move down"),
-                                                                 C_GtGetText::h_GetText("Move selected item(s) down"));
-      this->mpc_Ui->pc_PushButtonMoveUp->SetToolTipInformation(C_GtGetText::h_GetText("Move up"),
-                                                               C_GtGetText::h_GetText("Move selected item(s) up"));
+      this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation("Add",
+                                                            "Add new item");
+      this->mpc_Ui->pc_PushButtonCopy->SetToolTipInformation("Copy",
+                                                             "Copy selected item(s)");
+      this->mpc_Ui->pc_PushButtonCut->SetToolTipInformation("Cut",
+                                                            "Cut selected item(s)");
+      this->mpc_Ui->pc_PushButtonPaste->SetToolTipInformation("Paste",
+                                                              "Paste item(s)");
+      this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation("Delete",
+                                                               "Delete selected item(s)");
+      this->mpc_Ui->pc_PushButtonMoveDown->SetToolTipInformation("Move down",
+                                                                 "Move selected item(s) down");
+      this->mpc_Ui->pc_PushButtonMoveUp->SetToolTipInformation("Move up",
+                                                               "Move selected item(s) up");
    }
 }
 
@@ -382,13 +381,13 @@ void C_SdNdeDpListPopUp::m_HandleSelection(const uint32_t & oru32_ListIndex, con
       else if (oru32_Count == 1)
       {
          //Translation: 1: Data element type
-         c_Text = static_cast<QString>(C_GtGetText::h_GetText("1 %1 selected")).arg(c_Type);
+         c_Text = static_cast<QString>("1 %1 selected").arg(c_Type);
       }
       else
       {
          //Translation: 1: Number of selected items 2: Data element type
          c_Text =
-            static_cast<QString>(C_GtGetText::h_GetText("%1 %2s selected")).arg(oru32_Count).arg(c_Type);
+            static_cast<QString>("%1 %2s selected").arg(oru32_Count).arg(c_Type);
       }
       this->mpc_Ui->pc_SelectionLabel->setText(c_Text);
       this->mpc_Ui->pc_SelectionLabel->setVisible(q_Visible);

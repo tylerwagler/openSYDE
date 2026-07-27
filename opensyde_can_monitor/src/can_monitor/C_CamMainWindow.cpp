@@ -38,7 +38,6 @@
 #include "C_CamProHandler.hpp"
 #include "C_CamDbHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_GtGetText.hpp"
 #include "C_HeHandler.hpp"
 
 #include <QDebug>
@@ -187,13 +186,24 @@ C_CamMainWindow::C_CamMainWindow(QWidget * const opc_Parent) :
            this, &C_CamMainWindow::m_SaveUserSettings);
    // CAN DLL configuration
    connect(this->mpc_Ui->pc_SettingsWidget, &C_CamMosWidget::SigCanDllConfigured, this,
-           &C_CamMainWindow::m_OnCanDllConfigChange);
+            &C_CamMainWindow::m_OnCanDllConfigChange);
+    // CAN-TP decoder enable/disable (from toolbar toggle).
+    // The transmitter is always available; per-message protocol selection decides usage.
+    connect(this->mpc_Ui->pc_TraceWidget, &C_CamMetWidget::SigCanTpEnabled, this,
+            [this](const bool oq_Enabled) {
+       this->mpc_Ui->pc_TraceWidget->GetMessageMonitor()->GetCanTpDecoder().SetEnabled(oq_Enabled);
+    });
 
    mpc_CanThread = new stw::opensyde_gui_logic::C_SyvComDriverThread(&C_CamMainWindow::mh_ThreadFunc, this);
 
    // Dispatcher is created lazily by m_InitCan(): see h_CreateAdapter call there. The COM driver
    // receives the pointer once the user starts communication.
    this->mc_ComDriver.RegisterLogger(this->mpc_Ui->pc_TraceWidget->GetMessageMonitor());
+
+   // Wire the CAN-TP transmitter to the message monitor so FC frames
+   // received from the bus are forwarded to the Tx state machine.
+   this->mpc_Ui->pc_TraceWidget->GetMessageMonitor()->SetCanTpTransmitter(
+      &this->mc_ComDriver.GetCanTpTransmitter());
 
    // Load initial project
    this->m_LoadInitialProject();
@@ -495,6 +505,9 @@ void C_CamMainWindow::m_StartLogging(void)
    int32_t s32_Bitrate;
    int32_t s32_Return;
 
+   // Reset CAN-TP decoder state for a fresh session
+   this->mpc_Ui->pc_TraceWidget->GetMessageMonitor()->GetCanTpDecoder().Reset();
+
    s32_Return = this->m_InitCan(s32_Bitrate);
 
    if (s32_Return != C_NO_ERR)
@@ -505,23 +518,23 @@ void C_CamMainWindow::m_StartLogging(void)
       switch (s32_Return)
       {
       case C_RD_WR:
-         c_Text = C_GtGetText::h_GetText("CAN adapter could not be opened. Check the configured adapter "
-                                         "is connected and the selected backend is available.");
+         c_Text = "CAN adapter could not be opened. Check the configured adapter "
+                                         "is connected and the selected backend is available.";
          break;
       case C_COM:
-         c_Text = C_GtGetText::h_GetText("CAN adapter initialization failed. Check that the configured "
-                                         "bitrate matches the bus.");
+         c_Text = "CAN adapter initialization failed. Check that the configured "
+                                         "bitrate matches the bus.";
          break;
       case C_WARN:
          c_MessageBox.SetType(C_OgeWiCustomMessage::eWARNING);
-         c_Text = C_GtGetText::h_GetText("Used bitrate could not used for bus load calculation."
-                                         " Bus load will not work.");
+         c_Text = "Used bitrate could not used for bus load calculation."
+                                         " Bus load will not work.";
          break;
       default:
          break;
       }
 
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Starting CAN monitoring"));
+      c_MessageBox.SetHeading("Starting CAN monitoring");
       c_MessageBox.SetDescription(c_Text);
       c_MessageBox.Execute();
    }
@@ -556,6 +569,7 @@ void C_CamMainWindow::m_PauseLogging(void)
    this->mc_ComDriver.PauseLogging();
    this->mpc_Ui->pc_GeneratorWidget->SetCommunicationStarted(false);
    this->mc_ComDriver.RemoveAllCyclicCanMessages();
+   this->mc_ComDriver.RemoveAllCyclicTpRequests();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -589,6 +603,7 @@ void C_CamMainWindow::m_StopLogging(void)
    this->m_CloseCan();
    this->mpc_Ui->pc_GeneratorWidget->SetCommunicationStarted(false);
    this->mc_ComDriver.RemoveAllCyclicCanMessages();
+   this->mc_ComDriver.RemoveAllCyclicTpRequests();
    this->mpc_Ui->pc_SettingsWidget->OnCommunicationStarted(false);
    //Clear bitrate
    this->mpc_Ui->pc_TraceWidget->SetCanBitrate(0);
@@ -1140,6 +1155,23 @@ void C_CamMainWindow::m_RegisterCyclicMessage(const uint32_t ou32_MessageIndex, 
 
    if (pc_Message != NULL)
    {
+      if ((pc_Message->GetTxProtocol() == C_CamProMessageData::eTX_CAN_TP) ||
+          (pc_Message->GetTxProtocol() == C_CamProMessageData::eTX_UDS))
+      {
+         if (oq_Active)
+         {
+            this->mc_ComDriver.AddCyclicTpRequest(pc_Message->u32_Id,
+                                                   pc_Message->q_IsExtended,
+                                                   pc_Message->c_Bytes,
+                                                   pc_Message->u32_CyclicTriggerTime);
+         }
+         else
+         {
+            this->mc_ComDriver.RemoveCyclicTpRequest(pc_Message->u32_Id);
+         }
+         return;
+      }
+
       C_OscCanProtocol::E_Type e_ProtocolType = C_OscCanProtocol::eCAN_OPEN;
       C_CamDbHandler::h_GetInstance()->GetOscMessage(pc_Message->c_DataBaseFilePath.c_str(),
                                                      pc_Message->c_Name.c_str(),
@@ -1177,6 +1209,17 @@ void C_CamMainWindow::m_SendMessage(const uint32_t ou32_MessageIndex, const uint
 
    if (pc_Message != NULL)
    {
+      // Route based on per-message Tx protocol
+      if ((pc_Message->GetTxProtocol() == C_CamProMessageData::eTX_CAN_TP) ||
+          (pc_Message->GetTxProtocol() == C_CamProMessageData::eTX_UDS))
+      {
+         // Queue for the CAN thread to process (thread-safe)
+         this->mc_ComDriver.QueueTpRequest(pc_Message->u32_Id,
+                                           pc_Message->q_IsExtended,
+                                           pc_Message->c_Bytes);
+         return;
+      }
+
       C_OscCanProtocol::E_Type e_ProtocolType = C_OscCanProtocol::eCAN_OPEN;
       C_CamDbHandler::h_GetInstance()->GetOscMessage(pc_Message->c_DataBaseFilePath.c_str(),
                                                      pc_Message->c_Name.c_str(),
@@ -1201,6 +1244,7 @@ void C_CamMainWindow::m_SendMessage(const uint32_t ou32_MessageIndex, const uint
 void C_CamMainWindow::m_RemoveAllCyclicMessages(void)
 {
    this->mc_ComDriver.RemoveAllCyclicCanMessages();
+   this->mc_ComDriver.RemoveAllCyclicTpRequests();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1467,11 +1511,11 @@ void C_CamMainWindow::m_DisplayCheckMessagesDialog(const QString & orc_DatabaseP
       QString c_Details;
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eINFORMATION);
 
-      c_Message.SetHeading(C_GtGetText::h_GetText("Message Generator consistency check"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Inconsistent messages in message generator found. "
-                                                      "These are removed from message generator. "));
+      c_Message.SetHeading("Message Generator consistency check");
+      c_Message.SetDescription("Inconsistent messages in message generator found. "
+                                                      "These are removed from message generator. ");
 
-      c_Details = C_GtGetText::h_GetText("Following messages are removed from message generator: \n");
+      c_Details = "Following messages are removed from message generator: \n";
 
       for (uint32_t u32_It = 0UL; u32_It < orc_Indices.size(); ++u32_It)
       {

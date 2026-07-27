@@ -23,7 +23,6 @@
 
 #include "C_OscUtils.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 #include "C_CamProHandler.hpp"
 #include "C_Uti.hpp"
@@ -71,11 +70,11 @@ C_CamMosLoggingWidget::C_CamMosLoggingWidget(QWidget * const opc_Parent) :
    this->SetBackgroundColor(5);
 
    // initialize title widget
-   this->mpc_Ui->pc_WiHeader->SetTitle(C_GtGetText::h_GetText("Logging"));
+   this->mpc_Ui->pc_WiHeader->SetTitle("Logging");
    this->mpc_Ui->pc_WiHeader->SetIcon("://images/IconLogging.svg");
    this->mpc_Ui->pc_WiHeader->SetToggle(true);
-   this->mpc_Ui->pc_WiHeader->SetToggleToolTip(C_GtGetText::h_GetText("Logging"),
-                                               C_GtGetText::h_GetText("Start or stop logging to file."));
+   this->mpc_Ui->pc_WiHeader->SetToggleToolTip("Logging",
+                                               "Start or stop logging to file.");
 
    // initialize labels
    this->mpc_Ui->pc_LabFile->SetForegroundColor(0);
@@ -87,31 +86,30 @@ C_CamMosLoggingWidget::C_CamMosLoggingWidget(QWidget * const opc_Parent) :
    this->mpc_Ui->pc_LabFormat->SetFontPixel(13);
    this->mpc_Ui->pc_LabOverwrite->SetFontPixel(13);
 
-   this->mpc_Ui->pc_LabFile->setText(C_GtGetText::h_GetText("File"));
-   this->mpc_Ui->pc_LabFile->SetToolTipInformation(C_GtGetText::h_GetText("File"),
-                                                   C_GtGetText::h_GetText("Name of log file without extension."));
-   this->mpc_Ui->pc_LabFolder->setText(C_GtGetText::h_GetText("Directory"));
-   this->mpc_Ui->pc_LabFolder->SetToolTipInformation(C_GtGetText::h_GetText("Directory"),
-                                                     C_GtGetText::h_GetText(
-                                                        "Path of directory where log file(s) get saved at."));
-   this->mpc_Ui->pc_LabFormat->setText(C_GtGetText::h_GetText("Format"));
-   this->mpc_Ui->pc_LabFormat->SetToolTipInformation(C_GtGetText::h_GetText("Format"),
-                                                     C_GtGetText::h_GetText("File format of log file (*.asc or *.blf)."));
-   this->mpc_Ui->pc_LabOverwrite->setText(C_GtGetText::h_GetText("File Options"));
+   this->mpc_Ui->pc_LabFile->setText("File");
+   this->mpc_Ui->pc_LabFile->SetToolTipInformation("File",
+                                                   "Name of log file without extension.");
+   this->mpc_Ui->pc_LabFolder->setText("Directory");
+   this->mpc_Ui->pc_LabFolder->SetToolTipInformation("Directory",
+                                                     "Path of directory where log file(s) get saved at.");
+   this->mpc_Ui->pc_LabFormat->setText("Format");
+   this->mpc_Ui->pc_LabFormat->SetToolTipInformation("Format",
+                                                     "File format of log file (*.asc or *.blf).");
+   this->mpc_Ui->pc_LabOverwrite->setText("File Options");
    this->mpc_Ui->pc_LabOverwrite->SetToolTipInformation(
-      C_GtGetText::h_GetText("File Options"),
-      C_GtGetText::h_GetText("File overwrite options:\n"
+      "File Options",
+      "File overwrite options:\n"
                              "  - Make log file name unique by adding a timestamp suffix. Format: <LogFileName>_<Date>_<Time>\n"
                              "  - Overwrite an existing file but warn before doing so.\n"
-                             "  - Overwrite an existing file without warning."));
+                             "  - Overwrite an existing file without warning.");
 
    // initialize combo boxes
    this->mpc_Ui->pc_CbxFormat->addItem("ASC");
    this->mpc_Ui->pc_CbxFormat->addItem("BLF");
 
-   this->mpc_Ui->pc_CbxOverwrite->addItem(C_GtGetText::h_GetText("Add timestamp suffix"));
-   this->mpc_Ui->pc_CbxOverwrite->addItem(C_GtGetText::h_GetText("Warn before overwriting"));
-   this->mpc_Ui->pc_CbxOverwrite->addItem(C_GtGetText::h_GetText("Overwrite without warning"));
+   this->mpc_Ui->pc_CbxOverwrite->addItem("Add timestamp suffix");
+   this->mpc_Ui->pc_CbxOverwrite->addItem("Warn before overwriting");
+   this->mpc_Ui->pc_CbxOverwrite->addItem("Overwrite without warning");
 
    // initialize button
    this->mpc_Ui->pc_PubBrowse->setText("");
@@ -203,8 +201,8 @@ void C_CamMosLoggingWidget::OnSigLogFileAddResult(const int32_t os32_Result)
    if (os32_Result != stw::errors::C_NO_ERR)
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Start logging"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Could not start logging. Possible reason: Missing write access."));
+      c_Message.SetHeading("Start logging");
+      c_Message.SetDescription("Could not start logging. Possible reason: Missing write access.");
       c_Message.Execute();
       this->m_OnToggled(false);
    }
@@ -357,7 +355,7 @@ void C_CamMosLoggingWidget::m_OnBrowse(void)
       }
    }
 
-   c_Path = QFileDialog::getExistingDirectory(this, C_GtGetText::h_GetText("Select Log File Location"),
+   c_Path = QFileDialog::getExistingDirectory(this, "Select Log File Location",
                                               c_Folder, QFileDialog::ShowDirsOnly);
 
    if (c_Path != "")
@@ -416,14 +414,14 @@ void C_CamMosLoggingWidget::m_DecideStartStop()
    if ((this->mq_Online == true) && (C_CamProHandler::h_GetInstance()->GetLoggingData().q_Enabled == true))
    {
       this->mpc_Ui->pc_WiContent->setEnabled(false);
-      this->mpc_Ui->pc_WiHeader->SetTitle(C_GtGetText::h_GetText("Logging (active)"));
+      this->mpc_Ui->pc_WiHeader->SetTitle("Logging (active)");
 
       // check and start logging
       this->m_CheckAndStartLogging();
    }
    else
    {
-      this->mpc_Ui->pc_WiHeader->SetTitle(C_GtGetText::h_GetText("Logging"));
+      this->mpc_Ui->pc_WiHeader->SetTitle("Logging");
       this->mpc_Ui->pc_WiContent->setEnabled(true);
 
       // stop logging
@@ -456,27 +454,27 @@ void C_CamMosLoggingWidget::m_CheckAndStartLogging()
    {
       // inform user
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-      const QString c_Heading = C_GtGetText::h_GetText("Logging Directory");
+      const QString c_Heading = "Logging Directory";
       const QString c_MessageText =
-         C_GtGetText::h_GetText("Could not start logging because of invalid log file name or directory. "
-                                "For more information see details.");
+         "Could not start logging because of invalid log file name or directory. "
+                                "For more information see details.";
       QString c_Details = "";
 
       if (q_ValidDir == false)
       {
          if (rc_LoggingData.c_Directory.isEmpty() == false)
          {
-            c_Details += C_GtGetText::h_GetText("The directory contains invalid characters:\n");
+            c_Details += "The directory contains invalid characters:\n";
             c_Details += rc_LoggingData.c_Directory;
             if (rc_LoggingData.c_Directory != c_ResolvedPath)
             {
-               c_Details += C_GtGetText::h_GetText(" (resolved: ") + c_ResolvedPath + ")";
+               c_Details += " (resolved: " + c_ResolvedPath + ")";
             }
             c_Details += "\n";
          }
          else
          {
-            c_Details += C_GtGetText::h_GetText("The directory path is empty.\n");
+            c_Details += "The directory path is empty.\n";
          }
       }
 
@@ -484,12 +482,12 @@ void C_CamMosLoggingWidget::m_CheckAndStartLogging()
       {
          if (rc_LoggingData.c_FileName.isEmpty() == false)
          {
-            c_Details += C_GtGetText::h_GetText("The file name contains invalid characters:\n");
+            c_Details += "The file name contains invalid characters:\n";
             c_Details += rc_LoggingData.c_FileName;
          }
          else
          {
-            c_Details += C_GtGetText::h_GetText("The file name is empty.");
+            c_Details += "The file name is empty.";
          }
       }
 
@@ -528,12 +526,12 @@ void C_CamMosLoggingWidget::m_CheckAndStartLogging()
          if (c_FileInfo.exists() == true)
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eWARNING);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Log file overwrite"));
-            c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText("The log file %1 already exists. "
-                                                                                 "Do you want to overwrite the file?")).
+            c_Message.SetHeading("Log file overwrite");
+            c_Message.SetDescription(static_cast<QString>("The log file %1 already exists. "
+                                                                                 "Do you want to overwrite the file?").
                                      arg(c_FileInfo.absoluteFilePath()));
-            c_Message.SetCancelButtonText(C_GtGetText::h_GetText("Cancel"));
-            c_Message.SetOkButtonText(C_GtGetText::h_GetText("Overwrite"));
+            c_Message.SetCancelButtonText("Cancel");
+            c_Message.SetOkButtonText("Overwrite");
             q_Continue = (c_Message.Execute() == C_OgeWiCustomMessage::eOK);
          }
       }

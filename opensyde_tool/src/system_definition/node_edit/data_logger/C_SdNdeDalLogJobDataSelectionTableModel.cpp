@@ -77,11 +77,11 @@ void C_SdNdeDalLogJobDataSelectionTableModel::AddData(
 
          if (ou32_NodeIndex == rc_ConfiguredElementOptArrayId.u32_NodeIndex)
          {
-            rc_JobData.c_Location = C_GtGetText::h_GetText("Local");
+            rc_JobData.c_Location = "Local";
          }
          else
          {
-            rc_JobData.c_Location = C_GtGetText::h_GetText("Remote");
+            rc_JobData.c_Location = "Remote";
          }
 
          rc_JobData.c_Namespace =
@@ -93,7 +93,7 @@ void C_SdNdeDalLogJobDataSelectionTableModel::AddData(
          }
          else
          {
-            rc_JobData.c_LoggingName = C_GtGetText::h_GetText("[Namespace]");
+            rc_JobData.c_LoggingName = "[Namespace]";
          }
 
          this->mc_LoggingDataList.push_back(rc_JobData);
@@ -116,7 +116,7 @@ void C_SdNdeDalLogJobDataSelectionTableModel::GetElementLocationCount(uint32_t &
    for (uint32_t u32_Index = 0; u32_Index < this->mc_LoggingDataList.size(); u32_Index++)
    {
       // If element is "remote"
-      if (this->mc_LoggingDataList[u32_Index].c_Location == C_GtGetText::h_GetText("Remote"))
+      if (this->mc_LoggingDataList[u32_Index].c_Location == "Remote")
       {
          oru32_RemoteElements++;
       }
@@ -204,19 +204,19 @@ QVariant C_SdNdeDalLogJobDataSelectionTableModel::headerData(const int32_t os32_
          switch (e_Col)
          {
          case eDATA_ELEMENT:
-            c_Retval =  C_GtGetText::h_GetText("Data Element");
+            c_Retval =  "Data Element";
             break;
          case eLOCATION:
-            c_Retval =  C_GtGetText::h_GetText("Location");
+            c_Retval =  "Location";
             break;
          case eNAMESPACE:
-            c_Retval =  C_GtGetText::h_GetText("Namespace");
+            c_Retval =  "Namespace";
             break;
          case eLOGGING_NAME:
-            c_Retval =  C_GtGetText::h_GetText("Logging Name");
+            c_Retval =  "Logging Name";
             break;
          case eCOMMENT:
-            c_Retval =  C_GtGetText::h_GetText("Comment");
+            c_Retval =  "Comment";
             break;
          default:
             break;
@@ -232,19 +232,19 @@ QVariant C_SdNdeDalLogJobDataSelectionTableModel::headerData(const int32_t os32_
          switch (e_Col)
          {
          case eDATA_ELEMENT:
-            c_Retval =  C_GtGetText::h_GetText("Name of the element");
+            c_Retval =  "Name of the element";
             break;
          case eLOCATION:
-            c_Retval =  C_GtGetText::h_GetText("Location of the element");
+            c_Retval =  "Location of the element";
             break;
          case eNAMESPACE:
-            c_Retval =  C_GtGetText::h_GetText("Namespace to which the element belongs");
+            c_Retval =  "Namespace to which the element belongs";
             break;
          case eLOGGING_NAME:
-            c_Retval =  C_GtGetText::h_GetText("Custom name used for logging");
+            c_Retval =  "Custom name used for logging";
             break;
          case eCOMMENT:
-            c_Retval =  C_GtGetText::h_GetText("Additional info on this element");
+            c_Retval =  "Additional info on this element";
             break;
          default:
             break;
@@ -255,19 +255,19 @@ QVariant C_SdNdeDalLogJobDataSelectionTableModel::headerData(const int32_t os32_
          switch (e_Col)
          {
          case eDATA_ELEMENT:
-            c_Retval =  C_GtGetText::h_GetText("Data Element");
+            c_Retval =  "Data Element";
             break;
          case eLOCATION:
-            c_Retval =  C_GtGetText::h_GetText("Location");
+            c_Retval =  "Location";
             break;
          case eNAMESPACE:
-            c_Retval =  C_GtGetText::h_GetText("Namespace");
+            c_Retval =  "Namespace";
             break;
          case eLOGGING_NAME:
-            c_Retval =  C_GtGetText::h_GetText("Logging Name");
+            c_Retval =  "Logging Name";
             break;
          case eCOMMENT:
-            c_Retval =  C_GtGetText::h_GetText("Comment");
+            c_Retval =  "Comment";
             break;
          default:
             break;
@@ -367,7 +367,7 @@ QVariant C_SdNdeDalLogJobDataSelectionTableModel::data(const QModelIndex & orc_I
                {
                   const C_DalLogJobData & rc_Data = this->mc_LoggingDataList[u32_Index];
                   const QString c_LoggingName = rc_Data.c_LoggingName.c_str();
-                  const int32_t s32_Ret = c_LoggingName.compare(C_GtGetText::h_GetText("[Namespace]"));
+                  const int32_t s32_Ret = c_LoggingName.compare("[Namespace]");
                   if (s32_Ret != 0)
                   {
                      c_Font = C_Uti::h_GetFontPixel(mc_STYLE_GUIDE_FONT_SEMIBOLD_13);

@@ -14,7 +14,6 @@
 
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdUtil.hpp"
@@ -68,10 +67,10 @@ C_CieDcfEdsImportNodeSelectWidget::C_CieDcfEdsImportNodeSelectWidget(
    this->mpc_Ui->pc_LabPath->setText(
       C_Uti::h_MinimizePath(orc_FilePath, C_Uti::h_GetFontPixel(mc_STYLE_GUIDE_FONT_REGULAR_13), 500, 0));
    this->mpc_Ui->pc_LabPath->SetToolTipInformation(static_cast<QFileInfo>(orc_FilePath).completeSuffix().toUpper() +
-                                                   C_GtGetText::h_GetText(" Configuration File"),
-                                                   C_GtGetText::h_GetText(orc_FilePath.toStdString().c_str()));
+                                                   " Configuration File",
+                                                   orc_FilePath.toStdString().c_str());
    mrc_ParentDialog.SetSubTitle(static_cast<QFileInfo>(orc_FilePath).completeSuffix().toUpper() +
-                                C_GtGetText::h_GetText(" File"));
+                                " File");
 
    if (static_cast<QFileInfo>(orc_FilePath).completeSuffix().toUpper() == "DCF")
    {
@@ -111,20 +110,20 @@ C_CieDcfEdsImportNodeSelectWidget::~C_CieDcfEdsImportNodeSelectWidget(void)
 void C_CieDcfEdsImportNodeSelectWidget::InitStaticNames(void)
 {
    // window title
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Import Messages"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("EDS/DCF File"));
+   this->mrc_ParentDialog.SetTitle("Import Messages");
+   this->mrc_ParentDialog.SetSubTitle("EDS/DCF File");
 
    // labels
-   this->mpc_Ui->pc_LabelHeading->setText(C_GtGetText::h_GetText("Configuration"));
-   this->mpc_Ui->pc_LabelNode->setText(C_GtGetText::h_GetText("Assignee"));
+   this->mpc_Ui->pc_LabelHeading->setText("Configuration");
+   this->mpc_Ui->pc_LabelNode->setText("Assignee");
    this->mpc_Ui->pc_LabelNode->SetToolTipInformation(
-      C_GtGetText::h_GetText("Assignee"),
-      C_GtGetText::h_GetText("Select a node from Network Topology. All messages get imported to this node."));
-   this->mpc_Ui->pc_LabPathTitle->setText(C_GtGetText::h_GetText("Path:"));
+      "Assignee",
+      "Select a node from Network Topology. All messages get imported to this node.");
+   this->mpc_Ui->pc_LabPathTitle->setText("Path:");
 
    // buttons
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Continue"));
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_PushButtonOk->setText("Continue");
 }
 
 //-------------------------------------------------------------------------------------------f---------------------------

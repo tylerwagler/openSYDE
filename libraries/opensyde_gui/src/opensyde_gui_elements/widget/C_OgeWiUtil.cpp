@@ -22,7 +22,6 @@
 
 #include "C_OscUtils.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -464,9 +463,9 @@ void C_OgeWiUtil::h_ShowPathInvalidError(QWidget * const opc_Parent, const QStri
 {
    C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::eERROR);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("Invalid Path"));
-   c_Message.SetDescription(C_GtGetText::h_GetText("Path contains invalid characters."));
-   c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("Path(s):\n%1")).arg(orc_InvalidPaths));
+   c_Message.SetHeading("Invalid Path");
+   c_Message.SetDescription("Path contains invalid characters.");
+   c_Message.SetDetails(static_cast<QString>("Path(s):\n%1").arg(orc_InvalidPaths));
    c_Message.SetCustomMinHeight(180, 250);
    c_Message.Execute();
 }
@@ -496,10 +495,10 @@ int32_t C_OgeWiUtil::h_AskOverwriteFile(QWidget * const opc_Parent, const QStrin
       C_OgeWiCustomMessage c_MessageBox(opc_Parent, C_OgeWiCustomMessage::E_Type::eQUESTION);
       C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
 
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Save File"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("File does already exist. Do you want to overwrite?"));
-      c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Overwrite"));
-      c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Back"));
+      c_MessageBox.SetHeading("Save File");
+      c_MessageBox.SetDescription("File does already exist. Do you want to overwrite?");
+      c_MessageBox.SetOkButtonText("Overwrite");
+      c_MessageBox.SetNoButtonText("Back");
       c_MessageBox.SetCustomMinHeight(180, 180);
       e_ReturnMessageBox = c_MessageBox.Execute();
 

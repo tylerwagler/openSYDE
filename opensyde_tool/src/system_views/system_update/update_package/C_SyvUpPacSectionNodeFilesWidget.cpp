@@ -15,7 +15,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "TglUtils.hpp"
 
 #include "C_SyvUpPacSectionNodeFilesWidget.hpp"
@@ -138,12 +137,12 @@ void C_SyvUpPacSectionNodeFilesWidget::AddFile(const QString & orc_File)
       {
          // Only one PEM file allowed
          const QString c_Message = static_cast<QString>(
-            C_GtGetText::h_GetText("A PEM file was already added. "
-                                   "Only one PEM file for a node is allowed. The file %1 was not added."))
+            "A PEM file was already added. "
+                                   "Only one PEM file for a node is allowed. The file %1 was not added.")
                                    .arg(orc_File);
          C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eWARNING);
          c_MessageBox.SetDescription(c_Message);
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("Adding PEM file"));
+         c_MessageBox.SetHeading("Adding PEM file");
          c_MessageBox.Execute();
       }
    }
@@ -241,12 +240,12 @@ void C_SyvUpPacSectionNodeFilesWidget::AdaptFile(const QString & orc_File, C_Syv
          else
          {
             // Only one PEM file allowed
-            const QString c_Message = static_cast<QString>(C_GtGetText::h_GetText("A PEM file was already added. "
-                                                                                  "Only one PEM file for a node is allowed. The file %1 was not added."))
+            const QString c_Message = static_cast<QString>("A PEM file was already added. "
+                                                                                  "Only one PEM file for a node is allowed. The file %1 was not added.")
                                       .arg(orc_File);
             C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eWARNING);
             c_MessageBox.SetDescription(c_Message);
-            c_MessageBox.SetHeading(C_GtGetText::h_GetText("Adding PEM file"));
+            c_MessageBox.SetHeading("Adding PEM file");
             c_MessageBox.Execute();
          }
       }
@@ -656,7 +655,7 @@ void C_SyvUpPacSectionNodeFilesWidget::m_InitSpecificItem(const stw::opensyde_co
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacSectionNodeFilesWidget::m_InitStaticNames(void)
 {
-   this->mc_SectionName = C_GtGetText::h_GetText("Other Files (Optional)");
+   this->mc_SectionName = "Other Files (Optional)";
 }
 
 //----------------------------------------------------------------------------------------------------------------------

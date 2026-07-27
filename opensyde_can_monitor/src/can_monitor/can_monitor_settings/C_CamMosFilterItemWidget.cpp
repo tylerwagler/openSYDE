@@ -18,7 +18,6 @@
 #include "ui_C_CamMosFilterItemWidget.h"
 
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_OgePopUpDialog.hpp"
@@ -80,14 +79,13 @@ C_CamMosFilterItemWidget::C_CamMosFilterItemWidget(const C_CamProFilterData & or
    this->m_SetFilterNameElided();
 
    // tool tips
-   this->mpc_Ui->pc_PbEdit->SetToolTipInformation(C_GtGetText::h_GetText("Edit"),
-                                                  C_GtGetText::h_GetText("Edit filter properties."));
-   this->mpc_Ui->pc_PbRemove->SetToolTipInformation(C_GtGetText::h_GetText("Delete"),
-                                                    C_GtGetText::h_GetText("Delete this filter."));
-   this->mpc_Ui->pc_CheckBox->SetToolTipInformation(C_GtGetText::h_GetText("Enable Receive Filter"),
-                                                    C_GtGetText::h_GetText(
-                                                       "Check to stop or pass messages as described in the filter "
-                                                       "items or uncheck to remove filtering."));
+   this->mpc_Ui->pc_PbEdit->SetToolTipInformation("Edit",
+                                                  "Edit filter properties.");
+   this->mpc_Ui->pc_PbRemove->SetToolTipInformation("Delete",
+                                                    "Delete this filter.");
+   this->mpc_Ui->pc_CheckBox->SetToolTipInformation("Enable Receive Filter",
+                                                    "Check to stop or pass messages as described in the filter "
+                                                       "items or uncheck to remove filtering.");
    this->m_CreateTooltipInformation();
 
    // connects
@@ -120,7 +118,7 @@ void C_CamMosFilterItemWidget::m_CreateTooltipInformation(void)
 
    QList<C_CamProFilterItemData> c_FilterItems = mc_Filter.c_FilterItems;
 
-   c_Content += static_cast<QString>(C_GtGetText::h_GetText("Number of Filter Items: %1")).arg(c_FilterItems.size());
+   c_Content += static_cast<QString>("Number of Filter Items: %1").arg(c_FilterItems.size());
    c_Content += "\n";
 
    // show information of first few filter items (maximum 3)
@@ -130,47 +128,47 @@ void C_CamMosFilterItemWidget::m_CreateTooltipInformation(void)
       QString c_Temp = "";
 
       c_Content += "\n";
-      c_Content += static_cast<QString>(C_GtGetText::h_GetText("Filter Item %1\n")).arg(s32_Pos + 1);
+      c_Content += static_cast<QString>("Filter Item %1\n").arg(s32_Pos + 1);
 
       // enabled flag
       c_Content += "   ";
-      c_Content += C_GtGetText::h_GetText("Enabled: ");
+      c_Content += "Enabled: ";
       if (rc_FilterItem.q_Enabled == true)
       {
-         c_Content += C_GtGetText::h_GetText("Yes\n");
+         c_Content += "Yes\n";
       }
       else
       {
-         c_Content += C_GtGetText::h_GetText("No\n");
+         c_Content += "No\n";
       }
 
       // type
       c_Content += "   ";
-      c_Content += C_GtGetText::h_GetText("Type: ");
+      c_Content += "Type: ";
       if (rc_FilterItem.e_Type == C_CamProFilterItemData::eID_SINGLE)
       {
-         c_Content += C_GtGetText::h_GetText("CAN ID\n");
+         c_Content += "CAN ID\n";
       }
       else
       {
-         c_Content += C_GtGetText::h_GetText("CAN ID Range\n");
+         c_Content += "CAN ID Range\n";
       }
 
       // mode
       c_Content += "   ";
-      c_Content += C_GtGetText::h_GetText("Mode: ");
+      c_Content += "Mode: ";
       if (rc_FilterItem.q_PassFilter == true)
       {
-         c_Content += C_GtGetText::h_GetText("Pass\n");
+         c_Content += "Pass\n";
       }
       else
       {
-         c_Content += C_GtGetText::h_GetText("Stop\n");
+         c_Content += "Stop\n";
       }
 
       // details
       c_Content += "   ";
-      c_Content += C_GtGetText::h_GetText("Details: ");
+      c_Content += "Details: ";
 
       // add "x" to ID if extended
       if (static_cast<bool>(rc_FilterItem.u8_ExtendedId) ==  true)
@@ -179,17 +177,17 @@ void C_CamMosFilterItemWidget::m_CreateTooltipInformation(void)
       }
       if (rc_FilterItem.e_Type == C_CamProFilterItemData::eID_SINGLE)
       {
-         c_Content += C_GtGetText::h_GetText("ID 0x");
+         c_Content += "ID 0x";
          c_Content += static_cast<QString>("%1").arg(rc_FilterItem.u32_StartId, 0, 16).toUpper();
          c_Content += c_Temp;
          c_Content += "\n";
       }
       else
       {
-         c_Content += C_GtGetText::h_GetText("From 0x");
+         c_Content += "From 0x";
          c_Content += static_cast<QString>("%1").arg(rc_FilterItem.u32_StartId, 0, 16).toUpper();
          c_Content += c_Temp;
-         c_Content += C_GtGetText::h_GetText(" to 0x");
+         c_Content += " to 0x";
          c_Content += static_cast<QString>("%1").arg(rc_FilterItem.u32_EndId, 0, 16).toUpper();
          c_Content += c_Temp;
          c_Content += "\n";
@@ -199,7 +197,7 @@ void C_CamMosFilterItemWidget::m_CreateTooltipInformation(void)
    if (c_FilterItems.size() > 3)
    {
       c_Content += "\n";
-      c_Content += C_GtGetText::h_GetText("Click edit to see all filter items...");
+      c_Content += "Click edit to see all filter items...";
    }
 
    this->SetToolTipInformation(mc_Filter.c_Name, c_Content.trimmed());

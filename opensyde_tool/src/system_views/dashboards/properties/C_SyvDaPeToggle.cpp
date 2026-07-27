@@ -16,7 +16,6 @@
 #include "C_SyvDaPeToggle.hpp"
 #include "ui_C_SyvDaPeToggle.h"
 
-#include "C_GtGetText.hpp"
 #include "C_GiSvDaToggleBase.hpp"
 #include "C_PuiSvDbWidgetBase.hpp"
 
@@ -85,16 +84,15 @@ C_SyvDaPeToggle::~C_SyvDaPeToggle(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeToggle::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelStyle->setText(C_GtGetText::h_GetText("Style"));
+   this->mpc_Ui->pc_LabelStyle->setText("Style");
 
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Type 1"));
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Type 2"));
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Type 3"));
+   this->mpc_Ui->pc_ComboBoxType->addItem("Type 1");
+   this->mpc_Ui->pc_ComboBoxType->addItem("Type 2");
+   this->mpc_Ui->pc_ComboBoxType->addItem("Type 3");
 
    //Tool tips
-   this->mpc_Ui->pc_LabelStyle->SetToolTipInformation(C_GtGetText::h_GetText("Style"),
-                                                      C_GtGetText::h_GetText(
-                                                         "Different options for styles specific to this widget"));
+   this->mpc_Ui->pc_LabelStyle->SetToolTipInformation("Style",
+                                                      "Different options for styles specific to this widget");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

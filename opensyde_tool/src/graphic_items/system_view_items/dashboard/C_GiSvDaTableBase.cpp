@@ -19,7 +19,6 @@
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_SyvDaPeBase.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -446,8 +445,7 @@ void C_GiSvDaTableBase::ConfigureContextMenu(C_SyvDaContextMenuManager * const o
          if (mpc_AddDataElement == NULL)
          {
             mpc_AddDataElement =
-               opc_ContextMenuManager->RegisterActionWithKeyboardShortcut(C_GtGetText::h_GetText(
-                                                                             "Add data element(s)"),
+               opc_ContextMenuManager->RegisterActionWithKeyboardShortcut("Add data element(s)",
                                                                           static_cast<int32_t>(Qt::CTRL) +
                                                                           static_cast<int32_t>(Qt::Key_Plus));
             // The action has to be set invisible initial. Only with that the function SetVisibleWithAutoHide can work.
@@ -462,8 +460,7 @@ void C_GiSvDaTableBase::ConfigureContextMenu(C_SyvDaContextMenuManager * const o
          }
          if (mpc_ConfigDataElement == NULL)
          {
-            mpc_ConfigDataElement = opc_ContextMenuManager->RegisterAction(C_GtGetText::h_GetText(
-                                                                              "Edit Properties"));
+            mpc_ConfigDataElement = opc_ContextMenuManager->RegisterAction("Edit Properties");
             // The action has to be set invisible initial. Only with that the function SetVisibleWithAutoHide can work.
             this->mpc_ConfigDataElement->setVisible(false);
             connect(mpc_ConfigDataElement, &QAction::triggered, this, &C_GiSvDaTableBase::EditElementProperties);
@@ -477,8 +474,7 @@ void C_GiSvDaTableBase::ConfigureContextMenu(C_SyvDaContextMenuManager * const o
          if (mpc_MoveUpDataElement == NULL)
          {
             mpc_MoveUpDataElement =
-               opc_ContextMenuManager->RegisterActionWithKeyboardShortcut(C_GtGetText::h_GetText(
-                                                                             "Move up"),
+               opc_ContextMenuManager->RegisterActionWithKeyboardShortcut("Move up",
                                                                           static_cast<int32_t>(Qt::CTRL) +
                                                                           static_cast<int32_t>(Qt::Key_Up));
             // The action has to be set invisible initial. Only with that the function SetVisibleWithAutoHide can work.
@@ -488,8 +484,7 @@ void C_GiSvDaTableBase::ConfigureContextMenu(C_SyvDaContextMenuManager * const o
          if (mpc_MoveDownDataElement == NULL)
          {
             mpc_MoveDownDataElement =
-               opc_ContextMenuManager->RegisterActionWithKeyboardShortcut(C_GtGetText::h_GetText(
-                                                                             "Move down"),
+               opc_ContextMenuManager->RegisterActionWithKeyboardShortcut("Move down",
                                                                           static_cast<int32_t>(Qt::CTRL) +
                                                                           static_cast<int32_t>(Qt::Key_Down));
             // The action has to be set invisible initial. Only with that the function SetVisibleWithAutoHide can work.
@@ -505,8 +500,7 @@ void C_GiSvDaTableBase::ConfigureContextMenu(C_SyvDaContextMenuManager * const o
          if (mpc_RemoveDataElement == NULL)
          {
             mpc_RemoveDataElement =
-               opc_ContextMenuManager->RegisterActionWithKeyboardShortcut(C_GtGetText::h_GetText(
-                                                                             "Delete"),
+               opc_ContextMenuManager->RegisterActionWithKeyboardShortcut("Delete",
                                                                           static_cast<int32_t>(Qt::Key_Delete));
             // The action has to be set invisible initial. Only with that the function SetVisibleWithAutoHide can work.
             this->mpc_RemoveDataElement->setVisible(false);
@@ -820,7 +814,7 @@ bool C_GiSvDaTableBase::CheckItemError(const C_PuiSvDbNodeDataPoolListElementId 
       if (c_ItInvalidDlc != this->mc_InvalidDlcSignals.end())
       {
          q_Retval = true;
-         orc_Content += static_cast<QString>(C_GtGetText::h_GetText("%1 had invalid DLC %2.")).
+         orc_Content += static_cast<QString>("%1 had invalid DLC %2.").
                         arg(C_PuiSdUtil::h_GetSignalNamespace(c_ItInvalidDlc.key())).
                         arg(QString::number(c_ItInvalidDlc.value()));
       }

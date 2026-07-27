@@ -16,7 +16,6 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvUpPacParamSetFileInfoPopUp.hpp"
 #include "ui_C_SyvUpPacParamSetFileInfoPopUp.h"
 
@@ -84,10 +83,10 @@ void C_SyvUpPacParamSetFileInfoPopUp::InitStaticNames(void) const
 {
    const QFileInfo c_Info(this->mc_FileInfo.GetPath());
 
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Parameter Set Image File"));
+   this->mrc_ParentDialog.SetTitle("Parameter Set Image File");
    this->mrc_ParentDialog.SetSubTitle(c_Info.fileName());
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("File Information"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("File Information");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -115,10 +114,10 @@ int32_t C_SyvUpPacParamSetFileInfoPopUp::m_ReadFile(void)
    }
    else
    {
-      c_Html += C_GtGetText::h_GetText("Could not read ");
+      c_Html += "Could not read ";
       c_Html += this->mc_FileInfo.GetPath();
       c_Html += ".<br>";
-      c_Html += C_GtGetText::h_GetText("Please make sure it is an existing and valid parameter set image file.");
+      c_Html += "Please make sure it is an existing and valid parameter set image file.";
    }
    c_Html += "</body>";
    c_Html += "</html>";

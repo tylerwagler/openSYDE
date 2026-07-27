@@ -10,7 +10,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_GtGetText.hpp"
 #include "C_GiSvDaParam.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -119,26 +118,26 @@ void C_SyvDaItPaArWidget::InitStaticNames(void)
          const QString c_Type = C_PuiSdHandler::h_GetElementTypeName(pc_DataPool->e_Type);
          if (this->mq_EcuValues == true)
          {
-            c_EditType = C_GtGetText::h_GetText("Device Value");
+            c_EditType = "Device Value";
          }
          else
          {
-            c_EditType = C_GtGetText::h_GetText("Set Value");
+            c_EditType = "Set Value";
          }
 
          //Translation: 1: Data element type, 2: Data element name, 3: Value type
-         this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("%1 %2 (%3)")).arg(c_Type).arg(
+         this->mrc_ParentDialog.SetTitle(static_cast<QString>("%1 %2 (%3)").arg(c_Type).arg(
                                       pc_Element->c_Name.c_str()).arg(c_EditType));
       }
    }
 
    if ((this->mq_EcuValues == true) || (s32_DataSetIndex >= 0L))
    {
-      this->mrc_ParentDialog.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Array Editor (Read Only)")));
+      this->mrc_ParentDialog.SetSubTitle(static_cast<QString>("Array Editor (Read Only)"));
    }
    else
    {
-      this->mrc_ParentDialog.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Array Editor")));
+      this->mrc_ParentDialog.SetSubTitle(static_cast<QString>("Array Editor"));
    }
 }
 

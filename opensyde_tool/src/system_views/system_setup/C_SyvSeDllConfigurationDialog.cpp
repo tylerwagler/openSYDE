@@ -25,7 +25,6 @@
 #include "C_SyvSeDllConfigurationDialog.hpp"
 #include "ui_C_SyvSeDllConfigurationDialog.h"
 
-#include "C_GtGetText.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OscCanAdapterFactory.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -85,21 +84,20 @@ C_SyvSeDllConfigurationDialog::~C_SyvSeDllConfigurationDialog()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeDllConfigurationDialog::InitText(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("PC CAN Interface"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Configuration"));
+   this->mrc_ParentDialog.SetTitle("PC CAN Interface");
+   this->mrc_ParentDialog.SetSubTitle("Configuration");
 
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_PushButtonTestConnection->setText(C_GtGetText::h_GetText("Test Connection"));
-   this->mpc_Ui->pc_LabelBitrateInfo->setText(C_GtGetText::h_GetText(
-                                                 "CAN bitrate will be applied automatically."));
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_PushButtonTestConnection->setText("Test Connection");
+   this->mpc_Ui->pc_LabelBitrateInfo->setText("CAN bitrate will be applied automatically.");
 
 #ifdef _WIN32
-   this->mpc_Ui->pc_LabelBusHeading->setText(C_GtGetText::h_GetText("PEAK USB Channel"));
-   this->mpc_Ui->pc_LabelCustomDllPath->setText(C_GtGetText::h_GetText("Channel (1-16)"));
+   this->mpc_Ui->pc_LabelBusHeading->setText("PEAK USB Channel");
+   this->mpc_Ui->pc_LabelCustomDllPath->setText("Channel (1-16)");
 #else
-   this->mpc_Ui->pc_LabelBusHeading->setText(C_GtGetText::h_GetText("SocketCAN Interface"));
-   this->mpc_Ui->pc_LabelCustomDllPath->setText(C_GtGetText::h_GetText("Interface name"));
+   this->mpc_Ui->pc_LabelBusHeading->setText("SocketCAN Interface");
+   this->mpc_Ui->pc_LabelCustomDllPath->setText("Interface name");
 #endif
 }
 
@@ -252,7 +250,7 @@ void C_SyvSeDllConfigurationDialog::m_TestConnectionClicked(void) const
    C_CanDispatcher * const pc_Dispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
 
    C_OgeWiCustomMessage c_MessageBox(this->parentWidget());
-   c_MessageBox.SetHeading(C_GtGetText::h_GetText("PC CAN Interface configuration"));
+   c_MessageBox.SetHeading("PC CAN Interface configuration");
    c_MessageBox.SetCustomMinHeight(180, 180);
 
    if (pc_Dispatcher == NULL)
@@ -267,14 +265,13 @@ void C_SyvSeDllConfigurationDialog::m_TestConnectionClicked(void) const
       if (s32_Init == C_NO_ERR)
       {
          c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eINFORMATION);
-         c_MessageBox.SetDescription(C_GtGetText::h_GetText("Connection test successful. CAN Interface is ready for use."));
+         c_MessageBox.SetDescription("Connection test successful. CAN Interface is ready for use.");
          (void)pc_Dispatcher->CAN_Exit();
       }
       else
       {
          c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eWARNING);
-         c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                        "CAN initialization failed. Verify adapter is connected and the interface is up."));
+         c_MessageBox.SetDescription("CAN initialization failed. Verify adapter is connected and the interface is up.");
       }
       delete pc_Dispatcher;
    }

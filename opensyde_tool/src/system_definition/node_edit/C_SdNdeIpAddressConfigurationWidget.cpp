@@ -10,7 +10,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeIpAddressConfigurationWidget.hpp"
 #include "TglUtils.hpp"
@@ -60,8 +59,8 @@ C_SdNdeIpAddressConfigurationWidget::C_SdNdeIpAddressConfigurationWidget(
    // register the widget for showing
    this->mrc_ParentDialog.SetWidget(this);
 
-   this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("IP Address")));
-   this->mrc_ParentDialog.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Settings")));
+   this->mrc_ParentDialog.SetTitle(static_cast<QString>("IP Address"));
+   this->mrc_ParentDialog.SetSubTitle(static_cast<QString>("Settings"));
 
    //Init
    InitStaticNames();
@@ -117,12 +116,12 @@ C_SdNdeIpAddressConfigurationWidget::~C_SdNdeIpAddressConfigurationWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeIpAddressConfigurationWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_LabelDataElement->setText(C_GtGetText::h_GetText("IP Address Settings"));
-   this->mpc_Ui->pc_LabelIpAddress->setText(C_GtGetText::h_GetText("IP Address"));
-   this->mpc_Ui->pc_LabelSubNetMask->setText(C_GtGetText::h_GetText("Sub Net Mask"));
-   this->mpc_Ui->pc_LabelDefaultGateway->setText(C_GtGetText::h_GetText("Default Gateway"));
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_LabelDataElement->setText("IP Address Settings");
+   this->mpc_Ui->pc_LabelIpAddress->setText("IP Address");
+   this->mpc_Ui->pc_LabelSubNetMask->setText("Sub Net Mask");
+   this->mpc_Ui->pc_LabelDefaultGateway->setText("Default Gateway");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -194,11 +193,10 @@ void C_SdNdeIpAddressConfigurationWidget::m_OkClicked(void)
    if (q_IpValid == false)
    {
       C_OgeWiCustomMessage c_Error(this, C_OgeWiCustomMessage::E_Type::eERROR);
-      c_Error.SetHeading(C_GtGetText::h_GetText("IP Address Settings"));
-      c_Error.SetDescription(C_GtGetText::h_GetText(
-                                "IP Address does conflict with another node on the same Ethernet. Are you sure you want to assign this IP Address?"));
-      c_Error.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-      c_Error.SetCancelButtonText(C_GtGetText::h_GetText("Cancel"));
+      c_Error.SetHeading("IP Address Settings");
+      c_Error.SetDescription("IP Address does conflict with another node on the same Ethernet. Are you sure you want to assign this IP Address?");
+      c_Error.SetOkButtonText("Continue");
+      c_Error.SetCancelButtonText("Cancel");
       c_Error.SetCustomMinHeight(180, 250);
 
       if (c_Error.Execute() == C_OgeWiCustomMessage::eCANCEL)

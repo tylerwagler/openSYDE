@@ -15,7 +15,6 @@
 #include <cmath>
 #include <QFileDialog>
 
-#include "C_GtGetText.hpp"
 #include "TglUtils.hpp"
 #include "C_Uti.hpp"
 #include "C_OgeWiUtil.hpp"
@@ -68,12 +67,12 @@ C_FlaUpProperties::C_FlaUpProperties(QWidget * const opc_Parent) :
 
    this->mpc_ScrollLayout->addWidget(this->mpc_ListWidget);
 
-   this->mpc_Ui->pc_WiTitle->SetTitle(C_GtGetText::h_GetText("Update"));
+   this->mpc_Ui->pc_WiTitle->SetTitle("Update");
    this->mpc_Ui->pc_WiTitle->SetIconType(C_CamOgeWiSectionHeader::E_ButtonType::eNOBUTTON);
    this->mpc_Ui->pc_LabelTitle->SetForegroundColor(4);
    this->mpc_Ui->pc_LabelTitle->SetFontPixel(12, true, false);
    this->mpc_Ui->pc_LabelTitle->setText(
-      static_cast<QString>(C_GtGetText::h_GetText("<b>Hex-Files (%1)<\b>")).arg(QString::number(this->mpc_ListWidget->
+      static_cast<QString>("<b>Hex-Files (%1)<\b>").arg(QString::number(this->mpc_ListWidget->
                                                                                                 count())));
    if (this->mpc_ListWidget->count() <= 0)
    {
@@ -89,9 +88,8 @@ C_FlaUpProperties::C_FlaUpProperties(QWidget * const opc_Parent) :
                                       "://images/IconAddEnabledHover.svg", "", "",
                                       "",
                                       "://images/IconAddEnabledPressed.svg");
-   this->mpc_Ui->pc_AddButton->SetToolTipInformation(C_GtGetText::h_GetText("Add file"),
-                                                     C_GtGetText::h_GetText(
-                                                        "Add HEX file (.*hex)"));
+   this->mpc_Ui->pc_AddButton->SetToolTipInformation("Add file",
+                                                     "Add HEX file (.*hex)");
    this->mpc_Ui->pc_FileIconButton->SetSvg("://images/IconApp.svg");
 
    stw::opensyde_gui_logic::C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_Seperator,
@@ -514,7 +512,7 @@ void C_FlaUpProperties::m_UpdateLabelTitleWithFileCounter(void)
    if (this->mpc_ListWidget != NULL)
    {
       this->mpc_Ui->pc_LabelTitle->setText(
-         static_cast<QString>(C_GtGetText::h_GetText("<b>Hex-Files (%1)<\b>")).arg(this->mpc_ListWidget->count()));
+         static_cast<QString>("<b>Hex-Files (%1)<\b>").arg(this->mpc_ListWidget->count()));
    }
 
    if (this->mpc_ListWidget->count() <= 0)

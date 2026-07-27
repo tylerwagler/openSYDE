@@ -15,7 +15,6 @@
 
 #include "constants.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_OgePopUpDialog.hpp"
 
@@ -215,7 +214,7 @@ void C_SyvUpPacListNodeItemParamSetWidget::m_LoadFileInformation(bool & orq_File
       }
       else
       {
-         QString c_Details = static_cast<QString>(C_GtGetText::h_GetText("File path: %1")).arg(
+         QString c_Details = static_cast<QString>("File path: %1").arg(
             this->GetAppAbsoluteFilePath()) +
                              "\nReason: ";
          //New file cannot be read
@@ -223,23 +222,22 @@ void C_SyvUpPacListNodeItemParamSetWidget::m_LoadFileInformation(bool & orq_File
          switch (s32_ReadResult)
          {
          case C_RD_WR:
-            c_Details += C_GtGetText::h_GetText(
-               "File does not exist or has invalid structure. See log file for details.");
+            c_Details += "File does not exist or has invalid structure. See log file for details.";
             break;
          case C_CHECKSUM:
-            c_Details += C_GtGetText::h_GetText("File CRC is not correct.");
+            c_Details += "File CRC is not correct.";
             break;
          case C_CONFIG:
-            c_Details += C_GtGetText::h_GetText("File has missing content. See log file for details.");
+            c_Details += "File has missing content. See log file for details.";
             break;
          default:
-            c_Details += static_cast<QString>(C_GtGetText::h_GetText("Unknown reason. Error code: %1")).arg(
+            c_Details += static_cast<QString>("Unknown reason. Error code: %1").arg(
                s32_ReadResult);
             break;
          }
 
-         c_Message.SetHeading(C_GtGetText::h_GetText("Update package configuration"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("File is not a valid parameter set image file."));
+         c_Message.SetHeading("Update package configuration");
+         c_Message.SetDescription("File is not a valid parameter set image file.");
          c_Message.SetDetails(c_Details);
          c_Message.SetCustomMinHeight(180, 250);
          c_Message.Execute();

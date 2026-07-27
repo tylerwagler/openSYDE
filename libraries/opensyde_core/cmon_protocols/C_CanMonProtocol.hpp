@@ -18,6 +18,7 @@
 #include "C_CanMonProtocolL2.hpp"
 #include "C_CanMonProtocolJ1939.hpp"
 #include "C_CanMonProtocolOpenSyde.hpp"
+#include "C_CanMonProtocolUds.hpp"
 #include "C_SclString.hpp"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -28,7 +29,7 @@ namespace cmon_protocol
 {
 //----------------------------------------------------------------------------------------------------------------------
 
-const int32_t gs32_CMON_NUM_PROTOCOLS = 5;
+const int32_t gs32_CMON_NUM_PROTOCOLS = 7;
 
 enum e_CanMonL7Protocols
 {
@@ -36,7 +37,9 @@ enum e_CanMonL7Protocols
    eCMON_L7_PROTOCOL_CAN_OPEN,
    eCMON_L7_PROTOCOL_GD,
    eCMON_L7_PROTOCOL_J1939,
-   eCMON_L7_PROTOCOL_OPEN_SYDE
+   eCMON_L7_PROTOCOL_OPEN_SYDE,
+   eCMON_L7_PROTOCOL_CAN_TP,  // ISO 15765-2 (transport layer, L2 interpretation)
+   eCMON_L7_PROTOCOL_UDS      // ISO 14229 (Unified Diagnostic Services)
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -51,6 +54,7 @@ private:
    C_CanMonProtocolGd mc_ProtocolGd;
    C_CanMonProtocolJ1939 mc_ProtocolJ1939;
    C_CanMonProtocolOpenSyde mc_ProtocolOpenSyde;
+   C_CanMonProtocolUds mc_ProtocolUds;
 
 protected:
    C_CanMonProtocolBase * mapc_Protocols[gs32_CMON_NUM_PROTOCOLS];

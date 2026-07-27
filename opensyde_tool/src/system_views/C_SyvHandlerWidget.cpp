@@ -19,7 +19,6 @@
 #include "ui_C_SyvHandlerWidget.h"
 
 #include "C_PopUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_HeHandler.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -74,22 +73,21 @@ C_SyvHandlerWidget::C_SyvHandlerWidget(QWidget * const opc_Parent) :
    C_NagToolBarButtonProperties c_ButtonProperties;
 
    // Function index 0: mhu32_USER_INPUT_FUNC_APPLY
-   c_ButtonProperties.c_ButtonText = C_GtGetText::h_GetText("Save Project");
-   c_ButtonProperties.c_ToolTipHeading = C_GtGetText::h_GetText("Save Project");
-   c_ButtonProperties.c_ToolTipContent = C_GtGetText::h_GetText("Save project data to file.");
+   c_ButtonProperties.c_ButtonText = "Save Project";
+   c_ButtonProperties.c_ToolTipHeading = "Save Project";
+   c_ButtonProperties.c_ToolTipContent = "Save project data to file.";
    this->mc_VecUserInputFuncNames.append(c_ButtonProperties);
 
    // Function index 1: mhu32_USER_INPUT_FUNC_SETTINGS
-   c_ButtonProperties.c_ButtonText = C_GtGetText::h_GetText("Dashboard Configuration");
-   c_ButtonProperties.c_ToolTipHeading = C_GtGetText::h_GetText("Configure Dashboard");
-   c_ButtonProperties.c_ToolTipContent = C_GtGetText::h_GetText("Edit Dashboard transmission settings.");
+   c_ButtonProperties.c_ButtonText = "Dashboard Configuration";
+   c_ButtonProperties.c_ToolTipHeading = "Configure Dashboard";
+   c_ButtonProperties.c_ToolTipContent = "Edit Dashboard transmission settings.";
    this->mc_VecUserInputFuncNames.append(c_ButtonProperties);
 
    // Function index 2: mhu32_USER_INPUT_FUNC_DEVICECONFIG
-   c_ButtonProperties.c_ButtonText = C_GtGetText::h_GetText("Device Configuration");
-   c_ButtonProperties.c_ToolTipHeading = C_GtGetText::h_GetText("Device Configuration");
-   c_ButtonProperties.c_ToolTipContent = C_GtGetText::h_GetText(
-      "Scan for devices, assign and configure device interface properties like node ID, bitrate, ...");
+   c_ButtonProperties.c_ButtonText = "Device Configuration";
+   c_ButtonProperties.c_ToolTipHeading = "Device Configuration";
+   c_ButtonProperties.c_ToolTipContent = "Scan for devices, assign and configure device interface properties like node ID, bitrate, ...";
    this->mc_VecUserInputFuncNames.append(c_ButtonProperties);
 }
 

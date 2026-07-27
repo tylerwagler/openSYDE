@@ -24,7 +24,6 @@
 #include "stwerrors.hpp"
 #include "C_SdNdeNodePropertiesWidget.hpp"
 #include "ui_C_SdNdeNodePropertiesWidget.h"
-#include "C_GtGetText.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SdNdeComIfSettingsTableDelegate.hpp"
 #include "C_SdNdeDbcSync.hpp"
@@ -242,155 +241,136 @@ void C_SdNdeNodePropertiesWidget::InitStaticNames(void) const
    const int32_t s32_COL_DIAGNOSTIC = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eDIAGNOSTIC);
    const int32_t s32_COL_SYNC_DBC = static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eSYNC_DBC);
 
-   this->mpc_Ui->pc_LabSubNodeTitle->setText(C_GtGetText::h_GetText("Sub-Node"));
-   this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
-   this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
-   this->mpc_Ui->pc_LabelConfiguration->setText(C_GtGetText::h_GetText("Configuration"));
-   this->mpc_Ui->pc_LabelProtocol->setText(C_GtGetText::h_GetText("Protocol Support"));
-   this->mpc_Ui->pc_LabelProgramming->setText(C_GtGetText::h_GetText("Programming Support"));
-   this->mpc_Ui->pc_LabelXAppSupport->setText(C_GtGetText::h_GetText("X.App Support"));
-   this->mpc_Ui->pc_LabelComIfSettings->setText(C_GtGetText::h_GetText("Communication Interfaces Settings"));
+   this->mpc_Ui->pc_LabSubNodeTitle->setText("Sub-Node");
+   this->mpc_Ui->pc_LabelName->setText("Name");
+   this->mpc_Ui->pc_LabelComment->setText("Comment");
+   this->mpc_Ui->pc_LabelConfiguration->setText("Configuration");
+   this->mpc_Ui->pc_LabelProtocol->setText("Protocol Support");
+   this->mpc_Ui->pc_LabelProgramming->setText("Programming Support");
+   this->mpc_Ui->pc_LabelXAppSupport->setText("X.App Support");
+   this->mpc_Ui->pc_LabelComIfSettings->setText("Communication Interfaces Settings");
 
-   this->mpc_Ui->pc_ComboBoxProtocol->addItem(C_GtGetText::h_GetText("openSYDE"));
-   this->mpc_Ui->pc_ComboBoxProtocol->addItem(C_GtGetText::h_GetText("None"));
+   this->mpc_Ui->pc_ComboBoxProtocol->addItem("openSYDE");
+   this->mpc_Ui->pc_ComboBoxProtocol->addItem("None");
 
-   this->mpc_Ui->pc_ComboBoxProgramming->addItem(C_GtGetText::h_GetText("Disabled"));
-   this->mpc_Ui->pc_ComboBoxProgramming->addItem(C_GtGetText::h_GetText("Enabled"));
+   this->mpc_Ui->pc_ComboBoxProgramming->addItem("Disabled");
+   this->mpc_Ui->pc_ComboBoxProgramming->addItem("Enabled");
 
-   this->mpc_Ui->pc_ComboBoxXAppSupport->addItem(C_GtGetText::h_GetText("Disabled"));
-   this->mpc_Ui->pc_ComboBoxXAppSupport->addItem(C_GtGetText::h_GetText("Enabled"));
+   this->mpc_Ui->pc_ComboBoxXAppSupport->addItem("Disabled");
+   this->mpc_Ui->pc_ComboBoxXAppSupport->addItem("Enabled");
 
    //table column text
    //fake padding with Spaces. No other solution known so far
    c_InterfaceString = "          ";
-   c_InterfaceString.append(C_GtGetText::h_GetText("Interface"));
+   c_InterfaceString.append("Interface");
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_INTERFACE)->setText(c_InterfaceString);
 
    //fake padding with Spaces. No other solution known so far
    c_ConnectString = "  ";
-   c_ConnectString.append(C_GtGetText::h_GetText("Linked to..."));
+   c_ConnectString.append("Linked to...");
    this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_CONNECTION)->setText(c_ConnectString);
-   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_NODE_ID)->setText(C_GtGetText::h_GetText(
-                                                                                                "Node ID"));
-   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_IP_ADDRESS)->setText(C_GtGetText::h_GetText(
-                                                                                                   "IP Address"));
-   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_UPDATE)->setText(C_GtGetText::h_GetText(
-                                                                                               "Usable for Update"));
-   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_ROUTING)->setText(C_GtGetText::h_GetText(
-                                                                                                "Usable for Routing"));
-   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_DIAGNOSTIC)->setText(C_GtGetText::h_GetText(
-                                                                                                   "Usable for Dashboard"));
-   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_SYNC_DBC)->setText(C_GtGetText::h_GetText(
-                                                                                                 "Sync DBC"));
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_NODE_ID)->setText("Node ID");
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_IP_ADDRESS)->setText("IP Address");
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_UPDATE)->setText("Usable for Update");
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_ROUTING)->setText("Usable for Routing");
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_DIAGNOSTIC)->setText("Usable for Dashboard");
+   this->mpc_Ui->pc_TableWidgetComIfSettings->horizontalHeaderItem(s32_COL_SYNC_DBC)->setText("Sync DBC");
 
-   this->mpc_Ui->pc_TextEditComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
+   this->mpc_Ui->pc_TextEditComment->setPlaceholderText("Add your comment here ...");
 
    //Tool tips
-   this->mpc_Ui->pc_LabSubNodeTitle->SetToolTipInformation(C_GtGetText::h_GetText("Sub-Node"),
-                                                           C_GtGetText::h_GetText("Name of the Sub-Node."));
+   this->mpc_Ui->pc_LabSubNodeTitle->SetToolTipInformation("Sub-Node",
+                                                           "Name of the Sub-Node.");
 
-   this->mpc_Ui->pc_LabelName->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                        "Name"),
-                                                     static_cast<QString>(C_GtGetText::h_GetText(
-                                                                             "Symbolic node name. Unique within Network Topology.\n"
+   this->mpc_Ui->pc_LabelName->SetToolTipInformation("Name",
+                                                     static_cast<QString>("Symbolic node name. Unique within Network Topology.\n"
                                                                              "\nFollowing C naming conventions are required:"
                                                                              "\n - must not be empty"
                                                                              "\n - must not start with digits"
                                                                              "\n - only alphanumeric characters and \"_\""
-                                                                             "\n - should not be longer than %1 (= project setting) characters")).arg(
+                                                                             "\n - should not be longer than %1 (= project setting) characters").arg(
                                                         C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit()));
 
-   this->mpc_Ui->pc_LabelComment->SetToolTipInformation(C_GtGetText::h_GetText("Comment"),
-                                                        C_GtGetText::h_GetText("Comment for this node."));
+   this->mpc_Ui->pc_LabelComment->SetToolTipInformation("Comment",
+                                                        "Comment for this node.");
 
-   this->mpc_Ui->pc_LabelProgramming->SetToolTipInformation(C_GtGetText::h_GetText("Programming Support"),
-                                                            C_GtGetText::h_GetText(
-                                                               "This property shows if the device is user programmable."
+   this->mpc_Ui->pc_LabelProgramming->SetToolTipInformation("Programming Support",
+                                                            "This property shows if the device is user programmable."
                                                                "\nDefined in read only *.syde_devdef file."
                                                                "\n\nIf enabled, the source code generation feature can "
-                                                               "be activated for Data Blocks ."));
-   this->mpc_Ui->pc_LabelXAppSupport->SetToolTipInformation(C_GtGetText::h_GetText("X.App Support"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Node properties option, available only for file-based targets.\n\n"
+                                                               "be activated for Data Blocks .");
+   this->mpc_Ui->pc_LabelXAppSupport->SetToolTipInformation("X.App Support",
+                                                            "Node properties option, available only for file-based targets.\n\n"
                                                                "If enabled:\n"
                                                                "- The X.App configuration support in Data Blocks is enabled\n"
-                                                               "- The tab Data Logger is enabled"));
+                                                               "- The tab Data Logger is enabled");
 
-   this->mpc_Ui->pc_LabelProtocol->SetToolTipInformation(C_GtGetText::h_GetText("Protocol Support"),
-                                                         C_GtGetText::h_GetText(
-                                                            "Type of Flashloader and diagnostic server.\n"
+   this->mpc_Ui->pc_LabelProtocol->SetToolTipInformation("Protocol Support",
+                                                         "Type of Flashloader and diagnostic server.\n"
                                                             "Options:\n"
                                                             "   - openSYDE: openSYDE server and openSYDE Flashloader support\n"
                                                             "   - none: no STW protocol support (e.g.: 3rd party node)\n"
                                                             "\nSupported protocols defined in read only "
-                                                            "*.syde_devdef file."));
+                                                            "*.syde_devdef file.");
 
    this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipHeadingAt(s32_COL_INTERFACE, Qt::Horizontal,
-                                                                  C_GtGetText::h_GetText("Interface"),
-                                                                  C_GtGetText::h_GetText(
-                                                                     "Name of communication interface (CAN/ETHERNET)."));
+                                                                  "Interface",
+                                                                  "Name of communication interface (CAN/ETHERNET).");
 
    this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipHeadingAt(s32_COL_CONNECTION, Qt::Horizontal,
-                                                                  C_GtGetText::h_GetText("Linked to..."),
-                                                                  C_GtGetText::h_GetText(
-                                                                     "Name of bus to which the interface is linked to."));
+                                                                  "Linked to...",
+                                                                  "Name of bus to which the interface is linked to.");
 
    this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipHeadingAt(s32_COL_NODE_ID, Qt::Horizontal,
-                                                                  C_GtGetText::h_GetText("Node ID"),
-                                                                  C_GtGetText::h_GetText(
-                                                                     "Node ID is unique on connected bus. The ID is "
+                                                                  "Node ID",
+                                                                  "Node ID is unique on connected bus. The ID is "
                                                                      "used for addressing in the communication "
                                                                      "protocol. \nThis property is configured for all "
                                                                      "connected interfaces on device while \"Device "
-                                                                     "configuration\" (SYSTEM COMMISSIONING/Setup)."));
+                                                                     "configuration\" (SYSTEM COMMISSIONING/Setup).");
 
    this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipHeadingAt(s32_COL_IP_ADDRESS, Qt::Horizontal,
-                                                                  C_GtGetText::h_GetText("IP Address"),
-                                                                  C_GtGetText::h_GetText(
-                                                                     "IP address settings: IP address and subnet mask"
+                                                                  "IP Address",
+                                                                  "IP address settings: IP address and subnet mask"
                                                                      "\nThese properties are configured for all "
                                                                      "connected interfaces on device while \"Device "
-                                                                     "configuration\" (SYSTEM COMMISSIONING/Setup)"));
+                                                                     "configuration\" (SYSTEM COMMISSIONING/Setup)");
 
    this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipHeadingAt(s32_COL_UPDATE, Qt::Horizontal,
-                                                                  C_GtGetText::h_GetText("Usable for Update"),
-                                                                  C_GtGetText::h_GetText(
-                                                                     "If enabled, the interface is usable for System Update. "
+                                                                  "Usable for Update",
+                                                                  "If enabled, the interface is usable for System Update. "
                                                                      "(SYSTEM COMMISSIONING - Update)"
                                                                      "\n\nThis property is just "
                                                                      "a configuration for openSYDE PC tool, "
-                                                                     "it is NOT configured on device."));
+                                                                     "it is NOT configured on device.");
 
    this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipHeadingAt(s32_COL_DIAGNOSTIC, Qt::Horizontal,
-                                                                  C_GtGetText::h_GetText("Usable for Dashboard"),
-                                                                  C_GtGetText::h_GetText(
-                                                                     "If enabled, the interface is usable for Dashboard "
+                                                                  "Usable for Dashboard",
+                                                                  "If enabled, the interface is usable for Dashboard "
                                                                      "(Access of Datapool data elements via diagnostic protocol). "
                                                                      "(SYSTEM COMMISSIONING - Dashboards)"
                                                                      "\n\nThis property is just "
                                                                      "a configuration for openSYDE PC tool, "
-                                                                     "it is NOT configured on device."));
+                                                                     "it is NOT configured on device.");
 
    this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipHeadingAt(s32_COL_ROUTING, Qt::Horizontal,
-                                                                  C_GtGetText::h_GetText("Usable for Routing"),
-                                                                  C_GtGetText::h_GetText(
-                                                                     "If enabled, the interface is usable for Routing. "
+                                                                  "Usable for Routing",
+                                                                  "If enabled, the interface is usable for Routing. "
                                                                      "\nAttention: This property is intended as additive "
                                                                      "feature in addition to \"System Update\" and \"Dashboards\" "
                                                                      "\nUse cases: SYSTEM COMMISSIONING - Update "
                                                                      "SYSTEM COMMISSIONING - Dashboards.\n\nThis "
                                                                      "property is just a configuration for openSYDE tool, "
-                                                                     "it is NOT configured on device."));
+                                                                     "it is NOT configured on device.");
 
    this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipHeadingAt(s32_COL_SYNC_DBC, Qt::Horizontal,
-                                                                  C_GtGetText::h_GetText("Sync DBC"),
-                                                                  C_GtGetText::h_GetText(
-                                                                     "Pull the device's bundled DBC file (named "
+                                                                  "Sync DBC",
+                                                                  "Pull the device's bundled DBC file (named "
                                                                      "<device_name>_CAN<n>.dbc, sibling of device.syd) "
                                                                      "and add its messages onto the connected bus. "
                                                                      "Stores a SHA-256 fingerprint of the DBC at sync "
                                                                      "time so the project can flag the interface as "
-                                                                     "out-of-sync if the DBC content drifts."));
+                                                                     "out-of-sync if the DBC content drifts.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -577,7 +557,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                }
 
                this->mpc_Ui->pc_LabelProductPageLink->SetLink(
-                  C_GtGetText::h_GetText("Visit Product Page"), pc_DevDef->c_ProductPageLink.c_str());
+                  "Visit Product Page", pc_DevDef->c_ProductPageLink.c_str());
                this->mpc_Ui->pc_LabelProductPageLink->SetToolTipInformation(
                   pc_DevDef->c_ManufacturerDisplayValue.c_str(), pc_DevDef->c_ProductPageLink.c_str());
                this->mpc_Ui->pc_WidgetCompLogo->setVisible(true);
@@ -835,7 +815,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                //connect to RegisterChange
                connect(dynamic_cast<C_OgeChxTristateBase *> (this->mpc_Ui->pc_TableWidgetComIfSettings
                                                          ->cellWidget(u8_ComIfCnt,
-                                                                      s32_COL_UPDATE)), &QCheckBox::checkStateChanged, this,
+                                                                      s32_COL_UPDATE)), &QCheckBox::stateChanged, this,
                        &C_SdNdeNodePropertiesWidget::m_RegisterChange);
 
                /**********************************************************************************************************/
@@ -871,7 +851,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                //connect to RegisterChange
                connect(dynamic_cast<C_OgeChxTristateBase *> (this->mpc_Ui->pc_TableWidgetComIfSettings
                                                          ->cellWidget(u8_ComIfCnt,
-                                                                      s32_COL_ROUTING)), &QCheckBox::checkStateChanged, this,
+                                                                      s32_COL_ROUTING)), &QCheckBox::stateChanged, this,
                        &C_SdNdeNodePropertiesWidget::m_RegisterChange);
 
                /**********************************************************************************************************/
@@ -901,7 +881,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                //connect to RegisterChange
                connect(dynamic_cast<C_OgeChxTristateBase *> (
                           this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u8_ComIfCnt, s32_COL_DIAGNOSTIC)),
-                       &QCheckBox::checkStateChanged, this, &C_SdNdeNodePropertiesWidget::m_RegisterChange);
+                       &QCheckBox::stateChanged, this, &C_SdNdeNodePropertiesWidget::m_RegisterChange);
 
                /**********************************************************************************************************/
                //SYNC DBC — bidirectional. Button label/tooltip and click action both come from
@@ -919,17 +899,15 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   // Pull, Push, or pops a conflict-resolution prompt; even with a missing DBC the
                   // user can Push to (re)create the file from the project's messages.
                   pc_BtnSync->setEnabled(q_IsCanIface && q_BusConnected);
-                  pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
+                  pc_BtnSync->setText("Sync");
 
                   if (q_IsCanIface == false)
                   {
-                     pc_BtnSync->setToolTip(C_GtGetText::h_GetText(
-                                               "Sync DBC is only available for CAN interfaces."));
+                     pc_BtnSync->setToolTip("Sync DBC is only available for CAN interfaces.");
                   }
                   else if (q_BusConnected == false)
                   {
-                     pc_BtnSync->setToolTip(C_GtGetText::h_GetText(
-                                               "Sync DBC requires the interface to be connected to a bus."));
+                     pc_BtnSync->setToolTip("Sync DBC requires the interface to be connected to a bus.");
                   }
                   else
                   {
@@ -938,45 +916,39 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                      switch (e_State)
                      {
                      case C_SdNdeDbcSync::eNEVER_SYNCED:
-                        pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
-                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "Never synced: %1\n"
-                                                                       "Click to import messages from the DBC.")).arg(
+                        pc_BtnSync->setText("Sync");
+                        pc_BtnSync->setToolTip(static_cast<QString>("Never synced: %1\n"
+                                                                       "Click to import messages from the DBC.").arg(
                                                   c_DisplayPath));
                         break;
                      case C_SdNdeDbcSync::eIN_SYNC:
-                        pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
-                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "In sync with %1\n"
-                                                                       "Click to re-pull.")).arg(c_DisplayPath));
+                        pc_BtnSync->setText("Sync");
+                        pc_BtnSync->setToolTip(static_cast<QString>("In sync with %1\n"
+                                                                       "Click to re-pull.").arg(c_DisplayPath));
                         break;
                      case C_SdNdeDbcSync::eDBC_DRIFTED:
-                        pc_BtnSync->setText(C_GtGetText::h_GetText("Pull"));
-                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "DBC drifted: %1\n"
-                                                                       "Click to pull DBC into the project.")).arg(
+                        pc_BtnSync->setText("Pull");
+                        pc_BtnSync->setToolTip(static_cast<QString>("DBC drifted: %1\n"
+                                                                       "Click to pull DBC into the project.").arg(
                                                   c_DisplayPath));
                         break;
                      case C_SdNdeDbcSync::ePROJECT_DRIFTED:
-                        pc_BtnSync->setText(C_GtGetText::h_GetText("Push"));
-                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "Project drifted from %1\n"
-                                                                       "Click to push project messages to the DBC.")).arg(
+                        pc_BtnSync->setText("Push");
+                        pc_BtnSync->setToolTip(static_cast<QString>("Project drifted from %1\n"
+                                                                       "Click to push project messages to the DBC.").arg(
                                                   c_DisplayPath));
                         break;
                      case C_SdNdeDbcSync::eCONFLICT:
-                        pc_BtnSync->setText(C_GtGetText::h_GetText("Resolve"));
-                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "Conflict: %1\n"
+                        pc_BtnSync->setText("Resolve");
+                        pc_BtnSync->setToolTip(static_cast<QString>("Conflict: %1\n"
                                                                        "Both DBC and project drifted. Click to choose "
-                                                                       "Pull or Push.")).arg(c_DisplayPath));
+                                                                       "Pull or Push.").arg(c_DisplayPath));
                         break;
                      case C_SdNdeDbcSync::eDBC_MISSING:
-                        pc_BtnSync->setText(C_GtGetText::h_GetText("Push"));
-                        pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "DBC missing: %1\n"
+                        pc_BtnSync->setText("Push");
+                        pc_BtnSync->setToolTip(static_cast<QString>("DBC missing: %1\n"
                                                                        "Click to (re)create it from the project's "
-                                                                       "messages.")).arg(c_DisplayPath));
+                                                                       "messages.").arg(c_DisplayPath));
                         break;
                      }
                   }
@@ -998,15 +970,14 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                      if (e_State == C_SdNdeDbcSync::eCONFLICT)
                      {
                         QMessageBox c_Box(this);
-                        c_Box.setWindowTitle(C_GtGetText::h_GetText("DBC Sync Conflict"));
+                        c_Box.setWindowTitle("DBC Sync Conflict");
                         c_Box.setIcon(QMessageBox::Warning);
-                        c_Box.setText(C_GtGetText::h_GetText(
-                                         "Both the DBC file and the project's messages have changed "
-                                         "since the last sync.\n\nChoose which side to keep:"));
+                        c_Box.setText("Both the DBC file and the project's messages have changed "
+                                         "since the last sync.\n\nChoose which side to keep:");
                         QPushButton * const pc_PullBtn =
-                           c_Box.addButton(C_GtGetText::h_GetText("Pull (use DBC)"), QMessageBox::AcceptRole);
+                           c_Box.addButton("Pull (use DBC)", QMessageBox::AcceptRole);
                         QPushButton * const pc_PushBtn =
-                           c_Box.addButton(C_GtGetText::h_GetText("Push (use project)"),
+                           c_Box.addButton("Push (use project)",
                                            QMessageBox::DestructiveRole);
                         c_Box.addButton(QMessageBox::Cancel);
                         c_Box.exec();
@@ -1048,29 +1019,26 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                         {
                            s32_Result = C_SdNdeDbcSync::h_PullInterface(u32_CapturedNode, u32_CapturedInterface,
                                                                         c_ErrorMessage);
-                           c_Heading = C_GtGetText::h_GetText("Pull DBC");
-                           c_SuccessDescription = C_GtGetText::h_GetText(
-                              "DBC messages imported into the project. Existing same-ID messages were "
+                           c_Heading = "Pull DBC";
+                           c_SuccessDescription = "DBC messages imported into the project. Existing same-ID messages were "
                               "updated in place; new messages were added to the node's Layer 2 COMM "
-                              "datapool.");
+                              "datapool.";
                         }
                         else
                         {
                            s32_Result = C_SdNdeDbcSync::h_PushInterface(u32_CapturedNode, u32_CapturedInterface,
                                                                         c_ErrorMessage);
-                           c_Heading = C_GtGetText::h_GetText("Push DBC");
-                           c_SuccessDescription = C_GtGetText::h_GetText(
-                              "Project messages exported to the DBC file. The DBC now matches the "
-                              "current state of the node's Layer 2 COMM datapool.");
+                           c_Heading = "Push DBC";
+                           c_SuccessDescription = "Project messages exported to the DBC file. The DBC now matches the "
+                              "current state of the node's Layer 2 COMM datapool.";
                         }
 
                         if (s32_Result == stw::errors::C_NO_ERR)
                         {
                            // Reset the button to its in-sync visual state.
-                           pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
-                           pc_BtnSync->setToolTip(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "In sync with %1\n"
-                                                                          "Click to re-pull.")).arg(c_DisplayPath));
+                           pc_BtnSync->setText("Sync");
+                           pc_BtnSync->setToolTip(static_cast<QString>("In sync with %1\n"
+                                                                          "Click to re-pull.").arg(c_DisplayPath));
                            C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eINFORMATION);
                            c_Msg.SetHeading(c_Heading);
                            c_Msg.SetDescription(c_SuccessDescription);
@@ -1079,7 +1047,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                         else
                         {
                            C_OgeWiCustomMessage c_Msg(this, C_OgeWiCustomMessage::eERROR);
-                           c_Msg.SetHeading(c_Heading + C_GtGetText::h_GetText(" failed"));
+                           c_Msg.SetHeading(c_Heading + " failed");
                            c_Msg.SetDescription(c_ErrorMessage);
                            c_Msg.Execute();
                         }
@@ -1101,7 +1069,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                         const C_OscCanProtocol::E_Type e_Current =
                            pc_NodeRo->c_Properties.c_ComInterfaces[u32_CapturedInterface].e_DbcProtocol;
                         QMenu c_Menu(pc_BtnSync);
-                        QAction * const pc_Header = c_Menu.addAction(C_GtGetText::h_GetText("DBC sync protocol"));
+                        QAction * const pc_Header = c_Menu.addAction("DBC sync protocol");
                         pc_Header->setEnabled(false);
                         c_Menu.addSeparator();
 
@@ -1111,8 +1079,8 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                            QString c_Label;
                         };
                         const std::vector<T_Option> c_Options = {
-                           {C_OscCanProtocol::eLAYER2, C_GtGetText::h_GetText("Layer 2 (raw CAN)")},
-                           {C_OscCanProtocol::eJ1939, C_GtGetText::h_GetText("J1939")}
+                           {C_OscCanProtocol::eLAYER2, "Layer 2 (raw CAN)"},
+                           {C_OscCanProtocol::eJ1939, "J1939"}
                         };
 
                         for (uint32_t u32_OptIt = 0U; u32_OptIt < c_Options.size(); ++u32_OptIt)
@@ -1140,10 +1108,9 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                                     rc_If.c_LastSyncedDbcSha256 = "";
                                     rc_If.c_LastSyncedProjectMsgHash = "";
                                     this->m_RegisterChange();
-                                    pc_BtnSync->setText(C_GtGetText::h_GetText("Sync"));
-                                    pc_BtnSync->setToolTip(C_GtGetText::h_GetText(
-                                                              "Protocol changed. Click to perform the first "
-                                                              "sync on the new protocol."));
+                                    pc_BtnSync->setText("Sync");
+                                    pc_BtnSync->setToolTip("Protocol changed. Click to perform the first "
+                                                              "sync on the new protocol.");
                                  }
                               }
                            });
@@ -1488,21 +1455,21 @@ void C_SdNdeNodePropertiesWidget::m_CheckNodeName(void)
 
    if ((q_NameIsUnique == true) && (q_NameIsValid == true))
    {
-      this->mpc_Ui->pc_LineEditNodeName->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                               C_GtGetText::h_GetText(""),
+      this->mpc_Ui->pc_LineEditNodeName->SetToolTipInformation("",
+                                                               "",
                                                                C_NagToolTip::eDEFAULT);
    }
    else
    {
-      const QString c_Heading = C_GtGetText::h_GetText("Node Name");
+      const QString c_Heading = "Node Name";
       QString c_Content;
       if (q_NameIsUnique == false)
       {
-         c_Content += C_GtGetText::h_GetText("- is already in use\n");
+         c_Content += "- is already in use\n";
       }
       if (q_NameIsValid == false)
       {
-         c_Content += C_GtGetText::h_GetText("- is empty or contains invalid characters.\n");
+         c_Content += "- is empty or contains invalid characters.\n";
       }
       this->mpc_Ui->pc_LineEditNodeName->SetToolTipInformation(c_Heading, c_Content, C_NagToolTip::eERROR);
    }
@@ -1567,14 +1534,13 @@ void C_SdNdeNodePropertiesWidget::m_RegisterNameChange(void)
              &c_ExistingNames) == false)
       {
          const QString c_Description =
-            static_cast<QString>(C_GtGetText::h_GetText(
-                                    "A node with the name \"%1\" already exists. Choose another name.")).
+            static_cast<QString>("A node with the name \"%1\" already exists. Choose another name.").
             arg(this->mpc_Ui->pc_LineEditNodeName->text());
          QString c_Details;
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Node naming"));
+         c_Message.SetHeading("Node naming");
          c_Message.SetDescription(c_Description);
-         c_Details.append(C_GtGetText::h_GetText("Used node names:\n"));
+         c_Details.append("Used node names:\n");
          for (uint32_t u32_ItExistingName = 0UL; u32_ItExistingName < c_ExistingNames.size(); ++u32_ItExistingName)
          {
             const C_SclString & rc_Name = c_ExistingNames[u32_ItExistingName];
@@ -1618,8 +1584,7 @@ void C_SdNdeNodePropertiesWidget::m_RegisterNameChange(void)
 
          if (pc_Node != NULL)
          {
-            Q_EMIT (this->SigNameChanged(C_GtGetText::h_GetText(
-                                            "NETWORK TOPOLOGY"), pc_Node->c_Properties.c_Name.c_str(), false));
+            Q_EMIT (this->SigNameChanged("NETWORK TOPOLOGY", pc_Node->c_Properties.c_Name.c_str(), false));
          }
       }
       hq_InProgress = false; //lint !e838 its static and could be used on strange second call
@@ -1815,10 +1780,10 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(const int32_t os32_Inter
                      q_ShowIcon = true;
                      const std::vector<uint32_t> c_UsedIds = C_SdUtil::h_GetUsedNodeIdsForBusUniqueAndSortedAscending(
                         rc_Interface.u32_BusIndex, this->mu32_NodeIndex, static_cast<int32_t>(os32_InterfaceIndex));
-                     const QString c_Heading = C_GtGetText::h_GetText("Interface: Node ID invalid");
+                     const QString c_Heading = "Interface: Node ID invalid";
                      c_TooltipContent = C_SdUtil::h_InitUsedIdsString(c_UsedIds,
                                                                       pc_Bus->c_Name.c_str(),
-                                                                      C_GtGetText::h_GetText("bus"));
+                                                                      "bus");
                      this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipAt(os32_InterfaceIndex,
                                                                              static_cast<uint32_t> (
                                                                                 C_SdNdeComIfSettingsTableDelegate
@@ -1832,10 +1797,10 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(const int32_t os32_Inter
                      const std::vector<std::vector<uint8_t> > c_Ips = C_SdUtil::h_GetAllUsedIpAddressesForBus(
                         rc_Interface.u32_BusIndex, this->mu32_NodeIndex,
                         static_cast<int32_t>(os32_InterfaceIndex));
-                     const QString c_Heading = C_GtGetText::h_GetText("Interface: IP Address invalid");
+                     const QString c_Heading = "Interface: IP Address invalid";
                      c_TooltipContent = C_SdUtil::h_InitUsedIpsString(c_Ips,
                                                                       pc_Bus->c_Name.c_str(),
-                                                                      C_GtGetText::h_GetText("bus"));
+                                                                      "bus");
 
                      this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipAt(os32_InterfaceIndex,
                                                                              static_cast<uint32_t> (
@@ -1851,14 +1816,14 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(const int32_t os32_Inter
                         rc_Interface.u32_BusIndex, this->mu32_NodeIndex, static_cast<int32_t>(os32_InterfaceIndex));
                      const std::vector<std::vector<uint8_t> > c_Ips = C_SdUtil::h_GetAllUsedIpAddressesForBus(
                         rc_Interface.u32_BusIndex, this->mu32_NodeIndex, static_cast<int32_t>(os32_InterfaceIndex));
-                     const QString c_Heading = C_GtGetText::h_GetText("Interface: Property invalid");
+                     const QString c_Heading = "Interface: Property invalid";
                      c_TooltipContent = C_SdUtil::h_InitUsedIdsString(c_UsedIds,
                                                                       pc_Bus->c_Name.c_str(),
-                                                                      C_GtGetText::h_GetText("bus"));
+                                                                      "bus");
                      c_TooltipContent += "\n";
                      c_TooltipContent += C_SdUtil::h_InitUsedIpsString(c_Ips,
                                                                        pc_Bus->c_Name.c_str(),
-                                                                       C_GtGetText::h_GetText("bus"));
+                                                                       "bus");
 
                      this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipAt(os32_InterfaceIndex,
                                                                              static_cast<uint32_t> (
@@ -1890,24 +1855,20 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(const int32_t os32_Inter
       switch (e_DriftState)
       {
       case C_SdNdeDbcSync::eDBC_DRIFTED:
-         c_DriftHeading = C_GtGetText::h_GetText("DBC drifted");
-         c_DriftBody = C_GtGetText::h_GetText(
-            "The bundled DBC has changed since the last sync. Pull on the Sync DBC button to import the new content.");
+         c_DriftHeading = "DBC drifted";
+         c_DriftBody = "The bundled DBC has changed since the last sync. Pull on the Sync DBC button to import the new content.";
          break;
       case C_SdNdeDbcSync::ePROJECT_DRIFTED:
-         c_DriftHeading = C_GtGetText::h_GetText("Project drifted");
-         c_DriftBody = C_GtGetText::h_GetText(
-            "The project's messages have changed since the last sync. Push on the Sync DBC button to write them back.");
+         c_DriftHeading = "Project drifted";
+         c_DriftBody = "The project's messages have changed since the last sync. Push on the Sync DBC button to write them back.";
          break;
       case C_SdNdeDbcSync::eCONFLICT:
-         c_DriftHeading = C_GtGetText::h_GetText("DBC sync conflict");
-         c_DriftBody = C_GtGetText::h_GetText(
-            "Both the DBC file and the project's messages have changed. Resolve via the Sync DBC button.");
+         c_DriftHeading = "DBC sync conflict";
+         c_DriftBody = "Both the DBC file and the project's messages have changed. Resolve via the Sync DBC button.";
          break;
       case C_SdNdeDbcSync::eDBC_MISSING:
-         c_DriftHeading = C_GtGetText::h_GetText("DBC missing");
-         c_DriftBody = C_GtGetText::h_GetText(
-            "The expected DBC file is gone. Push on the Sync DBC button to re-create it from the project's messages.");
+         c_DriftHeading = "DBC missing";
+         c_DriftBody = "The expected DBC file is gone. Push on the Sync DBC button to re-create it from the project's messages.";
          break;
       case C_SdNdeDbcSync::eNEVER_SYNCED:
       case C_SdNdeDbcSync::eIN_SYNC:
@@ -2108,32 +2069,32 @@ void C_SdNdeNodePropertiesWidget::m_XappSupportChange(const int32_t os32_Index)
       QString c_Details;
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eQUESTION);
       const QString c_EnableDisable =
-         (os32_Index == mhs32_PR_INDEX_ENABLED) ? C_GtGetText::h_GetText("Enable") : C_GtGetText::h_GetText("Disable");
+         (os32_Index == mhs32_PR_INDEX_ENABLED) ? "Enable" : "Disable";
 
-      c_Description = C_GtGetText::h_GetText("Do you really want to ") + c_EnableDisable.toLower() +
-                      C_GtGetText::h_GetText(" X.App Support?");
+      c_Description = "Do you really want to " + c_EnableDisable.toLower() +
+                      " X.App Support?";
 
       if (q_FileGenDatablockExists == true)
       {
-         c_Description += C_GtGetText::h_GetText(" All existing Data Blocks with enabled file "
-                                                 "generation will be deleted.");
-         c_Details += C_GtGetText::h_GetText("The following Data Blocks will be deleted:\n") +
+         c_Description += " All existing Data Blocks with enabled file "
+                                                 "generation will be deleted.";
+         c_Details += "The following Data Blocks will be deleted:\n" +
                       c_ConcernedDataBlocks.join("\n") + "\n\n";
       }
 
       if (q_LogJobExists == true)
       {
-         c_Description += C_GtGetText::h_GetText(" All log jobs will be deleted.");
-         c_Details += C_GtGetText::h_GetText("The following log jobs will be deleted:\n") +
+         c_Description += " All log jobs will be deleted.";
+         c_Details += "The following log jobs will be deleted:\n" +
                       c_ConcernedLogJobs.join("\n");
       }
 
-      c_Message.SetHeading(c_EnableDisable + C_GtGetText::h_GetText(" X.App Support"));
+      c_Message.SetHeading(c_EnableDisable + " X.App Support");
       c_Message.SetDescription(c_Description);
       c_Message.SetDetails(c_Details);
 
-      c_Message.SetOkButtonText(c_EnableDisable + C_GtGetText::h_GetText(" X.App Support"));
-      c_Message.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+      c_Message.SetOkButtonText(c_EnableDisable + " X.App Support");
+      c_Message.SetNoButtonText("Cancel");
 
       if (c_Message.Execute() != C_OgeWiCustomMessage::eYES)
       {

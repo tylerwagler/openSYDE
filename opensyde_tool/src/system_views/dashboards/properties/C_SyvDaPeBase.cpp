@@ -18,7 +18,6 @@
 #include "C_OscUtils.hpp"
 #include "C_SyvUtil.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvDaPeBase.hpp"
 #include "C_GiSvDaRectBaseGroup.hpp"
 #include "C_SyvDaPeUpdateModeConfiguration.hpp"
@@ -103,7 +102,7 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
    this->mrc_ParentDialog.SetWidget(this);
 
    // init static names
-   this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("%1 Widget")).arg(orc_Name));
+   this->mrc_ParentDialog.SetTitle(static_cast<QString>("%1 Widget").arg(orc_Name));
    this->InitStaticNames();
 
    //Factor needs to be above zero
@@ -232,105 +231,101 @@ C_SyvDaPeBase::~C_SyvDaPeBase(void) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeBase::InitStaticNames(void)
 {
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_LabelDesign->setText(C_GtGetText::h_GetText("Design"));
-   this->mpc_Ui->pc_LabelPreview->setText(C_GtGetText::h_GetText("Example Preview"));
-   this->mpc_Ui->pc_LabelDataElement->setText(C_GtGetText::h_GetText("Data Element"));
-   this->mpc_Ui->pc_LabelUpdateModeHeading->setText(C_GtGetText::h_GetText("Update Mode"));
-   this->mpc_Ui->pc_LabelScaling->setText(C_GtGetText::h_GetText("Value Scaling"));
-   this->mpc_Ui->pc_LabelFactor->setText(C_GtGetText::h_GetText("Factor"));
-   this->mpc_Ui->pc_LabelOffset->setText(C_GtGetText::h_GetText("Offset"));
-   this->mpc_Ui->pc_LabelUnit->setText(C_GtGetText::h_GetText("Unit"));
-   this->mpc_Ui->pc_LabelFormatter->setText(C_GtGetText::h_GetText("Display Formatter"));
-   this->mpc_Ui->pc_LabelFormatterString->setText(C_GtGetText::h_GetText("Printf Formatter String"));
-   this->mpc_Ui->pc_CheckBoxFormatterActive->setText(C_GtGetText::h_GetText(
-                                                        "Enable Display Formatter"));
-   this->mpc_Ui->pc_LineEditFormatterString->setPlaceholderText(C_GtGetText::h_GetText("e.g.: \"%.2f\", "
-                                                                                       "\"0x%x\", ..."));
-   this->mpc_Ui->pc_LabelNamespaceDescription->setText(C_GtGetText::h_GetText("Source"));
-   this->mpc_Ui->pc_CheckBoxDefaultScaling->setText(C_GtGetText::h_GetText(
-                                                       "Use the default values of SYSTEM DEFINITION"));
-   this->mpc_Ui->pc_PushButtonUpdateModeConfigure->setText(C_GtGetText::h_GetText("Configure"));
-   this->mpc_Ui->pc_ComboBoxTransmissionMode->addItem(C_GtGetText::h_GetText("On Trigger"));
-   this->mpc_Ui->pc_ComboBoxTransmissionMode->addItem(C_GtGetText::h_GetText("On Change"));
-   this->mpc_Ui->pc_LabelTheme->setText(C_GtGetText::h_GetText("Theme"));
-   this->mpc_Ui->pc_LabelDisplayName->setText(C_GtGetText::h_GetText("Display as"));
-   this->mpc_Ui->pc_ComboBoxTheme->addItem(C_GtGetText::h_GetText("openSYDE"));
-   this->mpc_Ui->pc_ComboBoxTheme->addItem(C_GtGetText::h_GetText("Material"));
-   this->mpc_Ui->pc_ComboBoxTheme->addItem(C_GtGetText::h_GetText("Flat"));
-   this->mpc_Ui->pc_ComboBoxTheme->addItem(C_GtGetText::h_GetText("Skeuomorphic"));
-   this->mpc_Ui->pc_LabelDashboardConnectHandling->setText(C_GtGetText::h_GetText("Handling on Dashboard Connect"));
-   this->mpc_Ui->pc_LabelInitialValueMode->setText(C_GtGetText::h_GetText("Initial Value Mode"));
-   this->mpc_Ui->pc_LabelInitialValue->setText(C_GtGetText::h_GetText("Value"));
-   this->mpc_Ui->pc_CheckBoxDashboardConnectWrite->setText(C_GtGetText::h_GetText(
-                                                              "Auto write value on dashboard connect"));
-   this->mpc_Ui->pc_ComboBoxInitialValueMode->addItem(C_GtGetText::h_GetText("Disabled"));
-   this->mpc_Ui->pc_ComboBoxInitialValueMode->addItem(C_GtGetText::h_GetText("Set Constant Value"));
-   this->mpc_Ui->pc_ComboBoxInitialValueMode->addItem(C_GtGetText::h_GetText("Read Server Value"));
+   this->mrc_ParentDialog.SetSubTitle("Properties");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_LabelDesign->setText("Design");
+   this->mpc_Ui->pc_LabelPreview->setText("Example Preview");
+   this->mpc_Ui->pc_LabelDataElement->setText("Data Element");
+   this->mpc_Ui->pc_LabelUpdateModeHeading->setText("Update Mode");
+   this->mpc_Ui->pc_LabelScaling->setText("Value Scaling");
+   this->mpc_Ui->pc_LabelFactor->setText("Factor");
+   this->mpc_Ui->pc_LabelOffset->setText("Offset");
+   this->mpc_Ui->pc_LabelUnit->setText("Unit");
+   this->mpc_Ui->pc_LabelFormatter->setText("Display Formatter");
+   this->mpc_Ui->pc_LabelFormatterString->setText("Printf Formatter String");
+   this->mpc_Ui->pc_CheckBoxFormatterActive->setText("Enable Display Formatter");
+   this->mpc_Ui->pc_LineEditFormatterString->setPlaceholderText("e.g.: \"%.2f\", "
+                                                                                       "\"0x%x\", ...");
+   this->mpc_Ui->pc_LabelNamespaceDescription->setText("Source");
+   this->mpc_Ui->pc_CheckBoxDefaultScaling->setText("Use the default values of SYSTEM DEFINITION");
+   this->mpc_Ui->pc_PushButtonUpdateModeConfigure->setText("Configure");
+   this->mpc_Ui->pc_ComboBoxTransmissionMode->addItem("On Trigger");
+   this->mpc_Ui->pc_ComboBoxTransmissionMode->addItem("On Change");
+   this->mpc_Ui->pc_LabelTheme->setText("Theme");
+   this->mpc_Ui->pc_LabelDisplayName->setText("Display as");
+   this->mpc_Ui->pc_ComboBoxTheme->addItem("openSYDE");
+   this->mpc_Ui->pc_ComboBoxTheme->addItem("Material");
+   this->mpc_Ui->pc_ComboBoxTheme->addItem("Flat");
+   this->mpc_Ui->pc_ComboBoxTheme->addItem("Skeuomorphic");
+   this->mpc_Ui->pc_LabelDashboardConnectHandling->setText("Handling on Dashboard Connect");
+   this->mpc_Ui->pc_LabelInitialValueMode->setText("Initial Value Mode");
+   this->mpc_Ui->pc_LabelInitialValue->setText("Value");
+   this->mpc_Ui->pc_CheckBoxDashboardConnectWrite->setText("Auto write value on dashboard connect");
+   this->mpc_Ui->pc_ComboBoxInitialValueMode->addItem("Disabled");
+   this->mpc_Ui->pc_ComboBoxInitialValueMode->addItem("Set Constant Value");
+   this->mpc_Ui->pc_ComboBoxInitialValueMode->addItem("Read Server Value");
 
    //Tool tips
    this->mpc_Ui->pc_LabelTheme->SetToolTipInformation(
-      C_GtGetText::h_GetText("Theme"),
-      C_GtGetText::h_GetText("General display style of the widget grouped into different common themes"));
+      "Theme",
+      "General display style of the widget grouped into different common themes");
    this->mpc_Ui->pc_LabelDataElement->SetToolTipInformation(
-      C_GtGetText::h_GetText("Data Element"),
-      C_GtGetText::h_GetText("The currently selected data element defined in the SYSTEM DEFINITION"));
+      "Data Element",
+      "The currently selected data element defined in the SYSTEM DEFINITION");
    this->mpc_Ui->pc_LabelUpdateModeHeading->SetToolTipInformation(
-      C_GtGetText::h_GetText("Update Mode"),
-      C_GtGetText::h_GetText("The rate at which the data element value is requested,"
-                             " once the dashboard is connected"));
+      "Update Mode",
+      "The rate at which the data element value is requested,"
+                             " once the dashboard is connected");
    this->mpc_Ui->pc_LabelFormatterString->SetToolTipInformation(
-      C_GtGetText::h_GetText("Printf Formatter String"),
-      C_GtGetText::h_GetText("Configuration of the Display Formatter. The printf syntax can be used."));
+      "Printf Formatter String",
+      "Configuration of the Display Formatter. The printf syntax can be used.");
    this->mpc_Ui->pc_CheckBoxDefaultScaling->SetToolTipInformation(
-      C_GtGetText::h_GetText("Use the default values of SYSTEM DEFINITION"),
-      C_GtGetText::h_GetText("Option to either use the scaling defined in the SYSTEM DEFINITION\n"
-                             "or define a custom scaling just for this occurrence of this data element"));
+      "Use the default values of SYSTEM DEFINITION",
+      "Option to either use the scaling defined in the SYSTEM DEFINITION\n"
+                             "or define a custom scaling just for this occurrence of this data element");
    this->mpc_Ui->pc_CheckBoxFormatterActive->SetToolTipInformation(
-      C_GtGetText::h_GetText("Activate the Display Formatter"),
-      C_GtGetText::h_GetText("Option to either use the formatting style defined in the printf formatter string below\n"
-                             "or use the standard formatting of the Dashboard"));
+      "Activate the Display Formatter",
+      "Option to either use the formatting style defined in the printf formatter string below\n"
+                             "or use the standard formatting of the Dashboard");
    this->mpc_Ui->pc_PushButtonClearDataElement->SetToolTipInformation(
-      C_GtGetText::h_GetText("Clear Data Element"),
-      C_GtGetText::h_GetText("Remove currently selected data element."));
+      "Clear Data Element",
+      "Remove currently selected data element.");
    this->mpc_Ui->pc_PushButtonDataElement->SetToolTipInformation(
-      C_GtGetText::h_GetText("Browse Data Element"),
-      C_GtGetText::h_GetText("Select a data element from list of all data elements."));
+      "Browse Data Element",
+      "Select a data element from list of all data elements.");
    this->mpc_Ui->pc_PushButtonUpdateModeConfigure->SetToolTipInformation(
-      C_GtGetText::h_GetText("Configure Update Mode"),
-      C_GtGetText::h_GetText("Configure transmission mode, cycle intervals and change threshold."));
+      "Configure Update Mode",
+      "Configure transmission mode, cycle intervals and change threshold.");
 
    //Tool tip content partly adapted from Vector CANdb++ Documentation
    {
       const QString c_PhysicalValueInfo =
-         C_GtGetText::h_GetText("The raw value of a data element is the value as it is transmitted in the network."
+         "The raw value of a data element is the value as it is transmitted in the network."
                                 "\nThe physical value of a data element is the value of the physical quantity (e.g. speed, "
                                 "\nrpm, temperature, etc.) that represents the data element."
                                 "\nThe following conversion formula is used to transform the raw value "
                                 "\nto a physical value or in the reverse direction:"
-                                "\n\n[Physical value] = ([Raw value] * [Factor]) + [Offset]");
-      QString c_InfoText =  C_GtGetText::h_GetText("Unit of the data elements physical quantity\n\n");
-      this->mpc_Ui->pc_LabelUnit->SetToolTipInformation(C_GtGetText::h_GetText("Unit"),
+                                "\n\n[Physical value] = ([Raw value] * [Factor]) + [Offset]";
+      QString c_InfoText =  "Unit of the data elements physical quantity\n\n";
+      this->mpc_Ui->pc_LabelUnit->SetToolTipInformation("Unit",
                                                         c_InfoText.append(c_PhysicalValueInfo));
-      this->mpc_Ui->pc_LabelFactor->SetToolTipInformation(C_GtGetText::h_GetText("Factor"),
+      this->mpc_Ui->pc_LabelFactor->SetToolTipInformation("Factor",
                                                           c_PhysicalValueInfo);
-      this->mpc_Ui->pc_LabelOffset->SetToolTipInformation(C_GtGetText::h_GetText("Offset"),
+      this->mpc_Ui->pc_LabelOffset->SetToolTipInformation("Offset",
                                                           c_PhysicalValueInfo);
    }
 
    this->mpc_Ui->pc_LabelInitialValueMode->SetToolTipInformation(
-      C_GtGetText::h_GetText("Initial Value Mode"),
-      C_GtGetText::h_GetText("Options for handling of initial value on dashboard connect:\n\n"
+      "Initial Value Mode",
+      "Options for handling of initial value on dashboard connect:\n\n"
                              "Disabled: Use the value that was set before connecting.\n"
                              "Set constant value: Set the value to a constant before connecting.\n"
                              "Read server value: Read the current value from the server and set the widgets "
-                             "value to it before connecting.\n"));
+                             "value to it before connecting.\n");
    this->mpc_Ui->pc_CheckBoxDashboardConnectWrite->SetToolTipInformation(
-      C_GtGetText::h_GetText("Auto write value on dashboard connect"),
-      C_GtGetText::h_GetText(
-         "Option: Set value should be automatically sent once when connecting to the dashboard."));
+      "Auto write value on dashboard connect",
+      "Option: Set value should be automatically sent once when connecting to the dashboard.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -863,12 +858,11 @@ void C_SyvDaPeBase::m_OkClicked(void)
          {
             // Error
             C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eERROR);
-            c_MessageBox.SetHeading(C_GtGetText::h_GetText("Display Formatter"));
+            c_MessageBox.SetHeading("Display Formatter");
             c_MessageBox.SetDescription(
-               C_GtGetText::h_GetText(
-                  "The configured printf formatter string is invalid or not compatible to the selected data element. \n"
+               "The configured printf formatter string is invalid or not compatible to the selected data element. \n"
                   "Check user documentation for more information about supported printf parameters.\n\n"
-                  "Adapt the printf formatter string or disable the display formatter option."));
+                  "Adapt the printf formatter string or disable the display formatter option.");
             c_MessageBox.SetCustomMinHeight(250, 250);
             c_MessageBox.SetCustomMinWidth(730);
             c_MessageBox.Execute();
@@ -1255,8 +1249,8 @@ void C_SyvDaPeBase::m_OnFormatterActiveChange(void) const
    {
       C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LineEditFormatterString, "Valid",
                                              true);
-      this->mpc_Ui->pc_LineEditFormatterString->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                                      C_GtGetText::h_GetText(""),
+      this->mpc_Ui->pc_LineEditFormatterString->SetToolTipInformation("",
+                                                                      "",
                                                                       stw::opensyde_gui::C_NagToolTip::eDEFAULT);
    }
 }
@@ -1298,18 +1292,18 @@ void C_SyvDaPeBase::m_CheckFormatterString(void) const
                                                 q_FormatterCompatible);
          if (!q_FormatterCompatible)
          {
-            const QString c_Heading = C_GtGetText::h_GetText("Formatter String");
+            const QString c_Heading = "Formatter String";
             QString c_Content;
 
-            c_Content += C_GtGetText::h_GetText("- invalid or not compatible format\n");
+            c_Content += "- invalid or not compatible format\n";
 
             this->mpc_Ui->pc_LineEditFormatterString->SetToolTipInformation(c_Heading, c_Content,
                                                                             stw::opensyde_gui::C_NagToolTip::eERROR);
          }
          else
          {
-            this->mpc_Ui->pc_LineEditFormatterString->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                                            C_GtGetText::h_GetText(""),
+            this->mpc_Ui->pc_LineEditFormatterString->SetToolTipInformation("",
+                                                                            "",
                                                                             stw::opensyde_gui::C_NagToolTip::eDEFAULT);
          }
       }
@@ -1448,7 +1442,7 @@ const
       const QString c_Edit = C_PuiSvHandler::h_GetNamespace(orc_Id);
 
       this->mpc_Ui->pc_LineEditDataElement->setText(c_Edit);
-      this->mpc_Ui->pc_LineEditDataElement->SetToolTipInformation(C_GtGetText::h_GetText("Data Element"), c_Edit);
+      this->mpc_Ui->pc_LineEditDataElement->SetToolTipInformation("Data Element", c_Edit);
       this->mpc_Ui->pc_LabelNamespaceValue->setText(c_Edit);
       if (this->mc_DisplayName.compare("") == 0)
       {

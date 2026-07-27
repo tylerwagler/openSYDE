@@ -19,11 +19,9 @@
 
 #include "stwtypes.hpp"
 #include "C_OgeTebContextMenuBase.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_elements;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -95,13 +93,13 @@ void C_OgeTebContextMenuBase::m_SetupContextMenu(const QPoint & orc_Pos)
    // add the actions
    if (this->mq_LinkOnly == false)
    {
-      this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Copy"),
+      this->mpc_ContextMenu->addAction("Copy",
                                        this,
                                        &C_OgeTebContextMenuBase::copy,
                                        static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_C));
    }
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Copy Link Location"),
+   this->mpc_ContextMenu->addAction("Copy Link Location",
                                     this,
                                     &C_OgeTebContextMenuBase::m_CopyHyperLink);
 
@@ -109,7 +107,7 @@ void C_OgeTebContextMenuBase::m_SetupContextMenu(const QPoint & orc_Pos)
 
    if (this->mq_LinkOnly == false)
    {
-      this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Select All"),
+      this->mpc_ContextMenu->addAction("Select All",
                                        this,
                                        &C_OgeTebContextMenuBase::selectAll,
                                        static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_A));

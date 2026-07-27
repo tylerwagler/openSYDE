@@ -14,7 +14,6 @@
 #include "precomp_headers.hpp"
 #include "stwtypes.hpp"
 #include "C_SdNdeDalLogJobsOvTableModel.hpp"
-#include "C_GtGetText.hpp"
 #include "constants.hpp"
 #include "C_PuiSdHandler.hpp"
 
@@ -111,22 +110,22 @@ QVariant C_SdNdeDalLogJobsOvTableModel::headerData(const int32_t os32_Section, c
             c_Retval = "#";
             break;
          case eICON:
-            c_Retval = C_GtGetText::h_GetText("Icon");
+            c_Retval = "Icon";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eUSE_CASE:
-            c_Retval = C_GtGetText::h_GetText("Use Case");
+            c_Retval = "Use Case";
             break;
          case eTRIGGERMODE:
-            c_Retval = C_GtGetText::h_GetText("Trigger Mode");
+            c_Retval = "Trigger Mode";
             break;
          case eLOGGINGDATA:
-            c_Retval = C_GtGetText::h_GetText("Logging Data");
+            c_Retval = "Logging Data";
             break;
          default:
             break;
@@ -138,22 +137,22 @@ QVariant C_SdNdeDalLogJobsOvTableModel::headerData(const int32_t os32_Section, c
          {
          case eICON:
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Index");
+            c_Retval = "Index";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eUSE_CASE:
-            c_Retval = C_GtGetText::h_GetText("Use Case");
+            c_Retval = "Use Case";
             break;
          case eTRIGGERMODE:
-            c_Retval = C_GtGetText::h_GetText("Trigger Mode");
+            c_Retval = "Trigger Mode";
             break;
          case eLOGGINGDATA:
-            c_Retval = C_GtGetText::h_GetText("Logging Data");
+            c_Retval = "Logging Data";
             break;
          default:
             break;
@@ -165,22 +164,22 @@ QVariant C_SdNdeDalLogJobsOvTableModel::headerData(const int32_t os32_Section, c
          {
          case eICON:
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Continuous index for all LogJobs");
+            c_Retval = "Continuous index for all LogJobs";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("LogJob name");
+            c_Retval = "LogJob name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("LogJob comment");
+            c_Retval = "LogJob comment";
             break;
          case eUSE_CASE:
-            c_Retval = C_GtGetText::h_GetText("Selected use case");
+            c_Retval = "Selected use case";
             break;
          case eTRIGGERMODE:
-            c_Retval = C_GtGetText::h_GetText("LogJob Trigger mode");
+            c_Retval = "LogJob Trigger mode";
             break;
          case eLOGGINGDATA:
-            c_Retval = C_GtGetText::h_GetText("LogJob Logging data");
+            c_Retval = "LogJob Logging data";
             break;
          default:
             break;
@@ -511,7 +510,7 @@ void C_SdNdeDalLogJobsOvTableModel::m_FillLogJobsInfo(const std::vector<std::tup
             if (u32_TotalCount == 1)
             {
                c_DataElementsText =
-                  static_cast<QString>(C_GtGetText::h_GetText("%1 data element (%2 local; %3 remote)"))
+                  static_cast<QString>("%1 data element (%2 local; %3 remote)")
                   .arg(u32_TotalCount)
                   .arg(u32_LocalCount)
                   .arg(u32_RemoteCount);
@@ -519,14 +518,14 @@ void C_SdNdeDalLogJobsOvTableModel::m_FillLogJobsInfo(const std::vector<std::tup
             else if (u32_TotalCount > 1)
             {
                c_DataElementsText =
-                  static_cast<QString>(C_GtGetText::h_GetText("%1 data elements (%2 local; %3 remote)"))
+                  static_cast<QString>("%1 data elements (%2 local; %3 remote)")
                   .arg(u32_TotalCount)
                   .arg(u32_LocalCount)
                   .arg(u32_RemoteCount);
             }
             else
             {
-               c_DataElementsText = C_GtGetText::h_GetText("No data elements");
+               c_DataElementsText = "No data elements";
             }
 
             c_LogJobInfo.c_LogJobLoggingData = c_DataElementsText;

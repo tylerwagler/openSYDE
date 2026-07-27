@@ -17,7 +17,6 @@
 #include "ui_C_SyvDaPeProgressBar.h"
 
 #include "C_GiSvDaProgressBarBase.hpp"
-#include "C_GtGetText.hpp"
 #include "C_GiProgressBarUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -98,24 +97,21 @@ C_SyvDaPeProgressBar::~C_SyvDaPeProgressBar(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeProgressBar::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelShowMinMax->setText(C_GtGetText::h_GetText("Show Min / Max"));
-   this->mpc_Ui->pc_LabelStyle->setText(C_GtGetText::h_GetText("Style"));
-   this->mpc_Ui->pc_LabelAlignment->setText(C_GtGetText::h_GetText("Alignment"));
+   this->mpc_Ui->pc_LabelShowMinMax->setText("Show Min / Max");
+   this->mpc_Ui->pc_LabelStyle->setText("Style");
+   this->mpc_Ui->pc_LabelAlignment->setText("Alignment");
 
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Type 1"));
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Type 2"));
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Type 3"));
+   this->mpc_Ui->pc_ComboBoxType->addItem("Type 1");
+   this->mpc_Ui->pc_ComboBoxType->addItem("Type 2");
+   this->mpc_Ui->pc_ComboBoxType->addItem("Type 3");
 
    //Tool tips
-   this->mpc_Ui->pc_LabelStyle->SetToolTipInformation(C_GtGetText::h_GetText("Style"),
-                                                      C_GtGetText::h_GetText(
-                                                         "Different options for styles specific to this widget"));
-   this->mpc_Ui->pc_LabelAlignment->SetToolTipInformation(C_GtGetText::h_GetText("Alignment"),
-                                                          C_GtGetText::h_GetText(
-                                                             "Option for different alignments of the value label"));
-   this->mpc_Ui->pc_LabelShowMinMax->SetToolTipInformation(C_GtGetText::h_GetText("Show Min / Max"),
-                                                           C_GtGetText::h_GetText(
-                                                              "Option to display the minimum and maximum value next to the progress bar or hide them entirely"));
+   this->mpc_Ui->pc_LabelStyle->SetToolTipInformation("Style",
+                                                      "Different options for styles specific to this widget");
+   this->mpc_Ui->pc_LabelAlignment->SetToolTipInformation("Alignment",
+                                                          "Option for different alignments of the value label");
+   this->mpc_Ui->pc_LabelShowMinMax->SetToolTipInformation("Show Min / Max",
+                                                           "Option to display the minimum and maximum value next to the progress bar or hide them entirely");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -276,13 +272,13 @@ void C_SyvDaPeProgressBar::m_FillAlignmentComboBox(const int32_t os32_Type) cons
 
    if (os32_Type == mhs32_INDEX_STYLE_TYPE1)
    {
-      this->mpc_Ui->pc_ComboBoxAlignment->addItem(C_GtGetText::h_GetText("Top"));
-      this->mpc_Ui->pc_ComboBoxAlignment->addItem(C_GtGetText::h_GetText("Bottom"));
+      this->mpc_Ui->pc_ComboBoxAlignment->addItem("Top");
+      this->mpc_Ui->pc_ComboBoxAlignment->addItem("Bottom");
    }
    else
    {
-      this->mpc_Ui->pc_ComboBoxAlignment->addItem(C_GtGetText::h_GetText("Left"));
-      this->mpc_Ui->pc_ComboBoxAlignment->addItem(C_GtGetText::h_GetText("Right"));
+      this->mpc_Ui->pc_ComboBoxAlignment->addItem("Left");
+      this->mpc_Ui->pc_ComboBoxAlignment->addItem("Right");
    }
 }
 

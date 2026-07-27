@@ -23,7 +23,6 @@
 #include "C_NagToolBarWidget.hpp"
 #include "ui_C_NagToolBarWidget.h"
 
-#include "C_GtGetText.hpp"
 #include "C_HeHandler.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "constants.hpp"
@@ -80,8 +79,8 @@ C_NagToolBarWidget::C_NagToolBarWidget(QWidget * const opc_Parent) :
 
    //Help
    this->mpc_Ui->pc_BtnHelp->setIconSize(mc_ICON_SIZE_24);
-   this->mpc_Ui->pc_BtnHelp->SetToolTipInformation(C_GtGetText::h_GetText("Help"),
-                                                   C_GtGetText::h_GetText("Open user manual for help."));
+   this->mpc_Ui->pc_BtnHelp->SetToolTipInformation("Help",
+                                                   "Open user manual for help.");
    connect(this->mpc_Ui->pc_BtnHelp, &QPushButton::clicked, this, &C_NagToolBarWidget::m_TriggerHelp);
 
    //search connects
@@ -118,7 +117,7 @@ C_NagToolBarWidget::~C_NagToolBarWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagToolBarWidget::InitText(void) const
 {
-   this->mpc_Ui->pc_LineEditSearch->setPlaceholderText(C_GtGetText::h_GetText("What are you looking for?"));
+   this->mpc_Ui->pc_LineEditSearch->setPlaceholderText("What are you looking for?");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -341,9 +340,9 @@ bool C_NagToolBarWidget::eventFilter(QObject * const opc_Object, QEvent * const 
                      //never type openSYDE into openSYDE ;-)
                      C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eERROR);
 
-                     c_MessageBox.SetHeading(C_GtGetText::h_GetText("Do not do this!"));
-                     c_MessageBox.SetDescription(C_GtGetText::h_GetText("Never type openSYDE into openSYDE! ;-)"));
-                     c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Sorry, I'll never do this again"));
+                     c_MessageBox.SetHeading("Do not do this!");
+                     c_MessageBox.SetDescription("Never type openSYDE into openSYDE! ;-)");
+                     c_MessageBox.SetOkButtonText("Sorry, I'll never do this again");
                      c_MessageBox.SetCustomMinHeight(180, 180);
                      c_MessageBox.Execute();
                   }

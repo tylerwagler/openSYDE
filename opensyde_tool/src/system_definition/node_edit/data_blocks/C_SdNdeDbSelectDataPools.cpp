@@ -14,7 +14,6 @@
 
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -109,14 +108,14 @@ C_SdNdeDbSelectDataPools::~C_SdNdeDbSelectDataPools(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbSelectDataPools::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Owned Datapool"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Selection"));
-   this->mpc_Ui->pc_LineEditSearch->setPlaceholderText(C_GtGetText::h_GetText("Filter"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Select Datapool"));
-   this->mpc_Ui->pc_LabelSearchNoElementsFound->setText(C_GtGetText::h_GetText("No data elements found."));
-   this->mpc_Ui->pc_LabelInitialDataElementsNoElements->setText(C_GtGetText::h_GetText("No Datapools."));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetTitle("Owned Datapool");
+   this->mrc_ParentDialog.SetSubTitle("Selection");
+   this->mpc_Ui->pc_LineEditSearch->setPlaceholderText("Filter");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Select Datapool");
+   this->mpc_Ui->pc_LabelSearchNoElementsFound->setText("No data elements found.");
+   this->mpc_Ui->pc_LabelInitialDataElementsNoElements->setText("No Datapools.");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -229,18 +228,17 @@ void C_SdNdeDbSelectDataPools::m_UpdateSelection(const int32_t os32_SelectionCou
       {
          if (os32_SelectionCount > 1)
          {
-            this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                             "%1 selected Datapools")).arg(
+            this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("%1 selected Datapools").arg(
                                                         os32_SelectionCount));
          }
          else
          {
-            this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText("1 selected Datapool")));
+            this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("1 selected Datapool"));
          }
       }
       else
       {
-         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText("No selected Datapool")));
+         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("No selected Datapool"));
       }
    }
 }
@@ -302,11 +300,11 @@ bool C_SdNdeDbSelectDataPools::m_IsCommDatapoolSelectionValid(void)
    if (q_Return == false)
    {
       c_Details.prepend(
-         C_GtGetText::h_GetText("There is more than one Datapool selected for the following protocol type(s): "));
+         "There is more than one Datapool selected for the following protocol type(s): ");
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("COMM Datapool selection"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Select only one COMM Datapool for each of Layer 2, "
-                                                      "ECeS and ECoS."));
+      c_Message.SetHeading("COMM Datapool selection");
+      c_Message.SetDescription("Select only one COMM Datapool for each of Layer 2, "
+                                                      "ECeS and ECoS.");
       c_Message.SetDetails(c_Details);
       c_Message.SetCustomMinHeight(230, 270);
       c_Message.Execute();

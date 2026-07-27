@@ -14,7 +14,6 @@
 #include "ui_C_SdNodeToNodeConnectionSetupWidget.h"
 #include "constants.hpp"
 #include "C_OscUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "stwerrors.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "TglUtils.hpp"
@@ -65,8 +64,8 @@ C_SdNodeToNodeConnectionSetupWidget::C_SdNodeToNodeConnectionSetupWidget(
    mu32_NodeId1(0),
    mu32_NodeId2(0),
    mq_InteractionPossible(false),
-   mc_BusTypeCan(C_GtGetText::h_GetText("CAN")),
-   mc_BusTypeEthernet(C_GtGetText::h_GetText("Ethernet"))
+   mc_BusTypeCan("CAN"),
+   mc_BusTypeEthernet("Ethernet")
 {
    // init UI
    this->mpc_Ui->setupUi(this);
@@ -115,26 +114,24 @@ C_SdNodeToNodeConnectionSetupWidget::~C_SdNodeToNodeConnectionSetupWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNodeToNodeConnectionSetupWidget::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Node to Node"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Link Setup"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_LabelInterfaceHeading->setText(C_GtGetText::h_GetText("2. Select COMM Interface"));
-   this->mpc_Ui->pc_LabelBusHeading->setText(C_GtGetText::h_GetText("1. Select Bus"));
-   this->mpc_Ui->pc_LabelBusType->setText(C_GtGetText::h_GetText("Type"));
-   this->mpc_Ui->pc_LabelBusName->setText(C_GtGetText::h_GetText("Name"));
-   this->mpc_Ui->pc_RadioButtonCreateNew->setText(C_GtGetText::h_GetText("Create New Bus"));
-   this->mpc_Ui->pc_RadioButtonSelectExisting->setText(C_GtGetText::h_GetText("Select Existing Bus"));
+   this->mrc_ParentDialog.SetTitle("Node to Node");
+   this->mrc_ParentDialog.SetSubTitle("Link Setup");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_LabelInterfaceHeading->setText("2. Select COMM Interface");
+   this->mpc_Ui->pc_LabelBusHeading->setText("1. Select Bus");
+   this->mpc_Ui->pc_LabelBusType->setText("Type");
+   this->mpc_Ui->pc_LabelBusName->setText("Name");
+   this->mpc_Ui->pc_RadioButtonCreateNew->setText("Create New Bus");
+   this->mpc_Ui->pc_RadioButtonSelectExisting->setText("Select Existing Bus");
    //Tool tips
-   this->mpc_Ui->pc_LabelBusName->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                           "Name"),
-                                                        static_cast<QString>(C_GtGetText::h_GetText(
-                                                                                "Symbolic bus name. Unique within Network Topology.\n"
+   this->mpc_Ui->pc_LabelBusName->SetToolTipInformation("Name",
+                                                        static_cast<QString>("Symbolic bus name. Unique within Network Topology.\n"
                                                                                 "\nC naming conventions must be followed:"
                                                                                 "\n - must not be empty"
                                                                                 "\n - must not start with digits"
                                                                                 "\n - only alphanumeric characters and \"_\""
-                                                                                "\n - should not be longer than %1 (= project setting) characters")).arg(
+                                                                                "\n - should not be longer than %1 (= project setting) characters").arg(
                                                            C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit()));
 }
 

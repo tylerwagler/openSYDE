@@ -36,6 +36,7 @@ private:
    std::unique_ptr< ::can::ICanBackend> mpc_Backend;
    ::can::ChannelConfig mc_Config;
    bool mq_Open;
+   int64_t ms64_RealtimeMonotonicOffsetUs;
 
 protected:
    virtual int32_t m_CAN_Read_Msg(stw::can::T_STWCAN_Msg_RX & orc_Message);

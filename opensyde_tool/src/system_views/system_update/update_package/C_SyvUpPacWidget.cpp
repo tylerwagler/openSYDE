@@ -15,7 +15,6 @@
 #include "constants.hpp"
 
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_SyvUpPacServiceUpdatePackageDialog.hpp"
 #include "C_OgePopUpDialog.hpp"
@@ -138,23 +137,20 @@ C_SyvUpPacWidget::~C_SyvUpPacWidget()
 void C_SyvUpPacWidget::InitText(void) const
 {
    this->mpc_Ui->pc_LabelTitle->setText(
-      static_cast<QString>(C_GtGetText::h_GetText("UPDATE PACKAGE (%1)")).arg(QString::number(this->mpc_Ui->
+      static_cast<QString>("UPDATE PACKAGE (%1)").arg(QString::number(this->mpc_Ui->
                                                                                               pc_ListWidget->count())));
 
-   this->mpc_Ui->pc_PushButtonClearAll->SetToolTipInformation(C_GtGetText::h_GetText("Clear Update Package"),
-                                                              C_GtGetText::h_GetText(
-                                                                 "Clear content of complete Update Package."));
-   this->mpc_Ui->pc_PushButtonImport->SetToolTipInformation(C_GtGetText::h_GetText("Import Update Package"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Import Update Package configuration from file."));
+   this->mpc_Ui->pc_PushButtonClearAll->SetToolTipInformation("Clear Update Package",
+                                                              "Clear content of complete Update Package.");
+   this->mpc_Ui->pc_PushButtonImport->SetToolTipInformation("Import Update Package",
+                                                            "Import Update Package configuration from file.");
 
-   this->mpc_Ui->pc_PushButtonExport->SetToolTipInformation(C_GtGetText::h_GetText("Export Update Package to File"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Export Update Package configuration to file."));
+   this->mpc_Ui->pc_PushButtonExport->SetToolTipInformation("Export Update Package to File",
+                                                            "Export Update Package configuration to file.");
 
    this->mpc_Ui->pc_PushButtonCreatePackage->SetToolTipInformation(
-      C_GtGetText::h_GetText("Create Service Update Package"),
-      C_GtGetText::h_GetText("All required files are packed together (SYSTEM DEFINITION, flashware, ... )"));
+      "Create Service Update Package",
+      "All required files are packed together (SYSTEM DEFINITION, flashware, ... )");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -298,11 +294,10 @@ void C_SyvUpPacWidget::DisableUpdatePackage()
    this->mpc_Ui->pc_PushButtonCreatePackage->setEnabled(false);
    //give explanation why creation is disabled
    this->mpc_Ui->pc_PushButtonCreatePackage->SetToolTipInformation(
-      C_GtGetText::h_GetText("Create Service Update Package"),
-      C_GtGetText::h_GetText(
-         "Update Package creation is currently disabled. Possible reasons:\n- current view is invalid.\n"
+      "Create Service Update Package",
+      "Update Package creation is currently disabled. Possible reasons:\n- current view is invalid.\n"
          "- no files to be updated.\n"
-         "- specific files are missing."));
+         "- specific files are missing.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -357,11 +352,10 @@ void C_SyvUpPacWidget::m_ButtonClearAll(void) const
 {
    C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
    C_OgeWiCustomMessage c_MessageBox(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eQUESTION);
-   c_MessageBox.SetHeading(C_GtGetText::h_GetText("Update Package clear"));
-   c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                  "Do you really want to clear the configuration of Update Package?"));
-   c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Clear"));
-   c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+   c_MessageBox.SetHeading("Update Package clear");
+   c_MessageBox.SetDescription("Do you really want to clear the configuration of Update Package?");
+   c_MessageBox.SetOkButtonText("Clear");
+   c_MessageBox.SetNoButtonText("Keep");
    c_MessageBox.SetCustomMinHeight(180, 180);
    e_ReturnMessageBox = c_MessageBox.Execute();
 
@@ -665,10 +659,10 @@ void C_SyvUpPacWidget::m_SetUpdatePackageStatusNotLocked(const QStringList & orc
          const int32_t s32_TotalMissingFiles =
             static_cast<int32_t>(orc_MissingDataBlocks.length() + orc_MissingParamFiles.length() +
                                  orc_MissingFiles.length());
-         c_TooltipHeading = C_GtGetText::h_GetText("Update Package Invalid");
+         c_TooltipHeading = "Update Package Invalid";
          if (orc_MissingDataBlocks.length() > 0)
          {
-            c_TooltipContent += C_GtGetText::h_GetText("Missing Data Block files:\n");
+            c_TooltipContent += "Missing Data Block files:\n";
             c_TooltipContent += orc_MissingDataBlocks.join("\n");
          }
          if (orc_MissingParamFiles.length() > 0)
@@ -678,7 +672,7 @@ void C_SyvUpPacWidget::m_SetUpdatePackageStatusNotLocked(const QStringList & orc
             {
                c_TooltipContent += "\n\n";
             }
-            c_TooltipContent += C_GtGetText::h_GetText("Missing Parameter set image files:\n");
+            c_TooltipContent += "Missing Parameter set image files:\n";
             c_TooltipContent += orc_MissingParamFiles.join("\n");
          }
          if (orc_MissingFiles.length() > 0)
@@ -688,32 +682,31 @@ void C_SyvUpPacWidget::m_SetUpdatePackageStatusNotLocked(const QStringList & orc
             {
                c_TooltipContent += "\n\n";
             }
-            c_TooltipContent += C_GtGetText::h_GetText("Missing files:\n");
+            c_TooltipContent += "Missing files:\n";
             c_TooltipContent += orc_MissingFiles.join("\n");
          }
          if (s32_TotalMissingFiles == 1)
          {
-            c_LabelText = C_GtGetText::h_GetText("One file is missing!");
+            c_LabelText = "One file is missing!";
          }
          else
          {
-            c_LabelText = QString::number(s32_TotalMissingFiles) + C_GtGetText::h_GetText(
-               " files are missing!");
+            c_LabelText = QString::number(s32_TotalMissingFiles) + " files are missing!";
          }
          this->mpc_Ui->pc_LabelStateIcon->SetSvg("://images/system_views/IconWarning.svg");
       }
       else
       {
-         c_TooltipHeading = C_GtGetText::h_GetText("Update Package Complete");
-         c_TooltipContent = C_GtGetText::h_GetText("Update Package is complete and valid.");
+         c_TooltipHeading = "Update Package Complete";
+         c_TooltipContent = "Update Package is complete and valid.";
          this->mpc_Ui->pc_LabelStateIcon->SetSvg("://images/system_views/IconOk.svg");
       }
 
       // flashware warnings
       if (orc_FlashwareWarningsApps.size() > 0)
       {
-         c_LabelText += C_GtGetText::h_GetText(" Flashware warnings!");
-         c_TooltipContent += C_GtGetText::h_GetText("\n\nFlashware warnings:\n");
+         c_LabelText += " Flashware warnings!";
+         c_TooltipContent += "\n\nFlashware warnings:\n";
          c_TooltipContent += orc_FlashwareWarningsApps.join("\n");
       }
 

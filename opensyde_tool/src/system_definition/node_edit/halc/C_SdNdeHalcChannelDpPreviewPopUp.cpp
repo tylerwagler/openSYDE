@@ -14,7 +14,6 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscHalcMagicianUtil.hpp"
 #include "C_SdNdeHalcChannelDpPreviewPopUp.hpp"
@@ -100,9 +99,9 @@ C_SdNdeHalcChannelDpPreviewPopUp::~C_SdNdeHalcChannelDpPreviewPopUp(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcChannelDpPreviewPopUp::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Datapool Details"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mrc_ParentDialog.SetSubTitle("Datapool Details");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Details");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -158,7 +157,7 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDpSection(const uint32_t ou32_NodeI
                                                                       ou32_ChannelIndex, oq_UseChannelIndex);
 
    orc_Text += "<h3>";
-   orc_Text += C_GtGetText::h_GetText("Datapool Information");
+   orc_Text += "Datapool Information";
    orc_Text += "</h3>";
    if ((pc_Channel != NULL) && (pc_Node != NULL))
    {
@@ -168,13 +167,13 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDpSection(const uint32_t ou32_NodeI
 
       orc_Text += "<table style=\"width:100%;\">";
       orc_Text += "<tr>";
-      orc_Text += "<td>" + static_cast<QString>(C_GtGetText::h_GetText("Datapool:")) + "</td>";
+      orc_Text += "<td>" + static_cast<QString>("Datapool:") + "</td>";
       orc_Text += "<td>" +
                   static_cast<QString>(C_OscHalcMagicianUtil::h_GetDatapoolName(pc_Channel->q_SafetyRelevant).c_str()) +
                   "</td>";
       orc_Text += "</tr>";
       orc_Text += "<tr>";
-      orc_Text += "<td>" + static_cast<QString>(C_GtGetText::h_GetText("Mapped Data Block: ")) + "</td>";
+      orc_Text += "<td>" + static_cast<QString>("Mapped Data Block: ") + "</td>";
 
       if ((pc_Datapool != NULL) && (pc_Datapool->s32_RelatedDataBlockIndex >= 0))
       {
@@ -224,12 +223,12 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDeSection(const uint32_t ou32_NodeI
                                                                       ou32_ChannelIndex, oq_UseChannelIndex);
 
    orc_Text += "<h3>";
-   orc_Text += C_GtGetText::h_GetText("Used Datapool Elements");
+   orc_Text += "Used Datapool Elements";
    orc_Text += "</h3>";
    orc_Text += "<p>";
-   orc_Text += C_GtGetText::h_GetText("Used Datapool elements according to current ");
-   orc_Text += oq_UseChannelIndex ? C_GtGetText::h_GetText("channel") : C_GtGetText::h_GetText("domain");
-   orc_Text += C_GtGetText::h_GetText(" configuration");
+   orc_Text += "Used Datapool elements according to current ";
+   orc_Text += oq_UseChannelIndex ? "channel" : "domain";
+   orc_Text += " configuration";
    mh_AddUseCase(ou32_NodeIndex, ou32_DomainIndex, ou32_ChannelIndex, oq_UseChannelIndex, orc_Text);
    orc_Text += ":";
    orc_Text += "</p>";
@@ -237,13 +236,13 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDeSection(const uint32_t ou32_NodeI
    orc_Text += "<table style=\"width:100%;\">";
    orc_Text += "<tr>";
    orc_Text += c_Column1HeadingTagStart;
-   orc_Text += C_GtGetText::h_GetText("List");
+   orc_Text += "List";
    orc_Text += "</td>";
    orc_Text += c_ColumnContentHeadingTagStart;
-   orc_Text += C_GtGetText::h_GetText("Data Element");
+   orc_Text += "Data Element";
    orc_Text += "</td>";
    orc_Text += c_ColumnContentHeadingTagStart;
-   orc_Text += C_GtGetText::h_GetText("Description");
+   orc_Text += "Description";
    orc_Text += "</td>";
    orc_Text += "</tr>";
    if ((pc_Channel != NULL) && (pc_OscNode != NULL))
@@ -369,7 +368,7 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddUseCase(const uint32_t ou32_NodeInd
           (pc_Channel->u32_UseCaseIndex < pc_Domain->c_ChannelUseCases.size()))
       {
          const C_OscHalcDefChannelUseCase & rc_UseCase = pc_Domain->c_ChannelUseCases[pc_Channel->u32_UseCaseIndex];
-         orc_Text += C_GtGetText::h_GetText(" (use case \'");
+         orc_Text += " (use case \'";
          orc_Text += rc_UseCase.c_Display.c_str();
          orc_Text += c_UseCase;
          orc_Text += "\')";

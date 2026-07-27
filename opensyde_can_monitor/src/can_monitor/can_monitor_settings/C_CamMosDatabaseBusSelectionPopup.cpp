@@ -16,7 +16,6 @@
 #include <QComboBox>
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_CamProHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_CamMosDatabaseBusSelectionPopup.hpp"
@@ -138,22 +137,21 @@ uint32_t C_CamMosDatabaseBusSelectionPopup::GetSelectedBus() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosDatabaseBusSelectionPopup::m_InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("openSYDE Database Import"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Bus Selection"));
-   this->mpc_Ui->pc_LabelSelectBus->setText(C_GtGetText::h_GetText("Select Bus"));
-   this->mpc_Ui->pc_LabelDatabase->setText(C_GtGetText::h_GetText("Database:"));
-   this->mpc_Ui->pc_LabelDatabase->SetToolTipInformation(C_GtGetText::h_GetText("Database"),
-                                                         C_GtGetText::h_GetText("Path of database file."));
-   this->mpc_Ui->pc_LabelBus->setText(C_GtGetText::h_GetText("Bus:"));
-   this->mpc_Ui->pc_LabelBus->SetToolTipInformation(C_GtGetText::h_GetText("Bus"),
-                                                    C_GtGetText::h_GetText(
-                                                       "Bus information from openSYDE system definition."));
-   this->mpc_Ui->pc_LabelBusId->setText(C_GtGetText::h_GetText("Bus ID:"));
-   this->mpc_Ui->pc_LabelBitrate->setText(C_GtGetText::h_GetText("Bitrate:"));
-   this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment:"));
+   this->mrc_ParentDialog.SetTitle("openSYDE Database Import");
+   this->mrc_ParentDialog.SetSubTitle("Bus Selection");
+   this->mpc_Ui->pc_LabelSelectBus->setText("Select Bus");
+   this->mpc_Ui->pc_LabelDatabase->setText("Database:");
+   this->mpc_Ui->pc_LabelDatabase->SetToolTipInformation("Database",
+                                                         "Path of database file.");
+   this->mpc_Ui->pc_LabelBus->setText("Bus:");
+   this->mpc_Ui->pc_LabelBus->SetToolTipInformation("Bus",
+                                                    "Bus information from openSYDE system definition.");
+   this->mpc_Ui->pc_LabelBusId->setText("Bus ID:");
+   this->mpc_Ui->pc_LabelBitrate->setText("Bitrate:");
+   this->mpc_Ui->pc_LabelComment->setText("Comment:");
 
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -279,12 +277,10 @@ void C_CamMosDatabaseBusSelectionPopup::m_OkClicked(void)
    {
       QString c_Details;
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
-      c_Message.SetHeading(C_GtGetText::h_GetText("openSYDE database re-import"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "Do you really apply the changes? All message generator messages from this database will be deleted."));
+      c_Message.SetHeading("openSYDE database re-import");
+      c_Message.SetDescription("Do you really apply the changes? All message generator messages from this database will be deleted.");
       //Add details
-      c_Details.append(C_GtGetText::h_GetText(
-                          "Following messages will be deleted:\n"));
+      c_Details.append("Following messages will be deleted:\n");
       //Add all messages
       for (QStringList::const_iterator c_It = c_Messages.begin(); c_It != c_Messages.end(); ++c_It)
       {

@@ -16,7 +16,6 @@
 
 #include "stwtypes.hpp"
 #include "gitypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_GiArrowCursorButton.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -122,10 +121,9 @@ int32_t C_GiArrowCursorButton::type() const
 void C_GiArrowCursorButton::GenerateHint(void)
 {
    //Tool tip
-   this->SetDefaultToolTipHeading(C_GtGetText::h_GetText("Link Use"));
-   this->SetDefaultToolTipContent(C_GtGetText::h_GetText(
-                                     "Connect existing elements: Click on the link icon and drag and drop it "
-                                     "either to an existing node or to a bus element."));
+   this->SetDefaultToolTipHeading("Link Use");
+   this->SetDefaultToolTipContent("Connect existing elements: Click on the link icon and drag and drop it "
+                                     "either to an existing node or to a bus element.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

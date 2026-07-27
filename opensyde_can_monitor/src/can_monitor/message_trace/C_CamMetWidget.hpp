@@ -124,6 +124,7 @@ Q_SIGNALS:
    // C_NO_ERR    File added successfully
    // C_RD_WR     Error on creating file, folders or deleting old file
    void SigLogFileAddResult(const int32_t os32_Result);
+   void SigCanTpEnabled(const bool oq_Enabled);
    //lint -restore
 
 private:

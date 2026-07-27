@@ -18,7 +18,6 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_OscNode.hpp"
 #include "C_OscDeviceDefinition.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_SdUtil.hpp"
 
@@ -149,8 +148,8 @@ C_SdNdeDpSelectorWidget::~C_SdNdeDpSelectorWidget()
 void C_SdNdeDpSelectorWidget::InitStaticNames(void) const
 {
    //Tool tips
-   this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation(C_GtGetText::h_GetText("Add"),
-                                                         C_GtGetText::h_GetText("Add new Datapool."));
+   this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation("Add",
+                                                         "Add new Datapool.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -565,12 +564,12 @@ void C_SdNdeDpSelectorWidget::m_SetupContextMenu(void)
 {
    this->mpc_ContextMenu = new stw::opensyde_gui_elements::C_OgeContextMenu(this);
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Add new Datapool"), this,
+   this->mpc_ContextMenu->addAction("Add new Datapool", this,
                                     &C_SdNdeDpSelectorWidget::m_AddNewDatapool,
                                     static_cast<int32_t>(Qt::CTRL) +
                                     static_cast<int32_t>(Qt::Key_Plus));
    this->mpc_ContextMenu->addSeparator();
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Paste"), this,
+   this->mpc_ContextMenu->addAction("Paste", this,
                                     &C_SdNdeDpSelectorWidget::m_PasteDatapool,
                                     static_cast<int32_t>(Qt::CTRL) +
                                     static_cast<int32_t>(Qt::Key_V));

@@ -10,6 +10,7 @@
 #include "C_CanMonProtocolL2.hpp"
 #include "C_CanMonProtocolJ1939.hpp"
 #include "C_CanMonProtocolOpenSyde.hpp"
+#include "C_CanMonProtocolUds.hpp"
 
 #include "C_SclString.hpp"
 #include "C_SclIniFile.hpp"
@@ -166,6 +167,8 @@ C_CanMonProtocols::C_CanMonProtocols() :
    mapc_Protocols[eCMON_L7_PROTOCOL_GD]        = &mc_ProtocolGd;
    mapc_Protocols[eCMON_L7_PROTOCOL_J1939]     = &mc_ProtocolJ1939;
    mapc_Protocols[eCMON_L7_PROTOCOL_OPEN_SYDE] = &mc_ProtocolOpenSyde;
+   mapc_Protocols[eCMON_L7_PROTOCOL_CAN_TP]    = &mc_ProtocolL2; // L2 interpretation
+   mapc_Protocols[eCMON_L7_PROTOCOL_UDS]       = &mc_ProtocolUds;
 }
 
 //---------------------------------------------------------------------------

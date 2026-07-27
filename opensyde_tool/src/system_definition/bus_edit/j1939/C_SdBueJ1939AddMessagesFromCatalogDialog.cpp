@@ -12,7 +12,6 @@
 #include "constants.hpp"
 #include "stwtypes.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_SdBueJ1939AddMessagesFromCatalogDialog.hpp"
 #include "ui_C_SdBueJ1939AddMessagesFromCatalogDialog.h"
 #include "C_UsHandler.hpp"
@@ -80,8 +79,8 @@ C_SdBueJ1939AddMessagesFromCatalogDialog::C_SdBueJ1939AddMessagesFromCatalogDial
    m_UpdateSelection(0);
 
    // Combobox settings
-   this->mpc_Ui->pc_ComboBoxMessageMode->addItem(C_GtGetText::h_GetText("Show all messages"));
-   this->mpc_Ui->pc_ComboBoxMessageMode->addItem(C_GtGetText::h_GetText("Show only J1939 specific messages"));
+   this->mpc_Ui->pc_ComboBoxMessageMode->addItem("Show all messages");
+   this->mpc_Ui->pc_ComboBoxMessageMode->addItem("Show only J1939 specific messages");
    this->mpc_Ui->pc_ComboBoxMessageMode->setCurrentIndex(0);
 
    this->mpc_Ui->pc_TreeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -89,16 +88,12 @@ C_SdBueJ1939AddMessagesFromCatalogDialog::C_SdBueJ1939AddMessagesFromCatalogDial
    this->mpc_Ui->pc_TextBrowserStatusMessage->SetLinkOnly();
 
    // Set tool tip info
-   this->mpc_Ui->pc_LabelCatalogPath->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                               "J1939 Catalog Path"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Full path to J1939 Catalog (DBC file)"));
-   this->mpc_Ui->pc_LabelMode->SetToolTipInformation(C_GtGetText::h_GetText("Display Mode"),
-                                                     C_GtGetText::h_GetText(
-                                                        "Message filter: Display all or only J1939 specific"));
-   this->mpc_Ui->pc_LabelStatus->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                          "Status"),
-                                                       C_GtGetText::h_GetText("Shows the state of loading the catalog"));
+   this->mpc_Ui->pc_LabelCatalogPath->SetToolTipInformation("J1939 Catalog Path",
+                                                            "Full path to J1939 Catalog (DBC file)");
+   this->mpc_Ui->pc_LabelMode->SetToolTipInformation("Display Mode",
+                                                     "Message filter: Display all or only J1939 specific");
+   this->mpc_Ui->pc_LabelStatus->SetToolTipInformation("Status",
+                                                       "Shows the state of loading the catalog");
 
    connect(this->mpc_Ui->pc_PushButtonAdd, &QPushButton::clicked, this,
            &C_SdBueJ1939AddMessagesFromCatalogDialog::m_AddClicked);
@@ -135,15 +130,15 @@ C_SdBueJ1939AddMessagesFromCatalogDialog::~C_SdBueJ1939AddMessagesFromCatalogDia
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939AddMessagesFromCatalogDialog::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Add PG Messages"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("From J1939 Catalog"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("J1939 Catalog"));
-   this->mpc_Ui->pc_PushButtonAdd->setText(C_GtGetText::h_GetText("Add"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_LineEditMessageFilter->setPlaceholderText(C_GtGetText::h_GetText("Filter"));
-   this->mpc_Ui->pc_LabelNoMessages->setText(C_GtGetText::h_GetText("No messages to display."));
-   this->mpc_Ui->pc_LabelSelection->setText(C_GtGetText::h_GetText("No selected message"));
-   this->mpc_Ui->pc_TextBrowserStatusMessage->setText(C_GtGetText::h_GetText("<span>-</span>"));
+   this->mrc_ParentDialog.SetTitle("Add PG Messages");
+   this->mrc_ParentDialog.SetSubTitle("From J1939 Catalog");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("J1939 Catalog");
+   this->mpc_Ui->pc_PushButtonAdd->setText("Add");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_LineEditMessageFilter->setPlaceholderText("Filter");
+   this->mpc_Ui->pc_LabelNoMessages->setText("No messages to display.");
+   this->mpc_Ui->pc_LabelSelection->setText("No selected message");
+   this->mpc_Ui->pc_TextBrowserStatusMessage->setText("<span>-</span>");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -265,8 +260,8 @@ QString C_SdBueJ1939AddMessagesFromCatalogDialog::m_GetCatalogFilePath(QWidget *
    QString c_Folder = C_UsHandler::h_GetInstance()->GetLastKnownJ1939CatalogPath();
    QString c_FilePath = "";
    QFileInfo c_FileInfo;
-   const QString c_FilterName = static_cast<QString>(C_GtGetText::h_GetText("DBC file")) + " (*.dbc)";
-   const QString c_DefaultSuffix = static_cast<QString>(C_GtGetText::h_GetText("dbc"));
+   const QString c_FilterName = static_cast<QString>("DBC file") + " (*.dbc)";
+   const QString c_DefaultSuffix = static_cast<QString>("dbc");
 
    //Replace default path if necessary
    if (c_Folder.compare("") == 0)
@@ -276,7 +271,7 @@ QString C_SdBueJ1939AddMessagesFromCatalogDialog::m_GetCatalogFilePath(QWidget *
 
    // Opens file explorer
    c_FilePath =
-      C_OgeWiUtil::h_GetOpenFileName(opc_BaseWidget, C_GtGetText::h_GetText("Select DBC File"),
+      C_OgeWiUtil::h_GetOpenFileName(opc_BaseWidget, "Select DBC File",
                                      c_Folder, c_FilterName, c_DefaultSuffix);
    c_FileInfo.setFile(c_FilePath);
 
@@ -331,7 +326,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_LoadCatalog()
 
    // Clear (1)filter text (2)Selected messages, when new DBC file is loaded
    this->mpc_Ui->pc_LineEditMessageFilter->clear();
-   this->mpc_Ui->pc_LabelSelection->setText(C_GtGetText::h_GetText("No selected message"));
+   this->mpc_Ui->pc_LabelSelection->setText("No selected message");
 
    // import network of DBC file
    QApplication::setOverrideCursor(Qt::WaitCursor); // big DBC file can take some time to load
@@ -392,8 +387,8 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_LoadCatalog()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939AddMessagesFromCatalogDialog::m_SetStatus() const
 {
-   const QString c_StatusOk = C_GtGetText::h_GetText("File loaded. ");
-   const QString c_StatusFail = C_GtGetText::h_GetText("Loading failed. ");
+   const QString c_StatusOk = "File loaded. ";
+   const QString c_StatusFail = "Loading failed. ";
    QString c_StatusMessage("");
 
    if ((this->ms32_ImportCatalogReturn == stw::errors::C_NO_ERR) ||
@@ -406,8 +401,8 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_SetStatus() const
       c_StatusMessage = c_StatusFail;
    }
 
-   c_StatusMessage += C_GtGetText::h_GetText("For detailed information see ");
-   c_StatusMessage += C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLE_GUIDE_COLOR_LINK,
+   c_StatusMessage += "For detailed information see ";
+   c_StatusMessage += C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
                                        C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
 
    this->mpc_Ui->pc_TextBrowserStatusMessage->setText(c_StatusMessage);
@@ -453,15 +448,13 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_UpdateSelection(const uint32_t 
       this->mpc_Ui->pc_LabelSelection->setVisible(true);
       if (ou32_SelectionCount > 0)
       {
-         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "%1 selected message(s)")).
+         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("%1 selected message(s)").
                                                   arg(ou32_SelectionCount));
          this->mpc_Ui->pc_TreeView->update();
       }
       else
       {
-         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "No selected message")));
+         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("No selected message"));
       }
    }
 }
@@ -474,16 +467,16 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_UpdateSelection(const uint32_t 
 void C_SdBueJ1939AddMessagesFromCatalogDialog::m_ShowCatalogImportError()
 {
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-   const QString c_LogMessage = C_GtGetText::h_GetText("For detailed information see ") +
-                                C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLE_GUIDE_COLOR_LINK,
+   const QString c_LogMessage = "For detailed information see " +
+                                C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
                                                  C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
 
    //Update log file
    C_OscLoggingHandler::h_Flush();
 
    // Show message
-   c_Message.SetHeading(C_GtGetText::h_GetText("Catalog Import Error"));
-   c_Message.SetDescription(C_GtGetText::h_GetText("DBC file cannot be read. Check your file and retry."));
+   c_Message.SetHeading("Catalog Import Error");
+   c_Message.SetDescription("DBC file cannot be read. Check your file and retry.");
    c_Message.SetDetails(c_LogMessage);
    c_Message.SetCustomMinHeight(180, 270);
    c_Message.Execute();
@@ -498,8 +491,8 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_ShowNoMessagesSelectedPopup()
 {
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eINFORMATION);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("Add PG Message"));
-   c_Message.SetDescription(C_GtGetText::h_GetText("No PG messages selected. Select at least one message."));
+   c_Message.SetHeading("Add PG Message");
+   c_Message.SetDescription("No PG messages selected. Select at least one message.");
    c_Message.SetCustomMinHeight(180, 270);
    c_Message.Execute();
 }
@@ -545,7 +538,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_ProcessCatalogPath(const bool o
    if (this->mc_CatalogFilePath != c_LastPath)
    {
       // Initialize status label
-      this->mpc_Ui->pc_TextBrowserStatusMessage->setText(C_GtGetText::h_GetText("<span>-</span>"));
+      this->mpc_Ui->pc_TextBrowserStatusMessage->setText("<span>-</span>");
 
       // Load the catalog if path not empty
       if (this->mc_CatalogFilePath.compare("") != 0)
@@ -662,10 +655,10 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_SetupContextMenu(void)
 {
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Expand all"),
+   this->mpc_ContextMenu->addAction("Expand all",
                                     this->mpc_Ui->pc_TreeView,
                                     &C_SdBueJ1939AddMessagesFromCatalogTreeView::expandAll);
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Collapse all"),
+   this->mpc_ContextMenu->addAction("Collapse all",
                                     this->mpc_Ui->pc_TreeView,
                                     &C_SdBueJ1939AddMessagesFromCatalogTreeView::collapseAll);
 
@@ -673,10 +666,10 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_SetupContextMenu(void)
    this->mpc_ContextMenu->addSeparator();
 
    // select all action
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Select all visible"),
+   this->mpc_ContextMenu->addAction("Select all visible",
                                     this, &C_SdBueJ1939AddMessagesFromCatalogDialog::m_SelectAllMessages,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_A));
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Unselect all"),
+   this->mpc_ContextMenu->addAction("Unselect all",
                                     this->mpc_Ui->pc_TreeView,
                                     &C_SdBueJ1939AddMessagesFromCatalogTreeView::UnSelectAllMessages);
 

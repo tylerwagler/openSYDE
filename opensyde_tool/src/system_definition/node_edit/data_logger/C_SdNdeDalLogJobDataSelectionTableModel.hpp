@@ -15,7 +15,6 @@
 
 #include "C_OscDataLoggerDataElementReference.hpp"
 #include "C_SclString.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

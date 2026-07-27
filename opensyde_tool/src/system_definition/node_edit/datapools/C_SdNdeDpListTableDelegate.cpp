@@ -22,7 +22,6 @@
 #include "C_OgeSpxDoubleToolTipBase.hpp"
 #include "C_OgeCbxTable.hpp"
 #include "C_OgeSpxFactor.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_TblTreDelegateUtil.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
@@ -127,17 +126,17 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
       case C_SdNdeDpListTableModel::eVALUE_TYPE:
          pc_ComboBox = new C_OgeCbxTable(opc_Parent);
          //Init
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("uint8 - data type 8bit unsigned"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("sint8 - data type 8bit signed"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("uint16 - data type 16bit unsigned"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("sint16 - data type 16bit signed"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("uint32 - data type 32bit unsigned"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("sint32 - data type 32bit signed"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("uint64 - data type 64bit unsigned"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("sint64 - data type 64bit signed"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("float32 - data type IEEE 32bit float"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("float64 - data type IEEE 64bit float"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("string - character array"));
+         pc_ComboBox->addItem("uint8 - data type 8bit unsigned");
+         pc_ComboBox->addItem("sint8 - data type 8bit signed");
+         pc_ComboBox->addItem("uint16 - data type 16bit unsigned");
+         pc_ComboBox->addItem("sint16 - data type 16bit signed");
+         pc_ComboBox->addItem("uint32 - data type 32bit unsigned");
+         pc_ComboBox->addItem("sint32 - data type 32bit signed");
+         pc_ComboBox->addItem("uint64 - data type 64bit unsigned");
+         pc_ComboBox->addItem("sint64 - data type 64bit signed");
+         pc_ComboBox->addItem("float32 - data type IEEE 32bit float");
+         pc_ComboBox->addItem("float64 - data type IEEE 64bit float");
+         pc_ComboBox->addItem("string - character array");
          pc_ComboBox->ResizeViewToContents();
          connect(pc_ComboBox, static_cast<void (C_OgeCbxTable::*)(int32_t)>(&C_OgeCbxTable::currentIndexChanged), this,
                  &C_SdNdeDpListTableDelegate::m_OnValueTypeChange);
@@ -198,8 +197,8 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
          break;
       case C_SdNdeDpListTableModel::eACCESS:
          pc_ComboBox = new C_OgeCbxTable(opc_Parent);
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("RW - read/write access"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("RO - read only access"));
+         pc_ComboBox->addItem("RW - read/write access");
+         pc_ComboBox->addItem("RO - read only access");
          pc_ComboBox->ResizeViewToContents();
          pc_Retval = pc_ComboBox;
          break;

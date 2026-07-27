@@ -18,12 +18,10 @@
 #include "stwtypes.hpp"
 #include "C_FlaUpHexFileInfo.hpp"
 #include "C_OscHexFile.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
-using namespace stw::opensyde_gui_logic;
 using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -101,7 +99,7 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_DeviceId = C_GtGetText::h_GetText("Unknown");
+               c_BlockInfo.at(s32_ItAppl).c_DeviceId = "Unknown";
             }
             if (rc_CurInfo.ContainsDateAndTime() == true)
             {
@@ -109,7 +107,7 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_Date = C_GtGetText::h_GetText("Unknown");
+               c_BlockInfo.at(s32_ItAppl).c_Date = "Unknown";
             }
             if (rc_CurInfo.ContainsDateAndTime() == true)
             {
@@ -117,7 +115,7 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_Time = C_GtGetText::h_GetText("Unknown");
+               c_BlockInfo.at(s32_ItAppl).c_Time = "Unknown";
             }
             if (rc_CurInfo.ContainsProjectName() == true)
             {
@@ -125,7 +123,7 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_ProjectName = C_GtGetText::h_GetText("Unknown");
+               c_BlockInfo.at(s32_ItAppl).c_ProjectName = "Unknown";
             }
             if (rc_CurInfo.ContainsProjectVersion() == true)
             {
@@ -133,7 +131,7 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_ProjectVersion = C_GtGetText::h_GetText("Unknown");
+               c_BlockInfo.at(s32_ItAppl).c_ProjectVersion = "Unknown";
             }
             if (rc_CurInfo.ContainsAdditionalInfo() == true)
             {
@@ -141,7 +139,7 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_AdditionalInfo = C_GtGetText::h_GetText("Unknown");
+               c_BlockInfo.at(s32_ItAppl).c_AdditionalInfo = "Unknown";
             }
          }
       }

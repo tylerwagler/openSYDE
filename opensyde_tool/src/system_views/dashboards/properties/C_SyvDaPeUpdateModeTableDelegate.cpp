@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeCbxTable.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_SdNdeDpUtil.hpp"
@@ -83,9 +82,9 @@ QWidget * C_SyvDaPeUpdateModeTableDelegate::createEditor(QWidget * const opc_Par
       case C_SyvDaPeUpdateModeTableModel::eTRANSMISSION_MODE:
          pc_ComboBox = new C_OgeCbxTable(opc_Parent);
          //Init
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("Cyclic"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("On Change"));
-         pc_ComboBox->addItem(C_GtGetText::h_GetText("On Trigger"));
+         pc_ComboBox->addItem("Cyclic");
+         pc_ComboBox->addItem("On Change");
+         pc_ComboBox->addItem("On Trigger");
          pc_ComboBox->ResizeViewToContents();
          pc_Retval = pc_ComboBox;
          break;
@@ -95,11 +94,11 @@ QWidget * C_SyvDaPeUpdateModeTableDelegate::createEditor(QWidget * const opc_Par
          {
             pc_ComboBox = new C_OgeCbxTable(opc_Parent);
             //Init
-            pc_ComboBox->addItem(static_cast<QString>(C_GtGetText::h_GetText("Fast (%1 ms)")).arg(pc_View->
+            pc_ComboBox->addItem(static_cast<QString>("Fast (%1 ms)").arg(pc_View->
                                                                                                   GetUpdateRateFast()));
-            pc_ComboBox->addItem(static_cast<QString>(C_GtGetText::h_GetText("Medium (%1 ms)")).arg(pc_View->
+            pc_ComboBox->addItem(static_cast<QString>("Medium (%1 ms)").arg(pc_View->
                                                                                                     GetUpdateRateMedium()));
-            pc_ComboBox->addItem(static_cast<QString>(C_GtGetText::h_GetText("Slow (%1 ms)")).arg(pc_View->
+            pc_ComboBox->addItem(static_cast<QString>("Slow (%1 ms)").arg(pc_View->
                                                                                                   GetUpdateRateSlow()));
             pc_ComboBox->ResizeViewToContents();
             pc_Retval = pc_ComboBox;

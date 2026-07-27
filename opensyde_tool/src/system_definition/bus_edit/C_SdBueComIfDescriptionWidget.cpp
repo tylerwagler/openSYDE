@@ -25,7 +25,6 @@
 #include "C_SdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_CieUtil.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OgeLabGenericNoPaddingNoMargins.hpp"
@@ -217,45 +216,44 @@ void C_SdBueComIfDescriptionWidget::InitStaticNames(void) const
    c_Protocol = C_PuiSdUtil::h_ConvertProtocolTypeToString(C_OscCanProtocol::eLAYER2);
    this->mpc_Ui->pc_ProtocolTabWidget->SetToolTipInformation(
       0, c_Protocol,
-      static_cast<QString>(C_GtGetText::h_GetText("Edit Messages and Signals of protocol type %1.")).arg(c_Protocol));
+      static_cast<QString>("Edit Messages and Signals of protocol type %1.").arg(c_Protocol));
 
    // tooltip ECeS
    c_Protocol = C_PuiSdUtil::h_ConvertProtocolTypeToString(C_OscCanProtocol::eECES);
    this->mpc_Ui->pc_ProtocolTabWidget->SetToolTipInformation(
-      1, c_Protocol, static_cast<QString>(C_GtGetText::h_GetText("Edit Messages and Signals of protocol type %1 "
-                                                                 "(ESX CAN efficient safety protocol).")).arg(
+      1, c_Protocol, static_cast<QString>("Edit Messages and Signals of protocol type %1 "
+                                                                 "(ESX CAN efficient safety protocol).").arg(
          c_Protocol));
 
    // tooltip ECoS
    c_Protocol = C_PuiSdUtil::h_ConvertProtocolTypeToString(C_OscCanProtocol::eCAN_OPEN_SAFETY);
    this->mpc_Ui->pc_ProtocolTabWidget->SetToolTipInformation(
-      2, c_Protocol, static_cast<QString>(C_GtGetText::h_GetText("Edit Messages and Signals of protocol type %1 "
-                                                                 "(ESX CANopen safety protocol).")).arg(c_Protocol));
+      2, c_Protocol, static_cast<QString>("Edit Messages and Signals of protocol type %1 "
+                                                                 "(ESX CANopen safety protocol).").arg(c_Protocol));
 
    // tooltip CANopen
    c_Protocol = C_PuiSdUtil::h_ConvertProtocolTypeToString(C_OscCanProtocol::eCAN_OPEN);
    this->mpc_Ui->pc_ProtocolTabWidget->SetToolTipInformation(
-      3, c_Protocol, static_cast<QString>(C_GtGetText::h_GetText("Edit PDO Messages and Signals of protocol type %1 "
-                                                                 )).arg(c_Protocol));
+      3, c_Protocol, static_cast<QString>("Edit PDO Messages and Signals of protocol type %1 ").arg(c_Protocol));
 
    // tooltip J1939
    c_Protocol = C_PuiSdUtil::h_ConvertProtocolTypeToString(C_OscCanProtocol::eJ1939);
    this->mpc_Ui->pc_ProtocolTabWidget->SetToolTipInformation(
       4, c_Protocol,
-      static_cast<QString>(C_GtGetText::h_GetText("Edit PG Messages and SP Signals of protocol type %1 ")).arg(
+      static_cast<QString>("Edit PG Messages and SP Signals of protocol type %1 ").arg(
          c_Protocol));
 
-   this->mpc_Ui->pc_InterfaceSelectorTitleLabel->setText(C_GtGetText::h_GetText("Node Interface"));
+   this->mpc_Ui->pc_InterfaceSelectorTitleLabel->setText("Node Interface");
 
-   this->mpc_Ui->pc_HintToBusLabel->setText(C_GtGetText::h_GetText("Node Interface is already used on a bus.\n"
-                                                                   "Edit the COMM Messages here:"));
+   this->mpc_Ui->pc_HintToBusLabel->setText("Node Interface is already used on a bus.\n"
+                                                                   "Edit the COMM Messages here:");
    this->mpc_Ui->pc_HintNoUsageLabel->setText(
-      C_GtGetText::h_GetText("Node Interface has no CANopen Manager or\n"
+      "Node Interface has no CANopen Manager or\n"
                              "is not assigned to a CANopen Manager.\n"
                              "Activate the CANopen Manager in its\n"
                              "tab on this interface or\n"
                              "add the node as device to an already\n"
-                             "existing CANopen Manager."));
+                             "existing CANopen Manager.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -744,10 +742,10 @@ void C_SdBueComIfDescriptionWidget::ImportMessages(void)
    else
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eERROR,
-                                        C_GtGetText::h_GetText("Import Messages Feature is not supported for "
+                                        "Import Messages Feature is not supported for "
                                                                "CANopen protocol. List of available PDOs messages "
-                                                               "is defined by the CANopen Manager Configuration."));
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Import Messages"));
+                                                               "is defined by the CANopen Manager Configuration.");
+      c_MessageBox.SetHeading("Import Messages");
       c_MessageBox.SetCustomMinHeight(180, 180);
       c_MessageBox.Execute();
    }
@@ -2004,12 +2002,12 @@ void C_SdBueComIfDescriptionWidget::m_UpdateInterfaceText(const uint32_t ou32_In
       const uint32_t u32_Protocol = static_cast<uint32_t>(this->GetActProtocol());
       const uint32_t u32_MsgCount = this->mc_MessageCount[u32_Protocol][ou32_InterfaceIndex];
       const uint32_t u32_SigCount = this->mc_SignalCount[u32_Protocol][ou32_InterfaceIndex];
-      c_Text += C_GtGetText::h_GetText(" - Messages: ") + QString::number(u32_MsgCount) +
-                C_GtGetText::h_GetText(", Signals: ") + QString::number(u32_SigCount);
+      c_Text += " - Messages: " + QString::number(u32_MsgCount) +
+                ", Signals: " + QString::number(u32_SigCount);
 
       if (this->mc_ProtocolUsedOnBus[u32_Protocol][ou32_InterfaceIndex] == true)
       {
-         c_Text += C_GtGetText::h_GetText(" (used on ") + this->mc_BusNames[ou32_InterfaceIndex] + ")";
+         c_Text += " (used on " + this->mc_BusNames[ou32_InterfaceIndex] + ")";
       }
 
       this->mpc_Ui->pc_CbInterface->setItemText(ou32_InterfaceIndex, c_Text);

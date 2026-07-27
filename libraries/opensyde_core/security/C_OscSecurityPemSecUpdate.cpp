@@ -15,6 +15,7 @@
 
 #include "openssl/pem.h"
 #include "openssl/evp.h"
+#include "openssl/core_names.h"
 
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
@@ -123,36 +124,24 @@ int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<uint8_t> &
       BIO_free(pc_PrivKeyFile);
       if ((pc_PrivKey != NULL) && (EVP_PKEY_is_a(pc_PrivKey, "EC") == 1))
       {
-         //extract the ECDSA key from the private key portion
-         //This approach uses deprecated API
-         //But the newer suggested API (EVP_PKEY_get_raw_private_key)
-         // will not work with secp256r1 keys. At least up to OpenSSL 3.6:
-         // "This function only works for algorithms that support raw private keys."
-         //Another alternative approach via the OSSL API also failed:
-         // EVP_PKEY_todata fails with the key extracted from .pem file.
-         //So keep with the deprecated but straightforward approach for now.
-         EC_KEY * const pc_EcdsaKey = EVP_PKEY_get1_EC_KEY(pc_PrivKey);
-         if (pc_EcdsaKey != NULL)
+         //extract the private key using OpenSSL 3.0 EVP API
+         //EVP_PKEY_get_raw_private_key does not support EC keys (only X25519, Ed25519, etc.)
+         //so we use the generic EVP_PKEY_get_bn_param instead.
+         BIGNUM * pc_PrivBigNum = NULL;
+         if (EVP_PKEY_get_bn_param(pc_PrivKey, OSSL_PKEY_PARAM_PRIV_KEY, &pc_PrivBigNum) == 1)
          {
-            //Get the private key as BIGNUM (needed for later conversion)
-            const BIGNUM * const pc_PrivBigNum = EC_KEY_get0_private_key(pc_EcdsaKey);
+            const int x_Size = BN_num_bytes(pc_PrivBigNum); //lint !e970 !e8080 //use type expected by API
+            std::vector<uint8_t> c_PrivKey(x_Size);
 
-            if (pc_PrivBigNum != NULL)
-            {
-               const int x_Size = BN_num_bytes(pc_PrivBigNum); //lint !e970 !e8080 //use type expected by API
-               std::vector<uint8_t> c_PrivKey(x_Size);
+            //convert BIGNUM to byte array
+            BN_bn2bin(pc_PrivBigNum, &c_PrivKey[0]);
 
-               //convert BIGNUM to byte array
-               BN_bn2bin(pc_PrivBigNum, &c_PrivKey[0]);
+            //write private key to our internal structure
+            this->mc_KeyInfo.SetPrivateKey(c_PrivKey);
 
-               //write private key to our internal structure
-               this->mc_KeyInfo.SetPrivateKey(c_PrivKey);
-
-               EVP_PKEY_free(pc_PrivKey);
-               EC_KEY_set_private_key(pc_EcdsaKey, NULL);
-               EC_KEY_free(pc_EcdsaKey);
-            }
+            BN_clear_free(pc_PrivBigNum);
          }
+         EVP_PKEY_free(pc_PrivKey);
       }
       else
       {

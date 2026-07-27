@@ -19,7 +19,6 @@
 #include "gitypes.hpp"
 #include "C_OscNode.hpp"
 #include "C_OscSystemBus.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SebUtil.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_Uti.hpp"
@@ -246,12 +245,11 @@ void C_GiLiBusConnector::GenerateHint(void)
             }
 
             //heading
-            c_Hint = C_GtGetText::h_GetText("Bus Connection");
+            c_Hint = "Bus Connection";
             this->SetDefaultToolTipHeading(c_Hint);
 
             //content
-            c_Hint = static_cast<QString>(C_GtGetText::h_GetText(
-                                             "%1 connected to %2 (Interface: %3%4)")).arg(
+            c_Hint = static_cast<QString>("%1 connected to %2 (Interface: %3%4)").arg(
                pc_Node->GetText(),            //Node name
                this->GetBusItem()->GetName(), //Bus name
                C_PuiSdUtil::h_GetInterfaceName(this->GetBusItem()->GetType(),

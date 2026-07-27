@@ -18,7 +18,6 @@
 #include "C_PuiSvData.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_UsHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscHexFile.hpp"
 #include "C_OscParamSetHandler.hpp"
 
@@ -294,15 +293,15 @@ void C_SyvUpInformationWidget::ResetSummary(void)
    this->mc_FileSizeInformation.Reset();
 
    //Reset summary widgets
-   this->SetHeading("", C_GtGetText::h_GetText("Disconnected!"), false, false);
+   this->SetHeading("", "Disconnected!", false, false);
    this->mpc_Ui->pc_WidgetUpdateSummary->SetElapsedTime("00:00:00");
    this->mpc_Ui->pc_WidgetUpdateSummarySmall->SetElapsedTime("00:00:00");
    this->mpc_Ui->pc_WidgetUpdateSummary->SetProgress(0);
    this->mpc_Ui->pc_WidgetUpdateSummarySmall->SetProgress(0);
 
    this->mc_EstimatedTime = "";
-   this->mc_DataRateAbsoluteBytes = C_GtGetText::h_GetText("Data Transfer 0.0 kB/0.0 kB");
-   this->mc_DataRateBytesPerSecond = C_GtGetText::h_GetText("0 B/s");
+   this->mc_DataRateAbsoluteBytes = "Data Transfer 0.0 kB/0.0 kB";
+   this->mc_DataRateBytesPerSecond = "0 B/s";
 
    this->m_UpdateEstimatedWaitTime(false);
    this->m_UpdateLabel();
@@ -681,7 +680,7 @@ void C_SyvUpInformationWidget::m_UpdateDataTransfer(const uint64_t & oru64_Overa
    c_Value = static_cast<QString>("%1 %3/%2 %3").arg(c_Progress).arg(c_Complete).arg(c_Unit);
 
    //Translation: 1:File progress
-   this->mc_DataRateAbsoluteBytes = static_cast<QString>(C_GtGetText::h_GetText("Data transfer %1")).arg(c_Value);
+   this->mc_DataRateAbsoluteBytes = static_cast<QString>("Data transfer %1").arg(c_Value);
 
    m_UpdateLabel();
 }
@@ -726,7 +725,7 @@ void C_SyvUpInformationWidget::m_UpdateLabel(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpInformationWidget::m_UpdateEstimatedWaitTime(const bool oq_IncludesCurrentNodeStatus)
 {
-   const QString c_Default = C_GtGetText::h_GetText("Estimated waiting time --.");
+   const QString c_Default = "Estimated waiting time --.";
 
    if (oq_IncludesCurrentNodeStatus == true)
    {
@@ -741,8 +740,7 @@ void C_SyvUpInformationWidget::m_UpdateEstimatedWaitTime(const bool oq_IncludesC
 
             if (u64_WaitingTimeMin == 0ULL)
             {
-               this->mc_EstimatedTime = static_cast<QString>(C_GtGetText::h_GetText(
-                                                                "Estimated waiting time less than one minute."));
+               this->mc_EstimatedTime = static_cast<QString>("Estimated waiting time less than one minute.");
             }
             else
             {
@@ -753,13 +751,13 @@ void C_SyvUpInformationWidget::m_UpdateEstimatedWaitTime(const bool oq_IncludesC
                if (u64_WaitingTimeHours == 0ULL)
                {
                   this->mc_EstimatedTime =
-                     static_cast<QString>(C_GtGetText::h_GetText("Estimated waiting time %1 min.")).arg(
+                     static_cast<QString>("Estimated waiting time %1 min.").arg(
                         u64_WaitingTimeMin + 1ULL);
                }
                else
                {
                   this->mc_EstimatedTime =
-                     static_cast<QString>(C_GtGetText::h_GetText("Estimated waiting time %1 h %2 min.")).arg(
+                     static_cast<QString>("Estimated waiting time %1 h %2 min.").arg(
                         u64_WaitingTimeHours).arg((u64_WaitingTimeMin + 1ULL) % 60ULL);
                }
             }
@@ -826,7 +824,7 @@ void C_SyvUpInformationWidget::m_UpdateDataRate()
          c_DataTransferRate = QString::number(f64_NumberOfFlashedBytesThisSecond, 'f', 0);
       }
       this->mc_DataRateBytesPerSecond =
-         static_cast<QString>(C_GtGetText::h_GetText("%1 %2/s")).arg(c_DataTransferRate).arg(c_Unit);
+         static_cast<QString>("%1 %2/s").arg(c_DataTransferRate).arg(c_Unit);
 
       m_UpdateLabel();
    }

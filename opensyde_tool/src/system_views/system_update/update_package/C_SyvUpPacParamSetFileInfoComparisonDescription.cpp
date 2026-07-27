@@ -10,7 +10,6 @@
 #include "precomp_headers.hpp"
 
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvUpPacParamSetFileInfoComparisonDescription.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -52,13 +51,13 @@ QString C_SyvUpPacParamSetFileInfoComparisonDescription::GetResultText(void) con
    switch (this->e_ResultType)
    {
    case eRT_MATCH:
-      c_Retval = C_GtGetText::h_GetText("match");
+      c_Retval = "match";
       break;
    case eRT_NO_MATCH:
-      c_Retval = C_GtGetText::h_GetText("don't match");
+      c_Retval = "don't match";
       break;
    case eRT_NOT_FOUND:
-      c_Retval = C_GtGetText::h_GetText("-");
+      c_Retval = "-";
       break;
    default:
       tgl_assert(false);

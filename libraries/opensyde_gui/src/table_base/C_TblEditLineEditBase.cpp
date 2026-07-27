@@ -13,13 +13,11 @@
 #include "precomp_headers.hpp"
 
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_TblEditLineEditBase.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -101,10 +99,8 @@ void C_TblEditLineEditBase::SetMaxFromVariant(const QVariant & orc_Value)
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_TblEditLineEditBase::GetValueAsVariant(QVariant & orc_Value, QString & orc_ErrorDescription) const
 {
-   const QString c_ErrorDescriptionInt = C_GtGetText::h_GetText(
-      "Only integers and hexadecimal numbers (leading \"0x\") are allowed.");
-   const QString c_ErrorDescriptionFloat = C_GtGetText::h_GetText(
-      "Only floating point numbers and integers are allowed.");
+   const QString c_ErrorDescriptionInt = "Only integers and hexadecimal numbers (leading \"0x\") are allowed.";
+   const QString c_ErrorDescriptionFloat = "Only floating point numbers and integers are allowed.";
    int32_t s32_Retval = C_NO_ERR;
    bool q_Worked = false;
    uint32_t u32_Base = 10;
@@ -187,7 +183,7 @@ int32_t C_TblEditLineEditBase::GetValueAsVariant(QVariant & orc_Value, QString &
       {
          orc_ErrorDescription += "\n";
       }
-      orc_ErrorDescription += static_cast<QString>(C_GtGetText::h_GetText("Minimum: %1")).arg(this->mc_MinValue);
+      orc_ErrorDescription += static_cast<QString>("Minimum: %1").arg(this->mc_MinValue);
    }
    if (this->mc_MaxValue.isEmpty() == false)
    {
@@ -195,7 +191,7 @@ int32_t C_TblEditLineEditBase::GetValueAsVariant(QVariant & orc_Value, QString &
       {
          orc_ErrorDescription += "\n";
       }
-      orc_ErrorDescription += static_cast<QString>(C_GtGetText::h_GetText("Maximum: %1")).arg(this->mc_MaxValue);
+      orc_ErrorDescription += static_cast<QString>("Maximum: %1").arg(this->mc_MaxValue);
    }
    return s32_Retval;
 }
@@ -208,11 +204,11 @@ void C_TblEditLineEditBase::m_UpdateToolTip(void)
 {
    if ((this->mc_MinValue.isEmpty() == false) || (this->mc_MaxValue.isEmpty() == false))
    {
-      const QString c_Heading = C_GtGetText::h_GetText("Value Range");
+      const QString c_Heading = "Value Range";
       QString c_Content = "";
       if (this->mc_MinValue.isEmpty() == false)
       {
-         c_Content += static_cast<QString>(C_GtGetText::h_GetText("Minimum: %1")).arg(this->mc_MinValue);
+         c_Content += static_cast<QString>("Minimum: %1").arg(this->mc_MinValue);
       }
       if (this->mc_MaxValue.isEmpty() == false)
       {
@@ -220,7 +216,7 @@ void C_TblEditLineEditBase::m_UpdateToolTip(void)
          {
             c_Content += "\n";
          }
-         c_Content += static_cast<QString>(C_GtGetText::h_GetText("Maximum: %1")).arg(this->mc_MaxValue);
+         c_Content += static_cast<QString>("Maximum: %1").arg(this->mc_MaxValue);
       }
       this->SetToolTipInformation(c_Heading, c_Content);
    }

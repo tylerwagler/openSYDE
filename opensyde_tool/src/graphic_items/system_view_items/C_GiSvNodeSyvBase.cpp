@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_GiSvNodeSyvBase.hpp"
 
@@ -105,7 +104,7 @@ bool C_GiSvNodeSyvBase::m_UpdateError(void)
 
    if (q_Retval == true)
    {
-      this->mc_ErrorText = C_GtGetText::h_GetText("For further details switch to SYSTEM DEFINITION");
+      this->mc_ErrorText = "For further details switch to SYSTEM DEFINITION";
    }
    else
    {

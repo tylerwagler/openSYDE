@@ -59,6 +59,7 @@ public:
 
    void ActionClearData(void);
    void SetProtocol(const stw::cmon_protocol::e_CanMonL7Protocols oe_Protocol) override;
+   void SetCanTpEnabled(const bool oq_Enabled);
    void SetDisplayTree(const bool oq_Value);
    void SetDisplayUniqueMessages(const bool oq_Value);
    void SetDisplayAsHex(const bool oq_Value);

@@ -26,7 +26,6 @@
 #include "C_SclString.hpp"
 #include "TglUtils.hpp"
 #include "C_Uti.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SyvUpSequences.hpp"
@@ -370,317 +369,317 @@ QString C_SyvUpSequences::GetStepName(const E_ProgressStep oe_Step) const
    switch (oe_Step)
    {
    case eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_START:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Request programming start");
+      c_Text = "Activate Flashloader: Request programming start";
       break;
    case eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_WARNING:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Request programming warning");
+      c_Text = "Activate Flashloader: Request programming warning";
       break;
    case eACTIVATE_FLASHLOADER_OSY_REQUEST_PROGRAMMING_ERROR:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Request programming error");
+      c_Text = "Activate Flashloader: Request programming error";
       break;
    case eACTIVATE_FLASHLOADER_OSY_ECU_RESET_WARNING:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: ECU reset warning");
+      c_Text = "Activate Flashloader: ECU reset warning";
       break;
    case eACTIVATE_FLASHLOADER_OSY_ECU_RESET_ERROR:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: ECU reset error");
+      c_Text = "Activate Flashloader: ECU reset error";
       break;
    case eACTIVATE_FLASHLOADER_OSY_BC_ENTER_FLASHLOADER_START:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Broadcast enter Flashloader start");
+      c_Text = "Activate Flashloader: Broadcast enter Flashloader start";
       break;
    case eACTIVATE_FLASHLOADER_OSY_BC_ENTER_PRE_PROGRAMMING_ERROR:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Broadcast enter pre programming error");
+      c_Text = "Activate Flashloader: Broadcast enter pre programming error";
       break;
    case eACTIVATE_FLASHLOADER_OSY_BC_PING_START:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Ping devices start");
+      c_Text = "Activate Flashloader: Ping devices start";
       break;
    case eACTIVATE_FLASHLOADER_OSY_RECONNECT_WARNING:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Reconnect warning");
+      c_Text = "Activate Flashloader: Reconnect warning";
       break;
    case eACTIVATE_FLASHLOADER_OSY_RECONNECT_ERROR:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Reconnect error");
+      c_Text = "Activate Flashloader: Reconnect error";
       break;
    case eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Set session error");
+      c_Text = "Activate Flashloader: Set session error";
       break;
    case eACTIVATE_FLASHLOADER_ROUTING_START:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Start routing");
+      c_Text = "Activate Flashloader: Start routing";
       break;
    case eACTIVATE_FLASHLOADER_ROUTING_ERROR:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Error on start routing");
+      c_Text = "Activate Flashloader: Error on start routing";
       break;
    case eACTIVATE_FLASHLOADER_ROUTING_AVAILABLE_FEATURE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Error on start routing due to available features");
+      c_Text = "Activate Flashloader: Error on start routing due to available features";
       break;
    case eACTIVATE_FLASHLOADER_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Activate Flashloader: Finished");
+      c_Text = "Activate Flashloader: Finished";
       break;
    case eREAD_DEVICE_INFO_START:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Start");
+      c_Text = "Read Device Information: Start";
       break;
    case eREAD_DEVICE_INFO_OSY_RECONNECT_ERROR:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Error on reconnecting");
+      c_Text = "Read Device Information: Error on reconnecting";
       break;
    case eREAD_DEVICE_INFO_OSY_SET_SESSION_START:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Set session start");
+      c_Text = "Read Device Information: Set session start";
       break;
    case eREAD_DEVICE_INFO_OSY_SET_SESSION_ERROR:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Set session error");
+      c_Text = "Read Device Information: Set session error";
       break;
    case eREAD_DEVICE_INFO_OSY_DEVICE_NAME_START:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Device name start");
+      c_Text = "Read Device Information: Device name start";
       break;
    case eREAD_DEVICE_INFO_OSY_DEVICE_NAME_ERROR:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Device name error");
+      c_Text = "Read Device Information: Device name error";
       break;
    case eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_START:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Flash blocks start");
+      c_Text = "Read Device Information: Flash blocks start";
       break;
    case eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_SECURITY_ERROR:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Flash blocks security error");
+      c_Text = "Read Device Information: Flash blocks security error";
       break;
    case eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_ERROR:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Flash blocks error");
+      c_Text = "Read Device Information: Flash blocks error";
       break;
    case eREAD_DEVICE_INFO_OSY_FLASHLOADER_INFO_START:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Flashloader information start");
+      c_Text = "Read Device Information: Flashloader information start";
       break;
    case eREAD_DEVICE_INFO_OSY_FLASHLOADER_INFO_ERROR:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Flashloader information error");
+      c_Text = "Read Device Information: Flashloader information error";
       break;
    case eREAD_DEVICE_INFO_OSY_FLASHLOADER_CHECK_DEBUGGER_ACTIVATION_START:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Flashloader debugger activation state start");
+      c_Text = "Read Device Information: Flashloader debugger activation state start";
       break;
    case eREAD_DEVICE_INFO_OSY_FLASHLOADER_CHECK_DEBUGGER_ACTIVATION_ERROR:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Flashloader debugger activation state error");
+      c_Text = "Read Device Information: Flashloader debugger activation state error";
       break;
    case eREAD_DEVICE_INFO_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Read Device Information: Finished");
+      c_Text = "Read Device Information: Finished";
       break;
    case eREAD_DEVICE_INFO_OSY_START:
-      c_Text = C_GtGetText::h_GetText("Read openSYDE Device Information: Started");
+      c_Text = "Read openSYDE Device Information: Started";
       break;
    case eREAD_DEVICE_INFO_OSY_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Read openSYDE Device Information: Finished");
+      c_Text = "Read openSYDE Device Information: Finished";
       break;
    case eUPDATE_SYSTEM_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Start");
+      c_Text = "Update System: Start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node start");
+      c_Text = "Update System: Node start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_READ_FEATURE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node read of available features error");
+      c_Text = "Update System: Node read of available features error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Update System: Node finished");
+      c_Text = "Update System: Node finished";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_HEX_OPEN_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node open HEX file start");
+      c_Text = "Update System: Node open HEX file start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_HEX_OPEN_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node open HEX file error");
+      c_Text = "Update System: Node open HEX file error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_HEX_SIGNATURE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node HEX file signature error");
+      c_Text = "Update System: Node HEX file signature error";
       break;
    case eUPDATE_SYSTEM_OSY_RECONNECT_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Error on reconnecting");
+      c_Text = "Update System: Error on reconnecting";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_CHECK_DEVICE_NAME_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node check device name start");
+      c_Text = "Update System: Node check device name start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_CHECK_DEVICE_NAME_COMM_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node check device name communication error");
+      c_Text = "Update System: Node check device name communication error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_CHECK_DEVICE_NAME_FILE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node check device name file error");
+      c_Text = "Update System: Node check device name file error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_CHECK_DEVICE_NAME_MATCH_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node check device name match error");
+      c_Text = "Update System: Node check device name match error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_CHECK_MEMORY_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node check memory start");
+      c_Text = "Update System: Node check memory start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_CHECK_MEMORY_SESSION_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node check memory session error");
+      c_Text = "Update System: Node check memory session error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_CHECK_MEMORY_FILE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node check memory file error");
+      c_Text = "Update System: Node check memory file error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_CHECK_MEMORY_NOT_OK:
-      c_Text = C_GtGetText::h_GetText("Update System: Node check memory not OK");
+      c_Text = "Update System: Node check memory not OK";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FINGERPRINT_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node fingerprint start");
+      c_Text = "Update System: Node fingerprint start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FINGERPRINT_NAME_NOT_READABLE:
-      c_Text = C_GtGetText::h_GetText("Update System: Node fingerprint name is not readable");
+      c_Text = "Update System: Node fingerprint name is not readable";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FINGERPRINT_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node fingerprint error");
+      c_Text = "Update System: Node fingerprint error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash of HEX file start");
+      c_Text = "Update System: Node flash of HEX file start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash area of HEX file start");
+      c_Text = "Update System: Node flash area of HEX file start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_ERASE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash area of HEX file erase error");
+      c_Text = "Update System: Node flash area of HEX file erase error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_TRANSFER_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash area of HEX file transfer start");
+      c_Text = "Update System: Node flash area of HEX file transfer start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_TRANSFER_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash area of HEX file transfer error");
+      c_Text = "Update System: Node flash area of HEX file transfer error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_EXIT_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash area of HEX file exit start");
+      c_Text = "Update System: Node flash area of HEX file exit start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_EXIT_FINAL_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash area of HEX file exit final start");
+      c_Text = "Update System: Node flash area of HEX file exit final start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_EXIT_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash area of HEX file exit error");
+      c_Text = "Update System: Node flash area of HEX file exit error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash of HEX file finished");
+      c_Text = "Update System: Node flash of HEX file finished";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash of file system file start");
+      c_Text = "Update System: Node flash of file system file start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_PREPARE_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Preparation of Node flash area of file system file start");
+      c_Text = "Update System: Preparation of Node flash area of file system file start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_PREPARE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Preparation of Node flash area of file system file erase error");
+      c_Text = "Update System: Preparation of Node flash area of file system file erase error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_TRANSFER_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash area of file system file transfer start");
+      c_Text = "Update System: Node flash area of file system file transfer start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_TRANSFER_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash area of file system file transfer error");
+      c_Text = "Update System: Node flash area of file system file transfer error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_EXIT_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash of file system file exit start");
+      c_Text = "Update System: Node flash of file system file exit start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_EXIT_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash of file system file exit error");
+      c_Text = "Update System: Node flash of file system file exit error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_RESULT_STRING:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash of file system file read exit result");
+      c_Text = "Update System: Node flash of file system file read exit result";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Update System: Node flash of file system file finished");
+      c_Text = "Update System: Node flash of file system file finished";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node NVM write start");
+      c_Text = "Update System: Node NVM write start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_AVAILABLE_FEATURE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node NVM write available features error");
+      c_Text = "Update System: Node NVM write available features error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_SESSION_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node NVM write session error");
+      c_Text = "Update System: Node NVM write session error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_MAX_SIZE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node NVM write read back of maximum block length error");
+      c_Text = "Update System: Node NVM write read back of maximum block length error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_OPEN_FILE_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node NVM write read back of parameter set image file start");
+      c_Text = "Update System: Node NVM write read back of parameter set image file start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_OPEN_FILE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node NVM write read back of parameter set image file error");
+      c_Text = "Update System: Node NVM write read back of parameter set image file error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_WRITE_FILE_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node NVM write write of parameter set image file start");
+      c_Text = "Update System: Node NVM write write of parameter set image file start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_WRITE_FILE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node NVM write write of parameter set image file error");
+      c_Text = "Update System: Node NVM write write of parameter set image file error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_FILE_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Update System: Node NVM write of parameter set image file finished");
+      c_Text = "Update System: Node NVM write of parameter set image file finished";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Update System: Node NVM write of parameter set image files finished");
+      c_Text = "Update System: Node NVM write of parameter set image files finished";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of PEM file start");
+      c_Text = "Update System: Node write of PEM file start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_AVAILABLE_FEATURE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of PEM file available feature error");
+      c_Text = "Update System: Node write of PEM file available feature error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_SESSION_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of PEM file session error");
+      c_Text = "Update System: Node write of PEM file session error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_OPEN_FILE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of PEM file open file error");
+      c_Text = "Update System: Node write of PEM file open file error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_EXTRACT_KEY_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of PEM file extract key error");
+      c_Text = "Update System: Node write of PEM file extract key error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_SEND_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of PEM file send error");
+      c_Text = "Update System: Node write of PEM file send error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of PEM file finished");
+      c_Text = "Update System: Node write of PEM file finished";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_ENTER_SESSION_ERROR:
       c_Text =
-         C_GtGetText::h_GetText("Update System: Entering programming session for writing security settings error");
+         "Update System: Entering programming session for writing security settings error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_SECURE_AUTHENTICATION_WRITE_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of security activation state start");
+      c_Text = "Update System: Node write of security activation state start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_SECURE_AUTHENTICATION_WRITE_AVAILABLE_FEATURE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of security activation state available feature error");
+      c_Text = "Update System: Node write of security activation state available feature error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_SECURE_AUTHENTICATION_WRITE_SEND_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of security activation state send error");
+      c_Text = "Update System: Node write of security activation state send error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_SECURE_AUTHENTICATION_WRITE_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of security activation state finished");
+      c_Text = "Update System: Node write of security activation state finished";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_TRAFFIC_ENCRYPTION_WRITE_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of traffic encryption state start");
+      c_Text = "Update System: Node write of traffic encryption state start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_TRAFFIC_ENCRYPTION_WRITE_AVAILABLE_FEATURE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of traffic encryption state available feature error");
+      c_Text = "Update System: Node write of traffic encryption state available feature error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_TRAFFIC_ENCRYPTION_WRITE_SEND_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of traffic encryption state send error");
+      c_Text = "Update System: Node write of traffic encryption state send error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_TRAFFIC_ENCRYPTION_WRITE_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of traffic encryption state finished");
+      c_Text = "Update System: Node write of traffic encryption state finished";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_DEBUGGER_WRITE_START:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of debugger activation state start");
+      c_Text = "Update System: Node write of debugger activation state start";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_DEBUGGER_WRITE_AVAILABLE_FEATURE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of debugger activation state available feature error");
+      c_Text = "Update System: Node write of debugger activation state available feature error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_DEBUGGER_WRITE_SEND_ERROR:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of debugger activation state send error");
+      c_Text = "Update System: Node write of debugger activation state send error";
       break;
    case eUPDATE_SYSTEM_OSY_NODE_STATE_DEBUGGER_WRITE_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Update System: Node write of debugger activation state finished");
+      c_Text = "Update System: Node write of debugger activation state finished";
       break;
    case eUPDATE_SYSTEM_ABORTED:
-      c_Text = C_GtGetText::h_GetText("Update System: Aborted");
+      c_Text = "Update System: Aborted";
       break;
    case eUPDATE_SYSTEM_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Update System: Finished");
+      c_Text = "Update System: Finished";
       break;
    case eRESET_SYSTEM_START:
-      c_Text = C_GtGetText::h_GetText("Reset System: Start");
+      c_Text = "Reset System: Start";
       break;
    case eRESET_SYSTEM_OSY_NODE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Reset System: Node error");
+      c_Text = "Reset System: Node error";
       break;
    case eRESET_SYSTEM_OSY_ROUTED_NODE_ERROR:
-      c_Text = C_GtGetText::h_GetText("Reset System: Routed node error");
+      c_Text = "Reset System: Routed node error";
       break;
    case eRESET_SYSTEM_FINISHED:
-      c_Text = C_GtGetText::h_GetText("Reset System: Finished");
+      c_Text = "Reset System: Finished";
       break;
    default:
       tgl_assert(false);

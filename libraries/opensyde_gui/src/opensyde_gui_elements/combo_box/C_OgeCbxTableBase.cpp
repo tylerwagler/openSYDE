@@ -16,7 +16,6 @@
 #include <QLineEdit>
 
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 
 #include "C_OscUtils.hpp"
 #include "C_OgeCbxTableBase.hpp"
@@ -24,7 +23,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
-using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -152,7 +150,7 @@ int32_t C_OgeCbxTableBase::GetValue(int64_t & ors64_Value, QString & orc_ErrorDe
 
    if (s32_Retval == C_CONFIG)
    {
-      orc_ErrorDescription = C_GtGetText::h_GetText("Only numbers and selectable items are allowed.");
+      orc_ErrorDescription = "Only numbers and selectable items are allowed.";
    }
    else
    {
@@ -175,9 +173,9 @@ int32_t C_OgeCbxTableBase::GetValue(int64_t & ors64_Value, QString & orc_ErrorDe
 
             s32_Retval = C_CONFIG;
 
-            orc_ErrorDescription = C_GtGetText::h_GetText("Value is out of range (Minimum: ");
+            orc_ErrorDescription = "Value is out of range (Minimum: ";
             orc_ErrorDescription += c_Min;
-            orc_ErrorDescription += C_GtGetText::h_GetText("; Maximum: ");
+            orc_ErrorDescription += "; Maximum: ";
             orc_ErrorDescription += c_Max;
             orc_ErrorDescription += ").";
          }

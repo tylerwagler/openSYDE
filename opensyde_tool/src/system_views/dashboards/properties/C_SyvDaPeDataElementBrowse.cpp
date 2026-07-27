@@ -10,7 +10,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_SyvDaPeDataElementBrowse.hpp"
 
 #include "ui_C_SyvDaPeDataElementBrowse.h"
@@ -103,15 +102,15 @@ C_SyvDaPeDataElementBrowse::C_SyvDaPeDataElementBrowse(C_OgePopUpDialog & orc_Pa
    // set title
    if (oq_ShowNvmLists == true)
    {
-      this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("NVM List")));
+      this->mrc_ParentDialog.SetTitle(static_cast<QString>("NVM List"));
       this->mpc_Ui->pc_ComboBoxType->setVisible(false);
-      this->mpc_Ui->pc_LabelDataElement->setText(C_GtGetText::h_GetText("Select NVM List"));
+      this->mpc_Ui->pc_LabelDataElement->setText("Select NVM List");
    }
    else
    {
-      this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("Data Element")));
+      this->mrc_ParentDialog.SetTitle(static_cast<QString>("Data Element"));
       this->mpc_Ui->pc_ComboBoxType->setVisible(true);
-      this->mpc_Ui->pc_LabelDataElement->setText(C_GtGetText::h_GetText("Select Data Element"));
+      this->mpc_Ui->pc_LabelDataElement->setText("Select Data Element");
 
       //Restoration only necessary for read elements!
       if (oq_ShowOnlyWriteElements == false)
@@ -130,9 +129,9 @@ C_SyvDaPeDataElementBrowse::C_SyvDaPeDataElementBrowse(C_OgePopUpDialog & orc_Pa
    // Used in system definition for selecting data pool elements
    if (oq_UseInSysViews == false)
    {
-      this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("Data Element")));
+      this->mrc_ParentDialog.SetTitle(static_cast<QString>("Data Element"));
       this->mpc_Ui->pc_ComboBoxType->setVisible(false);
-      this->mpc_Ui->pc_LabelDataElement->setText(C_GtGetText::h_GetText("Select Data Element"));
+      this->mpc_Ui->pc_LabelDataElement->setText("Select Data Element");
    }
 
    //Avoid filling/resetting the tree if already set up (and user settings/ last known state takes priority)
@@ -147,7 +146,7 @@ C_SyvDaPeDataElementBrowse::C_SyvDaPeDataElementBrowse(C_OgePopUpDialog & orc_Pa
    }
    //After tree was filled
    m_UpdateSelection(0);
-   this->mrc_ParentDialog.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Selection")));
+   this->mrc_ParentDialog.SetSubTitle(static_cast<QString>("Selection"));
 
    //Deactivate combo box for write widgets
    this->mpc_Ui->pc_ComboBoxType->setEnabled(!oq_ShowOnlyWriteElements);
@@ -191,15 +190,14 @@ C_SyvDaPeDataElementBrowse::~C_SyvDaPeDataElementBrowse(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeDataElementBrowse::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Datapool Element"));
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Bus Signal"));
-   this->mpc_Ui->pc_LineEditSearch->setPlaceholderText(C_GtGetText::h_GetText("Filter"));
-   this->mpc_Ui->pc_LabelSearchNoElementsFound->setText(C_GtGetText::h_GetText("No data elements found."));
-   this->mpc_Ui->pc_LabelInitialDataElementsNoElements->setText(C_GtGetText::h_GetText("No data elements."));
-   this->mpc_Ui->pc_LabelInitialSignalNoElements->setText(C_GtGetText::h_GetText(
-                                                             "No signals defined on the connected bus."));
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_ComboBoxType->addItem("Datapool Element");
+   this->mpc_Ui->pc_ComboBoxType->addItem("Bus Signal");
+   this->mpc_Ui->pc_LineEditSearch->setPlaceholderText("Filter");
+   this->mpc_Ui->pc_LabelSearchNoElementsFound->setText("No data elements found.");
+   this->mpc_Ui->pc_LabelInitialDataElementsNoElements->setText("No data elements.");
+   this->mpc_Ui->pc_LabelInitialSignalNoElements->setText("No signals defined on the connected bus.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -367,14 +365,12 @@ void C_SyvDaPeDataElementBrowse::m_UpdateSelection(const int32_t os32_SelectionC
       this->mpc_Ui->pc_LabelSelection->setVisible(true);
       if (os32_SelectionCount > 0)
       {
-         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "%1 selected data element(s)")).
+         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("%1 selected data element(s)").
                                                   arg(os32_SelectionCount));
       }
       else
       {
-         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "No selected data element")));
+         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("No selected data element"));
       }
    }
 }
@@ -389,10 +385,10 @@ void C_SyvDaPeDataElementBrowse::m_SetupContextMenu(const bool & orq_MultiSelect
 {
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Expand all"),
+   this->mpc_ContextMenu->addAction("Expand all",
                                     this->mpc_Ui->pc_TreeView,
                                     &C_TblTreDataElementView::expandAll);
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Collapse all"),
+   this->mpc_ContextMenu->addAction("Collapse all",
                                     this->mpc_Ui->pc_TreeView,
                                     &C_TblTreDataElementView::collapseAll);
 
@@ -400,7 +396,7 @@ void C_SyvDaPeDataElementBrowse::m_SetupContextMenu(const bool & orq_MultiSelect
    if (orq_MultiSelect == true)
    {
       this->mpc_ContextMenu->addSeparator();
-      this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Select all"),
+      this->mpc_ContextMenu->addAction("Select all",
                                        this->mpc_Ui->pc_TreeView,
                                        &C_TblTreDataElementView::selectAll,
                                        static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_A));

@@ -18,7 +18,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscCanOpenManagerInfo.hpp"
@@ -109,112 +108,104 @@ C_SdNdeCoManagerIntfWidget::~C_SdNdeCoManagerIntfWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoManagerIntfWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelCanOpenIdCaption->setText(C_GtGetText::h_GetText("CANopen Manager Node ID"));
+   this->mpc_Ui->pc_LabelCanOpenIdCaption->setText("CANopen Manager Node ID");
 
-   this->mpc_Ui->pc_LabelCanOpenId->setText(C_GtGetText::h_GetText("CANopen Node ID"));
+   this->mpc_Ui->pc_LabelCanOpenId->setText("CANopen Node ID");
    this->mpc_Ui->pc_LabelCanOpenId->
-   SetToolTipInformation(C_GtGetText::h_GetText("CANopen Node ID"),
-                         C_GtGetText::h_GetText("Unique Node ID within a CANopen network."));
+   SetToolTipInformation("CANopen Node ID",
+                         "Unique Node ID within a CANopen network.");
 
-   this->mpc_Ui->pc_CheckBoxSameAsOpensyde->setText(C_GtGetText::h_GetText("Use openSYDE Node ID"));
+   this->mpc_Ui->pc_CheckBoxSameAsOpensyde->setText("Use openSYDE Node ID");
    this->mpc_Ui->pc_CheckBoxSameAsOpensyde->
-   SetToolTipInformation(C_GtGetText::h_GetText("Use openSYDE Node ID"),
-                         C_GtGetText::h_GetText("If enabled, openSYDE Node ID is used as CANopen Node ID. \n"
-                                                "openSYDE Node ID is defined in \"Properties Tab\"."));
+   SetToolTipInformation("Use openSYDE Node ID",
+                         "If enabled, openSYDE Node ID is used as CANopen Node ID. \n"
+                                                "openSYDE Node ID is defined in \"Properties Tab\".");
 
-   this->mpc_Ui->pc_LabelSettingsCaption->setText(C_GtGetText::h_GetText("Settings"));
+   this->mpc_Ui->pc_LabelSettingsCaption->setText("Settings");
 
-   this->mpc_Ui->pc_CheckBoxAutostart->setText(C_GtGetText::h_GetText("Autostart CANopen Manager"));
+   this->mpc_Ui->pc_CheckBoxAutostart->setText("Autostart CANopen Manager");
    this->mpc_Ui->pc_CheckBoxAutostart->
-   SetToolTipInformation(C_GtGetText::h_GetText("Autostart CANopen Manager"),
-                         C_GtGetText::h_GetText(
-                            "If enabled, the CANopen Manager goes automatically to operational mode on startup when"
+   SetToolTipInformation("Autostart CANopen Manager",
+                         "If enabled, the CANopen Manager goes automatically to operational mode on startup when"
                             " all mandatory CANopen Devices are ready.\n"
-                            "If disabled, the CANopen Manager must be started by the application."));
+                            "If disabled, the CANopen Manager must be started by the application.");
 
-   this->mpc_Ui->pc_CheckBoxStartDevices->setText(C_GtGetText::h_GetText("Start CANopen Devices"));
+   this->mpc_Ui->pc_CheckBoxStartDevices->setText("Start CANopen Devices");
    this->mpc_Ui->pc_CheckBoxStartDevices->
-   SetToolTipInformation(C_GtGetText::h_GetText("Start CANopen Devices"),
-                         C_GtGetText::h_GetText(
-                            "If enabled, the CANopen Manager starts the CANopen Devices on startup.\n"
-                            "If disabled, the CANopen Devices must be started by the application."));
+   SetToolTipInformation("Start CANopen Devices",
+                         "If enabled, the CANopen Manager starts the CANopen Devices on startup.\n"
+                            "If disabled, the CANopen Devices must be started by the application.");
 
-   this->mpc_Ui->pc_CheckBoxNMTStartAll->setText(C_GtGetText::h_GetText("Use \"NMT Start All\" Command"));
+   this->mpc_Ui->pc_CheckBoxNMTStartAll->setText("Use \"NMT Start All\" Command");
    this->mpc_Ui->pc_CheckBoxNMTStartAll->
-   SetToolTipInformation(C_GtGetText::h_GetText("Use \"NMT Start All\" Command"),
-                         C_GtGetText::h_GetText(
-                            "If enabled, the CANopen Manager starts all CANopen Devices with an "
+   SetToolTipInformation("Use \"NMT Start All\" Command",
+                         "If enabled, the CANopen Manager starts all CANopen Devices with an "
                             "\"NMT Start All\" command.\n"
                             "\"NMT Start All\" command can only be used if all optional CANopen Devices are ready. "
-                            "Otherwise the CANopen Manager starts every CANopen Device separately."));
+                            "Otherwise the CANopen Manager starts every CANopen Device separately.");
 
-   this->mpc_Ui->pc_LabelNMTErrorBehaviour->setText(C_GtGetText::h_GetText("NMT Error Behavior"));
-   this->mpc_Ui->pc_LabelNMTErrorBehaviour->SetToolTipInformation(C_GtGetText::h_GetText("NMT Error Behaviour"),
-                                                                  C_GtGetText::h_GetText(
-                                                                     "\"Restart all CANopen Devices\": CANopen Manager restarts all CANopen Devices automatically "
+   this->mpc_Ui->pc_LabelNMTErrorBehaviour->setText("NMT Error Behavior");
+   this->mpc_Ui->pc_LabelNMTErrorBehaviour->SetToolTipInformation("NMT Error Behaviour",
+                                                                  "\"Restart all CANopen Devices\": CANopen Manager restarts all CANopen Devices automatically "
                                                                      "(NMT Reset + SDO Configuration + NMT Start).\n"
                                                                      "\"Restart failure CANopen Device\": CANopen Manager restarts the failure CANopen Device automatically "
                                                                      "(NMT Reset + SDO Configuration + NMT Start).\n"
                                                                      "\"Stop all CANopen Device\": CANopen Manager stops all CANopen Devices. "
-                                                                     "The CANopen Devices must be resetted by the application."));
-   this->mpc_Ui->pc_ComboBoxNMTErrorBehaviour->addItem(C_GtGetText::h_GetText("Restart all CANopen Devices"));
-   this->mpc_Ui->pc_ComboBoxNMTErrorBehaviour->addItem(C_GtGetText::h_GetText("Restart failure CANopen Device"));
-   this->mpc_Ui->pc_ComboBoxNMTErrorBehaviour->addItem(C_GtGetText::h_GetText("Stop all CANopen Devices"));
+                                                                     "The CANopen Devices must be resetted by the application.");
+   this->mpc_Ui->pc_ComboBoxNMTErrorBehaviour->addItem("Restart all CANopen Devices");
+   this->mpc_Ui->pc_ComboBoxNMTErrorBehaviour->addItem("Restart failure CANopen Device");
+   this->mpc_Ui->pc_ComboBoxNMTErrorBehaviour->addItem("Stop all CANopen Devices");
 
-   this->mpc_Ui->pc_LabelSDOTimeout->setText(C_GtGetText::h_GetText("SDO Timeout"));
+   this->mpc_Ui->pc_LabelSDOTimeout->setText("SDO Timeout");
    this->mpc_Ui->pc_LabelSDOTimeout->
-   SetToolTipInformation(C_GtGetText::h_GetText("SDO Timeout"),
-                         C_GtGetText::h_GetText("CANopen Manager expects a response from CANopen Device within this "
-                                                "time after sending an SDO command."));
+   SetToolTipInformation("SDO Timeout",
+                         "CANopen Manager expects a response from CANopen Device within this "
+                                                "time after sending an SDO command.");
 
-   this->mpc_Ui->pc_SpinBoxSDOTimeout->setSuffix(C_GtGetText::h_GetText(" ms"));
+   this->mpc_Ui->pc_SpinBoxSDOTimeout->setSuffix(" ms");
 
-   this->mpc_Ui->pc_LabelHeartbeatCaption->setText(C_GtGetText::h_GetText("Heartbeat"));
+   this->mpc_Ui->pc_LabelHeartbeatCaption->setText("Heartbeat");
 
-   this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing->setText(C_GtGetText::h_GetText("Enable Heartbeat Producing"));
+   this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing->setText("Enable Heartbeat Producing");
    this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing->
-   SetToolTipInformation(C_GtGetText::h_GetText("Enable Heartbeat Producing"),
-                         C_GtGetText::h_GetText(
-                            "If enabled, the CANopen Manager sends heartbeats according to defined "
+   SetToolTipInformation("Enable Heartbeat Producing",
+                         "If enabled, the CANopen Manager sends heartbeats according to defined "
                             "\"Producer Time\" interval.\n"
-                            "When disabled, heartbeat consuming option is disabled for all CANopen Devices."));
+                            "When disabled, heartbeat consuming option is disabled for all CANopen Devices.");
 
-   this->mpc_Ui->pc_LabelProducerTime->setText(C_GtGetText::h_GetText("Producer Time"));
+   this->mpc_Ui->pc_LabelProducerTime->setText("Producer Time");
    this->mpc_Ui->pc_LabelProducerTime->
-   SetToolTipInformation(C_GtGetText::h_GetText("Producer Time"),
-                         C_GtGetText::h_GetText("Heartbeat interval produced by the CANopen Manager."));
+   SetToolTipInformation("Producer Time",
+                         "Heartbeat interval produced by the CANopen Manager.");
 
-   this->mpc_Ui->pc_SpinBoxProducerTime->setSuffix(C_GtGetText::h_GetText(" ms"));
+   this->mpc_Ui->pc_SpinBoxProducerTime->setSuffix(" ms");
 
-   this->mpc_Ui->pc_LabelSYNCPdoCaption->setText(C_GtGetText::h_GetText("SYNC PDO"));
+   this->mpc_Ui->pc_LabelSYNCPdoCaption->setText("SYNC PDO");
 
-   this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled->setText(C_GtGetText::h_GetText("Produce SYNC"));
+   this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled->setText("Produce SYNC");
    this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled->
-   SetToolTipInformation(C_GtGetText::h_GetText("Produce SYNC"),
-                         C_GtGetText::h_GetText(
-                            "If enabled, the CANopen Manager sends the SYNC message with a fixed COB-ID 0x80 according "
+   SetToolTipInformation("Produce SYNC",
+                         "If enabled, the CANopen Manager sends the SYNC message with a fixed COB-ID 0x80 according "
                             "to the defined \"Cycle Period\" interval.\nAll CANopen Devices get "
                             "the \"Window Length\" time distributed to Object 0x1007.\n"
                             "When disabled, the PDO SYNC will not be sent and the CANopen Devices will not get the"
-                            "\"Window Length\" time configuration distributed."));
+                            "\"Window Length\" time configuration distributed.");
 
-   this->mpc_Ui->pc_LabelSYNCPeriod->setText(C_GtGetText::h_GetText("Cycle Period"));
+   this->mpc_Ui->pc_LabelSYNCPeriod->setText("Cycle Period");
    this->mpc_Ui->pc_LabelSYNCPeriod->
-   SetToolTipInformation(C_GtGetText::h_GetText("Cycle Period"),
-                         C_GtGetText::h_GetText(
-                            "SYNC PDO produced with the interval of \"Cycle Period\" by the CANopen Manager."));
+   SetToolTipInformation("Cycle Period",
+                         "SYNC PDO produced with the interval of \"Cycle Period\" by the CANopen Manager.");
 
-   this->mpc_Ui->pc_SpinBoxSYNCPeriod->setSuffix(C_GtGetText::h_GetText(" us"));
+   this->mpc_Ui->pc_SpinBoxSYNCPeriod->setSuffix(" us");
 
-   this->mpc_Ui->pc_LabelSYNCWindowLength->setText(C_GtGetText::h_GetText("Window Length"));
+   this->mpc_Ui->pc_LabelSYNCWindowLength->setText("Window Length");
    this->mpc_Ui->pc_LabelSYNCWindowLength->
-   SetToolTipInformation(C_GtGetText::h_GetText("Window Length"),
-                         C_GtGetText::h_GetText(
-                            "SYNC PDO \"Window Length\" will be distributed by CANopen Manager"
+   SetToolTipInformation("Window Length",
+                         "SYNC PDO \"Window Length\" will be distributed by CANopen Manager"
                             " to Object 0x1007 of all CANopen Devices.\n"
-                            "Will not be used by CANopen Manager for incoming PDOs."));
+                            "Will not be used by CANopen Manager for incoming PDOs.");
 
-   this->mpc_Ui->pc_SpinBoxSYNCWindowLength->setSuffix(C_GtGetText::h_GetText(" us"));
+   this->mpc_Ui->pc_SpinBoxSYNCWindowLength->setSuffix(" us");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -498,13 +489,11 @@ void C_SdNdeCoManagerIntfWidget::m_CheckCoNodeId(void) const
          QString c_Content;
          if (q_NodeIdConflict == true)
          {
-            c_Content = C_GtGetText::h_GetText(
-               "The CANopen Node ID must be unique on the bus.");
+            c_Content = "The CANopen Node ID must be unique on the bus.";
          }
          if (q_ManagerNodeIdInvalid == true)
          {
-            c_Content += C_GtGetText::h_GetText(
-               "\nThe CANopen Node ID must be in the range for CANopen (1 - 127).");
+            c_Content += "\nThe CANopen Node ID must be in the range for CANopen (1 - 127).";
          }
 
          this->mpc_Ui->pc_SpinBoxCanOpenId->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
@@ -547,8 +536,7 @@ void C_SdNdeCoManagerIntfWidget::m_CheckHeartbeatProducerTime(void) const
       }
       else
       {
-         const QString c_Content = C_GtGetText::h_GetText(
-            "The producer time of the Manager must be lower than than the consumer time of all Devices.");
+         const QString c_Content = "The producer time of the Manager must be lower than than the consumer time of all Devices.";
          this->mpc_Ui->pc_SpinBoxProducerTime->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
       }
    }
@@ -591,17 +579,17 @@ void C_SdNdeCoManagerIntfWidget::m_LoadFromData(void)
               static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged), this,
               &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
 
-   disconnect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_OnSameAsOpensydeNodeIdChanged);
-   disconnect(this->mpc_Ui->pc_CheckBoxAutostart, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxAutostart, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   disconnect(this->mpc_Ui->pc_CheckBoxStartDevices, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxStartDevices, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   disconnect(this->mpc_Ui->pc_CheckBoxNMTStartAll, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxNMTStartAll, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   disconnect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_OnHeartbeatEnableChanged);
-   disconnect(this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled, &QCheckBox::stateChanged, this,
               &C_SdNdeCoManagerIntfWidget::m_OnPdoSyncEnableChanged);
 
    if (pc_CanOpenManagerInfo != NULL)
@@ -689,17 +677,17 @@ void C_SdNdeCoManagerIntfWidget::m_LoadFromData(void)
            static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged), this,
            &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
 
-   connect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_OnSameAsOpensydeNodeIdChanged);
-   connect(this->mpc_Ui->pc_CheckBoxAutostart, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxAutostart, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   connect(this->mpc_Ui->pc_CheckBoxStartDevices, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxStartDevices, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   connect(this->mpc_Ui->pc_CheckBoxNMTStartAll, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxNMTStartAll, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_SaveChanges);
-   connect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_OnHeartbeatEnableChanged);
-   connect(this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxSYNCProduceEnabled, &QCheckBox::stateChanged, this,
            &C_SdNdeCoManagerIntfWidget::m_OnPdoSyncEnableChanged);
 }
 

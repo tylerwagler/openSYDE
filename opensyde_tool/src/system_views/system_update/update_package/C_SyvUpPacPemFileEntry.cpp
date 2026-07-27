@@ -15,7 +15,6 @@
 #include "C_SyvUpPacPemFileEntry.hpp"
 #include "ui_C_SyvUpPacPemFileEntry.h"
 #include "C_Uti.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -54,9 +53,8 @@ C_SyvUpPacPemFileEntry::C_SyvUpPacPemFileEntry(QWidget * const opc_Parent, const
    this->mpc_Ui->setupUi(this);
 
    this->mpc_Ui->pc_PushButtonDelete->SetSvg("://images/main_page_and_navi_bar/Icon_delete.svg");
-   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation(C_GtGetText::h_GetText("Delete file"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Remove PEM file from list"));
+   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation("Delete file",
+                                                            "Remove PEM file from list");
 
    this->m_LoadPemFileInfo();
 

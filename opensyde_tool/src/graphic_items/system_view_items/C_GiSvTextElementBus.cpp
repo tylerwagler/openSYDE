@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_GiSvTextElementBus.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -56,8 +55,8 @@ void C_GiSvTextElementBus::GenerateHint(void)
 {
    if ((this->mq_ErrorIconHovered == true) && (this->ms32_Index >= 0))
    {
-      this->SetDefaultToolTipHeading(C_GtGetText::h_GetText("Invalid Bus Content"));
-      this->SetDefaultToolTipContent(C_GtGetText::h_GetText("For further details switch to SYSTEM DEFINITION"));
+      this->SetDefaultToolTipHeading("Invalid Bus Content");
+      this->SetDefaultToolTipContent("For further details switch to SYSTEM DEFINITION");
       this->SetDefaultToolTipType(C_NagToolTipWithImage::eERROR);
    }
    else

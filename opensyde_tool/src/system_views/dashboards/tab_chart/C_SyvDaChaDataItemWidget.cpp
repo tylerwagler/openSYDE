@@ -16,7 +16,6 @@
 #include "C_SyvDaChaDataItemWidget.hpp"
 #include "ui_C_SyvDaChaDataItemWidget.h"
 
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
 #include "C_UtiStyleSheets.hpp"
@@ -375,11 +374,11 @@ void C_SyvDaChaDataItemWidget::UpdateError(const QString & orc_ErrorText, const 
    this->mc_ToolTipErrorText = orc_ErrorText;
    if (oq_IsTransmissionError == true)
    {
-      this->mc_ToolTipErrorTextHeading = C_GtGetText::h_GetText("Transmission error");
+      this->mc_ToolTipErrorTextHeading = "Transmission error";
    }
    else
    {
-      this->mc_ToolTipErrorTextHeading = C_GtGetText::h_GetText("Signal error");
+      this->mc_ToolTipErrorTextHeading = "Signal error";
    }
 
    // Adapt the icon
@@ -425,9 +424,9 @@ void C_SyvDaChaDataItemWidget::ConnectionActiveChanged(const bool oq_Active, con
          if (q_WarningActive)
          {
             this->me_Warning = eWARNING_ACTIVE_SECURITY;
-            this->mc_ToolTipErrorText = C_GtGetText::h_GetText("Event driven data element trigger "
-                                                               "and encrypted communication via CAN is not supported");
-            this->mc_ToolTipErrorTextHeading = C_GtGetText::h_GetText("Configuration warning");
+            this->mc_ToolTipErrorText = "Event driven data element trigger "
+                                                               "and encrypted communication via CAN is not supported";
+            this->mc_ToolTipErrorTextHeading = "Configuration warning";
 
             // Adapt the icon
             this->m_UpdateIcon();

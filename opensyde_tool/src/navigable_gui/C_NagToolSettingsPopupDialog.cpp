@@ -16,7 +16,6 @@
 #include <QListWidget>
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_NagToolSettingsPopupDialog.hpp"
 #include "ui_C_NagToolSettingsPopupDialog.h"
 #include "C_OscUtils.hpp"
@@ -96,42 +95,39 @@ C_NagToolSettingsPopupDialog::~C_NagToolSettingsPopupDialog(void)
 void C_NagToolSettingsPopupDialog::InitStaticNames(void) const
 {
    //Global settings section
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Tool"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Settings"));
-   this->mpc_Ui->pc_LabelGlobalSettings->setText(C_GtGetText::h_GetText("General"));
+   this->mrc_ParentDialog.SetTitle("Tool");
+   this->mrc_ParentDialog.SetSubTitle("Settings");
+   this->mpc_Ui->pc_LabelGlobalSettings->setText("General");
 
-   this->mpc_Ui->pc_LabelPathHandling->setText(C_GtGetText::h_GetText("Relative/absolute path handling"));
-   this->mpc_Ui->pc_LabelSkipTsp->setText(C_GtGetText::h_GetText("Skip TSP Import assistance"));
+   this->mpc_Ui->pc_LabelPathHandling->setText("Relative/absolute path handling");
+   this->mpc_Ui->pc_LabelSkipTsp->setText("Skip TSP Import assistance");
 
-   this->mpc_Ui->pc_LabelPathHandling->SetToolTipInformation(C_GtGetText::h_GetText("Path handling"),
-                                                             C_GtGetText::h_GetText(
-                                                                "Choose if file paths shall be handled as relative or absolute paths."
-                                                                "\nIf the option \"Ask User\" is active, openSYDE will ask everytime a file action is performed."));
+   this->mpc_Ui->pc_LabelPathHandling->SetToolTipInformation("Path handling",
+                                                             "Choose if file paths shall be handled as relative or absolute paths."
+                                                                "\nIf the option \"Ask User\" is active, openSYDE will ask everytime a file action is performed.");
 
-   this->mpc_Ui->pc_LabelSkipTsp->SetToolTipInformation(C_GtGetText::h_GetText("TSP Import assistance"),
-                                                        C_GtGetText::h_GetText(
-                                                           "Choose if openSYDE automatically redirects you to TSP Import when a new node is added to the Topology."
-                                                           "\nIf the option \"Ask User\" is active, openSYDE will ask everytime a node is added."));
+   this->mpc_Ui->pc_LabelSkipTsp->SetToolTipInformation("TSP Import assistance",
+                                                        "Choose if openSYDE automatically redirects you to TSP Import when a new node is added to the Topology."
+                                                           "\nIf the option \"Ask User\" is active, openSYDE will ask everytime a node is added.");
 
-   this->mpc_Ui->pc_CbxPathHandling->addItem(C_GtGetText::h_GetText("Ask User"));
-   this->mpc_Ui->pc_CbxPathHandling->addItem(C_GtGetText::h_GetText("Relative"));
-   this->mpc_Ui->pc_CbxPathHandling->addItem(C_GtGetText::h_GetText("Absolute"));
+   this->mpc_Ui->pc_CbxPathHandling->addItem("Ask User");
+   this->mpc_Ui->pc_CbxPathHandling->addItem("Relative");
+   this->mpc_Ui->pc_CbxPathHandling->addItem("Absolute");
 
-   this->mpc_Ui->pc_CbxSkipTsp->addItem(C_GtGetText::h_GetText("Ask User"));
-   this->mpc_Ui->pc_CbxSkipTsp->addItem(C_GtGetText::h_GetText("Skip"));
+   this->mpc_Ui->pc_CbxSkipTsp->addItem("Ask User");
+   this->mpc_Ui->pc_CbxSkipTsp->addItem("Skip");
 
    //Device Roots section
-   this->mpc_Ui->pc_LabelDeviceRoots->setText(C_GtGetText::h_GetText("Device Roots"));
-   this->mpc_Ui->pc_LabelDeviceRootsNote->setText(C_GtGetText::h_GetText(
-                                                     "Folders scanned for device-bundle manifests "
+   this->mpc_Ui->pc_LabelDeviceRoots->setText("Device Roots");
+   this->mpc_Ui->pc_LabelDeviceRootsNote->setText("Folders scanned for device-bundle manifests "
                                                      "(`device.syd`). On duplicate device names, the "
                                                      "first matching root in the list wins. Changes "
-                                                     "take effect on the next launch."));
+                                                     "take effect on the next launch.");
    this->mpc_Ui->pc_LabelDeviceRootsNote->setWordWrap(true);
-   this->mpc_Ui->pc_PushButtonAddDeviceRoot->setText(C_GtGetText::h_GetText("Add..."));
-   this->mpc_Ui->pc_PushButtonRemoveDeviceRoot->setText(C_GtGetText::h_GetText("Remove"));
-   this->mpc_Ui->pc_PushButtonMoveUpDeviceRoot->setText(C_GtGetText::h_GetText("Move Up"));
-   this->mpc_Ui->pc_PushButtonMoveDownDeviceRoot->setText(C_GtGetText::h_GetText("Move Down"));
+   this->mpc_Ui->pc_PushButtonAddDeviceRoot->setText("Add...");
+   this->mpc_Ui->pc_PushButtonRemoveDeviceRoot->setText("Remove");
+   this->mpc_Ui->pc_PushButtonMoveUpDeviceRoot->setText("Move Up");
+   this->mpc_Ui->pc_PushButtonMoveDownDeviceRoot->setText("Move Down");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -193,7 +189,7 @@ void C_NagToolSettingsPopupDialog::m_AddDeviceRoot(void)
 {
    const QString c_Path = QFileDialog::getExistingDirectory(
       this,
-      C_GtGetText::h_GetText("Select Device Root Folder"),
+      "Select Device Root Folder",
       QString());
 
    if (c_Path.isEmpty() == false)

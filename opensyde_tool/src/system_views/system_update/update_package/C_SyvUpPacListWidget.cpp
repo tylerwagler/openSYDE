@@ -27,7 +27,6 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiProject.hpp"
 #include "C_OscNode.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvUpPacConfig.hpp"
 #include "C_SyvUpPacConfigFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -522,9 +521,8 @@ void C_SyvUpPacListWidget::ExportConfig(void)
    const QString c_Folder = this->m_GetDialogPath();
    const QString c_FileName =
       C_OgeWiUtil::h_GetSaveFileName(
-         this, C_GtGetText::h_GetText("Export Update Package Configuration"), c_Folder,
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 "openSYDE Update Package Configuration File")) +
+         this, "Export Update Package Configuration", c_Folder,
+         static_cast<QString>("openSYDE Update Package Configuration File") +
          " (*" + mhc_CONFIG_FILE_TYPE + ")", "");
 
    if (c_FileName != "")
@@ -580,9 +578,9 @@ void C_SyvUpPacListWidget::ExportConfig(void)
       {
          // TODO: Error handling
          C_OgeWiCustomMessage c_MessageResultSave(this, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_MessageResultSave.SetHeading(C_GtGetText::h_GetText("Update Package configuration export"));
-         c_MessageResultSave.SetDescription(C_GtGetText::h_GetText("Could not save the file."));
-         c_MessageResultSave.SetDetails(C_GtGetText::h_GetText("Error code: \n") + QString::number(s32_Result));
+         c_MessageResultSave.SetHeading("Update Package configuration export");
+         c_MessageResultSave.SetDescription("Could not save the file.");
+         c_MessageResultSave.SetDetails("Error code: \n" + QString::number(s32_Result));
          c_MessageResultSave.SetCustomMinHeight(180, 250);
          c_MessageResultSave.Execute();
       }
@@ -597,12 +595,12 @@ void C_SyvUpPacListWidget::ExportConfig(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::ImportConfig(void)
 {
-   const QString c_Filter = static_cast<QString>(C_GtGetText::h_GetText("openSYDE Update Package Configuration File")) +
+   const QString c_Filter = static_cast<QString>("openSYDE Update Package Configuration File") +
                             "(*" +
                             mhc_CONFIG_FILE_TYPE + ")";
    const QString c_FileName =
       C_OgeWiUtil::h_GetOpenFileName(this->parentWidget(),
-                                     C_GtGetText::h_GetText("openSYDE Update Package Configuration File"),
+                                     "openSYDE Update Package Configuration File",
                                      this->m_GetDialogPath(), c_Filter, mhc_CONFIG_FILE_TYPE);
 
    if (c_FileName != "")
@@ -613,11 +611,11 @@ void C_SyvUpPacListWidget::ImportConfig(void)
 
       this->mc_LastPath = QFileInfo(c_FileName).path() + "/";
 
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Update Package configuration import"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to overwrite the current Update "
-                                                         "Package configuration?"));
-      c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Import"));
-      c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+      c_MessageBox.SetHeading("Update Package configuration import");
+      c_MessageBox.SetDescription("Do you really want to overwrite the current Update "
+                                                         "Package configuration?");
+      c_MessageBox.SetOkButtonText("Import");
+      c_MessageBox.SetNoButtonText("Keep");
       c_MessageBox.SetCustomMinHeight(180, 180);
       e_ReturnMessageBox = c_MessageBox.Execute();
 
@@ -652,23 +650,23 @@ void C_SyvUpPacListWidget::ImportConfig(void)
             //Error handling
             QString c_Details;
             C_OgeWiCustomMessage c_MessageResultSave(this, C_OgeWiCustomMessage::E_Type::eERROR);
-            c_MessageResultSave.SetHeading(C_GtGetText::h_GetText("Update Package configuration import"));
-            c_MessageResultSave.SetDescription(C_GtGetText::h_GetText("Could not load file."));
+            c_MessageResultSave.SetHeading("Update Package configuration import");
+            c_MessageResultSave.SetDescription("Could not load file.");
             switch (s32_Result)
             {
             case C_RD_WR:
-               c_Details = C_GtGetText::h_GetText("There are problems accessing the file system.\n"
-                                                  "For example, there may be no read access to the file.");
+               c_Details = "There are problems accessing the file system.\n"
+                                                  "For example, there may be no read access to the file.";
                break;
             case C_NOACT:
-               c_Details = C_GtGetText::h_GetText("A file is present but its structure is invalid.\n"
-                                                  "For example this can be caused by an invalid XML file.");
+               c_Details = "A file is present but its structure is invalid.\n"
+                                                  "For example this can be caused by an invalid XML file.";
                break;
             case C_CONFIG:
-               c_Details = C_GtGetText::h_GetText("Content of file is invalid or incomplete");
+               c_Details = "Content of file is invalid or incomplete";
                break;
             default:
-               c_Details = C_GtGetText::h_GetText("Error code: \n") + QString::number(s32_Result);
+               c_Details = "Error code: \n" + QString::number(s32_Result);
                break;
             }
             c_MessageResultSave.SetDetails(c_Details);
@@ -725,16 +723,15 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
    if (oq_SaveAsFile)
    {
       c_FilterName =
-         static_cast<QString>(C_GtGetText::h_GetText("openSYDE Service Update Package File")) +
+         static_cast<QString>("openSYDE Service Update Package File") +
          " (*" +
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 C_OscSupServiceUpdatePackageBase::h_GetPackageExtension().c_str())) + ")";
+         static_cast<QString>(C_OscSupServiceUpdatePackageBase::h_GetPackageExtension().c_str()) + ")";
 
-      c_DefaultFilename += C_GtGetText::h_GetText("_ServiceUpdatePackage");
+      c_DefaultFilename += "_ServiceUpdatePackage";
 
       if (oq_SecureFile)
       {
-         c_DefaultFilename += C_GtGetText::h_GetText("_Secure");
+         c_DefaultFilename += "_Secure";
       }
 
       c_DefaultFilename +=
@@ -742,13 +739,13 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
    }
    else
    {
-      c_FilterName = static_cast<QString>(C_GtGetText::h_GetText("Directories only")) + " *.";
+      c_FilterName = static_cast<QString>("Directories only") + " *.";
       c_DefaultFilename += "_ServiceUpdatePackage";
    }
 
    const QString c_Folder = this->m_GetDialogPath();
    const QString c_FullPackagePath =
-      C_OgeWiUtil::h_GetSaveFileName(this, C_GtGetText::h_GetText("Select Directory for Service Update Package"),
+      C_OgeWiUtil::h_GetSaveFileName(this, "Select Directory for Service Update Package",
                                      c_Folder, c_FilterName, c_DefaultFilename,
                                      QFileDialog::Options(), &c_SelectedFilterName);
 
@@ -766,9 +763,9 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
          if (remove(c_FullPackagePath.toStdString().c_str()) != 0)
          {
             C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eERROR);
-            c_MessageResult.SetHeading(C_GtGetText::h_GetText("Create Service Update Package"));
-            c_MessageResult.SetDescription(C_GtGetText::h_GetText("Could not delete old Service Update Package."));
-            c_MessageResult.SetDetails(C_GtGetText::h_GetText("Could not delete ") + c_FullPackagePath);
+            c_MessageResult.SetHeading("Create Service Update Package");
+            c_MessageResult.SetDescription("Could not delete old Service Update Package.");
+            c_MessageResult.SetDetails("Could not delete " + c_FullPackagePath);
             c_MessageResult.SetCustomMinHeight(180, 250);
             c_MessageResult.Execute();
 
@@ -859,8 +856,8 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
          if (s32_Return == C_NO_ERR)
          {
             C_OgeWiCustomMessage c_MessageResult(this);
-            c_MessageResult.SetHeading(C_GtGetText::h_GetText("Create Service Update Package"));
-            c_MessageResult.SetDescription(C_GtGetText::h_GetText("Service Update Package successfully created."));
+            c_MessageResult.SetHeading("Create Service Update Package");
+            c_MessageResult.SetDescription("Service Update Package successfully created.");
             c_MessageResult.SetDetails("Package saved at " +
                                        C_Uti::h_GetLink(mc_LastPath, mc_STYLE_GUIDE_COLOR_LINK, mc_LastPath));
             c_MessageResult.SetCustomMinHeight(180, 250);
@@ -869,21 +866,20 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
          else if (s32_Return == C_WARN)
          {
             C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eWARNING);
-            c_MessageResult.SetHeading(C_GtGetText::h_GetText("Create Service Update Package"));
-            c_MessageResult.SetDescription(C_GtGetText::h_GetText(
-                                              "Created Service Update Package but there are warnings.") +
+            c_MessageResult.SetHeading("Create Service Update Package");
+            c_MessageResult.SetDescription("Created Service Update Package but there are warnings." +
                                            this->mc_LastPath);
-            c_MessageResult.SetDetails(C_GtGetText::h_GetText(c_Warnings.GetText().c_str()));
+            c_MessageResult.SetDetails(c_Warnings.GetText().c_str());
             c_MessageResult.SetCustomMinHeight(250, 300);
             c_MessageResult.Execute();
          }
          else
          {
             C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eERROR);
-            c_MessageResult.SetHeading(C_GtGetText::h_GetText("Create Service Update Package"));
-            c_MessageResult.SetDescription(C_GtGetText::h_GetText("Could not create Service Update Package!"));
-            c_MessageResult.SetDetails(C_GtGetText::h_GetText("Error code: ") + QString::number(s32_Return) + "\n" +
-                                       C_GtGetText::h_GetText(c_Error.c_str()));
+            c_MessageResult.SetHeading("Create Service Update Package");
+            c_MessageResult.SetDescription("Could not create Service Update Package!");
+            c_MessageResult.SetDetails("Error code: " + QString::number(s32_Return) + "\n" +
+                                       c_Error.c_str());
             c_MessageResult.SetCustomMinHeight(180, 250);
             c_MessageResult.Execute();
          }
@@ -1081,18 +1077,15 @@ const
       // No applications for updating
       s32_Return = C_NOACT;
 
-      osc_write_log_info("Generate Update Package", C_GtGetText::h_GetText(
-                            "Generate Update Package: No applications for updating."));
+      osc_write_log_info("Generate Update Package", "Generate Update Package: No applications for updating.");
    }
    else if (s32_Return == C_NOACT)
    {
-      osc_write_log_info("Generate Update Package", C_GtGetText::h_GetText(
-                            "Generate Update Package: No active nodes in the System View."));
+      osc_write_log_info("Generate Update Package", "Generate Update Package: No active nodes in the System View.");
    }
    else if (s32_Return == C_CONFIG)
    {
-      osc_write_log_info("Generate Update Package", C_GtGetText::h_GetText(
-                            "Generate Update Package: View configuration is invalid."));
+      osc_write_log_info("Generate Update Package", "Generate Update Package: View configuration is invalid.");
    }
    else
    {
@@ -1151,7 +1144,7 @@ void C_SyvUpPacListWidget::paintEvent(QPaintEvent * const opc_Event)
       // show a tip for adding a datapool
       QPen c_Pen = c_Painter.pen();
       QFont c_Font;
-      const QString c_Text = C_GtGetText::h_GetText("There are no active nodes to be updated.");
+      const QString c_Text = "There are no active nodes to be updated.";
 
       // configure color
       c_Pen.setColor(mc_STYLE_GUIDE_COLOR_8);
@@ -1353,17 +1346,17 @@ void C_SyvUpPacListWidget::m_OnCustomContextMenuRequested(const QPoint & orc_Pos
             this->mpc_SkipUpdateOfFile->setVisible(true);
             if (this->mpc_SelectedApp->GetSkipOfUpdateFile() == true)
             {
-               this->mpc_SkipUpdateOfFile->setText(C_GtGetText::h_GetText("Unskip Update of this File"));
+               this->mpc_SkipUpdateOfFile->setText("Unskip Update of this File");
             }
             else
             {
-               this->mpc_SkipUpdateOfFile->setText(C_GtGetText::h_GetText("Skip Update of this File"));
+               this->mpc_SkipUpdateOfFile->setText("Skip Update of this File");
             }
 
             this->mpc_RemoveFileAction->setVisible(true);
             this->mpc_RemoveFileAction->setEnabled(
                (this->mpc_SelectedSection->Type() != mu32_UPDATE_PACKAGE_NODE_SECTION_TYPE_DATABLOCK) ||
-               (this->mpc_SelectedApp->GetAppFilePath() != C_GtGetText::h_GetText("<Add File>")));
+               (this->mpc_SelectedApp->GetAppFilePath() != "<Add File>"));
             this->mpc_ShowFileInfoAction->setEnabled(this->mpc_SelectedApp->IsViewFileInfoPossible());
             this->mpc_ShowFileInfoAction->setVisible(true);
             this->mpc_RemoveAllNodeFilesAction->setVisible(false);
@@ -1408,46 +1401,46 @@ void C_SyvUpPacListWidget::m_SetupContextMenu(void)
    mpc_ContextMenu = new stw::opensyde_gui_elements::C_OgeContextMenu(this);
 
    this->mpc_SelectFileAction = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Select File"), this,  &C_SyvUpPacListWidget::m_SelectFile);
+      "Select File", this,  &C_SyvUpPacListWidget::m_SelectFile);
 
    this->mpc_AddFileAction = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Add new Files"), this, &C_SyvUpPacListWidget::m_AddFileAction);
+      "Add new Files", this, &C_SyvUpPacListWidget::m_AddFileAction);
 
    this->mpc_RevertFileAction = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Revert to Default"), this, &C_SyvUpPacListWidget::m_RevertFile);
+      "Revert to Default", this, &C_SyvUpPacListWidget::m_RevertFile);
 
    this->mpc_ContextMenu->addSeparator();
 
    this->mpc_ShowFileInfoAction = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("View File Information"), this, &C_SyvUpPacListWidget::m_ViewFileInfo);
+      "View File Information", this, &C_SyvUpPacListWidget::m_ViewFileInfo);
 
    this->mpc_ContextMenu->addSeparator();
 
    this->mpc_HideShowOptionalSectionsAction = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Hide Empty Optional Sections"), this,
+      "Hide Empty Optional Sections", this,
       &C_SyvUpPacListWidget::m_HideShowOptionalSections);
 
    this->mpc_ShowInExplorerAction = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Show in Explorer"), this,
+      "Show in Explorer", this,
       &C_SyvUpPacListWidget::m_ShowInExplorer);
 
    this->mpc_ContextMenu->addSeparator();
 
    this->mpc_SkipUpdateOfFile = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Skip/Unskip Update of this File"), this,
+      "Skip/Unskip Update of this File", this,
       &C_SyvUpPacListWidget::m_SkipUpdateOfFile);
 
    this->mpc_ContextMenu->addSeparator();
 
    this->mpc_RemoveFileAction = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Remove File"), this, &C_SyvUpPacListWidget::m_RemoveFile);
+      "Remove File", this, &C_SyvUpPacListWidget::m_RemoveFile);
 
    this->mpc_RemoveAllSectionFilesAction = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Remove all Files of this Section"),
+      "Remove all Files of this Section",
       this, &C_SyvUpPacListWidget::m_RemoveAllSectionFiles);
 
    this->mpc_RemoveAllNodeFilesAction = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Remove all Files"), this, &C_SyvUpPacListWidget::m_RemoveAllNodeFiles);
+      "Remove all Files", this, &C_SyvUpPacListWidget::m_RemoveAllNodeFiles);
 
    this->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -1469,15 +1462,15 @@ void C_SyvUpPacListWidget::m_AddFileAction(void)
       if (this->mpc_SelectedNode->IsFileBased() == false)
       {
          // No file based and a openSYDE device, only parameter set image and PEM files are possible to add
-         this->m_AddNewFile(C_GtGetText::h_GetText("Add openSYDE parameter set image or PEM file"),
-                            static_cast<QString>(C_GtGetText::h_GetText("Parameter set image/PEM file")) +
+         this->m_AddNewFile("Add openSYDE parameter set image or PEM file",
+                            static_cast<QString>("Parameter set image/PEM file") +
                             " (*.syde_psi *.pem)");
       }
       else
       {
          // File based device. All is possible. A parameter set image file will be added by file extension
-         this->m_AddNewFile(C_GtGetText::h_GetText("Add File"),
-                            static_cast<QString>(C_GtGetText::h_GetText("All files")) + " (*.*)");
+         this->m_AddNewFile("Add File",
+                            static_cast<QString>("All files") + " (*.*)");
       }
    }
 }
@@ -1521,11 +1514,10 @@ void C_SyvUpPacListWidget::m_AddNewFile(const QString & orc_DialogCaption, const
                {
                   // Only PEM and PSI files are allowed in non-filebased-case
                   const QString c_Details =
-                     static_cast<QString>(C_GtGetText::h_GetText("File path: %1")).arg(c_Files[s32_Pos]);
+                     static_cast<QString>("File path: %1").arg(c_Files[s32_Pos]);
                   C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                  c_Message.SetHeading(C_GtGetText::h_GetText("Update Package Configuration"));
-                  c_Message.SetDescription(C_GtGetText::h_GetText(
-                                              "Invalid file: only *.syde_psi and *.pem files are allowed."));
+                  c_Message.SetHeading("Update Package Configuration");
+                  c_Message.SetDescription("Invalid file: only *.syde_psi and *.pem files are allowed.");
                   c_Message.SetDetails(c_Details);
                   c_Message.SetCustomMinHeight(180, 250);
                   c_Message.Execute();
@@ -1569,22 +1561,22 @@ void C_SyvUpPacListWidget::m_SelectFile(void)
          case mu32_UPDATE_PACKAGE_NODE_SECTION_TYPE_DATABLOCK:
             if (this->mpc_SelectedNode->IsFileBased() == false)
             {
-               c_Filter = static_cast<QString>(C_GtGetText::h_GetText("HEX files")) + " (*.hex);;" + c_Filter;
+               c_Filter = static_cast<QString>("HEX files") + " (*.hex);;" + c_Filter;
                q_HexFile = true;
             }
             else
             {
-               c_Filter = static_cast<QString>(C_GtGetText::h_GetText("All files")) + " (*.*)";
+               c_Filter = static_cast<QString>("All files") + " (*.*)";
             }
             break;
          case mu32_UPDATE_PACKAGE_NODE_SECTION_TYPE_PARAMSET:
-            c_Filter = static_cast<QString>(C_GtGetText::h_GetText("openSYDE parameter set image")) + " (*.syde_psi)";
+            c_Filter = static_cast<QString>("openSYDE parameter set image") + " (*.syde_psi)";
             break;
          case mu32_UPDATE_PACKAGE_NODE_SECTION_TYPE_PEM:
-            c_Filter = static_cast<QString>(C_GtGetText::h_GetText("PEM file")) + " (*.pem)";
+            c_Filter = static_cast<QString>("PEM file") + " (*.pem)";
             break;
          case mu32_UPDATE_PACKAGE_NODE_SECTION_TYPE_FILE:
-            c_Filter = static_cast<QString>(C_GtGetText::h_GetText("All files")) + " (*.*)";
+            c_Filter = static_cast<QString>("All files") + " (*.*)";
             break;
          default:
             tgl_assert(false);
@@ -1594,7 +1586,7 @@ void C_SyvUpPacListWidget::m_SelectFile(void)
          if (c_Filter != "")
          {
             const QString c_DefaultSuffix = q_HexFile ? "hex" : "";
-            QString c_File = C_OgeWiUtil::h_GetOpenFileName(this, C_GtGetText::h_GetText("Select File"),
+            QString c_File = C_OgeWiUtil::h_GetOpenFileName(this, "Select File",
                                                             c_Folder, c_Filter, c_DefaultSuffix);
             if (c_File != "")
             {
@@ -1630,10 +1622,10 @@ void C_SyvUpPacListWidget::m_RemoveFile(void)
    if ((this->mpc_SelectedNode != NULL) && (this->mpc_SelectedApp != NULL))
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Remove file"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to remove ") +
+      c_MessageBox.SetHeading("Remove file");
+      c_MessageBox.SetDescription("Do you really want to remove " +
                                   this->mpc_SelectedApp->GetAppFilePath() +
-                                  C_GtGetText::h_GetText(" from the Update Package?"));
+                                  " from the Update Package?");
       c_MessageBox.SetOkButtonText("Remove");
       c_MessageBox.SetNoButtonText("Keep");
       c_MessageBox.SetCustomMinHeight(180, 180);
@@ -1671,18 +1663,18 @@ void C_SyvUpPacListWidget::m_RemoveAllSectionFiles(void)
       switch (this->mpc_SelectedSection->Type())
       {
       case mu32_UPDATE_PACKAGE_NODE_SECTION_TYPE_DATABLOCK:
-         c_Section = C_GtGetText::h_GetText("Data Blocks");
+         c_Section = "Data Blocks";
          break;
       case mu32_UPDATE_PACKAGE_NODE_SECTION_TYPE_FILE:
-         c_Section = C_GtGetText::h_GetText("Files");
+         c_Section = "Files";
          break;
       default:
          tgl_assert(false);
          break;
       }
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Remove files"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to remove all files of section \"") +
-                                  c_Section + C_GtGetText::h_GetText("\" from the Update Package?"));
+      c_MessageBox.SetHeading("Remove files");
+      c_MessageBox.SetDescription("Do you really want to remove all files of section \"" +
+                                  c_Section + "\" from the Update Package?");
       c_MessageBox.SetOkButtonText("Remove");
       c_MessageBox.SetNoButtonText("Keep");
       c_MessageBox.SetCustomMinHeight(180, 180);
@@ -1708,10 +1700,10 @@ void C_SyvUpPacListWidget::m_RemoveAllNodeFiles(void)
    if (this->mpc_SelectedNode != NULL)
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Remove files"));
+      c_MessageBox.SetHeading("Remove files");
       c_MessageBox.SetDescription(
-         C_GtGetText::h_GetText("Do you really want to remove all files of node \"") +
-         this->mpc_SelectedNode->GetNodeName() + C_GtGetText::h_GetText("\" from the Update Package?"));
+         "Do you really want to remove all files of node \"" +
+         this->mpc_SelectedNode->GetNodeName() + "\" from the Update Package?");
       c_MessageBox.SetOkButtonText("Remove");
       c_MessageBox.SetNoButtonText("Keep");
       c_MessageBox.SetCustomMinHeight(180, 180);
@@ -1737,13 +1729,13 @@ void C_SyvUpPacListWidget::m_HideShowOptionalSections(void)
    // update menu text
    if (this->mq_EmptyOptionalSectionsVisible == true)
    {
-      c_Help = C_GtGetText::h_GetText("Hide ");
+      c_Help = "Hide ";
    }
    else
    {
-      c_Help = C_GtGetText::h_GetText("Show ");
+      c_Help = "Show ";
    }
-   this->mpc_HideShowOptionalSectionsAction->setText(c_Help + C_GtGetText::h_GetText("Empty Optional Sections"));
+   this->mpc_HideShowOptionalSectionsAction->setText(c_Help + "Empty Optional Sections");
 
    // adapt all node widgets
    for (s32_Counter = 0; s32_Counter < this->count(); ++s32_Counter)

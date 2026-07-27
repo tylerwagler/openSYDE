@@ -19,11 +19,9 @@
 
 #include "C_OgeLabContextMenuBase.hpp"
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_elements;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -74,14 +72,14 @@ void C_OgeLabContextMenuBase::m_SetupContextMenu(void)
    this->mpc_ContextMenu->clear();
 
    // add the actions
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Copy"),
+   this->mpc_ContextMenu->addAction("Copy",
                                     this,
                                     &C_OgeLabContextMenuBase::m_Copy,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_C));
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Select All"),
+   this->mpc_ContextMenu->addAction("Select All",
                                     this,
                                     &C_OgeLabContextMenuBase::m_SelectAll,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_A));

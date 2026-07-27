@@ -14,7 +14,6 @@
 #include "TglUtils.hpp"
 #include "C_Uti.hpp"
 #include "C_SdUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdBueMessageRxEntry.hpp"
 #include "ui_C_SdBueMessageRxEntry.h"
 
@@ -110,11 +109,11 @@ void C_SdBueMessageRxEntry::InitStaticNames(void) const
    this->mpc_Ui->pc_LabelTimeoutLink->setContextMenuPolicy(Qt::NoContextMenu);
 
    this->mpc_Ui->pc_LabelTimeoutLink->SetToolTipInformation(
-      C_GtGetText::h_GetText("Timeout"),
-      C_GtGetText::h_GetText("This property is relevant for source code file generation. "
+      "Timeout",
+      "This property is relevant for source code file generation. "
                              "\nWithin this interval a valid message should be received. "
                              "\nOtherwise the COMM stack (implemented on device) will report an "
-                             "error."));
+                             "error.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -404,7 +403,7 @@ void C_SdBueMessageRxEntry::SetSpecificToolTip(const QString & orc_Tooltip)
    if (orc_Tooltip != "")
    {
       this->mpc_Ui->pc_LabelTimeoutLink->SetToolTipInformation(
-         C_GtGetText::h_GetText("Timeout"),
+         "Timeout",
          orc_Tooltip);
    }
 }
@@ -934,23 +933,23 @@ void C_SdBueMessageRxEntry::m_UpdateTimeoutLink(void) const
    QString c_LinkText;
 
    // Timeout info as link text
-   c_LinkText = C_GtGetText::h_GetText("Timeout: ");
+   c_LinkText = "Timeout: ";
 
    if (this->me_ReceiveTimeoutMode == C_PuiSdNodeCanMessage::eRX_TIMEOUT_MODE_DISABLED)
    {
-      c_LinkText += C_GtGetText::h_GetText("Disabled");
+      c_LinkText += "Disabled";
    }
    else
    {
       if (this->me_ReceiveTimeoutMode == C_PuiSdNodeCanMessage::eRX_TIMEOUT_MODE_AUTO)
       {
          c_LinkText += QString::number(this->mu32_AutoReceiveTimeoutValue);
-         c_LinkText += C_GtGetText::h_GetText(" ms (Auto)");
+         c_LinkText += " ms (Auto)";
       }
       else
       {
          c_LinkText += QString::number(this->mu32_ReceiveTimeoutValue);
-         c_LinkText += C_GtGetText::h_GetText(" ms (Custom)");
+         c_LinkText += " ms (Custom)";
       }
    }
 

@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscParamSetHandler.hpp"
 #include "C_SyvUpPacParamSetFileInfo.hpp"
@@ -139,7 +138,7 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
       //Node
       //Node name
       this->m_CompareString(rc_InterpretedNode.c_Name.c_str(),
-                            pc_Node->c_Properties.c_Name.c_str(), C_GtGetText::h_GetText("Node name"), 0UL);
+                            pc_Node->c_Properties.c_Name.c_str(), "Node name", 0UL);
       for (uint32_t u32_ItInDp = 0UL; u32_ItInDp < rc_InterpretedNode.c_DataPools.size(); ++u32_ItInDp)
       {
          //Datapools
@@ -156,35 +155,35 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
                q_DpMatch = true;
                //Datapool name
                this->m_CompareString(rc_InDp.c_DataPoolInfo.c_Name.c_str(),
-                                     rc_NoDp.c_Name.c_str(), C_GtGetText::h_GetText("Datapool name"), 1UL);
+                                     rc_NoDp.c_Name.c_str(), "Datapool name", 1UL);
                rc_NoDp.CalcGeneratedDefinitionHash(u32_DpHash);
                //Datapool CRC
                this->m_CompareString(static_cast<QString>("0x%1").arg(rc_InDp.c_DataPoolInfo.u32_DataPoolCrc, 0, 16),
                                      static_cast<QString>("0x%1").arg(u32_DpHash, 0, 16),
-                                     C_GtGetText::h_GetText("Datapool CRC"),
+                                     "Datapool CRC",
                                      1UL);
                //Datapool NVM start address
                if (oq_OptionlContentMissing)
                {
-                  c_Value = C_GtGetText::h_GetText("unknown");
+                  c_Value = "unknown";
                }
                else
                {
                   c_Value = static_cast<QString>("%1").arg(rc_NoDp.u32_NvmStartAddress);
                }
                this->m_CompareString(static_cast<QString>("%1").arg(rc_InDp.c_DataPoolInfo.u32_NvmStartAddress),
-                                     c_Value, C_GtGetText::h_GetText("Datapool NVM start address"), 1UL);
+                                     c_Value, "Datapool NVM start address", 1UL);
                //Datapool NVM size
                if (oq_OptionlContentMissing)
                {
-                  c_Value = C_GtGetText::h_GetText("unknown");
+                  c_Value = "unknown";
                }
                else
                {
                   c_Value = static_cast<QString>("%1").arg(rc_NoDp.u32_NvmSize);
                }
                this->m_CompareString(static_cast<QString>("%1").arg(rc_InDp.c_DataPoolInfo.u32_NvmSize),
-                                     c_Value, C_GtGetText::h_GetText("Datapool NVM size"), 1UL);
+                                     c_Value, "Datapool NVM size", 1UL);
                //Datapool version
                this->m_CompareString(C_SyvUpPacParamSetFileInfo::mh_GetVersionString(rc_InDp.c_DataPoolInfo.au8_Version[
                                                                                         0],
@@ -195,7 +194,7 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
                                      C_SyvUpPacParamSetFileInfo::mh_GetVersionString(rc_NoDp.au8_Version[0],
                                                                                      rc_NoDp.au8_Version[1],
                                                                                      rc_NoDp.au8_Version[2]),
-                                     C_GtGetText::h_GetText("Datapool version"), 1UL);
+                                     "Datapool version", 1UL);
                for (uint32_t u32_ItInLi = 0UL; u32_ItInLi < rc_InDp.c_Lists.size(); ++u32_ItInLi)
                {
                   //Lists
@@ -210,17 +209,17 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
                         q_LiMatch = true;
                         //List name
                         this->m_CompareString(rc_InLi.c_Name.c_str(), rc_NoLi.c_Name.c_str(),
-                                              C_GtGetText::h_GetText("List name"), 2UL);
+                                              "List name", 2UL);
                         //List elements
                         this->m_CompareString(static_cast<QString>("%1").arg(rc_InLi.c_Elements.size()),
                                               static_cast<QString>("%1").arg(rc_NoLi.c_Elements.size()),
-                                              C_GtGetText::h_GetText("Number of elements in list"), 2UL);
+                                              "Number of elements in list", 2UL);
                         break;
                      }
                   }
                   if (q_LiMatch == false)
                   {
-                     this->m_DisplayNoMatch(rc_InLi.c_Name.c_str(), C_GtGetText::h_GetText("List name"), 2UL);
+                     this->m_DisplayNoMatch(rc_InLi.c_Name.c_str(), "List name", 2UL);
                   }
                }
                break;
@@ -228,7 +227,7 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
          }
          if (q_DpMatch == false)
          {
-            this->m_DisplayNoMatch(rc_InDp.c_DataPoolInfo.c_Name.c_str(), C_GtGetText::h_GetText("Datapool name"), 1UL);
+            this->m_DisplayNoMatch(rc_InDp.c_DataPoolInfo.c_Name.c_str(), "Datapool name", 1UL);
          }
       }
    }
@@ -247,80 +246,79 @@ void C_SyvUpPacParamSetFileInfo::m_ConvertToHtmlString(const bool oq_OptionlCont
    this->mc_ComparisonHtml.clear();
 
    //File information
-   this->mc_ComparisonHtml += "<h3>" + static_cast<QString>(C_GtGetText::h_GetText("Meta information")) + "</h3>";
+   this->mc_ComparisonHtml += "<h3>" + static_cast<QString>("Meta information") + "</h3>";
    this->mc_ComparisonHtml += "<table>";
 
    if (oq_OptionlContentMissing)
    {
-      c_Value = C_GtGetText::h_GetText("unknown");
+      c_Value = "unknown";
    }
    else
    {
       c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_DateTime.c_str();
    }
-   this->m_AddTableRow(C_GtGetText::h_GetText("Created:"), c_Value);
+   this->m_AddTableRow("Created:", c_Value);
    if (oq_OptionlContentMissing)
    {
-      c_Value = C_GtGetText::h_GetText("unknown");
+      c_Value = "unknown";
    }
    else
    {
       c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_Creator.c_str();
    }
-   this->m_AddTableRow(C_GtGetText::h_GetText("Creator:"), c_Value);
+   this->m_AddTableRow("Creator:", c_Value);
    if (oq_OptionlContentMissing)
    {
-      c_Value = C_GtGetText::h_GetText("unknown");
+      c_Value = "unknown";
    }
    else
    {
       c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ToolName.c_str();
    }
-   this->m_AddTableRow(C_GtGetText::h_GetText("Tool name:"), c_Value);
+   this->m_AddTableRow("Tool name:", c_Value);
    if (oq_OptionlContentMissing)
    {
-      c_Value = C_GtGetText::h_GetText("unknown");
+      c_Value = "unknown";
    }
    else
    {
       c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ToolVersion.c_str();
    }
-   this->m_AddTableRow(C_GtGetText::h_GetText("Tool version:"), c_Value);
+   this->m_AddTableRow("Tool version:", c_Value);
    if (oq_OptionlContentMissing)
    {
-      c_Value = C_GtGetText::h_GetText("unknown");
+      c_Value = "unknown";
    }
    else
    {
       c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ProjectName.c_str();
    }
-   this->m_AddTableRow(C_GtGetText::h_GetText("Project name:"), c_Value);
+   this->m_AddTableRow("Project name:", c_Value);
    if (oq_OptionlContentMissing)
    {
-      c_Value = C_GtGetText::h_GetText("unknown");
+      c_Value = "unknown";
    }
    else
    {
       c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ProjectVersion.c_str();
    }
-   this->m_AddTableRow(C_GtGetText::h_GetText("Project version:"), c_Value);
+   this->m_AddTableRow("Project version:", c_Value);
    if (oq_OptionlContentMissing)
    {
-      c_Value = C_GtGetText::h_GetText("unknown");
+      c_Value = "unknown";
    }
    else
    {
       c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_UserComment.c_str();
    }
-   this->m_AddTableRow(C_GtGetText::h_GetText("Comment:"), c_Value);
+   this->m_AddTableRow("Comment:", c_Value);
 
    this->mc_ComparisonHtml += "</table>";
 
    //Comparison
-   this->mc_ComparisonHtml += "<h3>" + static_cast<QString>(C_GtGetText::h_GetText("Comparison result")) + "</h3>";
+   this->mc_ComparisonHtml += "<h3>" + static_cast<QString>("Comparison result") + "</h3>";
    this->mc_ComparisonHtml += "<p>" +
-                              static_cast<QString>(C_GtGetText::h_GetText(
-                                                      "Compare selected file with current SYSTEM DEFINITION.")) +
+                              static_cast<QString>("Compare selected file with current SYSTEM DEFINITION.") +
                               "</p>";
    this->mc_ComparisonHtml += "<table>";
 
@@ -330,28 +328,28 @@ void C_SyvUpPacParamSetFileInfo::m_ConvertToHtmlString(const bool oq_OptionlCont
    //Description
    this->mc_ComparisonHtml += C_SyvUpPacParamSetFileInfo::mhc_START_HEADING_TD;
    this->mc_ComparisonHtml += "<b>";
-   this->mc_ComparisonHtml += C_GtGetText::h_GetText("Description");
+   this->mc_ComparisonHtml += "Description";
    this->mc_ComparisonHtml += "</b>";
    this->mc_ComparisonHtml += "</td>";
 
    //File
    this->mc_ComparisonHtml += C_SyvUpPacParamSetFileInfo::mhc_CONTINUE_HEADING_TD;
    this->mc_ComparisonHtml += "<b>";
-   this->mc_ComparisonHtml += C_GtGetText::h_GetText("File value");
+   this->mc_ComparisonHtml += "File value";
    this->mc_ComparisonHtml += "</b>";
    this->mc_ComparisonHtml += "</td>";
 
    //SD
    this->mc_ComparisonHtml += C_SyvUpPacParamSetFileInfo::mhc_CONTINUE_HEADING_TD;
    this->mc_ComparisonHtml += "<b>";
-   this->mc_ComparisonHtml += C_GtGetText::h_GetText("SYSTEM DEFINITION value");
+   this->mc_ComparisonHtml += "SYSTEM DEFINITION value";
    this->mc_ComparisonHtml += "</b>";
    this->mc_ComparisonHtml += "</td>";
 
    //Result
    this->mc_ComparisonHtml += C_SyvUpPacParamSetFileInfo::mhc_CONTINUE_HEADING_TD;
    this->mc_ComparisonHtml += "<b>";
-   this->mc_ComparisonHtml += C_GtGetText::h_GetText("Comparison result");
+   this->mc_ComparisonHtml += "Comparison result";
    this->mc_ComparisonHtml += "</b>";
    this->mc_ComparisonHtml += "</td>";
 
@@ -426,7 +424,7 @@ void C_SyvUpPacParamSetFileInfo::m_DisplayNoMatch(const QString & orc_Item, cons
 
    //Value
    c_Description.c_FileValue = orc_Item;
-   c_Description.c_SdValue = C_GtGetText::h_GetText("not found");
+   c_Description.c_SdValue = "not found";
 
    //Result
    c_Description.e_ResultType = C_SyvUpPacParamSetFileInfoComparisonDescription::eRT_NOT_FOUND;

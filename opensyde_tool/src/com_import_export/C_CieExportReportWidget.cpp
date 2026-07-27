@@ -15,7 +15,6 @@
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_CieExportReportWidget.hpp"
 #include "ui_C_CieExportReportWidget.h"
@@ -71,8 +70,8 @@ C_CieExportReportWidget::C_CieExportReportWidget(stw::opensyde_gui_elements::C_O
 
    // set main title
    this->mrc_ParentDialog.SetTitle(
-      static_cast<QString>(C_GtGetText::h_GetText("%1 File Export")).arg(c_FileInfo.completeSuffix().toUpper()));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Report"));
+      static_cast<QString>("%1 File Export").arg(c_FileInfo.completeSuffix().toUpper()));
+   this->mrc_ParentDialog.SetSubTitle("Report");
 
    // connects
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
@@ -96,8 +95,8 @@ C_CieExportReportWidget::~C_CieExportReportWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieExportReportWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelHeadingReport->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_LabelHeadingReport->setText("Details");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -176,11 +175,11 @@ void C_CieExportReportWidget::m_BuildReport(void)
    c_CompleteLog += "<body>";
    //File
    c_CompleteLog += "<h3>";
-   c_CompleteLog += C_GtGetText::h_GetText("DBC File Information");
+   c_CompleteLog += "DBC File Information";
    c_CompleteLog += "</h3>";
    c_CompleteLog += "<table><tr>";
    c_CompleteLog += C_CieExportReportWidget::mhc_HTML_TABLE_DATA_START;
-   c_CompleteLog += C_GtGetText::h_GetText("Path:");
+   c_CompleteLog += "Path:";
    c_CompleteLog += "</td>";
    c_CompleteLog += C_CieExportReportWidget::mhc_HTML_TABLE_DATA_START;
    c_CompleteLog += static_cast<QString>("<a href=\"file:%1\"><span style=\"color: %2;\">%3</span></a>").
@@ -190,28 +189,28 @@ void C_CieExportReportWidget::m_BuildReport(void)
    c_CompleteLog += "</td></tr><tr>";
    //Content
    c_CompleteLog += C_CieExportReportWidget::mhc_HTML_TABLE_DATA_START;
-   c_CompleteLog += C_GtGetText::h_GetText("Content written:");
+   c_CompleteLog += "Content written:";
    c_CompleteLog += "</td>";
    c_CompleteLog += C_CieExportReportWidget::mhc_HTML_TABLE_DATA_START;
    //Add node mapping
-   c_CompleteLog += static_cast<QString>(C_GtGetText::h_GetText(c_Nodes.c_str()));
+   c_CompleteLog += static_cast<QString>(c_Nodes.c_str());
    c_CompleteLog += "<br/>";
    //Translation: 1=Number of Tx messages, 2=Number of Rx messages
-   c_CompleteLog += static_cast<QString>(C_GtGetText::h_GetText("Messages: %1;")).arg(
+   c_CompleteLog += static_cast<QString>("Messages: %1;").arg(
       this->mc_ExportStatistic.u32_NumOfMessages);
    //Translation: 1=Number of signals
-   c_CompleteLog += static_cast<QString>(C_GtGetText::h_GetText(" Signals: %1")).arg(
+   c_CompleteLog += static_cast<QString>(" Signals: %1").arg(
       this->mc_ExportStatistic.u32_NumOfSignals);
    // add warnings
-   c_CompleteLog += static_cast<QString>(C_GtGetText::h_GetText(c_Warnings.c_str()));
+   c_CompleteLog += static_cast<QString>(c_Warnings.c_str());
    c_CompleteLog += "<br/><br/>";
-   c_CompleteLog += C_GtGetText::h_GetText("For detailed information see ");
+   c_CompleteLog += "For detailed information see ";
    //Update log file
    C_OscLoggingHandler::h_Flush();
    c_CompleteLog += static_cast<QString>("<a href=\"file:%1\"><span style=\"color: %2;\">%3</span></a>.").
                     arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()).
                     arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
-                    arg(C_GtGetText::h_GetText("log file"));
+                    arg("log file");
    c_CompleteLog += "</td></tr></table>";
    //End
    c_CompleteLog += "</body>";

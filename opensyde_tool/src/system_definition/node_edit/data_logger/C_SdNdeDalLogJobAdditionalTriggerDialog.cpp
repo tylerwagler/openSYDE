@@ -19,7 +19,6 @@
 #include "../../../system_views/dashboards/properties/C_SyvDaPeDataElementBrowse.hpp"
 #include "TglUtils.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdNdeDalTriggerCheckHelper.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -107,18 +106,17 @@ C_SdNdeDalLogJobAdditionalTriggerDialog::~C_SdNdeDalLogJobAdditionalTriggerDialo
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobAdditionalTriggerDialog::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText(this->mc_LogJobName.toStdString().c_str()));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Additional Trigger"));
-   this->mpc_Ui->pc_LabelSettings->setText(C_GtGetText::h_GetText("Additional Trigger"));
-   this->mpc_Ui->pc_LabelSample->setText(C_GtGetText::h_GetText(
-                                            "Supported expressions: >, <, ==, >=, <=, !, &&, ||, (). \n"
-                                            "Example: (NodeA::DP1::List1::Var1 > NodeB::DP2::List2::Var2) && Node3::DP3::List3::Var3 == 1"));
-   this->mpc_Ui->pc_LabelNamingCheck->setText(C_GtGetText::h_GetText("Data Elements Naming Check"));
-   this->mpc_Ui->pc_LabelSyntaxCheck->setText(C_GtGetText::h_GetText("Condition Syntax Check"));
-   this->mpc_Ui->pc_PbAddDataElement->setText(C_GtGetText::h_GetText("Add Data Element"));
-   this->mpc_Ui->pc_LabelNamingCheckResult->setText(C_GtGetText::h_GetText("-"));
-   this->mpc_Ui->pc_LabelSyntaxCheckResult->setText(C_GtGetText::h_GetText("-"));
-   this->mpc_Ui->pc_LabelTriggerCondition->setText(C_GtGetText::h_GetText("Condition"));
+   this->mrc_ParentDialog.SetTitle(this->mc_LogJobName);
+   this->mrc_ParentDialog.SetSubTitle("Additional Trigger");
+   this->mpc_Ui->pc_LabelSettings->setText("Additional Trigger");
+   this->mpc_Ui->pc_LabelSample->setText("Supported expressions: >, <, ==, >=, <=, !, &&, ||, (). \n"
+                                            "Example: (NodeA::DP1::List1::Var1 > NodeB::DP2::List2::Var2) && Node3::DP3::List3::Var3 == 1");
+   this->mpc_Ui->pc_LabelNamingCheck->setText("Data Elements Naming Check");
+   this->mpc_Ui->pc_LabelSyntaxCheck->setText("Condition Syntax Check");
+   this->mpc_Ui->pc_PbAddDataElement->setText("Add Data Element");
+   this->mpc_Ui->pc_LabelNamingCheckResult->setText("-");
+   this->mpc_Ui->pc_LabelSyntaxCheckResult->setText("-");
+   this->mpc_Ui->pc_LabelTriggerCondition->setText("Condition");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -147,9 +145,8 @@ void C_SdNdeDalLogJobAdditionalTriggerDialog::m_OkClicked()
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
 
       // Show message
-      c_Message.SetHeading(C_GtGetText::h_GetText("Trigger Condition"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "Trigger condition checks have failed. Please correct the condition."));
+      c_Message.SetHeading("Trigger Condition");
+      c_Message.SetDescription("Trigger condition checks have failed. Please correct the condition.");
       c_Message.SetCustomMinHeight(180, 270);
       c_Message.Execute();
    }
@@ -257,7 +254,7 @@ void C_SdNdeDalLogJobAdditionalTriggerDialog::m_AddDataElementClicked()
                // if previous trigger condition exists, append the data element
                else
                {
-                  const QString c_DataElement = static_cast<QString>(C_GtGetText::h_GetText("%1")).arg(
+                  const QString c_DataElement = static_cast<QString>("%1").arg(
                      c_ElementName);
                   c_TriggerCondition.append(c_DataElement);
                }
@@ -312,30 +309,28 @@ void C_SdNdeDalLogJobAdditionalTriggerDialog::m_ValidateTriggerCondition()
 
       if (q_AreVariablesValid == true)
       {
-         this->mpc_Ui->pc_LabelNamingCheckResult->setText(C_GtGetText::h_GetText("PASS"));
+         this->mpc_Ui->pc_LabelNamingCheckResult->setText("PASS");
       }
       else
       {
-         this->mpc_Ui->pc_LabelNamingCheckResult->setText(static_cast<QString>(C_GtGetText::h_GetText("FAIL: %1")).arg(
+         this->mpc_Ui->pc_LabelNamingCheckResult->setText(static_cast<QString>("FAIL: %1").arg(
                                                              c_ErrorString.c_str()));
       }
 
       if (q_IsSyntaxValid == true)
       {
-         this->mpc_Ui->pc_LabelSyntaxCheckResult->setText(C_GtGetText::h_GetText("PASS"));
+         this->mpc_Ui->pc_LabelSyntaxCheckResult->setText("PASS");
       }
       else
       {
-         this->mpc_Ui->pc_LabelSyntaxCheckResult->setText(static_cast<QString>(C_GtGetText::h_GetText("FAIL: %1")).arg(
+         this->mpc_Ui->pc_LabelSyntaxCheckResult->setText(static_cast<QString>("FAIL: %1").arg(
                                                              c_ErrorString.c_str()));
       }
    }
    else
    {
-      this->mpc_Ui->pc_LabelNamingCheckResult->setText(C_GtGetText::h_GetText(
-                                                          "-"));
-      this->mpc_Ui->pc_LabelSyntaxCheckResult->setText(C_GtGetText::h_GetText(
-                                                          "-"));
+      this->mpc_Ui->pc_LabelNamingCheckResult->setText("-");
+      this->mpc_Ui->pc_LabelSyntaxCheckResult->setText("-");
    }
 }
 

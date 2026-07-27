@@ -48,6 +48,7 @@ public:
    bool CheckAndHandleKey(const QString & orc_Input) const;
 
    void ExpandMessageGen(const bool oq_Expand) const;
+   void SetDlcMaximum(const uint16_t ou16_Max);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

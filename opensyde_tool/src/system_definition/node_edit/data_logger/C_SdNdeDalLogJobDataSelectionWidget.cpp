@@ -19,7 +19,6 @@
 #include "../../../system_views/dashboards/properties/C_SyvDaPeDataElementBrowse.hpp"
 #include "C_OgePopUpDialog.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
 #include "C_Uti.hpp"
@@ -169,9 +168,9 @@ void C_SdNdeDalLogJobDataSelectionWidget::GetElementLocationCount(uint32_t & oru
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobDataSelectionWidget::InitStaticNames() const
 {
-   this->mpc_Ui->pc_LabelLoggingData->setText(C_GtGetText::h_GetText("Logging Data"));
-   this->mpc_Ui->pc_LabelSelection->setText(C_GtGetText::h_GetText("No selected element"));
-   this->mpc_Ui->pc_LabelNoMessages->setText(C_GtGetText::h_GetText("No data elements to display."));
+   this->mpc_Ui->pc_LabelLoggingData->setText("Logging Data");
+   this->mpc_Ui->pc_LabelSelection->setText("No selected element");
+   this->mpc_Ui->pc_LabelNoMessages->setText("No data elements to display.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -312,7 +311,7 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_UpdateSelection() const
       this->mpc_Ui->pc_LabelSelection->setVisible(true);
 
       // default string value set for 0 elements
-      QString c_DataElementsText(C_GtGetText::h_GetText("No data elements"));
+      QString c_DataElementsText("No data elements");
       uint32_t u32_LocalElements = 0;
       uint32_t u32_RemoteElements = 0;
 
@@ -324,13 +323,13 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_UpdateSelection() const
          if (this->mc_DataElements.size() == 1)
          {
             c_DataElementsText =
-               static_cast<QString>(C_GtGetText::h_GetText("%1 data element (%2 local; %3 remote)")).arg(
+               static_cast<QString>("%1 data element (%2 local; %3 remote)").arg(
                   this->mc_DataElements.size()).arg(u32_LocalElements).arg(u32_RemoteElements);
          }
          else
          {
             c_DataElementsText =
-               static_cast<QString>(C_GtGetText::h_GetText("%1 data elements (%2 local; %3 remote)")).arg(
+               static_cast<QString>("%1 data elements (%2 local; %3 remote)").arg(
                   this->mc_DataElements.size()).arg(u32_LocalElements).arg(u32_RemoteElements);
          }
       }
@@ -353,7 +352,7 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_OnDataChangedInModel(const QModelInd
    QString c_Data(oc_Data);
 
    // If user has reset the logging name to the namespace text
-   if (oc_Data.compare(C_GtGetText::h_GetText("[Namespace]")) == 0)
+   if (oc_Data.compare("[Namespace]") == 0)
    {
       q_UseCustomName = false;
       c_Data = QString();
@@ -397,14 +396,13 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_SetupContextMenu()
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
    this->setContextMenuPolicy(Qt::CustomContextMenu);
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                       "Select all"), this->mpc_Ui->pc_TableView,
+   this->mpc_ContextMenu->addAction("Select all", this->mpc_Ui->pc_TableView,
                                     &C_SdNdeDalLogJobDataSelectionTableView::selectAll,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_A));
    // select all action
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Delete"),
+   this->mpc_ContextMenu->addAction("Delete",
                                     this, &C_SdNdeDalLogJobDataSelectionWidget::m_DeleteSelectedDataElements,
                                     static_cast<int32_t>(Qt::Key_Delete));
 

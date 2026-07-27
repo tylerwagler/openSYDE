@@ -11,7 +11,6 @@
 #include "precomp_headers.hpp"
 
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_GiSvDaLabelBase.hpp"
 #include "C_SyvDaPeLabel.hpp"
 #include "ui_C_SyvDaPeLabel.h"
@@ -88,27 +87,23 @@ C_SyvDaPeLabel::~C_SyvDaPeLabel(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeLabel::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelCaption->setText(C_GtGetText::h_GetText("Caption"));
-   this->mpc_Ui->pc_LabelStyle->setText(C_GtGetText::h_GetText("Style"));
-   this->mpc_Ui->pc_LabelShowUnit->setText(C_GtGetText::h_GetText("Show Unit"));
-   this->mpc_Ui->pc_LabelShowCaption->setText(C_GtGetText::h_GetText("Show Caption"));
+   this->mpc_Ui->pc_LabelCaption->setText("Caption");
+   this->mpc_Ui->pc_LabelStyle->setText("Style");
+   this->mpc_Ui->pc_LabelShowUnit->setText("Show Unit");
+   this->mpc_Ui->pc_LabelShowCaption->setText("Show Caption");
 
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Default"));
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Transparent"));
+   this->mpc_Ui->pc_ComboBoxType->addItem("Default");
+   this->mpc_Ui->pc_ComboBoxType->addItem("Transparent");
 
    //Tool tips
-   this->mpc_Ui->pc_LabelCaption->SetToolTipInformation(C_GtGetText::h_GetText("Caption"),
-                                                        C_GtGetText::h_GetText(
-                                                           "Caption, displayed above the value"));
-   this->mpc_Ui->pc_LabelStyle->SetToolTipInformation(C_GtGetText::h_GetText("Style"),
-                                                      C_GtGetText::h_GetText(
-                                                         "Different options for styles specific to this widget"));
-   this->mpc_Ui->pc_LabelShowUnit->SetToolTipInformation(C_GtGetText::h_GetText("Show Unit"),
-                                                         C_GtGetText::h_GetText(
-                                                            "Option to display the unit after the value or hide the unit entirely"));
-   this->mpc_Ui->pc_LabelShowCaption->SetToolTipInformation(C_GtGetText::h_GetText("Show Caption"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Option to display the caption above the value or hide the caption entirely"));
+   this->mpc_Ui->pc_LabelCaption->SetToolTipInformation("Caption",
+                                                        "Caption, displayed above the value");
+   this->mpc_Ui->pc_LabelStyle->SetToolTipInformation("Style",
+                                                      "Different options for styles specific to this widget");
+   this->mpc_Ui->pc_LabelShowUnit->SetToolTipInformation("Show Unit",
+                                                         "Option to display the unit after the value or hide the unit entirely");
+   this->mpc_Ui->pc_LabelShowCaption->SetToolTipInformation("Show Caption",
+                                                            "Option to display the caption above the value or hide the caption entirely");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

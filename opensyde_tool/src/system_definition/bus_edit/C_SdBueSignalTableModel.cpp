@@ -16,7 +16,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_SdBueSignalTableModel.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdUtil.hpp"
 #include "C_SdTooltipUtil.hpp"
@@ -111,55 +110,55 @@ QVariant C_SdBueSignalTableModel::headerData(const int32_t os32_Section, const Q
             c_Retval = "";
             break;
          case eMESSAGE:
-            c_Retval = C_GtGetText::h_GetText("Message");
+            c_Retval = "Message";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eJ1939_SPN:
-            c_Retval = C_GtGetText::h_GetText("SPN");
+            c_Retval = "SPN";
             break;
          case eCAN_OPEN_INDEX:
-            c_Retval = C_GtGetText::h_GetText("Index");
+            c_Retval = "Index";
             break;
          case eMULTIPLEXING:
-            c_Retval = C_GtGetText::h_GetText("Multiplexing");
+            c_Retval = "Multiplexing";
             break;
          case eSTART_BIT:
-            c_Retval = C_GtGetText::h_GetText("Start [Bit]");
+            c_Retval = "Start [Bit]";
             break;
          case eLENGTH:
-            c_Retval = C_GtGetText::h_GetText("Length [Bit]");
+            c_Retval = "Length [Bit]";
             break;
          case eBYTE_ORDER:
-            c_Retval = C_GtGetText::h_GetText("Byte order");
+            c_Retval = "Byte order";
             break;
          case eVALUE_TYPE:
-            c_Retval = C_GtGetText::h_GetText("Value type");
+            c_Retval = "Value type";
             break;
          case eINITIAL_VALUE:
-            c_Retval = C_GtGetText::h_GetText("Initial value");
+            c_Retval = "Initial value";
             break;
          case eFACTOR:
-            c_Retval = C_GtGetText::h_GetText("Factor");
+            c_Retval = "Factor";
             break;
          case eOFFSET:
-            c_Retval = C_GtGetText::h_GetText("Offset");
+            c_Retval = "Offset";
             break;
          case eAUTO_MIN_MAX:
-            c_Retval = C_GtGetText::h_GetText("Auto min/max");
+            c_Retval = "Auto min/max";
             break;
          case eMINIMUM_VALUE:
-            c_Retval = C_GtGetText::h_GetText("Minimum");
+            c_Retval = "Minimum";
             break;
          case eMAXIMUM_VALUE:
-            c_Retval = C_GtGetText::h_GetText("Maximum");
+            c_Retval = "Maximum";
             break;
          case eUNIT:
-            c_Retval = C_GtGetText::h_GetText("Unit");
+            c_Retval = "Unit";
             break;
          default:
             tgl_assert(false);
@@ -555,7 +554,7 @@ QString C_SdBueSignalTableModel::m_GetMultiplexingValue(const C_OscCanMessageIde
    if (pc_OscSignal != NULL)
    {
       const C_OscCanMessage * pc_Message;
-      QString c_MultiplexerName = C_GtGetText::h_GetText("<no multiplexer defined yet>");
+      QString c_MultiplexerName = "<no multiplexer defined yet>";
       uint32_t u32_Multiplexer;
       switch (pc_OscSignal->e_MultiplexerType)
       {
@@ -563,7 +562,7 @@ QString C_SdBueSignalTableModel::m_GetMultiplexingValue(const C_OscCanMessageIde
          c_Retval = "-";
          break;
       case C_OscCanSignal::eMUX_MULTIPLEXER_SIGNAL:
-         c_Retval = C_GtGetText::h_GetText("Multiplexer");
+         c_Retval = "Multiplexer";
          break;
       case C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL:
          // find out name of multiplexer
@@ -582,7 +581,7 @@ QString C_SdBueSignalTableModel::m_GetMultiplexingValue(const C_OscCanMessageIde
                }
             } // if no multiplexer is found dummy-text is used
 
-            c_Retval = static_cast<QString>(C_GtGetText::h_GetText("%1=%2")).arg(c_MultiplexerName).arg(
+            c_Retval = static_cast<QString>("%1=%2").arg(c_MultiplexerName).arg(
                pc_OscSignal->u16_MultiplexValue);
          }
          break;

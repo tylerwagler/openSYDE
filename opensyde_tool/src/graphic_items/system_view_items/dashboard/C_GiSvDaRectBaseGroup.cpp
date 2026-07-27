@@ -25,7 +25,6 @@
 
 #include "C_Uti.hpp"
 #include "C_SyvUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -360,15 +359,15 @@ void C_GiSvDaRectBaseGroup::RegisterDataPoolElementCyclicError(
 
       if (ou8_ErrorCode == 0x22)
       {
-         c_AdditionalInfo = C_GtGetText::h_GetText("Access to element value failed (e.g. blocked by application)");
+         c_AdditionalInfo = "Access to element value failed (e.g. blocked by application)";
       }
       else
       {
          c_AdditionalInfo =
-            static_cast<QString>(C_GtGetText::h_GetText("Unknown NRC: 0x%1")).arg(QString::number(ou8_ErrorCode, 16));
+            static_cast<QString>("Unknown NRC: 0x%1").arg(QString::number(ou8_ErrorCode, 16));
       }
       c_Info =
-         static_cast<QString>(C_GtGetText::h_GetText("Cyclic service failed with error: %1")).arg(c_AdditionalInfo);
+         static_cast<QString>("Cyclic service failed with error: %1").arg(c_AdditionalInfo);
       this->mc_CommmunicationErrors.remove(orc_WidgetDataPoolElementId);
       this->mc_CommmunicationErrors.insert(orc_WidgetDataPoolElementId, c_Info);
       m_UpdateErrorIcon();
@@ -814,7 +813,7 @@ void C_GiSvDaRectBaseGroup::HandleManualOperationFinished(const int32_t os32_Res
                // Change only if a concrete value was set
                c_Message.SetCustomMinHeight(180, s32_MaxHeight);
             }
-            c_Message.SetHeading(C_GtGetText::h_GetText("Transmission failure"));
+            c_Message.SetHeading("Transmission failure");
             c_Message.SetDescription(c_Description);
             c_Message.SetDetails(c_Details);
             c_Message.Execute();
@@ -1501,11 +1500,11 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
        (this->mpc_ReadIcon->contains(this->mpc_ReadIcon->mapFromScene(opc_Event->scenePos())) == true))
    {
       QString c_Text;
-      c_Text = C_GtGetText::h_GetText("Trigger manual read for:\n");
+      c_Text = "Trigger manual read for:\n";
       c_Text += this->m_GetItemsForButtonToolTip();
       if (this->mq_ConnectionActive == false)
       {
-         c_Text += C_GtGetText::h_GetText("\nOnly available while connected.");
+         c_Text += "\nOnly available while connected.";
       }
       //Check if redisplay necessary
       if (c_Text.compare(this->GetCurrentToolTipContent()) != 0)
@@ -1520,12 +1519,12 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
             (this->mpc_SendIcon->contains(this->mpc_SendIcon->mapFromScene(opc_Event->scenePos())) == true))
    {
       QString c_Text;
-      c_Text = C_GtGetText::h_GetText("Trigger manual write for:\n");
+      c_Text = "Trigger manual write for:\n";
       c_Text += this->m_GetItemsForButtonToolTip();
 
       if (this->mq_ConnectionActive == false)
       {
-         c_Text += C_GtGetText::h_GetText("\nOnly available while connected.");
+         c_Text += "\nOnly available while connected.";
       }
       //Check if redisplay necessary
       if (c_Text.compare(this->GetCurrentToolTipContent()) != 0)
@@ -1539,25 +1538,24 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
    else if (((this->mpc_WarningIcon != NULL) && (this->mpc_WarningIcon->isVisible() == true)) &&
             (this->mpc_WarningIcon->contains(this->mpc_WarningIcon->mapFromScene(opc_Event->scenePos())) == true))
    {
-      const QString c_Heading = C_GtGetText::h_GetText("Configuration Warning");
+      const QString c_Heading = "Configuration Warning";
       QString c_Content;
       QString c_Name;
       //if there are no data elements use this tooltip
       if (this->GetWidgetDataPoolElementCount() == 0U)
       {
-         c_Content += C_GtGetText::h_GetText("- No data element selected");
+         c_Content += "- No data element selected";
       }
       else
       {
          if (m_CheckHasValidElements(c_Name) == false)
          {
             c_Content +=
-               static_cast<QString>(C_GtGetText::h_GetText(
-                                       "- This widget and this data element (\"%1\") does not match, "
+               static_cast<QString>("- This widget and this data element (\"%1\") does not match, "
                                        "possible reasons:\n"
                                        "   Data element was deleted\n"
                                        "   Data element has become an array\n"
-                                       "   Data element has different value range")).arg(c_Name);
+                                       "   Data element has different value range").arg(c_Name);
          }
          if (m_CheckHasAnyRequiredNodesActive() == false)
          {
@@ -1565,7 +1563,7 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
             {
                c_Content += "\n";
             }
-            c_Content += C_GtGetText::h_GetText("- There is a data element of an inactive node");
+            c_Content += "- There is a data element of an inactive node";
          }
          if (m_CheckHasAnyRequiredBusesConnected() == false)
          {
@@ -1573,7 +1571,7 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
             {
                c_Content += "\n";
             }
-            c_Content += C_GtGetText::h_GetText("- There is a signal of an inactive bus");
+            c_Content += "- There is a signal of an inactive bus";
          }
          if (m_CheckHasAnyRequiredNodesValidDashboardRouting() == false)
          {
@@ -1581,8 +1579,8 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
             {
                c_Content += "\n";
             }
-            c_Content += C_GtGetText::h_GetText("- There is a data element of a node with "
-                                                "disabled communication interface flags for Dashboard");
+            c_Content += "- There is a data element of a node with "
+                                                "disabled communication interface flags for Dashboard";
          }
          if (m_RequireWarningForTrafficEncryption())
          {
@@ -1590,8 +1588,8 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
             {
                c_Content += "\n";
             }
-            c_Content += C_GtGetText::h_GetText("- Event driven data element trigger "
-                                                "and encrypted communication via CAN is not supported");
+            c_Content += "- Event driven data element trigger "
+                                                "and encrypted communication via CAN is not supported";
          }
       }
       //Check if redisplay necessary
@@ -1991,24 +1989,24 @@ void C_GiSvDaRectBaseGroup::m_HandleReadButtonClick(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaRectBaseGroup::m_UpdateErrorIconToolTip(void)
 {
-   QString c_Heading = C_GtGetText::h_GetText("Transmission error");
+   QString c_Heading = "Transmission error";
    QString c_Content;
 
    if (this->mc_CommmunicationErrors.size() > 0L)
    {
-      c_Content += C_GtGetText::h_GetText("Following transmissions failed:\n");
+      c_Content += "Following transmissions failed:\n";
       for (QMap<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId, QString>::const_iterator c_It =
               this->mc_CommmunicationErrors.begin();
            c_It != this->mc_CommmunicationErrors.end(); ++c_It)
       {
          if (c_It.key().GetType() == C_PuiSvDbNodeDataPoolListElementId::eDATAPOOL_ELEMENT)
          {
-            c_Content += static_cast<QString>(C_GtGetText::h_GetText("%1 encountered error: %2")).
+            c_Content += static_cast<QString>("%1 encountered error: %2").
                          arg(C_PuiSdUtil::h_GetNamespace(c_It.key())).arg(c_It.value());
          }
          else
          {
-            c_Content += static_cast<QString>(C_GtGetText::h_GetText("%1 encountered error: %2")).
+            c_Content += static_cast<QString>("%1 encountered error: %2").
                          arg(C_PuiSdUtil::h_GetSignalNamespace(c_It.key())).arg(c_It.value());
          }
       }
@@ -2017,12 +2015,12 @@ void C_GiSvDaRectBaseGroup::m_UpdateErrorIconToolTip(void)
    {
       if (this->mc_InvalidDlcSignals.size() > 0L)
       {
-         c_Heading = C_GtGetText::h_GetText("Signal error");
+         c_Heading = "Signal error";
          for (QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId, uint8_t>::const_iterator c_It =
                  this->mc_InvalidDlcSignals.begin();
               c_It != this->mc_InvalidDlcSignals.end(); ++c_It)
          {
-            c_Content += static_cast<QString>(C_GtGetText::h_GetText("%1 had invalid DLC %2.")).
+            c_Content += static_cast<QString>("%1 had invalid DLC %2.").
                          arg(C_PuiSdUtil::h_GetSignalNamespace(c_It.key())).arg(QString::number(c_It.value()));
          }
       }

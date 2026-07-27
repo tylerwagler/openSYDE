@@ -26,7 +26,6 @@
 #include "C_PuiSdUtil.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_OscNode.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -99,36 +98,31 @@ C_SdNdeDpViewWidget::C_SdNdeDpViewWidget(QWidget * const opc_Parent) :
    this->m_UpdateAutoStartAddressSvg();
 
    this->mpc_Ui->pc_WidgetDpDiag->InitWidget(C_PuiSdUtil::h_ConvertDataPoolTypeToString(C_OscNodeDataPool::eDIAG),
-                                             C_GtGetText::h_GetText("DIAG - Diagnostic Datapools"),
-                                             C_GtGetText::h_GetText(
-                                                "- The use case of DIAG Datapools is monitoring live values of a system \n"
-                                                "- The lifetime of the variables is during operation only"),
+                                             "DIAG - Diagnostic Datapools",
+                                             "- The use case of DIAG Datapools is monitoring live values of a system \n"
+                                                "- The lifetime of the variables is during operation only",
                                              "pc_WidgetDpDiag");
    this->mpc_Ui->pc_WidgetDpNvm->InitWidget(C_PuiSdUtil::h_ConvertDataPoolTypeToString(C_OscNodeDataPool::eNVM),
-                                            C_GtGetText::h_GetText("NVM - Non Volatile Memory Datapools"),
-                                            C_GtGetText::h_GetText(
-                                               "- The use case of NVM Datapools is to parametrize the system \n"
+                                            "NVM - Non Volatile Memory Datapools",
+                                            "- The use case of NVM Datapools is to parametrize the system \n"
                                                "- The NVM parameters are located in a non volatile memory, for example in the EEPROM of the controller \n"
-                                               "- Depending on the users application strategy, the parameters can be saved on shutdown and can be restored on start up"),
+                                               "- Depending on the users application strategy, the parameters can be saved on shutdown and can be restored on start up",
                                             "pc_WidgetDpNvm");
    this->mpc_Ui->pc_WidgetDpCom->InitWidget(C_PuiSdUtil::h_ConvertDataPoolTypeToString(C_OscNodeDataPool::eCOM),
-                                            C_GtGetText::h_GetText("COMM - CAN Communication Datapools"),
-                                            C_GtGetText::h_GetText(
-                                               "- The use case of COMM Datapools is the exchange of data between nodes \n"
-                                               "- The lifetime of the variables is during operation only"),
+                                            "COMM - CAN Communication Datapools",
+                                            "- The use case of COMM Datapools is the exchange of data between nodes \n"
+                                               "- The lifetime of the variables is during operation only",
                                             "pc_WidgetDpCom");
    this->mpc_Ui->pc_WidgetDpHalc->InitWidget(C_PuiSdUtil::h_ConvertDataPoolTypeToString(C_OscNodeDataPool::eHALC),
-                                             C_GtGetText::h_GetText("HAL - Hardware Configuration Datapools"),
-                                             C_GtGetText::h_GetText(
-                                                "- The use case of HAL Datapools is to configure, monitor, and control hardware parts of the node \n"
-                                                "- The lifetime of the variables is during operation only"),
+                                             "HAL - Hardware Configuration Datapools",
+                                             "- The use case of HAL Datapools is to configure, monitor, and control hardware parts of the node \n"
+                                                "- The lifetime of the variables is during operation only",
                                              "pc_WidgetDpHalc");
    this->mpc_Ui->pc_WidgetDpHalcNvm->InitWidget(
       C_PuiSdUtil::h_ConvertDataPoolTypeToString(C_OscNodeDataPool::eHALC_NVM),
-      C_GtGetText::h_GetText("HAL - Hardware Configuration Datapools"),
-      C_GtGetText::h_GetText(
-         "- The use case of HAL Datapools is to configure, monitor, and control hardware parts of the node \n"
-         "- The lifetime of the variables is during operation only"),
+      "HAL - Hardware Configuration Datapools",
+      "- The use case of HAL Datapools is to configure, monitor, and control hardware parts of the node \n"
+         "- The lifetime of the variables is during operation only",
       "pc_WidgetDpHalcNvm");
 
    // save pointer in an array for easy usage
@@ -193,15 +187,15 @@ C_SdNdeDpViewWidget::~C_SdNdeDpViewWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpViewWidget::InitStaticNames(void) const
 {
-   const QString c_AutoStartAddressHeading = C_GtGetText::h_GetText("Auto Start Address");
+   const QString c_AutoStartAddressHeading = "Auto Start Address";
    const QString c_AutoStartAddressDescription =
-      C_GtGetText::h_GetText("On: All start addresses of NVM Datapools will be calculated "
+      "On: All start addresses of NVM Datapools will be calculated "
                              "automatically without any gaps between the Datapools.\n\n"
                              "Off: The start addresses of NVM Datapools will not be calculated "
                              "automatically. The start addresses must be set by the user. Gaps and overlaps "
-                             "between the Datapools are not corrected automatically.");
+                             "between the Datapools are not corrected automatically.";
 
-   this->mpc_Ui->pc_LabelAutoStartAddress->setText(C_GtGetText::h_GetText("Auto Start Address"));
+   this->mpc_Ui->pc_LabelAutoStartAddress->setText("Auto Start Address");
 
    this->mpc_Ui->pc_LabelAutoStartAddress->SetToolTipInformation(c_AutoStartAddressHeading,
                                                                  c_AutoStartAddressDescription);
@@ -589,7 +583,7 @@ void C_SdNdeDpViewWidget::m_DpUpdateUsageView(void)
                uint32_t u32_Percentage;
                uint32_t u32_SumNvmSize = 0;
                std::vector<C_PuiSdHandler::C_PuiSdHandlerNodeLogicNvmArea> c_Areas;
-               QString c_LabelTooltip = static_cast<QString>("%1% ") + C_GtGetText::h_GetText("reserved by Datapools") +
+               QString c_LabelTooltip = static_cast<QString>("%1% ") + "reserved by Datapools" +
                                         static_cast<QString>(
                   " (%2 / %3)");
 
@@ -603,7 +597,7 @@ void C_SdNdeDpViewWidget::m_DpUpdateUsageView(void)
 
                // show the percentage
                this->mpc_Ui->pc_LabelUsagePercentage->setText(
-                  C_GtGetText::h_GetText("Memory Usage: ") +
+                  "Memory Usage: " +
                   QString::number(u32_Percentage) + "%");
                c_LabelTooltip = c_LabelTooltip.arg(QString::number(u32_Percentage),
                                                    C_Uti::h_GetByteCountAsString(u32_SumNvmSize),
@@ -614,15 +608,13 @@ void C_SdNdeDpViewWidget::m_DpUpdateUsageView(void)
                if (u32_SumNvmSize > pc_DevDef->c_SubDevices[u32_SubDeviceIndex].u32_UserEepromSizeBytes)
                {
                   this->mpc_Ui->pc_LabelUsagePercentage->SetForegroundColor(24);
-                  this->mpc_Ui->pc_LabelUsagePercentage->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                                                  "Memory Statistics"), c_LabelTooltip,
+                  this->mpc_Ui->pc_LabelUsagePercentage->SetToolTipInformation("Memory Statistics", c_LabelTooltip,
                                                                                C_NagToolTip::eERROR);
                }
                else
                {
                   this->mpc_Ui->pc_LabelUsagePercentage->SetForegroundColor(7);
-                  this->mpc_Ui->pc_LabelUsagePercentage->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                                                  "Memory Statistics"), c_LabelTooltip);
+                  this->mpc_Ui->pc_LabelUsagePercentage->SetToolTipInformation("Memory Statistics", c_LabelTooltip);
                }
             }
          }
@@ -658,11 +650,10 @@ void C_SdNdeDpViewWidget::m_AutoStartAddressClicked(const bool oq_Enabled)
       // In case of a NVM HALC based HALC description the automatic start address mode is not activatable
       this->mpc_Ui->pc_PushButtonAutoStartAddress->setChecked(false);
 
-      c_Message.SetHeading(C_GtGetText::h_GetText("Auto Start Address mode"));
+      c_Message.SetHeading("Auto Start Address mode");
 
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "Hardware description file with enabled \"nvm-config\" property is loaded. \n"
-                                  "In this case the automatic start address mode cannot be used."));
+      c_Message.SetDescription("Hardware description file with enabled \"nvm-config\" property is loaded. \n"
+                                  "In this case the automatic start address mode cannot be used.");
       c_Message.SetCustomMinHeight(200, 250);
       c_Message.Execute();
    }
@@ -670,28 +661,26 @@ void C_SdNdeDpViewWidget::m_AutoStartAddressClicked(const bool oq_Enabled)
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eQUESTION);
 
-      c_Message.SetHeading(C_GtGetText::h_GetText("Auto Start Address mode"));
-      c_Message.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+      c_Message.SetHeading("Auto Start Address mode");
+      c_Message.SetNoButtonText("Cancel");
       c_Message.SetCustomMinHeight(250, 250);
 
       if (oq_Enabled == true)
       {
-         c_Message.SetDescription(C_GtGetText::h_GetText(
-                                     "Do you really want to activate the automatic start address mode?\n"
+         c_Message.SetDescription("Do you really want to activate the automatic start address mode?\n"
                                      "This is not revertible.\n\n"
                                      "After activating, the start addresses of Datapools located in NVM"
-                                     " will be recalculated."));
+                                     " will be recalculated.");
 
-         c_Message.SetOkButtonText(C_GtGetText::h_GetText("Activate"));
+         c_Message.SetOkButtonText("Activate");
       }
       else
       {
-         c_Message.SetDescription(C_GtGetText::h_GetText(
-                                     "Do you really want to deactivate the automatic start address mode?\n\n"
+         c_Message.SetDescription("Do you really want to deactivate the automatic start address mode?\n\n"
                                      "After deactivating, the start addresses of Datapools located in NVM must "
-                                     "be managed manually."));
+                                     "be managed manually.");
 
-         c_Message.SetOkButtonText(C_GtGetText::h_GetText("Deactivate"));
+         c_Message.SetOkButtonText("Deactivate");
       }
 
       if (c_Message.Execute() == C_OgeWiCustomMessage::eYES)

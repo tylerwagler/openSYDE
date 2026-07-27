@@ -22,6 +22,7 @@
 #include "C_SclString.hpp"
 #include "C_TblTreSimpleModel.hpp"
 #include "C_CamMetTreeLoggerData.hpp"
+#include "C_CanMonProtocol.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -45,6 +46,7 @@ public:
       eCAN_DATA,
       eCAN_COUNTER,
       eCAN_STATUS,
+      eCAN_TP_INFO,
    };
 
    C_CamMetTreeModel(QObject * const opc_Parent = NULL);
@@ -72,6 +74,7 @@ public:
    bool GetDisplayTimestampRelative(void) const;
    bool GetDisplayTimestampAbsoluteTimeOfDay(void) const;
    void SetTraceBufferSize(const uint32_t ou32_Value);
+   void SetProtocol(const stw::cmon_protocol::e_CanMonL7Protocols oe_Protocol);
 
    std::vector<C_CamMetTreeLoggerData *> GetAllMessagesForProtocolChange(void);
    void SignalProtocolChange(void);
@@ -89,6 +92,7 @@ public:
 
    static E_Columns h_ColumnToEnum(const int32_t os32_Column);
    static int32_t h_EnumToColumn(const E_Columns oe_Value);
+   static QString mh_GetTpInfoString(const C_CamMetTreeLoggerData & orc_Message);
    const C_CamMetTreeLoggerData * GetMessageData(const int32_t os32_Row) const;
    int32_t SearchMessageData(const QString & orc_SearchString, const bool oq_Next, int32_t & ors32_SignalRow,
                              int32_t & ors32_MultiplexedSignalRow);
@@ -101,6 +105,7 @@ public:
 private:
    bool mq_DisplayTree;
    bool mq_UniqueMessageMode;
+   stw::cmon_protocol::e_CanMonL7Protocols me_Protocol;
    bool mq_DisplayAsHex;
    bool mq_DisplayTimestampRelative;
    bool mq_DisplayTimestampAbsoluteTimeOfDay;

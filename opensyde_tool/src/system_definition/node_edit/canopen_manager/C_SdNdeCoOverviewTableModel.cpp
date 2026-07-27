@@ -13,7 +13,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_SdNdeCoOverviewTableModel.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -147,25 +146,25 @@ QVariant C_SdNdeCoOverviewTableModel::headerData(const int32_t os32_Section, con
             c_Retval = "#";
             break;
          case eINTERFACE:
-            c_Retval = C_GtGetText::h_GetText("Interface");
+            c_Retval = "Interface";
             break;
          case eLINKEDTO:
-            c_Retval = C_GtGetText::h_GetText("Linked to");
+            c_Retval = "Linked to";
             break;
          case eNODE:
-            c_Retval = C_GtGetText::h_GetText("Node");
+            c_Retval = "Node";
             break;
          case eROLE:
-            c_Retval = C_GtGetText::h_GetText("Role");
+            c_Retval = "Role";
             break;
          case eCANOPENNODEID:
-            c_Retval = C_GtGetText::h_GetText("CANopen Node ID");
+            c_Retval = "CANopen Node ID";
             break;
          case eTPDOS:
-            c_Retval = C_GtGetText::h_GetText("TPDOs");
+            c_Retval = "TPDOs";
             break;
          case eRPDOS:
-            c_Retval = C_GtGetText::h_GetText("RPDOs");
+            c_Retval = "RPDOs";
             break;
          default:
             break;
@@ -176,28 +175,28 @@ QVariant C_SdNdeCoOverviewTableModel::headerData(const int32_t os32_Section, con
          switch (e_Col)
          {
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Index");
+            c_Retval = "Index";
             break;
          case eINTERFACE:
-            c_Retval = C_GtGetText::h_GetText("Interface");
+            c_Retval = "Interface";
             break;
          case eLINKEDTO:
-            c_Retval = C_GtGetText::h_GetText("Linked to");
+            c_Retval = "Linked to";
             break;
          case eNODE:
-            c_Retval = C_GtGetText::h_GetText("Node");
+            c_Retval = "Node";
             break;
          case eROLE:
-            c_Retval = C_GtGetText::h_GetText("Role");
+            c_Retval = "Role";
             break;
          case eCANOPENNODEID:
-            c_Retval = C_GtGetText::h_GetText("CANopen Node ID");
+            c_Retval = "CANopen Node ID";
             break;
          case eTPDOS:
-            c_Retval = C_GtGetText::h_GetText("TPDOs");
+            c_Retval = "TPDOs";
             break;
          case eRPDOS:
-            c_Retval = C_GtGetText::h_GetText("RPDOs");
+            c_Retval = "RPDOs";
             break;
          default:
             break;
@@ -208,29 +207,28 @@ QVariant C_SdNdeCoOverviewTableModel::headerData(const int32_t os32_Section, con
          switch (e_Col)
          {
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Continuous index for all CANopen nodes");
+            c_Retval = "Continuous index for all CANopen nodes";
             break;
          case eINTERFACE:
-            c_Retval = C_GtGetText::h_GetText("Used CAN interface of CANopen manager");
+            c_Retval = "Used CAN interface of CANopen manager";
             break;
          case eLINKEDTO:
-            c_Retval = C_GtGetText::h_GetText("Name of bus to which the node is linked to");
+            c_Retval = "Name of bus to which the node is linked to";
             break;
          case eNODE:
-            c_Retval = C_GtGetText::h_GetText("Name of node in Network Topology");
+            c_Retval = "Name of node in Network Topology";
             break;
          case eROLE:
-            c_Retval = C_GtGetText::h_GetText(
-               "Role of CANopen device in network. Two roles are specified, either manager or normal server device.");
+            c_Retval = "Role of CANopen device in network. Two roles are specified, either manager or normal server device.";
             break;
          case eCANOPENNODEID:
-            c_Retval = C_GtGetText::h_GetText("Node ID of CANopen device");
+            c_Retval = "Node ID of CANopen device";
             break;
          case eTPDOS:
-            c_Retval = C_GtGetText::h_GetText("Number of active to total transmit PDOs of device (active/total TPDOs)");
+            c_Retval = "Number of active to total transmit PDOs of device (active/total TPDOs)";
             break;
          case eRPDOS:
-            c_Retval = C_GtGetText::h_GetText("Number of active to total receive PDOs of device (active/total RPDOs)");
+            c_Retval = "Number of active to total receive PDOs of device (active/total RPDOs)";
             break;
          default:
             break;
@@ -577,7 +575,7 @@ void C_SdNdeCoOverviewTableModel::m_FillCoInfo()
             this->mu32_NodeIndex, u8_InterfaceIndex);
 
          // Not linked to bus, hence display a "-".
-         if (c_LinkedBusNameMgr == C_GtGetText::h_GetText(""))
+         if (c_LinkedBusNameMgr == "")
          {
             c_LinkedBusNameMgr = "-";
          }
@@ -617,7 +615,7 @@ void C_SdNdeCoOverviewTableModel::m_FillCoInfo()
                u8_InterfaceIndex);
 
             // Not linked to bus, hence display a "-".
-            if (c_LinkedBusNameDevice == C_GtGetText::h_GetText(""))
+            if (c_LinkedBusNameDevice == "")
             {
                c_LinkedBusNameDevice = "-";
             }

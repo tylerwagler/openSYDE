@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdBueJ1939PgPropertiesDialog.hpp"
 #include "ui_C_SdBueJ1939PgPropertiesDialog.h"
 
@@ -104,32 +103,26 @@ C_SdBueJ1939PgPropertiesDialog::~C_SdBueJ1939PgPropertiesDialog(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939PgPropertiesDialog::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText(mc_MessageName.toStdString().c_str()));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("J1939 CAN Settings"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Settings"));
-   this->mpc_Ui->pc_LabelPgn->setText(C_GtGetText::h_GetText("PGN"));
-   this->mpc_Ui->pc_LabelPriority->setText(C_GtGetText::h_GetText("Priority"));
-   this->mpc_Ui->pc_LabelSourceAddress->setText(C_GtGetText::h_GetText("Source Address"));
-   this->mpc_Ui->pc_LabelDestinationAddress->setText(C_GtGetText::h_GetText("Destination Address"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_LabelDestinationAddressBroadcast->setText(C_GtGetText::h_GetText("All"));
+   this->mrc_ParentDialog.SetTitle(mc_MessageName);
+   this->mrc_ParentDialog.SetSubTitle("J1939 CAN Settings");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Settings");
+   this->mpc_Ui->pc_LabelPgn->setText("PGN");
+   this->mpc_Ui->pc_LabelPriority->setText("Priority");
+   this->mpc_Ui->pc_LabelSourceAddress->setText("Source Address");
+   this->mpc_Ui->pc_LabelDestinationAddress->setText("Destination Address");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_LabelDestinationAddressBroadcast->setText("All");
 
    // Set tool tip info
-   this->mpc_Ui->pc_LabelPgn->SetToolTipInformation(C_GtGetText::h_GetText("PGN"),
-                                                    C_GtGetText::h_GetText(
-                                                       "J1939 Parameter Group Number"));
-   this->mpc_Ui->pc_LabelPriority->SetToolTipInformation(C_GtGetText::h_GetText("Priority"),
-                                                         C_GtGetText::h_GetText(
-                                                            "The priority for this message"));
-   this->mpc_Ui->pc_LabelSourceAddress->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                                 "Source Address"),
-                                                              C_GtGetText::h_GetText(
-                                                                 "Address of source node"));
-   this->mpc_Ui->pc_LabelDestinationAddress->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                                      "Destination Address"),
-                                                                   C_GtGetText::h_GetText(
-                                                                      "Address of target node"));
+   this->mpc_Ui->pc_LabelPgn->SetToolTipInformation("PGN",
+                                                    "J1939 Parameter Group Number");
+   this->mpc_Ui->pc_LabelPriority->SetToolTipInformation("Priority",
+                                                         "The priority for this message");
+   this->mpc_Ui->pc_LabelSourceAddress->SetToolTipInformation("Source Address",
+                                                              "Address of source node");
+   this->mpc_Ui->pc_LabelDestinationAddress->SetToolTipInformation("Destination Address",
+                                                                   "Address of target node");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

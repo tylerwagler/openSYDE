@@ -17,7 +17,6 @@
 #include "stwtypes.hpp"
 
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeCbxText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdBueMlvWidget.hpp"
@@ -112,7 +111,7 @@ C_SdBueMlvWidget::~C_SdBueMlvWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelMultiplexer->setText(C_GtGetText::h_GetText("Multiplexer Signal"));
+   this->mpc_Ui->pc_LabelMultiplexer->setText("Multiplexer Signal");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -347,7 +346,7 @@ void C_SdBueMlvWidget::m_UpdateMultiplexerValues(const C_OscCanMessageIdentifica
          if (pc_Message->IsMultiplexed(&u32_MultiplexerIndex) == false)
          {
             // No selection possible
-            this->mpc_Ui->pc_ComboBoxMultiplexer->addItem(C_GtGetText::h_GetText("No Multiplexer"));
+            this->mpc_Ui->pc_ComboBoxMultiplexer->addItem("No Multiplexer");
             this->mpc_Ui->pc_ComboBoxMultiplexer->setEnabled(false);
          }
          else
@@ -406,7 +405,7 @@ void C_SdBueMlvWidget::m_UpdateMultiplexerValues(const C_OscCanMessageIdentifica
             else
             {
                // No selection due to defined multiplexer signal, but no multiplexed signals
-               this->mpc_Ui->pc_ComboBoxMultiplexer->addItem(C_GtGetText::h_GetText("No multiplexed signals defined"));
+               this->mpc_Ui->pc_ComboBoxMultiplexer->addItem("No multiplexed signals defined");
                this->mpc_Ui->pc_ComboBoxMultiplexer->setEnabled(false);
             }
          }

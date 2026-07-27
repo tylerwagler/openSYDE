@@ -15,7 +15,6 @@
 #include "C_OscNode.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "TglUtils.hpp"
 #include "C_Uti.hpp"
 #include "C_SdUtil.hpp"
@@ -175,9 +174,9 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::SetNodeAsManager(const bool oq_Manag
       if (oq_Manager == true)
       {
          this->mpc_Ui->pc_LinkToManagerLabel->setText(
-            C_Uti::h_GetLink(C_GtGetText::h_GetText("Manager"),
+            C_Uti::h_GetLink("Manager",
                              mc_STYLE_GUIDE_COLOR_6,
-                             C_GtGetText::h_GetText("Manager")));
+                             "Manager"));
 
          this->UpdateToolTip();
       }
@@ -238,7 +237,7 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::UpdateToolTip(void)
       const stw::opensyde_core::C_OscCanInterfaceId * pc_DeviceId = NULL;
 
       // Get the interface name
-      c_Content += C_GtGetText::h_GetText("Interface: ");
+      c_Content += "Interface: ";
       tgl_assert(u32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size());
       if (u32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size())
       {
@@ -266,22 +265,22 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::UpdateToolTip(void)
       if ((u32_RxMessageCount > 0U) ||
           (u32_TxMessageCount > 0U))
       {
-         c_Content += static_cast<QString>(C_GtGetText::h_GetText("\nMessages: %1 Tx, %2 Rx")).
+         c_Content += static_cast<QString>("\nMessages: %1 Tx, %2 Rx").
                       arg(u32_TxMessageCount).arg(u32_RxMessageCount);
       }
       else
       {
-         c_Content += C_GtGetText::h_GetText("\nNo Messages");
+         c_Content += "\nNo Messages";
       }
 
       // Signals
       if (u32_SignalCount > 0U)
       {
-         c_Content += static_cast<QString>(C_GtGetText::h_GetText("\nSignals: %1")).arg(u32_SignalCount);
+         c_Content += static_cast<QString>("\nSignals: %1").arg(u32_SignalCount);
       }
       else
       {
-         c_Content += C_GtGetText::h_GetText("\nNo Signals");
+         c_Content += "\nNo Signals";
       }
 
       // CANopen specific part
@@ -289,11 +288,11 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::UpdateToolTip(void)
       {
          if (this->mq_IsManager == true)
          {
-            c_Content += C_GtGetText::h_GetText("\nCANopen Role: Manager");
+            c_Content += "\nCANopen Role: Manager";
          }
          else if (this->mq_IsDevice == true)
          {
-            c_Content += C_GtGetText::h_GetText("\nCANopen Role: Device");
+            c_Content += "\nCANopen Role: Device";
          }
          else
          {

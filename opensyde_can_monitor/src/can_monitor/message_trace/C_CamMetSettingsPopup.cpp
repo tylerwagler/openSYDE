@@ -15,11 +15,9 @@
 #include "C_CamMetSettingsPopup.hpp"
 #include "ui_C_CamMetSettingsPopup.h"
 
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
-using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -144,27 +142,25 @@ uint32_t C_CamMetSettingsPopup::GetTraceBufferSize(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetSettingsPopup::m_InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Trace"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Settings"));
+   this->mrc_ParentDialog.SetTitle("Trace");
+   this->mrc_ParentDialog.SetSubTitle("Settings");
 
-   this->mpc_Ui->pc_LabelSettings->setText(C_GtGetText::h_GetText("General"));
+   this->mpc_Ui->pc_LabelSettings->setText("General");
 
-   this->mpc_Ui->pc_LabAbsoluteTimestampMode->setText(C_GtGetText::h_GetText("Absolute Time Mode"));
-   this->mpc_Ui->pc_LabAbsoluteTimestampMode->SetToolTipInformation(C_GtGetText::h_GetText("Absolute Time Mode"),
-                                                                    C_GtGetText::h_GetText(
-                                                                       "Configuration for the time mode absolute:\n"
+   this->mpc_Ui->pc_LabAbsoluteTimestampMode->setText("Absolute Time Mode");
+   this->mpc_Ui->pc_LabAbsoluteTimestampMode->SetToolTipInformation("Absolute Time Mode",
+                                                                    "Configuration for the time mode absolute:\n"
                                                                        "   - Timestamp beginning at start of measurement\n"
-                                                                       "   - Timestamp with time of day"));
-   this->mpc_Ui->pc_LabTraceBuffer->setText(C_GtGetText::h_GetText("Trace Buffer Size"));
-   this->mpc_Ui->pc_LabTraceBuffer->SetToolTipInformation(C_GtGetText::h_GetText("Trace Buffer Size"),
-                                                          C_GtGetText::h_GetText(
-                                                             "Configuration of the maximum number of shown messages in the trace.\n"
+                                                                       "   - Timestamp with time of day");
+   this->mpc_Ui->pc_LabTraceBuffer->setText("Trace Buffer Size");
+   this->mpc_Ui->pc_LabTraceBuffer->SetToolTipInformation("Trace Buffer Size",
+                                                          "Configuration of the maximum number of shown messages in the trace.\n"
                                                              "Will be set when starting the communication or when the trace will be cleared.\n"
-                                                             "Default is 1000. A large number can have a negative effect on the performance."));
+                                                             "Default is 1000. A large number can have a negative effect on the performance.");
 
    this->mpc_Ui->pc_ComboBoxAbsoluteTimestampMode->clear();
-   this->mpc_Ui->pc_ComboBoxAbsoluteTimestampMode->addItem(C_GtGetText::h_GetText("Since Measurement Start"));
-   this->mpc_Ui->pc_ComboBoxAbsoluteTimestampMode->addItem(C_GtGetText::h_GetText("Time of Day"));
+   this->mpc_Ui->pc_ComboBoxAbsoluteTimestampMode->addItem("Since Measurement Start");
+   this->mpc_Ui->pc_ComboBoxAbsoluteTimestampMode->addItem("Time of Day");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

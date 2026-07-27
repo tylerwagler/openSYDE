@@ -21,7 +21,6 @@
 #include "C_CieUtil.hpp"
 #include "C_PuiUtil.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_OscImportEdsDcf.hpp"
@@ -706,11 +705,11 @@ void C_SdNdeCoConfigTreeView::m_SetupContextMenu()
    connect(this, &C_SdNdeCoConfigTreeView::customContextMenuRequested,
            this, &C_SdNdeCoConfigTreeView::m_OnCustomContextMenuRequested);
 
-   this->mpc_AddAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Add CANopen Device"),
+   this->mpc_AddAction = this->mpc_ContextMenu->addAction("Add CANopen Device",
                                                           this, &C_SdNdeCoConfigTreeView::m_OnAddDevice);
    this->mpc_ContextMenu->addSeparator();
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Expand all"), this, &C_SdNdeCoConfigTreeView::expandAll);
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Collapse all"), this,
+   this->mpc_ContextMenu->addAction("Expand all", this, &C_SdNdeCoConfigTreeView::expandAll);
+   this->mpc_ContextMenu->addAction("Collapse all", this,
                                     &C_SdNdeCoConfigTreeView::collapseAll);
    this->mpc_ContextMenu->addSeparator();
    this->mpc_RemoveAction = this->mpc_ContextMenu->addAction("Unknown",
@@ -752,8 +751,7 @@ void C_SdNdeCoConfigTreeView::m_OnCustomContextMenuRequested(const QPoint & orc_
          if (pc_Node != NULL)
          {
             this->mpc_RemoveAction->setVisible(true);
-            this->mpc_RemoveAction->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                    "Remove CANopen Device \"%1\"")).arg(pc_Node->
+            this->mpc_RemoveAction->setText(static_cast<QString>("Remove CANopen Device \"%1\"").arg(pc_Node->
                                                                                                          c_Properties.
                                                                                                          c_Name.c_str()));
          }
@@ -802,19 +800,17 @@ void C_SdNdeCoConfigTreeView::m_OnAddDevice(void)
          if (pc_AddDialog->GetNodeSelection(u32_NodeIndex, u32_InterfaceIndex, c_EdsPath) == C_RANGE)
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Add CANopen Device"));
-            c_Message.SetDescription(C_GtGetText::h_GetText(
-                                        "Cannot add CANopen Device. There is no free Node available."));
+            c_Message.SetHeading("Add CANopen Device");
+            c_Message.SetDescription("Cannot add CANopen Device. There is no free Node available.");
             c_Message.SetCustomMinHeight(180, 250);
             c_Message.Execute();
          }
          else if (!QFileInfo::exists(QString::fromLocal8Bit(pc_AddDialog->GetEdsFile().c_str())))
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-            c_Message.SetHeading(C_GtGetText::h_GetText("EDS File"));
-            c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                             "Could not load specified EDS File.")));
-            c_Message.SetDetails(C_GtGetText::h_GetText("Specified EDS File does not exist."));
+            c_Message.SetHeading("EDS File");
+            c_Message.SetDescription(static_cast<QString>("Could not load specified EDS File."));
+            c_Message.SetDetails("Specified EDS File does not exist.");
             c_Message.SetCustomMinHeight(180, 250);
             c_Message.Execute();
          }
@@ -954,8 +950,8 @@ void C_SdNdeCoConfigTreeView::m_DisplayDeviceAddFinishedMessage()
 {
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eINFORMATION);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("Add CANopen Device"));
-   c_Message.SetDescription(C_GtGetText::h_GetText("CANopen Device added successfully"));
+   c_Message.SetHeading("Add CANopen Device");
+   c_Message.SetDescription("CANopen Device added successfully");
    c_Message.Execute();
 }
 

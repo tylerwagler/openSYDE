@@ -17,7 +17,6 @@
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_GiSvDaParam.hpp"
@@ -137,8 +136,8 @@ C_SyvDaItPaWidgetNew::~C_SyvDaItPaWidgetNew()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaWidgetNew::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_PushButtonAdd->setText(C_GtGetText::h_GetText("Add List"));
-   this->mpc_Ui->pc_LabelTreeEmpty->setText(C_GtGetText::h_GetText("Add any NVM Lists via the '+' button"));
+   this->mpc_Ui->pc_PushButtonAdd->setText("Add List");
+   this->mpc_Ui->pc_LabelTreeEmpty->setText("Add any NVM Lists via the '+' button");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -286,9 +285,8 @@ bool C_SyvDaItPaWidgetNew::HandleManualOperationFinished(const int32_t os32_Resu
                                             arg(pc_DataPool->c_Name.c_str()).arg(pc_List->c_Name.c_str());
                         }
                      }
-                     c_MessageResult.SetHeading(C_GtGetText::h_GetText("Invalid List CRC"));
-                     c_MessageResult.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                            "Detected CRCs are invalid for at least one list.")));
+                     c_MessageResult.SetHeading("Invalid List CRC");
+                     c_MessageResult.SetDescription(static_cast<QString>("Detected CRCs are invalid for at least one list."));
                      c_MessageResult.SetDetails(c_ListsString);
                      c_MessageResult.SetCustomMinHeight(180, 300);
                      c_MessageResult.Execute();
@@ -326,21 +324,21 @@ bool C_SyvDaItPaWidgetNew::HandleManualOperationFinished(const int32_t os32_Resu
                                                                                                    // of
                                                                                                    // style issues
                                                  C_OgeWiCustomMessage::E_Type::eERROR);
-            c_MessageResult.SetHeading(C_GtGetText::h_GetText("System Parametrization"));
+            c_MessageResult.SetHeading("System Parametrization");
             if (s32_Result == C_TIMEOUT)
             {
-               c_MessageResult.SetDescription(C_GtGetText::h_GetText("No response received."));
-               c_MessageResult.SetDetails(C_GtGetText::h_GetText("This may be caused by:\n"
+               c_MessageResult.SetDescription("No response received.");
+               c_MessageResult.SetDetails("This may be caused by:\n"
                                                                  "- Node shutdown/restart while connected\n"
                                                                  "- Connection interrupted while connected\n"
                                                                  "- Node response time outside expected timing constraints\n"
-                                                                 "  (node or bus may be overloaded)"));
+                                                                 "  (node or bus may be overloaded)");
                c_MessageResult.SetCustomMinHeight(180, 300);
             }
             else if (s32_Result == C_WARN)
             {
                QString c_Details;
-               QString c_Node = C_GtGetText::h_GetText("Node");
+               QString c_Node = "Node";
                if ((this->mu32_ListCounter - 1UL) < static_cast<uint32_t>(this->mc_ListIds.size()))
                {
                   const C_OscNodeDataPoolListElementId & rc_CurEntryId =
@@ -349,48 +347,45 @@ bool C_SyvDaItPaWidgetNew::HandleManualOperationFinished(const int32_t os32_Resu
                      rc_CurEntryId.u32_NodeIndex);
                   if (pc_Node != NULL)
                   {
-                     c_Node = static_cast<QString>(C_GtGetText::h_GetText("Node %1")).arg(
+                     c_Node = static_cast<QString>("Node %1").arg(
                         pc_Node->c_Properties.c_Name.c_str());
                   }
                }
                switch (ou8_Nrc)
                {
                case 0x13:
-                  c_Details = C_GtGetText::h_GetText("Incorrect length of request");
+                  c_Details = "Incorrect length of request";
                   break;
                case 0x31:
-                  c_Details = C_GtGetText::h_GetText("Address or length format invalid (> 4 bytes)\n"
-                                                     "Requested memory range specified by address and size invalid");
+                  c_Details = "Address or length format invalid (> 4 bytes)\n"
+                                                     "Requested memory range specified by address and size invalid";
                   break;
                case 0x22:
-                  c_Details = C_GtGetText::h_GetText("Reading failed.");
+                  c_Details = "Reading failed.";
                   break;
                case 0x33:
-                  c_Details = C_GtGetText::h_GetText("Required security level was not unlocked.");
+                  c_Details = "Required security level was not unlocked.";
                   break;
                case 0x14:
-                  c_Details = C_GtGetText::h_GetText(
-                     "The total length of the response message exceeds the available buffer size.");
+                  c_Details = "The total length of the response message exceeds the available buffer size.";
                   break;
                case 0x7F:
-                  c_Details = C_GtGetText::h_GetText(
-                     "The requested service is not available in the currently active session.");
+                  c_Details = "The requested service is not available in the currently active session.";
                   break;
                default:
                   c_Details =
-                     static_cast<QString>(C_GtGetText::h_GetText("Unknown NRC: 0x%1")).arg(QString::number(ou8_Nrc,
+                     static_cast<QString>("Unknown NRC: 0x%1").arg(QString::number(ou8_Nrc,
                                                                                                            16));
                   break;
                }
-               c_MessageResult.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                      "%1 responded with error response.")).arg(
+               c_MessageResult.SetDescription(static_cast<QString>("%1 responded with error response.").arg(
                                                  c_Node));
                c_MessageResult.SetDetails(c_Details);
                c_MessageResult.SetCustomMinHeight(180, 250);
             }
             else
             {
-               c_MessageResult.SetDescription(C_GtGetText::h_GetText("Failure on manual read."));
+               c_MessageResult.SetDescription("Failure on manual read.");
                c_MessageResult.SetDetails(C_Uti::h_StwError(s32_Result));
                c_MessageResult.SetCustomMinHeight(180, 250);
             }
@@ -736,10 +731,9 @@ void C_SyvDaItPaWidgetNew::m_ReadElements(void)
       if (s32_Result == C_RANGE)
       {
          C_OgeWiCustomMessage c_MessageResult(pc_ParamWidget->GetPopUpParent(), C_OgeWiCustomMessage::E_Type::eERROR);
-         c_MessageResult.SetHeading(C_GtGetText::h_GetText("System Parametrization"));
-         c_MessageResult.SetDescription(C_GtGetText::h_GetText(
-                                           "Parametrization widget contains nodes, which are not active in current"
-                                           " view or have the Dashboard flags disabled."));
+         c_MessageResult.SetHeading("System Parametrization");
+         c_MessageResult.SetDescription("Parametrization widget contains nodes, which are not active in current"
+                                           " view or have the Dashboard flags disabled.");
          c_MessageResult.SetCustomMinHeight(180, 180);
          c_MessageResult.Execute();
          this->mq_ReadActive = false;
@@ -747,8 +741,8 @@ void C_SyvDaItPaWidgetNew::m_ReadElements(void)
       else if (s32_Result != C_NO_ERR)
       {
          C_OgeWiCustomMessage c_MessageResult(pc_ParamWidget->GetPopUpParent(), C_OgeWiCustomMessage::E_Type::eERROR);
-         c_MessageResult.SetHeading(C_GtGetText::h_GetText("System Parametrization"));
-         c_MessageResult.SetDescription(C_GtGetText::h_GetText("Failure on read list."));
+         c_MessageResult.SetHeading("System Parametrization");
+         c_MessageResult.SetDescription("Failure on read list.");
          c_MessageResult.SetDetails(C_Uti::h_StwError(s32_Result));
          c_MessageResult.SetCustomMinHeight(180, 250);
          c_MessageResult.Execute();
@@ -905,10 +899,9 @@ void C_SyvDaItPaWidgetNew::m_WriteElements(const std::vector<C_OscNodeDataPoolLi
          {
             C_OgeWiCustomMessage c_MessageResult(pc_ParamWidget->GetPopUpParent(),
                                                  C_OgeWiCustomMessage::E_Type::eERROR);
-            c_MessageResult.SetHeading(C_GtGetText::h_GetText("System Parametrization"));
-            c_MessageResult.SetDescription(C_GtGetText::h_GetText(
-                                              "At least one of the selected lists contains invalid set"
-                                              " values. Enter valid set values and retry."));
+            c_MessageResult.SetHeading("System Parametrization");
+            c_MessageResult.SetDescription("At least one of the selected lists contains invalid set"
+                                              " values. Enter valid set values and retry.");
             c_MessageResult.SetCustomMinHeight(180, 180);
             c_MessageResult.Execute();
          }
@@ -916,9 +909,8 @@ void C_SyvDaItPaWidgetNew::m_WriteElements(const std::vector<C_OscNodeDataPoolLi
       else
       {
          C_OgeWiCustomMessage c_MessageResult(pc_ParamWidget->GetPopUpParent());
-         c_MessageResult.SetHeading(C_GtGetText::h_GetText("System Parametrization"));
-         c_MessageResult.SetDescription(C_GtGetText::h_GetText(
-                                           "Nothing to do for selected lists. Values on target device are up to date."));
+         c_MessageResult.SetHeading("System Parametrization");
+         c_MessageResult.SetDescription("Nothing to do for selected lists. Values on target device are up to date.");
          c_MessageResult.SetCustomMinHeight(180, 180);
          c_MessageResult.Execute();
       }
@@ -946,7 +938,7 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
       {
          QString c_Folder;
          QString c_File;
-         const QString c_Filter = static_cast<QString>(C_GtGetText::h_GetText("openSYDE Parameter Set File")) + " (*" +
+         const QString c_Filter = static_cast<QString>("openSYDE Parameter Set File") + " (*" +
                                   mhc_FILE_EXTENSION_PARAMSET + ")";
 
          //User settings restore
@@ -954,7 +946,7 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
                                                                       pc_View->GetName().c_str()).c_ParamImportPath);
 
          c_File = C_OgeWiUtil::h_GetOpenFileName(pc_ParamWidget->GetPopUpParent(),
-                                                 C_GtGetText::h_GetText("Load Parameter Set File"),
+                                                 "Load Parameter Set File",
                                                  c_Folder, c_Filter, mhc_FILE_EXTENSION_PARAMSET);
 
          if (c_File.compare("") != 0)
@@ -1047,15 +1039,14 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
 
                C_OscLoggingHandler::h_Flush();
 
-               c_MessageResultRead.SetHeading(C_GtGetText::h_GetText("Import configuration"));
-               c_MessageResultRead.SetDescription(C_GtGetText::h_GetText("Could not read the file."));
-               c_Details = C_GtGetText::h_GetText(
-                  "Possible reasons:<br/>"
+               c_MessageResultRead.SetHeading("Import configuration");
+               c_MessageResultRead.SetDescription("Could not read the file.");
+               c_Details = "Possible reasons:<br/>"
                   "- Invalid xml format (e.g. wrong filetype selected)<br/>"
                   "- Invalid xml version (e.g. version incompatible with current tool version)<br/>"
-                  "- Invalid content (e.g. values invalid)<br/>");
-               c_Details += C_GtGetText::h_GetText("For more information see ");
-               c_Details += C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLE_GUIDE_COLOR_LINK,
+                  "- Invalid content (e.g. values invalid)<br/>";
+               c_Details += "For more information see ";
+               c_Details += C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
                                              C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
                c_Details += ".";
                c_MessageResultRead.SetDetails(c_Details);
@@ -1262,10 +1253,9 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                   }
 
                   c_FileName = C_OgeWiUtil::h_GetSaveFileName(pc_ParamWidget->GetPopUpParent(),
-                                                              C_GtGetText::h_GetText("Save Parameter Set File"),
+                                                              "Save Parameter Set File",
                                                               c_Folder,
-                                                              static_cast<QString>(C_GtGetText::h_GetText(
-                                                                                      "openSYDE Parameter Set File")) +
+                                                              static_cast<QString>("openSYDE Parameter Set File") +
                                                               " (*" + mhc_FILE_EXTENSION_PARAMSET + ")", "");
 
                   if (c_FileName.compare("") != 0)
@@ -1299,9 +1289,9 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                         // TODO: Error handling
                         C_OgeWiCustomMessage c_MessageResultSave(
                            pc_ParamWidget->GetPopUpParent(), C_OgeWiCustomMessage::E_Type::eERROR);
-                        c_MessageResultSave.SetHeading(C_GtGetText::h_GetText("Configuration export"));
-                        c_MessageResultSave.SetDescription(C_GtGetText::h_GetText("Could not save the file."));
-                        c_MessageResultSave.SetDetails(C_GtGetText::h_GetText("Error code: \n") +
+                        c_MessageResultSave.SetHeading("Configuration export");
+                        c_MessageResultSave.SetDescription("Could not save the file.");
+                        c_MessageResultSave.SetDetails("Error code: \n" +
                                                        QString::number(s32_Result));
                         c_MessageResultSave.SetCustomMinHeight(180, 250);
                         c_MessageResultSave.Execute();
@@ -1314,9 +1304,8 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                                                                                           "file:" + c_FileName));
                         C_OgeWiCustomMessage c_MessageResultSave(
                            pc_ParamWidget->GetPopUpParent(), C_OgeWiCustomMessage::E_Type::eINFORMATION);
-                        c_MessageResultSave.SetHeading(C_GtGetText::h_GetText("Configuration export"));
-                        c_MessageResultSave.SetDescription(C_GtGetText::h_GetText(
-                                                              "Parameter Set File successfully created."));
+                        c_MessageResultSave.SetHeading("Configuration export");
+                        c_MessageResultSave.SetDescription("Parameter Set File successfully created.");
                         c_MessageResultSave.SetDetails(c_Details);
                         c_MessageResultSave.SetCustomMinHeight(180, 250);
                         c_MessageResultSave.Execute();
@@ -1329,9 +1318,9 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                // TODO: Error handling
                C_OgeWiCustomMessage c_MessageResult(pc_ParamWidget->GetPopUpParent(),
                                                     C_OgeWiCustomMessage::E_Type::eERROR);
-               c_MessageResult.SetHeading(C_GtGetText::h_GetText("Configuration export"));
-               c_MessageResult.SetDescription(C_GtGetText::h_GetText("Could not create the file!"));
-               c_MessageResult.SetDetails(C_GtGetText::h_GetText("Error code: \n") + QString::number(s32_Result));
+               c_MessageResult.SetHeading("Configuration export");
+               c_MessageResult.SetDescription("Could not create the file!");
+               c_MessageResult.SetDetails("Error code: \n" + QString::number(s32_Result));
                c_MessageResult.SetCustomMinHeight(180, 250);
                c_MessageResult.Execute();
             }
@@ -1341,9 +1330,9 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
             // TODO: Error handling
             C_OgeWiCustomMessage c_MessageResultCreate(
                pc_ParamWidget->GetPopUpParent(), C_OgeWiCustomMessage::E_Type::eERROR);
-            c_MessageResultCreate.SetHeading(C_GtGetText::h_GetText("Configuration export"));
-            c_MessageResultCreate.SetDescription(C_GtGetText::h_GetText("Could not create the file!"));
-            c_MessageResultCreate.SetDetails(C_GtGetText::h_GetText("Error code: \n") + QString::number(s32_Result));
+            c_MessageResultCreate.SetHeading("Configuration export");
+            c_MessageResultCreate.SetDescription("Could not create the file!");
+            c_MessageResultCreate.SetDetails("Error code: \n" + QString::number(s32_Result));
             c_MessageResultCreate.SetCustomMinHeight(180, 250);
             c_MessageResultCreate.Execute();
          }
@@ -1427,12 +1416,11 @@ void C_SyvDaItPaWidgetNew::m_UpdateButtons(void)
 void C_SyvDaItPaWidgetNew::m_UpdateButtonToolTips(void) const
 {
    const QString c_ReasonEditMode =
-      C_GtGetText::h_GetText(
-         "Disabled because this action is only allowed in edit content mode activated by the context menu.");
+      "Disabled because this action is only allowed in edit content mode activated by the context menu.";
    QString c_Heading;
    QString c_Description;
 
-   c_Heading = C_GtGetText::h_GetText("Add List");
+   c_Heading = "Add List";
    if (this->mpc_Ui->pc_PushButtonAdd->isEnabled() == true)
    {
       c_Description = "";
@@ -1515,13 +1503,12 @@ void C_SyvDaItPaWidgetNew::m_HandleRemoveTrigger(const std::vector<C_OscNodeData
    if (pc_ParamWidget != NULL)
    {
       C_OgeWiCustomMessage c_MessageBox(pc_ParamWidget->GetPopUpParent(), C_OgeWiCustomMessage::E_Type::eQUESTION);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Parametrization Widget delete lists"));
-      c_MessageBox.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "Do you really want to delete %1 list(s) of"
-                                                          " the Parametrization Widget?")).
+      c_MessageBox.SetHeading("Parametrization Widget delete lists");
+      c_MessageBox.SetDescription(static_cast<QString>("Do you really want to delete %1 list(s) of"
+                                                          " the Parametrization Widget?").
                                   arg(orc_ListIds.size()));
-      c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-      c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+      c_MessageBox.SetOkButtonText("Delete");
+      c_MessageBox.SetNoButtonText("Keep");
       c_MessageBox.SetCustomMinHeight(180, 180);
       e_ReturnMessageBox = c_MessageBox.Execute();
 
@@ -1570,7 +1557,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetDefaultFileName(const uint32_t ou32_ViewInde
 
    if (pc_View != NULL)
    {
-      const QString c_ViewPart1 = static_cast<QString>(C_GtGetText::h_GetText("View_%1_")).arg(ou32_ViewIndex + 1);
+      const QString c_ViewPart1 = static_cast<QString>("View_%1_").arg(ou32_ViewIndex + 1);
       const QString c_ViewPart1File = C_OscUtils::h_NiceifyStringForFileName(c_ViewPart1.toStdString().c_str()).c_str();
       const QString c_ViewPart2 = C_PuiSdHandler::h_AutomaticCeStringAdaptation(pc_View->GetName().c_str());
       const QString c_DataElementFileName = mh_GetFile(orc_Id, ou32_ValidLayers);
@@ -1622,7 +1609,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_Element != NULL)
          {
             c_Retval =
-               static_cast<QString>(C_GtGetText::h_GetText("_%1")).arg(C_OscUtils::h_NiceifyStringForFileName(
+               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(
                                                                           pc_Element->c_Name.c_str()).c_str());
          }
          break;
@@ -1632,7 +1619,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_List != NULL)
          {
             c_Retval =
-               static_cast<QString>(C_GtGetText::h_GetText("_%1")).arg(C_OscUtils::h_NiceifyStringForFileName(
+               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(
                                                                           pc_List->c_Name.c_str()).c_str());
          }
          break;
@@ -1642,7 +1629,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_DataPool != NULL)
          {
             c_Retval =
-               static_cast<QString>(C_GtGetText::h_GetText("_%1")).arg(C_OscUtils::h_NiceifyStringForFileName(
+               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(
                                                                           pc_DataPool->c_Name.c_str()).c_str());
          }
          break;
@@ -1651,7 +1638,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_Node != NULL)
          {
             c_Retval =
-               static_cast<QString>(C_GtGetText::h_GetText("%1")).arg(C_OscUtils::h_NiceifyStringForFileName(
+               static_cast<QString>("%1").arg(C_OscUtils::h_NiceifyStringForFileName(
                                                                          pc_Node->c_Properties.c_Name.c_str()).c_str());
          }
          break;
@@ -1695,14 +1682,12 @@ void C_SyvDaItPaWidgetNew::m_InformUserFloatRangeCheck(
             QString c_Content;
             C_OgeWiCustomMessage c_Message(pc_ParamWidget->GetPopUpParent(), C_OgeWiCustomMessage::eWARNING);
 
-            c_Message.SetHeading(C_GtGetText::h_GetText("Value changes"));
-            c_Message.SetDescription(C_GtGetText::h_GetText(
-                                        "Some values were changed due to invalid float values (-inf, inf, nan)"));
+            c_Message.SetHeading("Value changes");
+            c_Message.SetDescription("Some values were changed due to invalid float values (-inf, inf, nan)");
 
             for (uint32_t u32_It = 0UL; u32_It < orc_InvalidValueIds.size(); ++u32_It)
             {
-               c_Content += static_cast<QString>(C_GtGetText::h_GetText(
-                                                    "Changed value of parameter \"%1\" from \"%2\" to \"%3\"\n")).
+               c_Content += static_cast<QString>("Changed value of parameter \"%1\" from \"%2\" to \"%3\"\n").
                             arg(C_PuiSdUtil::h_GetNamespace(orc_InvalidValueIds[u32_It])).
                             arg(orc_InvalidValues[u32_It]).
                             arg(orc_NewValues[u32_It]);

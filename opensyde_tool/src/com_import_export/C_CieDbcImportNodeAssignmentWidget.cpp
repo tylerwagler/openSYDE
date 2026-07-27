@@ -14,7 +14,6 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_CieDbcImportNodeAssignmentWidget.hpp"
 #include "ui_C_CieDbcImportNodeAssignmentWidget.h"
 
@@ -73,8 +72,8 @@ C_CieDbcImportNodeAssignmentWidget::C_CieDbcImportNodeAssignmentWidget(
    //lint -e{1938} //we don't create global objects of this class; no race conditions can occur
    this->mpc_Ui->pc_LabPath->setText(
       C_Uti::h_MinimizePath(orc_FilePath, C_Uti::h_GetFontPixel(mc_STYLE_GUIDE_FONT_REGULAR_13), 520, 0));
-   this->mpc_Ui->pc_LabPath->SetToolTipInformation(C_GtGetText::h_GetText("DBC Source File"),
-                                                   C_GtGetText::h_GetText(orc_FilePath.toStdString().c_str()));
+   this->mpc_Ui->pc_LabPath->SetToolTipInformation("DBC Source File",
+                                                   orc_FilePath.toStdString().c_str());
 
    this->m_InitNodes(ou32_BusIndex, orc_CieCommDef);
 
@@ -111,52 +110,52 @@ C_CieDbcImportNodeAssignmentWidget::~C_CieDbcImportNodeAssignmentWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieDbcImportNodeAssignmentWidget::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Import Messages"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("DBC File"));
+   this->mrc_ParentDialog.SetTitle("Import Messages");
+   this->mrc_ParentDialog.SetSubTitle("DBC File");
 
    // file info group box
-   this->mpc_Ui->pc_LabHeadingFileInfo->setText(C_GtGetText::h_GetText("Source File Information"));
-   this->mpc_Ui->pc_LabPathTitle->setText(C_GtGetText::h_GetText("Path:"));
+   this->mpc_Ui->pc_LabHeadingFileInfo->setText("Source File Information");
+   this->mpc_Ui->pc_LabPathTitle->setText("Path:");
 
    // mapped messages
-   this->mpc_Ui->pc_LabHeadingMapped->setText(C_GtGetText::h_GetText("Mapped Messages"));
-   this->mpc_Ui->pc_LabDbcNodeTitle->setText(C_GtGetText::h_GetText("DBC Node"));
-   this->mpc_Ui->pc_LabDbcNodeTitle->SetToolTipInformation(C_GtGetText::h_GetText("DBC Node"),
-                                                           C_GtGetText::h_GetText("Node from DBC file description."));
-   this->mpc_Ui->pc_LabInfoTitle->setText(C_GtGetText::h_GetText("Information"));
+   this->mpc_Ui->pc_LabHeadingMapped->setText("Mapped Messages");
+   this->mpc_Ui->pc_LabDbcNodeTitle->setText("DBC Node");
+   this->mpc_Ui->pc_LabDbcNodeTitle->SetToolTipInformation("DBC Node",
+                                                           "Node from DBC file description.");
+   this->mpc_Ui->pc_LabInfoTitle->setText("Information");
    this->mpc_Ui->pc_LabInfoTitle->SetToolTipInformation(
-      C_GtGetText::h_GetText("Information"),
-      C_GtGetText::h_GetText("Number of Tx and Rx messages of this node in DBC file."));
-   this->mpc_Ui->pc_LabOsyNodeTitle->setText(C_GtGetText::h_GetText("Assignee"));
+      "Information",
+      "Number of Tx and Rx messages of this node in DBC file.");
+   this->mpc_Ui->pc_LabOsyNodeTitle->setText("Assignee");
    this->mpc_Ui->pc_LabOsyNodeTitle->SetToolTipInformation(
-      C_GtGetText::h_GetText("Assignee"),
-      C_GtGetText::h_GetText("Select a node from Network Topology. Corresponding DBC messages get imported "
-                             "to this node."));
-   this->mpc_Ui->pc_LabNoMapped->setText(C_GtGetText::h_GetText("No mapped messages found."));
+      "Assignee",
+      "Select a node from Network Topology. Corresponding DBC messages get imported "
+                             "to this node.");
+   this->mpc_Ui->pc_LabNoMapped->setText("No mapped messages found.");
 
    // unmapped messages
-   this->mpc_Ui->pc_LabHeadingUnmapped->setText(C_GtGetText::h_GetText("Unmapped Messages"));
-   this->mpc_Ui->pc_LabAssignee->setText(C_GtGetText::h_GetText("Assignee"));
+   this->mpc_Ui->pc_LabHeadingUnmapped->setText("Unmapped Messages");
+   this->mpc_Ui->pc_LabAssignee->setText("Assignee");
    this->mpc_Ui->pc_LabAssignee->SetToolTipInformation(
-      C_GtGetText::h_GetText("Assignee"),
-      C_GtGetText::h_GetText("Select a node from Network Topology. All unmapped DBC messages get imported "
-                             "to this node."));
-   this->mpc_Ui->pc_LabDirection->setText(C_GtGetText::h_GetText("Direction"));
+      "Assignee",
+      "Select a node from Network Topology. All unmapped DBC messages get imported "
+                             "to this node.");
+   this->mpc_Ui->pc_LabDirection->setText("Direction");
    this->mpc_Ui->pc_LabDirection->SetToolTipInformation(
-      C_GtGetText::h_GetText("Direction"),
-      C_GtGetText::h_GetText("Choose if the selected node is transmitter or receiver of the unmapped messages."));
-   this->mpc_Ui->pc_LabNoUnmapped->setText(C_GtGetText::h_GetText("No unmapped messages found."));
+      "Direction",
+      "Choose if the selected node is transmitter or receiver of the unmapped messages.");
+   this->mpc_Ui->pc_LabNoUnmapped->setText("No unmapped messages found.");
    this->mpc_Ui->pc_LabNumberUnmapped->setText("");
 
    // combobox direction
    this->mpc_Ui->pc_CbxDirection->addItem("dummy");
    this->mpc_Ui->pc_CbxDirection->addItem("dummy");
-   this->mpc_Ui->pc_CbxDirection->setItemText(mhu8_INDEX_TRANSMIT, C_GtGetText::h_GetText("Transmit"));
-   this->mpc_Ui->pc_CbxDirection->setItemText(mhu8_INDEX_RECEIVE, C_GtGetText::h_GetText("Receive"));
+   this->mpc_Ui->pc_CbxDirection->setItemText(mhu8_INDEX_TRANSMIT, "Transmit");
+   this->mpc_Ui->pc_CbxDirection->setItemText(mhu8_INDEX_RECEIVE, "Receive");
 
    // buttons
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Continue"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText("Continue");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -197,7 +196,7 @@ std::vector<C_CieDbcOsyNodeAssignment> C_CieDbcImportNodeAssignmentWidget::GetNo
       const uint32_t u32_DataIndex = static_cast<uint32_t>(s32_UnmappedIndex - 1);
 
       // messages
-      c_UnmappedMessages.c_CieNode.c_Properties.c_Name = C_GtGetText::h_GetText("Unmapped");
+      c_UnmappedMessages.c_CieNode.c_Properties.c_Name = "Unmapped";
       if (this->mpc_Ui->pc_CbxDirection->currentIndex() == mhu8_INDEX_RECEIVE)
       {
          c_UnmappedMessages.c_CieNode.c_RxMessages = this->mc_UnmappedMessages;
@@ -259,9 +258,9 @@ void C_CieDbcImportNodeAssignmentWidget::m_OkClicked(void)
    else
    {
       C_OgeWiCustomMessage c_Message(this);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Import Messages"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("No assigned node found. Select at least one assigned node to "
-                                                      "continue the message import."));
+      c_Message.SetHeading("Import Messages");
+      c_Message.SetDescription("No assigned node found. Select at least one assigned node to "
+                                                      "continue the message import.");
       c_Message.SetCustomMinHeight(180, 180);
       c_Message.Execute();
    }
@@ -327,7 +326,7 @@ void C_CieDbcImportNodeAssignmentWidget::m_InitNodes(const uint32_t ou32_BusInde
                                                                                    size()));
 
       // fill combobox with all connected topology nodes
-      this->mpc_Ui->pc_CbxAssignee->addItem(C_GtGetText::h_GetText("<ignore>"));
+      this->mpc_Ui->pc_CbxAssignee->addItem("<ignore>");
       for (std::vector<QString>::const_iterator c_It = c_NodeNames.begin(); c_It != c_NodeNames.end(); ++c_It)
       {
          this->mpc_Ui->pc_CbxAssignee->addItem(*c_It);

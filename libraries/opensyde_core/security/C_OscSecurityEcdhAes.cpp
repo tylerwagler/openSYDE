@@ -16,6 +16,7 @@
 #include <openssl/evp.h>
 #include <openssl/ec.h>
 #include <openssl/core_names.h>
+#include <openssl/param_build.h>
 #include <openssl/sha.h>
 
 #include "stwtypes.hpp"
@@ -126,73 +127,60 @@ int32_t C_OscSecurityEcdhAes::m_ExtractCompressedPublicKey(uint8_t (&orau8_Publi
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Create OpenSSL EVP_PKEY from raw RC public key
+/*! \brief   Create OpenSSL EVP_PKEY from raw EC public key
 
-   Note on usage of deprecated OpenSSL functions:
-   The new approach would be to use the "EVP_PKEY_fromdata" API.
-   This fails with "error:03000096:digital envelope routines::operation not supported for this keytype"
-    (same with public and private keys).
-   So constructing an EC key from binary data using this API is not supported with our version of OpenSSL (and possibly
-    also versions targets might use).
-   So better to use the "old" API until we can rely on OpenSSL providing the functionality with the new API.
+   Constructs an EVP_PKEY from a compressed secp256r1 public key using the OpenSSL 3.0
+   EVP_PKEY_fromdata API with OSSL_PARAM_BLD.
 
    \param[in]    orau8_PublicKey      Public key in compressed format (33 bytes of buffer)
 
    \retval  NULL     could not create key
-   \retval  C_NOACT  created key (needs to be EVP_PKEY_free's by caller)
+   \retval  !NULL   created key (needs to be EVP_PKEY_free'd by caller)
 */
 //----------------------------------------------------------------------------------------------------------------------
 EVP_PKEY * C_OscSecurityEcdhAes::mh_CreateEvpPkeyFromRawPublicKey(
    const uint8_t(&orau8_PublicKey)[hu32_PUBLIC_KEY_LENGTH])
 {
    EVP_PKEY * pc_Pkey = NULL;
-   EC_KEY * pc_EcKey = NULL;
-   EC_POINT * pc_Point = NULL;
-   int x_Result = -1; //lint !e970 !e8080 //using type to match library interface
 
-   // Create group for prime256v1
-   EC_GROUP * const pc_Group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
-
-   if (pc_Group != NULL)
+   OSSL_PARAM_BLD * const pc_Bld = OSSL_PARAM_BLD_new();
+   if (pc_Bld != NULL)
    {
-      pc_EcKey = EC_KEY_new();
-   }
-   if (pc_EcKey != NULL)
-   {
-      x_Result = EC_KEY_set_group(pc_EcKey, pc_Group);
-   }
-   if (x_Result == 1)
-   {
-      // Create EC_POINT for public key
-      pc_Point = EC_POINT_new(pc_Group);
-   }
-   if (pc_Point != NULL)
-   {
-      x_Result = EC_POINT_oct2point(pc_Group, pc_Point, orau8_PublicKey, hu32_PUBLIC_KEY_LENGTH, NULL);
-   }
-   if (x_Result == 1)
-   {
-      x_Result = EC_KEY_set_public_key(pc_EcKey, pc_Point);
-   }
-   if (x_Result == 1)
-   {
-      // Create EVP_PKEY and assign EC_KEY
-      pc_Pkey = EVP_PKEY_new();
-   }
-   if (pc_Pkey != NULL)
-   {
-      x_Result = EVP_PKEY_set1_EC_KEY(pc_Pkey, pc_EcKey);
-      if (x_Result != 1)
+      int x_Result = OSSL_PARAM_BLD_push_utf8_string(pc_Bld, OSSL_PKEY_PARAM_GROUP_NAME,
+                                                      "prime256v1", 0); //lint !e970 !e8080
+      if (x_Result == 1)
       {
-         EVP_PKEY_free(pc_Pkey);
-         pc_Pkey = NULL;
+         x_Result = OSSL_PARAM_BLD_push_octet_string(pc_Bld, OSSL_PKEY_PARAM_PUB_KEY,
+                                                      &orau8_PublicKey[0],
+                                                      hu32_PUBLIC_KEY_LENGTH);
+      }
+
+      OSSL_PARAM * pc_Params = NULL;
+      if (x_Result == 1)
+      {
+         pc_Params = OSSL_PARAM_BLD_to_param(pc_Bld);
+      }
+      OSSL_PARAM_BLD_free(pc_Bld);
+
+      if (pc_Params != NULL)
+      {
+         EVP_PKEY_CTX * const pc_KeyCtx = EVP_PKEY_CTX_new_from_name(NULL, "EC", NULL);
+         if (pc_KeyCtx != NULL)
+         {
+            if ((EVP_PKEY_fromdata_init(pc_KeyCtx) == 1) &&
+                (EVP_PKEY_fromdata(pc_KeyCtx, &pc_Pkey, EVP_PKEY_PUBLIC_KEY, pc_Params) == 1))
+            {
+               //EVP_PKEY_fromdata set pc_Pkey on success
+            }
+            else
+            {
+               pc_Pkey = NULL;
+            }
+            EVP_PKEY_CTX_free(pc_KeyCtx);
+         }
+         OSSL_PARAM_free(pc_Params);
       }
    }
-
-   //no action if parameters are NULL
-   EC_POINT_free(pc_Point);
-   EC_KEY_free(pc_EcKey);
-   EC_GROUP_free(pc_Group);
 
    return pc_Pkey;
 }

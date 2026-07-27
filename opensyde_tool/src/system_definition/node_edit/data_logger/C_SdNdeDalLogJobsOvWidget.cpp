@@ -14,7 +14,6 @@
 
 #include "C_SdNdeDalLogJobsOvWidget.hpp"
 #include "ui_C_SdNdeDalLogJobsOvWidget.h"
-#include "C_GtGetText.hpp"
 #include "C_SdNdeDalTabContentWidget.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -113,9 +112,8 @@ void C_SdNdeDalLogJobsOvWidget::SetNodeIndex(const uint32_t ou32_NodeIndex)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobsOvWidget::m_InitStaticNames() const
 {
-   this->mpc_Ui->pc_LabelNoLogJobs->setText(C_GtGetText::h_GetText(
-                                               "No LogJobs declared. \n"
-                                               "Add any via the '+' button."));
+   this->mpc_Ui->pc_LabelNoLogJobs->setText("No LogJobs declared. \n"
+                                               "Add any via the '+' button.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

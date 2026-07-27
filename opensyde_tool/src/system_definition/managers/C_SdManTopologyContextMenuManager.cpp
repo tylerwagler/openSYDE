@@ -16,7 +16,6 @@
 #include "C_SdManTopologyContextMenuManager.hpp"
 #include "C_SebUtil.hpp"
 #include "C_GiLiLineGroup.hpp"
-#include "C_GtGetText.hpp"
 #include "gitypes.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -44,7 +43,7 @@ C_SdManTopologyContextMenuManager::C_SdManTopologyContextMenuManager() :
    C_SebTopologyBaseContextMenuManager()
 {
    //   // insert actions
-   this->mpc_ActionEdit = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText("Edit Properties"), this,
+   this->mpc_ActionEdit = this->mc_ContextMenu.addAction("Edit Properties", this,
                                                          &C_SdManTopologyContextMenuManager::m_Edit);
 
    this->mpc_ActionEditSeparator = this->mc_ContextMenu.addSeparator();
@@ -53,8 +52,7 @@ C_SdManTopologyContextMenuManager::C_SdManTopologyContextMenuManager() :
    this->mc_ContextMenu.insertAction(this->mpc_ActionCut, this->mpc_ActionEdit);
    this->mc_ContextMenu.insertAction(this->mpc_ActionCut, this->mpc_ActionEditSeparator);
 
-   this->mpc_ActionInterfaceAssignment = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                           "Interface Assignment"),
+   this->mpc_ActionInterfaceAssignment = this->mc_ContextMenu.addAction("Interface Assignment",
                                                                         this,
                                                                         &C_SdManTopologyContextMenuManager::m_InterfaceAssignment);
 }
@@ -93,7 +91,7 @@ bool C_SdManTopologyContextMenuManager::m_ActivateSpecificActions(void)
    switch (this->mpc_ActiveItem->type())
    {
    case ms32_GRAPHICS_ITEM_NODE:
-      this->mpc_ActionEdit->setText(C_GtGetText::h_GetText("Edit Node Properties"));
+      this->mpc_ActionEdit->setText("Edit Node Properties");
       this->mpc_ActionEdit->setVisible(true);
       this->mpc_ActionCut->setVisible(true);
       this->mpc_ActionCopy->setVisible(true);
@@ -110,7 +108,7 @@ bool C_SdManTopologyContextMenuManager::m_ActivateSpecificActions(void)
       this->mpc_ActionDelete->setVisible(true);
       this->mpc_ActionBringToFront->setVisible(true);
       this->mpc_ActionSendToBack->setVisible(true);
-      this->mpc_ActionEdit->setText(C_GtGetText::h_GetText("Edit Bus Properties"));
+      this->mpc_ActionEdit->setText("Edit Bus Properties");
       this->mpc_ActionEdit->setVisible(true);
       break;
    // check for bus connector
@@ -136,7 +134,7 @@ bool C_SdManTopologyContextMenuManager::m_ActivateSpecificActions(void)
    case ms32_GRAPHICS_ITEM_TEXTELEMENT_BUS:
       this->mpc_ActionBringToFront->setVisible(true);
       this->mpc_ActionSendToBack->setVisible(true);
-      this->mpc_ActionEdit->setText(C_GtGetText::h_GetText("Edit Bus Properties"));
+      this->mpc_ActionEdit->setText("Edit Bus Properties");
       this->mpc_ActionEdit->setVisible(true);
       break;
    default:

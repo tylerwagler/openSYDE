@@ -18,7 +18,6 @@
 #include "C_OgeWiDashboardTab.hpp"
 #include "ui_C_OgeWiDashboardTab.h"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -77,8 +76,8 @@ C_OgeWiDashboardTab::C_OgeWiDashboardTab(QWidget * const opc_Parent, const bool 
    this->mpc_Ui->pc_LabelChartIcon->SetSvg("://images/system_views/dashboards/tab_chart/IconChartTab.svg");
 
    this->mpc_Ui->pc_PushButtonClose->setIconSize(QSize(16, 16));
-   this->mpc_Ui->pc_PushButtonClose->SetToolTipInformation(C_GtGetText::h_GetText("Delete"),
-                                                           C_GtGetText::h_GetText("Delete Dashboard tab."));
+   this->mpc_Ui->pc_PushButtonClose->SetToolTipInformation("Delete",
+                                                           "Delete Dashboard tab.");
 
    //Temporary remove of close action until reactivation feature is available
    //connect(this->mpc_Ui->pc_PushButtonClose, &QPushButton::clicked, this, &C_OgeWiDashboardTab::m_CloseAction);
@@ -280,7 +279,7 @@ void C_OgeWiDashboardTab::m_HandleMode(void)
    {
       if (this->mpc_ActionActivate != NULL)
       {
-         this->mpc_ActionActivate->setText(C_GtGetText::h_GetText("Deactivate"));
+         this->mpc_ActionActivate->setText("Deactivate");
       }
       this->mpc_Ui->pc_LabelName->setEnabled(true);
    }
@@ -288,7 +287,7 @@ void C_OgeWiDashboardTab::m_HandleMode(void)
    {
       if (this->mpc_ActionActivate != NULL)
       {
-         this->mpc_ActionActivate->setText(C_GtGetText::h_GetText("Activate"));
+         this->mpc_ActionActivate->setText("Activate");
       }
       this->mpc_Ui->pc_LabelName->setEnabled(false);
    }
@@ -301,38 +300,32 @@ void C_OgeWiDashboardTab::m_HandleMode(void)
 void C_OgeWiDashboardTab::m_InitContextMenu(void)
 {
    // add all actions
-   this->mpc_ActionEditProperties = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText("Edit Properties"), this,
+   this->mpc_ActionEditProperties = this->mc_ContextMenu.addAction("Edit Properties", this,
                                                                    &C_OgeWiDashboardTab::m_EditProperties);
 
    this->mc_ContextMenu.addSeparator();
 
    if (this->mq_ShowUndock == true)
    {
-      this->mc_ContextMenu.addAction(C_GtGetText::h_GetText("Undock"), this, &C_OgeWiDashboardTab::m_UndockAction);
+      this->mc_ContextMenu.addAction("Undock", this, &C_OgeWiDashboardTab::m_UndockAction);
       this->mc_ContextMenu.addSeparator();
    }
 
    /* Activate/Deactivate Feature is not supported so far (open issue)
-   this->mpc_ActionActivate = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                "Activate/Deactivate"), this,
+   this->mpc_ActionActivate = this->mc_ContextMenu.addAction("Activate/Deactivate", this,
                                                              &C_OgeWiDashboardTab::m_ToggleActive);
    this->mc_ContextMenu.addSeparator();
    */
 
-   this->mpc_ActionCut = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                           "Cut"), this, &C_OgeWiDashboardTab::m_CutAction);
-   this->mpc_ActionCopy = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                            "Copy"), this, &C_OgeWiDashboardTab::m_CopyAction);
-   this->mpc_ActionPaste = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                             "Paste"), this, &C_OgeWiDashboardTab::m_PasteAction);
+   this->mpc_ActionCut = this->mc_ContextMenu.addAction("Cut", this, &C_OgeWiDashboardTab::m_CutAction);
+   this->mpc_ActionCopy = this->mc_ContextMenu.addAction("Copy", this, &C_OgeWiDashboardTab::m_CopyAction);
+   this->mpc_ActionPaste = this->mc_ContextMenu.addAction("Paste", this, &C_OgeWiDashboardTab::m_PasteAction);
 
    this->mc_ContextMenu.addSeparator();
 
    //Temporary remove of close action until reactivation feature is available
-   //this->mpc_ActionClose = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-   //                                                          "Close"), this, &C_OgeWiDashboardTab::m_CloseAction);
-   this->mpc_ActionDelete = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                              "Delete"), this, &C_OgeWiDashboardTab::m_DeleteAction);
+   //this->mpc_ActionClose = this->mc_ContextMenu.addAction(//                                                          "Close", this, &C_OgeWiDashboardTab::m_CloseAction);
+   this->mpc_ActionDelete = this->mc_ContextMenu.addAction("Delete", this, &C_OgeWiDashboardTab::m_DeleteAction);
 
    this->setContextMenuPolicy(Qt::CustomContextMenu);
    connect(this, &C_OgeWiDashboardTab::customContextMenuRequested, this,

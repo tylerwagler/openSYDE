@@ -16,7 +16,6 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvUpPacParamSetFileAddPopUp.hpp"
 #include "ui_C_SyvUpPacParamSetFileAddPopUp.h"
 
@@ -125,11 +124,11 @@ void C_SyvUpPacParamSetFileAddPopUp::InitStaticNames(void) const
 {
    const QFileInfo c_Info(this->mc_FileInfo.GetPath());
 
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Parameter Set Image File"));
+   this->mrc_ParentDialog.SetTitle("Parameter Set Image File");
    this->mrc_ParentDialog.SetSubTitle(c_Info.fileName());
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("File Information"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Accept"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Discard"));
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("File Information");
+   this->mpc_Ui->pc_PushButtonOk->setText("Accept");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Discard");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

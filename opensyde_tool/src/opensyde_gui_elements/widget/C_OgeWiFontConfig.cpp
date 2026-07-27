@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_OgeWiFontConfig.hpp"
 #include "ui_C_OgeWiFontConfig.h"
 
@@ -135,11 +134,11 @@ C_OgeWiFontConfig::~C_OgeWiFontConfig(void)
 void C_OgeWiFontConfig::InitStaticNames(void) const
 {
    //Translation: italic
-   this->mpc_Ui->pc_PushButtonItalic->setText(C_GtGetText::h_GetText("I"));
+   this->mpc_Ui->pc_PushButtonItalic->setText("I");
    //Translation: bold
-   this->mpc_Ui->pc_PushButtonBold->setText(C_GtGetText::h_GetText("B"));
+   this->mpc_Ui->pc_PushButtonBold->setText("B");
    //Translation: underline
-   this->mpc_Ui->pc_PushButtonUnderline->setText(C_GtGetText::h_GetText("U"));
+   this->mpc_Ui->pc_PushButtonUnderline->setText("U");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -16,7 +16,6 @@
 #include "C_SyvDaPeSpinBox.hpp"
 #include "ui_C_SyvDaPeSpinBox.h"
 
-#include "C_GtGetText.hpp"
 #include "C_GiSvDaSpinBoxBase.hpp"
 #include "C_OgeCbxText.hpp"
 
@@ -88,19 +87,17 @@ C_SyvDaPeSpinBox::~C_SyvDaPeSpinBox(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeSpinBox::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelShowUnit->setText(C_GtGetText::h_GetText("Show Unit"));
-   this->mpc_Ui->pc_LabelStyle->setText(C_GtGetText::h_GetText("Style"));
+   this->mpc_Ui->pc_LabelShowUnit->setText("Show Unit");
+   this->mpc_Ui->pc_LabelStyle->setText("Style");
 
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Type 1"));
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Type 2"));
+   this->mpc_Ui->pc_ComboBoxType->addItem("Type 1");
+   this->mpc_Ui->pc_ComboBoxType->addItem("Type 2");
 
    //Tool tips
-   this->mpc_Ui->pc_LabelStyle->SetToolTipInformation(C_GtGetText::h_GetText("Style"),
-                                                      C_GtGetText::h_GetText(
-                                                         "Different options for styles specific to this widget"));
-   this->mpc_Ui->pc_LabelShowUnit->SetToolTipInformation(C_GtGetText::h_GetText("Show Unit"),
-                                                         C_GtGetText::h_GetText(
-                                                            "Option to display the unit after the value or hide the unit entirely"));
+   this->mpc_Ui->pc_LabelStyle->SetToolTipInformation("Style",
+                                                      "Different options for styles specific to this widget");
+   this->mpc_Ui->pc_LabelShowUnit->SetToolTipInformation("Show Unit",
+                                                         "Option to display the unit after the value or hide the unit entirely");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

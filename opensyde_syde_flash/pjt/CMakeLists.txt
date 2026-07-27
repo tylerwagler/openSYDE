@@ -70,8 +70,6 @@ set (OPENSYDE_INCLUDES
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util
-   ${OPENSYDE_GUI_ROOT}/src/gettext
-   ${OPENSYDE_GUI_ROOT}/src/gettext
    ${OPENSYDE_GUI_ROOT}/src/help_engine
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements
@@ -116,10 +114,6 @@ set (OPENSYDE_INCLUDES
 # Include path with library modules
 set (OPENSYDE_LIB_INCLUDES
 )
-if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   list(APPEND OPENSYDE_LIB_INCLUDES ${PROJECT_ROOT}/../libraries/gettext)
-   list(APPEND OPENSYDE_INCLUDES ${PROJECT_ROOT}/../libraries/gettext)
-endif()
 
 # --- PROJECT SOURCE FILE PATHS ----------------------------------------------------------------------------------------
 
@@ -140,7 +134,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_AdapterBrowser.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiGeneric.cpp
-   ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.cpp
    ${OPENSYDE_GUI_ROOT}/src/help_engine/C_HeHandler.cpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagAboutDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolTip.cpp
@@ -273,7 +266,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiGeneric.hpp
    ${OPENSYDE_GUI_ROOT}/src/constants.hpp
-   ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.hpp
    ${OPENSYDE_GUI_ROOT}/src/help_engine/C_HeHandler.hpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagAboutDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolTip.hpp
@@ -459,7 +451,6 @@ else()
       version
       ws2_32   #WinSock
       Iphlpapi #IP helper API
-      ${PROJECT_ROOT}/../libraries/gettext/libintl.a
       ${PROJECT_ROOT}/../libraries/openssl/openssl64/libssl.a
       ${PROJECT_ROOT}/../libraries/openssl/openssl64/libcrypto.a
    )

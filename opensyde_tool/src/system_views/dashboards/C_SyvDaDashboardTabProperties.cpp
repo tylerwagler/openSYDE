@@ -12,7 +12,6 @@
 
 #include "C_SyvDaDashboardTabProperties.hpp"
 #include "ui_C_SyvDaDashboardTabProperties.h"
-#include "C_GtGetText.hpp"
 #include "C_PuiSvData.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "stwerrors.hpp"
@@ -139,30 +138,29 @@ C_SyvDaDashboardTabProperties::~C_SyvDaDashboardTabProperties(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardTabProperties::InitStaticNames(void)
 {
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_TedComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
-   this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
-   this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
+   this->mrc_ParentDialog.SetSubTitle("Properties");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_TedComment->setPlaceholderText("Add your comment here ...");
+   this->mpc_Ui->pc_LabelName->setText("Name");
+   this->mpc_Ui->pc_LabelComment->setText("Comment");
    this->mpc_Ui->pc_LabelHintComment->setText(
-      C_GtGetText::h_GetText("Note: Comment is shown in tooltip on tab hover."));
-   this->mpc_Ui->pc_LabelType->setText(C_GtGetText::h_GetText("Type"));
-   this->mpc_Ui->pc_RbCommonDashboard->setText(C_GtGetText::h_GetText("Common Dashboard"));
-   this->mpc_Ui->pc_RbChartDashboard->setText(C_GtGetText::h_GetText("Chart Dashboard"));
+      "Note: Comment is shown in tooltip on tab hover.");
+   this->mpc_Ui->pc_LabelType->setText("Type");
+   this->mpc_Ui->pc_RbCommonDashboard->setText("Common Dashboard");
+   this->mpc_Ui->pc_RbChartDashboard->setText("Chart Dashboard");
 
    //Tool tips
-   this->mpc_Ui->pc_LabelName->SetToolTipInformation(C_GtGetText::h_GetText("Name"),
-                                                     C_GtGetText::h_GetText(
-                                                        "Unique Dashboard tab name. Unique within a view."));
+   this->mpc_Ui->pc_LabelName->SetToolTipInformation("Name",
+                                                     "Unique Dashboard tab name. Unique within a view.");
 
-   this->mpc_Ui->pc_LabelComment->SetToolTipInformation(C_GtGetText::h_GetText("Comment"),
-                                                        C_GtGetText::h_GetText("Comment for this Dashboard tab, that "
-                                                                               "is shown in tooltip on tab hover."));
-   this->mpc_Ui->pc_RbCommonDashboard->SetToolTipInformation(C_GtGetText::h_GetText("Common Dashboard"),
-                                                             C_GtGetText::h_GetText("Empty Dashboard"));
-   this->mpc_Ui->pc_RbChartDashboard->SetToolTipInformation(C_GtGetText::h_GetText("Chart Dashboard"),
-                                                            C_GtGetText::h_GetText("Dashboard with a chart"));
+   this->mpc_Ui->pc_LabelComment->SetToolTipInformation("Comment",
+                                                        "Comment for this Dashboard tab, that "
+                                                                               "is shown in tooltip on tab hover.");
+   this->mpc_Ui->pc_RbCommonDashboard->SetToolTipInformation("Common Dashboard",
+                                                             "Empty Dashboard");
+   this->mpc_Ui->pc_RbChartDashboard->SetToolTipInformation("Chart Dashboard",
+                                                            "Dashboard with a chart");
 }
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get name of dashboard tab.
@@ -220,9 +218,8 @@ void C_SyvDaDashboardTabProperties::m_OkClicked(void)
    else
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eERROR);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Dashboard rename"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                     "This Dashboard name already exists. Choose another name."));
+      c_MessageBox.SetHeading("Dashboard rename");
+      c_MessageBox.SetDescription("This Dashboard name already exists. Choose another name.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       c_MessageBox.Execute();
    }
@@ -274,14 +271,14 @@ bool C_SyvDaDashboardTabProperties::m_CheckDashboardTabName(void) const
       // show error tooltip if invalid and no tooltip else
       if (q_ValidName == true)
       {
-         this->mpc_Ui->pc_LineEditName->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                              C_GtGetText::h_GetText(""),
+         this->mpc_Ui->pc_LineEditName->SetToolTipInformation("",
+                                                              "",
                                                               C_NagToolTip::eDEFAULT);
       }
       else
       {
-         const QString c_Heading = C_GtGetText::h_GetText("Dashboard Name");
-         const QString c_Content = C_GtGetText::h_GetText("Name is already in use.");
+         const QString c_Heading = "Dashboard Name";
+         const QString c_Content = "Name is already in use.";
          this->mpc_Ui->pc_LineEditName->SetToolTipInformation(c_Heading, c_Content, C_NagToolTip::eERROR);
       }
    }

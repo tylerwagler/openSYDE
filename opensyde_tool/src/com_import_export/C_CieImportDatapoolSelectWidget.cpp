@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "TglUtils.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -88,18 +87,17 @@ C_CieImportDatapoolSelectWidget::~C_CieImportDatapoolSelectWidget(void)
 void C_CieImportDatapoolSelectWidget::InitStaticNames(void) const
 {
    const QString c_Description =
-      static_cast<QString>(C_GtGetText::h_GetText(
-                              "There are multiple Datapools with communication protocol type \"%1\" defined. "
-                              "Choose one Datapool for importing new messages.")).
+      static_cast<QString>("There are multiple Datapools with communication protocol type \"%1\" defined. "
+                              "Choose one Datapool for importing new messages.").
       arg(C_PuiSdUtil::h_ConvertProtocolTypeToString(this->me_ComProtocolType));
 
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Import New Messages"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Datapool Selection"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Select COMM Datapool"));
+   this->mrc_ParentDialog.SetTitle("Import New Messages");
+   this->mrc_ParentDialog.SetSubTitle("Datapool Selection");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Select COMM Datapool");
    this->mpc_Ui->pc_LabDescription->setText(c_Description);
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Import"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_LabDatapool->setText(C_GtGetText::h_GetText("Datapool"));
+   this->mpc_Ui->pc_PushButtonOk->setText("Import");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_LabDatapool->setText("Datapool");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

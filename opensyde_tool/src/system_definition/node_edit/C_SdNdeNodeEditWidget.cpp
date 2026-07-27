@@ -21,7 +21,6 @@
 #include "C_OscNode.hpp"
 
 #include "C_UsHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
@@ -114,12 +113,12 @@ C_SdNdeNodeEditWidget::~C_SdNdeNodeEditWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodeEditWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_PROPERTIES, C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_DATA_POOL, C_GtGetText::h_GetText("Datapools"));
-   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_COMM, C_GtGetText::h_GetText("COMM Messages"));
-   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_CO_MANAGER, C_GtGetText::h_GetText("CANopen Manager"));
-   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_HALC, C_GtGetText::h_GetText("Hardware Configurator"));
-   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_DATA_LOGGER, C_GtGetText::h_GetText("Data Logger"));
+   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_PROPERTIES, "Properties");
+   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_DATA_POOL, "Datapools");
+   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_COMM, "COMM Messages");
+   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_CO_MANAGER, "CANopen Manager");
+   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_HALC, "Hardware Configurator");
+   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(hs32_TAB_INDEX_DATA_LOGGER, "Data Logger");
 
    //Tool tips
 }

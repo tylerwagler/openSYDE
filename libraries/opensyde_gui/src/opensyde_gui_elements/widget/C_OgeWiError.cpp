@@ -14,13 +14,11 @@
 
 #include <QDialog>
 #include "C_OgeWiError.hpp"
-#include "C_GtGetText.hpp"
 #include "ui_C_OgeWiError.h"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::opensyde_gui_elements;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -71,8 +69,8 @@ C_OgeWiError::~C_OgeWiError()
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeWiError::InitStaticNames() const
 {
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_ErrorDescription->setPlainText(C_GtGetText::h_GetText("No error description available."));
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_ErrorDescription->setPlainText("No error description available.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

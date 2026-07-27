@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvUpPacSecurityCertificatePackageDialog.hpp"
 #include "ui_C_SyvUpPacSecurityCertificatePackageDialog.h"
 #include "C_OgeWiUtil.hpp"
@@ -185,27 +184,25 @@ bool C_SyvUpPacSecurityCertificatePackageDialog::GetOptionAddSecureAuthenticatio
 void C_SyvUpPacSecurityCertificatePackageDialog::m_InitStaticNames(void) const
 {
    //Secure Authentication
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Security Certificate Package"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Create"));
-   this->mpc_Ui->pc_LabelSecureAuthentication->setText(C_GtGetText::h_GetText("Secure Authentication"));
-   this->mpc_Ui->pc_ChxBoxAddPEMFiles->setText(C_GtGetText::h_GetText("Add new authentication PEM files"));
-   this->mpc_Ui->pc_ChxBoxAddPEMFiles->SetToolTipInformation(C_GtGetText::h_GetText("Add new authentication PEM files"),
-                                                             C_GtGetText::h_GetText(
-                                                                "Secure Authentication: if \"Add new authentication PEM "
+   this->mrc_ParentDialog.SetTitle("Security Certificate Package");
+   this->mrc_ParentDialog.SetSubTitle("Create");
+   this->mpc_Ui->pc_LabelSecureAuthentication->setText("Secure Authentication");
+   this->mpc_Ui->pc_ChxBoxAddPEMFiles->setText("Add new authentication PEM files");
+   this->mpc_Ui->pc_ChxBoxAddPEMFiles->SetToolTipInformation("Add new authentication PEM files",
+                                                             "Secure Authentication: if \"Add new authentication PEM "
                                                                 "files\" is enabled, new authentication PEM files are "
-                                                                "added to the Security Certificate Package."));
-   this->mpc_Ui->pc_LabelInstallationWorkflow->setText(C_GtGetText::h_GetText("Installation Workflow"));
+                                                                "added to the Security Certificate Package.");
+   this->mpc_Ui->pc_LabelInstallationWorkflow->setText("Installation Workflow");
    this->mpc_Ui->pc_LabelWorkflowInfo->setText(
-      C_GtGetText::h_GetText(
-         "When the Security Certificate Package is installed on X.App Node, following steps are done:\n"
+      "When the Security Certificate Package is installed on X.App Node, following steps are done:\n"
          "- delete existing configuration for the security features \"Secure Authentication\" (private PEM files) and \"Secure Update\" (public PEM files).\n"
          "- Secure Authentication: if \"Add new authentication PEM files\" is enabled, new authentication PEM files are added.\n"
-         "- Secure Update: if \"Apply new Secure Update configuration\" is enabled, new Secure Update config is added.")
+         "- Secure Update: if \"Apply new Secure Update configuration\" is enabled, new Secure Update config is added."
       );
    if (this->mpc_Ui->pc_PEMFilesWidget != NULL)
    {
       this->mpc_Ui->pc_LabelNewAuthenticationPEMFile->setText(
-         static_cast<QString>(C_GtGetText::h_GetText("New authentication PEM files (%1)")).arg(QString::number(this
+         static_cast<QString>("New authentication PEM files (%1)").arg(QString::number(this
                                                                                                                ->
                                                                                                                mpc_Ui->
                                                                                                                pc_PEMFilesWidget
@@ -214,42 +211,33 @@ void C_SyvUpPacSecurityCertificatePackageDialog::m_InitStaticNames(void) const
    }
 
    //Secure Update
-   this->mpc_Ui->pc_LabelSecureUpdate->setText(C_GtGetText::h_GetText("Secure Update"));
-   this->mpc_Ui->pc_ChxBoxApplyUpdateConfiguration->setText(C_GtGetText::h_GetText(
-                                                               "Apply new Secure Update configuration"));
-   this->mpc_Ui->pc_ChxBoxApplyUpdateConfiguration->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                                             "Apply new Secure Update configuration"),
-                                                                          C_GtGetText::h_GetText(
-                                                                             "Secure Update: if "
+   this->mpc_Ui->pc_LabelSecureUpdate->setText("Secure Update");
+   this->mpc_Ui->pc_ChxBoxApplyUpdateConfiguration->setText("Apply new Secure Update configuration");
+   this->mpc_Ui->pc_ChxBoxApplyUpdateConfiguration->SetToolTipInformation("Apply new Secure Update configuration",
+                                                                          "Secure Update: if "
                                                                              "\"Apply new Secure Update configuration\" "
                                                                              "is enabled, new Secure Update config is "
-                                                                             "added to the Security Certificate Package."));
-   this->mpc_Ui->pc_LabelNewConfiguration->setText(C_GtGetText::h_GetText("New Configuration"));
-   this->mpc_Ui->pc_LabelPublicPEMFile->setText(C_GtGetText::h_GetText("Public PEM File"));
-   this->mpc_Ui->pc_LabelPassword->setText(C_GtGetText::h_GetText("Encryption Password"));
+                                                                             "added to the Security Certificate Package.");
+   this->mpc_Ui->pc_LabelNewConfiguration->setText("New Configuration");
+   this->mpc_Ui->pc_LabelPublicPEMFile->setText("Public PEM File");
+   this->mpc_Ui->pc_LabelPassword->setText("Encryption Password");
 
    //Tooltips
-   this->mpc_Ui->pc_PushButtonClearall->SetToolTipInformation(C_GtGetText::h_GetText("Clear"),
-                                                              C_GtGetText::h_GetText(
-                                                                 "Remove all PEM files."));
-   this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation(C_GtGetText::h_GetText("Add"),
-                                                         C_GtGetText::h_GetText(
-                                                            "Add new PEM file."));
-   this->mpc_Ui->pc_LabelPublicPEMFile->SetToolTipInformation(C_GtGetText::h_GetText("Signature Public Key"),
-                                                              C_GtGetText::h_GetText(
-                                                                 "Full path to public key file (*.pem)."));
-   this->mpc_Ui->pc_LabelPassword->SetToolTipInformation(C_GtGetText::h_GetText("Encryption Password (optional)"),
-                                                         C_GtGetText::h_GetText(
-                                                            "Flashware will be encrypted if password is given."));
-   this->mpc_Ui->pc_PubPublicKeyPath->SetToolTipInformation(C_GtGetText::h_GetText("Browse"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Browse for path to public key file (PEM file)."));
-   this->mpc_Ui->pc_PubTogglePassword->SetToolTipInformation(C_GtGetText::h_GetText("Show/Hide Password"),
-                                                             C_GtGetText::h_GetText(
-                                                                "Shows/hides password when pressed down."));
+   this->mpc_Ui->pc_PushButtonClearall->SetToolTipInformation("Clear",
+                                                              "Remove all PEM files.");
+   this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation("Add",
+                                                         "Add new PEM file.");
+   this->mpc_Ui->pc_LabelPublicPEMFile->SetToolTipInformation("Signature Public Key",
+                                                              "Full path to public key file (*.pem).");
+   this->mpc_Ui->pc_LabelPassword->SetToolTipInformation("Encryption Password (optional)",
+                                                         "Flashware will be encrypted if password is given.");
+   this->mpc_Ui->pc_PubPublicKeyPath->SetToolTipInformation("Browse",
+                                                            "Browse for path to public key file (PEM file).");
+   this->mpc_Ui->pc_PubTogglePassword->SetToolTipInformation("Show/Hide Password",
+                                                             "Shows/hides password when pressed down.");
 
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Create"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText("Create");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -343,7 +331,7 @@ void C_SyvUpPacSecurityCertificatePackageDialog::m_UpdateLabelTitleWithFileCount
    {
       const int32_t s32_FileCount = mpc_Ui->pc_PEMFilesWidget->GetFilesCount();
       this->mpc_Ui->pc_LabelNewAuthenticationPEMFile->setText(
-         static_cast<QString>(C_GtGetText::h_GetText("New authentication PEM files (%1)")).arg(QString::number(
+         static_cast<QString>("New authentication PEM files (%1)").arg(QString::number(
                                                                                                   s32_FileCount)));
 
       if (s32_FileCount == 0)
@@ -402,10 +390,10 @@ void C_SyvUpPacSecurityCertificatePackageDialog::m_PublicKeyPathClicked()
       c_Folder = C_Uti::h_GetExePath();
    }
 
-   const QString c_FilterName = static_cast<QString>(C_GtGetText::h_GetText("PEM file (*.pem);;Others (*.*)"));
+   const QString c_FilterName = static_cast<QString>("PEM file (*.pem);;Others (*.*)");
 
    // Do not use QFileDialog::getOpenFileName because it does not support default suffix
-   QFileDialog c_Dialog(this,  C_GtGetText::h_GetText("Select Output File"), c_Folder, c_FilterName);
+   QFileDialog c_Dialog(this,  "Select Output File", c_Folder, c_FilterName);
 
    c_Dialog.setDefaultSuffix("pem");
 
@@ -454,38 +442,33 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_OnValidateSecureUpdateConf
    if (s32_Result != C_NO_ERR)
    {
       C_OgeWiCustomMessage c_ErrorPath(this, C_OgeWiCustomMessage::eERROR);
-      c_ErrorPath.SetHeading(C_GtGetText::h_GetText("Create Security Certificate Package"));
+      c_ErrorPath.SetHeading("Create Security Certificate Package");
 
       switch (s32_Result)
       {
       case C_NOACT:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "You need to enter a public PEM file to apply new Secure Update configuration."));
+         c_ErrorPath.SetDescription("You need to enter a public PEM file to apply new Secure Update configuration.");
          break;
       case C_RANGE:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "Invalid file format of public PEM file for Secure Update. The format (*.pem) is required."));
+         c_ErrorPath.SetDescription("Invalid file format of public PEM file for Secure Update. The format (*.pem) is required.");
          break;
       case C_RD_WR:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "Invalid path of public PEM file for Secure Update "
-                                       "(e.g. containing invalid characters or file not found)."));
+         c_ErrorPath.SetDescription("Invalid path of public PEM file for Secure Update "
+                                       "(e.g. containing invalid characters or file not found).");
          break;
       case C_CONFIG:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "Public PEM file for Secure Update has invalid key configuration."));
-         c_ErrorPath.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +
-                                C_Uti::h_GetLink(C_GtGetText::h_GetText("log file."),  mc_STYLESHEET_GUIDE_COLOR_LINK,
+         c_ErrorPath.SetDescription("Public PEM file for Secure Update has invalid key configuration.");
+         c_ErrorPath.SetDetails(static_cast<QString>("For details see ") +
+                                C_Uti::h_GetLink("log file.",  mc_STYLESHEET_GUIDE_COLOR_LINK,
                                                  C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()));
          C_OscLoggingHandler::h_Flush(); // update log file
          break;
       default:
          // should never occur...
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "Public PEM file for Secure Update not valid for unknown reason."));
+         c_ErrorPath.SetDescription("Public PEM file for Secure Update not valid for unknown reason.");
          break;
       }
-      c_ErrorPath.SetOkButtonText(C_GtGetText::h_GetText("OK"));
+      c_ErrorPath.SetOkButtonText("OK");
       c_ErrorPath.exec();
    }
 
@@ -510,48 +493,43 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_OnValidateSecureAuthentica
    QString c_PathDetails;
    const int32_t s32_Result = this->m_CheckAuthPemFiles(c_PathDetails);
 
-   c_PathDetails = C_GtGetText::h_GetText("The following file lead to this error: \n") + c_PathDetails;
+   c_PathDetails = "The following file lead to this error: \n" + c_PathDetails;
 
    if (s32_Result != C_NO_ERR)
    {
       C_OgeWiCustomMessage c_ErrorPath(this, C_OgeWiCustomMessage::eERROR);
-      c_ErrorPath.SetHeading(C_GtGetText::h_GetText("Create Security Certificate Package"));
+      c_ErrorPath.SetHeading("Create Security Certificate Package");
 
       switch (s32_Result)
       {
       case C_NOACT:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "No new authentication PEM files selected."));
+         c_ErrorPath.SetDescription("No new authentication PEM files selected.");
          break;
       case C_RANGE:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "Invalid file format of at least one file for Secure Authentication. "
-                                       "The format (*.pem) is required."));
+         c_ErrorPath.SetDescription("Invalid file format of at least one file for Secure Authentication. "
+                                       "The format (*.pem) is required.");
          c_ErrorPath.SetDetails(c_PathDetails);
          break;
       case C_RD_WR:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "Invalid path of of at least one file for Secure Authentication "
-                                       "(e.g. containing invalid characters or file not found)."));
+         c_ErrorPath.SetDescription("Invalid path of of at least one file for Secure Authentication "
+                                       "(e.g. containing invalid characters or file not found).");
          c_ErrorPath.SetDetails(c_PathDetails);
          break;
       case C_CONFIG:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "At least one file for Secure Authentication has invalid key configuration."));
+         c_ErrorPath.SetDescription("At least one file for Secure Authentication has invalid key configuration.");
          c_ErrorPath.SetDetails(c_PathDetails.replace("\n", "<br>") + "<br>" +
-                                static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +
-                                C_Uti::h_GetLink(C_GtGetText::h_GetText("log file."),  mc_STYLESHEET_GUIDE_COLOR_LINK,
+                                static_cast<QString>("For details see ") +
+                                C_Uti::h_GetLink("log file.",  mc_STYLESHEET_GUIDE_COLOR_LINK,
                                                  C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()));
          C_OscLoggingHandler::h_Flush(); // update log file
          break;
       default:
          // should never occur...
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "At least one file for Secure Authentication not valid for unknown reason."));
+         c_ErrorPath.SetDescription("At least one file for Secure Authentication not valid for unknown reason.");
          c_ErrorPath.SetDetails(c_PathDetails);
          break;
       }
-      c_ErrorPath.SetOkButtonText(C_GtGetText::h_GetText("OK"));
+      c_ErrorPath.SetOkButtonText("OK");
       c_ErrorPath.exec();
    }
 

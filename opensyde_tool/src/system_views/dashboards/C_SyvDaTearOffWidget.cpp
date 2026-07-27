@@ -21,7 +21,6 @@
 #include "C_SyvClipBoardHelper.hpp"
 #include "ui_C_SyvDaTearOffWidget.h"
 
-#include "C_GtGetText.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_SyvDaDashboardTabProperties.hpp"
@@ -205,8 +204,8 @@ C_SyvDaTearOffWidget::~C_SyvDaTearOffWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTearOffWidget::InitText(void) const
 {
-   this->mpc_Ui->pc_PbConfirm->setText(C_GtGetText::h_GetText("Edit"));
-   this->mpc_Ui->pc_PbCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PbConfirm->setText("Edit");
+   this->mpc_Ui->pc_PbCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -275,7 +274,7 @@ void C_SyvDaTearOffWidget::SetEditMode(const bool oq_Active)
       //Handle button
       this->mpc_Ui->pc_PbConfirm->SetSvg("://images/system_views/IconConfirm.svg");
       this->mpc_Ui->pc_PbConfirm->SetMargins(10, 20);
-      this->mpc_Ui->pc_PbConfirm->setText(C_GtGetText::h_GetText("Confirm"));
+      this->mpc_Ui->pc_PbConfirm->setText("Confirm");
    }
    else
    {
@@ -283,7 +282,7 @@ void C_SyvDaTearOffWidget::SetEditMode(const bool oq_Active)
       this->mpc_Ui->pc_PbConfirm->SetSvg("://images/main_page_and_navi_bar/IconEdit.svg",
                                          "://images/IconEditDisabledBright.svg");
       this->mpc_Ui->pc_PbConfirm->SetMargins(10, 28); // put a bit more space in between
-      this->mpc_Ui->pc_PbConfirm->setText(C_GtGetText::h_GetText("Edit"));
+      this->mpc_Ui->pc_PbConfirm->setText("Edit");
 
       //Also should remember settings
       this->Save();
@@ -569,11 +568,11 @@ void C_SyvDaTearOffWidget::m_CheckError(void) const
       if (q_ViewSetupError == true)
       {
          this->mpc_Ui->pc_ErrorLabelIcon->SetSvg(c_IconPath);
-         this->mpc_Ui->pc_ErrorLabelIcon->SetToolTipInformation(C_GtGetText::h_GetText("Invalid"),
+         this->mpc_Ui->pc_ErrorLabelIcon->SetToolTipInformation("Invalid",
                                                                 c_ErrorTextTooltip, e_ToolTipType);
          this->mpc_Ui->pc_ErrorLabelTitle->SetForegroundColor(s32_ColorId);
          this->mpc_Ui->pc_ErrorLabelTitle->setText(c_ErrorTextHeading);
-         this->mpc_Ui->pc_ErrorLabelTitle->SetToolTipInformation(C_GtGetText::h_GetText("Invalid"),
+         this->mpc_Ui->pc_ErrorLabelTitle->SetToolTipInformation("Invalid",
                                                                  c_ErrorTextTooltip, e_ToolTipType);
          this->mpc_Ui->pc_ErrorLabel->SetForegroundColor(s32_ColorId);
          this->mpc_Ui->pc_ErrorLabel->SetCompleteText(c_ErrorText, c_ErrorTextTooltip, e_ToolTipType);

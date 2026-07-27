@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 #include "C_FlaConNodeConfigPopup.hpp"
 
@@ -145,34 +144,32 @@ void C_FlaPropWidget::LoadUserSettings() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaPropWidget::m_InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_WiTitle->SetTitle(C_GtGetText::h_GetText("Properties"));
+   this->mpc_Ui->pc_WiTitle->SetTitle("Properties");
    this->mpc_Ui->pc_WiTitle->SetIconType(C_CamOgeWiSectionHeader::E_ButtonType::eNOBUTTON);
 
-   this->mpc_Ui->pc_LabelNodeId->setText(C_GtGetText::h_GetText("Node ID"));
-   this->mpc_Ui->pc_LabelBitrate->setText(C_GtGetText::h_GetText("Bitrate"));
+   this->mpc_Ui->pc_LabelNodeId->setText("Node ID");
+   this->mpc_Ui->pc_LabelBitrate->setText("Bitrate");
 
-   this->mpc_Ui->pc_LabelNodeId->SetToolTipInformation(C_GtGetText::h_GetText("Node ID"),
-                                                       C_GtGetText::h_GetText(
-                                                          "Current node ID of the node to be configured/updated."));
+   this->mpc_Ui->pc_LabelNodeId->SetToolTipInformation("Node ID",
+                                                       "Current node ID of the node to be configured/updated.");
 
-   this->mpc_Ui->pc_LabelBitrate->SetToolTipInformation(C_GtGetText::h_GetText("Bitrate"),
-                                                        C_GtGetText::h_GetText(
-                                                           "Current bitrate of the node to be configured/updated."));
-   this->mpc_Ui->pc_SpxNodeId->SetToolTipInformation(C_GtGetText::h_GetText("Value Range"),
-                                                     C_GtGetText::h_GetText("Minimum: 0\n"
-                                                                            "Maximum: 125"));
-   this->mpc_Ui->pc_CbxBitrate->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                      C_GtGetText::h_GetText(""),
+   this->mpc_Ui->pc_LabelBitrate->SetToolTipInformation("Bitrate",
+                                                        "Current bitrate of the node to be configured/updated.");
+   this->mpc_Ui->pc_SpxNodeId->SetToolTipInformation("Value Range",
+                                                     "Minimum: 0\n"
+                                                                            "Maximum: 125");
+   this->mpc_Ui->pc_CbxBitrate->SetToolTipInformation("",
+                                                      "",
                                                       C_NagToolTip::eDEFAULT);
 
    //fill combobox
-   this->mpc_Ui->pc_CbxBitrate->addItem(C_GtGetText::h_GetText("100 kbit/s"));
-   this->mpc_Ui->pc_CbxBitrate->addItem(C_GtGetText::h_GetText("125 kbit/s"));
-   this->mpc_Ui->pc_CbxBitrate->addItem(C_GtGetText::h_GetText("250 kbit/s"));
-   this->mpc_Ui->pc_CbxBitrate->addItem(C_GtGetText::h_GetText("500 kbit/s"));
-   this->mpc_Ui->pc_CbxBitrate->addItem(C_GtGetText::h_GetText("800 kbit/s"));
-   this->mpc_Ui->pc_CbxBitrate->addItem(C_GtGetText::h_GetText("1000 kbit/s"));
-   this->mpc_Ui->pc_CbxBitrate->setCurrentText(C_GtGetText::h_GetText("125 kbit/s"));
+   this->mpc_Ui->pc_CbxBitrate->addItem("100 kbit/s");
+   this->mpc_Ui->pc_CbxBitrate->addItem("125 kbit/s");
+   this->mpc_Ui->pc_CbxBitrate->addItem("250 kbit/s");
+   this->mpc_Ui->pc_CbxBitrate->addItem("500 kbit/s");
+   this->mpc_Ui->pc_CbxBitrate->addItem("800 kbit/s");
+   this->mpc_Ui->pc_CbxBitrate->addItem("1000 kbit/s");
+   this->mpc_Ui->pc_CbxBitrate->setCurrentText("125 kbit/s");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -19,7 +19,6 @@
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -98,10 +97,10 @@ C_CieImportReportWidget::C_CieImportReportWidget(C_OgePopUpDialog & orc_Parent, 
    this->mrc_ParentDialog.SetWidget(this);
 
    // set main title
-   this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("%1 File Import")).arg(c_FileInfo.
+   this->mrc_ParentDialog.SetTitle(static_cast<QString>("%1 File Import").arg(c_FileInfo.
                                                                                                       completeSuffix().
                                                                                                       toUpper()));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Report"));
+   this->mrc_ParentDialog.SetSubTitle("Report");
 
    //Trigger report
    C_CieUtil::h_AdaptImportMessages(this->mc_ImportedAssignedData, this->me_ProtocolType, q_IsEdsOrDcfImport);
@@ -132,9 +131,9 @@ C_CieImportReportWidget::~C_CieImportReportWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieImportReportWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelHeadingReport->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Import"));
+   this->mpc_Ui->pc_LabelHeadingReport->setText("Details");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_PushButtonOk->setText("Import");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -160,23 +159,23 @@ QString C_CieImportReportWidget::h_GetInitialReportPart(
    //Sum up read content
    if (oq_IsCanOpenCase == true)
    {
-      c_ReadContent += C_GtGetText::h_GetText("PDOs: ");
+      c_ReadContent += "PDOs: ";
    }
    else
    {
-      c_ReadContent += C_GtGetText::h_GetText("Nodes: ");
+      c_ReadContent += "Nodes: ";
    }
    for (uint32_t u32_ItNodes = 0; u32_ItNodes < orc_ImportDataAssignment.size(); u32_ItNodes++)
    {
       const C_CieImportDataAssignment & rc_CurData = orc_ImportDataAssignment[u32_ItNodes];
       c_ReadContent += rc_CurData.c_ImportData.c_NodeName;
-      c_ReadContent += static_cast<QString>(C_GtGetText::h_GetText(" (%1 Tx / %2 Rx); ")).
+      c_ReadContent += static_cast<QString>(" (%1 Tx / %2 Rx); ").
                        arg(rc_CurData.c_ImportData.c_Core.c_OscTxMessageData.size()).
                        arg(rc_CurData.c_ImportData.c_Core.c_OscRxMessageData.size());
    }
    c_ReadContent += "<br/>";
-   c_ReadContent += C_GtGetText::h_GetText("For parsing errors, warnings and detailed information see ");
-   c_ReadContent += C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLE_GUIDE_COLOR_LINK,
+   c_ReadContent += "For parsing errors, warnings and detailed information see ";
+   c_ReadContent += C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
                                      C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
    c_ReadContent += ".";
 
@@ -194,22 +193,22 @@ QString C_CieImportReportWidget::h_GetInitialReportPart(
    if (oq_AddMessageAdaptationInfo)
    {
       c_CompleteLog += "<h3>";
-      c_CompleteLog += C_GtGetText::h_GetText("Import Preview");
+      c_CompleteLog += "Import Preview";
       c_CompleteLog += "</h3>";
       c_CompleteLog += "<p>";
-      c_CompleteLog += C_GtGetText::h_GetText("Info: Message and signal names are adapted as follows:");
+      c_CompleteLog += "Info: Message and signal names are adapted as follows:";
       c_CompleteLog += "<br/>";
       c_CompleteLog += "- ";
-      c_CompleteLog += C_GtGetText::h_GetText("Eliminate spaces");
+      c_CompleteLog += "Eliminate spaces";
       c_CompleteLog += "<br/>";
       c_CompleteLog += "- ";
-      c_CompleteLog += static_cast<QString>(C_GtGetText::h_GetText("Cut to %1 (= project setting) characters")).arg(
+      c_CompleteLog += static_cast<QString>("Cut to %1 (= project setting) characters").arg(
          C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit());
       c_CompleteLog += "</p>";
       if ((oq_IsCanOpenCase == true) && (c_FileInfo.completeSuffix().toLower() == "dcf"))
       {
          c_CompleteLog += "<p>";
-         c_CompleteLog += C_GtGetText::h_GetText("Node ID and device name will not be adopted from the DCF - File.");
+         c_CompleteLog += "Node ID and device name will not be adopted from the DCF - File.";
          c_CompleteLog += "</p>";
       }
    }
@@ -248,7 +247,7 @@ int32_t C_CieImportReportWidget::h_GetMessageTableContent(QString & orc_ImportTa
       //New table
       orc_ImportTable += "<p><b>";
       //Translation: 1=Heading 2=Number of messages
-      orc_ImportTable += static_cast<QString>(C_GtGetText::h_GetText("%1 (%2)")).arg(orc_Heading).arg(
+      orc_ImportTable += static_cast<QString>("%1 (%2)").arg(orc_Heading).arg(
          u32_MessageCount);
       orc_ImportTable += "</b></p>";
       orc_ImportTable += "<table>";
@@ -257,13 +256,13 @@ int32_t C_CieImportReportWidget::h_GetMessageTableContent(QString & orc_ImportTa
       orc_ImportTable += C_CieImportReportWidget::hc_HTML_TABLE_HEADER_START;
       orc_ImportTable += "#</td>";
       orc_ImportTable += C_CieImportReportWidget::hc_HTML_TABLE_HEADER_START;
-      orc_ImportTable += C_GtGetText::h_GetText("Name");
+      orc_ImportTable += "Name";
       orc_ImportTable += "</td>";
       orc_ImportTable += C_CieImportReportWidget::hc_HTML_TABLE_HEADER_START;
-      orc_ImportTable += C_GtGetText::h_GetText("Signals");
+      orc_ImportTable += "Signals";
       orc_ImportTable += "</td>";
       orc_ImportTable += C_CieImportReportWidget::hc_HTML_TABLE_HEADER_START;
-      orc_ImportTable += C_GtGetText::h_GetText("Warnings");
+      orc_ImportTable += "Warnings";
       orc_ImportTable += "</td>";
       orc_ImportTable += "</tr>";
       //Content
@@ -424,7 +423,7 @@ int32_t C_CieImportReportWidget::m_ShowReport(const QString & orc_Suffix, const 
                                                                      this->mc_ImportedAssignedData,
                                                                      this->me_ProtocolType,
                                                                      this->mpc_NodeNameReplacement,
-                                                                     C_GtGetText::h_GetText("Import Messages"), true);
+                                                                     "Import Messages", true);
    }
 
    // Check skipped
@@ -440,8 +439,7 @@ int32_t C_CieImportReportWidget::m_ShowReport(const QString & orc_Suffix, const 
                                                                             this->mc_SkippedImportedAssignedData,
                                                                             this->me_ProtocolType,
                                                                             this->mpc_NodeNameReplacement,
-                                                                            C_GtGetText::h_GetText(
-                                                                               "Skipped Messages"), true);
+                                                                            "Skipped Messages", true);
    }
 
    if (s32_Retval == C_NO_ERR)
@@ -963,7 +961,7 @@ QString C_CieImportReportWidget::mh_GetMessageEntry(const uint32_t ou32_Index, c
    //Signals
    if (orc_CurMessage.c_Signals.size() == 0UL)
    {
-      c_Tmp = C_GtGetText::h_GetText("No Signals");
+      c_Tmp = "No Signals";
    }
    else
    {

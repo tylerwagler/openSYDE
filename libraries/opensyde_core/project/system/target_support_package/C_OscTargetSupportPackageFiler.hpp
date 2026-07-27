@@ -1,43 +1,41 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       openSYDE Core gettext utilities
-
-   cf. .cpp file header for details
-
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \brief       File handler for target support package file data.
+   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_GTGETTEX_HPP
-#define C_GTGETTEX_HPP
+#ifndef C_OSCTARGETSUPPORTPACKAGEFILER_HPP
+#define C_OSCTARGETSUPPORTPACKAGEFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QString>
-
 #include "stwtypes.hpp"
+#include "C_SclString.hpp"
+#include "C_OscTargetSupportPackage.hpp"
+#include "C_OscXmlParser.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
 {
-namespace opensyde_gui_logic
+namespace opensyde_core
 {
 /* -- Global Constants ---------------------------------------------------------------------------------------------- */
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_GtGetText
+class C_OscTargetSupportPackageFiler
 {
-private:
-   static bool mhq_Initialized;
-
 public:
-   static int32_t h_Initialize(const QString & orc_BasePath, const QString & orc_MoFileName);
-   static int32_t h_SetLanguage(const QString & orc_Language);
-   static const char_t * h_GetText(const char_t * const opcn_MessageId);
+   static int32_t h_Load(stw::opensyde_core::C_OscTargetSupportPackage & orc_TargetSupportPackage,
+                         stw::scl::C_SclString & orc_NodePath, const stw::scl::C_SclString & orc_Path);
+
+private:
+   static int32_t mh_Load(C_OscTargetSupportPackage & orc_TargetSupportPackage, stw::scl::C_SclString & orc_NodePath,
+                          C_OscXmlParserBase & orc_XmlParser);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
 }
-}
+} //end of namespace
 
 #endif

@@ -17,7 +17,6 @@
 #include "gitypes.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -479,7 +478,7 @@ void C_GiSvNodeSyvUpdate::UpdateIcons(void)
       }
       else
       {
-         this->mpc_IconBottom->SetText(C_GtGetText::h_GetText("FAIL"));
+         this->mpc_IconBottom->SetText("FAIL");
          this->mpc_IconBottom->SetSvg("://images/system_views/UpdateNoResponse.svg");
          this->mpc_IconTopRight->SetSvg("");
 
@@ -543,13 +542,12 @@ void C_GiSvNodeSyvUpdate::GenerateHint(void)
              (e_OverAllInitialState != C_SyvUtil::eI_ERROR))
          {
             c_Text =
-               C_GtGetText::h_GetText(
-                  "Node update disabled."
+               "Node update disabled."
                   "\nPossible reasons: "
                   "\n- There are no active Data Blocks declared (SYSTEM DEFINITION / Node / Properties)"
                   "\n- Update setting is disabled on connected node interface (SYSTEM DEFINITION / Node / Properties)"
                   "\n- Node has no protocol support"
-                  "\n- Update Package does not contain any files for this node");
+                  "\n- Update Package does not contain any files for this node";
          }
          else
          {
@@ -560,20 +558,20 @@ void C_GiSvNodeSyvUpdate::GenerateHint(void)
                   switch (e_OverAllInitialState)
                   {
                   case C_SyvUtil::eI_APPLICATION_MATCH:
-                     c_Text = C_GtGetText::h_GetText("Node is up to date.");
+                     c_Text = "Node is up to date.";
                      break;
                   case C_SyvUtil::eI_TO_BE_UPDATED:
                      if (this->mc_NodeData.AreAllNodesValid())
                      {
-                        c_Text = C_GtGetText::h_GetText("Update required.");
+                        c_Text = "Update required.";
                      }
                      else
                      {
-                        c_Text = C_GtGetText::h_GetText("Requesting info ...");
+                        c_Text = "Requesting info ...";
                      }
                      break;
                   case C_SyvUtil::eI_ERROR:
-                     c_Text = C_GtGetText::h_GetText("Error occurred. Check node progress log for details!");
+                     c_Text = "Error occurred. Check node progress log for details!";
                      break;
                   case C_SyvUtil::eI_UPDATE_DISABLED:
                   case C_SyvUtil::eI_UNKNOWN:
@@ -586,13 +584,13 @@ void C_GiSvNodeSyvUpdate::GenerateHint(void)
                   switch (e_OverAllInitialState)
                   {
                   case C_SyvUtil::eI_APPLICATION_MATCH:
-                     c_Text = C_GtGetText::h_GetText("Node is up to date.");
+                     c_Text = "Node is up to date.";
                      break;
                   case C_SyvUtil::eI_TO_BE_UPDATED:
-                     c_Text = C_GtGetText::h_GetText("Update required.");
+                     c_Text = "Update required.";
                      break;
                   case C_SyvUtil::eI_ERROR:
-                     c_Text = C_GtGetText::h_GetText("Error occurred. Check node progress log for details!");
+                     c_Text = "Error occurred. Check node progress log for details!";
                      break;
                   case C_SyvUtil::eI_UPDATE_DISABLED:
                   case C_SyvUtil::eI_UNKNOWN:
@@ -602,10 +600,10 @@ void C_GiSvNodeSyvUpdate::GenerateHint(void)
                   switch (this->mc_NodeData.GetOverallUpdateState())
                   {
                   case C_SyvUtil::eU_UPDATING:
-                     c_Text += C_GtGetText::h_GetText("\nUpdating...");
+                     c_Text += "\nUpdating...";
                      break;
                   case C_SyvUtil::eU_WAITING:
-                     c_Text += C_GtGetText::h_GetText("\nWaiting for update...");
+                     c_Text += "\nWaiting for update...";
                      break;
                   case C_SyvUtil::eU_UP_TO_DATE:
                   case C_SyvUtil::eU_UPDATE_SUCCESS:
@@ -618,7 +616,7 @@ void C_GiSvNodeSyvUpdate::GenerateHint(void)
             }
             else
             {
-               c_Text = C_GtGetText::h_GetText("Enter update mode to get the node status.");
+               c_Text = "Enter update mode to get the node status.";
             }
          }
          m_AppendSecurityToolTipIfNecessary(c_Text);
@@ -626,7 +624,7 @@ void C_GiSvNodeSyvUpdate::GenerateHint(void)
       }
       else
       {
-         this->SetDefaultToolTipContent(C_GtGetText::h_GetText("Inactive node."));
+         this->SetDefaultToolTipContent("Inactive node.");
       }
       QFileInfo c_FileInfoDevImg;
       const C_OscNode * const pc_Node =

@@ -15,7 +15,6 @@
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OscDataLoggerJobFiler.hpp"
 #include "C_SdNdeDalCopClipBoardHelper.hpp"
@@ -104,11 +103,10 @@ int32_t C_SdNdeDalCopClipBoardHelper::h_LoadDataloggerFromClipboardRemoveInvalid
    {
       C_OgeWiCustomMessage c_Message(opc_Parent);
       c_Message.SetType(C_OgeWiCustomMessage::eINFORMATION);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Log Job paste"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "Some data elements were not found in your SYSTEM DEFINITION\n"
+      c_Message.SetHeading("Log Job paste");
+      c_Message.SetDescription("Some data elements were not found in your SYSTEM DEFINITION\n"
                                   "or can no longer be reached by this node.\n"
-                                  "These were automatically removed from the pasted Log Job."));
+                                  "These were automatically removed from the pasted Log Job.");
       c_Message.SetCustomMinHeight(210, 210);
       c_Message.Execute();
    }

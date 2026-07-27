@@ -18,7 +18,6 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_SdBueMessageSignalEditWidget.hpp"
 #include "ui_C_SdBueMessageSignalEditWidget.h"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -339,11 +338,11 @@ void C_SdBueMessageSignalEditWidget::OnSignalCountOfMessageChanged(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageSignalEditWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_SignalLabel->setText(C_GtGetText::h_GetText("Signal Properties"));
-   this->mpc_Ui->pc_MessageLabel->setText(C_GtGetText::h_GetText("Message Properties"));
-   this->mpc_Ui->pc_CoDisabledInfoNoteLabel->setText(C_GtGetText::h_GetText("Note:"));
+   this->mpc_Ui->pc_SignalLabel->setText("Signal Properties");
+   this->mpc_Ui->pc_MessageLabel->setText("Message Properties");
+   this->mpc_Ui->pc_CoDisabledInfoNoteLabel->setText("Note:");
    this->mpc_Ui->pc_CoDisabledInfoLabel->setText(
-      C_GtGetText::h_GetText("This PDO is disabled. Unique COB-ID check is inactive on disabled PDOs."));
+      "This PDO is disabled. Unique COB-ID check is inactive on disabled PDOs.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

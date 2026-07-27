@@ -15,7 +15,6 @@
 #include "C_GiSyTextElementWidget.hpp"
 #include "ui_C_GiSyTextElementWidget.h"
 
-#include "C_GtGetText.hpp"
 #include <QPushButton>
 #include "C_UtiStyleSheets.hpp"
 #include "C_GiBiTextElement.hpp"
@@ -105,8 +104,8 @@ C_GiSyTextElementWidget::~C_GiSyTextElementWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyTextElementWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelFontColor->setText(C_GtGetText::h_GetText("Font Color"));
-   this->mpc_Ui->pc_LabelFontStyle->setText(C_GtGetText::h_GetText("Font"));
+   this->mpc_Ui->pc_LabelFontColor->setText("Font Color");
+   this->mpc_Ui->pc_LabelFontStyle->setText("Font");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

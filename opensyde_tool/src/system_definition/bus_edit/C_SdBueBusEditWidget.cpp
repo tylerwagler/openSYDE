@@ -19,7 +19,6 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_OscSystemBus.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -106,8 +105,8 @@ C_SdBueBusEditWidget::C_SdBueBusEditWidget(const uint32_t ou32_BusIndex, const i
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueBusEditWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(0, C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(1, C_GtGetText::h_GetText("COMM Messages"));
+   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(0, "Properties");
+   this->mpc_Ui->pc_TabWidgetPageNavi->setTabText(1, "COMM Messages");
 
    //Tool tips
 }

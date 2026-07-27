@@ -16,11 +16,11 @@
 #include <iomanip>
 
 #include <QBitArray>
+#include <QDebug>
 
 #include "TglTime.hpp"
 #include "stwtypes.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_CamMetUtil.hpp"
 #include "cam_constants.hpp"
 #include "C_CanMonProtocol.hpp"
@@ -61,6 +61,7 @@ C_CamMetTreeModel::C_CamMetTreeModel(QObject * const opc_Parent) :
    C_TblTreSimpleModel(opc_Parent),
    mq_DisplayTree(false),
    mq_UniqueMessageMode(false),
+   me_Protocol(stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE),
    mq_DisplayAsHex(false),
    mq_DisplayTimestampRelative(false),
    mq_DisplayTimestampAbsoluteTimeOfDay(false),
@@ -342,6 +343,20 @@ void C_CamMetTreeModel::SetDisplayUniqueMessages(const bool oq_Value)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Set the active protocol
+
+   When set to CAN-TP, intermediate TP frames (FF, CF, FC) are hidden in
+   unique mode and only fully reassembled messages are shown.
+
+   \param[in]  oe_Protocol  Active L7 protocol
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CamMetTreeModel::SetProtocol(const stw::cmon_protocol::e_CanMonL7Protocols oe_Protocol)
+{
+   this->me_Protocol = oe_Protocol;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Set display style for CAN ID and CAN data
 
    \param[in]  oq_Value    New value
@@ -513,120 +528,129 @@ QVariant C_CamMetTreeModel::headerData(const int32_t os32_Section, const Qt::Ori
    if (oe_Orientation == Qt::Orientation::Horizontal)
    {
       const E_Columns e_Col = h_ColumnToEnum(os32_Section);
-      if (os32_Role == static_cast<int32_t>(Qt::DisplayRole))
+       if (os32_Role == static_cast<int32_t>(Qt::DisplayRole))
 
-      {
-         switch (e_Col)
-         {
-         case eTIME_STAMP:
-            c_Retval = C_GtGetText::h_GetText("Time");
-            break;
-         case eCAN_ID:
-            c_Retval = C_GtGetText::h_GetText("ID");
-            break;
-         case eCAN_NAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
-            break;
-         case eCAN_DIR:
-            c_Retval = C_GtGetText::h_GetText("Dir");
-            break;
-         case eCAN_DLC:
-            c_Retval = C_GtGetText::h_GetText("DLC");
-            break;
-         case eCAN_DATA:
-            c_Retval = C_GtGetText::h_GetText("Data");
-            break;
-         case eCAN_COUNTER:
-            c_Retval = C_GtGetText::h_GetText("Counter");
-            break;
-         case eCAN_STATUS:
-            c_Retval = C_GtGetText::h_GetText("Status");
-            break;
-         default:
-            break;
-         }
-      }
+       {
+          switch (e_Col)
+          {
+          case eTIME_STAMP:
+             c_Retval = "Time";
+             break;
+          case eCAN_ID:
+             c_Retval = "ID";
+             break;
+          case eCAN_NAME:
+             c_Retval = "Name";
+             break;
+          case eCAN_DIR:
+             c_Retval = "Dir";
+             break;
+          case eCAN_DLC:
+             c_Retval = "DLC";
+             break;
+          case eCAN_DATA:
+             c_Retval = "Data";
+             break;
+          case eCAN_COUNTER:
+             c_Retval = "Counter";
+             break;
+          case eCAN_STATUS:
+             c_Retval = "Status";
+             break;
+          case eCAN_TP_INFO:
+             c_Retval = "TP";
+             break;
+          default:
+             break;
+          }
+       }
       else if (os32_Role == ms32_USER_ROLE_TOOL_TIP_HEADING)
       {
          switch (e_Col)
          {
          case eTIME_STAMP:
-            c_Retval = C_GtGetText::h_GetText("Time");
+            c_Retval = "Time";
             break;
          case eCAN_ID:
-            c_Retval = C_GtGetText::h_GetText("Identifier");
+            c_Retval = "Identifier";
             break;
          case eCAN_NAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCAN_DIR:
-            c_Retval = C_GtGetText::h_GetText("Direction");
+            c_Retval = "Direction";
             break;
          case eCAN_DLC:
-            c_Retval = C_GtGetText::h_GetText("Data Length Code");
+            c_Retval = "Data Length Code";
             break;
          case eCAN_DATA:
-            c_Retval = C_GtGetText::h_GetText("Data");
+            c_Retval = "Data";
             break;
          case eCAN_COUNTER:
-            c_Retval = C_GtGetText::h_GetText("Counter");
+            c_Retval = "Counter";
             break;
-         case eCAN_STATUS:
-            c_Retval = C_GtGetText::h_GetText("Status");
-            break;
-         default:
-            break;
-         }
-      }
-      else if (os32_Role == ms32_USER_ROLE_TOOL_TIP_CONTENT)
+          case eCAN_STATUS:
+             c_Retval = "Status";
+             break;
+          case eCAN_TP_INFO:
+             c_Retval = "CAN-TP";
+             break;
+          default:
+             break;
+          }
+       }
+       else if (os32_Role == ms32_USER_ROLE_TOOL_TIP_CONTENT)
       {
          switch (e_Col)
          {
          case eTIME_STAMP:
             if (this->mq_DisplayTimestampAbsoluteTimeOfDay == false)
             {
-               c_Retval = C_GtGetText::h_GetText("Absolute time (hh:mm:ss.ms.us) from the measurement start, or relative "
-                                                 "to the previous event.");
+               c_Retval = "Absolute time (hh:mm:ss.ms.us) from the measurement start, or relative "
+                                                 "to the previous event.";
             }
             else
             {
-               c_Retval = C_GtGetText::h_GetText("Absolute time (hh:mm:ss.ms.us) with time of day, or relative "
-                                                 "to the previous event.");
+               c_Retval = "Absolute time (hh:mm:ss.ms.us) with time of day, or relative "
+                                                 "to the previous event.";
             }
             break;
          case eCAN_ID:
-            c_Retval = C_GtGetText::h_GetText("CAN identifier of the message.");
+            c_Retval = "CAN identifier of the message.";
             break;
          case eCAN_NAME:
-            c_Retval = C_GtGetText::h_GetText("Symbolic name of the CAN message. Empty if not defined in one of the "
-                                              "active database(s).");
+            c_Retval = "Symbolic name of the CAN message. Empty if not defined in one of the "
+                                              "active database(s).";
             break;
          case eCAN_DIR:
-            c_Retval = C_GtGetText::h_GetText("Direction of the CAN message.\n"
+            c_Retval = "Direction of the CAN message.\n"
                                               "   - Rx: Received message\n"
-                                              "   - Tx: Sent by this instance of openSYDE CAN Monitor");
+                                              "   - Tx: Sent by this instance of openSYDE CAN Monitor";
             break;
          case eCAN_DLC:
-            c_Retval = C_GtGetText::h_GetText("Number of data bytes in decimal representation.");
+            c_Retval = "Number of data bytes in decimal representation.";
             break;
          case eCAN_DATA:
-            c_Retval = C_GtGetText::h_GetText("CAN message data in bytes.");
+            c_Retval = "CAN message data in bytes.";
             break;
          case eCAN_COUNTER:
-            c_Retval = C_GtGetText::h_GetText("Indicates the number of times the event has appeared since "
-                                              "measurement start.");
+            c_Retval = "Indicates the number of times the event has appeared since "
+                                              "measurement start.";
             break;
-         case eCAN_STATUS:
-            c_Retval = C_GtGetText::h_GetText("Indicates the validity of a (ECeS/ECoS) message.");
-            break;
-         default:
-            break;
-         }
-      }
-      else
-      {
-         //No handling necessary
-      }
+          case eCAN_STATUS:
+             c_Retval = "Indicates the validity of a (ECeS/ECoS) message.";
+             break;
+          case eCAN_TP_INFO:
+             c_Retval = "ISO 15765-2 CAN-TP transport protocol information. Shows frame type (SF/FF/CF/FC), sequence number, and session details.";
+             break;
+          default:
+             break;
+          }
+       }
+       else
+       {
+          //No handling necessary
+       }
    }
    return c_Retval;
 }
@@ -694,7 +718,7 @@ int32_t C_CamMetTreeModel::columnCount(const QModelIndex & orc_Parent) const
    if (orc_Parent.isValid() == false)
    {
       //Top level
-      s32_Retval = 8;
+      s32_Retval = 9;
    }
    else if (orc_Parent.parent().isValid() == false)
    {
@@ -820,16 +844,16 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
                case eCAN_DIR:
                   if (pc_CurMessage->q_IsTx == true)
                   {
-                     c_Text = C_GtGetText::h_GetText("Tx");
+                     c_Text = "Tx";
                   }
                   else
                   {
-                     c_Text = C_GtGetText::h_GetText("Rx");
+                     c_Text = "Rx";
                   }
 
                   if (pc_CurMessage->c_CanMsg.u8_RTR > 0U)
                   {
-                     c_Text += C_GtGetText::h_GetText(" (RTR)");
+                     c_Text += " (RTR)";
                   }
 
                   c_Retval = c_Text;
@@ -840,18 +864,24 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
                case eCAN_DATA:
                   if (pc_CurMessage->c_ProtocolTextDec == "")
                   {
-                     if ((pc_CurMessage->c_CanMsg.u8_RTR == 0U) &&
-                         ((orc_Index.data(ms32_USER_ROLE_MARKER).toBitArray().isEmpty() == true) ||
-                          (os32_Role == ms32_USER_ROLE_MARKER_TEXT)))
+                      if ((pc_CurMessage->c_CanMsg.u8_RTR == 0U) &&
+                          ((orc_Index.data(ms32_USER_ROLE_MARKER).toBitArray().isEmpty() == true) ||
+                           (os32_Role == ms32_USER_ROLE_MARKER_TEXT)))
                      {
-                        if (this->mq_DisplayAsHex == true)
-                        {
-                           c_Retval = pc_CurMessage->c_CanDataHex.c_str();
-                        }
-                        else
-                        {
-                           c_Retval = pc_CurMessage->c_CanDataDec.c_str();
-                        }
+                         if (this->mq_DisplayAsHex == true)
+                         {
+                            qDebug("UNIQUE_DBG: proto=[%s] rtr=%d markerEmpty=%d hex=[%s] dlc=[%s]",
+                                   pc_CurMessage->c_ProtocolTextDec.c_str(),
+                                   pc_CurMessage->c_CanMsg.u8_RTR,
+                                   orc_Index.data(ms32_USER_ROLE_MARKER).toBitArray().isEmpty() ? 1 : 0,
+                                   pc_CurMessage->c_CanDataHex.c_str(),
+                                   pc_CurMessage->c_CanDlc.c_str());
+                            c_Retval = pc_CurMessage->c_CanDataHex.c_str();
+                         }
+                         else
+                         {
+                            c_Retval = pc_CurMessage->c_CanDataDec.c_str();
+                         }
                      }
                   }
                   else
@@ -883,11 +913,14 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
                      c_Retval = pc_CurMessage->c_Counter.c_str();
                   }
                   break;
-               case eCAN_STATUS:
-                  c_Retval = pc_CurMessage->c_Status.c_str();
-                  break;
-               default:
-                  break;
+                case eCAN_STATUS:
+                   c_Retval = pc_CurMessage->c_Status.c_str();
+                   break;
+                case eCAN_TP_INFO:
+                   c_Retval = C_CamMetTreeModel::mh_GetTpInfoString(*pc_CurMessage);
+                   break;
+                default:
+                   break;
                }
             }
          }
@@ -975,33 +1008,29 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
             const C_CamMetTreeLoggerData * const pc_CurMessage = GetMessageData(orc_Index.row());
 
             // if text is interpreted do not return anything
-            if ((pc_CurMessage != NULL) && (pc_CurMessage->c_ProtocolTextDec == ""))
-            {
-               QBitArray c_Array;
-               //Should always be DLC size
-               c_Array.resize(pc_CurMessage->c_CanDlc.ToInt());
-               //Check if there is an active selection
-               if ((((this->ms32_SelectedParentRow >= 0) && (this->mc_SelectedChildBytes.size() > 0UL)) &&
-                    (orc_Index.parent().isValid() == false)) && (orc_Index.row() == this->ms32_SelectedParentRow))
-               {
-                  //Convert byte indices into bit array
-                  for (std::set<uint16_t>::const_iterator c_ItByte = this->mc_SelectedChildBytes.begin();
-                       c_ItByte != this->mc_SelectedChildBytes.end();
-                       ++c_ItByte)
-                  {
-                     if (*c_ItByte < c_Array.size())
-                     {
-                        //Set all affected bytes to be part of the highlighted area
-                        c_Array.setBit(*c_ItByte, true);
-                     }
-                  }
-               }
-               else
-               {
-                  //Leave everything at zero if there is no highlighted area
-               }
-               c_Retval = c_Array;
-            }
+             if ((pc_CurMessage != NULL) && (pc_CurMessage->c_ProtocolTextDec == ""))
+             {
+                QBitArray c_Array;
+                 //Check if there is an active selection
+                 if ((((this->ms32_SelectedParentRow >= 0) && (this->mc_SelectedChildBytes.size() > 0UL)) &&
+                      (orc_Index.parent().isValid() == false)) && (orc_Index.row() == this->ms32_SelectedParentRow))
+                 {
+                    //Size to DLC and mark selected bytes
+                    c_Array.resize(pc_CurMessage->c_CanDlc.ToInt());
+                    for (std::set<uint16_t>::const_iterator c_ItByte = this->mc_SelectedChildBytes.begin();
+                         c_ItByte != this->mc_SelectedChildBytes.end();
+                         ++c_ItByte)
+                    {
+                       if (*c_ItByte < c_Array.size())
+                       {
+                          c_Array.setBit(*c_ItByte, true);
+                       }
+                    }
+                 }
+                 // else: no selection → leave c_Array empty (size 0) so that
+                 //       isEmpty() returns true and the default text paint is used
+                c_Retval = c_Array;
+             }
          }
       }
       else if (os32_Role == ms32_USER_ROLE_MARKER_TRANSPARENCY)
@@ -1221,6 +1250,12 @@ C_CamMetTreeModel::E_Columns C_CamMetTreeModel::h_ColumnToEnum(const int32_t os3
    case 6:
       e_Retval = eCAN_COUNTER;
       break;
+   case 7:
+      e_Retval = eCAN_STATUS;
+      break;
+   case 8:
+      e_Retval = eCAN_TP_INFO;
+      break;
    default:
       e_Retval = eCAN_STATUS;
       break;
@@ -1269,12 +1304,71 @@ int32_t C_CamMetTreeModel::h_EnumToColumn(const C_CamMetTreeModel::E_Columns oe_
    case eCAN_STATUS:
       s32_Retval = 7;
       break;
+   case eCAN_TP_INFO:
+      s32_Retval = 8;
+      break;
    default:
       s32_Retval = -1;
       break;
    }
 
    return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get CAN-TP info string for display
+
+   Formats the CAN-TP metadata into a compact display string.
+
+   \param[in]  orc_Message  Message data with TP metadata
+
+   \return  Formatted TP info string (e.g. "SF", "FF DL=342", "CF 3/22", "FC BS=0")
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_CamMetTreeModel::mh_GetTpInfoString(const C_CamMetTreeLoggerData & orc_Message)
+{
+   if (orc_Message.e_TpFrameType == stw::opensyde_core::eCTFT_NONE)
+   {
+      return "";
+   }
+
+   QString c_Result;
+
+   switch (orc_Message.e_TpFrameType)
+   {
+   case stw::opensyde_core::eCTFT_SINGLE:
+      c_Result = "SF";
+      if (orc_Message.u16_TpTotalMessageLength > 0U)
+      {
+         c_Result += QString(" DL=%1").arg(orc_Message.u16_TpTotalMessageLength);
+      }
+      break;
+   case stw::opensyde_core::eCTFT_FIRST:
+      c_Result = QString("FF DL=%1").arg(orc_Message.u16_TpTotalMessageLength);
+      break;
+   case stw::opensyde_core::eCTFT_CONSECUTIVE:
+      c_Result = QString("CF SN=%1").arg(orc_Message.u8_TpSequenceNumber);
+      break;
+   case stw::opensyde_core::eCTFT_FLOW_CONTROL:
+      c_Result = QString("FC BS=%1 STmin=%2")
+                    .arg(orc_Message.u8_TpBlockSize)
+                    .arg(orc_Message.u8_TpSeparationTime);
+      break;
+   default:
+      break;
+   }
+
+   if (orc_Message.q_TpReassembled)
+   {
+      c_Result += " [OK]";
+   }
+
+   if (orc_Message.q_TpError)
+   {
+      c_Result += " [ERR]";
+   }
+
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1812,6 +1906,29 @@ void C_CamMetTreeModel::m_AddRowsUnique(const std::list<C_CamMetTreeLoggerData> 
       for (std::list<C_CamMetTreeLoggerData>::const_iterator c_ItData = orc_Data.begin();
            c_ItData != orc_Data.end(); ++c_ItData)
       {
+          // When protocol is set to CAN-TP or UDS, skip intermediate TP frames
+          // (FF, CF, FC) that are not yet fully reassembled in unique mode.
+          if ((this->me_Protocol == stw::cmon_protocol::eCMON_L7_PROTOCOL_CAN_TP) ||
+              (this->me_Protocol == stw::cmon_protocol::eCMON_L7_PROTOCOL_UDS))
+         {
+            if ((c_ItData->e_TpFrameType != stw::opensyde_core::eCTFT_NONE) &&
+                (!c_ItData->q_TpReassembled))
+            {
+               qDebug("SKIP id=%s type=%d reassembled=%d",
+                      c_ItData->c_CanIdDec.c_str(),
+                      static_cast<int>(c_ItData->e_TpFrameType),
+                      c_ItData->q_TpReassembled ? 1 : 0);
+               continue;
+            }
+            else
+            {
+               qDebug("SHOW id=%s type=%d reassembled=%d proto=CAN_TP",
+                      c_ItData->c_CanIdDec.c_str(),
+                      static_cast<int>(c_ItData->e_TpFrameType),
+                      c_ItData->q_TpReassembled ? 1 : 0);
+            }
+         }
+
          const QMap<stw::scl::C_SclString,
                     C_CamMetTreeLoggerData>::const_iterator c_ItMessage = this->mc_UniqueMessages.find(
             c_ItData->c_CanIdDec);

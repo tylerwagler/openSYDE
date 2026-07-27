@@ -107,7 +107,6 @@ set (OPENSYDE_INCLUDES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication
    ${OPENSYDE_GUI_ROOT}/src/project_operations/
-   ${OPENSYDE_GUI_ROOT}/src/gettext
    ${OPENSYDE_GUI_ROOT}/src/util
    ${PROJECT_ROOT}/src/precompiled_headers
    ${OPENSYDE_GUI_ROOT}/src/precompiled_headers
@@ -116,9 +115,6 @@ set (OPENSYDE_INCLUDES
 
 # Include path with library modules
 set (OPENSYDE_LIB_INCLUDES)
-if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   list(APPEND OPENSYDE_LIB_INCLUDES ${PROJECT_ROOT}/../libraries/gettext)
-endif()
 
 # --- PROJECT SOURCE FILE PATHS ----------------------------------------------------------------------------------------
 
@@ -126,10 +122,12 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariablesBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingsBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiGeneric.cpp
-   ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.cpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_Uti.cpp
    ${PROJECT_ROOT}/src/can_monitor/communication/C_SyvComMessageMonitor.cpp
    ${PROJECT_ROOT}/src/can_monitor/communication/C_SyvComMessageLoggerFileBlf.cpp
+   ${PROJECT_ROOT}/src/can_monitor/communication/C_CamCanTpData.cpp
+   ${PROJECT_ROOT}/src/can_monitor/communication/C_CamCanTpDecoder.cpp
+   ${PROJECT_ROOT}/src/can_monitor/communication/C_CamCanTpTransmitter.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieImportDbc.cpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieConverter.cpp
@@ -296,10 +294,12 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariablesBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingsBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiGeneric.hpp
-   ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.hpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_Uti.hpp
    ${PROJECT_ROOT}/src/can_monitor/communication/C_SyvComMessageMonitor.hpp
    ${PROJECT_ROOT}/src/can_monitor/communication/C_SyvComMessageLoggerFileBlf.hpp
+   ${PROJECT_ROOT}/src/can_monitor/communication/C_CamCanTpData.hpp
+   ${PROJECT_ROOT}/src/can_monitor/communication/C_CamCanTpDecoder.hpp
+   ${PROJECT_ROOT}/src/can_monitor/communication/C_CamCanTpTransmitter.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieImportDbc.hpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieConverter.hpp
@@ -543,7 +543,6 @@ else()
       version
       ws2_32   #WinSock
       Iphlpapi #IP helper API
-      ${PROJECT_ROOT}/../libraries/gettext/libintl.a
       ${PROJECT_ROOT}/../libraries/zlib/libzlibstatic.a
    )
 endif()

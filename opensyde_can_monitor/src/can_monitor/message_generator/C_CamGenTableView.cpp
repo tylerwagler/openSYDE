@@ -22,7 +22,6 @@
 #include "TglTime.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 #include "cam_constants.hpp"
 #include "C_CamDbHandler.hpp"
@@ -272,13 +271,19 @@ void C_CamGenTableView::SetCurrentColumnWidths(const std::vector<int32_t> & orc_
       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eXTD), 52);
       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eRTR), 51);
       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eDLC), 51);
+      this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::ePROTOCOL), 90);
       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eDATA), mhs32_COL_WIDTH_DATA);
       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eCYCLIC_TRIGGER), 63);
       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eCYCLIC_TIME), 94);
       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eKEY), 60);
       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eMANUAL_TRIGGER), 120);
-      this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eAUTO_SUPPORT), 110);
-   }
+       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eAUTO_SUPPORT), 110);
+       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eUDS_SERVICE), 130);
+       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eUDS_PARAM), 70);
+       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eUDS_SERVICE), 130);
+       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eUDS_PARAM), 70);
+       this->setColumnWidth(C_CamGenTableModel::h_EnumToColumn(C_CamGenTableModel::eUDS_DATA), 150);
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -445,6 +450,17 @@ void C_CamGenTableView::TriggerMessageReload()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Set maximum DLC value
+
+   \param[in]  ou16_Max  Maximum DLC
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CamGenTableView::SetDlcMaximum(const uint16_t ou16_Max)
+{
+   this->mc_Model.SetDlcMaximum(ou16_Max);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Overwritten keypress event slot
 
    Here: add new actions
@@ -520,18 +536,19 @@ void C_CamGenTableView::keyPressEvent(QKeyEvent * const opc_Event)
             //Handle depending on currently active column
             switch (e_Col)
             {
-            case C_CamGenTableModel::eNAME:
-            case C_CamGenTableModel::eID:
-            case C_CamGenTableModel::eDLC:
-            case C_CamGenTableModel::eCYCLIC_TIME:
-               break;
-            case C_CamGenTableModel::eXTD:
-            case C_CamGenTableModel::eRTR:
-            case C_CamGenTableModel::eDATA:
-            case C_CamGenTableModel::eCYCLIC_TRIGGER:
-            case C_CamGenTableModel::eKEY:
-            case C_CamGenTableModel::eMANUAL_TRIGGER:
-            case C_CamGenTableModel::eAUTO_SUPPORT:
+             case C_CamGenTableModel::eNAME:
+             case C_CamGenTableModel::eID:
+             case C_CamGenTableModel::eDLC:
+             case C_CamGenTableModel::ePROTOCOL:
+             case C_CamGenTableModel::eCYCLIC_TIME:
+                break;
+             case C_CamGenTableModel::eXTD:
+             case C_CamGenTableModel::eRTR:
+             case C_CamGenTableModel::eDATA:
+             case C_CamGenTableModel::eCYCLIC_TRIGGER:
+             case C_CamGenTableModel::eKEY:
+             case C_CamGenTableModel::eMANUAL_TRIGGER:
+             case C_CamGenTableModel::eAUTO_SUPPORT:
             default:
                q_Ignore = true;
                break;
@@ -683,47 +700,39 @@ std::vector<uint32_t> C_CamGenTableView::m_GetSelectedRows(void) const
 void C_CamGenTableView::m_SetupContextMenu(void)
 {
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
-   this->mpc_ActionAddFromDatabase = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                         "Add message from database"), this,
+   this->mpc_ActionAddFromDatabase = this->mpc_ContextMenu->addAction("Add message from database", this,
                                                                       &C_CamGenTableView::AddMessageFromDatabase);
-   this->mpc_ActionAdd = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                             "Add new message"), this, &C_CamGenTableView::AddMessage,
+   this->mpc_ActionAdd = this->mpc_ContextMenu->addAction("Add new message", this, &C_CamGenTableView::AddMessage,
                                                           static_cast<int32_t>(Qt::CTRL) +
                                                           static_cast<int32_t>(Qt::Key_Plus));
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ActionCut = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                             "Cut"), this, &C_CamGenTableView::CutMessage,
+   this->mpc_ActionCut = this->mpc_ContextMenu->addAction("Cut", this, &C_CamGenTableView::CutMessage,
                                                           static_cast<int32_t>(Qt::CTRL) +
                                                           static_cast<int32_t>(Qt::Key_X));
-   this->mpc_ActionCopy = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                              "Copy"), this, &C_CamGenTableView::CopyMessage,
+   this->mpc_ActionCopy = this->mpc_ContextMenu->addAction("Copy", this, &C_CamGenTableView::CopyMessage,
                                                            static_cast<int32_t>(Qt::CTRL) +
                                                            static_cast<int32_t>(Qt::Key_C));
-   this->mpc_ActionPaste = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                               "Paste"), this, &C_CamGenTableView::PasteMessage,
+   this->mpc_ActionPaste = this->mpc_ContextMenu->addAction("Paste", this, &C_CamGenTableView::PasteMessage,
                                                             static_cast<int32_t>(Qt::CTRL) +
                                                             static_cast<int32_t>(Qt::Key_V));
 
    //Deactivate move (kept for fast reactivation if necessary)
    //   this->mpc_ContextMenu->addSeparator();
 
-   //   this->mpc_ActionMoveUp = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-   //                                                                "Move Up"), this,
+   //   this->mpc_ActionMoveUp = this->mpc_ContextMenu->addAction(//                                                                "Move Up", this,
    //                                                             &C_CamGenTableView::MoveMessageUp,
    //                                                             static_cast<int32_t>(Qt::CTRL) +
    //                                                             static_cast<int32_t>(Qt::Key_Up));
-   //   this->mpc_ActionMoveDown = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-   //                                                                  "Move Down"), this,
+   //   this->mpc_ActionMoveDown = this->mpc_ContextMenu->addAction(//                                                                  "Move Down", this,
    //                                                               &C_CamGenTableView::MoveMessageDown,
    //                                                               static_cast<int32_t>(Qt::CTRL) +
    //                                                               static_cast<int32_t>(Qt::Key_Down));
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ActionDelete = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                "Delete"), this, &C_CamGenTableView::DeleteMessage,
+   this->mpc_ActionDelete = this->mpc_ContextMenu->addAction("Delete", this, &C_CamGenTableView::DeleteMessage,
                                                              static_cast<int32_t>(Qt::Key_Delete));
 
    this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -828,10 +837,10 @@ void C_CamGenTableView::m_HandleLinkClicked(const QModelIndex & orc_Index)
          else
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eINFORMATION);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Measurement not started"));
-            c_Message.SetDescription(C_GtGetText::h_GetText("The transmission of messages is only allowed as long "
+            c_Message.SetHeading("Measurement not started");
+            c_Message.SetDescription("The transmission of messages is only allowed as long "
                                                             "as the measurement is running. \nClick the play button "
-                                                            "in trace to start measurement."));
+                                                            "in trace to start measurement.");
             c_Message.Execute();
          }
       }

@@ -16,7 +16,6 @@
 #include "stwerrors.hpp"
 
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "TglUtils.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -181,8 +180,8 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                                                        orq_TriggerRemove);
 
    // Default text
-   this->mc_ProjectName = C_GtGetText::h_GetText("NA");
-   this->mc_Version = C_GtGetText::h_GetText("NA");
+   this->mc_ProjectName = "NA";
+   this->mc_Version = "NA";
 
    if (orq_FileExists == true)
    {
@@ -204,11 +203,11 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                if (s32_Result == C_WARN)
                {
                   // Hex file has multiple application blocks so information is ambiguous
-                  this->mc_ProjectName = C_GtGetText::h_GetText("ambiguous");
-                  this->mc_Version = C_GtGetText::h_GetText("ambiguous");
-                  this->mpc_Ui->pc_LabelVersion->setText(C_GtGetText::h_GetText("?"));
-                  this->mc_Date = C_GtGetText::h_GetText("ambiguous");
-                  this->mc_Time = C_GtGetText::h_GetText("");
+                  this->mc_ProjectName = "ambiguous";
+                  this->mc_Version = "ambiguous";
+                  this->mpc_Ui->pc_LabelVersion->setText("?");
+                  this->mc_Date = "ambiguous";
+                  this->mc_Time = "";
                   this->mq_AppInfoAmbiguous = true;
                   orq_FlashwareWarning = true;
                }
@@ -223,8 +222,8 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                   }
                   else
                   {
-                     this->mc_Version = C_GtGetText::h_GetText("NA");
-                     this->mpc_Ui->pc_LabelVersion->setText(C_GtGetText::h_GetText("?"));
+                     this->mc_Version = "NA";
+                     this->mpc_Ui->pc_LabelVersion->setText("?");
                   }
                   this->mc_Date = c_FileApplicationInfo.GetDate().c_str();
                   // This is in format Mar 14 2015 whereas openSYDE date format is usually 14.03.2015, but we do not
@@ -269,12 +268,11 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                      {
                         // openSYDE nodes must use HEX files with matching device IDs
                         C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                        c_Message.SetHeading(C_GtGetText::h_GetText("Update Package Configuration"));
-                        c_Message.SetDescription(C_GtGetText::h_GetText("Device type of selected HEX file does not "
-                                                                        "match the node type."));
+                        c_Message.SetHeading("Update Package Configuration");
+                        c_Message.SetDescription("Device type of selected HEX file does not "
+                                                                        "match the node type.");
                         c_Message.SetDetails(
-                           static_cast<QString>(C_GtGetText::h_GetText(
-                                                   "Device type of %1 does not match node type %2."))
+                           static_cast<QString>("Device type of %1 does not match node type %2.")
                            .arg(this->mc_AppDeviceType.trimmed(), this->mc_NodeDeviceType.trimmed()));
                         c_Message.SetCustomMinHeight(230, 250);
                         c_Message.Execute();
@@ -287,16 +285,16 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
             {
                // HEX file application block information is invalid
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-               c_Message.SetHeading(C_GtGetText::h_GetText("Update Package Configuration"));
+               c_Message.SetHeading("Update Package Configuration");
                if (s32_Result == C_OVERFLOW)
                {
-                  c_Message.SetDescription(C_GtGetText::h_GetText("HEX file has multiple application information "
-                                                                  "blocks with non-equal device names!"));
+                  c_Message.SetDescription("HEX file has multiple application information "
+                                                                  "blocks with non-equal device names!");
                   c_Message.SetCustomMinHeight(180, 180);
                }
                else
                {
-                  c_Message.SetDescription(C_GtGetText::h_GetText("HEX file has no application information block!"));
+                  c_Message.SetDescription("HEX file has no application information block!");
                   c_Message.SetCustomMinHeight(180, 180);
                }
                c_Message.Execute();
@@ -305,12 +303,12 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
          }
          else
          {
-            const QString c_Details = static_cast<QString>(C_GtGetText::h_GetText("File path: %1")).arg(
+            const QString c_Details = static_cast<QString>("File path: %1").arg(
                this->mc_AbsoluteFilePath);
             // Invalid file
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Update Package configuration"));
-            c_Message.SetDescription(C_GtGetText::h_GetText("File is not a valid HEX file!"));
+            c_Message.SetHeading("Update Package configuration");
+            c_Message.SetDescription("File is not a valid HEX file!");
             c_Message.SetDetails(c_Details);
             c_Message.SetCustomMinHeight(180, 250);
             c_Message.Execute();
@@ -326,13 +324,13 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
          orq_FileExists = false;
 
          // Remove the file
-         this->mc_FilePath = C_GtGetText::h_GetText("<Add File>");
+         this->mc_FilePath = "<Add File>";
          this->mc_AbsoluteFilePath = this->mc_FilePath;
          this->m_UpateFilePathLabel();
 
          if (this->mq_FileBased == false)
          {
-            this->mpc_Ui->pc_LabelVersion->setText(C_GtGetText::h_GetText("Missing"));
+            this->mpc_Ui->pc_LabelVersion->setText("Missing");
          }
          else
          {
@@ -363,13 +361,13 @@ QString C_SyvUpPacListNodeItemDatablockWidget::m_CreateToolTipContent(void) cons
 
    if (this->mq_FileBased == false)
    {
-      c_Content += C_GtGetText::h_GetText("Project Name: ");
+      c_Content += "Project Name: ";
       c_Content += this->mc_ProjectName;
 
-      c_Content += C_GtGetText::h_GetText("\nTimestamp: ");
+      c_Content += "\nTimestamp: ";
       c_Content += this->mc_Date + " " + this->mc_Time;
 
-      c_Content += C_GtGetText::h_GetText("\nVersion: ");
+      c_Content += "\nVersion: ";
       c_Content += this->mc_Version;
    }
    else

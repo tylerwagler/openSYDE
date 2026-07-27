@@ -16,7 +16,6 @@
 #include "stwtypes.hpp"
 #include "constants.hpp"
 #include "C_SdSearchTreeWidget.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OgeTreeWidgetToolBarSearchItemDelegate.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -151,21 +150,21 @@ bool C_SdSearchTreeWidget::Search(const QString & orc_SearchString)
       this->expandAll();
 
       // show the result counter
-      this->mpc_TreeItemRootNodes->setText(0, C_GtGetText::h_GetText("  Nodes") +
+      this->mpc_TreeItemRootNodes->setText(0, "  Nodes" +
                                            c_CounterResult.arg(QString::number(this->mu32_NodesFound)));
-      this->mpc_TreeItemRootBusses->setText(0, C_GtGetText::h_GetText("  Buses") +
+      this->mpc_TreeItemRootBusses->setText(0, "  Buses" +
                                             c_CounterResult.arg(QString::number(this->mu32_BussesFound)));
-      this->mpc_TreeItemRootDataPools->setText(0, C_GtGetText::h_GetText("  Datapools") +
+      this->mpc_TreeItemRootDataPools->setText(0, "  Datapools" +
                                                c_CounterResult.arg(QString::number(this->mu32_DataPoolsFound)));
-      this->mpc_TreeItemRootLists->setText(0, C_GtGetText::h_GetText("  Lists") +
+      this->mpc_TreeItemRootLists->setText(0, "  Lists" +
                                            c_CounterResult.arg(QString::number(this->mu32_ListsFound)));
-      this->mpc_TreeItemRootMessages->setText(0, C_GtGetText::h_GetText("  Messages") +
+      this->mpc_TreeItemRootMessages->setText(0, "  Messages" +
                                               c_CounterResult.arg(QString::number(this->mu32_MessagesFound)));
-      this->mpc_TreeItemRootDataElements->setText(0, C_GtGetText::h_GetText("  Data elements") +
+      this->mpc_TreeItemRootDataElements->setText(0, "  Data elements" +
                                                   c_CounterResult.arg(QString::number(this->mu32_DataElementsFound)));
-      this->mpc_TreeItemRootApplications->setText(0, C_GtGetText::h_GetText("  Data Blocks") +
+      this->mpc_TreeItemRootApplications->setText(0, "  Data Blocks" +
                                                   c_CounterResult.arg(QString::number(this->mu32_ApplicationsFound)));
-      this->mpc_TreeItemRootHalcChannels->setText(0, C_GtGetText::h_GetText("  Channels") +
+      this->mpc_TreeItemRootHalcChannels->setText(0, "  Channels" +
                                                   c_CounterResult.arg(QString::number(this->mu32_HalcChannelsFound)));
 
       //get result found status
@@ -812,7 +811,7 @@ void C_SdSearchTreeWidget::m_AddNodeResult(const QString & orc_NodeName, const u
 {
    QTreeWidgetItem * const pc_Item = new QTreeWidgetItem(this->mpc_TreeItemRootNodes);
    QString c_ResultString = orc_NodeName;
-   const QString c_Subtitle = C_GtGetText::h_GetText("Type: ") + orc_DeviceType;
+   const QString c_Subtitle = "Type: " + orc_DeviceType;
 
    this->m_MarkResultString(c_ResultString);
 
@@ -835,7 +834,7 @@ void C_SdSearchTreeWidget::m_AddBusResult(const QString & orc_BusName, const uin
 {
    QTreeWidgetItem * const pc_Item = new QTreeWidgetItem(this->mpc_TreeItemRootBusses);
    QString c_ResultString = orc_BusName;
-   const QString c_Subtitle = C_GtGetText::h_GetText("Type: ");
+   const QString c_Subtitle = "Type: ";
 
    this->m_MarkResultString(c_ResultString);
 
@@ -867,7 +866,7 @@ void C_SdSearchTreeWidget::m_AddDataPoolResult(const QString & orc_DataPoolName,
 {
    QTreeWidgetItem * const pc_Item = new QTreeWidgetItem(this->mpc_TreeItemRootDataPools);
    QString c_ResultString = orc_DataPoolName;
-   const QString c_Subtitle = C_GtGetText::h_GetText("Node: ") + orc_NodeName;
+   const QString c_Subtitle = "Node: " + orc_NodeName;
 
    this->m_MarkResultString(c_ResultString);
 
@@ -1002,7 +1001,7 @@ void C_SdSearchTreeWidget::m_AddApplicationResult(const QString & orc_Applicatio
 {
    QTreeWidgetItem * const pc_Item = new QTreeWidgetItem(this->mpc_TreeItemRootApplications);
    QString c_ResultString = orc_ApplicationName;
-   const QString c_Subtitle = C_GtGetText::h_GetText("Node: ") + orc_NodeName;
+   const QString c_Subtitle = "Node: " + orc_NodeName;
 
    this->m_MarkResultString(c_ResultString);
 
@@ -1052,7 +1051,7 @@ void C_SdSearchTreeWidget::m_AddHalcChannelResult(const QString & orc_HalcDomain
    else
    {
       c_ResultString = orc_HalcDomainName + " (-)";
-      c_Subtitle = C_GtGetText::h_GetText("Node: ") + orc_NodeName;
+      c_Subtitle = "Node: " + orc_NodeName;
    }
 
    this->m_MarkResultString(c_ResultString);
@@ -1091,49 +1090,49 @@ void C_SdSearchTreeWidget::m_AddHalcChannelResult(const QString & orc_HalcDomain
 void C_SdSearchTreeWidget::m_SetupStartingState(void)
 {
    this->mpc_TreeItemRootNodes = new QTreeWidgetItem();
-   this->mpc_TreeItemRootNodes->setText(0, C_GtGetText::h_GetText("Nodes"));
+   this->mpc_TreeItemRootNodes->setText(0, "Nodes");
    this->mpc_TreeItemRootNodes->setFlags(Qt::ItemIsEnabled); // item is not selectable
    this->addTopLevelItem(this->mpc_TreeItemRootNodes);
    this->mpc_TreeItemRootNodes->setHidden(true);
 
    this->mpc_TreeItemRootBusses = new QTreeWidgetItem();
-   this->mpc_TreeItemRootBusses->setText(0, C_GtGetText::h_GetText("Buses"));
+   this->mpc_TreeItemRootBusses->setText(0, "Buses");
    this->mpc_TreeItemRootBusses->setFlags(Qt::ItemIsEnabled); // item is not selectable
    this->addTopLevelItem(this->mpc_TreeItemRootBusses);
    this->mpc_TreeItemRootBusses->setHidden(true);
 
    this->mpc_TreeItemRootDataPools = new QTreeWidgetItem();
-   this->mpc_TreeItemRootDataPools->setText(0, C_GtGetText::h_GetText("Datapools"));
+   this->mpc_TreeItemRootDataPools->setText(0, "Datapools");
    this->mpc_TreeItemRootDataPools->setFlags(Qt::ItemIsEnabled); // item is not selectable
    this->addTopLevelItem(this->mpc_TreeItemRootDataPools);
    this->mpc_TreeItemRootDataPools->setHidden(true);
 
    this->mpc_TreeItemRootLists = new QTreeWidgetItem();
-   this->mpc_TreeItemRootLists->setText(0, C_GtGetText::h_GetText("Lists"));
+   this->mpc_TreeItemRootLists->setText(0, "Lists");
    this->mpc_TreeItemRootLists->setFlags(Qt::ItemIsEnabled); // item is not selectable
    this->addTopLevelItem(this->mpc_TreeItemRootLists);
    this->mpc_TreeItemRootLists->setHidden(true);
 
    this->mpc_TreeItemRootMessages = new QTreeWidgetItem();
-   this->mpc_TreeItemRootMessages->setText(0, C_GtGetText::h_GetText("Messages"));
+   this->mpc_TreeItemRootMessages->setText(0, "Messages");
    this->mpc_TreeItemRootMessages->setFlags(Qt::ItemIsEnabled); // item is not selectable
    this->addTopLevelItem(this->mpc_TreeItemRootMessages);
    this->mpc_TreeItemRootMessages->setHidden(true);
 
    this->mpc_TreeItemRootDataElements = new QTreeWidgetItem();
-   this->mpc_TreeItemRootDataElements->setText(0, C_GtGetText::h_GetText("Data elements"));
+   this->mpc_TreeItemRootDataElements->setText(0, "Data elements");
    this->mpc_TreeItemRootDataElements->setFlags(Qt::ItemIsEnabled); // item is not selectable
    this->addTopLevelItem(this->mpc_TreeItemRootDataElements);
    this->mpc_TreeItemRootDataElements->setHidden(true);
 
    this->mpc_TreeItemRootApplications = new QTreeWidgetItem();
-   this->mpc_TreeItemRootApplications->setText(0, C_GtGetText::h_GetText("Data Blocks"));
+   this->mpc_TreeItemRootApplications->setText(0, "Data Blocks");
    this->mpc_TreeItemRootApplications->setFlags(Qt::ItemIsEnabled); // item is not selectable
    this->addTopLevelItem(this->mpc_TreeItemRootApplications);
    this->mpc_TreeItemRootApplications->setHidden(true);
 
    this->mpc_TreeItemRootHalcChannels = new QTreeWidgetItem();
-   this->mpc_TreeItemRootHalcChannels->setText(0, C_GtGetText::h_GetText("Channels"));
+   this->mpc_TreeItemRootHalcChannels->setText(0, "Channels");
    this->mpc_TreeItemRootHalcChannels->setFlags(Qt::ItemIsEnabled); // item is not selectable
    this->addTopLevelItem(this->mpc_TreeItemRootHalcChannels);
    this->mpc_TreeItemRootHalcChannels->setHidden(true);

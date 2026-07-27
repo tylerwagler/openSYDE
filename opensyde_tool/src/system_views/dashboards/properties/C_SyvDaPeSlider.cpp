@@ -17,7 +17,6 @@
 #include "ui_C_SyvDaPeSlider.h"
 
 #include "C_GiSvDaSliderBase.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -91,25 +90,22 @@ C_SyvDaPeSlider::~C_SyvDaPeSlider(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeSlider::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelShowMinMax->setText(C_GtGetText::h_GetText("Show Min / Max"));
-   this->mpc_Ui->pc_LabelStyleColor->setText(C_GtGetText::h_GetText("Handle Style"));
-   this->mpc_Ui->pc_LabelStyleHandle->setText(C_GtGetText::h_GetText("Line Style"));
+   this->mpc_Ui->pc_LabelShowMinMax->setText("Show Min / Max");
+   this->mpc_Ui->pc_LabelStyleColor->setText("Handle Style");
+   this->mpc_Ui->pc_LabelStyleHandle->setText("Line Style");
 
-   this->mpc_Ui->pc_ComboBoxTypeColor->addItem(C_GtGetText::h_GetText("Type 1"));
-   this->mpc_Ui->pc_ComboBoxTypeColor->addItem(C_GtGetText::h_GetText("Type 2"));
-   this->mpc_Ui->pc_ComboBoxTypeHandle->addItem(C_GtGetText::h_GetText("Type 1"));
-   this->mpc_Ui->pc_ComboBoxTypeHandle->addItem(C_GtGetText::h_GetText("Type 2"));
+   this->mpc_Ui->pc_ComboBoxTypeColor->addItem("Type 1");
+   this->mpc_Ui->pc_ComboBoxTypeColor->addItem("Type 2");
+   this->mpc_Ui->pc_ComboBoxTypeHandle->addItem("Type 1");
+   this->mpc_Ui->pc_ComboBoxTypeHandle->addItem("Type 2");
 
    //Tool tips
-   this->mpc_Ui->pc_LabelStyleColor->SetToolTipInformation(C_GtGetText::h_GetText("Line Style"),
-                                                           C_GtGetText::h_GetText(
-                                                              "Different options for styles of the slider line"));
-   this->mpc_Ui->pc_LabelStyleHandle->SetToolTipInformation(C_GtGetText::h_GetText("Handle Style"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Different options for styles of the slider handle"));
-   this->mpc_Ui->pc_LabelShowMinMax->SetToolTipInformation(C_GtGetText::h_GetText("Show Min / Max"),
-                                                           C_GtGetText::h_GetText(
-                                                              "Option to display the minimum and maximum value next to the slider or hide them entirely"));
+   this->mpc_Ui->pc_LabelStyleColor->SetToolTipInformation("Line Style",
+                                                           "Different options for styles of the slider line");
+   this->mpc_Ui->pc_LabelStyleHandle->SetToolTipInformation("Handle Style",
+                                                            "Different options for styles of the slider handle");
+   this->mpc_Ui->pc_LabelShowMinMax->SetToolTipInformation("Show Min / Max",
+                                                           "Option to display the minimum and maximum value next to the slider or hide them entirely");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

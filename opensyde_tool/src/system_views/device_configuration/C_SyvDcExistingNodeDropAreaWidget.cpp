@@ -10,7 +10,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_GtGetText.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_SyvDcExistingNodeDropAreaWidget.hpp"
@@ -89,7 +88,7 @@ C_SyvDcExistingNodeDropAreaWidget::~C_SyvDcExistingNodeDropAreaWidget(void) noex
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcExistingNodeDropAreaWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelContent->setText(C_GtGetText::h_GetText("Drop device here"));
+   this->mpc_Ui->pc_LabelContent->setText("Drop device here");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -111,7 +110,7 @@ void C_SyvDcExistingNodeDropAreaWidget::SetContent(const bool oq_ValidSerialNumb
 
    this->mc_PureSerialNumber = orc_PureSerialNumber;
    this->mpc_Ui->pc_LabelSerialNumber->setText(
-      static_cast<QString>(C_GtGetText::h_GetText("SN.: %1")).arg(c_ShowedSerialNumber));
+      static_cast<QString>("SN.: %1").arg(c_ShowedSerialNumber));
    this->mc_SubNodeIdsToOldNodeIds = orc_SubNodeIdsToOldNodeIds;
 
    if (oq_ValidSerialNumber == true)

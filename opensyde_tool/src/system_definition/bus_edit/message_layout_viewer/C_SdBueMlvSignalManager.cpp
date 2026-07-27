@@ -17,7 +17,6 @@
 #include "C_SdBueMlvSignalManager.hpp"
 
 #include "C_PuiSdHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
 #include "C_SdUtil.hpp"
 
@@ -684,7 +683,7 @@ void C_SdBueMlvSignalManager::m_UpdateItemConfiguration(void)
 
          if (this->mq_MultiplexerSignal == true)
          {
-            c_ShownText += C_GtGetText::h_GetText(" (Multiplexer)");
+            c_ShownText += " (Multiplexer)";
          }
 
          // new item necessary

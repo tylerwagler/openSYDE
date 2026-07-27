@@ -16,7 +16,6 @@
 #include "ui_C_CamMosFilterPopup.h"
 
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_Uti.hpp"
 #include "TglUtils.hpp"
@@ -231,52 +230,49 @@ void C_CamMosFilterPopup::SetAddFilterItem(const QList<int32_t> oc_CanMsgId,  co
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosFilterPopup::m_InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Filter"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Configuration"));
+   this->mrc_ParentDialog.SetTitle("Filter");
+   this->mrc_ParentDialog.SetSubTitle("Configuration");
 
-   this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
-   this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
-   this->mpc_Ui->pc_TedComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
+   this->mpc_Ui->pc_LabelName->setText("Name");
+   this->mpc_Ui->pc_LabelComment->setText("Comment");
+   this->mpc_Ui->pc_TedComment->setPlaceholderText("Add your comment here ...");
 
-   this->mpc_Ui->pc_LabelFilterItems->setText(C_GtGetText::h_GetText("Filter Items"));
+   this->mpc_Ui->pc_LabelFilterItems->setText("Filter Items");
    this->mpc_Ui->pc_LabelNoteAnd->setText(
-      C_GtGetText::h_GetText("Note: Filter items are linked with logical conjunction (\"and\")."));
+      "Note: Filter items are linked with logical conjunction (\"and\").");
 
-   this->mpc_Ui->pc_LabelSettings->setText(C_GtGetText::h_GetText("Settings"));
-   this->mpc_Ui->pc_LabNoSelection->setText(C_GtGetText::h_GetText(
-                                               "No filter items declared, add any via the '+' button."));
-   this->mpc_Ui->pc_LabType->setText(C_GtGetText::h_GetText("Type"));
-   this->mpc_Ui->pc_LabMode->setText(C_GtGetText::h_GetText("Mode"));
-   this->mpc_Ui->pc_LabCanIdStart->setText(C_GtGetText::h_GetText("ID"));
-   this->mpc_Ui->pc_LabCanIdEnd->setText(C_GtGetText::h_GetText("To"));
-   this->mpc_Ui->pc_RabPass->setText(C_GtGetText::h_GetText("Pass"));
-   this->mpc_Ui->pc_RabStop->setText(C_GtGetText::h_GetText("Stop"));
-   this->mpc_Ui->pc_CheckBoxExtended->setText(C_GtGetText::h_GetText("Extended ID"));
-   this->mpc_Ui->pc_PubAddFromDatabase->setText(C_GtGetText::h_GetText("Add from Database"));
+   this->mpc_Ui->pc_LabelSettings->setText("Settings");
+   this->mpc_Ui->pc_LabNoSelection->setText("No filter items declared, add any via the '+' button.");
+   this->mpc_Ui->pc_LabType->setText("Type");
+   this->mpc_Ui->pc_LabMode->setText("Mode");
+   this->mpc_Ui->pc_LabCanIdStart->setText("ID");
+   this->mpc_Ui->pc_LabCanIdEnd->setText("To");
+   this->mpc_Ui->pc_RabPass->setText("Pass");
+   this->mpc_Ui->pc_RabStop->setText("Stop");
+   this->mpc_Ui->pc_CheckBoxExtended->setText("Extended ID");
+   this->mpc_Ui->pc_PubAddFromDatabase->setText("Add from Database");
 
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("CAN ID Range"));
-   this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("CAN ID"));
+   this->mpc_Ui->pc_ComboBoxType->addItem("CAN ID Range");
+   this->mpc_Ui->pc_ComboBoxType->addItem("CAN ID");
 
    // tool tips
-   this->mpc_Ui->pc_LabelName->SetToolTipInformation(C_GtGetText::h_GetText("Name"),
-                                                     C_GtGetText::h_GetText("Symbolic and unique filter name."));
-   this->mpc_Ui->pc_LabelComment->SetToolTipInformation(C_GtGetText::h_GetText("Comment"),
-                                                        C_GtGetText::h_GetText("Comment for this filter."));
-   this->mpc_Ui->pc_PubAddItem->SetToolTipInformation("", C_GtGetText::h_GetText("Add new filter item."));
-   this->mpc_Ui->pc_LabType->SetToolTipInformation(C_GtGetText::h_GetText("Type"),
-                                                   C_GtGetText::h_GetText("Available types: CAN ID and CAN ID Range."));
-   this->mpc_Ui->pc_LabMode->SetToolTipInformation(C_GtGetText::h_GetText("Mode"),
-                                                   C_GtGetText::h_GetText("Pass or stop given CAN ID(s)"));
-   this->mpc_Ui->pc_LabCanIdStart->SetToolTipInformation(C_GtGetText::h_GetText("Message ID"),
-                                                         C_GtGetText::h_GetText("ID of filtered message."));
-   this->mpc_Ui->pc_LabCanIdEnd->SetToolTipInformation(C_GtGetText::h_GetText("Message ID"),
-                                                       C_GtGetText::h_GetText("ID of last filtered message."));
-   this->mpc_Ui->pc_CheckBoxExtended->SetToolTipInformation(C_GtGetText::h_GetText("Extended"),
-                                                            C_GtGetText::h_GetText(
-                                                               "CAN Message ID is in extended format."));
-   this->mpc_Ui->pc_PubAddFromDatabase->SetToolTipInformation(C_GtGetText::h_GetText("Add from database"),
-                                                              C_GtGetText::h_GetText(
-                                                                 "Add message from configured database."));
+   this->mpc_Ui->pc_LabelName->SetToolTipInformation("Name",
+                                                     "Symbolic and unique filter name.");
+   this->mpc_Ui->pc_LabelComment->SetToolTipInformation("Comment",
+                                                        "Comment for this filter.");
+   this->mpc_Ui->pc_PubAddItem->SetToolTipInformation("", "Add new filter item.");
+   this->mpc_Ui->pc_LabType->SetToolTipInformation("Type",
+                                                   "Available types: CAN ID and CAN ID Range.");
+   this->mpc_Ui->pc_LabMode->SetToolTipInformation("Mode",
+                                                   "Pass or stop given CAN ID(s)");
+   this->mpc_Ui->pc_LabCanIdStart->SetToolTipInformation("Message ID",
+                                                         "ID of filtered message.");
+   this->mpc_Ui->pc_LabCanIdEnd->SetToolTipInformation("Message ID",
+                                                       "ID of last filtered message.");
+   this->mpc_Ui->pc_CheckBoxExtended->SetToolTipInformation("Extended",
+                                                            "CAN Message ID is in extended format.");
+   this->mpc_Ui->pc_PubAddFromDatabase->SetToolTipInformation("Add from database",
+                                                              "Add message from configured database.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -489,9 +485,9 @@ void C_CamMosFilterPopup::m_ShowTypeSpecificWidgets(const int32_t os32_NewType) 
    if (os32_NewType == 1)
    {
       // Type "ID"
-      this->mpc_Ui->pc_LabCanIdStart->setText(C_GtGetText::h_GetText("ID"));
-      this->mpc_Ui->pc_LabCanIdStart->SetToolTipInformation(C_GtGetText::h_GetText("Message ID"),
-                                                            C_GtGetText::h_GetText("ID of filtered message."));
+      this->mpc_Ui->pc_LabCanIdStart->setText("ID");
+      this->mpc_Ui->pc_LabCanIdStart->SetToolTipInformation("Message ID",
+                                                            "ID of filtered message.");
       this->mpc_Ui->pc_LabCanIdEnd->setVisible(false);
       this->mpc_Ui->pc_LeCanIdEnd->setVisible(false); // first hide then show to avoid resizing
       this->mpc_Ui->pc_PubAddFromDatabase->setVisible(true);
@@ -499,9 +495,9 @@ void C_CamMosFilterPopup::m_ShowTypeSpecificWidgets(const int32_t os32_NewType) 
    else
    {
       // Default: Type "ID Range"
-      this->mpc_Ui->pc_LabCanIdStart->setText(C_GtGetText::h_GetText("From"));
-      this->mpc_Ui->pc_LabCanIdStart->SetToolTipInformation(C_GtGetText::h_GetText("Message ID"),
-                                                            C_GtGetText::h_GetText("ID of first filtered message."));
+      this->mpc_Ui->pc_LabCanIdStart->setText("From");
+      this->mpc_Ui->pc_LabCanIdStart->SetToolTipInformation("Message ID",
+                                                            "ID of first filtered message.");
       this->mpc_Ui->pc_LabCanIdEnd->setVisible(true);
       this->mpc_Ui->pc_PubAddFromDatabase->setVisible(false); // first hide then show to avoid resizing
       this->mpc_Ui->pc_LeCanIdEnd->setVisible(true);
@@ -550,13 +546,13 @@ void C_CamMosFilterPopup::m_OnOk(void)
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
    bool q_Accept = true;
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("Filter Name"));
+   c_Message.SetHeading("Filter Name");
 
    // do not allow empty names
    if (c_Name.isEmpty() == true)
    {
       q_Accept = false;
-      c_Message.SetDescription(C_GtGetText::h_GetText("Filter name is empty. Choose a valid name."));
+      c_Message.SetDescription("Filter name is empty. Choose a valid name.");
    }
    else
    {
@@ -566,7 +562,7 @@ void C_CamMosFilterPopup::m_OnOk(void)
          if (C_CamProHandler::h_GetInstance()->CheckFilterNameAvailable(c_Name) == false)
          {
             q_Accept = false;
-            c_Message.SetDescription(C_GtGetText::h_GetText("Filter name is already used. Choose another name."));
+            c_Message.SetDescription("Filter name is already used. Choose another name.");
          }
       }
    }
@@ -816,7 +812,7 @@ void C_CamMosFilterPopup::m_OnStartIdEdited(void)
          disconnect(this->mpc_Ui->pc_LeCanIdStart, &C_TblEditLineEditBase::editingFinished, this,
                     &C_CamMosFilterPopup::m_OnStartIdEdited);
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eWARNING, c_ErrorDescription);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Invalid input"));
+         c_Message.SetHeading("Invalid input");
          c_Message.Execute();
          connect(this->mpc_Ui->pc_LeCanIdStart, &C_TblEditLineEditBase::editingFinished, this,
                  &C_CamMosFilterPopup::m_OnStartIdEdited);
@@ -868,7 +864,7 @@ void C_CamMosFilterPopup::m_OnEndIdEdited(void)
          disconnect(this->mpc_Ui->pc_LeCanIdEnd, &C_TblEditLineEditBase::editingFinished, this,
                     &C_CamMosFilterPopup::m_OnEndIdEdited);
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eWARNING, c_ErrorDescription);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Invalid input"));
+         c_Message.SetHeading("Invalid input");
          c_Message.Execute();
          connect(this->mpc_Ui->pc_LeCanIdEnd, &C_TblEditLineEditBase::editingFinished, this,
                  &C_CamMosFilterPopup::m_OnEndIdEdited);
@@ -915,10 +911,10 @@ void C_CamMosFilterPopup::m_OnExtendedToggled(const bool oq_Checked)
             // reset extended flag and inform user
             this->mpc_Ui->pc_CheckBoxExtended->setChecked(true);
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eWARNING);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Invalid Flag"));
+            c_Message.SetHeading("Invalid Flag");
             c_Message.SetDescription(
-               C_GtGetText::h_GetText("Current CAN message ID is out of range of standard format. To remove the "
-                                      "extended flag, first set CAN ID to 0x7FF or less."));
+               "Current CAN message ID is out of range of standard format. To remove the "
+                                      "extended flag, first set CAN ID to 0x7FF or less.");
             c_Message.Execute();
          }
       }
@@ -1012,7 +1008,7 @@ int32_t C_CamMosFilterPopup::m_GetCurrentSelectedRowIndex(void) const
 void C_CamMosFilterPopup::m_UpdateTitleFilterItemCount(void) const
 {
    this->mpc_Ui->pc_LabelFilterItems->setText(
-      static_cast<QString>(C_GtGetText::h_GetText("Filter Items (%1)")).arg(this->mpc_TableModel->rowCount()));
+      static_cast<QString>("Filter Items (%1)").arg(this->mpc_TableModel->rowCount()));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -19,7 +19,6 @@
 #include "C_FlaUpListItemWidget.hpp"
 #include "ui_C_FlaUpListItemWidget.h"
 #include "C_Uti.hpp"
-#include "C_GtGetText.hpp"
 #include "C_FlaUpHexFileView.hpp"
 #include "C_FlaUpHexFileInfo.hpp"
 #include "C_OgeWiUtil.hpp"
@@ -71,15 +70,13 @@ C_FlaUpListItemWidget::C_FlaUpListItemWidget(QListWidget * const opc_Parent, C_F
    this->mpc_Ui->pc_DeleteButton->SetSvg("://images/IconClear.svg", "://images/IconClearGrayDisabled.svg",
                                          "://images/IconClearHover.svg", "", "", "",
                                          "://images/IconClearPressed.svg");
-   this->mpc_Ui->pc_DeleteButton->SetToolTipInformation(C_GtGetText::h_GetText("Delete file"),
-                                                        C_GtGetText::h_GetText(
-                                                           "Remove HEX file from list"));
+   this->mpc_Ui->pc_DeleteButton->SetToolTipInformation("Delete file",
+                                                        "Remove HEX file from list");
    this->mpc_Ui->pc_BrowseButton->SetSvg("://images/IconBrowse.svg", "://images/IconBrowseDisabled.svg",
                                          "://images/IconBrowseHovered.svg", "", "", "",
                                          "://images/IconBrowsePressed.svg");
-   this->mpc_Ui->pc_BrowseButton->SetToolTipInformation(C_GtGetText::h_GetText("Browse file"),
-                                                        C_GtGetText::h_GetText(
-                                                           "Select HEX file (.*hex)"));
+   this->mpc_Ui->pc_BrowseButton->SetToolTipInformation("Browse file",
+                                                        "Select HEX file (.*hex)");
    this->mpc_Ui->pc_FilePathLabel->SetFontPixel(14, true, false);
    this->mpc_Ui->pc_FilePathLabel->SetForegroundColor(6);
    this->mpc_Ui->pc_FilepathWidget->SetBackgroundColor(11);
@@ -295,17 +292,16 @@ void C_FlaUpListItemWidget::m_SetupContextMenu()
 {
    mpc_ContextMenu = new stw::opensyde_gui_elements::C_OgeContextMenu(this);
    this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Select File"), this,  &C_FlaUpListItemWidget::m_SelectFile);
+      "Select File", this,  &C_FlaUpListItemWidget::m_SelectFile);
    this->mpc_ContextMenu->addSeparator();
    this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("View File Information"), this, &C_FlaUpListItemWidget::m_ViewFileInfo);
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                       "Show in Explorer"), this, &C_FlaUpListItemWidget::m_ShowInExplorer);
+      "View File Information", this, &C_FlaUpListItemWidget::m_ViewFileInfo);
+   this->mpc_ContextMenu->addAction("Show in Explorer", this, &C_FlaUpListItemWidget::m_ShowInExplorer);
    this->mpc_ContextMenu->addSeparator();
    this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Remove File"), this, &C_FlaUpListItemWidget::m_DeleteItem);
+      "Remove File", this, &C_FlaUpListItemWidget::m_DeleteItem);
    this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Remove all Files"), this, &C_FlaUpListItemWidget::m_DeleteAllItems);
+      "Remove all Files", this, &C_FlaUpListItemWidget::m_DeleteAllItems);
    this->setContextMenuPolicy(Qt::CustomContextMenu);
 
    connect(this, &C_FlaUpListItemWidget::customContextMenuRequested, this,
@@ -385,28 +381,28 @@ QString C_FlaUpListItemWidget::m_UpdateToolTipContent(const int32_t os32_Index)
          static_cast<uint32_t>(this->pc_HexFileInfo->c_HexFileInfo.c_Size.split(' ').at(0).toUInt());
       const float64_t f64_FileSize = std::ceil(static_cast<float64_t>(u32_FileSize) / 1024.0);
 
-      c_Content += C_GtGetText::h_GetText("Project Name: ");
+      c_Content += "Project Name: ";
       c_Content += this->pc_HexFileInfo->c_BlockInfo.at(os32_Index).c_ProjectName;
 
-      c_Content += C_GtGetText::h_GetText("\nTimestamp: ");
+      c_Content += "\nTimestamp: ";
       c_Content += this->pc_HexFileInfo->c_BlockInfo.at(os32_Index).c_Date + " " + this->pc_HexFileInfo->c_BlockInfo.at(
          os32_Index).c_Time;
 
-      c_Content += C_GtGetText::h_GetText("\nVersion: ");
+      c_Content += "\nVersion: ";
       c_Content += this->pc_HexFileInfo->c_BlockInfo.at(os32_Index).c_ProjectVersion;
 
-      c_Content += C_GtGetText::h_GetText("\nFile path origin: Defined by User");
+      c_Content += "\nFile path origin: Defined by User";
 
-      c_Content += C_GtGetText::h_GetText("\nFile path: ");
+      c_Content += "\nFile path: ";
       c_Content += this->pc_HexFileInfo->c_HexFileInfo.c_FileName;
 
-      c_Content += C_GtGetText::h_GetText("\nFile path absolute: ");
+      c_Content += "\nFile path absolute: ";
       c_Content += this->pc_HexFileInfo->c_HexFileInfo.c_FilePath;
 
-      c_Content += C_GtGetText::h_GetText("\nFile size: ");
+      c_Content += "\nFile size: ";
 
       c_Content += QString::number(f64_FileSize);
-      c_Content += C_GtGetText::h_GetText(" kB");
+      c_Content += " kB";
    }
 
    return c_Content;

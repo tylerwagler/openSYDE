@@ -15,7 +15,6 @@
 
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvUpPacSecurityOptionsPopUp.hpp"
 #include "ui_C_SyvUpPacSecurityOptionsPopUp.h"
 
@@ -98,41 +97,41 @@ C_SyvUpPacSecurityOptionsPopUp::~C_SyvUpPacSecurityOptionsPopUp(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacSecurityOptionsPopUp::InitStaticNames(void) const
 {
-   const QString c_ToolTipContent = C_GtGetText::h_GetText("No Change: Do nothing\n"
+   const QString c_ToolTipContent = "No Change: Do nothing\n"
                                                            "Activate: Enable %1 on next system update\n"
-                                                           "Deactivate: Disable %1 on next system update\n");
+                                                           "Deactivate: Disable %1 on next system update\n";
 
    this->mrc_ParentDialog.SetTitle(mc_NodeName);
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Security Settings"));
-   this->mpc_Ui->pc_LabelHeading->setText(C_GtGetText::h_GetText("Services"));
-   this->mpc_Ui->pc_LabelAuth->setText(C_GtGetText::h_GetText("Activate Authentication"));
-   this->mpc_Ui->pc_LabelDebugger->setText(C_GtGetText::h_GetText("Activate Debugger"));
-   this->mpc_Ui->pc_LabelTrafficEncryption->setText(C_GtGetText::h_GetText("Activate Traffic Encryption"));
+   this->mrc_ParentDialog.SetSubTitle("Security Settings");
+   this->mpc_Ui->pc_LabelHeading->setText("Services");
+   this->mpc_Ui->pc_LabelAuth->setText("Activate Authentication");
+   this->mpc_Ui->pc_LabelDebugger->setText("Activate Debugger");
+   this->mpc_Ui->pc_LabelTrafficEncryption->setText("Activate Traffic Encryption");
 
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
 
    //Combo Box
-   this->mpc_Ui->pc_ComboBoxAuth->addItem(C_GtGetText::h_GetText("No Change"));
-   this->mpc_Ui->pc_ComboBoxAuth->addItem(C_GtGetText::h_GetText("Activate"));
-   this->mpc_Ui->pc_ComboBoxAuth->addItem(C_GtGetText::h_GetText("Deactivate"));
-   this->mpc_Ui->pc_ComboBoxDebugger->addItem(C_GtGetText::h_GetText("No Change"));
-   this->mpc_Ui->pc_ComboBoxDebugger->addItem(C_GtGetText::h_GetText("Activate"));
-   this->mpc_Ui->pc_ComboBoxDebugger->addItem(C_GtGetText::h_GetText("Deactivate"));
-   this->mpc_Ui->pc_ComboBoxTrafficEncryption->addItem(C_GtGetText::h_GetText("No Change"));
-   this->mpc_Ui->pc_ComboBoxTrafficEncryption->addItem(C_GtGetText::h_GetText("Activate"));
-   this->mpc_Ui->pc_ComboBoxTrafficEncryption->addItem(C_GtGetText::h_GetText("Deactivate"));
+   this->mpc_Ui->pc_ComboBoxAuth->addItem("No Change");
+   this->mpc_Ui->pc_ComboBoxAuth->addItem("Activate");
+   this->mpc_Ui->pc_ComboBoxAuth->addItem("Deactivate");
+   this->mpc_Ui->pc_ComboBoxDebugger->addItem("No Change");
+   this->mpc_Ui->pc_ComboBoxDebugger->addItem("Activate");
+   this->mpc_Ui->pc_ComboBoxDebugger->addItem("Deactivate");
+   this->mpc_Ui->pc_ComboBoxTrafficEncryption->addItem("No Change");
+   this->mpc_Ui->pc_ComboBoxTrafficEncryption->addItem("Activate");
+   this->mpc_Ui->pc_ComboBoxTrafficEncryption->addItem("Deactivate");
 
    //ToolTips
    this->mpc_Ui->pc_LabelAuth->SetToolTipInformation(
-      C_GtGetText::h_GetText("Activate Authentication"),
-      c_ToolTipContent.arg(C_GtGetText::h_GetText("authentication")));
+      "Activate Authentication",
+      c_ToolTipContent.arg("authentication"));
    this->mpc_Ui->pc_LabelDebugger->SetToolTipInformation(
-      C_GtGetText::h_GetText("Activate Debugger"),
-      c_ToolTipContent.arg(C_GtGetText::h_GetText("debugger")));
+      "Activate Debugger",
+      c_ToolTipContent.arg("debugger"));
    this->mpc_Ui->pc_LabelTrafficEncryption->SetToolTipInformation(
-      C_GtGetText::h_GetText("Activate Traffic Encryption"),
-      c_ToolTipContent.arg(C_GtGetText::h_GetText("traffic encryption")));
+      "Activate Traffic Encryption",
+      c_ToolTipContent.arg("traffic encryption"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

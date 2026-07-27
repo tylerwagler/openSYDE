@@ -18,7 +18,6 @@
 #include "C_GiBiArrow.hpp"
 #include "C_GiBiLineBounding.hpp"
 #include "C_OgePopUpDialog.hpp"
-#include "C_GtGetText.hpp"
 #include "C_GiSyBaseWidget.hpp"
 #include "C_GiSyLineWidget.hpp"
 #include "gitypes.hpp"
@@ -164,7 +163,7 @@ bool C_GiBiArrow::OpenStyleDialog(void)
    QGraphicsView * const pc_View = this->scene()->views().at(0);
 
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(pc_View, pc_View);
-   C_GiSyBaseWidget * const pc_Dialog = new C_GiSyBaseWidget(*c_New, C_GtGetText::h_GetText("Line/Arrow"));
+   C_GiSyBaseWidget * const pc_Dialog = new C_GiSyBaseWidget(*c_New, "Line/Arrow");
    C_GiSyLineWidget * const pc_SettingsWidget = new C_GiSyLineWidget(C_GiSyLineWidget::E_Type::eLINE, *pc_Dialog);
 
    const QSize c_SIZE(880, 506);

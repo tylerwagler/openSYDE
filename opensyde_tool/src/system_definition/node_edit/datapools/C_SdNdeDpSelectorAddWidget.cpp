@@ -15,7 +15,6 @@
 
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_OgeWiUtil.hpp"
@@ -97,36 +96,33 @@ C_SdNdeDpSelectorAddWidget::~C_SdNdeDpSelectorAddWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpSelectorAddWidget::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Datapools"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Add new Datapool"));
-   this->mpc_Ui->pc_LabelHeading->setText(C_GtGetText::h_GetText("Select Type"));
+   this->mrc_ParentDialog.SetTitle("Datapools");
+   this->mrc_ParentDialog.SetSubTitle("Add new Datapool");
+   this->mpc_Ui->pc_LabelHeading->setText("Select Type");
 
-   this->mpc_Ui->pc_RadioButtonStandAlone->setText(C_GtGetText::h_GetText("Stand-alone Datapool"));
-   this->mpc_Ui->pc_RadioButtonShared->setText(C_GtGetText::h_GetText("Shared Datapool"));
+   this->mpc_Ui->pc_RadioButtonStandAlone->setText("Stand-alone Datapool");
+   this->mpc_Ui->pc_RadioButtonShared->setText("Shared Datapool");
 
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Continue"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_LabelSharedDatapool->setText(C_GtGetText::h_GetText("Share with"));
-   this->mpc_Ui->pc_LabelSharedDatapoolInfo->setText(C_GtGetText::h_GetText("Already shared with:"));
+   this->mpc_Ui->pc_PushButtonOk->setText("Continue");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_LabelSharedDatapool->setText("Share with");
+   this->mpc_Ui->pc_LabelSharedDatapoolInfo->setText("Already shared with:");
 
    //tooltips
-   this->mpc_Ui->pc_RadioButtonStandAlone->SetToolTipInformation(C_GtGetText::h_GetText("Stand-alone Datapool"),
-                                                                 C_GtGetText::h_GetText(
-                                                                    "Default type. A Datapool without relationship to other Datapools."));
+   this->mpc_Ui->pc_RadioButtonStandAlone->SetToolTipInformation("Stand-alone Datapool",
+                                                                 "Default type. A Datapool without relationship to other Datapools.");
 
-   this->mpc_Ui->pc_RadioButtonShared->SetToolTipInformation(C_GtGetText::h_GetText("Shared Datapool"),
-                                                             C_GtGetText::h_GetText(
-                                                                "A Datapool with relationship to other Datapools.\n"
+   this->mpc_Ui->pc_RadioButtonShared->SetToolTipInformation("Shared Datapool",
+                                                             "A Datapool with relationship to other Datapools.\n"
                                                                 "Datapool configuration and properties are synchronized"
-                                                                "within shared Datapools."));
+                                                                "within shared Datapools.");
 
-   this->mpc_Ui->pc_LabelSharedDatapool->SetToolTipInformation(C_GtGetText::h_GetText("Share with"),
-                                                               C_GtGetText::h_GetText("Select share partner Datapool."));
+   this->mpc_Ui->pc_LabelSharedDatapool->SetToolTipInformation("Share with",
+                                                               "Select share partner Datapool.");
 
-   this->mpc_Ui->pc_LabelSharedDatapoolInfo->SetToolTipInformation(C_GtGetText::h_GetText("Already shared with"),
-                                                                   C_GtGetText::h_GetText(
-                                                                      "List of Datapools which are already shared with "
-                                                                      "selected shared partner Datapool."));
+   this->mpc_Ui->pc_LabelSharedDatapoolInfo->SetToolTipInformation("Already shared with",
+                                                                   "List of Datapools which are already shared with "
+                                                                      "selected shared partner Datapool.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_SdBueCoAddSignalsDialog.hpp"
 #include "ui_C_SdBueCoAddSignalsDialog.h"
 
@@ -102,15 +101,14 @@ C_SdBueCoAddSignalsDialog::~C_SdBueCoAddSignalsDialog(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueCoAddSignalsDialog::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Add Signals"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Select Signal from Object Dictionary"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Select Signal from Object Dictionary"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_LineEditSearch->setPlaceholderText(C_GtGetText::h_GetText("Filter"));
-   this->mpc_Ui->pc_LabelSearchNoElementsFound->setText(C_GtGetText::h_GetText("No signals found."));
-   this->mpc_Ui->pc_LabelInitialSignalNoElements->setText(C_GtGetText::h_GetText(
-                                                             "No signals defined on the connected bus."));
+   this->mrc_ParentDialog.SetTitle("Add Signals");
+   this->mrc_ParentDialog.SetSubTitle("Select Signal from Object Dictionary");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Select Signal from Object Dictionary");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_LineEditSearch->setPlaceholderText("Filter");
+   this->mpc_Ui->pc_LabelSearchNoElementsFound->setText("No signals found.");
+   this->mpc_Ui->pc_LabelInitialSignalNoElements->setText("No signals defined on the connected bus.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -231,14 +229,12 @@ void C_SdBueCoAddSignalsDialog::m_UpdateSelection(const int32_t os32_SelectionCo
       this->mpc_Ui->pc_LabelSelection->setVisible(true);
       if (os32_SelectionCount > 0)
       {
-         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "%1 selected signal(s)")).
+         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("%1 selected signal(s)").
                                                   arg(os32_SelectionCount));
       }
       else
       {
-         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "No selected signal")));
+         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("No selected signal"));
       }
    }
 }
@@ -251,16 +247,16 @@ void C_SdBueCoAddSignalsDialog::m_SetupContextMenu(void)
 {
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Expand all"),
+   this->mpc_ContextMenu->addAction("Expand all",
                                     this->mpc_Ui->pc_TreeView,
                                     &C_SdBueCoAddSignalsView::expandAll);
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Collapse all"),
+   this->mpc_ContextMenu->addAction("Collapse all",
                                     this->mpc_Ui->pc_TreeView,
                                     &C_SdBueCoAddSignalsView::collapseAll);
 
    // select all action
    this->mpc_ContextMenu->addSeparator();
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Select all"),
+   this->mpc_ContextMenu->addAction("Select all",
                                     this->mpc_Ui->pc_TreeView,
                                     &C_SdBueCoAddSignalsView::selectAll,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_A));

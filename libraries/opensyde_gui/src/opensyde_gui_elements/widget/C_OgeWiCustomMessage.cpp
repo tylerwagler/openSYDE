@@ -12,8 +12,8 @@
    Example usage:
 
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
-   c_Message.SetHeading(C_GtGetText::h_GetText("Please confirm: "));
-   c_Message.SetDescription(C_GtGetText::h_GetText("Do you really want to steal the apple for eating it?"));
+   c_Message.SetHeading("Please confirm: ");
+   c_Message.SetDescription("Do you really want to steal the apple for eating it?");
    C_OgeWiCustomMessage::E_Outputs e_Output;
    e_Output = c_Message.Execute();
    switch(e_Output)
@@ -44,7 +44,6 @@
 #include "ui_C_OgeWiCustomMessage.h"
 
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_OgeOverlay.hpp"
 
@@ -241,10 +240,10 @@ void C_OgeWiCustomMessage::keyPressEvent(QKeyEvent * const opc_KeyEvent)
 void C_OgeWiCustomMessage::m_InitButtons(void)
 {
    // Initialize the buttons text
-   this->mpc_Ui->pc_ButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_ButtonNo->setText(C_GtGetText::h_GetText("NO"));
-   this->mpc_Ui->pc_ButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_LabelDetails->setText(C_GtGetText::h_GetText("DETAILS"));
+   this->mpc_Ui->pc_ButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_ButtonNo->setText("NO");
+   this->mpc_Ui->pc_ButtonOk->setText("OK");
+   this->mpc_Ui->pc_LabelDetails->setText("DETAILS");
 
    // hide the cancel and no button (only needed for question)
    this->mpc_Ui->pc_ButtonNo->hide();
@@ -292,7 +291,7 @@ void C_OgeWiCustomMessage::m_SetMessageType(const E_Type & ore_MessageType)
 {
    // reset to default
    mc_TypeString = "";
-   this->mpc_Ui->pc_ButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_ButtonOk->setText("OK");
    this->mpc_Ui->pc_ButtonNo->hide();
    this->mpc_Ui->pc_ButtonCancel->hide();
 
@@ -311,7 +310,7 @@ void C_OgeWiCustomMessage::m_SetMessageType(const E_Type & ore_MessageType)
       mc_TypeString = "QUESTION";
 
       // show the Cancel and NO Button and change text of OK button
-      this->mpc_Ui->pc_ButtonOk->setText(C_GtGetText::h_GetText("YES"));
+      this->mpc_Ui->pc_ButtonOk->setText("YES");
       this->mpc_Ui->pc_ButtonNo->show();
       if (mq_ShowCancelButton == true)
       {

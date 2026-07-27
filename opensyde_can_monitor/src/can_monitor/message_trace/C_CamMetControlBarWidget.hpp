@@ -68,6 +68,7 @@ Q_SIGNALS:
    void SigDisplayTimestampTimeOfDay(const bool oq_Value);
    void SigTraceBufferSize(const uint32_t ou32_Value);
    void SigChangeProtocol(const stw::cmon_protocol::e_CanMonL7Protocols oe_Protocol);
+   void SigCanTpEnabled(const bool oq_Enabled);
    void SigDisplayTree(const bool oq_Show);
    void SigDisplayUniqueMessages(const bool oq_Unique);
    void SigSearchTrace(const QString & orc_SearchString, const bool oq_Next) const;

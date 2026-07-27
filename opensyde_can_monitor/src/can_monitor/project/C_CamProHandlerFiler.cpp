@@ -156,8 +156,25 @@ void C_CamProHandlerFiler::h_SaveMessage(const C_CamProMessageData & orc_Message
    orc_XmlParser.SetAttributeBool("do-cyclic-trigger", orc_Message.q_DoCyclicTrigger);
    orc_XmlParser.SetAttributeUint32("interval", orc_Message.u32_CyclicTriggerTime);
    orc_XmlParser.SetAttributeUint32("key-press-offset", orc_Message.u32_KeyPressOffset);
-   orc_XmlParser.SetAttributeBool("auto-protocol-support", orc_Message.q_SetAutoSupportMode);
-   orc_XmlParser.CreateNodeChild("name", orc_Message.c_Name);
+    orc_XmlParser.SetAttributeBool("auto-protocol-support", orc_Message.q_SetAutoSupportMode);
+     orc_XmlParser.SetAttributeUint32("tx-protocol", static_cast<uint32_t>(orc_Message.e_TxProtocol));
+     orc_XmlParser.SetAttributeUint32("uds-service-id", orc_Message.u8_UdsServiceId);
+     orc_XmlParser.SetAttributeUint32("uds-sub-function", orc_Message.u8_UdsSubFunction);
+     orc_XmlParser.SetAttributeUint32("uds-did", orc_Message.u16_UdsDid);
+     if (orc_Message.c_UdsData.size() > 0UL)
+     {
+        C_SclString c_Data;
+        for (uint32_t u32_It = 0U; u32_It < orc_Message.c_UdsData.size(); ++u32_It)
+        {
+           if (u32_It > 0U)
+           {
+              c_Data += " ";
+           }
+           c_Data += C_SclString::IntToHex(orc_Message.c_UdsData[u32_It], 2);
+        }
+        orc_XmlParser.SetAttributeString("uds-data", c_Data);
+     }
+     orc_XmlParser.CreateNodeChild("name", orc_Message.c_Name);
    orc_XmlParser.CreateNodeChild("key", orc_Message.c_Key);
    orc_XmlParser.CreateNodeChild("database", orc_Message.c_DataBaseFilePath);
 }
@@ -371,8 +388,55 @@ int32_t C_CamProHandlerFiler::h_LoadMessage(C_CamProMessageData & orc_Message, C
       //Default
       orc_Message.q_SetAutoSupportMode = false;
    }
+    if (orc_XmlParser.AttributeExists("tx-protocol") == true)
+    {
+       orc_Message.e_TxProtocol = static_cast<C_CamProMessageData::E_TxProtocol>(
+          orc_XmlParser.GetAttributeUint32("tx-protocol"));
+    }
+    else
+    {
+       //Default
+       orc_Message.e_TxProtocol = C_CamProMessageData::eTX_CAN;
+    }
+    if (orc_XmlParser.AttributeExists("uds-service-id") == true)
+    {
+       orc_Message.u8_UdsServiceId = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("uds-service-id"));
+    }
+    if (orc_XmlParser.AttributeExists("uds-sub-function") == true)
+    {
+       orc_Message.u8_UdsSubFunction = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("uds-sub-function"));
+    }
+    if (orc_XmlParser.AttributeExists("uds-did") == true)
+    {
+       orc_Message.u16_UdsDid = static_cast<uint16_t>(orc_XmlParser.GetAttributeUint32("uds-did"));
+    }
+    if (orc_XmlParser.AttributeExists("uds-data") == true)
+    {
+       const C_SclString c_Data = orc_XmlParser.GetAttributeString("uds-data");
+       orc_Message.c_UdsData.clear();
+       C_SclString c_Remaining = c_Data;
+       while (c_Remaining.Length() > 0)
+       {
+          const int32_t s32_Space = c_Remaining.Pos(" ");
+          C_SclString c_Token;
+          if (s32_Space > 0)
+          {
+             c_Token = c_Remaining.SubString(1, s32_Space - 1);
+             c_Remaining = c_Remaining.SubString(s32_Space + 1, c_Remaining.Length() - s32_Space);
+          }
+          else
+          {
+             c_Token = c_Remaining;
+             c_Remaining = "";
+          }
+          if (c_Token.Length() > 0)
+          {
+             orc_Message.c_UdsData.push_back(static_cast<uint8_t>(c_Token.ToInt()));
+          }
+       }
+    }
 
-   if (orc_XmlParser.SelectNodeChild("name") == "name")
+    if (orc_XmlParser.SelectNodeChild("name") == "name")
    {
       orc_Message.c_Name = orc_XmlParser.GetNodeContent();
       //Return

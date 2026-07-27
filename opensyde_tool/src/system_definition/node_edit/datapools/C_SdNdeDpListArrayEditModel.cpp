@@ -18,7 +18,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_SdNdeUnoUtil.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
@@ -143,7 +142,7 @@ QVariant C_SdNdeDpListArrayEditModel::headerData(const int32_t os32_Section, con
    {
       if (os32_Role == static_cast<int32_t>(Qt::DisplayRole))
       {
-         c_Retval = C_GtGetText::h_GetText("Value");
+         c_Retval = "Value";
       }
       else if (os32_Role == static_cast<int32_t>(Qt::TextAlignmentRole))
       {

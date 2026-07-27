@@ -18,7 +18,6 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_Uti.hpp"
 #include "C_UsHandler.hpp"
@@ -168,35 +167,32 @@ void C_FlaConNodeConfigPopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaConNodeConfigPopup::m_InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Configure Node"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText(""));
-   this->mpc_Ui->pc_LabelSettings->setText(C_GtGetText::h_GetText("Settings"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Apply"));
+   this->mrc_ParentDialog.SetTitle("Configure Node");
+   this->mrc_ParentDialog.SetSubTitle("");
+   this->mpc_Ui->pc_LabelSettings->setText("Settings");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_PushButtonOk->setText("Apply");
 
-   this->mpc_Ui->pc_LabelInterface->setText(C_GtGetText::h_GetText("Interface"));
-   this->mpc_Ui->pc_LabelNodeId->setText(C_GtGetText::h_GetText("New Node ID"));
-   this->mpc_Ui->pc_LabelBitrate->setText(C_GtGetText::h_GetText("New Bitrate"));
+   this->mpc_Ui->pc_LabelInterface->setText("Interface");
+   this->mpc_Ui->pc_LabelNodeId->setText("New Node ID");
+   this->mpc_Ui->pc_LabelBitrate->setText("New Bitrate");
 
-   this->mpc_Ui->pc_LabelInterface->SetToolTipInformation(C_GtGetText::h_GetText("Interface"),
-                                                          C_GtGetText::h_GetText(
-                                                             "Interface the configuration shall be applied for. "
+   this->mpc_Ui->pc_LabelInterface->SetToolTipInformation("Interface",
+                                                          "Interface the configuration shall be applied for. "
                                                              "\nThis is not"
-                                                             " necessarily the interface the Node is currently connected to."));
-   this->mpc_Ui->pc_LabelNodeId->SetToolTipInformation(C_GtGetText::h_GetText("New Node ID"),
-                                                       C_GtGetText::h_GetText(
-                                                          "Node ID which shall be applied to the selected interface "
+                                                             " necessarily the interface the Node is currently connected to.");
+   this->mpc_Ui->pc_LabelNodeId->SetToolTipInformation("New Node ID",
+                                                       "Node ID which shall be applied to the selected interface "
                                                           "during node configuration process. "
                                                           "\nThe Node ID is used for addressing in the openSYDE "
-                                                          "communication protocol."));
-   this->mpc_Ui->pc_LabelBitrate->SetToolTipInformation(C_GtGetText::h_GetText("New Bitrate"),
-                                                        C_GtGetText::h_GetText(
-                                                           "CAN bitrate which shall be applied to the selected interface "
-                                                           "during node configuration process."));
+                                                          "communication protocol.");
+   this->mpc_Ui->pc_LabelBitrate->SetToolTipInformation("New Bitrate",
+                                                        "CAN bitrate which shall be applied to the selected interface "
+                                                           "during node configuration process.");
 
-   this->mpc_Ui->pc_SpxNodeId->SetToolTipInformation(C_GtGetText::h_GetText("Value Range"),
-                                                     C_GtGetText::h_GetText("Minimum: 0\n"
-                                                                            "Maximum: 125"));
+   this->mpc_Ui->pc_SpxNodeId->SetToolTipInformation("Value Range",
+                                                     "Minimum: 0\n"
+                                                                            "Maximum: 125");
    //fill bitrate combobox
    this->mpc_Ui->pc_CbxBitrate->addItem("100 kbit/s");
    this->mpc_Ui->pc_CbxBitrate->addItem("125 kbit/s");
@@ -263,12 +259,12 @@ int32_t C_FlaConNodeConfigPopup::m_InitDcSequence(void)
    {
       const uint32_t u32_BITNESS = 8 * sizeof(size_t);
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Initialization failed"));
+      c_Message.SetHeading("Initialization failed");
       c_Message.SetDescription(
-         static_cast<QString>(C_GtGetText::h_GetText("Failed to initialize CAN interface. "
-                                                     "Make sure to use a %1-bit DLL.")).arg(u32_BITNESS));
-      c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +
-                           C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLESHEET_GUIDE_COLOR_LINK,
+         static_cast<QString>("Failed to initialize CAN interface. "
+                                                     "Make sure to use a %1-bit DLL.").arg(u32_BITNESS));
+      c_Message.SetDetails(static_cast<QString>("For details see ") +
+                           C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
                                             C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) + ".");
       C_OscLoggingHandler::h_Flush();
       c_Message.Execute();
@@ -432,10 +428,10 @@ void C_FlaConNodeConfigPopup::m_FinishConfig(const int32_t os32_SequenceResult)
    if (os32_SequenceResult != C_NO_ERR)
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Configure Node"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(m_GetErrorAsString(os32_SequenceResult).toStdString().c_str()));
-      c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +
-                           C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLESHEET_GUIDE_COLOR_LINK,
+      c_Message.SetHeading("Configure Node");
+      c_Message.SetDescription(m_GetErrorAsString(os32_SequenceResult));
+      c_Message.SetDetails(static_cast<QString>("For details see ") +
+                           C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
                                             C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) + ".");
       C_OscLoggingHandler::h_Flush();
 
@@ -452,11 +448,11 @@ void C_FlaConNodeConfigPopup::m_FinishConfig(const int32_t os32_SequenceResult)
       const uint32_t u32_Bitrate = this->GetBitrate();
       C_OgeWiCustomMessage c_Message(this);
       // no more steps to do
-      c_Message.SetHeading(C_GtGetText::h_GetText("Node Configuration successful"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Successfully configured node interface \"") +
+      c_Message.SetHeading("Node Configuration successful");
+      c_Message.SetDescription("Successfully configured node interface \"" +
                                this->mpc_Ui->pc_CbxInterface->currentText() + "\":\nNew Node ID = " +
                                QString::number(u8_NodeId) +
-                               C_GtGetText::h_GetText("\nNew Bitrate = ") +
+                               "\nNew Bitrate = " +
                                QString::number(u32_Bitrate) + " kbit/s");
 
       C_UsHandler::h_GetInstance()->SetNodeCfgInterfaceIndex(this->mpc_Ui->pc_CbxInterface->currentIndex());

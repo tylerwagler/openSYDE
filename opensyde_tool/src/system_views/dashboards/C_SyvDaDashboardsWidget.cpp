@@ -19,7 +19,6 @@
 #include "TglUtils.hpp"
 #include "C_SyvUtil.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OgePopUpDialog.hpp"
@@ -137,11 +136,11 @@ C_SyvDaDashboardsWidget::C_SyvDaDashboardsWidget(const uint32_t ou32_ViewIndex, 
    // create toolbox
    this->mpc_ToolboxContent = new C_SyvDaDashboardToolbox();
    this->mpc_Toolbox = new C_OgeWiHover(*mpc_ToolboxContent,
-                                        C_GtGetText::h_GetText("TOOLBOX"), ":images/IconToolbox.svg",
+                                        "TOOLBOX", ":images/IconToolbox.svg",
                                         false, this->mpc_ToolboxParent, this->mpc_ToolboxParent);
 
    // create fix minimized toolbox
-   this->mpc_FixMinimizedToolbox = new C_OgeWiFixPosition(C_GtGetText::h_GetText("TOOLBOX"),
+   this->mpc_FixMinimizedToolbox = new C_OgeWiFixPosition("TOOLBOX",
                                                           ":images/IconToolbox.svg",
                                                           QRect(1277, 14, 190, 36), this->mpc_ToolboxParent);
 }
@@ -184,7 +183,7 @@ C_SyvDaDashboardsWidget::~C_SyvDaDashboardsWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardsWidget::InitText(void) const
 {
-   this->mpc_Ui->pc_PbCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PbCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -246,7 +245,7 @@ void C_SyvDaDashboardsWidget::SetEditMode(const bool oq_Active)
       //Handle button
       this->mpc_Ui->pc_PbConfirm->SetSvg("://images/system_views/IconConfirm.svg");
       this->mpc_Ui->pc_PbConfirm->SetMargins(10, 20);
-      this->mpc_Ui->pc_PbConfirm->setText(C_GtGetText::h_GetText("Confirm"));
+      this->mpc_Ui->pc_PbConfirm->setText("Confirm");
 
       //Initially create toolbox
       this->m_InitToolBox();
@@ -272,7 +271,7 @@ void C_SyvDaDashboardsWidget::SetEditMode(const bool oq_Active)
       this->mpc_Ui->pc_PbConfirm->SetSvg("://images/main_page_and_navi_bar/IconEdit.svg",
                                          "://images/IconEditDisabledBright.svg");
       this->mpc_Ui->pc_PbConfirm->SetMargins(10, 28); // put a bit more space in between
-      this->mpc_Ui->pc_PbConfirm->setText(C_GtGetText::h_GetText("Edit"));
+      this->mpc_Ui->pc_PbConfirm->setText("Edit");
 
       //Hide toolbox
       if (this->mpc_Toolbox != NULL)
@@ -400,11 +399,11 @@ void C_SyvDaDashboardsWidget::CheckError(void) const
    if (q_ViewSetupError == true)
    {
       this->mpc_Ui->pc_ErrorLabelIcon->SetSvg(c_IconPath);
-      this->mpc_Ui->pc_ErrorLabelIcon->SetToolTipInformation(C_GtGetText::h_GetText("Invalid"),
+      this->mpc_Ui->pc_ErrorLabelIcon->SetToolTipInformation("Invalid",
                                                              c_ErrorTextTooltip, e_ToolTipType);
       this->mpc_Ui->pc_ErrorLabelTitle->SetForegroundColor(s32_ColorId);
       this->mpc_Ui->pc_ErrorLabelTitle->setText(c_ErrorTextHeading);
-      this->mpc_Ui->pc_ErrorLabelTitle->SetToolTipInformation(C_GtGetText::h_GetText("Invalid"),
+      this->mpc_Ui->pc_ErrorLabelTitle->SetToolTipInformation("Invalid",
                                                               c_ErrorTextTooltip, e_ToolTipType);
       this->mpc_Ui->pc_ErrorLabel->SetForegroundColor(s32_ColorId);
       this->mpc_Ui->pc_ErrorLabel->SetCompleteText(c_ErrorText, c_ErrorTextTooltip, e_ToolTipType);
@@ -714,20 +713,18 @@ int32_t C_SyvDaDashboardsWidget::m_InitOsyDriver(QString & orc_Message)
       break;
    case C_CONFIG:
       orc_Message =
-         static_cast<QString>(C_GtGetText::h_GetText("System connect failed. Configuration error.")); //Many
+         static_cast<QString>("System connect failed. Configuration error."); //Many
                                                                                                       // possibilities
                                                                                                       // for this
       // error
       break;
    case C_RD_WR:
       orc_Message =
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 "Configured communication DLL does not exist or DLL could not be opened."));
+         static_cast<QString>("Configured communication DLL does not exist or DLL could not be opened.");
       break;
    case C_OVERFLOW:
       orc_Message =
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 "Unknown transport protocol or unknown diagnostic server for at least one node."));
+         static_cast<QString>("Unknown transport protocol or unknown diagnostic server for at least one node.");
       break;
    case C_BUSY:
       if (C_PuiSvHandler::h_GetInstance()->CheckViewError(this->mu32_ViewIndex, &q_NameInvalid,
@@ -739,19 +736,18 @@ int32_t C_SyvDaDashboardsWidget::m_InitOsyDriver(QString & orc_Message)
              (q_SysDefInvalid == false) && (q_NoNodesActive == false))
          {
             orc_Message =
-               static_cast<QString>(C_GtGetText::h_GetText("System View Dashboard configuration error detected. "
-                                                           "Check your Dashboard configuration settings and retry."));
+               static_cast<QString>("System View Dashboard configuration error detected. "
+                                                           "Check your Dashboard configuration settings and retry.");
          }
          else
          {
             orc_Message =
-               static_cast<QString>(C_GtGetText::h_GetText(
-                                       "System View is invalid. Action cannot be performed. Fix the issues and retry."));
+               static_cast<QString>("System View is invalid. Action cannot be performed. Fix the issues and retry.");
          }
       }
       else
       {
-         orc_Message = static_cast<QString>(C_GtGetText::h_GetText("System View check failed."));
+         orc_Message = static_cast<QString>("System View check failed.");
       }
       break;
    case C_COM:
@@ -780,30 +776,28 @@ int32_t C_SyvDaDashboardsWidget::m_InitOsyDriver(QString & orc_Message)
          {
             orc_Message =
                static_cast<QString>(
-                  C_GtGetText::h_GetText(
-                     "Ethernet initialization failed. Check your Ethernet adapter settings."));
+                  "Ethernet initialization failed. Check your Ethernet adapter settings.");
          }
          else
          {
             orc_Message =
-               static_cast<QString>(C_GtGetText::h_GetText(
-                                       "CAN initialization failed. Check your PC CAN interface configuration "
-                                       "(System View setup - double-click on PC)."));
+               static_cast<QString>("CAN initialization failed. Check your PC CAN interface configuration "
+                                       "(System View setup - double-click on PC).");
          }
       }
       break;
    case C_CHECKSUM:
-      orc_Message = static_cast<QString>(C_GtGetText::h_GetText("Internal buffer overflow detected."));
+      orc_Message = static_cast<QString>("Internal buffer overflow detected.");
       break;
    case C_RANGE:
-      orc_Message = static_cast<QString>(C_GtGetText::h_GetText("Routing configuration failed."));
+      orc_Message = static_cast<QString>("Routing configuration failed.");
       break;
    case C_UNKNOWN_ERR:
-      orc_Message = static_cast<QString>(C_GtGetText::h_GetText("Wrapped error of internal function call."));
+      orc_Message = static_cast<QString>("Wrapped error of internal function call.");
       break;
    default:
       orc_Message =
-         static_cast<QString>(C_GtGetText::h_GetText("Unknown error: %1")).arg(C_Uti::h_StwError(s32_Retval));
+         static_cast<QString>("Unknown error: %1").arg(C_Uti::h_StwError(s32_Retval));
       break;
    }
 
@@ -1039,14 +1033,14 @@ void C_SyvDaDashboardsWidget::m_ConnectStepFinished(void)
             break;
          case C_CONFIG:
             c_Message =
-               static_cast<QString>(C_GtGetText::h_GetText("System connect failed. Configuration error.")); //Many
+               static_cast<QString>("System connect failed. Configuration error."); //Many
                                                                                                             // possibilities
                                                                                                             // for
             // this error
             break;
          default:
             c_Message =
-               static_cast<QString>(C_GtGetText::h_GetText("Unknown error: %1")).arg(C_Uti::h_StwError(s32_Retval));
+               static_cast<QString>("Unknown error: %1").arg(C_Uti::h_StwError(s32_Retval));
             break;
          }
       }
@@ -1106,15 +1100,15 @@ void C_SyvDaDashboardsWidget::m_HandleConnectionResult(const int32_t os32_Result
       c_MessageDetails.replace("\n", "<br>");
       if (!c_MessageDetails.contains("For more information see"))
       {
-         c_MessageDetails += C_GtGetText::h_GetText("<br>For more information see ");
-         c_MessageDetails += C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLE_GUIDE_COLOR_LINK,
+         c_MessageDetails += "<br>For more information see ";
+         c_MessageDetails += C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
                                               C_OscLoggingHandler::h_GetCompleteLogFileLocation().
                                               c_str());
-         c_MessageDetails += C_GtGetText::h_GetText(".");
+         c_MessageDetails += ".";
       }
 
       // Show the message box only when all communication relevant functions closing in m_CloseOsyDriver are finished
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Dashboard connect"));
+      c_MessageBox.SetHeading("Dashboard connect");
       c_MessageBox.SetDescription(orc_Message);
       c_MessageBox.SetDetails(c_MessageDetails);
       c_MessageBox.SetCustomMinHeight(220, 400);

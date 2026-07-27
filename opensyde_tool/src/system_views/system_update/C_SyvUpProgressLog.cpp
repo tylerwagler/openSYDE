@@ -16,7 +16,6 @@
 #include <QClipboard>
 #include "stwtypes.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OgeLabToolTipBase.hpp"
 
@@ -282,10 +281,10 @@ void C_SyvUpProgressLog::AddLogHyperlink(void)
       //Configure
       this->mpc_LogHyperlink->setText(static_cast<QString>(
                                          "%1<a href=\"file:\\\\\\%2\"><span style=\"color: %3;\">%4</span></a>.").
-                                      arg(C_GtGetText::h_GetText("For more information see ")).
+                                      arg("For more information see ").
                                       arg(c_LogFilePath).
                                       arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
-                                      arg(C_GtGetText::h_GetText("log file")));
+                                      arg("log file"));
       this->mpc_LogHyperlink->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
       this->mpc_LogHyperlink->setFocusPolicy(Qt::NoFocus);
       connect(this->mpc_LogHyperlink, &QLabel::linkActivated, this,
@@ -372,7 +371,7 @@ void C_SyvUpProgressLog::m_ScrollToBottom(const int32_t os32_Min, const int32_t 
 void C_SyvUpProgressLog::m_SetupContextMenu(void)
 {
    this->mpc_ContextMenu->clear();
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Copy Link Location"),
+   this->mpc_ContextMenu->addAction("Copy Link Location",
                                     this,
                                     &C_SyvUpProgressLog::m_CopyHyperLink
                                     );

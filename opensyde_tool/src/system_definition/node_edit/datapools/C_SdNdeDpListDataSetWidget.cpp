@@ -14,7 +14,6 @@
 #include "stwerrors.hpp"
 #include "C_SdNdeDpListDataSetWidget.hpp"
 #include "ui_C_SdNdeDpListDataSetWidget.h"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_SdClipBoardHelper.hpp"
@@ -144,25 +143,24 @@ void C_SdNdeDpListDataSetWidget::InitStaticNames(void) const
 
    if (pc_List != NULL)
    {
-      mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("List %1")).arg(pc_List->c_Name.c_str()));
+      mrc_ParentDialog.SetTitle(static_cast<QString>("List %1").arg(pc_List->c_Name.c_str()));
    }
-   mrc_ParentDialog.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Dataset Configuration")));
-   this->mpc_Ui->pc_LabelReplacement->setText(C_GtGetText::h_GetText(
-                                                 "No Dataset is declared, add any via the '+' button"));
-   this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation(C_GtGetText::h_GetText("Add"),
-                                                         C_GtGetText::h_GetText("Add new Dataset"));
-   this->mpc_Ui->pc_PushButtonCopy->SetToolTipInformation(C_GtGetText::h_GetText("Copy"),
-                                                          C_GtGetText::h_GetText("Copy selected Dataset(s)"));
-   this->mpc_Ui->pc_PushButtonCut->SetToolTipInformation(C_GtGetText::h_GetText("Cut"),
-                                                         C_GtGetText::h_GetText("Cut selected Dataset(s)"));
-   this->mpc_Ui->pc_PushButtonPaste->SetToolTipInformation(C_GtGetText::h_GetText("Paste"),
-                                                           C_GtGetText::h_GetText("Paste Dataset(s)"));
-   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation(C_GtGetText::h_GetText("Delete"),
-                                                            C_GtGetText::h_GetText("Delete selected Dataset(s)"));
-   this->mpc_Ui->pc_PushButtonMoveLeft->SetToolTipInformation(C_GtGetText::h_GetText("Move left"),
-                                                              C_GtGetText::h_GetText("Move selected Dataset(s) left"));
-   this->mpc_Ui->pc_PushButtonMoveRight->SetToolTipInformation(C_GtGetText::h_GetText("Move right"),
-                                                               C_GtGetText::h_GetText("Move selected Dataset(s) right"));
+   mrc_ParentDialog.SetSubTitle(static_cast<QString>("Dataset Configuration"));
+   this->mpc_Ui->pc_LabelReplacement->setText("No Dataset is declared, add any via the '+' button");
+   this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation("Add",
+                                                         "Add new Dataset");
+   this->mpc_Ui->pc_PushButtonCopy->SetToolTipInformation("Copy",
+                                                          "Copy selected Dataset(s)");
+   this->mpc_Ui->pc_PushButtonCut->SetToolTipInformation("Cut",
+                                                         "Cut selected Dataset(s)");
+   this->mpc_Ui->pc_PushButtonPaste->SetToolTipInformation("Paste",
+                                                           "Paste Dataset(s)");
+   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation("Delete",
+                                                            "Delete selected Dataset(s)");
+   this->mpc_Ui->pc_PushButtonMoveLeft->SetToolTipInformation("Move left",
+                                                              "Move selected Dataset(s) left");
+   this->mpc_Ui->pc_PushButtonMoveRight->SetToolTipInformation("Move right",
+                                                               "Move selected Dataset(s) right");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -303,8 +301,7 @@ bool C_SdNdeDpListDataSetWidget::m_IsThereStillSpaceForDataSets(const uint32_t o
    {
       C_OgeWiCustomMessage c_MessageBox(this);
 
-      c_MessageBox.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "Only %1 Datasets allowed per Datapool list.")).
+      c_MessageBox.SetDescription(static_cast<QString>("Only %1 Datasets allowed per Datapool list.").
                                   arg(mu32_NODE_DATA_SET_PER_LIST_MAX));
       c_MessageBox.SetCustomMinHeight(180, 180);
       c_MessageBox.Execute();
@@ -459,11 +456,11 @@ void C_SdNdeDpListDataSetWidget::m_OnDataSetSelectionChange(const uint32_t & oru
    }
    else if (oru32_SelectionCount == 1)
    {
-      c_Text = static_cast<QString>(C_GtGetText::h_GetText("1 Dataset selected"));
+      c_Text = static_cast<QString>("1 Dataset selected");
    }
    else
    {
-      c_Text = static_cast<QString>(C_GtGetText::h_GetText("%1 Datasets selected")).arg(oru32_SelectionCount);
+      c_Text = static_cast<QString>("%1 Datasets selected").arg(oru32_SelectionCount);
    }
    this->mpc_Ui->pc_SelectionLabel->setText(c_Text);
 }
@@ -477,37 +474,31 @@ void C_SdNdeDpListDataSetWidget::m_SetupContextMenu(void)
    this->mpc_ContextMenu = new stw::opensyde_gui_elements::C_OgeContextMenu(this);
 
    this->mpc_ActionAdd = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText(
-         "Add new Dataset"), this, &C_SdNdeDpListDataSetWidget::m_DoInsert,
+      "Add new Dataset", this, &C_SdNdeDpListDataSetWidget::m_DoInsert,
       static_cast<int32_t>(Qt::CTRL) +
       static_cast<int32_t>(Qt::Key_Plus));
 
    this->mpc_ContextMenu->addSeparator();
 
    this->mpc_ActionCut = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText(
-         "Cut"), this->mpc_Ui->pc_TableView, &C_SdNdeDpListDataSetView::Cut,
+      "Cut", this->mpc_Ui->pc_TableView, &C_SdNdeDpListDataSetView::Cut,
       static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_X));
    this->mpc_ActionCopy = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText(
-         "Copy"), this->mpc_Ui->pc_TableView, &C_SdNdeDpListDataSetView::Copy,
+      "Copy", this->mpc_Ui->pc_TableView, &C_SdNdeDpListDataSetView::Copy,
       static_cast<int32_t>(Qt::CTRL) +
       static_cast<int32_t>(Qt::Key_C));
    this->mpc_ActionPaste = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText(
-         "Paste"), this, &C_SdNdeDpListDataSetWidget::m_DoPaste,
+      "Paste", this, &C_SdNdeDpListDataSetWidget::m_DoPaste,
       static_cast<int32_t>(Qt::CTRL) +
       static_cast<int32_t>(Qt::Key_V));
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ActionMoveLeft = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                  "Move Left"), this->mpc_Ui->pc_TableView,
+   this->mpc_ActionMoveLeft = this->mpc_ContextMenu->addAction("Move Left", this->mpc_Ui->pc_TableView,
                                                                &C_SdNdeDpListDataSetView::DoMoveLeft,
                                                                static_cast<int32_t>(Qt::CTRL) +
                                                                static_cast<int32_t>(Qt::Key_Left));
-   this->mpc_ActionMoveRight = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                   "Move Right"), this->mpc_Ui->pc_TableView,
+   this->mpc_ActionMoveRight = this->mpc_ContextMenu->addAction("Move Right", this->mpc_Ui->pc_TableView,
                                                                 &C_SdNdeDpListDataSetView::DoMoveRight,
                                                                 static_cast<int32_t>(Qt::CTRL) +
                                                                 static_cast<int32_t>(Qt::Key_Right));
@@ -515,8 +506,7 @@ void C_SdNdeDpListDataSetWidget::m_SetupContextMenu(void)
    this->mpc_ContextMenu->addSeparator();
 
    this->mpc_ActionDelete = this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText(
-         "Delete"), this->mpc_Ui->pc_TableView, &C_SdNdeDpListDataSetView::Delete,
+      "Delete", this->mpc_Ui->pc_TableView, &C_SdNdeDpListDataSetView::Delete,
       static_cast<int32_t>(Qt::Key_Delete));
 
    this->setContextMenuPolicy(Qt::CustomContextMenu);

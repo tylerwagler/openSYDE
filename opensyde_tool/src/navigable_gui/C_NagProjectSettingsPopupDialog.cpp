@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_NagProjectSettingsPopupDialog.hpp"
 #include "ui_C_NagProjectSettingsPopupDialog.h"
 #include "C_OscUtils.hpp"
@@ -91,47 +90,43 @@ C_NagProjectSettingsPopupDialog::~C_NagProjectSettingsPopupDialog(void)
 void C_NagProjectSettingsPopupDialog::InitStaticNames(void) const
 {
    const QString c_SpinBoxToolTip =
-      static_cast<QString>(C_GtGetText::h_GetText("Mininum: %1\nMaximum : %2")).arg(this->mpc_Ui->pc_SpinBox->minimum())
+      static_cast<QString>("Mininum: %1\nMaximum : %2").arg(this->mpc_Ui->pc_SpinBox->minimum())
       .arg(
          this->mpc_Ui->pc_SpinBox->maximum());
    const QString c_ResultMaxCharOfDiagOrNvm =
-      static_cast<QString>(C_GtGetText::h_GetText("Resulting max. length of generated variable name (DIAG/NVM) = %1")).
+      static_cast<QString>("Resulting max. length of generated variable name (DIAG/NVM) = %1").
       arg(
          this->mpc_Ui->pc_SpinBox->value() + 5);
    const QString c_ResultMaxCharOfCommSignal =
-      static_cast<QString>(C_GtGetText::h_GetText("Resulting max. length of generated variable name (COMM Signal) = %1"))
+      static_cast<QString>("Resulting max. length of generated variable name (COMM Signal) = %1")
       .arg(
          (2 * this->mpc_Ui->pc_SpinBox->value()) + 5);
 
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("PROJECT"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Global Settings"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("System Definition"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_SpinBox->SetToolTipInformation(C_GtGetText::h_GetText("Value"), c_SpinBoxToolTip);
+   this->mrc_ParentDialog.SetTitle("PROJECT");
+   this->mrc_ParentDialog.SetSubTitle("Global Settings");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("System Definition");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_SpinBox->SetToolTipInformation("Value", c_SpinBoxToolTip);
 
-   this->mpc_Ui->pc_SetMaxLengthLabel->setText(C_GtGetText::h_GetText("Max length of openSYDE element names"));
-   this->mpc_Ui->pc_SetMaxLengthLabel->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                             C_GtGetText::h_GetText(
-                                                                "This limit is used for openSYDE element names like Nodes, Buses, Datapools, "
-                                                                "Variables, Parameters, COMM Signals, ..."));
+   this->mpc_Ui->pc_SetMaxLengthLabel->setText("Max length of openSYDE element names");
+   this->mpc_Ui->pc_SetMaxLengthLabel->SetToolTipInformation("",
+                                                             "This limit is used for openSYDE element names like Nodes, Buses, Datapools, "
+                                                                "Variables, Parameters, COMM Signals, ...");
    this->mpc_Ui->pc_ResultLengthOfDIAGorNVM->setText(c_ResultMaxCharOfDiagOrNvm);
    this->mpc_Ui->pc_ResultLengthOfCOMMSignal->setText(c_ResultMaxCharOfCommSignal);
    this->mpc_Ui->pc_ResultLengthOfDIAGorNVM->SetToolTipInformation(
-      C_GtGetText::h_GetText("As a result, this limit affects the length of the variable names in generated code"),
-      C_GtGetText::h_GetText(
-         "Example C Coder:\nMax. length of generated variable name (DIAG/NVM): <prefix=4>+_+<diag/nvm_var_name_length>;\n"
-         "Max. length of generated variable name (COMM): <prefix=3>+_+<COMM_message_name_length>+_+<COMM_signal_name_length>;"));
+      "As a result, this limit affects the length of the variable names in generated code",
+      "Example C Coder:\nMax. length of generated variable name (DIAG/NVM): <prefix=4>+_+<diag/nvm_var_name_length>;\n"
+         "Max. length of generated variable name (COMM): <prefix=3>+_+<COMM_message_name_length>+_+<COMM_signal_name_length>;");
    this->mpc_Ui->pc_ResultLengthOfCOMMSignal->SetToolTipInformation(
-      C_GtGetText::h_GetText("As a result, this limit affects the length of the variable names in generated code"),
-      C_GtGetText::h_GetText(
-         "Example C Coder:\nMax. length of generated variable name (DIAG/NVM): <prefix=4>+_+<diag/nvm_var_name_length>;\n"
-         "Max. length of generated variable name (COMM): <prefix=3>+_+<COMM_message_name_length>+_+<COMM_signal_name_length>;"));
-   this->mpc_Ui->pc_LabelProjectFiles->setText(C_GtGetText::h_GetText("Project Files"));
-   this->mpc_Ui->pc_LabelFilesUnUsed->setText(C_GtGetText::h_GetText("Check for un-used project files"));
+      "As a result, this limit affects the length of the variable names in generated code",
+      "Example C Coder:\nMax. length of generated variable name (DIAG/NVM): <prefix=4>+_+<diag/nvm_var_name_length>;\n"
+         "Max. length of generated variable name (COMM): <prefix=3>+_+<COMM_message_name_length>+_+<COMM_signal_name_length>;");
+   this->mpc_Ui->pc_LabelProjectFiles->setText("Project Files");
+   this->mpc_Ui->pc_LabelFilesUnUsed->setText("Check for un-used project files");
 
-   this->mpc_Ui->pc_LabelFilesUnUsed->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                            C_GtGetText::h_GetText(
-                                                               "Scan current project directory for un-used project files."));
+   this->mpc_Ui->pc_LabelFilesUnUsed->SetToolTipInformation("",
+                                                            "Scan current project directory for un-used project files.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -321,7 +316,7 @@ bool C_NagProjectSettingsPopupDialog::m_AskUserForModifyName(
 
    C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
 
-   c_MessageBox.SetHeading(C_GtGetText::h_GetText("Modify openSYDE element names length"));
+   c_MessageBox.SetHeading("Modify openSYDE element names length");
    c_MessageBox.SetDescription(
       "Modifying name length based on your char length settings would have impact on some openSYDE element names. "
       "Check details for complete list."
@@ -370,7 +365,7 @@ void C_NagProjectSettingsPopupDialog::m_ShowUnUsedFiles()
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eINFORMATION);
 
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("SHOW UNUSED FILES"));
+      c_MessageBox.SetHeading("SHOW UNUSED FILES");
       c_MessageBox.SetDescription(
          "Currently there is no active project, thus no unused files can be shown.");
       c_MessageBox.SetOkButtonText("OK");

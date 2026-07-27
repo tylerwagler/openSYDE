@@ -20,7 +20,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_SdBueMessageTableModel.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_SdUtil.hpp"
@@ -113,49 +112,49 @@ QVariant C_SdBueMessageTableModel::headerData(const int32_t os32_Section, const 
             c_Retval = "";
             break;
          case eENABLED:
-            c_Retval = C_GtGetText::h_GetText("Enabled");
+            c_Retval = "Enabled";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eJ1939_PGN:
-            c_Retval = C_GtGetText::h_GetText("PGN");
+            c_Retval = "PGN";
             break;
          case eJ1939_PRIORITY:
-            c_Retval = C_GtGetText::h_GetText("Priority");
+            c_Retval = "Priority";
             break;
          case eJ1939_SOURCE_ADDRESS:
-            c_Retval = C_GtGetText::h_GetText("Source Address");
+            c_Retval = "Source Address";
             break;
          case eJ1939_DESTINATION_ADDRESS:
-            c_Retval = C_GtGetText::h_GetText("Destination Address");
+            c_Retval = "Destination Address";
             break;
          case eJ1939_FORMAT:
-            c_Retval = C_GtGetText::h_GetText("Format");
+            c_Retval = "Format";
             break;
          case eJ1939_EDP_AND_DP:
-            c_Retval = C_GtGetText::h_GetText("EDP/DP");
+            c_Retval = "EDP/DP";
             break;
          case eCAN_OPEN_INDEX:
-            c_Retval = C_GtGetText::h_GetText("Index");
+            c_Retval = "Index";
             break;
          case eEXTENDED:
-            c_Retval = C_GtGetText::h_GetText("Extended");
+            c_Retval = "Extended";
             break;
          case eCAN_ID:
-            c_Retval = C_GtGetText::h_GetText("CAN ID");
+            c_Retval = "CAN ID";
             break;
          case eCOB_ID:
-            c_Retval = C_GtGetText::h_GetText("COB-ID");
+            c_Retval = "COB-ID";
             break;
          case eDLC:
-            c_Retval = C_GtGetText::h_GetText("DLC");
+            c_Retval = "DLC";
             break;
          case eTX_METHOD:
-            c_Retval = C_GtGetText::h_GetText("Tx method");
+            c_Retval = "Tx method";
             break;
          case eCYCLE_TIME:
             c_Retval = this->m_GetCycleTimeHeaderName();
@@ -167,10 +166,10 @@ QVariant C_SdBueMessageTableModel::headerData(const int32_t os32_Section, const 
             c_Retval = this->m_GetNotLaterThanHeaderName();
             break;
          case eTRANSMITTER:
-            c_Retval = C_GtGetText::h_GetText("Transmitter");
+            c_Retval = "Transmitter";
             break;
          case eRECEIVER:
-            c_Retval = C_GtGetText::h_GetText("Receiver");
+            c_Retval = "Receiver";
             break;
          default:
             break;
@@ -783,13 +782,13 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SdBueMessageTableModel::m_GetNotEarlierThanHeaderName() const
 {
-   QString c_Retval = C_GtGetText::h_GetText("Not earlier than [ms]");
+   QString c_Retval = "Not earlier than [ms]";
 
    if (this->mpc_SyncManager != NULL)
    {
       if (this->mpc_SyncManager->GetCurrentComProtocol() == C_OscCanProtocol::eCAN_OPEN)
       {
-         c_Retval = C_GtGetText::h_GetText("Inhibit Time [ms]");
+         c_Retval = "Inhibit Time [ms]";
       }
    }
    return c_Retval;
@@ -804,13 +803,13 @@ QString C_SdBueMessageTableModel::m_GetNotEarlierThanHeaderName() const
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SdBueMessageTableModel::m_GetNotLaterThanHeaderName() const
 {
-   QString c_Retval = C_GtGetText::h_GetText("But not later than [ms]");
+   QString c_Retval = "But not later than [ms]";
 
    if (this->mpc_SyncManager != NULL)
    {
       if (this->mpc_SyncManager->GetCurrentComProtocol() == C_OscCanProtocol::eCAN_OPEN)
       {
-         c_Retval = C_GtGetText::h_GetText("Event Time [ms]");
+         c_Retval = "Event Time [ms]";
       }
    }
 
@@ -1228,12 +1227,12 @@ void C_SdBueMessageTableModel::m_FillJ1939MsgInfo(C_SdBueMessageTableModel::C_Ms
    if (c_PgInfo.q_HasDestinationAddress)
    {
       orc_MessageTableData.c_J1939DestinationAddress = QString::number(c_PgInfo.u8_PduSpecific);
-      orc_MessageTableData.c_J1939Format = C_GtGetText::h_GetText("PDU 1");
+      orc_MessageTableData.c_J1939Format = "PDU 1";
    }
    else
    {
-      orc_MessageTableData.c_J1939DestinationAddress = C_GtGetText::h_GetText("All");
-      orc_MessageTableData.c_J1939Format = C_GtGetText::h_GetText("PDU 2");
+      orc_MessageTableData.c_J1939DestinationAddress = "All";
+      orc_MessageTableData.c_J1939Format = "PDU 2";
    }
    orc_MessageTableData.c_J1939EdpAndDp = QString::number(c_PgInfo.u8_Edp) + QString::number(c_PgInfo.u8_Dp);
 }
@@ -1247,13 +1246,13 @@ void C_SdBueMessageTableModel::m_FillJ1939MsgInfo(C_SdBueMessageTableModel::C_Ms
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SdBueMessageTableModel::m_GetCycleTimeHeaderName(void) const
 {
-   QString c_Retval = C_GtGetText::h_GetText("Cycle Time [ms]");
+   QString c_Retval = "Cycle Time [ms]";
 
    if (this->mpc_SyncManager != NULL)
    {
       if (this->mpc_SyncManager->GetCurrentComProtocol() == C_OscCanProtocol::eCAN_OPEN_SAFETY)
       {
-         c_Retval = C_GtGetText::h_GetText("Safety Cycle-Time [ms]");
+         c_Retval = "Safety Cycle-Time [ms]";
       }
    }
    return c_Retval;

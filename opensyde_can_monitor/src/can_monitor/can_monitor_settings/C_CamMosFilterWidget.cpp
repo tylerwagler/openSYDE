@@ -18,7 +18,6 @@
 #include "C_CamMosFilterWidget.hpp"
 #include "ui_C_CamMosFilterWidget.h"
 
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_CamMosFilterPopup.hpp"
@@ -160,12 +159,12 @@ void C_CamMosFilterWidget::SetAddFilter(const QList<int32_t> oc_CanMsgId, const 
                                  static_cast<uint32_t>(s32_MessageFilterItemDroppedOnIndex - 1) : 0UL;
       c_MessageBox.SetDescription(
          static_cast<QString>(
-            C_GtGetText::h_GetText("Do you want to add the filter item to an existing filter \"%1\" ?")).
+            "Do you want to add the filter item to an existing filter \"%1\" ?").
          arg(c_Filters.at(u32_Index).c_Name));
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Add Filter"));
-      c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Add to existing Filter"));
-      c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Create new Filter"));
-      c_MessageBox.SetCancelButtonText(C_GtGetText::h_GetText("Cancel"));
+      c_MessageBox.SetHeading("Add Filter");
+      c_MessageBox.SetOkButtonText("Add to existing Filter");
+      c_MessageBox.SetNoButtonText("Create new Filter");
+      c_MessageBox.SetCancelButtonText("Cancel");
       c_MessageBox.SetCustomMinHeight(180, 180);
       e_ReturnMessageBox = c_MessageBox.Execute();
 
@@ -308,11 +307,11 @@ void C_CamMosFilterWidget::m_InitUi(void)
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_FrameTop, "HasColor8Background", true);
 
    // initialize title widget
-   this->mpc_Ui->pc_WiHeader->SetTitle(C_GtGetText::h_GetText("Receive Filter"));
+   this->mpc_Ui->pc_WiHeader->SetTitle("Receive Filter");
    this->mpc_Ui->pc_WiHeader->SetIcon("://images/IconFilter.svg");
    this->mpc_Ui->pc_WiHeader->SetToggle(true);
-   this->mpc_Ui->pc_WiHeader->SetToggleToolTip(C_GtGetText::h_GetText("Receive Filter"),
-                                               C_GtGetText::h_GetText("Disable or enable all filters."));
+   this->mpc_Ui->pc_WiHeader->SetToggleToolTip("Receive Filter",
+                                               "Disable or enable all filters.");
 
    // initialize add button
    QIcon c_Icon;
@@ -320,18 +319,16 @@ void C_CamMosFilterWidget::m_InitUi(void)
    c_Icon.addFile("://images/IconAddDisabled.svg", QSize(), QIcon::Disabled);
    this->mpc_Ui->pc_BtnAdd->setIconSize(QSize(11, 11));
    this->mpc_Ui->pc_BtnAdd->setIcon(c_Icon);
-   this->mpc_Ui->pc_BtnAdd->setText(C_GtGetText::h_GetText("Add Filter"));
-   this->mpc_Ui->pc_BtnAdd->SetToolTipInformation(C_GtGetText::h_GetText("Add New Filter"),
-                                                  C_GtGetText::h_GetText(
-                                                     "Add new receive filter and configure filter items."));
+   this->mpc_Ui->pc_BtnAdd->setText("Add Filter");
+   this->mpc_Ui->pc_BtnAdd->SetToolTipInformation("Add New Filter",
+                                                  "Add new receive filter and configure filter items.");
 
    // initialize label
    this->mpc_Ui->pc_LabNoFilter->SetForegroundColor(0);
    this->mpc_Ui->pc_LabNoFilter->SetFontPixel(12);
    this->mpc_Ui->pc_LabNoFilter->setEnabled(false);
 
-   this->mpc_Ui->pc_LabNoFilter->setText(C_GtGetText::h_GetText(
-                                            "No receive filters are declared.\nadd any via \"Add Filter\"."));
+   this->mpc_Ui->pc_LabNoFilter->setText("No receive filters are declared.\nadd any via \"Add Filter\".");
 
    // connects
    connect(this->mpc_Ui->pc_WiHeader, &C_CamOgeWiSettingSubSection::SigExpandSection,
@@ -483,9 +480,9 @@ void C_CamMosFilterWidget::m_OnAddClicked()
       if (C_CamProHandler::h_GetInstance()->GetFilterWidgetEnabled() == false)
       {
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Receive Filter Disabled"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("Filters are not applied as long as receive filter setting is "
-                                                         "disabled. Do you want to enable it now?"));
+         c_Message.SetHeading("Receive Filter Disabled");
+         c_Message.SetDescription("Filters are not applied as long as receive filter setting is "
+                                                         "disabled. Do you want to enable it now?");
          c_Message.SetOkButtonText("Enable");
          c_Message.SetNoButtonText("Keep Disabled");
          if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
@@ -565,9 +562,9 @@ void C_CamMosFilterWidget::m_OnAddFilterFromContextmenu(const QList<int32_t> oc_
       if (C_CamProHandler::h_GetInstance()->GetFilterWidgetEnabled() == false)
       {
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Receive Filter Disabled"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("Filters are not applied as long as receive filter setting is "
-                                                         "disabled. Do you want to enable it now?"));
+         c_Message.SetHeading("Receive Filter Disabled");
+         c_Message.SetDescription("Filters are not applied as long as receive filter setting is "
+                                                         "disabled. Do you want to enable it now?");
          c_Message.SetOkButtonText("Enable");
          c_Message.SetNoButtonText("Keep Disabled");
          if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
@@ -639,10 +636,10 @@ void C_CamMosFilterWidget::m_RemoveFilter(C_CamMosFilterItemWidget * const opc_I
    // ask user
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eQUESTION);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("Filter Delete"));
-   c_Message.SetDescription(C_GtGetText::h_GetText("Do you really want to delete this filter?"));
-   c_Message.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-   c_Message.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+   c_Message.SetHeading("Filter Delete");
+   c_Message.SetDescription("Do you really want to delete this filter?");
+   c_Message.SetOkButtonText("Delete");
+   c_Message.SetNoButtonText("Keep");
 
    if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
    {
@@ -882,5 +879,5 @@ void C_CamMosFilterWidget::m_OnExpand(const bool oq_Expand) const
 void C_CamMosFilterWidget::m_UpdateTitleFilterCount(void) const
 {
    this->mpc_Ui->pc_WiHeader->SetTitle(
-      static_cast<QString>(C_GtGetText::h_GetText("Receive Filter (%1)")).arg(this->mc_Entries.size()));
+      static_cast<QString>("Receive Filter (%1)").arg(this->mc_Entries.size()));
 }

@@ -14,7 +14,6 @@
 #include "ui_C_GiSyBoundaryWidget.h"
 
 #include "C_HeHandler.hpp"
-#include "C_GtGetText.hpp"
 #include <QPushButton>
 #include "C_UtiStyleSheets.hpp"
 #include "C_GiBiBoundary.hpp"
@@ -115,9 +114,9 @@ C_GiSyBoundaryWidget::~C_GiSyBoundaryWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyBoundaryWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelWidth->setText(C_GtGetText::h_GetText("Border Width"));
-   this->mpc_Ui->pc_LabelBorderColor->setText(C_GtGetText::h_GetText("Border Color"));
-   this->mpc_Ui->pc_LabelBackgroundColor->setText(C_GtGetText::h_GetText("Background Color"));
+   this->mpc_Ui->pc_LabelWidth->setText("Border Width");
+   this->mpc_Ui->pc_LabelBorderColor->setText("Border Color");
+   this->mpc_Ui->pc_LabelBackgroundColor->setText("Background Color");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

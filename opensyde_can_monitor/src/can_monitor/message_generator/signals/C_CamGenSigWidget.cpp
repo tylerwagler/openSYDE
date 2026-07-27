@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_CamDbHandler.hpp"
 #include "C_CamProHandler.hpp"
@@ -90,8 +89,8 @@ C_CamGenSigWidget::~C_CamGenSigWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamGenSigWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelHeading->setText(C_GtGetText::h_GetText("Signals of Message:"));
-   this->mpc_Ui->pc_LabelNoDatabase->setText(C_GtGetText::h_GetText("Database loading..."));
+   this->mpc_Ui->pc_LabelHeading->setText("Signals of Message:");
+   this->mpc_Ui->pc_LabelNoDatabase->setText("Database loading...");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -201,7 +200,7 @@ void C_CamGenSigWidget::UpdateSelection(const uint32_t ou32_NumSelectedItems, co
       else
       {
          //Case: no database and no message found
-         c_Name = C_GtGetText::h_GetText("Unknown");
+         c_Name = "Unknown";
          this->mpc_Ui->pc_GroupBoxNoDatabase->setVisible(false);
          this->mpc_Ui->pc_TableView->setVisible(true);
       }

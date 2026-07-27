@@ -10,7 +10,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_SyvDaDashboardSettings.hpp"
 #include "C_SyvDaPeUpdateModeConfiguration.hpp"
 #include "ui_C_SyvDaPeUpdateModeConfiguration.h"
@@ -70,8 +69,8 @@ C_SyvDaPeUpdateModeConfiguration::C_SyvDaPeUpdateModeConfiguration(C_OgePopUpDia
    this->mrc_ParentDialog.SetWidget(this);
 
    // set main title
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Dashboards"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Configuration"));
+   this->mrc_ParentDialog.SetTitle("Dashboards");
+   this->mrc_ParentDialog.SetSubTitle("Configuration");
    InitStaticNames();
 
    // connects
@@ -99,16 +98,14 @@ C_SyvDaPeUpdateModeConfiguration::~C_SyvDaPeUpdateModeConfiguration(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeUpdateModeConfiguration::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelDataElament->setText(C_GtGetText::h_GetText("Diagnostic Data Elements"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_PushButtonConfigure->setText(C_GtGetText::h_GetText("Configure Cyclic Transmission Intervals"));
-   this->mpc_Ui->pc_LabelNoElements->setText(C_GtGetText::h_GetText("No Diagnostic Data Elements declared."));
+   this->mpc_Ui->pc_LabelDataElament->setText("Diagnostic Data Elements");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_PushButtonConfigure->setText("Configure Cyclic Transmission Intervals");
+   this->mpc_Ui->pc_LabelNoElements->setText("No Diagnostic Data Elements declared.");
    //Tooltips
-   this->mpc_Ui->pc_PushButtonConfigure->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                                  "Configure Cyclic Transmission Intervals"),
-                                                               C_GtGetText::h_GetText(
-                                                                  "Configure the transmission intervals used by data elements in transmission mode \"Cyclic\""));
+   this->mpc_Ui->pc_PushButtonConfigure->SetToolTipInformation("Configure Cyclic Transmission Intervals",
+                                                               "Configure the transmission intervals used by data elements in transmission mode \"Cyclic\"");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

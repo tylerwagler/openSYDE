@@ -18,7 +18,6 @@
 #include "C_HeHandler.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_UsHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_FlaConNodeConfigPopup.hpp"
 #include "C_FlaSenSearchNodePopup.hpp"
@@ -358,9 +357,9 @@ void C_FlaMainWindow::m_OnUpdateNode()
       q_ProgressError = true;
 
       C_OgeWiCustomMessage c_Message(this->mpc_Ui->pc_TitleBarWidget, C_OgeWiCustomMessage::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Hex-Files missing"));
+      c_Message.SetHeading("Hex-Files missing");
       c_Message.SetDescription(
-         C_GtGetText::h_GetText("No HEX file(s) found for flashing."));
+         "No HEX file(s) found for flashing.");
       c_Message.Execute();
 
       this->mpc_Ui->pc_TitleBarWidget->EnableActions(q_ENABLE_ACTION);
@@ -370,8 +369,8 @@ void C_FlaMainWindow::m_OnUpdateNode()
       q_ProgressError = true;
 
       C_OgeWiCustomMessage c_Message(this->mpc_Ui->pc_TitleBarWidget, C_OgeWiCustomMessage::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Hex-Files invalid"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("At least one HEX file is missing or invalid."));
+      c_Message.SetHeading("Hex-Files invalid");
+      c_Message.SetDescription("At least one HEX file is missing or invalid.");
       c_Message.Execute();
 
       this->mpc_Ui->pc_TitleBarWidget->EnableActions(q_ENABLE_ACTION);
@@ -819,10 +818,10 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
    if (s32_Return != C_NO_ERR)
    {
       C_OgeWiCustomMessage c_Message(this->mpc_Ui->pc_TitleBarWidget, C_OgeWiCustomMessage::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Initialization failed"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Failed to initialize CAN interface."));
-      c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +
-                           C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLESHEET_GUIDE_COLOR_LINK,
+      c_Message.SetHeading("Initialization failed");
+      c_Message.SetDescription("Failed to initialize CAN interface.");
+      c_Message.SetDetails(static_cast<QString>("For details see ") +
+                           C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
                                             C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) + ".");
       C_OscLoggingHandler::h_Flush();
       c_Message.Execute();
@@ -948,8 +947,8 @@ void C_FlaMainWindow::m_TimerUpdate(void)
                   this->mc_SecTimer.stop();
 
                   // no more steps to do (reset is done on success and failure)
-                  c_Message.SetHeading(C_GtGetText::h_GetText("Update successful"));
-                  c_Message.SetDescription(C_GtGetText::h_GetText("Successfully updated node with ID ") +
+                  c_Message.SetHeading("Update successful");
+                  c_Message.SetDescription("Successfully updated node with ID " +
                                            QString::number(this->mpc_Ui->pc_GeneralPropertiesWidget->GetNodeId()) +
                                            ".");
                   c_Message.SetDetails("Flashed HEX file(s):\n" +
@@ -1035,17 +1034,16 @@ void C_FlaMainWindow::m_CheckDeviceName(const QString & orc_ReadDeviceName)
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
       C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
-      const QString c_Details = static_cast<QString>(C_GtGetText::h_GetText("Device: %1 \nHEX file(s): %2")).arg(
+      const QString c_Details = static_cast<QString>("Device: %1 \nHEX file(s): %2").arg(
          orc_ReadDeviceName).arg(c_DeviceNamesList);
 
       // Show message if user wants to continue with update
-      c_Message.SetHeading(C_GtGetText::h_GetText("Device name check"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "Device name of at least one HEX file does not match the "
-                                  "device name reported. Do you want to continue with the update anyway?"));
+      c_Message.SetHeading("Device name check");
+      c_Message.SetDescription("Device name of at least one HEX file does not match the "
+                                  "device name reported. Do you want to continue with the update anyway?");
       c_Message.SetDetails(c_Details);
-      c_Message.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-      c_Message.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+      c_Message.SetOkButtonText("Continue");
+      c_Message.SetNoButtonText("Cancel");
 
       e_ReturnMessageBox = c_Message.Execute();
 
@@ -1119,11 +1117,11 @@ bool stw::opensyde_gui::C_FlaMainWindow::m_ShowErrorMessage(void)
 
    C_OgeWiCustomMessage c_Message(this->mpc_Ui->pc_TitleBarWidget, C_OgeWiCustomMessage::eERROR);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("Update failed"));
-   c_Message.SetDescription(C_GtGetText::h_GetText("Failure when updating node with ID ") +
+   c_Message.SetHeading("Update failed");
+   c_Message.SetDescription("Failure when updating node with ID " +
                             QString::number(this->mpc_Ui->pc_GeneralPropertiesWidget->GetNodeId()) + ".");
-   c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("For details see ")) +
-                        C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLESHEET_GUIDE_COLOR_LINK,
+   c_Message.SetDetails(static_cast<QString>("For details see ") +
+                        C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
                                          C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) + ".");
 
    if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)

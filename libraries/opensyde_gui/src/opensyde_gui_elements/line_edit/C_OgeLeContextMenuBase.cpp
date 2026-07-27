@@ -16,11 +16,9 @@
 
 #include "stwtypes.hpp"
 #include "C_OgeLeContextMenuBase.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_elements;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -73,37 +71,37 @@ void C_OgeLeContextMenuBase::m_SetupContextMenu(void)
    // add the actions (differentiate between normal and read-only text edits)
    if (!this->isReadOnly())
    {
-      this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Undo"),
+      this->mpc_ContextMenu->addAction("Undo",
                                        this,
                                        &C_OgeLeContextMenuBase::undo,
                                        static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_Z));
 
-      this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Redo"),
+      this->mpc_ContextMenu->addAction("Redo",
                                        this,
                                        &C_OgeLeContextMenuBase::redo,
                                        static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_Y));
 
       this->mpc_ContextMenu->addSeparator();
 
-      this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Cut"),
+      this->mpc_ContextMenu->addAction("Cut",
                                        this,
                                        &C_OgeLeContextMenuBase::cut,
                                        static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_X));
    }
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Copy"),
+   this->mpc_ContextMenu->addAction("Copy",
                                     this,
                                     &C_OgeLeContextMenuBase::copy,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_C));
 
    if (!this->isReadOnly())
    {
-      this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Paste"),
+      this->mpc_ContextMenu->addAction("Paste",
                                        this,
                                        &C_OgeLeContextMenuBase::paste,
                                        static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_V));
 
-      this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Delete"),
+      this->mpc_ContextMenu->addAction("Delete",
                                        this,
                                        &C_OgeLeContextMenuBase::del,
                                        static_cast<int32_t>(Qt::Key_Delete));
@@ -111,7 +109,7 @@ void C_OgeLeContextMenuBase::m_SetupContextMenu(void)
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Select All"),
+   this->mpc_ContextMenu->addAction("Select All",
                                     this,
                                     &C_OgeLeContextMenuBase::selectAll,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_A));

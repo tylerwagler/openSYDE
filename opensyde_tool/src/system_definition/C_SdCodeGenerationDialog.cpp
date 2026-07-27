@@ -13,7 +13,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_SclString.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_SdCodeGenerationDialog.hpp"
 #include "ui_C_SdCodeGenerationDialog.h"
@@ -82,11 +81,11 @@ C_SdCodeGenerationDialog::~C_SdCodeGenerationDialog()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdCodeGenerationDialog::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("File Generation"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Data Blocks Selection"));
-   this->mpc_Ui->pc_LabelHeading->setText(C_GtGetText::h_GetText("Data Blocks"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Continue"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetTitle("File Generation");
+   this->mrc_ParentDialog.SetSubTitle("Data Blocks Selection");
+   this->mpc_Ui->pc_LabelHeading->setText("Data Blocks");
+   this->mpc_Ui->pc_PushButtonOk->setText("Continue");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -145,14 +144,13 @@ void C_SdCodeGenerationDialog::m_UpdateSelection(const int32_t os32_SelectionCou
 {
    if (os32_SelectionCount > 0)
    {
-      this->mpc_Ui->pc_SelectionLabel->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "%1 Data Block(s) selected")).
+      this->mpc_Ui->pc_SelectionLabel->setText(static_cast<QString>("%1 Data Block(s) selected").
                                                arg(os32_SelectionCount));
       this->mpc_Ui->pc_PushButtonOk->setDisabled(false);
    }
    else
    {
-      this->mpc_Ui->pc_SelectionLabel->setText(static_cast<QString>(C_GtGetText::h_GetText("No Data Block(s) selected")));
+      this->mpc_Ui->pc_SelectionLabel->setText(static_cast<QString>("No Data Block(s) selected"));
       this->mpc_Ui->pc_PushButtonOk->setDisabled(true);
    }
 }

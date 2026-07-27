@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_CamProHandler.hpp"
 
 #include "C_CamGenMessagesWidget.hpp"
@@ -98,22 +97,22 @@ C_CamGenMessagesWidget::~C_CamGenMessagesWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamGenMessagesWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelNoMessages->setText(C_GtGetText::h_GetText("No messages are declared, add any via the '+' "
-                                                                    "button."));
-   this->mpc_Ui->pc_LabelCyclic->setText(C_GtGetText::h_GetText("Cyclic Transmissions"));
+   this->mpc_Ui->pc_LabelNoMessages->setText("No messages are declared, add any via the '+' "
+                                                                    "button.");
+   this->mpc_Ui->pc_LabelCyclic->setText("Cyclic Transmissions");
    //Tooltips
-   this->mpc_Ui->pc_PushButtonToggleTx->SetToolTipInformation(C_GtGetText::h_GetText("Cyclic Message Transmission"),
-                                                              C_GtGetText::h_GetText("Disable or enable all cyclic "
-                                                                                     "message transmissions."));
-   this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation(C_GtGetText::h_GetText("Add Message"), "");
-   this->mpc_Ui->pc_PushButtonAddFromDatabase->SetToolTipInformation(C_GtGetText::h_GetText("Add Message from "
-                                                                                            "Database"), "");
-   this->mpc_Ui->pc_PushButtonCopy->SetToolTipInformation(C_GtGetText::h_GetText("Copy"), "");
-   this->mpc_Ui->pc_PushButtonPaste->SetToolTipInformation(C_GtGetText::h_GetText("Paste"), "");
-   this->mpc_Ui->pc_PushButtonCut->SetToolTipInformation(C_GtGetText::h_GetText("Cut"), "");
-   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation(C_GtGetText::h_GetText("Delete"), "");
-   this->mpc_Ui->pc_PushButtonMoveUp->SetToolTipInformation(C_GtGetText::h_GetText("Move Up"), "");
-   this->mpc_Ui->pc_PushButtonMoveDown->SetToolTipInformation(C_GtGetText::h_GetText("Move Down"), "");
+   this->mpc_Ui->pc_PushButtonToggleTx->SetToolTipInformation("Cyclic Message Transmission",
+                                                              "Disable or enable all cyclic "
+                                                                                     "message transmissions.");
+   this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation("Add Message", "");
+   this->mpc_Ui->pc_PushButtonAddFromDatabase->SetToolTipInformation("Add Message from "
+                                                                                            "Database", "");
+   this->mpc_Ui->pc_PushButtonCopy->SetToolTipInformation("Copy", "");
+   this->mpc_Ui->pc_PushButtonPaste->SetToolTipInformation("Paste", "");
+   this->mpc_Ui->pc_PushButtonCut->SetToolTipInformation("Cut", "");
+   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation("Delete", "");
+   this->mpc_Ui->pc_PushButtonMoveUp->SetToolTipInformation("Move Up", "");
+   this->mpc_Ui->pc_PushButtonMoveDown->SetToolTipInformation("Move Down", "");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -209,6 +208,17 @@ void C_CamGenMessagesWidget::TriggerMessageReload()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get pointer to table view
+
+   \return  Table view
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_CamGenTableView * C_CamGenMessagesWidget::GetTableView(void) const
+{
+   return this->mpc_Ui->pc_TableView;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Overridden resize event slot
 
    Here: remove or add label text depending on size
@@ -288,7 +298,7 @@ void C_CamGenMessagesWidget::m_InitButtons(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamGenMessagesWidget::m_UpdateHeading(void) const
 {
-   this->mpc_Ui->pc_LabelHeading->setText(static_cast<QString>(C_GtGetText::h_GetText("Messages (%1)")).arg(
+   this->mpc_Ui->pc_LabelHeading->setText(static_cast<QString>("Messages (%1)").arg(
                                              C_CamProHandler::
                                              h_GetInstance()
                                              ->

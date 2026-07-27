@@ -16,7 +16,6 @@
 #include "C_SyvUpPacSecureArchiveDialog.hpp"
 #include "ui_C_SyvUpPacSecureArchiveDialog.h"
 
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_UsHandler.hpp"
 #include "C_OscUtils.hpp"
@@ -101,30 +100,26 @@ C_SyvUpPacSecureArchiveDialog::~C_SyvUpPacSecureArchiveDialog()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacSecureArchiveDialog::InitStaticNames() const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Service Update Package "));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Secure Archive File (*.syde_sup)"));
+   this->mrc_ParentDialog.SetTitle("Service Update Package ");
+   this->mrc_ParentDialog.SetSubTitle("Secure Archive File (*.syde_sup)");
 
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Create"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_LabPrivateKey->setText(C_GtGetText::h_GetText("Signature Private Key"));
-   this->mpc_Ui->pc_LabPassword->setText(C_GtGetText::h_GetText("Encryption Password"));
+   this->mpc_Ui->pc_PushButtonOk->setText("Create");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_LabPrivateKey->setText("Signature Private Key");
+   this->mpc_Ui->pc_LabPassword->setText("Encryption Password");
 
    // Tooltips
-   this->mpc_Ui->pc_LabPassword->SetToolTipInformation(C_GtGetText::h_GetText("Encryption Password (optional)"),
-                                                       C_GtGetText::h_GetText(
-                                                          "Flashware will be encrypted if password is given."));
+   this->mpc_Ui->pc_LabPassword->SetToolTipInformation("Encryption Password (optional)",
+                                                       "Flashware will be encrypted if password is given.");
 
-   this->mpc_Ui->pc_LabPrivateKey->SetToolTipInformation(C_GtGetText::h_GetText("Signature Private Key"),
-                                                         C_GtGetText::h_GetText(
-                                                            "Full path to private key file (*.pem)."));
+   this->mpc_Ui->pc_LabPrivateKey->SetToolTipInformation("Signature Private Key",
+                                                         "Full path to private key file (*.pem).");
 
-   this->mpc_Ui->pc_PubTogglePwd->SetToolTipInformation(C_GtGetText::h_GetText("Show/Hide Password"),
-                                                        C_GtGetText::h_GetText(
-                                                           "Shows/hides password when pressed down."));
+   this->mpc_Ui->pc_PubTogglePwd->SetToolTipInformation("Show/Hide Password",
+                                                        "Shows/hides password when pressed down.");
 
-   this->mpc_Ui->pc_PubPrivateKeyPath->SetToolTipInformation(C_GtGetText::h_GetText("Browse"),
-                                                             C_GtGetText::h_GetText(
-                                                                "Browse for path to private key(pem) file."));
+   this->mpc_Ui->pc_PubPrivateKeyPath->SetToolTipInformation("Browse",
+                                                             "Browse for path to private key(pem) file.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -172,26 +167,23 @@ void C_SyvUpPacSecureArchiveDialog::m_OkClicked(void)
    if (s32_Result != C_NO_ERR)
    {
       C_OgeWiCustomMessage c_ErrorPath(this, C_OgeWiCustomMessage::eERROR);
-      c_ErrorPath.SetHeading(C_GtGetText::h_GetText("Create Service Update Package"));
+      c_ErrorPath.SetHeading("Create Service Update Package");
 
       switch (s32_Result)
       {
       case C_NOACT:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "You need to enter a signature file name."));
+         c_ErrorPath.SetDescription("You need to enter a signature file name.");
          break;
       case C_RANGE:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "Invalid file format. The format (*.pem) is required."));
+         c_ErrorPath.SetDescription("Invalid file format. The format (*.pem) is required.");
          break;
       case C_RD_WR:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "Invalid path (e.g. containing invalid characters)."));
+         c_ErrorPath.SetDescription("Invalid path (e.g. containing invalid characters).");
          break;
       default:
          break;
       }
-      c_ErrorPath.SetOkButtonText(C_GtGetText::h_GetText("OK"));
+      c_ErrorPath.SetOkButtonText("OK");
       c_ErrorPath.SetCustomMinHeight(180, 180);
       c_ErrorPath.exec();
 
@@ -204,11 +196,10 @@ void C_SyvUpPacSecureArchiveDialog::m_OkClicked(void)
       if (this->GetPassword() == "")
       {
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eWARNING);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Create service update package"));
-         c_Message.SetDescription(C_GtGetText::h_GetText(
-                                     "No password specified. The service update package won't be encrypted. Do you want to continue?"));
-         c_Message.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-         c_Message.SetCancelButtonText(C_GtGetText::h_GetText("Cancel"));
+         c_Message.SetHeading("Create service update package");
+         c_Message.SetDescription("No password specified. The service update package won't be encrypted. Do you want to continue?");
+         c_Message.SetOkButtonText("Continue");
+         c_Message.SetCancelButtonText("Cancel");
          c_Message.SetCustomMinHeight(180, 180);
          if (c_Message.Execute() != C_OgeWiCustomMessage::eOK)
          {
@@ -284,10 +275,10 @@ void C_SyvUpPacSecureArchiveDialog::m_PrivateKeyPathClicked()
 {
    const QString c_Tmp =
       C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditPath->GetPath());
-   const QString c_FilterName = static_cast<QString>(C_GtGetText::h_GetText("pem file (*.pem);;Others (*.*)"));
+   const QString c_FilterName = static_cast<QString>("pem file (*.pem);;Others (*.*)");
 
    // Do not use QFileDialog::getOpenFileName because it does not support default suffix
-   QFileDialog c_Dialog(this,  C_GtGetText::h_GetText("Select Output File"), c_Tmp, c_FilterName);
+   QFileDialog c_Dialog(this,  "Select Output File", c_Tmp, c_FilterName);
 
    c_Dialog.setDefaultSuffix("pem");
 

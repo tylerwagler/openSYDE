@@ -34,7 +34,6 @@
 #include "C_GiCustomFunctions.hpp"
 #include "C_PuiSdNode.hpp"
 #include "C_PuiSdBus.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -1335,11 +1334,10 @@ void C_SdTopologyScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * const opc_E
          {
             QGraphicsView * const pc_View = this->views().at(0);
             C_OgeWiCustomMessage c_MessageBox(pc_View, C_OgeWiCustomMessage::E_Type::eINFORMATION);
-            c_MessageBox.SetHeading(C_GtGetText::h_GetText("Link Use"));
-            c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                           "Connect existing elements: Click on the link icon and drag and drop it "
-                                           "either to an existing node or to a bus element."));
-            c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("OK"));
+            c_MessageBox.SetHeading("Link Use");
+            c_MessageBox.SetDescription("Connect existing elements: Click on the link icon and drag and drop it "
+                                           "either to an existing node or to a bus element.");
+            c_MessageBox.SetOkButtonText("OK");
             c_MessageBox.SetCustomMinHeight(180, 180);
             c_MessageBox.Execute();
          }
@@ -1702,10 +1700,10 @@ bool C_SdTopologyScene::m_HandleDeleteUserConfirmation(const QList<QGraphicsItem
       {
          C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
          C_OgeWiCustomMessage c_MessageBox(pc_View, C_OgeWiCustomMessage::E_Type::eQUESTION);
-         c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to delete the selected item(s)?"));
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("Items delete"));
-         c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-         c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+         c_MessageBox.SetDescription("Do you really want to delete the selected item(s)?");
+         c_MessageBox.SetHeading("Items delete");
+         c_MessageBox.SetOkButtonText("Delete");
+         c_MessageBox.SetNoButtonText("Keep");
          c_MessageBox.SetCustomMinHeight(180, 180);
          e_ReturnMessageBox = c_MessageBox.Execute();
 
@@ -2750,19 +2748,18 @@ void C_SdTopologyScene::m_EnterConnectState(const C_GiLiBusConnector::E_ConnectS
                            QString c_BusType;
                            if (pc_Bus->GetType() == C_OscSystemBus::E_Type::eCAN)
                            {
-                              c_BusType = C_GtGetText::h_GetText("CAN");
+                              c_BusType = "CAN";
                            }
                            else
                            {
-                              c_BusType = C_GtGetText::h_GetText("Ethernet");
+                              c_BusType = "Ethernet";
                            }
                            //Translation 1 = Bus name
-                           pc_Bus->SetTemporaryToolTipHeading(static_cast<QString>(C_GtGetText::h_GetText("%1:")
+                           pc_Bus->SetTemporaryToolTipHeading(static_cast<QString>("%1:"
                                                                                    ).arg(pc_Bus->GetName()));
                            //Translation 1 = Bus type string 2 = Node name
                            pc_Bus->SetTemporaryToolTipContent(static_cast<QString>(
-                                                                 C_GtGetText::h_GetText(
-                                                                    "No free %1 Interfaces of \"%2\" available")).arg(
+                                                                 "No free %1 Interfaces of \"%2\" available").arg(
                                                                  c_BusType, opc_Node->GetText()));
                         }
                      }
@@ -2833,21 +2830,20 @@ void C_SdTopologyScene::m_EnterConnectState(const C_GiLiBusConnector::E_ConnectS
                         QString c_BusType;
                         if (*ope_Type == C_OscSystemBus::E_Type::eCAN)
                         {
-                           c_BusType = C_GtGetText::h_GetText("CAN");
+                           c_BusType = "CAN";
                         }
                         else
                         {
-                           c_BusType = C_GtGetText::h_GetText("Ethernet");
+                           c_BusType = "Ethernet";
                         }
                         //Adapt
                         //Translation 1 = Node name
                         pc_Node->SetTemporaryToolTipHeading(
-                           static_cast<QString>(C_GtGetText::h_GetText("%1:")
+                           static_cast<QString>("%1:"
                                                 ).arg(pc_Node->GetText()));
                         //Translation 1 = Bus type string 2 = Node name
                         pc_Node->SetTemporaryToolTipContent(
-                           static_cast<QString>(C_GtGetText::h_GetText(
-                                                   "No free %1 Interfaces of \"%2\" available")).arg(
+                           static_cast<QString>("No free %1 Interfaces of \"%2\" available").arg(
                               c_BusType, opc_Node->GetText()));
                         pc_Node->SetTemporaryCursor(Qt::ForbiddenCursor);
                      }
@@ -4020,17 +4016,16 @@ bool C_SdTopologyScene::m_ShowShortcutTspOption(const QString & orc_NodeName,
       QGraphicsView * const pc_View = this->views().at(0);
       C_OgeWiCustomMessage c_MessageBox(pc_View, C_OgeWiCustomMessage::E_Type::eQUESTION);
 
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText(c_MessageBoxTitle.c_str()));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText(c_MessageBoxText.c_str()));
-      c_MessageBox.SetDetails(C_GtGetText::h_GetText(c_MessageBoxDetails.c_str()));
-      c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-      c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Skip"));
-      c_MessageBox.SetCheckboxText(C_GtGetText::h_GetText("Always skip TSP Import assistance"));
+      c_MessageBox.SetHeading(c_MessageBoxTitle.c_str());
+      c_MessageBox.SetDescription(c_MessageBoxText.c_str());
+      c_MessageBox.SetDetails(c_MessageBoxDetails.c_str());
+      c_MessageBox.SetOkButtonText("Continue");
+      c_MessageBox.SetNoButtonText("Skip");
+      c_MessageBox.SetCheckboxText("Always skip TSP Import assistance");
       c_MessageBox.SetCheckboxTooltip(
-         C_GtGetText::h_GetText("Remember selection"),
-         C_GtGetText::h_GetText(
-            "If checkbox is checked the TSP Import Assistance will always be skipped and this message will not appear anymore.\n"
-            "This option can be changed in Tool Settings."));
+         "Remember selection",
+         "If checkbox is checked the TSP Import Assistance will always be skipped and this message will not appear anymore.\n"
+            "This option can be changed in Tool Settings.");
       c_MessageBox.SetCustomMinWidth(700);
 
       const C_OgeWiCustomMessage::E_Outputs e_Output = c_MessageBox.Execute();

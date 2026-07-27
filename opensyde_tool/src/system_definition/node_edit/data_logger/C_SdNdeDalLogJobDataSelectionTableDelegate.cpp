@@ -151,7 +151,7 @@ void C_SdNdeDalLogJobDataSelectionTableDelegate::setModelData(QWidget * const op
             QString c_Value = pc_LineEdit->text();
             if (c_Value.isEmpty() == true)
             {
-               c_Value = C_GtGetText::h_GetText("[Namespace]");
+               c_Value = "[Namespace]";
             }
             opc_Model->setData(orc_Index, c_Value, static_cast<int32_t>(Qt::EditRole));
          }

@@ -17,7 +17,6 @@
 
 #include "C_PuiSdHandler.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_OscUtils.hpp"
@@ -177,73 +176,64 @@ void C_SdNdeDalLogJobPropertiesWidget::SaveUserSettings() const
 void C_SdNdeDalLogJobPropertiesWidget::InitStaticNames() const
 {
    // properties section
-   this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
-   this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
-   this->mpc_Ui->pc_TextEditComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here..."));
-   this->mpc_Ui->pc_LabelGeneral->setText(C_GtGetText::h_GetText("General"));
-   this->mpc_Ui->pc_LabelLogFileFormat->setText(C_GtGetText::h_GetText("Log File Format"));
-   this->mpc_Ui->pc_LabelMode->setText(C_GtGetText::h_GetText("Mode"));
-   this->mpc_Ui->pc_LabelGeneral->setText(C_GtGetText::h_GetText("General"));
-   this->mpc_Ui->pc_LabelLogJobUseCase->setText(C_GtGetText::h_GetText("Log Job Use-Case"));
-   this->mpc_Ui->pc_LabelLogFileFormat->setText(C_GtGetText::h_GetText("Log File Format"));
-   this->mpc_Ui->pc_LabelLogDestination->setText(C_GtGetText::h_GetText("Log Destination"));
-   this->mpc_Ui->pc_LineEditLogDestination->setPlaceholderText(C_GtGetText::h_GetText("./ExampleSubFolder"));
-   this->mpc_Ui->pc_LabelMode->setText(C_GtGetText::h_GetText("Mode"));
-   this->mpc_Ui->pc_LabelLoggingInterval->setText(C_GtGetText::h_GetText("Logging Interval"));
-   this->mpc_Ui->pc_LabelLogDuration->setText(C_GtGetText::h_GetText("Log Duration"));
-   this->mpc_Ui->pc_LabelMaxLogEntries->setText(C_GtGetText::h_GetText("Max Log Entries"));
+   this->mpc_Ui->pc_LabelName->setText("Name");
+   this->mpc_Ui->pc_LabelComment->setText("Comment");
+   this->mpc_Ui->pc_TextEditComment->setPlaceholderText("Add your comment here...");
+   this->mpc_Ui->pc_LabelGeneral->setText("General");
+   this->mpc_Ui->pc_LabelLogFileFormat->setText("Log File Format");
+   this->mpc_Ui->pc_LabelMode->setText("Mode");
+   this->mpc_Ui->pc_LabelGeneral->setText("General");
+   this->mpc_Ui->pc_LabelLogJobUseCase->setText("Log Job Use-Case");
+   this->mpc_Ui->pc_LabelLogFileFormat->setText("Log File Format");
+   this->mpc_Ui->pc_LabelLogDestination->setText("Log Destination");
+   this->mpc_Ui->pc_LineEditLogDestination->setPlaceholderText("./ExampleSubFolder");
+   this->mpc_Ui->pc_LabelMode->setText("Mode");
+   this->mpc_Ui->pc_LabelLoggingInterval->setText("Logging Interval");
+   this->mpc_Ui->pc_LabelLogDuration->setText("Log Duration");
+   this->mpc_Ui->pc_LabelMaxLogEntries->setText("Max Log Entries");
 
    //tooltips
-   this->mpc_Ui->pc_LabelName->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                        "Name"),
-                                                     static_cast<QString>(C_GtGetText::h_GetText(
-                                                                             "Symbolic log job name. Unique within Data Logger.\n"
+   this->mpc_Ui->pc_LabelName->SetToolTipInformation("Name",
+                                                     static_cast<QString>("Symbolic log job name. Unique within Data Logger.\n"
                                                                              "\nFollowing naming conventions are required:"
                                                                              "\n - must not be empty"
                                                                              "\n - must not start with digits"
                                                                              "\n - only alphanumeric characters and \"_\""
-                                                                             "\n - should not be longer than %1 (= project setting) characters")).arg(
+                                                                             "\n - should not be longer than %1 (= project setting) characters").arg(
                                                         C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit()));
-   this->mpc_Ui->pc_LabelComment->SetToolTipInformation(C_GtGetText::h_GetText("Comment"),
-                                                        C_GtGetText::h_GetText("Comment for this log job."));
+   this->mpc_Ui->pc_LabelComment->SetToolTipInformation("Comment",
+                                                        "Comment for this log job.");
 
-   this->mpc_Ui->pc_LabelLogJobUseCase->SetToolTipInformation(C_GtGetText::h_GetText("Log Job Use-Case"),
-                                                              C_GtGetText::h_GetText(
-                                                                 "Select the use-case of the log job:\n"
+   this->mpc_Ui->pc_LabelLogJobUseCase->SetToolTipInformation("Log Job Use-Case",
+                                                              "Select the use-case of the log job:\n"
                                                                  "- Manual: Select custom log destination and file format.\n"
                                                                  "- AWS: Logging for AWS cloud\n"
-                                                                 "- maschines.cloud: Logging for maschines.cloud"));
-   this->mpc_Ui->pc_LabelLogFileFormat->SetToolTipInformation(C_GtGetText::h_GetText("Log File Format"),
-                                                              C_GtGetText::h_GetText(
-                                                                 "Log File Format, relevant when log job use-case 'Manual' is selected."));
-   this->mpc_Ui->pc_LabelLogDestination->SetToolTipInformation(C_GtGetText::h_GetText("Log Destination"),
-                                                               C_GtGetText::h_GetText(
-                                                                  "Log Destination, relevant when log job use-case 'Manual' is selected.\n"
+                                                                 "- maschines.cloud: Logging for maschines.cloud");
+   this->mpc_Ui->pc_LabelLogFileFormat->SetToolTipInformation("Log File Format",
+                                                              "Log File Format, relevant when log job use-case 'Manual' is selected.");
+   this->mpc_Ui->pc_LabelLogDestination->SetToolTipInformation("Log Destination",
+                                                               "Log Destination, relevant when log job use-case 'Manual' is selected.\n"
                                                                   "Sub-folder name where the log files are stored.\n\n"
                                                                   "Format: \n"
                                                                   "- Must start with ./\n"
                                                                   "- Only alphanumeric characters, dots, hyphens, and underscores allowed\n"
                                                                   "- No leading/trailing dots or double slashes\n\n"
-                                                                  "Examples: ./LogFiles, ./my-folder/sub_dir"));
+                                                                  "Examples: ./LogFiles, ./my-folder/sub_dir");
 
-   this->mpc_Ui->pc_LabelMode->SetToolTipInformation(C_GtGetText::h_GetText("Mode"),
-                                                     C_GtGetText::h_GetText(
-                                                        "Log Mode:\n"
+   this->mpc_Ui->pc_LabelMode->SetToolTipInformation("Mode",
+                                                     "Log Mode:\n"
                                                         "- On Change: On every value change, the data element is logged to file. \n"
-                                                        "- Interval: Every logging interval all logging data of a log job are logged to file."));
-   this->mpc_Ui->pc_LabelLoggingInterval->SetToolTipInformation(C_GtGetText::h_GetText("Logging Interval"),
-                                                                C_GtGetText::h_GetText(
-                                                                   "Relevant when log mode 'Interval' is selected.\n"
-                                                                   "Every logging interval all logging data of a log job are logged to file."));
-   this->mpc_Ui->pc_LabelLogDuration->SetToolTipInformation(C_GtGetText::h_GetText("Log Duration"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Relevant when log mode 'Interval' is selected.\n"
+                                                        "- Interval: Every logging interval all logging data of a log job are logged to file.");
+   this->mpc_Ui->pc_LabelLoggingInterval->SetToolTipInformation("Logging Interval",
+                                                                "Relevant when log mode 'Interval' is selected.\n"
+                                                                   "Every logging interval all logging data of a log job are logged to file.");
+   this->mpc_Ui->pc_LabelLogDuration->SetToolTipInformation("Log Duration",
+                                                            "Relevant when log mode 'Interval' is selected.\n"
                                                                "Max log duration of a file before starting a new one. \n\n"
-                                                               "Value shall be greater than the logging interval."));
-   this->mpc_Ui->pc_LabelMaxLogEntries->SetToolTipInformation(C_GtGetText::h_GetText("Max Log Entries"),
-                                                              C_GtGetText::h_GetText(
-                                                                 "Relevant when log mode 'Interval' is selected.\n"
-                                                                 "Max log entries in a file before starting a new one."));
+                                                               "Value shall be greater than the logging interval.");
+   this->mpc_Ui->pc_LabelMaxLogEntries->SetToolTipInformation("Max Log Entries",
+                                                              "Relevant when log mode 'Interval' is selected.\n"
+                                                                 "Max log entries in a file before starting a new one.");
 
    // Icon section
    this->mpc_Ui->pc_LabelIconFileFormat->setText(
@@ -341,13 +331,13 @@ QString C_SdNdeDalLogJobPropertiesWidget::mh_ConvertTxMethodToName(
    switch (ore_Type)
    {
    case C_OscDataLoggerJobProperties::eUC_MANUAL:
-      c_Retval = C_GtGetText::h_GetText("Manual");
+      c_Retval = "Manual";
       break;
    case C_OscDataLoggerJobProperties::eUC_AWS:
-      c_Retval = C_GtGetText::h_GetText("AWS");
+      c_Retval = "AWS";
       break;
    case C_OscDataLoggerJobProperties::eUC_MACHINES_CLOUD:
-      c_Retval = C_GtGetText::h_GetText("machines.cloud");
+      c_Retval = "machines.cloud";
       break;
    default:
       c_Retval = "";
@@ -370,7 +360,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnLogJobUseCaseChanged(const int32_t os
    switch (e_UseCase)
    {
    case C_OscDataLoggerJobProperties::eUC_AWS:
-      this->mpc_Ui->pc_LabelIconFileFormat->setText(C_GtGetText::h_GetText("AWS"));
+      this->mpc_Ui->pc_LabelIconFileFormat->setText("AWS");
 
       this->mpc_Ui->pc_GbxFileFormat->setVisible(false);
       this->mpc_Ui->pc_LabelLogDestination->setVisible(false);
@@ -378,7 +368,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnLogJobUseCaseChanged(const int32_t os
       break;
 
    case C_OscDataLoggerJobProperties::eUC_MACHINES_CLOUD:
-      this->mpc_Ui->pc_LabelIconFileFormat->setText(C_GtGetText::h_GetText("machines.cloud"));
+      this->mpc_Ui->pc_LabelIconFileFormat->setText("machines.cloud");
 
       this->mpc_Ui->pc_GbxFileFormat->setVisible(false);
       this->mpc_Ui->pc_LabelLogDestination->setVisible(false);
@@ -386,7 +376,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnLogJobUseCaseChanged(const int32_t os
       break;
 
    case C_OscDataLoggerJobProperties::eUC_MANUAL:
-      this->mpc_Ui->pc_LabelIconFileFormat->setText(C_GtGetText::h_GetText("Manual"));
+      this->mpc_Ui->pc_LabelIconFileFormat->setText("Manual");
 
       this->mpc_Ui->pc_GbxFileFormat->setVisible(true);
       this->mpc_Ui->pc_LabelLogDestination->setVisible(true);
@@ -482,21 +472,21 @@ void C_SdNdeDalLogJobPropertiesWidget::m_CheckDataLoggerName()
 
    if ((q_IsLogJobNameUnique == true) && (q_IsLoggerNameValid == true))
    {
-      this->mpc_Ui->pc_LineEditName->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                           C_GtGetText::h_GetText(""),
+      this->mpc_Ui->pc_LineEditName->SetToolTipInformation("",
+                                                           "",
                                                            C_NagToolTip::eDEFAULT);
    }
    else
    {
-      const QString c_Heading = C_GtGetText::h_GetText("Data Logger Job Name");
+      const QString c_Heading = "Data Logger Job Name";
       QString c_Content;
       if (q_IsLogJobNameUnique == false)
       {
-         c_Content += C_GtGetText::h_GetText("- is already in use\n");
+         c_Content += "- is already in use\n";
       }
       if (q_IsLoggerNameValid == false)
       {
-         c_Content += C_GtGetText::h_GetText("- is empty or contains invalid characters.\n");
+         c_Content += "- is empty or contains invalid characters.\n";
       }
       this->mpc_Ui->pc_LineEditName->SetToolTipInformation(c_Heading, c_Content, C_NagToolTip::eERROR);
    }
@@ -595,14 +585,13 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
                                                           &c_ExistingLogJobNames) == false)
       {
          const QString c_Description =
-            static_cast<QString>(C_GtGetText::h_GetText(
-                                    "A Log Job with the name \"%1\" already exists. Choose another name.")).
+            static_cast<QString>("A Log Job with the name \"%1\" already exists. Choose another name.").
             arg(c_LogJobName.c_str());
          QString c_Details;
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Log Job naming"));
+         c_Message.SetHeading("Log Job naming");
          c_Message.SetDescription(c_Description);
-         c_Details.append(C_GtGetText::h_GetText("Used Log Job names:\n"));
+         c_Details.append("Used Log Job names:\n");
          for (uint32_t u32_ItExistingName = 0UL; u32_ItExistingName < c_ExistingLogJobNames.size();
               ++u32_ItExistingName)
          {
@@ -626,11 +615,10 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
       else if (C_OscUtils::h_CheckValidCeName(c_LogJobName) == false)
       {
          const QString c_Description =
-            static_cast<QString>(C_GtGetText::h_GetText(
-                                    "Data Logger Job name \"%1\" is empty or contains invalid characters.")).
+            static_cast<QString>("Data Logger Job name \"%1\" is empty or contains invalid characters.").
             arg(c_LogJobName.c_str());
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Log Job naming"));
+         c_Message.SetHeading("Log Job naming");
          c_Message.SetDescription(c_Description);
          c_Message.SetCustomMinHeight(220, 350);
          c_Message.Execute();
@@ -689,13 +677,13 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnLogDestinationEditFinished(void)
       c_Message.SetType(C_OgeWiCustomMessage::E_Type::eERROR);
       c_Message.SetCustomMinWidth(700);
       c_Message.SetCustomMinHeight(300, 300);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Log Destination Input"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Invalid log destination path format. \n\n"
+      c_Message.SetHeading("Log Destination Input");
+      c_Message.SetDescription("Invalid log destination path format. \n\n"
                                                       "Required format: \n"
                                                       "- Must start with ./\n"
                                                       "- Only alphanumeric characters, dots, hyphens, and underscores allowed\n"
                                                       "- No leading/trailing dots or double slashes\n\n"
-                                                      "Examples: ./LogFiles, ./my-folder/sub_dir\n\n"));
+                                                      "Examples: ./LogFiles, ./my-folder/sub_dir\n\n");
 
       // Reset input?
       q_ResetInput = true;

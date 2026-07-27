@@ -14,7 +14,6 @@
 
 #include "stwtypes.hpp"
 #include "gitypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_GiLiLineGroup.hpp"
 #include "C_SyvDaContextMenuManager.hpp"
 
@@ -44,11 +43,9 @@ C_SyvDaContextMenuManager::C_SyvDaContextMenuManager() :
    mq_FurtherActionsWillBeAdded(false)
 {
    // add all actions
-   this->mpc_ActionEditProperties = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                      "Edit Properties"), this,
+   this->mpc_ActionEditProperties = this->mc_ContextMenu.addAction("Edit Properties", this,
                                                                    &C_SyvDaContextMenuManager::m_EditProperties);
-   this->mpc_ActionEditContent = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                   "Edit Content"), this,
+   this->mpc_ActionEditContent = this->mc_ContextMenu.addAction("Edit Content", this,
                                                                 &C_SyvDaContextMenuManager::m_EditContent,
                                                                 static_cast<int32_t>(Qt::Key_F2));
    this->mpc_ActionEditSeparator = this->mc_ContextMenu.addSeparator();

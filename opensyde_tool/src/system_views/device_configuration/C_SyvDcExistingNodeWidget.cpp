@@ -18,7 +18,6 @@
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -553,12 +552,12 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
          {
             // Error message for target integrator
             C_OgeWiCustomMessage c_Box(this, C_OgeWiCustomMessage::E_Type::eERROR);
-            c_Box.SetHeading(C_GtGetText::h_GetText("Device Assignment"));
+            c_Box.SetHeading("Device Assignment");
             c_Box.SetDescription(
-               static_cast<QString>(C_GtGetText::h_GetText("Sub-node ids does not match the expectation")));
-            c_Box.SetDetails(C_GtGetText::h_GetText("Sub-node A expects sub-node id 0\n"
+               static_cast<QString>("Sub-node ids does not match the expectation"));
+            c_Box.SetDetails("Sub-node A expects sub-node id 0\n"
                                                     "Sub-node B expects sub-node id 1\n"
-                                                    "..."));
+                                                    "...");
             c_Box.SetCustomMinHeight(180, 250);
             c_Box.Execute();
          }
@@ -566,9 +565,8 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
       else
       {
          C_OgeWiCustomMessage c_Box(this, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_Box.SetHeading(C_GtGetText::h_GetText("Device Assignment"));
-         c_Box.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                      "Device type does not match. Expected \"%1\", dropped: \"%2\"")).arg(
+         c_Box.SetHeading("Device Assignment");
+         c_Box.SetDescription(static_cast<QString>("Device type does not match. Expected \"%1\", dropped: \"%2\"").arg(
                                  this->
                                  mc_DeviceName).arg(
                                  c_DroppedDevice));
@@ -640,19 +638,19 @@ int32_t C_SyvDcExistingNodeWidget::m_Init(void)
             }
          }
          //Translation: 1: Node ID
-         this->mpc_Ui->pc_LabelNodeId->setText(static_cast<QString>(C_GtGetText::h_GetText("Node ID: %1")).arg(c_Ids));
+         this->mpc_Ui->pc_LabelNodeId->setText(static_cast<QString>("Node ID: %1").arg(c_Ids));
       }
       else
       {
          //In case of a node squad, no concrete node id or IP address will be showed
-         this->mpc_Ui->pc_LabelNodeId->setText(static_cast<QString>(C_GtGetText::h_GetText("Node ID: <multiple>")));
+         this->mpc_Ui->pc_LabelNodeId->setText(static_cast<QString>("Node ID: <multiple>"));
       }
 
       this->mc_DeviceName = pc_Node->pc_DeviceDefinition->c_DeviceName.c_str();
 
       //Translation: 1: Node type
       this->mpc_Ui->pc_LabelDeviceType->setText(
-         static_cast<QString>(C_GtGetText::h_GetText("Type: %1")).
+         static_cast<QString>("Type: %1").
          arg(pc_Node->pc_DeviceDefinition->c_DeviceName.c_str()));
    }
    //Resize

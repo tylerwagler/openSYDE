@@ -18,7 +18,6 @@
 #include "stwerrors.hpp"
 #include "C_ImpUtil.hpp"
 #include "C_OscUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDbProperties.hpp"
@@ -151,7 +150,7 @@ C_SdNdeDbProperties::C_SdNdeDbProperties(const uint32_t ou32_NodeIndex, const in
            &C_SdNdeDbProperties::m_HandleAddDataPools);
    connect(this->mpc_Ui->pc_PushButtonRevertToDefault, &QPushButton::clicked, this,
            &C_SdNdeDbProperties::m_HandleRevertCodeGenerator);
-   connect(this->mpc_Ui->pc_CheckBoxFileGen, &QCheckBox::checkStateChanged,
+   connect(this->mpc_Ui->pc_CheckBoxFileGen, &QCheckBox::stateChanged,
            this, &C_SdNdeDbProperties::m_OnFileGenerationChanged);
 
    // browse actions
@@ -249,113 +248,111 @@ QSize C_SdNdeDbProperties::h_GetDefaultWindowSize(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbProperties::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Data Block"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
-   this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
-   this->mpc_Ui->pc_LabelHeadingProject->setText(C_GtGetText::h_GetText("Project"));
-   this->mpc_Ui->pc_CheckBoxFileGen->setText(C_GtGetText::h_GetText("File Generation"));
-   this->mpc_Ui->pc_LabelFileGenerationDisabled->setText(C_GtGetText::h_GetText("File Generation disabled."));
-   this->mpc_Ui->pc_LabelSafeFile->setText(C_GtGetText::h_GetText("Safe File"));
-   this->mpc_Ui->pc_LabelNonSafeFile->setText(C_GtGetText::h_GetText("Non Safe File"));
-   this->mpc_Ui->pc_LabelSafeFileNone->setText(C_GtGetText::h_GetText("<safe configuration not available>"));
-   this->mpc_Ui->pc_LabelNonSafeFileNone->setText(C_GtGetText::h_GetText("<non-safe configuration not available>"));
-   this->mpc_Ui->pc_LabelProject->setText(C_GtGetText::h_GetText("Project Path"));
-   this->mpc_Ui->pc_LabelProcessID->setText(C_GtGetText::h_GetText("Process ID"));
-   this->mpc_Ui->pc_LabelOutputFile->setText(C_GtGetText::h_GetText("Output File"));
-   this->mpc_Ui->pc_LabelIDE->setText(C_GtGetText::h_GetText("IDE Call"));
-   this->mpc_Ui->pc_LabelCodeGenerator->setText(C_GtGetText::h_GetText("Generator"));
-   this->mpc_Ui->pc_LabelCodeGenerate->setText(C_GtGetText::h_GetText("Gen. Directory"));
-   this->mpc_Ui->pc_LabelFileGenerate->setText(C_GtGetText::h_GetText("Gen. Directory"));
-   this->mpc_Ui->pc_LabelCodeStructure->setText(C_GtGetText::h_GetText("Structure"));
+   this->mrc_ParentDialog.SetTitle("Data Block");
+   this->mrc_ParentDialog.SetSubTitle("Properties");
+   this->mpc_Ui->pc_LabelName->setText("Name");
+   this->mpc_Ui->pc_LabelComment->setText("Comment");
+   this->mpc_Ui->pc_LabelHeadingProject->setText("Project");
+   this->mpc_Ui->pc_CheckBoxFileGen->setText("File Generation");
+   this->mpc_Ui->pc_LabelFileGenerationDisabled->setText("File Generation disabled.");
+   this->mpc_Ui->pc_LabelSafeFile->setText("Safe File");
+   this->mpc_Ui->pc_LabelNonSafeFile->setText("Non Safe File");
+   this->mpc_Ui->pc_LabelSafeFileNone->setText("<safe configuration not available>");
+   this->mpc_Ui->pc_LabelNonSafeFileNone->setText("<non-safe configuration not available>");
+   this->mpc_Ui->pc_LabelProject->setText("Project Path");
+   this->mpc_Ui->pc_LabelProcessID->setText("Process ID");
+   this->mpc_Ui->pc_LabelOutputFile->setText("Output File");
+   this->mpc_Ui->pc_LabelIDE->setText("IDE Call");
+   this->mpc_Ui->pc_LabelCodeGenerator->setText("Generator");
+   this->mpc_Ui->pc_LabelCodeGenerate->setText("Gen. Directory");
+   this->mpc_Ui->pc_LabelFileGenerate->setText("Gen. Directory");
+   this->mpc_Ui->pc_LabelCodeStructure->setText("Structure");
    this->mpc_Ui->pc_ComboBoxCode->addItem("dummy");
    this->mpc_Ui->pc_ComboBoxCode->addItem("dummy");
    this->mpc_Ui->pc_ComboBoxCode->addItem("dummy");
    this->mpc_Ui->pc_ComboBoxCode->addItem("dummy");
    this->mpc_Ui->pc_ComboBoxCode->addItem("dummy");
    this->mpc_Ui->pc_ComboBoxCode->addItem("dummy");
-   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V1, C_GtGetText::h_GetText("Version 1"));
-   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V2, C_GtGetText::h_GetText("Version 2"));
-   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V3, C_GtGetText::h_GetText("Version 3"));
-   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V4, C_GtGetText::h_GetText("Version 4"));
-   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V5, C_GtGetText::h_GetText("Version 5"));
-   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V6, C_GtGetText::h_GetText("Version 6"));
-   this->mpc_Ui->pc_LabelHeadingDatapools->setText(C_GtGetText::h_GetText("Owned Datapools"));
+   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V1, "Version 1");
+   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V2, "Version 2");
+   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V3, "Version 3");
+   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V4, "Version 4");
+   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V5, "Version 5");
+   this->mpc_Ui->pc_ComboBoxCode->setItemText(mhs32_VERSION_INDEX_V6, "Version 6");
+   this->mpc_Ui->pc_LabelHeadingDatapools->setText("Owned Datapools");
    this->mpc_Ui->pc_LabelDataPoolsEmpty->setText("No assigned Datapools, \nadd any via the '+' button");
-   this->mpc_Ui->pc_CommentText->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_CommentText->setPlaceholderText("Add your comment here ...");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 
    //Tool tips
    this->mpc_Ui->pc_LabelName->SetToolTipInformation(
-      C_GtGetText::h_GetText("Name"),
-      static_cast<QString>(C_GtGetText::h_GetText("Symbolic Data Block name. Unique within node\n"
+      "Name",
+      static_cast<QString>("Symbolic Data Block name. Unique within node\n"
                                                   "\nFollowing C naming conventions are required:"
                                                   "\n - must not be empty"
                                                   "\n - must not start with digits"
                                                   "\n - only alphanumeric characters and \"_\""
-                                                  "\n - should not be longer than %1 (= project setting) characters")).arg(
+                                                  "\n - should not be longer than %1 (= project setting) characters").arg(
          C_PuiSdHandler::
          h_GetInstance()
          ->
          GetNameMaxCharLimit()));
-   this->mpc_Ui->pc_LabelComment->SetToolTipInformation(C_GtGetText::h_GetText("Comment"),
-                                                        C_GtGetText::h_GetText("Comment for this Data Block."));
+   this->mpc_Ui->pc_LabelComment->SetToolTipInformation("Comment",
+                                                        "Comment for this Data Block.");
 
    this->mpc_Ui->pc_LabelHeadingDatapools->SetToolTipInformation(
-      C_GtGetText::h_GetText("Owned Datapools"),
-      C_GtGetText::h_GetText("List of all Datapool(s) which are mapped to this Data Block"
-                             "\n(Relevant for file generation)."));
+      "Owned Datapools",
+      "List of all Datapool(s) which are mapped to this Data Block"
+                             "\n(Relevant for file generation).");
 
-   this->mpc_Ui->pc_PushButtonAddDataPool->SetToolTipInformation(C_GtGetText::h_GetText("Add"),
-                                                                 C_GtGetText::h_GetText("Add Datapool(s) to list."));
+   this->mpc_Ui->pc_PushButtonAddDataPool->SetToolTipInformation("Add",
+                                                                 "Add Datapool(s) to list.");
 
    this->mpc_Ui->pc_CheckBoxFileGen->SetToolTipInformation(
-      C_GtGetText::h_GetText("File Generation"),
-      C_GtGetText::h_GetText("Generate files for this Data Block with an external code or file generator tool."));
+      "File Generation",
+      "Generate files for this Data Block with an external code or file generator tool.");
 
    this->mpc_Ui->pc_LabelSafeFile->SetToolTipInformation(
-      C_GtGetText::h_GetText("Safe File"),
-      C_GtGetText::h_GetText("File name of generated parameter set image for safe hardware configuration data."));
+      "Safe File",
+      "File name of generated parameter set image for safe hardware configuration data.");
    this->mpc_Ui->pc_LabelNonSafeFile->SetToolTipInformation(
-      C_GtGetText::h_GetText("Non Safe File"),
-      C_GtGetText::h_GetText("File name of generated parameter set image for non-safe hardware configuration data."));
+      "Non Safe File",
+      "File name of generated parameter set image for non-safe hardware configuration data.");
    this->mpc_Ui->pc_LabelSafeFileNone->SetToolTipInformation(
       "Safe Channel",
-      C_GtGetText::h_GetText("The hardware definition for this node does not support safe channel configuration."));
+      "The hardware definition for this node does not support safe channel configuration.");
    this->mpc_Ui->pc_LabelNonSafeFileNone->SetToolTipInformation(
       "Non Safe Channel",
-      C_GtGetText::h_GetText("The hardware definition for this node does not support non-safe channel configuration."));
+      "The hardware definition for this node does not support non-safe channel configuration.");
 
    this->mpc_Ui->pc_LabelProcessID->SetToolTipInformation(
-      C_GtGetText::h_GetText("Process ID"),
-      C_GtGetText::h_GetText(
-         "This is required by remote Datapool configurations. "
+      "Process ID",
+      "This is required by remote Datapool configurations. "
          "For devices that only can run one process at a time this setting is not relevant. "
-         "For information how the IDs are used see the device's user manual."));
+         "For information how the IDs are used see the device's user manual.");
 
    this->mpc_Ui->pc_LabelProject->SetToolTipInformation(
-      C_GtGetText::h_GetText("Project Path"),
-      C_GtGetText::h_GetText("Root directory of the target project. Absolute or relative to *.syde."));
+      "Project Path",
+      "Root directory of the target project. Absolute or relative to *.syde.");
    this->mpc_Ui->pc_LabelOutputFile->SetToolTipInformation(
-      C_GtGetText::h_GetText("Output File"),
-      C_GtGetText::h_GetText("Location of output file. Absolute or relative to project path."));
+      "Output File",
+      "Location of output file. Absolute or relative to project path.");
    this->mpc_Ui->pc_LabelCodeGenerate->SetToolTipInformation(
-      C_GtGetText::h_GetText("Generation Directory"),
-      C_GtGetText::h_GetText("Location of the directory for openSYDE generated source code files. "
-                             "Absolute or relative to project path."));
+      "Generation Directory",
+      "Location of the directory for openSYDE generated source code files. "
+                             "Absolute or relative to project path.");
    this->mpc_Ui->pc_LabelFileGenerate->SetToolTipInformation(
-      C_GtGetText::h_GetText("Generation Directory"),
-      C_GtGetText::h_GetText("Location of the directory for openSYDE generated parameter set image files. "
-                             "Absolute or relative to *.syde."));
+      "Generation Directory",
+      "Location of the directory for openSYDE generated parameter set image files. "
+                             "Absolute or relative to *.syde.");
    this->mpc_Ui->pc_LabelCodeGenerator->SetToolTipInformation(
-      C_GtGetText::h_GetText("Generator"),
-      C_GtGetText::h_GetText("Location of file generator executable. "
-                             "Absolute or relative to the openSYDE binary."));
+      "Generator",
+      "Location of file generator executable. "
+                             "Absolute or relative to the openSYDE binary.");
    this->mpc_Ui->pc_LabelCodeStructure->SetToolTipInformation(
-      C_GtGetText::h_GetText("Structure Version"),
-      static_cast<QString>(C_GtGetText::h_GetText(
-                              "Version of structure for generated output files. Which version to select depends on what "
+      "Structure Version",
+      static_cast<QString>("Version of structure for generated output files. Which version to select depends on what "
                               "your physical target supports. See target documentation for further information about "
                               "supported versions.\n"
                               " - %1: Compatibility mode for previous versions of provided tools \n"
@@ -364,7 +361,7 @@ void C_SdNdeDbProperties::InitStaticNames(void) const
                               " - %3: Support for flexible placement of embedded RAM variables\n"
                               " - %4: Support for public scope of Datapool content\n"
                               " - %5: Optimization of sequences where the openSYDE server keeps a thread/process lock on\n"
-                              " - %6: CANopen configuration: Support for SYNC PDOs and restoring device configuration at startup"))
+                              " - %6: CANopen configuration: Support for SYNC PDOs and restoring device configuration at startup")
       .arg(this->mpc_Ui->pc_ComboBoxCode->itemText(mhs32_VERSION_INDEX_V1),
            this->mpc_Ui->pc_ComboBoxCode->itemText(mhs32_VERSION_INDEX_V2),
            this->mpc_Ui->pc_ComboBoxCode->itemText(mhs32_VERSION_INDEX_V3),
@@ -372,33 +369,33 @@ void C_SdNdeDbProperties::InitStaticNames(void) const
            this->mpc_Ui->pc_ComboBoxCode->itemText(mhs32_VERSION_INDEX_V5),
            this->mpc_Ui->pc_ComboBoxCode->itemText(mhs32_VERSION_INDEX_V6)));
    this->mpc_Ui->pc_LabelIDE->SetToolTipInformation(
-      C_GtGetText::h_GetText("IDE Call"),
-      C_GtGetText::h_GetText("Command line IDE call. Absolute or relative to working directory. Use quotation marks "
+      "IDE Call",
+      "Command line IDE call. Absolute or relative to working directory. Use quotation marks "
                              "around executable and parameters if you have issues with the call. Especially needed for "
-                             "paths that contain blanks or for non-printable characters."));
+                             "paths that contain blanks or for non-printable characters.");
 
    this->mpc_Ui->pc_PushButtonRevertToDefault->SetToolTipInformation(
-      C_GtGetText::h_GetText("Revert to Default"),
-      C_GtGetText::h_GetText("Set path to default openSYDE file generator \"SYDE Coder C\"."));
+      "Revert to Default",
+      "Set path to default openSYDE file generator \"SYDE Coder C\".");
 
    this->mpc_Ui->pc_PushButtonProject->SetToolTipInformation(
-      C_GtGetText::h_GetText("Browse"),
-      C_GtGetText::h_GetText("Browse for project path of this Data Block."));
+      "Browse",
+      "Browse for project path of this Data Block.");
    this->mpc_Ui->pc_PushButtonOutputFile->SetToolTipInformation(
-      C_GtGetText::h_GetText("Browse"),
-      C_GtGetText::h_GetText("Browse for output file of this Data Block."));
+      "Browse",
+      "Browse for output file of this Data Block.");
    this->mpc_Ui->pc_PushButtonCodeGenerate->SetToolTipInformation(
-      C_GtGetText::h_GetText("Browse"),
-      C_GtGetText::h_GetText("Browse for location for openSYDE generated source code files."));
+      "Browse",
+      "Browse for location for openSYDE generated source code files.");
    this->mpc_Ui->pc_PushButtonFileGenerate->SetToolTipInformation(
-      C_GtGetText::h_GetText("Browse"),
-      C_GtGetText::h_GetText("Browse for location for openSYDE generated parameter set image files."));
+      "Browse",
+      "Browse for location for openSYDE generated parameter set image files.");
    this->mpc_Ui->pc_PushButtonCodeGenerator->SetToolTipInformation(
-      C_GtGetText::h_GetText("Browse"),
-      C_GtGetText::h_GetText("Browse for file generator of this Data Block."));
+      "Browse",
+      "Browse for file generator of this Data Block.");
    this->mpc_Ui->pc_PushButtonIDE->SetToolTipInformation(
-      C_GtGetText::h_GetText("Browse"),
-      C_GtGetText::h_GetText("Browse for IDE executable."));
+      "Browse",
+      "Browse for IDE executable.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -578,14 +575,14 @@ void C_SdNdeDbProperties::m_OkClicked(void)
    else
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-      const QString c_Heading = C_GtGetText::h_GetText("Data Block Properties");
+      const QString c_Heading = "Data Block Properties";
       const QString c_MessageText =
-         C_GtGetText::h_GetText("Invalid content detected. For more information see details.");
+         "Invalid content detected. For more information see details.";
       QString c_Details = "";
       if (q_NameIsValid == false)
       {
          c_Details +=
-            static_cast<QString>(C_GtGetText::h_GetText("Name \"%1\" is invalid: ")).arg(
+            static_cast<QString>("Name \"%1\" is invalid: ").arg(
                this->mpc_Ui->pc_LineEditName->text());
          c_Details += "\n";
          c_Details += c_ErrorName;
@@ -593,14 +590,14 @@ void C_SdNdeDbProperties::m_OkClicked(void)
       }
       if (q_IdIsValid == false)
       {
-         c_Details += C_GtGetText::h_GetText("Process ID is already used. ");
+         c_Details += "Process ID is already used. ";
          c_Details += "\n";
          c_Details += c_ErrorId;
          c_Details += "\n\n";
       }
       if (q_PathsAreValid == false)
       {
-         c_Details += C_GtGetText::h_GetText("Invalid paths (e.g. containing invalid characters):\n");
+         c_Details += "Invalid paths (e.g. containing invalid characters):\n";
          c_Details += c_ErrorPaths;
       }
 
@@ -662,12 +659,12 @@ QString C_SdNdeDbProperties::m_CheckName() const
 
       if (q_DuplicateNameError == true)
       {
-         c_Return += C_GtGetText::h_GetText("Name is already in use.");
+         c_Return += "Name is already in use.";
       }
       if (q_InvalidNameError == true)
       {
          c_Return +=
-            C_GtGetText::h_GetText("Name is empty or contains invalid characters.");
+            "Name is empty or contains invalid characters.";
       }
    }
 
@@ -731,7 +728,7 @@ QString C_SdNdeDbProperties::m_CheckId(void) const
             c_Ids +=
                QString::number(c_UsedProcessIds[static_cast<std::vector<uint32_t>::size_type>(c_UsedProcessIds.size() -
                                                                                               1UL)]);
-            c_Return += static_cast<QString>(C_GtGetText::h_GetText("Already used Process IDs: %1")).arg(c_Ids);
+            c_Return += static_cast<QString>("Already used Process IDs: %1").arg(c_Ids);
          }
       }
    }
@@ -765,7 +762,7 @@ QString C_SdNdeDbProperties::m_CheckPaths(void) const
        (pc_Node->c_Properties.q_XappSupport == true) &&
        (this->mpc_Ui->pc_LineEditCodeGenerate->GetPath().isEmpty() == true))
    {
-      c_Return += C_GtGetText::h_GetText("Generation directory path must not be empty.\n");
+      c_Return += "Generation directory path must not be empty.\n";
    }
 
    // PSI File Generation Directory
@@ -774,7 +771,7 @@ QString C_SdNdeDbProperties::m_CheckPaths(void) const
    if ((this->me_Type == C_OscNodeApplication::ePARAMETER_SET_HALC) &&
        (this->mpc_Ui->pc_LineEditFileGenerate->GetPath().isEmpty() == true))
    {
-      c_Return += C_GtGetText::h_GetText("Generation directory path must not be empty.\n");
+      c_Return += "Generation directory path must not be empty.\n";
    }
 
    // Generator
@@ -815,7 +812,7 @@ QString C_SdNdeDbProperties::m_CheckPath(const QString & orc_Path) const
          c_Return = orc_Path;
          if (orc_Path != c_ResolvedPath)
          {
-            c_Return += C_GtGetText::h_GetText(" (resolved: ") + c_ResolvedPath + ")";
+            c_Return += " (resolved: " + c_ResolvedPath + ")";
          }
          c_Return += "\n";
       }
@@ -997,21 +994,20 @@ void C_SdNdeDbProperties::m_LoadData(void)
 
             if ((q_ProgrammingSupport == true) && (q_XappSupport == true))
             {
-               this->mpc_Ui->pc_CheckBoxFileGen->setText(C_GtGetText::h_GetText(
-                                                            "File Generation (X.App Configuration)"));
+               this->mpc_Ui->pc_CheckBoxFileGen->setText("File Generation (X.App Configuration)");
             }
             else if ((q_ProgrammingSupport == true) && (!q_XappSupport == true))
             {
-               this->mpc_Ui->pc_CheckBoxFileGen->setText(C_GtGetText::h_GetText("File Generation (Source Code)"));
+               this->mpc_Ui->pc_CheckBoxFileGen->setText("File Generation (Source Code)");
             }
             else
             {
-               this->mpc_Ui->pc_CheckBoxFileGen->setText(C_GtGetText::h_GetText("File Generation (Parameter Set Image)"));
+               this->mpc_Ui->pc_CheckBoxFileGen->setText("File Generation (Parameter Set Image)");
             }
          }
          else
          {
-            this->mpc_Ui->pc_CheckBoxFileGen->setText(C_GtGetText::h_GetText("File Generation"));
+            this->mpc_Ui->pc_CheckBoxFileGen->setText("File Generation");
          }
       }
 
@@ -1425,7 +1421,7 @@ void C_SdNdeDbProperties::m_OnClickProject(void)
       this->m_GetDialogPath(C_PuiUtil::h_GetResolvedAbsPathFromProject(this->mpc_Ui->pc_LineEditProject->GetPath()));
 
    const QString c_Path =
-      QFileDialog::getExistingDirectory(this, C_GtGetText::h_GetText("Select Target Project Location"),
+      QFileDialog::getExistingDirectory(this, "Select Target Project Location",
                                         c_FolderName, QFileDialog::ShowDirsOnly);
 
    this->m_AskUserToSaveRelativePath(c_Path,
@@ -1463,11 +1459,11 @@ void C_SdNdeDbProperties::m_OnClickOutput(void)
       C_PuiUtil::h_GetResolvedAbsPathFromProject(this->mpc_Ui->pc_LineEditProject->GetPath());
    const QString c_FolderName = this->m_GetDialogPath(
       C_PuiUtil::h_GetResolvedAbsPathFromDbProject(c_ProjectPath, this->mpc_Ui->pc_LineEditOutputFile->GetPath()));
-   const QString c_FilterName = static_cast<QString>(C_GtGetText::h_GetText("HEX file (*.hex);;Others (*.*)"));
+   const QString c_FilterName = static_cast<QString>("HEX file (*.hex);;Others (*.*)");
 
    // Do not use QFileDialog::getOpenFileName because it does not support default suffix
    // File path check is done by h_AskUserToSaveRelativePath(), so no need to use C_OgeWiUtil::h_GetOpenFileName()
-   QFileDialog c_Dialog(this,  C_GtGetText::h_GetText("Select Output File"), c_FolderName, c_FilterName);
+   QFileDialog c_Dialog(this,  "Select Output File", c_FolderName, c_FilterName);
 
    c_Dialog.setDefaultSuffix("hex");
 
@@ -1506,10 +1502,10 @@ void C_SdNdeDbProperties::m_OnClickGenerator(void)
       C_PuiUtil::h_GetResolvedAbsPathFromExe(this->mpc_Ui->pc_LineEditCodeGenerator->GetPath(), c_ProjectPath);
    // if generator line edit is empty this results in executable path - we use this as feature
 
-   const QString c_FilterName = static_cast<QString>(C_GtGetText::h_GetText("Executable (*.exe *.bat);;Others (*.*)"));
+   const QString c_FilterName = static_cast<QString>("Executable (*.exe *.bat);;Others (*.*)");
 
    // File path check is done by h_AskUserToSaveRelativePath(), so no need to use C_OgeWiUtil::h_GetOpenFileName()
-   const QString c_FilePath = QFileDialog::getOpenFileName(this, C_GtGetText::h_GetText("Select Generator"),
+   const QString c_FilePath = QFileDialog::getOpenFileName(this, "Select Generator",
                                                            c_FolderName, c_FilterName, NULL);
 
    this->m_AskUserToSaveRelativePath(c_FilePath, C_Uti::h_GetExePath(), this->mpc_Ui->pc_LineEditCodeGenerator);
@@ -1537,7 +1533,7 @@ void C_SdNdeDbProperties::m_OnClickCodeGeneration(void)
       C_PuiUtil::h_GetResolvedAbsPathFromDbProject(c_ProjectPath, this->mpc_Ui->pc_LineEditCodeGenerate->GetPath()));
 
    const QString c_Path =
-      QFileDialog::getExistingDirectory(this, C_GtGetText::h_GetText("Select Directory for Generated Files"),
+      QFileDialog::getExistingDirectory(this, "Select Directory for Generated Files",
                                         c_FolderName, QFileDialog::ShowDirsOnly);
 
    this->m_AskUserToSaveRelativePath(c_Path, c_ProjectPath, this->mpc_Ui->pc_LineEditCodeGenerate);
@@ -1587,7 +1583,7 @@ void C_SdNdeDbProperties::m_OnClickFileGeneration(void)
       C_PuiUtil::h_GetResolvedAbsPathFromProject(this->mpc_Ui->pc_LineEditFileGenerate->GetPath()));
 
    const QString c_Path =
-      QFileDialog::getExistingDirectory(this, C_GtGetText::h_GetText("Select Directory for Generated Files"),
+      QFileDialog::getExistingDirectory(this, "Select Directory for Generated Files",
                                         c_FolderName, QFileDialog::ShowDirsOnly);
 
    this->m_AskUserToSaveRelativePath(c_Path,
@@ -1627,7 +1623,7 @@ void C_SdNdeDbProperties::m_OnClickIde(void)
 {
    const QString c_ProjectPath =
       C_PuiUtil::h_GetResolvedAbsPathFromProject(this->mpc_Ui->pc_LineEditProject->GetPath());
-   const QString c_FilterName = static_cast<QString>(C_GtGetText::h_GetText("Executable (*.exe);;Others (*.*)"));
+   const QString c_FilterName = static_cast<QString>("Executable (*.exe);;Others (*.*)");
    QString c_IdeCall =
       static_cast<QString>(C_PuiUtil::h_ResolvePlaceholderVariables(this->mpc_Ui->pc_LineEditIDE->text(),
                                                                     c_ProjectPath));
@@ -1655,7 +1651,7 @@ void C_SdNdeDbProperties::m_OnClickIde(void)
 
    c_FolderName = this->m_GetDialogPath(c_IdeCall);
    // File path check is done by h_AskUserToSaveRelativePath(), so no need to use C_OgeWiUtil::h_GetOpenFileName()
-   c_Path = QFileDialog::getOpenFileName(this, C_GtGetText::h_GetText("Select IDE Executable"), c_FolderName,
+   c_Path = QFileDialog::getOpenFileName(this, "Select IDE Executable", c_FolderName,
                                          c_FilterName, NULL);
 
    if (c_Path != "")
@@ -1683,13 +1679,13 @@ void C_SdNdeDbProperties::m_OnNameEdited(void) const
 
    if (q_Error)
    {
-      this->mpc_Ui->pc_LineEditName->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                           C_GtGetText::h_GetText(""),
+      this->mpc_Ui->pc_LineEditName->SetToolTipInformation("",
+                                                           "",
                                                            C_NagToolTip::eDEFAULT);
    }
    else
    {
-      const QString c_Heading = C_GtGetText::h_GetText("Data Block Name");
+      const QString c_Heading = "Data Block Name";
       this->mpc_Ui->pc_LineEditName->SetToolTipInformation(c_Heading, c_ErrorText, C_NagToolTip::eERROR);
    }
 }
@@ -1742,8 +1738,7 @@ void C_SdNdeDbProperties::m_CleanUpDataPoolWidgets(void)
 void C_SdNdeDbProperties::m_UpdateOwnedDpsCount(void) const
 {
    //update owned dp count
-   this->mpc_Ui->pc_LabelHeadingDatapools->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                           "Owned Datapools (%1)")).arg(
+   this->mpc_Ui->pc_LabelHeadingDatapools->setText(static_cast<QString>("Owned Datapools (%1)").arg(
                                                       this->mc_SelectedDataPools.size()));
 }
 
@@ -1790,10 +1785,10 @@ void C_SdNdeDbProperties::m_UpdatePathsRelativeToGeneratedDir(void) const
       C_PuiUtil::h_GetResolvedAbsPathFromProject(this->mpc_Ui->pc_LineEditFileGenerate->GetPath());
 
    this->mpc_Ui->pc_LabelSafeFileValue->
-   SetToolTipInformation(C_GtGetText::h_GetText("Safe File Value"),
+   SetToolTipInformation("Safe File Value",
                          C_Uti::h_ConcatPathIfNecessary(c_ProjectPath, this->mpc_Ui->pc_LabelSafeFileValue->text()));
    this->mpc_Ui->pc_LabelNonSafeFileValue->
-   SetToolTipInformation(C_GtGetText::h_GetText("Non Safe File Value"),
+   SetToolTipInformation("Non Safe File Value",
                          C_Uti::h_ConcatPathIfNecessary(c_ProjectPath, this->mpc_Ui->pc_LabelNonSafeFileValue->text()));
 }
 

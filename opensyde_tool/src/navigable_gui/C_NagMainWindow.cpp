@@ -35,7 +35,6 @@
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscNode.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_PopErrorHandling.hpp"
@@ -444,11 +443,11 @@ void C_NagMainWindow::keyPressEvent(QKeyEvent * const opc_KeyEvent)
          {
          case ms32_SUBMODE_SYSDEF_NODEEDIT:
             //One higher
-            m_ChangeMode(ms32_MODE_SYSDEF, ms32_SUBMODE_SYSDEF_TOPOLOGY, 0, C_GtGetText::h_GetText("NETWORK TOPOLOGY"));
+            m_ChangeMode(ms32_MODE_SYSDEF, ms32_SUBMODE_SYSDEF_TOPOLOGY, 0, "NETWORK TOPOLOGY");
             break;
          case ms32_SUBMODE_SYSDEF_BUSEDIT:
             //One higher
-            m_ChangeMode(ms32_MODE_SYSDEF, ms32_SUBMODE_SYSDEF_TOPOLOGY, 0, C_GtGetText::h_GetText("NETWORK TOPOLOGY"));
+            m_ChangeMode(ms32_MODE_SYSDEF, ms32_SUBMODE_SYSDEF_TOPOLOGY, 0, "NETWORK TOPOLOGY");
             break;
          case ms32_SUBMODE_SYSDEF_TOPOLOGY:
             //One higher
@@ -838,7 +837,7 @@ void C_NagMainWindow::mh_GetHeadingNames(const int32_t os32_Mode, const int32_t 
          {
             orc_SubSubMode = "Node";
          }
-         orc_SubMode = C_GtGetText::h_GetText("NETWORK TOPOLOGY");
+         orc_SubMode = "NETWORK TOPOLOGY";
       }
       else if (ors32_SubMode == ms32_SUBMODE_SYSDEF_BUSEDIT)
       {
@@ -850,13 +849,13 @@ void C_NagMainWindow::mh_GetHeadingNames(const int32_t os32_Mode, const int32_t 
          }
          else
          {
-            orc_SubSubMode = C_GtGetText::h_GetText("NETWORK TOPOLOGY");
+            orc_SubSubMode = "NETWORK TOPOLOGY";
          }
-         orc_SubMode = C_GtGetText::h_GetText("NETWORK TOPOLOGY");
+         orc_SubMode = "NETWORK TOPOLOGY";
       }
       else
       {
-         orc_SubMode = C_GtGetText::h_GetText("NETWORK TOPOLOGY");
+         orc_SubMode = "NETWORK TOPOLOGY";
          orc_SubSubMode = "";
       }
    }
@@ -915,8 +914,7 @@ void C_NagMainWindow::m_ShowSysDefItem(const int32_t os32_SubMode, const uint32_
       }
       else
       {
-         this->mpc_UseCaseWidget->UpdateUseCaseWidget(os32_SubMode, C_GtGetText::h_GetText(
-                                                         "NETWORK TOPOLOGY"), orc_Name, false);
+         this->mpc_UseCaseWidget->UpdateUseCaseWidget(os32_SubMode, "NETWORK TOPOLOGY", orc_Name, false);
       }
    }
 

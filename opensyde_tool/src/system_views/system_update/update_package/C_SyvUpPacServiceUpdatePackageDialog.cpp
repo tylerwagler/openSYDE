@@ -15,7 +15,6 @@
 #include "C_SyvUpPacServiceUpdatePackageDialog.hpp"
 #include "ui_C_SyvUpPacServiceUpdatePackageDialog.h"
 
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -92,35 +91,30 @@ C_SyvUpPacServiceUpdatePackageDialog::~C_SyvUpPacServiceUpdatePackageDialog()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacServiceUpdatePackageDialog::InitStaticNames() const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Update Package "));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Create Service Update Package"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Continue"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_RbArchiveFile->setText((C_GtGetText::h_GetText("Archive File (*.syde_sup)")));
-   this->mpc_Ui->pc_RbSecureArchive->setText((C_GtGetText::h_GetText("Secure Archive File (*.syde_sup)")));
-   this->mpc_Ui->pc_RbUnzip->setText((C_GtGetText::h_GetText("Un-zipped to a Directory")));
-   this->mpc_Ui->pc_LabelType->setText((C_GtGetText::h_GetText("Select Type")));
-   this->mpc_Ui->pc_LabFileVersion->setText((C_GtGetText::h_GetText("File Version")));
+   this->mrc_ParentDialog.SetTitle("Update Package ");
+   this->mrc_ParentDialog.SetSubTitle("Create Service Update Package");
+   this->mpc_Ui->pc_PushButtonOk->setText("Continue");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_RbArchiveFile->setText(("Archive File (*.syde_sup)"));
+   this->mpc_Ui->pc_RbSecureArchive->setText(("Secure Archive File (*.syde_sup)"));
+   this->mpc_Ui->pc_RbUnzip->setText(("Un-zipped to a Directory"));
+   this->mpc_Ui->pc_LabelType->setText(("Select Type"));
+   this->mpc_Ui->pc_LabFileVersion->setText(("File Version"));
 
    // Tool tips
-   this->mpc_Ui->pc_RbArchiveFile->SetToolTipInformation(C_GtGetText::h_GetText("Archive File"),
-                                                         C_GtGetText::h_GetText(
-                                                            "Saves the Service Update Package as archive, here the files are saved as a zipped archive with the file extension .syde_sup."));
-   this->mpc_Ui->pc_LabFileVersion->SetToolTipInformation(C_GtGetText::h_GetText("*.syde_sup File Version"),
-                                                          C_GtGetText::h_GetText(
-                                                             "Defines the file version of the .syde_sup package. \n"
+   this->mpc_Ui->pc_RbArchiveFile->SetToolTipInformation("Archive File",
+                                                         "Saves the Service Update Package as archive, here the files are saved as a zipped archive with the file extension .syde_sup.");
+   this->mpc_Ui->pc_LabFileVersion->SetToolTipInformation("*.syde_sup File Version",
+                                                          "Defines the file version of the .syde_sup package. \n"
                                                              "Version 1: use this version for compatibility with older SYDEsup tools, which do not support Version 2.\n"
-                                                             "Version 2: Default version to use. Supports the complete feature set."));
-   this->mpc_Ui->pc_RbUnzip->SetToolTipInformation(C_GtGetText::h_GetText("Directory"),
-                                                   C_GtGetText::h_GetText(
-                                                      "Saves the Service Update Package as a directory, in which all files are present individually. \n"
+                                                             "Version 2: Default version to use. Supports the complete feature set.");
+   this->mpc_Ui->pc_RbUnzip->SetToolTipInformation("Directory",
+                                                   "Saves the Service Update Package as a directory, in which all files are present individually. \n"
                                                       "Here, individual files such as HEX-files can be easily exchanged. Individual files can still be edited directly, "
-                                                      "e.g. changing node IDs, without having to generate a new Service Update Package via the openSYDE PC Tool."));
-   this->mpc_Ui->pc_RbSecureArchive->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                              "Secure Archive File"),
-                                                           C_GtGetText::h_GetText(
-                                                              "Saves the Service Update Package as a signed archive .syde_sup. "
-                                                              "\nThis option allows the user to sign the archive with a private signature key and also encrypt the archive content with a password."));
+                                                      "e.g. changing node IDs, without having to generate a new Service Update Package via the openSYDE PC Tool.");
+   this->mpc_Ui->pc_RbSecureArchive->SetToolTipInformation("Secure Archive File",
+                                                           "Saves the Service Update Package as a signed archive .syde_sup. "
+                                                              "\nThis option allows the user to sign the archive with a private signature key and also encrypt the archive content with a password.");
 }
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get the selected sydesup version

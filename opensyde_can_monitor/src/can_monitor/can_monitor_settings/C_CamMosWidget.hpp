@@ -13,6 +13,7 @@
 #define C_CAMMOSWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QCheckBox>
 #include "C_CamOgeWiSettingsBase.hpp"
 #include "C_CamProFilterData.hpp"
 #include "C_CamMosSectionPopup.hpp"
@@ -80,10 +81,10 @@ Q_SIGNALS:
    void SigCanDllConfigured(void);
    void SigNotifyMissingDataBase(const QString & orc_Path);
    void SigEmitAddFilterToChildWidget(const QList<int32_t> oc_CanMsgId, const QList<uint8_t> oc_CanMsgXtd);
-   void SigSendCanMsgDroppedToParentWidget(void);
+    void SigSendCanMsgDroppedToParentWidget(void);
 
 private:
-   Ui::C_CamMosWidget * mpc_Ui;
+    Ui::C_CamMosWidget * mpc_Ui;
 
    stw::opensyde_gui::C_CamMosSectionPopup * mpc_PopupDatabase;
    stw::opensyde_gui::C_CamMosSectionPopup * mpc_PopupDllConfig;

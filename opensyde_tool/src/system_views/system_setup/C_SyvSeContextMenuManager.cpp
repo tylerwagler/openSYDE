@@ -14,7 +14,6 @@
 
 #include "gitypes.hpp"
 #include "C_SyvSeContextMenuManager.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -40,11 +39,9 @@ C_SyvSeContextMenuManager::C_SyvSeContextMenuManager() :
    C_SebTopologyBaseContextMenuManager()
 {
    // insert actions
-   this->mpc_ActionShowNodeInformation = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                           "Show Node Information"), this,
+   this->mpc_ActionShowNodeInformation = this->mc_ContextMenu.addAction("Show Node Information", this,
                                                                         &C_SyvSeContextMenuManager::m_ShowNodeInformation);
-   this->mpc_ActionShowCanConfiguration = this->mc_ContextMenu.addAction(C_GtGetText::h_GetText(
-                                                                            "Configure PC CAN Interface"), this,
+   this->mpc_ActionShowCanConfiguration = this->mc_ContextMenu.addAction("Configure PC CAN Interface", this,
                                                                          &C_SyvSeContextMenuManager::m_ShowCanConfiguration);
 }
 

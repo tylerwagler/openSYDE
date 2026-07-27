@@ -16,7 +16,6 @@
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 
@@ -1528,9 +1527,9 @@ int32_t C_PuiSdHandlerNodeLogic::AddAutoGenCommDataPool(const uint32_t & oru32_N
    // add the new datapool
    c_NewDatapool.e_Type = C_OscNodeDataPool::eCOM;
 
-   c_Comment = C_GtGetText::h_GetText("Automatically generated Datapool for ");
+   c_Comment = "Automatically generated Datapool for ";
    c_Comment += c_ProtocolName;
-   c_Comment += C_GtGetText::h_GetText(" CAN communication");
+   c_Comment += " CAN communication";
 
    // special case layer 2 -> no spaces and no underscore number at the end
    c_ProtocolName = C_PuiSdUtil::h_ConvertProtocolTypeToDatapoolNameString(ore_ComProtocolType);

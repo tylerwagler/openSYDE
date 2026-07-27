@@ -19,7 +19,6 @@
 #include <QPointer>
 
 #include "C_SdNdeDpListTableView.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
@@ -319,7 +318,7 @@ void C_SdNdeDpListTableView::m_EditCommentInEditor()
    const QModelIndex c_NameIndex = this->model()->index(s32_SelectedRow, 3);
    const QModelIndex c_CommentIndex = this->model()->index(s32_SelectedRow, 4);
    const QString c_Text =
-      static_cast<QString>(C_GtGetText::h_GetText("Data Element \"%1\" ")).arg(this->model()->data(
+      static_cast<QString>("Data Element \"%1\" ").arg(this->model()->data(
                                                                                   c_NameIndex).toString());
 
    pc_ArrayEditWidget->SetTitle(c_Text);
@@ -372,9 +371,9 @@ void C_SdNdeDpListTableView::Insert(const bool & orq_SetFocus)
       }
       else
       {
-         c_Text = C_GtGetText::h_GetText("Data elements");
+         c_Text = "Data elements";
       }
-      c_MessageBox.SetDescription(static_cast<QString>(C_GtGetText::h_GetText("Only %1 %2 allowed per list.")).arg(
+      c_MessageBox.SetDescription(static_cast<QString>("Only %1 %2 allowed per list.").arg(
                                      C_OscNode::hu32_MAX_NUMBER_OF_ELEMENTS_PER_LIST).arg(c_Text));
       c_MessageBox.SetCustomMinHeight(180, 180);
       c_MessageBox.Execute();
@@ -1003,36 +1002,30 @@ void C_SdNdeDpListTableView::m_SetupContextMenu(void)
 
    m_CheckContextMenuText();
 
-   this->mpc_ActionCut = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                             "Cut"), this, &C_SdNdeDpListTableView::Cut,
+   this->mpc_ActionCut = this->mpc_ContextMenu->addAction("Cut", this, &C_SdNdeDpListTableView::Cut,
                                                           static_cast<int32_t>(Qt::CTRL) +
                                                           static_cast<int32_t>(Qt::Key_X));
-   this->mpc_ActionCopy = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                              "Copy"), this, &C_SdNdeDpListTableView::Copy,
+   this->mpc_ActionCopy = this->mpc_ContextMenu->addAction("Copy", this, &C_SdNdeDpListTableView::Copy,
                                                            static_cast<int32_t>(Qt::CTRL) +
                                                            static_cast<int32_t>(Qt::Key_C));
-   this->mpc_ActionPaste = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                               "Paste"), this, &C_SdNdeDpListTableView::Paste,
+   this->mpc_ActionPaste = this->mpc_ContextMenu->addAction("Paste", this, &C_SdNdeDpListTableView::Paste,
                                                             static_cast<int32_t>(Qt::CTRL) +
                                                             static_cast<int32_t>(Qt::Key_V));
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ActionMoveUp = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                "Move Up"), this,
+   this->mpc_ActionMoveUp = this->mpc_ContextMenu->addAction("Move Up", this,
                                                              &C_SdNdeDpListTableView::DoMoveUp,
                                                              static_cast<int32_t>(Qt::CTRL) +
                                                              static_cast<int32_t>(Qt::Key_Up));
-   this->mpc_ActionMoveDown = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                  "Move Down"), this,
+   this->mpc_ActionMoveDown = this->mpc_ContextMenu->addAction("Move Down", this,
                                                                &C_SdNdeDpListTableView::DoMoveDown,
                                                                static_cast<int32_t>(Qt::CTRL) +
                                                                static_cast<int32_t>(Qt::Key_Down));
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ActionDelete = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                "Delete"), this, &C_SdNdeDpListTableView::Delete,
+   this->mpc_ActionDelete = this->mpc_ContextMenu->addAction("Delete", this, &C_SdNdeDpListTableView::Delete,
                                                              static_cast<int32_t>(Qt::Key_Delete));
 
    this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -1334,10 +1327,10 @@ void C_SdNdeDpListTableView::m_CheckContextMenuText(void)
       }
       else
       {
-         c_Text = C_GtGetText::h_GetText("Data Element");
+         c_Text = "Data Element";
       }
 
-      this->mpc_ActionAdd->setText(C_GtGetText::h_GetText("Add new ") + c_Text);
+      this->mpc_ActionAdd->setText("Add new " + c_Text);
    }
 }
 

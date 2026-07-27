@@ -21,7 +21,6 @@
 #include "stwerrors.hpp"
 #include "C_CieUtil.hpp"
 #include "C_PuiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiProject.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_UsHandler.hpp"
@@ -102,17 +101,16 @@ C_SdNdeCoDeviceEdsWidget::~C_SdNdeCoDeviceEdsWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoDeviceEdsWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_PubUpdate->setText(C_GtGetText::h_GetText("Update"));
-   this->mpc_Ui->pc_PubUpdate->SetToolTipInformation(C_GtGetText::h_GetText("Update EDS File"),
-                                                     C_GtGetText::h_GetText(
-                                                        "Update the current EDS file to a new version by "
-                                                        "selecting a new EDS file *.eds."));
-   this->mpc_Ui->pc_LabFileTitle->setText(C_GtGetText::h_GetText("EDS File:"));
-   this->mpc_Ui->pc_LabFileTitle->SetToolTipInformation(C_GtGetText::h_GetText("EDS File"),
-                                                        C_GtGetText::h_GetText("The EDS file *.eds includes the "
-                                                                               "node's messages and signals."));
-   this->mpc_Ui->pc_LabelDetails->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_TedHtmlReport->setPlainText(C_GtGetText::h_GetText("<EDS file description>"));
+   this->mpc_Ui->pc_PubUpdate->setText("Update");
+   this->mpc_Ui->pc_PubUpdate->SetToolTipInformation("Update EDS File",
+                                                     "Update the current EDS file to a new version by "
+                                                        "selecting a new EDS file *.eds.");
+   this->mpc_Ui->pc_LabFileTitle->setText("EDS File:");
+   this->mpc_Ui->pc_LabFileTitle->SetToolTipInformation("EDS File",
+                                                        "The EDS file *.eds includes the "
+                                                                               "node's messages and signals.");
+   this->mpc_Ui->pc_LabelDetails->setText("Details");
+   this->mpc_Ui->pc_TedHtmlReport->setPlainText("<EDS file description>");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -236,7 +234,7 @@ void C_SdNdeCoDeviceEdsWidget::m_SetDetails(void)
       const C_OscCanOpenObjectDictionary c_CanOpenObjDictionary = pc_CanOpenDeviceInfo->GetEdsFileContent();
 
       this->mpc_Ui->pc_LabFileCurrent->setText(
-         C_GtGetText::h_GetText(pc_CanOpenDeviceInfo->c_OriginalEdsFileName.AsStdString()->c_str()));
+         pc_CanOpenDeviceInfo->c_OriginalEdsFileName.AsStdString()->c_str());
 
       if (C_SdUtil::h_GetEdsFileDetails(c_CanOpenObjDictionary) != "")
       {
@@ -244,11 +242,11 @@ void C_SdNdeCoDeviceEdsWidget::m_SetDetails(void)
       }
       else
       {
-         this->mpc_Ui->pc_TedHtmlReport->setPlainText(C_GtGetText::h_GetText("<No data>"));
+         this->mpc_Ui->pc_TedHtmlReport->setPlainText("<No data>");
       }
    }
    else
    {
-      this->mpc_Ui->pc_TedHtmlReport->setPlainText(C_GtGetText::h_GetText("<EDS file description>"));
+      this->mpc_Ui->pc_TedHtmlReport->setPlainText("<EDS file description>");
    }
 }

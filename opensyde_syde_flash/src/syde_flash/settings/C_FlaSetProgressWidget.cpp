@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 
 #include "C_FlaSetProgressWidget.hpp"
@@ -55,7 +54,7 @@ C_FlaSetProgressWidget::C_FlaSetProgressWidget(QWidget * const opc_Parent) :
    //Progress initial text
    this->mpc_Ui->pc_TextBrowser->setReadOnly(true);
    // initialize title widget
-   this->mpc_Ui->pc_WiHeader->SetTitle(C_GtGetText::h_GetText("Progress Log"));
+   this->mpc_Ui->pc_WiHeader->SetTitle("Progress Log");
    this->mpc_Ui->pc_WiHeader->SetIcon("://images/IconProgressLog.svg");
    this->mpc_Ui->pc_WiHeader->SetToggle(false);
    connect(this->mpc_Ui->pc_WiHeader, &C_CamOgeWiSettingSubSection::SigExpandSection,

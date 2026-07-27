@@ -17,7 +17,6 @@
 #include <QMimeData>
 #include <QDrag>
 #include "C_SdNdeDpListDataSetView.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
@@ -108,7 +107,7 @@ C_SdNdeDpListDataSetView::C_SdNdeDpListDataSetView(QWidget * const opc_Parent) :
       this->mpc_LabelCorner = new QLabel(this);
       this->mpc_LabelCorner->setAlignment(Qt::AlignCenter);
       this->mpc_LabelCorner->setAttribute(Qt::WA_TransparentForMouseEvents);
-      this->mpc_LabelCorner->setText(C_GtGetText::h_GetText("Dataset #"));
+      this->mpc_LabelCorner->setText("Dataset #");
 
       connect(
          this->verticalHeader(), &QHeaderView::geometriesChanged, this,

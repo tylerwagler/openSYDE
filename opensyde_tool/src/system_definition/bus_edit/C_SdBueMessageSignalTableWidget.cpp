@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 #include "C_SdBueMessageSignalTableWidget.hpp"
 #include "ui_C_SdBueMessageSignalTableWidget.h"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -109,11 +108,11 @@ void C_SdBueMessageSignalTableWidget::UpdateData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageSignalTableWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_RadioButtonMessages->setText(C_GtGetText::h_GetText("Message View"));
-   this->mpc_Ui->pc_RadioButtonSignals->setText(C_GtGetText::h_GetText("Signal View"));
+   this->mpc_Ui->pc_RadioButtonMessages->setText("Message View");
+   this->mpc_Ui->pc_RadioButtonSignals->setText("Signal View");
 
-   this->mpc_Ui->pc_LabelNoMessages->setText(C_GtGetText::h_GetText("No messages declared"));
-   this->mpc_Ui->pc_LabelNoSignals->setText(C_GtGetText::h_GetText("No signals declared"));
+   this->mpc_Ui->pc_LabelNoMessages->setText("No messages declared");
+   this->mpc_Ui->pc_LabelNoSignals->setText("No signals declared");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

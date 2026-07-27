@@ -18,7 +18,6 @@
 #include "stwtypes.hpp"
 #include "C_GiBiBoundary.hpp"
 #include "C_OgePopUpDialog.hpp"
-#include "C_GtGetText.hpp"
 #include "C_GiSyBaseWidget.hpp"
 #include "C_GiSyBoundaryWidget.hpp"
 #include "C_PuiSdDataElement.hpp"
@@ -129,7 +128,7 @@ bool C_GiBiBoundary::OpenStyleDialog(void)
    QGraphicsView * const pc_View = this->scene()->views().at(0);
 
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(pc_View, pc_View);
-   C_GiSyBaseWidget * const pc_Dialog = new C_GiSyBaseWidget(*c_New, C_GtGetText::h_GetText("Boundary"));
+   C_GiSyBaseWidget * const pc_Dialog = new C_GiSyBaseWidget(*c_New, "Boundary");
    C_GiSyBoundaryWidget * const pc_SettingsWidget = new C_GiSyBoundaryWidget(*pc_Dialog);
 
    const QSize c_SIZE(880, 506);

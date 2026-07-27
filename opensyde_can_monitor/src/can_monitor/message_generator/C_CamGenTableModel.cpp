@@ -18,7 +18,6 @@
 #include "TglUtils.hpp"
 #include "constants.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "cam_constants.hpp"
 #include "C_CamGenSigUtil.hpp"
 #include "C_CamProHandler.hpp"
@@ -26,6 +25,8 @@
 #include "C_CamProClipBoardHelper.hpp"
 #include "C_CamDbHandler.hpp"
 #include "C_OscCanProtocol.hpp"
+#include "C_OscNodeDataPoolContent.hpp"
+#include "C_SdNdeDpContentUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -53,7 +54,8 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_CamGenTableModel::C_CamGenTableModel(QObject * const opc_Parent) :
-   C_TblModelAction(opc_Parent)
+   C_TblModelAction(opc_Parent),
+   mu16_DlcMaximum(8U)
 {
    connect(C_CamProHandler::h_GetInstance(), &C_CamProHandler::SigNewConfiguration, this,
            &C_CamGenTableModel::ReloadAll);
@@ -128,6 +130,20 @@ void C_CamGenTableModel::TriggerMessageReload()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Set the maximum allowed DLC value
+
+   When CAN-TP is enabled, DLC can go up to 4095.
+   When disabled, DLC is limited to 8 (standard CAN).
+
+   \param[in]  ou16_Max  Maximum DLC value
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CamGenTableModel::SetDlcMaximum(const uint16_t ou16_Max)
+{
+   this->mu16_DlcMaximum = ou16_Max;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Request trigger of model function for update cyclic message
 
    Reason: have one central point for each check which has to be done when changing an existing message
@@ -166,41 +182,53 @@ QVariant C_CamGenTableModel::headerData(const int32_t os32_Section, const Qt::Or
          switch (e_Col)
          {
          case eRTR:
-            c_Header = C_GtGetText::h_GetText("RTR");
+            c_Header = "RTR";
             break;
          case eNAME:
-            c_Header = C_GtGetText::h_GetText("Name");
+            c_Header = "Name";
             break;
          case eID:
-            c_Header = C_GtGetText::h_GetText("ID");
+            c_Header = "ID";
             break;
-         case eDLC:
-            c_Header = C_GtGetText::h_GetText("DLC");
-            break;
-         case eDATA:
-            c_Header = C_GtGetText::h_GetText("Data");
+          case eDLC:
+             c_Header = "DLC";
+             break;
+          case ePROTOCOL:
+             c_Header = "Protocol";
+             break;
+          case eDATA:
+            c_Header = "Data";
             break;
          case eCYCLIC_TRIGGER:
-            c_Header = C_GtGetText::h_GetText("Cyclic");
+            c_Header = "Cyclic";
             break;
          case eCYCLIC_TIME:
-            c_Header = C_GtGetText::h_GetText("Cycle Time");
+            c_Header = "Cycle Time";
             break;
          case eMANUAL_TRIGGER:
-            c_Header = C_GtGetText::h_GetText("Manual Trigger");
+            c_Header = "Manual Trigger";
             break;
          case eXTD:
-            c_Header = C_GtGetText::h_GetText("XTD");
+            c_Header = "XTD";
             break;
          case eKEY:
-            c_Header = C_GtGetText::h_GetText("Key");
+            c_Header = "Key";
             break;
-         case eAUTO_SUPPORT:
-            c_Header = C_GtGetText::h_GetText("Auto Protocol");
-            break;
-         default:
-            tgl_assert(false);
-            break;
+          case eAUTO_SUPPORT:
+             c_Header = "Auto Protocol";
+             break;
+          case eUDS_SERVICE:
+             c_Header = "UDS Service";
+             break;
+          case eUDS_PARAM:
+             c_Header = "Param";
+             break;
+          case eUDS_DATA:
+             c_Header = "UDS Data";
+             break;
+          default:
+             tgl_assert(false);
+             break;
          }
          //Add spacing for sorting arrow
          c_Header += "   ";
@@ -211,41 +239,53 @@ QVariant C_CamGenTableModel::headerData(const int32_t os32_Section, const Qt::Or
          switch (e_Col)
          {
          case eRTR:
-            c_Retval = C_GtGetText::h_GetText("Remote Transmission Request");
+            c_Retval = "Remote Transmission Request";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eID:
-            c_Retval = C_GtGetText::h_GetText("Identifier");
+            c_Retval = "Identifier";
             break;
-         case eDLC:
-            c_Retval = C_GtGetText::h_GetText("Data Length Code");
-            break;
-         case eDATA:
-            c_Retval = C_GtGetText::h_GetText("Data");
+          case eDLC:
+             c_Retval = "Data Length Code";
+             break;
+          case ePROTOCOL:
+             c_Retval = "Protocol";
+             break;
+          case eDATA:
+            c_Retval = "Data";
             break;
          case eCYCLIC_TRIGGER:
-            c_Retval = C_GtGetText::h_GetText("Cyclic Trigger");
+            c_Retval = "Cyclic Trigger";
             break;
          case eCYCLIC_TIME:
-            c_Retval = C_GtGetText::h_GetText("Cycle Time");
+            c_Retval = "Cycle Time";
             break;
          case eMANUAL_TRIGGER:
-            c_Retval = C_GtGetText::h_GetText("Manual Trigger");
+            c_Retval = "Manual Trigger";
             break;
          case eXTD:
-            c_Retval = C_GtGetText::h_GetText("Extended");
+            c_Retval = "Extended";
             break;
          case eKEY:
-            c_Retval = C_GtGetText::h_GetText("Key");
+            c_Retval = "Key";
             break;
-         case eAUTO_SUPPORT:
-            c_Retval = C_GtGetText::h_GetText("Auto ECeS/ECoS Protocol Support");
-            break;
-         default:
-            tgl_assert(false);
-            break;
+          case eAUTO_SUPPORT:
+             c_Retval = "Auto ECeS/ECoS Protocol Support";
+             break;
+          case eUDS_SERVICE:
+             c_Retval = "UDS Service Identifier";
+             break;
+          case eUDS_PARAM:
+             c_Retval = "UDS Parameter (sub-function, session, DID, etc.)";
+             break;
+          case eUDS_DATA:
+             c_Retval = "Additional UDS data bytes";
+             break;
+          default:
+             tgl_assert(false);
+             break;
          }
       }
       else if (os32_Role == static_cast<int32_t>(Qt::TextAlignmentRole))
@@ -258,42 +298,45 @@ QVariant C_CamGenTableModel::headerData(const int32_t os32_Section, const Qt::Or
          switch (e_Col)
          {
          case eRTR:
-            c_Header = C_GtGetText::h_GetText("CAN message sent as remote transmission frame.");
+            c_Header = "CAN message sent as remote transmission frame.";
             break;
          case eNAME:
-            c_Header = C_GtGetText::h_GetText("Symbolic name of the CAN message.");
+            c_Header = "Symbolic name of the CAN message.";
             break;
          case eID:
-            c_Header = C_GtGetText::h_GetText("CAN identifier of the message.");
+            c_Header = "CAN identifier of the message.";
             break;
-         case eDLC:
-            c_Header = C_GtGetText::h_GetText("Number of data bytes in decimal representation.");
-            break;
-         case eDATA:
-            c_Header = C_GtGetText::h_GetText("CAN message data in bytes.");
+          case eDLC:
+             c_Header = "Number of data bytes in decimal representation.";
+             break;
+          case ePROTOCOL:
+             c_Header = "Transport protocol used when sending this message (CAN or CAN-TP).";
+             break;
+          case eDATA:
+            c_Header = "CAN message data in bytes.";
             break;
          case eCYCLIC_TRIGGER:
-            c_Header = C_GtGetText::h_GetText("Transmit this CAN message cyclically.");
+            c_Header = "Transmit this CAN message cyclically.";
             break;
          case eCYCLIC_TIME:
-            c_Header = C_GtGetText::h_GetText("CAN message cycle time in ms.");
+            c_Header = "CAN message cycle time in ms.";
             break;
          case eMANUAL_TRIGGER:
-            c_Header = C_GtGetText::h_GetText("Trigger the transmission of this CAN message manually.");
+            c_Header = "Trigger the transmission of this CAN message manually.";
             break;
          case eXTD:
-            c_Header = C_GtGetText::h_GetText("CAN message ID uses extended format.");
+            c_Header = "CAN message ID uses extended format.";
             break;
          case eKEY:
-            c_Header = C_GtGetText::h_GetText("Configure key for triggering transmission of message.");
+            c_Header = "Configure key for triggering transmission of message.";
             break;
          case eAUTO_SUPPORT:
-            c_Header = C_GtGetText::h_GetText("ECeS: When sending automatic calculation of the CRC and incrementing of "
+            c_Header = "ECeS: When sending automatic calculation of the CRC and incrementing of "
                                               "the block counter is applied.\n"
                                               "ECoS: When sending the inverted second frame will be sent automatically "
                                               "immediately after the first frame gets sent.\n\n"
                                               "Note: This option is only available for protocol messages "
-                                              "added from openSYDE *syde_sysdef database.");
+                                              "added from openSYDE *syde_sysdef database.";
             break;
          default:
             tgl_assert(false);
@@ -325,7 +368,7 @@ int32_t C_CamGenTableModel::columnCount(const QModelIndex & orc_Parent) const
    if (!orc_Parent.isValid())
    {
       //For table parent should always be invalid
-      s32_Retval = 11;
+      s32_Retval = 15;
    }
    return s32_Retval;
 }
@@ -371,10 +414,36 @@ QVariant C_CamGenTableModel::data(const QModelIndex & orc_Index, const int32_t o
                   c_Retval = mh_HandleHexValue(static_cast<uint64_t>(pc_Message->u32_Id), os32_Role);
                }
                break;
-            case eDLC:
-               c_Retval = static_cast<qulonglong>(pc_Message->u16_Dlc);
-               break;
-            case eDATA:
+             case eDLC:
+                c_Retval = static_cast<qulonglong>(pc_Message->u16_Dlc);
+                break;
+             case ePROTOCOL:
+                if (os32_Role == ms32_USER_ROLE_SORT)
+                {
+                   c_Retval = static_cast<int32_t>(pc_Message->GetTxProtocol());
+                }
+                else if (os32_Role == static_cast<int32_t>(Qt::EditRole))
+                {
+                   c_Retval = static_cast<int32_t>(pc_Message->GetTxProtocol());
+                }
+                else
+                {
+                   // DisplayRole: show the protocol name
+                    if (pc_Message->GetTxProtocol() == C_CamProMessageData::eTX_CAN_TP)
+                    {
+                       c_Retval = QString("CAN-TP");
+                    }
+                    else if (pc_Message->GetTxProtocol() == C_CamProMessageData::eTX_UDS)
+                    {
+                       c_Retval = QString("UDS");
+                    }
+                    else
+                    {
+                       c_Retval = QString("CAN");
+                    }
+                }
+                break;
+             case eDATA:
                //Don't set any data as this column is handled differently
                if (os32_Role == ms32_USER_ROLE_SORT)
                {
@@ -393,12 +462,12 @@ QVariant C_CamGenTableModel::data(const QModelIndex & orc_Index, const int32_t o
                c_Retval = static_cast<qulonglong>(pc_Message->u32_CyclicTriggerTime);
                break;
             case eMANUAL_TRIGGER:
-               c_Retval = C_GtGetText::h_GetText("Send now");
+               c_Retval = "Send now";
                break;
             case eKEY:
                if (pc_Message->c_Key.IsEmpty())
                {
-                  c_Retval = C_GtGetText::h_GetText("<none>");
+                  c_Retval = "<none>";
                }
                else
                {
@@ -434,17 +503,65 @@ QVariant C_CamGenTableModel::data(const QModelIndex & orc_Index, const int32_t o
                   c_Retval = pc_Message->GetExtended();
                }
                break;
-            case eAUTO_SUPPORT:
-               //Different handling for booleans
-               if (os32_Role == ms32_USER_ROLE_SORT)
-               {
-                  //For sorting!
-                  c_Retval = pc_Message->q_SetAutoSupportMode;
-               }
-               break;
-            default:
-               tgl_assert(false);
-               break;
+             case eUDS_SERVICE:
+                if (pc_Message->GetTxProtocol() != C_CamProMessageData::eTX_UDS)
+                {
+                   c_Retval = QVariant();
+                }
+                else if (os32_Role == ms32_USER_ROLE_SORT)
+                {
+                   c_Retval = static_cast<int32_t>(pc_Message->u8_UdsServiceId);
+                }
+                else if (os32_Role == static_cast<int32_t>(Qt::EditRole))
+                {
+                   c_Retval = static_cast<int32_t>(pc_Message->u8_UdsServiceId);
+                }
+                else
+                {
+                   c_Retval = C_CamGenTableModel::mh_UdsServiceIdToName(pc_Message->u8_UdsServiceId);
+                }
+                break;
+             case eUDS_PARAM:
+                if (pc_Message->GetTxProtocol() != C_CamProMessageData::eTX_UDS)
+                {
+                   c_Retval = QVariant();
+                }
+                else
+                {
+                   c_Retval = static_cast<qulonglong>(pc_Message->u8_UdsSubFunction);
+                }
+                break;
+             case eUDS_DATA:
+                if (pc_Message->GetTxProtocol() != C_CamProMessageData::eTX_UDS)
+                {
+                   c_Retval = QVariant();
+                }
+                else
+                {
+                   QString c_Tmp;
+                   for (uint16_t u16_It = 0U; u16_It < pc_Message->c_UdsData.size(); ++u16_It)
+                   {
+                      if (u16_It > 0U)
+                      {
+                         c_Tmp += " ";
+                      }
+                      c_Tmp += static_cast<QString>("%1").arg(pc_Message->c_UdsData[u16_It], 2, 16,
+                                                              static_cast<QChar>('0')).toUpper();
+                   }
+                   c_Retval = c_Tmp;
+                }
+                break;
+             case eAUTO_SUPPORT:
+                //Different handling for booleans
+                if (os32_Role == ms32_USER_ROLE_SORT)
+                {
+                   //For sorting!
+                   c_Retval = pc_Message->q_SetAutoSupportMode;
+                }
+                break;
+             default:
+                tgl_assert(false);
+                break;
             }
          }
          else if (os32_Role == static_cast<int32_t>(Qt::ForegroundRole))
@@ -520,36 +637,98 @@ QVariant C_CamGenTableModel::data(const QModelIndex & orc_Index, const int32_t o
             case eCYCLIC_TIME:
                c_Retval = static_cast<int32_t>(eURIEL_LINE_EDIT);
                break;
-            case eDLC:
-               c_Retval = static_cast<int32_t>(eURIEL_COMBO_BOX);
-               break;
-            default:
-               c_Retval = static_cast<int32_t>(eURIEL_NONE);
-               break;
-            }
-         }
-         else if ((os32_Role == ms32_USER_ROLE_INTERACTION_COMBO_BOX_STRINGS_LIST) ||
-                  (os32_Role == ms32_USER_ROLE_INTERACTION_COMBO_BOX_VALUES_LIST))
-         {
-            QStringList c_Tmp;
-            if (e_Col == eDLC)
+              case eDLC:
+                 c_Retval = static_cast<int32_t>(eURIEL_GENERIC_SPIN_BOX);
+                 break;
+               case ePROTOCOL:
+                  c_Retval = static_cast<int32_t>(eURIEL_COMBO_BOX);
+                  break;
+               case eUDS_SERVICE:
+                  c_Retval = static_cast<int32_t>(eURIEL_COMBO_BOX);
+                  break;
+               case eUDS_PARAM:
+                  c_Retval = static_cast<int32_t>(eURIEL_LINE_EDIT);
+                  break;
+               case eUDS_DATA:
+                  c_Retval = static_cast<int32_t>(eURIEL_LINE_EDIT);
+                  break;
+              default:
+                c_Retval = static_cast<int32_t>(eURIEL_NONE);
+                break;
+             }
+          }
+            else if ((os32_Role == ms32_USER_ROLE_INTERACTION_COMBO_BOX_STRINGS_LIST) ||
+                     (os32_Role == ms32_USER_ROLE_INTERACTION_COMBO_BOX_VALUES_LIST))
             {
-               c_Tmp.append("0");
-               c_Tmp.append("1");
-               c_Tmp.append("2");
-               c_Tmp.append("3");
-               c_Tmp.append("4");
-               c_Tmp.append("5");
-               c_Tmp.append("6");
-               c_Tmp.append("7");
-               c_Tmp.append("8");
-               c_Retval = c_Tmp;
-            }
-            else
-            {
-               c_Retval = c_Tmp;
-            }
-         }
+               if (e_Col == ePROTOCOL)
+               {
+                  if (os32_Role == ms32_USER_ROLE_INTERACTION_COMBO_BOX_STRINGS_LIST)
+                  {
+                      QStringList c_Strings;
+                      c_Strings.push_back("CAN");
+                      c_Strings.push_back("CAN-TP");
+                      c_Strings.push_back("UDS");
+                      c_Retval = c_Strings;
+                   }
+                   else
+                   {
+                      QStringList c_Values;
+                      c_Values.push_back("0"); // eTX_CAN
+                      c_Values.push_back("1"); // eTX_CAN_TP
+                      c_Values.push_back("2"); // eTX_UDS
+                      c_Retval = c_Values;
+                  }
+               }
+               else if (e_Col == eUDS_SERVICE)
+               {
+                  if (os32_Role == ms32_USER_ROLE_INTERACTION_COMBO_BOX_STRINGS_LIST)
+                  {
+                     QStringList c_Strings;
+                     c_Strings.push_back("DiagnosticSessionControl");
+                     c_Strings.push_back("ECUReset");
+                     c_Strings.push_back("ReadDataByIdentifier");
+                     c_Strings.push_back("ReadMemoryByAddress");
+                     c_Strings.push_back("WriteDataByIdentifier");
+                     c_Strings.push_back("InputOutputControlByIdentifier");
+                     c_Strings.push_back("SecurityAccess");
+                     c_Strings.push_back("CommunicationControl");
+                     c_Strings.push_back("RoutineControl");
+                     c_Strings.push_back("RequestDownload");
+                     c_Strings.push_back("RequestUpload");
+                     c_Strings.push_back("TransferData");
+                     c_Strings.push_back("RequestTransferExit");
+                     c_Strings.push_back("WriteMemoryByAddress");
+                     c_Strings.push_back("TesterPresent");
+                     c_Strings.push_back("AccessTimingParameter");
+                     c_Strings.push_back("ControlDTCSettings");
+                     c_Strings.push_back("LinkControl");
+                     c_Retval = c_Strings;
+                  }
+                  else
+                  {
+                     QStringList c_Values;
+                     c_Values.push_back("16");  // 0x10
+                     c_Values.push_back("17");  // 0x11
+                     c_Values.push_back("34");  // 0x22
+                     c_Values.push_back("35");  // 0x23
+                     c_Values.push_back("46");  // 0x2E
+                     c_Values.push_back("47");  // 0x2F
+                     c_Values.push_back("39");  // 0x27
+                     c_Values.push_back("40");  // 0x28
+                     c_Values.push_back("49");  // 0x31
+                     c_Values.push_back("52");  // 0x34
+                     c_Values.push_back("53");  // 0x35
+                     c_Values.push_back("54");  // 0x36
+                     c_Values.push_back("55");  // 0x37
+                     c_Values.push_back("61");  // 0x3D
+                     c_Values.push_back("62");  // 0x3E
+                     c_Values.push_back("131"); // 0x83
+                     c_Values.push_back("133"); // 0x85
+                     c_Values.push_back("135"); // 0x87
+                     c_Retval = c_Values;
+                  }
+               }
+           }
          else if (os32_Role == ms32_USER_ROLE_INTERACTION_IS_LINK)
          {
             switch (e_Col) //lint !e788 //not all columns explicitly handled
@@ -623,18 +802,51 @@ QVariant C_CamGenTableModel::data(const QModelIndex & orc_Index, const int32_t o
                   c_Retval = C_Uti::h_GetValueAsHex(static_cast<uint32_t>(0x7FF));
                }
                break;
-            case eDLC:
-               c_Retval = 8;
-               break;
+               case eDLC:
+                  if (pc_Message->GetTxProtocol() == C_CamProMessageData::eTX_CAN_TP)
+                  {
+                     c_Retval = 4095;
+                  }
+                  else
+                  {
+                     c_Retval = 8;
+                  }
+                  break;
             case eCYCLIC_TIME:
                c_Retval = 50000;
                break;
-            default:
-               //None
-               break;
-            }
-         }
-         else if (os32_Role == static_cast<int32_t>(Qt::CheckStateRole))
+             default:
+                //None
+                break;
+             }
+          }
+           else if (os32_Role == ms32_USER_ROLE_INTERACTION_GENERIC_SPIN_BOX_PARAMETERS_LIST)
+           {
+              if (e_Col == eDLC)
+              {
+                 const uint16_t u16_DlcMax =
+                    ((pc_Message != NULL) &&
+                     (pc_Message->GetTxProtocol() == C_CamProMessageData::eTX_CAN_TP)) ?
+                    4095U : 8U;
+                 QStringList c_List;
+                 // Min = 0 (uint16)
+                 C_OscNodeDataPoolContent c_Min;
+                 c_Min.SetType(C_OscNodeDataPoolContent::eUINT16);
+                 c_Min.SetValueU16(0U);
+                 c_List.push_back(C_SdNdeDpContentUtil::h_GetAllContentAsString(c_Min));
+                 // Max = dynamic per protocol (uint16)
+                 C_OscNodeDataPoolContent c_Max;
+                 c_Max.SetType(C_OscNodeDataPoolContent::eUINT16);
+                 c_Max.SetValueU16(u16_DlcMax);
+                 c_List.push_back(C_SdNdeDpContentUtil::h_GetAllContentAsString(c_Max));
+                 // Factor
+                 c_List.push_back(QString::number(1.0));
+                 // Offset
+                 c_List.push_back(QString::number(0.0));
+                 c_Retval = c_List;
+              }
+           }
+          else if (os32_Role == static_cast<int32_t>(Qt::CheckStateRole))
          {
             switch (e_Col)
             {
@@ -656,12 +868,18 @@ QVariant C_CamGenTableModel::data(const QModelIndex & orc_Index, const int32_t o
             case eRTR:
                c_Retval = mh_GetBoolAsCheckStateVariant(pc_Message->GetRtr());
                break;
-            case eAUTO_SUPPORT:
-               c_Retval = mh_GetBoolAsCheckStateVariant(pc_Message->q_SetAutoSupportMode);
-               break;
-            default:
-               tgl_assert(false);
-               break;
+              case ePROTOCOL:
+              case eUDS_SERVICE:
+              case eUDS_PARAM:
+              case eUDS_DATA:
+                 // Combo box / text columns — no check state
+                 break;
+              case eAUTO_SUPPORT:
+                 c_Retval = mh_GetBoolAsCheckStateVariant(pc_Message->q_SetAutoSupportMode);
+                 break;
+              default:
+                 tgl_assert(false);
+                 break;
             }
          }
          else if (os32_Role == static_cast<int32_t>(Qt::FontRole))
@@ -695,6 +913,8 @@ QVariant C_CamGenTableModel::data(const QModelIndex & orc_Index, const int32_t o
    false failure
 */
 //----------------------------------------------------------------------------------------------------------------------
+static void mh_AutoComputeUdsBytes(C_CamProMessageData & orc_Message);
+//----------------------------------------------------------------------------------------------------------------------
 bool C_CamGenTableModel::setData(const QModelIndex & orc_Index, const QVariant & orc_Value, const int32_t os32_Role)
 {
    bool q_Retval = false;
@@ -723,16 +943,119 @@ bool C_CamGenTableModel::setData(const QModelIndex & orc_Index, const QVariant &
                q_Continue = true;
                q_Retval = true;
                break;
-            case eDLC:
-               q_UpdateCyclicMessage = true;
-               e_Selector = C_CamProMessageData::eGUIDS_DLC;
-               q_Continue = true;
-               q_Retval = true;
-               break;
-            case eDATA:
-               //Unknown yet
-               break;
-            case eCYCLIC_TIME:
+             case eDLC:
+                q_UpdateCyclicMessage = true;
+                e_Selector = C_CamProMessageData::eGUIDS_DLC;
+                q_Continue = true;
+                q_Retval = true;
+                break;
+              case ePROTOCOL:
+                {
+                   const int32_t s32_Protocol = orc_Value.toInt();
+                    if ((s32_Protocol >= 0) &&
+                        (s32_Protocol <= static_cast<int32_t>(C_CamProMessageData::eTX_UDS)))
+                   {
+                      tgl_assert(C_CamProHandler::h_GetInstance()->SetMessageTxProtocol(
+                                    u32_Index,
+                                    static_cast<C_CamProMessageData::E_TxProtocol>(s32_Protocol)) == C_NO_ERR);
+                      // Dynamic DLC adjustment: switching to CAN caps DLC at 8
+                      if (s32_Protocol == static_cast<int32_t>(C_CamProMessageData::eTX_CAN))
+                      {
+                         const C_CamProMessageData * const pc_Msg =
+                            C_CamProHandler::h_GetInstance()->GetMessageConst(u32_Index);
+                         if ((pc_Msg != NULL) && (pc_Msg->u16_Dlc > 8U))
+                         {
+                            C_CamProHandler::h_GetInstance()->SetMessageUint32Value(
+                               u32_Index, C_CamProMessageData::eGUIDS_DLC, 8U);
+                            // Notify DLC and DATA columns of the change
+                            const int32_t s32_DlcCol = C_CamGenTableModel::h_EnumToColumn(eDLC);
+                            const int32_t s32_DataCol = C_CamGenTableModel::h_EnumToColumn(eDATA);
+                            Q_EMIT this->dataChanged(this->index(orc_Index.row(), s32_DlcCol),
+                                                     this->index(orc_Index.row(), s32_DlcCol));
+                            Q_EMIT this->dataChanged(this->index(orc_Index.row(), s32_DataCol),
+                                                     this->index(orc_Index.row(), s32_DataCol));
+                         }
+                      }
+                   }
+                   q_Retval = true;
+                }
+                break;
+              case eUDS_SERVICE:
+                {
+                   const int32_t s32_Svc = orc_Value.toInt();
+                   if ((s32_Svc >= 0) && (s32_Svc <= 255))
+                   {
+                      C_CamProMessageData * const pc_Msg =
+                         const_cast<C_CamProMessageData *>(C_CamProHandler::h_GetInstance()->GetMessageConst(u32_Index));
+                      if (pc_Msg != NULL)
+                      {
+                         pc_Msg->u8_UdsServiceId = static_cast<uint8_t>(s32_Svc);
+                         mh_AutoComputeUdsBytes(*pc_Msg);
+                         const int32_t s32_DlcCol = h_EnumToColumn(eDLC);
+                         const int32_t s32_DataCol = h_EnumToColumn(eDATA);
+                         const int32_t s32_ParamCol = h_EnumToColumn(eUDS_PARAM);
+                         Q_EMIT this->dataChanged(this->index(orc_Index.row(), s32_DlcCol),
+                                                  this->index(orc_Index.row(), s32_DataCol));
+                         Q_EMIT this->dataChanged(this->index(orc_Index.row(), s32_ParamCol),
+                                                  this->index(orc_Index.row(), s32_ParamCol));
+                      }
+                   }
+                   q_Retval = true;
+                }
+                break;
+              case eUDS_PARAM:
+                {
+                   const int32_t s32_Val = orc_Value.toInt();
+                   if ((s32_Val >= 0) && (s32_Val <= 255))
+                   {
+                      C_CamProMessageData * const pc_Msg =
+                         const_cast<C_CamProMessageData *>(C_CamProHandler::h_GetInstance()->GetMessageConst(u32_Index));
+                      if (pc_Msg != NULL)
+                      {
+                         pc_Msg->u8_UdsSubFunction = static_cast<uint8_t>(s32_Val);
+                         mh_AutoComputeUdsBytes(*pc_Msg);
+                         const int32_t s32_DlcCol = h_EnumToColumn(eDLC);
+                         const int32_t s32_DataCol = h_EnumToColumn(eDATA);
+                         Q_EMIT this->dataChanged(this->index(orc_Index.row(), s32_DlcCol),
+                                                  this->index(orc_Index.row(), s32_DataCol));
+                      }
+                   }
+                   q_Retval = true;
+                }
+                break;
+              case eUDS_DATA:
+                {
+                   C_CamProMessageData * const pc_Msg =
+                      const_cast<C_CamProMessageData *>(C_CamProHandler::h_GetInstance()->GetMessageConst(u32_Index));
+                   if (pc_Msg != NULL)
+                   {
+                      const QString c_Text = orc_Value.toString().trimmed();
+                      const QStringList c_Parts = c_Text.split(QRegularExpression("[\\s,;]+"),
+                                                                Qt::SkipEmptyParts);
+                      std::vector<uint8_t> c_Data;
+                      for (const QString & rc_Part : c_Parts)
+                      {
+                         bool q_Ok;
+                         const uint8_t u8_Val = static_cast<uint8_t>(rc_Part.toUInt(&q_Ok, 16));
+                         if (q_Ok)
+                         {
+                            c_Data.push_back(u8_Val);
+                         }
+                      }
+                      pc_Msg->c_UdsData = c_Data;
+                      mh_AutoComputeUdsBytes(*pc_Msg);
+                      const int32_t s32_DlcCol = h_EnumToColumn(eDLC);
+                      const int32_t s32_DataCol = h_EnumToColumn(eDATA);
+                      Q_EMIT this->dataChanged(this->index(orc_Index.row(), s32_DlcCol),
+                                               this->index(orc_Index.row(), s32_DataCol));
+                   }
+                   q_Retval = true;
+                }
+                break;
+              case eDATA:
+                //Unknown yet
+                break;
+             case eCYCLIC_TIME:
                q_UpdateCyclicMessage = true;
                e_Selector = C_CamProMessageData::eGUIDS_CYCLIC_TIME;
                q_Continue = true;
@@ -933,21 +1256,41 @@ Qt::ItemFlags C_CamGenTableModel::flags(const QModelIndex & orc_Index) const
             }
          }
          break;
-      case eDATA:
-         c_Retval = c_Retval | Qt::ItemIsEnabled;
-         break;
-      case eAUTO_SUPPORT:
-         if ((C_CamGenTableModel::m_GetCurrentMessageProtocolType(static_cast<uint32_t>(orc_Index.row())) ==
-              C_OscCanProtocol::eECES) ||
-             (C_CamGenTableModel::m_GetCurrentMessageProtocolType(static_cast<uint32_t>(orc_Index.row())) ==
-              C_OscCanProtocol::eCAN_OPEN_SAFETY))
-         {
-            c_Retval = c_Retval | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
-         }
-         break;
-      default:
-         tgl_assert(false);
-         break;
+       case eDATA:
+          c_Retval = c_Retval | Qt::ItemIsEnabled;
+          break;
+       case ePROTOCOL:
+          c_Retval = c_Retval | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+          break;
+        case eAUTO_SUPPORT:
+          if ((C_CamGenTableModel::m_GetCurrentMessageProtocolType(static_cast<uint32_t>(orc_Index.row())) ==
+               C_OscCanProtocol::eECES) ||
+              (C_CamGenTableModel::m_GetCurrentMessageProtocolType(static_cast<uint32_t>(orc_Index.row())) ==
+               C_OscCanProtocol::eCAN_OPEN_SAFETY))
+          {
+             c_Retval = c_Retval | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
+          }
+          break;
+        case eUDS_SERVICE:
+        case eUDS_PARAM:
+        case eUDS_DATA:
+          if (orc_Index.row() >= 0)
+          {
+             const C_CamProMessageData * const pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(
+                static_cast<uint32_t>(orc_Index.row()));
+             if ((pc_Message != NULL) && (pc_Message->GetTxProtocol() == C_CamProMessageData::eTX_UDS))
+             {
+                c_Retval = c_Retval | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+             }
+             else
+             {
+                c_Retval = c_Retval | Qt::ItemIsEnabled;
+             }
+          }
+          break;
+       default:
+          tgl_assert(false);
+          break;
       }
    }
    return c_Retval;
@@ -1000,30 +1343,42 @@ C_CamGenTableModel::E_Columns C_CamGenTableModel::h_ColumnToEnum(const int32_t o
    case 3:
       e_Retval = eRTR;
       break;
-   case 4:
-      e_Retval = eDLC;
-      break;
-   case 5:
-      e_Retval = eDATA;
-      break;
-   case 6:
-      e_Retval = eCYCLIC_TRIGGER;
-      break;
-   case 7:
-      e_Retval = eCYCLIC_TIME;
-      break;
-   case 8:
-      e_Retval = eAUTO_SUPPORT;
-      break;
-   case 9:
-      e_Retval = eKEY;
-      break;
-   case 10:
-      e_Retval = eMANUAL_TRIGGER;
-      break;
-   default:
-      e_Retval = eNAME;
-      break;
+    case 4:
+       e_Retval = eDLC;
+       break;
+    case 5:
+       e_Retval = ePROTOCOL;
+       break;
+    case 6:
+       e_Retval = eDATA;
+       break;
+    case 7:
+       e_Retval = eCYCLIC_TRIGGER;
+       break;
+    case 8:
+       e_Retval = eCYCLIC_TIME;
+       break;
+    case 9:
+       e_Retval = eAUTO_SUPPORT;
+       break;
+    case 10:
+       e_Retval = eKEY;
+       break;
+     case 11:
+        e_Retval = eMANUAL_TRIGGER;
+        break;
+     case 12:
+        e_Retval = eUDS_SERVICE;
+        break;
+     case 13:
+        e_Retval = eUDS_PARAM;
+        break;
+     case 14:
+        e_Retval = eUDS_DATA;
+        break;
+    default:
+       e_Retval = eNAME;
+       break;
    }
    return e_Retval;
 }
@@ -1056,30 +1411,42 @@ int32_t C_CamGenTableModel::h_EnumToColumn(const C_CamGenTableModel::E_Columns o
    case eRTR:
       s32_Retval = 3;
       break;
-   case eDLC:
-      s32_Retval = 4;
-      break;
-   case eDATA:
-      s32_Retval = 5;
-      break;
-   case eCYCLIC_TRIGGER:
-      s32_Retval = 6;
-      break;
-   case eCYCLIC_TIME:
-      s32_Retval = 7;
-      break;
-   case eAUTO_SUPPORT:
-      s32_Retval = 8;
-      break;
-   case eKEY:
-      s32_Retval = 9;
-      break;
-   case eMANUAL_TRIGGER:
-      s32_Retval = 10;
-      break;
-   default:
-      tgl_assert(false);
-      break;
+    case eDLC:
+       s32_Retval = 4;
+       break;
+    case ePROTOCOL:
+       s32_Retval = 5;
+       break;
+    case eDATA:
+       s32_Retval = 6;
+       break;
+    case eCYCLIC_TRIGGER:
+       s32_Retval = 7;
+       break;
+    case eCYCLIC_TIME:
+       s32_Retval = 8;
+       break;
+    case eAUTO_SUPPORT:
+       s32_Retval = 9;
+       break;
+    case eKEY:
+       s32_Retval = 10;
+       break;
+     case eMANUAL_TRIGGER:
+        s32_Retval = 11;
+        break;
+     case eUDS_SERVICE:
+        s32_Retval = 12;
+        break;
+     case eUDS_PARAM:
+        s32_Retval = 13;
+        break;
+     case eUDS_DATA:
+        s32_Retval = 14;
+        break;
+    default:
+       tgl_assert(false);
+       break;
    }
    return s32_Retval;
 }
@@ -1322,9 +1689,8 @@ void C_CamGenTableModel::m_SpecialXtdFlagSetHandling(const int32_t os32_Row, con
                                                                          u32_NEW_VAL) == C_NO_ERR);
       //Message
       Q_EMIT (this->SigReport(stw::opensyde_gui_elements::C_OgeWiCustomMessage::eWARNING,
-                              C_GtGetText::h_GetText("Check Message ID"),
-                              C_GtGetText::h_GetText(
-                                 "XTD flag is disabled, message ID is invalid and is reset to \"0\"")));
+                              "Check Message ID",
+                              "XTD flag is disabled, message ID is invalid and is reset to \"0\""));
 
       //lint -e{1793} Qt example
       Q_EMIT (this->dataChanged(this->index(os32_Row, s32_Col),
@@ -1370,4 +1736,73 @@ C_OscCanProtocol::E_Type C_CamGenTableModel::m_GetCurrentMessageProtocolType(con
       }
    }
    return e_ProtocolType;
+}
+
+//----------------------------------------------------------------------
+/*! \brief  Convert UDS service ID to display name
+*/
+//----------------------------------------------------------------------
+QString C_CamGenTableModel::mh_UdsServiceIdToName(const uint8_t ou8_Sid)
+{
+   switch (ou8_Sid)
+   {
+   case 0x10: return "DiagnosticSessionControl";
+   case 0x11: return "ECUReset";
+   case 0x22: return "ReadDataByIdentifier";
+   case 0x23: return "ReadMemoryByAddress";
+   case 0x2E: return "WriteDataByIdentifier";
+   case 0x2F: return "InputOutputControlByIdentifier";
+   case 0x27: return "SecurityAccess";
+   case 0x28: return "CommunicationControl";
+   case 0x31: return "RoutineControl";
+   case 0x34: return "RequestDownload";
+   case 0x35: return "RequestUpload";
+   case 0x36: return "TransferData";
+   case 0x37: return "RequestTransferExit";
+   case 0x3D: return "WriteMemoryByAddress";
+   case 0x3E: return "TesterPresent";
+   case 0x83: return "AccessTimingParameter";
+   case 0x85: return "ControlDTCSettings";
+   case 0x87: return "LinkControl";
+   default: return "Unknown(0x" + QString::number(ou8_Sid, 16).toUpper() + ")";
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Auto-compute c_Bytes and DLC from UDS fields
+           Builds: [serviceId] [+subFunction] [+DID hi] [+DID lo] [+udsData]
+*/
+//----------------------------------------------------------------------------------------------------------------------
+static void mh_AutoComputeUdsBytes(C_CamProMessageData & orc_Message)
+{
+   std::vector<uint8_t> c_New;
+   c_New.push_back(orc_Message.u8_UdsServiceId);
+
+   // Services that have a sub-function byte
+   switch (orc_Message.u8_UdsServiceId)
+   {
+   case 0x10: case 0x11: case 0x27: case 0x28:
+   case 0x31: case 0x3E: case 0x83: case 0x85: case 0x87:
+      c_New.push_back(orc_Message.u8_UdsSubFunction);
+      break;
+   default:
+      break;
+   }
+
+   // Services that have a 2-byte DID
+   switch (orc_Message.u8_UdsServiceId)
+   {
+   case 0x22: case 0x2E: case 0x2F:
+      c_New.push_back(static_cast<uint8_t>((orc_Message.u16_UdsDid >> 8) & 0xFF));
+      c_New.push_back(static_cast<uint8_t>(orc_Message.u16_UdsDid & 0xFF));
+      break;
+   default:
+      break;
+   }
+
+   // Append additional data bytes
+   c_New.insert(c_New.end(), orc_Message.c_UdsData.begin(), orc_Message.c_UdsData.end());
+
+   orc_Message.c_Bytes = c_New;
+   orc_Message.u16_Dlc = static_cast<uint16_t>(c_New.size());
 }

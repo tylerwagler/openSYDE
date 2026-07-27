@@ -19,7 +19,6 @@
 #include "C_UtiStyleSheets.hpp"
 #include "C_NagMainWindow.hpp"
 #include "C_PuiProject.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_PopErrorHandling.hpp"
 #include "stwtypes.hpp"
@@ -98,11 +97,7 @@ int32_t main(int32_t os32_Argc, char_t * opacn_Argv[])
       c_Appl.setStyleSheet(stw::opensyde_gui_logic::C_UtiStyleSheets::h_GetStylesheet());
    }
    {
-      const QString c_TranslationLocation = stw::opensyde_gui_logic::C_Uti::h_GetExePath() + "/Translations";
-      //Set language (THIRD)
-      //stw::opensyde_core::C_OscGetText::h_SetLanguage("en_US");
-      stw::opensyde_gui_logic::C_PopErrorHandling::h_GetTextInitializeErr(
-         stw::opensyde_gui_logic::C_GtGetText::h_Initialize(c_TranslationLocation, "en_US"));
+      //Set language (THIRD) — gettext removed, English-only
    }
    {
       //Application (FOURTH)

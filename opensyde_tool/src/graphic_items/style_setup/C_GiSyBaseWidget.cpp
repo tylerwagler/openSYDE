@@ -17,7 +17,6 @@
 #include "C_OgeWiUtil.hpp"
 #include "ui_C_GiSyBaseWidget.h"
 
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -103,11 +102,11 @@ C_GiSyBaseWidget::~C_GiSyBaseWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyBaseWidget::InitStaticNames(void)
 {
-   this->mpc_ParentDialog->SetSubTitle(C_GtGetText::h_GetText("Setup Style"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_LabelStyle->setText(C_GtGetText::h_GetText("Style"));
-   this->mpc_Ui->pc_LabelPreview->setText(C_GtGetText::h_GetText("Example Preview"));
+   this->mpc_ParentDialog->SetSubTitle("Setup Style");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+   this->mpc_Ui->pc_LabelStyle->setText("Style");
+   this->mpc_Ui->pc_LabelPreview->setText("Example Preview");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

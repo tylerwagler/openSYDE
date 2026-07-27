@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDpListsWidget.hpp"
@@ -110,20 +109,20 @@ C_SdNdeDpListsWidget::~C_SdNdeDpListsWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListsWidget::InitText(void) const
 {
-   this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation(C_GtGetText::h_GetText("Add"),
-                                                         C_GtGetText::h_GetText("Add new item"));
-   this->mpc_Ui->pc_PushButtonCopy->SetToolTipInformation(C_GtGetText::h_GetText("Copy"),
-                                                          C_GtGetText::h_GetText("Copy selected item(s)"));
-   this->mpc_Ui->pc_PushButtonCut->SetToolTipInformation(C_GtGetText::h_GetText("Cut"),
-                                                         C_GtGetText::h_GetText("Cut selected item(s)"));
-   this->mpc_Ui->pc_PushButtonPaste->SetToolTipInformation(C_GtGetText::h_GetText("Paste"),
-                                                           C_GtGetText::h_GetText("Paste item(s)"));
-   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation(C_GtGetText::h_GetText("Delete"),
-                                                            C_GtGetText::h_GetText("Delete selected item(s)"));
-   this->mpc_Ui->pc_PushButtonMoveDown->SetToolTipInformation(C_GtGetText::h_GetText("Move down"),
-                                                              C_GtGetText::h_GetText("Move selected item(s) down"));
-   this->mpc_Ui->pc_PushButtonMoveUp->SetToolTipInformation(C_GtGetText::h_GetText("Move up"),
-                                                            C_GtGetText::h_GetText("Move selected item(s) up"));
+   this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation("Add",
+                                                         "Add new item");
+   this->mpc_Ui->pc_PushButtonCopy->SetToolTipInformation("Copy",
+                                                          "Copy selected item(s)");
+   this->mpc_Ui->pc_PushButtonCut->SetToolTipInformation("Cut",
+                                                         "Cut selected item(s)");
+   this->mpc_Ui->pc_PushButtonPaste->SetToolTipInformation("Paste",
+                                                           "Paste item(s)");
+   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation("Delete",
+                                                            "Delete selected item(s)");
+   this->mpc_Ui->pc_PushButtonMoveDown->SetToolTipInformation("Move down",
+                                                              "Move selected item(s) down");
+   this->mpc_Ui->pc_PushButtonMoveUp->SetToolTipInformation("Move up",
+                                                            "Move selected item(s) up");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -247,7 +246,7 @@ void C_SdNdeDpListsWidget::m_UpdateDpLabel(const uint32_t ou32_NodeIndex, const 
    {
       const int32_t s32_TypeSpecificNum = C_PuiSdHandler::h_GetInstance()->GetDataPoolTypeIndex(ou32_NodeIndex,
                                                                                                 ou32_DataPoolIndex);
-      const QString c_Text = static_cast<QString>(C_GtGetText::h_GetText("%1 Datapool: #%2 %3")).
+      const QString c_Text = static_cast<QString>("%1 Datapool: #%2 %3").
                              arg(C_PuiSdUtil::h_ConvertDataPoolTypeToString(pc_Dp->e_Type)).
                              arg(s32_TypeSpecificNum + 1).
                              arg(pc_Dp->c_Name.c_str());
@@ -308,11 +307,11 @@ void C_SdNdeDpListsWidget::m_HandleSelection(const uint32_t & oru32_Count, const
       {
          if (this->mu32_LastKnownListSelectionCount == 1)
          {
-            c_Text = static_cast<QString>(C_GtGetText::h_GetText("1 List selected"));
+            c_Text = static_cast<QString>("1 List selected");
          }
          else
          {
-            c_Text = static_cast<QString>(C_GtGetText::h_GetText("%1 Lists selected")).arg(
+            c_Text = static_cast<QString>("%1 Lists selected").arg(
                this->mu32_LastKnownListSelectionCount);
          }
       }
@@ -322,13 +321,13 @@ void C_SdNdeDpListsWidget::m_HandleSelection(const uint32_t & oru32_Count, const
          if (this->mu32_LastKnownTableSelectionCount == 1)
          {
             //Translation: 1: Data element type
-            c_Text = static_cast<QString>(C_GtGetText::h_GetText("1 %1 selected")).arg(c_Type);
+            c_Text = static_cast<QString>("1 %1 selected").arg(c_Type);
          }
          else
          {
             //Translation: 1: Number of selected items 2: Data element type
             c_Text =
-               static_cast<QString>(C_GtGetText::h_GetText("%1 %2s selected")).arg(
+               static_cast<QString>("%1 %2s selected").arg(
                   this->mu32_LastKnownTableSelectionCount).arg(
                   c_Type);
          }

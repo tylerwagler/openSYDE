@@ -14,7 +14,6 @@
 
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdNdeDbDataPoolEntry.hpp"
 #include "ui_C_SdNdeDbDataPoolEntry.h"
 
@@ -55,8 +54,8 @@ C_SdNdeDbDataPoolEntry::C_SdNdeDbDataPoolEntry(const uint32_t ou32_NodeIndex, co
 
    this->mpc_Ui->pc_PushButtonDelete->SetSvg("://images/main_page_and_navi_bar/Icon_delete.svg");
 
-   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation(C_GtGetText::h_GetText("Remove"),
-                                                            C_GtGetText::h_GetText("Remove Datapool from this list."));
+   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation("Remove",
+                                                            "Remove Datapool from this list.");
 
    m_Init(ou32_NodeIndex, ou32_DataPoolIndex);
 
@@ -104,7 +103,7 @@ void C_SdNdeDbDataPoolEntry::m_Init(const uint32_t ou32_NodeIndex, const uint32_
       if (pc_Datapool->e_Type == C_OscNodeDataPool::eCOM)
       {
          c_Text += ", ";
-         c_Text += C_GtGetText::h_GetText("Protocol: ");
+         c_Text += "Protocol: ";
          c_Text += C_PuiSdUtil::h_ConvertProtocolTypeToString(C_PuiSdUtil::h_GetRelatedCanProtocolType(
                                                                  ou32_NodeIndex, ou32_DataPoolIndex));
       }

@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
 
@@ -315,19 +314,18 @@ QString C_PuiSvDbNodeDataPoolListElementId::GetInvalidItemPlaceholderTooltip(voi
    QString c_Retval;
 
    //Complete tooltip
-   c_Retval = C_GtGetText::h_GetText("Data element was deleted in SYSTEM DEFINITION\n");
+   c_Retval = "Data element was deleted in SYSTEM DEFINITION\n";
    //Additional reasons only
    if ((this->me_InvalidTypePlaceholder == C_OscNodeDataPool::eHALC) ||
        (this->me_InvalidTypePlaceholder == C_OscNodeDataPool::eHALC_NVM))
    {
-      c_Retval += C_GtGetText::h_GetText(
-         "\n"
+      c_Retval += "\n"
          "Potential reason(s):\n"
          "- HAL was changed and corresponding datapool was generated and all variables were replaced\n"
          "- HAL was removed\n"
          "\n"
          "Next steps:\n"
-         "Delete or replace this item by a valid one");
+         "Delete or replace this item by a valid one";
    }
 
    return c_Retval;

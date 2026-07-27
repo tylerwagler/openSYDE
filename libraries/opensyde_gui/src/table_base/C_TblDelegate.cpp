@@ -17,7 +17,6 @@
 
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_TblDelegate.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
@@ -262,7 +261,7 @@ void C_TblDelegate::setModelData(QWidget * const opc_Editor, QAbstractItemModel 
          else
          {
             C_OgeWiCustomMessage c_Message(opc_Editor, C_OgeWiCustomMessage::eWARNING);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Invalid input"));
+            c_Message.SetHeading("Invalid input");
             c_Message.SetDescription(c_ErrorDescription);
             c_Message.SetCustomMinHeight(230, 270);
             c_Message.Execute();
@@ -285,7 +284,7 @@ void C_TblDelegate::setModelData(QWidget * const opc_Editor, QAbstractItemModel 
          else
          {
             C_OgeWiCustomMessage c_Message(opc_Editor, C_OgeWiCustomMessage::eWARNING);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Invalid input"));
+            c_Message.SetHeading("Invalid input");
             c_Message.SetDescription(c_ErrorDescription);
             c_Message.Execute();
             //Reset data to last known value

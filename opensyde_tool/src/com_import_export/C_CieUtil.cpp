@@ -19,7 +19,6 @@
 #include "TglUtils.hpp"
 #include "C_SdUtil.hpp"
 #include "C_PuiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OgePopUpDialog.hpp"
@@ -90,7 +89,7 @@ int32_t C_CieUtil::h_ImportFile(const uint32_t ou32_BusIndex, const C_OscCanProt
    //Load user settings value
    QString c_Folder = C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownImportPath();
    // open file selector with DBC filter
-   const QString c_Filter = static_cast<QString>(C_GtGetText::h_GetText("COMM Messages Files")) +
+   const QString c_Filter = static_cast<QString>("COMM Messages Files") +
                             " (*.dbc *.eds *.dcf)";
    int32_t s32_Return = C_NOACT;
 
@@ -101,7 +100,7 @@ int32_t C_CieUtil::h_ImportFile(const uint32_t ou32_BusIndex, const C_OscCanProt
    }
 
    const QString c_FullFilePath =
-      C_OgeWiUtil::h_GetOpenFileName(opc_Parent, C_GtGetText::h_GetText("Select COMM Messages File"),
+      C_OgeWiUtil::h_GetOpenFileName(opc_Parent, "Select COMM Messages File",
                                      c_Folder, c_Filter, "*.dbc");
 
    // check for user abort (empty string)
@@ -126,8 +125,8 @@ int32_t C_CieUtil::h_ImportFile(const uint32_t ou32_BusIndex, const C_OscCanProt
       {
          // strange
          C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Import from File"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("File type not allowed."));
+         c_Message.SetHeading("Import from File");
+         c_Message.SetDescription("File type not allowed.");
          c_Message.SetCustomMinHeight(180, 180);
          c_Message.Execute();
       }
@@ -158,7 +157,7 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
 {
    //Load user settings value
    QString c_Folder = C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownExportPath();
-   const QString c_FilterName = static_cast<QString>(C_GtGetText::h_GetText("openSYDE DBC export")) + " (*.dbc)";
+   const QString c_FilterName = static_cast<QString>("openSYDE DBC export") + " (*.dbc)";
    const QString c_DefaultFilename = static_cast<QString>(orc_CommDef.c_Bus.c_Name.c_str()) + ".dbc";
    QString c_FullFilePath;
    int32_t s32_Return = C_NOACT;
@@ -171,7 +170,7 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
 
    //Get file name
    c_FullFilePath =
-      C_OgeWiUtil::h_GetSaveFileName(opc_Parent, C_GtGetText::h_GetText("Select File for openSYDE DBC Export"),
+      C_OgeWiUtil::h_GetSaveFileName(opc_Parent, "Select File for openSYDE DBC Export",
                                      c_Folder, c_FilterName, c_DefaultFilename);
 
    //Check for user abort (empty string)
@@ -271,8 +270,8 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
          {
             // display error
             C_OgeWiCustomMessage c_ExportError(opc_Parent, C_OgeWiCustomMessage::E_Type::eERROR);
-            c_ExportError.SetHeading(C_GtGetText::h_GetText("DBC file export"));
-            c_ExportError.SetDescription(C_GtGetText::h_GetText("There occurred an error on DBC file export."));
+            c_ExportError.SetHeading("DBC file export");
+            c_ExportError.SetDescription("There occurred an error on DBC file export.");
             c_ExportError.SetDetails(c_Error.c_str());
             c_ExportError.SetCustomMinHeight(180, 250);
             c_ExportError.Execute();
@@ -281,7 +280,7 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
       else
       {
          C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_Message.SetDescription(C_GtGetText::h_GetText("The specified file has the wrong extension, use: \".dbc\"."));
+         c_Message.SetDescription("The specified file has the wrong extension, use: \".dbc\".");
          c_Message.SetDetails(static_cast<QString>("Invalid extension: \"%1\"").arg("." + c_Extension));
          c_Message.SetCustomMinHeight(180, 250);
          c_Message.Execute();
@@ -328,7 +327,7 @@ void C_CieUtil::h_AdaptName(C_SclString & orc_Name, C_SclString & orc_Comment, c
       //Set comment before overwriting the original name
       //Translation: 1=Original name from file,2=Optional line break if there was some more content
       orc_Comment +=
-         static_cast<QString>(C_GtGetText::h_GetText("%2Original name (from import source): %1")).arg(orc_Name.c_str()).
+         static_cast<QString>("%2Original name (from import source): %1").arg(orc_Name.c_str()).
          arg(c_Addition.c_str()).toStdString().c_str();
       orc_Name = c_NewName;
    }
@@ -504,37 +503,36 @@ void C_CieUtil::h_ReportEdsImportError(QWidget * const opc_ParentWidget, const i
 {
    C_OgeWiCustomMessage c_Message(opc_ParentWidget, C_OgeWiCustomMessage::E_Type::eERROR);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("EDS file"));
+   c_Message.SetHeading("EDS file");
    switch (os32_ImportResult)
    {
    case C_RANGE:
-      c_Message.SetDescription(C_GtGetText::h_GetText("Invalid parameter."));
+      c_Message.SetDescription("Invalid parameter.");
       c_Message.SetDetails(orc_ParsingError);
       c_Message.SetCustomMinHeight(180, 300);
       break;
    case C_NOACT:
-      c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                       "EDS file import failed. Node ID %1 is invalid.")).arg(
+      c_Message.SetDescription(static_cast<QString>("EDS file import failed. Node ID %1 is invalid.").arg(
                                   ou8_NodeId));
-      c_Message.SetDetails(C_GtGetText::h_GetText("CANopen standard only supports node IDs in the range "
+      c_Message.SetDetails("CANopen standard only supports node IDs in the range "
                                                   "of 1 to 127.\nThe node ID can be changed in node "
-                                                  "properties."));
+                                                  "properties.");
       c_Message.SetCustomMinHeight(180, 270);
       break;
    case C_CONFIG:
-      c_Message.SetDescription(C_GtGetText::h_GetText("An error occurred while parsing."));
+      c_Message.SetDescription("An error occurred while parsing.");
       //Update log file
       C_OscLoggingHandler::h_Flush();
       c_Message.SetDetails(static_cast<QString>(
                               "%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.").
-                           arg(C_GtGetText::h_GetText("For more information see ")).
+                           arg("For more information see ").
                            arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()).
                            arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
-                           arg(C_GtGetText::h_GetText("log file")));
+                           arg("log file"));
       c_Message.SetCustomMinHeight(180, 250);
       break;
    default:
-      c_Message.SetDescription(C_GtGetText::h_GetText("Unknown reason."));
+      c_Message.SetDescription("Unknown reason.");
       c_Message.SetCustomMinHeight(180, 180);
       break;
    }
@@ -676,15 +674,14 @@ int32_t C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex, const C_OscCan
 
       {
          C_OgeWiCustomMessage c_NodesError(opc_Parent, C_OgeWiCustomMessage::eERROR);
-         c_NodesError.SetHeading(C_GtGetText::h_GetText("DBC file import"));
-         c_NodesError.SetDescription(C_GtGetText::h_GetText("No nodes or messages found in selected DBC file."));
+         c_NodesError.SetHeading("DBC file import");
+         c_NodesError.SetDescription("No nodes or messages found in selected DBC file.");
          c_NodesError.SetDetails(static_cast<QString>(
                                     "%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.").
-                                 arg(C_GtGetText::h_GetText(
-                                        "For possible parsing errors, warnings and detailed information see ")).
+                                 arg("For possible parsing errors, warnings and detailed information see ").
                                  arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()).
                                  arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
-                                 arg(C_GtGetText::h_GetText("log file")));
+                                 arg("log file"));
          c_NodesError.SetCustomMinHeight(180, 270);
          c_NodesError.Execute();
       }
@@ -700,8 +697,8 @@ int32_t C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex, const C_OscCan
                c_Warnings += "\n";
             }
             C_OgeWiCustomMessage c_ImportWarnings(opc_Parent, C_OgeWiCustomMessage::E_Type::eWARNING);
-            c_ImportWarnings.SetHeading(C_GtGetText::h_GetText("DBC file import"));
-            c_ImportWarnings.SetDescription(C_GtGetText::h_GetText("Warnings occurred during DBC file import."));
+            c_ImportWarnings.SetHeading("DBC file import");
+            c_ImportWarnings.SetDescription("Warnings occurred during DBC file import.");
             c_ImportWarnings.SetDetails(c_Warnings);
             c_ImportWarnings.SetCustomMinWidth(750);
             c_ImportWarnings.SetCustomMinHeight(180, 400);
@@ -794,11 +791,11 @@ int32_t C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex, const C_OscCan
       // display error message to user
       const QString c_ErrorMsg = c_ErrorMessage.c_str();
       C_OgeWiCustomMessage c_MessageResult(opc_Parent, C_OgeWiCustomMessage::E_Type::eERROR);
-      c_MessageResult.SetHeading(C_GtGetText::h_GetText("DBC file import"));
-      c_MessageResult.SetDescription(C_GtGetText::h_GetText("DBC file import error occurred."));
-      c_MessageResult.SetDetails(C_GtGetText::h_GetText("Error code: \n") +
+      c_MessageResult.SetHeading("DBC file import");
+      c_MessageResult.SetDescription("DBC file import error occurred.");
+      c_MessageResult.SetDetails("Error code: \n" +
                                  QString::number(s32_ImportReturn) +
-                                 C_GtGetText::h_GetText("\nError message(s):\n") +
+                                 "\nError message(s):\n" +
                                  c_ErrorMsg);
       c_MessageResult.SetCustomMinHeight(180, 300);
       c_MessageResult.Execute();
@@ -915,15 +912,14 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
                else
                {
                   C_OgeWiCustomMessage c_Message(opc_Parent);
-                  c_Message.SetHeading(C_GtGetText::h_GetText("Nothing found"));
-                  c_Message.SetDescription(C_GtGetText::h_GetText("No messages found in file."));
+                  c_Message.SetHeading("Nothing found");
+                  c_Message.SetDescription("No messages found in file.");
                   c_Message.SetDetails(static_cast<QString>(
                                           "%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.").
-                                       arg(C_GtGetText::h_GetText(
-                                              "For possible parsing errors, warnings and detailed information see ")).
+                                       arg("For possible parsing errors, warnings and detailed information see ").
                                        arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()).
                                        arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
-                                       arg(C_GtGetText::h_GetText("log file")));
+                                       arg("log file"));
                   c_Message.SetCustomMinHeight(180, 270);
                   c_Message.Execute();
                }
@@ -931,37 +927,36 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
             else
             {
                C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::E_Type::eERROR);
-               c_Message.SetHeading(C_GtGetText::h_GetText("Import from file"));
+               c_Message.SetHeading("Import from file");
                switch (s32_ImportResult)
                {
                case C_RANGE:
-                  c_Message.SetDescription(C_GtGetText::h_GetText("Invalid parameter."));
+                  c_Message.SetDescription("Invalid parameter.");
                   c_Message.SetDetails(static_cast<QString>(c_ParsingError.c_str()));
                   c_Message.SetCustomMinHeight(180, 300);
                   break;
                case C_NOACT:
-                  c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                   "EDS file import failed. Node ID %1 is invalid.")).arg(
+                  c_Message.SetDescription(static_cast<QString>("EDS file import failed. Node ID %1 is invalid.").arg(
                                               rc_CurInterface.u8_NodeId));
-                  c_Message.SetDetails(C_GtGetText::h_GetText("CANopen standard only supports node IDs in the range "
+                  c_Message.SetDetails("CANopen standard only supports node IDs in the range "
                                                               "of 1 to 127.\nThe node ID can be changed in node "
-                                                              "properties."));
+                                                              "properties.");
                   c_Message.SetCustomMinHeight(180, 270);
                   break;
                case C_CONFIG:
-                  c_Message.SetDescription(C_GtGetText::h_GetText("An error occurred while parsing."));
+                  c_Message.SetDescription("An error occurred while parsing.");
                   //Update log file
                   C_OscLoggingHandler::h_Flush();
                   c_Message.SetDetails(static_cast<QString>(
                                           "%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.").
-                                       arg(C_GtGetText::h_GetText("For more information see ")).
+                                       arg("For more information see ").
                                        arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()).
                                        arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
-                                       arg(C_GtGetText::h_GetText("log file")));
+                                       arg("log file"));
                   c_Message.SetCustomMinHeight(180, 250);
                   break;
                default:
-                  c_Message.SetDescription(C_GtGetText::h_GetText("Unknown reason."));
+                  c_Message.SetDescription("Unknown reason.");
                   c_Message.SetCustomMinHeight(180, 180);
                   break;
                }

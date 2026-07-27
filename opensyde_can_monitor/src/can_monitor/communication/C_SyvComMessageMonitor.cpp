@@ -10,6 +10,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <cstring>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 
@@ -19,6 +21,7 @@
 #include "C_CieImportDbc.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_SyvComMessageLoggerFileBlf.hpp"
+#include "C_CamCanTpTransmitter.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -51,7 +54,8 @@ C_SyvComMessageMonitor::C_SyvComMessageMonitor(void) :
    ms32_Result(0),
    mu8_BusLoad(0U),
    mu32_TxMessages(0U),
-   mu32_TxErrors(0U)
+   mu32_TxErrors(0U),
+   mpc_CanTpTransmitter(NULL)
 {
    mpc_LoadingThread = new C_SyvComDriverThread(&C_SyvComMessageMonitor::mh_ThreadFunc, this);
 }
@@ -515,15 +519,140 @@ int32_t C_SyvComMessageMonitor::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg
 {
    int32_t s32_Return;
 
-   this->mc_CriticalSectionCounter.lock();
-   s32_Return = C_OscComMessageLogger::HandleCanMessage(orc_Msg, oq_IsTx);
-   this->mc_CriticalSectionCounter.unlock();
+   // --- CAN-TP preprocessing ---
+   C_CamCanTpResult c_TpResult;
+   this->mc_CanTpDecoder.ProcessFrame(orc_Msg, c_TpResult);
+
+   // Forward Flow Control frames to the CAN-TP transmitter so that
+   // multi-frame Tx sessions can proceed past the WAITING_FOR_FLOW_CONTROL state.
+   if ((c_TpResult.q_IsTpFrame) && (c_TpResult.u8_PciType == mhu8_CAN_TP_PCI_FC) &&
+       (this->mpc_CanTpTransmitter != NULL))
+   {
+      this->mpc_CanTpTransmitter->HandleFlowControl(orc_Msg);
+   }
+
+   // Suppress logging of duplicate CAN-TP frames that arrive after reassembly
+   // completed (e.g., the Rx echo of a CF that was already processed via Tx echo).
+   // These would otherwise overwrite the reconstructed message in unique display mode.
+   if ((c_TpResult.q_IsTpFrame) && (c_TpResult.q_Error) && (c_TpResult.u8_PciType == mhu8_CAN_TP_PCI_CF))
+   {
+      return C_NOACT;
+   }
+
+   // Determine the CAN message to pass to the base class.
+   // If TP reassembly completed, log the raw frame first, then the reconstructed message.
+   bool q_Reassembled = false;
+   std::vector<uint8_t> c_Reassembled;
+   // Saved timestamps from the raw CAN-TP frame, used to restore the
+   // reconstructed message's display timestamps (see below).
+   uint64_t u64_RawTsAbs = 0ULL;
+   uint64_t u64_RawTsTod = 0ULL;
+   uint64_t u64_RawTsRel = 0ULL;
+   stw::scl::C_SclString c_RawTsAbsStr;
+   stw::scl::C_SclString c_RawTsTodStr;
+   stw::scl::C_SclString c_RawTsRelStr;
+   stw::scl::C_SclString c_RawCounter;
+   if ((c_TpResult.q_IsTpFrame) && (c_TpResult.q_ReassemblyComplete) && (!c_TpResult.q_Error))
+   {
+      (void)this->mc_CanTpDecoder.GetReassembledData(c_TpResult.u32_SessionKey, c_Reassembled);
+      q_Reassembled = (c_Reassembled.size() > 0U);
+   }
+
+   // --- Base class processing (filtering, interpretation, logging) ---
+   // For reassembled messages, log the raw frame first, then the reconstructed payload.
+   if (q_Reassembled)
+   {
+      // Log the raw CAN-TP frame (CF with PCI byte) as-is
+      this->mc_CriticalSectionCounter.lock();
+      s32_Return = C_OscComMessageLogger::HandleCanMessage(orc_Msg, oq_IsTx);
+      this->mc_CriticalSectionCounter.unlock();
+      if (s32_Return == C_NO_ERR)
+      {
+         this->mc_CriticalSectionMsg.lock();
+         {
+            const C_OscComMessageLoggerData c_RawData = this->m_GetHandledCanMessage();
+            u64_RawTsAbs = c_RawData.u64_TimeStampAbsoluteStart;
+            u64_RawTsTod = c_RawData.u64_TimeStampAbsoluteTimeOfDay;
+            u64_RawTsRel = c_RawData.u64_TimeStampRelative;
+            c_RawTsAbsStr = c_RawData.c_TimeStampAbsoluteStart;
+            c_RawTsTodStr = c_RawData.c_TimeStampAbsoluteTimeOfDay;
+            c_RawTsRelStr = c_RawData.c_TimeStampRelative;
+            c_RawCounter = c_RawData.c_Counter;
+            C_OscComMessageLoggerData c_RawDataCpy = c_RawData;
+            this->m_ApplyTpMetadata(c_RawDataCpy, c_TpResult);
+            // The raw frame is an intermediate TP frame — clear the reassembled
+            // flag so the trace model can distinguish it from the final
+            // reconstructed message in unique mode.
+            c_RawDataCpy.q_TpReassembled = false;
+            this->mc_ReceivedMessages.push_back(c_RawDataCpy);
+         }
+         this->mc_CriticalSectionMsg.unlock();
+      }
+
+      // Now log the reconstructed message with the full reassembled payload.
+      // Build a modified message with the reassembled data clamped to 8 bytes
+      // for the base class, then overwrite with the full payload for display.
+      stw::can::T_STWCAN_Msg_RX c_ReconstMsg = orc_Msg;
+      const uint32_t u32_ClampedLen = (c_Reassembled.size() <= 8U) ?
+                                       static_cast<uint32_t>(c_Reassembled.size()) : 8U;
+      (void)std::memcpy(c_ReconstMsg.au8_Data, &c_Reassembled[0], u32_ClampedLen);
+      c_ReconstMsg.u8_DLC = static_cast<uint8_t>(u32_ClampedLen);
+
+      this->mc_CriticalSectionCounter.lock();
+      s32_Return = C_OscComMessageLogger::HandleCanMessage(c_ReconstMsg, oq_IsTx);
+      this->mc_CriticalSectionCounter.unlock();
+   }
+   else
+   {
+      // Normal path: log the message as-is
+      this->mc_CriticalSectionCounter.lock();
+      s32_Return = C_OscComMessageLogger::HandleCanMessage(orc_Msg, oq_IsTx);
+      this->mc_CriticalSectionCounter.unlock();
+   }
 
    if (s32_Return == C_NO_ERR)
    {
-      // Add the interpreted data to the list
       this->mc_CriticalSectionMsg.lock();
-      this->mc_ReceivedMessages.push_back(this->m_GetHandledCanMessage());
+      C_OscComMessageLoggerData c_MessageData = this->m_GetHandledCanMessage();
+      this->m_ApplyTpMetadata(c_MessageData, c_TpResult);
+
+      // For reassembled messages, overwrite with the full payload
+      if (q_Reassembled)
+      {
+         // Restore the timestamp from the raw frame — the base class advanced
+         // mu64_LastTimeStamp when processing the raw frame, so the reconstructed
+         // message (same timestamp) would otherwise show relative=0.
+         c_MessageData.u64_TimeStampAbsoluteStart = u64_RawTsAbs;
+         c_MessageData.u64_TimeStampAbsoluteTimeOfDay = u64_RawTsTod;
+         c_MessageData.u64_TimeStampRelative = u64_RawTsRel;
+         c_MessageData.c_TimeStampAbsoluteStart = c_RawTsAbsStr;
+         c_MessageData.c_TimeStampAbsoluteTimeOfDay = c_RawTsTodStr;
+          c_MessageData.c_TimeStampRelative = c_RawTsRelStr;
+          // Use our own per-ID counter so the count reflects complete
+          // messages, not individual CAN-TP frames.
+          this->mc_MessageCounter[orc_Msg.u32_ID]++;
+          c_MessageData.c_Counter = stw::scl::C_SclString::IntToStr(
+             this->mc_MessageCounter[orc_Msg.u32_ID]);
+
+         stw::scl::C_SclString c_HexStr;
+         stw::scl::C_SclString c_DecStr;
+         const uint16_t u16_Count = static_cast<uint16_t>(c_Reassembled.size());
+         for (uint16_t u16_i = 0U; u16_i < u16_Count; ++u16_i)
+         {
+            if (u16_i > 0U) { c_HexStr += " "; c_DecStr += " "; }
+            const uint8_t u8_Val = c_Reassembled[u16_i];
+            c_HexStr += stw::scl::C_SclString::IntToHex(u8_Val, 2).UpperCase();
+            if (u8_Val < 100U) { c_DecStr += " "; if (u8_Val < 10U) { c_DecStr += " "; } }
+            c_DecStr += stw::scl::C_SclString::IntToStr(u8_Val);
+         }
+         c_MessageData.c_CanDataHex = c_HexStr;
+         c_MessageData.c_CanDataDec = c_DecStr;
+         c_MessageData.c_CanDlc = stw::scl::C_SclString::IntToStr(u16_Count);
+         c_MessageData.c_ProtocolTextHex = "";
+         c_MessageData.c_ProtocolTextDec = "";
+      }
+
+      this->mc_ReceivedMessages.push_back(c_MessageData);
       this->mc_CriticalSectionMsg.unlock();
    }
 
@@ -538,6 +667,7 @@ void C_SyvComMessageMonitor::ResetCounter(void)
 {
    this->mc_CriticalSectionCounter.lock();
    C_OscComMessageLogger::ResetCounter();
+   this->mc_MessageCounter.clear();
    this->mc_CriticalSectionCounter.unlock();
 }
 
@@ -655,6 +785,32 @@ uint32_t C_SyvComMessageMonitor::GetTxErrors(void) const
    this->mc_CriticalSectionMeta.unlock();
 
    return u32_TxErrors;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get reference to CAN-TP decoder
+
+   \return
+   Reference to internal CAN-TP decoder instance
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_CamCanTpDecoder & C_SyvComMessageMonitor::GetCanTpDecoder(void)
+{
+   return this->mc_CanTpDecoder;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set the CAN-TP transmitter for FC frame forwarding
+*
+*   When an incoming Flow Control frame is decoded, it is forwarded
+*   to the transmitter so the multi-frame Tx session can proceed.
+*
+*   \param[in]  opc_Transmitter  Pointer to the CAN-TP transmitter instance
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SyvComMessageMonitor::SetCanTpTransmitter(C_CamCanTpTransmitter * const opc_Transmitter)
+{
+   this->mpc_CanTpTransmitter = opc_Transmitter;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1202,6 +1358,63 @@ void C_SyvComMessageMonitor::mh_InterpretDbcFileCanSignal(C_OscComMessageLoggerD
    }
 
    orc_MessageData.c_Signals.push_back(c_Signal);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Apply CAN-TP metadata to a message data object
+
+   Transfers the CAN-TP decoder result into the message data
+   structure for display and further processing.
+
+   \param[in,out]  orc_MessageData  Message data to annotate
+   \param[in]      orc_TpResult     CAN-TP decoder result
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SyvComMessageMonitor::m_ApplyTpMetadata(C_OscComMessageLoggerData & orc_MessageData,
+                                                const C_CamCanTpResult & orc_TpResult) const
+{
+   if (!orc_TpResult.q_IsTpFrame)
+   {
+      orc_MessageData.e_TpFrameType = stw::opensyde_core::eCTFT_NONE;
+      return;
+   }
+
+   switch (orc_TpResult.u8_PciType)
+   {
+   case mhu8_CAN_TP_PCI_SF:
+      orc_MessageData.e_TpFrameType = stw::opensyde_core::eCTFT_SINGLE;
+      break;
+   case mhu8_CAN_TP_PCI_FF:
+      orc_MessageData.e_TpFrameType = stw::opensyde_core::eCTFT_FIRST;
+      break;
+   case mhu8_CAN_TP_PCI_CF:
+      orc_MessageData.e_TpFrameType = stw::opensyde_core::eCTFT_CONSECUTIVE;
+      break;
+   case mhu8_CAN_TP_PCI_FC:
+      orc_MessageData.e_TpFrameType = stw::opensyde_core::eCTFT_FLOW_CONTROL;
+      break;
+   default:
+      orc_MessageData.e_TpFrameType = stw::opensyde_core::eCTFT_NONE;
+      break;
+   }
+
+   orc_MessageData.u8_TpSequenceNumber = orc_TpResult.u8_SequenceNumber;
+   orc_MessageData.u16_TpTotalMessageLength = orc_TpResult.u16_TotalMessageLength;
+   orc_MessageData.u8_TpBlockSize = orc_TpResult.u8_BlockSize;
+   orc_MessageData.u8_TpSeparationTime = orc_TpResult.u8_SeparationTime;
+   orc_MessageData.u32_TpSessionKey = orc_TpResult.u32_SessionKey;
+   orc_MessageData.q_TpReassembled = orc_TpResult.q_ReassemblyComplete;
+   orc_MessageData.q_TpError = orc_TpResult.q_Error;
+
+   if (orc_TpResult.q_Error)
+   {
+      if (orc_MessageData.c_Status != "")
+      {
+         orc_MessageData.c_Status += "; ";
+      }
+      orc_MessageData.c_Status += "TP: ";
+      orc_MessageData.c_Status += orc_TpResult.c_ErrorDescription.c_str();
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

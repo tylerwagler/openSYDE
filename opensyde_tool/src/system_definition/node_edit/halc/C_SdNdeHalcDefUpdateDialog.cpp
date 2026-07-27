@@ -14,7 +14,6 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_ImpUtil.hpp"
 #include "TglUtils.hpp"
@@ -99,11 +98,11 @@ C_SdNdeHalcDefUpdateDialog::~C_SdNdeHalcDefUpdateDialog(void) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcDefUpdateDialog::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("HALC Configuration"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Update Definition"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Update Definition"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetTitle("HALC Configuration");
+   this->mrc_ParentDialog.SetSubTitle("Update Definition");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Update Definition");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -128,7 +127,7 @@ int32_t C_SdNdeHalcDefUpdateDialog::GetResult(C_OscHalcConfig & orc_UpdatedHalcC
       break;
    default:
       orc_ErrorDetails =
-         static_cast<QString>(C_GtGetText::h_GetText("Unknown error: %1")).arg(C_Uti::h_StwError(this->ms32_Result));
+         static_cast<QString>("Unknown error: %1").arg(C_Uti::h_StwError(this->ms32_Result));
       break;
    }
 
@@ -176,9 +175,9 @@ void C_SdNdeHalcDefUpdateDialog::m_CreateReport(const QString & orc_FilePath) co
    QString c_Text;
 
    // Content summary
-   c_ReadContent += static_cast<QString>(C_GtGetText::h_GetText("Content version: %1; ")).
+   c_ReadContent += static_cast<QString>("Content version: %1; ").
                     arg(this->mrc_LoadedHalcConfig.u32_ContentVersion);
-   c_ReadContent += static_cast<QString>(C_GtGetText::h_GetText("Domains: %1")).
+   c_ReadContent += static_cast<QString>("Domains: %1").
                     arg(this->mrc_LoadedHalcConfig.GetDomainSize());
 
    // Source file information
@@ -186,13 +185,13 @@ void C_SdNdeHalcDefUpdateDialog::m_CreateReport(const QString & orc_FilePath) co
 
    // Preview heading
    c_Text += "<h3>";
-   c_Text += C_GtGetText::h_GetText("Update Preview");
+   c_Text += "Update Preview";
    c_Text += "</h3>";
 
    // Content
-   c_Text += this->m_AddSection(C_GtGetText::h_GetText("New"), this->mc_NewContent);
-   c_Text += this->m_AddSection(C_GtGetText::h_GetText("Reset to Default"), this->mc_ResetContent);
-   c_Text += this->m_AddSection(C_GtGetText::h_GetText("Removed"), this->mc_RemovedContent);
+   c_Text += this->m_AddSection("New", this->mc_NewContent);
+   c_Text += this->m_AddSection("Reset to Default", this->mc_ResetContent);
+   c_Text += this->m_AddSection("Removed", this->mc_RemovedContent);
 
    // Finally add to text edit field
    this->mpc_Ui->pc_TextEditFlash->setHtml(c_Text);
@@ -213,11 +212,11 @@ QString C_SdNdeHalcDefUpdateDialog::m_AddSection(const QString & orc_SectionName
    QString c_Text = "";
 
    c_Text += "<p><b>";
-   c_Text += static_cast<QString>(C_GtGetText::h_GetText("%1 (%2)")).arg(orc_SectionName).arg(orc_Content.length());
+   c_Text += static_cast<QString>("%1 (%2)").arg(orc_SectionName).arg(orc_Content.length());
    c_Text += "</b></p>";
    if (orc_Content.length() == 0)
    {
-      c_Text += static_cast<QString>(C_GtGetText::h_GetText("No %1 features.")).arg(orc_SectionName.toLower());
+      c_Text += static_cast<QString>("No %1 features.").arg(orc_SectionName.toLower());
    }
    else
    {
@@ -231,7 +230,7 @@ QString C_SdNdeHalcDefUpdateDialog::m_AddSection(const QString & orc_SectionName
       c_Text += c_TableHeaderStart;
       c_Text += "#</td>";
       c_Text += c_TableHeaderStart;
-      c_Text += C_GtGetText::h_GetText("Description");
+      c_Text += "Description";
       c_Text += "</td>";
       c_Text += "</tr>";
 
@@ -312,7 +311,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateHalcConfiguration(void)
             if (q_DomainFound == false)
             {
                // Report new domain
-               this->mc_NewContent.append(static_cast<QString>(C_GtGetText::h_GetText("Domain ")) +
+               this->mc_NewContent.append(static_cast<QString>("Domain ") +
                                           pc_UpdatedDomain->c_Name.c_str());
             }
          }
@@ -349,7 +348,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateHalcConfiguration(void)
             if (q_CurrentDomainFound == false)
             {
                // Report domain removed
-               this->mc_RemovedContent.append(static_cast<QString>(C_GtGetText::h_GetText("Domain ")) +
+               this->mc_RemovedContent.append(static_cast<QString>("Domain ") +
                                               pc_CurrentDomain->c_Name.c_str());
             }
          }
@@ -409,7 +408,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateDomainConfiguration(const C_OscHalcConf
       if (q_ChannelFound == false)
       {
          // Report new channel
-         this->mc_NewContent.append(static_cast<QString>(C_GtGetText::h_GetText("Channel ")) +
+         this->mc_NewContent.append(static_cast<QString>("Channel ") +
                                     orc_UpdatedConfig.c_ChannelConfigs[u32_UpdatedChannelCounter].c_Name.c_str());
       }
    }
@@ -436,7 +435,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateDomainConfiguration(const C_OscHalcConf
       if (q_CurrentChannelFound == false)
       {
          // Report channel removed
-         this->mc_RemovedContent.append(static_cast<QString>(C_GtGetText::h_GetText("Channel ")) +
+         this->mc_RemovedContent.append(static_cast<QString>("Channel ") +
                                         orc_CurrentConfig.c_ChannelConfigs[u32_CurrentChannelCounter].c_Name.c_str());
       }
    }
@@ -541,9 +540,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcCon
          // Using the loaded default values of definition.
          q_ResetToDefault = true;
          // Report channel reset to default due to missing use case
-         this->mc_ResetContent.append(static_cast<QString>(C_GtGetText::h_GetText(
-                                                              "Configured use case of channel %1 is not "
-                                                              "available anymore and was reset to default."))
+         this->mc_ResetContent.append(static_cast<QString>("Configured use case of channel %1 is not "
+                                                              "available anymore and was reset to default.")
                                       .arg(rc_UpdatedChannelConfig.c_Name.c_str()));
       }
    }
@@ -617,9 +615,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcCon
                {
                   // Parameter struct changed, no update possible
                   // Reporting parameter structure changed
-                  this->mc_ResetContent.append(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                       "Configured parameter %1 of channel %2 is not "
-                                                                       "updated due to changed configuration structure."))
+                  this->mc_ResetContent.append(static_cast<QString>("Configured parameter %1 of channel %2 is not "
+                                                                       "updated due to changed configuration structure.")
                                                .arg(rc_UpdatedParameterDef.c_Display.c_str())
                                                .arg(rc_UpdatedChannelConfig.c_Name.c_str()));
                }
@@ -631,7 +628,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcCon
          if (q_ParameterFound == false)
          {
             // Reporting new parameter
-            this->mc_NewContent.append(static_cast<QString>(C_GtGetText::h_GetText("Parameter %1 of channel %2"))
+            this->mc_NewContent.append(static_cast<QString>("Parameter %1 of channel %2")
                                        .arg(rc_UpdatedParameterDef.c_Display.c_str())
                                        .arg(rc_UpdatedChannelConfig.c_Name.c_str()));
          }
@@ -660,7 +657,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcCon
          if (q_CurrentParameterFound == false)
          {
             // Reporting parameter removed
-            this->mc_RemovedContent.append(static_cast<QString>(C_GtGetText::h_GetText("Parameter %1 of channel %2"))
+            this->mc_RemovedContent.append(static_cast<QString>("Parameter %1 of channel %2")
                                            .arg((*pc_CurrentParametersToCompare)[u32_CurrentDefParameterCounter].
                                                 c_Display.c_str())
                                            .arg(rc_UpdatedChannelConfig.c_Name.c_str()));
@@ -737,7 +734,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateSubParameterConfiguration(const C_OscHa
       if (q_ParameterFound == false)
       {
          // Reporting new sub parameter
-         this->mc_NewContent.append(static_cast<QString>(C_GtGetText::h_GetText("Parameter %1 of channel %2"))
+         this->mc_NewContent.append(static_cast<QString>("Parameter %1 of channel %2")
                                     .arg(rc_UpdatedParameterDef.c_Display.c_str())
                                     .arg(orc_ChannelName.c_str()));
       }
@@ -766,7 +763,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateSubParameterConfiguration(const C_OscHa
       if (q_CurrentParameterFound == false)
       {
          // Reporting sub parameter removed
-         this->mc_RemovedContent.append(static_cast<QString>(C_GtGetText::h_GetText("Parameter %1 of channel %2"))
+         this->mc_RemovedContent.append(static_cast<QString>("Parameter %1 of channel %2")
                                         .arg(orc_CurrentParameterDef.c_StructElements[u32_CurrentDefSubParameterCounter]
                                              .c_Display.c_str())
                                         .arg(orc_ChannelName.c_str()));
@@ -811,8 +808,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateParameterElementConfiguration(
    {
       // In previous definition the parameter was not relevant for the use case but with the new definition it is
       // Nothing to update, but to report
-      this->mc_NewContent.append(static_cast<QString>(C_GtGetText::h_GetText(
-                                                         "Parameter %1 of channel %2 is now available for its set use case"))
+      this->mc_NewContent.append(static_cast<QString>("Parameter %1 of channel %2 is now available for its set use case")
                                  .arg(orc_UpdatedParameterDef.c_Display.c_str())
                                  .arg(orc_ChannelName.c_str()));
    }
@@ -839,9 +835,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateParameterElementConfiguration(
          else
          {
             // Reporting parameter not updated due to changed min max values
-            this->mc_ResetContent.append(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                 "Configured parameter %1 of channel %2 is not "
-                                                                 "updated due to changed range and was reset to default."))
+            this->mc_ResetContent.append(static_cast<QString>("Configured parameter %1 of channel %2 is not "
+                                                                 "updated due to changed range and was reset to default.")
                                          .arg(orc_UpdatedParameterDef.c_Display.c_str())
                                          .arg(orc_ChannelName.c_str()));
          }
@@ -849,9 +844,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateParameterElementConfiguration(
       else
       {
          // Reporting parameter not updated due to changed value type
-         this->mc_ResetContent.append(static_cast<QString>(C_GtGetText::h_GetText(
-                                                              "Configured parameter %1 of channel %2 is not "
-                                                              "updated due to changed value type and was reset to default."))
+         this->mc_ResetContent.append(static_cast<QString>("Configured parameter %1 of channel %2 is not "
+                                                              "updated due to changed value type and was reset to default.")
                                       .arg(orc_UpdatedParameterDef.c_Display.c_str())
                                       .arg(orc_ChannelName.c_str()));
       }

@@ -14,7 +14,6 @@
 
 #include "C_SdNdeHalcChannelTreeView.hpp"
 #include "C_OgeContextMenu.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -271,16 +270,16 @@ void C_SdNdeHalcChannelTreeView::m_SetupContextMenu(void)
    connect(this, &C_SdNdeHalcChannelTreeView::customContextMenuRequested,
            this, &C_SdNdeHalcChannelTreeView::m_OnCustomContextMenuRequested);
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Expand all"), this, &C_SdNdeHalcChannelTreeView::expandAll);
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Collapse all"), this,
+   this->mpc_ContextMenu->addAction("Expand all", this, &C_SdNdeHalcChannelTreeView::expandAll);
+   this->mpc_ContextMenu->addAction("Collapse all", this,
                                     &C_SdNdeHalcChannelTreeView::collapseAll);
    this->mpc_ContextMenu->addSeparator();
-   this->mpc_CopyAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Copy Configuration"),
+   this->mpc_CopyAction = this->mpc_ContextMenu->addAction("Copy Configuration",
                                                            this, &C_SdNdeHalcChannelTreeView::m_OnCopy);
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Apply Configuration"),
+   this->mpc_ContextMenu->addAction("Apply Configuration",
                                     this, &C_SdNdeHalcChannelTreeView::m_OnPaste);
    this->mpc_ContextMenu->addSeparator();
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Reset to Default"), this,
+   this->mpc_ContextMenu->addAction("Reset to Default", this,
                                     &C_SdNdeHalcChannelTreeView::m_OnReset);
 }
 
@@ -343,12 +342,12 @@ void C_SdNdeHalcChannelTreeView::m_OnReset(void)
 {
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eQUESTION);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("Reset configuration"));
-   c_Message.SetDescription(C_GtGetText::h_GetText("Do you really want to reset the selected channel(s) to their "
+   c_Message.SetHeading("Reset configuration");
+   c_Message.SetDescription("Do you really want to reset the selected channel(s) to their "
                                                    "default configuration and lose your current settings? For linked "
-                                                   "channel(s) the use case will be reset to default."));
-   c_Message.SetOkButtonText(C_GtGetText::h_GetText("Reset"));
-   c_Message.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+                                                   "channel(s) the use case will be reset to default.");
+   c_Message.SetOkButtonText("Reset");
+   c_Message.SetNoButtonText("Cancel");
    if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
    {
       this->mc_Model.Reset(this->selectionModel()->selectedIndexes());

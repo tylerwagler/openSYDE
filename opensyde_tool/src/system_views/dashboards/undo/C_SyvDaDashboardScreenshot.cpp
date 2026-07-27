@@ -19,7 +19,6 @@
 #include "C_SyvDaDashboardSelectorTabWidget.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSvHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 #include "C_PuiProject.hpp"
 #include "C_SyvClipBoardHelper.hpp"
@@ -87,10 +86,10 @@ C_SyvDaDashboardScreenshot::C_SyvDaDashboardScreenshot(QWidget * const opc_Paren
    this->mpc_ScreenshotPushButton->SetIconSize(24);
    //lint -e{1938}  static const is guaranteed preinitialized before main
    this->mpc_ScreenshotPushButton->setIcon(QIcon(C_SyvDaDashboardScreenshot::mhc_SCREENSHOT_ICON_LIGHT));
-   this->mpc_ScreenshotPushButton->SetToolTipInformation(C_GtGetText::h_GetText("Screenshot (F10)"),
-                                                         C_GtGetText::h_GetText("Take dashboard screenshot. "
+   this->mpc_ScreenshotPushButton->SetToolTipInformation("Screenshot (F10)",
+                                                         "Take dashboard screenshot. "
                                                                                 "\nImage is copied to clipboard and"
-                                                                                " saved at /Screenshots folder."));
+                                                                                " saved at /Screenshots folder.");
 
    this->mpc_ScreenshotPushButton->setEnabled(!q_ServiceModeActive);
 
@@ -309,11 +308,10 @@ void C_SyvDaDashboardScreenshot::m_ShowMessageBox(QWidget * const opc_ParentWidg
                                                              mc_STYLE_GUIDE_COLOR_4,
                                                              mhc_ScreenshotFolderPath);
 
-   c_MessageBox.SetHeading(C_GtGetText::h_GetText("Dashboard Screenshot"));
-   c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                  "Dashboard screenshot taken. Image is saved at /Screenshots folder."));
+   c_MessageBox.SetHeading("Dashboard Screenshot");
+   c_MessageBox.SetDescription("Dashboard screenshot taken. Image is saved at /Screenshots folder.");
    c_MessageBox.SetDetails(c_ScreenshotLocationPath);
-   c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("OK"));
+   c_MessageBox.SetOkButtonText("OK");
    c_MessageBox.SetCustomMinHeight(180, 250);
    c_MessageBox.Execute();
 }

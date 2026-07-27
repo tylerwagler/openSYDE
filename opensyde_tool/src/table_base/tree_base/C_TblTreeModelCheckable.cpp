@@ -13,7 +13,6 @@
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 
-#include "C_GtGetText.hpp"
 //#include "C_SdCodeGenerationModel.hpp"
 #include "C_TblTreeModelCheckable.hpp"
 #include "C_PuiSdHandler.hpp"

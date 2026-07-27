@@ -28,6 +28,16 @@ namespace opensyde_core
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
+///CAN-TP (ISO 15765-2) frame type
+enum E_OscCanTpFrameType
+{
+   eCTFT_NONE,       ///< Not a CAN-TP frame (or TP decoding disabled)
+   eCTFT_SINGLE,     ///< Single Frame (SF) — complete message ≤7 bytes payload
+   eCTFT_FIRST,      ///< First Frame (FF) — start of multi-frame message
+   eCTFT_CONSECUTIVE,///< Consecutive Frame (CF) — continuation of multi-frame message
+   eCTFT_FLOW_CONTROL///< Flow Control (FC) — peer throttling
+};
+
 class C_OscComMessageLoggerDataSignal
 {
 public:
@@ -77,6 +87,16 @@ public:
 
    stw::can::T_STWCAN_Msg_RX c_CanMsg;
    bool q_IsTx;
+
+   // CAN-TP (ISO 15765-2) metadata
+   E_OscCanTpFrameType e_TpFrameType;     ///< Detected CAN-TP frame type (eCTFT_NONE if not TP)
+   uint8_t u8_TpSequenceNumber;           ///< Sequence number (SN) for CF frames (0-15)
+   uint16_t u16_TpTotalMessageLength;     ///< Total message length from FF (0 for non-FF)
+   uint8_t u8_TpBlockSize;                ///< Block Size (BS) from FC frame
+   uint8_t u8_TpSeparationTime;           ///< Separation Time (STmin) from FC frame (ms)
+   uint32_t u32_TpSessionKey;             ///< Session identifier (typically source CAN ID)
+   bool q_TpReassembled;                  ///< true if this frame completes a TP reassembly
+   bool q_TpError;                        ///< true if TP protocol error detected
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

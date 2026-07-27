@@ -19,7 +19,6 @@
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_NagNaviBarWidget.hpp"
-#include "C_GtGetText.hpp"
 #include "ui_C_NagNaviBarWidget.h"
 
 #include "stwtypes.hpp"
@@ -385,19 +384,18 @@ void C_NagNaviBarWidget::ResetUseCaseAfterChangeFailure(const int32_t os32_Mode)
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagNaviBarWidget::InitText(void) const
 {
-   this->mpc_Ui->pc_PushButtonTopology->setText(C_GtGetText::h_GetText("NETWORK TOPOLOGY"));
-   this->mpc_Ui->pc_BtnMain->setText(C_GtGetText::h_GetText("MAIN"));
+   this->mpc_Ui->pc_PushButtonTopology->setText("NETWORK TOPOLOGY");
+   this->mpc_Ui->pc_BtnMain->setText("MAIN");
 
-   this->mpc_Ui->pc_PushButtonAddSysView->setText(C_GtGetText::h_GetText("Add View"));
-   this->mpc_Ui->pc_PushButtonCanMonitor->setText(C_GtGetText::h_GetText("openSYDE CAN Monitor"));
+   this->mpc_Ui->pc_PushButtonAddSysView->setText("Add View");
+   this->mpc_Ui->pc_PushButtonCanMonitor->setText("openSYDE CAN Monitor");
 
    //SetText
-   this->mpc_Ui->pc_WidgetTabSd->SetText(C_GtGetText::h_GetText("SYSTEM\nDEFINITION"));
-   this->mpc_Ui->pc_WidgetTabSc->SetText(C_GtGetText::h_GetText("SYSTEM\nCOMMISSIONING"));
+   this->mpc_Ui->pc_WidgetTabSd->SetText("SYSTEM\nDEFINITION");
+   this->mpc_Ui->pc_WidgetTabSc->SetText("SYSTEM\nCOMMISSIONING");
 
-   this->mpc_Ui->pc_PushButtonCanMonitor->SetToolTipInformation(C_GtGetText::h_GetText("openSYDE CAN Monitor"),
-                                                                C_GtGetText::h_GetText(
-                                                                   "Open new instance of openSYDE CAN Monitor."));
+   this->mpc_Ui->pc_PushButtonCanMonitor->SetToolTipInformation("openSYDE CAN Monitor",
+                                                                "Open new instance of openSYDE CAN Monitor.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -619,7 +617,7 @@ void C_NagNaviBarWidget::m_NodesChanged(void) const
    }
    //Update node count
    this->mpc_Ui->pc_LabelNodes->setText(
-      static_cast<QString>(C_GtGetText::h_GetText("Nodes (%1)")).arg(u32_ParentNodeCounter));
+      static_cast<QString>("Nodes (%1)").arg(u32_ParentNodeCounter));
 
    //Update view
    this->mpc_Ui->pc_TreeViewNodes->SetContent(c_Nodes, c_SubNodes);
@@ -652,7 +650,7 @@ void C_NagNaviBarWidget::m_BussesChanged(void) const
    std::vector<QString> c_Buses;
 
    //Update bus count
-   this->mpc_Ui->pc_LabelBuses->setText(static_cast<QString>(C_GtGetText::h_GetText("Buses (%1)")).
+   this->mpc_Ui->pc_LabelBuses->setText(static_cast<QString>("Buses (%1)").
                                         arg(C_PuiSdHandler::h_GetInstance()->GetOscBusesSize()));
 
    c_Buses.reserve(C_PuiSdHandler::h_GetInstance()->GetOscBusesSize());
@@ -722,11 +720,9 @@ void C_NagNaviBarWidget::m_OpenCanMonitor(void)
       osc_write_log_error("Open openSYDE CAN Monitor Tool", c_ErrorMsg.toStdString().c_str());
 
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eERROR,
-                                        C_GtGetText::h_GetText(
-                                           "Could not start openSYDE CAN Monitor. Reason: Most likely due to insufficient permissions or the executable is missing."));
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Open openSYDE CAN Monitor"));
-      c_MessageBox.SetDetails(static_cast<QString>(C_GtGetText::h_GetText(
-                                                      "Executable path: \n%1")).arg(c_ExecutablePath));
+                                        "Could not start openSYDE CAN Monitor. Reason: Most likely due to insufficient permissions or the executable is missing.");
+      c_MessageBox.SetHeading("Open openSYDE CAN Monitor");
+      c_MessageBox.SetDetails(static_cast<QString>("Executable path: \n%1").arg(c_ExecutablePath));
       c_MessageBox.SetCustomMinHeight(230, 270);
       c_MessageBox.Execute();
    }
@@ -1051,7 +1047,7 @@ void C_NagNaviBarWidget::m_AnimationTimerEvent()
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagNaviBarWidget::m_PbTopologyClick(void)
 {
-   const QString c_Name = C_GtGetText::h_GetText("NETWORK TOPOLOGY");
+   const QString c_Name = "NETWORK TOPOLOGY";
    const int32_t s32_SUB_MODE = ms32_SUBMODE_SYSDEF_TOPOLOGY;
 
    Q_EMIT this->SigChangeMode(ms32_MODE_SYSDEF, s32_SUB_MODE, 0, c_Name);

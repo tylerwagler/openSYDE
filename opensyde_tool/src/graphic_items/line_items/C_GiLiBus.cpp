@@ -11,7 +11,6 @@
 #include "precomp_headers.hpp"
 
 #include "C_GiLiBus.hpp"
-#include "C_GtGetText.hpp"
 #include "C_GiSyLineWidget.hpp"
 #include "gitypes.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -146,7 +145,7 @@ int32_t C_GiLiBus::type() const
 QString C_GiLiBus::GetName(void) const
 {
    //Translation: Default bus name
-   QString c_Name = C_GtGetText::h_GetText("Bus");
+   QString c_Name = "Bus";
 
    const stw::opensyde_core::C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(ms32_Index);
 
@@ -267,7 +266,7 @@ void C_GiLiBus::GenerateHint(void)
       }
    }
 
-   c_ToolTip.append(C_GtGetText::h_GetText("\n\nConnected nodes:"));
+   c_ToolTip.append("\n\nConnected nodes:");
 
    for (uint32_t u32_ItNode = 0; u32_ItNode < C_PuiSdHandler::h_GetInstance()->GetOscNodesSize(); ++u32_ItNode)
    {
@@ -293,7 +292,7 @@ void C_GiLiBus::GenerateHint(void)
                {
                   //Translation: 1 = Bus name, 2 = Interface, 3 = Node ID
                   c_ToolTip.append("\n");
-                  c_ToolTip.append(static_cast<QString>(C_GtGetText::h_GetText("%1 (Interface: %2, Node ID: %3)")).
+                  c_ToolTip.append(static_cast<QString>("%1 (Interface: %2, Node ID: %3)").
                                    arg(pc_Node->c_Properties.c_Name.c_str(), //Node
                                        C_PuiSdUtil::h_GetInterfaceName(rc_ComInterface.e_InterfaceType,
                                                                        rc_ComInterface.u8_InterfaceNumber), //Interface
@@ -308,7 +307,7 @@ void C_GiLiBus::GenerateHint(void)
    if (q_Entry == false)
    {
       //Translation: No bus interface connected
-      c_ToolTip.append(static_cast<QString>(C_GtGetText::h_GetText("\n-")));
+      c_ToolTip.append(static_cast<QString>("\n-"));
    }
 
    this->SetDefaultToolTipContent(c_ToolTip);

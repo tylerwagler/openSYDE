@@ -19,7 +19,6 @@
 #include "constants.hpp"
 #include "TglUtils.hpp"
 #include "C_PopFileTableModel.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdUtil.hpp"
 #include "C_PuiProject.hpp"
 #include "C_Uti.hpp"
@@ -241,8 +240,8 @@ QVariant C_PopFileTableModel::data(const QModelIndex & orc_Index, const int32_t 
                c_ModificationTime = C_OscProject::h_GetTimeFormatted(rc_RecentProject.c_ModificationTime).c_str();
             }
             c_TooltipContent =
-               static_cast<QString>(C_GtGetText::h_GetText("Version: %1 \nAuthor: %2 \nCreated: %3 \n"
-                                                           "Last modified: %4 (by %5) \nUsed openSYDE version: %6")).
+               static_cast<QString>("Version: %1 \nAuthor: %2 \nCreated: %3 \n"
+                                                           "Last modified: %4 (by %5) \nUsed openSYDE version: %6").
                arg(rc_RecentProject.c_Version.c_str()).
                arg(rc_RecentProject.c_Author.c_str()).
                arg(c_CreationTime).
@@ -255,7 +254,7 @@ QVariant C_PopFileTableModel::data(const QModelIndex & orc_Index, const int32_t 
                const float64_t f64_SizeFloat = std::ceil(static_cast<float64_t>(u64_SizeByte) / 1024.0);
 
                c_TooltipContent.append(
-                  static_cast<QString>(C_GtGetText::h_GetText("\nSize: %L1 kB")).arg(static_cast
+                  static_cast<QString>("\nSize: %L1 kB").arg(static_cast
                                                                                      <uint64_t>(
                                                                                         f64_SizeFloat)));
             }

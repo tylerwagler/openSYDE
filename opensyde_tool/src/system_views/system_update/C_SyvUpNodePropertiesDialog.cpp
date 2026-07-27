@@ -14,7 +14,6 @@
 
 #include "TglUtils.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -88,7 +87,7 @@ C_SyvUpNodePropertiesDialog::C_SyvUpNodePropertiesDialog(stw::opensyde_gui_eleme
    // set main title
    this->mrc_ParentDialog.SetTitle(C_PuiSdUtil::h_GetNodeBaseNameOrName(this->mu32_NodeIndex));
 
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Device Status Information"));
+   this->mrc_ParentDialog.SetSubTitle("Device Status Information");
 
    // connects
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SyvUpNodePropertiesDialog::m_OkClicked);
@@ -112,13 +111,13 @@ C_SyvUpNodePropertiesDialog::~C_SyvUpNodePropertiesDialog(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpNodePropertiesDialog::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_TabWidget->setTabText(0, C_GtGetText::h_GetText("Update File(s)"));
-   this->mpc_Ui->pc_TabWidget->setTabText(1, C_GtGetText::h_GetText("Progress Log"));
-   this->mpc_Ui->pc_TabWidget->setTabText(2, C_GtGetText::h_GetText("Flashloader Information"));
-   this->mpc_Ui->pc_PushButtonDiscard->setText(C_GtGetText::h_GetText("Force Update"));
+   this->mpc_Ui->pc_TabWidget->setTabText(0, "Update File(s)");
+   this->mpc_Ui->pc_TabWidget->setTabText(1, "Progress Log");
+   this->mpc_Ui->pc_TabWidget->setTabText(2, "Flashloader Information");
+   this->mpc_Ui->pc_PushButtonDiscard->setText("Force Update");
    this->mpc_Ui->pc_PushButtonDiscard->SetToolTipInformation(
-      C_GtGetText::h_GetText("Force Update"),
-      C_GtGetText::h_GetText("Option to force flashing of already up to date nodes."), C_NagToolTip::eDEFAULT);
+      "Force Update",
+      "Option to force flashing of already up to date nodes.", C_NagToolTip::eDEFAULT);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -212,27 +211,26 @@ void C_SyvUpNodePropertiesDialog::m_InitStatus(void) const
       {
       case C_SyvUtil::eI_APPLICATION_MATCH:
          c_Icon = QIcon("://images/system_views/IconUpdateSuccess.svg");
-         this->mpc_Ui->pc_LabelDescription->setText(C_GtGetText::h_GetText("Node is up to date."));
+         this->mpc_Ui->pc_LabelDescription->setText("Node is up to date.");
          break;
       case C_SyvUtil::eI_TO_BE_UPDATED:
          c_Icon = QIcon("://images/system_views/IconUpdateWaiting.svg");
          if (this->mc_NodeData.GetUpdateInProgressStatus() == true)
          {
-            this->mpc_Ui->pc_LabelDescription->setText(C_GtGetText::h_GetText("Update is running ..."));
+            this->mpc_Ui->pc_LabelDescription->setText("Update is running ...");
          }
          else
          {
-            this->mpc_Ui->pc_LabelDescription->setText(C_GtGetText::h_GetText("Update required."));
+            this->mpc_Ui->pc_LabelDescription->setText("Update required.");
          }
          break;
       case C_SyvUtil::eI_ERROR:
          c_Icon = QIcon("://images/Error_iconV2.svg");
-         this->mpc_Ui->pc_LabelDescription->setText(C_GtGetText::h_GetText(
-                                                       "Error occurred. Check progress log for details!"));
+         this->mpc_Ui->pc_LabelDescription->setText("Error occurred. Check progress log for details!");
          break;
       case C_SyvUtil::eI_UPDATE_DISABLED:
          c_Icon = QIcon("://images/system_views/IconUpdateStatusDisabled.svg");
-         this->mpc_Ui->pc_LabelDescription->setText(C_GtGetText::h_GetText("Node update disabled."));
+         this->mpc_Ui->pc_LabelDescription->setText("Node update disabled.");
          break;
       case C_SyvUtil::eI_UNKNOWN:
          c_Icon = QIcon("");
@@ -248,11 +246,11 @@ void C_SyvUpNodePropertiesDialog::m_InitStatus(void) const
       c_Icon = QIcon("");
       if (this->mc_NodeData.GetConnectInProgressStatus() == true)
       {
-         this->mpc_Ui->pc_LabelDescription->setText(C_GtGetText::h_GetText("Requesting info ..."));
+         this->mpc_Ui->pc_LabelDescription->setText("Requesting info ...");
       }
       else
       {
-         this->mpc_Ui->pc_LabelDescription->setText(C_GtGetText::h_GetText("Enter update mode to get the node status"));
+         this->mpc_Ui->pc_LabelDescription->setText("Enter update mode to get the node status");
       }
    }
    //Apply default icon size
@@ -317,7 +315,7 @@ void C_SyvUpNodePropertiesDialog::mh_InitDataBlockTableForNode(const C_GiSvSubNo
              true)
          {
             c_NewContent += "<p>";
-            c_NewContent += C_GtGetText::h_GetText("No status request supported. Update required.");
+            c_NewContent += "No status request supported. Update required.";
             c_NewContent += "</p>";
          }
          else
@@ -362,7 +360,7 @@ void C_SyvUpNodePropertiesDialog::mh_InitDataBlockTableForNode(const C_GiSvSubNo
             else
             {
                c_NewContent += "<p>";
-               c_NewContent += C_GtGetText::h_GetText("No Data Block available. No update required.");
+               c_NewContent += "No Data Block available. No update required.";
                c_NewContent += "</p>";
             }
          }
@@ -415,10 +413,10 @@ void C_SyvUpNodePropertiesDialog::mh_GetApplicationDataForNode(const C_GiSvSubNo
 
    orc_ApplicationStateIcon = "";
    orc_ApplicationState = "";
-   orc_DeviceProjectName = C_GtGetText::h_GetText("<b>Not present</b>");
-   orc_DeviceFileVersion = C_GtGetText::h_GetText("<b>Not present</b>");
-   orc_DeviceBuildDate = C_GtGetText::h_GetText("<b>Not present</b>");
-   orc_DeviceValidStatus = C_GtGetText::h_GetText("<b>Not present</b>");
+   orc_DeviceProjectName = "<b>Not present</b>";
+   orc_DeviceFileVersion = "<b>Not present</b>";
+   orc_DeviceBuildDate = "<b>Not present</b>";
+   orc_DeviceValidStatus = "<b>Not present</b>";
 
    //Check, exceptions:
    //If update successful all applications have to be up to date
@@ -436,11 +434,11 @@ void C_SyvUpNodePropertiesDialog::mh_GetApplicationDataForNode(const C_GiSvSubNo
       orc_DeviceBuildDate = orc_FileBuildDate;
       if (c_DeviceInfo.pc_OpenSydeDevice != NULL)
       {
-         orc_DeviceValidStatus = C_GtGetText::h_GetText("Valid");
+         orc_DeviceValidStatus = "Valid";
       }
       else
       {
-         orc_DeviceValidStatus = C_GtGetText::h_GetText("Not available");
+         orc_DeviceValidStatus = "Not available";
       }
       q_Missing = false;
    }
@@ -452,7 +450,7 @@ void C_SyvUpNodePropertiesDialog::mh_GetApplicationDataForNode(const C_GiSvSubNo
       orc_DeviceProjectName = orc_FileProjectName;
       orc_DeviceFileVersion = orc_FileVersion;
       orc_DeviceBuildDate = orc_FileBuildDate;
-      orc_DeviceValidStatus = C_GtGetText::h_GetText("Not available");
+      orc_DeviceValidStatus = "Not available";
       q_Missing = false;
    }
    else if (((orc_NodeInfo.GetUpdateFailedStatus() == true) &&
@@ -489,19 +487,19 @@ void C_SyvUpNodePropertiesDialog::mh_GetApplicationDataForNode(const C_GiSvSubNo
    if (q_Missing == true)
    {
       orc_ApplicationStateIcon += "<img src=\"://images/system_views/IconUpdateWaiting.svg\"";
-      orc_ApplicationState = C_GtGetText::h_GetText("Update required");
+      orc_ApplicationState = "Update required";
    }
    else
    {
       if (q_Match == true)
       {
          orc_ApplicationStateIcon += "<img src=\"://images/system_views/IconUpdateSuccess.svg\"";
-         orc_ApplicationState = C_GtGetText::h_GetText("Up to date");
+         orc_ApplicationState = "Up to date";
       }
       else
       {
          orc_ApplicationStateIcon += "<img src=\"://images/system_views/IconUpdateWaiting.svg\"";
-         orc_ApplicationState = C_GtGetText::h_GetText("Update required");
+         orc_ApplicationState = "Update required";
       }
    }
    orc_ApplicationStateIcon += "style=\"vertical-align: middle;\"/>";
@@ -560,11 +558,11 @@ void C_SyvUpNodePropertiesDialog::mh_ExtractOpenSydeDeviceInformation(const C_Gi
 
          if (rc_OsyDeviceInfo.u8_SignatureValid == 0U)
          {
-            orc_DeviceValidStatus = C_GtGetText::h_GetText("Valid");
+            orc_DeviceValidStatus = "Valid";
          }
          else
          {
-            orc_DeviceValidStatus = C_GtGetText::h_GetText("<b>Invalid</b>");
+            orc_DeviceValidStatus = "<b>Invalid</b>";
             orq_MatchStatus = false;
          }
          break;
@@ -639,8 +637,8 @@ void C_SyvUpNodePropertiesDialog::mh_ExtractDetailsPartFromDataForNode(const boo
 
    if (oq_HexAppInfoAmbiguous == true)
    {
-      c_NewContent += C_GtGetText::h_GetText("HEX file has multiple application blocks and therefore "
-                                             "information is ambiguous.");
+      c_NewContent += "HEX file has multiple application blocks and therefore "
+                                             "information is ambiguous.";
    }
    else
    {
@@ -649,20 +647,20 @@ void C_SyvUpNodePropertiesDialog::mh_ExtractDetailsPartFromDataForNode(const boo
       c_NewContent += "<tr>";
       c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_CONTENT;
       //lint -e{1946} Qt interface
-      c_NewContent += QString("<u>") + C_GtGetText::h_GetText("Property") + "</u>";
+      c_NewContent += QString("<u>") + "Property" + "</u>";
       c_NewContent += "</td>";
       c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_CONTENT;
       //lint -e{1946} Qt interface
-      c_NewContent += QString("<u>") + C_GtGetText::h_GetText("Update Package") + "</u>";
+      c_NewContent += QString("<u>") + "Update Package" + "</u>";
       c_NewContent += "</td>";
       c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_CONTENT;
       //lint -e{1946} Qt interface
-      c_NewContent += QString("<u>") + C_GtGetText::h_GetText("Device Status") + "</u>";
+      c_NewContent += QString("<u>") + "Device Status" + "</u>";
       c_NewContent += "</td>";
       c_NewContent += "</tr>";
       c_NewContent += "<tr>";
       c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_CONTENT;
-      c_NewContent += C_GtGetText::h_GetText("Project Name");
+      c_NewContent += "Project Name";
       c_NewContent += "</td>";
       c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_CONTENT;
       c_NewContent += orc_FileProjectName;
@@ -673,7 +671,7 @@ void C_SyvUpNodePropertiesDialog::mh_ExtractDetailsPartFromDataForNode(const boo
       c_NewContent += "</tr>";
       c_NewContent += "<tr>";
       c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_CONTENT;
-      c_NewContent += C_GtGetText::h_GetText("Version");
+      c_NewContent += "Version";
       c_NewContent += "</td>";
       c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_CONTENT;
       c_NewContent += orc_FileVersion;
@@ -684,7 +682,7 @@ void C_SyvUpNodePropertiesDialog::mh_ExtractDetailsPartFromDataForNode(const boo
       c_NewContent += "</tr>";
       c_NewContent += "<tr>";
       c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_CONTENT;
-      c_NewContent += C_GtGetText::h_GetText("Timestamp");
+      c_NewContent += "Timestamp";
       c_NewContent += "</td>";
       c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_CONTENT;
       c_NewContent += orc_FileBuildDate;
@@ -729,7 +727,7 @@ void C_SyvUpNodePropertiesDialog::mh_AppendApplicationForNode(const uint32_t ou3
    c_NewContent += "<table>";
    c_NewContent += "<tr>";
    c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_MAIN;
-   c_NewContent += C_GtGetText::h_GetText("Status");
+   c_NewContent += "Status";
    c_NewContent += "</td>";
    c_NewContent += "<td><table><tr>";
    c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_STATUS;
@@ -739,13 +737,13 @@ void C_SyvUpNodePropertiesDialog::mh_AppendApplicationForNode(const uint32_t ou3
    c_NewContent += "</tr>";
    c_NewContent += "<tr>";
    c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_MAIN;
-   c_NewContent += C_GtGetText::h_GetText("Signature");
+   c_NewContent += "Signature";
    c_NewContent += "</td>";
    c_NewContent += "<td>" + orc_DeviceValidStatus + "</td>";
    c_NewContent += "</tr>";
    c_NewContent += "<tr>";
    c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_MAIN;
-   c_NewContent += C_GtGetText::h_GetText("Summary");
+   c_NewContent += "Summary";
    c_NewContent += "</td>";
    c_NewContent += "<td>";
    c_NewContent += orc_DetailsPart;
@@ -774,17 +772,17 @@ void C_SyvUpNodePropertiesDialog::mh_InitDataBlockTableOtherSectionForNode(const
        (orc_NodeInfo.GetFileInfosCount() > 0UL))
    {
       c_NewContent += "<h4>";
-      c_NewContent += C_GtGetText::h_GetText("Other Files");
+      c_NewContent += "Other Files";
       c_NewContent += "</h4>";
       c_NewContent += "<table><tr>";
       c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_MAIN;
-      c_NewContent += C_GtGetText::h_GetText("Status");
+      c_NewContent += "Status";
       c_NewContent += "</td>";
       c_NewContent += "<td><table><tr>";
       c_NewContent += C_SyvUpNodePropertiesDialog::mhc_HTML_CELL_TAG_START_STATUS;
       c_NewContent +=
          "<img src=\"://images/system_views/IconUpdateWaiting.svg\"style=\"vertical-align: middle;\"/></td><td>";
-      c_NewContent += C_GtGetText::h_GetText("No status request supported. Update required.");
+      c_NewContent += "No status request supported. Update required.";
       c_NewContent += "</td>";
       c_NewContent += "</tr></table></td>";
       c_NewContent += "</tr>";
@@ -851,7 +849,7 @@ void C_SyvUpNodePropertiesDialog::mh_InitFlashloaderTableForNode(const C_GiSvSub
    if (c_List.Strings.GetLength() > 1)
    {
       c_NewContent +=
-         static_cast<QString>(C_GtGetText::h_GetText("Note: Flashloader data is read during \"Enter Update Mode\""));
+         static_cast<QString>("Note: Flashloader data is read during \"Enter Update Mode\"");
       c_NewContent += "<p>";
       for (int32_t s32_ItString = 0; s32_ItString < c_List.Strings.GetLength(); ++s32_ItString)
       {
@@ -927,7 +925,7 @@ QString C_SyvUpNodePropertiesDialog::m_GetProgressLogConnectStatesString(void) c
    QString c_Text = "";
 
    c_Text += mc_REPORT_HEADLINE_HTML_TAG_START;
-   c_Text += static_cast<QString>(C_GtGetText::h_GetText("Enter Update Mode"));
+   c_Text += static_cast<QString>("Enter Update Mode");
    c_Text += mc_REPORT_HEADLINE_HTML_TAG_END;
 
    if (this->mc_NodeData.IsNodeConnectStatesSet() == true)
@@ -953,7 +951,7 @@ QString C_SyvUpNodePropertiesDialog::m_GetProgressLogConnectStatesString(void) c
                   const C_OscNode * const opc_OscNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
                   if (opc_OscNode != NULL)
                   {
-                     c_Text += static_cast<QString>(C_GtGetText::h_GetText("Node: ")) +
+                     c_Text += static_cast<QString>("Node: ") +
                                static_cast<QString>(opc_OscNode->c_Properties.c_Name.c_str());
                   }
                }
@@ -972,12 +970,12 @@ QString C_SyvUpNodePropertiesDialog::m_GetProgressLogConnectStatesString(void) c
    else if (this->mc_NodeData.GetConnectInProgressStatus() == true)
    {
       // States not available yet, but process is running now
-      c_Text += static_cast<QString>(C_GtGetText::h_GetText("Connecting ...")) + "<br>";
+      c_Text += static_cast<QString>("Connecting ...") + "<br>";
    }
    else
    {
       // States not available
-      c_Text += static_cast<QString>(C_GtGetText::h_GetText("Enter update mode to get the progress information.")) +
+      c_Text += static_cast<QString>("Enter update mode to get the progress information.") +
                 "<br>";
    }
 
@@ -998,87 +996,83 @@ QString C_SyvUpNodePropertiesDialog::mh_GetProgressLogConnectStatesStringForSubN
 
    if (opc_SubNodeData != NULL)
    {
-      const QString c_Ok = static_cast<QString>(C_GtGetText::h_GetText("Ok"));
-      const QString c_Failed = static_cast<QString>(C_GtGetText::h_GetText("Failed"));
-      const QString c_Yes = static_cast<QString>(C_GtGetText::h_GetText("Yes"));
-      const QString c_No = static_cast<QString>(C_GtGetText::h_GetText("No"));
+      const QString c_Ok = static_cast<QString>("Ok");
+      const QString c_Failed = static_cast<QString>("Failed");
+      const QString c_Yes = static_cast<QString>("Yes");
+      const QString c_No = static_cast<QString>("No");
       const C_OscSuSequencesNodeConnectStates & rc_States = opc_SubNodeData->GetNodeConnectStates();
       const C_GiSvSubNodeData::C_GiSvSubNodeDataPreconditionErrors & rc_PreconditionErrors =
          opc_SubNodeData->GetNodeConnectPreconditionErrors();
 
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Request connection"),
+      c_Text += mh_GetTableLineForBrowser("Request connection",
                                           ((rc_States.q_Timeout == false) ? c_Ok : c_Failed),
                                           1);
 
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Node information read"),
+      c_Text += mh_GetTableLineForBrowser("Node information read",
                                           mh_GetSuSequenceNodeStateString(rc_States.e_InformationRead),
                                           1);
 
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Client secure authentication required?"),
+      c_Text += mh_GetTableLineForBrowser("Client secure authentication required?",
                                           ((rc_States.q_AuthenticationNecessary == true) ? c_Yes : c_No),
                                           1);
 
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Traffic encryption required?"),
+      c_Text += mh_GetTableLineForBrowser("Traffic encryption required?",
                                           ((rc_States.q_TrafficEncryptionNecessary == true) ? c_Yes : c_No),
                                           1);
 
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Security access"),
+      c_Text += mh_GetTableLineForBrowser("Security access",
                                           ((rc_States.q_SecurityAccessError == false) ? c_Ok : c_Failed),
                                           2);
 
       c_Text +=
-         mh_GetTableLineForBrowser(static_cast<QString>(C_GtGetText::h_GetText(
-                                                           "Parameter Set Image file (syde_psi)")), "",
+         mh_GetTableLineForBrowser(static_cast<QString>("Parameter Set Image file (syde_psi)"), "",
                                    1);
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Writing to NVM supported?"),
+      c_Text += mh_GetTableLineForBrowser("Writing to NVM supported?",
                                           mh_GetSuSequenceNodePreconditionString(
                                              rc_States.c_AvailableFeatures.q_FlashloaderCanWriteToNvm,
                                              rc_PreconditionErrors.q_NvmWriteError),
                                           2);
 
-      c_Text += mh_GetTableLineForBrowser(static_cast<QString>(C_GtGetText::h_GetText("Security settings")), "",
+      c_Text += mh_GetTableLineForBrowser(static_cast<QString>("Security settings"), "",
                                           1);
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText(
-                                             "Authentication supported?"),
+      c_Text += mh_GetTableLineForBrowser("Authentication supported?",
                                           mh_GetSuSequenceNodePreconditionString(
                                              rc_States.c_AvailableFeatures.q_SupportsSecurityAuthentication,
                                              rc_PreconditionErrors.q_PemWriteError),
                                           2);
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText(
-                                             "Traffic encryption supported?"),
+      c_Text += mh_GetTableLineForBrowser("Traffic encryption supported?",
                                           mh_GetSuSequenceNodePreconditionString(
                                              rc_States.c_AvailableFeatures.q_SupportsSecurityTrafficEncryption,
                                              rc_PreconditionErrors.q_TrafficEncryptionEnableError),
                                           2);
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Activating debugger supported?"),
+      c_Text += mh_GetTableLineForBrowser("Activating debugger supported?",
                                           mh_GetSuSequenceNodePreconditionString(
                                              rc_States.c_AvailableFeatures.q_SupportsDebuggerOn,
                                              rc_PreconditionErrors.q_DebuggerEnableError),
                                           2);
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Deactivating debugger supported?"),
+      c_Text += mh_GetTableLineForBrowser("Deactivating debugger supported?",
                                           mh_GetSuSequenceNodePreconditionString(
                                              rc_States.c_AvailableFeatures.q_SupportsDebuggerOff,
                                              rc_PreconditionErrors.q_DebuggerDisableError),
                                           2);
 
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Authentication enabled?"),
+      c_Text += mh_GetTableLineForBrowser("Authentication enabled?",
                                           ((rc_States.c_AvailableFeatures.q_SupportsSecurityAuthentication) ?
                                            ((rc_States.q_AuthenticationNecessary == true) ? c_Yes : c_No) : c_No),
                                           2);
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Traffic encryption enabled?"),
+      c_Text += mh_GetTableLineForBrowser("Traffic encryption enabled?",
                                           ((rc_States.c_AvailableFeatures.q_SupportsSecurityTrafficEncryption) ?
                                            ((rc_States.q_TrafficEncryptionNecessary == true) ? c_Yes : c_No) : "-"),
                                           2);
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Debugger disabled?"),
+      c_Text += mh_GetTableLineForBrowser("Debugger disabled?",
                                           ((rc_States.c_AvailableFeatures.q_SupportsDebuggerOff &&
                                             rc_States.c_AvailableFeatures.q_SupportsDebuggerOn) ?
                                            ((rc_States.q_DebuggerEnabled == false) ? c_Yes : c_No) : "-"),
                                           2);
 
-      c_Text += mh_GetTableLineForBrowser(static_cast<QString>(C_GtGetText::h_GetText("Routing")), "",
+      c_Text += mh_GetTableLineForBrowser(static_cast<QString>("Routing"), "",
                                           1);
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText(
-                                             "Ethernet to Ethernet routing supported?"),
+      c_Text += mh_GetTableLineForBrowser("Ethernet to Ethernet routing supported?",
                                           mh_GetSuSequenceNodePreconditionString(
                                              rc_States.c_AvailableFeatures.q_EthernetToEthernetRoutingSupported,
                                              rc_PreconditionErrors.q_EthToEthError),
@@ -1101,7 +1095,7 @@ QString C_SyvUpNodePropertiesDialog::m_GetProgressLogUpdateStatesString(void) co
    if ((q_UpdateStatesSet == true) || (q_UpdateInProgress == true))
    {
       c_Text += mc_REPORT_HEADLINE_HTML_TAG_START;
-      c_Text += static_cast<QString>(C_GtGetText::h_GetText("Update System"));
+      c_Text += static_cast<QString>("Update System");
       c_Text += mc_REPORT_HEADLINE_HTML_TAG_END;
 
       if (q_UpdateStatesSet == true)
@@ -1128,7 +1122,7 @@ QString C_SyvUpNodePropertiesDialog::m_GetProgressLogUpdateStatesString(void) co
                         u32_NodeIndex);
                      if (opc_OscNode != NULL)
                      {
-                        c_Text += static_cast<QString>(C_GtGetText::h_GetText("Node: ")) +
+                        c_Text += static_cast<QString>("Node: ") +
                                   static_cast<QString>(opc_OscNode->c_Properties.c_Name.c_str());
                      }
                   }
@@ -1147,7 +1141,7 @@ QString C_SyvUpNodePropertiesDialog::m_GetProgressLogUpdateStatesString(void) co
       else
       {
          // States not available yet
-         c_Text += static_cast<QString>(C_GtGetText::h_GetText("Updating ...")) + "<br>";
+         c_Text += static_cast<QString>("Updating ...") + "<br>";
       }
    }
 
@@ -1180,49 +1174,49 @@ QString C_SyvUpNodePropertiesDialog::mh_GetProgressLogUpdateStatesStringForSubNo
          q_AtLeastOneFile = true;
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("File ") + static_cast<QString>(rc_FileState.c_FileName.c_str()) + ":",
+            "File " + static_cast<QString>(rc_FileState.c_FileName.c_str()) + ":",
             "",
             1);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Loading file"),
+            "Loading file",
             mh_GetSuSequenceNodeFileLoadStateString(rc_FileState.e_FileExists, rc_FileState.e_FileLoaded),
             2);
 
          // Checking preconditions
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Reading file signature block address"),
+            "Reading file signature block address",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_SignatureBlockAddressFromFileRead),
             2);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Comparing node name"),
+            "Comparing node name",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_NodeNameCompared),
             2);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Reading dump from file"),
+            "Reading dump from file",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_DataDumpFromFileRead),
             2);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Checking available flash memory"),
+            "Checking available flash memory",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_AvailableFlashMemoryChecked),
             2);
 
          // Transfers
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Sending download request"),
+            "Sending download request",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_RequestDownloadSent),
             2);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Sending all transfer data"),
+            "Sending all transfer data",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_AllTransferDataSent),
             2);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Sending transfer exit request"),
+            "Sending transfer exit request",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_RequestTransferAddressExitSent),
             2);
       }
@@ -1235,33 +1229,33 @@ QString C_SyvUpNodePropertiesDialog::mh_GetProgressLogUpdateStatesStringForSubNo
          q_AtLeastOneFile = true;
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("File ") + static_cast<QString>(rc_FileState.c_FileName.c_str()) + ":",
+            "File " + static_cast<QString>(rc_FileState.c_FileName.c_str()) + ":",
             "",
             1);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Loading file"),
+            "Loading file",
             mh_GetSuSequenceNodeFileLoadStateString(rc_FileState.e_FileExists, rc_FileState.e_FileLoaded),
             2);
 
          // Transfers
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Sending transfer request"),
+            "Sending transfer request",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_RequestFileTransferSent),
             2);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Sending all transfer data"),
+            "Sending all transfer data",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_AllTransferDataSent),
             2);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Sending transfer exit request"),
+            "Sending transfer exit request",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_RequestTransferFileExitSent),
             2);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Sending transfer exit result request"),
+            "Sending transfer exit result request",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_RequestTransferFileExitResultSent),
             2);
       }
@@ -1274,18 +1268,18 @@ QString C_SyvUpNodePropertiesDialog::mh_GetProgressLogUpdateStatesStringForSubNo
          q_AtLeastOneFile = true;
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("File ") + static_cast<QString>(rc_FileState.c_FileName.c_str()) + ":",
+            "File " + static_cast<QString>(rc_FileState.c_FileName.c_str()) + ":",
             "",
             1);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Loading file"),
+            "Loading file",
             mh_GetSuSequenceNodeFileLoadStateString(rc_FileState.e_FileExists, rc_FileState.e_FileLoaded),
             2);
 
          // Transfers
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Writing file"),
+            "Writing file",
             mh_GetSuSequenceNodeStateString(rc_FileState.e_PsiFileWrote),
             2);
       }
@@ -1299,40 +1293,40 @@ QString C_SyvUpNodePropertiesDialog::mh_GetProgressLogUpdateStatesStringForSubNo
             q_AtLeastOneFile = true;
 
             c_Text += mh_GetTableLineForBrowser(
-               C_GtGetText::h_GetText("File ") + static_cast<QString>(rc_SettingsState.c_FileName.c_str()) + ":",
+               "File " + static_cast<QString>(rc_SettingsState.c_FileName.c_str()) + ":",
                "",
                1);
 
             c_Text += mh_GetTableLineForBrowser(
-               C_GtGetText::h_GetText("Loading file"),
+               "Loading file",
                mh_GetSuSequenceNodeFileLoadStateString(rc_SettingsState.e_FileExists, rc_SettingsState.e_FileLoaded),
                2);
 
             // secure authentication PEM file
             c_Text += mh_GetTableLineForBrowser(
-               C_GtGetText::h_GetText("Extracting file"),
+               "Extracting file",
                mh_GetSuSequenceNodeStateString(rc_SettingsState.e_PemFileExtracted),
                2);
 
             c_Text += mh_GetTableLineForBrowser(
-               C_GtGetText::h_GetText("Sending public key of file"),
+               "Sending public key of file",
                mh_GetSuSequenceNodeStateString(rc_SettingsState.e_SecureAuthenticationKeySent),
                2);
          }
 
          // security flag states
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Sending secure authentication enable flag"),
+            "Sending secure authentication enable flag",
             mh_GetSuSequenceNodeStateString(rc_SettingsState.e_SecureAuthenticationFlagSent),
             2);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Sending traffic encryption enable flag"),
+            "Sending traffic encryption enable flag",
             mh_GetSuSequenceNodeStateString(rc_SettingsState.e_TrafficEncryptionFlagSent),
             2);
 
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("Sending debugger enable flag"),
+            "Sending debugger enable flag",
             mh_GetSuSequenceNodeStateString(rc_SettingsState.e_DebuggerFlagSent),
             2);
       }
@@ -1340,7 +1334,7 @@ QString C_SyvUpNodePropertiesDialog::mh_GetProgressLogUpdateStatesStringForSubNo
       if (q_AtLeastOneFile == false)
       {
          c_Text += mh_GetTableLineForBrowser(
-            C_GtGetText::h_GetText("No files for updating"),
+            "No files for updating",
             "",
             1);
       }
@@ -1403,11 +1397,11 @@ QString C_SyvUpNodePropertiesDialog::mh_GetTableLineForBrowser(const QString & o
 QString C_SyvUpNodePropertiesDialog::mh_GetSuSequenceNodeStateString(const E_OscSuSequencesNodeState oe_State)
 {
    QString c_Text;
-   const QString c_Ok = static_cast<QString>(C_GtGetText::h_GetText("Ok"));
-   const QString c_Failed = static_cast<QString>(C_GtGetText::h_GetText("Failed"));
-   const QString c_Skipped = static_cast<QString>(C_GtGetText::h_GetText("Skipped"));
+   const QString c_Ok = static_cast<QString>("Ok");
+   const QString c_Failed = static_cast<QString>("Failed");
+   const QString c_Skipped = static_cast<QString>("Skipped");
    const QString c_SkippedPrevErr =
-      static_cast<QString>(C_GtGetText::h_GetText("<b>Skipped</b> (error occurred during process)"));
+      static_cast<QString>("<b>Skipped</b> (error occurred during process)");
 
    switch (oe_State)
    {
@@ -1445,10 +1439,10 @@ QString C_SyvUpNodePropertiesDialog::mh_GetSuSequenceNodeFileLoadStateString(
    const stw::opensyde_core::E_OscSuSequencesNodeState oe_StateLoadedd)
 {
    QString c_Text;
-   const QString c_Ok = static_cast<QString>(C_GtGetText::h_GetText("Ok"));
-   const QString c_Failed = static_cast<QString>(C_GtGetText::h_GetText("Failed"));
+   const QString c_Ok = static_cast<QString>("Ok");
+   const QString c_Failed = static_cast<QString>("Failed");
    const QString c_SkippedPrevErr =
-      static_cast<QString>(C_GtGetText::h_GetText("<b>Skipped</b> (error occurred during process)"));
+      static_cast<QString>("<b>Skipped</b> (error occurred during process)");
 
    if ((oe_StateExists == eSUSEQ_STATE_NO_ERR) &&
        (oe_StateLoadedd == eSUSEQ_STATE_NO_ERR))
@@ -1482,10 +1476,10 @@ QString C_SyvUpNodePropertiesDialog::mh_GetSuSequenceNodePreconditionString(cons
                                                                             const bool oq_FeatureError)
 {
    QString c_Text;
-   const QString c_Yes = static_cast<QString>(C_GtGetText::h_GetText("Yes"));
-   const QString c_No = static_cast<QString>(C_GtGetText::h_GetText("No"));
+   const QString c_Yes = static_cast<QString>("Yes");
+   const QString c_No = static_cast<QString>("No");
    const QString c_NoButNeeded =
-      static_cast<QString>(C_GtGetText::h_GetText("<b>No (Service is activated in Update Package)</b>"));
+      static_cast<QString>("<b>No (Service is activated in Update Package)</b>");
 
    if (oq_FeatureSupported == true)
    {

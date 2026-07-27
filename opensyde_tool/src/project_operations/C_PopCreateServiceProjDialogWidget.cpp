@@ -16,7 +16,6 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PopCreateServiceProjDialogWidget.hpp"
 #include "ui_C_PopCreateServiceProjDialogWidget.h"
 #include "C_OgeWiUtil.hpp"
@@ -132,35 +131,31 @@ C_PopCreateServiceProjDialogWidget::~C_PopCreateServiceProjDialogWidget(void)
 void C_PopCreateServiceProjDialogWidget::InitStaticNames(void) const
 {
    //set main title
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Service Project"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Create"));
+   this->mrc_ParentDialog.SetTitle("Service Project");
+   this->mrc_ParentDialog.SetSubTitle("Create");
 
    //labels and buttons
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Settings"));
-   this->mpc_Ui->pc_LabPermissions->setText(C_GtGetText::h_GetText("Permissions"));
-   this->mpc_Ui->pc_LabPassword->setText(C_GtGetText::h_GetText("Password"));
-   this->mpc_Ui->pc_LabPath->setText(C_GtGetText::h_GetText("Path"));
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Settings");
+   this->mpc_Ui->pc_LabPermissions->setText("Permissions");
+   this->mpc_Ui->pc_LabPassword->setText("Password");
+   this->mpc_Ui->pc_LabPath->setText("Path");
    this->mpc_Ui->pc_PubSpPath->setText("");
    this->mpc_Ui->pc_PubTogglePwd->setText("");
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Create"));
+   this->mpc_Ui->pc_PushButtonOk->setText("Create");
 
    // label tooltips
-   this->mpc_Ui->pc_LabPassword->SetToolTipInformation(C_GtGetText::h_GetText("Password (optional)"),
-                                                       C_GtGetText::h_GetText(
-                                                          "Service project will be encrypted if password is given."));
-   this->mpc_Ui->pc_LabPath->SetToolTipInformation(C_GtGetText::h_GetText("Service Project path"),
-                                                   C_GtGetText::h_GetText(
-                                                      "Full path to save as Service Project (*.syde_sp)."));
-   this->mpc_Ui->pc_LabPermissions->SetToolTipInformation(C_GtGetText::h_GetText("Permissions"),
-                                                          C_GtGetText::h_GetText(
-                                                             "Specify which views shall be accessible within Service Project."));
+   this->mpc_Ui->pc_LabPassword->SetToolTipInformation("Password (optional)",
+                                                       "Service project will be encrypted if password is given.");
+   this->mpc_Ui->pc_LabPath->SetToolTipInformation("Service Project path",
+                                                   "Full path to save as Service Project (*.syde_sp).");
+   this->mpc_Ui->pc_LabPermissions->SetToolTipInformation("Permissions",
+                                                          "Specify which views shall be accessible within Service Project.");
 
    // button tooltips
-   this->mpc_Ui->pc_PubTogglePwd->SetToolTipInformation(C_GtGetText::h_GetText("Show/Hide Password"),
-                                                        C_GtGetText::h_GetText(
-                                                           "Shows/hides password when pressed down."));
-   this->mpc_Ui->pc_PubSpPath->SetToolTipInformation(C_GtGetText::h_GetText("Browse"),
-                                                     C_GtGetText::h_GetText("Browse for export path."));
+   this->mpc_Ui->pc_PubTogglePwd->SetToolTipInformation("Show/Hide Password",
+                                                        "Shows/hides password when pressed down.");
+   this->mpc_Ui->pc_PubSpPath->SetToolTipInformation("Browse",
+                                                     "Browse for export path.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -300,26 +295,23 @@ void C_PopCreateServiceProjDialogWidget::m_OkClicked(void)
    if (s32_Result != C_NO_ERR)
    {
       C_OgeWiCustomMessage c_ErrorPath(this, C_OgeWiCustomMessage::eERROR);
-      c_ErrorPath.SetHeading(C_GtGetText::h_GetText("Create Service Project"));
+      c_ErrorPath.SetHeading("Create Service Project");
 
       switch (s32_Result)
       {
       case C_NOACT:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "You need to enter an output path."));
+         c_ErrorPath.SetDescription("You need to enter an output path.");
          break;
       case C_RANGE:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "Invalid Service Project format. File format (*.syde_sp) is required."));
+         c_ErrorPath.SetDescription("Invalid Service Project format. File format (*.syde_sp) is required.");
          break;
       case C_RD_WR:
-         c_ErrorPath.SetDescription(C_GtGetText::h_GetText(
-                                       "Invalid path (e.g. containing invalid characters)."));
+         c_ErrorPath.SetDescription("Invalid path (e.g. containing invalid characters).");
          break;
       default:
          break;
       }
-      c_ErrorPath.SetOkButtonText(C_GtGetText::h_GetText("OK"));
+      c_ErrorPath.SetOkButtonText("OK");
       c_ErrorPath.SetCustomMinHeight(180, 180);
       c_ErrorPath.exec();
 
@@ -332,11 +324,10 @@ void C_PopCreateServiceProjDialogWidget::m_OkClicked(void)
       if (this->GetPassword() == "")
       {
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eWARNING);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Create service project"));
-         c_Message.SetDescription(C_GtGetText::h_GetText(
-                                     "No password specified. The project won't be encrypted. Do you want to continue?"));
-         c_Message.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-         c_Message.SetCancelButtonText(C_GtGetText::h_GetText("Cancel"));
+         c_Message.SetHeading("Create service project");
+         c_Message.SetDescription("No password specified. The project won't be encrypted. Do you want to continue?");
+         c_Message.SetOkButtonText("Continue");
+         c_Message.SetCancelButtonText("Cancel");
          c_Message.SetCustomMinHeight(180, 180);
          if (c_Message.Execute() != C_OgeWiCustomMessage::eOK)
          {
@@ -374,10 +365,10 @@ void C_PopCreateServiceProjDialogWidget::m_SpPathClicked()
 {
    const QString c_Tmp =
       C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditPath->GetPath());
-   const QString c_FilterName = static_cast<QString>(C_GtGetText::h_GetText("syde_sp file (*.syde_sp);;Others (*.*)"));
+   const QString c_FilterName = static_cast<QString>("syde_sp file (*.syde_sp);;Others (*.*)");
 
    // Do not use QFileDialog::getOpenFileName because it does not support default suffix
-   QFileDialog c_Dialog(this,  C_GtGetText::h_GetText("Select Output File"), c_Tmp, c_FilterName);
+   QFileDialog c_Dialog(this,  "Select Output File", c_Tmp, c_FilterName);
 
    c_Dialog.setDefaultSuffix("syde_sp");
 

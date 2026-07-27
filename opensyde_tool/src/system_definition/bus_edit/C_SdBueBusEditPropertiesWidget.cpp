@@ -16,7 +16,6 @@
 
 #include "stwerrors.hpp"
 #include "C_SdBueBusEditPropertiesWidget.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -72,11 +71,11 @@ C_SdBueBusEditPropertiesWidget::C_SdBueBusEditPropertiesWidget(QWidget * const o
    //Ui restriction
    this->mpc_Ui->pc_SpinBoxBusId->SetMaximumCustom(15);
 
-   this->mpc_Ui->pc_ComboBoxBitRate->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                           C_GtGetText::h_GetText(""),
+   this->mpc_Ui->pc_ComboBoxBitRate->SetToolTipInformation("",
+                                                           "",
                                                            C_NagToolTip::eDEFAULT);
-   this->mpc_Ui->pc_ComboBoxCANFDBitRate->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                                C_GtGetText::h_GetText(""),
+   this->mpc_Ui->pc_ComboBoxCANFDBitRate->SetToolTipInformation("",
+                                                                "",
                                                                 C_NagToolTip::eDEFAULT);
 
    InitStaticNames();
@@ -121,50 +120,44 @@ C_SdBueBusEditPropertiesWidget::~C_SdBueBusEditPropertiesWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueBusEditPropertiesWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
-   this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
-   this->mpc_Ui->pc_LabelConfiguration->setText(C_GtGetText::h_GetText("Configuration"));
-   this->mpc_Ui->pc_LabelBusId->setText(C_GtGetText::h_GetText("Bus ID"));
-   this->mpc_Ui->pc_LabelBitRate->setText(C_GtGetText::h_GetText("Bitrate"));
+   this->mpc_Ui->pc_LabelName->setText("Name");
+   this->mpc_Ui->pc_LabelComment->setText("Comment");
+   this->mpc_Ui->pc_LabelConfiguration->setText("Configuration");
+   this->mpc_Ui->pc_LabelBusId->setText("Bus ID");
+   this->mpc_Ui->pc_LabelBitRate->setText("Bitrate");
    //CAN FD
-   this->mpc_Ui->pc_LabelCANFD->setText(C_GtGetText::h_GetText("CAN FD"));
-   this->mpc_Ui->pc_CheckBoxEnableCANFD->setText(C_GtGetText::h_GetText("Enable CAN FD Option"));
-   this->mpc_Ui->pc_LabelCANFDBitRate->setText(C_GtGetText::h_GetText("CAN FD Bitrate"));
+   this->mpc_Ui->pc_LabelCANFD->setText("CAN FD");
+   this->mpc_Ui->pc_CheckBoxEnableCANFD->setText("Enable CAN FD Option");
+   this->mpc_Ui->pc_LabelCANFDBitRate->setText("CAN FD Bitrate");
 
-   this->mpc_Ui->pc_TextEditComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
+   this->mpc_Ui->pc_TextEditComment->setPlaceholderText("Add your comment here ...");
 
    //Tool tips
-   this->mpc_Ui->pc_LabelName->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                        "Name"),
-                                                     static_cast<QString>(C_GtGetText::h_GetText(
-                                                                             "Symbolic bus name. Unique within Network Topology.\n"
+   this->mpc_Ui->pc_LabelName->SetToolTipInformation("Name",
+                                                     static_cast<QString>("Symbolic bus name. Unique within Network Topology.\n"
                                                                              "\nC naming conventions must be followed:"
                                                                              "\n - must not be empty"
                                                                              "\n - must not start with digits"
                                                                              "\n - only alphanumeric characters and \"_\""
-                                                                             "\n - should not be longer than %1 (= project setting) characters")).arg(
+                                                                             "\n - should not be longer than %1 (= project setting) characters").arg(
                                                         C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit()));
-   this->mpc_Ui->pc_LabelComment->SetToolTipInformation(C_GtGetText::h_GetText("Comment"),
-                                                        C_GtGetText::h_GetText("Comment for this bus."));
-   this->mpc_Ui->pc_LabelBusId->SetToolTipInformation(C_GtGetText::h_GetText("Bus ID"),
-                                                      C_GtGetText::h_GetText(
-                                                         "Unique within Network Topology. Range: 0-15."
-                                                         "\nThe ID is used for addressing in the communication protocol."));
-   this->mpc_Ui->pc_LabelBitRate->SetToolTipInformation(C_GtGetText::h_GetText("Bitrate"),
-                                                        C_GtGetText::h_GetText("CAN bus bitrate"));
-   this->mpc_Ui->pc_CheckBoxUsableForRouting->SetToolTipInformation(C_GtGetText::h_GetText("Usable for Routing"),
-                                                                    C_GtGetText::h_GetText(
-                                                                       "If disabled, the bus is no more usable for routing."));
-   this->mpc_Ui->pc_LabelNotRelevant->SetToolTipInformation(C_GtGetText::h_GetText("Bus ID not relevant"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Bus ID is not relevant when the option "
+   this->mpc_Ui->pc_LabelComment->SetToolTipInformation("Comment",
+                                                        "Comment for this bus.");
+   this->mpc_Ui->pc_LabelBusId->SetToolTipInformation("Bus ID",
+                                                      "Unique within Network Topology. Range: 0-15."
+                                                         "\nThe ID is used for addressing in the communication protocol.");
+   this->mpc_Ui->pc_LabelBitRate->SetToolTipInformation("Bitrate",
+                                                        "CAN bus bitrate");
+   this->mpc_Ui->pc_CheckBoxUsableForRouting->SetToolTipInformation("Usable for Routing",
+                                                                    "If disabled, the bus is no more usable for routing.");
+   this->mpc_Ui->pc_LabelNotRelevant->SetToolTipInformation("Bus ID not relevant",
+                                                            "Bus ID is not relevant when the option "
                                                                "\"Usable for Routing\" is disabled. \nUniqueness check "
-                                                               "is also disabled in this state."));
-   this->mpc_Ui->pc_LabelCANFDBitRate->SetToolTipInformation(C_GtGetText::h_GetText("CAN FD Bitrate"),
-                                                             C_GtGetText::h_GetText("CAN FD bus bitrate"));
-   this->mpc_Ui->pc_CheckBoxEnableCANFD->SetToolTipInformation(C_GtGetText::h_GetText("Usable for Enabling CAN FD"),
-                                                               C_GtGetText::h_GetText(
-                                                                  "If disabled, the bus is no more support CAN FD."));
+                                                               "is also disabled in this state.");
+   this->mpc_Ui->pc_LabelCANFDBitRate->SetToolTipInformation("CAN FD Bitrate",
+                                                             "CAN FD bus bitrate");
+   this->mpc_Ui->pc_CheckBoxEnableCANFD->SetToolTipInformation("Usable for Enabling CAN FD",
+                                                               "If disabled, the bus is no more support CAN FD.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -219,7 +212,7 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
       disconnect(this->mpc_Ui->pc_SpinBoxBusId, static_cast<void (QSpinBox::*)(
                                                                int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
                  &C_SdBueBusEditPropertiesWidget::m_RegisterIdChange);
-      disconnect(this->mpc_Ui->pc_CheckBoxUsableForRouting, &QCheckBox::checkStateChanged, this,
+      disconnect(this->mpc_Ui->pc_CheckBoxUsableForRouting, &QCheckBox::stateChanged, this,
                  &C_SdBueBusEditPropertiesWidget::m_RegisterIdChange);
       //lint -e{929} Cast required to avoid ambiguous signal of qt interface
       disconnect(this->mpc_Ui->pc_ComboBoxBitRate, static_cast<void (QComboBox::*)(
@@ -237,7 +230,7 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
                     &C_SdBueBusEditPropertiesWidget::m_RegisterCanFdChange);
          disconnect(this->mpc_Ui->pc_ComboBoxCANFDBitRate, &C_OgeCbxText::SigErrorFixed, this,
                     &C_SdBueBusEditPropertiesWidget::m_CanFdBitrateFixed);
-         disconnect(this->mpc_Ui->pc_CheckBoxEnableCANFD, &QCheckBox::checkStateChanged, this,
+         disconnect(this->mpc_Ui->pc_CheckBoxEnableCANFD, &QCheckBox::stateChanged, this,
                     &C_SdBueBusEditPropertiesWidget::m_RegisterCanFdChange);
          disconnect(this->mpc_Ui->pc_CheckBoxEnableCANFD, &QCheckBox::toggled, this,
                     &C_SdBueBusEditPropertiesWidget::m_HandleEnableCanFdChange);
@@ -299,15 +292,14 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
          }
          if (q_CurrentSetBitrateFound == true)
          {
-            this->mpc_Ui->pc_ComboBoxBitRate->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                                    C_GtGetText::h_GetText(""),
+            this->mpc_Ui->pc_ComboBoxBitRate->SetToolTipInformation("",
+                                                                    "",
                                                                     C_NagToolTip::eDEFAULT);
          }
          else
          {
             QString c_Content;
-            const QString c_Heading = C_GtGetText::h_GetText(
-               "Selected bitrate not supported by following connected nodes:");
+            const QString c_Heading = "Selected bitrate not supported by following connected nodes:";
             std::vector<QString> c_InvalidNodesForBitRate;
             C_PuiSdHandler::h_GetInstance()->CheckBusConflictDetailed(this->mu32_BusIndex, NULL, NULL, NULL,
                                                                       &c_InvalidNodesForBitRate, NULL);
@@ -351,8 +343,8 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
             }
             if (q_CurrentSetCanFdBitrateFound == true)
             {
-               this->mpc_Ui->pc_ComboBoxCANFDBitRate->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                                            C_GtGetText::h_GetText(""),
+               this->mpc_Ui->pc_ComboBoxCANFDBitRate->SetToolTipInformation("",
+                                                                            "",
                                                                             C_NagToolTip::eDEFAULT);
             }
             else
@@ -360,8 +352,7 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
                if (q_UseCanFd)
                {
                   QString c_Content;
-                  const QString c_Heading = C_GtGetText::h_GetText(
-                     "Selected bitrate not supported by following connected nodes:");
+                  const QString c_Heading = "Selected bitrate not supported by following connected nodes:";
                   std::vector<QString> c_InvalidNodesForCanFdBitRate;
                   C_PuiSdHandler::h_GetInstance()->CheckBusConflictDetailed(this->mu32_BusIndex, NULL, NULL, NULL,
                                                                             &c_InvalidNodesForCanFdBitRate, NULL);
@@ -435,7 +426,7 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
       connect(this->mpc_Ui->pc_SpinBoxBusId, static_cast<void (QSpinBox::*)(
                                                             int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
               &C_SdBueBusEditPropertiesWidget::m_RegisterIdChange);
-      connect(this->mpc_Ui->pc_CheckBoxUsableForRouting, &QCheckBox::checkStateChanged, this,
+      connect(this->mpc_Ui->pc_CheckBoxUsableForRouting, &QCheckBox::stateChanged, this,
               &C_SdBueBusEditPropertiesWidget::m_RegisterIdChange);
       //lint -e{929} Cast required to avoid ambiguous signal of qt interface
       connect(this->mpc_Ui->pc_ComboBoxBitRate, static_cast<void (QComboBox::*)(
@@ -452,7 +443,7 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
                  &C_SdBueBusEditPropertiesWidget::m_RegisterCanFdChange);
          connect(this->mpc_Ui->pc_ComboBoxCANFDBitRate, &C_OgeCbxText::SigErrorFixed, this,
                  &C_SdBueBusEditPropertiesWidget::m_CanFdBitrateFixed);
-         connect(this->mpc_Ui->pc_CheckBoxEnableCANFD, &QCheckBox::checkStateChanged, this,
+         connect(this->mpc_Ui->pc_CheckBoxEnableCANFD, &QCheckBox::stateChanged, this,
                  &C_SdBueBusEditPropertiesWidget::m_RegisterCanFdChange);
          connect(this->mpc_Ui->pc_CheckBoxEnableCANFD, &QCheckBox::toggled, this,
                  &C_SdBueBusEditPropertiesWidget::m_HandleEnableCanFdChange);
@@ -463,8 +454,8 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueBusEditPropertiesWidget::m_CanBitrateFixed(void) const
 {
-   this->mpc_Ui->pc_ComboBoxBitRate->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                           C_GtGetText::h_GetText(""),
+   this->mpc_Ui->pc_ComboBoxBitRate->SetToolTipInformation("",
+                                                           "",
                                                            C_NagToolTip::eDEFAULT);
 }
 
@@ -474,8 +465,8 @@ void C_SdBueBusEditPropertiesWidget::m_CanBitrateFixed(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueBusEditPropertiesWidget::m_CanFdBitrateFixed() const
 {
-   this->mpc_Ui->pc_ComboBoxCANFDBitRate->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                                C_GtGetText::h_GetText(""),
+   this->mpc_Ui->pc_ComboBoxCANFDBitRate->SetToolTipInformation("",
+                                                                "",
                                                                 C_NagToolTip::eDEFAULT);
 }
 
@@ -534,14 +525,14 @@ bool C_SdBueBusEditPropertiesWidget::m_ConfirmDisableRouting()
 
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("Usable for Routing"));
-   c_Message.SetDescription(C_GtGetText::h_GetText("Do you really want to disable routing for this bus?"));
-   c_Message.SetDetails(C_GtGetText::h_GetText("This will disable the routing flags of all node interfaces "
-                                               "connected to this bus."));
+   c_Message.SetHeading("Usable for Routing");
+   c_Message.SetDescription("Do you really want to disable routing for this bus?");
+   c_Message.SetDetails("This will disable the routing flags of all node interfaces "
+                                               "connected to this bus.");
    c_Message.SetCustomMinHeight(180, 270);
 
-   c_Message.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
-   c_Message.SetOkButtonText(C_GtGetText::h_GetText("Disable Routing"));
+   c_Message.SetNoButtonText("Cancel");
+   c_Message.SetOkButtonText("Disable Routing");
 
    if (c_Message.Execute() == C_OgeWiCustomMessage::eYES)
    {
@@ -706,21 +697,21 @@ void C_SdBueBusEditPropertiesWidget::m_CheckBusName(void)
 
    if ((q_NameIsUnique == true) && (q_NameIsValid == true))
    {
-      this->mpc_Ui->pc_LineEditBusName->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                              C_GtGetText::h_GetText(""),
+      this->mpc_Ui->pc_LineEditBusName->SetToolTipInformation("",
+                                                              "",
                                                               C_NagToolTip::eDEFAULT);
    }
    else
    {
-      const QString c_Heading = C_GtGetText::h_GetText("Bus Name");
+      const QString c_Heading = "Bus Name";
       QString c_Content;
       if (q_NameIsUnique == false)
       {
-         c_Content += C_GtGetText::h_GetText("- is already in use");
+         c_Content += "- is already in use";
       }
       if (q_NameIsValid == false)
       {
-         c_Content += C_GtGetText::h_GetText("- is empty or contains invalid characters.");
+         c_Content += "- is empty or contains invalid characters.";
       }
       this->mpc_Ui->pc_LineEditBusName->SetToolTipInformation(c_Heading, c_Content, C_NagToolTip::eERROR);
    }
@@ -802,15 +793,14 @@ void C_SdBueBusEditPropertiesWidget::m_RegisterNameChange(void)
                                                                  c_str(), &this->mu32_BusIndex,
                                                                  &c_ExistingNames) == false)
       {
-         const QString c_Description = static_cast<QString>(C_GtGetText::h_GetText(
-                                                               "A bus with the name \"%1\" already exists. Choose another name."))
+         const QString c_Description = static_cast<QString>("A bus with the name \"%1\" already exists. Choose another name.")
                                        .
                                        arg(this->mpc_Ui->pc_LineEditBusName->text());
          QString c_Details;
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Bus naming"));
+         c_Message.SetHeading("Bus naming");
          c_Message.SetDescription(c_Description);
-         c_Details.append(C_GtGetText::h_GetText("Used bus names:\n"));
+         c_Details.append("Used bus names:\n");
          for (uint32_t u32_ItExistingName = 0UL; u32_ItExistingName < c_ExistingNames.size(); ++u32_ItExistingName)
          {
             const C_SclString & rc_Name = c_ExistingNames[u32_ItExistingName];
@@ -832,8 +822,7 @@ void C_SdBueBusEditPropertiesWidget::m_RegisterNameChange(void)
       {
          m_TrimmBusName();
          m_RegisterChange();
-         Q_EMIT (this->SigNameChanged(C_GtGetText::h_GetText(
-                                         "NETWORK TOPOLOGY"), this->mpc_Ui->pc_LineEditBusName->text(), false));
+         Q_EMIT (this->SigNameChanged("NETWORK TOPOLOGY", this->mpc_Ui->pc_LineEditBusName->text(), false));
       }
       hq_InProgress = false; //lint !e838 its static and could be used on strange second call
    }

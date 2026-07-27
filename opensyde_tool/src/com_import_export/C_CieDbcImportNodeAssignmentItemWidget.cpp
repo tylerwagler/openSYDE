@@ -16,7 +16,6 @@
 #include "ui_C_CieDbcImportNodeAssignmentItemWidget.h"
 
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -61,14 +60,14 @@ C_CieDbcImportNodeAssignmentItemWidget::C_CieDbcImportNodeAssignmentItemWidget(
    this->mpc_Ui->setupUi(this);
    this->mpc_Ui->pc_LabImportNode->setText(orc_DbcNode.c_Properties.c_Name.c_str());
    this->mpc_Ui->pc_LabImportNode->SetToolTipInformation(
-      C_GtGetText::h_GetText(orc_DbcNode.c_Properties.c_Name.c_str()),
-      C_GtGetText::h_GetText(orc_DbcNode.c_Properties.c_Comment.c_str()));
+      orc_DbcNode.c_Properties.c_Name.c_str(),
+      orc_DbcNode.c_Properties.c_Comment.c_str());
 
    this->mpc_Ui->pc_LabInfo->setText(static_cast<QString>("%1 Tx / %2 Rx").
                                      arg(orc_DbcNode.c_TxMessages.size()).arg(orc_DbcNode.c_RxMessages.size()));
 
    // fill combobox with all connected topology nodes
-   this->mpc_Ui->pc_CbxOsyNodes->addItem(C_GtGetText::h_GetText("<ignore>"));
+   this->mpc_Ui->pc_CbxOsyNodes->addItem("<ignore>");
    for (std::vector<QString>::const_iterator c_It = orc_OsyNodeNames.begin(); c_It != orc_OsyNodeNames.end(); ++c_It)
    {
       this->mpc_Ui->pc_CbxOsyNodes->addItem(*c_It);

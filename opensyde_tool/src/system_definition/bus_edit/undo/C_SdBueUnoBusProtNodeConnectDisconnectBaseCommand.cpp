@@ -20,7 +20,6 @@
 #include "C_OscNode.hpp"
 #include "C_OscNodeDataPool.hpp"
 #include "C_SdBueComIfDescriptionWidget.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDpListCommentDialog.hpp"
 #include "ui_C_SdNdeDpListCommentDialog.h"
@@ -91,14 +90,14 @@ void C_SdNdeDpListCommentDialog::InitStaticNames(void) const
 
    if (pc_List != NULL)
    {
-      mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("List \"%1\"")).arg(pc_List->c_Name.c_str()));
-      this->mpc_Ui->pc_TextEditComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
+      mrc_ParentDialog.SetTitle(static_cast<QString>("List \"%1\"").arg(pc_List->c_Name.c_str()));
+      this->mpc_Ui->pc_TextEditComment->setPlaceholderText("Add your comment here ...");
       this->mpc_Ui->pc_TextEditComment->setText(pc_List->c_Comment.c_str());
    }
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Comment Edit"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Comment"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetSubTitle("Comment Edit");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Comment");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

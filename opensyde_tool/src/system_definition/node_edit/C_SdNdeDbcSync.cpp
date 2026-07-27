@@ -28,7 +28,6 @@
 #include <QFileInfo>
 
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscNode.hpp"
 #include "C_OscNodeCommFiler.hpp"
 #include "C_OscNodeDataPool.hpp"
@@ -398,18 +397,18 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
 
    if (pc_Node == NULL)
    {
-      orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText("Node index %1 out of range.")).arg(
+      orc_ErrorMessage = static_cast<QString>("Node index %1 out of range.").arg(
          ou32_NodeIndex);
       s32_Retval = C_RANGE;
    }
    else if (pc_Node->pc_DeviceDefinition == NULL)
    {
-      orc_ErrorMessage = C_GtGetText::h_GetText("Node has no associated device definition.");
+      orc_ErrorMessage = "Node has no associated device definition.";
       s32_Retval = C_CONFIG;
    }
    else if (ou32_InterfaceIndex >= pc_Node->c_Properties.c_ComInterfaces.size())
    {
-      orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText("Interface index %1 out of range.")).arg(
+      orc_ErrorMessage = static_cast<QString>("Interface index %1 out of range.").arg(
          ou32_InterfaceIndex);
       s32_Retval = C_RANGE;
    }
@@ -419,12 +418,12 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
 
       if (rc_Interface.e_InterfaceType != C_OscSystemBus::eCAN)
       {
-         orc_ErrorMessage = C_GtGetText::h_GetText("Interface is not a CAN interface.");
+         orc_ErrorMessage = "Interface is not a CAN interface.";
          s32_Retval = C_RANGE;
       }
       else if (rc_Interface.GetBusConnected() == false)
       {
-         orc_ErrorMessage = C_GtGetText::h_GetText("Interface is not connected to a bus.");
+         orc_ErrorMessage = "Interface is not connected to a bus.";
          s32_Retval = C_CONFIG;
       }
       else
@@ -432,8 +431,7 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
          const QString c_DbcPath = h_GetExpectedDbcPath(ou32_NodeIndex, ou32_InterfaceIndex);
          if (c_DbcPath.isEmpty() || (QFile::exists(c_DbcPath) == false))
          {
-            orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
-                                                       "Expected DBC file not found: %1")).arg(c_DbcPath);
+            orc_ErrorMessage = static_cast<QString>("Expected DBC file not found: %1").arg(c_DbcPath);
             s32_Retval = C_RD_WR;
          }
          else
@@ -451,15 +449,13 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
 
             if ((s32_ParseResult != C_NO_ERR) && (s32_ParseResult != C_WARN))
             {
-               orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "Could not parse DBC %1: %2")).arg(c_DbcPath,
+               orc_ErrorMessage = static_cast<QString>("Could not parse DBC %1: %2").arg(c_DbcPath,
                                                                                              c_ParseError.c_str());
                s32_Retval = C_RD_WR;
             }
             else if (c_CommDef.c_Nodes.empty() == true)
             {
-               orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "DBC %1 contains no nodes.")).arg(c_DbcPath);
+               orc_ErrorMessage = static_cast<QString>("DBC %1 contains no nodes.").arg(c_DbcPath);
                s32_Retval = C_CONFIG;
             }
             else
@@ -475,9 +471,8 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
                         ou32_NodeIndex, e_Protocol);
                      if (s32_Add != C_NO_ERR)
                      {
-                        orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
-                                                                   "Could not auto-create a %1 COMM datapool "
-                                                                   "on the node.")).arg(
+                        orc_ErrorMessage = static_cast<QString>("Could not auto-create a %1 COMM datapool "
+                                                                   "on the node.").arg(
                            C_OscNodeCommFiler::h_CommunicationProtocolToString(e_Protocol).c_str());
                         s32_Retval = C_CONFIG;
                      }
@@ -499,9 +494,8 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
                   }
                   if (s32_DatapoolIndex < 0)
                   {
-                     orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
-                                                                "Could not locate a %1 COMM datapool "
-                                                                "after auto-creation.")).arg(
+                     orc_ErrorMessage = static_cast<QString>("Could not locate a %1 COMM datapool "
+                                                                "after auto-creation.").arg(
                         C_OscNodeCommFiler::h_CommunicationProtocolToString(e_Protocol).c_str());
                      s32_Retval = C_CONFIG;
                   }
@@ -562,9 +556,8 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
                   const QString c_DbcHash = h_ComputeFileSha256(c_DbcPath);
                   if (c_DbcHash.isEmpty() == true)
                   {
-                     orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
-                                                                "Messages imported, but the DBC could not be re-read "
-                                                                "to record its fingerprint: %1")).arg(c_DbcPath);
+                     orc_ErrorMessage = static_cast<QString>("Messages imported, but the DBC could not be re-read "
+                                                                "to record its fingerprint: %1").arg(c_DbcPath);
                      s32_Retval = C_RD_WR;
                   }
                   else
@@ -621,18 +614,18 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
 
    if (pc_Node == NULL)
    {
-      orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText("Node index %1 out of range.")).arg(
+      orc_ErrorMessage = static_cast<QString>("Node index %1 out of range.").arg(
          ou32_NodeIndex);
       s32_Retval = C_RANGE;
    }
    else if (pc_Node->pc_DeviceDefinition == NULL)
    {
-      orc_ErrorMessage = C_GtGetText::h_GetText("Node has no associated device definition.");
+      orc_ErrorMessage = "Node has no associated device definition.";
       s32_Retval = C_CONFIG;
    }
    else if (ou32_InterfaceIndex >= pc_Node->c_Properties.c_ComInterfaces.size())
    {
-      orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText("Interface index %1 out of range.")).arg(
+      orc_ErrorMessage = static_cast<QString>("Interface index %1 out of range.").arg(
          ou32_InterfaceIndex);
       s32_Retval = C_RANGE;
    }
@@ -642,12 +635,12 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
 
       if (rc_Interface.e_InterfaceType != C_OscSystemBus::eCAN)
       {
-         orc_ErrorMessage = C_GtGetText::h_GetText("Interface is not a CAN interface.");
+         orc_ErrorMessage = "Interface is not a CAN interface.";
          s32_Retval = C_RANGE;
       }
       else if (rc_Interface.GetBusConnected() == false)
       {
-         orc_ErrorMessage = C_GtGetText::h_GetText("Interface is not connected to a bus.");
+         orc_ErrorMessage = "Interface is not connected to a bus.";
          s32_Retval = C_CONFIG;
       }
       else
@@ -655,7 +648,7 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
          const QString c_DbcPath = h_GetExpectedDbcPath(ou32_NodeIndex, ou32_InterfaceIndex);
          if (c_DbcPath.isEmpty())
          {
-            orc_ErrorMessage = C_GtGetText::h_GetText("Could not derive a DBC path for this interface.");
+            orc_ErrorMessage = "Could not derive a DBC path for this interface.";
             s32_Retval = C_RANGE;
          }
          else
@@ -676,8 +669,7 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
 
             if (s32_DatapoolIndex < 0)
             {
-               orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "Node has no %1 COMM datapool to push from.")).arg(
+               orc_ErrorMessage = static_cast<QString>("Node has no %1 COMM datapool to push from.").arg(
                   C_OscNodeCommFiler::h_CommunicationProtocolToString(e_Protocol).c_str());
                s32_Retval = C_CONFIG;
             }
@@ -690,8 +682,7 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
 
                if (pc_Container == NULL)
                {
-                  orc_ErrorMessage = C_GtGetText::h_GetText(
-                     "Could not access the per-interface message container.");
+                  orc_ErrorMessage = "Could not access the per-interface message container.";
                   s32_Retval = C_CONFIG;
                }
                else
@@ -738,8 +729,7 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
 
                   if ((s32_Export != C_NO_ERR) && (s32_Export != C_WARN))
                   {
-                     orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
-                                                                "Could not write DBC %1: %2")).arg(
+                     orc_ErrorMessage = static_cast<QString>("Could not write DBC %1: %2").arg(
                         c_DbcPath, c_ExportError.c_str());
                      s32_Retval = C_RD_WR;
                   }
@@ -749,9 +739,8 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
                      const QString c_DbcHash = h_ComputeFileSha256(c_DbcPath);
                      if (c_DbcHash.isEmpty() == true)
                      {
-                        orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText(
-                                                                   "DBC written, but the file could not be re-read "
-                                                                   "to record its fingerprint: %1")).arg(c_DbcPath);
+                        orc_ErrorMessage = static_cast<QString>("DBC written, but the file could not be re-read "
+                                                                   "to record its fingerprint: %1").arg(c_DbcPath);
                         s32_Retval = C_RD_WR;
                      }
                      else

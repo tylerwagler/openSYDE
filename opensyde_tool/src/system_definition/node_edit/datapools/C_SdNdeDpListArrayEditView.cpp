@@ -23,7 +23,6 @@
 #include "C_Uti.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_SdNdeSingleHeaderView.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -105,7 +104,7 @@ C_SdNdeDpListArrayEditView::C_SdNdeDpListArrayEditView(QWidget * const opc_Paren
       this->mpc_LabelCorner = new QLabel(this);
       this->mpc_LabelCorner->setAlignment(Qt::AlignCenter);
       this->mpc_LabelCorner->setAttribute(Qt::WA_TransparentForMouseEvents);
-      this->mpc_LabelCorner->setText(C_GtGetText::h_GetText("Index"));
+      this->mpc_LabelCorner->setText("Index");
 
       connect(
          this->verticalHeader(), &QHeaderView::geometriesChanged, this,

@@ -14,7 +14,6 @@
 
 #include <QPainter>
 
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_NagServiceModeInfo.hpp"
 #include "ui_C_NagServiceModeInfo.h"
@@ -75,10 +74,10 @@ C_NagServiceModeInfo::~C_NagServiceModeInfo()
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagServiceModeInfo::InitStaticNames()
 {
-   this->mpc_Ui->pc_InfoLabel->setText(C_GtGetText::h_GetText("Service Project - Limited Access"));
-   this->SetToolTipInformation(C_GtGetText::h_GetText("Service Project"),
-                               C_GtGetText::h_GetText("Project for service mode use case.\n"
-                                                      "Access is limited to specific views controlled by the project settings"));
+   this->mpc_Ui->pc_InfoLabel->setText("Service Project - Limited Access");
+   this->SetToolTipInformation("Service Project",
+                               "Project for service mode use case.\n"
+                                                      "Access is limited to specific views controlled by the project settings");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

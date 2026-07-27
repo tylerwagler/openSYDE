@@ -30,7 +30,6 @@
 #include "C_SdBueMlvBaseItem.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdNodeCanSignal.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscCanMessage.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -429,7 +428,7 @@ void C_SdBueMlvGraphicsScene::DisplayToolTip(const QPointF & orc_ScenePos)
             c_ToolTipContent += (*c_It)->GetName() + "\n";
          }
 
-         Q_EMIT this->SigShowToolTip(orc_ScenePos, C_GtGetText::h_GetText("Following signals are overlapping"),
+         Q_EMIT this->SigShowToolTip(orc_ScenePos, "Following signals are overlapping",
                                      c_ToolTipContent, true);
       }
       else if (this->mpc_HoveredSignal != pc_HoveredItem)
@@ -792,12 +791,10 @@ void C_SdBueMlvGraphicsScene::m_InitProtocolItems(void)
 {
    this->mapc_EcesHints[0] = new C_SdBueMlvBaseItem(QColor(0, 0, 0, 0),
                                                     mc_STYLE_GUIDE_COLOR_10, mc_STYLE_GUIDE_FONT_REGULAR_16,
-                                                    stw::opensyde_gui_logic::C_GtGetText::h_GetText(
-                                                       "Reserved by Message Counter"), true);
+                                                    "Reserved by Message Counter", true);
    this->mapc_EcesHints[1] = new C_SdBueMlvBaseItem(QColor(0, 0, 0, 0),
                                                     mc_STYLE_GUIDE_COLOR_10, mc_STYLE_GUIDE_FONT_REGULAR_16,
-                                                    stw::opensyde_gui_logic::C_GtGetText::h_GetText(
-                                                       "Reserved by Checksum"), true);
+                                                    "Reserved by Checksum", true);
 
    this->mapc_EcesHints[0]->setZValue(mhf64_Z_ORDER_HINT_ITEM);
    this->mapc_EcesHints[1]->setZValue(mhf64_Z_ORDER_HINT_ITEM);
@@ -1575,24 +1572,24 @@ void C_SdBueMlvGraphicsScene::m_SetupContextMenu(void)
 {
    this->mpc_ContextMenu = new stw::opensyde_gui_elements::C_OgeContextMenu();
 
-   this->mpc_Add = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Add new Signal"), this,
+   this->mpc_Add = this->mpc_ContextMenu->addAction("Add new Signal", this,
                                                     &C_SdBueMlvGraphicsScene::m_ActionAdd);
 
-   this->mpc_AddMultiplexed = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Add new multiplexed Signal"),
+   this->mpc_AddMultiplexed = this->mpc_ContextMenu->addAction("Add new multiplexed Signal",
                                                                this, &C_SdBueMlvGraphicsScene::m_ActionAddMultiplexed);
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_Cut = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Cut"),
+   this->mpc_Cut = this->mpc_ContextMenu->addAction("Cut",
                                                     this, &C_SdBueMlvGraphicsScene::m_ActionCut);
-   this->mpc_Copy = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Copy"),
+   this->mpc_Copy = this->mpc_ContextMenu->addAction("Copy",
                                                      this, &C_SdBueMlvGraphicsScene::m_ActionCopy);
-   this->mpc_Paste = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Paste"),
+   this->mpc_Paste = this->mpc_ContextMenu->addAction("Paste",
                                                       this, &C_SdBueMlvGraphicsScene::m_ActionPaste);
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_Delete = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Delete"),
+   this->mpc_Delete = this->mpc_ContextMenu->addAction("Delete",
                                                        this, &C_SdBueMlvGraphicsScene::m_ActionDelete);
 }
 

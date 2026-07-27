@@ -15,7 +15,6 @@
 #include "C_SyvDaPePieChart.hpp"
 #include "ui_C_SyvDaPePieChart.h"
 
-#include "C_GtGetText.hpp"
 #include "C_GiSvDaPieChartBase.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -82,16 +81,14 @@ C_SyvDaPePieChart::~C_SyvDaPePieChart(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPePieChart::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelShowUnit->setText(C_GtGetText::h_GetText("Show Unit"));
-   this->mpc_Ui->pc_LabelShowValue->setText(C_GtGetText::h_GetText("Show Value"));
+   this->mpc_Ui->pc_LabelShowUnit->setText("Show Unit");
+   this->mpc_Ui->pc_LabelShowValue->setText("Show Value");
 
    //Tool tips
-   this->mpc_Ui->pc_LabelShowUnit->SetToolTipInformation(C_GtGetText::h_GetText("Show Unit"),
-                                                         C_GtGetText::h_GetText(
-                                                            "Option to display the unit after the value or hide the unit entirely"));
-   this->mpc_Ui->pc_LabelShowValue->SetToolTipInformation(C_GtGetText::h_GetText("Show Value"),
-                                                          C_GtGetText::h_GetText(
-                                                             "Option to display the value inside the pie chart or hide the value entirely"));
+   this->mpc_Ui->pc_LabelShowUnit->SetToolTipInformation("Show Unit",
+                                                         "Option to display the unit after the value or hide the unit entirely");
+   this->mpc_Ui->pc_LabelShowValue->SetToolTipInformation("Show Value",
+                                                          "Option to display the value inside the pie chart or hide the value entirely");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

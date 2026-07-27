@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_CamMosDatabaseSelectionPopup.hpp"
 #include "ui_C_CamMosDatabaseSelectionPopup.h"
 
@@ -120,25 +119,24 @@ C_CamMosDatabaseSelectionPopup::~C_CamMosDatabaseSelectionPopup(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosDatabaseSelectionPopup::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Message"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Selection"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Select Message"));
+   this->mrc_ParentDialog.SetTitle("Message");
+   this->mrc_ParentDialog.SetSubTitle("Selection");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Select Message");
 
-   this->mpc_Ui->pc_LineEditSearch->setPlaceholderText(C_GtGetText::h_GetText("Filter"));
-   this->mpc_Ui->pc_LabelSearchNoElementsFound->setText(C_GtGetText::h_GetText("No messages found."));
-   this->mpc_Ui->pc_LabelInitialSignalNoElements->setText(C_GtGetText::h_GetText(
-                                                             "No messages found. \n\n"
+   this->mpc_Ui->pc_LineEditSearch->setPlaceholderText("Filter");
+   this->mpc_Ui->pc_LabelSearchNoElementsFound->setText("No messages found.");
+   this->mpc_Ui->pc_LabelInitialSignalNoElements->setText("No messages found. \n\n"
                                                              "Possible reasons:\n"
                                                              "   - Database deactivated\n"
                                                              "   - Database not loaded yet\n"
                                                              "   - Database loading failed\n"
-                                                             "   - Database doesn't contain messages"));
+                                                             "   - Database doesn't contain messages");
 
    this->mpc_Ui->pc_GroupBoxSearchNoElementsFound->setTitle("");
    this->mpc_Ui->pc_GroupBoxInitialSignalNoElements->setTitle("");
 
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -264,18 +262,17 @@ void C_CamMosDatabaseSelectionPopup::m_UpdateSelection(const int32_t os32_Select
       {
          if (os32_SelectionCount > 1)
          {
-            this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                             "%1 selected messages")).arg(
+            this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("%1 selected messages").arg(
                                                         os32_SelectionCount));
          }
          else
          {
-            this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText("1 selected message")));
+            this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("1 selected message"));
          }
       }
       else
       {
-         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>(C_GtGetText::h_GetText("No selected message")));
+         this->mpc_Ui->pc_LabelSelection->setText(static_cast<QString>("No selected message"));
       }
    }
 }
@@ -290,10 +287,10 @@ void C_CamMosDatabaseSelectionPopup::m_SetupContextMenu(const bool & orq_MultiSe
 {
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Expand all"),
+   this->mpc_ContextMenu->addAction("Expand all",
                                     this->mpc_Ui->pc_TreeView,
                                     &C_CamMosDatabaseSelectionView::expandAll);
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Collapse all"),
+   this->mpc_ContextMenu->addAction("Collapse all",
                                     this->mpc_Ui->pc_TreeView,
                                     &C_CamMosDatabaseSelectionView::collapseAll);
 
@@ -301,7 +298,7 @@ void C_CamMosDatabaseSelectionPopup::m_SetupContextMenu(const bool & orq_MultiSe
    if (orq_MultiSelect == true)
    {
       this->mpc_ContextMenu->addSeparator();
-      this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Select all"),
+      this->mpc_ContextMenu->addAction("Select all",
                                        this->mpc_Ui->pc_TreeView,
                                        &C_CamMosDatabaseSelectionView::selectAll,
                                        static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_A));

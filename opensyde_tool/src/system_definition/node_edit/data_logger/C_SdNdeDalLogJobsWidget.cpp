@@ -22,7 +22,6 @@
 #include "C_SdNdeDalCopClipBoardHelper.hpp"
 #include "C_OscDataLoggerJobProperties.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_Uti.hpp"
 #include "TglUtils.hpp"
@@ -109,10 +108,10 @@ C_SdNdeDalLogJobsWidget::~C_SdNdeDalLogJobsWidget()
 void C_SdNdeDalLogJobsWidget::InitStaticNames() const
 {
    // overview
-   this->mpc_Ui->pc_PbLogJobsOverview->setText(C_GtGetText::h_GetText("Log Jobs"));
+   this->mpc_Ui->pc_PbLogJobsOverview->setText("Log Jobs");
    this->mpc_Ui->pc_PbLogJobsOverview->
-   SetToolTipInformation(C_GtGetText::h_GetText("Log Jobs Overview"),
-                         C_GtGetText::h_GetText("Show overview of all Log Jobs."));
+   SetToolTipInformation("Log Jobs Overview",
+                         "Show overview of all Log Jobs.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -213,7 +212,7 @@ void C_SdNdeDalLogJobsWidget::LoadLogJobs(void)
       }
       else
       {
-         this->mpc_Ui->pc_PbLogJobsOverview->setText(C_GtGetText::h_GetText("Log Jobs"));
+         this->mpc_Ui->pc_PbLogJobsOverview->setText("Log Jobs");
          this->mpc_Ui->pc_PushButtonAdd->setVisible(false);
          this->mpc_Ui->pc_JobsListView->setVisible(false);
       }
@@ -410,28 +409,23 @@ void C_SdNdeDalLogJobsWidget::m_SetupContextMenu()
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
    this->setContextMenuPolicy(Qt::CustomContextMenu);
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                       "Add new Log Job"), this, &C_SdNdeDalLogJobsWidget::m_OnAddLogJob,
+   this->mpc_ContextMenu->addAction("Add new Log Job", this, &C_SdNdeDalLogJobsWidget::m_OnAddLogJob,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_Plus));
 
    // separating line
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                       "Cut"), this, &C_SdNdeDalLogJobsWidget::m_OnCutLogJob,
+   this->mpc_ContextMenu->addAction("Cut", this, &C_SdNdeDalLogJobsWidget::m_OnCutLogJob,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_X));
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                       "Copy"), this, &C_SdNdeDalLogJobsWidget::m_OnCopyLogJob,
+   this->mpc_ContextMenu->addAction("Copy", this, &C_SdNdeDalLogJobsWidget::m_OnCopyLogJob,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_C));
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                       "Paste"), this, &C_SdNdeDalLogJobsWidget::m_OnPasteLogJob,
+   this->mpc_ContextMenu->addAction("Paste", this, &C_SdNdeDalLogJobsWidget::m_OnPasteLogJob,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_V));
 
    // separating line
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                       "Delete"), this, &C_SdNdeDalLogJobsWidget::m_OnDeleteLogJob,
+   this->mpc_ContextMenu->addAction("Delete", this, &C_SdNdeDalLogJobsWidget::m_OnDeleteLogJob,
                                     static_cast<int32_t>(Qt::Key_Delete));
 
    connect(this, &C_SdNdeDalLogJobsWidget::customContextMenuRequested, this,
@@ -464,7 +458,7 @@ void C_SdNdeDalLogJobsWidget::m_OnCustomContextMenuRequested(const QPoint & orc_
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobsWidget::m_UpdateLogJobCountLabel(const uint32_t ou32_LogJobCount)
 {
-   const QString c_LogJobsCount = static_cast<QString>(C_GtGetText::h_GetText("Log Jobs (%1)")).arg(
+   const QString c_LogJobsCount = static_cast<QString>("Log Jobs (%1)").arg(
       ou32_LogJobCount);
 
    this->mpc_Ui->pc_PbLogJobsOverview->setText(c_LogJobsCount);

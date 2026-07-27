@@ -21,7 +21,6 @@
 
 #include "constants.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_HeHandler.hpp"
 #include "C_UsHandler.hpp"
 #include "C_ImpUtil.hpp"
@@ -86,9 +85,8 @@ C_SdHandlerWidget::C_SdHandlerWidget(QWidget * const opc_Parent) :
    ms32_SubMode(-1),
    mu32_Index(0U),
    mq_DataChanged(false),
-   mc_TooltipGenerateCodeHeading(C_GtGetText::h_GetText("Generate Files")),
-   mc_TooltipGenerateCodeContentSysdef(C_GtGetText::h_GetText(
-                                          "Generate files for all nodes with file generation support based on defined SYSTEM DEFINITION."
+   mc_TooltipGenerateCodeHeading("Generate Files"),
+   mc_TooltipGenerateCodeContentSysdef("Generate files for all nodes with file generation support based on defined SYSTEM DEFINITION."
                                           "\n - openSYDE server initialization wrapper"
                                           "\n   Create source code providing initialization structures for the OSS DPD and DPH init functions."
                                           "\n - COMM stack definition"
@@ -96,9 +94,8 @@ C_SdHandlerWidget::C_SdHandlerWidget(QWidget * const opc_Parent) :
                                           "\n - Datapools"
                                           "\n   Create source code for Datapool settings of an openSYDE node."
                                           "\n - NVM-based Hardware Configuration"
-                                          "\n   Generate parameter set image file(s) for hardware configuration of an openSYDE node.")),
-   mc_TooltipGenerateCodeContentNode(C_GtGetText::h_GetText(
-                                        "Generate files for current node based on defined SYSTEM DEFINITION."
+                                          "\n   Generate parameter set image file(s) for hardware configuration of an openSYDE node."),
+   mc_TooltipGenerateCodeContentNode("Generate files for current node based on defined SYSTEM DEFINITION."
                                         "\n - openSYDE server initialization wrapper"
                                         "\n   Create source code providing initialization structures for the OSS DPD and DPH init functions."
                                         "\n - COMM stack definition"
@@ -106,7 +103,7 @@ C_SdHandlerWidget::C_SdHandlerWidget(QWidget * const opc_Parent) :
                                         "\n - Datapools"
                                         "\n   Create source code for Datapool settings of current openSYDE node."
                                         "\n - NVM-based Hardware Configuration"
-                                        "\n   Generate parameter set image file(s) for hardware configuration of current openSYDE node."))
+                                        "\n   Generate parameter set image file(s) for hardware configuration of current openSYDE node.")
 {
    int32_t s32_Index;
 
@@ -136,42 +133,40 @@ C_SdHandlerWidget::C_SdHandlerWidget(QWidget * const opc_Parent) :
    C_NagToolBarButtonProperties c_ButtonProperties;
 
    // Function index 0: mhu32_USER_INPUT_FUNC_APPLY
-   c_ButtonProperties.c_ButtonText = C_GtGetText::h_GetText("Save Project");
-   c_ButtonProperties.c_ToolTipHeading = C_GtGetText::h_GetText("Save Project");
-   c_ButtonProperties.c_ToolTipContent = C_GtGetText::h_GetText("Save project data to file.");
+   c_ButtonProperties.c_ButtonText = "Save Project";
+   c_ButtonProperties.c_ToolTipHeading = "Save Project";
+   c_ButtonProperties.c_ToolTipContent = "Save project data to file.";
    this->mc_VecUserInputFuncNames.append(c_ButtonProperties);
 
    // Function index 1: mhu32_USER_INPUT_FUNC_GENERATE_CODE
-   c_ButtonProperties.c_ButtonText = C_GtGetText::h_GetText("Generate Files");
+   c_ButtonProperties.c_ButtonText = "Generate Files";
    c_ButtonProperties.c_ToolTipHeading = mc_TooltipGenerateCodeHeading;
    c_ButtonProperties.c_ToolTipContent = mc_TooltipGenerateCodeContentSysdef;
    this->mc_VecUserInputFuncNames.append(c_ButtonProperties);
 
    // Function index 2: mhu32_USER_INPUT_FUNC_IMPORT
-   c_ButtonProperties.c_ButtonText = C_GtGetText::h_GetText("Import Messages");
-   c_ButtonProperties.c_ToolTipHeading = C_GtGetText::h_GetText("Import Messages");
+   c_ButtonProperties.c_ButtonText = "Import Messages";
+   c_ButtonProperties.c_ToolTipHeading = "Import Messages";
    c_ButtonProperties.c_ToolTipContent =
-      C_GtGetText::h_GetText("Import messages and signals from DBC, EDS or DCF file.");
+      "Import messages and signals from DBC, EDS or DCF file.";
    this->mc_VecUserInputFuncNames.append(c_ButtonProperties);
 
    // Function index 3: mhu32_USER_INPUT_FUNC_EXPORT
-   c_ButtonProperties.c_ButtonText = C_GtGetText::h_GetText("DBC File Export");
-   c_ButtonProperties.c_ToolTipHeading = C_GtGetText::h_GetText("DBC File Export");
-   c_ButtonProperties.c_ToolTipContent = C_GtGetText::h_GetText(
-      "Export messages and signals of current bus in standard DBC file format.");
+   c_ButtonProperties.c_ButtonText = "DBC File Export";
+   c_ButtonProperties.c_ToolTipHeading = "DBC File Export";
+   c_ButtonProperties.c_ToolTipContent = "Export messages and signals of current bus in standard DBC file format.";
    this->mc_VecUserInputFuncNames.append(c_ButtonProperties);
 
    // Function index 4: mhu32_USER_INPUT_FUNC_RTF_EXPORT
-   c_ButtonProperties.c_ButtonText = C_GtGetText::h_GetText("Report");
-   c_ButtonProperties.c_ToolTipHeading = C_GtGetText::h_GetText("Report");
-   c_ButtonProperties.c_ToolTipContent = C_GtGetText::h_GetText("Export the SYSTEM DEFINITION as RTF document file.");
+   c_ButtonProperties.c_ButtonText = "Report";
+   c_ButtonProperties.c_ToolTipHeading = "Report";
+   c_ButtonProperties.c_ToolTipContent = "Export the SYSTEM DEFINITION as RTF document file.";
    this->mc_VecUserInputFuncNames.append(c_ButtonProperties);
 
    // Function index 5: mhu32_USER_INPUT_FUNC_TSP_IMPORT
-   c_ButtonProperties.c_ButtonText = C_GtGetText::h_GetText("Import TSP");
-   c_ButtonProperties.c_ToolTipHeading = C_GtGetText::h_GetText("Import TSP");
-   c_ButtonProperties.c_ToolTipContent = C_GtGetText::h_GetText(
-      "Import node configuration from openSYDE Target Support Package (*.syde_tsp)");
+   c_ButtonProperties.c_ButtonText = "Import TSP";
+   c_ButtonProperties.c_ToolTipHeading = "Import TSP";
+   c_ButtonProperties.c_ToolTipContent = "Import node configuration from openSYDE Target Support Package (*.syde_tsp)";
    this->mc_VecUserInputFuncNames.append(c_ButtonProperties);
 }
 
@@ -886,8 +881,8 @@ void C_SdHandlerWidget::m_Export(void)
          const stw::scl::C_SclString c_Message = "Bus \"" + pc_Bus->c_Name + "\" has invalid content. "
                                                  "DBC file export cannot be performed.";
          C_OgeWiCustomMessage c_ExportWarnings(this, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_ExportWarnings.SetHeading(C_GtGetText::h_GetText("DBC file export"));
-         c_ExportWarnings.SetDescription(C_GtGetText::h_GetText(c_Message.c_str()));
+         c_ExportWarnings.SetHeading("DBC file export");
+         c_ExportWarnings.SetDescription(c_Message.c_str());
          c_ExportWarnings.SetCustomMinHeight(180, 180);
          c_ExportWarnings.Execute();
       }
@@ -1051,9 +1046,8 @@ void C_SdHandlerWidget::m_Export(void)
                   {
                      // display warnings
                      C_OgeWiCustomMessage c_ExportWarnings(this, C_OgeWiCustomMessage::E_Type::eWARNING);
-                     c_ExportWarnings.SetHeading(C_GtGetText::h_GetText("DBC file export"));
-                     c_ExportWarnings.SetDescription(C_GtGetText::h_GetText(
-                                                        "Warnings occurred during DBC file export."));
+                     c_ExportWarnings.SetHeading("DBC file export");
+                     c_ExportWarnings.SetDescription("Warnings occurred during DBC file export.");
                      c_ExportWarnings.SetDetails(c_Warnings.GetText().c_str());
                      c_ExportWarnings.SetCustomMinHeight(180, 300);
                      c_ExportWarnings.Execute();
@@ -1165,11 +1159,10 @@ void C_SdHandlerWidget::m_RtfExport(void)
       if (C_PuiProject::h_GetInstance()->IsEmptyProject() == true)
       {
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("RTF File Export"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("Cannot export RTF file without a valid project path. "
-                                                         "Save project to continue."));
-         c_Message.SetDetails(C_GtGetText::h_GetText(
-                                 "For RTF file export the SYSTEM DEFINITION must be saved to disk."));
+         c_Message.SetHeading("RTF File Export");
+         c_Message.SetDescription("Cannot export RTF file without a valid project path. "
+                                                         "Save project to continue.");
+         c_Message.SetDetails("For RTF file export the SYSTEM DEFINITION must be saved to disk.");
          c_Message.SetCustomMinHeight(230, 250);
          c_Message.Execute();
       }
@@ -1235,13 +1228,13 @@ void C_SdHandlerWidget::m_RtfExport(void)
             {
                const QString c_Details =
                   static_cast<QString>("%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.").
-                  arg(C_GtGetText::h_GetText("File saved at ")).
+                  arg("File saved at ").
                   arg(static_cast<QString>(c_RtfPath.c_str())).
                   arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
                   arg(static_cast<QString>(c_RtfPath.c_str()));
                C_OgeWiCustomMessage c_MessageResult(this);
-               c_MessageResult.SetHeading(C_GtGetText::h_GetText("RTF File Export"));
-               c_MessageResult.SetDescription(C_GtGetText::h_GetText("RTF document successfully created."));
+               c_MessageResult.SetHeading("RTF File Export");
+               c_MessageResult.SetDescription("RTF document successfully created.");
                c_MessageResult.SetDetails(c_Details);
                c_MessageResult.SetCustomMinHeight(180, 250);
                c_MessageResult.Execute();
@@ -1250,18 +1243,18 @@ void C_SdHandlerWidget::m_RtfExport(void)
             {
                const stw::scl::C_SclString c_Details = "Warnings: \r\n" + c_Warnings.GetText();
                C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eWARNING);
-               c_MessageResult.SetHeading(C_GtGetText::h_GetText("RTF File Export"));
-               c_MessageResult.SetDescription(C_GtGetText::h_GetText("Warnings occurred on RTF File Export."));
-               c_MessageResult.SetDetails(C_GtGetText::h_GetText(c_Details.c_str()));
+               c_MessageResult.SetHeading("RTF File Export");
+               c_MessageResult.SetDescription("Warnings occurred on RTF File Export.");
+               c_MessageResult.SetDetails(c_Details.c_str());
                c_MessageResult.SetCustomMinHeight(180, 250);
                c_MessageResult.Execute();
             }
             else
             {
                C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eERROR);
-               c_MessageResult.SetHeading(C_GtGetText::h_GetText("RTF File Export"));
-               c_MessageResult.SetDescription(C_GtGetText::h_GetText("RTF file export error occurred."));
-               c_MessageResult.SetDetails(C_GtGetText::h_GetText(c_Error.c_str()));
+               c_MessageResult.SetHeading("RTF File Export");
+               c_MessageResult.SetDescription("RTF file export error occurred.");
+               c_MessageResult.SetDetails(c_Error.c_str());
                c_MessageResult.SetCustomMinHeight(180, 250);
                c_MessageResult.Execute();
             }
@@ -1289,15 +1282,13 @@ C_OgeWiCustomMessage * C_SdHandlerWidget::m_ShowWarningUnstoredProjectPopupMessa
 
    pc_MessageBox->SetType(C_OgeWiCustomMessage::eWARNING);
 
-   pc_MessageBox->SetHeading(C_GtGetText::h_GetText("Import TSP"));
-   pc_MessageBox->SetDescription(C_GtGetText::h_GetText(
-                                    "This project is not saved yet. Adding Data Blocks might cause "
-                                    "problems with file or directory paths."));
-   pc_MessageBox->SetDetails(C_GtGetText::h_GetText(
-                                "Paths that are handled as relative to *.syde file can not be resolved correctly!"));
-   pc_MessageBox->SetOkButtonText(C_GtGetText::h_GetText("Continue"));
+   pc_MessageBox->SetHeading("Import TSP");
+   pc_MessageBox->SetDescription("This project is not saved yet. Adding Data Blocks might cause "
+                                    "problems with file or directory paths.");
+   pc_MessageBox->SetDetails("Paths that are handled as relative to *.syde file can not be resolved correctly!");
+   pc_MessageBox->SetOkButtonText("Continue");
    pc_MessageBox->SetCustomMinHeight(230, 270);
-   pc_MessageBox->SetCancelButtonText(C_GtGetText::h_GetText("Cancel"));
+   pc_MessageBox->SetCancelButtonText("Cancel");
 
    return pc_MessageBox;
 }
@@ -1361,9 +1352,8 @@ bool C_SdHandlerWidget::m_CheckImportPossible()
 
       pc_MessageBox.SetType(C_OgeWiCustomMessage::eERROR);
 
-      pc_MessageBox.SetHeading(C_GtGetText::h_GetText("Import Messages"));
-      pc_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                      "Cannot import messages without any connected nodes."));
+      pc_MessageBox.SetHeading("Import Messages");
+      pc_MessageBox.SetDescription("Cannot import messages without any connected nodes.");
       pc_MessageBox.SetCustomMinHeight(230, 270);
       pc_MessageBox.Execute();
    }
@@ -1383,14 +1373,12 @@ void C_SdHandlerWidget::m_TspImport(const bool oq_IsNodeNew)
    if (C_PuiProject::h_GetInstance()->IsEmptyProject() == true)
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Save Project"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                     "This project is not saved yet. TSP import might cause "
-                                     "problems with file or directory paths."));
-      c_MessageBox.SetDetails(C_GtGetText::h_GetText(
-                                 "Paths that are handled as relative to *.syde file can not be resolved correctly!"));
-      c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Save and Continue"));
-      c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+      c_MessageBox.SetHeading("Save Project");
+      c_MessageBox.SetDescription("This project is not saved yet. TSP import might cause "
+                                     "problems with file or directory paths.");
+      c_MessageBox.SetDetails("Paths that are handled as relative to *.syde file can not be resolved correctly!");
+      c_MessageBox.SetOkButtonText("Save and Continue");
+      c_MessageBox.SetNoButtonText("Cancel");
       c_MessageBox.SetCustomMinHeight(200, 280);
 
       const C_OgeWiCustomMessage::E_Outputs e_Output = c_MessageBox.Execute();

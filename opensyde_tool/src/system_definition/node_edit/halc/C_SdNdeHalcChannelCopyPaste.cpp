@@ -15,7 +15,6 @@
 
 #include "C_SdNdeHalcChannelCopyPaste.hpp"
 
-#include "C_GtGetText.hpp"
 #include "TglUtils.hpp"
 #include "C_OscHalcConfigUtil.hpp"
 #include "C_Uti.hpp"
@@ -109,12 +108,12 @@ bool C_SdNdeHalcChannelCopyPaste::h_Paste(QWidget * const opc_Parent, const uint
          if (q_LinkedChange == true)
          {
             C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::eQUESTION,
-                                           C_GtGetText::h_GetText("Do you really want to apply this configuration "
+                                           "Do you really want to apply this configuration "
                                                                   "to the selected channel(s)? This will change "
                                                                   "linkage of channel(s) and might overwrite "
                                                                   "the configuration of channel(s) that are not "
-                                                                  "selected."));
-            c_Message.SetHeading(C_GtGetText::h_GetText("Apply Channel"));
+                                                                  "selected.");
+            c_Message.SetHeading("Apply Channel");
             c_Message.SetOkButtonText("Apply");
             c_Message.SetNoButtonText("Cancel");
             c_Message.SetCustomMinHeight(200, 200);
@@ -143,9 +142,9 @@ bool C_SdNdeHalcChannelCopyPaste::h_Paste(QWidget * const opc_Parent, const uint
       {
          // report error
          C_OgeWiCustomMessage c_ErrorMessage(opc_Parent, C_OgeWiCustomMessage::eERROR,
-                                             C_GtGetText::h_GetText("Could not apply channel configuration."));
+                                             "Could not apply channel configuration.");
          c_ErrorMessage.SetDetails(c_ErrorDescription);
-         c_ErrorMessage.SetHeading(C_GtGetText::h_GetText("Apply Channel"));
+         c_ErrorMessage.SetHeading("Apply Channel");
          c_ErrorMessage.SetCustomMinHeight(230, 400);
          c_ErrorMessage.SetCustomMinWidth(600);
          c_ErrorMessage.Execute();
@@ -175,7 +174,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckDataFromClipboard(const uint32_t ou32_
 {
    bool q_Return = true;
    const QString c_SupportedPasteExplanation =
-      C_GtGetText::h_GetText("Pasting is only supported for one channel to n channels in the same domain.");
+      "Pasting is only supported for one channel to n channels in the same domain.";
 
    const stw::opensyde_core::C_OscHalcConfig * const pc_Config =
       stw::opensyde_gui_logic::C_PuiSdHandler::h_GetInstance()->GetHalcConfig(ou32_NodeIndex);
@@ -188,16 +187,16 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckDataFromClipboard(const uint32_t ou32_
       {
          q_Return = false;
          orc_ErrorDescription +=
-            static_cast<QString>(C_GtGetText::h_GetText("Cannot apply HALC channel configuration for device "
-                                                        "type %1 to device type %2.")).
+            static_cast<QString>("Cannot apply HALC channel configuration for device "
+                                                        "type %1 to device type %2.").
             arg(orc_HalcConfig.c_DeviceType.c_str(), pc_Config->c_DeviceName.c_str());
       }
       else if (orc_HalcConfig.u32_DefinitionContentVersion != pc_Config->u32_ContentVersion)
       {
          q_Return = false;
          orc_ErrorDescription +=
-            static_cast<QString>(C_GtGetText::h_GetText("Cannot apply HALC channel configuration with content "
-                                                        "version %1 to configuration with content version %2."))
+            static_cast<QString>("Cannot apply HALC channel configuration with content "
+                                                        "version %1 to configuration with content version %2.")
             .arg(orc_HalcConfig.u32_DefinitionContentVersion).arg(pc_Config->u32_ContentVersion);
       }
       else
@@ -212,7 +211,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckDataFromClipboard(const uint32_t ou32_
       if (orc_HalcConfig.c_Domains.size() != 1)
       {
          q_Return = false;
-         orc_ErrorDescription += C_GtGetText::h_GetText("Data from clipboard contains more than one domain. ");
+         orc_ErrorDescription += "Data from clipboard contains more than one domain. ";
          orc_ErrorDescription += c_SupportedPasteExplanation;
       }
       else
@@ -223,7 +222,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckDataFromClipboard(const uint32_t ou32_
          if ((rc_Domain.c_ChannelConfigs.size() > 1) || (rc_Domain.c_StandaloneChannels.size() > 1))
          {
             q_Return = false;
-            orc_ErrorDescription += C_GtGetText::h_GetText("Data from clipboard contains more than one channel. ");
+            orc_ErrorDescription += "Data from clipboard contains more than one channel. ";
             orc_ErrorDescription += c_SupportedPasteExplanation;
          }
       }
@@ -285,7 +284,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedChannels(const uint32_t ou32_N
 
          if (q_AllChannelsValid == false)
          {
-            orc_ErrorDescription += C_GtGetText::h_GetText("The following items are invalid targets:\n");
+            orc_ErrorDescription += "The following items are invalid targets:\n";
             orc_ErrorDescription += c_InvalidChannels;
          }
          else
@@ -307,7 +306,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedChannels(const uint32_t ou32_N
             // One specific domain only
             if (mh_CheckSelectedDomain(ou32_NodeIndex, rc_Domain, *c_ItIndex, c_InvalidDomain) == false)
             {
-               orc_ErrorDescription += C_GtGetText::h_GetText("The following domain is an invalid target:\n");
+               orc_ErrorDescription += "The following domain is an invalid target:\n";
                orc_ErrorDescription += c_InvalidDomain;
             }
             else
@@ -317,8 +316,8 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedChannels(const uint32_t ou32_N
          }
          else
          {
-            orc_ErrorDescription += C_GtGetText::h_GetText("Only one specific domain can be selected as target"
-                                                           " when applying a copied domain configuration.\n");
+            orc_ErrorDescription += "Only one specific domain can be selected as target"
+                                                           " when applying a copied domain configuration.\n";
          }
       }
       else
@@ -378,7 +377,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedChannel(const uint32_t ou32_No
       if (q_ChannelCase == false)
       {
          q_Return = false;
-         c_ProblemDescription = C_GtGetText::h_GetText("Cannot copy channel configuration to domain.\n");
+         c_ProblemDescription = "Cannot copy channel configuration to domain.\n";
       }
 
       // check domain
@@ -386,7 +385,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedChannel(const uint32_t ou32_No
       {
          q_Return = false;
          c_ProblemDescription =
-            static_cast<QString>(C_GtGetText::h_GetText("Source domain %1 (%2) differs from target domain %3 (%4).")).
+            static_cast<QString>("Source domain %1 (%2) differs from target domain %3 (%4).").
             arg(orc_SourceDomain.c_DomainConfig.c_Name.c_str(), orc_SourceDomain.c_Id.c_str(),
                 pc_Domain->c_Name.c_str(), pc_Domain->c_Id.c_str());
       }
@@ -442,7 +441,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedChannel(const uint32_t ou32_No
             {
                q_Return = false;
                c_ProblemDescription =
-                  static_cast<QString>(C_GtGetText::h_GetText("Use case %1 is not available.")).arg(c_UseCaseName);
+                  static_cast<QString>("Use case %1 is not available.").arg(c_UseCaseName);
             }
          }
       }
@@ -509,7 +508,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedDomain(const uint32_t ou32_Nod
       if (q_ChannelCase == true)
       {
          q_Return = false;
-         c_ProblemDescription = C_GtGetText::h_GetText("Cannot copy domain configuration to channel.\n");
+         c_ProblemDescription = "Cannot copy domain configuration to channel.\n";
       }
 
       // check domain
@@ -517,7 +516,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedDomain(const uint32_t ou32_Nod
       {
          q_Return = false;
          c_ProblemDescription =
-            static_cast<QString>(C_GtGetText::h_GetText("Source domain %1 (%2) differs from target domain %3 (%4).")).
+            static_cast<QString>("Source domain %1 (%2) differs from target domain %3 (%4).").
             arg(orc_SourceDomain.c_DomainConfig.c_Name.c_str(), orc_SourceDomain.c_Id.c_str(),
                 pc_Domain->c_Name.c_str(), pc_Domain->c_Id.c_str());
       }
@@ -531,7 +530,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedDomain(const uint32_t ou32_Nod
             // check if configured use case is available
             q_Return = false;
             c_ProblemDescription =
-               static_cast<QString>(C_GtGetText::h_GetText("Use case configuration of domain is not valid."));
+               static_cast<QString>("Use case configuration of domain is not valid.");
          }
       }
 

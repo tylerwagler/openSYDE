@@ -17,7 +17,6 @@
 
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_Uti.hpp"
 #include "C_SyvDaItUtil.hpp"
@@ -126,27 +125,24 @@ C_SyvDaItPaWriteWidget::~C_SyvDaItPaWriteWidget()
 void C_SyvDaItPaWriteWidget::InitText(void)
 {
    // set title
-   this->mpc_ParentDialog->SetTitle(static_cast<QString>(C_GtGetText::h_GetText("Parametrization")));
-   this->mpc_ParentDialog->SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Write Parameters to System")));
+   this->mpc_ParentDialog->SetTitle(static_cast<QString>("Parametrization"));
+   this->mpc_ParentDialog->SetSubTitle(static_cast<QString>("Write Parameters to System"));
 
-   this->mpc_Ui->pc_LabelFinished->setText(static_cast<QString>(C_GtGetText::h_GetText("Finished")));
-   this->mpc_Ui->pc_LabelConfirm->setText(static_cast<QString>(C_GtGetText::h_GetText("Confirm")));
-   this->mpc_Ui->pc_LabelWrite->setText(static_cast<QString>(C_GtGetText::h_GetText("Write")));
-   this->mpc_Ui->pc_LabelRead->setText(static_cast<QString>(C_GtGetText::h_GetText("Read")));
-   this->mpc_Ui->pc_LabelCrc->setText(static_cast<QString>(C_GtGetText::h_GetText("Write CRC")));
+   this->mpc_Ui->pc_LabelFinished->setText(static_cast<QString>("Finished"));
+   this->mpc_Ui->pc_LabelConfirm->setText(static_cast<QString>("Confirm"));
+   this->mpc_Ui->pc_LabelWrite->setText(static_cast<QString>("Write"));
+   this->mpc_Ui->pc_LabelRead->setText(static_cast<QString>("Read"));
+   this->mpc_Ui->pc_LabelCrc->setText(static_cast<QString>("Write CRC"));
 
-   this->mpc_Ui->pc_LabelHeadingSteps->setText(C_GtGetText::h_GetText("Write Parameter Values"));
+   this->mpc_Ui->pc_LabelHeadingSteps->setText("Write Parameter Values");
    this->mpc_Ui->pc_LabelStepDescription->setText(
-      C_GtGetText::h_GetText("The following parameter values will be written to NVM memory. "
-                             "Click \"Write\" to start this process."));
+      "The following parameter values will be written to NVM memory. "
+                             "Click \"Write\" to start this process.");
 
-   this->mpc_Ui->pc_LabelHeadingNotification->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                              "Application Notification")));
-   this->mpc_Ui->pc_PbConfirm->setText(static_cast<QString>(C_GtGetText::h_GetText("Write")));
-   this->mpc_Ui->pc_CbConfirm->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                               "Confirmed, parameter values are valid")));
-   this->mpc_Ui->pc_CbNotifiction->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                   "Trigger Application Notification")));
+   this->mpc_Ui->pc_LabelHeadingNotification->setText(static_cast<QString>("Application Notification"));
+   this->mpc_Ui->pc_PbConfirm->setText(static_cast<QString>("Write"));
+   this->mpc_Ui->pc_CbConfirm->setText(static_cast<QString>("Confirmed, parameter values are valid"));
+   this->mpc_Ui->pc_CbNotifiction->setText(static_cast<QString>("Trigger Application Notification"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -417,9 +413,9 @@ void C_SyvDaItPaWriteWidget::m_WriteChangedElementsOfNode(void)
                   this->mpc_Ui->pc_LabelRead->setEnabled(true);
                   this->mpc_Ui->pc_BopperleReadBack->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21,
                                                                           mc_STYLE_GUIDE_COLOR_13);
-                  this->mpc_Ui->pc_LabelHeadingSteps->setText(C_GtGetText::h_GetText("Read Back"));
+                  this->mpc_Ui->pc_LabelHeadingSteps->setText("Read Back");
                   this->mpc_Ui->pc_LabelStepDescription->setText(
-                     C_GtGetText::h_GetText("Reading back the read parameter values for verification... "));
+                     "Reading back the read parameter values for verification... ");
                   this->mpc_Ui->pc_CbConfirm->setVisible(false);
                   this->mpc_Ui->pc_PbConfirm->setVisible(false);
                   this->me_Step = eREADBACK;
@@ -506,14 +502,13 @@ void C_SyvDaItPaWriteWidget::m_ReadBackElementsOfNode(void)
                   this->mpc_Ui->pc_LabelConfirm->setEnabled(true);
                   this->mpc_Ui->pc_BopperleConfirm->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21,
                                                                          mc_STYLE_GUIDE_COLOR_13);
-                  this->mpc_Ui->pc_LabelHeadingSteps->setText(C_GtGetText::h_GetText("Confirm"));
+                  this->mpc_Ui->pc_LabelHeadingSteps->setText("Confirm");
                   this->mpc_Ui->pc_LabelStepDescription->setText(
-                     C_GtGetText::h_GetText(
-                        "Parameter values have been written to NVM memory. Verify the read back values. "
+                     "Parameter values have been written to NVM memory. Verify the read back values. "
                         "Activate \"Parameter values are valid\" when the values are OK and click \"Continue\". "
                         "If list checksum is enabled in list definition, the checksum will be updated and the "
-                        "NVM data is marked as valid. "));
-                  this->mpc_Ui->pc_PbConfirm->setText(static_cast<QString>(C_GtGetText::h_GetText("Continue")));
+                        "NVM data is marked as valid. ");
+                  this->mpc_Ui->pc_PbConfirm->setText(static_cast<QString>("Continue"));
                   this->mpc_Ui->pc_CbConfirm->setVisible(true);
                   this->mpc_Ui->pc_PbConfirm->setVisible(true);
                   this->mpc_Ui->pc_PbConfirm->setEnabled(false);
@@ -529,12 +524,11 @@ void C_SyvDaItPaWriteWidget::m_ReadBackElementsOfNode(void)
                   if (c_SuspectElementsReport.isEmpty() == false)
                   {
                      C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eWARNING);
-                     c_Message.SetHeading(C_GtGetText::h_GetText("Verify parameter values"));
+                     c_Message.SetHeading("Verify parameter values");
                      c_Message.SetCustomMinWidth(700);
-                     c_Message.SetDescription(C_GtGetText::h_GetText(
-                                                 "There were some suspect values detected.\n "
+                     c_Message.SetDescription("There were some suspect values detected.\n "
                                                  "In these cases the read values from target are different from "
-                                                 "the written set values."));
+                                                 "the written set values.");
                      c_Message.SetDetails(c_SuspectElementsReport);
                      c_Message.SetCustomMinHeight(230, 300);
                      c_Message.Execute();
@@ -602,7 +596,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
 
          if (pc_OscNode != NULL)
          {
-            c_Text += "<u>" + static_cast<QString>(C_GtGetText::h_GetText("Node")) + " - " +
+            c_Text += "<u>" + static_cast<QString>("Node") + " - " +
                       static_cast<QString>(pc_OscNode->c_Properties.c_Name.c_str()) + "</u>";
          }
       }
@@ -626,7 +620,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
             if (pc_OscDataPool != NULL)
             {
                c_Text += static_cast<QString>("<div %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(1UL));
-               c_Text += static_cast<QString>(C_GtGetText::h_GetText("Datapool")) +
+               c_Text += static_cast<QString>("Datapool") +
                          " - " + static_cast<QString>(pc_OscDataPool->c_Name.c_str()) + "</div>";
             }
          }
@@ -636,7 +630,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
             uint32_t u32_ElementCounter;
             // Heading for list
             c_Text += static_cast<QString>("<div %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(2UL));
-            c_Text += static_cast<QString>(C_GtGetText::h_GetText("List")) + " - " +
+            c_Text += static_cast<QString>("List") + " - " +
                       static_cast<QString>(pc_OscList->c_Name.c_str()) + "</div>";
             c_Text += static_cast<QString>("<table width=\"100%\" %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(3UL));
 
@@ -808,15 +802,14 @@ void C_SyvDaItPaWriteWidget::m_WriteCrcOfNode(void)
                   this->mpc_Ui->pc_WiNotification->setEnabled(true);
                   this->mpc_Ui->pc_ProgressCrc->SetProgress(100);
                   this->mpc_Ui->pc_LabelFinished->setEnabled(true);
-                  this->mpc_Ui->pc_LabelHeadingSteps->setText(C_GtGetText::h_GetText("Parametrization Finished"));
+                  this->mpc_Ui->pc_LabelHeadingSteps->setText("Parametrization Finished");
                   this->mpc_Ui->pc_LabelStepDescription->setText(
-                     C_GtGetText::h_GetText(
-                        "Parametrization process has finished.\nATTENTION: The values have been written to "
+                     "Parametrization process has finished.\nATTENTION: The values have been written to "
                         "NVM memory, but RAM copies were not updated. To update the RAM "
                         "copies choose one of these options: \n"
                         "Option 1: Use the following application notification (This option "
                         "needs an implemented hook function \"osy_app_nvm_data_was_changed_event\").\n"
-                        "Option 2: Reset your System."));
+                        "Option 2: Reset your System.");
                   this->mpc_Ui->pc_PushButtonOk->setVisible(true);
                   this->mpc_Ui->pc_PushButtonCancel->setVisible(false);
                   this->mpc_Ui->pc_BopperleFinished->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21,
@@ -914,14 +907,14 @@ void C_SyvDaItPaWriteWidget::m_SendNextNotification(void)
                QString c_Result;
                if (this->mc_NotificationResult[u32_ItAck] == false)
                {
-                  c_Result = C_GtGetText::h_GetText("FAILURE");
+                  c_Result = "FAILURE";
                   q_AnyNonAcks = true;
                }
                else
                {
-                  c_Result = C_GtGetText::h_GetText("OK");
+                  c_Result = "OK";
                }
-               c_Text += static_cast<QString>(C_GtGetText::h_GetText("%1 ended with %2\n")).
+               c_Text += static_cast<QString>("%1 ended with %2\n").
                          arg(mh_GetId(*c_NotificationIterator)).arg(c_Result);
                //Important iterator step
                ++c_NotificationIterator;
@@ -930,9 +923,8 @@ void C_SyvDaItPaWriteWidget::m_SendNextNotification(void)
             if (q_AnyNonAcks == true)
             {
                C_OgeWiCustomMessage c_Message(this);
-               c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                "At least one application did not acknowledge "
-                                                                "the application notification")));
+               c_Message.SetDescription(static_cast<QString>("At least one application did not acknowledge "
+                                                                "the application notification"));
                c_Message.SetDetails(c_Text);
                c_Message.SetCustomMinHeight(180, 250);
                c_Message.Execute();
@@ -977,9 +969,9 @@ void C_SyvDaItPaWriteWidget::m_OnCancel(void)
    if ((me_Step == eCONFIRM) || (me_Step == eREADBACK) || (me_Step == eWRITE))
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Parametrization interrupt "));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Do you really want to interrupt the process?\nWithout writing "
-                                                      "CRC the lists will become invalid!"));
+      c_Message.SetHeading("Parametrization interrupt ");
+      c_Message.SetDescription("Do you really want to interrupt the process?\nWithout writing "
+                                                      "CRC the lists will become invalid!");
       c_Message.SetNoButtonText("Interrupt");
       c_Message.SetOkButtonText("Don't Interrupt");
       c_Message.SetCustomMinHeight(180, 180);
@@ -1019,10 +1011,10 @@ void C_SyvDaItPaWriteWidget::m_ConfirmClicked(void)
    if (this->me_Step == eBEFOREWRITE)
    {
       this->mpc_Ui->pc_ProgressWrite->SetProgress(50);
-      this->mpc_Ui->pc_LabelHeadingSteps->setText(C_GtGetText::h_GetText("Write Parameter Values"));
+      this->mpc_Ui->pc_LabelHeadingSteps->setText("Write Parameter Values");
       this->mpc_Ui->pc_LabelStepDescription->setText(
-         C_GtGetText::h_GetText("Writing parameter values to NVM memory (without lists CRC). Lists CRC "
-                                "will be handled later in this process."));
+         "Writing parameter values to NVM memory (without lists CRC). Lists CRC "
+                                "will be handled later in this process.");
       this->mpc_Ui->pc_PbConfirm->setVisible(false);
       this->mpc_Ui->pc_CbConfirm->setVisible(false);
       this->me_Step = eWRITE;
@@ -1038,9 +1030,9 @@ void C_SyvDaItPaWriteWidget::m_ConfirmClicked(void)
          this->mpc_Ui->pc_PbConfirm->setVisible(false);
          this->mpc_Ui->pc_CbConfirm->setVisible(false);
          this->mpc_Ui->pc_BopperleCrc->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21, mc_STYLE_GUIDE_COLOR_13);
-         this->mpc_Ui->pc_LabelHeadingSteps->setText(C_GtGetText::h_GetText("Write Lists CRC"));
+         this->mpc_Ui->pc_LabelHeadingSteps->setText("Write Lists CRC");
          this->mpc_Ui->pc_LabelStepDescription->setText(
-            C_GtGetText::h_GetText("Updating lists CRC..."));
+            "Updating lists CRC...");
          this->me_Step = eWRITECRC;
 
          this->mc_Timer.start();
@@ -1166,7 +1158,7 @@ QString C_SyvDaItPaWriteWidget::m_GetSuspectElementReport(void) const
                                                                     pc_Element->f64_Factor,
                                                                     pc_Element->f64_Offset, c_Actual, false);
             c_Actual += static_cast<QString>(" ") + pc_Element->c_Unit.c_str();
-            c_Entry = static_cast<QString>(C_GtGetText::h_GetText("%1 written: %2, read: %3")).arg(c_Namespace).arg(
+            c_Entry = static_cast<QString>("%1 written: %2, read: %3").arg(c_Namespace).arg(
                c_Expected).arg(
                c_Actual);
             c_Retval += c_Entry + "\n";
@@ -1217,9 +1209,9 @@ void C_SyvDaItPaWriteWidget::m_ReportError(const QString & orc_FunctionName, con
    osc_write_log_info("Write NVM Parameters",
                       c_Text.toStdString().c_str());
 
-   c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText("Function %1 ended with error.")).arg(
+   c_Message.SetDescription(static_cast<QString>("Function %1 ended with error.").arg(
                                orc_FunctionName));
-   c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("Error code:\n %1\nError text: \n %2"))
+   c_Message.SetDetails(static_cast<QString>("Error code:\n %1\nError text: \n %2")
                         .arg(os32_ErrorCode).arg(orc_ErrorText));
    c_Message.SetCustomMinHeight(180, 270);
    c_Message.Execute();
@@ -1270,29 +1262,29 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeWriteChangedValues(const int32_
       switch (u8_Nrc)
       {
       case 0x13:
-         c_Details = C_GtGetText::h_GetText("Incorrect length of request<br/>");
+         c_Details = "Incorrect length of request<br/>";
          break;
       case 0x31:
-         c_Details = C_GtGetText::h_GetText("Address or length format invalid (> 4 bytes)<br/>"
-                                            "Requested memory range specified by address and size invalid<br/>");
+         c_Details = "Address or length format invalid (> 4 bytes)<br/>"
+                                            "Requested memory range specified by address and size invalid<br/>";
          break;
       case 0x72:
-         c_Details = C_GtGetText::h_GetText("Server writing NVM failed<br/>");
+         c_Details = "Server writing NVM failed<br/>";
          break;
       case 0x33:
-         c_Details = C_GtGetText::h_GetText("Required security level was not unlocked<br/>");
+         c_Details = "Required security level was not unlocked<br/>";
          break;
       case 0x14:
          c_Details =
-            C_GtGetText::h_GetText("The total length of the response message exceeds the available buffer size<br/>");
+            "The total length of the response message exceeds the available buffer size<br/>";
          break;
       case 0x7F:
          c_Details =
-            C_GtGetText::h_GetText("Server is not in the correct diagnostic session<br/>");
+            "Server is not in the correct diagnostic session<br/>";
          break;
       default:
          c_Details =
-            static_cast<QString>(C_GtGetText::h_GetText("Unknown NRC: 0x%1<br/>")).arg(QString::number(u8_Nrc, 16));
+            static_cast<QString>("Unknown NRC: 0x%1<br/>").arg(QString::number(u8_Nrc, 16));
          break;
       }
       c_Description += "Server sent error response";
@@ -1310,7 +1302,7 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeWriteChangedValues(const int32_
    }
 
    C_OscLoggingHandler::h_Flush();
-   c_Details += static_cast<QString>(C_GtGetText::h_GetText("See log file for details: ")) +
+   c_Details += static_cast<QString>("See log file for details: ") +
                 C_Uti::h_GetLink(c_Log, mc_STYLESHEET_GUIDE_COLOR_LINK, c_Log);
 
    c_Message.SetDescription(c_Description);
@@ -1371,29 +1363,29 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeReadValues(const int32_t os32_E
       switch (u8_Nrc)
       {
       case 0x13:
-         c_Details = C_GtGetText::h_GetText("Incorrect length of request<br/>");
+         c_Details = "Incorrect length of request<br/>";
          break;
       case 0x31:
-         c_Details = C_GtGetText::h_GetText("Address or length format invalid (> 4 bytes)<br/>"
-                                            "Requested memory range specified by address and size invalid<br/>");
+         c_Details = "Address or length format invalid (> 4 bytes)<br/>"
+                                            "Requested memory range specified by address and size invalid<br/>";
          break;
       case 0x72:
-         c_Details = C_GtGetText::h_GetText("Server reading NVM failed<br/>");
+         c_Details = "Server reading NVM failed<br/>";
          break;
       case 0x33:
-         c_Details = C_GtGetText::h_GetText("Required security level was not unlocked<br/>");
+         c_Details = "Required security level was not unlocked<br/>";
          break;
       case 0x14:
          c_Details =
-            C_GtGetText::h_GetText("The total length of the response message exceeds the available buffer size<br/>");
+            "The total length of the response message exceeds the available buffer size<br/>";
          break;
       case 0x7F:
          c_Details =
-            C_GtGetText::h_GetText("Server is not in the correct diagnostic session<br/>");
+            "Server is not in the correct diagnostic session<br/>";
          break;
       default:
          c_Details =
-            static_cast<QString>(C_GtGetText::h_GetText("Unknown NRC: 0x%1<br/>")).arg(QString::number(u8_Nrc, 16));
+            static_cast<QString>("Unknown NRC: 0x%1<br/>").arg(QString::number(u8_Nrc, 16));
          break;
       }
       break;
@@ -1407,7 +1399,7 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeReadValues(const int32_t os32_E
    }
 
    C_OscLoggingHandler::h_Flush();
-   c_Details += static_cast<QString>(C_GtGetText::h_GetText("See log file for details: ")) +
+   c_Details += static_cast<QString>("See log file for details: ") +
                 C_Uti::h_GetLink(c_Log, mc_STYLESHEET_GUIDE_COLOR_LINK, c_Log);
 
    c_Message.SetType(C_OgeWiCustomMessage::eERROR);
@@ -1479,29 +1471,29 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeWriteCrcs(const int32_t os32_Er
       switch (u8_Nrc)
       {
       case 0x13:
-         c_Details = C_GtGetText::h_GetText("Incorrect length of request<br/>");
+         c_Details = "Incorrect length of request<br/>";
          break;
       case 0x31:
-         c_Details = C_GtGetText::h_GetText("Address or length format invalid (> 4 bytes)<br/>"
-                                            "Requested memory range specified by address and size invalid<br/>");
+         c_Details = "Address or length format invalid (> 4 bytes)<br/>"
+                                            "Requested memory range specified by address and size invalid<br/>";
          break;
       case 0x72:
-         c_Details = C_GtGetText::h_GetText("Server writing NVM failed<br/>");
+         c_Details = "Server writing NVM failed<br/>";
          break;
       case 0x33:
-         c_Details = C_GtGetText::h_GetText("Required security level was not unlocked<br/>");
+         c_Details = "Required security level was not unlocked<br/>";
          break;
       case 0x14:
          c_Details =
-            C_GtGetText::h_GetText("The total length of the response message exceeds the available buffer size<br/>");
+            "The total length of the response message exceeds the available buffer size<br/>";
          break;
       case 0x7F:
          c_Details =
-            C_GtGetText::h_GetText("Server is not in the correct diagnostic session<br/>");
+            "Server is not in the correct diagnostic session<br/>";
          break;
       default:
          c_Details =
-            static_cast<QString>(C_GtGetText::h_GetText("Unknown NRC: 0x%1<br/>")).arg(QString::number(u8_Nrc, 16));
+            static_cast<QString>("Unknown NRC: 0x%1<br/>").arg(QString::number(u8_Nrc, 16));
          break;
       }
       break;
@@ -1518,7 +1510,7 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeWriteCrcs(const int32_t os32_Er
    }
 
    C_OscLoggingHandler::h_Flush();
-   c_Details += static_cast<QString>(C_GtGetText::h_GetText("See log file for details: ")) +
+   c_Details += static_cast<QString>("See log file for details: ") +
                 C_Uti::h_GetLink(c_Log, mc_STYLESHEET_GUIDE_COLOR_LINK, c_Log);
 
    c_Message.SetType(C_OgeWiCustomMessage::eERROR);
@@ -1568,29 +1560,28 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmNotifyOfChanges(const int32_t os32_
       switch (u8_Nrc)
       {
       case 0x13:
-         c_Details = C_GtGetText::h_GetText("Incorrect length of request");
+         c_Details = "Incorrect length of request";
          break;
       case 0x31:
-         c_Details = C_GtGetText::h_GetText("Invalid Datapool index or list index");
+         c_Details = "Invalid Datapool index or list index";
          break;
       case 0x33:
-         c_Details = C_GtGetText::h_GetText("Required security level was not unlocked");
+         c_Details = "Required security level was not unlocked";
          break;
       case 0x12:
-         c_Details = C_GtGetText::h_GetText(
-            "RoutineControl sub-function (= routineControlType) not supported for this routine identifier "
-            "(see description of individual routines for supported sub-functions)");
+         c_Details = "RoutineControl sub-function (= routineControlType) not supported for this routine identifier "
+            "(see description of individual routines for supported sub-functions)";
          break;
       case 0x14:
          c_Details =
-            C_GtGetText::h_GetText("The total length of the response message exceeds the available buffer size");
+            "The total length of the response message exceeds the available buffer size";
          break;
       case 0x7F:
          c_Details =
-            C_GtGetText::h_GetText("Server is not in the correct diagnostic session<br/>");
+            "Server is not in the correct diagnostic session<br/>";
          break;
       default:
-         c_Details = static_cast<QString>(C_GtGetText::h_GetText("Unknown NRC: 0x%1")).arg(QString::number(u8_Nrc, 16));
+         c_Details = static_cast<QString>("Unknown NRC: 0x%1").arg(QString::number(u8_Nrc, 16));
          break;
       }
       break;
@@ -1607,7 +1598,7 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmNotifyOfChanges(const int32_t os32_
    }
 
    C_OscLoggingHandler::h_Flush();
-   c_Details += static_cast<QString>(C_GtGetText::h_GetText("See log file for details: ")) +
+   c_Details += static_cast<QString>("See log file for details: ") +
                 C_Uti::h_GetLink(c_Log, mc_STYLESHEET_GUIDE_COLOR_LINK, c_Log);
 
    c_Message.SetType(C_OgeWiCustomMessage::eERROR);
@@ -1658,7 +1649,7 @@ QString C_SyvDaItPaWriteWidget::m_ReadAndStoreUpdatedValues(void)
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SyvDaItPaWriteWidget::mh_GetId(const C_OscNodeDataPoolListId & orc_Id)
 {
-   QString c_Default = C_GtGetText::h_GetText("Unknown");
+   QString c_Default = "Unknown";
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(orc_Id.u32_NodeIndex);
    const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(orc_Id.u32_NodeIndex,
                                                                                                  orc_Id.u32_DataPoolIndex);

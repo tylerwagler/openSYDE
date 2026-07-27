@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_SdNdeDpListArrayEditWidget.hpp"
 #include "ui_C_SdNdeDpListArrayEditWidget.h"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -110,29 +109,29 @@ void C_SdNdeDpListArrayEditWidget::InitStaticNames(void) const
       switch (this->me_ArrayEditType)
       {
       case C_SdNdeDpUtil::eARRAY_EDIT_MIN:
-         c_EditType = C_GtGetText::h_GetText("Minimum");
+         c_EditType = "Minimum";
          break;
       case C_SdNdeDpUtil::eARRAY_EDIT_MAX:
-         c_EditType = C_GtGetText::h_GetText("Maximum");
+         c_EditType = "Maximum";
          break;
       case C_SdNdeDpUtil::eARRAY_EDIT_DATA_SET:
          if (pc_DataSet != NULL)
          {
             //Translation: 1: data set name
-            c_EditType = static_cast<QString>(C_GtGetText::h_GetText("Dataset Value"));
+            c_EditType = static_cast<QString>("Dataset Value");
          }
          break;
       default:
-         c_EditType = C_GtGetText::h_GetText("Unknown");
+         c_EditType = "Unknown";
          break;
       }
 
       //Translation: 1: Data element type, 2: Data element name, 3: Value type
-      this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("%1 %2 (%3)")).arg(c_Type).arg(
+      this->mrc_ParentDialog.SetTitle(static_cast<QString>("%1 %2 (%3)").arg(c_Type).arg(
                                    pc_Element->c_Name.c_str()).arg(c_EditType));
    }
 
-   this->mrc_ParentDialog.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Array Editor")));
+   this->mrc_ParentDialog.SetSubTitle(static_cast<QString>("Array Editor"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

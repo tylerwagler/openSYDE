@@ -15,7 +15,6 @@
 
 #include "stwerrors.hpp"
 #include "C_PopServiceProjSettingsModel.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_PuiSvData.hpp"
 
@@ -77,7 +76,7 @@ int32_t C_PopServiceProjSettingsModel::Init(const std::vector<uint32_t> & orc_El
 
    this->mpc_InvisibleRootItem = new C_TblTreeModelCheckableItem();
 
-   pc_VisibleRootItem->c_Name = C_GtGetText::h_GetText("System Commissioning");
+   pc_VisibleRootItem->c_Name = "System Commissioning";
 
    for (uint32_t u32_ViewCnt = 0; u32_ViewCnt < orc_ElementIndices.size(); ++u32_ViewCnt)
    {
@@ -92,19 +91,19 @@ int32_t C_PopServiceProjSettingsModel::Init(const std::vector<uint32_t> & orc_El
          pc_VisibleRootItem->AddChild(pc_TreeNode);
 
          C_TblTreeModelCheckableItem * const pc_TreeNodeSetup = new C_TblTreeModelCheckableItem();
-         pc_TreeNodeSetup->c_Name = C_GtGetText::h_GetText("Setup");
+         pc_TreeNodeSetup->c_Name = "Setup";
          pc_TreeNodeSetup->q_Enabled = true;
          pc_TreeNodeSetup->q_CheckBoxVisible = true;
          pc_TreeNodeSetup->q_Selectable = true;
 
          C_TblTreeModelCheckableItem * const pc_TreeNodeUpdate = new C_TblTreeModelCheckableItem();
-         pc_TreeNodeUpdate->c_Name = C_GtGetText::h_GetText("Update");
+         pc_TreeNodeUpdate->c_Name = "Update";
          pc_TreeNodeUpdate->q_Enabled = true;
          pc_TreeNodeUpdate->q_CheckBoxVisible = true;
          pc_TreeNodeUpdate->q_Selectable = true;
 
          C_TblTreeModelCheckableItem * const pc_TreeNodeDashb = new C_TblTreeModelCheckableItem();
-         pc_TreeNodeDashb->c_Name = C_GtGetText::h_GetText("Dashboard");
+         pc_TreeNodeDashb->c_Name = "Dashboard";
          pc_TreeNodeDashb->q_Enabled = true;
          pc_TreeNodeDashb->q_CheckBoxVisible = true;
          pc_TreeNodeDashb->q_Selectable = true;

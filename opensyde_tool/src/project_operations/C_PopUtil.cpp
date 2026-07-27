@@ -15,7 +15,6 @@
 
 #include "C_PopErrorHandling.hpp"
 #include "C_PopUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -62,21 +61,21 @@ bool C_PopUtil::h_AskUserToContinue(QWidget * const opc_Parent, const bool oq_Al
       C_OgeWiCustomMessage c_MessageBox(opc_Parent, C_OgeWiCustomMessage::E_Type::eQUESTION);
       C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
       QString c_Description = "";
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Unsaved changes"));
+      c_MessageBox.SetHeading("Unsaved changes");
       if (oq_AllowContinueWithoutSaving == true)
       {
-         c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Save"));
-         c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Don't Save"));
+         c_MessageBox.SetOkButtonText("Save");
+         c_MessageBox.SetNoButtonText("Don't Save");
          c_MessageBox.ShowCancelButton();
       }
       else
       {
-         c_Description = C_GtGetText::h_GetText("To continue the current project changes have to be saved. ");
-         c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Save and Continue"));
-         c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+         c_Description = "To continue the current project changes have to be saved. ";
+         c_MessageBox.SetOkButtonText("Save and Continue");
+         c_MessageBox.SetNoButtonText("Cancel");
       }
       c_Description +=
-         static_cast<QString>(C_GtGetText::h_GetText("Do you want to save the changes of the current project"));
+         static_cast<QString>("Do you want to save the changes of the current project");
 
       //Don't set details. User expects in details something like a list of what was changed in project
       if (C_PuiProject::h_GetInstance()->IsEmptyProject() == false)
@@ -173,12 +172,11 @@ bool C_PopUtil::h_CheckCriticalNamingConflict(QWidget * const opc_Parent, const 
    {
       QString c_Details;
       C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::E_Type::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Project save"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "The project cannot be saved with conflicting names for either nodes, buses or Datapools"));
+      c_Message.SetHeading("Project save");
+      c_Message.SetDescription("The project cannot be saved with conflicting names for either nodes, buses or Datapools");
       if (c_CriticalNodeNames.size() > 0UL)
       {
-         c_Details.append(C_GtGetText::h_GetText("Conflicting node names:\n"));
+         c_Details.append("Conflicting node names:\n");
          for (uint32_t u32_ItName = 0UL; u32_ItName < c_CriticalNodeNames.size(); ++u32_ItName)
          {
             c_Details.append(static_cast<QString>("\"%1\"\n").arg(c_CriticalNodeNames[u32_ItName]));
@@ -186,7 +184,7 @@ bool C_PopUtil::h_CheckCriticalNamingConflict(QWidget * const opc_Parent, const 
       }
       if (c_CriticalBusNames.size() > 0UL)
       {
-         c_Details.append(C_GtGetText::h_GetText("Conflicting bus names:\n"));
+         c_Details.append("Conflicting bus names:\n");
          for (uint32_t u32_ItName = 0UL; u32_ItName < c_CriticalBusNames.size(); ++u32_ItName)
          {
             c_Details.append(static_cast<QString>("\"%1\"\n").arg(c_CriticalBusNames[u32_ItName]));
@@ -194,7 +192,7 @@ bool C_PopUtil::h_CheckCriticalNamingConflict(QWidget * const opc_Parent, const 
       }
       if (c_CriticalDatapoolNamespaceNames.size() > 0UL)
       {
-         c_Details.append(C_GtGetText::h_GetText("Conflicting datapool names:\n"));
+         c_Details.append("Conflicting datapool names:\n");
          for (uint32_t u32_ItName = 0UL; u32_ItName < c_CriticalDatapoolNamespaceNames.size(); ++u32_ItName)
          {
             c_Details.append(static_cast<QString>("%1\n").arg(c_CriticalDatapoolNamespaceNames[u32_ItName]));

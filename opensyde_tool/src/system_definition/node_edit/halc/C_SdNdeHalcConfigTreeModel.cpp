@@ -14,7 +14,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 
 #include "C_SdNdeHalcConfigTreeModel.hpp"
 #include "C_TblTreItem.hpp"
@@ -110,13 +109,13 @@ QVariant C_SdNdeHalcConfigTreeModel::headerData(const int32_t os32_Section, cons
          switch (e_Col)
          {
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eVALUE:
-            c_Retval = C_GtGetText::h_GetText("Value");
+            c_Retval = "Value";
             break;
          case eDESCRIPTION:
-            c_Retval = C_GtGetText::h_GetText("Description");
+            c_Retval = "Description";
             break;
          default:
             tgl_assert(false);
@@ -128,13 +127,13 @@ QVariant C_SdNdeHalcConfigTreeModel::headerData(const int32_t os32_Section, cons
          switch (e_Col)
          {
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eVALUE:
-            c_Retval = C_GtGetText::h_GetText("Value");
+            c_Retval = "Value";
             break;
          case eDESCRIPTION:
-            c_Retval = C_GtGetText::h_GetText("Description");
+            c_Retval = "Description";
             break;
          default:
             tgl_assert(false);
@@ -146,13 +145,13 @@ QVariant C_SdNdeHalcConfigTreeModel::headerData(const int32_t os32_Section, cons
          switch (e_Col)
          {
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Parameter name.");
+            c_Retval = "Parameter name.";
             break;
          case eVALUE:
-            c_Retval = C_GtGetText::h_GetText("Value of this parameter.");
+            c_Retval = "Value of this parameter.";
             break;
          case eDESCRIPTION:
-            c_Retval = C_GtGetText::h_GetText("Description of this parameter.");
+            c_Retval = "Description of this parameter.";
             break;
          default:
             tgl_assert(false);
@@ -214,7 +213,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
                   c_Retval = C_SdNdeDpContentUtil::h_ConvertContentToGeneric(pc_ParameterElement->c_Value, 0);
                   break;
                case C_OscHalcDefContent::eCT_ENUM:
-                  c_Retval = C_GtGetText::h_GetText("unknown");
+                  c_Retval = "unknown";
 
                   for (std::vector<std::pair<stw::scl::C_SclString, C_OscNodeDataPoolContent> >::const_iterator c_It =
                           rc_EnumItems.begin(); c_It != rc_EnumItems.end(); ++c_It)
@@ -1011,7 +1010,7 @@ QString C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToString(const C_OscHalcDe
       // no checked item found
       if (q_Found == false)
       {
-         c_Display = C_GtGetText::h_GetText("Not Set");
+         c_Display = "Not Set";
       }
    }
    return c_Display;

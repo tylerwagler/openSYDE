@@ -15,7 +15,6 @@
 #include <QMimeData>
 #include <cmath>
 
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_FlaUpListItemWidget.hpp"
@@ -115,8 +114,8 @@ void C_FlaUpListWidget::AddFileAction(const bool oq_IsActionForExistingFile, con
       }
    }
 
-   this->m_AddNewHexFile(C_GtGetText::h_GetText("Select HEX file"),
-                         static_cast<QString>(C_GtGetText::h_GetText("Hex file")) +
+   this->m_AddNewHexFile("Select HEX file",
+                         static_cast<QString>("Hex file") +
                          " (*.hex)", c_Folder, oq_IsActionForExistingFile, os32_CurrentHexFileIndex,
                          oq_IsFileToReplace);
 }
@@ -300,9 +299,8 @@ void C_FlaUpListWidget::DropEvent(QDropEvent * const opc_Event)
                      {
                         C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eWARNING);
 
-                        c_MessageBox.SetHeading(C_GtGetText::h_GetText("Multiple files"));
-                        c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                                       "Multiple files cannot be replaced by single file ") +
+                        c_MessageBox.SetHeading("Multiple files");
+                        c_MessageBox.SetDescription("Multiple files cannot be replaced by single file " +
                                                     pc_ItemWidget->pc_HexFileInfo->c_HexFileInfo.c_FileName);
                         c_MessageBox.SetOkButtonText("OK");
                         c_MessageBox.SetCustomMinHeight(180, 180);
@@ -312,10 +310,9 @@ void C_FlaUpListWidget::DropEvent(QDropEvent * const opc_Event)
                      {
                         C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
 
-                        c_MessageBox.SetHeading(C_GtGetText::h_GetText("Replace HEX file"));
-                        c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                                       "Do you really want to replace ") + pc_ItemWidget->pc_HexFileInfo->c_HexFileInfo.c_FileName +
-                                                    C_GtGetText::h_GetText(" with ") + rc_Url.fileName());
+                        c_MessageBox.SetHeading("Replace HEX file");
+                        c_MessageBox.SetDescription("Do you really want to replace " + pc_ItemWidget->pc_HexFileInfo->c_HexFileInfo.c_FileName +
+                                                    " with " + rc_Url.fileName());
                         c_MessageBox.SetOkButtonText("Replace");
                         c_MessageBox.SetNoButtonText("Cancel");
                         c_MessageBox.SetCustomMinHeight(180, 180);
@@ -588,13 +585,12 @@ void C_FlaUpListWidget::m_AddFile(const QString & orc_File, const bool oq_IsActi
       else
       {
          C_OgeWiCustomMessage c_Message(this);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Add HEX file"));
+         c_Message.SetHeading("Add HEX file");
          c_Message.SetDescription(
-            static_cast<QString>(C_GtGetText::h_GetText(
-                                    "The file is already contained in the HEX file list "
-                                    "and therefore not added again.")));
+            static_cast<QString>("The file is already contained in the HEX file list "
+                                    "and therefore not added again."));
          c_Message.SetDetails(
-            static_cast<QString>(C_GtGetText::h_GetText("%1")).arg(orc_File));
+            static_cast<QString>("%1").arg(orc_File));
          c_Message.Execute();
       }
    }
@@ -697,10 +693,10 @@ void C_FlaUpListWidget::m_SetupContextMenu()
 {
    mpc_ContextMenu = new stw::opensyde_gui_elements::C_OgeContextMenu(this);
    this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Add file(s)"), this,  &C_FlaUpListWidget::m_AddFilesFromContextMenu);
+      "Add file(s)", this,  &C_FlaUpListWidget::m_AddFilesFromContextMenu);
    this->mpc_ContextMenu->addSeparator();
    this->mpc_ContextMenu->addAction(
-      C_GtGetText::h_GetText("Remove all Files"), this, &C_FlaUpListWidget::m_DeleteAllItem);
+      "Remove all Files", this, &C_FlaUpListWidget::m_DeleteAllItem);
    this->setContextMenuPolicy(Qt::CustomContextMenu);
 
    connect(this, &C_FlaUpListWidget::customContextMenuRequested, this,
@@ -739,14 +735,13 @@ bool C_FlaUpListWidget::m_AskUserToSaveRelativePath(const QString & orc_Path, co
 
    C_Uti::h_IsPathRelativeToDir(orc_Path, orc_AbsoluteReferenceDir, c_PathAbsolute, c_PathRelative);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("Relative Path"));
-   c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                    "Do you want to save the selected path (%1) relative or absolute?")).arg(
+   c_Message.SetHeading("Relative Path");
+   c_Message.SetDescription(static_cast<QString>("Do you want to save the selected path (%1) relative or absolute?").arg(
                                c_PathAbsolute));
-   c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("Relative path: %1 \nAbsolute path: %2")).
+   c_Message.SetDetails(static_cast<QString>("Relative path: %1 \nAbsolute path: %2").
                         arg(c_PathRelative).arg(c_PathAbsolute));
-   c_Message.SetOkButtonText(C_GtGetText::h_GetText("Relative"));
-   c_Message.SetNoButtonText(C_GtGetText::h_GetText("Absolute"));
+   c_Message.SetOkButtonText("Relative");
+   c_Message.SetNoButtonText("Absolute");
    c_Message.SetCustomMinHeight(230, 250);
 
    if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
@@ -799,8 +794,8 @@ void C_FlaUpListWidget::m_AddNewHexFile(const QString & orc_DialogCaption, const
       {
          const QString c_Details = static_cast<QString>("File path: %1").arg(rc_File);
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Update Package Configuration"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("Invalid file: only *.hex files are allowed."));
+         c_Message.SetHeading("Update Package Configuration");
+         c_Message.SetDescription("Invalid file: only *.hex files are allowed.");
          c_Message.SetDetails(c_Details);
          c_Message.SetCustomMinHeight(180, 250);
          c_Message.Execute();
@@ -897,10 +892,10 @@ void C_FlaUpListWidget::m_DeleteItem(const int32_t os32_CurrentHexFileIndex, con
          {
             C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
 
-            c_MessageBox.SetHeading(C_GtGetText::h_GetText("Remove file"));
-            c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to remove ") +
+            c_MessageBox.SetHeading("Remove file");
+            c_MessageBox.SetDescription("Do you really want to remove " +
                                         pc_ItemWidget->pc_HexFileInfo->c_HexFileInfo.c_FileName +
-                                        C_GtGetText::h_GetText(" from the Hex-Files list?"));
+                                        " from the Hex-Files list?");
             c_MessageBox.SetOkButtonText("Remove");
             c_MessageBox.SetNoButtonText("Keep");
             c_MessageBox.SetCustomMinHeight(180, 180);
@@ -930,8 +925,8 @@ void C_FlaUpListWidget::m_DeleteAllItem()
 {
    C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
 
-   c_MessageBox.SetHeading(C_GtGetText::h_GetText("Remove all File"));
-   c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to remove all files from the Hex-Files list?"));
+   c_MessageBox.SetHeading("Remove all File");
+   c_MessageBox.SetDescription("Do you really want to remove all files from the Hex-Files list?");
    c_MessageBox.SetOkButtonText("Remove All");
    c_MessageBox.SetNoButtonText("Keep");
    c_MessageBox.SetCustomMinHeight(180, 180);

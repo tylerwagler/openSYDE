@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 
 #include "C_TblTreDataElementItem.hpp"
 
@@ -169,7 +168,7 @@ void C_TblTreDataElementItem::ConfigureDynamicName(const bool oq_ShowOnlyWriteEl
 
          if (rc_ExistingId == this->mc_Id)
          {
-            this->c_Name += C_GtGetText::h_GetText(" (Already used)");
+            this->c_Name += " (Already used)";
             this->q_Selectable = false;
             this->q_Enabled = false;
          }

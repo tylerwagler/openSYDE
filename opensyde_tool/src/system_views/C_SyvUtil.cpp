@@ -16,7 +16,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_SyvUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -90,36 +89,34 @@ bool C_SyvUtil::h_GetViewStatusLabelInfo(const uint32_t ou32_ViewIndex, const in
    {
       if (s32_Return == C_RANGE)
       {
-         orc_ErrorLabelHeadingText = C_GtGetText::h_GetText("Invalid View:");
-         orc_ErrorLabelText = C_GtGetText::h_GetText("View is invalid.");
+         orc_ErrorLabelHeadingText = "Invalid View:";
+         orc_ErrorLabelText = "View is invalid.";
       }
       else if (q_NoActiveNodes == true)
       {
-         orc_ErrorLabelHeadingText = C_GtGetText::h_GetText("Invalid View:");
-         orc_ErrorLabelText = C_GtGetText::h_GetText("There are no active nodes.");
+         orc_ErrorLabelHeadingText = "Invalid View:";
+         orc_ErrorLabelText = "There are no active nodes.";
       }
       else if (q_NameInvalid == true)
       {
-         orc_ErrorLabelHeadingText = C_GtGetText::h_GetText("Invalid View:");
-         orc_ErrorLabelText = C_GtGetText::h_GetText("Name of view is already used.");
+         orc_ErrorLabelHeadingText = "Invalid View:";
+         orc_ErrorLabelText = "Name of view is already used.";
       }
       else if (q_PcNotConnected == true)
       {
-         orc_ErrorLabelHeadingText = C_GtGetText::h_GetText("Invalid View:");
-         orc_ErrorLabelText = C_GtGetText::h_GetText(
-            "There are no active buses. PC connection could not be established.");
+         orc_ErrorLabelHeadingText = "Invalid View:";
+         orc_ErrorLabelText = "There are no active buses. PC connection could not be established.";
       }
       else if (q_RoutingInvalid == true)
       {
          // Setup error is relevant for all sub modes
-         orc_ErrorLabelHeadingText = C_GtGetText::h_GetText("Invalid View:");
+         orc_ErrorLabelHeadingText = "Invalid View:";
          orc_ErrorLabelText = c_RoutingErrorText[ms32_SUBMODE_SYSVIEW_SETUP];
       }
       else if (q_SysDefInvalid == true)
       {
-         orc_ErrorLabelHeadingText = C_GtGetText::h_GetText("Invalid View:");
-         orc_ErrorLabelText = C_GtGetText::h_GetText(
-            "At least one of the active view items (node or bus) has invalid definition.");
+         orc_ErrorLabelHeadingText = "Invalid View:";
+         orc_ErrorLabelText = "At least one of the active view items (node or bus) has invalid definition.";
       }
       else
       {
@@ -132,21 +129,21 @@ bool C_SyvUtil::h_GetViewStatusLabelInfo(const uint32_t ou32_ViewIndex, const in
    else if ((os32_ViewSubMode == ms32_SUBMODE_SYSVIEW_UPDATE) && (q_UpdateRoutingInvalid == true))
    {
       // Handle the invalid update routing as error
-      orc_ErrorLabelHeadingText = C_GtGetText::h_GetText("Invalid Update View:");
+      orc_ErrorLabelHeadingText = "Invalid Update View:";
       orc_ErrorLabelText = c_RoutingErrorText[ms32_SUBMODE_SYSVIEW_UPDATE];
       q_Retval = true;
    }
    else if ((os32_ViewSubMode == ms32_SUBMODE_SYSVIEW_DASHBOARD) && (q_DashboardRoutingInvalid == true))
    {
       // Show the error as warning to inform the user why specific nodes are not available in the dashboard
-      orc_ErrorLabelHeadingText = C_GtGetText::h_GetText("Note:");
+      orc_ErrorLabelHeadingText = "Note:";
       orc_ErrorLabelText = c_RoutingErrorText[ms32_SUBMODE_SYSVIEW_DASHBOARD];
    }
    else if ((os32_ViewSubMode == ms32_SUBMODE_SYSVIEW_SETUP) &&
             (c_SetupRoutingWarningText != ""))
    {
       // Show the warning if a warning exists as information
-      orc_ErrorLabelHeadingText = C_GtGetText::h_GetText("Note:");
+      orc_ErrorLabelHeadingText = "Note:";
       orc_ErrorLabelText = c_SetupRoutingWarningText;
    }
    else
@@ -278,17 +275,17 @@ QString C_SyvUtil::h_GetUpdateModeDescription(const uint32_t ou32_ViewIndex,
                {
                case 0:
                   //Translation: 1 = Time in milliseconds
-                  c_CyclicText = static_cast<QString>(C_GtGetText::h_GetText("Fast - %1 ms")).arg(
+                  c_CyclicText = static_cast<QString>("Fast - %1 ms").arg(
                      pc_View->GetUpdateRateFast());
                   break;
                case 1:
                   //Translation: 1 = Time in milliseconds
-                  c_CyclicText = static_cast<QString>(C_GtGetText::h_GetText("Medium - %1 ms")).arg(
+                  c_CyclicText = static_cast<QString>("Medium - %1 ms").arg(
                      pc_View->GetUpdateRateMedium());
                   break;
                case 2:
                   //Translation: 1 = Time in milliseconds
-                  c_CyclicText = static_cast<QString>(C_GtGetText::h_GetText("Slow - %1 ms")).arg(
+                  c_CyclicText = static_cast<QString>("Slow - %1 ms").arg(
                      pc_View->GetUpdateRateSlow());
                   break;
                default:
@@ -299,11 +296,11 @@ QString C_SyvUtil::h_GetUpdateModeDescription(const uint32_t ou32_ViewIndex,
                switch (c_Result.value().e_TransmissionMode)
                {
                case C_PuiSvReadDataConfiguration::eTM_ON_TRIGGER:
-                  c_Text = C_GtGetText::h_GetText("On Trigger");
+                  c_Text = "On Trigger";
                   break;
                case C_PuiSvReadDataConfiguration::eTM_CYCLIC:
                   //Translation: 1 = Additional information
-                  c_Text = static_cast<QString>(C_GtGetText::h_GetText("Cyclic (%1)")).arg(c_CyclicText);
+                  c_Text = static_cast<QString>("Cyclic (%1)").arg(c_CyclicText);
                   break;
                case C_PuiSvReadDataConfiguration::eTM_ON_CHANGE:
                   //Additional text for threshold type
@@ -348,7 +345,7 @@ QString C_SyvUtil::h_GetUpdateModeDescription(const uint32_t ou32_ViewIndex,
                      }
                   }
                   //Translation: 1 = Additional information, 2 = Threshold value
-                  c_Text = static_cast<QString>(C_GtGetText::h_GetText("Cyclic on change (%1),Threshold: %2")).arg(
+                  c_Text = static_cast<QString>("Cyclic on change (%1),Threshold: %2").arg(
                      c_CyclicText).arg(
                      c_ThresholdText);
                   break;
@@ -374,35 +371,33 @@ QString C_SyvUtil::h_GetUpdateModeDescription(const uint32_t ou32_ViewIndex,
                switch (pc_Message->e_TxMethod)
                {
                case C_OscCanMessage::eTX_METHOD_ON_EVENT:
-                  c_Retval = static_cast<QString>(C_GtGetText::h_GetText("On Event"));
+                  c_Retval = static_cast<QString>("On Event");
                   break;
                case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_0:
                   c_Retval =
-                     static_cast<QString>(C_GtGetText::h_GetText(
-                                             "Type 0 - synchronous transmission after next SYNC and change"));
+                     static_cast<QString>("Type 0 - synchronous transmission after next SYNC and change");
                   break;
                case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_1_TO_240:
                   c_Retval =
-                     static_cast<QString>(C_GtGetText::h_GetText(
-                                             "Type 1 to 240 - synchronous transmission after 1st to 240th SYNC"));
+                     static_cast<QString>("Type 1 to 240 - synchronous transmission after 1st to 240th SYNC");
                   break;
                case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254:
                   c_Retval =
-                     static_cast<QString>(C_GtGetText::h_GetText("Type 254 - asynchronous manufacturer specific"));
+                     static_cast<QString>("Type 254 - asynchronous manufacturer specific");
                   break;
                case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_255:
                   c_Retval =
-                     static_cast<QString>(C_GtGetText::h_GetText("Type 255 - asynchronous device specific"));
+                     static_cast<QString>("Type 255 - asynchronous device specific");
                   break;
                case C_OscCanMessage::eTX_METHOD_CYCLIC:
-                  c_Retval = static_cast<QString>(C_GtGetText::h_GetText("Cyclic (%1 ms)")).arg(
+                  c_Retval = static_cast<QString>("Cyclic (%1 ms)").arg(
                      pc_Message->u32_CycleTimeMs);
                   break;
                case C_OscCanMessage::eTX_METHOD_ON_CHANGE:
                   //Translation1: Timeout, 2: Minimum delay, 3: "greater than or equal" - sign, 4: "less than or equal"
                   // - sign
                   c_Retval =
-                     static_cast<QString>(C_GtGetText::h_GetText("On Change (%3 %2 ms; %4 %1 ms)")).
+                     static_cast<QString>("On Change (%3 %2 ms; %4 %1 ms)").
                      arg(pc_Message->u32_CycleTimeMs).arg(pc_Message->u16_DelayTimeMs).
                      arg(static_cast<QChar>(0x2265)).arg(static_cast<QChar>(0x2264));
                   break;
@@ -437,15 +432,15 @@ QString C_SyvUtil::h_GetCommonDashboardItemToolTip(const uint32_t ou32_ViewIndex
    QString c_Retval;
    QString c_DashboardDescription;
 
-   c_DashboardDescription = C_GtGetText::h_GetText("Visualization Properties: \n");
+   c_DashboardDescription = "Visualization Properties: \n";
 
    //Source
-   c_DashboardDescription += static_cast<QString>("   ") + C_GtGetText::h_GetText("Source: ");
+   c_DashboardDescription += static_cast<QString>("   ") + "Source: ";
    c_DashboardDescription += C_PuiSvHandler::h_GetNamespace(orc_Id);
    c_DashboardDescription += "\n";
 
    //Update Mode
-   c_DashboardDescription += static_cast<QString>("   ") + C_GtGetText::h_GetText("Update mode: ");
+   c_DashboardDescription += static_cast<QString>("   ") + "Update mode: ";
 
    if (oq_ReadItem == true)
    {
@@ -455,11 +450,11 @@ QString C_SyvUtil::h_GetCommonDashboardItemToolTip(const uint32_t ou32_ViewIndex
    {
       if (oe_WriteMode == C_PuiSvDbWriteWidgetBase::eWM_MANUAL)
       {
-         c_DashboardDescription += C_GtGetText::h_GetText("On Trigger");
+         c_DashboardDescription += "On Trigger";
       }
       else
       {
-         c_DashboardDescription += C_GtGetText::h_GetText("On Change");
+         c_DashboardDescription += "On Change";
       }
    }
 
@@ -486,13 +481,13 @@ void C_SyvUtil::h_GetViewDisplayName(const uint32_t ou32_ViewIndex, const int32_
       switch (os32_SubMode)
       {
       case ms32_SUBMODE_SYSVIEW_SETUP:
-         orc_SubSubMode = static_cast<QString>(C_GtGetText::h_GetText("Setup"));
+         orc_SubSubMode = static_cast<QString>("Setup");
          break;
       case ms32_SUBMODE_SYSVIEW_UPDATE:
-         orc_SubSubMode = static_cast<QString>(C_GtGetText::h_GetText("Update"));
+         orc_SubSubMode = static_cast<QString>("Update");
          break;
       case ms32_SUBMODE_SYSVIEW_DASHBOARD:
-         orc_SubSubMode = static_cast<QString>(C_GtGetText::h_GetText("Dashboards (%1)")).arg(
+         orc_SubSubMode = static_cast<QString>("Dashboards (%1)").arg(
             pc_View->GetDashboards().size());
          break;
       default:
@@ -500,7 +495,7 @@ void C_SyvUtil::h_GetViewDisplayName(const uint32_t ou32_ViewIndex, const int32_
          orc_SubSubMode = "";
          break;
       }
-      orc_SubMode = static_cast<QString>(C_GtGetText::h_GetText("VIEW #%1 - %2"))
+      orc_SubMode = static_cast<QString>("VIEW #%1 - %2")
                     .arg(ou32_ViewIndex + 1).arg(pc_View->GetName().c_str());
    }
 }

@@ -20,7 +20,6 @@
 #include "constants.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -646,7 +645,7 @@ void C_SdNdeCoConfigTreeModel::m_InitInterfaceNodeContent(const C_OscNodeComInte
                                                           C_TblTreeModelCheckableItem & orc_InterfaceEntry) const
 {
    // Default - not connected to any bus
-   QString c_DisplayName = C_GtGetText::h_GetText("%1 (not connected) - CANopen Manager");
+   QString c_DisplayName = "%1 (not connected) - CANopen Manager";
 
    // Add linked bus info if connected
    if (orc_Interface.GetBusConnected() == true)
@@ -658,8 +657,7 @@ void C_SdNdeCoConfigTreeModel::m_InitInterfaceNodeContent(const C_OscNodeComInte
       if (pc_Bus != NULL)
       {
          c_BusName = pc_Bus->c_Name.c_str();
-         c_DisplayName = C_GtGetText::h_GetText("%1 (linked to ") + c_BusName + C_GtGetText::h_GetText(
-            ") - CANopen Manager");
+         c_DisplayName = "%1 (linked to " + c_BusName + ") - CANopen Manager";
       }
    }
 
@@ -721,7 +719,7 @@ void C_SdNdeCoConfigTreeModel::m_InitDevicesNodeContent(const C_OscCanOpenManage
                                                         C_TblTreeModelCheckableItem & orc_DevicesEntry) const
 {
    orc_DevicesEntry.c_Name =
-      static_cast<QString>(C_GtGetText::h_GetText("CANopen Devices (%1)")).arg(
+      static_cast<QString>("CANopen Devices (%1)").arg(
          orc_CanOpenManager.c_CanOpenDevices.size());
    orc_DevicesEntry.q_CheckBoxVisible = false;
    // Special case: All not selectable items shall not change the current selection of the tree
@@ -796,7 +794,7 @@ void C_SdNdeCoConfigTreeModel::m_InitDeviceNodeContent(const uint8_t ou8_Interfa
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoConfigTreeModel::m_InitEdsFileNodeContent(C_TblTreeModelCheckableItem & orc_EdsFileEntry) const
 {
-   orc_EdsFileEntry.c_Name = C_GtGetText::h_GetText("EDS File");
+   orc_EdsFileEntry.c_Name = "EDS File";
    orc_EdsFileEntry.q_CheckBoxVisible = false;
    orc_EdsFileEntry.q_Enabled = true;
    orc_EdsFileEntry.q_Selectable = true;
@@ -813,7 +811,7 @@ void C_SdNdeCoConfigTreeModel::m_InitEdsFileNodeContent(C_TblTreeModelCheckableI
 void C_SdNdeCoConfigTreeModel::m_InitConfigurationNodeContent(C_TblTreeModelCheckableItem & orc_ConfigurationEntry)
 const
 {
-   orc_ConfigurationEntry.c_Name = C_GtGetText::h_GetText("Configuration");
+   orc_ConfigurationEntry.c_Name = "Configuration";
    orc_ConfigurationEntry.q_CheckBoxVisible = false;
    orc_ConfigurationEntry.q_Enabled = true;
    orc_ConfigurationEntry.q_Selectable = true;
@@ -829,7 +827,7 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoConfigTreeModel::m_InitPdosNodeContent(C_TblTreeModelCheckableItem & orc_PdosEntry) const
 {
-   orc_PdosEntry.c_Name = C_GtGetText::h_GetText("PDOs");
+   orc_PdosEntry.c_Name = "PDOs";
    orc_PdosEntry.q_CheckBoxVisible = false;
    orc_PdosEntry.q_Enabled = true;
    orc_PdosEntry.q_Selectable = true;
@@ -893,10 +891,9 @@ bool C_SdNdeCoConfigTreeModel::m_CheckInterface(const QModelIndex & orc_Index,
    {
       C_OgeWiCustomMessage c_Message(this->mpc_Parent, C_OgeWiCustomMessage::E_Type::eQUESTION);
       C_OgeWiCustomMessage::E_Outputs e_Output;
-      c_Message.SetHeading(C_GtGetText::h_GetText("Deactivate CANopen manager"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "Do you really want to deactivate the CANopen manager?\n"
-                                  "Any configuration for this manager will be permanently discarded."));
+      c_Message.SetHeading("Deactivate CANopen manager");
+      c_Message.SetDescription("Do you really want to deactivate the CANopen manager?\n"
+                                  "Any configuration for this manager will be permanently discarded.");
       e_Output = c_Message.Execute();
       if (e_Output == C_OgeWiCustomMessage::eYES)
       {
@@ -1511,9 +1508,8 @@ bool C_SdNdeCoConfigTreeModel::m_CheckIfCoManagerCanBeActivated(const uint32_t o
    {
       q_CoManagerCanBeActivated = false;
       C_OgeWiCustomMessage c_Message(this->mpc_Parent, C_OgeWiCustomMessage::eINFORMATION);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Activate CANopen Manager"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "The CANopen Manager can't be activated for this interface because it is not connected to any bus."));
+      c_Message.SetHeading("Activate CANopen Manager");
+      c_Message.SetDescription("The CANopen Manager can't be activated for this interface because it is not connected to any bus.");
       c_Message.Execute();
    }
 
@@ -1543,8 +1539,8 @@ bool C_SdNdeCoConfigTreeModel::m_CheckIfCoManagerCanBeActivated(const uint32_t o
                                               "\" at interface \"" + c_InterfaceName.toStdString() + "\".";
 
          C_OgeWiCustomMessage c_Message(this->mpc_Parent, C_OgeWiCustomMessage::eINFORMATION);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Activate CANopen Manager"));
-         c_Message.SetDescription(C_GtGetText::h_GetText(c_Text.c_str()));
+         c_Message.SetHeading("Activate CANopen Manager");
+         c_Message.SetDescription(c_Text.c_str());
          c_Message.Execute();
       }
    }

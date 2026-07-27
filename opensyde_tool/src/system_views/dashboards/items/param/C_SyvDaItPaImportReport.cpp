@@ -14,7 +14,6 @@
 
 #include "stwtypes.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_ImpUtil.hpp"
@@ -98,11 +97,11 @@ C_SyvDaItPaImportReport::~C_SyvDaItPaImportReport(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaImportReport::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Load Parameter Set File"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Report"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Apply"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetTitle("Load Parameter Set File");
+   this->mrc_ParentDialog.SetSubTitle("Report");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Details");
+   this->mpc_Ui->pc_PushButtonOk->setText("Apply");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -204,7 +203,7 @@ void C_SyvDaItPaImportReport::m_HandleSourceFileInformation(QString & orc_Text) 
       }
    }
    c_ReadContent +=
-      static_cast<QString>(C_GtGetText::h_GetText("Nodes: %1, Datapools: %2, Lists: %3, Parameters: %4")).arg(
+      static_cast<QString>("Nodes: %1, Datapools: %2, Lists: %3, Parameters: %4").arg(
          u32_NodeCount).arg(
          u32_DatapoolCount).arg(u32_ListCount).arg(u32_ParameterCount);
    orc_Text += C_ImpUtil::h_FormatSourceFileInfoForReport(this->mrc_Path, c_ReadContent);
@@ -226,16 +225,16 @@ void C_SyvDaItPaImportReport::m_HandleParsing(QString & orc_Text)
    uint32_t u32_TableRemainContent = 0UL;
 
    orc_Text += "<h3>";
-   orc_Text += C_GtGetText::h_GetText("Import Preview");
+   orc_Text += "Import Preview";
    orc_Text += "</h3>";
    orc_Text += "<p>";
-   orc_Text += static_cast<QString>(C_GtGetText::h_GetText("Filter: %1")).arg(m_GetFilter(this->mu32_ValidLayers));
+   orc_Text += static_cast<QString>("Filter: %1").arg(m_GetFilter(this->mu32_ValidLayers));
    orc_Text += "</p>";
    m_PrepareTableContent(c_TableApplyContent, c_TableMismatchContent, c_TableRemainContent, u32_TableApplyContent,
                          u32_TableMismatchContent, u32_TableRemainContent);
    orc_Text += "<p><b>";
    //Translation: 1=Number of entries
-   orc_Text += static_cast<QString>(C_GtGetText::h_GetText("Applied parameters (%1)")).arg(u32_TableApplyContent);
+   orc_Text += static_cast<QString>("Applied parameters (%1)").arg(u32_TableApplyContent);
    orc_Text += "</b></p>";
    if (u32_TableApplyContent == 0UL)
    {
@@ -250,19 +249,19 @@ void C_SyvDaItPaImportReport::m_HandleParsing(QString & orc_Text)
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
       orc_Text += "#</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Node");
+      orc_Text += "Node";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Datapool");
+      orc_Text += "Datapool";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("List");
+      orc_Text += "List";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Parameter");
+      orc_Text += "Parameter";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Value");
+      orc_Text += "Value";
       orc_Text += "</td>";
       orc_Text += "</tr>";
       orc_Text += c_TableApplyContent;
@@ -270,7 +269,7 @@ void C_SyvDaItPaImportReport::m_HandleParsing(QString & orc_Text)
    }
    orc_Text += "<p><b>";
    //Translation: 1=Number of entries
-   orc_Text += static_cast<QString>(C_GtGetText::h_GetText("Ignored parameters (%1)")).arg(u32_TableMismatchContent);
+   orc_Text += static_cast<QString>("Ignored parameters (%1)").arg(u32_TableMismatchContent);
    orc_Text += "</b></p>";
    if (u32_TableMismatchContent == 0UL)
    {
@@ -285,22 +284,22 @@ void C_SyvDaItPaImportReport::m_HandleParsing(QString & orc_Text)
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
       orc_Text += "#</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Node");
+      orc_Text += "Node";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Datapool");
+      orc_Text += "Datapool";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("List");
+      orc_Text += "List";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Parameter");
+      orc_Text += "Parameter";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Value");
+      orc_Text += "Value";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Reason");
+      orc_Text += "Reason";
       orc_Text += "</td>";
       orc_Text += "</tr>";
       orc_Text += c_TableMismatchContent;
@@ -308,7 +307,7 @@ void C_SyvDaItPaImportReport::m_HandleParsing(QString & orc_Text)
    }
    orc_Text += "<p><b>";
    //Translation: 1=Number of entries
-   orc_Text += static_cast<QString>(C_GtGetText::h_GetText("Remaining untouched parameters (%1)")).arg(
+   orc_Text += static_cast<QString>("Remaining untouched parameters (%1)").arg(
       u32_TableRemainContent);
    orc_Text += "</b></p>";
    if (u32_TableRemainContent == 0UL)
@@ -324,16 +323,16 @@ void C_SyvDaItPaImportReport::m_HandleParsing(QString & orc_Text)
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
       orc_Text += "#</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Node");
+      orc_Text += "Node";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Datapool");
+      orc_Text += "Datapool";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("List");
+      orc_Text += "List";
       orc_Text += "</td>";
       orc_Text += C_SyvDaItPaImportReport::mhc_HTML_TABLE_HEADER_START;
-      orc_Text += C_GtGetText::h_GetText("Parameter");
+      orc_Text += "Parameter";
       orc_Text += "</td>";
       orc_Text += "</tr>";
       orc_Text += c_TableRemainContent;
@@ -404,7 +403,7 @@ void C_SyvDaItPaImportReport::m_PrepareTableContent(QString & orc_TableApplyCont
                                  if (pc_Element->GetType() != rc_Element.c_NvmValue.GetType())
                                  {
                                     const QString c_Description = static_cast<QString>(
-                                       C_GtGetText::h_GetText("Specified type in project: %1, found type in file: %2")).
+                                       "Specified type in project: %1, found type in file: %2").
                                                                   arg(C_SdNdeDpUtil::h_ConvertContentTypeToString(
                                                                          pc_Element->GetType())).arg(C_SdNdeDpUtil::h_ConvertContentTypeToString(
                                                                                                         rc_Element
@@ -419,22 +418,22 @@ void C_SyvDaItPaImportReport::m_PrepareTableContent(QString & orc_TableApplyCont
                                     QString c_FoundArray;
                                     if (pc_Element->GetArray())
                                     {
-                                       c_ElementArray += C_GtGetText::h_GetText("is array");
+                                       c_ElementArray += "is array";
                                     }
                                     else
                                     {
-                                       c_ElementArray += C_GtGetText::h_GetText("is not array");
+                                       c_ElementArray += "is not array";
                                     }
                                     if (rc_Element.c_NvmValue.GetArray())
                                     {
-                                       c_FoundArray += C_GtGetText::h_GetText("is array");
+                                       c_FoundArray += "is array";
                                     }
                                     else
                                     {
-                                       c_FoundArray += C_GtGetText::h_GetText("is not array");
+                                       c_FoundArray += "is not array";
                                     }
                                     const QString c_Description = static_cast<QString>(
-                                       C_GtGetText::h_GetText("Specified type in project: %1, found type in file: %2")).
+                                       "Specified type in project: %1, found type in file: %2").
                                                                   arg(c_ElementArray).arg(c_FoundArray);
                                     m_AppendTableEntry(orc_TableMismatchContent, oru32_TableMismatchCount, rc_ParamId,
                                                        c_Value, c_Description);
@@ -442,8 +441,7 @@ void C_SyvDaItPaImportReport::m_PrepareTableContent(QString & orc_TableApplyCont
                                  else if (pc_Element->GetArraySize() != rc_Element.c_NvmValue.GetArraySize())
                                  {
                                     const QString c_Description = static_cast<QString>(
-                                       C_GtGetText::h_GetText(
-                                          "Specified array size in project: %1, found array size in file: %2")).
+                                       "Specified array size in project: %1, found array size in file: %2").
                                                                   arg(pc_Element->GetArraySize()).arg(
                                        rc_Element.c_NvmValue.GetArraySize());
                                     m_AppendTableEntry(orc_TableMismatchContent, oru32_TableMismatchCount, rc_ParamId,
@@ -461,8 +459,7 @@ void C_SyvDaItPaImportReport::m_PrepareTableContent(QString & orc_TableApplyCont
                                        pc_Element->c_MaxValue, pc_Element->f64_Factor, pc_Element->f64_Offset, c_Max,
                                        false);
                                     const QString c_Description =
-                                       static_cast<QString>(C_GtGetText::h_GetText(
-                                                               "Specified value not in allowed range. Min: %1, Max: %2"))
+                                       static_cast<QString>("Specified value not in allowed range. Min: %1, Max: %2")
                                        .arg(c_Min).
                                        arg(c_Max);
                                     m_AppendTableEntry(orc_TableMismatchContent, oru32_TableMismatchCount, rc_ParamId,
@@ -576,7 +573,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
    //Special case: top layer
    if (ou32_Value == 0UL)
    {
-      c_Retval = static_cast<QString>(C_GtGetText::h_GetText("All"));
+      c_Retval = static_cast<QString>("All");
    }
    else if (ou32_Value <= this->mu32_ValidLayers)
    {
@@ -593,7 +590,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
             this->mrc_Id.u32_ElementIndex);
          if (pc_Element != NULL)
          {
-            c_Retval = static_cast<QString>(C_GtGetText::h_GetText(" - Parameter \"%1\"")).arg(
+            c_Retval = static_cast<QString>(" - Parameter \"%1\"").arg(
                pc_Element->c_Name.c_str());
          }
          break;
@@ -602,7 +599,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
             this->mrc_Id.u32_NodeIndex, this->mrc_Id.u32_DataPoolIndex, this->mrc_Id.u32_ListIndex);
          if (pc_List != NULL)
          {
-            c_Retval = static_cast<QString>(C_GtGetText::h_GetText(" - List \"%1\"")).arg(pc_List->c_Name.c_str());
+            c_Retval = static_cast<QString>(" - List \"%1\"").arg(pc_List->c_Name.c_str());
          }
          break;
       case 2UL:
@@ -610,7 +607,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
                                                                        this->mrc_Id.u32_DataPoolIndex);
          if (pc_DataPool != NULL)
          {
-            c_Retval = static_cast<QString>(C_GtGetText::h_GetText(" - Datapool \"%1\"")).arg(
+            c_Retval = static_cast<QString>(" - Datapool \"%1\"").arg(
                pc_DataPool->c_Name.c_str());
          }
          break;
@@ -618,7 +615,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
          pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mrc_Id.u32_NodeIndex);
          if (pc_Node != NULL)
          {
-            c_Retval = static_cast<QString>(C_GtGetText::h_GetText("Node \"%1\"")).arg(
+            c_Retval = static_cast<QString>("Node \"%1\"").arg(
                pc_Node->c_Properties.c_Name.c_str());
          }
          break;

@@ -15,7 +15,6 @@
 #include "constants.hpp"
 #include "C_SyvUtil.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 #include "C_NagViewItem.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -217,8 +216,8 @@ void C_NagViewItem::UpdateName(void) const
    {
       const QString c_ServiceModeInfo =
          ((!C_PuiSvHandler::h_GetInstance()->GetServiceModeActive()) ||
-          (pc_View->GetServiceModeActive())) ? "" : C_GtGetText::h_GetText(" (no access)");
-      const QString c_Name = static_cast<QString>(C_GtGetText::h_GetText("VIEW #%1 - %2%3"))
+          (pc_View->GetServiceModeActive())) ? "" : " (no access)";
+      const QString c_Name = static_cast<QString>("VIEW #%1 - %2%3")
                              .arg(this->mu32_ViewIndex + 1).arg(pc_View->GetName().c_str()).arg(c_ServiceModeInfo);
       this->mpc_Ui->pc_LabelHeading->setText(c_Name);
    }
@@ -263,21 +262,18 @@ void C_NagViewItem::UpdateDeco(void) const
 void C_NagViewItem::InitStaticNames(void) const
 {
    //Tool tips
-   this->mpc_Ui->pc_PushButtonCopy->SetToolTipInformation(C_GtGetText::h_GetText("Duplicate"),
-                                                          C_GtGetText::h_GetText("Add a copy of this view"));
-   this->mpc_Ui->pc_PushButtonEdit->SetToolTipInformation(C_GtGetText::h_GetText("Rename"),
-                                                          C_GtGetText::h_GetText("Edit view name"));
-   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation(C_GtGetText::h_GetText("Delete"),
-                                                            C_GtGetText::h_GetText("Delete this view from the project"));
-   this->mpc_Ui->pc_WidgetSetup->SetToolTipInformation(C_GtGetText::h_GetText("Setup"),
-                                                       C_GtGetText::h_GetText(
-                                                          "Edit your current setup of available nodes"));
-   this->mpc_Ui->pc_WidgetUpdate->SetToolTipInformation(C_GtGetText::h_GetText("Update"),
-                                                        C_GtGetText::h_GetText(
-                                                           "Update software on your current setup of available nodes"));
-   this->mpc_Ui->pc_WidgetDashboard->SetToolTipInformation(C_GtGetText::h_GetText("Dashboards"),
-                                                           C_GtGetText::h_GetText(
-                                                              "Interact (visualize, parametrize) with your current setup of available nodes"));
+   this->mpc_Ui->pc_PushButtonCopy->SetToolTipInformation("Duplicate",
+                                                          "Add a copy of this view");
+   this->mpc_Ui->pc_PushButtonEdit->SetToolTipInformation("Rename",
+                                                          "Edit view name");
+   this->mpc_Ui->pc_PushButtonDelete->SetToolTipInformation("Delete",
+                                                            "Delete this view from the project");
+   this->mpc_Ui->pc_WidgetSetup->SetToolTipInformation("Setup",
+                                                       "Edit your current setup of available nodes");
+   this->mpc_Ui->pc_WidgetUpdate->SetToolTipInformation("Update",
+                                                        "Update software on your current setup of available nodes");
+   this->mpc_Ui->pc_WidgetDashboard->SetToolTipInformation("Dashboards",
+                                                           "Interact (visualize, parametrize) with your current setup of available nodes");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -562,10 +558,9 @@ void C_NagViewItem::m_OnNameEditFinished(void)
    {
       stw::opensyde_gui_elements::C_OgeWiCustomMessage
          c_ImportWarnings(this, stw::opensyde_gui_elements::C_OgeWiCustomMessage::eERROR);
-      c_ImportWarnings.SetHeading(C_GtGetText::h_GetText("View rename"));
+      c_ImportWarnings.SetHeading("View rename");
       c_ImportWarnings.SetDescription(
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 "A view with the name \"%1\" already exists. Choose another name.")).
+         static_cast<QString>("A view with the name \"%1\" already exists. Choose another name.").
          arg(this->mpc_Ui->pc_LineEditHeading->text()));
       c_ImportWarnings.SetCustomMinHeight(180, 180);
       c_ImportWarnings.Execute();
@@ -649,7 +644,7 @@ void C_NagViewItem::m_HandleSubItemNames()
    if (((pc_View != NULL) && (C_PuiSvHandler::h_GetInstance()->GetServiceModeActive())) &&
        (pc_View->GetServiceModeActive()))
    {
-      const QString c_AccessWarning = C_GtGetText::h_GetText(" (no access)");
+      const QString c_AccessWarning = " (no access)";
       if (!pc_View->GetServiceModeSetupActive())
       {
          c_SetupAdd = c_AccessWarning;
@@ -664,9 +659,9 @@ void C_NagViewItem::m_HandleSubItemNames()
       }
    }
    {
-      const QString c_Setup = c_Padding + C_GtGetText::h_GetText("Setup") + c_SetupAdd;
-      const QString c_Update = c_Padding + C_GtGetText::h_GetText("Update") + c_UpdateAdd;
-      const QString c_Dashboard = c_Padding + C_GtGetText::h_GetText("Dashboards") + c_DashboardAdd;
+      const QString c_Setup = c_Padding + "Setup" + c_SetupAdd;
+      const QString c_Update = c_Padding + "Update" + c_UpdateAdd;
+      const QString c_Dashboard = c_Padding + "Dashboards" + c_DashboardAdd;
 
       //Add one space as padding
       this->mpc_Ui->pc_WidgetSetup->setText(c_Setup);

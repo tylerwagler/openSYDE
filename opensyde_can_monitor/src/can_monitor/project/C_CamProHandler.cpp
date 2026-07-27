@@ -155,6 +155,26 @@ const C_CamProLoggingData & C_CamProHandler::GetLoggingData() const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get message Tx protocol
+
+   \param[in]  ou32_Index  Message index
+
+   \return
+   Current Tx protocol (defaults to eTX_CAN if index out of range)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_CamProMessageData::E_TxProtocol C_CamProHandler::GetMessageTxProtocol(const uint32_t ou32_Index) const
+{
+   C_CamProMessageData::E_TxProtocol e_Retval = C_CamProMessageData::eTX_CAN;
+
+   if (ou32_Index < this->mc_Messages.size())
+   {
+      e_Retval = this->mc_Messages[ou32_Index].GetTxProtocol();
+   }
+   return e_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Set all messages
 
    \param[in]  orc_Messages   All messages
@@ -176,6 +196,23 @@ void C_CamProHandler::SetMessages(const std::vector<C_CamProMessageData> & orc_M
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
+int32_t C_CamProHandler::SetMessageTxProtocol(const uint32_t ou32_Index,
+                                              const C_CamProMessageData::E_TxProtocol oe_Protocol)
+{
+   int32_t s32_Retval = C_NO_ERR;
+
+   if (ou32_Index < this->mc_Messages.size())
+   {
+      C_CamProMessageData & rc_Message = this->mc_Messages[ou32_Index];
+      rc_Message.e_TxProtocol = oe_Protocol;
+   }
+   else
+   {
+      s32_Retval = C_RANGE;
+   }
+   return s32_Retval;
+}
+
 int32_t C_CamProHandler::SetMessageName(const uint32_t ou32_Index, const QString & orc_Name)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -305,6 +342,25 @@ int32_t C_CamProHandler::SetMessageDataBytes(const uint32_t ou32_Index, const st
       s32_Retval = C_RANGE;
    }
    return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Set a single data byte at the given index
+*
+*   Supports payloads larger than 8 bytes for CAN-TP multi-frame
+*   transmission.  The byte vector is auto-extended if needed.
+*
+*   \param[in]  ou32_Index      Message index
+*   \param[in]  ou32_ByteIndex  Byte position within the payload
+*   \param[in]  ou8_Value       Byte value
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CamProHandler::SetMessageByte(const uint32_t ou32_Index, const uint32_t ou32_ByteIndex, const uint8_t ou8_Value)
+{
+   if (ou32_Index < this->mc_Messages.size())
+   {
+      this->mc_Messages[ou32_Index].SetMessageByte(ou32_ByteIndex, ou8_Value);
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

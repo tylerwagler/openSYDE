@@ -20,7 +20,6 @@
 #include "C_NagToolBarSearchResults.hpp"
 #include "ui_C_NagToolBarSearchResults.h"
 
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -57,7 +56,7 @@ C_NagToolBarSearchResults::C_NagToolBarSearchResults(QWidget * const opc_Parent)
 
    this->mpc_Ui->pc_LabelNoSearchResultsFound->setVisible(false);
 
-   this->mpc_Ui->pc_LabelNoSearchResultsFound->setText(C_GtGetText::h_GetText("    No results found"));
+   this->mpc_Ui->pc_LabelNoSearchResultsFound->setText("    No results found");
 
    pc_Shadow = new QGraphicsDropShadowEffect(this);
    pc_Shadow->setBlurRadius(4.0);

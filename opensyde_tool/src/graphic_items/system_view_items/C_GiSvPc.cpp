@@ -19,7 +19,6 @@
 
 #include "gitypes.hpp"
 #include "C_GiSvPc.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OgePopUpDialog.hpp"
@@ -288,9 +287,9 @@ bool C_GiSvPc::OpenDialog(void) const
       {
          QGraphicsView * const pc_GraphicsView = this->scene()->views().at(0);
          C_OgeWiCustomMessage c_Message(pc_GraphicsView);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Ethernet settings"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("Setup your Ethernet adapter settings in Windows system "
-                                                         "network configuration."));
+         c_Message.SetHeading("Ethernet settings");
+         c_Message.SetDescription("Setup your Ethernet adapter settings in Windows system "
+                                                         "network configuration.");
          c_Message.SetCustomMinHeight(180, 180);
          c_Message.Execute();
       }
@@ -299,8 +298,8 @@ bool C_GiSvPc::OpenDialog(void) const
    {
       QGraphicsView * const pc_GraphicsView = this->scene()->views().at(0);
       C_OgeWiCustomMessage c_Message(pc_GraphicsView);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Configure PC Interface settings"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Not available while being connected."));
+      c_Message.SetHeading("Configure PC Interface settings");
+      c_Message.SetDescription("Not available while being connected.");
       c_Message.SetCustomMinHeight(180, 180);
       c_Message.Execute();
    }
@@ -398,16 +397,16 @@ void C_GiSvPc::GenerateHint()
 
       // content
       const stw::opensyde_core::C_OscCanAdapterConfig & rc_Config = c_PcData.GetAdapterConfig();
-      c_ToolTipContent += C_GtGetText::h_GetText("CAN Interface: ");
+      c_ToolTipContent += "CAN Interface: ";
       c_ToolTipContent += static_cast<QString>("%1 (%2, %3 bps)").arg(
          QString::fromStdString(::can::backendKindToString(rc_Config.e_BackendKind)),
          QString::fromStdString(rc_Config.c_ChannelId)).arg(rc_Config.u32_BitrateBps);
 
-      c_ToolTipContent += C_GtGetText::h_GetText("\nDouble click on PC to enter CAN interface settings.");
+      c_ToolTipContent += "\nDouble click on PC to enter CAN interface settings.";
       this->SetDefaultToolTipContent(c_ToolTipContent);
 
       // heading
-      this->SetDefaultToolTipHeading(C_GtGetText::h_GetText("openSYDE Client PC"));
+      this->SetDefaultToolTipHeading("openSYDE Client PC");
    }
 }
 

@@ -15,7 +15,6 @@
 #include "TglUtils.hpp"
 #include "C_SdUtil.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -128,14 +127,14 @@ void C_TblTreDataElementModel::InitSd(const uint32_t ou32_NodeIndex, const int32
       bool q_DataPoolNvmValid = false;
       bool q_DataPoolComValid = false;
       bool q_DataPoolHalcValid = false;
-      pc_DiagItem->c_Name = C_GtGetText::h_GetText("DIAG Datapools");
-      pc_NvmItem->c_Name = C_GtGetText::h_GetText("NVM Datapools");
-      pc_ComItem->c_Name = C_GtGetText::h_GetText("COMM Datapools");
-      pc_HalcItem->c_Name = C_GtGetText::h_GetText("HAL Datapools");
-      pc_DiagItem->c_ToolTipHeading = C_GtGetText::h_GetText("DIAG Datapools");
-      pc_NvmItem->c_ToolTipHeading = C_GtGetText::h_GetText("NVM Datapools");
-      pc_ComItem->c_ToolTipHeading = C_GtGetText::h_GetText("COMM Datapools");
-      pc_HalcItem->c_ToolTipHeading = C_GtGetText::h_GetText("HAL Datapools");
+      pc_DiagItem->c_Name = "DIAG Datapools";
+      pc_NvmItem->c_Name = "NVM Datapools";
+      pc_ComItem->c_Name = "COMM Datapools";
+      pc_HalcItem->c_Name = "HAL Datapools";
+      pc_DiagItem->c_ToolTipHeading = "DIAG Datapools";
+      pc_NvmItem->c_ToolTipHeading = "NVM Datapools";
+      pc_ComItem->c_ToolTipHeading = "COMM Datapools";
+      pc_HalcItem->c_ToolTipHeading = "HAL Datapools";
       pc_DiagItem->q_Selectable = false;
       pc_NvmItem->q_Selectable = false;
       pc_ComItem->q_Selectable = false;
@@ -176,7 +175,7 @@ void C_TblTreDataElementModel::InitSd(const uint32_t ou32_NodeIndex, const int32
          // Append protocol type if COMM datapool
          if (rc_DataPool.e_Type == C_OscNodeDataPool::eCOM)
          {
-            pc_DataPoolItem->c_Name += C_GtGetText::h_GetText(" (Protocol: ");
+            pc_DataPoolItem->c_Name += " (Protocol: ";
             pc_DataPoolItem->c_Name +=
                C_PuiSdUtil::h_ConvertProtocolTypeToString(C_PuiSdUtil::h_GetRelatedCanProtocolType(ou32_NodeIndex,
                                                                                                    u32_ItDataPool));
@@ -890,14 +889,14 @@ void C_TblTreDataElementModel::m_InitDatapoolElements(const uint32_t ou32_ViewIn
                C_TblTreItem * const pc_NvmItem = new C_TblTreItem();
                C_TblTreItem * const pc_ComItem = new C_TblTreItem();
                C_TblTreItem * const pc_HalcItem = new C_TblTreItem();
-               pc_DiagItem->c_Name = C_GtGetText::h_GetText("DIAG Datapools");
-               pc_NvmItem->c_Name = C_GtGetText::h_GetText("NVM Datapools");
-               pc_ComItem->c_Name = C_GtGetText::h_GetText("COMM Datapools");
-               pc_HalcItem->c_Name = C_GtGetText::h_GetText("HAL Datapools");
-               pc_DiagItem->c_ToolTipHeading = C_GtGetText::h_GetText("DIAG Datapools");
-               pc_NvmItem->c_ToolTipHeading = C_GtGetText::h_GetText("NVM Datapools");
-               pc_ComItem->c_ToolTipHeading = C_GtGetText::h_GetText("COMM Datapools");
-               pc_HalcItem->c_ToolTipHeading = C_GtGetText::h_GetText("HAL Datapools");
+               pc_DiagItem->c_Name = "DIAG Datapools";
+               pc_NvmItem->c_Name = "NVM Datapools";
+               pc_ComItem->c_Name = "COMM Datapools";
+               pc_HalcItem->c_Name = "HAL Datapools";
+               pc_DiagItem->c_ToolTipHeading = "DIAG Datapools";
+               pc_NvmItem->c_ToolTipHeading = "NVM Datapools";
+               pc_ComItem->c_ToolTipHeading = "COMM Datapools";
+               pc_HalcItem->c_ToolTipHeading = "HAL Datapools";
                pc_DiagItem->q_Selectable = false;
                pc_NvmItem->q_Selectable = false;
                pc_ComItem->q_Selectable = false;
@@ -937,7 +936,7 @@ void C_TblTreDataElementModel::m_InitDatapoolElements(const uint32_t ou32_ViewIn
                   // Append protocol type if COMM datapool
                   if (rc_DataPool.e_Type == C_OscNodeDataPool::eCOM)
                   {
-                     pc_DataPoolItem->c_Name += C_GtGetText::h_GetText(" (Protocol: ");
+                     pc_DataPoolItem->c_Name += " (Protocol: ";
                      pc_DataPoolItem->c_Name +=
                         C_PuiSdUtil::h_ConvertProtocolTypeToString(C_PuiSdUtil::h_GetRelatedCanProtocolType(
                                                                       u32_ItNode, u32_ItDataPool));
@@ -1184,9 +1183,9 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalc(C_TblTreItem * const 
       C_TblTreItem * const pc_UnusedChannelsItem = new C_TblTreItem();
       bool q_UnusedNodeValid = false;
       //Init current channels
-      pc_UnusedChannelsItem->c_Name = C_GtGetText::h_GetText("Unused Channels");
-      pc_UnusedChannelsItem->c_ToolTipHeading = C_GtGetText::h_GetText("Unused Channels");
-      pc_UnusedChannelsItem->c_ToolTipContent = C_GtGetText::h_GetText("Channels which are not used by this datapool");
+      pc_UnusedChannelsItem->c_Name = "Unused Channels";
+      pc_UnusedChannelsItem->c_ToolTipHeading = "Unused Channels";
+      pc_UnusedChannelsItem->c_ToolTipContent = "Channels which are not used by this datapool";
       pc_UnusedChannelsItem->q_Selectable = false;
       for (uint32_t u32_ItDomain = 0UL; u32_ItDomain < orc_Node.c_HalcConfig.GetDomainSize(); ++u32_ItDomain)
       {
@@ -1543,10 +1542,9 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(C_TblTreIte
    pc_ListItem->q_Selectable = false;
    //Init other item
    pc_OtherItem->u32_Index = 0UL;
-   pc_OtherItem->c_Name = C_GtGetText::h_GetText("Unused Dataelements");
-   pc_OtherItem->c_ToolTipHeading = C_GtGetText::h_GetText("Unused Dataelements");
-   pc_OtherItem->c_ToolTipContent = C_GtGetText::h_GetText(
-      "Unused Dataelements which are not relevant for current use-case");
+   pc_OtherItem->c_Name = "Unused Dataelements";
+   pc_OtherItem->c_ToolTipHeading = "Unused Dataelements";
+   pc_OtherItem->c_ToolTipContent = "Unused Dataelements which are not relevant for current use-case";
    pc_OtherItem->q_Enabled = true;
    pc_OtherItem->q_Selectable = false;
    //Fill
@@ -2082,7 +2080,7 @@ void C_TblTreDataElementModel::mh_CreateArrayElementNodes(const bool oq_ShowOnly
             pc_ArrayItem->c_Name = static_cast<QString>("[%1]").arg(u32_ArrayIndex);
             pc_ArrayItem->c_ToolTipHeading = pc_ArrayItem->c_Name;
             pc_ArrayItem->c_ToolTipContent =
-               static_cast<QString>(C_GtGetText::h_GetText("Array element %1 of \"%2\"")).arg(u32_ArrayIndex).arg(
+               static_cast<QString>("Array element %1 of \"%2\"").arg(u32_ArrayIndex).arg(
                   orc_Element.c_Name.c_str());
 
             //Configure
@@ -2149,14 +2147,14 @@ void C_TblTreDataElementModel::m_InitNvmList(const uint32_t ou32_ViewIndex)
                C_TblTreItem * const pc_NvmItem = new C_TblTreItem();
                C_TblTreItem * const pc_ComItem = new C_TblTreItem();
                C_TblTreItem * const pc_HalcItem = new C_TblTreItem();
-               pc_DiagItem->c_Name = C_GtGetText::h_GetText("DIAG Datapools");
-               pc_NvmItem->c_Name = C_GtGetText::h_GetText("NVM Datapools");
-               pc_ComItem->c_Name = C_GtGetText::h_GetText("COMM Datapools");
-               pc_HalcItem->c_Name = C_GtGetText::h_GetText("HAL Datapools");
-               pc_DiagItem->c_ToolTipHeading = C_GtGetText::h_GetText("DIAG Datapools");
-               pc_NvmItem->c_ToolTipHeading = C_GtGetText::h_GetText("NVM Datapools");
-               pc_ComItem->c_ToolTipHeading = C_GtGetText::h_GetText("COMM Datapools");
-               pc_HalcItem->c_ToolTipHeading = C_GtGetText::h_GetText("HAL Datapools");
+               pc_DiagItem->c_Name = "DIAG Datapools";
+               pc_NvmItem->c_Name = "NVM Datapools";
+               pc_ComItem->c_Name = "COMM Datapools";
+               pc_HalcItem->c_Name = "HAL Datapools";
+               pc_DiagItem->c_ToolTipHeading = "DIAG Datapools";
+               pc_NvmItem->c_ToolTipHeading = "NVM Datapools";
+               pc_ComItem->c_ToolTipHeading = "COMM Datapools";
+               pc_HalcItem->c_ToolTipHeading = "HAL Datapools";
                pc_DiagItem->q_Selectable = false;
                pc_NvmItem->q_Selectable = false;
                pc_ComItem->q_Selectable = false;
@@ -2222,7 +2220,7 @@ void C_TblTreDataElementModel::m_InitNvmList(const uint32_t ou32_ViewIndex)
                            if (pc_View->CheckNvmParamListUsage(C_OscNodeDataPoolListId(u32_ItNode, u32_ItDataPool,
                                                                                        u32_ItList)) == true)
                            {
-                              pc_ListItem->c_Name += C_GtGetText::h_GetText(" (Already used)");
+                              pc_ListItem->c_Name += " (Already used)";
                               pc_ListItem->q_Selectable = false;
                               pc_ListItem->q_Enabled = false;
                            }

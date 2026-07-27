@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_FlaConNodeConfigPopup.hpp"
 
@@ -92,25 +91,22 @@ C_FlaTitleBarWidget::~C_FlaTitleBarWidget()
 void C_FlaTitleBarWidget::InitStaticNames(void) const
 {
    // initialize button texts
-   this->mpc_Ui->pc_PushButtonAbout->setText(C_GtGetText::h_GetText("About")); // no icon therefore no icon-only mode
+   this->mpc_Ui->pc_PushButtonAbout->setText("About"); // no icon therefore no icon-only mode
    this->m_SetButtonsText(false);
 
    //tooltips
-   this->mpc_Ui->pc_PushButtonHelp->SetToolTipInformation(C_GtGetText::h_GetText("Help"),
-                                                          C_GtGetText::h_GetText("Open user manual for help."));
-   this->mpc_Ui->pc_PushButtonAbout->SetToolTipInformation(C_GtGetText::h_GetText("About"),
-                                                           C_GtGetText::h_GetText(
-                                                              "Show information about SYDEflash."));
+   this->mpc_Ui->pc_PushButtonHelp->SetToolTipInformation("Help",
+                                                          "Open user manual for help.");
+   this->mpc_Ui->pc_PushButtonAbout->SetToolTipInformation("About",
+                                                           "Show information about SYDEflash.");
 
-   this->mpc_Ui->pc_PushButtonUpdate->SetToolTipInformation(C_GtGetText::h_GetText("Update Node"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Flash selected HEX files on connected node."));
-   this->mpc_Ui->pc_PushButtonSearch->SetToolTipInformation(C_GtGetText::h_GetText("Search Node"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Scan network for connected openSYDE nodes."));
-   this->mpc_Ui->pc_PushButtonConfigure->SetToolTipInformation(C_GtGetText::h_GetText("Configure Node"),
-                                                               C_GtGetText::h_GetText("Apply new node ID and bitrate "
-                                                                                      "to connected node."));
+   this->mpc_Ui->pc_PushButtonUpdate->SetToolTipInformation("Update Node",
+                                                            "Flash selected HEX files on connected node.");
+   this->mpc_Ui->pc_PushButtonSearch->SetToolTipInformation("Search Node",
+                                                            "Scan network for connected openSYDE nodes.");
+   this->mpc_Ui->pc_PushButtonConfigure->SetToolTipInformation("Configure Node",
+                                                               "Apply new node ID and bitrate "
+                                                                                      "to connected node.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -167,9 +163,9 @@ void C_FlaTitleBarWidget::m_SetButtonsText(const bool oq_IconOnly) const
    if (oq_IconOnly == true)
    {
       const uint32_t u32_SMALL_MAXIMUM_SIZE = 34;
-      this->mpc_Ui->pc_PushButtonUpdate->setText(C_GtGetText::h_GetText(""));
-      this->mpc_Ui->pc_PushButtonSearch->setText(C_GtGetText::h_GetText(""));
-      this->mpc_Ui->pc_PushButtonConfigure->setText(C_GtGetText::h_GetText(""));
+      this->mpc_Ui->pc_PushButtonUpdate->setText("");
+      this->mpc_Ui->pc_PushButtonSearch->setText("");
+      this->mpc_Ui->pc_PushButtonConfigure->setText("");
 
       this->mpc_Ui->pc_PushButtonUpdate->setMaximumWidth(u32_SMALL_MAXIMUM_SIZE);
       this->mpc_Ui->pc_PushButtonSearch->setMaximumWidth(u32_SMALL_MAXIMUM_SIZE);
@@ -177,9 +173,9 @@ void C_FlaTitleBarWidget::m_SetButtonsText(const bool oq_IconOnly) const
    }
    else
    {
-      this->mpc_Ui->pc_PushButtonUpdate->setText(C_GtGetText::h_GetText("Update Node"));
-      this->mpc_Ui->pc_PushButtonSearch->setText(C_GtGetText::h_GetText("Search Node"));
-      this->mpc_Ui->pc_PushButtonConfigure->setText(C_GtGetText::h_GetText("Configure Node"));
+      this->mpc_Ui->pc_PushButtonUpdate->setText("Update Node");
+      this->mpc_Ui->pc_PushButtonSearch->setText("Search Node");
+      this->mpc_Ui->pc_PushButtonConfigure->setText("Configure Node");
 
       // we cannot change Qt constant but it is still better than using the hard coded magic number 16777215
       this->mpc_Ui->pc_PushButtonUpdate->setMaximumWidth(QWIDGETSIZE_MAX);    //lint !e893 !e9130 !e9136

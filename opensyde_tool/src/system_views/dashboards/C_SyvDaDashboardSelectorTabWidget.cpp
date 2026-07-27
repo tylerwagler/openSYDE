@@ -18,7 +18,6 @@
 #include "C_SyvDaDashboardSelectorTabWidget.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSvHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 #include "C_PuiProject.hpp"
 #include "C_SyvClipBoardHelper.hpp"
@@ -78,8 +77,8 @@ C_SyvDaDashboardSelectorTabWidget::C_SyvDaDashboardSelectorTabWidget(QWidget * c
    this->mpc_PushButton->SetIconSize(24);
    //lint -e{1938}  static const is guaranteed preinitialized before main
    this->mpc_PushButton->setIcon(QIcon(C_SyvDaDashboardSelectorTabWidget::mhc_ADD_ICON_LIGHT));
-   this->mpc_PushButton->SetToolTipInformation(C_GtGetText::h_GetText("Add"),
-                                               C_GtGetText::h_GetText("Add new Dashboard tab."));
+   this->mpc_PushButton->SetToolTipInformation("Add",
+                                               "Add new Dashboard tab.");
    connect(this->mpc_PushButton, &QPushButton::clicked, this, &C_SyvDaDashboardSelectorTabWidget::m_OnAddClicked);
 
    // Handle service mode
@@ -1338,12 +1337,11 @@ void C_SyvDaDashboardSelectorTabWidget::m_DeleteTab(const int32_t os32_TabIndex)
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
       C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
 
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Dashboard delete"));
-      c_MessageBox.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "Do you really want to delete dashboard \"%1\"?")).arg(
+      c_MessageBox.SetHeading("Dashboard delete");
+      c_MessageBox.SetDescription(static_cast<QString>("Do you really want to delete dashboard \"%1\"?").arg(
                                      pc_Widget->GetName()));
-      c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-      c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+      c_MessageBox.SetOkButtonText("Delete");
+      c_MessageBox.SetNoButtonText("Keep");
       c_MessageBox.SetCustomMinHeight(180, 180);
       e_ReturnMessageBox = c_MessageBox.Execute();
       if (e_ReturnMessageBox == C_OgeWiCustomMessage::eYES)
@@ -1366,7 +1364,7 @@ void C_SyvDaDashboardSelectorTabWidget::m_DeleteTab(const int32_t os32_TabIndex)
                   const uint32_t u32_FreeIndex = static_cast<uint32_t>(pc_View->GetDashboards().size());
                   //Insert one after the last one (least conflict potential)
                   C_PuiSvDashboard c_DefaultDashboard;
-                  c_DefaultDashboard.SetName(C_GtGetText::h_GetText("Dashboard"));
+                  c_DefaultDashboard.SetName("Dashboard");
                   if (C_PuiSvHandler::h_GetInstance()->InsertDashboard(this->mu32_ViewIndex, u32_FreeIndex,
                                                                        c_DefaultDashboard,
                                                                        true, NULL) == C_NO_ERR)
@@ -1395,8 +1393,8 @@ void C_SyvDaDashboardSelectorTabWidget::m_DeleteTab(const int32_t os32_TabIndex)
    {
       C_OgeWiCustomMessage c_MessageBox(this);
 
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Dashboard delete"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("You can't delete the last dashboard."));
+      c_MessageBox.SetHeading("Dashboard delete");
+      c_MessageBox.SetDescription("You can't delete the last dashboard.");
       c_MessageBox.Execute();
    }
 }

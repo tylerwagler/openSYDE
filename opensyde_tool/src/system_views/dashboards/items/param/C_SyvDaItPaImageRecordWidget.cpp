@@ -26,7 +26,6 @@
 #include "C_OscUtils.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_UsHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvDaItUtil.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -104,7 +103,7 @@ C_SyvDaItPaImageRecordWidget::C_SyvDaItPaImageRecordWidget(stw::opensyde_gui_ele
 
    this->InitText();
 
-   this->mpc_Ui->pc_TextBrowserConfirm->setHtml(C_GtGetText::h_GetText("Empty, not read yet."));
+   this->mpc_Ui->pc_TextBrowserConfirm->setHtml("Empty, not read yet.");
 
    m_LoadUserSettings();
 
@@ -152,35 +151,33 @@ C_SyvDaItPaImageRecordWidget::~C_SyvDaItPaImageRecordWidget()
 void C_SyvDaItPaImageRecordWidget::InitText(void)
 {
    // set title
-   this->mpc_ParentDialog->SetTitle(static_cast<QString>(C_GtGetText::h_GetText("Parametrization")));
-   this->mpc_ParentDialog->SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Record Parameter Set from System")));
+   this->mpc_ParentDialog->SetTitle(static_cast<QString>("Parametrization"));
+   this->mpc_ParentDialog->SetSubTitle(static_cast<QString>("Record Parameter Set from System"));
 
-   this->mpc_Ui->pc_LabelFinished->setText(static_cast<QString>(C_GtGetText::h_GetText("Finished")));
-   this->mpc_Ui->pc_LabelSelectFile->setText(static_cast<QString>(C_GtGetText::h_GetText("File")));
-   this->mpc_Ui->pc_LabelRead->setText(static_cast<QString>(C_GtGetText::h_GetText("Read")));
-   this->mpc_Ui->pc_LabelConfirm->setText(static_cast<QString>(C_GtGetText::h_GetText("Confirm")));
-   this->mpc_Ui->pc_LabelValidateFile->setText(static_cast<QString>(C_GtGetText::h_GetText("Validate File(s)")));
+   this->mpc_Ui->pc_LabelFinished->setText(static_cast<QString>("Finished"));
+   this->mpc_Ui->pc_LabelSelectFile->setText(static_cast<QString>("File"));
+   this->mpc_Ui->pc_LabelRead->setText(static_cast<QString>("Read"));
+   this->mpc_Ui->pc_LabelConfirm->setText(static_cast<QString>("Confirm"));
+   this->mpc_Ui->pc_LabelValidateFile->setText(static_cast<QString>("Validate File(s)"));
 
-   this->mpc_Ui->pc_LabelHeadingSelectFile->setText(C_GtGetText::h_GetText("File"));
+   this->mpc_Ui->pc_LabelHeadingSelectFile->setText("File");
    this->mpc_Ui->pc_LabelStepDescription->setText(
-      C_GtGetText::h_GetText("Choose a path to save the file to and click "
-                             "\"Read Parameters\" to start the parameter set record process."));
-   this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
-   this->mpc_Ui->pc_CommentText->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
-   this->mpc_Ui->pc_LabelHeadingConfirm->setText(C_GtGetText::h_GetText("Read Parameter Lists"));
-   this->mpc_Ui->pc_LineEditPath->setPlaceholderText(C_GtGetText::h_GetText(""));
+      "Choose a path to save the file to and click "
+                             "\"Read Parameters\" to start the parameter set record process.");
+   this->mpc_Ui->pc_LabelComment->setText("Comment");
+   this->mpc_Ui->pc_CommentText->setPlaceholderText("Add your comment here ...");
+   this->mpc_Ui->pc_LabelHeadingConfirm->setText("Read Parameter Lists");
+   this->mpc_Ui->pc_LineEditPath->setPlaceholderText("");
    this->mpc_Ui->pc_LabelMultipleNodes->setText(
-      C_GtGetText::h_GetText(
-         "Attention: Recording for multiple nodes will result in one file per node."
-         " Name format: \"<SelectedPathAndFileName>_<NodeName>.syde_psi\""));
+      "Attention: Recording for multiple nodes will result in one file per node."
+         " Name format: \"<SelectedPathAndFileName>_<NodeName>.syde_psi\"");
 
-   this->mpc_Ui->pc_PbConfirm->setText(static_cast<QString>(C_GtGetText::h_GetText("Read Parameters")));
-   this->mpc_Ui->pc_CbConfirm->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                               "Confirmed, all required parameter lists are included")));
+   this->mpc_Ui->pc_PbConfirm->setText(static_cast<QString>("Read Parameters"));
+   this->mpc_Ui->pc_CbConfirm->setText(static_cast<QString>("Confirmed, all required parameter lists are included"));
 
    this->mpc_Ui->pc_PushButtonBrowse->SetToolTipInformation(
-      C_GtGetText::h_GetText("Browse"),
-      C_GtGetText::h_GetText("Browse for location where to save recorded parameter set image file."));
+      "Browse",
+      "Browse for location where to save recorded parameter set image file.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -255,9 +252,8 @@ void C_SyvDaItPaImageRecordWidget::m_OnBrowse(void)
    const QString c_Folder = C_Uti::h_GetAbsolutePathFromExe(this->mpc_Ui->pc_LineEditPath->GetPath());
 
    const QString c_Path =
-      C_OgeWiUtil::h_GetSaveFileName(this, C_GtGetText::h_GetText("Select File for Parameter Set Image"),
-                                     c_Folder, C_GtGetText::h_GetText(
-                                        "openSYDE parameter set image (*") + mhc_FILE_EXTENSION + ")",
+      C_OgeWiUtil::h_GetSaveFileName(this, "Select File for Parameter Set Image",
+                                     c_Folder, "openSYDE parameter set image (*" + mhc_FILE_EXTENSION + ")",
                                      "", QFileDialog::DontConfirmOverwrite); // overwrite is handled later
 
    if (c_Path.compare("") != 0)
@@ -337,13 +333,12 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
                if (((c_File.exists() == true) && (this->mc_AllNodeIndexes.size() == 1UL)) ||
                    (c_ConflictedFiles.size() > 0UL))
                {
-                  QString c_Details = C_GtGetText::h_GetText("The following file(s) already exist: \n");
+                  QString c_Details = "The following file(s) already exist: \n";
                   C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
                   C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
 
-                  c_MessageBox.SetHeading(C_GtGetText::h_GetText("Parameter Set Image File save"));
-                  c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                                 "Do you really want to overwrite the existing file(s)?"));
+                  c_MessageBox.SetHeading("Parameter Set Image File save");
+                  c_MessageBox.SetDescription("Do you really want to overwrite the existing file(s)?");
                   //Append conflicted files as details
                   if (c_ConflictedFiles.size() > 0UL)
                   {
@@ -358,8 +353,8 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
                      c_Details += this->mc_FilePath;
                   }
                   c_MessageBox.SetDetails(c_Details);
-                  c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Overwrite"));
-                  c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Back"));
+                  c_MessageBox.SetOkButtonText("Overwrite");
+                  c_MessageBox.SetNoButtonText("Back");
                   c_MessageBox.SetCustomMinHeight(180, 300);
                   c_MessageBox.SetCustomMinWidth(700);
                   e_ReturnMessageBox = c_MessageBox.Execute();
@@ -386,7 +381,7 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
 
                            if (q_Continue == false)
                            {
-                              c_Details = C_GtGetText::h_GetText("The following file(s) can not be overwritten: \n");
+                              c_Details = "The following file(s) can not be overwritten: \n";
                               c_Details += c_ConflictedFiles[u32_ItFile];
                               break;
                            }
@@ -396,8 +391,8 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
                      {
                         // Error on deleting file
                         C_OgeWiCustomMessage c_MessageBoxErrorRemove(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                        c_MessageBoxErrorRemove.SetHeading(C_GtGetText::h_GetText("Parameter Set Image File save"));
-                        c_MessageBoxErrorRemove.SetDescription(C_GtGetText::h_GetText("File cannot be overwritten!"));
+                        c_MessageBoxErrorRemove.SetHeading("Parameter Set Image File save");
+                        c_MessageBoxErrorRemove.SetDescription("File cannot be overwritten!");
                         c_MessageBoxErrorRemove.SetDetails(c_Details);
                         c_MessageBoxErrorRemove.SetCustomMinHeight(180, 300);
                         c_MessageBoxErrorRemove.Execute();
@@ -426,9 +421,8 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
                   this->mpc_Ui->pc_PushButtonBrowse->setVisible(false);
                   this->mpc_Ui->pc_LabelRead->setEnabled(true);
                   this->mpc_Ui->pc_BopperleRead->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21, mc_STYLE_GUIDE_COLOR_13);
-                  this->mpc_Ui->pc_LabelHeadingSelectFile->setText(C_GtGetText::h_GetText("Read Parameter Values"));
-                  this->mpc_Ui->pc_LabelStepDescription->setText(C_GtGetText::h_GetText(
-                                                                    "Reading parameter values from NVM..."));
+                  this->mpc_Ui->pc_LabelHeadingSelectFile->setText("Read Parameter Values");
+                  this->mpc_Ui->pc_LabelStepDescription->setText("Reading parameter values from NVM...");
                   this->mpc_Ui->pc_PbConfirm->setEnabled(false);
 
                   this->m_StartReadElementsOfNode();
@@ -437,9 +431,8 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
             else
             {
                C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eERROR);
-               c_MessageBox.SetHeading(C_GtGetText::h_GetText("Parameter Set Image File"));
-               c_MessageBox.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                   "File path contains invalid characters.")));
+               c_MessageBox.SetHeading("Parameter Set Image File");
+               c_MessageBox.SetDescription(static_cast<QString>("File path contains invalid characters."));
                c_MessageBox.SetCustomMinHeight(180, 180);
                c_MessageBox.Execute();
             }
@@ -447,9 +440,8 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
          else
          {
             C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eERROR);
-            c_MessageBox.SetHeading(C_GtGetText::h_GetText("Parameter Set Image File"));
-            c_MessageBox.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                "The specified file has the wrong extension, use: \"%1\".")).arg(
+            c_MessageBox.SetHeading("Parameter Set Image File");
+            c_MessageBox.SetDescription(static_cast<QString>("The specified file has the wrong extension, use: \"%1\".").arg(
                                            C_SyvDaItPaImageRecordWidget::mhc_FILE_EXTENSION));
             c_MessageBox.SetDetails(static_cast<QString>("Invalid extension: \"%1\"").arg("." +
                                                                                           c_BaseInfo.completeSuffix()));
@@ -460,8 +452,8 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
       else
       {
          C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("Parameter Set Image File"));
-         c_MessageBox.SetDescription(C_GtGetText::h_GetText("The specified directory does not exist."));
+         c_MessageBox.SetHeading("Parameter Set Image File");
+         c_MessageBox.SetDescription("The specified directory does not exist.");
          c_MessageBox.SetDetails(static_cast<QString>("Invalid path: \"%1\"").arg(this->mc_FilePath));
          c_MessageBox.SetCustomMinHeight(180, 250);
          c_MessageBox.Execute();
@@ -470,8 +462,8 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
    else
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eERROR);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Parameter Set Image File"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("The file path is empty. Please enter valid file path."));
+      c_MessageBox.SetHeading("Parameter Set Image File");
+      c_MessageBox.SetDescription("The file path is empty. Please enter valid file path.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       c_MessageBox.Execute();
    }
@@ -616,14 +608,13 @@ void C_SyvDaItPaImageRecordWidget::m_ReadElementsOfNode(const QString & orc_Comm
                         this->mpc_Ui->pc_LabelConfirm->setEnabled(true);
                         this->mpc_Ui->pc_BopperleConfirm->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21,
                                                                                mc_STYLE_GUIDE_COLOR_13);
-                        this->mpc_Ui->pc_LabelHeadingSelectFile->setText(C_GtGetText::h_GetText("Confirm"));
+                        this->mpc_Ui->pc_LabelHeadingSelectFile->setText("Confirm");
                         this->mpc_Ui->pc_LabelStepDescription->setText(
-                           C_GtGetText::h_GetText("Parameter lists are read from system. Check if all required "
+                           "Parameter lists are read from system. Check if all required "
                                                   "parameter lists are listed below. If yes, check "
                                                   "\"All required parameter lists are included\" "
-                                                  "and click \"Validate File(s)\"."));
-                        this->mpc_Ui->pc_PbConfirm->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                                    "Validate File(s)")));
+                                                  "and click \"Validate File(s)\".");
+                        this->mpc_Ui->pc_PbConfirm->setText(static_cast<QString>("Validate File(s)"));
                         this->mpc_Ui->pc_CbConfirm->setVisible(true);
                         this->mpc_Ui->pc_CbConfirm->setEnabled(true);
 
@@ -839,7 +830,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
             // Node name
             if (oq_IsConfirm == false)
             {
-               c_Text += "<div>" + static_cast<QString>(C_GtGetText::h_GetText("Path: %1")).arg(c_PathHtml) + "</div>";
+               c_Text += "<div>" + static_cast<QString>("Path: %1").arg(c_PathHtml) + "</div>";
             }
             if (oq_IsConfirm == true)
             {
@@ -849,7 +840,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
             {
                c_Text += static_cast<QString>("<div %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(1UL));
             }
-            c_Text += static_cast<QString>(C_GtGetText::h_GetText("Node")) + " - " +
+            c_Text += static_cast<QString>("Node") + " - " +
                       static_cast<QString>(pc_OscNode->c_Properties.c_Name.c_str());
             if (oq_IsConfirm == true)
             {
@@ -889,7 +880,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
                      {
                         c_Text += static_cast<QString>("<div %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(2UL));
                      }
-                     c_Text += static_cast<QString>(C_GtGetText::h_GetText("DataPool")) +
+                     c_Text += static_cast<QString>("DataPool") +
                                " - " + static_cast<QString>(pc_OscDataPool->c_Name.c_str()) + "</div>";
                   }
                }
@@ -905,7 +896,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
                   {
                      c_Text += static_cast<QString>("<div %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(3UL));
                   }
-                  c_Text += static_cast<QString>(C_GtGetText::h_GetText("List")) +
+                  c_Text += static_cast<QString>("List") +
                             " - " + static_cast<QString>(pc_OscList->c_Name.c_str()) + "</div>";
                }
             }
@@ -972,9 +963,8 @@ void C_SyvDaItPaImageRecordWidget::m_WriteCrcOfNodeToFile(void)
       this->mpc_Ui->pc_PushButtonCancel->setVisible(false);
       this->mpc_Ui->pc_ProgressValidateFile->SetProgress(100);
       this->mpc_Ui->pc_BopperleFinished->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21, mc_STYLE_GUIDE_COLOR_13);
-      this->mpc_Ui->pc_LabelHeadingSelectFile->setText(C_GtGetText::h_GetText("Finished"));
-      this->mpc_Ui->pc_LabelStepDescription->setText(C_GtGetText::h_GetText(
-                                                        "Parameter set file(s) recording finished successfully."));
+      this->mpc_Ui->pc_LabelHeadingSelectFile->setText("Finished");
+      this->mpc_Ui->pc_LabelStepDescription->setText("Parameter set file(s) recording finished successfully.");
       this->me_Step = eFINISHED;
    }
    else
@@ -1024,9 +1014,9 @@ void C_SyvDaItPaImageRecordWidget::m_OnCancel(void)
    {
       // ask the user to continue
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Parameter Set Record interrupt"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Do you really want to interrupt the process? \n"
-                                                      "The unfinished file(s) will be deleted."));
+      c_Message.SetHeading("Parameter Set Record interrupt");
+      c_Message.SetDescription("Do you really want to interrupt the process? \n"
+                                                      "The unfinished file(s) will be deleted.");
       c_Message.SetNoButtonText("Interrupt");
       c_Message.SetOkButtonText("Don't Interrupt");
       c_Message.SetCustomMinHeight(180, 180);
@@ -1097,8 +1087,8 @@ void C_SyvDaItPaImageRecordWidget::m_ConfirmClicked(void)
          this->mpc_Ui->pc_LabelValidateFile->setEnabled(true);
          this->mpc_Ui->pc_TextBrowserConfirm->setHtml(this->mc_FinishedText);
          this->mpc_Ui->pc_BopperleValidateFile->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21, mc_STYLE_GUIDE_COLOR_13);
-         this->mpc_Ui->pc_LabelHeadingSelectFile->setText(C_GtGetText::h_GetText("Validate File(s)"));
-         this->mpc_Ui->pc_LabelStepDescription->setText(C_GtGetText::h_GetText("Validating parameter set file(s)..."));
+         this->mpc_Ui->pc_LabelHeadingSelectFile->setText("Validate File(s)");
+         this->mpc_Ui->pc_LabelStepDescription->setText("Validating parameter set file(s)...");
          this->me_Step = eWRITECRC;
 
          // Step 8
@@ -1163,9 +1153,9 @@ void C_SyvDaItPaImageRecordWidget::m_ReportError(const QString & orc_FunctionNam
 
    osc_write_log_info("Write NVM parameters", c_Text.toStdString().c_str());
 
-   c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText("Function %1 ended with error.")).arg(
+   c_Message.SetDescription(static_cast<QString>("Function %1 ended with error.").arg(
                                orc_FunctionName));
-   c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("Error code:\n %1 \nError text: \n %2"))
+   c_Message.SetDetails(static_cast<QString>("Error code:\n %1 \nError text: \n %2")
                         .arg(os32_ErrorCode).arg(orc_ErrorText));
    c_Message.SetCustomMinHeight(180, 350);
    c_Message.Execute();
@@ -1222,29 +1212,29 @@ void C_SyvDaItPaImageRecordWidget::m_ReportErrorNvmSafeReadParameterValues(const
       switch (u8_Nrc)
       {
       case 0x13:
-         c_Details = C_GtGetText::h_GetText("Incorrect length of request<br/>");
+         c_Details = "Incorrect length of request<br/>";
          break;
       case 0x31:
-         c_Details = C_GtGetText::h_GetText("Address or length format invalid (> 4 bytes)<br/>"
-                                            "Requested memory range specified by address and size invalid<br/>");
+         c_Details = "Address or length format invalid (> 4 bytes)<br/>"
+                                            "Requested memory range specified by address and size invalid<br/>";
          break;
       case 0x72:
-         c_Details = C_GtGetText::h_GetText("Server reading NVM failed<br/>");
+         c_Details = "Server reading NVM failed<br/>";
          break;
       case 0x33:
-         c_Details = C_GtGetText::h_GetText("Required security level was not unlocked<br/>");
+         c_Details = "Required security level was not unlocked<br/>";
          break;
       case 0x14:
          c_Details =
-            C_GtGetText::h_GetText("The total length of the response message exceeds the available buffer size<br/>");
+            "The total length of the response message exceeds the available buffer size<br/>";
          break;
       case 0x7F:
          c_Details =
-            C_GtGetText::h_GetText("Server is not in the correct diagnostic session<br/>");
+            "Server is not in the correct diagnostic session<br/>";
          break;
       default:
          c_Details =
-            static_cast<QString>(C_GtGetText::h_GetText("Unknown NRC: 0x%1<br/>")).arg(QString::number(u8_Nrc, 16));
+            static_cast<QString>("Unknown NRC: 0x%1<br/>").arg(QString::number(u8_Nrc, 16));
          break;
       }
       break;
@@ -1258,7 +1248,7 @@ void C_SyvDaItPaImageRecordWidget::m_ReportErrorNvmSafeReadParameterValues(const
    }
 
    C_OscLoggingHandler::h_Flush();
-   c_Details += static_cast<QString>(C_GtGetText::h_GetText("See log file for details: ")) +
+   c_Details += static_cast<QString>("See log file for details: ") +
                 C_Uti::h_GetLink(c_Log, mc_STYLESHEET_GUIDE_COLOR_LINK, c_Log);
 
    c_Message.SetType(C_OgeWiCustomMessage::eERROR);

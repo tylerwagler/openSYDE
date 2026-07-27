@@ -15,7 +15,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdTooltipUtil.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
 
@@ -58,70 +57,68 @@ QString C_SdTooltipUtil::h_GetToolTipContentMessage(const stw::opensyde_core::C_
    }
 
    //CAN settings
-   c_ToolTipContent += C_GtGetText::h_GetText("Message Properties:\n");
+   c_ToolTipContent += "Message Properties:\n";
    if (orc_Message.q_IsExtended == true)
    {
-      c_Tmp = C_GtGetText::h_GetText("Extended (29 bit)");
+      c_Tmp = "Extended (29 bit)";
    }
    else
    {
-      c_Tmp = C_GtGetText::h_GetText("Standard (11 bit)");
+      c_Tmp = "Standard (11 bit)";
    }
-   c_ToolTipContent += static_cast<QString>(static_cast<QString>("   ") + C_GtGetText::h_GetText("Type: %1\n")).arg(
+   c_ToolTipContent += static_cast<QString>(static_cast<QString>("   ") + "Type: %1\n").arg(
       c_Tmp);
    c_ToolTipContent +=
       static_cast<QString>(static_cast<QString>("   ") +
-                           C_GtGetText::h_GetText("CAN ID: 0x%1\n")).arg(static_cast<QString>("%1").arg(orc_Message.
+                           "CAN ID: 0x%1\n").arg(static_cast<QString>("%1").arg(orc_Message.
                                                                                                         u32_CanId, 0,
                                                                                                         16).toUpper());
 
    c_ToolTipContent +=
-      static_cast<QString>(static_cast<QString>("   ") + C_GtGetText::h_GetText("DLC: %1 Bytes\n")).arg(
+      static_cast<QString>(static_cast<QString>("   ") + "DLC: %1 Bytes\n").arg(
          orc_Message.u16_Dlc);
    switch (orc_Message.e_TxMethod)
    {
    case C_OscCanMessage::eTX_METHOD_ON_EVENT:
       c_ToolTipContent +=
-         static_cast<QString>(static_cast<QString>("   ") + C_GtGetText::h_GetText("Tx-Method: On Event\n"));
+         static_cast<QString>(static_cast<QString>("   ") + "Tx-Method: On Event\n");
       break;
    case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_0:
       c_ToolTipContent +=
          static_cast<QString>(static_cast<QString>("   ") +
-                              C_GtGetText::h_GetText(
-                                 "Tx-Method: Type 0 - synchronous transmission after next SYNC and change\n"));
+                              "Tx-Method: Type 0 - synchronous transmission after next SYNC and change\n");
       break;
    case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_1_TO_240:
       c_ToolTipContent +=
          static_cast<QString>(static_cast<QString>("   ") +
-                              C_GtGetText::h_GetText(
-                                 "Tx-Method: Type 1 to 240 - synchronous transmission after 1st to 240th SYNC\n"));
+                              "Tx-Method: Type 1 to 240 - synchronous transmission after 1st to 240th SYNC\n");
       break;
    case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254:
       c_ToolTipContent +=
          static_cast<QString>(static_cast<QString>("   ") +
-                              C_GtGetText::h_GetText("Tx-Method: Type 254 - asynchronous manufacturer specific\n"));
+                              "Tx-Method: Type 254 - asynchronous manufacturer specific\n");
       break;
    case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_255:
       c_ToolTipContent +=
          static_cast<QString>(static_cast<QString>("   ") +
-                              C_GtGetText::h_GetText("Tx-Method: Type 255 - asynchronous device specific\n"));
+                              "Tx-Method: Type 255 - asynchronous device specific\n");
       break;
    case C_OscCanMessage::eTX_METHOD_CYCLIC:
       c_ToolTipContent +=
-         static_cast<QString>(static_cast<QString>("   ") + C_GtGetText::h_GetText("Tx-Method: Cyclic\n"));
+         static_cast<QString>(static_cast<QString>("   ") + "Tx-Method: Cyclic\n");
       c_ToolTipContent +=
-         static_cast<QString>(static_cast<QString>("   ") + C_GtGetText::h_GetText("Cycle Time: %1\n")).arg(
+         static_cast<QString>(static_cast<QString>("   ") + "Cycle Time: %1\n").arg(
             orc_Message.u32_CycleTimeMs);
       break;
    case C_OscCanMessage::eTX_METHOD_ON_CHANGE:
       c_ToolTipContent +=
-         static_cast<QString>(static_cast<QString>("   ") + C_GtGetText::h_GetText("Tx-Method: On Change\n"));
+         static_cast<QString>(static_cast<QString>("   ") + "Tx-Method: On Change\n");
       c_ToolTipContent +=
-         static_cast<QString>(static_cast<QString>("   ") + C_GtGetText::h_GetText("Not earlier than: %1\n")).arg(
+         static_cast<QString>(static_cast<QString>("   ") + "Not earlier than: %1\n").arg(
             orc_Message.u16_DelayTimeMs);
       c_ToolTipContent +=
          static_cast<QString>(static_cast<QString>("   ") +
-                              C_GtGetText::h_GetText("But not later than: %1\n")).arg(orc_Message.u32_CycleTimeMs);
+                              "But not later than: %1\n").arg(orc_Message.u32_CycleTimeMs);
       break;
    default:
       tgl_assert(false);
@@ -159,9 +156,9 @@ QString C_SdTooltipUtil::h_GetToolTipContentSignal(const C_OscCanSignal & orc_Si
    // Object Dictionary (only CANopen Protocol)
    if (oe_ProtocolType == C_OscCanProtocol::eCAN_OPEN)
    {
-      c_ToolTipContent.append(C_GtGetText::h_GetText("Object Dictionary: "));
+      c_ToolTipContent.append("Object Dictionary: ");
       c_ToolTipContent.append(QString::number(orc_Signal.u16_CanOpenManagerObjectDictionaryIndex, 16) +
-                              static_cast<QString>(C_GtGetText::h_GetText("sub")) +
+                              static_cast<QString>("sub") +
                               QString::number(orc_Signal.u8_CanOpenManagerObjectDictionarySubIndex));
       c_ToolTipContent.append("\n\n");
    }
@@ -181,38 +178,38 @@ QString C_SdTooltipUtil::h_GetToolTipContentSignal(const C_OscCanSignal & orc_Si
    }
 
    // Value information
-   c_ToolTipContent.append(C_GtGetText::h_GetText("Signal Properties: \n"));
+   c_ToolTipContent.append("Signal Properties: \n");
    if (orc_AutoMinMaxInformation.isEmpty() == false)
    {
       c_ToolTipContent.append(orc_AutoMinMaxInformation);
       c_ToolTipContent.append("\n");
    }
 
-   c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Min: "));
+   c_ToolTipContent.append(static_cast<QString>("   ") + "Min: ");
    if (C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_DpListElement.c_MinValue, f64_Value, 0UL) == C_NO_ERR)
    {
       c_ToolTipContent.append(QString::number(f64_Value));
    }
    c_ToolTipContent.append("\n");
 
-   c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Max: "));
+   c_ToolTipContent.append(static_cast<QString>("   ") + "Max: ");
    if (C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_DpListElement.c_MaxValue, f64_Value, 0UL) == C_NO_ERR)
    {
       c_ToolTipContent.append(QString::number(f64_Value));
    }
    c_ToolTipContent.append("\n");
 
-   c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Factor: "));
+   c_ToolTipContent.append(static_cast<QString>("   ") + "Factor: ");
    c_ToolTipContent.append(QString::number(orc_DpListElement.f64_Factor));
    c_ToolTipContent.append("\n");
 
-   c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Offset: "));
+   c_ToolTipContent.append(static_cast<QString>("   ") + "Offset: ");
    c_ToolTipContent.append(QString::number(orc_DpListElement.f64_Offset));
    c_ToolTipContent.append("\n");
 
    if (orc_DpListElement.c_DataSetValues.size() > 0UL)
    {
-      c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Init Value: "));
+      c_ToolTipContent.append(static_cast<QString>("   ") + "Init Value: ");
       if (C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_DpListElement.c_DataSetValues[0UL],
                                                     f64_Value, 0UL) == C_NO_ERR)
       {
@@ -223,55 +220,55 @@ QString C_SdTooltipUtil::h_GetToolTipContentSignal(const C_OscCanSignal & orc_Si
    if (orc_DpListElement.c_Unit.IsEmpty() == false)
    {
       c_ToolTipContent.append("\n");
-      c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Unit: "));
+      c_ToolTipContent.append(static_cast<QString>("   ") + "Unit: ");
       c_ToolTipContent.append(orc_DpListElement.c_Unit.c_str());
    }
    c_ToolTipContent.append("\n");
 
    // Value type information
-   c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Byte Order: "));
+   c_ToolTipContent.append(static_cast<QString>("   ") + "Byte Order: ");
    if (orc_Signal.e_ComByteOrder == C_OscCanSignal::eBYTE_ORDER_INTEL)
    {
-      c_ToolTipContent.append(C_GtGetText::h_GetText("Intel"));
+      c_ToolTipContent.append("Intel");
    }
    else
    {
-      c_ToolTipContent.append(C_GtGetText::h_GetText("Motorola"));
+      c_ToolTipContent.append("Motorola");
    }
    c_ToolTipContent.append("\n");
 
-   c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Type: "));
+   c_ToolTipContent.append(static_cast<QString>("   ") + "Type: ");
    c_ToolTipContent.append(C_SdTooltipUtil::h_ConvertTypeToNameSimplified(orc_DpListElement.c_MinValue.GetType()));
    c_ToolTipContent.append("\n");
 
-   c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Length: "));
+   c_ToolTipContent.append(static_cast<QString>("   ") + "Length: ");
    c_ToolTipContent.append(QString::number(orc_Signal.u16_ComBitLength));
-   c_ToolTipContent.append(C_GtGetText::h_GetText(" Bit\n"));
+   c_ToolTipContent.append(" Bit\n");
 
    // Layout information
-   c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Message: "));
+   c_ToolTipContent.append(static_cast<QString>("   ") + "Message: ");
    c_ToolTipContent.append(orc_Message.c_Name.c_str());
    c_ToolTipContent.append("\n");
 
-   c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Start Bit: "));
+   c_ToolTipContent.append(static_cast<QString>("   ") + "Start Bit: ");
    c_ToolTipContent.append(QString::number(orc_Signal.u16_ComBitStart));
 
    if (orc_Signal.e_MultiplexerType != C_OscCanSignal::eMUX_DEFAULT)
    {
       c_ToolTipContent.append("\n");
-      c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Multiplexer Type: "));
+      c_ToolTipContent.append(static_cast<QString>("   ") + "Multiplexer Type: ");
 
       if (orc_Signal.e_MultiplexerType == C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL)
       {
-         c_ToolTipContent.append(C_GtGetText::h_GetText("Multiplexed Signal"));
+         c_ToolTipContent.append("Multiplexed Signal");
          c_ToolTipContent.append("\n");
-         c_ToolTipContent.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Multiplexer Value: "));
+         c_ToolTipContent.append(static_cast<QString>("   ") + "Multiplexer Value: ");
          c_ToolTipContent.append(QString::number(orc_Signal.u16_MultiplexValue));
       }
       else
       {
          // Multiplexer signal
-         c_ToolTipContent.append(C_GtGetText::h_GetText("Multiplexer Signal"));
+         c_ToolTipContent.append("Multiplexer Signal");
       }
    }
 
@@ -297,19 +294,19 @@ QString C_SdTooltipUtil::h_ConvertTypeToNameSimplified(const C_OscNodeDataPoolCo
    case C_OscNodeDataPoolContent::eUINT16:
    case C_OscNodeDataPoolContent::eUINT32:
    case C_OscNodeDataPoolContent::eUINT64:
-      c_Retval = C_GtGetText::h_GetText("unsigned");
+      c_Retval = "unsigned";
       break;
    case C_OscNodeDataPoolContent::eSINT8:
    case C_OscNodeDataPoolContent::eSINT16:
    case C_OscNodeDataPoolContent::eSINT32:
    case C_OscNodeDataPoolContent::eSINT64:
-      c_Retval = C_GtGetText::h_GetText("signed");
+      c_Retval = "signed";
       break;
    case C_OscNodeDataPoolContent::eFLOAT32:
-      c_Retval = C_GtGetText::h_GetText("IEEE float (32)");
+      c_Retval = "IEEE float (32)";
       break;
    case C_OscNodeDataPoolContent::eFLOAT64:
-      c_Retval = C_GtGetText::h_GetText("IEEE float (64)");
+      c_Retval = "IEEE float (64)";
       break;
    default:
       c_Retval = "";

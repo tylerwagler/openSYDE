@@ -888,7 +888,8 @@ C_SclString C_OscComMessageLogger::m_GetProtocolStringHex(const T_STWCAN_Msg_RX 
 {
    C_SclString c_Result = "";
 
-   if (this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE)
+   if ((this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE) &&
+       (this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_CAN_TP))
    {
       c_Result = this->mc_ProtocolHex.MessageToStringProtocolOnly(orc_Msg);
    }
@@ -910,7 +911,8 @@ C_SclString C_OscComMessageLogger::m_GetProtocolStringDec(const T_STWCAN_Msg_RX 
 {
    C_SclString c_Result = "";
 
-   if (this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE)
+   if ((this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE) &&
+       (this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_CAN_TP))
    {
       c_Result = this->mc_ProtocolDec.MessageToStringProtocolOnly(orc_Msg);
    }

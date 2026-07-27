@@ -18,7 +18,6 @@
 
 #include "stwtypes.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdTopologyListWidget.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 
@@ -76,7 +75,7 @@ C_SdTopologyListWidget::C_SdTopologyListWidget(QWidget * const opc_Parent) :
    //set no focus policy to hide focus rectangle of an selected item
    this->setFocusPolicy(Qt::NoFocus);
 
-   this->mpc_DeleteAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Delete                     "));
+   this->mpc_DeleteAction = this->mpc_ContextMenu->addAction("Delete                     ");
    connect(this->mpc_DeleteAction, &QAction::triggered, this, &C_SdTopologyListWidget::m_DeleteTriggered);
 
    // connect left mouse click to open context menu
@@ -253,11 +252,10 @@ void C_SdTopologyListWidget::m_DeleteTriggered(void)
 {
    C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
 
-   c_MessageBox.SetHeading(C_GtGetText::h_GetText("Delete User Nodes"));
-   c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                  "Do you really want to delete this user node?"));
-   c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-   c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+   c_MessageBox.SetHeading("Delete User Nodes");
+   c_MessageBox.SetDescription("Do you really want to delete this user node?");
+   c_MessageBox.SetOkButtonText("Delete");
+   c_MessageBox.SetNoButtonText("Keep");
    c_MessageBox.SetCustomMinHeight(180, 180);
 
    if (c_MessageBox.Execute() == C_OgeWiCustomMessage::eYES)

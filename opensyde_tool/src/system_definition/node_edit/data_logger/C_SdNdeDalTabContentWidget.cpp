@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "C_UsHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDalTabContentWidget.hpp"
 #include "ui_C_SdNdeDalTabContentWidget.h"
@@ -128,10 +127,10 @@ void C_SdNdeDalTabContentWidget::SaveUserSettings() const
 void C_SdNdeDalTabContentWidget::InitStaticNames(void) const
 {
    this->mpc_Ui->pc_LabelNoData->setText(
-      C_GtGetText::h_GetText("No Log Jobs declared.\nAdd any via the '+' button."));
+      "No Log Jobs declared.\nAdd any via the '+' button.");
    this->mpc_Ui->pc_LabelDisabled->setText(
-      C_GtGetText::h_GetText("No Log Jobs declared.\n"
-                             "Enable X.App support in node properties to configure data logger."));
+      "No Log Jobs declared.\n"
+                             "Enable X.App support in node properties to configure data logger.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

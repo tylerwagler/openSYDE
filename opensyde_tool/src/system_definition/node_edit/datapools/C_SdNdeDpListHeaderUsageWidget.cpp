@@ -22,7 +22,6 @@
 #include "C_SdNdeDpListHeaderUsageWidget.hpp"
 
 #include "C_Uti.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -61,7 +60,7 @@ C_SdNdeDpListHeaderUsageWidget::C_SdNdeDpListHeaderUsageWidget(QWidget * const o
    this->SetColorTooMuch(mc_STYLE_GUIDE_COLOR_24);
 
    // init the tooltip
-   this->SetToolTipWidgetName(static_cast<QString>(C_GtGetText::h_GetText("Datapool")));
+   this->SetToolTipWidgetName(static_cast<QString>("Datapool"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -147,7 +146,7 @@ bool C_SdNdeDpListHeaderUsageWidget::event(QEvent * const opc_Event)
          if (pc_HelpEvent != NULL)
          {
             const QString c_Text = static_cast<QString>("%1% %2 (%3 / %4)").arg(QString::number(this->GetProgress()),
-                                                                                C_GtGetText::h_GetText("used"),
+                                                                                "used",
                                                                                 C_Uti::h_GetByteCountAsString(this->
                                                                                                               mu32_Used),
                                                                                 C_Uti::h_GetByteCountAsString(this->
@@ -198,7 +197,7 @@ bool C_SdNdeDpListHeaderUsageWidget::event(QEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListHeaderUsageWidget::SetToolTipWidgetName(const QString & orc_Value)
 {
-   this->mc_ToolTipHeading = orc_Value + static_cast<QString>(C_GtGetText::h_GetText(" Usage"));
+   this->mc_ToolTipHeading = orc_Value + static_cast<QString>(" Usage");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

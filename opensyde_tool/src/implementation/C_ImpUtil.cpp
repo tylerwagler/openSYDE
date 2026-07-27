@@ -26,7 +26,6 @@
 #include "TglFile.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -145,10 +144,10 @@ void C_ImpUtil::h_ExportCode(const std::vector<uint32_t> & orc_NodeIndices,
       {
          C_OgeWiCustomMessage c_Question(opc_Parent, C_OgeWiCustomMessage::E_Type::eWARNING);
          c_Question.SetHeading("CONFIRM FILE GENERATION");
-         c_Question.SetDescription(C_GtGetText::h_GetText("There are SYSTEM DEFINITION errors. "
-                                                          "Do you really want to generate files?"));
-         c_Question.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-         c_Question.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+         c_Question.SetDescription("There are SYSTEM DEFINITION errors. "
+                                                          "Do you really want to generate files?");
+         c_Question.SetOkButtonText("Continue");
+         c_Question.SetNoButtonText("Cancel");
          c_Question.SetCustomMinHeight(180, 180);
          if (c_Question.Execute() == C_OgeWiCustomMessage::eYES)
          {
@@ -169,7 +168,7 @@ void C_ImpUtil::h_ExportCode(const std::vector<uint32_t> & orc_NodeIndices,
       QString c_ErrorMessage;
       bool q_CodeGeneratorMissing = false;
 
-      c_DataBlockInfoMessage += C_GtGetText::h_GetText("There will be files generated for the following node(s):<br>");
+      c_DataBlockInfoMessage += "There will be files generated for the following node(s):<br>";
       for (uint32_t u32_ItNode = 0; u32_ItNode < orc_NodeIndices.size(); ++u32_ItNode)
       {
          const C_OscNode * const pc_Node =
@@ -188,7 +187,7 @@ void C_ImpUtil::h_ExportCode(const std::vector<uint32_t> & orc_NodeIndices,
                   // message for generating
                   //Translation: 1 = Node name, 2 = Application name
                   c_DataBlockInfoMessage +=
-                     static_cast<QString>(C_GtGetText::h_GetText("- %1, Data Block \"%2\"<br>")).arg(
+                     static_cast<QString>("- %1, Data Block \"%2\"<br>").arg(
                         pc_Node->c_Properties.c_Name.c_str()).arg(pc_Application->c_Name.c_str());
 
                   // message for erase information
@@ -220,16 +219,16 @@ void C_ImpUtil::h_ExportCode(const std::vector<uint32_t> & orc_NodeIndices,
          //  add surroundings if there are existing directories that will get erased
          if (c_EraseInfoMessage != "")
          {
-            c_EraseInfoMessage.prepend(C_GtGetText::h_GetText("The content of the following existing directories "
-                                                              "will get deleted permanently:<br>"));
+            c_EraseInfoMessage.prepend("The content of the following existing directories "
+                                                              "will get deleted permanently:<br>");
             c_EraseInfoMessage.append("<br>");
-            c_Description = static_cast<QString>(C_GtGetText::h_GetText("All target directories will be erased and its "
-                                                                        "content will be deleted permanently! "));
+            c_Description = static_cast<QString>("All target directories will be erased and its "
+                                                                        "content will be deleted permanently! ");
             c_Message.SetType(C_OgeWiCustomMessage::E_Type::eQUESTION);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Erase target directories"));
+            c_Message.SetHeading("Erase target directories");
             c_Message.SetDescription(c_Description);
-            c_Message.SetOkButtonText(C_GtGetText::h_GetText("Generate Files"));
-            c_Message.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+            c_Message.SetOkButtonText("Generate Files");
+            c_Message.SetNoButtonText("Cancel");
             c_Message.SetDetails("<a/>" + c_EraseInfoMessage + c_DataBlockInfoMessage);
             c_Message.SetCustomMinHeight(200, 400);
             c_Message.SetCustomMinWidth(650);
@@ -243,11 +242,11 @@ void C_ImpUtil::h_ExportCode(const std::vector<uint32_t> & orc_NodeIndices,
       else
       {
          c_Message.SetType(C_OgeWiCustomMessage::E_Type::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("File generation"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("Cannot generate files. "
-                                                         "Set a file generator for every Data Block."));
-         c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("<a/>The following Data Blocks "
-                                                                          "have no file generator:<br>%1")).arg(
+         c_Message.SetHeading("File generation");
+         c_Message.SetDescription("Cannot generate files. "
+                                                         "Set a file generator for every Data Block.");
+         c_Message.SetDetails(static_cast<QString>("<a/>The following Data Blocks "
+                                                                          "have no file generator:<br>%1").arg(
                                  c_ErrorMessage));
          c_Message.SetCustomMinHeight(180, 300);
          c_Message.Execute();
@@ -293,14 +292,14 @@ void C_ImpUtil::h_ExportCode(const std::vector<uint32_t> & orc_NodeIndices,
       {
          C_OgeWiCustomMessage c_MessageResult(opc_Parent);
          c_MessageResult.SetType(C_OgeWiCustomMessage::E_Type::eERROR);
-         c_MessageResult.SetHeading(C_GtGetText::h_GetText("File generation"));
-         c_MessageResult.SetDescription(C_GtGetText::h_GetText("File generation failed."));
+         c_MessageResult.SetHeading("File generation");
+         c_MessageResult.SetDescription("File generation failed.");
          //Update log file
          C_OscLoggingHandler::h_Flush();
-         const QString c_Details = C_GtGetText::h_GetText("For details see ") +
-                                   C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLESHEET_GUIDE_COLOR_LINK,
+         const QString c_Details = "For details see " +
+                                   C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
                                                     C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) +
-                                   C_GtGetText::h_GetText(" or log file(s) of file generator(s).");
+                                   " or log file(s) of file generator(s).";
          c_MessageResult.SetDetails(c_Details);
          c_MessageResult.SetCustomMinHeight(180, 250);
          c_MessageResult.Execute();
@@ -351,18 +350,16 @@ void C_ImpUtil::h_ExportCodeNodes(const std::vector<uint32_t> & orc_NodeIndices,
       QString c_Text;
       if (orc_NodeIndices.size() == 1)
       {
-         c_Text = C_GtGetText::h_GetText(
-            "There are no Data Blocks with enabled file generation found. "
-            "\nFiles cannot be generated.");
+         c_Text = "There are no Data Blocks with enabled file generation found. "
+            "\nFiles cannot be generated.";
       }
       else
       {
-         c_Text = C_GtGetText::h_GetText(
-            "There are no nodes with Data Blocks with enabled file generation found."
-            "\nFiles cannot be generated.");
+         c_Text = "There are no nodes with Data Blocks with enabled file generation found."
+            "\nFiles cannot be generated.";
       }
       c_Message.SetType(C_OgeWiCustomMessage::E_Type::eINFORMATION);
-      c_Message.SetHeading(C_GtGetText::h_GetText("File generation"));
+      c_Message.SetHeading("File generation");
       c_Message.SetDescription(c_Text);
       c_Message.SetCustomMinHeight(180, 180);
       c_Message.Execute();
@@ -651,11 +648,10 @@ bool C_ImpUtil::h_CheckProjForCodeGeneration(QWidget * const opc_Parent)
       if (C_PuiProject::h_GetInstance()->IsEmptyProject() == true)
       {
          C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("File generation"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("Files cannot be generated without a valid project path."));
-         c_Message.SetDetails(C_GtGetText::h_GetText(
-                                 "The path where the generated files are saved must be set. "
-                                 "Save the project to set a default path."));
+         c_Message.SetHeading("File generation");
+         c_Message.SetDescription("Files cannot be generated without a valid project path.");
+         c_Message.SetDetails("The path where the generated files are saved must be set. "
+                                 "Save the project to set a default path.");
          c_Message.SetCustomMinHeight(180, 250);
          c_Message.Execute();
          q_Return = false;
@@ -712,20 +708,18 @@ QString C_ImpUtil::h_AskUserToSaveRelativePath(QWidget * const opc_Parent, const
           (C_UsHandler::h_GetInstance()->GetPathHandlingSelection() == "Ask User"))
       {
          C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::eQUESTION);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Relative Path"));
-         c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "Do you want to save the selected path (%1) relative or absolute?")).arg(
+         c_Message.SetHeading("Relative Path");
+         c_Message.SetDescription(static_cast<QString>("Do you want to save the selected path (%1) relative or absolute?").arg(
                                      c_PathAbsolute));
-         c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("Relative path: %1 \nAbsolute path: %2")).
+         c_Message.SetDetails(static_cast<QString>("Relative path: %1 \nAbsolute path: %2").
                               arg(c_PathRelative).arg(c_PathAbsolute));
-         c_Message.SetOkButtonText(C_GtGetText::h_GetText("Relative"));
-         c_Message.SetNoButtonText(C_GtGetText::h_GetText("Absolute"));
-         c_Message.SetCheckboxText(C_GtGetText::h_GetText("Remember this selection"));
+         c_Message.SetOkButtonText("Relative");
+         c_Message.SetNoButtonText("Absolute");
+         c_Message.SetCheckboxText("Remember this selection");
          c_Message.SetCheckboxTooltip(
-            C_GtGetText::h_GetText("Path handling"),
-            C_GtGetText::h_GetText(
-               "If checkbox is enabled the option you chose will be applied and this message will no longer appear.\n"
-               "This option can be reverted in Tool Settings"));
+            "Path handling",
+            "If checkbox is enabled the option you chose will be applied and this message will no longer appear.\n"
+               "This option can be reverted in Tool Settings");
          c_Message.SetCustomMinHeight(230, 250);
          c_Message.SetCustomMinWidth(700);
 
@@ -839,25 +833,24 @@ QStringList C_ImpUtil::h_AskUserToSaveRelativePath(QWidget * const opc_Parent, c
       {
          // ask user
          C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::eQUESTION,
-                                        C_GtGetText::h_GetText("There are paths that could be stored relative. "
-                                                               "Do you want to save the paths relative or absolute?"));
-         c_Message.SetHeading(C_GtGetText::h_GetText("Relative Path"));
-         c_Details = C_GtGetText::h_GetText("Relative paths: ");
+                                        "There are paths that could be stored relative. "
+                                                               "Do you want to save the paths relative or absolute?");
+         c_Message.SetHeading("Relative Path");
+         c_Details = "Relative paths: ";
          c_Details += "\n   ";
          c_Details += c_PathsRelative.join("\n   ");
          c_Details += "\n";
-         c_Details += C_GtGetText::h_GetText("Absolute paths: ");
+         c_Details += "Absolute paths: ";
          c_Details += "\n   ";
          c_Details += c_PathsAbsolute.join("\n   ");
          c_Message.SetDetails(c_Details);
-         c_Message.SetOkButtonText(C_GtGetText::h_GetText("Relative"));
-         c_Message.SetNoButtonText(C_GtGetText::h_GetText("Absolute"));
-         c_Message.SetCheckboxText(C_GtGetText::h_GetText("Remember this selection"));
+         c_Message.SetOkButtonText("Relative");
+         c_Message.SetNoButtonText("Absolute");
+         c_Message.SetCheckboxText("Remember this selection");
          c_Message.SetCheckboxTooltip(
-            C_GtGetText::h_GetText("Path handling"),
-            C_GtGetText::h_GetText(
-               "If checkbox is enabled the option you chose will be applied and this message will no longer appear.\n"
-               "This option can be reverted in Tool Settings"));
+            "Path handling",
+            "If checkbox is enabled the option you chose will be applied and this message will no longer appear.\n"
+               "This option can be reverted in Tool Settings");
          c_Message.SetCustomMinHeight(230, 400);
 
          if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
@@ -908,11 +901,11 @@ QString C_ImpUtil::h_FormatSourceFileInfoForReport(const QString & orc_FilePath,
 
    //File
    c_Text += "<h3>";
-   c_Text += C_GtGetText::h_GetText("Source File Information");
+   c_Text += "Source File Information";
    c_Text += "</h3>";
    c_Text += "<table><tr>";
    c_Text += c_HtmlTableDataStart;
-   c_Text += C_GtGetText::h_GetText("Path:");
+   c_Text += "Path:";
    c_Text += "</td>";
    c_Text += c_HtmlTableDataStart;
    c_Text += C_Uti::h_GetLink(orc_FilePath, mc_STYLE_GUIDE_COLOR_LINK, orc_FilePath);
@@ -920,7 +913,7 @@ QString C_ImpUtil::h_FormatSourceFileInfoForReport(const QString & orc_FilePath,
 
    //Content
    c_Text += c_HtmlTableDataStart;
-   c_Text += C_GtGetText::h_GetText("Read Content:");
+   c_Text += "Read Content:";
    c_Text += "</td>";
    c_Text += c_HtmlTableDataStart;
    c_Text += orc_ReadContent;
@@ -962,11 +955,9 @@ bool C_ImpUtil::mh_CheckDatapoolsAssignmentForExportCode(const std::vector<uint3
    {
       C_OgeWiCustomMessage c_Message(opc_Parent);
       c_Message.SetType(C_OgeWiCustomMessage::E_Type::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("File Generation"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "Cannot generate files. Assign all Datapools and retry."));
-      c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText(
-                                                   "The following Datapools have no assigned application:\n%1")).arg(
+      c_Message.SetHeading("File Generation");
+      c_Message.SetDescription("Cannot generate files. Assign all Datapools and retry.");
+      c_Message.SetDetails(static_cast<QString>("The following Datapools have no assigned application:\n%1").arg(
                               c_DataPoolErrorMessage));
       c_Message.SetCustomMinHeight(180, 250);
       c_Message.Execute();

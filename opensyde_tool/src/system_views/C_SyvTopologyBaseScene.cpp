@@ -21,7 +21,6 @@
 #include "gitypes.hpp"
 #include "TglUtils.hpp"
 #include "C_PuiSvHandler.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -131,13 +130,12 @@ void C_SyvTopologyBaseScene::Load(void)
       QGraphicsView * const pc_GraphicsView = this->views().at(0);
       C_OgeWiCustomMessage c_MessageBox(pc_GraphicsView, C_OgeWiCustomMessage::E_Type::eQUESTION);
       c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eWARNING);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Connection updated!"));
+      c_MessageBox.SetHeading("Connection updated!");
       Q_EMIT this->SigChanged();
       if (c_BusName != "")
       {
-         c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                        "Due to changes in SYSTEM DEFINITION the PC - connected bus has been changed.\n"
-                                        "PC is connected to ") + c_BusName + C_GtGetText::h_GetText(" now."));
+         c_MessageBox.SetDescription("Due to changes in SYSTEM DEFINITION the PC - connected bus has been changed.\n"
+                                        "PC is connected to " + c_BusName + " now.");
          c_MessageBox.SetCustomMinHeight(180, 180);
          c_MessageBox.Execute();
       }

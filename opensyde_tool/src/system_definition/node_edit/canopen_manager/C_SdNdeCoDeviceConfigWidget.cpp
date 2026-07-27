@@ -18,7 +18,6 @@
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscImportEdsDcf.hpp"
 #include "C_OscCanOpenManagerDeviceInfo.hpp"
@@ -107,86 +106,84 @@ C_SdNdeCoDeviceConfigWidget::~C_SdNdeCoDeviceConfigWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoDeviceConfigWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelCanOpenIdCaption->setText(C_GtGetText::h_GetText("CANopen Device Node ID"));
+   this->mpc_Ui->pc_LabelCanOpenIdCaption->setText("CANopen Device Node ID");
 
-   this->mpc_Ui->pc_LabelCanOpenId->setText(C_GtGetText::h_GetText("CANopen Node ID"));
+   this->mpc_Ui->pc_LabelCanOpenId->setText("CANopen Node ID");
    this->mpc_Ui->pc_LabelCanOpenId->
-   SetToolTipInformation(C_GtGetText::h_GetText("CANopen Node ID"),
-                         C_GtGetText::h_GetText("Unique Node ID within a CANopen network."));
+   SetToolTipInformation("CANopen Node ID",
+                         "Unique Node ID within a CANopen network.");
 
-   this->mpc_Ui->pc_CheckBoxSameAsOpensyde->setText(C_GtGetText::h_GetText("Use openSYDE Node ID"));
+   this->mpc_Ui->pc_CheckBoxSameAsOpensyde->setText("Use openSYDE Node ID");
    this->mpc_Ui->pc_CheckBoxSameAsOpensyde->
-   SetToolTipInformation(C_GtGetText::h_GetText("Use openSYDE Node ID"),
-                         C_GtGetText::h_GetText("If enabled, openSYDE Node ID is used as CANopen Node ID. \n"
-                                                "openSYDE Node ID is defined in \"Properties Tab\"."));
+   SetToolTipInformation("Use openSYDE Node ID",
+                         "If enabled, openSYDE Node ID is used as CANopen Node ID. \n"
+                                                "openSYDE Node ID is defined in \"Properties Tab\".");
 
-   this->mpc_Ui->pc_LabelSettingsCaption->setText(C_GtGetText::h_GetText("Settings"));
+   this->mpc_Ui->pc_LabelSettingsCaption->setText("Settings");
 
-   this->mpc_Ui->pc_CheckBoxOptionalDevice->setText(C_GtGetText::h_GetText("Optional CANopen Device"));
+   this->mpc_Ui->pc_CheckBoxOptionalDevice->setText("Optional CANopen Device");
    this->mpc_Ui->pc_CheckBoxOptionalDevice->
-   SetToolTipInformation(C_GtGetText::h_GetText("Optional CANopen Device"),
-                         C_GtGetText::h_GetText("If enabled, the CANopen Device is optional, and it is not "
-                                                "mandatory for the start of the CANopen network"));
+   SetToolTipInformation("Optional CANopen Device",
+                         "If enabled, the CANopen Device is optional, and it is not "
+                                                "mandatory for the start of the CANopen network");
 
-   this->mpc_Ui->pc_CheckBoxNoInitialization->setText(C_GtGetText::h_GetText("No Initialization"));
+   this->mpc_Ui->pc_CheckBoxNoInitialization->setText("No Initialization");
    this->mpc_Ui->pc_CheckBoxNoInitialization->
-   SetToolTipInformation(C_GtGetText::h_GetText("No Initialization"),
-                         C_GtGetText::h_GetText("If enabled, the CANopen Manager sends no configuration SDOs and "
+   SetToolTipInformation("No Initialization",
+                         "If enabled, the CANopen Manager sends no configuration SDOs and "
                                                 "no NMT start command to the CANopen Device. \n"
                                                 "This option is meant for CANopen Devices which already start "
-                                                "with valid configuration."));
+                                                "with valid configuration.");
 
-   //this->mpc_Ui->pc_CheckBoxFactorySettings->setText(C_GtGetText::h_GetText("Factory Settings"));
-   this->mpc_Ui->pc_CheckBoxFactorySettings->setText(C_GtGetText::h_GetText("Restore Parameters on Configuration"));
+   //this->mpc_Ui->pc_CheckBoxFactorySettings->setText("Factory Settings");
+   this->mpc_Ui->pc_CheckBoxFactorySettings->setText("Restore Parameters on Configuration");
    this->mpc_Ui->pc_CheckBoxFactorySettings->
-   SetToolTipInformation(C_GtGetText::h_GetText("Restore Parameters on Configuration"),
-                         C_GtGetText::h_GetText("If enabled, the parameters of the CANopen Device are restored to "
+   SetToolTipInformation("Restore Parameters on Configuration",
+                         "If enabled, the parameters of the CANopen Device are restored to "
                                                 "defaults before (re-)configuration. "
-                                                "It depends on the CANopen Device which parameters can be restored."));
+                                                "It depends on the CANopen Device which parameters can be restored.");
 
-   this->mpc_Ui->pc_LabelOption->setText(C_GtGetText::h_GetText("Restore Option"));
+   this->mpc_Ui->pc_LabelOption->setText("Restore Option");
    this->mpc_Ui->pc_LabelOption->
-   SetToolTipInformation(C_GtGetText::h_GetText("Restore Option"),
-                         C_GtGetText::h_GetText("Factory settings restore options:\n"
+   SetToolTipInformation("Restore Option",
+                         "Factory settings restore options:\n"
                                                 "   - Sub:001: All parameters are restored\n"
                                                 "   - Sub:002: Communication-related parameters are restored\n"
                                                 "   - Sub:003: Application-related parameters are restored \n"
-                                                "   - Sub:004 - Sub:127: Manufacturer-specific choice of parameters is restored"));
+                                                "   - Sub:004 - Sub:127: Manufacturer-specific choice of parameters is restored");
 
-   this->mpc_Ui->pc_LabelHeartbeatCaption->setText(C_GtGetText::h_GetText("Heartbeat"));
+   this->mpc_Ui->pc_LabelHeartbeatCaption->setText("Heartbeat");
 
-   this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing->setText(C_GtGetText::h_GetText("Enable Heartbeat Producing"));
+   this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing->setText("Enable Heartbeat Producing");
    this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing->
-   SetToolTipInformation(C_GtGetText::h_GetText("Enable Heartbeat Producing"),
-                         C_GtGetText::h_GetText(
-                            "If enabled, the CANopen Device sends heartbeats according to defined "
-                            "\"Producer Time\" interval."));
+   SetToolTipInformation("Enable Heartbeat Producing",
+                         "If enabled, the CANopen Device sends heartbeats according to defined "
+                            "\"Producer Time\" interval.");
 
-   this->mpc_Ui->pc_LabelProducerTime->setText(C_GtGetText::h_GetText("Producer Time"));
+   this->mpc_Ui->pc_LabelProducerTime->setText("Producer Time");
    this->mpc_Ui->pc_LabelProducerTime->
-   SetToolTipInformation(C_GtGetText::h_GetText("Producer Time"),
-                         C_GtGetText::h_GetText("Heartbeat interval produced by the CANopen Device."));
+   SetToolTipInformation("Producer Time",
+                         "Heartbeat interval produced by the CANopen Device.");
 
-   this->mpc_Ui->pc_SpinBoxProducerTime->setSuffix(C_GtGetText::h_GetText(" ms"));
+   this->mpc_Ui->pc_SpinBoxProducerTime->setSuffix(" ms");
 
-   this->mpc_Ui->pc_CheckBoxEnableHeartbeatConsuming->setText(C_GtGetText::h_GetText("Enable Heartbeat Consuming"));
+   this->mpc_Ui->pc_CheckBoxEnableHeartbeatConsuming->setText("Enable Heartbeat Consuming");
    this->mpc_Ui->pc_CheckBoxEnableHeartbeatConsuming->
-   SetToolTipInformation(C_GtGetText::h_GetText("Enable Heartbeat Consuming"),
-                         C_GtGetText::h_GetText(
-                            "If enabled, the CANopen Device will listen to heartbeats sent by CANopen Manager."));
+   SetToolTipInformation("Enable Heartbeat Consuming",
+                         "If enabled, the CANopen Device will listen to heartbeats sent by CANopen Manager.");
 
-   this->mpc_Ui->pc_LabelConsumerTime->setText(C_GtGetText::h_GetText("Consumer Time"));
+   this->mpc_Ui->pc_LabelConsumerTime->setText("Consumer Time");
    this->mpc_Ui->pc_LabelConsumerTime->
-   SetToolTipInformation(C_GtGetText::h_GetText("Consumer Time"),
-                         C_GtGetText::h_GetText("Heartbeat consumer interval."));
+   SetToolTipInformation("Consumer Time",
+                         "Heartbeat consumer interval.");
 
-   this->mpc_Ui->pc_SpinBoxConsumerTime->setSuffix(C_GtGetText::h_GetText(" ms"));
+   this->mpc_Ui->pc_SpinBoxConsumerTime->setSuffix(" ms");
 
-   this->mpc_Ui->pc_CheckBoxConsumerTimeAuto->setText(C_GtGetText::h_GetText("Automatic"));
+   this->mpc_Ui->pc_CheckBoxConsumerTimeAuto->setText("Automatic");
    this->mpc_Ui->pc_CheckBoxConsumerTimeAuto->
-   SetToolTipInformation(C_GtGetText::h_GetText("Automatic"),
-                         C_GtGetText::h_GetText("If enabled, the consumer time is calculated automatically. \n"
-                                                "Formula: <device_consumer_time> = <manager_producer_time> * 1.5"));
+   SetToolTipInformation("Automatic",
+                         "If enabled, the consumer time is calculated automatically. \n"
+                                                "Formula: <device_consumer_time> = <manager_producer_time> * 1.5");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -379,13 +376,11 @@ void C_SdNdeCoDeviceConfigWidget::m_CheckCoNodeId(void) const
             QString c_Content;
             if (q_NodeIdConflict == true)
             {
-               c_Content = C_GtGetText::h_GetText(
-                  "The CANopen Node ID must be unique on the bus.");
+               c_Content = "The CANopen Node ID must be unique on the bus.";
             }
             if (q_NodeIdInvalid == true)
             {
-               c_Content += C_GtGetText::h_GetText(
-                  "\nThe CANopen Node ID must be in the range for CANopen (1 - 127).");
+               c_Content += "\nThe CANopen Node ID must be in the range for CANopen (1 - 127).";
             }
 
             this->mpc_Ui->pc_SpinBoxCanOpenId->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
@@ -487,8 +482,7 @@ void C_SdNdeCoDeviceConfigWidget::m_CheckHeartbeatConsumerTime(void) const
          }
          else
          {
-            const QString c_Content = C_GtGetText::h_GetText(
-               "The consumer time of the Device must be higher than the producer time of the Manager.");
+            const QString c_Content = "The consumer time of the Device must be higher than the producer time of the Manager.";
             this->mpc_Ui->pc_SpinBoxConsumerTime->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
             this->mpc_Ui->pc_SpinBoxConsumerTime->ShowToolTipWhenDisabled(true);
          }
@@ -562,19 +556,19 @@ void C_SdNdeCoDeviceConfigWidget::m_LoadFromData(void)
    disconnect(this->mpc_Ui->pc_ComboBoxFactorySettings,
               static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged), this,
               &C_SdNdeCoDeviceConfigWidget::m_SaveChanges);
-   disconnect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::stateChanged, this,
               &C_SdNdeCoDeviceConfigWidget::m_OnSameAsOpensydeNodeIdChanged);
-   disconnect(this->mpc_Ui->pc_CheckBoxConsumerTimeAuto, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxConsumerTimeAuto, &QCheckBox::stateChanged, this,
               &C_SdNdeCoDeviceConfigWidget::m_OnConsumerTimeAutoChanged);
-   disconnect(this->mpc_Ui->pc_CheckBoxOptionalDevice, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxOptionalDevice, &QCheckBox::stateChanged, this,
               &C_SdNdeCoDeviceConfigWidget::m_SaveChanges);
-   disconnect(this->mpc_Ui->pc_CheckBoxNoInitialization, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxNoInitialization, &QCheckBox::stateChanged, this,
               &C_SdNdeCoDeviceConfigWidget::m_SaveChanges);
-   disconnect(this->mpc_Ui->pc_CheckBoxFactorySettings, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxFactorySettings, &QCheckBox::stateChanged, this,
               &C_SdNdeCoDeviceConfigWidget::m_SaveChanges);
-   disconnect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::stateChanged, this,
               &C_SdNdeCoDeviceConfigWidget::m_SaveChanges);
-   disconnect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatConsuming, &QCheckBox::checkStateChanged, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatConsuming, &QCheckBox::stateChanged, this,
               &C_SdNdeCoDeviceConfigWidget::m_OnHeartbeatConsumingEnableChanged);
 
    tgl_assert(pc_CanOpenDeviceInfo != NULL);
@@ -600,13 +594,11 @@ void C_SdNdeCoDeviceConfigWidget::m_LoadFromData(void)
       this->mpc_Ui->pc_ComboBoxFactorySettings->clear();
       this->mc_ComboboxIndexToFactorySettingsSub.clear();
 
-      this->mpc_Ui->pc_ComboBoxFactorySettings->addItem(C_GtGetText::h_GetText("Sub:001: All parameters"));
+      this->mpc_Ui->pc_ComboBoxFactorySettings->addItem("Sub:001: All parameters");
       this->mc_ComboboxIndexToFactorySettingsSub[mu8_SUB001_COMBOBOX_INDEX] = mu8_SUB001;
-      this->mpc_Ui->pc_ComboBoxFactorySettings->addItem(C_GtGetText::h_GetText(
-                                                           "Sub:002: Communication-related parameters"));
+      this->mpc_Ui->pc_ComboBoxFactorySettings->addItem("Sub:002: Communication-related parameters");
       this->mc_ComboboxIndexToFactorySettingsSub[mu8_SUB002_COMBOBOX_INDEX] = mu8_SUB002;
-      this->mpc_Ui->pc_ComboBoxFactorySettings->addItem(C_GtGetText::h_GetText(
-                                                           "Sub:003: Application-related parameters"));
+      this->mpc_Ui->pc_ComboBoxFactorySettings->addItem("Sub:003: Application-related parameters");
       this->mc_ComboboxIndexToFactorySettingsSub[mu8_SUB003_COMBOBOX_INDEX] = mu8_SUB003;
 
       //check if Sub:001, Sub:002, Sub:003 are supported, if not: disabled item in combobox
@@ -647,17 +639,17 @@ void C_SdNdeCoDeviceConfigWidget::m_LoadFromData(void)
                if (u8_SubIndex < 10)
                {
                   this->mpc_Ui->pc_ComboBoxFactorySettings->addItem(
-                     static_cast<QString>(C_GtGetText::h_GetText("Sub:00%1: Manufacturer-specific")).arg(u8_SubIndex));
+                     static_cast<QString>("Sub:00%1: Manufacturer-specific").arg(u8_SubIndex));
                }
                else if (u8_SubIndex < 100)
                {
                   this->mpc_Ui->pc_ComboBoxFactorySettings->addItem(
-                     static_cast<QString>(C_GtGetText::h_GetText("Sub:0%1: Manufacturer-specific")).arg(u8_SubIndex));
+                     static_cast<QString>("Sub:0%1: Manufacturer-specific").arg(u8_SubIndex));
                }
                else
                {
                   this->mpc_Ui->pc_ComboBoxFactorySettings->addItem(
-                     static_cast<QString>(C_GtGetText::h_GetText("Sub:%1: Manufacturer-specific")).arg(u8_SubIndex));
+                     static_cast<QString>("Sub:%1: Manufacturer-specific").arg(u8_SubIndex));
                }
                this->mc_ComboboxIndexToFactorySettingsSub[this->mpc_Ui->pc_ComboBoxFactorySettings->count() -
                                                           1] = u8_SubIndex;
@@ -757,19 +749,19 @@ void C_SdNdeCoDeviceConfigWidget::m_LoadFromData(void)
    connect(this->mpc_Ui->pc_ComboBoxFactorySettings,
            static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged), this,
            &C_SdNdeCoDeviceConfigWidget::m_SaveChanges);
-   connect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxSameAsOpensyde, &QCheckBox::stateChanged, this,
            &C_SdNdeCoDeviceConfigWidget::m_OnSameAsOpensydeNodeIdChanged);
-   connect(this->mpc_Ui->pc_CheckBoxConsumerTimeAuto, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxConsumerTimeAuto, &QCheckBox::stateChanged, this,
            &C_SdNdeCoDeviceConfigWidget::m_OnConsumerTimeAutoChanged);
-   connect(this->mpc_Ui->pc_CheckBoxOptionalDevice, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxOptionalDevice, &QCheckBox::stateChanged, this,
            &C_SdNdeCoDeviceConfigWidget::m_SaveChanges);
-   connect(this->mpc_Ui->pc_CheckBoxNoInitialization, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxNoInitialization, &QCheckBox::stateChanged, this,
            &C_SdNdeCoDeviceConfigWidget::m_SaveChanges);
-   connect(this->mpc_Ui->pc_CheckBoxFactorySettings, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxFactorySettings, &QCheckBox::stateChanged, this,
            &C_SdNdeCoDeviceConfigWidget::m_SaveChanges);
-   connect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing, &QCheckBox::stateChanged, this,
            &C_SdNdeCoDeviceConfigWidget::m_SaveChanges);
-   connect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatConsuming, &QCheckBox::checkStateChanged, this,
+   connect(this->mpc_Ui->pc_CheckBoxEnableHeartbeatConsuming, &QCheckBox::stateChanged, this,
            &C_SdNdeCoDeviceConfigWidget::m_OnHeartbeatConsumingEnableChanged);
 }
 

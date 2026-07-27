@@ -16,7 +16,6 @@
 
 #include "constants.hpp"
 #include "C_SyvUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_UsHandler.hpp"
@@ -154,8 +153,8 @@ C_SyvSeSetupWidget::~C_SyvSeSetupWidget(void) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeSetupWidget::InitText(void) const
 {
-   this->mpc_Ui->pc_CheckBoxSelectAll->setText(C_GtGetText::h_GetText("Select All"));
-   this->mpc_Ui->pc_PbCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_CheckBoxSelectAll->setText("Select All");
+   this->mpc_Ui->pc_PbCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -234,7 +233,7 @@ void C_SyvSeSetupWidget::SetEditMode(const bool oq_Active, const bool oq_WithSav
       //Handle button
       this->mpc_Ui->pc_PbConfirm->SetSvg("://images/system_views/IconConfirm.svg");
       this->mpc_Ui->pc_PbConfirm->SetMargins(10, 20);
-      this->mpc_Ui->pc_PbConfirm->setText(C_GtGetText::h_GetText("Confirm"));
+      this->mpc_Ui->pc_PbConfirm->setText("Confirm");
 
       // create copy of view in case of clicking cancel
       this->mc_ViewCopy = *C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
@@ -245,7 +244,7 @@ void C_SyvSeSetupWidget::SetEditMode(const bool oq_Active, const bool oq_WithSav
       this->mpc_Ui->pc_PbConfirm->SetSvg("://images/main_page_and_navi_bar/IconEdit.svg",
                                          "://images/IconEditDisabledBright.svg");
       this->mpc_Ui->pc_PbConfirm->SetMargins(10, 28); // put a bit more space in between
-      this->mpc_Ui->pc_PbConfirm->setText(C_GtGetText::h_GetText("Edit"));
+      this->mpc_Ui->pc_PbConfirm->setText("Edit");
 
       if (oq_WithSave == true)
       {
@@ -300,10 +299,10 @@ void C_SyvSeSetupWidget::StartDeviceConfiguration(void)
             C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eERROR);
             QString c_Message;
 
-            c_Message = C_GtGetText::h_GetText("At least one sub node is not connected or can not"
+            c_Message = "At least one sub node is not connected or can not"
                                                " reached on the local bus.\n"
                                                "The device configuration is only possible when all sub nodes"
-                                               " of one device can be reached on one interface.");
+                                               " of one device can be reached on one interface.";
 
             c_MessageBox.SetCustomMinHeight(230, 230);
             c_MessageBox.SetDescription(c_Message);
@@ -414,12 +413,12 @@ void C_SyvSeSetupWidget::m_CheckViewForError(const bool oq_SendError) const
 
       if (e_ToolTipType == C_NagToolTip::eERROR)
       {
-         c_ToolTipHeading = C_GtGetText::h_GetText("Invalid");
+         c_ToolTipHeading = "Invalid";
          Q_EMIT (this->SigEnableConfiguration(false));
       }
       else
       {
-         c_ToolTipHeading = C_GtGetText::h_GetText("Note");
+         c_ToolTipHeading = "Note";
          Q_EMIT (this->SigEnableConfiguration(true));
       }
 

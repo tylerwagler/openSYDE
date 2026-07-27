@@ -29,7 +29,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdBueSortHelper.hpp"
 #include "C_SdClipBoardHelper.hpp"
@@ -954,11 +953,11 @@ void C_SdBueMessageSelectorTreeWidget::Paste(void)
                   if (pc_Message->IsMultiplexed() && (q_ContainsMultiplexer))
                   {
                      C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-                     c_Message.SetHeading(C_GtGetText::h_GetText("Paste signal"));
-                     c_Message.SetDescription(C_GtGetText::h_GetText("Could not paste the copied signals.\n"
+                     c_Message.SetHeading("Paste signal");
+                     c_Message.SetDescription("Could not paste the copied signals.\n"
                                                                      "At least one of the copied signals is a multiplexer signal,"
                                                                      " the message already contains one multiplexer signal"
-                                                                     " and only one multiplexer signal per message is allowed."));
+                                                                     " and only one multiplexer signal per message is allowed.");
                      c_Message.SetCustomMinHeight(230, 230);
                      c_Message.Execute();
                   }

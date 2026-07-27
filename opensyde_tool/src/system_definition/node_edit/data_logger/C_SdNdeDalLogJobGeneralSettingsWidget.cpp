@@ -17,7 +17,6 @@
 
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -57,28 +56,24 @@ C_SdNdeDalLogJobGeneralSettingsWidget::C_SdNdeDalLogJobGeneralSettingsWidget(QWi
    this->mpc_Ui->pc_LabelHardwareDescriptionFileTitle->SetBackgroundColor(0);
    this->mpc_Ui->pc_LabelHardwareDescriptionFileTitle->SetForegroundColor(3);
    this->mpc_Ui->pc_LabelHardwareDescriptionFileTitle->SetFontPixel(16, true);
-   this->mpc_Ui->pc_LabelHardwareDescriptionFileTitle->setText(C_GtGetText::h_GetText("General X.App Settings"));
+   this->mpc_Ui->pc_LabelHardwareDescriptionFileTitle->setText("General X.App Settings");
 
    //labels
-   this->mpc_Ui->pc_LabelClientInterface->setText(C_GtGetText::h_GetText("Client Interface"));
-   this->mpc_Ui->pc_LabelPollingInterval->setText(C_GtGetText::h_GetText("Polling Interval COMM Data"));
-   this->mpc_Ui->pc_LabelRemoteDataRequestInterval->setText(C_GtGetText::h_GetText("Remote Data Request Interval"));
+   this->mpc_Ui->pc_LabelClientInterface->setText("Client Interface");
+   this->mpc_Ui->pc_LabelPollingInterval->setText("Polling Interval COMM Data");
+   this->mpc_Ui->pc_LabelRemoteDataRequestInterval->setText("Remote Data Request Interval");
 
    //Tool tips
-   this->mpc_Ui->pc_LabelClientInterface->SetToolTipInformation(C_GtGetText::h_GetText("Client Interface"),
-                                                                C_GtGetText::h_GetText(
-                                                                   "X.App client interface to use when communicating with other topology devices."));
+   this->mpc_Ui->pc_LabelClientInterface->SetToolTipInformation("Client Interface",
+                                                                "X.App client interface to use when communicating with other topology devices.");
 
-   this->mpc_Ui->pc_LabelPollingInterval->SetToolTipInformation(C_GtGetText::h_GetText("Polling Interval COMM Data"),
-                                                                C_GtGetText::h_GetText(
-                                                                   "Polling interval for checking (local) COMM data elements.\n"
-                                                                   "Use-case: Option for tuning the CPU load of the file-based device."));
+   this->mpc_Ui->pc_LabelPollingInterval->SetToolTipInformation("Polling Interval COMM Data",
+                                                                "Polling interval for checking (local) COMM data elements.\n"
+                                                                   "Use-case: Option for tuning the CPU load of the file-based device.");
 
-   this->mpc_Ui->pc_LabelRemoteDataRequestInterval->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                                             "Remote Data Request Interval"),
-                                                                          C_GtGetText::h_GetText(
-                                                                             "Interval of the X.App to requests remote data from other topology devices. For remote requests the openSYDE protocol is used. This may cause higher bus load.\n"
-                                                                             "Use-case: Option for tuning the bus load of file-based device."));
+   this->mpc_Ui->pc_LabelRemoteDataRequestInterval->SetToolTipInformation("Remote Data Request Interval",
+                                                                          "Interval of the X.App to requests remote data from other topology devices. For remote requests the openSYDE protocol is used. This may cause higher bus load.\n"
+                                                                             "Use-case: Option for tuning the bus load of file-based device.");
 
    // set PollingInterval min/max
    this->mpc_Ui->pc_SpnBoxPollingInterval->SetMinimumCustom(10);
@@ -194,8 +189,7 @@ void C_SdNdeDalLogJobGeneralSettingsWidget::m_GetSupportedClientInterfaces() con
             rc_Interface.u32_BusIndex);
          if (pc_Bus != NULL)
          {
-            this->mpc_Ui->pc_ComboBoxClientInterface->addItem(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                                      "%1 (linked to %2)")).arg(
+            this->mpc_Ui->pc_ComboBoxClientInterface->addItem(static_cast<QString>("%1 (linked to %2)").arg(
                                                                  c_InterfaceNames[
                                                                     u32_InterfaceNamesCounter
                                                                  ]).arg(pc_Bus->c_Name.c_str()));
@@ -203,8 +197,7 @@ void C_SdNdeDalLogJobGeneralSettingsWidget::m_GetSupportedClientInterfaces() con
       }
       else
       {
-         this->mpc_Ui->pc_ComboBoxClientInterface->addItem(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                                   "%1 (not connected)")).arg(
+         this->mpc_Ui->pc_ComboBoxClientInterface->addItem(static_cast<QString>("%1 (not connected)").arg(
                                                               c_InterfaceNames[
                                                                  u32_InterfaceNamesCounter
                                                               ]));

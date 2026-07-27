@@ -15,7 +15,6 @@
 
 #include "constants.hpp"
 #include "C_OscUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgePubPathVariables.hpp"
 #include "C_OgeLabGenericNoPaddingNoMargins.hpp"
 
@@ -50,24 +49,24 @@ C_OgePubPathVariables::C_OgePubPathVariables(QWidget * const opc_Parent) :
    mpc_Menu(new C_OgeMuSections(opc_Parent))
 {
    // first section: openSYDE actions
-   this->mpc_Menu->AddCustomSection(C_GtGetText::h_GetText("openSYDE"));
-   this->mpc_Menu->addAction(C_GtGetText::h_GetText("openSYDE Binary"),
+   this->mpc_Menu->AddCustomSection("openSYDE");
+   this->mpc_Menu->addAction("openSYDE Binary",
                              this, &C_OgePubPathVariables::m_OpenSydeExeTriggered);
-   this->mpc_Menu->addAction(C_GtGetText::h_GetText("openSYDE Project"),
+   this->mpc_Menu->addAction("openSYDE Project",
                              this, &C_OgePubPathVariables::m_OpenSydeProjTriggered);
 
    // second section: system actions
-   this->mpc_Menu->AddCustomSection(C_GtGetText::h_GetText("System"));
-   this->mpc_Menu->addAction(C_GtGetText::h_GetText("User Name"), this, &C_OgePubPathVariables::m_UserNameTriggered);
-   this->mpc_Menu->addAction(C_GtGetText::h_GetText("Computer Name"),
+   this->mpc_Menu->AddCustomSection("System");
+   this->mpc_Menu->addAction("User Name", this, &C_OgePubPathVariables::m_UserNameTriggered);
+   this->mpc_Menu->addAction("Computer Name",
                              this, &C_OgePubPathVariables::m_ComputerNameTriggered);
    this->mpc_Menu->setMinimumWidth(140);
 
    this->setMenu(this->mpc_Menu);
 
    this->setIcon(QIcon("://images/IconPathVariables.svg"));
-   this->SetToolTipInformation(C_GtGetText::h_GetText("Insert Variable"),
-                               C_GtGetText::h_GetText("Use common locations like your project path as variables."));
+   this->SetToolTipInformation("Insert Variable",
+                               "Use common locations like your project path as variables.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -85,8 +84,8 @@ C_OgePubPathVariables::~C_OgePubPathVariables()
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgePubPathVariables::AddDatablockSection(void)
 {
-   this->mpc_Menu->AddCustomSection(C_GtGetText::h_GetText("Data Block"));
-   this->mpc_Menu->addAction(C_GtGetText::h_GetText("Project Path"),
+   this->mpc_Menu->AddCustomSection("Data Block");
+   this->mpc_Menu->addAction("Project Path",
                              this, &C_OgePubPathVariables::m_DataBlockProjTriggered);
 }
 

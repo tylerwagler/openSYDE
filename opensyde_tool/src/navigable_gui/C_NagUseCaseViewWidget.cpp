@@ -18,7 +18,6 @@
 #include <QPalette>
 
 #include "C_NagUseCaseViewWidget.hpp"
-#include "C_GtGetText.hpp"
 #include "ui_C_NagUseCaseViewWidget.h"
 
 #include "constants.hpp"
@@ -94,7 +93,7 @@ void C_NagUseCaseViewWidget::InitText(void) const
       this->mpc_Ui->pc_LabelSubmode->setVisible(true);
       this->mpc_Ui->pc_LabelSpace->setVisible(true);
 
-      this->mpc_Ui->pc_LabelMode->setText(C_GtGetText::h_GetText("SYSTEM DEFINITION"));
+      this->mpc_Ui->pc_LabelMode->setText("SYSTEM DEFINITION");
       m_HandleSubSections();
       break;
 
@@ -102,7 +101,7 @@ void C_NagUseCaseViewWidget::InitText(void) const
       this->mpc_Ui->pc_LabelSubmode->setVisible(true);
       this->mpc_Ui->pc_LabelSpace->setVisible(true);
 
-      this->mpc_Ui->pc_LabelMode->setText(C_GtGetText::h_GetText("SYSTEM COMMISSIONING"));
+      this->mpc_Ui->pc_LabelMode->setText("SYSTEM COMMISSIONING");
       m_HandleSubSections();
       break;
 
@@ -171,7 +170,7 @@ void C_NagUseCaseViewWidget::m_HandleSubSections(void) const
    {
       if (this->mq_CombineItemAndSubSubName)
       {
-         const QString c_Text = static_cast<QString>(C_GtGetText::h_GetText("%1 | %2")).arg(this->mc_ItemName).arg(
+         const QString c_Text = static_cast<QString>("%1 | %2").arg(this->mc_ItemName).arg(
             this->mc_ItemSubSubName);
          this->mpc_Ui->pc_GroupBoxSubSubMode->setVisible(false);
          this->mpc_Ui->pc_LabelSubmode->setText(c_Text);

@@ -22,7 +22,6 @@
 #include "C_SyvDcWidget.hpp"
 #include "ui_C_SyvDcWidget.h"
 #include "C_OscNodeProperties.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -221,54 +220,50 @@ void C_SyvDcWidget::CleanUp(void)
 void C_SyvDcWidget::InitText(void)
 {
    // set title
-   this->mpc_ParentDialog->SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Device Configuration")));
+   this->mpc_ParentDialog->SetSubTitle(static_cast<QString>("Device Configuration"));
 
-   this->mpc_Ui->pc_LabelHeadingReport->setText(static_cast<QString>(C_GtGetText::h_GetText("Report")));
-   this->mpc_Ui->pc_LabelHeadingBitrate->setText(static_cast<QString>(C_GtGetText::h_GetText("Settings")));
-   this->mpc_Ui->pc_LabelConfigurationMode->setText(static_cast<QString>(C_GtGetText::h_GetText("Configuration Mode")));
-   this->mpc_Ui->pc_PushButtonScan->setText(static_cast<QString>(C_GtGetText::h_GetText("Scan for Devices")));
-   this->mpc_Ui->pc_LabelStartScan->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                    "Click on \"Scan for Devices\" ...")));
-   this->mpc_Ui->pc_LabelNoExistingNodes->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "No valid Topology nodes found.")));
-   this->mpc_Ui->pc_LabelBitRate->setText(static_cast<QString>(C_GtGetText::h_GetText("Bitrate of Connected Devices")));
-   this->mpc_Ui->pc_PbBackToScan->setText(static_cast<QString>(C_GtGetText::h_GetText("Back to Scan")));
-   this->mpc_Ui->pc_LabelHeadingAssignment->setText(static_cast<QString>(C_GtGetText::h_GetText("Assignment")));
-   this->mpc_Ui->pc_LabelAssignment->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                     "Assign all connected devices to Topology nodes via drag&drop"
-                                                                     " and click on \"Configure Devices\".")));
-   this->mpc_Ui->pc_PushButtonConfigure->setText(static_cast<QString>(C_GtGetText::h_GetText("Configure Devices")));
-   this->mpc_Ui->pc_LabelProgressScan->setText(static_cast<QString>(C_GtGetText::h_GetText("Scan")));
-   this->mpc_Ui->pc_LabelProgressAssignmnet->setText(static_cast<QString>(C_GtGetText::h_GetText("Assignment")));
-   this->mpc_Ui->pc_LabelProgressConfiguration->setText(static_cast<QString>(C_GtGetText::h_GetText("Configuration")));
-   this->mpc_Ui->pc_LabelProgressFinished->setText(static_cast<QString>(C_GtGetText::h_GetText("Finished")));
+   this->mpc_Ui->pc_LabelHeadingReport->setText(static_cast<QString>("Report"));
+   this->mpc_Ui->pc_LabelHeadingBitrate->setText(static_cast<QString>("Settings"));
+   this->mpc_Ui->pc_LabelConfigurationMode->setText(static_cast<QString>("Configuration Mode"));
+   this->mpc_Ui->pc_PushButtonScan->setText(static_cast<QString>("Scan for Devices"));
+   this->mpc_Ui->pc_LabelStartScan->setText(static_cast<QString>("Click on \"Scan for Devices\" ..."));
+   this->mpc_Ui->pc_LabelNoExistingNodes->setText(static_cast<QString>("No valid Topology nodes found."));
+   this->mpc_Ui->pc_LabelBitRate->setText(static_cast<QString>("Bitrate of Connected Devices"));
+   this->mpc_Ui->pc_PbBackToScan->setText(static_cast<QString>("Back to Scan"));
+   this->mpc_Ui->pc_LabelHeadingAssignment->setText(static_cast<QString>("Assignment"));
+   this->mpc_Ui->pc_LabelAssignment->setText(static_cast<QString>("Assign all connected devices to Topology nodes via drag&drop"
+                                                                     " and click on \"Configure Devices\"."));
+   this->mpc_Ui->pc_PushButtonConfigure->setText(static_cast<QString>("Configure Devices"));
+   this->mpc_Ui->pc_LabelProgressScan->setText(static_cast<QString>("Scan"));
+   this->mpc_Ui->pc_LabelProgressAssignmnet->setText(static_cast<QString>("Assignment"));
+   this->mpc_Ui->pc_LabelProgressConfiguration->setText(static_cast<QString>("Configuration"));
+   this->mpc_Ui->pc_LabelProgressFinished->setText(static_cast<QString>("Finished"));
    this->mpc_Ui->pc_ComboBoxConfigurationMode->clear();
 
-   this->mpc_Ui->pc_PushButtonCancel->setText(static_cast<QString>(C_GtGetText::h_GetText("Cancel")));
-   this->mpc_Ui->pc_PushButtonOk->setText(static_cast<QString>(C_GtGetText::h_GetText("OK")));
+   this->mpc_Ui->pc_PushButtonCancel->setText(static_cast<QString>("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(static_cast<QString>("OK"));
 
    // Order is important!
    // Index 0 = all connected interfaces in the system.
    // Index 1 = only the for the device configuration used interface
-   this->mpc_Ui->pc_ComboBoxConfigurationMode->addItem(C_GtGetText::h_GetText("Only directly connected interfaces"));
-   this->mpc_Ui->pc_ComboBoxConfigurationMode->addItem(C_GtGetText::h_GetText("All connected interfaces"));
+   this->mpc_Ui->pc_ComboBoxConfigurationMode->addItem("Only directly connected interfaces");
+   this->mpc_Ui->pc_ComboBoxConfigurationMode->addItem("All connected interfaces");
 
    //Tool Tips
    this->mpc_Ui->pc_LabelConfigurationMode->SetToolTipInformation(
-      C_GtGetText::h_GetText("Configuration Mode"),
-      C_GtGetText::h_GetText(
-         "Decide which device interfaces will be configured.\n \n"
+      "Configuration Mode",
+      "Decide which device interfaces will be configured.\n \n"
          " - Only directly connected interfaces: \n"
          "   All interfaces which are connected to the bus are used by the current device configuration.\n\n"
          " - All connected interfaces: \n"
          "   All interfaces which are connected to any bus in the SYSTEM DEFINITION.\n"
          "   Attention: This may lead to inconsistent configurations on other connected buses. \n"
          "   (e.g.: CAN bitrate of configured interface does not match the bitrate of other nodes connected \n"
-         "   to same bus)"));
+         "   to same bus)");
    this->mpc_Ui->pc_LabelBitRate->SetToolTipInformation(
-      C_GtGetText::h_GetText("Bitrate of Connected Devices"),
-      C_GtGetText::h_GetText("Specify current bitrate of connected devices. If you defined another bitrate in SYSTEM "
-                             "DEFINITION a successful device configuration will change the bitrate."));
+      "Bitrate of Connected Devices",
+      "Specify current bitrate of connected devices. If you defined another bitrate in SYSTEM "
+                             "DEFINITION a successful device configuration will change the bitrate.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -357,23 +352,21 @@ int32_t C_SyvDcWidget::m_InitSequence(void)
    case C_NO_ERR:
       break;
    case C_CONFIG:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Invalid SYSTEM DEFINITION/View configuration."));
+      c_Message = static_cast<QString>("Invalid SYSTEM DEFINITION/View configuration.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_RD_WR:
       c_Message =
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 "Configured communication DLL does not exist or DLL could not be opened."));
+         static_cast<QString>("Configured communication DLL does not exist or DLL could not be opened.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_OVERFLOW:
       c_Message =
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 "Unknown transport protocol or unknown diagnostic server for at least one node."));
+         static_cast<QString>("Unknown transport protocol or unknown diagnostic server for at least one node.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_NOACT:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("System View is invalid. Action cannot be performed."));
+      c_Message = static_cast<QString>("System View is invalid. Action cannot be performed.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_COM:
@@ -402,43 +395,41 @@ int32_t C_SyvDcWidget::m_InitSequence(void)
          {
             c_Message =
                static_cast<QString>(
-                  C_GtGetText::h_GetText(
-                     "Ethernet initialization failed. Check your Ethernet adapter settings."));
+                  "Ethernet initialization failed. Check your Ethernet adapter settings.");
             c_MessageBox.SetCustomMinHeight(180, 180);
          }
          else
          {
             c_Message =
                static_cast<QString>(
-                  C_GtGetText::h_GetText(
-                     "CAN initialization failed. Check your PC CAN interface configuration (System View setup - "
-                     "double-click on PC)."));
+                  "CAN initialization failed. Check your PC CAN interface configuration (System View setup - "
+                     "double-click on PC).");
             c_MessageBox.SetCustomMinHeight(200, 200);
          }
       }
       break;
    case C_CHECKSUM:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Internal buffer overflow detected."));
+      c_Message = static_cast<QString>("Internal buffer overflow detected.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_RANGE:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Routing configuration failed."));
+      c_Message = static_cast<QString>("Routing configuration failed.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_BUSY:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("System view error detected."));
+      c_Message = static_cast<QString>("System view error detected.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_UNKNOWN_ERR:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Wrapped error of internal function call."));
+      c_Message = static_cast<QString>("Wrapped error of internal function call.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    case C_WARN:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Internal error."));
+      c_Message = static_cast<QString>("Internal error.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    default:
-      c_Message = static_cast<QString>(C_GtGetText::h_GetText("Unknown error: %1")).arg(C_Uti::h_StwError(s32_Retval));
+      c_Message = static_cast<QString>("Unknown error: %1").arg(C_Uti::h_StwError(s32_Retval));
       c_MessageBox.SetCustomMinHeight(180, 180);
       break;
    }
@@ -475,8 +466,8 @@ void C_SyvDcWidget::m_StartSearchProper(void)
    this->mpc_Ui->pc_GroupBoxStartScan->setVisible(true);
    this->mpc_Ui->pc_ListWidgetConnectedNodesScan->setVisible(false);
    // Let the user know, when the tool is occupied with itself before communicating with the bus
-   this->mpc_Ui->pc_LabelStartScan->setText(C_GtGetText::h_GetText("Initializing communication interface..."));
-   this->mpc_Ui->pc_LabelHeadingFoundDevices->setText(static_cast<QString>(C_GtGetText::h_GetText("Connected Devices")));
+   this->mpc_Ui->pc_LabelStartScan->setText("Initializing communication interface...");
+   this->mpc_Ui->pc_LabelHeadingFoundDevices->setText(static_cast<QString>("Connected Devices"));
 
    this->mq_InitializationFinished = false;
 
@@ -515,7 +506,7 @@ void C_SyvDcWidget::m_StartSearchProper(void)
                {
                   // The thread was started, Ethernet sequence has no further initialization,
                   // the communication is running...
-                  this->mpc_Ui->pc_LabelStartScan->setText(C_GtGetText::h_GetText("Scanning for devices..."));
+                  this->mpc_Ui->pc_LabelStartScan->setText("Scanning for devices...");
                   this->mq_InitializationFinished = true;
                }
             }
@@ -532,7 +523,7 @@ void C_SyvDcWidget::m_StartSearchProper(void)
             {
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
                c_Message.SetHeading("Failed!");
-               c_Message.SetDescription(C_GtGetText::h_GetText("Could not continue with step: enter Flashloader."));
+               c_Message.SetDescription("Could not continue with step: enter Flashloader.");
                m_CleanUpScan();
                c_Message.SetCustomMinHeight(180, 180);
                c_Message.Execute();
@@ -541,7 +532,7 @@ void C_SyvDcWidget::m_StartSearchProper(void)
          else
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-            c_Message.SetDescription(C_GtGetText::h_GetText("Unknown bitrate."));
+            c_Message.SetDescription("Unknown bitrate.");
             m_CleanUpScan();
             c_Message.SetCustomMinHeight(180, 180);
             c_Message.Execute();
@@ -571,7 +562,7 @@ void C_SyvDcWidget::m_CleanUpScan(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::m_ScanFinished(void)
 {
-   C_SclString c_NotTrimmedDevices = C_GtGetText::h_GetText("Not trimmed device types: \n");
+   C_SclString c_NotTrimmedDevices = "Not trimmed device types: \n";
    bool q_NotTrimmedDevicesFound = false;
 
    //evaluate results
@@ -579,24 +570,24 @@ void C_SyvDcWidget::m_ScanFinished(void)
    {
       //Zero
       this->mpc_Ui->pc_ProgressScan->SetProgress(0, false);
-      this->mpc_Ui->pc_LabelStartScan->setText(C_GtGetText::h_GetText("No devices found."));
-      m_InformUserAfterScan(C_GtGetText::h_GetText("No devices found! Check connection of connected devices and retry."));
+      this->mpc_Ui->pc_LabelStartScan->setText("No devices found.");
+      m_InformUserAfterScan("No devices found! Check connection of connected devices and retry.");
    }
    else if (this->mc_FoundDevices.size() <
             static_cast<uint32_t>(this->mpc_Ui->pc_ListWidgetExistingNodes->GetCommunicatingNodeCount()))
    {
       //Less
       m_EnterScanErrorState();
-      m_InformUserAfterScan(C_GtGetText::h_GetText("Fewer devices found than defined by the System View!"
-                                                   " Check connection of connected devices and retry."));
+      m_InformUserAfterScan("Fewer devices found than defined by the System View!"
+                                                   " Check connection of connected devices and retry.");
    }
    else if (this->mc_FoundDevices.size() >
             static_cast<uint32_t>(this->mpc_Ui->pc_ListWidgetExistingNodes->GetCommunicatingNodeCount()))
    {
       //More
       m_EnterScanErrorState();
-      m_InformUserAfterScan(C_GtGetText::h_GetText("More devices found than defined by the System View! "
-                                                   "Connect only devices which are defined in the System View and retry."));
+      m_InformUserAfterScan("More devices found than defined by the System View! "
+                                                   "Connect only devices which are defined in the System View and retry.");
    }
    else
    {
@@ -605,9 +596,8 @@ void C_SyvDcWidget::m_ScanFinished(void)
       if (q_SameSerialNumber == true)
       {
          //Same serial number error
-         m_InformUserAfterScan(C_GtGetText::h_GetText(
-                                  "Devices with duplicate serial numbers found! Make sure that each device "
-                                  "is connected only through one interface to the device configuration and try again."));
+         m_InformUserAfterScan("Devices with duplicate serial numbers found! Make sure that each device "
+                                  "is connected only through one interface to the device configuration and try again.");
 
          m_EnterScanErrorState();
       }
@@ -621,8 +611,7 @@ void C_SyvDcWidget::m_ScanFinished(void)
          this->mpc_Ui->pc_PushButtonConfigure->setVisible(true);
 
          m_InitAssignmentScreen();
-         this->mpc_Ui->pc_LabelStartScan->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                          "Click on \"Scan for Devices\" ...")));
+         this->mpc_Ui->pc_LabelStartScan->setText(static_cast<QString>("Click on \"Scan for Devices\" ..."));
          //Progress
          this->mpc_Ui->pc_BopperleScan->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21, mc_STYLE_GUIDE_COLOR_13);
          this->mpc_Ui->pc_ProgressScan->SetProgress(100, false);
@@ -652,10 +641,9 @@ void C_SyvDcWidget::m_ScanFinished(void)
    if (q_NotTrimmedDevicesFound == true)
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eWARNING);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Device Type"));
-      c_Message.SetDescription(C_GtGetText::h_GetText(
-                                  "Device type received from target is not trimmed. "
-                                  "This could lead to visual misunderstanding while devices assignment."));
+      c_Message.SetHeading("Device Type");
+      c_Message.SetDescription("Device type received from target is not trimmed. "
+                                  "This could lead to visual misunderstanding while devices assignment.");
       c_Message.SetDetails(c_NotTrimmedDevices.c_str());
       c_Message.SetCustomMinHeight(230, 300);
       c_Message.Execute();
@@ -748,7 +736,7 @@ void C_SyvDcWidget::m_EnterScanErrorState(void)
    this->mpc_Ui->pc_ListWidgetConnectedNodesScan->setDragEnabled(false);
    this->mpc_Ui->pc_GroupBoxStartScan->setVisible(false);
    this->mpc_Ui->pc_LabelHeadingFoundDevices->setText(
-      static_cast<QString>(C_GtGetText::h_GetText("Connected Devices (%1)")).
+      static_cast<QString>("Connected Devices (%1)").
       arg(this->mpc_Ui->pc_ListWidgetConnectedNodesScan->count()));
 }
 
@@ -808,7 +796,7 @@ void C_SyvDcWidget::m_StartConfigProper(void)
             if (s32_Result != C_NO_ERR)
             {
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-               c_Message.SetDescription(C_GtGetText::h_GetText("Could not configure openSYDE devices."));
+               c_Message.SetDescription("Could not configure openSYDE devices.");
                c_Message.SetCustomMinHeight(180, 180);
                c_Message.Execute();
             }
@@ -847,7 +835,7 @@ void C_SyvDcWidget::m_StartConfigProper(void)
          else
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-            c_Message.SetDescription(C_GtGetText::h_GetText("Could not configure openSYDE devices."));
+            c_Message.SetDescription("Could not configure openSYDE devices.");
             c_Message.SetCustomMinHeight(180, 180);
             c_Message.Execute();
          }
@@ -855,7 +843,7 @@ void C_SyvDcWidget::m_StartConfigProper(void)
       else
       {
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-         c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText("Internal error FillDeviceConfig %1.")).
+         c_Message.SetDescription(static_cast<QString>("Internal error FillDeviceConfig %1.").
                                   arg(C_Uti::h_StwError(s32_Result)));
          c_Message.SetCustomMinHeight(180, 180);
          c_Message.Execute();
@@ -864,7 +852,7 @@ void C_SyvDcWidget::m_StartConfigProper(void)
    else
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-      c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText("Internal error starting configuration.")));
+      c_Message.SetDescription(static_cast<QString>("Internal error starting configuration."));
       c_Message.SetCustomMinHeight(180, 180);
       c_Message.Execute();
    }
@@ -986,8 +974,8 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
 
       // Counter of devices
       orc_Text += static_cast<QString>("%1 %2 %3 %4<br>").arg(
-         static_cast<QString>(C_GtGetText::h_GetText("Device")), QString::number(ou32_DeviceCounter),
-         static_cast<QString>(C_GtGetText::h_GetText("of")), QString::number(ou32_DeviceMaxCount));
+         static_cast<QString>("Device"), QString::number(ou32_DeviceCounter),
+         static_cast<QString>("of"), QString::number(ou32_DeviceMaxCount));
 
       // Serial number
       orc_Text +=
@@ -1059,7 +1047,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
             bool q_CummunicationBusFound = false;
 
             // Get topology node name. In case of a node squad, the base name is necessary
-            orc_Text += static_cast<QString>(C_GtGetText::h_GetText("Topology Node: ")) +
+            orc_Text += static_cast<QString>("Topology Node: ") +
                         C_PuiSdUtil::h_GetNodeBaseNameOrName(u32_FirstNodeIndex) + "<br>";
 
             // Interface
@@ -1261,7 +1249,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfCanInterface(const C_OscNodeComInterfaceSe
    {
       orc_Text += "<tr>";
       orc_Text += "<td width=\"40%\">" +
-                  static_cast<QString>(C_GtGetText::h_GetText("CAN-Bitrate: ")) +
+                  static_cast<QString>("CAN-Bitrate: ") +
                   QString::number(ou32_Bitrate / 1000U) +
                   static_cast<QString>(" kbit/s ") + "</td>";
       orc_Text += "<td width=\"60%\">" +
@@ -1306,9 +1294,9 @@ void C_SyvDcWidget::m_ShowConfigInfoOfEthInterface(const C_OscNodeComInterfaceSe
       c_DefaultGateway = C_Uti::h_IpAddressToString(orc_IpAddress.au8_DefaultGateway);
 
       orc_Text += "<tr>";
-      orc_Text += "<td width=\"40%\">" + static_cast<QString>(C_GtGetText::h_GetText("IP: ")) + c_IpAddress +
-                  static_cast<QString>(C_GtGetText::h_GetText(" (Sub-Net: ")) + c_NetMask +
-                  static_cast<QString>(C_GtGetText::h_GetText(", default gateway: ")) + c_DefaultGateway + ")</td>";
+      orc_Text += "<td width=\"40%\">" + static_cast<QString>("IP: ") + c_IpAddress +
+                  static_cast<QString>(" (Sub-Net: ") + c_NetMask +
+                  static_cast<QString>(", default gateway: ") + c_DefaultGateway + ")</td>";
       orc_Text += "<td width=\"60%\">" + this->m_GetStateStringOfServerStep(C_SyvDcSequences::hu32_SETIPADDRESS,
                                                                             orc_ServerIdOnConfiguredBus,
                                                                             orc_IntfSetting.e_InterfaceType,
@@ -1339,7 +1327,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfInterface(const C_OscNodeComInterfaceSetti
 {
    if (oq_SingleNodeOrFirstSubNode == true)
    {
-      orc_Text += static_cast<QString>(C_GtGetText::h_GetText("Interface: "));
+      orc_Text += static_cast<QString>("Interface: ");
 
       //Interface
       orc_Text += C_PuiSdUtil::h_GetInterfaceName(orc_IntfSetting.e_InterfaceType, orc_IntfSetting.u8_InterfaceNumber);
@@ -1347,19 +1335,18 @@ void C_SyvDcWidget::m_ShowConfigInfoOfInterface(const C_OscNodeComInterfaceSetti
 
    if (oq_BusConnected == false)
    {
-      orc_Text += static_cast<QString>(C_GtGetText::h_GetText(" (skipped, not used)<br>"));
+      orc_Text += static_cast<QString>(" (skipped, not used)<br>");
    }
    else if (oq_Configured == false)
    {
-      orc_Text += static_cast<QString>(C_GtGetText::h_GetText(" (skipped, not configurable on this bus)<br>"));
+      orc_Text += static_cast<QString>(" (skipped, not configurable on this bus)<br>");
    }
    else if ((this->m_AreAllInterfacesToConfigure() == false) &&
             (orc_ServerIdOnUsedBus != orc_ServerIdOnConfiguredBus))
    {
       // The interface shall not be configured, because it is not the used interface by the device configuration
       orc_Text +=
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 " (skipped, connected to other bus. Config Mode: Only directly connected interfaces)<br>"));
+         static_cast<QString>(" (skipped, connected to other bus. Config Mode: Only directly connected interfaces)<br>");
    }
    else
    {
@@ -1368,7 +1355,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfInterface(const C_OscNodeComInterfaceSetti
          // HTML row in table start (Table row)
          orc_Text += "<table width=\"100%\" style =\" margin-left:5px\">";
          orc_Text += "<tr>";
-         orc_Text += "<td width=\"100%\">" + static_cast<QString>(C_GtGetText::h_GetText(" Sub-Node: "));
+         orc_Text += "<td width=\"100%\">" + static_cast<QString>(" Sub-Node: ");
 
          // Sub node
          orc_Text += orc_SubNodeName + "</td>";
@@ -1379,7 +1366,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfInterface(const C_OscNodeComInterfaceSetti
       // HTML row in table start (Table row)
       orc_Text += "<table width=\"100%\" style =\" margin-left:10px\">";
       orc_Text += "<tr>";
-      orc_Text += "<td width=\"40%\">" + static_cast<QString>(C_GtGetText::h_GetText("Node ID: ")) +
+      orc_Text += "<td width=\"40%\">" + static_cast<QString>("Node ID: ") +
                   QString::number(static_cast<uint32_t>(orc_ServerIdOnConfiguredBus.u8_NodeIdentifier)) + "</td>";
       orc_Text += "<td width=\"60%\">" + this->m_GetStateStringOfServerStep(C_SyvDcSequences::hu32_SETNODEID,
                                                                             orc_ServerIdOnConfiguredBus,
@@ -1450,11 +1437,10 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
          if (q_Manual == true)
          {
             C_OgeWiCustomMessage c_ConfirmationBox(this, C_OgeWiCustomMessage::E_Type::eWARNING);
-            c_ConfirmationBox.SetHeading(C_GtGetText::h_GetText("Devices reset"));
+            c_ConfirmationBox.SetHeading("Devices reset");
             c_ConfirmationBox.SetDetails(c_Details);
-            c_ConfirmationBox.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-            c_ConfirmationBox.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                     "Power OFF all nodes manually and press \"Continue\".")));
+            c_ConfirmationBox.SetOkButtonText("Continue");
+            c_ConfirmationBox.SetDescription(static_cast<QString>("Power OFF all nodes manually and press \"Continue\"."));
             c_ConfirmationBox.SetCustomMinHeight(180, 270);
             c_ConfirmationBox.Execute();
          }
@@ -1513,13 +1499,12 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
             const uint32_t u32_WaitTimeSec = (u32_WaitTime / 1000UL) +
                                              (((u32_WaitTime % 1000UL) ==
                                                0UL) ? static_cast<uint32_t>(0UL) : static_cast<uint32_t>(1UL));
-            c_ConfirmationBox.SetHeading(C_GtGetText::h_GetText("Devices reset"));
+            c_ConfirmationBox.SetHeading("Devices reset");
             c_ConfirmationBox.SetDetails(c_Details);
-            c_ConfirmationBox.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-            c_ConfirmationBox.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                     "Turn ON all nodes manually, wait at least %1 "
+            c_ConfirmationBox.SetOkButtonText("Continue");
+            c_ConfirmationBox.SetDescription(static_cast<QString>("Turn ON all nodes manually, wait at least %1 "
                                                                      "second(s) due to Flashloader reset wait time"
-                                                                     " and then press \"Continue\".")).
+                                                                     " and then press \"Continue\".").
                                              arg(u32_WaitTimeSec));
             c_ConfirmationBox.SetCustomMinHeight(200, 270);
             c_ConfirmationBox.Execute();
@@ -1705,8 +1690,8 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
 
             // Counter of nodes
             c_Text += static_cast<QString>("%1 %2 %3 %4<br>").arg(
-               static_cast<QString>(C_GtGetText::h_GetText("Node")), QString::number(u32_DeviceCounter + 1U),
-               static_cast<QString>(C_GtGetText::h_GetText("of")), QString::number(u32_DeviceTotal));
+               static_cast<QString>("Node"), QString::number(u32_DeviceCounter + 1U),
+               static_cast<QString>("of"), QString::number(u32_DeviceTotal));
 
             // Serial number
             c_Text += "SN.: ";
@@ -1717,7 +1702,7 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
             }
             else
             {
-               c_Text += static_cast<QString>(C_GtGetText::h_GetText("Not valid."));
+               c_Text += static_cast<QString>("Not valid.");
             }
             c_Text += "<br>";
 
@@ -1737,21 +1722,21 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
             }
 
             // Topology node name
-            c_Text += static_cast<QString>(C_GtGetText::h_GetText("Topology Node: ")) + c_TopologyNodeName;
+            c_Text += static_cast<QString>("Topology Node: ") + c_TopologyNodeName;
 
             // Title of device type
             // HTML row in table start (Table row)
             c_Text += "<table width=\"100%\" style =\" margin-left:10px\">";
             c_Text += "<tr>";
-            c_Text += "<td width=\"40%\">" + static_cast<QString>(C_GtGetText::h_GetText("Get type from node")) +
+            c_Text += "<td width=\"40%\">" + static_cast<QString>("Get type from node") +
                       "</td>";
             if (rc_Info.q_DeviceNameValid == true)
             {
-               c_Text += "<td width=\"60%\">" + static_cast<QString>(C_GtGetText::h_GetText("OK")) + "</td>";
+               c_Text += "<td width=\"60%\">" + static_cast<QString>("OK") + "</td>";
             }
             else
             {
-               c_Text += "<td width=\"60%\">" + static_cast<QString>(C_GtGetText::h_GetText("NA")) + "</td>";
+               c_Text += "<td width=\"60%\">" + static_cast<QString>("NA") + "</td>";
             }
             c_Text += "</tr>";
             c_Text += "</table>";
@@ -1759,14 +1744,14 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
             c_Text += "<table width=\"100%\" style =\" margin-left:20px\">";
             // Read device type
             c_Text += "<tr>";
-            c_Text += "<td width=\"40%\">" + static_cast<QString>(C_GtGetText::h_GetText("Read Type: ")) +
+            c_Text += "<td width=\"40%\">" + static_cast<QString>("Read Type: ") +
                       static_cast<QString>(rc_Info.c_DeviceName.c_str()) +
                       "</td>";
             c_Text += "</tr>";
 
             // Expected device type
             c_Text += "<tr>";
-            c_Text += "<td width=\"40%\">" + static_cast<QString>(C_GtGetText::h_GetText("Expected Type: ")) +
+            c_Text += "<td width=\"40%\">" + static_cast<QString>("Expected Type: ") +
                       c_TopologyDeviceType +
                       "</td>";
             c_Text += "</tr>";
@@ -1775,14 +1760,14 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
             // Result
             c_Text += "<table width=\"100%\" style =\" margin-left:10px\">";
             c_Text += "<tr>";
-            c_Text += "<td width=\"40%\">" + static_cast<QString>(C_GtGetText::h_GetText("Verification")) + "</td>";
+            c_Text += "<td width=\"40%\">" + static_cast<QString>("Verification") + "</td>";
             if (static_cast<QString>(rc_Info.c_DeviceName.c_str()) == c_TopologyDeviceType)
             {
-               c_Text += "<td width=\"20%\">" + static_cast<QString>(C_GtGetText::h_GetText("OK")) + "</td>";
+               c_Text += "<td width=\"20%\">" + static_cast<QString>("OK") + "</td>";
             }
             else
             {
-               c_Text += "<td width=\"20%\"><b>" + static_cast<QString>(C_GtGetText::h_GetText("FAILED")) + "</b></td>";
+               c_Text += "<td width=\"20%\"><b>" + static_cast<QString>("FAILED") + "</b></td>";
             }
             c_Text += "</tr>";
 
@@ -1792,18 +1777,18 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
 
          if (os32_ActualResult != C_NO_ERR)
          {
-            c_Text += "<b>" + static_cast<QString>(C_GtGetText::h_GetText("Missing node(s) or subnode(s):")) +
+            c_Text += "<b>" + static_cast<QString>("Missing node(s) or subnode(s):") +
                       "</b><br/>";
             //Add missing STW devices
             //Add missing openSYDE devices
             m_HandleMissingDevices(this->mc_OpenSydeDeviceConfigurations, c_DeviceInfos, c_Text);
-            c_Text += static_cast<QString>(C_GtGetText::h_GetText("For more details see "));
+            c_Text += static_cast<QString>("For more details see ");
             //Update log file
             C_OscLoggingHandler::h_Flush();
             c_Text += static_cast<QString>("<a href=\"file:%1\"><span style=\"color: %2;\">%3</span></a>.").
                       arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()).
                       arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
-                      arg(C_GtGetText::h_GetText("log file"));
+                      arg("log file");
             c_Text += "<br/>";
          }
 
@@ -1891,7 +1876,7 @@ QString C_SyvDcWidget::m_GetStateStringOfServerStep(const uint32_t ou32_Step,
                                                     const uint8_t ou8_InterfaceNumber)
 {
    // Default text if no concrete state is available
-   QString c_Text = static_cast<QString>(C_GtGetText::h_GetText("<b>Skipped</b> (error occurred during process)"));
+   QString c_Text = static_cast<QString>("<b>Skipped</b> (error occurred during process)");
 
    QMap<stw::opensyde_core::C_OscProtocolDriverOsyNode,
         std::vector<C_ServerConfStepResult> >::const_iterator c_ItServer;
@@ -1912,11 +1897,11 @@ QString C_SyvDcWidget::m_GetStateStringOfServerStep(const uint32_t ou32_Step,
             // State found
             if (rc_States[u32_StateCounter].s32_Result == C_NO_ERR)
             {
-               c_Text = static_cast<QString>(C_GtGetText::h_GetText("OK"));
+               c_Text = static_cast<QString>("OK");
             }
             else
             {
-               c_Text = "<b>" + static_cast<QString>(C_GtGetText::h_GetText("FAILED")) + "</b>";
+               c_Text = "<b>" + static_cast<QString>("FAILED") + "</b>";
             }
             break;
          }
@@ -1987,10 +1972,10 @@ void C_SyvDcWidget::m_InitScanScreen(void)
       this->mpc_Ui->pc_GroupBoxNoExistingNodes->setVisible(false);
       this->mpc_Ui->pc_ListWidgetExistingNodes->setVisible(true);
    }
-   c_Heading = static_cast<QString>(C_GtGetText::h_GetText("Topology Nodes (%1)")).arg(
+   c_Heading = static_cast<QString>("Topology Nodes (%1)").arg(
       this->mpc_Ui->pc_ListWidgetExistingNodes->count());
    this->mpc_Ui->pc_LabelHeadingTopologyNodes->setText(c_Heading);
-   this->mpc_Ui->pc_LabelHeadingFoundDevices->setText(static_cast<QString>(C_GtGetText::h_GetText("Connected Devices")));
+   this->mpc_Ui->pc_LabelHeadingFoundDevices->setText(static_cast<QString>("Connected Devices"));
    //Progress
    this->mpc_Ui->pc_BopperleScan->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21, mc_STYLE_GUIDE_COLOR_13);
    //Reset
@@ -2003,9 +1988,8 @@ void C_SyvDcWidget::m_InitScanScreen(void)
 
    if (s32_Return != C_NO_ERR)
    {
-      m_InformUserAfterScan(C_GtGetText::h_GetText(
-                               "At least one node is connected to the bus with more than one interface."
-                               " Check interface configuration of the devices and retry."));
+      m_InformUserAfterScan("At least one node is connected to the bus with more than one interface."
+                               " Check interface configuration of the devices and retry.");
       this->mpc_Ui->pc_PushButtonScan->setEnabled(false);
    }
 }
@@ -2019,12 +2003,12 @@ void C_SyvDcWidget::m_InitAssignmentScreen(void) const
    QString c_Heading;
 
    this->mpc_Ui->pc_ListWidgetExistingNodesAssignment->SetView(this->mu32_ViewIndex, true);
-   c_Heading = static_cast<QString>(C_GtGetText::h_GetText("Topology Nodes (%1)")).arg(
+   c_Heading = static_cast<QString>("Topology Nodes (%1)").arg(
       this->mpc_Ui->pc_ListWidgetExistingNodesAssignment->count());
    this->mpc_Ui->pc_LabelHeadingTopologyNodesAssignment->setText(c_Heading);
 
    this->mpc_Ui->pc_ListWidgetConnectedNodesAssignment->SetData(this->mc_FoundDevices);
-   c_Heading = static_cast<QString>(C_GtGetText::h_GetText("Connected Devices (%1)")).
+   c_Heading = static_cast<QString>("Connected Devices (%1)").
                arg(this->mpc_Ui->pc_ListWidgetConnectedNodesAssignment->count());
    this->mpc_Ui->pc_LabelHeadingFoundDevicesAssignment->setText(c_Heading);
    m_AssignmentUpdateProgress();
@@ -2274,7 +2258,7 @@ void C_SyvDcWidget::m_AssignmentUpdateProgress(void) const
       static_cast<uint32_t>(this->mpc_Ui->pc_ListWidgetExistingNodesAssignment->count());
    QString c_Text;
 
-   c_Text = static_cast<QString>(C_GtGetText::h_GetText("Assigned: %1 of %2")).arg(u32_AssignedItemCount).arg(
+   c_Text = static_cast<QString>("Assigned: %1 of %2").arg(u32_AssignedItemCount).arg(
       u32_OverallItemCount);
 
    if (u32_AssignedItemCount == u32_OverallItemCount)
@@ -2309,7 +2293,7 @@ void C_SyvDcWidget::m_Timer(void)
          if (this->mq_InitializationFinished == true)
          {
             // The thread is running, CAN is now initialized, therefore the communication is running...
-            this->mpc_Ui->pc_LabelStartScan->setText(C_GtGetText::h_GetText("Scanning for devices..."));
+            this->mpc_Ui->pc_LabelStartScan->setText("Scanning for devices...");
          }
       }
 
@@ -2333,9 +2317,9 @@ void C_SyvDcWidget::m_Timer(void)
                if (s32_Result != C_NO_ERR)
                {
                   C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-                  c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
-                  c_Message.SetDescription(C_GtGetText::h_GetText("Could not continue with step: Reading information"
-                                                                  " from openSYDE devices."));
+                  c_Message.SetHeading("Device configuration");
+                  c_Message.SetDescription("Could not continue with step: Reading information"
+                                                                  " from openSYDE devices.");
                   m_CleanUpScan();
                   c_Message.SetCustomMinHeight(180, 180);
                   c_Message.Execute();
@@ -2351,8 +2335,8 @@ void C_SyvDcWidget::m_Timer(void)
             else
             {
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-               c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
-               c_Message.SetDescription(C_GtGetText::h_GetText("Could not transfer all devices into Flashloader mode."));
+               c_Message.SetHeading("Device configuration");
+               c_Message.SetDescription("Could not transfer all devices into Flashloader mode.");
                m_CleanUpScan();
                c_Message.SetCustomMinHeight(180, 180);
                c_Message.Execute();
@@ -2378,21 +2362,20 @@ void C_SyvDcWidget::m_Timer(void)
             else
             {
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-               c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
+               c_Message.SetHeading("Device configuration");
                if (s32_SequenceResult == C_CHECKSUM)
                {
                   c_Message.SetCustomMinHeight(200, 230);
                   c_Message.SetDescription(
-                     C_GtGetText::h_GetText("At least one node has secure authentication or traffic encryption "
-                                            "activated and at least one node ID is not unique."));
-                  c_Message.SetDetails(C_GtGetText::h_GetText(
-                                          "This combination is not supported by the device configuration."));
+                     "At least one node has secure authentication or traffic encryption "
+                                            "activated and at least one node ID is not unique.");
+                  c_Message.SetDetails("This combination is not supported by the device configuration.");
                }
                else
                {
                   c_Message.SetCustomMinHeight(180, 180);
-                  c_Message.SetDescription(C_GtGetText::h_GetText("Failed while getting all information"
-                                                                  " from openSYDE Devices."));
+                  c_Message.SetDescription("Failed while getting all information"
+                                                                  " from openSYDE Devices.");
                }
                m_CleanUpScan();
                c_Message.Execute();
@@ -2411,19 +2394,18 @@ void C_SyvDcWidget::m_Timer(void)
             else
             {
                q_ShowFinalErrorMessage = true;
-               c_ErrorDescription = C_GtGetText::h_GetText("Error occurred during openSYDE device configuration.");
+               c_ErrorDescription = "Error occurred during openSYDE device configuration.";
 
-               c_Text = static_cast<QString>(C_GtGetText::h_GetText("For more details see "));
+               c_Text = static_cast<QString>("For more details see ");
                //Update log file
                C_OscLoggingHandler::h_Flush();
                c_Text += static_cast<QString>("<a href=\"file:%1\"><span style=\"color: %2;\">%3</span></a>.").
                          arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()).
                          arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
-                         arg(C_GtGetText::h_GetText("log file"));
+                         arg("log file");
                c_Text += "<br/>";
                c_Text += "<br/><br/><br/>" + mc_REPORT_HIGHLIGHT_TAG_START;
-               c_Text += static_cast<QString>(C_GtGetText::h_GetText(
-                                                 "Errors occurred during device configuration. Check report for details."));
+               c_Text += static_cast<QString>("Errors occurred during device configuration. Check report for details.");
 
                c_Text += mc_REPORT_HIGHLIGHT_TAG_END + "<br/>";
 
@@ -2435,16 +2417,15 @@ void C_SyvDcWidget::m_Timer(void)
 
                   q_ShowFinalErrorMessage = false;
                   C_OscLoggingHandler::h_Flush();
-                  c_MessageAuth.SetHeading(C_GtGetText::h_GetText("Device Configuration"));
-                  c_MessageAuth.SetDescription(C_GtGetText::h_GetText(
-                                                  "Authentication between openSYDE Tool and device(s) has failed. Access denied."));
-                  c_MessageAuth.SetDetails(C_GtGetText::h_GetText("Possible reasons:<br/>"
+                  c_MessageAuth.SetHeading("Device Configuration");
+                  c_MessageAuth.SetDescription("Authentication between openSYDE Tool and device(s) has failed. Access denied.");
+                  c_MessageAuth.SetDetails("Possible reasons:<br/>"
                                                                   "- Associated private key (*.pem) not found in /certificates folder (most common)<br/>"
                                                                   "- Failure during authenfication process<br/>"
-                                                                  "For more information see ") +
-                                           C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"),
+                                                                  "For more information see " +
+                                           C_Uti::h_GetLink("log file",
                                                             mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                                            c_Log) + C_GtGetText::h_GetText("."));
+                                                            c_Log) + ".");
                   c_MessageAuth.SetCustomMinHeight(200, 300);
                   c_MessageAuth.Execute();
                }
@@ -2476,23 +2457,22 @@ void C_SyvDcWidget::m_Timer(void)
             {
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eINFORMATION);
 
-               c_Text +=  static_cast<QString>(C_GtGetText::h_GetText("Device Configuration successfully finished!"));
+               c_Text +=  static_cast<QString>("Device Configuration successfully finished!");
                c_Text += mc_REPORT_HIGHLIGHT_TAG_END + "<br/><br/>";
                this->m_UpdateReportText(c_Text);
 
                c_Message.SetHeading("Device Configuration");
-               c_Message.SetDescription(C_GtGetText::h_GetText("Device Configuration successfully finished."));
+               c_Message.SetDescription("Device Configuration successfully finished.");
                c_Message.SetCustomMinHeight(180, 180);
                c_Message.Execute();
             }
             else
             {
                q_ShowFinalErrorMessage = true;
-               c_ErrorDescription = C_GtGetText::h_GetText("Error occurred during device configuration.");
+               c_ErrorDescription = "Error occurred during device configuration.";
 
                c_Text +=
-                  static_cast<QString>(C_GtGetText::h_GetText(
-                                          "Errors occurred during device configuration. Check report for details."));
+                  static_cast<QString>("Errors occurred during device configuration. Check report for details.");
                c_Text += mc_REPORT_HIGHLIGHT_TAG_END + "<br/><br/>";
                this->m_UpdateReportText(c_Text);
 
@@ -2502,16 +2482,15 @@ void C_SyvDcWidget::m_Timer(void)
 
                   q_ShowFinalErrorMessage = false;
                   C_OscLoggingHandler::h_Flush();
-                  c_MessageAuth.SetHeading(C_GtGetText::h_GetText("Device Configuration"));
-                  c_MessageAuth.SetDescription(C_GtGetText::h_GetText(
-                                                  "Authentication between openSYDE Tool and device(s) has failed. Access denied."));
-                  c_MessageAuth.SetDetails(C_GtGetText::h_GetText("Possible reasons:<br/>"
+                  c_MessageAuth.SetHeading("Device Configuration");
+                  c_MessageAuth.SetDescription("Authentication between openSYDE Tool and device(s) has failed. Access denied.");
+                  c_MessageAuth.SetDetails("Possible reasons:<br/>"
                                                                   "- Associated private key (*.pem) not found in /certificates folder (most common)<br/>"
                                                                   "- Failure during authenfication process<br/>"
-                                                                  "For more information see ") +
-                                           C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"),
+                                                                  "For more information see " +
+                                           C_Uti::h_GetLink("log file",
                                                             mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                                            c_Log) + C_GtGetText::h_GetText("."));
+                                                            c_Log) + ".");
                   c_MessageAuth.SetCustomMinHeight(200, 300);
                   c_MessageAuth.Execute();
                }
@@ -2535,14 +2514,13 @@ void C_SyvDcWidget::m_Timer(void)
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
          c_Message.SetHeading("Device Configuration");
          c_Message.SetDescription(c_ErrorDescription);
-         c_Message.SetDetails(C_GtGetText::h_GetText(
-                                 "Tips:\n"
+         c_Message.SetDetails("Tips:\n"
                                  "- Check if your PC is really connected to the device interface, which is defined in the setup view.\n"
                                  "- Check whether the devices have performed the reset correctly.\n"
                                  "- Check if the devices are still available.\n"
                                  "- Check if in case of Ethernet the set IP address is in the same subnet like the PC Ethernet adapter?\n"
                                  "\n"
-                                 "Check device configuration report for more details about warnings, errors or success."));
+                                 "Check device configuration report for more details about warnings, errors or success.");
          c_Message.SetCustomMinHeight(180, 350);
          c_Message.Execute();
       }
@@ -2586,9 +2564,9 @@ void C_SyvDcWidget::m_HandleConfigurationStarted(void)
    QString c_Temporary;
 
    c_Text = mc_REPORT_HEADLINE_HTML_TAG_START;
-   c_Text += static_cast<QString>(C_GtGetText::h_GetText("Device Configuration"));
+   c_Text += static_cast<QString>("Device Configuration");
    c_Text += mc_REPORT_HEADLINE_HTML_TAG_END;
-   c_Temporary = "<p>" + static_cast<QString>(C_GtGetText::h_GetText("Waiting for results ...")) + "</p>";
+   c_Temporary = "<p>" + static_cast<QString>("Waiting for results ...") + "</p>";
 
    this->m_UpdateReportText(c_Text, c_Temporary);
 }
@@ -2603,9 +2581,9 @@ void C_SyvDcWidget::m_HandleDeviceVerificationStart(void)
    QString c_Temporary;
 
    c_Text = mc_REPORT_HEADLINE_HTML_TAG_START;
-   c_Text += static_cast<QString>(C_GtGetText::h_GetText("Device Type Verification"));
+   c_Text += static_cast<QString>("Device Type Verification");
    c_Text += mc_REPORT_HEADLINE_HTML_TAG_END;
-   c_Temporary = "<p>" + static_cast<QString>(C_GtGetText::h_GetText("Waiting for results ...")) + "</p>";
+   c_Temporary = "<p>" + static_cast<QString>("Waiting for results ...") + "</p>";
 
    this->m_UpdateReportText(c_Text, c_Temporary);
 }
@@ -2637,7 +2615,7 @@ void C_SyvDcWidget::m_HandleMissingDevices(const std::vector<C_SyvDcDeviceConfig
       }
       if (q_Found == false)
       {
-         orc_ReportText += "<b>" + static_cast<QString>(C_GtGetText::h_GetText("SN.: %1")).arg(
+         orc_ReportText += "<b>" + static_cast<QString>("SN.: %1").arg(
             static_cast<QString>(rc_ExpectedDevice.c_SerialNumber.GetSerialNumberAsFormattedString().c_str())) +
                            "</b><br/>";
       }
@@ -2698,8 +2676,8 @@ void C_SyvDcWidget::m_DoCompleteDisconnect(void)
             QApplication::setOverrideCursor(Qt::WaitCursor);
 
             //inform user whats happening
-            c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
-            c_Message.SetDescription(C_GtGetText::h_GetText("Exiting Update Mode..."));
+            c_Message.SetHeading("Device configuration");
+            c_Message.SetDescription("Exiting Update Mode...");
             c_Message.SetCustomMinHeight(180, 180);
             c_Message.show();
 
@@ -2822,9 +2800,8 @@ void C_SyvDcWidget::m_InformUserAboutAbortedClose(void) const
 {
    C_OgeWiCustomMessage c_Message(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eINFORMATION);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
-   c_Message.SetDescription(C_GtGetText::h_GetText(
-                               "While the communication is running, an abort can lead to an inconsistent status of the system."));
+   c_Message.SetHeading("Device configuration");
+   c_Message.SetDescription("While the communication is running, an abort can lead to an inconsistent status of the system.");
    c_Message.SetCustomMinHeight(180, 180);
    c_Message.Execute();
 }
@@ -2837,7 +2814,7 @@ void C_SyvDcWidget::m_InformUserAfterScan(const QString & orc_Text)
 {
    C_OgeWiCustomMessage c_Message(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eERROR);
 
-   c_Message.SetHeading(C_GtGetText::h_GetText("Device configuration"));
+   c_Message.SetHeading("Device configuration");
    c_Message.SetDescription(orc_Text);
    c_Message.SetCustomMinHeight(180, 180);
    c_Message.Execute();

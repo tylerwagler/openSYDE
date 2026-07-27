@@ -21,13 +21,13 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "cam_constants.hpp"
+#include "C_CanMonProtocol.hpp"
 
 #include "C_OgeWiUtil.hpp"
 #include "C_UsHandler.hpp"
 #include "C_CamProHandler.hpp"
 #include "C_CamMetTreeView.hpp"
 #include "C_CamMetClipBoardHelper.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -256,6 +256,30 @@ void C_CamMetTreeView::SetProtocol(const stw::cmon_protocol::e_CanMonL7Protocols
       this->m_UpdateProtocolString(*c_Messages[u32_ItMessage]);
    }
    //Update all related columns
+   this->mc_Model.SignalProtocolChange();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Enable or disable CAN-TP decoding
+
+   \param[in]  oq_Enabled  true to enable
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CamMetTreeView::SetCanTpEnabled(const bool oq_Enabled)
+{
+   this->GetCanTpDecoder().SetEnabled(oq_Enabled);
+   // When CAN-TP protocol is selected, enable consolidation in unique mode
+   this->mc_Model.SetProtocol(oq_Enabled ? stw::cmon_protocol::eCMON_L7_PROTOCOL_CAN_TP :
+                                stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE);
+   // Show TP column when CAN-TP is active, hide otherwise
+   this->setColumnHidden(C_CamMetTreeModel::h_EnumToColumn(C_CamMetTreeModel::eCAN_TP_INFO), !oq_Enabled);
+   // Widen Data column to accommodate reassembled payloads, and persist to user settings
+   // so saved settings don't override it on next restore.
+   const int32_t s32_DataCol = C_CamMetTreeModel::h_EnumToColumn(C_CamMetTreeModel::eCAN_DATA);
+   const int32_t s32_NewWidth = oq_Enabled ? 800 : mhs32_COL_WIDTH_CAN_DATA;
+   this->setColumnWidth(s32_DataCol, s32_NewWidth);
+   std::vector<int32_t> c_Widths = this->GetCurrentColumnWidths();
+   C_UsHandler::h_GetInstance()->SetTraceColWidths(c_Widths);
    this->mc_Model.SignalProtocolChange();
 }
 
@@ -795,20 +819,19 @@ void C_CamMetTreeView::startDrag(const Qt::DropActions oc_SupportedActions)
 void C_CamMetTreeView::m_SetupContextMenu(void)
 {
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
-   this->mpc_ActionCopy = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                              "Copy as Text"), this, &C_CamMetTreeView::m_CopySelection,
+   this->mpc_ActionCopy = this->mpc_ContextMenu->addAction("Copy as Text", this, &C_CamMetTreeView::m_CopySelection,
                                                            static_cast<int32_t>(Qt::CTRL) +
                                                            static_cast<int32_t>(Qt::Key_C));
 
-   this->mpc_AddFilter = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Add to Receive Filter"),
+   this->mpc_AddFilter = this->mpc_ContextMenu->addAction("Add to Receive Filter",
                                                           this, &C_CamMetTreeView::m_OnAddFilterClicked);
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ActionExpandAll = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Expand all"),
+   this->mpc_ActionExpandAll = this->mpc_ContextMenu->addAction("Expand all",
                                                                 this, &C_CamMetTreeView::m_ExpandAll);
 
-   this->mpc_ActionCollapseAll = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Collapse all"),
+   this->mpc_ActionCollapseAll = this->mpc_ContextMenu->addAction("Collapse all",
                                                                   this, &C_CamMetTreeView::m_CollapseAll);
 
    this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -953,6 +976,13 @@ void C_CamMetTreeView::m_HandleMessages(void)
 
    while (this->m_GetCanMessage(c_Msg) == C_NO_ERR)
    {
+      // Ensure grey-out vectors match the actual data length (they default to 8)
+      const uint32_t u32_Dlc = static_cast<uint32_t>(c_Msg.c_CanDlc.ToInt());
+      if (c_Msg.c_GreyOutInformation.c_GrayOutValueDataBytes.size() != u32_Dlc)
+      {
+         c_Msg.c_GreyOutInformation.c_GrayOutValueDataBytes.resize(u32_Dlc, 0);
+         c_Msg.c_GreyOutInformation.c_DataBytesChangedTimeStamps.resize(u32_Dlc, 0);
+      }
       this->mc_GuiBuffer.HandleData(c_Msg);
    }
 }

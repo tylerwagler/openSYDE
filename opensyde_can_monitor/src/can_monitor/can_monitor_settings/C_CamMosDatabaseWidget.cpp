@@ -19,7 +19,6 @@
 #include "ui_C_CamMosDatabaseWidget.h"
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "TglUtils.hpp"
 #include "C_CamProHandler.hpp"
@@ -238,10 +237,9 @@ void C_CamMosDatabaseWidget::OnSigOsySysDefBusResult(const QString & orc_PathSys
             C_CamProHandler::h_GetInstance()->GetDatabases()[this->m_GetIndexFromWidget(pc_Item)].s32_BusIndex);
       }
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eWARNING);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Bus Selection"));
-      c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                       "An error occurred on bus that was selected for database %1. "
-                                                       "Returned to previous bus.")).arg(
+      c_Message.SetHeading("Bus Selection");
+      c_Message.SetDescription(static_cast<QString>("An error occurred on bus that was selected for database %1. "
+                                                       "Returned to previous bus.").arg(
                                   orc_PathSystemDefinition));
       c_Message.Execute();
    }
@@ -249,11 +247,10 @@ void C_CamMosDatabaseWidget::OnSigOsySysDefBusResult(const QString & orc_PathSys
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
 
-      c_Message.SetHeading(C_GtGetText::h_GetText("Bus Selection"));
+      c_Message.SetHeading("Bus Selection");
       c_Message.SetDescription(static_cast<QString>(
-                                  C_GtGetText::h_GetText(
-                                     "An unknown error occurred on bus that was selected for database %1. "
-                                     "Behavior of used bus undefined and can be displayed wrong.")).
+                                  "An unknown error occurred on bus that was selected for database %1. "
+                                     "Behavior of used bus undefined and can be displayed wrong.").
                                arg(orc_PathSystemDefinition));
       c_Message.Execute();
    }
@@ -390,7 +387,7 @@ void C_CamMosDatabaseWidget::m_InitUi(void)
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_FrameTop, "HasColor8Background", true);
 
    // initialize title widget
-   this->mpc_Ui->pc_WiHeader->SetTitle(C_GtGetText::h_GetText("Database"));
+   this->mpc_Ui->pc_WiHeader->SetTitle("Database");
    this->mpc_Ui->pc_WiHeader->SetIcon("://images/IconDatabase.svg");
    this->mpc_Ui->pc_WiHeader->SetToggle(false);
 
@@ -400,10 +397,9 @@ void C_CamMosDatabaseWidget::m_InitUi(void)
    c_Icon.addFile("://images/IconAddDisabled.svg", QSize(), QIcon::Disabled);
    this->mpc_Ui->pc_BtnAdd->setIconSize(QSize(11, 11));
    this->mpc_Ui->pc_BtnAdd->setIcon(c_Icon);
-   this->mpc_Ui->pc_BtnAdd->setText(C_GtGetText::h_GetText("Add Database"));
-   this->mpc_Ui->pc_BtnAdd->SetToolTipInformation(C_GtGetText::h_GetText("Add New Database"),
-                                                  C_GtGetText::h_GetText(
-                                                     "Add new database (*.syde or *.dbc) from file system."));
+   this->mpc_Ui->pc_BtnAdd->setText("Add Database");
+   this->mpc_Ui->pc_BtnAdd->SetToolTipInformation("Add New Database",
+                                                  "Add new database (*.syde or *.dbc) from file system.");
 
    // initialize label
    this->mpc_Ui->pc_LabNoDatabase->SetForegroundColor(0);
@@ -411,7 +407,7 @@ void C_CamMosDatabaseWidget::m_InitUi(void)
    this->mpc_Ui->pc_LabNoDatabase->setEnabled(false);
 
    this->mpc_Ui->pc_LabNoDatabase->setText(
-      C_GtGetText::h_GetText("No databases are declared.\nAdd any via \"Add Database\"."));
+      "No databases are declared.\nAdd any via \"Add Database\".");
 
    connect(this->mpc_Ui->pc_WiHeader, &C_CamOgeWiSettingSubSection::SigExpandSection,
            this, &C_CamMosDatabaseWidget::m_OnExpand);
@@ -550,17 +546,17 @@ void C_CamMosDatabaseWidget::m_RemoveDatabase(C_CamMosDatabaseItemWidget * const
    if (oq_AskUser == true)
    {
       QString c_Details;
-      QString c_Description = C_GtGetText::h_GetText("Do you really want to delete this database?");
+      QString c_Description = "Do you really want to delete this database?";
       // ask user
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eQUESTION);
 
       C_CamMosDatabaseItemWidget::h_AppendMessageWarningIfNecessary(
          opc_ItemWidget->GetDatabaseData().c_Name, c_Description, c_Details);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Database Delete"));
+      c_Message.SetHeading("Database Delete");
       c_Message.SetDescription(c_Description);
       c_Message.SetDetails(c_Details);
-      c_Message.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-      c_Message.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+      c_Message.SetOkButtonText("Delete");
+      c_Message.SetNoButtonText("Keep");
 
       if (c_Message.Execute() != C_OgeWiCustomMessage::eOK)
       {
@@ -640,13 +636,13 @@ bool C_CamMosDatabaseWidget::m_ActivateDatabase(const C_CamMosDatabaseItemWidget
          opc_ItemWidget->GetDatabaseData().c_Name, c_TmpDescription, c_Details);
       if (c_TmpDescription.isEmpty() == false)
       {
-         QString c_Description = C_GtGetText::h_GetText("Do you really want to disable this database?");
+         QString c_Description = "Do you really want to disable this database?";
          c_Description.append(c_TmpDescription);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Database Disable"));
+         c_Message.SetHeading("Database Disable");
          c_Message.SetDescription(c_Description);
          c_Message.SetDetails(c_Details);
-         c_Message.SetOkButtonText(C_GtGetText::h_GetText("Disable"));
-         c_Message.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+         c_Message.SetOkButtonText("Disable");
+         c_Message.SetNoButtonText("Keep");
 
          if (c_Message.Execute() != C_OgeWiCustomMessage::eOK)
          {
@@ -938,5 +934,5 @@ void C_CamMosDatabaseWidget::m_OnExpand(const bool oq_Expand) const
 void C_CamMosDatabaseWidget::m_UpdateTitleDatabaseCount(void) const
 {
    this->mpc_Ui->pc_WiHeader->SetTitle(
-      static_cast<QString>(C_GtGetText::h_GetText("Database (%1)")).arg(this->mc_Entries.size()));
+      static_cast<QString>("Database (%1)").arg(this->mc_Entries.size()));
 }

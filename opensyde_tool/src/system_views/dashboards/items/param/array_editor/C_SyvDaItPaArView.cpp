@@ -15,7 +15,6 @@
 #include <QScrollBar>
 #include "C_Uti.hpp"
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvDaItPaArView.hpp"
 #include "C_SdNdeSingleHeaderView.hpp"
 #include "TglUtils.hpp"
@@ -89,7 +88,7 @@ C_SyvDaItPaArView::C_SyvDaItPaArView(QWidget * const opc_Parent) :
    this->mpc_LabelCorner = new QLabel(this);
    this->mpc_LabelCorner->setAlignment(Qt::AlignCenter);
    this->mpc_LabelCorner->setAttribute(Qt::WA_TransparentForMouseEvents);
-   this->mpc_LabelCorner->setText(C_GtGetText::h_GetText("Index"));
+   this->mpc_LabelCorner->setText("Index");
    connect(
       this->verticalHeader(), &QHeaderView::geometriesChanged, this,
       &C_SyvDaItPaArView::m_UpdateCornerButton);

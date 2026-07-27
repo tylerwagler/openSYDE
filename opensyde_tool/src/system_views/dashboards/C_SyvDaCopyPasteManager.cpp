@@ -35,7 +35,6 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -497,18 +496,17 @@ void C_SyvDaCopyPasteManager::h_AdaptCopyDataForPaste(C_PuiSvDashboard & orc_Cop
             //No iterator step because new element at current position
             orc_CopyData.DeleteWidget(u32_ItParam, C_PuiSvDbDataElement::ePARAM);
             c_Message.SetType(C_OgeWiCustomMessage::eINFORMATION);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Widget paste"));
-            c_Message.SetDescription(C_GtGetText::h_GetText("Parametrization widget could not be pasted."));
+            c_Message.SetHeading("Widget paste");
+            c_Message.SetDescription("Parametrization widget could not be pasted.");
             if (q_Found)
             {
-               c_Details = C_GtGetText::h_GetText("Another parametrization widget in this view is already "
-                                                  "using at least one of the containing lists.");
+               c_Details = "Another parametrization widget in this view is already "
+                                                  "using at least one of the containing lists.";
                c_Message.SetCustomMinHeight(180, 250);
             }
             else if (q_ElementMissing)
             {
-               c_Details = C_GtGetText::h_GetText(
-                  "The following copied lists were changed before pasting the parametrization widget:\n");
+               c_Details = "The following copied lists were changed before pasting the parametrization widget:\n";
                for (std::set<QString>::const_iterator c_It = c_AdaptedLists.begin(); c_It != c_AdaptedLists.end();
                     ++c_It)
                {
@@ -538,10 +536,9 @@ void C_SyvDaCopyPasteManager::h_AdaptCopyDataForPaste(C_PuiSvDashboard & orc_Cop
          {
             C_OgeWiCustomMessage c_Message(opc_Parent);
             c_Message.SetType(C_OgeWiCustomMessage::eINFORMATION);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Widget paste"));
-            c_Message.SetDescription(C_GtGetText::h_GetText(
-                                        "Some data elements were not found in your SYSTEM DEFINITION.\n"
-                                        "These were automatically removed from the pasted widgets."));
+            c_Message.SetHeading("Widget paste");
+            c_Message.SetDescription("Some data elements were not found in your SYSTEM DEFINITION.\n"
+                                        "These were automatically removed from the pasted widgets.");
             c_Message.SetCustomMinHeight(180, 180);
             c_Message.Execute();
          }

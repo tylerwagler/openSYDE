@@ -16,7 +16,6 @@
 #include <QDir>
 #include <QStandardPaths>
 #include "C_UsFiler.hpp"
-#include "C_GtGetText.hpp"
 #include "stwerrors.hpp"
 #include "C_UsHandler.hpp"
 #include "C_Uti.hpp"
@@ -108,7 +107,7 @@ void C_UsHandler::LoadActiveProject(const QString & orc_ActiveProject)
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetDefault(void)
 {
-   mc_Lang = C_GtGetText::h_GetText("American english");
+   mc_Lang = "American english";
    this->mq_PerformanceMeasurementActive = false;
 
    this->mc_ScreenPos = QPoint(50, 50);
@@ -563,7 +562,7 @@ void C_UsHandler::GetRecentFolders(QStringList & orc_Folders) const
 void C_UsHandler::h_GetLanguages(QStringList & orc_List)
 {
    orc_List.clear();
-   orc_List.append(C_GtGetText::h_GetText("American english"));
+   orc_List.append("American english");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

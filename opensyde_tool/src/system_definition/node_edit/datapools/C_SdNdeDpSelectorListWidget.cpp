@@ -18,7 +18,6 @@
 #include "constants.hpp"
 
 #include "C_SdNdeDpSelectorListWidget.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_SdNdeDpProperties.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -691,8 +690,7 @@ void C_SdNdeDpSelectorListWidget::Paste(void)
          {
             C_OgeWiCustomMessage c_MessageBox(this);
             QApplication::restoreOverrideCursor();
-            c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                           "Cannot paste Datapool. Datapool type is not compatible."));
+            c_MessageBox.SetDescription("Cannot paste Datapool. Datapool type is not compatible.");
             c_MessageBox.Execute();
          }
       }
@@ -946,17 +944,15 @@ void C_SdNdeDpSelectorListWidget::paintEvent(QPaintEvent * const opc_Event)
       if ((this->me_DataPoolType != C_OscNodeDataPool::eHALC) &&
           (this->me_DataPoolType != C_OscNodeDataPool::eHALC_NVM))
       {
-         c_Text = static_cast<QString>(C_GtGetText::h_GetText("No")) + static_cast<QString>(" ") +
+         c_Text = static_cast<QString>("No") + static_cast<QString>(" ") +
                   C_PuiSdUtil::h_ConvertDataPoolTypeToString(this->me_DataPoolType) +
-                  static_cast<QString>(C_GtGetText::h_GetText(
-                                          " Datapool is declared.\nAdd any via the '+' button."));
+                  static_cast<QString>(" Datapool is declared.\nAdd any via the '+' button.");
       }
       else
       {
-         c_Text = static_cast<QString>(C_GtGetText::h_GetText("No")) + static_cast<QString>(" ") +
+         c_Text = static_cast<QString>("No") + static_cast<QString>(" ") +
                   C_PuiSdUtil::h_ConvertDataPoolTypeToString(this->me_DataPoolType) +
-                  static_cast<QString>(C_GtGetText::h_GetText(
-                                          " Datapool is declared. \nHardware configuration is handled in tab 'Hardware Configurator'."));
+                  static_cast<QString>(" Datapool is declared. \nHardware configuration is handled in tab 'Hardware Configurator'.");
       }
 
       // configure color
@@ -1562,63 +1558,52 @@ void C_SdNdeDpSelectorListWidget::m_SetupContextMenu(void)
 {
    this->mpc_ContextMenu = new stw::opensyde_gui_elements::C_OgeContextMenu(this);
 
-   this->mpc_AddAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                             "Add new Datapool"), this,
+   this->mpc_AddAction = this->mpc_ContextMenu->addAction("Add new Datapool", this,
                                                           &C_SdNdeDpSelectorListWidget::AddNewDatapool,
                                                           static_cast<int32_t>(Qt::CTRL) +
                                                           static_cast<int32_t>(Qt::Key_Plus));
 
-   this->mpc_EditAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                              "Edit Properties"), this,
+   this->mpc_EditAction = this->mpc_ContextMenu->addAction("Edit Properties", this,
                                                            &C_SdNdeDpSelectorListWidget::m_Edit,
                                                            static_cast<int32_t>(Qt::Key_F2));
 
-   this->mpc_EditContentAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                     "Edit Content"), this,
+   this->mpc_EditContentAction = this->mpc_ContextMenu->addAction("Edit Content", this,
                                                                   &C_SdNdeDpSelectorListWidget::m_EditContent);
 
    this->mpc_EditActionSeparator = this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_CutAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                             "Cut"), this, &C_SdNdeDpSelectorListWidget::m_Cut,
+   this->mpc_CutAction = this->mpc_ContextMenu->addAction("Cut", this, &C_SdNdeDpSelectorListWidget::m_Cut,
                                                           static_cast<int32_t>(Qt::CTRL) +
                                                           static_cast<int32_t>(Qt::Key_X));
-   this->mpc_CopyAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                              "Copy"), this, &C_SdNdeDpSelectorListWidget::m_Copy,
+   this->mpc_CopyAction = this->mpc_ContextMenu->addAction("Copy", this, &C_SdNdeDpSelectorListWidget::m_Copy,
                                                            static_cast<int32_t>(Qt::CTRL) +
                                                            static_cast<int32_t>(Qt::Key_C));
-   this->mpc_PasteAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                               "Paste"), this, &C_SdNdeDpSelectorListWidget::Paste,
+   this->mpc_PasteAction = this->mpc_ContextMenu->addAction("Paste", this, &C_SdNdeDpSelectorListWidget::Paste,
                                                             static_cast<int32_t>(Qt::CTRL) +
                                                             static_cast<int32_t>(Qt::Key_V));
 
    this->mpc_MoveActionSeparator = this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_MoveLeftAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                  "Move Left"), this,
+   this->mpc_MoveLeftAction = this->mpc_ContextMenu->addAction("Move Left", this,
                                                                &C_SdNdeDpSelectorListWidget::m_MoveLeft,
                                                                static_cast<int32_t>(Qt::CTRL) +
                                                                static_cast<int32_t>(Qt::Key_Left));
-   this->mpc_MoveRightAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                   "Move Right"), this,
+   this->mpc_MoveRightAction = this->mpc_ContextMenu->addAction("Move Right", this,
                                                                 &C_SdNdeDpSelectorListWidget::m_MoveRight,
                                                                 static_cast<int32_t>(Qt::CTRL) +
                                                                 static_cast<int32_t>(Qt::Key_Right));
-   this->mpc_MoveUpAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                "Move Up"), this,
+   this->mpc_MoveUpAction = this->mpc_ContextMenu->addAction("Move Up", this,
                                                              &C_SdNdeDpSelectorListWidget::m_MoveUp,
                                                              static_cast<int32_t>(Qt::CTRL) +
                                                              static_cast<int32_t>(Qt::Key_Up));
-   this->mpc_MoveDownAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                  "Move Down"), this,
+   this->mpc_MoveDownAction = this->mpc_ContextMenu->addAction("Move Down", this,
                                                                &C_SdNdeDpSelectorListWidget::m_MoveDown,
                                                                static_cast<int32_t>(Qt::CTRL) +
                                                                static_cast<int32_t>(Qt::Key_Down));
 
    this->mpc_DeleteActionSeparator = this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_DeleteAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                "Delete"), this, &C_SdNdeDpSelectorListWidget::m_DeleteSlot,
+   this->mpc_DeleteAction = this->mpc_ContextMenu->addAction("Delete", this, &C_SdNdeDpSelectorListWidget::m_DeleteSlot,
                                                              static_cast<int32_t>(Qt::Key_Delete));
 
    this->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -1784,10 +1769,10 @@ void C_SdNdeDpSelectorListWidget::m_Delete(const bool oq_AskUser)
    {
       C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Datapool delete"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to delete the selected Datapool(s)?"));
-      c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-      c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+      c_MessageBox.SetHeading("Datapool delete");
+      c_MessageBox.SetDescription("Do you really want to delete the selected Datapool(s)?");
+      c_MessageBox.SetOkButtonText("Delete");
+      c_MessageBox.SetNoButtonText("Keep");
       c_MessageBox.SetCustomMinHeight(180, 180);
       e_ReturnMessageBox = c_MessageBox.Execute();
 
@@ -2248,22 +2233,22 @@ void C_SdNdeDpSelectorListWidget::m_UpdateItemErrorToolTip(const uint32_t ou32_I
             if (((q_NameConflict == false) && (q_NameInvalid == false)) && (q_IsErrorInListOrMessage == false) &&
                 (q_TooFewListsOrElementsError == false) && (q_TooManyListsOrElementsError == false))
             {
-               pc_Sender->SetErrorToolTip(C_GtGetText::h_GetText("No error found!"), "");
+               pc_Sender->SetErrorToolTip("No error found!", "");
             }
             else
             {
-               const QString c_Heading = C_GtGetText::h_GetText("Datapool has invalid content");
+               const QString c_Heading = "Datapool has invalid content";
                QString c_Content;
                if ((q_NameConflict == true) || (q_NameInvalid == true))
                {
-                  c_Content += C_GtGetText::h_GetText("Invalid properties:\n");
+                  c_Content += "Invalid properties:\n";
                   if (q_NameConflict == true)
                   {
-                     c_Content += C_GtGetText::h_GetText("Duplicate datapool name detected.\n");
+                     c_Content += "Duplicate datapool name detected.\n";
                   }
                   if (q_NameInvalid == true)
                   {
-                     c_Content += C_GtGetText::h_GetText("Datapool name is empty or contains invalid characters.\n");
+                     c_Content += "Datapool name is empty or contains invalid characters.\n";
                   }
                   c_Content += "\n";
                }
@@ -2273,11 +2258,11 @@ void C_SdNdeDpSelectorListWidget::m_UpdateItemErrorToolTip(const uint32_t ou32_I
                   {
                      if (this->me_DataPoolType != C_OscNodeDataPool::eCOM)
                      {
-                        c_Content += C_GtGetText::h_GetText("Lists:\n");
+                        c_Content += "Lists:\n";
                      }
                      else
                      {
-                        c_Content += C_GtGetText::h_GetText("Interfaces:\n");
+                        c_Content += "Interfaces:\n";
                      }
 
                      for (uint32_t u32_ItList = 0;
@@ -2316,16 +2301,16 @@ void C_SdNdeDpSelectorListWidget::m_UpdateItemErrorToolTip(const uint32_t ou32_I
                }
                if (q_TooFewListsOrElementsError == true)
                {
-                  c_Content += C_GtGetText::h_GetText("An interface is missing signals.\n"
+                  c_Content += "An interface is missing signals.\n"
                                                       "Requirements:\n"
                                                       "If there is a message associated with this interface\n"
                                                       "there needs to be at least one signal on this interface.\n"
                                                       "Both Rx and Tx need one signal separately if there is such a message.\n"
-                                                      "\n");
+                                                      "\n";
                }
                if (q_TooManyListsOrElementsError == true)
                {
-                  c_Content += C_GtGetText::h_GetText("Too many lists or elements in the data pool.\n");
+                  c_Content += "Too many lists or elements in the data pool.\n";
                }
 
                pc_Sender->SetErrorToolTip(c_Heading, c_Content);

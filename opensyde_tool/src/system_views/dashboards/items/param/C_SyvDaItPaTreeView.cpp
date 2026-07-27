@@ -15,7 +15,6 @@
 #include <QScrollBar>
 #include <QHeaderView>
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_GiSvDaParam.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_SyvDaItPaArWidget.hpp"

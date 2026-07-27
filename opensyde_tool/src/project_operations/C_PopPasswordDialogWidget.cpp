@@ -14,7 +14,6 @@
 #include "precomp_headers.hpp"
 #include "constants.hpp"
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include <QGraphicsDropShadowEffect>
 #include "C_PopPasswordDialogWidget.hpp"
@@ -169,24 +168,21 @@ void C_PopPasswordDialogWidget::HandleMouseMoveEvent(const QMouseEvent * const o
 //----------------------------------------------------------------------------------------------------------------------
 void C_PopPasswordDialogWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabHeading->setText(C_GtGetText::h_GetText("SERVICE PROJECT AUTHENTICATION"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_LabHeading->setText("SERVICE PROJECT AUTHENTICATION");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
    this->mpc_Ui->pc_PubTogglePwd->setText("");
-   this->mpc_Ui->pc_LabPassword->setText(C_GtGetText::h_GetText("Password"));
-   this->mpc_Ui->pc_LabProject->setText(C_GtGetText::h_GetText("Project"));
-   this->mpc_Ui->pc_LabProjectName->setText(C_GtGetText::h_GetText(
-                                               C_PuiProject::h_GetInstance()->GetName().toStdString().c_str()));
+   this->mpc_Ui->pc_LabPassword->setText("Password");
+   this->mpc_Ui->pc_LabProject->setText("Project");
+   this->mpc_Ui->pc_LabProjectName->setText(C_PuiProject::h_GetInstance()->GetName());
 
    // tooltip
-   this->mpc_Ui->pc_LabPassword->SetToolTipInformation(C_GtGetText::h_GetText("Password"),
-                                                       C_GtGetText::h_GetText(
-                                                          "Enter password to gain access to Service Project."));
+   this->mpc_Ui->pc_LabPassword->SetToolTipInformation("Password",
+                                                       "Enter password to gain access to Service Project.");
 
    // button tooltips
-   this->mpc_Ui->pc_PubTogglePwd->SetToolTipInformation(C_GtGetText::h_GetText("Show/Hide Password"),
-                                                        C_GtGetText::h_GetText(
-                                                           "Shows/hides password when pressed down."));
+   this->mpc_Ui->pc_PubTogglePwd->SetToolTipInformation("Show/Hide Password",
+                                                        "Shows/hides password when pressed down.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -243,9 +239,9 @@ void C_PopPasswordDialogWidget::m_OkClicked(void)
    if (this->GetPassword() == "")
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Open Service Project"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("You must enter a password."));
-      c_Message.SetOkButtonText(C_GtGetText::h_GetText("OK"));
+      c_Message.SetHeading("Open Service Project");
+      c_Message.SetDescription("You must enter a password.");
+      c_Message.SetOkButtonText("OK");
       c_Message.SetCustomMinHeight(180, 180);
 
       if (c_Message.Execute() == C_OgeWiCustomMessage::eYES)

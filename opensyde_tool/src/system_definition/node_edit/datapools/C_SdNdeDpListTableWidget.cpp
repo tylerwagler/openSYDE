@@ -16,7 +16,6 @@
 #include "C_SdNdeDpListTableWidget.hpp"
 #include "C_SdNdeDpListTableWidget.hpp"
 #include "ui_C_SdNdeDpListTableWidget.h"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDpListsTreeWidget.hpp"
 
@@ -99,9 +98,7 @@ C_SdNdeDpListTableWidget::~C_SdNdeDpListTableWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_CheckBoxCrc->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                          "Add checksum"), C_GtGetText::h_GetText(
-                                                          "CRC16 Checksum Option. If active, 2 bytes are reserved at the beginning of the list."));
+   this->mpc_Ui->pc_CheckBoxCrc->SetToolTipInformation("Add checksum", "CRC16 Checksum Option. If active, 2 bytes are reserved at the beginning of the list.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -397,13 +394,12 @@ void C_SdNdeDpListTableWidget::m_InitCrcOption(void)
             this->mpc_Ui->pc_CheckBoxCrc->setChecked(pc_List->q_NvmCrcActive);
             if (pc_DataPool->q_IsSafety == true)
             {
-               this->mpc_Ui->pc_CheckBoxCrc->setText(C_GtGetText::h_GetText(
-                                                        "Add Checksum (Cannot be disabled for safety Datapools)"));
+               this->mpc_Ui->pc_CheckBoxCrc->setText("Add Checksum (Cannot be disabled for safety Datapools)");
                this->mpc_Ui->pc_CheckBoxCrc->setEnabled(false);
             }
             else
             {
-               this->mpc_Ui->pc_CheckBoxCrc->setText(C_GtGetText::h_GetText("Add Checksum"));
+               this->mpc_Ui->pc_CheckBoxCrc->setText("Add Checksum");
                this->mpc_Ui->pc_CheckBoxCrc->setEnabled(true);
             }
             connect(this->mpc_Ui->pc_CheckBoxCrc, &QCheckBox::toggled, this,

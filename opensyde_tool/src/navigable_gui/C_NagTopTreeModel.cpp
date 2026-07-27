@@ -13,7 +13,6 @@
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdUtil.hpp"
 #include "C_NagToolTip.hpp"
@@ -457,7 +456,7 @@ void C_NagTopTreeModel::m_SetParentError(C_TblTreItem * const opc_Item, const bo
                                          const QString & orc_ChildNames)
 {
    this->m_SetItemError(opc_Item, oq_Error,
-                        C_GtGetText::h_GetText("Following items contain invalid content:\n") + orc_ChildNames);
+                        "Following items contain invalid content:\n" + orc_ChildNames);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -475,11 +474,11 @@ void C_NagTopTreeModel::m_SetItemError(C_TblTreItem * const opc_Item, const bool
    {
       if (this->mq_TypeNode == true)
       {
-         opc_Item->c_ToolTipHeading = C_GtGetText::h_GetText("Invalid Node Content");
+         opc_Item->c_ToolTipHeading = "Invalid Node Content";
       }
       else
       {
-         opc_Item->c_ToolTipHeading = C_GtGetText::h_GetText("Invalid Bus Content");
+         opc_Item->c_ToolTipHeading = "Invalid Bus Content";
       }
       opc_Item->c_ToolTipContent = orc_ToolTipContent;
       opc_Item->c_Icon = this->mc_ErrorIcon;

@@ -22,7 +22,6 @@
 #include "C_NagMainWidget.hpp"
 #include "C_HeHandler.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "ui_C_NagMainWidget.h"
 
 #include "C_PuiSvHandler.hpp"
@@ -172,58 +171,52 @@ void C_NagMainWidget::InitText(void) const
 
    //fake padding with Spaces.
    c_String = "    ";
-   c_String.append(C_GtGetText::h_GetText("SYSTEM DEFINITION"));
+   c_String.append("SYSTEM DEFINITION");
    this->mpc_Ui->pc_BtnSysDef->setText(c_String);
-   this->mpc_Ui->pc_BtnSysView->setText(C_GtGetText::h_GetText("SYSTEM COMMISSIONING"));
-   this->mpc_Ui->pc_BtnAbout->setText(C_GtGetText::h_GetText("About"));
-   this->mpc_Ui->pc_BtnToolSettings->setText(C_GtGetText::h_GetText("Settings"));
-   this->mpc_Ui->pc_BtnNewProj->setText(C_GtGetText::h_GetText("New Project"));
-   this->mpc_Ui->pc_BtnOpenProj->setText(C_GtGetText::h_GetText("Open Project"));
-   this->mpc_Ui->pc_BtnSaveProjAs->setText(C_GtGetText::h_GetText("Save Project As"));
-   this->mpc_Ui->pc_BtnCreateServiceProj->setText(C_GtGetText::h_GetText("Create Service Project"));
-   this->mpc_Ui->pc_LabelCurProjTitle->setText(C_GtGetText::h_GetText("Current Project"));
-   this->mpc_Ui->pc_LabelNoRecentProj->setText(C_GtGetText::h_GetText(
-                                                  "No recent projects found, use \"Open Project\"."));
+   this->mpc_Ui->pc_BtnSysView->setText("SYSTEM COMMISSIONING");
+   this->mpc_Ui->pc_BtnAbout->setText("About");
+   this->mpc_Ui->pc_BtnToolSettings->setText("Settings");
+   this->mpc_Ui->pc_BtnNewProj->setText("New Project");
+   this->mpc_Ui->pc_BtnOpenProj->setText("Open Project");
+   this->mpc_Ui->pc_BtnSaveProjAs->setText("Save Project As");
+   this->mpc_Ui->pc_BtnCreateServiceProj->setText("Create Service Project");
+   this->mpc_Ui->pc_LabelCurProjTitle->setText("Current Project");
+   this->mpc_Ui->pc_LabelNoRecentProj->setText("No recent projects found, use \"Open Project\".");
    this->mpc_Ui->pc_GroupBoxNoRecentProj->setTitle("");
 
    // tool tips
-   this->mpc_Ui->pc_BtnNewProj->SetToolTipInformation(C_GtGetText::h_GetText("New Project"),
-                                                      C_GtGetText::h_GetText("Create new empty project."));
-   this->mpc_Ui->pc_BtnOpenProj->SetToolTipInformation(C_GtGetText::h_GetText("Open Project"),
-                                                       C_GtGetText::h_GetText("Browse to open existing project."));
-   this->mpc_Ui->pc_BtnSaveProjAs->SetToolTipInformation(C_GtGetText::h_GetText("Save Project As"),
-                                                         C_GtGetText::h_GetText(
-                                                            "Select name and location to save the project."));
-   this->mpc_Ui->pc_BtnCreateServiceProj->SetToolTipInformation(C_GtGetText::h_GetText("Create Service Project"),
-                                                                C_GtGetText::h_GetText(
-                                                                   "Set a password and select the views that shall be accessible in your Service Project"));
-   this->mpc_Ui->pc_BtnAbout->SetToolTipInformation(C_GtGetText::h_GetText("About"),
-                                                    C_GtGetText::h_GetText("Show information about openSYDE tool."));
-   this->mpc_Ui->pc_BtnToolSettings->SetToolTipInformation(C_GtGetText::h_GetText("Tool Settings"),
-                                                           C_GtGetText::h_GetText("Define general tool behaviour."));
-   this->mpc_Ui->pc_BtnSysDef->SetToolTipInformation(C_GtGetText::h_GetText("SYSTEM DEFINITION"),
-                                                     C_GtGetText::h_GetText("Define your Network "
+   this->mpc_Ui->pc_BtnNewProj->SetToolTipInformation("New Project",
+                                                      "Create new empty project.");
+   this->mpc_Ui->pc_BtnOpenProj->SetToolTipInformation("Open Project",
+                                                       "Browse to open existing project.");
+   this->mpc_Ui->pc_BtnSaveProjAs->SetToolTipInformation("Save Project As",
+                                                         "Select name and location to save the project.");
+   this->mpc_Ui->pc_BtnCreateServiceProj->SetToolTipInformation("Create Service Project",
+                                                                "Set a password and select the views that shall be accessible in your Service Project");
+   this->mpc_Ui->pc_BtnAbout->SetToolTipInformation("About",
+                                                    "Show information about openSYDE tool.");
+   this->mpc_Ui->pc_BtnToolSettings->SetToolTipInformation("Tool Settings",
+                                                           "Define general tool behaviour.");
+   this->mpc_Ui->pc_BtnSysDef->SetToolTipInformation("SYSTEM DEFINITION",
+                                                     "Define your Network "
                                                                             "Topology, Nodes properties, Datapools, "
                                                                             "Interface description, "
-                                                                            "generate files and more."));
-   this->mpc_Ui->pc_BtnSysView->SetToolTipInformation(C_GtGetText::h_GetText("SYSTEM COMMISSIONING"),
-                                                      C_GtGetText::h_GetText("Manage your system views, "
+                                                                            "generate files and more.");
+   this->mpc_Ui->pc_BtnSysView->SetToolTipInformation("SYSTEM COMMISSIONING",
+                                                      "Manage your system views, "
                                                                              "update your system, analyze your system "
-                                                                             "behavior in Dashboards and more."));
-   this->mpc_Ui->pc_BtnClear->SetToolTipInformation(C_GtGetText::h_GetText("Clear Recent Projects"),
-                                                    C_GtGetText::h_GetText("Delete recent projects from user settings."));
-   this->mpc_Ui->pc_BtnEdit->SetToolTipInformation(C_GtGetText::h_GetText("Edit Project Version"),
-                                                   C_GtGetText::h_GetText(
-                                                      "Edit version of your project. \nThis version "
-                                                      "number gets saved on next project save."));
+                                                                             "behavior in Dashboards and more.");
+   this->mpc_Ui->pc_BtnClear->SetToolTipInformation("Clear Recent Projects",
+                                                    "Delete recent projects from user settings.");
+   this->mpc_Ui->pc_BtnEdit->SetToolTipInformation("Edit Project Version",
+                                                   "Edit version of your project. \nThis version "
+                                                      "number gets saved on next project save.");
 
    //NameMaxCharLengthSettings
-   this->mpc_Ui->pc_BtnNameMaxCharLengthSettings->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                                           "Global Project Settings"),
-                                                                        C_GtGetText::h_GetText(
-                                                                           "In Global Project Settings define global "
+   this->mpc_Ui->pc_BtnNameMaxCharLengthSettings->SetToolTipInformation("Global Project Settings",
+                                                                        "In Global Project Settings define global "
                                                                            "project settings like maximum length of the "
-                                                                           "openSYDE element names.)"));
+                                                                           "openSYDE element names.)");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -352,14 +345,14 @@ void C_NagMainWidget::UpdateRecentProjects(void)
    if (c_Files.size() > 0)
    {
       this->mpc_Ui->pc_LabRecentProjects->setText(
-         static_cast<QString>(C_GtGetText::h_GetText("Recent Projects (%1)")).arg(c_Files.size()));
+         static_cast<QString>("Recent Projects (%1)").arg(c_Files.size()));
       this->mpc_Ui->pc_GroupBoxNoRecentProj->setVisible(false);
       this->mpc_Ui->pc_TableView->setVisible(true);
       this->mpc_Ui->pc_TableView->UpdateData(c_Files, c_Projects);
    }
    else
    {
-      this->mpc_Ui->pc_LabRecentProjects->setText(C_GtGetText::h_GetText("Recent Projects"));
+      this->mpc_Ui->pc_LabRecentProjects->setText("Recent Projects");
       this->mpc_Ui->pc_GroupBoxNoRecentProj->setVisible(true);
       this->mpc_Ui->pc_TableView->setVisible(false);
    }
@@ -433,14 +426,13 @@ void C_NagMainWidget::OnCreateServiceProj(void)
          C_OgeWiCustomMessage c_FinishMessage(this, C_OgeWiCustomMessage::E_Type::eINFORMATION);
          const QString c_Details =
             static_cast<QString>("%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.").
-            arg(C_GtGetText::h_GetText("File saved at ")).
+            arg("File saved at ").
             arg(static_cast<QString>(c_SpPath.toStdString().c_str())).
             arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
             arg(static_cast<QString>(c_SpPath.toStdString().c_str()));
-         c_FinishMessage.SetHeading(C_GtGetText::h_GetText("Create Service Project"));
-         c_FinishMessage.SetDescription(C_GtGetText::h_GetText(
-                                           "Service Project created successfully."));
-         c_FinishMessage.SetOkButtonText(C_GtGetText::h_GetText("OK"));
+         c_FinishMessage.SetHeading("Create Service Project");
+         c_FinishMessage.SetDescription("Service Project created successfully.");
+         c_FinishMessage.SetOkButtonText("OK");
          c_FinishMessage.SetDetails(c_Details);
          c_FinishMessage.SetCustomMinHeight(180, 250);
          c_FinishMessage.Execute();
@@ -640,8 +632,7 @@ void C_NagMainWidget::m_UpdateCurrProjInfo(void)
    {
       //Current project
       const QString c_TooltipContent =
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 "Author: %1 \nCreated: %2 \nLast Modified: %3 (by %4) \nUsed openSYDE version: %5")).
+         static_cast<QString>("Author: %1 \nCreated: %2 \nLast Modified: %3 (by %4) \nUsed openSYDE version: %5").
          arg(C_PuiProject::h_GetInstance()->c_Author.c_str()).
          arg(C_PuiProject::h_GetTimeFormatted(C_PuiProject::h_GetInstance()->c_CreationTime).c_str()).
          arg(C_PuiProject::h_GetTimeFormatted(C_PuiProject::h_GetInstance()->c_ModificationTime).c_str()).
@@ -658,16 +649,16 @@ void C_NagMainWidget::m_UpdateCurrProjInfo(void)
    else
    {
       //New project
-      this->mpc_Ui->pc_LabelCurProjName->setText(C_GtGetText::h_GetText("New project"));
-      this->mpc_Ui->pc_LabelCurProjName->SetToolTipInformation(C_GtGetText::h_GetText("New project"),
-                                                               C_GtGetText::h_GetText("This project is not yet saved."));
+      this->mpc_Ui->pc_LabelCurProjName->setText("New project");
+      this->mpc_Ui->pc_LabelCurProjName->SetToolTipInformation("New project",
+                                                               "This project is not yet saved.");
       Q_EMIT (this->SigNewApplicationName(static_cast<QString>("openSYDE - ") +
-                                          static_cast<QString>(C_GtGetText::h_GetText("New project"))));
+                                          static_cast<QString>("New project")));
    }
    //Always use version from current project
    this->mpc_Ui->pc_LabelVersion->setText(c_FontMetrics.elidedText(C_PuiProject::h_GetInstance()->c_Version.c_str(),
                                                                    Qt::ElideRight, 140));
-   this->mpc_Ui->pc_LabelVersion->SetToolTipInformation(C_GtGetText::h_GetText("Project Version"),
+   this->mpc_Ui->pc_LabelVersion->SetToolTipInformation("Project Version",
                                                         C_PuiProject::h_GetInstance()->c_Version.c_str());
    this->mpc_Ui->pc_LineEditVersion->setText(C_PuiProject::h_GetInstance()->c_Version.c_str());
 }
@@ -679,7 +670,7 @@ void C_NagMainWidget::m_UpdateCurrProjInfo(void)
 void C_NagMainWidget::m_SysDefClicked()
 {
    Q_EMIT (this->SigChangeMode(ms32_MODE_SYSDEF, ms32_SUBMODE_SYSDEF_TOPOLOGY, 0,
-                               C_GtGetText::h_GetText("NETWORK TOPOLOGY")));
+                               "NETWORK TOPOLOGY"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -722,9 +713,9 @@ void C_NagMainWidget::m_AboutClicked()
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
 
    new C_NagAboutDialog(*c_New, "openSYDE", ":/images/LogoOpensyde_XXL.png", 27,
-                        C_GtGetText::h_GetText("Vector::DBC Module by Tobias Lorenz;Bison;Flex;"
+                        "Vector::DBC Module by Tobias Lorenz;Bison;Flex;"
                                                "Miniz;AES implementation by SergeyBel;OpenSSL;"
-                                               "QCustomPlot by Emanuel Eichhammer"));
+                                               "QCustomPlot by Emanuel Eichhammer");
 
    //Resize
    c_New->SetSize(QSize(650, 611));
@@ -795,15 +786,15 @@ void C_NagMainWidget::m_OnOpenProj(void)
       // "All files" escape hatch so users on platforms whose native dialogs misparse name
       // filters (notably some KDE Plasma versions) can still see and pick .syde[_sp] files.
       const QString c_Filter =
-         static_cast<QString>(C_GtGetText::h_GetText("openSYDE project (*.syde)")) +
+         static_cast<QString>("openSYDE project (*.syde)") +
          ";;" +
-         static_cast<QString>(C_GtGetText::h_GetText("openSYDE service project (*.syde_sp)")) +
+         static_cast<QString>("openSYDE service project (*.syde_sp)") +
          ";;" +
-         static_cast<QString>(C_GtGetText::h_GetText("All files (*)"));
+         static_cast<QString>("All files (*)");
 
       C_UsHandler::h_GetInstance()->GetMostRecentFolder(c_Folder);
 
-      const QString c_File = C_OgeWiUtil::h_GetOpenFileName(this, C_GtGetText::h_GetText("Open openSYDE Project"),
+      const QString c_File = C_OgeWiUtil::h_GetOpenFileName(this, "Open openSYDE Project",
                                                             c_Folder, c_Filter, "");
       if (c_File.isEmpty() == false)
       {
@@ -871,12 +862,11 @@ void C_NagMainWidget::m_OnClear(void)
    // ask user to confirm
    C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
 
-   c_MessageBox.SetHeading(C_GtGetText::h_GetText("Clear recent projects"));
-   c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                  "Do you really want to clear the table and hence "
-                                  "forget all recent project user settings?"));
-   c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Clear"));
-   c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Keep"));
+   c_MessageBox.SetHeading("Clear recent projects");
+   c_MessageBox.SetDescription("Do you really want to clear the table and hence "
+                                  "forget all recent project user settings?");
+   c_MessageBox.SetOkButtonText("Clear");
+   c_MessageBox.SetNoButtonText("Keep");
    c_MessageBox.SetCustomMinHeight(180, 180);
    //   c_MessageBox.SetCustomMinWidth(700);
 
@@ -954,9 +944,9 @@ int32_t C_NagMainWidget::m_LoadConcreteProject(uint16_t * const opu16_FileVersio
             if (s32_Result == C_CHECKSUM)
             {
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-               c_Message.SetHeading(C_GtGetText::h_GetText("Open Service Project"));
-               c_Message.SetDescription(C_GtGetText::h_GetText("You entered the wrong password. Please try again."));
-               c_Message.SetOkButtonText(C_GtGetText::h_GetText("OK"));
+               c_Message.SetHeading("Open Service Project");
+               c_Message.SetDescription("You entered the wrong password. Please try again.");
+               c_Message.SetOkButtonText("OK");
                c_Message.SetCustomMinHeight(180, 180);
                c_Message.exec();
             }

@@ -13,11 +13,9 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_CamOgePubPathVariablesBase.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -53,8 +51,8 @@ C_CamOgePubPathVariablesBase::C_CamOgePubPathVariablesBase(QWidget * const opc_P
    this->setIcon(c_Icon);
 
    // tool tip
-   this->SetToolTipInformation(C_GtGetText::h_GetText("Insert Variable"),
-                               C_GtGetText::h_GetText("Use common locations like your project path as variables."));
+   this->SetToolTipInformation("Insert Variable",
+                               "Use common locations like your project path as variables.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

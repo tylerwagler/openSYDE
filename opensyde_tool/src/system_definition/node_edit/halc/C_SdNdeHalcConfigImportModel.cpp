@@ -13,7 +13,6 @@
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 
-#include "C_GtGetText.hpp"
 
 #include "C_SdNdeHalcConfigImportModel.hpp"
 
@@ -108,7 +107,7 @@ int32_t C_SdNdeHalcConfigImportModel::Init(const C_OscHalcConfig & orc_Config,
    this->mpc_InvisibleRootItem = new C_SdNdeHalcConfigImportItem();
 
    pc_VisibleRootItem = new C_SdNdeHalcConfigImportItem();
-   pc_VisibleRootItem->c_Name = C_GtGetText::h_GetText("Configuration");
+   pc_VisibleRootItem->c_Name = "Configuration";
 
    // Check domains
    for (u32_ImpDomainCounter = 0U; u32_ImpDomainCounter < this->mc_ImportConfigCopy.c_Domains.size();
@@ -125,10 +124,10 @@ int32_t C_SdNdeHalcConfigImportModel::Init(const C_OscHalcConfig & orc_Config,
       {
          pc_DomainItem->c_ToolTipContent = rc_ImpDomain.c_DomainConfig.c_Comment.c_str();
          pc_DomainItem->c_ToolTipContent += "\n\n";
-         pc_DomainItem->c_ToolTipContent += C_GtGetText::h_GetText("Configuration:\n");
-         pc_DomainItem->c_ToolTipContent += C_GtGetText::h_GetText("   Safety Relevant Parameters: ");
+         pc_DomainItem->c_ToolTipContent += "Configuration:\n";
+         pc_DomainItem->c_ToolTipContent += "   Safety Relevant Parameters: ";
          pc_DomainItem->c_ToolTipContent += rc_ImpDomain.c_DomainConfig.q_SafetyRelevant ?
-                                            C_GtGetText::h_GetText("Yes") : C_GtGetText::h_GetText("No");
+                                            "Yes" : "No";
       }
 
       // Check domains
@@ -770,13 +769,13 @@ QString C_SdNdeHalcConfigImportModel::m_CreateTooltipContent(const uint32_t ou32
          c_Return = rc_ImpChannelConfig.c_Comment.c_str();
          c_Return += "\n\n";
 
-         c_Return += C_GtGetText::h_GetText("Configuration: ");
+         c_Return += "Configuration: ";
          c_Return += "\n";
 
          // safety flag
-         c_Return += C_GtGetText::h_GetText("   Safety Relevant Parameters: ");
+         c_Return += "   Safety Relevant Parameters: ";
          c_Return += rc_ImpChannelConfig.q_SafetyRelevant ?
-                     C_GtGetText::h_GetText("Yes") : C_GtGetText::h_GetText("No");
+                     "Yes" : "No";
          c_Return += "\n";
 
          // selected use case
@@ -786,7 +785,7 @@ QString C_SdNdeHalcConfigImportModel::m_CreateTooltipContent(const uint32_t ou32
          {
             const C_OscHalcDefChannelUseCase & rc_UseCase =
                pc_CurDomain->c_ChannelUseCases[rc_ImpChannelConfig.u32_UseCaseIndex];
-            c_Return += C_GtGetText::h_GetText("   Use Case: ");
+            c_Return += "   Use Case: ";
             c_Return += rc_UseCase.c_Display.c_str();
             c_Return += "\n";
          }
@@ -798,7 +797,7 @@ QString C_SdNdeHalcConfigImportModel::m_CreateTooltipContent(const uint32_t ou32
          // and we want the names of the import channel to be displayed so we cannot use opc_LinkedChannelNames
          if (q_IsLinked == true)
          {
-            c_Return += C_GtGetText::h_GetText("   Linked to: ");
+            c_Return += "   Linked to: ";
             for (uint32_t u32_LinkBuddyCounter = 0; u32_LinkBuddyCounter < c_LinkedChannelIndices.size();
                  u32_LinkBuddyCounter++)
             {

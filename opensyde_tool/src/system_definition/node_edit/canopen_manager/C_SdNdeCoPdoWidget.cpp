@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "TglUtils.hpp"
 #include "C_SdNdeCoPdoWidget.hpp"
 #include "ui_C_SdNdeCoPdoWidget.h"
@@ -100,7 +99,7 @@ void C_SdNdeCoPdoWidget::SaveUserSettings() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoPdoWidget::InitStaticNames() const
 {
-   this->mpc_Ui->pc_LabelNoChannels->setText(C_GtGetText::h_GetText("No PDO data for node found."));
+   this->mpc_Ui->pc_LabelNoChannels->setText("No PDO data for node found.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

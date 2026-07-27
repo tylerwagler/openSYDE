@@ -91,7 +91,15 @@ C_OscComMessageLoggerData::C_OscComMessageLoggerData(void) :
    c_Counter(""),
    c_Status(""),
    c_CanMsg(stw::can::T_STWCAN_Msg_RX()),
-   q_IsTx(false)
+   q_IsTx(false),
+   e_TpFrameType(eCTFT_NONE),
+   u8_TpSequenceNumber(0U),
+   u16_TpTotalMessageLength(0U),
+   u8_TpBlockSize(0U),
+   u8_TpSeparationTime(0U),
+   u32_TpSessionKey(0U),
+   q_TpReassembled(false),
+   q_TpError(false)
 {
 }
 

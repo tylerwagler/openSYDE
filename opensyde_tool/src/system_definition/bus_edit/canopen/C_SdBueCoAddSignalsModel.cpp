@@ -18,7 +18,6 @@
 #include "constants.hpp"
 #include "stwerrors.hpp"
 #include "C_CieUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_TblTreItem.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscImportEdsDcf.hpp"
@@ -199,13 +198,13 @@ QVariant C_SdBueCoAddSignalsModel::headerData(const int32_t os32_Section, const 
          switch (e_Col)
          {
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Index");
+            c_Retval = "Index";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eLENGTH:
-            c_Retval = C_GtGetText::h_GetText("Length[Bit]");
+            c_Retval = "Length[Bit]";
             break;
          default:
             break;
@@ -216,13 +215,13 @@ QVariant C_SdBueCoAddSignalsModel::headerData(const int32_t os32_Section, const 
          switch (e_Col)
          {
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Index");
+            c_Retval = "Index";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eLENGTH:
-            c_Retval = C_GtGetText::h_GetText("Length[Bit]");
+            c_Retval = "Length[Bit]";
             break;
          default:
             break;
@@ -233,13 +232,13 @@ QVariant C_SdBueCoAddSignalsModel::headerData(const int32_t os32_Section, const 
          switch (e_Col)
          {
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("CANopen object dictionary entry index");
+            c_Retval = "CANopen object dictionary entry index";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("CANopen object dictionary entry name");
+            c_Retval = "CANopen object dictionary entry name";
             break;
          case eLENGTH:
-            c_Retval = C_GtGetText::h_GetText("CANopen object dictionary entry bit length");
+            c_Retval = "CANopen object dictionary entry bit length";
             break;
          default:
             break;

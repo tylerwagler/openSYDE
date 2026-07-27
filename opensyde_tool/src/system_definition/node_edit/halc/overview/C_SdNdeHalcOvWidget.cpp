@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_SdNdeHalcOvWidget.hpp"
 #include "ui_C_SdNdeHalcOvWidget.h"
 
@@ -90,9 +89,8 @@ void C_SdNdeHalcOvWidget::SaveUserSettings() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcOvWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelNoChannels->setText(C_GtGetText::h_GetText(
-                                                "No channels declared. \n"
-                                                "Load the hardware description file via 'Select' button."));
+   this->mpc_Ui->pc_LabelNoChannels->setText("No channels declared. \n"
+                                                "Load the hardware description file via 'Select' button.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

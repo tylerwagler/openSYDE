@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SebToolboxUtil.hpp"
 #include <QLabel>
 #include "C_SdUtil.hpp"
@@ -235,18 +234,14 @@ void C_SebToolboxUtil::h_InitFreeElements(QListWidget * const opc_ListWidget)
 {
    if (opc_ListWidget != NULL)
    {
-      C_SebToolboxUtil::h_AddElementToList(opc_ListWidget, C_GtGetText::h_GetText(
-                                              "Text element"), ":/images/system_definition/TextElement.png", "",
-                                           C_GtGetText::h_GetText("Text element"));
-      C_SebToolboxUtil::h_AddElementToList(opc_ListWidget, C_GtGetText::h_GetText(
-                                              "Boundary"), ":/images/system_definition/Boundary.png", "",
-                                           C_GtGetText::h_GetText("Boundary"));
-      C_SebToolboxUtil::h_AddElementToList(opc_ListWidget, C_GtGetText::h_GetText(
-                                              "Line/Arrow"), ":/images/system_definition/LineArrow.png", "",
-                                           C_GtGetText::h_GetText("Line/Arrow"));
-      C_SebToolboxUtil::h_AddElementToList(opc_ListWidget, C_GtGetText::h_GetText(
-                                              "Image"), ":/images/system_definition/Image.svg", "",
-                                           C_GtGetText::h_GetText("Image"));
+      C_SebToolboxUtil::h_AddElementToList(opc_ListWidget, "Text element", ":/images/system_definition/TextElement.png", "",
+                                           "Text element");
+      C_SebToolboxUtil::h_AddElementToList(opc_ListWidget, "Boundary", ":/images/system_definition/Boundary.png", "",
+                                           "Boundary");
+      C_SebToolboxUtil::h_AddElementToList(opc_ListWidget, "Line/Arrow", ":/images/system_definition/LineArrow.png", "",
+                                           "Line/Arrow");
+      C_SebToolboxUtil::h_AddElementToList(opc_ListWidget, "Image", ":/images/system_definition/Image.svg", "",
+                                           "Image");
    }
 }
 

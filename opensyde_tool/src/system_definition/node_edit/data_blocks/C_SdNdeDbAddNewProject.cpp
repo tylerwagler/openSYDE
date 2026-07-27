@@ -23,7 +23,6 @@
 #include "C_PuiUtil.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_OscUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscZipFile.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -120,30 +119,29 @@ C_SdNdeDbAddNewProject::~C_SdNdeDbAddNewProject(void) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbAddNewProject::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Import openSYDE Target Support Package"));
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_LabelTSP->setText(C_GtGetText::h_GetText("openSYDE Target Support Package"));
-   this->mpc_Ui->pc_LabelCreateIn->setText(C_GtGetText::h_GetText("Create In Directory"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Import"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetSubTitle("Import openSYDE Target Support Package");
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Properties");
+   this->mpc_Ui->pc_LabelTSP->setText("openSYDE Target Support Package");
+   this->mpc_Ui->pc_LabelCreateIn->setText("Create In Directory");
+   this->mpc_Ui->pc_PushButtonOk->setText("Import");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 
    //tooltips
    this->mpc_Ui->pc_LabelTSP->SetToolTipInformation(
-      C_GtGetText::h_GetText("openSYDE Target Support Package"),
-      C_GtGetText::h_GetText("openSYDE Target Support Package provided by target deployment"));
+      "openSYDE Target Support Package",
+      "openSYDE Target Support Package provided by target deployment");
 
    this->mpc_Ui->pc_LabelCreateIn->SetToolTipInformation(
-      C_GtGetText::h_GetText("Create In Directory"),
-      C_GtGetText::h_GetText(
-         "Location where the openSYDE Target Support Package content (e.g.: Target project, Flashware, ...) should be extracted at."));
+      "Create In Directory",
+      "Location where the openSYDE Target Support Package content (e.g.: Target project, Flashware, ...) should be extracted at.");
 
    this->mpc_Ui->pc_PushButtonTSP->SetToolTipInformation(
-      C_GtGetText::h_GetText("Browse"),
-      C_GtGetText::h_GetText("Browse for openSYDE Target Support Package."));
+      "Browse",
+      "Browse for openSYDE Target Support Package.");
 
    this->mpc_Ui->pc_PushButtonCreateIn->SetToolTipInformation(
-      C_GtGetText::h_GetText("Browse"),
-      C_GtGetText::h_GetText("Browse for location where openSYDE Target Support Package should be extracted at."));
+      "Browse",
+      "Browse for location where openSYDE Target Support Package should be extracted at.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -211,26 +209,24 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
       {
          QString c_Details;
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Import TSP"));
+         c_Message.SetHeading("Import TSP");
          switch (this->ms32_TspReadResult)
          {
          case C_RANGE:
-            c_Details = C_GtGetText::h_GetText("Specified openSYDE Target Support Package does not exist.");
+            c_Details = "Specified openSYDE Target Support Package does not exist.";
             break;
          case C_NOACT:
             c_Details =
-               C_GtGetText::h_GetText(
-                  "Specified file is present but its structure is invalid (e.g. invalid XML file).");
+               "Specified file is present but its structure is invalid (e.g. invalid XML file).";
             break;
          case C_CONFIG:
-            c_Details = C_GtGetText::h_GetText("In specified file is a XML node or attribute missing.");
+            c_Details = "In specified file is a XML node or attribute missing.";
             break;
          default:
-            c_Details = C_GtGetText::h_GetText("Unknown error occurred.");
+            c_Details = "Unknown error occurred.";
             break;
          }
-         c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                          "Could not load specified openSYDE Target Support Package.")));
+         c_Message.SetDescription(static_cast<QString>("Could not load specified openSYDE Target Support Package."));
          c_Message.SetDetails(c_Details);
          c_Message.SetCustomMinHeight(180, 250);
          c_Message.Execute();
@@ -243,11 +239,10 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
          if (c_DeviceName != pc_Node->c_DeviceType)
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Import TSP"));
+            c_Message.SetHeading("Import TSP");
             c_Message.SetDescription(
-               static_cast<QString>(C_GtGetText::h_GetText(
-                                       "The openSYDE Target Support Package device \"%1\" does not match the "
-                                       "device type \"%2\" of this node")).
+               static_cast<QString>("The openSYDE Target Support Package device \"%1\" does not match the "
+                                       "device type \"%2\" of this node").
                arg(c_DeviceName.c_str()).
                arg(pc_Node->c_DeviceType.c_str()));
             c_Message.SetCustomMinHeight(230, 180);
@@ -257,9 +252,8 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
          else if (this->mpc_Ui->pc_LineEditCreateIn->GetPath().isEmpty() == true)
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-            c_Message.SetHeading(C_GtGetText::h_GetText("Import TSP"));
-            c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                             "Define a directory for the project here.")));
+            c_Message.SetHeading("Import TSP");
+            c_Message.SetDescription(static_cast<QString>("Define a directory for the project here."));
             c_Message.SetCustomMinHeight(180, 180);
             c_Message.Execute();
          }
@@ -275,14 +269,13 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
          bool q_IsWarningSet = true;
 
          C_OgeWiCustomMessage c_Warning(this, C_OgeWiCustomMessage::eWARNING);
-         c_Warning.SetHeading(C_GtGetText::h_GetText("Import TSP"));
-         c_Warning.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
-         c_Warning.SetCancelButtonText(C_GtGetText::h_GetText("Cancel"));
+         c_Warning.SetHeading("Import TSP");
+         c_Warning.SetOkButtonText("Continue");
+         c_Warning.SetCancelButtonText("Cancel");
 
          if (this->mq_IsCurrentNodeNew == false)
          {
-            c_Warning.SetDescription(C_GtGetText::h_GetText(
-                                        "All existing node configuration will be deleted. Do you really want to continue?"));
+            c_Warning.SetDescription("All existing node configuration will be deleted. Do you really want to continue?");
             q_IsWarningSet = true;
          }
          else
@@ -311,14 +304,13 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
                q_Continue = false;
 
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eQUESTION);
-               c_Message.SetHeading(C_GtGetText::h_GetText("Import TSP"));
-               c_Message.SetCancelButtonText(C_GtGetText::h_GetText("Cancel"));
-               c_Message.SetNoButtonText(C_GtGetText::h_GetText("Continue without Clearing"));
-               c_Message.SetOkButtonText(C_GtGetText::h_GetText("Clear and Continue"));
+               c_Message.SetHeading("Import TSP");
+               c_Message.SetCancelButtonText("Cancel");
+               c_Message.SetNoButtonText("Continue without Clearing");
+               c_Message.SetOkButtonText("Clear and Continue");
                c_Message.SetDescription(
-                  static_cast<QString>(C_GtGetText::h_GetText(
-                                          "Directory \"%1\" is not empty. \n\nShould this directory be cleared? "
-                                          "Attention: Your data will be lost!")).arg(c_CreateInFolder.
+                  static_cast<QString>("Directory \"%1\" is not empty. \n\nShould this directory be cleared? "
+                                          "Attention: Your data will be lost!").arg(c_CreateInFolder.
                                                                                      absolutePath()));
                c_Message.SetCustomMinHeight(230, 230);
                c_Message.SetCustomMinWidth(800);
@@ -335,9 +327,9 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
                   else
                   {
                      C_OgeWiCustomMessage c_Message2(this, C_OgeWiCustomMessage::eERROR);
-                     c_Message2.SetHeading(C_GtGetText::h_GetText("Import TSP"));
+                     c_Message2.SetHeading("Import TSP");
                      c_Message2.SetDescription(
-                        static_cast<QString>(C_GtGetText::h_GetText("Could not clear directory \"%1\".")).
+                        static_cast<QString>("Could not clear directory \"%1\".").
                         arg(C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditCreateIn->GetPath())));
                      QApplication::restoreOverrideCursor();
                      c_Message2.SetCustomMinHeight(180, 180);
@@ -376,10 +368,9 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
                else
                {
                   C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-                  c_Message.SetHeading(C_GtGetText::h_GetText("Import TSP"));
-                  c_Message.SetDescription(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                   "Could not extract openSYDE Target Support Package "
-                                                                   "from file \"%1\" to directory \"%2\".")).arg(
+                  c_Message.SetHeading("Import TSP");
+                  c_Message.SetDescription(static_cast<QString>("Could not extract openSYDE Target Support Package "
+                                                                   "from file \"%1\" to directory \"%2\".").arg(
                                               c_Path).
                                            arg(C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditCreateIn
                                                                                        ->
@@ -418,7 +409,7 @@ void C_SdNdeDbAddNewProject::m_TspButtonClicked(void)
    QString c_FolderName; // for default folder
    QString c_FilePath = "";
    const QFileInfo c_File(C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditTSP->GetPath()));
-   const QString c_FilterName = static_cast<QString>(C_GtGetText::h_GetText("openSYDE Target Support Package file")) +
+   const QString c_FilterName = static_cast<QString>("openSYDE Target Support Package file") +
                                 " (*." + mhc_SUFFIX + ")";
 
    if (c_File.exists() == true)
@@ -431,7 +422,7 @@ void C_SdNdeDbAddNewProject::m_TspButtonClicked(void)
    }
 
    c_FilePath =
-      C_OgeWiUtil::h_GetOpenFileName(this, C_GtGetText::h_GetText("Select openSYDE Target Support Package File"),
+      C_OgeWiUtil::h_GetOpenFileName(this, "Select openSYDE Target Support Package File",
                                      c_FolderName, c_FilterName, mhc_SUFFIX);
    if (c_FilePath != "")
    {
@@ -460,7 +451,7 @@ void C_SdNdeDbAddNewProject::m_CreateInButtonClicked(void)
 
    const QString c_Path = QFileDialog::getExistingDirectory(
       this,
-      C_GtGetText::h_GetText("Select Directory for Target Project"),
+      "Select Directory for Target Project",
       c_FolderName, QFileDialog::ShowDirsOnly);
 
    if (c_Path != "")
@@ -506,11 +497,10 @@ void C_SdNdeDbAddNewProject::m_OnLoadTsp(void)
       C_PuiTargetSupportPackageFiler::h_LoadTspV3(C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditTSP
                                                                                           ->GetPath()),
                                                   mc_Tsp, this->mc_OscNode, this->mc_UiNode);
-   this->mpc_Ui->pc_LabelCreateIn->setText(C_GtGetText::h_GetText("Template Project Extract Directory"));
+   this->mpc_Ui->pc_LabelCreateIn->setText("Template Project Extract Directory");
    this->mpc_Ui->pc_LabelCreateIn->SetToolTipInformation(
-      C_GtGetText::h_GetText("Template Project Extract Directory"),
-      C_GtGetText::h_GetText(
-         "Location where the openSYDE Target Support Package content (e.g.: Target project, Flashware, ...) should be extracted at."));
+      "Template Project Extract Directory",
+      "Location where the openSYDE Target Support Package content (e.g.: Target project, Flashware, ...) should be extracted at.");
    if (this->ms32_TspReadResult == C_NO_ERR)
    {
       const bool q_HaveTemplate = !this->mc_Tsp.c_TemplatePath.IsEmpty();
@@ -528,8 +518,7 @@ void C_SdNdeDbAddNewProject::m_OnLoadTsp(void)
    {
       // C_BUSY here used to dispatch to the V2 reader; V2 TSPs are no longer supported by the GUI
       // (use osy_tsp_convert to upgrade legacy TSPs to V3).
-      this->mpc_Ui->pc_TextEditTSPDescription->setPlainText(C_GtGetText::h_GetText(
-                                                               "<openSYDE Target Support Package description>"));
+      this->mpc_Ui->pc_TextEditTSPDescription->setPlainText("<openSYDE Target Support Package description>");
    }
 }
 
@@ -541,11 +530,11 @@ void C_SdNdeDbAddNewProject::m_OnLoadTsp(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbAddNewProject::m_AddV3TopSection(QString & orc_Content) const
 {
-   orc_Content += "<h3>" + static_cast<QString>(C_GtGetText::h_GetText("openSYDE Target Support Package")) + "</h3>";
+   orc_Content += "<h3>" + static_cast<QString>("openSYDE Target Support Package") + "</h3>";
    orc_Content += "<table>";
    orc_Content += "<tr>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-   orc_Content += C_GtGetText::h_GetText("Format Version:");
+   orc_Content += "Format Version:";
    orc_Content += "</td>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
    orc_Content += "3";
@@ -553,7 +542,7 @@ void C_SdNdeDbAddNewProject::m_AddV3TopSection(QString & orc_Content) const
    orc_Content += "</tr>";
    orc_Content += "<tr>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-   orc_Content += C_GtGetText::h_GetText("Device Type: ");
+   orc_Content += "Device Type: ";
    orc_Content += "</td>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
    orc_Content += this->mc_Tsp.c_DeviceName.c_str();
@@ -561,7 +550,7 @@ void C_SdNdeDbAddNewProject::m_AddV3TopSection(QString & orc_Content) const
    orc_Content += "</tr>";
    orc_Content += "<tr>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-   orc_Content += C_GtGetText::h_GetText("Description: ");
+   orc_Content += "Description: ";
    orc_Content += "</td>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
    orc_Content += mc_Tsp.c_Comment.c_str();
@@ -580,11 +569,11 @@ void C_SdNdeDbAddNewProject::m_AddV3TemplateSection(QString & orc_Content) const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   orc_Content += "<h3>" + static_cast<QString>(C_GtGetText::h_GetText("Node Definition Content")) + "</h3>";
+   orc_Content += "<h3>" + static_cast<QString>("Node Definition Content") + "</h3>";
    orc_Content += "<table>";
    orc_Content += "<tr>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-   orc_Content += C_GtGetText::h_GetText("Data Blocks:");
+   orc_Content += "Data Blocks:";
    orc_Content += "</td>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
    orc_Content += QString::number(this->mc_OscNode.c_Applications.size());
@@ -592,7 +581,7 @@ void C_SdNdeDbAddNewProject::m_AddV3TemplateSection(QString & orc_Content) const
    orc_Content += "</tr>";
    orc_Content += "<tr>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-   orc_Content += C_GtGetText::h_GetText("Datapools: ");
+   orc_Content += "Datapools: ";
    orc_Content += "</td>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
    orc_Content += QString::number(this->mc_OscNode.c_DataPools.size());
@@ -600,7 +589,7 @@ void C_SdNdeDbAddNewProject::m_AddV3TemplateSection(QString & orc_Content) const
    orc_Content += "</tr>";
    orc_Content += "<tr>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-   orc_Content += C_GtGetText::h_GetText("COMM Messages: ");
+   orc_Content += "COMM Messages: ";
    orc_Content += "</td>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
    orc_Content += QString::number(this->mc_OscNode.CountAllLocalMessages());
@@ -610,7 +599,7 @@ void C_SdNdeDbAddNewProject::m_AddV3TemplateSection(QString & orc_Content) const
    {
       orc_Content += "<tr>";
       orc_Content += C_SdNdeDbAddNewProject::mhc_START_TD;
-      orc_Content += C_GtGetText::h_GetText("Hardware Configuration: ");
+      orc_Content += "Hardware Configuration: ";
       orc_Content += "</td>";
       orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
       orc_Content += "./" + static_cast<QString>(this->mc_OscNode.c_HalcConfig.c_OriginalFileName.c_str());

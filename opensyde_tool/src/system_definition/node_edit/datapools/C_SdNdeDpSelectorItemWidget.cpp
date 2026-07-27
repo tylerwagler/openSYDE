@@ -17,7 +17,6 @@
 
 #include "C_Uti.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "TglUtils.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -214,11 +213,11 @@ void C_SdNdeDpSelectorItemWidget::SetData(const QString & orc_DatapoolName, cons
       if ((this->mu32_Reserved > this->mu32_Size) &&
           (this->mu32_Reserved > this->mu32_Used))
       {
-         c_Label = c_Label.arg(QString::number(u32_PercentageReserved), C_GtGetText::h_GetText("Reservation"));
+         c_Label = c_Label.arg(QString::number(u32_PercentageReserved), "Reservation");
       }
       else
       {
-         c_Label = c_Label.arg(QString::number(u32_PercentageUsed), C_GtGetText::h_GetText("Usage"));
+         c_Label = c_Label.arg(QString::number(u32_PercentageUsed), "Usage");
       }
       this->mpc_Ui->pc_LabelUsage->setText(c_Label);
    }
@@ -250,18 +249,18 @@ void C_SdNdeDpSelectorItemWidget::UpdateData(void)
 
       // Tooltip
       c_ToolTipText = this->mpc_Ui->pc_TextEditDpComment->toPlainText();
-      c_ToolTipText += C_GtGetText::h_GetText("\n\nVersion: ");
+      c_ToolTipText += "\n\nVersion: ";
       c_ToolTipText += static_cast<QString>("v%1.%2r%3").
                        arg(pc_OscDataPool->au8_Version[0], 2, 10, static_cast<QChar>('0')).
                        arg(pc_OscDataPool->au8_Version[1], 2, 10, static_cast<QChar>('0')).
                        arg(pc_OscDataPool->au8_Version[2], 2, 10, static_cast<QChar>('0'));
 
-      c_ToolTipText += C_GtGetText::h_GetText("\n\nConfiguration:\n");
+      c_ToolTipText += "\n\nConfiguration:\n";
 
       // Protocol type for COMM datapools
       if (pc_OscDataPool->e_Type == C_OscNodeDataPool::eCOM)
       {
-         c_ToolTipText += C_GtGetText::h_GetText("   Communication Protocol: ");
+         c_ToolTipText += "   Communication Protocol: ";
          c_ToolTipText +=
             C_PuiSdUtil::h_ConvertProtocolTypeToString(
                C_PuiSdUtil::h_GetRelatedCanProtocolType(this->mc_DatapoolId.u32_NodeIndex,
@@ -270,29 +269,29 @@ void C_SdNdeDpSelectorItemWidget::UpdateData(void)
       }
 
       // Scope flag
-      c_ToolTipText += C_GtGetText::h_GetText("   Scope of Content: ");
+      c_ToolTipText += "   Scope of Content: ";
       if (pc_OscDataPool->q_ScopeIsPrivate == true)
       {
-         c_ToolTipText += C_GtGetText::h_GetText("Private");
+         c_ToolTipText += "Private";
       }
       else
       {
-         c_ToolTipText += C_GtGetText::h_GetText("Public");
+         c_ToolTipText += "Public";
       }
 
       // Safety flag
-      c_ToolTipText += C_GtGetText::h_GetText("\n   Safety Relevant Content: ");
+      c_ToolTipText += "\n   Safety Relevant Content: ";
       if (pc_OscDataPool->q_IsSafety == true)
       {
-         c_ToolTipText += C_GtGetText::h_GetText("Yes");
+         c_ToolTipText += "Yes";
       }
       else
       {
-         c_ToolTipText += C_GtGetText::h_GetText("No");
+         c_ToolTipText += "No";
       }
 
       // Application
-      c_ToolTipText += C_GtGetText::h_GetText("\n   Related Data Block: ");
+      c_ToolTipText += "\n   Related Data Block: ";
       if (pc_OscDataPool->s32_RelatedDataBlockIndex >= 0)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
@@ -311,7 +310,7 @@ void C_SdNdeDpSelectorItemWidget::UpdateData(void)
       }
       else
       {
-         c_ToolTipText += C_GtGetText::h_GetText("<not assigned>");
+         c_ToolTipText += "<not assigned>";
       }
       c_ToolTipText += "\n\n";
 
@@ -321,7 +320,7 @@ void C_SdNdeDpSelectorItemWidget::UpdateData(void)
          std::vector<QString> c_SharedDatapoolGroup;
          uint32_t u32_DatapoolCounter;
 
-         c_ToolTipText += C_GtGetText::h_GetText("Share configuration with:\n");
+         c_ToolTipText += "Share configuration with:\n";
 
          C_SdNdeDpUtil::h_GetSharedDatapoolGroup(u32_SharedGroup, this->mc_DatapoolId,
                                                  this->mc_DatapoolId.u32_NodeIndex, c_SharedDatapoolGroup);
@@ -352,30 +351,28 @@ void C_SdNdeDpSelectorItemWidget::UpdateData(void)
          // update the label
          if ((this->mu32_Reserved > this->mu32_Size) && (this->mu32_Reserved > this->mu32_Used))
          {
-            c_Label = c_Label.arg(QString::number(u32_PercentageReserved), C_GtGetText::h_GetText("Reservation"));
+            c_Label = c_Label.arg(QString::number(u32_PercentageReserved), "Reservation");
          }
          else
          {
-            c_Label = c_Label.arg(QString::number(u32_PercentageUsed), C_GtGetText::h_GetText("Usage"));
+            c_Label = c_Label.arg(QString::number(u32_PercentageUsed), "Usage");
          }
          this->mpc_Ui->pc_LabelUsage->setText(c_Label);
 
          // udpate the tool tip
-         c_StartAddress = static_cast<QString>("   %1: %2\n").arg(C_GtGetText::h_GetText("Start Address"),
+         c_StartAddress = static_cast<QString>("   %1: %2\n").arg("Start Address",
                                                                   QString::number(pc_OscDataPool->u32_NvmStartAddress));
 
          c_TextUsage = "   " + static_cast<QString>("%1% %2 (%3 / %4)\n").arg(QString::number(u32_PercentageUsed),
 
-                                                                              C_GtGetText::h_GetText(
-                                                                                 "used by parameters"),
+                                                                              "used by parameters",
                                                                               C_Uti::h_GetByteCountAsString(this->
                                                                                                             mu32_Used),
                                                                               C_Uti::h_GetByteCountAsString(this->
                                                                                                             mu32_Size));
          c_TextReservation = "   " + static_cast<QString>("%1% %2 (%3 / %4)").arg(QString::number(
                                                                                      u32_PercentageReserved),
-                                                                                  C_GtGetText::h_GetText(
-                                                                                     "reserved by lists"),
+                                                                                  "reserved by lists",
                                                                                   C_Uti::h_GetByteCountAsString(this->
                                                                                                                 mu32_Reserved),
                                                                                   C_Uti::h_GetByteCountAsString(this->
@@ -679,8 +676,8 @@ void C_SdNdeDpSelectorItemWidget::m_UpdateLabel(void)
          this->mpc_LabelStateImg->setPixmap(this->mc_ConflictImg);
          this->mpc_LabelStateImg->setVisible(true);
          //Activate tool tip
-         this->mpc_LabelStateImg->SetToolTipInformation(C_GtGetText::h_GetText("Not visible"),
-                                                        C_GtGetText::h_GetText("Not visible"));
+         this->mpc_LabelStateImg->SetToolTipInformation("Not visible",
+                                                        "Not visible");
       }
       //safety icon deactivated so far (SSI, 13.03.18)
       // - Layout is awful

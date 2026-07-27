@@ -18,7 +18,6 @@
 #include "stwerrors.hpp"
 #include "C_Uti.hpp"
 #include "C_CamOgeWiSectionHeader.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_CamMainWindow.hpp"
 
@@ -58,7 +57,7 @@ C_CamMetWidget::C_CamMetWidget(QWidget * const opc_Parent) :
 
    this->SetBackgroundColor(11);
 
-   this->mpc_Ui->pc_WiTitle->SetTitle(C_GtGetText::h_GetText("Trace"));
+   this->mpc_Ui->pc_WiTitle->SetTitle("Trace");
    this->mpc_Ui->pc_WiTitle->SetIconType(C_CamOgeWiSectionHeader::E_ButtonType::eNOBUTTON);
 
    connect(this->mpc_Ui->pc_ControlWidget, &C_CamMetControlBarWidget::SigStartLogging,
@@ -79,7 +78,11 @@ C_CamMetWidget::C_CamMetWidget(QWidget * const opc_Parent) :
    connect(this->mpc_Ui->pc_ControlWidget, &C_CamMetControlBarWidget::SigTraceBufferSize,
            this->mpc_Ui->pc_TraceView, &C_CamMetTreeView::SetTraceBufferSize);
    connect(this->mpc_Ui->pc_ControlWidget, &C_CamMetControlBarWidget::SigChangeProtocol,
-           this->mpc_Ui->pc_TraceView, &C_CamMetTreeView::SetProtocol);
+            this->mpc_Ui->pc_TraceView, &C_CamMetTreeView::SetProtocol);
+   connect(this->mpc_Ui->pc_ControlWidget, &C_CamMetControlBarWidget::SigCanTpEnabled,
+           this->mpc_Ui->pc_TraceView, &C_CamMetTreeView::SetCanTpEnabled);
+   connect(this->mpc_Ui->pc_ControlWidget, &C_CamMetControlBarWidget::SigCanTpEnabled,
+           this, &C_CamMetWidget::SigCanTpEnabled);
    connect(this->mpc_Ui->pc_ControlWidget, &C_CamMetControlBarWidget::SigDisplayTree,
            this->mpc_Ui->pc_TraceView, &C_CamMetTreeView::SetDisplayTree);
    connect(this->mpc_Ui->pc_ControlWidget, &C_CamMetControlBarWidget::SigDisplayUniqueMessages,

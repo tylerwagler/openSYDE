@@ -13,7 +13,6 @@
 #include <QFileInfo>
 #include <QDir>
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_ImpCodeGenerationReportWidget.hpp"
 #include "ui_C_ImpCodeGenerationReportWidget.h"
@@ -59,8 +58,8 @@ C_ImpCodeGenerationReportWidget::C_ImpCodeGenerationReportWidget(
    this->mrc_ParentDialog.SetWidget(this);
 
    // set main title
-   this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("File Generation")));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Report"));
+   this->mrc_ParentDialog.SetTitle(static_cast<QString>("File Generation"));
+   this->mrc_ParentDialog.SetSubTitle("Report");
 
    // connects
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
@@ -84,8 +83,8 @@ C_ImpCodeGenerationReportWidget::~C_ImpCodeGenerationReportWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_ImpCodeGenerationReportWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelHeadingReport->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_LabelHeadingReport->setText("Details");
+   this->mpc_Ui->pc_PushButtonOk->setText("OK");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -107,7 +106,7 @@ const
 
       // section title
       c_MessageResultText += "<h4>";
-      c_MessageResultText += static_cast<QString>(C_GtGetText::h_GetText("\n%1, Data Block \"%2\"")).
+      c_MessageResultText += static_cast<QString>("\n%1, Data Block \"%2\"").
                              arg(rc_ReportData.c_NodeName).arg(rc_ReportData.c_AppName);
       c_MessageResultText += "</h4>";
 
@@ -116,7 +115,7 @@ const
 
       // first table row:  | File Generator: | C:/path/to/syde_coder.exe |
       c_MessageResultText += mhc_HTML_TABLE_DATA_START;
-      c_MessageResultText += C_GtGetText::h_GetText("File Generator:");
+      c_MessageResultText += "File Generator:";
       c_MessageResultText += "</td>";
       c_MessageResultText += mhc_HTML_TABLE_DATA_START;
       c_MessageResultText +=
@@ -128,12 +127,12 @@ const
       // second table row:  | File Structure Version: | 3 |
       c_MessageResultText += "<tr>";
       c_MessageResultText += mhc_HTML_TABLE_DATA_START;
-      c_MessageResultText += C_GtGetText::h_GetText("File Structure:");
+      c_MessageResultText += "File Structure:";
       c_MessageResultText += "</td>";
       c_MessageResultText += mhc_HTML_TABLE_DATA_START;
       if (rc_ReportData.q_CodeVersionRelevant == true)
       {
-         c_MessageResultText += C_GtGetText::h_GetText("Version ");
+         c_MessageResultText += "Version ";
          c_MessageResultText += QString::number(rc_ReportData.u16_CodeVersion);
       }
       else
@@ -146,7 +145,7 @@ const
       // third table row:  | Location:| C:/path/to/files |
       c_MessageResultText += "<tr>";
       c_MessageResultText += mhc_HTML_TABLE_DATA_START;
-      c_MessageResultText += C_GtGetText::h_GetText("Location:");
+      c_MessageResultText += "Location:";
       c_MessageResultText += "</td>";
       c_MessageResultText += mhc_HTML_TABLE_DATA_START;
       c_MessageResultText += C_Uti::h_GetLink(rc_ReportData.c_Directory, mc_STYLE_GUIDE_COLOR_LINK,
@@ -157,7 +156,7 @@ const
       // fourth table row:  | Generated Files:| my_datapool.c (one row for each generated file) |
       c_MessageResultText += "<tr>";
       c_MessageResultText += mhc_HTML_TABLE_DATA_START;
-      c_MessageResultText += C_GtGetText::h_GetText("Generated Files:");
+      c_MessageResultText += "Generated Files:";
       c_MessageResultText += "</td>";
       c_MessageResultText += mhc_HTML_TABLE_DATA_START;
 

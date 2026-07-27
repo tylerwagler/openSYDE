@@ -59,6 +59,7 @@ public:
    void TriggerModelUpdateCyclicMessage(const uint32_t ou32_MessageIndex, const bool oq_Active);
    bool CheckAndHandleKey(const QString & orc_Input);
    void TriggerMessageReload(void);
+   void SetDlcMaximum(const uint16_t ou16_Max);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

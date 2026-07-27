@@ -13,7 +13,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_SyvUpPacListNodeItemPemFileWidget.hpp"
@@ -161,7 +160,7 @@ void C_SyvUpPacListNodeItemPemFileWidget::m_LoadFileInformation(bool & orq_FileE
 
       if (s32_Result != C_NO_ERR)
       {
-         QString c_Details = static_cast<QString>(C_GtGetText::h_GetText("File path: %1")).arg(
+         QString c_Details = static_cast<QString>("File path: %1").arg(
             this->GetAppAbsoluteFilePath()) +
                              "\nReason: ";
          //New file cannot be read
@@ -170,35 +169,33 @@ void C_SyvUpPacListNodeItemPemFileWidget::m_LoadFileInformation(bool & orq_FileE
          {
          case C_RANGE:
             c_Details +=
-               static_cast<QString>(C_GtGetText::h_GetText("File could not be opened. PEM error message: %1")).arg(
+               static_cast<QString>("File could not be opened. PEM error message: %1").arg(
                   c_ErrorMessage.c_str());
             break;
          case C_CONFIG:
             c_Details +=
-               static_cast<QString>(C_GtGetText::h_GetText("Invalid file content. PEM error message: %1")).arg(
+               static_cast<QString>("Invalid file content. PEM error message: %1").arg(
                   c_ErrorMessage.c_str());
             break;
          case C_CHECKSUM:
             c_Details +=
-               static_cast<QString>(C_GtGetText::h_GetText(
-                                       "Could not parse modulus and exponent from key. PEM error message: %1")).arg(
+               static_cast<QString>("Could not parse modulus and exponent from key. PEM error message: %1").arg(
                   c_ErrorMessage.c_str());
             break;
          case C_OVERFLOW:
             c_Details += static_cast<QString>(
-               C_GtGetText::h_GetText(
-                  "The public key or its exponent of the PEM file does not have the expected size.\n"
+               "The public key or its exponent of the PEM file does not have the expected size.\n"
                   "The public key must be 1024 Bit."
-                  "The exponent of the public key must be less than or equal to 32 bits."));
+                  "The exponent of the public key must be less than or equal to 32 bits.");
             break;
          default:
-            c_Details += static_cast<QString>(C_GtGetText::h_GetText("Unknown reason. PEM error message: %1")).arg(
+            c_Details += static_cast<QString>("Unknown reason. PEM error message: %1").arg(
                c_ErrorMessage.c_str());
             break;
          }
 
-         c_Message.SetHeading(C_GtGetText::h_GetText("Update package configuration"));
-         c_Message.SetDescription(C_GtGetText::h_GetText("File is not a valid PEM file."));
+         c_Message.SetHeading("Update package configuration");
+         c_Message.SetDescription("File is not a valid PEM file.");
          c_Message.SetDetails(c_Details);
          c_Message.SetCustomMinHeight(180, 250);
          c_Message.Execute();

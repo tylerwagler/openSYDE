@@ -48,8 +48,13 @@ public:
    const std::vector<C_CamProDatabaseData> & GetDatabases(void) const;
    const C_CamProLoggingData & GetLoggingData(void) const;
 
+   //Get
+   C_CamProMessageData::E_TxProtocol GetMessageTxProtocol(const uint32_t ou32_Index) const;
+
    //Set
    void SetMessages(const std::vector<C_CamProMessageData> & orc_Messages);
+   int32_t SetMessageTxProtocol(const uint32_t ou32_Index,
+                                const C_CamProMessageData::E_TxProtocol oe_Protocol);
    int32_t SetMessageName(const uint32_t ou32_Index, const QString & orc_Name);
    int32_t SetMessageUint32Value(const uint32_t ou32_Index,
                                  const C_CamProMessageData::E_GenericUint32DataSelector oe_Selector,
@@ -58,6 +63,7 @@ public:
                                const C_CamProMessageData::E_GenericBoolDataSelector oe_Selector, const bool oq_Value);
    int32_t SetMessageKey(const uint32_t ou32_Index, const QString & orc_Key, const uint32_t ou32_Offset);
    int32_t SetMessageDataBytes(const uint32_t ou32_Index, const std::vector<uint8_t> & orc_DataBytes);
+   void SetMessageByte(const uint32_t ou32_Index, const uint32_t ou32_ByteIndex, const uint8_t ou8_Value);
    void SetCyclicMessageTransmitActive(const bool oq_Active);
    void SetAdapterConfig(const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config);
    void SetFilters(const std::vector<C_CamProFilterData> & orc_Filters);

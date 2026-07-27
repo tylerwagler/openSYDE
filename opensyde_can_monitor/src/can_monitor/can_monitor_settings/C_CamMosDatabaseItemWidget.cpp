@@ -20,7 +20,6 @@
 
 #include "C_OgePopUpDialog.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "constants.hpp"
 #include "C_CamMosDatabaseBusSelectionPopup.hpp"
@@ -99,14 +98,14 @@ C_CamMosDatabaseItemWidget::C_CamMosDatabaseItemWidget(const C_CamProDatabaseDat
    this->mpc_Ui->pc_PbRemove->SetSvg("://images/IconClearGray.svg", "://images/IconNothing.svg",
                                      "://images/IconClearGrayHovered.svg");
 
-   this->mpc_Ui->pc_PbSelectBus->SetToolTipInformation(C_GtGetText::h_GetText("Select Bus."),
-                                                       C_GtGetText::h_GetText("Select bus for this database."));
-   this->mpc_Ui->pc_PbBrowse->SetToolTipInformation(C_GtGetText::h_GetText("Options"),
-                                                    C_GtGetText::h_GetText("Browse for a new database file "
+   this->mpc_Ui->pc_PbSelectBus->SetToolTipInformation("Select Bus.",
+                                                       "Select bus for this database.");
+   this->mpc_Ui->pc_PbBrowse->SetToolTipInformation("Options",
+                                                    "Browse for a new database file "
                                                                            "(*.syde_sysdef or *.dbc) or "
-                                                                           "reload the current one from disk."));
-   this->mpc_Ui->pc_PbRemove->SetToolTipInformation(C_GtGetText::h_GetText("Delete"),
-                                                    C_GtGetText::h_GetText("Delete this database."));
+                                                                           "reload the current one from disk.");
+   this->mpc_Ui->pc_PbRemove->SetToolTipInformation("Delete",
+                                                    "Delete this database.");
    this->m_EnableCheckBoxTooltip(true); // set tooltip of pc_CheckBox
 
    // hide buttons on start
@@ -169,34 +168,33 @@ void C_CamMosDatabaseItemWidget::SetState(const C_CamMosDatabaseItemWidget::E_Lo
    {
    case eOK:
       c_Icon = "://images/IconFile.svg";
-      c_ToolTip = C_GtGetText::h_GetText("Database successfully loaded and ready for use.");
+      c_ToolTip = "Database successfully loaded and ready for use.";
       q_EnableBusSelectButton = true;
       break;
    case eLOADING:
       c_Icon = "://images/IconFileLoading.svg";
-      c_ToolTip = C_GtGetText::h_GetText("Loading database ...");
+      c_ToolTip = "Loading database ...";
       q_EnableButtons = false;
       break;
    case eQUEUE:
       c_Icon = "://images/IconFileQueue.svg";
-      c_ToolTip = C_GtGetText::h_GetText("Database is in queue.");
+      c_ToolTip = "Database is in queue.";
       break;
    case eNOT_FOUND:
-      c_ToolTip = C_GtGetText::h_GetText("File not found. This database will not be used.");
+      c_ToolTip = "File not found. This database will not be used.";
       q_Error = true;
       break;
    case eLOAD_ERROR:
-      c_ToolTip = C_GtGetText::h_GetText("Error loading file. This database will not be used.");
+      c_ToolTip = "Error loading file. This database will not be used.";
       q_Error = true;
       break;
    case eWRONG_FORMAT:
-      c_ToolTip = C_GtGetText::h_GetText(
-         "File format is not supported. Only files of format *.dbc and *.syde_sysdef are supported.\n"
-         "This database will not be used.");
+      c_ToolTip = "File format is not supported. Only files of format *.dbc and *.syde_sysdef are supported.\n"
+         "This database will not be used.";
       q_Error = true;
       break;
    default:
-      c_ToolTip = C_GtGetText::h_GetText("Unknown Error. This database will not be used.");
+      c_ToolTip = "Unknown Error. This database will not be used.";
       q_Error = true;
       break;
    }
@@ -266,8 +264,8 @@ void C_CamMosDatabaseItemWidget::UpdateTooltip(void) const
 
    if (this->mc_Database.c_Name != c_AbsolutePath)
    {
-      c_ToolTipContent = C_GtGetText::h_GetText("File path: ") + this->mc_Database.c_Name + "\n";
-      c_ToolTipContent += C_GtGetText::h_GetText("File path absolute: ") + c_AbsolutePath;
+      c_ToolTipContent = "File path: " + this->mc_Database.c_Name + "\n";
+      c_ToolTipContent += "File path absolute: " + c_AbsolutePath;
    }
 
    if ((this->mc_Database.s32_BusIndex > -1) &&
@@ -276,7 +274,7 @@ void C_CamMosDatabaseItemWidget::UpdateTooltip(void) const
    {
       c_ToolTipContent += "\n\n";
       c_ToolTipContent +=
-         static_cast<QString>(C_GtGetText::h_GetText("Bus: %1")).arg(
+         static_cast<QString>("Bus: %1").arg(
             this->mc_Busses[this->mc_Database.s32_BusIndex].c_Name.c_str());
    }
 
@@ -330,13 +328,12 @@ void C_CamMosDatabaseItemWidget::CheckFile(void)
             {
                // ask user to reload database
                c_Message.SetType(C_OgeWiCustomMessage::eQUESTION);
-               c_Message.SetHeading(C_GtGetText::h_GetText("File Changed"));
+               c_Message.SetHeading("File Changed");
                c_Message.SetDescription(
-                  static_cast<QString>(C_GtGetText::h_GetText(
-                                          "Database %1 changed on disk. Do you want to reload this database?")).
+                  static_cast<QString>("Database %1 changed on disk. Do you want to reload this database?").
                   arg(c_File.absoluteFilePath()));
-               c_Message.SetOkButtonText(C_GtGetText::h_GetText("Reload"));
-               c_Message.SetNoButtonText(C_GtGetText::h_GetText("Don't reload!"));
+               c_Message.SetOkButtonText("Reload");
+               c_Message.SetNoButtonText("Don't reload!");
 
                if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
                {
@@ -374,19 +371,19 @@ void C_CamMosDatabaseItemWidget::CheckFile(void)
             if (this->mq_AlreadyAskedUserDelete == false)
             {
                QString c_Details;
-               QString c_Description = static_cast<QString>(C_GtGetText::h_GetText("Could not find file %1. "
-                                                                                   "Do you want to delete this database?"))
+               QString c_Description = static_cast<QString>("Could not find file %1. "
+                                                                                   "Do you want to delete this database?")
                                        .arg(
                   c_File.absoluteFilePath());
                C_CamMosDatabaseItemWidget::h_AppendMessageWarningIfNecessary(
                   c_File.absoluteFilePath(), c_Description, c_Details);
                // ask user to delete database
                c_Message.SetType(C_OgeWiCustomMessage::eERROR);
-               c_Message.SetHeading(C_GtGetText::h_GetText("File not found"));
+               c_Message.SetHeading("File not found");
                c_Message.SetDescription(c_Description);
                c_Message.SetDetails(c_Details);
-               c_Message.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-               c_Message.SetCancelButtonText(C_GtGetText::h_GetText("Keep"));
+               c_Message.SetOkButtonText("Delete");
+               c_Message.SetCancelButtonText("Keep");
                if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
                {
                   q_Remove = true;
@@ -438,11 +435,11 @@ QString C_CamMosDatabaseItemWidget::h_BrowseForDatabasePath(QWidget * const opc_
 {
    const C_CamMosDatabaseItemWidget * const pc_DatabaseItemWidget =
       dynamic_cast<C_CamMosDatabaseItemWidget *>(opc_Parent);
-   const QString c_Filter = static_cast<QString>(C_GtGetText::h_GetText("CAN Database File ")) +
+   const QString c_Filter = static_cast<QString>("CAN Database File ") +
                             "(*.syde_sysdef | *.dbc | *.syde)";
    QString c_Folder = "";
    QString c_Return = "";
-   QFileDialog c_Dialog(opc_Parent, C_GtGetText::h_GetText("Select Database"), c_Folder, c_Filter);
+   QFileDialog c_Dialog(opc_Parent, "Select Database", c_Folder, c_Filter);
 
    // favorite location: actual database path if browse was clicked
    if (pc_DatabaseItemWidget != NULL)
@@ -561,9 +558,9 @@ bool C_CamMosDatabaseItemWidget::h_IsDatabaseAlreadyUsed(const QString & orc_Abs
       {
          // inform user
          C_OgeWiCustomMessage c_Message(opc_Parent);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Database Loading"));
+         c_Message.SetHeading("Database Loading");
          c_Message.SetDescription(
-            static_cast<QString>(C_GtGetText::h_GetText("The database %1 is already used and not added again.")).
+            static_cast<QString>("The database %1 is already used and not added again.").
             arg(orc_AbsolutePath));
          c_Message.Execute();
 
@@ -594,11 +591,9 @@ void C_CamMosDatabaseItemWidget::h_AppendMessageWarningIfNecessary(const QString
    if (c_Messages.isEmpty() == false)
    {
       //Append description
-      orc_Description.append(C_GtGetText::h_GetText(
-                                " All messages generator messages from this database will be deleted."));
+      orc_Description.append(" All messages generator messages from this database will be deleted.");
       //Add details
-      orc_Details.append(C_GtGetText::h_GetText(
-                            "Following messages will be deleted:\n"));
+      orc_Details.append("Following messages will be deleted:\n");
       //Add all messages
       for (QStringList::const_iterator c_It = c_Messages.begin(); c_It != c_Messages.end(); ++c_It)
       {
@@ -643,9 +638,9 @@ void C_CamMosDatabaseItemWidget::m_SetupContextMenu(void)
 {
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Browse..."), this,
+   this->mpc_ContextMenu->addAction("Browse...", this,
                                     &C_CamMosDatabaseItemWidget::m_OnBrowse);
-   this->mpc_ActionReload = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Reload"), this,
+   this->mpc_ActionReload = this->mpc_ContextMenu->addAction("Reload", this,
                                                              &C_CamMosDatabaseItemWidget::m_OnReload);
 }
 
@@ -699,16 +694,16 @@ void C_CamMosDatabaseItemWidget::m_OnBrowse()
          QString c_Details;
          C_OgeWiCustomMessage c_Message(this);
          QString c_Description =
-            static_cast<QString>(C_GtGetText::h_GetText("Do you really want to replace this database?"));
+            static_cast<QString>("Do you really want to replace this database?");
          C_CamMosDatabaseItemWidget::h_AppendMessageWarningIfNecessary(
             C_CamUti::h_GetAbsPathFromProj(this->mc_Database.c_Name), c_Description, c_Details);
          // ask user to replace database
          c_Message.SetType(C_OgeWiCustomMessage::eWARNING);
-         c_Message.SetHeading(C_GtGetText::h_GetText("Database replace"));
+         c_Message.SetHeading("Database replace");
          c_Message.SetDescription(c_Description);
          c_Message.SetDetails(c_Details);
-         c_Message.SetOkButtonText(C_GtGetText::h_GetText("Replace"));
-         c_Message.SetCancelButtonText(C_GtGetText::h_GetText("Keep"));
+         c_Message.SetOkButtonText("Replace");
+         c_Message.SetCancelButtonText("Keep");
          if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
          {
             //User confirmed
@@ -808,8 +803,8 @@ void C_CamMosDatabaseItemWidget::m_EnableCheckBoxTooltip(const bool oq_Enabled)
    if (oq_Enabled == true)
    {
       this->mpc_Ui->pc_CheckBox->SetToolTipInformation(
-         C_GtGetText::h_GetText("Enable Database"),
-         C_GtGetText::h_GetText("Check to interpret messages with this database or uncheck to remove interpretation."));
+         "Enable Database",
+         "Check to interpret messages with this database or uncheck to remove interpretation.");
    }
    else
    {

@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 
 #include "C_SdBueMessageRxTimeoutConfig.hpp"
 #include "ui_C_SdBueMessageRxTimeoutConfig.h"
@@ -108,7 +107,7 @@ C_SdBueMessageRxTimeoutConfig::C_SdBueMessageRxTimeoutConfig(C_OgePopUpDialog & 
 
    //Title
    this->mrc_ParentDialog.SetTitle(orc_NameForTitle);
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Receive Timeout"));
+   this->mrc_ParentDialog.SetSubTitle("Receive Timeout");
 
    if ((oe_ReceiveTimeoutMode == C_PuiSdNodeCanMessage::eRX_TIMEOUT_MODE_DISABLED) &&
        (oq_DisablePossible == true))
@@ -159,29 +158,29 @@ C_SdBueMessageRxTimeoutConfig::~C_SdBueMessageRxTimeoutConfig()
 void C_SdBueMessageRxTimeoutConfig::InitStaticNames(void) const
 {
    //Texts
-   this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Timeout Configuration"));
-   this->mpc_Ui->pc_LabelTimeoutModeDescription->setText(C_GtGetText::h_GetText("Timeout Mode"));
-   this->mpc_Ui->pc_LabelTimeoutValueDescription->setText(C_GtGetText::h_GetText("Timeout Value"));
+   this->mpc_Ui->pc_LabelHeadingPreview->setText("Timeout Configuration");
+   this->mpc_Ui->pc_LabelTimeoutModeDescription->setText("Timeout Mode");
+   this->mpc_Ui->pc_LabelTimeoutValueDescription->setText("Timeout Value");
 
-   this->mpc_Ui->pc_ComboBoxTimeoutActive->addItem(C_GtGetText::h_GetText("Auto"));
-   this->mpc_Ui->pc_ComboBoxTimeoutActive->addItem(C_GtGetText::h_GetText("Custom"));
-   this->mpc_Ui->pc_ComboBoxTimeoutActive->addItem(C_GtGetText::h_GetText("Disabled"));
-   this->mpc_Ui->pc_SpinBoxTimeout->setSuffix(C_GtGetText::h_GetText(" ms"));
+   this->mpc_Ui->pc_ComboBoxTimeoutActive->addItem("Auto");
+   this->mpc_Ui->pc_ComboBoxTimeoutActive->addItem("Custom");
+   this->mpc_Ui->pc_ComboBoxTimeoutActive->addItem("Disabled");
+   this->mpc_Ui->pc_SpinBoxTimeout->setSuffix(" ms");
 
    //Tool tips
    this->mpc_Ui->pc_LabelTimeoutModeDescription->SetToolTipInformation(
-      C_GtGetText::h_GetText("Timeout Mode"),
-      C_GtGetText::h_GetText("Available modes for receive timeout: "
+      "Timeout Mode",
+      "Available modes for receive timeout: "
                              "\nAuto: Auto calculation of timeout value (3x Cycle Time + 10ms)"
                              "\nCustom: Manually set timeout value"
-                             "\nDisabled: Timeout monitoring deactivated (only with Tx Method: On Event)"));
+                             "\nDisabled: Timeout monitoring deactivated (only with Tx Method: On Event)");
 
    this->mpc_Ui->pc_LabelTimeoutValueDescription->SetToolTipInformation(
-      C_GtGetText::h_GetText("Timeout Value"),
-      C_GtGetText::h_GetText("This property is relevant for source code file generation. "
+      "Timeout Value",
+      "This property is relevant for source code file generation. "
                              "\nWithin this interval a valid message should be received. "
                              "\nOtherwise the COMM stack (implemented on device) will report an "
-                             "error."));
+                             "error.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

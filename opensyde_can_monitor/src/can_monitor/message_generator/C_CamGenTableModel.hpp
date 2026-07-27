@@ -40,12 +40,17 @@ public:
       eRTR,
       eID,
       eDLC,
+      ePROTOCOL,
       eDATA,
       eCYCLIC_TRIGGER,
       eCYCLIC_TIME,
       eKEY,
       eMANUAL_TRIGGER,
-      eAUTO_SUPPORT
+      eAUTO_SUPPORT,
+      // UDS-specific columns (visible only when protocol is UDS)
+      eUDS_SERVICE,
+      eUDS_PARAM,
+      eUDS_DATA
    };
 
    C_CamGenTableModel(QObject * const opc_Parent = NULL);
@@ -74,6 +79,7 @@ public:
    void UpdateMessageData(const uint32_t ou32_MessageIndex);
    void UpdateAutoProtocolCellData(const uint32_t ou32_MessageIndex);
    void TriggerMessageReload(void);
+   void SetDlcMaximum(const uint16_t ou16_Max);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
@@ -95,12 +101,15 @@ protected:
    void m_MoveItem(const uint32_t ou32_SourceIndex, const uint32_t ou32_TargetIndex) override;
 
 private:
+   uint16_t mu16_DlcMaximum;
+
    std::vector<uint32_t> m_AddNewMessages(const uint32_t ou32_SelectedIndex,
-                                          const std::vector<C_CamProMessageData> & orc_Data);
+                                           const std::vector<C_CamProMessageData> & orc_Data);
 
    void m_CheckAndHandleRegisterCyclicMessage(const uint32_t ou32_MessageIndex, const bool oq_Active);
    void m_SpecialXtdFlagSetHandling(const int32_t os32_Row, const uint32_t ou32_Index, const int32_t os32_Role);
    stw::opensyde_core::C_OscCanProtocol::E_Type m_GetCurrentMessageProtocolType(const uint32_t ou32_MessageIndex) const;
+   static QString mh_UdsServiceIdToName(const uint8_t ou8_Sid);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -32,6 +32,8 @@ public:
    explicit C_CamOgeCbxTableSmall(QWidget * const opc_Parent = NULL);
    ~C_CamOgeCbxTableSmall(void) override;
 
+   void showPopup(void) override;
+
 private:
    //Avoid call
    C_CamOgeCbxTableSmall(const C_CamOgeCbxTableSmall &);

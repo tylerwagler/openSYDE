@@ -16,7 +16,6 @@
 #include "stwtypes.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_CamUtiGeneric.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 
@@ -74,12 +73,12 @@ QString C_CamUtiGeneric::h_AskUserToSaveRelativePath(QWidget * const opc_Parent,
    {
       // ask user
       C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::eQUESTION);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Relative Path"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Do you want to save the selected path relative or absolute?"));
-      c_Message.SetDetails(static_cast<QString>(C_GtGetText::h_GetText("Relative path: %1 \nAbsolute path: %2")).
+      c_Message.SetHeading("Relative Path");
+      c_Message.SetDescription("Do you want to save the selected path relative or absolute?");
+      c_Message.SetDetails(static_cast<QString>("Relative path: %1 \nAbsolute path: %2").
                            arg(c_PathRelative).arg(c_PathAbsolute));
-      c_Message.SetOkButtonText(C_GtGetText::h_GetText("Relative"));
-      c_Message.SetNoButtonText(C_GtGetText::h_GetText("Absolute"));
+      c_Message.SetOkButtonText("Relative");
+      c_Message.SetNoButtonText("Absolute");
 
       if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
       {

@@ -35,7 +35,6 @@
 #include "C_AdapterBrowser.hpp"
 #include "C_CamOgeCbxDark.hpp"
 #include "C_CamOgeWiSettingSubSection.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeLabGenericNoPaddingNoMargins.hpp"
 #include "C_OgePubToolTipBase.hpp"
 #include "C_OgeWiUtil.hpp"
@@ -91,7 +90,7 @@ void C_AdapterBrowser::m_BuildUi(void)
    pc_Outer->setSpacing(0);
 
    mpc_Header = new C_CamOgeWiSettingSubSection(this);
-   mpc_Header->SetTitle(C_GtGetText::h_GetText("PC CAN Interface Configuration"));
+   mpc_Header->SetTitle("PC CAN Interface Configuration");
    mpc_Header->SetIcon("://images/IconConfig.svg");
    mpc_Header->SetToggle(false);
    pc_Outer->addWidget(mpc_Header);
@@ -137,7 +136,7 @@ void C_AdapterBrowser::m_BuildUi(void)
 
    const auto c_MakeLabel = [this](const char * const opcn_Text) -> C_OgeLabGenericNoPaddingNoMargins * {
       C_OgeLabGenericNoPaddingNoMargins * const pc_Lab = new C_OgeLabGenericNoPaddingNoMargins(this->mpc_Content);
-      pc_Lab->setText(C_GtGetText::h_GetText(opcn_Text));
+      pc_Lab->setText(opcn_Text);
       pc_Lab->SetForegroundColor(0);
       pc_Lab->SetFontPixel(13);
       return pc_Lab;

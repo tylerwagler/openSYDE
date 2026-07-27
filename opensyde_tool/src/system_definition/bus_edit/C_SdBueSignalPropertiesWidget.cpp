@@ -25,7 +25,6 @@
 #include "TglUtils.hpp"
 #include "C_SdUtil.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdTooltipUtil.hpp"
@@ -116,29 +115,29 @@ void C_SdBueSignalPropertiesWidget::InitStaticNames(void) const
    QString c_PhysicalValueInfo;
    QString c_InfoText;
 
-   this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
-   this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
-   this->mpc_Ui->pc_LabelValue->setText(C_GtGetText::h_GetText("Value"));
-   this->mpc_Ui->pc_LabelMin->setText(C_GtGetText::h_GetText("Min"));
-   this->mpc_Ui->pc_LabelMax->setText(C_GtGetText::h_GetText("Max"));
-   this->mpc_Ui->pc_LabelFactor->setText(C_GtGetText::h_GetText("Factor"));
-   this->mpc_Ui->pc_LabelOffset->setText(C_GtGetText::h_GetText("Offset"));
-   this->mpc_Ui->pc_LabelInitValue->setText(C_GtGetText::h_GetText("Init Value"));
-   this->mpc_Ui->pc_LabelUnit->setText(C_GtGetText::h_GetText("Unit"));
-   this->mpc_Ui->pc_LabelValueType->setText(C_GtGetText::h_GetText("Value Type"));
-   this->mpc_Ui->pc_LabelLayout->setText(C_GtGetText::h_GetText("Layout"));
-   this->mpc_Ui->pc_LabelType->setText(C_GtGetText::h_GetText("Type"));
-   this->mpc_Ui->pc_LabelLength->setText(C_GtGetText::h_GetText("Length"));
-   this->mpc_Ui->pc_LabelByteOrder->setText(C_GtGetText::h_GetText("Byte Order"));
-   this->mpc_Ui->pc_LabelStartBit->setText(C_GtGetText::h_GetText("Start Bit"));
-   this->mpc_Ui->pc_LabelMuxType->setText(C_GtGetText::h_GetText("Multiplexer Type"));
-   this->mpc_Ui->pc_LabelMuxValue->setText(C_GtGetText::h_GetText("Multiplexer Value"));
-   this->mpc_Ui->pc_CheckBoxAutoMinMax->setText(C_GtGetText::h_GetText("Auto min/max"));
-   this->mpc_Ui->pc_LabelObjectDictTitle->setText(C_GtGetText::h_GetText("Object Dictionary"));
-   this->mpc_Ui->pc_LabelJ1939->setText(C_GtGetText::h_GetText("J1939 Specific"));
-   this->mpc_Ui->pc_LabelJ1939Spn->setText(C_GtGetText::h_GetText("SPN"));
+   this->mpc_Ui->pc_LabelName->setText("Name");
+   this->mpc_Ui->pc_LabelComment->setText("Comment");
+   this->mpc_Ui->pc_LabelValue->setText("Value");
+   this->mpc_Ui->pc_LabelMin->setText("Min");
+   this->mpc_Ui->pc_LabelMax->setText("Max");
+   this->mpc_Ui->pc_LabelFactor->setText("Factor");
+   this->mpc_Ui->pc_LabelOffset->setText("Offset");
+   this->mpc_Ui->pc_LabelInitValue->setText("Init Value");
+   this->mpc_Ui->pc_LabelUnit->setText("Unit");
+   this->mpc_Ui->pc_LabelValueType->setText("Value Type");
+   this->mpc_Ui->pc_LabelLayout->setText("Layout");
+   this->mpc_Ui->pc_LabelType->setText("Type");
+   this->mpc_Ui->pc_LabelLength->setText("Length");
+   this->mpc_Ui->pc_LabelByteOrder->setText("Byte Order");
+   this->mpc_Ui->pc_LabelStartBit->setText("Start Bit");
+   this->mpc_Ui->pc_LabelMuxType->setText("Multiplexer Type");
+   this->mpc_Ui->pc_LabelMuxValue->setText("Multiplexer Value");
+   this->mpc_Ui->pc_CheckBoxAutoMinMax->setText("Auto min/max");
+   this->mpc_Ui->pc_LabelObjectDictTitle->setText("Object Dictionary");
+   this->mpc_Ui->pc_LabelJ1939->setText("J1939 Specific");
+   this->mpc_Ui->pc_LabelJ1939Spn->setText("SPN");
 
-   this->mpc_Ui->pc_TextEditComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
+   this->mpc_Ui->pc_TextEditComment->setPlaceholderText("Add your comment here ...");
 
    //Combo boxes
    //Ensure there are four items
@@ -175,103 +174,100 @@ void C_SdBueSignalPropertiesWidget::InitStaticNames(void) const
    this->mpc_Ui->pc_ComboBoxMuxType->addItem("2");
    this->mpc_Ui->pc_ComboBoxMuxType->addItem("3");
    //Ensure the indices match the text
-   this->mpc_Ui->pc_ComboBoxMuxType->setItemText(ms32_MUX_DEFAULT, C_GtGetText::h_GetText("none"));
+   this->mpc_Ui->pc_ComboBoxMuxType->setItemText(ms32_MUX_DEFAULT, "none");
    this->mpc_Ui->pc_ComboBoxMuxType->setItemText(ms32_MUX_MULTIPLEXER_SIGNAL,
-                                                 C_GtGetText::h_GetText("Multiplexer Signal"));
+                                                 "Multiplexer Signal");
    this->mpc_Ui->pc_ComboBoxMuxType->setItemText(ms32_MUX_MULTIPLEXED_SIGNAL,
-                                                 C_GtGetText::h_GetText("Multiplexed Signal"));
+                                                 "Multiplexed Signal");
 
    //Other
-   this->mpc_Ui->pc_SpinBoxLength->setSuffix(C_GtGetText::h_GetText("bit"));
+   this->mpc_Ui->pc_SpinBoxLength->setSuffix("bit");
 
    //Tool tips
    //Tool tip content partly adapted from Vector CANdb++ Documentation
-   c_PhysicalValueInfo = C_GtGetText::h_GetText("The raw value of a signal is the value as it is transmitted in the network."
+   c_PhysicalValueInfo = "The raw value of a signal is the value as it is transmitted in the network."
                                                 "\nThe physical value of a signal is the value of the physical quantity (e.g. speed, "
                                                 "\nrpm, temperature, etc.) that represents the signal."
                                                 "\nThe following conversion formula is used to transform the raw value "
                                                 "\nto a physical value or in the reverse direction:"
-                                                "\n\n[Physical value] = ([Raw value] * [Factor]) + [Offset]");
+                                                "\n\n[Physical value] = ([Raw value] * [Factor]) + [Offset]";
 
    //name
-   c_InfoText =  static_cast<QString>(C_GtGetText::h_GetText("Symbolic signal name. Unique within a message."
+   c_InfoText =  static_cast<QString>("Symbolic signal name. Unique within a message."
                                                              "\nC naming conventions must be followed:"
                                                              "\n - must not be empty"
                                                              "\n - only alphanumeric characters and \"_\""
-                                                             "\n - should not be longer than %1 (= project setting) characters"))
+                                                             "\n - should not be longer than %1 (= project setting) characters")
                 .arg(
       C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit());
-   this->mpc_Ui->pc_LabelName->SetToolTipInformation(C_GtGetText::h_GetText("Name"), c_InfoText);
+   this->mpc_Ui->pc_LabelName->SetToolTipInformation("Name", c_InfoText);
 
    //comment
-   c_InfoText =  C_GtGetText::h_GetText("Comment for this signal.");
-   this->mpc_Ui->pc_LabelComment->SetToolTipInformation(C_GtGetText::h_GetText("Comment"), c_InfoText);
+   c_InfoText =  "Comment for this signal.";
+   this->mpc_Ui->pc_LabelComment->SetToolTipInformation("Comment", c_InfoText);
 
    //auto min max
-   c_InfoText =  C_GtGetText::h_GetText(
-      "Minimum and maximum are defined automatically depending on signal length.\nValues are set as physical values.\n\n");
-   this->mpc_Ui->pc_CheckBoxAutoMinMax->SetToolTipInformation(C_GtGetText::h_GetText("Auto Min/Max"),
+   c_InfoText =  "Minimum and maximum are defined automatically depending on signal length.\nValues are set as physical values.\n\n";
+   this->mpc_Ui->pc_CheckBoxAutoMinMax->SetToolTipInformation("Auto Min/Max",
                                                               c_InfoText.append(c_PhysicalValueInfo));
 
    //min
-   c_InfoText =  C_GtGetText::h_GetText("Minimum is set as physical value.\n\n");
-   this->mpc_Ui->pc_LabelMin->SetToolTipInformation(C_GtGetText::h_GetText("Min"), c_InfoText.append(
+   c_InfoText =  "Minimum is set as physical value.\n\n";
+   this->mpc_Ui->pc_LabelMin->SetToolTipInformation("Min", c_InfoText.append(
                                                        c_PhysicalValueInfo));
 
    //max
-   c_InfoText =  C_GtGetText::h_GetText("Maximum is set as physical value.\n\n");
-   this->mpc_Ui->pc_LabelMax->SetToolTipInformation(C_GtGetText::h_GetText("Max"), c_InfoText.append(
+   c_InfoText =  "Maximum is set as physical value.\n\n";
+   this->mpc_Ui->pc_LabelMax->SetToolTipInformation("Max", c_InfoText.append(
                                                        c_PhysicalValueInfo));
 
    //init
-   c_InfoText =  C_GtGetText::h_GetText("Initial value is set as physical value.\n\n");
-   this->mpc_Ui->pc_LabelInitValue->SetToolTipInformation(C_GtGetText::h_GetText("Init Value"), c_InfoText.append(
+   c_InfoText =  "Initial value is set as physical value.\n\n";
+   this->mpc_Ui->pc_LabelInitValue->SetToolTipInformation("Init Value", c_InfoText.append(
                                                              c_PhysicalValueInfo));
 
    //unit
-   c_InfoText =  C_GtGetText::h_GetText("Unit of the signals physical quantity\n\n");
-   this->mpc_Ui->pc_LabelUnit->SetToolTipInformation(C_GtGetText::h_GetText("Unit"), c_InfoText.append(
+   c_InfoText =  "Unit of the signals physical quantity\n\n";
+   this->mpc_Ui->pc_LabelUnit->SetToolTipInformation("Unit", c_InfoText.append(
                                                         c_PhysicalValueInfo));
 
    //factor + offset
-   this->mpc_Ui->pc_LabelFactor->SetToolTipInformation(C_GtGetText::h_GetText("Factor"), c_PhysicalValueInfo);
-   this->mpc_Ui->pc_LabelOffset->SetToolTipInformation(C_GtGetText::h_GetText("Offset"), c_PhysicalValueInfo);
+   this->mpc_Ui->pc_LabelFactor->SetToolTipInformation("Factor", c_PhysicalValueInfo);
+   this->mpc_Ui->pc_LabelOffset->SetToolTipInformation("Offset", c_PhysicalValueInfo);
 
    //byte order
-   c_InfoText =  C_GtGetText::h_GetText("Signals can be defined with a byte order for either Motorola or Intel processors. "
-                                        "\nThe individual signals within a message may also have different byte orders.");
-   this->mpc_Ui->pc_LabelByteOrder->SetToolTipInformation(C_GtGetText::h_GetText("Byte Order"), c_InfoText);
+   c_InfoText =  "Signals can be defined with a byte order for either Motorola or Intel processors. "
+                                        "\nThe individual signals within a message may also have different byte orders.";
+   this->mpc_Ui->pc_LabelByteOrder->SetToolTipInformation("Byte Order", c_InfoText);
 
    //value type
-   c_InfoText =  C_GtGetText::h_GetText("Value type"
+   c_InfoText =  "Value type"
                                         "\nSigned: Signed Integer"
                                         "\nUnsigned: Unsigned Integer"
                                         "\nIEEE Float: 32 Bit IEEE Float"
-                                        "\nIEEE Double: 64 Bit IEEE Double");
-   this->mpc_Ui->pc_LabelType->SetToolTipInformation(C_GtGetText::h_GetText("Type"), c_InfoText);
+                                        "\nIEEE Double: 64 Bit IEEE Double";
+   this->mpc_Ui->pc_LabelType->SetToolTipInformation("Type", c_InfoText);
 
    //Length
-   c_InfoText =  C_GtGetText::h_GetText("Signal length in bits.");
-   this->mpc_Ui->pc_LabelLength->SetToolTipInformation(C_GtGetText::h_GetText("Length"), c_InfoText);
+   c_InfoText =  "Signal length in bits.";
+   this->mpc_Ui->pc_LabelLength->SetToolTipInformation("Length", c_InfoText);
 
    //Start Bit
-   c_InfoText =  C_GtGetText::h_GetText("Start bit of the signal inside the message payload.");
-   this->mpc_Ui->pc_LabelStartBit->SetToolTipInformation(C_GtGetText::h_GetText("Start Bit"), c_InfoText);
+   c_InfoText =  "Start bit of the signal inside the message payload.";
+   this->mpc_Ui->pc_LabelStartBit->SetToolTipInformation("Start Bit", c_InfoText);
 
    //Multiplexer
-   c_InfoText =  C_GtGetText::h_GetText("Available types:\n"
+   c_InfoText =  "Available types:\n"
                                         "none (default): Standard signal, present in all messages of this type\n"
                                         "Multiplexer Signal: Multiplexer signal, present in all messages of this type.\n"
                                         "Value signifies which multiplexed signals will be present in the current instance of this message.\n"
-                                        "Multiplexed Signal: Multiplexed signal, only present in messages with the multiplexer signal value matching this signal's multiplexer value.\n");
-   this->mpc_Ui->pc_LabelMuxType->SetToolTipInformation(C_GtGetText::h_GetText("Multiplexer Type"), c_InfoText);
-   c_InfoText =  C_GtGetText::h_GetText(
-      "With which multiplexer signal value should this multiplexed signal be transmitted.");
-   this->mpc_Ui->pc_LabelMuxValue->SetToolTipInformation(C_GtGetText::h_GetText("Multiplexer Value"), c_InfoText);
+                                        "Multiplexed Signal: Multiplexed signal, only present in messages with the multiplexer signal value matching this signal's multiplexer value.\n";
+   this->mpc_Ui->pc_LabelMuxType->SetToolTipInformation("Multiplexer Type", c_InfoText);
+   c_InfoText =  "With which multiplexer signal value should this multiplexed signal be transmitted.";
+   this->mpc_Ui->pc_LabelMuxValue->SetToolTipInformation("Multiplexer Value", c_InfoText);
 
-   c_InfoText =  C_GtGetText::h_GetText(
-      "J1939 specific number to identify a specific Suspect Parameter.");
-   this->mpc_Ui->pc_LabelJ1939Spn->SetToolTipInformation(C_GtGetText::h_GetText("Suspect Parameter Number"),
+   c_InfoText =  "J1939 specific number to identify a specific Suspect Parameter.";
+   this->mpc_Ui->pc_LabelJ1939Spn->SetToolTipInformation("Suspect Parameter Number",
                                                          c_InfoText);
 
    this->mpc_Ui->pc_SpinBoxJ1939Spn->SetMinimumCustom(0);
@@ -890,21 +886,21 @@ void C_SdBueSignalPropertiesWidget::m_CheckSignalName(const bool & orq_SignalErr
       C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LineEditName, "Valid", q_Combined);
       if (q_Combined == true)
       {
-         this->mpc_Ui->pc_LineEditName->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                              C_GtGetText::h_GetText(""),
+         this->mpc_Ui->pc_LineEditName->SetToolTipInformation("",
+                                                              "",
                                                               C_NagToolTip::eDEFAULT);
       }
       else
       {
-         const QString c_Heading = C_GtGetText::h_GetText("Signal Name");
+         const QString c_Heading = "Signal Name";
          QString c_Content;
          if (q_NameInvalid == true)
          {
-            c_Content += C_GtGetText::h_GetText("- is empty or contains invalid characters\n");
+            c_Content += "- is empty or contains invalid characters\n";
          }
          if (q_NameConflict == true)
          {
-            c_Content += C_GtGetText::h_GetText("- is already in use\n");
+            c_Content += "- is already in use\n";
          }
          this->mpc_Ui->pc_LineEditName->SetToolTipInformation(c_Heading, c_Content, C_NagToolTip::eERROR);
       }
@@ -945,16 +941,14 @@ void C_SdBueSignalPropertiesWidget::m_CheckMuxType(const bool & orq_SignalErrorC
       C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_ComboBoxMuxType, "Valid", !q_MuxTypeInvalid);
       if (q_MuxTypeInvalid == false)
       {
-         this->mpc_Ui->pc_ComboBoxMuxType->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                                 C_GtGetText::h_GetText(""),
+         this->mpc_Ui->pc_ComboBoxMuxType->SetToolTipInformation("",
+                                                                 "",
                                                                  C_NagToolTip::eDEFAULT);
       }
       else
       {
-         const QString c_Heading = C_GtGetText::h_GetText(
-            "Multiplexer type");
-         const QString c_Content = C_GtGetText::h_GetText(
-            "There is currently no multiplexer defined for this multiplexed signal");
+         const QString c_Heading = "Multiplexer type";
+         const QString c_Content = "There is currently no multiplexer defined for this multiplexed signal";
          this->mpc_Ui->pc_ComboBoxMuxType->SetToolTipInformation(c_Heading, c_Content, C_NagToolTip::eERROR);
       }
       if (orq_SignalErrorChange == true)
@@ -998,8 +992,7 @@ void C_SdBueSignalPropertiesWidget::m_CheckMuxValue(const bool & orq_SignalError
       }
       else
       {
-         const QString c_Content = C_GtGetText::h_GetText(
-            "This value is out of range of the Multiplexer signal");
+         const QString c_Content = "This value is out of range of the Multiplexer signal";
          this->mpc_Ui->pc_SpinBoxMuxValue->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
       }
       if (orq_SignalErrorChange == true)
@@ -1053,16 +1046,14 @@ void C_SdBueSignalPropertiesWidget::m_CheckMessagePosition(const bool & orq_Sign
       {
          if (q_ByteAlignmentStartbitConflict == true)
          {
-            const QString c_Content = C_GtGetText::h_GetText(
-               "The signal has a start bit which is not byte aligned and is not allowed for CANopen.");
+            const QString c_Content = "The signal has a start bit which is not byte aligned and is not allowed for CANopen.";
             this->mpc_Ui->pc_SpinBoxStartBit->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
             this->mpc_Ui->pc_SpinBoxStartBit->ShowToolTipWhenDisabled(true);
          }
          else if (q_GapConflict == true)
          {
             // Special case CANopen: Gap error is only relevant for the start bit
-            const QString c_Content = C_GtGetText::h_GetText(
-               "A gap between signals is detected and is not allowed for CANopen.");
+            const QString c_Content = "A gap between signals is detected and is not allowed for CANopen.";
             this->mpc_Ui->pc_SpinBoxStartBit->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
             this->mpc_Ui->pc_SpinBoxStartBit->ShowToolTipWhenDisabled(true);
          }
@@ -1074,9 +1065,8 @@ void C_SdBueSignalPropertiesWidget::m_CheckMessagePosition(const bool & orq_Sign
 
          if (q_ByteAlignmentLengthConflict == true)
          {
-            const QString c_Content = C_GtGetText::h_GetText(
-               "The signal has a length which is not byte aligned and is not allowed for CANopen."
-               " Only 8, 16, 32 and 64 bit are supported.");
+            const QString c_Content = "The signal has a length which is not byte aligned and is not allowed for CANopen."
+               " Only 8, 16, 32 and 64 bit are supported.";
             this->mpc_Ui->pc_SpinBoxLength->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
             // Special case CANopen: This can only happen with CANopen and the spin box is always disabled
             this->mpc_Ui->pc_SpinBoxLength->ShowToolTipWhenDisabled(true);
@@ -1089,8 +1079,7 @@ void C_SdBueSignalPropertiesWidget::m_CheckMessagePosition(const bool & orq_Sign
       }
       else
       {
-         const QString c_Content = C_GtGetText::h_GetText(
-            "Either signal out of range of message DLC or intersecting signals detected.");
+         const QString c_Content = "Either signal out of range of message DLC or intersecting signals detected.";
          this->mpc_Ui->pc_SpinBoxStartBit->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
          this->mpc_Ui->pc_SpinBoxLength->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
          this->mpc_Ui->pc_SpinBoxStartBit->ShowToolTipWhenDisabled(true);
@@ -1308,7 +1297,7 @@ void C_SdBueSignalPropertiesWidget::m_HandleAnyChange(const C_SdBueSignalPropert
    if ((c_UserNotificationText.isEmpty() == false) || (c_UserNotificationAdditionalInformation.isEmpty() == false))
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eINFORMATION);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Multiplexer type"));
+      c_Message.SetHeading("Multiplexer type");
       c_Message.SetDescription(c_UserNotificationText);
       c_Message.SetDetails(c_UserNotificationAdditionalInformation);
       c_Message.SetCustomMinHeight(230, 400); //unknown issue: message box grabs the place it need.
@@ -1646,9 +1635,8 @@ void C_SdBueSignalPropertiesWidget::m_AdaptOtherValues(const C_SdBueSignalProper
          }
          if (q_MessageAdapt == true)
          {
-            orc_UserNotificationText = C_GtGetText::h_GetText(
-               "The message has been adapted to some restrictions concerning multiplexer messages and signals.");
-            orc_UserNotificationAdditionalInformation = C_GtGetText::h_GetText("Multiplexer message restrictions:\n"
+            orc_UserNotificationText = "The message has been adapted to some restrictions concerning multiplexer messages and signals.";
+            orc_UserNotificationAdditionalInformation = "Multiplexer message restrictions:\n"
                                                                                "- Tx method may not be \"On Change\"\n"
                                                                                "\n"
                                                                                "Multiplexer signal restrictions:\n"
@@ -1658,7 +1646,7 @@ void C_SdBueSignalPropertiesWidget::m_AdaptOtherValues(const C_SdBueSignalProper
                                                                                "- Init value: 0\n"
                                                                                "- Unit: disabled\n"
                                                                                "- Length: Maximum 16 bit\n"
-                                                                               "- Type: unsigned");
+                                                                               "- Type: unsigned";
          }
          this->mc_DataUiSignalCommon.q_AutoMinMaxActive = true;
          this->mc_DataOscSignalCommon.f64_Factor = 1.0;

@@ -16,7 +16,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandlerBusLogic.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscCanMessage.hpp"
@@ -163,34 +162,34 @@ QVariant C_SdNdeCoPdoTableModel::headerData(const int32_t os32_Section, const Qt
             c_Retval = "#";
             break;
          case eENABLED:
-            c_Retval = C_GtGetText::h_GetText("Enabled");
+            c_Retval = "Enabled";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eCOTYPE:
-            c_Retval = C_GtGetText::h_GetText("Type");
+            c_Retval = "Type";
             break;
          case eEXTENDED:
-            c_Retval = C_GtGetText::h_GetText("Extended");
+            c_Retval = "Extended";
             break;
          case eCOBID:
-            c_Retval = C_GtGetText::h_GetText("COB-ID");
+            c_Retval = "COB-ID";
             break;
          case eDLC:
-            c_Retval = C_GtGetText::h_GetText("DLC");
+            c_Retval = "DLC";
             break;
          case eTXMETHOD:
-            c_Retval = C_GtGetText::h_GetText("Tx Method");
+            c_Retval = "Tx Method";
             break;
          case eINHIBITTIME:
-            c_Retval = C_GtGetText::h_GetText("Inhibit Time [ms]");
+            c_Retval = "Inhibit Time [ms]";
             break;
          case eEVENTTIME:
-            c_Retval = C_GtGetText::h_GetText("Event Time [ms]");
+            c_Retval = "Event Time [ms]";
             break;
          default:
             break;
@@ -201,37 +200,37 @@ QVariant C_SdNdeCoPdoTableModel::headerData(const int32_t os32_Section, const Qt
          switch (e_Col)
          {
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Index");
+            c_Retval = "Index";
             break;
          case eENABLED:
-            c_Retval = C_GtGetText::h_GetText("Enabled");
+            c_Retval = "Enabled";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eCOTYPE:
-            c_Retval = C_GtGetText::h_GetText("Type");
+            c_Retval = "Type";
             break;
          case eEXTENDED:
-            c_Retval = C_GtGetText::h_GetText("Extended");
+            c_Retval = "Extended";
             break;
          case eCOBID:
-            c_Retval = C_GtGetText::h_GetText("COB-ID");
+            c_Retval = "COB-ID";
             break;
          case eDLC:
-            c_Retval = C_GtGetText::h_GetText("DLC");
+            c_Retval = "DLC";
             break;
          case eTXMETHOD:
-            c_Retval = C_GtGetText::h_GetText("Tx Method");
+            c_Retval = "Tx Method";
             break;
          case eINHIBITTIME:
-            c_Retval = C_GtGetText::h_GetText("Inhibit Time");
+            c_Retval = "Inhibit Time";
             break;
          case eEVENTTIME:
-            c_Retval = C_GtGetText::h_GetText("Event Time");
+            c_Retval = "Event Time";
             break;
          default:
             break;
@@ -242,41 +241,39 @@ QVariant C_SdNdeCoPdoTableModel::headerData(const int32_t os32_Section, const Qt
          switch (e_Col)
          {
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Continuous index for all PDOs.");
+            c_Retval = "Continuous index for all PDOs.";
             break;
          case eENABLED:
-            c_Retval = C_GtGetText::h_GetText("If PDO is activated, then a 'x' sign is displayed.");
+            c_Retval = "If PDO is activated, then a 'x' sign is displayed.";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("User specific name of PDO.");
+            c_Retval = "User specific name of PDO.";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("User specific comment of PDO.");
+            c_Retval = "User specific comment of PDO.";
             break;
          case eCOTYPE:
-            c_Retval = C_GtGetText::h_GetText("CANopen type of PDO.");
+            c_Retval = "CANopen type of PDO.";
             break;
          case eEXTENDED:
             c_Retval =
-               C_GtGetText::h_GetText("If Extended flag 'x' is displayed, then 29-bit CAN-IDs are used for PDO.");
+               "If Extended flag 'x' is displayed, then 29-bit CAN-IDs are used for PDO.";
             break;
          case eCOBID:
-            c_Retval = C_GtGetText::h_GetText("COB-ID of PDO.");
+            c_Retval = "COB-ID of PDO.";
             break;
          case eDLC:
-            c_Retval = C_GtGetText::h_GetText("Data Length Code of PDO.");
+            c_Retval = "Data Length Code of PDO.";
             break;
          case eTXMETHOD:
-            c_Retval = C_GtGetText::h_GetText(
-               "Transmission type of PDO. Asynchronous manufacturer specific value of 254 " \
-               "or asynchronous device specific value of 255.");
+            c_Retval = "Transmission type of PDO. Asynchronous manufacturer specific value of 254 " \
+               "or asynchronous device specific value of 255.";
             break;
          case eINHIBITTIME:
-            c_Retval = C_GtGetText::h_GetText(
-               "Minimum time in milliseconds between two consecutives CAN messages of PDO.");
+            c_Retval = "Minimum time in milliseconds between two consecutives CAN messages of PDO.";
             break;
          case eEVENTTIME:
-            c_Retval = C_GtGetText::h_GetText("Resend interval time in milliseconds of PDO.");
+            c_Retval = "Resend interval time in milliseconds of PDO.";
             break;
          default:
             break;
@@ -520,20 +517,19 @@ const
 
    if (orc_Message.e_TxMethod == C_OscCanMessage::E_TxMethodType::eTX_METHOD_CAN_OPEN_TYPE_254)
    {
-      c_CurrentPdo.c_TxMethod = C_GtGetText::h_GetText("254 - async manufacturer specific");
+      c_CurrentPdo.c_TxMethod = "254 - async manufacturer specific";
    }
    else if (orc_Message.e_TxMethod == C_OscCanMessage::E_TxMethodType::eTX_METHOD_CAN_OPEN_TYPE_255)
    {
-      c_CurrentPdo.c_TxMethod = C_GtGetText::h_GetText("255 - async device specific");
+      c_CurrentPdo.c_TxMethod = "255 - async device specific";
    }
    else if (orc_Message.e_TxMethod == C_OscCanMessage::E_TxMethodType::eTX_METHOD_CAN_OPEN_TYPE_0)
    {
-      c_CurrentPdo.c_TxMethod = C_GtGetText::h_GetText("0 - synchronous transmission after next SYNC and change");
+      c_CurrentPdo.c_TxMethod = "0 - synchronous transmission after next SYNC and change";
    }
    else
    {
-      c_CurrentPdo.c_TxMethod = C_GtGetText::h_GetText(
-         "1 to 240 - synchronous transmission after 1st to 240th SYNC");
+      c_CurrentPdo.c_TxMethod = "1 to 240 - synchronous transmission after 1st to 240th SYNC";
    }
 
    c_CurrentPdo.c_InhibitTime = QString::number(orc_Message.u16_DelayTimeMs);

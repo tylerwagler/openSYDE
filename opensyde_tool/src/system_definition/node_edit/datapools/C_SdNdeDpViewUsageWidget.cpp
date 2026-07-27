@@ -23,7 +23,6 @@
 #include "C_SdNdeDpViewUsageWidget.hpp"
 
 #include "C_Uti.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -255,7 +254,7 @@ void C_SdNdeDpViewUsageWidget::SetUsage(const uint32_t ou32_NodeIndex, const uin
                   {
                      if (u32_DatapoolCounter == 0U)
                      {
-                        c_DatapoolNames += C_GtGetText::h_GetText("Overlapping between:\n");
+                        c_DatapoolNames += "Overlapping between:\n";
                      }
                      else
                      {
@@ -683,13 +682,13 @@ void C_SdNdeDpViewUsageWidget::m_UpdateTooltip(const int32_t os32_MouseHorizonta
       c_Percentage = QString::number(f32_ShowPercentage, 'f', 2);
 
       // Prepare the text
-      c_Text = static_cast<QString>(C_GtGetText::h_GetText("Start Address: "));
+      c_Text = static_cast<QString>("Start Address: ");
       c_Text += "%1\n";
 
       if (q_ShowFree == true)
       {
-         this->mpc_ToolTip->SetHeading(C_GtGetText::h_GetText("Free space"));
-         c_MemoryState = C_GtGetText::h_GetText("free");
+         this->mpc_ToolTip->SetHeading("Free space");
+         c_MemoryState = "free";
          this->mpc_ToolTip->SetType(C_NagToolTip::eDEFAULT);
 
          c_Text += "%2% %3 (%4 / %5)";
@@ -697,20 +696,20 @@ void C_SdNdeDpViewUsageWidget::m_UpdateTooltip(const int32_t os32_MouseHorizonta
       else if (q_ErrorCase == true)
       {
          this->mpc_ToolTip->SetHeading(c_Description);
-         c_MemoryState = C_GtGetText::h_GetText("overlapped");
+         c_MemoryState = "overlapped";
          this->mpc_ToolTip->SetType(C_NagToolTip::eERROR);
 
          c_Text += "%2 ";
-         c_Text += static_cast<QString>(C_GtGetText::h_GetText("Bytes"));
+         c_Text += static_cast<QString>("Bytes");
          c_Text += " %3";
       }
       else
       {
          this->mpc_ToolTip->SetHeading(c_Description);
-         c_MemoryState = C_GtGetText::h_GetText("reserved");
+         c_MemoryState = "reserved";
          this->mpc_ToolTip->SetType(C_NagToolTip::eDEFAULT);
 
-         c_Text += static_cast<QString>(C_GtGetText::h_GetText("Used: "));
+         c_Text += static_cast<QString>("Used: ");
          c_Text += "%2% %3 (%4 / %5)";
       }
 

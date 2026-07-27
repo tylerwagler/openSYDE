@@ -18,7 +18,6 @@
 #include "C_OgeSliToolTipBase.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
 #include "C_OscNodeDataPoolContentUtil.hpp"
-#include "C_GtGetText.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -182,7 +181,7 @@ void C_OgeSliToolTipBase::m_OnValueChange(void)
    //apply factor and offset
    c_Content = this->mc_FormatterConfig.GetSingleValueContentFormatted(c_Tmp, 0UL, this->mc_ToolTipUserScaling, NULL);
 
-   this->SetToolTipInformation(C_GtGetText::h_GetText("Value"), c_Content);
+   this->SetToolTipInformation("Value", c_Content);
    //Update directly
    if (this->m_GetToolTip() != NULL)
    {

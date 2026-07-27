@@ -11,7 +11,6 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvDcConnectedNodeWidget.hpp"
 #include "ui_C_SyvDcConnectedNodeWidget.h"
 
@@ -225,7 +224,7 @@ void C_SyvDcConnectedNodeWidget::m_Init(void)
    }
    else
    {
-      c_Name = C_GtGetText::h_GetText("Unknown");
+      c_Name = "Unknown";
    }
 
    this->mpc_Ui->pc_LabelName->setText(static_cast<QString>("SN.: %1").arg(c_Name));
@@ -234,7 +233,7 @@ void C_SyvDcConnectedNodeWidget::m_Init(void)
    {
       if (this->mc_SubNodeIdsToOldNodeIds.size() > 1)
       {
-         c_Id = C_GtGetText::h_GetText("<multiple>");
+         c_Id = "<multiple>";
       }
       else
       {
@@ -243,7 +242,7 @@ void C_SyvDcConnectedNodeWidget::m_Init(void)
    }
    else
    {
-      c_Id = C_GtGetText::h_GetText("Unknown");
+      c_Id = "Unknown";
    }
 
    if ((this->mc_Info.q_IpAddressValid == true) && (this->mc_SubNodeIdsToOldNodeIds.size() == 1))
@@ -260,7 +259,7 @@ void C_SyvDcConnectedNodeWidget::m_Init(void)
    }
    else
    {
-      c_Device = C_GtGetText::h_GetText("Unknown");
+      c_Device = "Unknown";
    }
    this->mpc_Ui->pc_LabelDeviceType->setText(static_cast<QString>("Type: %1").arg(c_Device));
    //Resize

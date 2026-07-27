@@ -16,7 +16,6 @@
 #include "gitypes.hpp"
 #include "constants.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_GiTextElementBus.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_Uti.hpp"
@@ -175,7 +174,7 @@ void C_GiTextElementBus::GenerateHint(void)
    {
       QString c_Content;
       C_SdUtil::h_GetErrorToolTipBus(this->ms32_Index, c_Content);
-      this->SetDefaultToolTipHeading(C_GtGetText::h_GetText("Invalid Bus Content"));
+      this->SetDefaultToolTipHeading("Invalid Bus Content");
       this->SetDefaultToolTipContent(c_Content);
       this->SetDefaultToolTipType(C_NagToolTipWithImage::eERROR);
    }

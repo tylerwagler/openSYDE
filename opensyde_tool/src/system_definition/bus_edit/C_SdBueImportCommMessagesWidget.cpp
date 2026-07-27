@@ -95,21 +95,19 @@ void C_SdBueImportCommMessagesWidget::m_InitStaticNames(const C_SclString & orc_
    const QString c_Title(orc_Name.c_str());
 
    this->mrc_ParentDialog.SetTitle(c_Title);
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Import Messages"));
+   this->mrc_ParentDialog.SetSubTitle("Import Messages");
 
    // labels and buttons
 
-   this->mpc_Ui->pc_LabelHeadingReport->setText(C_GtGetText::h_GetText(
-                                                   "Select Protocol"));
-   this->mpc_Ui->pc_LabelCommMessageProtocol->setText(C_GtGetText::h_GetText(
-                                                         "COMM Messages Protocol"));
-   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Continue"));
-   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_LabelHeadingReport->setText("Select Protocol");
+   this->mpc_Ui->pc_LabelCommMessageProtocol->setText("COMM Messages Protocol");
+   this->mpc_Ui->pc_PushButtonOk->setText("Continue");
+   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 
    // Tool tips
    this->mpc_Ui->pc_LabelCommMessageProtocol->SetToolTipInformation(
-      C_GtGetText::h_GetText("COMM Messages Protocol"),
-      C_GtGetText::h_GetText("Select the COMM protocol where to import the messages."));
+      "COMM Messages Protocol",
+      "Select the COMM protocol where to import the messages.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

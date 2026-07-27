@@ -165,7 +165,6 @@ set (OPENSYDE_GUI_INCLUDES
    ${PROJECT_ROOT}/src/project_gui/system_definition/node
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/can
    ${OPENSYDE_GUI_ROOT}/src/help_engine
-   ${OPENSYDE_GUI_ROOT}/src/gettext
    ${OPENSYDE_GUI_ROOT}/src/util
    ${PROJECT_ROOT}/src/util
    ${PROJECT_ROOT}/src/precompiled_headers/gui
@@ -183,8 +182,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    list(APPEND OPENSYDE_GUI_LIB_INCLUDES ${OPENSSL_INCLUDE_DIR})
 else()
    list(APPEND OPENSYDE_GUI_LIB_INCLUDES
-      ${PROJECT_ROOT}/../libraries/gettext
-      ${PROJECT_ROOT}/../libraries/openssl/openssl64/include
+   ${PROJECT_ROOT}/../libraries/openssl/openssl64/include
    )
 endif()
 
@@ -393,7 +391,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBaseCommand.cpp
    ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBusCommand.cpp
    ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologySetupStyleCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.cpp
    ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyChangeInterfaceCommand.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpProperties.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeConnectionId.cpp
@@ -1159,7 +1156,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBaseCommand.hpp
    ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyReconnectBusCommand.hpp
    ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologySetupStyleCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.hpp
    ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyChangeInterfaceCommand.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpProperties.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeConnectionId.hpp
@@ -1984,7 +1980,6 @@ else()
       Iphlpapi #IP helper API
       ${PROJECT_ROOT}/../libraries/openssl/openssl64/libssl.a
       ${PROJECT_ROOT}/../libraries/openssl/openssl64/libcrypto.a
-      ${PROJECT_ROOT}/../libraries/gettext/libintl.a
       ${PROJECT_ROOT}/../libraries/osy_git_data_model_monitor/libosy_git_data_model_monitor.a
    )
 endif()

@@ -18,7 +18,6 @@
 #include "C_SyvUpPacPemFilesListWidget.hpp"
 #include "C_UsHandler.hpp"
 #include "C_Uti.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_SyvUpPacPemFileEntry.hpp"
@@ -85,9 +84,8 @@ void C_SyvUpPacPemFilesListWidget::AddFileAction(void)
       c_Folder = C_Uti::h_GetExePath();
    }
 
-   this->m_AddNewPemFile(C_GtGetText::h_GetText("Select PEM file"),
-                         static_cast<QString>(C_GtGetText::h_GetText(
-                                                 "PEM file")) + " (*.pem)", c_Folder);
+   this->m_AddNewPemFile("Select PEM file",
+                         static_cast<QString>("PEM file") + " (*.pem)", c_Folder);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -107,8 +105,8 @@ void C_SyvUpPacPemFilesListWidget::DeleteAllItems()
 {
    C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
 
-   c_MessageBox.SetHeading(C_GtGetText::h_GetText("Remove all Files"));
-   c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to remove all files from the list?"));
+   c_MessageBox.SetHeading("Remove all Files");
+   c_MessageBox.SetDescription("Do you really want to remove all files from the list?");
    c_MessageBox.SetOkButtonText("Remove All");
    c_MessageBox.SetNoButtonText("Keep");
    c_MessageBox.SetCustomMinHeight(180, 180);
@@ -262,8 +260,8 @@ void C_SyvUpPacPemFilesListWidget::m_AddNewPemFile(const QString & orc_DialogCap
    if (!c_InvalidFiles.isEmpty())
    {
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Update Package Configuration"));
-      c_Message.SetDescription(C_GtGetText::h_GetText("Invalid files: only *.pem files are allowed."));
+      c_Message.SetHeading("Update Package Configuration");
+      c_Message.SetDescription("Invalid files: only *.pem files are allowed.");
       c_Message.SetDetails(c_InvalidFiles.join("\n"));
       c_Message.SetCustomMinHeight(180, 250);
       c_Message.Execute();
@@ -345,13 +343,12 @@ void C_SyvUpPacPemFilesListWidget::m_AddFile(const QString & orc_File, const int
    else
    {
       C_OgeWiCustomMessage c_Message(this);
-      c_Message.SetHeading(C_GtGetText::h_GetText("Add PEM file"));
+      c_Message.SetHeading("Add PEM file");
       c_Message.SetDescription(
-         static_cast<QString>(C_GtGetText::h_GetText(
-                                 "The file is already contained in the PEM file list "
-                                 "and therefore not added again.")));
+         static_cast<QString>("The file is already contained in the PEM file list "
+                                 "and therefore not added again."));
       c_Message.SetDetails(
-         static_cast<QString>(C_GtGetText::h_GetText("%1")).arg(orc_File));
+         static_cast<QString>("%1").arg(orc_File));
       c_Message.Execute();
    }
 }
@@ -392,10 +389,10 @@ void C_SyvUpPacPemFilesListWidget::m_DeleteItem(const int32_t os32_CurrentPemFil
          {
             C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
 
-            c_MessageBox.SetHeading(C_GtGetText::h_GetText("Remove file"));
-            c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to remove ") +
+            c_MessageBox.SetHeading("Remove file");
+            c_MessageBox.SetDescription("Do you really want to remove " +
                                         pc_ItemWidget->c_FilePath +
-                                        C_GtGetText::h_GetText(" from the PEM files list?"));
+                                        " from the PEM files list?");
             c_MessageBox.SetOkButtonText("Remove");
             c_MessageBox.SetNoButtonText("Keep");
             c_MessageBox.SetCustomMinHeight(200, 200);

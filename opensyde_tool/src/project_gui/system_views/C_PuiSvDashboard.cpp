@@ -14,7 +14,6 @@
 
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -1984,7 +1983,7 @@ void C_PuiSvDashboard::h_OnSyncNodeHalc(C_PuiSvDbNodeDataPoolListElementId & orc
                                                                      orc_MapCurToNew) == true)
       {
          orc_DataElementId.MarkInvalid(C_OscNodeDataPool::eHALC,
-                                       C_GtGetText::h_GetText("Unknown HAL data element"));
+                                       "Unknown HAL data element");
       }
    }
 }

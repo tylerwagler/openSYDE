@@ -17,7 +17,6 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_OscUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_GiSvDaParam.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -1223,40 +1222,40 @@ QVariant C_SyvDaItPaTreeModel::headerData(const int32_t os32_Section, const Qt::
          switch (e_Col)
          {
          case eTREE:
-            c_Retval = C_GtGetText::h_GetText("Items");
+            c_Retval = "Items";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eDEVICE_VALUE:
-            c_Retval = C_GtGetText::h_GetText("Device Value");
+            c_Retval = "Device Value";
             break;
          case eSET:
-            c_Retval = C_GtGetText::h_GetText("Set Value");
+            c_Retval = "Set Value";
             break;
          case eUNIT:
-            c_Retval = C_GtGetText::h_GetText("Unit");
+            c_Retval = "Unit";
             break;
          case eACTION_READ:
-            c_Retval = C_GtGetText::h_GetText("Read");
+            c_Retval = "Read";
             break;
          case eACTION_WRITE:
-            c_Retval = C_GtGetText::h_GetText("Write");
+            c_Retval = "Write";
             break;
          case eACTION_APPLY:
-            c_Retval = C_GtGetText::h_GetText("Copy");
+            c_Retval = "Copy";
             break;
          case eACTION_LOAD:
-            c_Retval = C_GtGetText::h_GetText("Load");
+            c_Retval = "Load";
             break;
          case eACTION_SAVE:
-            c_Retval = C_GtGetText::h_GetText("Save");
+            c_Retval = "Save";
             break;
          case eACTION_RECORD:
-            c_Retval = C_GtGetText::h_GetText("Rec.");
+            c_Retval = "Rec.";
             break;
          case eACTION_REMOVE:
-            c_Retval = C_GtGetText::h_GetText("Del.");
+            c_Retval = "Del.";
             break;
          default:
             break;
@@ -1267,40 +1266,40 @@ QVariant C_SyvDaItPaTreeModel::headerData(const int32_t os32_Section, const Qt::
          switch (e_Col)
          {
          case eTREE:
-            c_Retval = C_GtGetText::h_GetText("Items");
+            c_Retval = "Items";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eDEVICE_VALUE:
-            c_Retval = C_GtGetText::h_GetText("Device Value");
+            c_Retval = "Device Value";
             break;
          case eSET:
-            c_Retval = C_GtGetText::h_GetText("Set Value");
+            c_Retval = "Set Value";
             break;
          case eUNIT:
-            c_Retval = C_GtGetText::h_GetText("Unit");
+            c_Retval = "Unit";
             break;
          case eACTION_READ:
-            c_Retval = C_GtGetText::h_GetText("Read command");
+            c_Retval = "Read command";
             break;
          case eACTION_WRITE:
-            c_Retval = C_GtGetText::h_GetText("Write command");
+            c_Retval = "Write command";
             break;
          case eACTION_APPLY:
-            c_Retval = C_GtGetText::h_GetText("Copy command");
+            c_Retval = "Copy command";
             break;
          case eACTION_LOAD:
-            c_Retval = C_GtGetText::h_GetText("Load command");
+            c_Retval = "Load command";
             break;
          case eACTION_SAVE:
-            c_Retval = C_GtGetText::h_GetText("Save command");
+            c_Retval = "Save command";
             break;
          case eACTION_RECORD:
-            c_Retval = C_GtGetText::h_GetText("Record command");
+            c_Retval = "Record command";
             break;
          case eACTION_REMOVE:
-            c_Retval = C_GtGetText::h_GetText("Delete command");
+            c_Retval = "Delete command";
             break;
          default:
             break;
@@ -1308,12 +1307,12 @@ QVariant C_SyvDaItPaTreeModel::headerData(const int32_t os32_Section, const Qt::
       }
       else if (os32_Role == ms32_USER_ROLE_TOOL_TIP_CONTENT)
       {
-         const QString c_PhysicalValueInfo = C_GtGetText::h_GetText("The raw value of a data element is the value as it is transmitted in the network."
+         const QString c_PhysicalValueInfo = "The raw value of a data element is the value as it is transmitted in the network."
                                                                     "\nThe physical value of a data element is the value of the physical quantity (e.g. speed, "
                                                                     "\nrpm, temperature, etc.) that represents the data element."
                                                                     "\nThe following conversion formula is used to transform the raw value "
                                                                     "\nto a physical value or in the reverse direction:"
-                                                                    "\n\n[Physical value] = ([Raw value] * [Factor]) + [Offset]");
+                                                                    "\n\n[Physical value] = ([Raw value] * [Factor]) + [Offset]";
          QString c_InfoText;
          switch (e_Col)
          {
@@ -1321,45 +1320,43 @@ QVariant C_SyvDaItPaTreeModel::headerData(const int32_t os32_Section, const Qt::
             c_Retval = "";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment for this data element.");
+            c_Retval = "Comment for this data element.";
             break;
          case eDEVICE_VALUE:
-            c_Retval = C_GtGetText::h_GetText("Device value (= actual value), read from system NVM."
-                                              "\n\nExecute \"Read\" command to refresh.");
+            c_Retval = "Device value (= actual value), read from system NVM."
+                                              "\n\nExecute \"Read\" command to refresh.";
             break;
          case eSET:
-            c_Retval = C_GtGetText::h_GetText("Set value (= desired value). Bold styled if != device value."
+            c_Retval = "Set value (= desired value). Bold styled if != device value."
                                               "\n\nEdit Modes:"
                                               "\n - Custom values (default): values can be edited manually by user"
                                               "\n - Dataset values (if available): Dataset values defined in SYSTEM DEFINITION are used. Cannot be adapted by user."
-                                              "\n\nExecute \"Write\" command to write set values to device in parametrization step");
+                                              "\n\nExecute \"Write\" command to write set values to device in parametrization step";
             break;
          case eUNIT:
-            c_InfoText = C_GtGetText::h_GetText("Unit of the signals physical quantity\n\n");
+            c_InfoText = "Unit of the signals physical quantity\n\n";
             c_Retval = c_InfoText.append(c_PhysicalValueInfo);
             break;
          case eACTION_READ:
-            c_Retval = C_GtGetText::h_GetText("Triggers the read of actual device values from System NVM.");
+            c_Retval = "Triggers the read of actual device values from System NVM.";
             break;
          case eACTION_WRITE:
-            c_Retval = C_GtGetText::h_GetText(
-               "Triggers a parametrization dialog where set values (desired values) are written to System NVM");
+            c_Retval = "Triggers a parametrization dialog where set values (desired values) are written to System NVM";
             break;
          case eACTION_APPLY:
-            c_Retval = C_GtGetText::h_GetText("Copies values from \"device values\" column to \"set values\" column");
+            c_Retval = "Copies values from \"device values\" column to \"set values\" column";
             break;
          case eACTION_LOAD:
-            c_Retval = C_GtGetText::h_GetText("Loads \"set values\" from a parameter set file.");
+            c_Retval = "Loads \"set values\" from a parameter set file.";
             break;
          case eACTION_SAVE:
-            c_Retval = C_GtGetText::h_GetText("Saves \"set values\" to a parameter set file.");
+            c_Retval = "Saves \"set values\" to a parameter set file.";
             break;
          case eACTION_RECORD:
-            c_Retval = C_GtGetText::h_GetText(
-               "Triggers a parameter set record dialog where actual device values are written to a parameter set image.");
+            c_Retval = "Triggers a parameter set record dialog where actual device values are written to a parameter set image.";
             break;
          case eACTION_REMOVE:
-            c_Retval = C_GtGetText::h_GetText("Remove list from parametrization widget.");
+            c_Retval = "Remove list from parametrization widget.";
             break;
          default:
             break;
@@ -1487,17 +1484,17 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                                  {
                                     if (this->mc_EcuCrcValidStatus[u32_ItFinalIndex] == true)
                                     {
-                                       c_Retval = C_GtGetText::h_GetText("CRC: Valid");
+                                       c_Retval = "CRC: Valid";
                                     }
                                     else
                                     {
-                                       c_Retval = C_GtGetText::h_GetText("CRC: Invalid");
+                                       c_Retval = "CRC: Invalid";
                                     }
                                  }
                               }
                               else
                               {
-                                 c_Retval = static_cast<QString>(C_GtGetText::h_GetText("CRC: %1")).arg(
+                                 c_Retval = static_cast<QString>("CRC: %1").arg(
                                     C_SyvDaItPaTreeModel::mhc_ECU_VALUE_INIT_STRING);
                               }
                            }
@@ -1506,7 +1503,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                   }
                   else
                   {
-                     c_Retval = C_GtGetText::h_GetText("CRC: Unused");
+                     c_Retval = "CRC: Unused";
                   }
                }
                break;
@@ -1526,7 +1523,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                         {
                            if (s32_DataSetIndex < 0)
                            {
-                              c_Retval = C_GtGetText::h_GetText("Custom values");
+                              c_Retval = "Custom values";
                            }
                            else
                            {
@@ -1538,7 +1535,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                               if ((pc_List != NULL) && (u32_DataSet < pc_List->c_DataSets.size()))
                               {
                                  const C_OscNodeDataPoolDataSet & rc_DataSet = pc_List->c_DataSets[u32_DataSet];
-                                 c_Retval = static_cast<QString>(C_GtGetText::h_GetText("Dataset \"%1\"")).arg(
+                                 c_Retval = static_cast<QString>("Dataset \"%1\"").arg(
                                     rc_DataSet.c_Name.c_str());
                               }
                            }
@@ -1874,25 +1871,25 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
             switch (e_Col) //lint !e788 not all cases handled here explicitly
             {
             case C_SyvDaItPaTreeModel::eACTION_APPLY:
-               c_Retval = C_GtGetText::h_GetText("Copy command");
+               c_Retval = "Copy command";
                break;
             case C_SyvDaItPaTreeModel::eACTION_READ:
-               c_Retval = C_GtGetText::h_GetText("Read command");
+               c_Retval = "Read command";
                break;
             case C_SyvDaItPaTreeModel::eACTION_WRITE:
-               c_Retval = C_GtGetText::h_GetText("Write command");
+               c_Retval = "Write command";
                break;
             case C_SyvDaItPaTreeModel::eACTION_LOAD:
-               c_Retval = C_GtGetText::h_GetText("Load command");
+               c_Retval = "Load command";
                break;
             case C_SyvDaItPaTreeModel::eACTION_SAVE:
-               c_Retval = C_GtGetText::h_GetText("Save command");
+               c_Retval = "Save command";
                break;
             case C_SyvDaItPaTreeModel::eACTION_RECORD:
-               c_Retval = C_GtGetText::h_GetText("Record command");
+               c_Retval = "Record command";
                break;
             case C_SyvDaItPaTreeModel::eACTION_REMOVE:
-               c_Retval = C_GtGetText::h_GetText("Remove command");
+               c_Retval = "Remove command";
                break;
             default:
                //Use default value = empty
@@ -1954,7 +1951,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                case C_SyvDaItPaTreeModel::eACTION_SAVE:
                case C_SyvDaItPaTreeModel::eACTION_RECORD:
                case C_SyvDaItPaTreeModel::eACTION_REMOVE:
-                  c_Retval = c_Template.arg(C_GtGetText::h_GetText("Apply for"));
+                  c_Retval = c_Template.arg("Apply for");
                   break;
                default:
                   //Use default value = empty
@@ -2716,19 +2713,19 @@ QString C_SyvDaItPaTreeModel::h_GetSelectedItemTypeTemplate(const QModelIndex & 
    switch (u32_ValidLayers)
    {
    case 0UL:
-      c_Retval = C_GtGetText::h_GetText("%1 all containing lists");
+      c_Retval = "%1 all containing lists";
       break;
    case 1UL:
-      c_Retval = C_GtGetText::h_GetText("%1 all containing lists of this node");
+      c_Retval = "%1 all containing lists of this node";
       break;
    case 2UL:
-      c_Retval = C_GtGetText::h_GetText("%1 all containing lists of this Datapool");
+      c_Retval = "%1 all containing lists of this Datapool";
       break;
    case 3UL:
-      c_Retval = C_GtGetText::h_GetText("%1 this list");
+      c_Retval = "%1 this list";
       break;
    case 4UL:
-      c_Retval = C_GtGetText::h_GetText("%1 current list"); //not used
+      c_Retval = "%1 current list"; //not used
       break;
    default:
       //Unknown
@@ -2996,7 +2993,7 @@ void C_SyvDaItPaTreeModel::mh_InitAllNode(C_TblTreItem * const opc_TreeNode, con
       if (pc_View != NULL)
       {
          opc_TreeNode->c_Name =
-            static_cast<QString>(C_GtGetText::h_GetText("VIEW #%1 - %2")).arg(ou32_ViewIndex + 1).arg(
+            static_cast<QString>("VIEW #%1 - %2").arg(ou32_ViewIndex + 1).arg(
                pc_View->GetName().c_str());
       }
       //Icon
@@ -3044,7 +3041,7 @@ void C_SyvDaItPaTreeModel::mh_InitNode(C_TblTreItem * const opc_TreeNode, const 
 
             if (opc_TreeNode->q_Enabled == false)
             {
-               opc_TreeNode->c_Name += C_GtGetText::h_GetText(" (Inactive in view)");
+               opc_TreeNode->c_Name += " (Inactive in view)";
             }
             else
             {
@@ -3058,8 +3055,7 @@ void C_SyvDaItPaTreeModel::mh_InitNode(C_TblTreItem * const opc_TreeNode, const 
                if (q_Error == true)
                {
                   opc_TreeNode->q_Enabled = false;
-                  opc_TreeNode->c_Name += C_GtGetText::h_GetText(
-                     " (Disabled flags)");
+                  opc_TreeNode->c_Name += " (Disabled flags)";
                }
             }
          }

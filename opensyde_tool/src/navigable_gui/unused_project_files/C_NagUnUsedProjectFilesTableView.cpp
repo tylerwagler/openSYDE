@@ -16,7 +16,6 @@
 #include "C_NagUnUsedProjectFilesTableView.hpp"
 #include "C_Uti.hpp"
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdNdeDpUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -140,11 +139,11 @@ void C_NagUnUsedProjectFilesTableView::m_DeleteSelectedFiles()
    }
    const QString c_Details = this->mc_Model.DetailsOfFilesToDelete(c_SourceSelection);
 
-   c_MessageBox.SetHeading(C_GtGetText::h_GetText("Delete Files"));
-   c_MessageBox.SetDescription(C_GtGetText::h_GetText("Are you sure about deleting following files?"));
+   c_MessageBox.SetHeading("Delete Files");
+   c_MessageBox.SetDescription("Are you sure about deleting following files?");
    c_MessageBox.SetDetails(c_Details);
-   c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Delete"));
-   c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+   c_MessageBox.SetOkButtonText("Delete");
+   c_MessageBox.SetNoButtonText("Cancel");
    c_MessageBox.SetCustomMinHeight(180, 550);
    c_MessageBox.SetCustomMinWidth(800);
 
@@ -164,7 +163,7 @@ void C_NagUnUsedProjectFilesTableView::DeleteAllFiles()
    if (!this->IsEmpty())
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Delete All Files"));
+      c_MessageBox.SetHeading("Delete All Files");
       c_MessageBox.SetDescription(
          "Are you sure about deleting all files?");
       c_MessageBox.SetOkButtonText("Yes");
@@ -323,12 +322,12 @@ void C_NagUnUsedProjectFilesTableView::m_SetupContextMenu()
 {
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
 
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Select all"),
+   this->mpc_ContextMenu->addAction("Select all",
                                     this,
                                     &C_NagUnUsedProjectFilesTableView::m_SelectAllFiles,
                                     static_cast<int32_t>(Qt::CTRL) + static_cast<int32_t>(Qt::Key_A));
    this->mpc_ContextMenu->addSeparator();
-   this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Delete selected"),
+   this->mpc_ContextMenu->addAction("Delete selected",
                                     this,
                                     &C_NagUnUsedProjectFilesTableView::m_DeleteSelectedFiles,
                                     static_cast<int32_t>(Qt::Key_Delete));

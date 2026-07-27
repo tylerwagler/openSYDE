@@ -13,11 +13,9 @@
 #include "precomp_headers.hpp"
 
 #include <QHelpEvent>
-#include "C_GtGetText.hpp"
 #include "C_OgeSpxAllBase.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -63,11 +61,11 @@ void C_OgeSpxAllBase::SetToolTipAdditionalInfo(const QString & orc_Text,
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeSpxAllBase::ActivateDefaultToolTip(void)
 {
-   const QString c_Heading = C_GtGetText::h_GetText("Value Range");
+   const QString c_Heading = "Value Range";
 
    //Translation: 1=Minimum value, 2=Maximum value
    const QString c_Content =
-      static_cast<QString>(C_GtGetText::h_GetText("Minimum: %1\nMaximum: %2")).arg(this->m_GetMinimumString()).arg(
+      static_cast<QString>("Minimum: %1\nMaximum: %2").arg(this->m_GetMinimumString()).arg(
          this->m_GetMaximumString());
 
    this->SetToolTipInformation(c_Heading, c_Content);

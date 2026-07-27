@@ -17,7 +17,6 @@
 #include "TglUtils.hpp"
 #include "constants.hpp"
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -113,28 +112,28 @@ QVariant C_SyvDaPeUpdateModeTableModel::headerData(const int32_t os32_Section, c
             c_Retval = "#";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Data Element");
+            c_Retval = "Data Element";
             break;
          case eVALUE_TYPE:
-            c_Retval = C_GtGetText::h_GetText("Value type");
+            c_Retval = "Value type";
             break;
          case eARRAY_SIZE:
-            c_Retval = C_GtGetText::h_GetText("Array size");
+            c_Retval = "Array size";
             break;
          case eDATA_POOL:
-            c_Retval = C_GtGetText::h_GetText("Datapool");
+            c_Retval = "Datapool";
             break;
          case eTRANSMISSION_MODE:
-            c_Retval = C_GtGetText::h_GetText("Transmission Mode");
+            c_Retval = "Transmission Mode";
             break;
          case eCYCLIC_INTERVAL:
-            c_Retval = C_GtGetText::h_GetText("Cyclic Interval");
+            c_Retval = "Cyclic Interval";
             break;
          case eTHRESHOLD:
-            c_Retval = C_GtGetText::h_GetText("Change threshold");
+            c_Retval = "Change threshold";
             break;
          case eUSAGE:
-            c_Retval = C_GtGetText::h_GetText("Usage");
+            c_Retval = "Usage";
             break;
          default:
             break;
@@ -155,28 +154,28 @@ QVariant C_SyvDaPeUpdateModeTableModel::headerData(const int32_t os32_Section, c
             c_Retval = "#";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Data Element");
+            c_Retval = "Data Element";
             break;
          case eVALUE_TYPE:
-            c_Retval = C_GtGetText::h_GetText("Value type");
+            c_Retval = "Value type";
             break;
          case eARRAY_SIZE:
-            c_Retval = C_GtGetText::h_GetText("Array size");
+            c_Retval = "Array size";
             break;
          case eDATA_POOL:
-            c_Retval = C_GtGetText::h_GetText("Datapool");
+            c_Retval = "Datapool";
             break;
          case eTRANSMISSION_MODE:
-            c_Retval = C_GtGetText::h_GetText("Transmission Mode");
+            c_Retval = "Transmission Mode";
             break;
          case eCYCLIC_INTERVAL:
-            c_Retval = C_GtGetText::h_GetText("Cyclic Interval");
+            c_Retval = "Cyclic Interval";
             break;
          case eTHRESHOLD:
-            c_Retval = C_GtGetText::h_GetText("Change threshold");
+            c_Retval = "Change threshold";
             break;
          case eUSAGE:
-            c_Retval = C_GtGetText::h_GetText("Usage");
+            c_Retval = "Usage";
             break;
          default:
             break;
@@ -187,41 +186,39 @@ QVariant C_SyvDaPeUpdateModeTableModel::headerData(const int32_t os32_Section, c
          switch (e_Col)
          {
          case eICON:
-            c_Retval = C_GtGetText::h_GetText("Type of data element");
+            c_Retval = "Type of data element";
             break;
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Item number");
+            c_Retval = "Item number";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Data element namespace from SYSTEM DEFINITION");
+            c_Retval = "Data element namespace from SYSTEM DEFINITION";
             break;
          case eVALUE_TYPE:
-            c_Retval = C_GtGetText::h_GetText("Data element value type from SYSTEM DEFINITION");
+            c_Retval = "Data element value type from SYSTEM DEFINITION";
             break;
          case eARRAY_SIZE:
-            c_Retval = C_GtGetText::h_GetText("Data element array size from SYSTEM DEFINITION");
+            c_Retval = "Data element array size from SYSTEM DEFINITION";
             break;
          case eDATA_POOL:
-            c_Retval = C_GtGetText::h_GetText("Parent Datapool name from SYSTEM DEFINITION");
+            c_Retval = "Parent Datapool name from SYSTEM DEFINITION";
             break;
          case eTRANSMISSION_MODE:
-            c_Retval = C_GtGetText::h_GetText(
-               "Used transmission mode:\n"
+            c_Retval = "Used transmission mode:\n"
                "\"Cyclic\": transmit in fixed time interval\n"
                "\"On Change\": transmit in fixed time interval or earlier if change detected\n"
-               "\"On Trigger\": transmit if the user clicks the corresponding button");
+               "\"On Trigger\": transmit if the user clicks the corresponding button";
             break;
          case eCYCLIC_INTERVAL:
-            c_Retval = C_GtGetText::h_GetText(
-               "Fixed time interval for transmission.\n"
-               "Only necessary if transmission mode is \"On Change\" or \"Cyclic\"");
+            c_Retval = "Fixed time interval for transmission.\n"
+               "Only necessary if transmission mode is \"On Change\" or \"Cyclic\"";
             break;
          case eTHRESHOLD:
-            c_Retval = C_GtGetText::h_GetText("Threshold for detected change to trigger a value update.\n"
-                                              "Only necessary if transmission mode is \"On Change\"");
+            c_Retval = "Threshold for detected change to trigger a value update.\n"
+                                              "Only necessary if transmission mode is \"On Change\"";
             break;
          case eUSAGE:
-            c_Retval = C_GtGetText::h_GetText("Number of items on each Dashboard which uses this data element");
+            c_Retval = "Number of items on each Dashboard which uses this data element";
             break;
          default:
             break;
@@ -326,7 +323,7 @@ QVariant C_SyvDaPeUpdateModeTableModel::data(const QModelIndex & orc_Index, cons
                {
                   if (pc_OscElement->q_InterpretAsString == true)
                   {
-                     c_Retval = C_GtGetText::h_GetText("string");
+                     c_Retval = "string";
                   }
                   else
                   {
@@ -976,13 +973,13 @@ QString C_SyvDaPeUpdateModeTableModel::mh_TransmissionModeToString(
    switch (oe_TransmissionMode)
    {
    case C_PuiSvReadDataConfiguration::eTM_ON_TRIGGER:
-      c_Retval = C_GtGetText::h_GetText("On Trigger");
+      c_Retval = "On Trigger";
       break;
    case C_PuiSvReadDataConfiguration::eTM_CYCLIC:
-      c_Retval = C_GtGetText::h_GetText("Cyclic");
+      c_Retval = "Cyclic";
       break;
    case C_PuiSvReadDataConfiguration::eTM_ON_CHANGE:
-      c_Retval = C_GtGetText::h_GetText("On Change");
+      c_Retval = "On Change";
       break;
    default:
       break;
@@ -1010,13 +1007,13 @@ QString C_SyvDaPeUpdateModeTableModel::m_RailIndexToString(const uint8_t ou8_Rai
       switch (ou8_RailIndex)
       {
       case 0U:
-         c_Retval = static_cast<QString>(C_GtGetText::h_GetText("Fast (%1 ms)")).arg(pc_View->GetUpdateRateFast());
+         c_Retval = static_cast<QString>("Fast (%1 ms)").arg(pc_View->GetUpdateRateFast());
          break;
       case 1U:
-         c_Retval = static_cast<QString>(C_GtGetText::h_GetText("Medium (%1 ms)")).arg(pc_View->GetUpdateRateMedium());
+         c_Retval = static_cast<QString>("Medium (%1 ms)").arg(pc_View->GetUpdateRateMedium());
          break;
       case 2U:
-         c_Retval = static_cast<QString>(C_GtGetText::h_GetText("Slow (%1 ms)")).arg(pc_View->GetUpdateRateSlow());
+         c_Retval = static_cast<QString>("Slow (%1 ms)").arg(pc_View->GetUpdateRateSlow());
          break;
       default:
          c_Retval = "";

@@ -12,7 +12,6 @@
 
 #include <QAction>
 
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdBueMessageSelectorWidget.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -221,15 +220,15 @@ void C_SdBueMessageSelectorWidget::UpdateButtonText(void) const
       //Text
       if (this->me_ProtocolType == C_OscCanProtocol::eCAN_OPEN)
       {
-         c_Text = static_cast<QString>(C_GtGetText::h_GetText("PDO Messages (%1)"));
+         c_Text = static_cast<QString>("PDO Messages (%1)");
       }
       else if (this->me_ProtocolType == C_OscCanProtocol::eJ1939)
       {
-         c_Text = static_cast<QString>(C_GtGetText::h_GetText("PG Messages (%1)"));
+         c_Text = static_cast<QString>("PG Messages (%1)");
       }
       else
       {
-         c_Text = static_cast<QString>(C_GtGetText::h_GetText("Messages (%1)"));
+         c_Text = static_cast<QString>("Messages (%1)");
       }
 
       tgl_assert(this->mpc_MessageSyncManager != NULL);
@@ -294,7 +293,7 @@ void C_SdBueMessageSelectorWidget::InitFromData(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageSelectorWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_PbAddMessage->setText(C_GtGetText::h_GetText("Add new Message"));
+   this->mpc_Ui->pc_PbAddMessage->setText("Add new Message");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -424,7 +423,7 @@ void C_SdBueMessageSelectorWidget::RecheckProtocolError(void) const
                                                                                          c_NodeIndexes,
                                                                                          c_InterfaceIndexes);
 
-      c_ErrorNodes = C_GtGetText::h_GetText("\nAffected nodes:");
+      c_ErrorNodes = "\nAffected nodes:";
 
       for (uint32_t u32_Counter = 0U; u32_Counter < c_NodeIndexes.size(); u32_Counter++)
       {
@@ -486,27 +485,27 @@ void C_SdBueMessageSelectorWidget::RecheckProtocolError(void) const
        (q_CommMinSignalCountInvalid == true))
    {
       q_Valid = false;
-      c_ErrorText = C_GtGetText::h_GetText("\n\nProtocol error detected:\n");
+      c_ErrorText = "\n\nProtocol error detected:\n";
 
       if (q_CommMaxRxSignalCountInvalid == true)
       {
-         c_ErrorText += C_GtGetText::h_GetText("The number of RX signals is too high. The maximum is 2048.");
+         c_ErrorText += "The number of RX signals is too high. The maximum is 2048.";
       }
       if (q_CommMaxTxSignalCountInvalid == true)
       {
-         c_ErrorText += C_GtGetText::h_GetText("The number of TX signals is too high. The maximum is 2048.");
+         c_ErrorText += "The number of TX signals is too high. The maximum is 2048.";
       }
       if (q_CommMinSignalCountInvalid == true)
       {
-         c_ErrorText += C_GtGetText::h_GetText("At least one signal is required.");
+         c_ErrorText += "At least one signal is required.";
       }
       if (q_CoRxPdoCountInvalid == true)
       {
-         c_ErrorText += C_GtGetText::h_GetText("The number of active RPDOs is too high. The maximum is 512.");
+         c_ErrorText += "The number of active RPDOs is too high. The maximum is 512.";
       }
       if (q_CoTxPdoCountInvalid == true)
       {
-         c_ErrorText += C_GtGetText::h_GetText("The number of active TPDOs is too high. The maximum is 512.");
+         c_ErrorText += "The number of active TPDOs is too high. The maximum is 512.";
       }
 
       if (c_ErrorNodes != "")
@@ -522,18 +521,18 @@ void C_SdBueMessageSelectorWidget::RecheckProtocolError(void) const
    QString c_ToolTipText;
    if (this->me_ProtocolType == C_OscCanProtocol::eCAN_OPEN)
    {
-      c_ToolTipHeading = C_GtGetText::h_GetText("PDO Messages");
-      c_ToolTipText = C_GtGetText::h_GetText("Show overview of all PDO messages / mapped signals");
+      c_ToolTipHeading = "PDO Messages";
+      c_ToolTipText = "Show overview of all PDO messages / mapped signals";
    }
    else if (this->me_ProtocolType == C_OscCanProtocol::eJ1939)
    {
-      c_ToolTipHeading = C_GtGetText::h_GetText("PG Messages");
-      c_ToolTipText = C_GtGetText::h_GetText("Show overview of all PG messages / mapped SP signals");
+      c_ToolTipHeading = "PG Messages";
+      c_ToolTipText = "Show overview of all PG messages / mapped SP signals";
    }
    else
    {
-      c_ToolTipHeading = C_GtGetText::h_GetText("Messages");
-      c_ToolTipText = C_GtGetText::h_GetText("Show overview of all messages / mapped signals");
+      c_ToolTipHeading = "Messages";
+      c_ToolTipText = "Show overview of all messages / mapped signals";
    }
 
    if (q_Valid == true)
@@ -802,8 +801,8 @@ void C_SdBueMessageSelectorWidget::m_AddMessageButtonClicked(void) const
    else
    {
       C_OgeWiCustomMessage c_MessageBox(this->parentWidget());
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Message add"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("Cannot add new message. Select an active node."));
+      c_MessageBox.SetHeading("Message add");
+      c_MessageBox.SetDescription("Cannot add new message. Select an active node.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       c_MessageBox.Execute();
    }
@@ -864,24 +863,22 @@ void C_SdBueMessageSelectorWidget::m_SelectSignal(const C_OscCanMessageIdentific
 void C_SdBueMessageSelectorWidget::m_SetupContextMenu(void)
 {
    this->mpc_ContextMenu = new C_OgeContextMenu(this);
-   this->mpc_AddMessageAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Add new Message"),
+   this->mpc_AddMessageAction = this->mpc_ContextMenu->addAction("Add new Message",
                                                                  this->mpc_Ui->pc_MessageTreeWidget,
                                                                  &C_SdBueMessageSelectorTreeWidget::AddMessage,
                                                                  static_cast<int32_t>(Qt::CTRL) +
                                                                  static_cast<int32_t>(Qt::Key_Plus));
 
    this->mpc_AddMessageFromCatalogAction =
-      this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                          "Add new Message from Catalog"),
+      this->mpc_ContextMenu->addAction("Add new Message from Catalog",
                                        this->mpc_Ui->pc_MessageTreeWidget,
                                        &C_SdBueMessageSelectorTreeWidget::AddMessageFromCatalog);
 
-   this->mpc_AddSignalAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Add new Signal"),
+   this->mpc_AddSignalAction = this->mpc_ContextMenu->addAction("Add new Signal",
                                                                 this->mpc_Ui->pc_MessageTreeWidget,
                                                                 &C_SdBueMessageSelectorTreeWidget::AddSignalFromMenu);
 
-   this->mpc_AddSignalActionWithKey = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText(
-                                                                          "Add new Signal"),
+   this->mpc_AddSignalActionWithKey = this->mpc_ContextMenu->addAction("Add new Signal",
                                                                        this->mpc_Ui->pc_MessageTreeWidget,
                                                                        &C_SdBueMessageSelectorTreeWidget::AddSignalFromMenu,
                                                                        static_cast<int32_t>(Qt::CTRL) +
@@ -889,27 +886,27 @@ void C_SdBueMessageSelectorWidget::m_SetupContextMenu(void)
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_ExpandAllAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Expand all"),
+   this->mpc_ExpandAllAction = this->mpc_ContextMenu->addAction("Expand all",
                                                                 this->mpc_Ui->pc_MessageTreeWidget,
                                                                 &C_SdBueMessageSelectorTreeWidget::ExpandAll);
 
-   this->mpc_CollapseAllAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Collapse all"),
+   this->mpc_CollapseAllAction = this->mpc_ContextMenu->addAction("Collapse all",
                                                                   this->mpc_Ui->pc_MessageTreeWidget,
                                                                   &C_SdBueMessageSelectorTreeWidget::CollapseAll);
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_CutAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Cut"),
+   this->mpc_CutAction = this->mpc_ContextMenu->addAction("Cut",
                                                           this->mpc_Ui->pc_MessageTreeWidget,
                                                           &C_SdBueMessageSelectorTreeWidget::Cut,
                                                           static_cast<int32_t>(Qt::CTRL) +
                                                           static_cast<int32_t>(Qt::Key_X));
-   this->mpc_CopyAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Copy"),
+   this->mpc_CopyAction = this->mpc_ContextMenu->addAction("Copy",
                                                            this->mpc_Ui->pc_MessageTreeWidget,
                                                            &C_SdBueMessageSelectorTreeWidget::Copy,
                                                            static_cast<int32_t>(Qt::CTRL) +
                                                            static_cast<int32_t>(Qt::Key_C));
-   this->mpc_PasteAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Paste"),
+   this->mpc_PasteAction = this->mpc_ContextMenu->addAction("Paste",
                                                             this->mpc_Ui->pc_MessageTreeWidget,
                                                             &C_SdBueMessageSelectorTreeWidget::Paste,
                                                             static_cast<int32_t>(Qt::CTRL) +
@@ -917,7 +914,7 @@ void C_SdBueMessageSelectorWidget::m_SetupContextMenu(void)
 
    this->mpc_ContextMenu->addSeparator();
 
-   this->mpc_DeleteAction = this->mpc_ContextMenu->addAction(C_GtGetText::h_GetText("Delete"),
+   this->mpc_DeleteAction = this->mpc_ContextMenu->addAction("Delete",
                                                              this->mpc_Ui->pc_MessageTreeWidget,
                                                              &C_SdBueMessageSelectorTreeWidget::Delete,
                                                              static_cast<int32_t>(Qt::Key_Delete));
@@ -1031,8 +1028,8 @@ void C_SdBueMessageSelectorWidget::m_OnCustomContextMenuRequested(const QPoint &
       else
       {
          C_OgeWiCustomMessage c_MessageBox(this);
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("No actions available"));
-         c_MessageBox.SetDescription(C_GtGetText::h_GetText("Select an active node and retry."));
+         c_MessageBox.SetHeading("No actions available");
+         c_MessageBox.SetDescription("Select an active node and retry.");
          c_MessageBox.Execute();
       }
    }
@@ -1090,8 +1087,8 @@ void C_SdBueMessageSelectorWidget::m_AddMessageFromCatalogButtonClicked() const
    else
    {
       C_OgeWiCustomMessage c_MessageBox(this->parentWidget());
-      c_MessageBox.SetHeading(C_GtGetText::h_GetText("Message add from catalog"));
-      c_MessageBox.SetDescription(C_GtGetText::h_GetText("Cannot add new Message from catalog. Select an active node."));
+      c_MessageBox.SetHeading("Message add from catalog");
+      c_MessageBox.SetDescription("Cannot add new Message from catalog. Select an active node.");
       c_MessageBox.SetCustomMinHeight(180, 180);
       c_MessageBox.Execute();
    }

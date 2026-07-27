@@ -14,7 +14,6 @@
 #include <QDirIterator>
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_NagUnUsedProjectFilesPopUpDialog.hpp"
 #include "ui_C_NagUnUsedProjectFilesPopUpDialog.h"
 #include "constants.hpp"
@@ -96,16 +95,16 @@ C_NagUnUsedProjectFilesPopUpDialog::~C_NagUnUsedProjectFilesPopUpDialog(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagUnUsedProjectFilesPopUpDialog::InitStaticNames(void) const
 {
-   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Project Settings"));
-   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Un-used project files"));
-   this->mpc_Ui->pc_BtnCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetTitle("Project Settings");
+   this->mrc_ParentDialog.SetSubTitle("Un-used project files");
+   this->mpc_Ui->pc_BtnCancel->setText("Cancel");
 
-   this->mpc_Ui->pc_BtnRefresh->SetToolTipInformation(C_GtGetText::h_GetText("Refresh"),
-                                                      C_GtGetText::h_GetText("Refresh list of un-used files."));
-   this->mpc_Ui->pc_BtnDeleteAll->SetToolTipInformation(C_GtGetText::h_GetText("Delete All"),
-                                                        C_GtGetText::h_GetText("Delete all shown files."));
+   this->mpc_Ui->pc_BtnRefresh->SetToolTipInformation("Refresh",
+                                                      "Refresh list of un-used files.");
+   this->mpc_Ui->pc_BtnDeleteAll->SetToolTipInformation("Delete All",
+                                                        "Delete all shown files.");
 
-   this->mpc_Ui->pc_LabelEmptyFiles->setText(C_GtGetText::h_GetText("No un-used files found."));
+   this->mpc_Ui->pc_LabelEmptyFiles->setText("No un-used files found.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -168,7 +167,7 @@ void C_NagUnUsedProjectFilesPopUpDialog::ShowAllUnusedFiles()
    else
    {
       this->mpc_Ui->pc_LabelNumOfSelectedMessages->setVisible(true);
-      this->mpc_Ui->pc_LabelNumOfSelectedMessages->setText(C_GtGetText::h_GetText("No selected files"));
+      this->mpc_Ui->pc_LabelNumOfSelectedMessages->setText("No selected files");
    }
 }
 
@@ -314,15 +313,13 @@ void C_NagUnUsedProjectFilesPopUpDialog::m_UpdateSelection(const uint32_t ou32_S
       this->mpc_Ui->pc_LabelNumOfSelectedMessages->setVisible(true);
       if (ou32_SelectionCount > 0)
       {
-         this->mpc_Ui->pc_LabelNumOfSelectedMessages->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                                      "%1 selected file(s)")).
+         this->mpc_Ui->pc_LabelNumOfSelectedMessages->setText(static_cast<QString>("%1 selected file(s)").
                                                               arg(ou32_SelectionCount));
          this->mpc_Ui->pc_TableViewUnUsedFiles->update();
       }
       else
       {
-         this->mpc_Ui->pc_LabelNumOfSelectedMessages->setText(static_cast<QString>(C_GtGetText::h_GetText(
-                                                                                      "No selected files")));
+         this->mpc_Ui->pc_LabelNumOfSelectedMessages->setText(static_cast<QString>("No selected files"));
       }
    }
 }

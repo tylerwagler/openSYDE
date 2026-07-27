@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -101,11 +100,11 @@ void C_SdNdeDpListEditWidget::Clear(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListEditWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_PubBack->setText(C_GtGetText::h_GetText("Back to Overview"));
-   this->mpc_Ui->pc_PubPrevious->setText(C_GtGetText::h_GetText("Prev."));
-   this->mpc_Ui->pc_PubNext->setText(C_GtGetText::h_GetText("Next"));
-   this->mpc_Ui->pc_PubBack->SetToolTipInformation(C_GtGetText::h_GetText("Back to Overview"),
-                                                   C_GtGetText::h_GetText("Go back to Datapool overview."));
+   this->mpc_Ui->pc_PubBack->setText("Back to Overview");
+   this->mpc_Ui->pc_PubPrevious->setText("Prev.");
+   this->mpc_Ui->pc_PubNext->setText("Next");
+   this->mpc_Ui->pc_PubBack->SetToolTipInformation("Back to Overview",
+                                                   "Go back to Datapool overview.");
    // tool tips of previous and next buttons are dynamic
 }
 
@@ -208,8 +207,8 @@ void C_SdNdeDpListEditWidget::m_UpdateButtonTooltips(const uint32_t ou32_NodeInd
    if ((pc_Dp != NULL) && (s32_Next >= 0))
    {
       this->mpc_Ui->pc_PubNext->
-      SetToolTipInformation(C_GtGetText::h_GetText("Go to Next Datapool"),
-                            static_cast<QString>(C_GtGetText::h_GetText("#%1 %2 (%3)")).
+      SetToolTipInformation("Go to Next Datapool",
+                            static_cast<QString>("#%1 %2 (%3)").
                             arg(C_PuiSdHandler::h_GetInstance()->GetDataPoolTypeIndex(ou32_NodeIndex, s32_Next) + 1).
                             arg(pc_Dp->c_Name.c_str()).
                             arg(C_PuiSdUtil::h_ConvertDataPoolTypeToString(pc_Dp->e_Type)));
@@ -220,8 +219,8 @@ void C_SdNdeDpListEditWidget::m_UpdateButtonTooltips(const uint32_t ou32_NodeInd
    if ((pc_Dp != NULL) && (s32_Next >= 0))
    {
       this->mpc_Ui->pc_PubPrevious->
-      SetToolTipInformation(C_GtGetText::h_GetText("Go to Previous Datapool"),
-                            static_cast<QString>(C_GtGetText::h_GetText("#%1 %2 (%3)")).
+      SetToolTipInformation("Go to Previous Datapool",
+                            static_cast<QString>("#%1 %2 (%3)").
                             arg(C_PuiSdHandler::h_GetInstance()->GetDataPoolTypeIndex(ou32_NodeIndex, s32_Prev) + 1).
                             arg(pc_Dp->c_Name.c_str()).
                             arg(C_PuiSdUtil::h_ConvertDataPoolTypeToString(pc_Dp->e_Type)));

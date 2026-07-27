@@ -16,7 +16,6 @@
 #include "C_CamMetStatusBarWidget.hpp"
 #include "ui_C_CamMetStatusBarWidget.h"
 
-#include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -78,15 +77,15 @@ void C_CamMetStatusBarWidget::InitStaticNames(void)
    this->m_UpdateFilterLabel();
 
    this->mpc_Ui->pc_ActiveFiltersLabel->SetToolTipInformation(
-      C_GtGetText::h_GetText("Active Receive Filters"),
-      C_GtGetText::h_GetText("Number of active receive filters and "
-                             "number of CAN messages which are filtered since measurement start."));
+      "Active Receive Filters",
+      "Number of active receive filters and "
+                             "number of CAN messages which are filtered since measurement start.");
    this->mpc_Ui->pc_BusLoadLabel->SetToolTipInformation(
-      C_GtGetText::h_GetText("Bus Load"),
-      C_GtGetText::h_GetText("Approximate bus load."));
+      "Bus Load",
+      "Approximate bus load.");
    this->mpc_Ui->pc_TxInfoLabel->SetToolTipInformation(
-      C_GtGetText::h_GetText("Tx Errors"),
-      C_GtGetText::h_GetText("Number of failed tries to transmit CAN messages."));
+      "Tx Errors",
+      "Number of failed tries to transmit CAN messages.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -101,7 +100,7 @@ void C_CamMetStatusBarWidget::SetBusLoad(const uint8_t ou8_BusLoad, const int32_
    const QString c_Bitrate =
       (os32_CanBitrate > 0) ? static_cast<QString>(" (@%1 kBit/s)").arg(QString::number(os32_CanBitrate)) : "";
 
-   this->mpc_Ui->pc_BusLoadLabel->setText(static_cast<QString>(C_GtGetText::h_GetText("Bus Load: %1%%2")).
+   this->mpc_Ui->pc_BusLoadLabel->setText(static_cast<QString>("Bus Load: %1%%2").
                                           arg(QString::number(ou8_BusLoad)).arg(c_Bitrate));
 
    // Prevent applying the stylesheet each call
@@ -181,20 +180,19 @@ void C_CamMetStatusBarWidget::m_UpdateFilterLabel(void) const
 {
    if (this->mu32_ActiveFilters > 0U)
    {
-      this->mpc_Ui->pc_ActiveFiltersLabel->setText(static_cast<QString>(C_GtGetText::h_GetText("Active Filters: %1")).
+      this->mpc_Ui->pc_ActiveFiltersLabel->setText(static_cast<QString>("Active Filters: %1").
                                                    arg(QString::number(this->mu32_ActiveFilters)));
    }
    else
    {
-      this->mpc_Ui->pc_ActiveFiltersLabel->setText(C_GtGetText::h_GetText("No Active Filters"));
+      this->mpc_Ui->pc_ActiveFiltersLabel->setText("No Active Filters");
    }
 
    if ((this->mu32_FilteredMessages > 0U) ||
        (this->mu32_ActiveFilters > 0U))
    {
       this->mpc_Ui->pc_ActiveFiltersLabel->setText(this->mpc_Ui->pc_ActiveFiltersLabel->text() +
-                                                   static_cast<QString>(C_GtGetText::h_GetText(
-                                                                           " (Filtered Messages: %1)")).
+                                                   static_cast<QString>(" (Filtered Messages: %1)").
                                                    arg(QString::number(this->mu32_FilteredMessages)));
    }
 }
@@ -205,13 +203,13 @@ void C_CamMetStatusBarWidget::m_UpdateFilterLabel(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetStatusBarWidget::m_UpdateTxLabel(void)
 {
-   QString c_Text = C_GtGetText::h_GetText("Tx Messages: ");
+   QString c_Text = "Tx Messages: ";
 
    c_Text += QString::number(this->mu32_TransmittedMessages);
 
    if (this->mu32_TxErrors > 0U)
    {
-      c_Text += C_GtGetText::h_GetText(" (Tx Errors: ");
+      c_Text += " (Tx Errors: ";
       c_Text += QString::number(this->mu32_TxErrors);
       c_Text += ")";
 

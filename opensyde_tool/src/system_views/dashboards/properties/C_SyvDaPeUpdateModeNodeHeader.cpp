@@ -13,7 +13,6 @@
 #include "TglUtils.hpp"
 #include "constants.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_SyvDaPeUpdateModeNodeHeader.hpp"
@@ -88,7 +87,7 @@ C_SyvDaPeUpdateModeNodeHeader::C_SyvDaPeUpdateModeNodeHeader(const uint32_t ou32
    if (pc_Node != NULL)
    {
       //Translation: 1: Node name
-      this->mpc_Ui->pc_LabelListName->setText(static_cast<QString>(C_GtGetText::h_GetText("Node - %1")).arg(pc_Node->
+      this->mpc_Ui->pc_LabelListName->setText(static_cast<QString>("Node - %1").arg(pc_Node->
                                                                                                             c_Properties
                                                                                                             .
                                                                                                             c_Name.c_str()));
@@ -117,15 +116,13 @@ C_SyvDaPeUpdateModeNodeHeader::~C_SyvDaPeUpdateModeNodeHeader(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeUpdateModeNodeHeader::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelCount->setText(C_GtGetText::h_GetText("Used Transmissions:"));
-   this->mpc_Ui->pc_LabelCount->SetToolTipInformation(C_GtGetText::h_GetText("Used Transmissions"),
-                                                      C_GtGetText::h_GetText(
-                                                         "Number of used cyclic or event driven transmissions. "
-                                                         "\nThese transmissions will be registered on the server during dashboard connect."));
-   this->mpc_Ui->pc_LabelCountNumber->SetToolTipInformation(C_GtGetText::h_GetText("Used Transmissions"),
-                                                            C_GtGetText::h_GetText(
-                                                               "Number of used cyclic or event driven transmissions."
-                                                               "\nThese transmissions will be registered on the server during dashboard connect."));
+   this->mpc_Ui->pc_LabelCount->setText("Used Transmissions:");
+   this->mpc_Ui->pc_LabelCount->SetToolTipInformation("Used Transmissions",
+                                                      "Number of used cyclic or event driven transmissions. "
+                                                         "\nThese transmissions will be registered on the server during dashboard connect.");
+   this->mpc_Ui->pc_LabelCountNumber->SetToolTipInformation("Used Transmissions",
+                                                            "Number of used cyclic or event driven transmissions."
+                                                               "\nThese transmissions will be registered on the server during dashboard connect.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -152,7 +149,7 @@ void C_SyvDaPeUpdateModeNodeHeader::UpdateCount(const int32_t os32_Count) const
          u32_Cur = pc_View->CountCyclicTransmissions(this->mu32_NodeIndex);
       }
       //Translation: 1 = Current number of used transmissions, 2 = Allowed number of used transmissions
-      this->mpc_Ui->pc_LabelCountNumber->setText(static_cast<QString>(C_GtGetText::h_GetText("%1")).arg(u32_Cur));
+      this->mpc_Ui->pc_LabelCountNumber->setText(static_cast<QString>("%1").arg(u32_Cur));
    }
 }
 

@@ -20,7 +20,6 @@
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "C_OscUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_Uti.hpp"
@@ -127,54 +126,54 @@ C_SdNdeHalcChannelWidget::~C_SdNdeHalcChannelWidget()
 void C_SdNdeHalcChannelWidget::InitStaticNames(void) const
 {
    // properties section
-   this->mpc_Ui->pc_LabName->setText(C_GtGetText::h_GetText("Name"));
-   this->mpc_Ui->pc_LabChannelTitle->setText(C_GtGetText::h_GetText("Channel"));
-   this->mpc_Ui->pc_LabComment->setText(C_GtGetText::h_GetText("Comment"));
-   this->mpc_Ui->pc_TedComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here..."));
+   this->mpc_Ui->pc_LabName->setText("Name");
+   this->mpc_Ui->pc_LabChannelTitle->setText("Channel");
+   this->mpc_Ui->pc_LabComment->setText("Comment");
+   this->mpc_Ui->pc_TedComment->setPlaceholderText("Add your comment here...");
 
    // configuration section
-   this->mpc_Ui->pc_LabSafety->setText(C_GtGetText::h_GetText("Safety Relevant"));
-   this->mpc_Ui->pc_LabConfig->setText(C_GtGetText::h_GetText("Configuration"));
-   this->mpc_Ui->pc_LabUseCase->setText(C_GtGetText::h_GetText("Use Case"));
+   this->mpc_Ui->pc_LabSafety->setText("Safety Relevant");
+   this->mpc_Ui->pc_LabConfig->setText("Configuration");
+   this->mpc_Ui->pc_LabUseCase->setText("Use Case");
    this->mpc_Ui->pc_LabViewDatapools->setText(C_Uti::h_GetLink("View Datapool Details", mc_STYLE_GUIDE_COLOR_6,
                                                                "View Datapool Details"));
 
    // tool tips
    this->mpc_Ui->pc_LabName->
-   SetToolTipInformation(C_GtGetText::h_GetText("Name"),
-                         static_cast<QString>(C_GtGetText::h_GetText("Symbolic channel name. Unique within node.\n"
+   SetToolTipInformation("Name",
+                         static_cast<QString>("Symbolic channel name. Unique within node.\n"
                                                                      "Following C naming conventions are required:"
                                                                      "\n - must not be empty"
                                                                      "\n - must not start with digits"
                                                                      "\n - only alphanumeric characters and \"_\""
-                                                                     "\n - should not be longer than %1 (= project setting) characters")).arg(
+                                                                     "\n - should not be longer than %1 (= project setting) characters").arg(
                             C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit()));
    this->mpc_Ui->pc_LabChannelTitle->
-   SetToolTipInformation(C_GtGetText::h_GetText("Channel"),
-                         C_GtGetText::h_GetText("Channel ID from hardware description."));
+   SetToolTipInformation("Channel",
+                         "Channel ID from hardware description.");
    this->mpc_Ui->pc_LabComment->
-   SetToolTipInformation(C_GtGetText::h_GetText("Comment"),
-                         C_GtGetText::h_GetText("Comment for this channel."));
+   SetToolTipInformation("Comment",
+                         "Comment for this channel.");
    this->mpc_Ui->pc_LabSafety->
-   SetToolTipInformation(C_GtGetText::h_GetText("Safety Relevant"),
-                         C_GtGetText::h_GetText("Does the current channel hold safety relevant parameters?"));
+   SetToolTipInformation("Safety Relevant",
+                         "Does the current channel hold safety relevant parameters?");
    this->mpc_Ui->pc_LabUseCase->
-   SetToolTipInformation(C_GtGetText::h_GetText("Use Case"),
-                         C_GtGetText::h_GetText("Select a use case to configure the current channel. Depending on the "
+   SetToolTipInformation("Use Case",
+                         "Select a use case to configure the current channel. Depending on the "
                                                 "underlying hardware description, there can be use cases that link two "
-                                                "channels together."));
+                                                "channels together.");
    this->mpc_Ui->pc_LabLinkedChannel->
-   SetToolTipInformation(C_GtGetText::h_GetText("Linked Channel"),
-                         C_GtGetText::h_GetText("The current channel is linked to another channel. All parameter "
-                                                "values are synchronized. Click link to navigate to linked channel."));
+   SetToolTipInformation("Linked Channel",
+                         "The current channel is linked to another channel. All parameter "
+                                                "values are synchronized. Click link to navigate to linked channel.");
    this->mpc_Ui->pc_PubLinkedIcon->
-   SetToolTipInformation(C_GtGetText::h_GetText("Linked Channel"),
-                         C_GtGetText::h_GetText("The current channel is linked to another channel. All parameter "
-                                                "values are synchronized. Click link to navigate to partner channel."));
+   SetToolTipInformation("Linked Channel",
+                         "The current channel is linked to another channel. All parameter "
+                                                "values are synchronized. Click link to navigate to partner channel.");
    this->mpc_Ui->pc_LabViewDatapools->
-   SetToolTipInformation(C_GtGetText::h_GetText("View Datapool Details"),
-                         C_GtGetText::h_GetText("Show lists and its elements of the Datapool that gets generated from "
-                                                "the current hardware configuration."));
+   SetToolTipInformation("View Datapool Details",
+                         "Show lists and its elements of the Datapool that gets generated from "
+                                                "the current hardware configuration.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -707,21 +706,21 @@ void C_SdNdeHalcChannelWidget::m_CheckName(const QString & orc_NewName) const
 
    if ((q_NameIsUnique == true) && (q_NameIsValid == true))
    {
-      this->mpc_Ui->pc_LeName->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                     C_GtGetText::h_GetText(""),
+      this->mpc_Ui->pc_LeName->SetToolTipInformation("",
+                                                     "",
                                                      C_NagToolTip::eDEFAULT);
    }
    else
    {
-      const QString c_Heading = C_GtGetText::h_GetText("Channel Name");
+      const QString c_Heading = "Channel Name";
       QString c_Content;
       if (q_NameIsUnique == false)
       {
-         c_Content += C_GtGetText::h_GetText("- is already in use\n");
+         c_Content += "- is already in use\n";
       }
       if (q_NameIsValid == false)
       {
-         c_Content += C_GtGetText::h_GetText("- is empty or contains invalid characters.\n");
+         c_Content += "- is empty or contains invalid characters.\n";
       }
       this->mpc_Ui->pc_LeName->SetToolTipInformation(c_Heading, c_Content, C_NagToolTip::eERROR);
    }
@@ -776,26 +775,26 @@ bool C_SdNdeHalcChannelWidget::m_AskUserToContinueLinkingIfNecessary(const bool 
          if (oq_IsLinkedNew == true)
          {
             c_Description =
-               static_cast<QString>(C_GtGetText::h_GetText("Are you sure to select the use case '%1'?\n"
+               static_cast<QString>("Are you sure to select the use case '%1'?\n"
                                                            "Linked channel %2 will lose its configuration "
                                                            "and also be set to this use case. After linking, the configuration is "
-                                                           "always applied to both channels.")).
+                                                           "always applied to both channels.").
                arg(pc_UseCase->c_Display.c_str(), c_LinkedChannels);
             c_MessageBox.SetCustomMinHeight(230, 230);
          }
          else
          {
             c_Description =
-               static_cast<QString>(C_GtGetText::h_GetText("Are you sure to select the use case '%1'?\n"
-                                                           "Use case of linked channel %2 will be reset to default.")).
+               static_cast<QString>("Are you sure to select the use case '%1'?\n"
+                                                           "Use case of linked channel %2 will be reset to default.").
                arg(pc_UseCase->c_Display.c_str(), c_LinkedChannels);
             c_MessageBox.SetCustomMinHeight(200, 200);
          }
 
-         c_MessageBox.SetHeading(C_GtGetText::h_GetText("Use Case Selection"));
+         c_MessageBox.SetHeading("Use Case Selection");
          c_MessageBox.SetDescription(c_Description);
-         c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Apply Selection"));
-         c_MessageBox.SetNoButtonText(C_GtGetText::h_GetText("Cancel"));
+         c_MessageBox.SetOkButtonText("Apply Selection");
+         c_MessageBox.SetNoButtonText("Cancel");
 
          if (c_MessageBox.Execute() != C_OgeWiCustomMessage::eYES)
          {

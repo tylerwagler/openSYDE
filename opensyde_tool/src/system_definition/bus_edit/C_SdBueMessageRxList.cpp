@@ -11,7 +11,6 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdBueMessageRxList.hpp"
 #include "ui_C_SdBueMessageRxList.h"
 
@@ -77,7 +76,7 @@ C_SdBueMessageRxList::~C_SdBueMessageRxList(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageRxList::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelEmpty->setText(C_GtGetText::h_GetText("No receivers available."));
+   this->mpc_Ui->pc_LabelEmpty->setText("No receivers available.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -18,7 +18,6 @@
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_Uti.hpp"
 #include "C_CamDbHandler.hpp"
 #include "C_SdTooltipUtil.hpp"
@@ -132,19 +131,19 @@ QVariant C_CamGenSigTableModel::headerData(const int32_t os32_Section, const Qt:
          switch (e_Col)
          {
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eBIT_POS:
-            c_Retval = C_GtGetText::h_GetText("SB");
+            c_Retval = "SB";
             break;
          case eRAW:
-            c_Retval = C_GtGetText::h_GetText("RAW Value");
+            c_Retval = "RAW Value";
             break;
          case ePHYSICAL:
-            c_Retval = C_GtGetText::h_GetText("Phys Value");
+            c_Retval = "Phys Value";
             break;
          case eUNIT:
-            c_Retval = C_GtGetText::h_GetText("Unit");
+            c_Retval = "Unit";
             break;
          default:
             tgl_assert(false);
@@ -156,19 +155,19 @@ QVariant C_CamGenSigTableModel::headerData(const int32_t os32_Section, const Qt:
          switch (e_Col)
          {
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eBIT_POS:
-            c_Retval = C_GtGetText::h_GetText("Start Bit");
+            c_Retval = "Start Bit";
             break;
          case eRAW:
-            c_Retval = C_GtGetText::h_GetText("Raw Value");
+            c_Retval = "Raw Value";
             break;
          case ePHYSICAL:
-            c_Retval = C_GtGetText::h_GetText("Physical Value");
+            c_Retval = "Physical Value";
             break;
          case eUNIT:
-            c_Retval = C_GtGetText::h_GetText("Unit");
+            c_Retval = "Unit";
             break;
          default:
             tgl_assert(false);
@@ -184,19 +183,19 @@ QVariant C_CamGenSigTableModel::headerData(const int32_t os32_Section, const Qt:
          switch (e_Col)
          {
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("CAN message signal name");
+            c_Retval = "CAN message signal name";
             break;
          case eBIT_POS:
-            c_Retval = C_GtGetText::h_GetText("CAN message signal start bit position");
+            c_Retval = "CAN message signal start bit position";
             break;
          case eRAW:
-            c_Retval = C_GtGetText::h_GetText("CAN message signal raw value (= as seen on CAN)");
+            c_Retval = "CAN message signal raw value (= as seen on CAN)";
             break;
          case ePHYSICAL:
-            c_Retval = C_GtGetText::h_GetText("CAN message signal physical value (=interpreted/scaled value)");
+            c_Retval = "CAN message signal physical value (=interpreted/scaled value)";
             break;
          case eUNIT:
-            c_Retval = C_GtGetText::h_GetText("CAN message signal unit  (=interpreted/scaled value unit)");
+            c_Retval = "CAN message signal unit  (=interpreted/scaled value unit)";
             break;
          default:
             tgl_assert(false);
@@ -561,20 +560,20 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
                case eBIT_POS:
                   c_Retval = static_cast<uint64_t>(u32_Index) * 8ULL;
                   break;
-               case eRAW:
-                  pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(this->mu32_MessageIndex);
-                  if ((pc_Message != NULL) && (u32_Index < 8UL))
-                  {
-                     if (os32_Role == static_cast<int32_t>(Qt::DisplayRole))
-                     {
-                        c_Retval = C_Uti::h_GetValueAsHex(static_cast<uint64_t>(pc_Message->c_Bytes[u32_Index]), 2);
-                     }
-                     else
-                     {
-                        c_Retval = static_cast<qulonglong>(pc_Message->c_Bytes[u32_Index]);
-                     }
-                  }
-                  break;
+                case eRAW:
+                   pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(this->mu32_MessageIndex);
+                   if ((pc_Message != NULL) && (u32_Index < static_cast<uint32_t>(pc_Message->c_Bytes.size())))
+                   {
+                      if (os32_Role == static_cast<int32_t>(Qt::DisplayRole))
+                      {
+                         c_Retval = C_Uti::h_GetValueAsHex(static_cast<uint64_t>(pc_Message->c_Bytes[u32_Index]), 2);
+                      }
+                      else
+                      {
+                         c_Retval = static_cast<qulonglong>(pc_Message->c_Bytes[u32_Index]);
+                      }
+                   }
+                   break;
                default:
                   //Not necessary for not interpreted mode
                   break;
@@ -789,50 +788,19 @@ bool C_CamGenSigTableModel::setData(const QModelIndex & orc_Index, const QVarian
          }
          else
          {
-            if (e_Col == C_CamGenSigTableModel::eRAW)
-            {
-               bool q_Ok;
-               C_CamProMessageData::E_GenericUint32DataSelector e_Selector;
-               switch (u32_Index)
-               {
-               case 0UL:
-                  e_Selector = C_CamProMessageData::eGUIDS_DB0;
-                  break;
-               case 1UL:
-                  e_Selector = C_CamProMessageData::eGUIDS_DB1;
-                  break;
-               case 2UL:
-                  e_Selector = C_CamProMessageData::eGUIDS_DB2;
-                  break;
-               case 3UL:
-                  e_Selector = C_CamProMessageData::eGUIDS_DB3;
-                  break;
-               case 4UL:
-                  e_Selector = C_CamProMessageData::eGUIDS_DB4;
-                  break;
-               case 5UL:
-                  e_Selector = C_CamProMessageData::eGUIDS_DB5;
-                  break;
-               case 6UL:
-                  e_Selector = C_CamProMessageData::eGUIDS_DB6;
-                  break;
-               case 7UL:
-                  e_Selector = C_CamProMessageData::eGUIDS_DB7;
-                  break;
-               default:
-                  e_Selector = C_CamProMessageData::eGUIDS_DB0;
-                  break;
-               }
-               if (C_CamProHandler::h_GetInstance()->
-                   SetMessageUint32Value(this->mu32_MessageIndex, e_Selector,
-                                         static_cast<uint32_t>(orc_Value.toULongLong(&q_Ok))) == C_NO_ERR)
-               {
-                  if (q_Ok == true)
-                  {
-                     q_Retval = true;
-                  }
-               }
-            }
+             if (e_Col == C_CamGenSigTableModel::eRAW)
+             {
+                bool q_Ok;
+                const uint64_t u64_Value = orc_Value.toULongLong(&q_Ok);
+                if (q_Ok)
+                {
+                   C_CamProHandler::h_GetInstance()->SetMessageByte(
+                      this->mu32_MessageIndex,
+                      static_cast<uint32_t>(u32_Index),
+                      static_cast<uint8_t>(u64_Value));
+                   q_Retval = true;
+                }
+             }
          }
          if (q_Retval == true)
          {

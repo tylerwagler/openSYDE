@@ -24,7 +24,6 @@
 #include "C_OscSystemBus.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "TglUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdUtil.hpp"
 #include "C_CieUtil.hpp"
 
@@ -82,19 +81,18 @@ C_SdBueNodeSelectorWidget::~C_SdBueNodeSelectorWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueNodeSelectorWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_BueNodeSelectorTitleLabel->setText(C_GtGetText::h_GetText("Active Protocol Nodes"));
-   this->mpc_Ui->pc_LabelNoNodes->setText(C_GtGetText::h_GetText("No nodes connected to this bus"));
+   this->mpc_Ui->pc_BueNodeSelectorTitleLabel->setText("Active Protocol Nodes");
+   this->mpc_Ui->pc_LabelNoNodes->setText("No nodes connected to this bus");
 
    //tooltips
-   this->mpc_Ui->pc_BueNodeSelectorTitleLabel->SetToolTipInformation(C_GtGetText::h_GetText("Active Protocol Nodes"),
-                                                                     C_GtGetText::h_GetText(
-                                                                        "This list shows all physical connection to "
+   this->mpc_Ui->pc_BueNodeSelectorTitleLabel->SetToolTipInformation("Active Protocol Nodes",
+                                                                     "This list shows all physical connection to "
                                                                         "this bus."
                                                                         "\nChecked connections are active participants "
                                                                         "of current selected CAN protocol."
                                                                         "\nA Datapool is created automatically on check"
                                                                         " if there is no COMM Datapool already declared"
-                                                                        " on this node."));
+                                                                        " on this node.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -20,7 +20,6 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_OgeWiSpinBoxGroup.hpp"
 #include "C_OgeLeContextMenuBase.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
 #include "C_PuiSdSharedDatapools.hpp"
 
@@ -393,10 +392,10 @@ QString C_SdNdeDpUtil::h_ConvertElementAccessToString(const C_OscNodeDataPoolLis
    switch (ore_Type)
    {
    case C_OscNodeDataPoolListElement::E_Access::eACCESS_RO:
-      c_Retval = C_GtGetText::h_GetText("RO");
+      c_Retval = "RO";
       break;
    case C_OscNodeDataPoolListElement::E_Access::eACCESS_RW:
-      c_Retval = C_GtGetText::h_GetText("RW");
+      c_Retval = "RW";
       break;
    default:
       c_Retval = "";

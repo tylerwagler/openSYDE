@@ -15,7 +15,6 @@
 
 #include "constants.hpp"
 #include "C_SdTopologyToolbox.hpp"
-#include "C_GtGetText.hpp"
 #include "ui_C_SdTopologyToolbox.h"
 #include "C_SebToolboxUtil.hpp"
 #include "C_OscSystemDefinition.hpp"
@@ -61,7 +60,7 @@ C_SdTopologyToolbox::C_SdTopologyToolbox(QWidget * const opc_Parent) :
    this->mpc_Ui->pc_BlankTopWidgetSearch->setVisible(false);
    this->mpc_Ui->pc_BlankTopWidgetSearch->SetBackgroundColor(12);
    this->mpc_Ui->pc_LabelSearchNotFound->setVisible(false);
-   this->mpc_Ui->pc_LabelSearchNotFound->setText(C_GtGetText::h_GetText("No results found"));
+   this->mpc_Ui->pc_LabelSearchNotFound->setText("No results found");
    this->mpc_Ui->pc_LabelSearchNotFound->setStyleSheet("background-color: rgb(250, 250, 250);");
 
    this->mpc_Ui->pc_ScrollAreaNodesWidget->SetBackgroundColor(-1);
@@ -165,10 +164,10 @@ void C_SdTopologyToolbox::SearchChanged(const QString & orc_Text)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyToolbox::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(0, C_GtGetText::h_GetText("Nodes"));
-   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(1, C_GtGetText::h_GetText("Buses"));
-   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(2, C_GtGetText::h_GetText("Meta"));
-   this->mpc_Ui->pc_LabelFreeElements->setText(C_GtGetText::h_GetText("Meta Information Elements"));
+   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(0, "Nodes");
+   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(1, "Buses");
+   this->mpc_Ui->pc_TabWidget->tabBar()->setTabText(2, "Meta");
+   this->mpc_Ui->pc_LabelFreeElements->setText("Meta Information Elements");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -259,16 +258,13 @@ void C_SdTopologyToolbox::m_FillToolboxStatic(void)
    QListWidget * pc_List;
 
    // fill draw lists with items
-   pc_List = C_SebToolboxUtil::h_AddNewList(C_GtGetText::h_GetText(
-                                               "Bus Types"), this->mpc_Ui->pc_VerticalLayout1_3, this->mc_ListWidgets,
+   pc_List = C_SebToolboxUtil::h_AddNewList("Bus Types", this->mpc_Ui->pc_VerticalLayout1_3, this->mc_ListWidgets,
                                             this);
 
-   C_SebToolboxUtil::h_AddElementToList(pc_List, C_GtGetText::h_GetText(
-                                           "CAN Bus"), "://images/system_definition/IconBus.svg", "",
-                                        C_GtGetText::h_GetText("CAN Bus"));
-   C_SebToolboxUtil::h_AddElementToList(pc_List, C_GtGetText::h_GetText(
-                                           "Ethernet Bus"), "://images/system_definition/IconBus.svg", "",
-                                        C_GtGetText::h_GetText("Ethernet Bus"));
+   C_SebToolboxUtil::h_AddElementToList(pc_List, "CAN Bus", "://images/system_definition/IconBus.svg", "",
+                                        "CAN Bus");
+   C_SebToolboxUtil::h_AddElementToList(pc_List, "Ethernet Bus", "://images/system_definition/IconBus.svg", "",
+                                        "Ethernet Bus");
    C_SebToolboxUtil::h_AddFinalSpacer(this->mpc_Ui->pc_VerticalLayout1_3, pc_List);
 
    C_SebToolboxUtil::h_InitFreeElements(this->mpc_Ui->pc_ListWidgetDrawing);

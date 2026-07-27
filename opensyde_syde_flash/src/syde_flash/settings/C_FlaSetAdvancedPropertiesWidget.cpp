@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 
 #include "C_FlaSetAdvancedPropertiesWidget.hpp"
@@ -60,24 +59,23 @@ C_FlaSetAdvancedPropertiesWidget::C_FlaSetAdvancedPropertiesWidget(QWidget * con
    this->mpc_Ui->pc_LabRequestDownloadTimeout->SetFontPixel(13);
    this->mpc_Ui->pc_LabTransferDataTimeout->SetFontPixel(13);
 
-   this->mpc_Ui->pc_LabFlashloaderResetWaitTime->setText(C_GtGetText::h_GetText("Flashloader Reset Wait Time"));
+   this->mpc_Ui->pc_LabFlashloaderResetWaitTime->setText("Flashloader Reset Wait Time");
    this->mpc_Ui->pc_LabFlashloaderResetWaitTime->SetToolTipInformation(
-      C_GtGetText::h_GetText("Flashloader Reset Wait Time"),
-      C_GtGetText::h_GetText("Wait time for transition from application to flashloader. (Default: 1000 ms)"));
+      "Flashloader Reset Wait Time",
+      "Wait time for transition from application to flashloader. (Default: 1000 ms)");
 
-   this->mpc_Ui->pc_LabRequestDownloadTimeout->setText(C_GtGetText::h_GetText("Request Download Timeout"));
+   this->mpc_Ui->pc_LabRequestDownloadTimeout->setText("Request Download Timeout");
    this->mpc_Ui->pc_LabRequestDownloadTimeout->SetToolTipInformation(
-      C_GtGetText::h_GetText("Request Download Timeout"),
-      C_GtGetText::h_GetText("Timeout for erasing flash memory. (Default: 40000 ms)"));
+      "Request Download Timeout",
+      "Timeout for erasing flash memory. (Default: 40000 ms)");
 
-   this->mpc_Ui->pc_LabTransferDataTimeout->setText(C_GtGetText::h_GetText("Transfer Data Timeout"));
-   this->mpc_Ui->pc_LabTransferDataTimeout->SetToolTipInformation(C_GtGetText::h_GetText("Transfer Data Timeout"),
-                                                                  C_GtGetText::h_GetText(
-                                                                     "Timeout for writing to flash. (Default: 1000 ms)"));
+   this->mpc_Ui->pc_LabTransferDataTimeout->setText("Transfer Data Timeout");
+   this->mpc_Ui->pc_LabTransferDataTimeout->SetToolTipInformation("Transfer Data Timeout",
+                                                                  "Timeout for writing to flash. (Default: 1000 ms)");
 
-   this->mpc_Ui->pc_SpxFlashloaderResetWaitTime->setSuffix(C_GtGetText::h_GetText(" ms"));
-   this->mpc_Ui->pc_SpxRequestDownloadTimeout->setSuffix(C_GtGetText::h_GetText(" ms"));
-   this->mpc_Ui->pc_SpxTransferDataTimeout->setSuffix(C_GtGetText::h_GetText(" ms"));
+   this->mpc_Ui->pc_SpxFlashloaderResetWaitTime->setSuffix(" ms");
+   this->mpc_Ui->pc_SpxRequestDownloadTimeout->setSuffix(" ms");
+   this->mpc_Ui->pc_SpxTransferDataTimeout->setSuffix(" ms");
 
    //set max
    this->mpc_Ui->pc_SpxFlashloaderResetWaitTime->SetMaximumCustom(std::numeric_limits<int32_t>::max());
@@ -85,7 +83,7 @@ C_FlaSetAdvancedPropertiesWidget::C_FlaSetAdvancedPropertiesWidget(QWidget * con
    this->mpc_Ui->pc_SpxTransferDataTimeout->SetMaximumCustom(std::numeric_limits<int32_t>::max());
 
    // initialize title widget
-   this->mpc_Ui->pc_WiHeader->SetTitle(C_GtGetText::h_GetText("Advanced Properties"));
+   this->mpc_Ui->pc_WiHeader->SetTitle("Advanced Properties");
    this->mpc_Ui->pc_WiHeader->SetIcon("://images/IconProperties.svg");
    this->mpc_Ui->pc_WiHeader->SetToggle(false);
    connect(this->mpc_Ui->pc_WiHeader, &C_CamOgeWiSettingSubSection::SigExpandSection,

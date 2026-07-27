@@ -20,7 +20,6 @@
 #include "TglUtils.hpp"
 
 #include "C_SdBueJ1939AddMessagesFromCatalogTreeModel.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscCanUtil.hpp"
 #include "C_SdUtil.hpp"
 
@@ -212,16 +211,16 @@ QVariant C_SdBueJ1939AddMessagesFromCatalogTreeModel::headerData(const int32_t o
          switch (e_Col)
          {
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case ePGN_SPN:
-            c_Retval = C_GtGetText::h_GetText("PGN/SPN");
+            c_Retval = "PGN/SPN";
             break;
          case eCAN_ID:
-            c_Retval = C_GtGetText::h_GetText("CAN ID");
+            c_Retval = "CAN ID";
             break;
          default:
             break;
@@ -236,16 +235,16 @@ QVariant C_SdBueJ1939AddMessagesFromCatalogTreeModel::headerData(const int32_t o
          switch (e_Col)
          {
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Symbolic message name");
+            c_Retval = "Symbolic message name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment for this message");
+            c_Retval = "Comment for this message";
             break;
          case eCAN_ID:
-            c_Retval = C_GtGetText::h_GetText("CAN Identifier(Hex). 29 Bit");
+            c_Retval = "CAN Identifier(Hex). 29 Bit";
             break;
          case ePGN_SPN:
-            c_Retval = C_GtGetText::h_GetText("Parameter Group Number. 18 Bit\nSuspect Parameter Number. 19 Bit");
+            c_Retval = "Parameter Group Number. 18 Bit\nSuspect Parameter Number. 19 Bit";
             break;
          default:
             break;
@@ -256,16 +255,16 @@ QVariant C_SdBueJ1939AddMessagesFromCatalogTreeModel::headerData(const int32_t o
          switch (e_Col)
          {
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eCAN_ID:
-            c_Retval = C_GtGetText::h_GetText("CAN Id");
+            c_Retval = "CAN Id";
             break;
          case ePGN_SPN:
-            c_Retval = C_GtGetText::h_GetText("PGN/SPN");
+            c_Retval = "PGN/SPN";
             break;
          default:
             break;

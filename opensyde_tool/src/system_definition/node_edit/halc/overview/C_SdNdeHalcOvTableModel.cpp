@@ -14,7 +14,6 @@
 
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscHalcMagicianUtil.hpp"
 #include "C_SdNdeHalcOvTableModel.hpp"
@@ -162,34 +161,34 @@ QVariant C_SdNdeHalcOvTableModel::headerData(const int32_t os32_Section, const Q
             c_Retval = "#";
             break;
          case eDOMAIN:
-            c_Retval = C_GtGetText::h_GetText("Domain");
+            c_Retval = "Domain";
             break;
          case eCHANNEL:
-            c_Retval = C_GtGetText::h_GetText("Channel");
+            c_Retval = "Channel";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eUSE_CASE:
-            c_Retval = C_GtGetText::h_GetText("Use Case");
+            c_Retval = "Use Case";
             break;
          case eLINKED_WITH:
-            c_Retval = C_GtGetText::h_GetText("Linked with");
+            c_Retval = "Linked with";
             break;
          case eSAFETY_RELEVANT:
-            c_Retval = C_GtGetText::h_GetText("Safety");
+            c_Retval = "Safety";
             break;
          case eTYPE:
             c_Retval = "";
             break;
          case eDATAPOOL:
-            c_Retval = C_GtGetText::h_GetText("Datapool");
+            c_Retval = "Datapool";
             break;
          case eDATABLOCK_ASSIGNMENT:
-            c_Retval = C_GtGetText::h_GetText("Data Block Assignment");
+            c_Retval = "Data Block Assignment";
             break;
          default:
             break;
@@ -200,37 +199,37 @@ QVariant C_SdNdeHalcOvTableModel::headerData(const int32_t os32_Section, const Q
          switch (e_Col)
          {
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Index");
+            c_Retval = "Index";
             break;
          case eDOMAIN:
-            c_Retval = C_GtGetText::h_GetText("Domain");
+            c_Retval = "Domain";
             break;
          case eCHANNEL:
-            c_Retval = C_GtGetText::h_GetText("Channel");
+            c_Retval = "Channel";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("Name");
+            c_Retval = "Name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("Comment");
+            c_Retval = "Comment";
             break;
          case eUSE_CASE:
-            c_Retval = C_GtGetText::h_GetText("Use Case");
+            c_Retval = "Use Case";
             break;
          case eLINKED_WITH:
-            c_Retval = C_GtGetText::h_GetText("Linked with");
+            c_Retval = "Linked with";
             break;
          case eSAFETY_RELEVANT:
-            c_Retval = C_GtGetText::h_GetText("Safety");
+            c_Retval = "Safety";
             break;
          case eTYPE:
-            c_Retval = C_GtGetText::h_GetText("Type");
+            c_Retval = "Type";
             break;
          case eDATAPOOL:
-            c_Retval = C_GtGetText::h_GetText("Datapool");
+            c_Retval = "Datapool";
             break;
          case eDATABLOCK_ASSIGNMENT:
-            c_Retval = C_GtGetText::h_GetText("Data Block Assignment");
+            c_Retval = "Data Block Assignment";
             break;
          default:
             break;
@@ -241,37 +240,37 @@ QVariant C_SdNdeHalcOvTableModel::headerData(const int32_t os32_Section, const Q
          switch (e_Col)
          {
          case eINDEX:
-            c_Retval = C_GtGetText::h_GetText("Continuous index for all channels and domains");
+            c_Retval = "Continuous index for all channels and domains";
             break;
          case eDOMAIN:
-            c_Retval = C_GtGetText::h_GetText("Parent domain");
+            c_Retval = "Parent domain";
             break;
          case eCHANNEL:
-            c_Retval = C_GtGetText::h_GetText("Channel name");
+            c_Retval = "Channel name";
             break;
          case eNAME:
-            c_Retval = C_GtGetText::h_GetText("User channel name");
+            c_Retval = "User channel name";
             break;
          case eCOMMENT:
-            c_Retval = C_GtGetText::h_GetText("User comment");
+            c_Retval = "User comment";
             break;
          case eUSE_CASE:
-            c_Retval = C_GtGetText::h_GetText("Selected use case");
+            c_Retval = "Selected use case";
             break;
          case eLINKED_WITH:
-            c_Retval = C_GtGetText::h_GetText("Channel which are linked with this channel");
+            c_Retval = "Channel which are linked with this channel";
             break;
          case eSAFETY_RELEVANT:
-            c_Retval = C_GtGetText::h_GetText("Flag if this channel was marked as safety relevant");
+            c_Retval = "Flag if this channel was marked as safety relevant";
             break;
          case eTYPE:
-            c_Retval = C_GtGetText::h_GetText("A general type for this channel");
+            c_Retval = "A general type for this channel";
             break;
          case eDATAPOOL:
-            c_Retval = C_GtGetText::h_GetText("Datapool where this channel is stored");
+            c_Retval = "Datapool where this channel is stored";
             break;
          case eDATABLOCK_ASSIGNMENT:
-            c_Retval = C_GtGetText::h_GetText("The Data Block which is assigned to this Datapool");
+            c_Retval = "The Data Block which is assigned to this Datapool";
             break;
          default:
             break;
@@ -912,6 +911,6 @@ void C_SdNdeHalcOvTableModel::m_FillHalcInfoData(const C_OscHalcConfigDomain & o
    }
    else
    {
-      orc_Data.c_DatablockAssignment = C_GtGetText::h_GetText("<not assigned>");
+      orc_Data.c_DatablockAssignment = "<not assigned>";
    }
 }

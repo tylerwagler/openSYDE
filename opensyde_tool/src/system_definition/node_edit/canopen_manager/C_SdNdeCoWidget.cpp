@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "stwerrors.hpp"
-#include "C_GtGetText.hpp"
 #include "C_UsHandler.hpp"
 #include "TglUtils.hpp"
 #include "C_Uti.hpp"
@@ -184,10 +183,10 @@ void C_SdNdeCoWidget::SaveUserSettings(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_PubOverview->setText(C_GtGetText::h_GetText("CANopen Manager Configuration"));
+   this->mpc_Ui->pc_PubOverview->setText("CANopen Manager Configuration");
    this->mpc_Ui->pc_PubOverview->
-   SetToolTipInformation(C_GtGetText::h_GetText("CANopen Manager Configuration"),
-                         C_GtGetText::h_GetText("Show overview of CANopen Manager Configuration of current node."));
+   SetToolTipInformation("CANopen Manager Configuration",
+                         "Show overview of CANopen Manager Configuration of current node.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -240,7 +239,7 @@ void C_SdNdeCoWidget::SetNode(const uint32_t ou32_NodeIndex)
       else
       {
          this->mpc_Ui->pc_HintToManagerLabel->setText
-            (C_GtGetText::h_GetText("The Node has the Programming Support disabled. No CANopen Manager is supported."));
+            ("The Node has the Programming Support disabled. No CANopen Manager is supported.");
          this->mpc_Ui->pc_LinkToManagerLabel->setVisible(false);
       }
    }
@@ -249,7 +248,7 @@ void C_SdNdeCoWidget::SetNode(const uint32_t ou32_NodeIndex)
       // Node is already a device
       const C_OscNode * const pc_ManagerNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ManagerNodeIndex);
 
-      this->mpc_Ui->pc_HintToManagerLabel->setText(C_GtGetText::h_GetText("Device is handled by CANopen Manager:"));
+      this->mpc_Ui->pc_HintToManagerLabel->setText("Device is handled by CANopen Manager:");
       this->mpc_Ui->pc_LinkToManagerLabel->setVisible(true);
 
       tgl_assert(pc_ManagerNode != NULL);

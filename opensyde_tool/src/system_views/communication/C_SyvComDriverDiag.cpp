@@ -26,7 +26,6 @@
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_Uti.hpp"
-#include "C_GtGetText.hpp"
 #include "C_SyvComDriverUtil.hpp"
 #include "C_OscCanUtil.hpp"
 
@@ -542,26 +541,25 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
                   switch (s32_Return)
                   {
                   case C_RANGE:
-                     c_Details = C_GtGetText::h_GetText("Parameter out of range (checked by client-side function)");
+                     c_Details = "Parameter out of range (checked by client-side function)";
                      break;
                   case C_NOACT:
-                     c_Details = C_GtGetText::h_GetText("Could not send request (e.g. Tx buffer full)");
+                     c_Details = "Could not send request (e.g. Tx buffer full)";
                      break;
                   case C_CONFIG:
-                     c_Details = C_GtGetText::h_GetText("Pre-requisites not correct; e.g. driver not initialized");
+                     c_Details = "Pre-requisites not correct; e.g. driver not initialized";
                      break;
                   case C_WARN:
                      switch (u8_NegResponseCode)
                      {
                      case 0x13U:
-                        c_AdditionalInfo = C_GtGetText::h_GetText("Incorrect length of request");
+                        c_AdditionalInfo = "Incorrect length of request";
                         break;
                      case 0x22U:
-                        c_AdditionalInfo = C_GtGetText::h_GetText(
-                           "Datapool element specified by data identifier cannot be transferred event driven (invalid data type)");
+                        c_AdditionalInfo = "Datapool element specified by data identifier cannot be transferred event driven (invalid data type)";
                         break;
                      case 0x70U:
-                        c_AdditionalInfo = C_GtGetText::h_GetText("Too many transmissions already registered");
+                        c_AdditionalInfo = "Too many transmissions already registered";
 
                         c_ItFailedNodesElementNumber = orc_FailedNodesElementNumber.find(c_It.key().u32_NodeIndex);
 
@@ -573,46 +571,44 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
                         }
                         break;
                      case 0x31U:
-                        c_AdditionalInfo = C_GtGetText::h_GetText("Invalid transmission mode.\n"
+                        c_AdditionalInfo = "Invalid transmission mode.\n"
                                                                   "\n"
                                                                   "When initiating transmission:\n"
                                                                   "- Datapool element specified by data identifier is not available\n"
                                                                   "- changeDrivenThreshold is zero\n"
                                                                   "\n"
                                                                   "When stopping transmission:\n"
-                                                                  "- Datapool element specified by data identifier is currently not transferred event driven");
+                                                                  "- Datapool element specified by data identifier is currently not transferred event driven";
                         break;
                      case 0x33U:
-                        c_AdditionalInfo = C_GtGetText::h_GetText("Required security level was not unlocked");
+                        c_AdditionalInfo = "Required security level was not unlocked";
                         break;
                      case 0x14U:
-                        c_AdditionalInfo = C_GtGetText::h_GetText(
-                           "The total length of the event driven response messages would exceed the available buffer size");
+                        c_AdditionalInfo = "The total length of the event driven response messages would exceed the available buffer size";
                         break;
                      case 0x39U:
                         //this should only happen if this implementation requests it even if connected via CAN with
                         // encryption on
-                        c_AdditionalInfo = C_GtGetText::h_GetText("Secured data transmission not allowed");
+                        c_AdditionalInfo = "Secured data transmission not allowed";
                         break;
                      case 0x7FU:
-                        c_AdditionalInfo = C_GtGetText::h_GetText(
-                           "The requested service is not available in the session currently active");
+                        c_AdditionalInfo = "The requested service is not available in the session currently active";
                         break;
                      default:
                         c_AdditionalInfo =
-                           static_cast<QString>(C_GtGetText::h_GetText("Unknown NRC: 0x%1")).arg(QString::number(
+                           static_cast<QString>("Unknown NRC: 0x%1").arg(QString::number(
                                                                                                     u8_NegResponseCode,
                                                                                                     16));
                         break;
                      }
-                     c_Details = static_cast<QString>(C_GtGetText::h_GetText("Error response (%1)")).arg(
+                     c_Details = static_cast<QString>("Error response (%1)").arg(
                         c_AdditionalInfo);
                      break;
                   case C_RD_WR:
-                     c_Details = C_GtGetText::h_GetText("Malformed protocol response");
+                     c_Details = "Malformed protocol response";
                      break;
                   default:
-                     c_Details = C_GtGetText::h_GetText("Unknown error");
+                     c_Details = "Unknown error";
                      break;
                   }
                   orc_FailedIdErrorDetails.push_back(c_Details);
@@ -2155,7 +2151,7 @@ int32_t C_SyvComDriverDiag::m_GetAllDatapoolMetadata(const uint32_t ou32_ActiveD
                osc_write_log_error("Starting diagnostics", c_Error);
 
                //Translation: 1=Node name, 2=List of Datapool names
-               orc_ErrorDetails += static_cast<QString>(C_GtGetText::h_GetText("- %1: %2\n")).arg(
+               orc_ErrorDetails += static_cast<QString>("- %1: %2\n").arg(
                   pc_Node->c_Properties.c_Name.c_str()).arg("\n   " + c_ErrorReason);
             }
          }
@@ -2362,7 +2358,7 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
       else
       {
          //Translation: 1=Node name, 2=List of Datapool names
-         orc_ErrorDetails += static_cast<QString>(C_GtGetText::h_GetText("- %1: %2\n")).arg(
+         orc_ErrorDetails += static_cast<QString>("- %1: %2\n").arg(
             pc_Node->c_Properties.c_Name.c_str()).arg(c_DataPoolErrorString);
       }
    }

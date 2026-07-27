@@ -15,7 +15,6 @@
 #include <QFileInfo>
 
 #include "stwtypes.hpp"
-#include "C_GtGetText.hpp"
 #include "C_CamDbHandler.hpp"
 #include "C_CamGenSigUtil.hpp"
 #include "C_SdTooltipUtil.hpp"
@@ -235,7 +234,7 @@ void C_CamMosDatabaseSelectionModel::m_Init(void)
          if (c_Messages.size() == 0UL)
          {
             //Special handling for no messages
-            pc_DatabaseItem->c_Name = static_cast<QString>(C_GtGetText::h_GetText("%1 (No mapped messages)")).arg(
+            pc_DatabaseItem->c_Name = static_cast<QString>("%1 (No mapped messages)").arg(
                pc_DatabaseItem->c_Name);
          }
          else
@@ -272,7 +271,7 @@ void C_CamMosDatabaseSelectionModel::m_Init(void)
          if (static_cast<uint32_t>(rc_Messages.size()) == 0UL)
          {
             //Special handling for no messages
-            pc_DatabaseItem->c_Name = static_cast<QString>(C_GtGetText::h_GetText("%1 (No mapped messages)")).arg(
+            pc_DatabaseItem->c_Name = static_cast<QString>("%1 (No mapped messages)").arg(
                pc_DatabaseItem->c_Name);
          }
          else
@@ -314,7 +313,7 @@ C_TblTreItem * C_CamMosDatabaseSelectionModel::m_CreateAndFillDatabaseNode(const
    //Static
    pc_Retval->c_Icon = QIcon(C_CamMosDatabaseSelectionModel::mhc_ICON_DATABASE);
    pc_Retval->c_Name = c_FileInfo.completeBaseName();
-   pc_Retval->c_ToolTipHeading = C_GtGetText::h_GetText("Database");
+   pc_Retval->c_ToolTipHeading = "Database";
    pc_Retval->c_ToolTipContent = orc_File;
    //Remember the original name (required by getter)
    this->mc_DatabaseMap.insert(pc_Retval->c_Name, orc_File);

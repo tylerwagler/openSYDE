@@ -23,7 +23,6 @@
 #include "stwerrors.hpp"
 #include "C_OgeLeComboBox.hpp"
 #include "C_SdBueMessagePropertiesWidget.hpp"
-#include "C_GtGetText.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscCanUtil.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -210,36 +209,35 @@ void C_SdBueMessagePropertiesWidget::InitStaticNames(void) const
 {
    QLineEdit * pc_LineEdit;
 
-   this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
-   this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
-   this->mpc_Ui->pc_CheckBoxExtendedType->setText(C_GtGetText::h_GetText("Extended Type"));
-   this->mpc_Ui->pc_LabelID->setText(C_GtGetText::h_GetText("CAN ID"));
-   this->mpc_Ui->pc_LabelTxMethod->setText(C_GtGetText::h_GetText("Tx Method"));
-   this->mpc_Ui->pc_LabelDlc->setText(C_GtGetText::h_GetText("DLC"));
-   this->mpc_Ui->pc_LabelCoDlc->setText(C_GtGetText::h_GetText("DLC"));
-   this->mpc_Ui->pc_LabelCoDlcAuto->setText(C_GtGetText::h_GetText("(Auto)"));
-   this->mpc_Ui->pc_LabelCycleTime->setText(C_GtGetText::h_GetText("Cycle Time"));
-   this->mpc_Ui->pc_LabelTransmitter->setText(C_GtGetText::h_GetText("Transmitter"));
-   this->mpc_Ui->pc_LabelReceiver->setText(C_GtGetText::h_GetText("Receiver(s)"));
-   this->mpc_Ui->pc_LabelDirection->setText(C_GtGetText::h_GetText("Direction"));
-   this->mpc_Ui->pc_LabelCanSettings->setText(C_GtGetText::h_GetText("CAN Settings"));
-   this->mpc_Ui->pc_LabelCriticalMessage->setText(C_GtGetText::h_GetText(
-                                                     "No receivers allowed until the message is unique."));
-   this->mpc_Ui->pc_LabelTransmitterNode->setText(C_GtGetText::h_GetText("Node"));
-   this->mpc_Ui->pc_LabelTransmitterDatapool->setText(C_GtGetText::h_GetText("Datapool"));
-   this->mpc_Ui->pc_LabelTransmitterDatapoolOnly->setText(C_GtGetText::h_GetText("Datapool"));
-   this->mpc_Ui->pc_LabelCoPdoSyncNumber->setText(C_GtGetText::h_GetText("SYNC Number"));
+   this->mpc_Ui->pc_LabelName->setText("Name");
+   this->mpc_Ui->pc_LabelComment->setText("Comment");
+   this->mpc_Ui->pc_CheckBoxExtendedType->setText("Extended Type");
+   this->mpc_Ui->pc_LabelID->setText("CAN ID");
+   this->mpc_Ui->pc_LabelTxMethod->setText("Tx Method");
+   this->mpc_Ui->pc_LabelDlc->setText("DLC");
+   this->mpc_Ui->pc_LabelCoDlc->setText("DLC");
+   this->mpc_Ui->pc_LabelCoDlcAuto->setText("(Auto)");
+   this->mpc_Ui->pc_LabelCycleTime->setText("Cycle Time");
+   this->mpc_Ui->pc_LabelTransmitter->setText("Transmitter");
+   this->mpc_Ui->pc_LabelReceiver->setText("Receiver(s)");
+   this->mpc_Ui->pc_LabelDirection->setText("Direction");
+   this->mpc_Ui->pc_LabelCanSettings->setText("CAN Settings");
+   this->mpc_Ui->pc_LabelCriticalMessage->setText("No receivers allowed until the message is unique.");
+   this->mpc_Ui->pc_LabelTransmitterNode->setText("Node");
+   this->mpc_Ui->pc_LabelTransmitterDatapool->setText("Datapool");
+   this->mpc_Ui->pc_LabelTransmitterDatapoolOnly->setText("Datapool");
+   this->mpc_Ui->pc_LabelCoPdoSyncNumber->setText("SYNC Number");
 
-   this->mpc_Ui->pc_LabelJ1939Pgn->setText(C_GtGetText::h_GetText("PGN:"));
-   this->mpc_Ui->pc_LabelJ1939Priority->setText(C_GtGetText::h_GetText("Priority:"));
-   this->mpc_Ui->pc_LabelJ1939SourceAddr->setText(C_GtGetText::h_GetText("Source Address:"));
-   this->mpc_Ui->pc_LabelJ1939DestAddr->setText(C_GtGetText::h_GetText("Destination Address:"));
-   this->mpc_Ui->pc_LabelJ1939Format->setText(C_GtGetText::h_GetText("Format:"));
-   this->mpc_Ui->pc_LabelJ1939EdpDp->setText(C_GtGetText::h_GetText("EDP and DP:"));
+   this->mpc_Ui->pc_LabelJ1939Pgn->setText("PGN:");
+   this->mpc_Ui->pc_LabelJ1939Priority->setText("Priority:");
+   this->mpc_Ui->pc_LabelJ1939SourceAddr->setText("Source Address:");
+   this->mpc_Ui->pc_LabelJ1939DestAddr->setText("Destination Address:");
+   this->mpc_Ui->pc_LabelJ1939Format->setText("Format:");
+   this->mpc_Ui->pc_LabelJ1939EdpDp->setText("EDP and DP:");
 
-   this->mpc_Ui->pc_TextEditComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
+   this->mpc_Ui->pc_TextEditComment->setPlaceholderText("Add your comment here ...");
    pc_LineEdit = new C_OgeLeComboBox(this->mpc_Ui->pc_ComboBoxTransmitterNode);
-   pc_LineEdit->setPlaceholderText(C_GtGetText::h_GetText("Choose a transmitter"));
+   pc_LineEdit->setPlaceholderText("Choose a transmitter");
    pc_LineEdit->setReadOnly(true);
    // force line edit to be not selectable (QLineEdit has no text interaction flags like QTextEdit or QLabel)
    connect(pc_LineEdit, &QLineEdit::selectionChanged, pc_LineEdit, &QLineEdit::deselect);
@@ -248,8 +246,8 @@ void C_SdBueMessagePropertiesWidget::InitStaticNames(void) const
    this->mpc_Ui->pc_ComboBoxTransmitterNode->setContextMenuPolicy(Qt::NoContextMenu);
 
    //Combo boxes
-   this->mpc_Ui->pc_ComboBoxDirection->addItem(C_GtGetText::h_GetText("Transmit"));
-   this->mpc_Ui->pc_ComboBoxDirection->addItem(C_GtGetText::h_GetText("Receive"));
+   this->mpc_Ui->pc_ComboBoxDirection->addItem("Transmit");
+   this->mpc_Ui->pc_ComboBoxDirection->addItem("Receive");
 
    this->mpc_Ui->pc_ComboBoxTxMethod->addItem(C_SdUtil::h_ConvertTxMethodToName(C_OscCanMessage::eTX_METHOD_CYCLIC));
    this->mpc_Ui->pc_ComboBoxTxMethod->addItem(C_SdUtil::h_ConvertTxMethodToName(C_OscCanMessage::eTX_METHOD_ON_CHANGE));
@@ -264,71 +262,66 @@ void C_SdBueMessagePropertiesWidget::InitStaticNames(void) const
                                                                                 eTX_METHOD_CAN_OPEN_TYPE_255));
 
    //Other
-   this->mpc_Ui->pc_SpinBoxCycleTime->setSuffix(C_GtGetText::h_GetText(" ms"));
-   this->mpc_Ui->pc_SpinBoxEarly->setSuffix(C_GtGetText::h_GetText(" ms"));
-   this->mpc_Ui->pc_SpinBoxLater->setSuffix(C_GtGetText::h_GetText(" ms"));
-   this->mpc_Ui->pc_SpinBoxId->setPrefix(C_GtGetText::h_GetText("0x"));
-   this->mpc_Ui->pc_SpinBoxCobId->setPrefix(C_GtGetText::h_GetText("0x"));
-   this->mpc_Ui->pc_PushButtonJ1939OpenDialog->setText(C_GtGetText::h_GetText(""));
+   this->mpc_Ui->pc_SpinBoxCycleTime->setSuffix(" ms");
+   this->mpc_Ui->pc_SpinBoxEarly->setSuffix(" ms");
+   this->mpc_Ui->pc_SpinBoxLater->setSuffix(" ms");
+   this->mpc_Ui->pc_SpinBoxId->setPrefix("0x");
+   this->mpc_Ui->pc_SpinBoxCobId->setPrefix("0x");
+   this->mpc_Ui->pc_PushButtonJ1939OpenDialog->setText("");
 
    //Tool tips
-   this->mpc_Ui->pc_LabelName->SetToolTipInformation(C_GtGetText::h_GetText(
-                                                        "Name"),
-                                                     static_cast<QString>(C_GtGetText::h_GetText(
-                                                                             "Symbolic message name. Unique within a bus."
+   this->mpc_Ui->pc_LabelName->SetToolTipInformation("Name",
+                                                     static_cast<QString>("Symbolic message name. Unique within a bus."
                                                                              "\nFollowing C naming conventions are required:"
                                                                              "\n - must not be empty"
                                                                              "\n - must not start with digits"
                                                                              "\n - only alphanumeric characters and \"_\""
-                                                                             "\n - should not be longer than %1 (= project setting) characters")).arg(
+                                                                             "\n - should not be longer than %1 (= project setting) characters").arg(
                                                         C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit()));
-   this->mpc_Ui->pc_LabelComment->SetToolTipInformation(C_GtGetText::h_GetText("Comment"),
-                                                        C_GtGetText::h_GetText("Comment for this message."));
+   this->mpc_Ui->pc_LabelComment->SetToolTipInformation("Comment",
+                                                        "Comment for this message.");
 
-   this->mpc_Ui->pc_LabelID->SetToolTipInformation(C_GtGetText::h_GetText("CAN ID"),
-                                                   C_GtGetText::h_GetText("CAN Identifier (Hex).\n"
-                                                                          "Unique within a bus."));
+   this->mpc_Ui->pc_LabelID->SetToolTipInformation("CAN ID",
+                                                   "CAN Identifier (Hex).\n"
+                                                                          "Unique within a bus.");
    this->mpc_Ui->pc_PushButtonJ1939OpenDialog->SetToolTipInformation(
-      C_GtGetText::h_GetText("Edit CAN ID"),
-      C_GtGetText::h_GetText("Edit J1939 PG properties like PGN, priority, source and destination address "
-                             "and calculate the CAN ID from those."));
-   this->mpc_Ui->pc_LabelCobId->SetToolTipInformation(C_GtGetText::h_GetText("COB-ID"),
-                                                      C_GtGetText::h_GetText("Communication Object Identifier (Hex).\n"
-                                                                             "Unique within a bus."));
+      "Edit CAN ID",
+      "Edit J1939 PG properties like PGN, priority, source and destination address "
+                             "and calculate the CAN ID from those.");
+   this->mpc_Ui->pc_LabelCobId->SetToolTipInformation("COB-ID",
+                                                      "Communication Object Identifier (Hex).\n"
+                                                                             "Unique within a bus.");
    this->mpc_Ui->pc_CheckBoxCobIdWithNodeId->SetToolTipInformation(
-      C_GtGetText::h_GetText("COB-ID CANopen Node ID Offset"),
-      C_GtGetText::h_GetText("Communication Object Identifier (Hex) with CANopen Node ID as offset. "));
-   this->mpc_Ui->pc_LabelDlc->SetToolTipInformation(C_GtGetText::h_GetText("DLC"),
-                                                    C_GtGetText::h_GetText("Data Length Code. Number of data bytes."));
+      "COB-ID CANopen Node ID Offset",
+      "Communication Object Identifier (Hex) with CANopen Node ID as offset. ");
+   this->mpc_Ui->pc_LabelDlc->SetToolTipInformation("DLC",
+                                                    "Data Length Code. Number of data bytes.");
    this->mpc_Ui->pc_LabelCoDlc->SetToolTipInformation(
-      C_GtGetText::h_GetText("DLC"),
-      C_GtGetText::h_GetText("Data Length Code. Number of data bytes. Will be set automatically for CANopen."));
+      "DLC",
+      "Data Length Code. Number of data bytes. Will be set automatically for CANopen.");
    this->mpc_Ui->pc_LabelCoDlcAuto->SetToolTipInformation(
-      C_GtGetText::h_GetText("DLC"),
-      C_GtGetText::h_GetText("Data Length Code. Number of data bytes. Will be set automatically for CANopen."));
-   this->mpc_Ui->pc_LabelCycleTime->SetToolTipInformation(C_GtGetText::h_GetText("Cycle Time"),
-                                                          C_GtGetText::h_GetText(
-                                                             "Cyclic method property. Message is transmitted every time"
-                                                             " after this time is expired."));
+      "DLC",
+      "Data Length Code. Number of data bytes. Will be set automatically for CANopen.");
+   this->mpc_Ui->pc_LabelCycleTime->SetToolTipInformation("Cycle Time",
+                                                          "Cyclic method property. Message is transmitted every time"
+                                                             " after this time is expired.");
 
    this->mpc_Ui->pc_LabelTxMethodCo->SetToolTipInformation(
-      C_GtGetText::h_GetText("Tx Method"),
-      C_GtGetText::h_GetText(
-         "Message transmission method. "
+      "Tx Method",
+      "Message transmission method. "
          "\nType 0\t- synchronous transmission after next SYNC and change: Message is transmitted after receiving\n"
          "\t  the next SYNC message and a detected change"
          "\nType 1 to 240\t - synchronous transmission after 1st to 240th SYNC: Message is transmitted after\n"
          "\t  receiving the specified number of SYNC messages."
          "\nType 254\t- asynchronous manufacturer specific: Message is transmitted cyclically."
-         "\nType 255\t- asynchronous device specific:  Message is transmitted cyclically."));
+         "\nType 255\t- asynchronous device specific:  Message is transmitted cyclically.");
    this->mpc_Ui->pc_LabelDirection->SetToolTipInformation(
-      C_GtGetText::h_GetText("Direction"),
-      C_GtGetText::h_GetText("Message is either transmitted or received."));
+      "Direction",
+      "Message is either transmitted or received.");
 
    this->mpc_Ui->pc_LabelCoPdoSyncNumber->SetToolTipInformation(
-      C_GtGetText::h_GetText("SYNC Number"),
-      C_GtGetText::h_GetText(
-         "Defined number of PDO SYNC messages necessary for sending the PDO."));
+      "SYNC Number",
+      "Defined number of PDO SYNC messages necessary for sending the PDO.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1496,8 +1489,7 @@ void C_SdBueMessagePropertiesWidget::m_OnRxChanged(const uint32_t ou32_NodeIndex
                   std::vector<uint32_t> c_TmpNodeIndexes;
                   std::vector<uint32_t> c_TmpInterfaceIndexes;
                   std::vector<uint32_t> c_TmpDatapoolIndexes;
-                  C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eERROR, C_GtGetText::h_GetText(
-                                                       "A message cannot exist without a receiver and transmitter."));
+                  C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eERROR, "A message cannot exist without a receiver and transmitter.");
                   c_MessageBox.SetCustomMinHeight(180, 180);
                   c_TmpNodeIndexes.push_back(ou32_NodeIndex);
                   c_TmpInterfaceIndexes.push_back(ou32_InterfaceIndex);
@@ -1806,7 +1798,7 @@ void C_SdBueMessagePropertiesWidget::m_UpdateTxSelection(
             if (q_CanOpenActive == true)
             {
                this->mpc_Ui->pc_ComboBoxTransmitterNode->addItem(c_CurrentName +
-                                                                 C_GtGetText::h_GetText(" (Manager)"));
+                                                                 " (Manager)");
             }
             else
             {
@@ -1905,7 +1897,7 @@ void C_SdBueMessagePropertiesWidget::m_UpdateTxSelection(
          {
             this->mpc_Ui->pc_ComboBoxTransmitterNode->addItem(
                static_cast<QString>(pc_Device->c_Properties.c_Name.c_str()) +
-               static_cast<QString>(C_GtGetText::h_GetText(" (Device)")));
+               static_cast<QString>(" (Device)"));
             this->mpc_Ui->pc_ComboBoxTransmitterNode->setCurrentIndex(0);
             q_Transmitter = true;
          }
@@ -2075,10 +2067,10 @@ void C_SdBueMessagePropertiesWidget::m_UpdateRxAfterTxSelection(
          if (q_CanOpenActive == true)
          {
             c_TooltipText =
-               C_GtGetText::h_GetText("This property is relevant for source code file generation. "
+               "This property is relevant for source code file generation. "
                                       "\nThe CANopen Event Timer Reception Time."
                                       "\nWithin this interval a PDO should be received. "
-                                      "\nOtherwise the CANopen stack will report an error.");
+                                      "\nOtherwise the CANopen stack will report an error.";
             // Special case CANopen
             if (this->mq_CoDeviceIsTransmitter == false)
             {
@@ -2100,7 +2092,7 @@ void C_SdBueMessagePropertiesWidget::m_UpdateRxAfterTxSelection(
                   {
                      // Extend node name
                      c_NodeNames[0] = static_cast<QString>(pc_Device->c_Properties.c_Name.c_str()) +
-                                      C_GtGetText::h_GetText(" (Device)");
+                                      " (Device)";
                   }
                }
             }
@@ -2111,7 +2103,7 @@ void C_SdBueMessagePropertiesWidget::m_UpdateRxAfterTxSelection(
                if (c_NodeNames.size() == 1)
                {
                   // Extend node name
-                  c_NodeNames[0] += C_GtGetText::h_GetText(" (Manager)");
+                  c_NodeNames[0] += " (Manager)";
                }
             }
          }
@@ -2321,11 +2313,11 @@ void C_SdBueMessagePropertiesWidget::m_BusModeAdaptTransmitterComboBoxesValid(co
 {
    if (oq_Valid == false)
    {
-      const QString c_Content = C_GtGetText::h_GetText("No transmitter selected.");
+      const QString c_Content = "No transmitter selected.";
       //Set invalid
       this->mpc_Ui->pc_ComboBoxTransmitterNode->setCurrentIndex(-1);
       C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_ComboBoxTransmitterNode, "Valid", false);
-      this->mpc_Ui->pc_ComboBoxTransmitterNode->SetToolTipInformation(C_GtGetText::h_GetText("Error"),
+      this->mpc_Ui->pc_ComboBoxTransmitterNode->SetToolTipInformation("Error",
                                                                       c_Content, C_NagToolTip::eERROR);
 
       this->mpc_Ui->pc_ComboBoxTransmitterDatapool->setVisible(false);
@@ -2333,8 +2325,8 @@ void C_SdBueMessagePropertiesWidget::m_BusModeAdaptTransmitterComboBoxesValid(co
    }
    else
    {
-      this->mpc_Ui->pc_ComboBoxTransmitterNode->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                                      C_GtGetText::h_GetText(""),
+      this->mpc_Ui->pc_ComboBoxTransmitterNode->SetToolTipInformation("",
+                                                                      "",
                                                                       C_NagToolTip::eDEFAULT);
       C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_ComboBoxTransmitterNode, "Valid", true);
 
@@ -2671,12 +2663,12 @@ void C_SdBueMessagePropertiesWidget::m_UpdateJ1939PgInfo(void)
       if (c_PgInfo.q_HasDestinationAddress == true)
       {
          this->mpc_Ui->pc_LabelJ1939DestAddrValue->setText(QString::number(c_PgInfo.u8_PduSpecific));
-         this->mpc_Ui->pc_LabelJ1939FormatValue->setText(C_GtGetText::h_GetText("PDU 1 (Point-to-Point)"));
+         this->mpc_Ui->pc_LabelJ1939FormatValue->setText("PDU 1 (Point-to-Point)");
       }
       else
       {
-         this->mpc_Ui->pc_LabelJ1939DestAddrValue->setText(C_GtGetText::h_GetText("All"));
-         this->mpc_Ui->pc_LabelJ1939FormatValue->setText(C_GtGetText::h_GetText("PDU 2 (Broadcast)"));
+         this->mpc_Ui->pc_LabelJ1939DestAddrValue->setText("All");
+         this->mpc_Ui->pc_LabelJ1939FormatValue->setText("PDU 2 (Broadcast)");
       }
 
       // Special case: The addressing mode changes the receivers list for an exclusive selection
@@ -2684,19 +2676,19 @@ void C_SdBueMessagePropertiesWidget::m_UpdateJ1939PgInfo(void)
 
       if ((c_PgInfo.u8_Edp == 0U) && (c_PgInfo.u8_Dp == 0U))
       {
-         this->mpc_Ui->pc_LabelJ1939EdpDpValue->setText(C_GtGetText::h_GetText("00 (SAE J1939)"));
+         this->mpc_Ui->pc_LabelJ1939EdpDpValue->setText("00 (SAE J1939)");
       }
       else if ((c_PgInfo.u8_Edp == 0U) && (c_PgInfo.u8_Dp == 1U))
       {
-         this->mpc_Ui->pc_LabelJ1939EdpDpValue->setText(C_GtGetText::h_GetText("01 (NMEAJ1939)"));
+         this->mpc_Ui->pc_LabelJ1939EdpDpValue->setText("01 (NMEAJ1939)");
       }
       else if ((c_PgInfo.u8_Edp == 1U) && (c_PgInfo.u8_Dp == 0U))
       {
-         this->mpc_Ui->pc_LabelJ1939EdpDpValue->setText(C_GtGetText::h_GetText("10 (SAE J1939 reserved)"));
+         this->mpc_Ui->pc_LabelJ1939EdpDpValue->setText("10 (SAE J1939 reserved)");
       }
       else
       {
-         this->mpc_Ui->pc_LabelJ1939EdpDpValue->setText(C_GtGetText::h_GetText("11 (ISO 11992-4)"));
+         this->mpc_Ui->pc_LabelJ1939EdpDpValue->setText("11 (ISO 11992-4)");
       }
    }
 }
@@ -2824,29 +2816,28 @@ void C_SdBueMessagePropertiesWidget::SetComProtocol(const C_OscCanProtocol::E_Ty
    this->mpc_Ui->pc_WidgetReceiver->SetExclusiveMode(false);
 
    // Cycle Time
-   this->mpc_Ui->pc_LabelCycleTime->setText(C_GtGetText::h_GetText("Cycle Time"));
-   this->mpc_Ui->pc_LabelCycleTime->SetToolTipInformation(C_GtGetText::h_GetText("Cycle Time"),
-                                                          C_GtGetText::h_GetText(
-                                                             "Cyclic method property. Message is transmitted every time"
-                                                             " after this time is expired."));
+   this->mpc_Ui->pc_LabelCycleTime->setText("Cycle Time");
+   this->mpc_Ui->pc_LabelCycleTime->SetToolTipInformation("Cycle Time",
+                                                          "Cyclic method property. Message is transmitted every time"
+                                                             " after this time is expired.");
 
    if (q_J1939Active == false)
    {
       this->mpc_Ui->pc_LabelTxMethod->SetToolTipInformation(
-         C_GtGetText::h_GetText("Tx Method"),
-         C_GtGetText::h_GetText("Message transmission method. "
+         "Tx Method",
+         "Message transmission method. "
                                 "\nCyclic: Message is transmitted cyclically."
                                 "\nOn Change: Message is transmitted if any signal value is changed."
-                                "\nOn Event: Message transmission is handled by application (spontaneous)."));
+                                "\nOn Event: Message transmission is handled by application (spontaneous).");
    }
    else
    {
       this->mpc_Ui->pc_LabelTxMethod->SetToolTipInformation(
-         C_GtGetText::h_GetText("Tx Method"),
-         C_GtGetText::h_GetText("Message transmission method. "
+         "Tx Method",
+         "Message transmission method. "
                                 "\nCyclic: Message is transmitted cyclically."
                                 "\nOn Event: Message transmission is handled by application (spontaneous) or"
-                                " is triggered by an other J1939 node."));
+                                " is triggered by an other J1939 node.");
    }
 
    // No need of removing the widget from the previous layout manually.
@@ -2865,22 +2856,22 @@ void C_SdBueMessagePropertiesWidget::SetComProtocol(const C_OscCanProtocol::E_Ty
       this->mpc_Ui->pc_SpinBoxCycleTime->SetMinimumCustom(1);
       this->mpc_Ui->pc_SpinBoxCycleTime->SetMaximumCustom(50000);
 
-      this->mpc_Ui->pc_CheckBoxExtendedType->SetToolTipInformation(C_GtGetText::h_GetText("Extended Type"),
-                                                                   C_GtGetText::h_GetText("CAN ID Type. "
+      this->mpc_Ui->pc_CheckBoxExtendedType->SetToolTipInformation("Extended Type",
+                                                                   "CAN ID Type. "
                                                                                           "\nStandard Type: 11Bit "
-                                                                                          "\nExtended Type: 29Bit"));
+                                                                                          "\nExtended Type: 29Bit");
 
-      this->mpc_Ui->pc_LabelEarly->setText(C_GtGetText::h_GetText("Not earlier than"));
-      this->mpc_Ui->pc_LabelLater->setText(C_GtGetText::h_GetText("But no later than"));
+      this->mpc_Ui->pc_LabelEarly->setText("Not earlier than");
+      this->mpc_Ui->pc_LabelLater->setText("But no later than");
       this->mpc_Ui->pc_LabelEarly->SetToolTipInformation(
-         C_GtGetText::h_GetText("Not earlier than"),
-         C_GtGetText::h_GetText("On change method property. "
+         "Not earlier than",
+         "On change method property. "
                                 "\nIf a signal changes during this time, the message will not be transmitted."
-                                "\nThis allows the bus load to be controlled."));
+                                "\nThis allows the bus load to be controlled.");
       this->mpc_Ui->pc_LabelLater->SetToolTipInformation(
-         C_GtGetText::h_GetText("But no later than"),
-         C_GtGetText::h_GetText("On change method property. "
-                                "\nIf the signal does not change, the message will still be sent after this time."));
+         "But no later than",
+         "On change method property. "
+                                "\nIf the signal does not change, the message will still be sent after this time.");
    }
    else
    {
@@ -2900,22 +2891,22 @@ void C_SdBueMessagePropertiesWidget::SetComProtocol(const C_OscCanProtocol::E_Ty
       this->mpc_Ui->pc_SpinBoxCoPdoSyncNumber->SetMinimumCustom(1);
       this->mpc_Ui->pc_SpinBoxCoPdoSyncNumber->SetMaximumCustom(240);
 
-      this->mpc_Ui->pc_CheckBoxExtendedType->SetToolTipInformation(C_GtGetText::h_GetText("Extended Type"),
-                                                                   C_GtGetText::h_GetText("COB-ID Type. "
+      this->mpc_Ui->pc_CheckBoxExtendedType->SetToolTipInformation("Extended Type",
+                                                                   "COB-ID Type. "
                                                                                           "\nStandard Type: 11Bit "
-                                                                                          "\nExtended Type: 29Bit"));
+                                                                                          "\nExtended Type: 29Bit");
 
-      this->mpc_Ui->pc_LabelEarly->setText(C_GtGetText::h_GetText("Inhibit Time"));
-      this->mpc_Ui->pc_LabelLater->setText(C_GtGetText::h_GetText("Event Time"));
+      this->mpc_Ui->pc_LabelEarly->setText("Inhibit Time");
+      this->mpc_Ui->pc_LabelLater->setText("Event Time");
       this->mpc_Ui->pc_LabelEarly->SetToolTipInformation(
-         C_GtGetText::h_GetText("Inhibit Time"),
-         C_GtGetText::h_GetText("CANopen event driven method property. "
+         "Inhibit Time",
+         "CANopen event driven method property. "
                                 "\nIf a signal changes during this time, the message will not be transmitted."
-                                "\nThis allows the bus load to be controlled."));
+                                "\nThis allows the bus load to be controlled.");
       this->mpc_Ui->pc_LabelLater->SetToolTipInformation(
-         C_GtGetText::h_GetText("Event Time"),
-         C_GtGetText::h_GetText("CANopen event driven method property. "
-                                "\nIf the signal does not change, the message will still be sent after this time."));
+         "Event Time",
+         "CANopen event driven method property. "
+                                "\nIf the signal does not change, the message will still be sent after this time.");
    }
 
    //Protocol specific changes
@@ -2947,12 +2938,11 @@ void C_SdBueMessagePropertiesWidget::SetComProtocol(const C_OscCanProtocol::E_Ty
       this->mpc_Ui->pc_ComboBoxTxMethod->setCurrentIndex(ms32_TX_TYPE_INDEX_CYCLIC);
 
       // Cycle Time is "Safety Cycle-Time" in CANopen Safety
-      this->mpc_Ui->pc_LabelCycleTime->setText(C_GtGetText::h_GetText("Safety Cycle-Time"));
-      this->mpc_Ui->pc_LabelCycleTime->SetToolTipInformation(C_GtGetText::h_GetText("Safety Cycle-Time (SCT)"),
-                                                             C_GtGetText::h_GetText(
-                                                                "Safety Cycle-Time (SCT) is the cycle time of an SRDO transmission."
+      this->mpc_Ui->pc_LabelCycleTime->setText("Safety Cycle-Time");
+      this->mpc_Ui->pc_LabelCycleTime->SetToolTipInformation("Safety Cycle-Time (SCT)",
+                                                             "Safety Cycle-Time (SCT) is the cycle time of an SRDO transmission."
                                                                 "\nIn openSYDE there is no separate setting of the SR Validation Time"
-                                                                "\n(SRVT)(SRVT = SCT)."));
+                                                                "\n(SRVT)(SRVT = SCT).");
    }
    else if (ore_Value == C_OscCanProtocol::eCAN_OPEN)
    {
@@ -3157,21 +3147,21 @@ void C_SdBueMessagePropertiesWidget::m_CheckMessageName(void) const
       C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LineEditName, "Valid", q_NameIsValid);
       if (q_NameIsValid == true)
       {
-         this->mpc_Ui->pc_LineEditName->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                              C_GtGetText::h_GetText(""),
+         this->mpc_Ui->pc_LineEditName->SetToolTipInformation("",
+                                                              "",
                                                               stw::opensyde_gui::C_NagToolTip::eDEFAULT);
       }
       else
       {
-         const QString c_Heading = C_GtGetText::h_GetText("Message Name");
+         const QString c_Heading = "Message Name";
          QString c_Content;
          if (q_InvalidName == true)
          {
-            c_Content += C_GtGetText::h_GetText("- is empty or contains invalid characters\n");
+            c_Content += "- is empty or contains invalid characters\n";
          }
          if (q_DuplicateName == true)
          {
-            c_Content += C_GtGetText::h_GetText("- is already in use\n");
+            c_Content += "- is already in use\n";
          }
          this->mpc_Ui->pc_LineEditName->SetToolTipInformation(c_Heading, c_Content,
                                                               stw::opensyde_gui::C_NagToolTip::eERROR);
@@ -3218,15 +3208,15 @@ void C_SdBueMessagePropertiesWidget::m_CheckMessageId(void) const
          QString c_Content;
          if (q_EcosRangeError == true)
          {
-            c_Content += C_GtGetText::h_GetText("Message ID out of range for ECOS\n");
+            c_Content += "Message ID out of range for ECOS\n";
          }
          if (q_EcosEvenError == true)
          {
-            c_Content += C_GtGetText::h_GetText("Message ID may not be even for ECOS\n");
+            c_Content += "Message ID may not be even for ECOS\n";
          }
          if (q_DuplicateDetected == true)
          {
-            c_Content += C_GtGetText::h_GetText("Message ID already in use\n");
+            c_Content += "Message ID already in use\n";
          }
 
          pc_VisibleSpinBox->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
@@ -3288,20 +3278,20 @@ void C_SdBueMessagePropertiesWidget::m_CheckEarlyTime(void) const
 
          if (this->me_ComProtocol != C_OscCanProtocol::eCAN_OPEN)
          {
-            c_Heading1 = C_GtGetText::h_GetText("Not earlier than");
-            c_Heading2 = C_GtGetText::h_GetText("But not later than");
+            c_Heading1 = "Not earlier than";
+            c_Heading2 = "But not later than";
          }
          else
          {
-            c_Heading1 = C_GtGetText::h_GetText("Inhibit Time");
-            c_Heading2 = C_GtGetText::h_GetText("Event Time");
+            c_Heading1 = "Inhibit Time";
+            c_Heading2 = "Event Time";
          }
 
          const QString c_Content1 =
-            static_cast<QString>(C_GtGetText::h_GetText("Value may not be greater than the value for \"%1\"")).arg(
+            static_cast<QString>("Value may not be greater than the value for \"%1\"").arg(
                c_Heading2);
          const QString c_Content2 =
-            static_cast<QString>(C_GtGetText::h_GetText("Value may not be smaller than the value for \"%1\"")).arg(
+            static_cast<QString>("Value may not be smaller than the value for \"%1\"").arg(
                c_Heading1);
          this->mpc_Ui->pc_SpinBoxEarly->SetToolTipAdditionalInfo(c_Content1, C_NagToolTip::eERROR);
          this->mpc_Ui->pc_SpinBoxLater->SetToolTipAdditionalInfo(c_Content2, C_NagToolTip::eERROR);
@@ -3377,10 +3367,9 @@ void C_SdBueMessagePropertiesWidget::m_CheckTxMethod(void) const
       else
       {
          const QString c_Content =
-            static_cast<QString>(C_GtGetText::h_GetText(
-                                    "Producing SYNC PDO message is deactivated in the CANopen Manager.\n"
+            static_cast<QString>("Producing SYNC PDO message is deactivated in the CANopen Manager.\n"
                                     "For using \"Type 0\" and \"Type 1 to 240\" activate \"Produce SYNC\" in "
-                                    "the CANopen Manager configuration."));
+                                    "the CANopen Manager configuration.");
          this->mpc_Ui->pc_ComboBoxTxMethod->SetToolTipInformation("TX Method", c_Content, C_NagToolTip::eERROR);
       }
    }

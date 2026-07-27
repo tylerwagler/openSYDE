@@ -43,7 +43,6 @@ C_SdNdeDalTriggerCheckHelper::C_SdNdeDalTriggerCheckHelper() {}
 
 #include "TglUtils.hpp"
 #include "C_OscUtils.hpp"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscHalcMagicianUtil.hpp"
@@ -406,7 +405,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannel(const uint32_t ou32_NodeIndex
    {
       if (opc_ErrorDetails != NULL)
       {
-         *opc_ErrorDetails = C_GtGetText::h_GetText("Variable invalid: too many components");
+         *opc_ErrorDetails = "Variable invalid: too many components";
       }
    }
    else if (orc_ChannelComponents.size() > 3UL)
@@ -429,7 +428,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannel(const uint32_t ou32_NodeIndex
                {
                   if (opc_ErrorDetails != NULL)
                   {
-                     *opc_ErrorDetails = C_GtGetText::h_GetText("Variable invalid: node not reachable");
+                     *opc_ErrorDetails = "Variable invalid: node not reachable";
                   }
                }
             }
@@ -439,7 +438,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannel(const uint32_t ou32_NodeIndex
       {
          if ((q_IsValid == false) && (*opc_ErrorDetails == ""))
          {
-            *opc_ErrorDetails = C_GtGetText::h_GetText("Variable invalid: variable not found");
+            *opc_ErrorDetails = "Variable invalid: variable not found";
          }
       }
    }
@@ -447,7 +446,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannel(const uint32_t ou32_NodeIndex
    {
       if (opc_ErrorDetails != NULL)
       {
-         *opc_ErrorDetails = C_GtGetText::h_GetText("Variable invalid: too few components");
+         *opc_ErrorDetails = "Variable invalid: too few components";
       }
    }
    return q_IsValid;
@@ -506,8 +505,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelDatapool(const opensyde_core::
                {
                   if (opc_ErrorDetails != NULL)
                   {
-                     *opc_ErrorDetails = C_GtGetText::h_GetText(
-                        "Variable invalid: No matching communication protocol structure found");
+                     *opc_ErrorDetails = "Variable invalid: No matching communication protocol structure found";
                   }
                }
             }
@@ -614,7 +612,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelHalType(const opensyde_core::C
       {
          if (opc_ErrorDetails != NULL)
          {
-            *opc_ErrorDetails = C_GtGetText::h_GetText("Variable invalid: HAL unknown list type");
+            *opc_ErrorDetails = "Variable invalid: HAL unknown list type";
          }
       }
    }
@@ -622,7 +620,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelHalType(const opensyde_core::C
    {
       if (opc_ErrorDetails != NULL)
       {
-         *opc_ErrorDetails = C_GtGetText::h_GetText("Variable invalid: too few components for HAL");
+         *opc_ErrorDetails = "Variable invalid: too few components for HAL";
       }
    }
 
@@ -720,7 +718,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelList(const opensyde_core::C_Os
             {
                if (opc_ErrorDetails != NULL)
                {
-                  *opc_ErrorDetails = C_GtGetText::h_GetText("Variable index invalid: int negative");
+                  *opc_ErrorDetails = "Variable index invalid: int negative";
                }
             }
          }
@@ -728,7 +726,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelList(const opensyde_core::C_Os
          {
             if (opc_ErrorDetails != NULL)
             {
-               *opc_ErrorDetails = C_GtGetText::h_GetText("Variable index invalid: could not parse int");
+               *opc_ErrorDetails = "Variable index invalid: could not parse int";
             }
          }
       }
@@ -780,8 +778,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelComm(const C_OscNodeDataPool &
       {
          if (opc_ErrorDetails != NULL)
          {
-            *opc_ErrorDetails = C_GtGetText::h_GetText(
-               "Variable invalid: No array types supported for communication");
+            *opc_ErrorDetails = "Variable invalid: No array types supported for communication";
          }
       }
       else
@@ -856,7 +853,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelMessages(const C_OscNodeDataPo
             if (q_IsValid == false)
             {
                *opc_ErrorDetails =
-                  C_GtGetText::h_GetText("Variable index invalid: signal not found in message");
+                  "Variable index invalid: signal not found in message";
             }
          }
       }
@@ -997,7 +994,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelElement(const opensyde_core::C
                if (opc_ErrorDetails != NULL)
                {
                   *opc_ErrorDetails =
-                     C_GtGetText::h_GetText("Variable index invalid: invalid array type usage");
+                     "Variable index invalid: invalid array type usage";
                }
             }
             else
@@ -1046,7 +1043,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelElementArray(
          if (opc_ErrorDetails != NULL)
          {
             *opc_ErrorDetails =
-               C_GtGetText::h_GetText("Variable index invalid: index out of bounds");
+               "Variable index invalid: index out of bounds";
          }
       }
    }
@@ -1055,7 +1052,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelElementArray(
       if (opc_ErrorDetails != NULL)
       {
          *opc_ErrorDetails =
-            C_GtGetText::h_GetText("Variable index invalid: variable is not of type array");
+            "Variable index invalid: variable is not of type array";
       }
    }
 

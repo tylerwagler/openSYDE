@@ -213,8 +213,13 @@ bool C_TblViewToolTipBase::event(QEvent * const opc_Event)
       m_HideToolTip();
       q_Return = QTableView::event(opc_Event);
    }
-   //Necessary to detect mouse move events over integrated widgets
-   else if (opc_Event->type() == QEvent::HoverMove)
+    // Workaround for Qt 6 + Wayland crash in QAbstractItemView::inputMethodEvent
+    else if (opc_Event->type() == QEvent::InputMethod)
+    {
+       q_Return = false;
+    }
+    //Necessary to detect mouse move events over integrated widgets
+    else if (opc_Event->type() == QEvent::HoverMove)
    {
       QHoverEvent * const pc_HoverEvent = dynamic_cast<QHoverEvent * const>(opc_Event);
 

@@ -20,7 +20,6 @@
 #include "constants.hpp"
 #include "C_SdNdeDpListHeaderWidget.hpp"
 #include "ui_C_SdNdeDpListHeaderWidget.h"
-#include "C_GtGetText.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDpListsTreeWidget.hpp"
 #include "C_OgePopUpDialog.hpp"
@@ -86,7 +85,7 @@ C_SdNdeDpListHeaderWidget::C_SdNdeDpListHeaderWidget(QWidget * const opc_Parent,
 
    mpc_Ui->setupUi(this);
 
-   this->mpc_Ui->pc_UsageWidget->SetToolTipWidgetName(static_cast<QString>(C_GtGetText::h_GetText("List")));
+   this->mpc_Ui->pc_UsageWidget->SetToolTipWidgetName(static_cast<QString>("List"));
    this->NotifySelection(false);
 
    //Init buttons
@@ -231,24 +230,24 @@ void C_SdNdeDpListHeaderWidget::SetIndex(const uint32_t & oru32_Value)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListHeaderWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_LabelSize->setText(C_GtGetText::h_GetText("Size: "));
-   this->mpc_Ui->pc_SpinBoxSize->setSuffix(C_GtGetText::h_GetText(" Bytes"));
-   this->mpc_Ui->pc_LineEditName->setPlaceholderText(C_GtGetText::h_GetText("Add your List Name"));
+   this->mpc_Ui->pc_LabelSize->setText("Size: ");
+   this->mpc_Ui->pc_SpinBoxSize->setSuffix(" Bytes");
+   this->mpc_Ui->pc_LineEditName->setPlaceholderText("Add your List Name");
    this->mpc_Ui->pc_PushButtonComment->SetToolTipInformation(
-      C_GtGetText::h_GetText("Edit Comment"),
-      C_GtGetText::h_GetText("Add or edit comment for this List."));
+      "Edit Comment",
+      "Add or edit comment for this List.");
    this->mpc_Ui->pc_PushButtonFullScreen->SetToolTipInformation(
-      C_GtGetText::h_GetText("Full Screen"),
-      C_GtGetText::h_GetText("Shows this list in full-screen-mode to improve your editing experience."));
+      "Full Screen",
+      "Shows this list in full-screen-mode to improve your editing experience.");
    this->mpc_Ui->pc_PushButtonCollapse->SetToolTipInformation(
-      C_GtGetText::h_GetText("Exit Full Screen"),
-      C_GtGetText::h_GetText("Go back to Datapool Lists."));
+      "Exit Full Screen",
+      "Go back to Datapool Lists.");
    this->mpc_Ui->pc_LabelSize->SetToolTipInformation(
-      C_GtGetText::h_GetText("Size"),
-      C_GtGetText::h_GetText("Set the number of bytes which this list will reserve."));
+      "Size",
+      "Set the number of bytes which this list will reserve.");
    this->mpc_Ui->pc_PushButtonDataset->SetToolTipInformation(
-      C_GtGetText::h_GetText("Edit Datasets"),
-      C_GtGetText::h_GetText("Datasets can be used to set defined values for each element contained in this list."));
+      "Edit Datasets",
+      "Datasets can be used to set defined values for each element contained in this list.");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -511,7 +510,7 @@ void C_SdNdeDpListHeaderWidget::m_OnPushButtonExpandClicked(const bool oq_Checke
 void C_SdNdeDpListHeaderWidget::m_UpdateListNamePrefix(void) const
 {
    const QString c_Text =
-      static_cast<QString>(C_GtGetText::h_GetText("List #%1 - ")).arg(QString::number(this->mu32_ListIndex + 1));
+      static_cast<QString>("List #%1 - ").arg(QString::number(this->mu32_ListIndex + 1));
 
    this->mpc_Ui->pc_LabelListNamePrefix->setText(c_Text);
 }
@@ -550,7 +549,7 @@ void C_SdNdeDpListHeaderWidget::m_UpdateUi(void)
       this->mpc_Ui->pc_LineEditName->SetName(pc_List->c_Name.c_str());
       this->mpc_Ui->pc_LineEditName->SetCounter(static_cast<uint32_t>(pc_List->c_Elements.size()));
       this->mpc_Ui->pc_LabelComment->SetCompleteText(c_SimplifiedComment);
-      this->mpc_Ui->pc_LabelComment->SetToolTipInformation(C_GtGetText::h_GetText("Comment"),
+      this->mpc_Ui->pc_LabelComment->SetToolTipInformation("Comment",
                                                            pc_List->c_Comment.c_str());
 
       if (pc_List->c_Comment.IsEmpty() == true)
@@ -591,7 +590,7 @@ void C_SdNdeDpListHeaderWidget::m_UpdateUi(void)
 
          //Size value
          this->mpc_Ui->pc_SpinBoxSize->setValue(pc_List->u32_NvmSize);
-         this->mpc_Ui->pc_LabelUsage->setText(static_cast<QString>(C_GtGetText::h_GetText("Usage: %1%")).arg(u32_Usage));
+         this->mpc_Ui->pc_LabelUsage->setText(static_cast<QString>("Usage: %1%").arg(u32_Usage));
       }
       else
       {
@@ -754,7 +753,7 @@ void C_SdNdeDpListHeaderWidget::m_CheckName(void) const
 
    if (q_NameIsValid == false)
    {
-      c_Content += C_GtGetText::h_GetText("- is empty or contains invalid characters\n");
+      c_Content += "- is empty or contains invalid characters\n";
    }
 
    if (C_PuiSdHandler::h_GetInstance()->CheckNodeDataPoolListNameAvailable(this->mu32_NodeIndex,
@@ -763,20 +762,20 @@ void C_SdNdeDpListHeaderWidget::m_CheckName(void) const
                                                                            &this->mu32_ListIndex) == false)
    {
       q_NameIsValid = false;
-      c_Content += C_GtGetText::h_GetText("- is already in use\n");
+      c_Content += "- is already in use\n";
    }
 
    //set invalid text property
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LineEditName, "Valid", q_NameIsValid);
    if (q_NameIsValid == true)
    {
-      this->mpc_Ui->pc_LineEditName->SetToolTipInformation(C_GtGetText::h_GetText(""),
-                                                           C_GtGetText::h_GetText(""),
+      this->mpc_Ui->pc_LineEditName->SetToolTipInformation("",
+                                                           "",
                                                            C_NagToolTip::eDEFAULT);
    }
    else
    {
-      const QString c_Heading = C_GtGetText::h_GetText("List Name");
+      const QString c_Heading = "List Name";
       this->mpc_Ui->pc_LineEditName->SetToolTipInformation(c_Heading, c_Content, C_NagToolTip::eERROR);
    }
 }
@@ -840,35 +839,34 @@ void C_SdNdeDpListHeaderWidget::m_UpdateErrorToolTip(void) const
       if ((((((q_NameConflict == true) || (q_NameInvalid == true)) || (q_UsageInvalid == true)) ||
             (q_ElementsInvalid == true)) || (this->mq_DataSetError == true)) || (q_OutOfDataPool == true))
       {
-         const QString c_Heading = C_GtGetText::h_GetText("List has invalid content");
+         const QString c_Heading = "List has invalid content";
          QString c_Content;
          if ((((q_NameConflict == true) || (q_NameInvalid == true)) || (q_UsageInvalid == true)) ||
              (q_OutOfDataPool == true))
          {
-            c_Content += C_GtGetText::h_GetText("Invalid properties:\n");
+            c_Content += "Invalid properties:\n";
             if (q_NameConflict == true)
             {
-               c_Content += C_GtGetText::h_GetText("Duplicate list name detected.\n");
+               c_Content += "Duplicate list name detected.\n";
             }
             if (q_NameInvalid == true)
             {
-               c_Content += C_GtGetText::h_GetText("List name is empty or contains invalid characters.\n");
+               c_Content += "List name is empty or contains invalid characters.\n";
             }
             if (q_UsageInvalid == true)
             {
-               c_Content += C_GtGetText::h_GetText(
-                  "List contains too many parameters. More than reserved by list size.\n");
+               c_Content += "List contains too many parameters. More than reserved by list size.\n";
             }
             if (q_OutOfDataPool == true)
             {
                c_Content +=
-                  C_GtGetText::h_GetText("Reserved list size is bigger than the reserved NVM Datapool size.\n");
+                  "Reserved list size is bigger than the reserved NVM Datapool size.\n";
             }
             c_Content += "\n";
          }
          if (q_DataSetError == true)
          {
-            c_Content += C_GtGetText::h_GetText("Invalid Datasets:\n");
+            c_Content += "Invalid Datasets:\n";
             for (uint32_t u32_ItDataSet = 0;
                  (u32_ItDataSet < c_InvalidDataSetIndices.size()) &&
                  (u32_ItDataSet < mu32_TOOL_TIP_MAXIMUM_ITEMS);
@@ -892,7 +890,7 @@ void C_SdNdeDpListHeaderWidget::m_UpdateErrorToolTip(void) const
          }
          if (q_ElementsInvalid == true)
          {
-            c_Content += C_GtGetText::h_GetText("Invalid elements:\n");
+            c_Content += "Invalid elements:\n";
             for (uint32_t u32_ItElement = 0;
                  (u32_ItElement < c_InvalidElementIndices.size()) &&
                  (u32_ItElement < mu32_TOOL_TIP_MAXIMUM_ITEMS);

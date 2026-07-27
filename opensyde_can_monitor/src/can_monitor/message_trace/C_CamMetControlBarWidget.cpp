@@ -19,7 +19,6 @@
 #include "ui_C_CamMetControlBarWidget.h"
 
 #include "C_UsHandler.hpp"
-#include "C_GtGetText.hpp"
 
 #include "C_OgePopUpDialog.hpp"
 #include "C_CamMetSettingsPopup.hpp"
@@ -127,8 +126,10 @@ C_CamMetControlBarWidget::C_CamMetControlBarWidget(QWidget * const opc_Parent) :
    connect(this->mpc_Ui->pc_PushButtonToggleDisplayMode, &QPushButton::toggled, this,
            &C_CamMetControlBarWidget::m_HandleToggleDisplayMode);
    connect(this->mpc_Ui->pc_ComboBoxProtocol,
-           static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged),
-           this, &C_CamMetControlBarWidget::m_OnProtocolIndexChange);
+            static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged),
+            this, &C_CamMetControlBarWidget::m_OnProtocolIndexChange);
+
+
 
    connect(this->mpc_Ui->pc_PushButtonClear, &QPushButton::clicked,
            this, &C_CamMetControlBarWidget::SigClearData);
@@ -169,64 +170,71 @@ void C_CamMetControlBarWidget::InitStaticNames() const
 {
    //Protocols
    this->mpc_Ui->pc_ComboBoxProtocol->clear();
-   this->mpc_Ui->pc_ComboBoxProtocol->addItem("L7-Protocol: CAN Layer 2");
-   this->mpc_Ui->pc_ComboBoxProtocol->addItem("L7-Protocol: STW openSYDE");
-   this->mpc_Ui->pc_ComboBoxProtocol->addItem("L7-Protocol: CANopen");
-   this->mpc_Ui->pc_ComboBoxProtocol->addItem("L7-Protocol: SAE J1939 06/2006");
+   this->mpc_Ui->pc_ComboBoxProtocol->addItem("CAN Layer 2 (raw)");
+   this->mpc_Ui->pc_ComboBoxProtocol->addItem("STW openSYDE");
+   this->mpc_Ui->pc_ComboBoxProtocol->addItem("CANopen");
+   this->mpc_Ui->pc_ComboBoxProtocol->addItem("SAE J1939");
+   this->mpc_Ui->pc_ComboBoxProtocol->addItem("CAN-TP (ISO 15765-2)");
+   this->mpc_Ui->pc_ComboBoxProtocol->addItem("UDS (ISO 14229)");
 
    this->mpc_Ui->pc_PushButtonTogglePlay->SetToolTipInformation(
-      C_GtGetText::h_GetText("Start / Pause Measurement"),
-      C_GtGetText::h_GetText("Start Measurement: \n"
+      "Start / Pause Measurement",
+      "Start Measurement: \n"
                              "   - Open CAN adapter, start CAN communication\n"
                              "   - Display CAN messages in trace window\n"
                              "   - Send CAN messages configured in \"Message Generator\" window\n"
                              "Pause Measurement:\n"
                              "   - Freeze trace window content\n"
                              "   - Stop sending messages configured in \"Message Generator\" window\n"
-                             "   - CAN communication will not be closed. CAN acknowledge is still enabled."));
+                             "   - CAN communication will not be closed. CAN acknowledge is still enabled.");
 
    this->mpc_Ui->pc_PushButtonStop->SetToolTipInformation(
-      C_GtGetText::h_GetText("Stop Measurement"),
-      C_GtGetText::h_GetText("The CAN communication will be stopped and closed."));
+      "Stop Measurement",
+      "The CAN communication will be stopped and closed.");
 
    this->mpc_Ui->pc_PushButtonToggleTimeMode->SetToolTipInformation(
-      C_GtGetText::h_GetText("Toggle Time Mode"),
-      C_GtGetText::h_GetText("The displaying of the time can be switched between absolute and relative values."));
+      "Toggle Time Mode",
+      "The displaying of the time can be switched between absolute and relative values.");
 
    this->mpc_Ui->pc_PushButtonToggleHex->SetToolTipInformation(
-      C_GtGetText::h_GetText("Toggle Number Format"),
-      C_GtGetText::h_GetText("The number format of CAN messages can be switched between decimal and hexadecimal."));
+      "Toggle Number Format",
+      "The number format of CAN messages can be switched between decimal and hexadecimal.");
 
    this->mpc_Ui->pc_PushButtonToggleDisplayMode->SetToolTipInformation(
-      C_GtGetText::h_GetText("Toggle Display Mode"),
-      C_GtGetText::h_GetText("The display mode of CAN messages can be switched between static and continuous."));
+      "Toggle Display Mode",
+      "The display mode of CAN messages can be switched between static and continuous.");
 
    this->mpc_Ui->pc_ComboBoxProtocol->SetToolTipInformation(
-      C_GtGetText::h_GetText("Layer 7-Protocol Interpretation"),
-      C_GtGetText::h_GetText("Layer 7 protocol interpretation of CAN messages."));
+      "Protocol Interpretation",
+      "Select protocol interpretation for CAN messages.\n"
+                             "\n"
+                             "L2:  CAN Layer 2 (raw frame display)\n"
+                             "L4:  CAN-TP (ISO 15765-2 transport protocol)\n"
+                             "L7:  STW openSYDE, CANopen\n"
+                             "Stack: SAE J1939");
 
    this->mpc_Ui->pc_PushButtonClear->SetToolTipInformation(
-      C_GtGetText::h_GetText("Clear Trace"),
-      C_GtGetText::h_GetText("Clear trace window content."));
+      "Clear Trace",
+      "Clear trace window content.");
 
    this->mpc_Ui->pc_PushButtonTraceSettings->SetToolTipInformation(
-      C_GtGetText::h_GetText("Trace Settings"),
-      C_GtGetText::h_GetText("Show and edit trace settings."));
+      "Trace Settings",
+      "Show and edit trace settings.");
 
-   this->mpc_Ui->pc_ComboBoxSearch->lineEdit()->setPlaceholderText(C_GtGetText::h_GetText("Search..."));
+   this->mpc_Ui->pc_ComboBoxSearch->lineEdit()->setPlaceholderText("Search...");
 
    this->mpc_Ui->pc_ComboBoxSearch->SetToolTipInformation(
-      C_GtGetText::h_GetText("Trace Search"),
-      C_GtGetText::h_GetText("Search quickly and simply for text within the Trace.\n"
-                             "Available only when Trace is paused or stopped."));
+      "Trace Search",
+      "Search quickly and simply for text within the Trace.\n"
+                             "Available only when Trace is paused or stopped.");
 
    this->mpc_Ui->pc_PushButtoneSearchNext->SetToolTipInformation(
-      C_GtGetText::h_GetText("Trace Search"),
-      C_GtGetText::h_GetText("Find next (F3)."));
+      "Trace Search",
+      "Find next (F3).");
 
    this->mpc_Ui->pc_PushButtoneSearchPrev->SetToolTipInformation(
-      C_GtGetText::h_GetText("Trace Search"),
-      C_GtGetText::h_GetText("Find previous (Shift + F3)."));
+      "Trace Search",
+      "Find previous (Shift + F3).");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -390,6 +398,7 @@ void C_CamMetControlBarWidget::m_HandleStop(void)
 void C_CamMetControlBarWidget::m_OnProtocolIndexChange(const int32_t os32_Index)
 {
    Q_EMIT this->SigChangeProtocol(C_CamMetControlBarWidget::mh_GetProtocolFromIndex(os32_Index));
+   Q_EMIT this->SigCanTpEnabled((os32_Index == 4) || (os32_Index == 5));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -415,6 +424,12 @@ stw::cmon_protocol::e_CanMonL7Protocols C_CamMetControlBarWidget::mh_GetProtocol
       break;
    case 3:
       e_Retval = stw::cmon_protocol::eCMON_L7_PROTOCOL_J1939;
+      break;
+   case 4:
+      e_Retval = stw::cmon_protocol::eCMON_L7_PROTOCOL_CAN_TP;
+      break;
+   case 5:
+      e_Retval = stw::cmon_protocol::eCMON_L7_PROTOCOL_UDS;
       break;
    default:
       e_Retval = stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE;
@@ -545,7 +560,7 @@ void C_CamMetControlBarWidget::m_MessageSearchWhileTracing()
 {
    C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eINFORMATION);
 
-   c_MessageBox.SetHeading(C_GtGetText::h_GetText("Trace Search"));
-   c_MessageBox.SetDescription(C_GtGetText::h_GetText("Available only if Trace is paused or stopped"));
+   c_MessageBox.SetHeading("Trace Search");
+   c_MessageBox.SetDescription("Available only if Trace is paused or stopped");
    c_MessageBox.Execute();
 }

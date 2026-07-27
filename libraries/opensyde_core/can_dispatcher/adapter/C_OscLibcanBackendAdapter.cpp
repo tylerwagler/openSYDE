@@ -20,6 +20,7 @@
 #include "precomp_headers.hpp"
 
 #include <cstring>
+#include <ctime>
 
 #include "C_OscLibcanBackendAdapter.hpp"
 #include "stwerrors.hpp"
@@ -49,7 +50,8 @@ C_OscLibcanBackendAdapter::C_OscLibcanBackendAdapter(std::unique_ptr< ::can::ICa
    C_CanDispatcher(),
    mpc_Backend(std::move(opc_Backend)),
    mc_Config(orc_Config),
-   mq_Open(false)
+   mq_Open(false),
+   ms64_RealtimeMonotonicOffsetUs(0)
 {
 }
 
@@ -74,6 +76,24 @@ int32_t C_OscLibcanBackendAdapter::CAN_Init(void)
    else
    {
       mq_Open = true;
+
+      // Compute the offset between CLOCK_REALTIME (used by kernel CAN timestamps)
+      // and CLOCK_MONOTONIC (used by TglGetTickCountUs). Kernel timestamps from
+      // SocketCAN's SO_TIMESTAMPNS are in CLOCK_REALTIME; the rest of the CAN
+      // Monitor expects monotonic microseconds since boot.
+      struct timespec ts_mono;
+      struct timespec ts_real;
+      if ((clock_gettime(CLOCK_MONOTONIC, &ts_mono) == 0) &&
+          (clock_gettime(CLOCK_REALTIME, &ts_real) == 0))
+      {
+         const int64_t s64_MonoUs =
+            static_cast<int64_t>(ts_mono.tv_sec) * 1000000LL +
+            static_cast<int64_t>(ts_mono.tv_nsec) / 1000LL;
+         const int64_t s64_RealUs =
+            static_cast<int64_t>(ts_real.tv_sec) * 1000000LL +
+            static_cast<int64_t>(ts_real.tv_nsec) / 1000LL;
+         this->ms64_RealtimeMonotonicOffsetUs = s64_RealUs - s64_MonoUs;
+      }
    }
 
    return s32_Return;
@@ -168,7 +188,17 @@ int32_t C_OscLibcanBackendAdapter::m_CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
          {
             orc_Message.au8_Data[u8_Byte] = c_Frame.data[u8_Byte];
          }
-         orc_Message.u64_TimeStamp = (c_Frame.timestamp_us != 0ULL) ? c_Frame.timestamp_us : TglGetTickCountUs();
+         if (c_Frame.timestamp_us != 0ULL)
+         {
+            // Kernel timestamp is CLOCK_REALTIME; convert to monotonic
+            const int64_t s64_MonoTs =
+               static_cast<int64_t>(c_Frame.timestamp_us) - this->ms64_RealtimeMonotonicOffsetUs;
+            orc_Message.u64_TimeStamp = (s64_MonoTs > 0) ? static_cast<uint64_t>(s64_MonoTs) : 0ULL;
+         }
+         else
+         {
+            orc_Message.u64_TimeStamp = TglGetTickCountUs();
+         }
          s32_Return = C_NO_ERR;
       }
       else
