@@ -117,9 +117,9 @@ C_SclDateTime C_OscProject::h_GetTimeOfString(const C_SclString & orc_Str)
    C_SclDateTime c_Retval;
    bool q_Err = true;
 
-   C_SclDynamicArray<C_SclString> c_Dyn;
+   std::vector<C_SclString> c_Dyn;
    orc_Str.Tokenize(". :", c_Dyn);
-   if (c_Dyn.GetLength() == 5)
+   if (c_Dyn.size() == 5)
    {
       try
       {

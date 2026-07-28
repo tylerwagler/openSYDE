@@ -41,9 +41,9 @@ using namespace stw::scl;
 static bool m_FileAgeDosTime(const C_SclString & orc_FileName, uint16_t * const opu16_Date,
                              uint16_t * const opu16_Time);
 static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
-                          C_SclDynamicArray<C_TglFileSearchRecord> & orc_FoundFiles,
+                          std::vector<C_TglFileSearchRecord> & orc_FoundFiles,
                           const bool oq_IncludeDirectories = false,
-                          C_SclDynamicArray<uint8_t> * const opc_IsDirectory = NULL);
+                          std::vector<uint8_t> * const opc_IsDirectory = NULL);
 static bool m_CheckUncShare(const C_SclString & orc_Path);
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
@@ -267,14 +267,14 @@ bool stw::tgl::TglFileExists(const C_SclString & orc_FileName)
 */
 //----------------------------------------------------------------------------------------------------------------------
 static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
-                          C_SclDynamicArray<C_TglFileSearchRecord> & orc_FoundFiles, const bool oq_IncludeDirectories,
-                          C_SclDynamicArray<uint8_t> * const opc_IsDirectory)
+                          std::vector<C_TglFileSearchRecord> & orc_FoundFiles, const bool oq_IncludeDirectories,
+                          std::vector<uint8_t> * const opc_IsDirectory)
 {
    WIN32_FIND_DATAA t_FindFileData;
    HANDLE pv_Find;
    uint8_t u8_IsDirectory;
 
-   orc_FoundFiles.SetLength(0);
+   orc_FoundFiles.clear();
 
    // Find the first file in the directory.
    pv_Find = FindFirstFileA(orc_SearchPattern.c_str(), &t_FindFileData);
@@ -287,12 +287,12 @@ static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
                      static_cast<uint32_t>(FILE_ATTRIBUTE_DIRECTORY)) ? 1U : 0U;
    if ((u8_IsDirectory == 0U) || (oq_IncludeDirectories == true))
    {
-      orc_FoundFiles.IncLength();
-      orc_FoundFiles[orc_FoundFiles.GetHigh()].c_FileName = t_FindFileData.cFileName;
+      orc_FoundFiles.emplace_back();
+      orc_FoundFiles.back().c_FileName = t_FindFileData.cFileName;
       if (opc_IsDirectory != NULL)
       {
-         opc_IsDirectory->IncLength();
-         (*opc_IsDirectory)[opc_IsDirectory->GetHigh()] = u8_IsDirectory;
+         opc_IsDirectory->emplace_back();
+         opc_IsDirectory->back() = u8_IsDirectory;
       }
    }
 
@@ -302,17 +302,17 @@ static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
                         static_cast<uint32_t>(FILE_ATTRIBUTE_DIRECTORY)) ? 1U : 0U;
       if ((u8_IsDirectory == 0U) || (oq_IncludeDirectories == true))
       {
-         orc_FoundFiles.IncLength();
-         orc_FoundFiles[orc_FoundFiles.GetHigh()].c_FileName = t_FindFileData.cFileName;
+         orc_FoundFiles.emplace_back();
+         orc_FoundFiles.back().c_FileName = t_FindFileData.cFileName;
          if (opc_IsDirectory != NULL)
          {
-            opc_IsDirectory->IncLength();
-            (*opc_IsDirectory)[opc_IsDirectory->GetHigh()] = u8_IsDirectory;
+            opc_IsDirectory->emplace_back();
+            opc_IsDirectory->back() = u8_IsDirectory;
          }
       }
    }
    (void)FindClose(pv_Find);
-   return (orc_FoundFiles.GetLength() > 0) ? C_NO_ERR : C_NOACT;
+   return (orc_FoundFiles.size() > 0) ? C_NO_ERR : C_NOACT;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -331,7 +331,7 @@ static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t stw::tgl::TglFileFind(const C_SclString & orc_SearchPattern,
-                              C_SclDynamicArray<C_TglFileSearchRecord> & orc_FoundFiles)
+                              std::vector<C_TglFileSearchRecord> & orc_FoundFiles)
 {
    return m_FileFind(orc_SearchPattern, orc_FoundFiles);
 }
@@ -576,8 +576,8 @@ int32_t stw::tgl::TglRemoveDirectory(const C_SclString & orc_Directory, const bo
    int32_t s32_Return;
    uint32_t u32_Index;
 
-   C_SclDynamicArray<C_TglFileSearchRecord> c_Files;
-   C_SclDynamicArray<uint8_t> c_IsDirectory;
+   std::vector<C_TglFileSearchRecord> c_Files;
+   std::vector<uint8_t> c_IsDirectory;
 
    c_Pattern = orc_Directory + "\\*.*";
 
@@ -588,7 +588,7 @@ int32_t stw::tgl::TglRemoveDirectory(const C_SclString & orc_Directory, const bo
    }
    else
    {
-      for (u32_Index = 0U; u32_Index < static_cast<uint32_t>(c_Files.GetLength()); u32_Index++)
+      for (u32_Index = 0U; u32_Index < static_cast<uint32_t>(c_Files.size()); u32_Index++)
       {
          //delete content of directory
          if ((c_Files[u32_Index].c_FileName != ".") && (c_Files[u32_Index].c_FileName != "..")) //ignore "." and ".."

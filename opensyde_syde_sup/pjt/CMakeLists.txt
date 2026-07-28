@@ -67,7 +67,6 @@ set(SYDESUP_LINUX_LIB_SOURCES
 # for Linux shared library only:
 set(SYDESUP_API_HEADERS
    ${PROJECT_ROOT}/../libraries/opensyde_core/scl/C_SclString.hpp
-   ${PROJECT_ROOT}/../libraries/opensyde_core/scl/C_SclDynamicArray.hpp
    ${PROJECT_ROOT}/src/C_SydeSup.hpp
    ${PROJECT_ROOT}/src/C_SydeSupLinux.hpp
 )

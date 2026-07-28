@@ -147,7 +147,6 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclIniFile.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclString.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclStringList.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclDynamicArray.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/stwerrors.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/stwerrors.h
    ${CMAKE_CURRENT_SOURCE_DIR}/stwtypes/stwtypes.hpp

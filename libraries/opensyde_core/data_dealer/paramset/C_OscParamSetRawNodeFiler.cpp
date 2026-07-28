@@ -235,10 +235,10 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
       if (orc_XmlParser.SelectNodeChild("value") == "value")
       {
          const C_SclString c_Content = orc_XmlParser.GetNodeContent();
-         C_SclDynamicArray<C_SclString> c_Tokens;
+         std::vector<C_SclString> c_Tokens;
          c_Content.Tokenize(";", c_Tokens);
-         orc_Entry.c_Bytes.reserve(c_Tokens.GetLength());
-         for (int32_t s32_It = 0; (s32_It < c_Tokens.GetLength()) && (s32_Retval == C_NO_ERR); ++s32_It)
+         orc_Entry.c_Bytes.reserve(c_Tokens.size());
+         for (int32_t s32_It = 0; (s32_It < c_Tokens.size()) && (s32_Retval == C_NO_ERR); ++s32_It)
          {
             const C_SclString & rc_Token = c_Tokens[s32_It];
             try

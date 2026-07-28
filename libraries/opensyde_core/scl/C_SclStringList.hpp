@@ -26,7 +26,7 @@
 #define C_SCLSTRINGLISTHPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclDynamicArray.hpp"
+#include <vector>
 #include "C_SclString.hpp"
 #include "stwtypes.hpp"
 
@@ -66,7 +66,7 @@ public:
 
    void Sort(void);
 
-   C_SclDynamicArray<C_SclString> Strings; ///< actual strings
+   std::vector<C_SclString> Strings; ///< actual strings
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

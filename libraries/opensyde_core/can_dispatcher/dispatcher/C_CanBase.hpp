@@ -15,8 +15,6 @@
 #include "stwtypes.hpp"
 #include "stw_can.hpp"
 
-#include "C_SclDynamicArray.hpp"
-
 namespace stw
 {
 namespace can

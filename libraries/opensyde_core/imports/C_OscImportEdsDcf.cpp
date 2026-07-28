@@ -1567,12 +1567,12 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const C_SclString & orc_CoValue, c
       c_LowerCaseNoWhiteSpaceNumber = c_LowerCaseNoWhiteSpaceNumber.LowerCase();
       if (c_LowerCaseNoWhiteSpaceNumber.Length() > 0)
       {
-         C_SclDynamicArray<C_SclString> c_Tokens;
+         std::vector<C_SclString> c_Tokens;
          c_LowerCaseNoWhiteSpaceNumber.Tokenize("+", c_Tokens);
-         if (c_Tokens.GetLength() > 0L)
+         if (c_Tokens.size() > 0UL)
          {
             for (uint32_t u32_ItToken = 0;
-                 (u32_ItToken < static_cast<uint32_t>(c_Tokens.GetLength())) && (s32_Retval == C_NO_ERR);
+                 (u32_ItToken < static_cast<uint32_t>(c_Tokens.size())) && (s32_Retval == C_NO_ERR);
                  ++u32_ItToken)
             {
                const C_SclString & rc_CurToken = c_Tokens[u32_ItToken];

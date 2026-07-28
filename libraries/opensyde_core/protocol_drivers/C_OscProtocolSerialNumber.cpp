@@ -374,13 +374,13 @@ bool C_OscProtocolSerialNumber::h_SerialNumberFromStringToArray(const C_SclStrin
    //format up to and including 2019. E.g: 05.123456.1001
    if (orc_SerialNumber.Length() == 14)
    {
-      C_SclDynamicArray<C_SclString> c_Tokens;
+      std::vector<C_SclString> c_Tokens;
       //Get all numbers
       orc_SerialNumber.Tokenize(".", c_Tokens);
-      if (c_Tokens.GetLength() == 3)
+      if (c_Tokens.size() == 3)
       {
          //Combine all numbers
-         for (uint32_t u32_ItCounter = 0U; u32_ItCounter < static_cast<uint32_t>(c_Tokens.GetLength()); ++u32_ItCounter)
+         for (uint32_t u32_ItCounter = 0U; u32_ItCounter < static_cast<uint32_t>(c_Tokens.size()); ++u32_ItCounter)
          {
             c_CompleteString += c_Tokens[u32_ItCounter];
          }

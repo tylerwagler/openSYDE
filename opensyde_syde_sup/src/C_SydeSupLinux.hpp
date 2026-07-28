@@ -49,7 +49,7 @@ private:
    bool mq_UpdateTaskRunning = false;
    E_Result me_UpdateTaskResult;
    uint8_t mu8_UpdateProgress = 0U;
-   stw::scl::C_SclDynamicArray<stw::scl::C_SclString> mac_UpdateInfo;
+   std::vector<stw::scl::C_SclString> mac_UpdateInfo;
    uint32_t mu32_InfoIndex = 0U;
 
    static void * mh_UpdateTask(void * const opv_Arg);

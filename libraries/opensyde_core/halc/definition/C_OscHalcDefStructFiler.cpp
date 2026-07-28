@@ -1448,9 +1448,9 @@ int32_t C_OscHalcDefStructFiler::mh_ParseAttributeAvailability(std::vector<uint3
    }
    else
    {
-      C_SclDynamicArray<C_SclString> c_SplittedString;
+      std::vector<C_SclString> c_SplittedString;
       orc_AttributeContent.Tokenize(",", c_SplittedString);
-      for (int32_t s32_ItSplit = 0L; s32_ItSplit < c_SplittedString.GetLength(); ++s32_ItSplit)
+      for (int32_t s32_ItSplit = 0L; s32_ItSplit < c_SplittedString.size(); ++s32_ItSplit)
       {
          const C_SclString c_CurSplit = c_SplittedString[s32_ItSplit].Trim();
          bool q_Found = false;

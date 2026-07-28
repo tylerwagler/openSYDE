@@ -244,7 +244,7 @@ void C_SyvUpPacHexFileView::mh_AddDataInformation(C_OscHexFile & orc_HexFile, QS
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexFile, QString & orc_Content)
 {
-   C_SclDynamicArray<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
+   std::vector<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
    orc_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
    orc_Content += "<h3>" + static_cast<QString>("File Information Blocks") + "</h3>";
    orc_Content += "<table>";

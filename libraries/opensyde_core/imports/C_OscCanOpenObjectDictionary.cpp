@@ -55,7 +55,7 @@ public:
    {
    }
 
-   C_SclDynamicArray<C_SclIniSection> & GetIniSections()
+   std::vector<C_SclIniSection> & GetIniSections()
    {
       //lint -e{1536}  //provide direct access to sections; alternative would require some refactoring
       // and break the existing API
@@ -212,7 +212,7 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
       C_EdsFile c_IniFile(orc_File);
 
       //go through all sections and set up c_Objects
-      C_SclDynamicArray<C_SclIniSection> & rc_Sections = c_IniFile.GetIniSections();
+      std::vector<C_SclIniSection> & rc_Sections = c_IniFile.GetIniSections();
 
       for (int32_t s32_Section = 0U; s32_Section < rc_Sections.GetLength(); s32_Section++)
       {
@@ -435,7 +435,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
    orc_Object.u8_DataType = C_OscCanOpenObjectData::hu8_DATA_TYPE_DOMAIN; //optional for "DOMAIN" objects
    orc_Object.q_IsMappableIntoPdo = false;
 
-   C_SclDynamicArray<C_SclIniKey> & rc_Keys = orc_Section.c_Keys;
+   std::vector<C_SclIniKey> & rc_Keys = orc_Section.c_Keys;
    for (int32_t s32_Key = 0; s32_Key < rc_Keys.GetLength(); s32_Key++)
    {
       const C_SclString c_KeyUpperCase = rc_Keys[s32_Key].c_Key.UpperCase();

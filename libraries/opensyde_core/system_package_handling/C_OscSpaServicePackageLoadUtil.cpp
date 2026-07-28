@@ -150,7 +150,7 @@ int32_t C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(const stw::scl::C_Sc
 {
    int32_t s32_Return = C_NO_ERR;
 
-   stw::scl::C_SclDynamicArray<C_TglFileSearchRecord> c_Files; //storage for found files
+   std::vector<C_TglFileSearchRecord> c_Files; //storage for found files
 
    for (uint32_t u32_It = 0; u32_It < orc_NecessaryFiles.size(); ++u32_It)
    {

@@ -39,10 +39,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <string>
+#include <vector>
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
 #include "C_SclStringList.hpp"
-#include "C_SclDynamicArray.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -94,7 +94,7 @@ public:
 
    C_SclString c_Name;                    ///< name (text within "[""]")
    C_SclString c_Comment;                 ///< comment preceding the section
-   C_SclDynamicArray<C_SclIniKey> c_Keys; ///< key/value pairs contained in this section
+   std::vector<C_SclIniKey> c_Keys; ///< key/value pairs contained in this section
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ protected:
    // exist. Section is created with no keys.
    C_SclIniSection * m_CreateSection(const C_SclString & orc_Section);
 
-   C_SclDynamicArray<C_SclIniSection> mc_Sections; ///< Our list of sections
+   std::vector<C_SclIniSection> mc_Sections; ///< Our list of sections
    bool mq_Dirty;                                  ///< Tracks whether or not data has changed.
    int32_t ms32_PreviousSectionIndex;              ///< for speeding up searching for a section
 

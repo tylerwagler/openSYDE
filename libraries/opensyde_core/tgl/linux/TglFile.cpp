@@ -189,14 +189,14 @@ bool stw::tgl::TglFileExists(const C_SclString & orc_FileName)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t stw::tgl::TglFileFind(const C_SclString & orc_SearchPattern,
-                              C_SclDynamicArray<C_TglFileSearchRecord> & orc_FoundFiles)
+                              std::vector<C_TglFileSearchRecord> & orc_FoundFiles)
 {
    int32_t s32_Error = C_CONFIG;
    DIR * pc_Dir;
    struct dirent * pc_Entry;
    const C_SclString c_Path = TglExtractFilePath(orc_SearchPattern);
 
-   orc_FoundFiles.SetLength(0);
+   orc_FoundFiles.clear();
 
    pc_Dir = opendir(c_Path.c_str());
    if (pc_Dir != NULL)
@@ -211,8 +211,8 @@ int32_t stw::tgl::TglFileFind(const C_SclString & orc_SearchPattern,
             //lint -e{9130} //API defined by library
             if (fnmatch(c_Pattern.c_str(), pc_Entry->d_name, FNM_PATHNAME | FNM_NOESCAPE) == 0)
             {
-               orc_FoundFiles.IncLength();
-               orc_FoundFiles[orc_FoundFiles.GetHigh()].c_FileName = pc_Entry->d_name;
+               orc_FoundFiles.emplace_back();
+               orc_FoundFiles.back().c_FileName = pc_Entry->d_name;
                s32_Error = C_NO_ERR;
             }
          }

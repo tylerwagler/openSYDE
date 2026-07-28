@@ -1125,11 +1125,11 @@ bool C_SdNdeDalTriggerCheckHelper::mh_TranslateDataElementStringToId(const C_Scl
    bool q_IsValid = false;
 
    std::vector<std::string> c_ChannelComponents;
-   C_SclDynamicArray<C_SclString> c_Tokens;
+   std::vector<C_SclString> c_Tokens;
 
    orc_Element.Tokenize(".", c_Tokens);
-   c_ChannelComponents.reserve(c_Tokens.GetLength());
-   for (int32_t s32_It = 0L; s32_It < c_Tokens.GetLength(); ++s32_It)
+   c_ChannelComponents.reserve(c_Tokens.size());
+   for (int32_t s32_It = 0L; s32_It < static_cast<int32_t>(c_Tokens.size()); ++s32_It)
    {
       c_ChannelComponents.emplace_back(c_Tokens[s32_It].c_str());
    }

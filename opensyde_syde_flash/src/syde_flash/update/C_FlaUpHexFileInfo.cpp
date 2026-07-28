@@ -60,7 +60,7 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
    C_OscHexFile c_HexFile;
    uint32_t u32_Result;
 
-   C_SclDynamicArray<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
+   std::vector<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
 
    c_BlockInfo.resize(0);
    c_HexFileInfo.s32_NumberOfBlocks = 0;

@@ -50,9 +50,8 @@ using namespace stw::scl;
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_SclStringList::Add(const C_SclString & orc_String)
 {
-   Strings.IncLength();
-   Strings[Strings.GetHigh()] = orc_String;
-   return static_cast<uint32_t>(Strings.GetHigh());
+   Strings.push_back(orc_String);
+   return static_cast<uint32_t>(Strings.size()) - 1U;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -77,7 +76,7 @@ void C_SclStringList::Append(const C_SclString & orc_String)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SclStringList::Clear(void)
 {
-   Strings.SetLength(0);
+   Strings.clear();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -91,7 +90,7 @@ void C_SclStringList::Clear(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SclStringList::Delete(const uint32_t ou32_Index)
 {
-   Strings.Delete(static_cast<int32_t>(ou32_Index));
+   Strings.erase(Strings.begin() + ou32_Index);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -125,7 +124,7 @@ void C_SclStringList::Exchange(const uint32_t ou32_Index1, const uint32_t ou32_I
 //----------------------------------------------------------------------------------------------------------------------
 void C_SclStringList::Insert(const uint32_t ou32_Index, const C_SclString & orc_String)
 {
-   Strings.Insert(static_cast<int32_t>(ou32_Index), orc_String);
+   Strings.insert(Strings.begin() + ou32_Index, orc_String);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -143,7 +142,7 @@ int32_t C_SclStringList::IndexOf(const C_SclString & orc_String)
 {
    int32_t s32_Index;
 
-   for (s32_Index = 0; s32_Index < Strings.GetLength(); s32_Index++)
+   for (s32_Index = 0; s32_Index < static_cast<int32_t>(Strings.size()); s32_Index++)
    {
       if (Strings[s32_Index].AnsiCompareIc(orc_String) == 0)
       {
@@ -170,7 +169,7 @@ C_SclString C_SclStringList::GetText(const C_SclString orc_LineSeparator) const
    C_SclString c_Text;
    int32_t s32_Index;
 
-   for (s32_Index = 0; s32_Index < Strings.GetLength(); s32_Index++)
+   for (s32_Index = 0; s32_Index < static_cast<int32_t>(Strings.size()); s32_Index++)
    {
       c_Text += (Strings[s32_Index] + orc_LineSeparator);
    }
@@ -187,7 +186,7 @@ C_SclString C_SclStringList::GetText(const C_SclString orc_LineSeparator) const
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_SclStringList::GetCount(void) const
 {
-   return static_cast<uint32_t>(Strings.GetLength());
+   return static_cast<uint32_t>(Strings.size());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -214,7 +213,7 @@ void C_SclStringList::LoadFromFile(const C_SclString & orc_FileName)
    uint32_t u32_NumStrings;
    int32_t s32_Len; //2GB file size limit is acceptable
 
-   Strings.SetLength(0);
+   Strings.clear();
    pc_File = std::fopen(orc_FileName.c_str(), "rb");
    if (pc_File == NULL)
    {
@@ -281,15 +280,15 @@ void C_SclStringList::LoadFromFile(const C_SclString & orc_FileName)
    //split into strings:
    try
    {
-      Strings.SetLength(u32_NumStrings);
-   }
-   catch (...)
-   {
-      delete[] pcn_Buffer;
-      throw ("C_SclStringList::LoadFromFile: could not allocate buffer for file");
-   }
+       Strings.resize(u32_NumStrings);
+    }
+    catch (...)
+    {
+       delete[] pcn_Buffer;
+       throw ("C_SclStringList::LoadFromFile: could not allocate buffer for file");
+    }
 
-   x_Index = 0U;
+    x_Index = 0U;
    for (uint32_t u32_Line = 0U; u32_Line < u32_NumStrings; u32_Line++)
    {
       //using the std::string directly improves performance significantly
@@ -335,7 +334,7 @@ void C_SclStringList::SaveToFile(const C_SclString & orc_FileName)
       throw ("C_SclStringList::SaveToFile: could not create file");
    }
 
-   for (s32_Line = 0; s32_Line < Strings.GetLength(); s32_Line++)
+   for (int32_t s32_Line = 0; s32_Line < static_cast<int32_t>(Strings.size()); s32_Line++)
    {
       u32_NumWritten = std::fwrite(Strings[s32_Line].c_str(), 1U, Strings[s32_Line].Length(), pc_File);
       if (u32_NumWritten != Strings[s32_Line].Length())
@@ -377,7 +376,7 @@ C_SclString C_SclStringList::Values(const C_SclString & orc_Key) const
    C_SclString c_Help = "";
    const C_SclString c_Search = orc_Key.UpperCase() + "=";
 
-   for (s32_Index = 0; s32_Index < Strings.GetLength(); s32_Index++)
+   for (s32_Index = 0; s32_Index < static_cast<int32_t>(Strings.size()); s32_Index++)
    {
       //performance boost: first check only first character:
       if (static_cast<char_t>(std::toupper(Strings[s32_Index].c_str()[0])) == (c_Search.c_str()[0]))
@@ -414,7 +413,7 @@ int32_t C_SclStringList::IndexOfName(const C_SclString & orc_Name) const
    C_SclString c_Remainder;
    uint32_t u32_Pos;
 
-   for (s32_Index = 0; s32_Index < Strings.GetLength(); s32_Index++)
+   for (s32_Index = 0; s32_Index < static_cast<int32_t>(Strings.size()); s32_Index++)
    {
       u32_Pos = Strings[s32_Index].UpperCase().Pos(c_Search);
       if (u32_Pos == 1U)
@@ -475,14 +474,11 @@ C_SclString C_SclStringList::ValueFromIndex(const uint32_t ou32_Index) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SclStringList::AddStrings(const C_SclStringList * const opc_Strings)
 {
-   int32_t s32_Index;
-   int32_t s32_OldIndex;
-
-   s32_OldIndex = Strings.GetLength();
-   Strings.IncLength(opc_Strings->Strings.GetLength()); //first increase length (faster than adding one by one)
-   for (s32_Index = 0; s32_Index < opc_Strings->Strings.GetLength(); s32_Index++)
+   const size_t x_OldSize = Strings.size();
+   Strings.resize(Strings.size() + opc_Strings->Strings.size());
+   for (size_t x_Index = 0; x_Index < opc_Strings->Strings.size(); x_Index++)
    {
-      Strings[s32_Index + s32_OldIndex] = opc_Strings->Strings[s32_Index];
+      Strings[x_Index + x_OldSize] = opc_Strings->Strings[x_Index];
    }
 }
 
@@ -498,7 +494,7 @@ void C_SclStringList::Sort(void)
    int32_t s32_Position;
    C_SclString t_Key;
 
-   for (s32_Index = 1; s32_Index < Strings.GetLength(); s32_Index++)
+   for (s32_Index = 1; s32_Index < static_cast<int32_t>(Strings.size()); s32_Index++)
    {
       t_Key = Strings[s32_Index];
       s32_Position = s32_Index - 1;

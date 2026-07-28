@@ -12,8 +12,8 @@
 #define CHEXFILEHPP
 
 #include <cstdio> //for "FILE"
+#include <vector>
 #include "stwtypes.hpp"
-#include "C_SclDynamicArray.hpp"
 
 namespace stw
 {
@@ -57,14 +57,14 @@ class C_HexDataDumpBlock
 {
 public:
    uint32_t u32_AddressOffset;
-   stw::scl::C_SclDynamicArray<uint8_t> au8_Data;
+   std::vector<uint8_t> au8_Data;
 };
 
 ///Array of containers for memory dump data
 class C_HexDataDump
 {
 public:
-   stw::scl::C_SclDynamicArray<C_HexDataDumpBlock> at_Blocks;
+   std::vector<C_HexDataDumpBlock> at_Blocks;
 };
 
 ///Handles reading and writing of hex files

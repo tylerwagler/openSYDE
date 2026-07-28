@@ -15,7 +15,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanBase.hpp"
-#include "C_SclDynamicArray.hpp"
 #include "TglTime.hpp"
 
 //----------------------------------------------------------------------------------------------------------------------

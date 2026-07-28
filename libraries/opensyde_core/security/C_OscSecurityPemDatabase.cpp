@@ -284,7 +284,7 @@ int32_t C_OscSecurityPemDatabase::m_TryAddKey(const C_OscSecurityPemKeyInfo & or
 std::vector<std::string> C_OscSecurityPemDatabase::mh_GetPemFiles(const std::string & orc_FolderPath)
 {
    std::vector<std::string> c_Retval;
-   stw::scl::C_SclDynamicArray<C_TglFileSearchRecord> c_FilesScl;
+   std::vector<C_TglFileSearchRecord> c_FilesScl;
 
    TglFileFind(orc_FolderPath + "*", c_FilesScl);
    for (int32_t s32_It = 0; s32_It < c_FilesScl.GetLength(); ++s32_It)

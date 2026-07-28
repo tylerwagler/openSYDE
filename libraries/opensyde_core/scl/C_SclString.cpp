@@ -1628,7 +1628,7 @@ C_SclString C_SclString::FloatToStr(const float64_t of64_Value, const int32_t os
    \param[out]   orc_TokenizedData    array containing parsed tokens
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclString::Tokenize(const C_SclString & orc_Delimiters, C_SclDynamicArray<C_SclString> & orc_TokenizedData) const
+void C_SclString::Tokenize(const C_SclString & orc_Delimiters, std::vector<C_SclString> & orc_TokenizedData) const
 {
    C_SclString c_Text;
    const std::string * pc_String;
@@ -1638,7 +1638,7 @@ void C_SclString::Tokenize(const C_SclString & orc_Delimiters, C_SclDynamicArray
    std::string::size_type un_Pos = 0U;
 
    pc_String = this->AsStdString();
-   orc_TokenizedData.SetLength(0);
+   orc_TokenizedData.clear();
 
    while (true) //lint !e716  //no problem; we have a clearly defined termination condition
    {
@@ -1651,7 +1651,7 @@ void C_SclString::Tokenize(const C_SclString & orc_Delimiters, C_SclDynamicArray
          break;
       }
 
-      orc_TokenizedData.IncLength(); //might throw bad_alloc
+      orc_TokenizedData.emplace_back(); //might throw bad_alloc
       if (un_DelimPos != std::string::npos)
       {
          if (un_TokenPos != std::string::npos)
@@ -1669,7 +1669,7 @@ void C_SclString::Tokenize(const C_SclString & orc_Delimiters, C_SclDynamicArray
          {
             c_Text = "";
          }
-         orc_TokenizedData[orc_TokenizedData.GetHigh()] = c_Text;
+         orc_TokenizedData.back() = c_Text;
          un_Pos = un_DelimPos + 1U;
       }
       else
@@ -1682,7 +1682,7 @@ void C_SclString::Tokenize(const C_SclString & orc_Delimiters, C_SclDynamicArray
          {
             c_Text = "";
          }
-         orc_TokenizedData[orc_TokenizedData.GetHigh()] = c_Text;
+         orc_TokenizedData.back() = c_Text;
          break; //lint !e1960  //refactoring the code could cause more problems than it solved; no problems known
       }
    }

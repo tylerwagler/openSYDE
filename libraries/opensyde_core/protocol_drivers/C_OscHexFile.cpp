@@ -87,7 +87,7 @@ C_SclString C_OscHexFile::ErrorCodeToErrorText(const uint32_t ou32_ErrorCode) co
    C_NOACT      if oq_ExactAddressMatch: no block found at specified address
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHexFile::GetApplicationInformationBlocks(C_SclDynamicArray<C_OscApplicationInfoBlock> & orc_InfoBlocks,
+int32_t C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscApplicationInfoBlock> & orc_InfoBlocks,
                                                       const uint32_t ou32_SearchStartAddress,
                                                       const bool oq_OnlyOneBlock,
                                                       const bool oq_ExactAddressMatch, const bool oq_Block0Only)
@@ -309,7 +309,7 @@ int32_t C_OscHexFile::ScanDeviceIdFromHexFile(C_SclString & orc_DeviceId)
    int32_t s32_Return;
    C_SclString c_DeviceId = "";
 
-   C_SclDynamicArray<C_OscApplicationInfoBlock> c_InfoBlocks;
+   std::vector<C_OscApplicationInfoBlock> c_InfoBlocks;
    s32_Return = this->GetApplicationInformationBlocks(c_InfoBlocks, 0x0U, false, false, true);
    if ((s32_Return == C_NO_ERR) && (c_InfoBlocks.GetLength() > 0))
    {
@@ -370,7 +370,7 @@ int32_t C_OscHexFile::ScanApplicationInformationBlockFromHexFile(C_OscApplicatio
 {
    int32_t s32_Return;
 
-   C_SclDynamicArray<C_OscApplicationInfoBlock> c_InfoBlocks;
+   std::vector<C_OscApplicationInfoBlock> c_InfoBlocks;
    s32_Return = this->GetApplicationInformationBlocks(c_InfoBlocks, 0x0U, false, false, true);
    tgl_assert(s32_Return == C_NO_ERR); //no plausible reasons documented
 

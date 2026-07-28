@@ -421,10 +421,10 @@ bool C_OscUtils::h_CheckValidFilePath(const C_SclString & orc_String)
    else
    {
       bool q_AtLeastOneOtherChar = false;
-      C_SclDynamicArray<C_SclString> c_SplitStrings;
+      std::vector<C_SclString> c_SplitStrings;
       orc_String.Tokenize("\\/", c_SplitStrings);
 
-      for (int32_t s32_Index = 0U; (s32_Index < c_SplitStrings.GetLength()) && (q_Return == true); s32_Index++)
+      for (int32_t s32_Index = 0U; (s32_Index < static_cast<int32_t>(c_SplitStrings.size())) && (q_Return == true); s32_Index++)
       {
          const C_SclString & rc_Substring = c_SplitStrings[s32_Index];
 

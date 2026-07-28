@@ -794,7 +794,7 @@ int32_t C_OscBuSequences::h_ReadHexFile(const C_SclString & orc_HexFilePath, C_O
    }
    else
    {
-      C_SclDynamicArray<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
+      std::vector<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
       //no return value that can cause trouble for us
       (void)orc_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0, false, false, false);
 

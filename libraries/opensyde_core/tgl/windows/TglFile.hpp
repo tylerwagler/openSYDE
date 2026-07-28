@@ -17,7 +17,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
-#include "C_SclDynamicArray.hpp"
+#include <vector>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -42,7 +42,7 @@ bool TglDirectoryExists(const stw::scl::C_SclString & orc_Path);
 bool TglFileExists(const stw::scl::C_SclString & orc_FileName);
 
 int32_t TglFileFind(const stw::scl::C_SclString & orc_SearchPattern,
-                    stw::scl::C_SclDynamicArray<C_TglFileSearchRecord> & orc_FoundFiles);
+                    std::vector<C_TglFileSearchRecord> & orc_FoundFiles);
 
 stw::scl::C_SclString TglFileIncludeTrailingDelimiter(const stw::scl::C_SclString & orc_Path);
 stw::scl::C_SclString TglExtractFileExtension(const stw::scl::C_SclString & orc_Path);
