@@ -29,7 +29,10 @@ endfunction()
 
 # --- Test suites --------------------------------------------------------------
 
-add_osc_test(test_opensyde_core_checksums  test_checksums.cpp)
-add_osc_test(test_opensyde_core_stwtypes   test_stwtypes.cpp)
-add_osc_test(test_opensyde_core_stwerrors  test_stwerrors.cpp)
-add_osc_test(test_opensyde_core_xml_parser test_xml_parser.cpp)
+add_osc_test(test_opensyde_core_checksums      test_checksums.cpp)
+add_osc_test(test_opensyde_core_stwtypes       test_stwtypes.cpp)
+add_osc_test(test_opensyde_core_stwerrors      test_stwerrors.cpp)
+add_osc_test(test_opensyde_core_xml_parser     test_xml_parser.cpp)
+add_osc_test(test_opensyde_core_dynamic_array  test_dynamic_array.cpp)
+add_osc_test(test_opensyde_core_scl_string     test_scl_string.cpp)
+add_osc_test(test_opensyde_core_logging        test_logging.cpp)

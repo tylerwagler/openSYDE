@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <cstdlib>
+#include <atomic>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -212,7 +213,8 @@ void C_OscLoggingHandler::h_WriteLogPerformance(const uint16_t ou16_TimerId, con
 //----------------------------------------------------------------------------------------------------------------------
 uint16_t C_OscLoggingHandler::h_StartPerformanceTimer(void)
 {
-   const uint16_t u16_Id = static_cast< uint16_t > (rand());
+   static std::atomic<uint16_t> hu16_NextId(0);
+   const uint16_t u16_Id = hu16_NextId.fetch_add(1, std::memory_order_relaxed);
 
    mhc_StartTimes[u16_Id] = stw::tgl::TglGetTickCount();
 

@@ -238,7 +238,7 @@ template <typename T> C_SclString C_SclString::IntToHex(const T orc_Value, const
    C_SclString c_Text;
 
    std::stringstream c_Stream;
-   c_Stream << &std::hex << std::setw(ou32_Digits) << std::setfill('0') << orc_Value;
+   c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Value;
    c_Text.c_String = c_Stream.str();
 
    return c_Text;

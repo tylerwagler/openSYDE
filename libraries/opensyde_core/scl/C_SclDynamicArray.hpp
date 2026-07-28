@@ -19,6 +19,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <stdexcept>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -128,14 +129,7 @@ template <class T> int32_t C_SclDynamicArray<T>::GetLength(void) const
 //lint -e{1960}  false positive in PC-Lint: as an inline function implementation this can be reused
 template <class T> int32_t C_SclDynamicArray<T>::GetHigh(void) const
 {
-   int32_t s32_Return;
-
-   s32_Return = static_cast<int32_t>(mc_Array.size()) - 1;
-   if (s32_Return < 0)
-   {
-      s32_Return = 0;
-   }
-   return s32_Return;
+   return static_cast<int32_t>(mc_Array.size()) - 1;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -245,9 +239,9 @@ template <class T> C_SclDynamicArray<T> & C_SclDynamicArray<T>::operator =(const
 //lint -e{1960}  false positive in PC-Lint: as an inline function implementation this can be reused
 template <class T> void C_SclDynamicArray<T>::Delete(const int32_t os32_Index)
 {
-   if (os32_Index > this->GetHigh())
+   if ((os32_Index < 0) || (os32_Index > this->GetHigh()))
    {
-      throw "C_SclDynamicArray::Delete at Invalid Position !";
+      throw std::out_of_range("C_SclDynamicArray::Delete at Invalid Position");
    }
    typename std::vector<T>::iterator c_Index = mc_Array.begin();
    c_Index += os32_Index;
@@ -270,9 +264,9 @@ template <class T> void C_SclDynamicArray<T>::Delete(const int32_t os32_Index)
 //lint -e{1960}  false positive in PC-Lint: as an inline function implementation this can be reused
 template <class T> void C_SclDynamicArray<T>::Insert(const int32_t os32_Index, const T & orc_Src)
 {
-   if (os32_Index > this->GetLength()) //allow appending ...
+   if ((os32_Index < 0) || (os32_Index > this->GetLength())) //allow appending ...
    {
-      throw "C_SclDynamicArray::Insert at Invalid Position !";
+      throw std::out_of_range("C_SclDynamicArray::Insert at Invalid Position");
    }
    typename std::vector<T>::iterator c_Index = mc_Array.begin();
    c_Index += os32_Index;
