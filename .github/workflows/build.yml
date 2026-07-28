@@ -1,0 +1,93 @@
+# openSYDE CI — Build & Test
+#
+# Builds the opensyde_core library and runs unit tests on Ubuntu with Qt6.
+# Triggered on pushes and pull requests to main branches.
+
+name: Build & Test
+
+on:
+  push:
+    branches: [main, develop, master]
+  pull_request:
+    branches: [main, develop, master]
+  workflow_dispatch: # allow manual trigger
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+  core-library:
+    name: Core Library (Ubuntu ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+        compiler: [g++-12, g++-13]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            cmake ninja-build \
+            ${{ matrix.compiler }} \
+            qt6-base-dev \
+            libgl1-mesa-dev
+
+      - name: Configure CMake (core library tests)
+        run: >
+          cmake
+          -S libraries/opensyde_core
+          -B build/core
+          -G Ninja
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
+          -DOPENSYDE_CORE_BUILD_TESTS=ON
+          -DOPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_COMMON=ON
+          -DOPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_SYSTEM=ON
+          -DOPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_MONITOR=ON
+          -DOPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_BASIC=ON
+          -DOPENSYDE_CORE_SKIP_PROTOCOL_LOGGING=ON
+          -DOPENSYDE_CORE_SKIP_SECURITY=ON
+          -DOPENSYDE_CORE_SKIP_ZIPPING=ON
+          -DOPENSYDE_CORE_SKIP_IMPORTS=ON
+          -DOPENSYDE_CORE_SKIP_CODE_GENERATION=ON
+          -DOPENSYDE_CORE_SKIP_PROJECT_HANDLING=ON
+          -DOPENSYDE_CORE_SKIP_PARAM_SET=ON
+          -DOPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING=ON
+          -DOPENSYDE_CORE_SKIP_X_CONFIG_GENERATION=ON
+          -DOPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION=ON
+
+      - name: Build
+        run: cmake --build build/core -j $(nproc)
+
+      - name: Run unit tests
+        run: ctest --test-dir build/core --output-on-failure -j $(nproc)
+
+  gui-tools:
+    name: GUI Tools (Ubuntu 22.04)
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            cmake ninja-build g++-12 \
+            qt6-base-dev qt6-svg-dev qt6-tools-dev \
+            libgl1-mesa-dev
+
+      - name: Build openSYDE tool (smoke test)
+        run: |
+          ./build.sh -b Debug opensyde

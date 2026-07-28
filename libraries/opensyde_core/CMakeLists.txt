@@ -980,3 +980,24 @@ set_source_files_properties(${OPENSYDE_CORE_C_SOURCES} PROPERTIES SKIP_PRECOMPIL
 if(NOT OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_COMMON)
    target_link_libraries(opensyde_core PUBLIC CanLibraries::can)
 endif()
+
+# --- Tests (optional, off by default) ----------------------------------------------------------------
+option(OPENSYDE_CORE_BUILD_TESTS "Build openSYDE core unit tests" OFF)
+
+if(OPENSYDE_CORE_BUILD_TESTS)
+   enable_testing()
+   include(FetchContent)
+   FetchContent_Declare(
+     googletest
+     GIT_REPOSITORY https://github.com/google/googletest.git
+     GIT_TAG        v1.15.2
+   )
+   # GoogleTest's CMake interferes with our AUTOMOC/AUTOUIC settings if any are set in the
+   # including project; we only need the GTest targets, so suppress its install/test/example targets.
+   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+   set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+   set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
+   FetchContent_MakeAvailable(googletest)
+
+   add_subdirectory(tests)
+endif()
