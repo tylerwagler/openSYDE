@@ -575,7 +575,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChart(C_PuiSvDbTabChart & orc_Widget, C
          // Size shall be identical
          uint32_t u32_Counter;
 
-         for (u32_Counter = orc_Widget.c_DataPoolElementsColorIndex.size();
+         for (u32_Counter = static_cast<uint32_t>(orc_Widget.c_DataPoolElementsColorIndex.size());
               u32_Counter < orc_Widget.c_DataPoolElementsConfig.size(); ++u32_Counter)
          {
             orc_Widget.c_DataPoolElementsColorIndex.push_back(static_cast<uint8_t>(u32_Counter));
@@ -865,7 +865,7 @@ void C_PuiSvDashboardFiler::mh_LoadParamColumnPositionIndices(std::vector<int32_
             }
             else
             {
-               s32_Index = orc_Items.size();
+               s32_Index = static_cast<int32_t>(orc_Items.size());
             }
             orc_Items.push_back(s32_Index);
             //Next

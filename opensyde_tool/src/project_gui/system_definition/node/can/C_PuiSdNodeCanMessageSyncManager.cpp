@@ -240,7 +240,7 @@ uint32_t C_PuiSdNodeCanMessageSyncManager::GetUniqueMessageCount(const C_OscCanP
 
          if (pc_Message != NULL)
          {
-            *opu32_SignalCount += pc_Message->c_Signals.size();
+            *opu32_SignalCount += static_cast<uint32_t>(pc_Message->c_Signals.size());
          }
       }
    }
@@ -708,7 +708,8 @@ int32_t C_PuiSdNodeCanMessageSyncManager::AddCanMessage(const uint32_t & oru32_N
    {
       const std::vector<C_OscCanMessage> & rc_Messages = pc_MessageContainer->GetMessagesConst(orq_MessageIsTx);
       const C_OscCanMessageIdentificationIndices c_MessageId(oru32_NodeIndex, ore_ComType, oru32_InterfaceIndex,
-                                                             oru32_DatapoolIndex, orq_MessageIsTx, rc_Messages.size());
+                                                             oru32_DatapoolIndex, orq_MessageIsTx,
+                                                             static_cast<uint32_t>(rc_Messages.size()));
       s32_Retval = this->InsertCanMessage(c_MessageId, orc_Message,
                                           orc_OscSignalCommons,
                                           orc_UiSignalCommons, orc_UiMessage);
@@ -812,7 +813,7 @@ int32_t C_PuiSdNodeCanMessageSyncManager::ChangeCanMessageTx(const C_OscCanMessa
    if (pc_MessageContainer != NULL)
    {
       const std::vector<C_OscCanMessage> & rc_Messages = pc_MessageContainer->GetMessagesConst(true);
-      const uint32_t u32_MessageIndex = rc_Messages.size();
+      const uint32_t u32_MessageIndex = static_cast<uint32_t>(rc_Messages.size());
       const C_OscCanMessageIdentificationIndices c_NewId(oru32_NodeIndex, orc_MessageId.e_ComProtocol,
                                                          oru32_InterfaceIndex, ou32_DatapoolIndex, true,
                                                          u32_MessageIndex);
@@ -927,7 +928,7 @@ int32_t C_PuiSdNodeCanMessageSyncManager::AddCanMessageRx(const C_OscCanMessageI
    if (pc_MessageContainer != NULL)
    {
       const std::vector<C_OscCanMessage> & rc_Messages = pc_MessageContainer->GetMessagesConst(false);
-      const uint32_t u32_MessageIndex = rc_Messages.size();
+      const uint32_t u32_MessageIndex = static_cast<uint32_t>(rc_Messages.size());
       const C_OscCanMessageIdentificationIndices c_NewId(ou32_NodeIndex, orc_MessageId.e_ComProtocol,
                                                          ou32_InterfaceIndex, ou32_DatapoolIndex, false,
                                                          u32_MessageIndex);
@@ -2675,13 +2676,13 @@ std::vector<C_OscCanMessageIdentificationIndices> C_PuiSdNodeCanMessageSyncManag
 void C_PuiSdNodeCanMessageSyncManager::mh_Append(const std::vector<C_OscCanMessageIdentificationIndices> & orc_Input,
                                                  std::vector<C_OscCanMessageIdentificationIndices> & orc_Output)
 {
-   const uint32_t u32_PreviousEnd = orc_Output.size();
+   const uint32_t u32_PreviousEnd = static_cast<uint32_t>(orc_Output.size());
 
    orc_Output.resize(orc_Output.size() + orc_Input.size());
    for (uint32_t u32_ItInput = 0; u32_ItInput < orc_Input.size(); ++u32_ItInput)
    {
-      orc_Output[static_cast<std::vector< C_OscCanMessageIdentificationIndices>::size_type >
-                 (u32_PreviousEnd + u32_ItInput)] = orc_Input[u32_ItInput];
+      orc_Output[static_cast<std::vector<C_OscCanMessageIdentificationIndices>::size_type>
+                 (u32_PreviousEnd) + u32_ItInput] = orc_Input[u32_ItInput];
    }
 }
 

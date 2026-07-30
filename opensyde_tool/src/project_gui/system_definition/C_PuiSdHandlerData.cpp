@@ -91,6 +91,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
          }
          if (s32_Return == C_NO_ERR)
          {
+            this->mc_CoreDefinition.SetLastLoadedFilePath(orc_Path);
             if ((u16_FileVersion == 1U) || (u16_FileVersion == 2U))
             {
                //Deprecated version: reuse same XML parser

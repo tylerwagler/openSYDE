@@ -673,7 +673,7 @@ void C_SdBueMlvSignalManager::m_UpdateItemConfiguration(void)
       uint16_t u16_BitPosition;
       uint16_t u16_ByteRow;
 
-      if ((s32_Counter + 1) <= this->mc_VecSignalItems.size())
+      if ((s32_Counter + 1) <= static_cast<int32_t>(this->mc_VecSignalItems.size()))
       {
          // reuse item
          pc_Item = this->mc_VecSignalItems[s32_Counter];

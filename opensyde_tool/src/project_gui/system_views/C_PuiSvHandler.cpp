@@ -1497,7 +1497,8 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationParamInfoContent(const uint32_t 
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvHandler::AddView(const C_PuiSvData & orc_View, const bool oq_AutoAdaptName, const bool oq_AutoAdaptContent)
 {
-   tgl_assert(this->InsertView(this->mc_Views.size(), orc_View, oq_AutoAdaptName, oq_AutoAdaptContent) == C_NO_ERR);
+   tgl_assert(this->InsertView(static_cast<uint32_t>(this->mc_Views.size()),
+                               orc_View, oq_AutoAdaptName, oq_AutoAdaptContent) == C_NO_ERR);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

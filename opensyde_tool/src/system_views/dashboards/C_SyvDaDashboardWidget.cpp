@@ -294,7 +294,7 @@ void C_SyvDaDashboardWidget::HandleManualOperationFinished(const int32_t os32_Re
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardWidget::SetFocus(void) const
 {
-   this->mpc_Content->setFocus();
+   this->mpc_Content->SetFocus();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

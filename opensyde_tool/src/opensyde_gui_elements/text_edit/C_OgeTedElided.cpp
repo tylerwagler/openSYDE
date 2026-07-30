@@ -102,9 +102,9 @@ void C_OgeTedElided::paintEvent(QPaintEvent * const opc_Event)
                else
                {
                   // update the original string
-                  if ((s32_Counter + 1) < c_Content.length())
+                  if ((s32_Counter + 1) < static_cast<int32_t>(c_Content.length()))
                   {
-                     c_Content = c_Content.mid(s32_Counter + 1);
+                     c_Content = c_Content.mid(static_cast<qsizetype>(s32_Counter) + 1);
                   }
                   else
                   {

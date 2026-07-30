@@ -444,7 +444,6 @@ void C_SyvUpInformationWidget::InitUpdatePackage(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpInformationWidget::UpdateProgress(const uint16_t ou16_Progress100, const bool oq_Finished)
 {
-   // TODO BAY: Handle PEM files
    if (oq_Finished == false)
    {
       uint16_t u16_ActualProgress = 0;

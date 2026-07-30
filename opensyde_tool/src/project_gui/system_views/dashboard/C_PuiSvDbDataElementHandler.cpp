@@ -698,7 +698,8 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
       this->mc_CriticalSection.Acquire();
       if (this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() > 0)
       {
-         const int32_t s32_LastIndex = this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() - 1;
+         const int32_t s32_LastIndex =
+            static_cast<int32_t>(this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size()) - 1;
          const uint32_t u32_ArrayIndex = c_Id.GetArrayElementIndexOrZero();
 
          orc_ScaledValue = this->mc_UsedConfig[ou32_WidgetDataPoolElementIndex].GetSingleValueContentFormatted(
@@ -760,7 +761,8 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
       this->mc_CriticalSection.Acquire();
       if (this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() > 0)
       {
-         const int32_t s32_LastIndex = this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() - 1;
+         const int32_t s32_LastIndex =
+            static_cast<int32_t>(this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size()) - 1;
 
          // Get the newest value(s)
          orc_ScaledValues = this->mc_UsedConfig[ou32_WidgetDataPoolElementIndex].GetValuesContentFormatted(
@@ -817,7 +819,8 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
       this->mc_CriticalSection.Acquire();
       if (this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() > 0)
       {
-         const int32_t s32_LastIndex = this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() - 1;
+         const int32_t s32_LastIndex =
+            static_cast<int32_t>(this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size()) - 1;
          float64_t f64_Temp;
 
          // Get the newest value
@@ -888,7 +891,8 @@ int32_t C_PuiSvDbDataElementHandler::m_GetAllValues(const uint32_t ou32_WidgetDa
          uint32_t u32_Counter = 0U;
          QList<C_PuiSvDbDataElementContent>::const_iterator c_ItItem;
          const uint32_t u32_ArrayIndex = c_Id.GetArrayElementIndexOrZero();
-         const int32_t s32_LastIndex = this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() - 1;
+         const int32_t s32_LastIndex =
+            static_cast<int32_t>(this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size()) - 1;
 
          // Copy all values and scale the values
          orc_ScaledValues.resize(this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size());

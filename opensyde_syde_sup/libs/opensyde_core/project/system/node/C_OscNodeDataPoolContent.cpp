@@ -2930,23 +2930,32 @@ bool C_OscNodeDataPoolContent::CompareArrayGreater(const C_OscNodeDataPoolConten
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get all value as scaled string
 
-   Info: - floats doubles and any scaled value will be displayed in exponential format with 6 digits precision,
-           e.g. 2.45823e+06
-         - The postfix e+01 will be skipped (if the number has less than 6 digits)
-         - The last digit will get rounded if necessary
+   If scaling factor is != 1.0 or scaling offset is != 0.0, the value will be scaled and returned as string.
+   Otherwise, the value will be returned as string without scaling.
+
+   String formats for non-integer values:
+   * float32, float64 and any scaled value will be displayed in exponential format with 6 digits precision,
+      e.g. 2.45823e+06 (this is the default output of std::stringstream for float values)
+   * The postfix e+01 will be skipped (if the number has less than 6 digits)
+   * The last digit will get rounded if necessary
+
+   Special option for unscaled float32/float64:
+   * If oq_MaxFloatPrecision is set to true, the value will be displayed with the maximum precision of the type
+      (9 digits for float32 and 17 digits for float64) and without exponential format if possible.
 
    \param[in]   of64_Factor               Scaling factor
    \param[in]   of64_Offset               Scaling offset
    \param[out]  orc_Output                Scaled string
    \param[in]   ou32_Index                Index to use in case of array
-   \param[in]   oq_AllowRangeAdaptation   Allow range adaptation
-   \param[in]   oq_AllowSpecialHandling   Allow special handling
+   \param[in]   oq_AllowRangeAdaptation   Allow range adaptation (applied after scaling to limit float values to
+                                           min/max to prevent INF/NAN)
+   \param[in]   oq_MaxFloatPrecision      Use maximum float precision for unscaled float32/float64 values
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Factor, const float64_t of64_Offset,
                                                       std::string & orc_Output, const uint32_t ou32_Index,
                                                       const bool oq_AllowRangeAdaptation,
-                                                      const bool oq_AllowSpecialHandling) const
+                                                      const bool oq_MaxFloatPrecision) const
 {
    std::stringstream c_Stream;
 
@@ -2988,10 +2997,10 @@ void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Facto
             c_Stream << this->GetValueS64();
             break;
          case C_OscNodeDataPoolContent::eFLOAT32:
-            if (oq_AllowSpecialHandling == true)
+            if (oq_MaxFloatPrecision == true)
             {
                C_SclString c_Precison;
-               c_Precison.PrintFormatted("%.9g", this->GetValueF32());
+               c_Precison.PrintFormatted("%.9g", static_cast<float64_t>(this->GetValueF32()));
                c_Stream << c_Precison.c_str();
             }
             else
@@ -3000,7 +3009,7 @@ void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Facto
             }
             break;
          case C_OscNodeDataPoolContent::eFLOAT64:
-            if (oq_AllowSpecialHandling == true)
+            if (oq_MaxFloatPrecision == true)
             {
                C_SclString c_Precison;
                c_Precison.PrintFormatted("%.17g", this->GetValueF64());

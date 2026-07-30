@@ -1,0 +1,20 @@
+#include <windows.h>
+#include "version_config.hpp"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     PROJECT_VERSION_MAJOR,PROJECT_VERSION_MINOR,PROJECT_VERSION_RELEASE,0
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",        "Sensor-Technik Wiedemann GmbH\0"
+            VALUE "FileDescription",    "osy_crypto_agent\n"
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END

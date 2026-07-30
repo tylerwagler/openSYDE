@@ -43,7 +43,9 @@
 #include "C_Uti.hpp"
 #include "C_NagToolTip.hpp"
 #include "C_PopUtil.hpp"
+#include "C_PuiUtil.hpp"
 #include "C_TblTreDataElementModel.hpp"
+#include "C_OscCryptoAgentAccessUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
@@ -111,6 +113,7 @@ C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
    stw::opensyde_core::C_OscSystemDefinition::hc_Devices.LoadFromFile(
       C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString().c_str(), false, NULL);
 
+   C_PuiUtil::h_ChangeRelativePathsInUserDevicesIniToDevicesFolder();
    //lint -e{1938}  static const is guaranteed preinitialized before main
    stw::opensyde_core::C_OscSystemDefinition::hc_Devices.LoadFromFile(
       C_Uti::h_GetAbsolutePathFromExe("../devices/user_devices.ini").toStdString().c_str(), true, NULL);
@@ -175,6 +178,11 @@ C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
 
    // Performance time measurement
    C_OscLoggingHandler::h_SetMeasurePerformanceActive(C_UsHandler::h_GetInstance()->GetPerformanceActive());
+
+   // Crypto agent
+   C_OscCryptoAgentAccessUtil::h_SetCryptoAgentSettings(
+      C_UsHandler::h_GetInstance()->GetToolSettings().GetCryptoAgentSettings());
+   this->mc_CryptoAgentStarterThread.start();
 
    //Drag & drop of *.syde files
    this->setAcceptDrops(true);
@@ -535,6 +543,13 @@ void C_NagMainWindow::closeEvent(QCloseEvent * const opc_Event)
       C_UsHandler::h_GetInstance()->SetProjLastScreenMode(this->ms32_SdSubMode, this->mu32_SdIndex, this->mu32_SdFlag,
                                                           this->ms32_SvSubMode, this->mu32_SvIndex, this->mu32_SvFlag);
       C_UsHandler::h_GetInstance()->SetProjLastMode(this->ms32_Mode);
+      // Crypto agent
+      for (uint32_t u32_CurTime = 0UL; (u32_CurTime < 100UL) && (!this->mc_CryptoAgentStarterThread.isFinished());
+           ++u32_CurTime)
+      {
+         TglSleep(100);
+      }
+      C_OscCryptoAgentAccessUtil::h_HandleCryptoAgentAutostop();
       QMainWindow::closeEvent(opc_Event);
    }
 }
@@ -989,7 +1004,8 @@ void C_NagMainWindow::m_SaveScreenProperties(void) const
    C_UsHandler::h_GetInstance()->SetScreenPos(this->normalGeometry().topLeft());
    C_UsHandler::h_GetInstance()->SetAppSize(this->normalGeometry().size());
    C_UsHandler::h_GetInstance()->SetAppMaximized(this->isMaximized());
-   C_UsHandler::h_GetInstance()->SetAppScreenIndex(QGuiApplication::screens().indexOf(this->screen()));
+   C_UsHandler::h_GetInstance()->SetAppScreenIndex(
+      static_cast<uint32_t>(QGuiApplication::screens().indexOf(this->screen())));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

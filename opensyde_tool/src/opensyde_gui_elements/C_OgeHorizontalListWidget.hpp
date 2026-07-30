@@ -43,8 +43,6 @@ public:
    static bool h_CheckValidMoveAction(const int32_t os32_StartIndex, const int32_t os32_EndIndex,
                                       const QListWidget & orc_Widget);
 
-   void dropEvent(QDropEvent * const opc_Event) override;
-
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
 Q_SIGNALS:
@@ -52,6 +50,7 @@ Q_SIGNALS:
    void SigListChanged(void);
 
 protected:
+   void dropEvent(QDropEvent * const opc_Event) override;
    void startDrag(const Qt::DropActions oc_SupportedActions) override;
    void dragMoveEvent(QDragMoveEvent * const opc_Event) override;
    void dragLeaveEvent(QDragLeaveEvent * const opc_Event) override;

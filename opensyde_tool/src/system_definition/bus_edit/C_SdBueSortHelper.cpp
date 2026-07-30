@@ -231,7 +231,7 @@ int32_t C_SdBueSortHelper::h_SortOneMessageVector(std::vector<C_OscCanMessage> &
          {
             const C_OscCanMessage & rc_CurrentMessage = orc_OscMessages[u32_ItMessagePair];
             const C_OscCanMessage & rc_NextMessage =
-               orc_OscMessages[static_cast<std::vector< C_OscCanMessage>::size_type > (u32_ItMessagePair + 1UL)];
+               orc_OscMessages[static_cast<std::vector< C_OscCanMessage>::size_type > (u32_ItMessagePair) + 1UL];
             //Compare
             if ((h_CompareString(rc_CurrentMessage.c_Name, rc_NextMessage.c_Name) == false) &&
                 (rc_CurrentMessage.c_Name != rc_NextMessage.c_Name))
@@ -267,7 +267,7 @@ bool C_SdBueSortHelper::mh_CheckMessagesSorted(const std::vector<C_OscCanMessage
       {
          const C_OscCanMessage & rc_CurrentMessage = orc_OscMessages[u32_ItMessagePair];
          const C_OscCanMessage & rc_NextMessage =
-            orc_OscMessages[static_cast<std::vector< C_OscCanMessage>::size_type > (u32_ItMessagePair + 1UL)];
+            orc_OscMessages[static_cast<std::vector< C_OscCanMessage>::size_type > (u32_ItMessagePair) + 1UL];
          //Compare
          if ((h_CompareString(rc_CurrentMessage.c_Name,
                               rc_NextMessage.c_Name) == false) && (rc_CurrentMessage.c_Name != rc_NextMessage.c_Name))

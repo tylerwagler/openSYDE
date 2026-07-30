@@ -193,7 +193,7 @@ int32_t C_SdBueSignalTableModel::rowCount(const QModelIndex & orc_Parent) const
 
    if (!orc_Parent.isValid())
    {
-      s32_Retval = this->mc_SigInfoAll.size();
+      s32_Retval = static_cast<int32_t>(this->mc_SigInfoAll.size());
    }
    return s32_Retval;
 }
@@ -831,14 +831,14 @@ void C_SdBueSignalTableModel::m_FillSigInfo(void)
                c_SigData.c_Unit = static_cast<QString>(pc_OscSignalCommon->c_Unit.c_str());
 
                // The icon
-               c_TmpIcon.push_back(QString::number(20));
+               c_TmpIcon.append(QString::number(20));
                if (q_SignalValid == false)
                {
-                  c_TmpIcon.push_back("://images/system_definition/IconSignalError.svg");
+                  c_TmpIcon.append("://images/system_definition/IconSignalError.svg");
                }
                else
                {
-                  c_TmpIcon.push_back("://images/system_definition/IconSignal.svg");
+                  c_TmpIcon.append("://images/system_definition/IconSignal.svg");
                }
                c_SigData.c_Icon = c_TmpIcon;
 

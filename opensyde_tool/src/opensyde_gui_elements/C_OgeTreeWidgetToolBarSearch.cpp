@@ -78,7 +78,8 @@ bool C_OgeTreeWidgetToolBarSearch::HasResults(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeTreeWidgetToolBarSearch::m_MarkResultString(QString & orc_ResultString) const
 {
-   const int32_t s32_Pos = orc_ResultString.indexOf(this->mc_SearchString, 0, Qt::CaseInsensitive);
+   const int32_t s32_Pos =
+      static_cast<int32_t>(orc_ResultString.indexOf(this->mc_SearchString, 0, Qt::CaseInsensitive));
 
    // mark the search string in the result
    orc_ResultString.insert(s32_Pos + this->mc_SearchString.length(), "</b>");

@@ -350,7 +350,7 @@ void C_GiBiArrow::mousePressEvent(QGraphicsSceneMouseEvent * const opc_Event)
          if (this->mpc_ArrowHeadEnd->isUnderMouse() == true)
          {
             this->me_ActiveResizeMode = eLINE;
-            this->ms32_ActiveItemIndex = this->mc_Points.size() - 2;
+            this->ms32_ActiveItemIndex = static_cast<int32_t>(this->mc_Points.size()) - 2;
          }
       }
    }

@@ -1,12 +1,12 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       openSYDE Core AES text encryption utility
+   \brief       openSYDE Core AES CBC encryption utility
 
    \class       stw::opensyde_core::C_OscSecurityAesCbc
 
    Wrapper for the AES library by SergeyBel.
-   Provides functions to encrypt/decrypt text with AES-128 CBC with PKCS#7 and initialization vector.
+   Provides functions to encrypt/decrypt data with AES-128 CBC with PKCS#7 and initialization vector.
 
    \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */

@@ -495,3 +495,33 @@ uint32_t C_OscCanUtil::h_GetVisiblePgn(const uint32_t ou32_Pgn)
    }
    return u32_VisiblePgn;
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get J1939 transport protocol from Can ID and DLC
+
+   \param[in]   ou32_CanId                   Can ID
+   \param[in]   ou16_MessageDlc              Message DLC
+   \param[out]  ore_J1939TransportProtocol   J1939 transport protocol
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanUtil::h_GetJ1939TransportProtocolFromCanIdAndDlc(const uint32_t ou32_CanId, const uint16_t ou16_MessageDlc,
+                                                              E_J1939TransportProtocol & ore_J1939TransportProtocol)
+{
+   if (ou16_MessageDlc <= 8U)
+   {
+      ore_J1939TransportProtocol = eJTP_NONE;
+   }
+   else
+   {
+      C_OscCanUtilJ1939PgInfo c_J1939PgInfo;
+      h_GetJ1939PgInfoFromCanId(ou32_CanId, c_J1939PgInfo);
+      if (c_J1939PgInfo.q_HasDestinationAddress == false)
+      {
+         ore_J1939TransportProtocol = eJTP_CMDT;
+      }
+      else
+      {
+         ore_J1939TransportProtocol = eJTP_BAM;
+      }
+   }
+}

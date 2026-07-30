@@ -291,7 +291,7 @@ void C_SebToolboxUtil::h_AddElementToList(QListWidget * const opc_ListWidget, co
    \param[in,out] opc_ListWidget Last list widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SebToolboxUtil::h_AddFinalSpacer(QVBoxLayout * const opc_Layout, QListWidget * const opc_ListWidget)
+void C_SebToolboxUtil::h_AddFinalSpacer(QVBoxLayout * const opc_Layout, const QListWidget * const opc_ListWidget)
 {
    if ((opc_Layout != NULL) && (opc_ListWidget != NULL))
    {

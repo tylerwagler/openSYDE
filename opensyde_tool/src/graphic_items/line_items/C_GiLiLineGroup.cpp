@@ -266,7 +266,7 @@ int32_t C_GiLiLineGroup::BendLine(const QPointF & orc_ScenePos, const int32_t * 
    // save the position
    if (s32_Retval >= 0)
    {
-      if (((s32_Retval - 1L) < this->mpc_LinePath->GetLines().size()) &&
+      if (((s32_Retval - 1L) < static_cast<int32_t>(this->mpc_LinePath->GetLines().size())) &&
           (s32_Retval < this->mc_Points.size()))
       {
          //Insert new interaction point

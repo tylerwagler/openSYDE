@@ -28,6 +28,7 @@
 
 #include <cstring>
 #include <cctype>
+#include <algorithm>
 
 #include "C_HexFile.hpp"
 #include "stwtypes.hpp"
@@ -84,6 +85,35 @@ static const uint32_t mu32_XADR32_MASK  =   0xFFFF0000U;
 
 static const uint32_t mu32_MAX_DWORD    =   0xFFFFFFFFU;
 static const uint32_t mu32_MIN_DWORD    =   0x00000000U;
+
+//-----------------------------------------------------------------------------
+/*!
+   \brief   Less than comparison operator
+
+   Compare address field and returns resuls
+
+   \param[in]    orc_Other    other instance to compare against
+
+   \return
+   Offending address when generating last WRN_RECORD_OVERLAY return code.
+*/
+//-----------------------------------------------------------------------------
+bool C_HexDataDumpBlock::operator <(const C_HexDataDumpBlock & orc_Other)
+{
+   return (this->u32_AddressOffset < orc_Other.u32_AddressOffset);
+}
+
+//-----------------------------------------------------------------------------
+/*!
+   \brief   Sort blocks
+
+   Sort owned blocks ascendingly by their address offset
+*/
+//-----------------------------------------------------------------------------
+void C_HexDataDump::SortBlocksByAddressOffset(void)
+{
+   std::sort(this->at_Blocks.c_TheVector.begin(), this->at_Blocks.c_TheVector.end());
+}
 
 //------------------------------------------------------------------------
 
@@ -609,7 +639,6 @@ uint32_t C_HexFile::SaveToFile(const char_t * const opcn_FileName)
       // write binary file to avoid OS-specific handling of newlines
       pc_File = std::fopen(opcn_FileName, "wb"); // yes, now open acFileName
 
-
       if (pc_File == NULL)
       {
          u32_Error = ERR_CANT_OPEN_FILE; // something is wrong with acFileName!
@@ -622,7 +651,6 @@ uint32_t C_HexFile::SaveToFile(const char_t * const opcn_FileName)
             fputs(mh_HexLineString(pu8_HexLine), pc_File); // write string into file
             // we always create CR/LF to avoid different hex-file data on different OS
             fputs("\r\n", pc_File);
-
          }
 
          (void)fclose(pc_File);
@@ -987,6 +1015,7 @@ uint32_t C_HexFile::CreateHexFile(const C_HexDataDump & orc_Dump, const uint32_t
    uint32_t u32_OffsetInBlock;
    bool q_RecordOpen = false;
    const C_HexDataDumpBlock * pc_Block;
+   C_HexDataDump c_TheData;
 
    mq_DumpIsDirty = true;
 
@@ -1000,16 +1029,20 @@ uint32_t C_HexFile::CreateHexFile(const C_HexDataDump & orc_Dump, const uint32_t
       u32_RecSize = mu8_MAX_RECSIZE;
    }
 
+   //copy and sort input data to make sure resulting data has all needed address offsets:
+   c_TheData = orc_Dump;
+   c_TheData.SortBlocksByAddressOffset();
+
    this->Clear(); // clear existing hex file data
 
    u32_Error = m_AddHexLine(":020000040000FA\n"); // init data with zero offset
 
    if (u32_Error == NO_ERR)
    {
-      for (s32_Block = 0U; s32_Block < orc_Dump.at_Blocks.GetLength(); s32_Block++)
+      for (s32_Block = 0U; s32_Block < c_TheData.at_Blocks.GetLength(); s32_Block++)
       {
          s32_Length = 0;
-         pc_Block = &orc_Dump.at_Blocks[s32_Block];
+         pc_Block = &c_TheData.at_Blocks[s32_Block];
 
          mu32_NumRawBytes += static_cast<uint32_t>(pc_Block->au8_Data.GetLength());
          for (u32_OffsetInBlock = 0U;
@@ -1055,7 +1088,7 @@ uint32_t C_HexFile::CreateHexFile(const C_HexDataDump & orc_Dump, const uint32_t
 
             // store data
             mh_SetByte(acn_Record, static_cast<uint32_t>(mu8_INTEL_DAT + s32_Length),
-                       static_cast<uint8_t>(pc_Block->au8_Data[u32_OffsetInBlock]));
+                       pc_Block->au8_Data[u32_OffsetInBlock]);
             s32_Length++;                                                            // inc. data length
             mh_SetByte(acn_Record, mu8_INTEL_LEN, static_cast<uint8_t>(s32_Length)); // set data length
          }

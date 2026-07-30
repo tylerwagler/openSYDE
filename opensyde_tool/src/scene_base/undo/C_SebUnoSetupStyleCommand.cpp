@@ -232,7 +232,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
             orc_Map.insert(pc_Arrow->GetId(),
                            C_PuiBsTemporaryDataId(static_cast<int32_t>(C_PuiSdDataElement::eLINE_ARROW),
                                                   u32_Index));
-            opc_Snapshot->c_LineArrows.resize(static_cast<std::vector<C_PuiBsLineArrow>::size_type>(u32_Index + 1UL));
+            opc_Snapshot->c_LineArrows.resize(static_cast<std::vector<C_PuiBsLineArrow>::size_type>(u32_Index) + 1UL);
             //Content
             {
                C_PuiBsLineArrow & rc_UiArrow = opc_Snapshot->c_LineArrows[u32_Index];
@@ -252,7 +252,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
             orc_Map.insert(pc_Boundary->GetId(),
                            C_PuiBsTemporaryDataId(static_cast<int32_t>(C_PuiSdDataElement::eBOUNDARY),
                                                   u32_Index));
-            opc_Snapshot->c_Boundaries.resize(static_cast<std::vector<C_PuiBsBoundary>::size_type>(u32_Index + 1UL));
+            opc_Snapshot->c_Boundaries.resize(static_cast<std::vector<C_PuiBsBoundary>::size_type>(u32_Index) + 1UL);
             //Content
             {
                C_PuiBsBoundary & rc_UiBoundary = opc_Snapshot->c_Boundaries[u32_Index];
@@ -278,8 +278,8 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
             orc_Map.insert(pc_TextElement->GetId(),
                            C_PuiBsTemporaryDataId(static_cast<int32_t>(C_PuiSdDataElement::eTEXT_ELEMENT),
                                                   u32_Index));
-            opc_Snapshot->c_TextElements.resize(static_cast<std::vector<C_PuiBsTextElement>::size_type>(u32_Index +
-                                                                                                        1UL));
+            opc_Snapshot->c_TextElements.resize(
+               static_cast<std::vector<C_PuiBsTextElement>::size_type>(u32_Index) + 1UL);
             //Content
             {
                C_PuiBsTextElement & rc_UiTextElement = opc_Snapshot->c_TextElements[u32_Index];

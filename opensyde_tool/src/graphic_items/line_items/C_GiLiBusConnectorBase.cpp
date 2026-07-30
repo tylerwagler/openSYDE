@@ -447,7 +447,7 @@ void C_GiLiBusConnectorBase::m_UpdateBus(const QPointF & orc_Pos, const C_GiLiBu
       m_AdaptStyleToBus(this->GetBusItem());
 
       c_Lines = this->GetBusItem()->GetLines();
-      ms32_KnownLineCount = c_Lines.size();
+      ms32_KnownLineCount = static_cast<int32_t>(c_Lines.size());
       connect(this->GetBusItem(), &C_GiLiBus::SigChangedGraphic,
               this, &C_GiLiBusConnectorBase::m_UpdateExternal);
       connect(this->GetBusItem(), &C_GiLiBus::SigChangedZeOrder,
@@ -531,7 +531,7 @@ void C_GiLiBusConnectorBase::m_UpdateExternal(void)
       {
          //Replace line count
          const QVector<C_GiLiLineConnection *> c_Lines = this->GetBusItem()->GetLines();
-         const int32_t s32_LineCount = c_Lines.size();
+         const int32_t s32_LineCount = static_cast<int32_t>(c_Lines.size());
          if (s32_LineCount < ms32_KnownLineCount)
          {
             //Deleted line

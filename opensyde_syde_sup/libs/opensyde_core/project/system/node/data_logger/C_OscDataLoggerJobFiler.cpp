@@ -552,6 +552,11 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerProperties(
          if (s32_Retval == C_NO_ERR)
          {
             orc_Config.c_Operation = orc_XmlParser.GetNodeContent();
+            //Default
+            if (orc_Config.c_Operation.IsEmpty())
+            {
+               orc_Config.c_Operation = "==";
+            }
             tgl_assert(orc_XmlParser.SelectNodeParent() == "additional-trigger-properties");
          }
       }

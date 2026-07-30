@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       openSYDE Core AES text encryption utility
+   \brief       openSYDE Core AES CBC encryption utility
 
    see header in .h file for details.
 
@@ -46,8 +46,8 @@ using namespace std;
 
    \param[in]   orau8_Key           128bit key to use for encryption
    \param[in]   orau8_InitVector    128bit initialization vector
-   \param[in]   orc_Input           Input data
-   \param[out]  orc_Output          Output data
+   \param[in]   orc_Input           Unencrypted input data
+   \param[out]  orc_Output          Encrypted output data
 
    \return
    C_NO_ERR    success
@@ -110,8 +110,8 @@ int32_t C_OscSecurityAesCbc::h_Encrypt(const uint8_t (&orau8_Key)[hu32_KEY_LENGT
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Decrypt given text with AES-128 using CBC mode and PKCS#7 padding
 
-   The size of the text must be a multiple of 16bytes resp. 32hex characters.
-   The text must have been written with PKCS#7 algorithm.
+   The size of the data must be a multiple of 16bytes.
+   The data must have been padded with PKCS#7 algorithm.
 
    Steps:
    * perform decryption
@@ -119,13 +119,13 @@ int32_t C_OscSecurityAesCbc::h_Encrypt(const uint8_t (&orau8_Key)[hu32_KEY_LENGT
 
    \param[in]   orau8_Key           128bit key to use for decryption
    \param[in]   orau8_InitVector    128bit initialization vector
-   \param[in]   orc_Input           Encrypted input string (assumed to be a hex string))
-   \param[out]  orc_Output          Decrypted output string
+   \param[in]   orc_Input           Encrypted input data
+   \param[out]  orc_Output          Decrypted output data
 
    \return
    C_NO_ERR    success
-   C_CONFIG    input text length is no multiple of 16bytes
-   C_CHECKSUM  input text is invalid; PKCS#7 value is > 16 or > file size (checked after decryption)
+   C_CONFIG    input data size is no multiple of 16bytes or is zero
+   C_CHECKSUM  input data is invalid; PKCS#7 value is > 16 or > input size (checked after decryption)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSecurityAesCbc::h_Decrypt(const uint8_t (&orau8_Key)[hu32_KEY_LENGTH],
@@ -136,7 +136,7 @@ int32_t C_OscSecurityAesCbc::h_Decrypt(const uint8_t (&orau8_Key)[hu32_KEY_LENGT
    const uint32_t u32_InputSize = static_cast<uint32_t>(orc_Input.size());
 
    // check inputs: input text correctly padded to 16 bytes resp. 32 hex characters?
-   if ((u32_InputSize % 16U) != 0U)
+   if  ((u32_InputSize == 0U) || ((u32_InputSize % 16U) != 0U))
    {
       s32_Return = C_CONFIG;
    }

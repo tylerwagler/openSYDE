@@ -170,7 +170,7 @@ void C_SdTopologyScene::AddNode(const QString & orc_NodeType, const QPointF & or
 
    if (pc_MainDevice != NULL)
    {
-      const uint32_t u32_SubDevicesSize = pc_MainDevice->c_SubDevices.size();
+      const uint32_t u32_SubDevicesSize = static_cast<uint32_t>(pc_MainDevice->c_SubDevices.size());
       const uint32_t u32_OriginalOscNodeSize = C_PuiSdHandler::h_GetInstance()->GetOscNodesSize();
 
       stw::opensyde_gui_logic::C_PuiSdNode c_UiNode;
@@ -4009,8 +4009,8 @@ bool C_SdTopologyScene::m_ShowShortcutTspOption(const QString & orc_NodeName,
    bool q_UseShortcut = false;
 
    //only show this thing if user settings say so or nothing is set yet
-   if ((C_UsHandler::h_GetInstance()->GetSkipTspSelection() == "") ||
-       (C_UsHandler::h_GetInstance()->GetSkipTspSelection() == "Ask User"))
+   if ((C_UsHandler::h_GetInstance()->GetToolSettings().GetSkipTspSelection() == "") ||
+       (C_UsHandler::h_GetInstance()->GetToolSettings().GetSkipTspSelection() == "Ask User"))
    {
       const stw::scl::C_SclString c_TitleString = orc_NodeName.toStdString().c_str();
       const stw::scl::C_SclString c_MessageBoxTitle = "Import TSP Assistance";
@@ -4052,7 +4052,9 @@ bool C_SdTopologyScene::m_ShowShortcutTspOption(const QString & orc_NodeName,
          //shall the skipping be remembered?
          if (c_MessageBox.GetCheckboxState() == true)
          {
-            C_UsHandler::h_GetInstance()->SetSkipTspSelection("Skip");
+            C_UsToolSettings c_ToolSettings = C_UsHandler::h_GetInstance()->GetToolSettings();
+            c_ToolSettings.SetSkipTspSelection("Skip");
+            C_UsHandler::h_GetInstance()->SetToolSettings(c_ToolSettings);
          }
       }
       else

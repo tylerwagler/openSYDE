@@ -719,11 +719,12 @@ void C_SdBueComIfDescriptionWidget::ImportMessages(void)
             for (uint32_t u32_ItIndex = 0; u32_ItIndex < c_NodeIndexes.size(); u32_ItIndex++)
             {
                const int32_t s32_NumMessageContainers =
-                  C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainers(c_NodeIndexes[u32_ItIndex],
-                                                                                   e_Protocol,
-                                                                                   c_InterfaceIndexes[u32_ItIndex]).size();
+                  static_cast<int32_t>(C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainers(
+                                          c_NodeIndexes[u32_ItIndex], e_Protocol,
+                                          c_InterfaceIndexes[u32_ItIndex]).size());
                const int32_t s32_NumComDataPools =
-                  C_PuiSdHandler::h_GetInstance()->GetOscCanDataPools(c_NodeIndexes[u32_ItIndex], e_Protocol).size();
+                  static_cast<int32_t>(C_PuiSdHandler::h_GetInstance()->GetOscCanDataPools(
+                                          c_NodeIndexes[u32_ItIndex], e_Protocol).size());
 
                // on import a Datapool was created if necessary - just to make sure
                tgl_assert(s32_NumComDataPools == s32_NumMessageContainers);

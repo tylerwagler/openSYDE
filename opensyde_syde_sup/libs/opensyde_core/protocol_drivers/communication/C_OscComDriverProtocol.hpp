@@ -25,7 +25,6 @@
 #include "C_OscProtocolDriverOsyTpIp.hpp"
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscComDriverBase.hpp"
-#include "C_OscSecurityPemDatabase.hpp"
 #include "TglTasks.hpp"
 #include "C_SclString.hpp"
 
@@ -47,8 +46,8 @@ public:
 
    virtual int32_t Init(const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex,
                         const std::vector<uint8_t> & orc_ActiveNodes,
-                        stw::can::C_CanDispatcher * const opc_CanDispatcher, C_OscIpDispatcher * const opc_IpDispatcher,
-                        C_OscSecurityPemDatabase * const opc_SecurityPemDb);
+                        stw::can::C_CanDispatcher * const opc_CanDispatcher,
+                        C_OscIpDispatcher * const opc_IpDispatcher);
    int32_t SendTesterPresent(const std::set<uint32_t> * const opc_SkipNodes = NULL);
    int32_t SendTesterPresent(const std::vector<uint32_t> & orc_ActiveNodes) const;
    int32_t SendTesterPresent(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
@@ -70,7 +69,8 @@ public:
    void ClearDispatcherQueue(void);
    bool IsInitialized(void) const;
 
-   int32_t ReConnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
+   int32_t ReConnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId,
+                         uint32_t * const opu32_ErrorActiveNodeIndex = NULL) const;
    int32_t DisconnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
    void DisconnectNodes(void) const;
 
@@ -134,6 +134,12 @@ protected:
    int32_t m_SetNodeSecurityAccess(C_OscProtocolDriverOsy * const opc_ExistingProtocol, const uint8_t ou8_SecurityLevel,
                                    uint8_t * const opu8_NrCode, bool * const opq_SecureAuthenticationActive = NULL,
                                    bool * const opq_TrafficEncryptionActive = NULL) const;
+   virtual int32_t m_HandleCryptoAgentCommunication(const std::vector<uint8_t> & orc_SerialNumber,
+                                                    const uint8_t ou8_SecurityLevel,
+                                                    const std::vector<uint8_t> & orc_ServerChallengeValue,
+                                                    std::vector<uint8_t> & orc_RsaSignature,
+                                                    const stw::scl::C_SclString & orc_LastLoadedSystemDefinitionFilePath, const C_OscNode & orc_Node, const uint8_t ou8_NodeIdentifier, const stw::scl::C_SclString & orc_SerialNumberExtended,
+                                                    const uint8_t ou8_SerialNumberManufacturerFormat) const;
    int32_t m_SetNodesSecurityAccess(const uint8_t ou8_SecurityLevel, std::set<uint32_t> & orc_ErrorActiveNodes) const;
    int32_t m_SetNodesSecurityAccess(const std::vector<uint32_t> & orc_ActiveNodes, const uint8_t ou8_SecurityLevel,
                                     std::set<uint32_t> & orc_ErrorActiveNodes) const;
@@ -206,8 +212,6 @@ private:
 
    std::vector<uint8_t> mc_ActiveNodesSystem; ///< List of flags for all nodes which are active in the system
    // definition set by Init call
-
-   C_OscSecurityPemDatabase * mpc_SecurityPemDb;
 
    int32_t m_InitRoutesAndActiveNodes(void);
    int32_t m_InitServerIds(void);

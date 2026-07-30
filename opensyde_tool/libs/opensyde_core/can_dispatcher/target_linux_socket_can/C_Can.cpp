@@ -116,10 +116,12 @@ int32_t C_Can::CAN_Reset(void)
 int32_t C_Can::CAN_Init(const C_SclString & orc_InterfaceName, const int32_t os32_RxTimeout)
 {
    int32_t s32_RetVal = C_NO_ERR;
-   struct sockaddr_can c_Addr;
-   struct ifreq c_IfRequest;
+   struct sockaddr_can c_Addr = {};
 
-   (void)memcpy(c_IfRequest.ifr_name, orc_InterfaceName.c_str(), sizeof (c_IfRequest.ifr_name));
+   struct ifreq c_IfRequest = {};
+
+   (void)std::strncpy(c_IfRequest.ifr_name, orc_InterfaceName.c_str(), (IFNAMSIZ - 1));
+   c_IfRequest.ifr_name[IFNAMSIZ - 1] = '\0';
 
    // ************************* RxTx Socket configuration*************************
    // open socket
@@ -250,8 +252,10 @@ int32_t C_Can::CAN_Send_Msg(const T_STWCAN_Msg_TX & orc_Message)
 
    if (this->ms32_Socket >= 0)
    {
+      const uint8_t u8_Dlc = (orc_Message.u8_DLC <= 8U) ? orc_Message.u8_DLC : 8U;
       struct pollfd c_PollFd;
-      struct can_frame c_Frame;
+      struct can_frame c_Frame = {};
+
       int32_t s32_Ret;
 
       // prepare CAN frame
@@ -264,8 +268,8 @@ int32_t C_Can::CAN_Send_Msg(const T_STWCAN_Msg_TX & orc_Message)
       {
          c_Frame.can_id |= CAN_RTR_FLAG;
       }
-      c_Frame.can_dlc = orc_Message.u8_DLC;
-      for (uint8_t u8_Byte = 0; u8_Byte < 8; ++u8_Byte)
+      c_Frame.can_dlc = u8_Dlc;
+      for (uint8_t u8_Byte = 0; u8_Byte < u8_Dlc; ++u8_Byte)
       {
          c_Frame.data[u8_Byte] = orc_Message.au8_Data[u8_Byte];
       }

@@ -88,6 +88,25 @@ private:
 
    void m_ComposeRequest(const C_OscProtocolDriverOsyService & orc_Service, std::vector<uint8_t> & orc_Request) const;
 
+   int32_t m_BroadcastSetIpAddress(const C_OscProtocolSerialNumber &orc_SerialNumber,
+                                   const uint8_t(&orau8_NewIpAddress)[4],
+                                   const uint8_t(&orau8_NetMask)[4],
+                                   const uint8_t(&orau8_DefaultGateway)[4],
+                                   const C_OscProtocolDriverOsyNode &orc_NewNodeId,
+                                   const uint8_t ou8_Mode,
+                                   uint8_t(&orau8_ResponseIp)[4],
+                                   uint8_t * const opu8_ErrorResult) const;
+   int32_t m_BroadcastSetIpAddressExtended(
+      const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
+      const uint8_t(&orau8_NewIpAddress)[4],
+      const uint8_t(&orau8_NetMask)[4],
+      const uint8_t(&orau8_DefaultGateway)[4],
+      const C_OscProtocolDriverOsyNode &orc_NewNodeId,
+      const uint8_t ou8_SubNodeId,
+      const uint8_t ou8_Mode,
+      uint8_t(&orau8_ResponseIp)[4],
+      uint8_t * const opu8_ErrorResult) const;
+
 protected:
    void m_LogWarningWithHeader(const stw::scl::C_SclString & orc_Information, const char_t * const opcn_Function) const;
    void m_LogWarningWithHeaderAndIp(const stw::scl::C_SclString & orc_Information, const char_t * const opcn_Function,
@@ -148,12 +167,22 @@ public:
                                   std::vector<C_BroadcastGetDeviceInfoExtendedResults> & orc_DeviceExtendedInfos)
    const;
    int32_t BroadcastSetIpAddress(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
+                                 const C_OscProtocolDriverOsyNode &orc_NewNodeId,
+                                 uint8_t(&orau8_ResponseIp)[4],
+                                 uint8_t * const opu8_ErrorResult = NULL) const;
+   int32_t BroadcastSetIpAddress(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
                                  const uint8_t(&orau8_NewIpAddress)[4],
                                  const uint8_t(&orau8_NetMask)[4],
                                  const uint8_t(&orau8_DefaultGateway)[4],
                                  const C_OscProtocolDriverOsyNode &orc_NewNodeId,
                                  uint8_t(&orau8_ResponseIp)[4],
                                  uint8_t * const opu8_ErrorResult = NULL) const;
+   int32_t BroadcastSetIpAddressExtended(
+      const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
+      const C_OscProtocolDriverOsyNode &orc_NewNodeId,
+      const uint8_t ou8_SubNodeId,
+      uint8_t(&orau8_ResponseIp)[4],
+      uint8_t * const opu8_ErrorResult = NULL) const;
    int32_t BroadcastSetIpAddressExtended(
       const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
       const uint8_t(&orau8_NewIpAddress)[4],

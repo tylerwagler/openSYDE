@@ -3,26 +3,30 @@
 # Some optional parts of the core can be skipped by setting options in the application CMakeLists.txt file before
 #  including this file in order to keep build times low.
 #  List of the groups (all but "COMMON_SOURCES" are skippable):
-#     COMMON_SOURCES             basic infrastructure (also requires a target layer, e.g. for Windows or a
-#                                                      corresponding implementation for e.g. Linux)
-#     ZIPPING                    zip/unzip functionality
-#     IMPORTS                    imports: EDS, DCF, RamView
-#     CODE_GENERATION            source code generation
-#     PROJECT_HANDLING           project handling (including all aspects of System Definition)
-#     PARAM_SET                  parameter set handling (reading and writing syde_psi files)
-#     PROTOCOL_DRIVERS_BASIC     communication protocol drivers basic update
-#     PROTOCOL_DRIVERS_SYSTEM    communication protocol drivers system update
-#     PROTOCOL_DRIVERS_MONITOR   communication protocol drivers monitor (openSYDE CAN Monitor basics)
-#     PROTOCOL_DRIVERS_COMMON    communication protocol drivers common
-#                                (openSYDE, STW Flashloader, KEFEX, Data Dealer, Dispatcher interface)
-#     PROTOCOL_LOGGING           protocol logging
-#     X_CONFIG_GENERATION        X-App configuration generation functionality
-#     X_CERTIFICATES_GENERATION  X-App certificate generation functionality
-#     SYSTEM_PACKAGE_HANDLING    system package base functionality
-#     WINDOWS_DRIVERS            windows target drivers: CAN and Ethernet dispatchers
-#     WINDOWS_TARGET             windows target glue layer
-#     SECURITY                   security features like authentication, secure update, secure communication
-#                                 (note: OpenSSL also needed to be provided by application)
+#     COMMON_SOURCES               basic infrastructure (also requires a target layer, e.g. for Windows or a
+#                                                        corresponding implementation for e.g. Linux)
+#     ZIPPING                      zip/unzip functionality
+#     IMPORTS                      imports: EDS, DCF, RamView
+#     CODE_GENERATION              source code generation
+#     PROJECT_HANDLING             project handling (including all aspects of System Definition)
+#     PARAM_SET                    parameter set handling (reading and writing syde_psi files)
+#     PROTOCOL_DRIVERS_BASIC       communication protocol drivers basic update
+#     PROTOCOL_DRIVERS_SYSTEM      communication protocol drivers system update
+#     PROTOCOL_DRIVERS_MONITOR     communication protocol drivers monitor (openSYDE CAN Monitor basics)
+#     PROTOCOL_DRIVERS_COMMON      communication protocol drivers common
+#                                   (openSYDE, STW Flashloader, KEFEX, Data Dealer, Dispatcher interface)
+#     PROTOCOL_LOGGING             protocol logging
+#     X_CONFIG_GENERATION          X-App configuration generation functionality
+#     X_CERTIFICATES_GENERATION    X-App certificate generation functionality
+#     SYSTEM_PACKAGE_HANDLING      system package base functionality
+#     WINDOWS_DRIVERS              windows target drivers: CAN and Ethernet dispatchers
+#                                   (note: ws2_32 and Iphlpapi libraries also needed to be linked by application)
+#     LINUX_DRIVERS                linux target drivers: CAN and Ethernet dispatchers
+#     WINDOWS_TARGET               windows target glue layer (only either Windows or ...
+#     LINUX_TARGET                 linux target glue layer    ... linux target glue layer can be used)
+#     SECURITY                     security features like authentication, secure update, secure communication
+#                                   (note: OpenSSL also needed to be provided by application)
+#     SECURITY_CRYPTO_AGENT_UTILS  utility classes for the security crypto agent
 #
 # This CMakeLists.txt defined the library "opensyde_core" to be linked from the application.
 # As the openSYDE core needs the "precomp_headers.hpp" that is placed with the application, the path
@@ -71,6 +75,23 @@ if (NOT OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_SYSTEM)
       message("OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_SYSTEM not set: forcing OPENSYDE_CORE_SKIP_ZIPPING to 0")
    endif()
 endif()
+
+if (NOT OPENSYDE_CORE_SKIP_WINDOWS_TARGET)
+   if (NOT OPENSYDE_CORE_SKIP_LINUX_TARGET)
+      set(OPENSYDE_CORE_SKIP_LINUX_TARGET 1)
+      #We cannot have both Windows and Linux target layers at the same time. For now Windows wins. But the time will come ...
+      message("OPENSYDE_CORE_SKIP_WINDOWS_TARGET and OPENSYDE_CORE_SKIP_LINUX_TARGET both not set: forcing OPENSYDE_CORE_SKIP_LINUX_TARGET to 1")
+   endif()
+endif()
+
+if (NOT OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS)
+   if (NOT OPENSYDE_CORE_SKIP_LINUX_DRIVERS)
+      set(OPENSYDE_CORE_SKIP_LINUX_DRIVERS 1)
+      #We cannot have both Windows and Linux driverss at the same time. For now Windows wins. But the time will come ...
+      message("OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS and OPENSYDE_CORE_SKIP_LINUX_DRIVERS both not set: forcing OPENSYDE_CORE_SKIP_LINUX_DRIVERS to 1")
+   endif()
+endif()
+
 
 # --- Project source files ---------------------------------------------------------------------------------------------
 #basic infrastructure (also requires Windows target layer, or a corresponding implementation for e.g. Linux)
@@ -818,11 +839,32 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls/C_Can.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls/C_CanDll.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock/C_OscIpDispatcherWinSock.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock/C_OscIpDispatcherImpl.hpp
    )
 
    set(OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock
+   )
+endif()
+
+# linux target drivers: CAN and Ethernet dispatchers
+if(OPENSYDE_CORE_SKIP_LINUX_DRIVERS)
+   message("OPENSYDE_CORE_SKIP_LINUX_DRIVERS detected ... skipping package")
+else()
+   message("OPENSYDE_CORE_SKIP_LINUX_DRIVERS not detected ... dragging in package")
+
+   set (OPENSYDE_CORE_LINUX_DRIVERS_SOURCES
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can/C_Can.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can/C_Can.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock/C_OscIpDispatcherImpl.hpp
+   )
+
+   set(OPENSYDE_CORE_LINUX_DRIVERS_INCLUDE_DIRECTORIES
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock
    )
 endif()
 
@@ -832,7 +874,7 @@ if(OPENSYDE_CORE_SKIP_WINDOWS_TARGET)
 else()
    message("OPENSYDE_CORE_SKIP_WINDOWS_TARGET not detected ... dragging in package")
 
-   set (OPENSYDE_CORE_WINDOWS_TARGET_SOURCES
+   set (OPENSYDE_CORE_TARGET_LAYER_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_windows/TglFile.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_windows/TglTasks.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_windows/TglTime.cpp
@@ -843,10 +885,33 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_windows/TglUtils.hpp
    )
 
-   set(OPENSYDE_CORE_WINDOWS_TARGET_INCLUDE_DIRECTORIES
+   set(OPENSYDE_CORE_TARGET_LAYER_INCLUDE_DIRECTORIES
       ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_windows
    )
 endif()
+
+# windows target glue layer
+if(OPENSYDE_CORE_SKIP_LINUX_TARGET)
+   message("OPENSYDE_CORE_SKIP_LINUX_TARGET detected ... skipping package")
+else()
+   message("OPENSYDE_CORE_SKIP_LINUX_TARGET not detected ... dragging in package")
+
+   set (OPENSYDE_CORE_TARGET_LAYER_SOURCES
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglFile.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglTasks.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglTime.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglUtils.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglFile.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglTasks.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglTime.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglUtils.hpp
+   )
+
+   set(OPENSYDE_CORE_TARGET_LAYER_INCLUDE_DIRECTORIES
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux
+   )
+endif()
+
 
 # security features like authentication, secure update, secure communication
 if(OPENSYDE_CORE_SKIP_SECURITY)
@@ -886,6 +951,25 @@ else()
    )
 endif()
 
+# security crypto agent utility feature
+if(OPENSYDE_CORE_SKIP_SECURITY_CRYPTO_AGENT_UTILS)
+   message("OPENSYDE_CORE_SKIP_SECURITY_CRYPTO_AGENT_UTILS detected ... skipping package")
+else()
+   message("OPENSYDE_CORE_SKIP_SECURITY_CRYPTO_AGENT_UTILS not detected ... dragging in package")
+
+   set (OPENSYDE_CORE_SECURITY_CRYPTO_AGENT_UTILS_SOURCES
+      ${CMAKE_CURRENT_SOURCE_DIR}/security/crypto_agent/C_OscCryptoAgentAccessUtil.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/security/crypto_agent/C_OscCryptoAgentSettings.cpp
+
+      ${CMAKE_CURRENT_SOURCE_DIR}/security/crypto_agent/C_OscCryptoAgentAccessUtil.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/security/crypto_agent/C_OscCryptoAgentSettings.hpp
+   )
+
+   set(OPENSYDE_CORE_SECURITY_CRYPTO_AGENT_UTILS_INCLUDE_DIRECTORIES
+      ${CMAKE_CURRENT_SOURCE_DIR}/security/crypto_agent
+   )
+endif()
+
 # all sources
 set(OPENSYDE_CORE_SOURCES
    ${OPENSYDE_CORE_COMMON_SOURCES}
@@ -902,9 +986,11 @@ set(OPENSYDE_CORE_SOURCES
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_COMMON_SOURCES}
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_MONITOR_SOURCES}
    ${OPENSYDE_CORE_WINDOWS_DRIVERS_SOURCES}
-   ${OPENSYDE_CORE_WINDOWS_TARGET_SOURCES}
+   ${OPENSYDE_CORE_LINUX_DRIVERS_SOURCES}
+   ${OPENSYDE_CORE_TARGET_LAYER_SOURCES}
    ${OPENSYDE_CORE_PROTOCOL_LOGGING_SOURCES}
    ${OPENSYDE_CORE_SECURITY_SOURCES}
+   ${OPENSYDE_CORE_SECURITY_CRYPTO_AGENT_UTILS_SOURCES}
 )
 
 # all include directories
@@ -923,9 +1009,11 @@ set(OPENSYDE_CORE_INCLUDE_DIRECTORIES
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_COMMON_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_MONITOR_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES}
-   ${OPENSYDE_CORE_WINDOWS_TARGET_INCLUDE_DIRECTORIES}
+   ${OPENSYDE_CORE_LINUX_DRIVERS_INCLUDE_DIRECTORIES}
+   ${OPENSYDE_CORE_TARGET_LAYER_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_PROTOCOL_LOGGING_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_SECURITY_INCLUDE_DIRECTORIES}
+   ${OPENSYDE_CORE_SECURITY_CRYPTO_AGENT_UTILS_INCLUDE_DIRECTORIES}
 )
 
 #deactivate warnings for miniz due to external component; but only for GCC as the switch is compiler specific

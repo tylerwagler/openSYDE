@@ -235,7 +235,7 @@ void C_NagUnUsedProjectFilesTableView::selectionChanged(const QItemSelection & o
    std::vector<uint32_t> c_SelectedIndices;
    c_SelectedIndices = C_SdNdeDpUtil::h_ConvertVector(this->selectedIndexes());
    C_Uti::h_Uniqueify(c_SelectedIndices);
-   Q_EMIT this->SigSelectionChanged(c_SelectedIndices.size());
+   Q_EMIT this->SigSelectionChanged(static_cast<uint32_t>(c_SelectedIndices.size()));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

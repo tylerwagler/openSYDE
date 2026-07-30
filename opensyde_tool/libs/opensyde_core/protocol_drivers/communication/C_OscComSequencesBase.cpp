@@ -86,8 +86,6 @@ C_OscComSequencesBase::~C_OscComSequencesBase(void)
                                            - set the entry to false if the device is not expected to be present
    \param[in]  opc_CanDispatcher        Pointer to concrete CAN dispatcher
    \param[in]  opc_IpDispatcher         Pointer to concrete IP dispatcher
-   \param[in]  opc_SecurityPemDb        Pointer to PEM database (optional)
-                                        Needed if nodes with enabled security are used in the system
 
    \return
    C_NO_ERR      Configuration set
@@ -108,8 +106,7 @@ C_OscComSequencesBase::~C_OscComSequencesBase(void)
 int32_t C_OscComSequencesBase::Init(C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex,
                                     const std::vector<uint8_t> & orc_ActiveNodes,
                                     stw::can::C_CanDispatcher * const opc_CanDispatcher,
-                                    C_OscIpDispatcher * const opc_IpDispatcher,
-                                    C_OscSecurityPemDatabase * const opc_SecurityPemDb)
+                                    C_OscIpDispatcher * const opc_IpDispatcher)
 {
    int32_t s32_Return = C_CONFIG;
 
@@ -122,7 +119,7 @@ int32_t C_OscComSequencesBase::Init(C_OscSystemDefinition & orc_SystemDefinition
       this->mc_TimeoutNodes.resize(this->mc_ActiveNodes.size(), 0);
 
       s32_Return = this->mpc_ComDriver->Init(orc_SystemDefinition, ou32_ActiveBusIndex,
-                                             orc_ActiveNodes, opc_CanDispatcher, opc_IpDispatcher, opc_SecurityPemDb);
+                                             orc_ActiveNodes, opc_CanDispatcher, opc_IpDispatcher);
 
       if (s32_Return == C_NO_ERR)
       {

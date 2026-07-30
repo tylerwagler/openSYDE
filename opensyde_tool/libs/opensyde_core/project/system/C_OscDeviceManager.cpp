@@ -96,7 +96,9 @@ int32_t C_OscDeviceManager::AddDevice(const stw::scl::C_SclString & orc_DeviceDe
                                       const stw::scl::C_SclString & orc_IniFile)
 {
    int32_t s32_Return;
-
+   const C_SclString c_FullDevicePath =
+      C_OscDeviceGroup::h_GetFullDevicePathFromDeviceIniEntry(orc_DeviceDefinitionFile,
+                                                              TglExtractFilePath(orc_IniFile));
    C_OscDeviceDefinition c_DeviceDefinition;
 
    // Ini with toolbox structure definition
@@ -111,7 +113,7 @@ int32_t C_OscDeviceManager::AddDevice(const stw::scl::C_SclString & orc_DeviceDe
    }
 
    // Load device definition for name checking
-   s32_Return = C_OscDeviceDefinitionFiler::h_Load(c_DeviceDefinition, orc_DeviceDefinitionFile);
+   s32_Return = C_OscDeviceDefinitionFiler::h_Load(c_DeviceDefinition, c_FullDevicePath);
    if (s32_Return == C_NO_ERR)
    {
       // Compare new device definition file with existing

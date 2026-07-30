@@ -174,8 +174,8 @@ bool C_SdBueUnoSignalAddDeleteBaseCommand::m_CheckSignalsSortedAscending() const
             bool q_PrevIdValid = false;
             for (uint32_t u32_It = 0UL; u32_It < this->mc_UniqueId.size(); ++u32_It)
             {
-               const C_OscCanMessageIdentificationIndices c_Id = this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
-                  this->mc_UniqueId[u32_It]);
+               const C_OscCanMessageIdentificationIndices c_Id =
+                  this->mpc_MessageSyncManager->GetMessageIdForUniqueId(this->mc_UniqueId[u32_It]);
                if (q_PrevIdValid)
                {
                   if (((((c_Id.u32_NodeIndex == c_PrevId.u32_NodeIndex) &&
@@ -234,8 +234,7 @@ void C_SdBueUnoSignalAddDeleteBaseCommand::m_Store(void)
                                                                             this->mc_UniqueId[u32_ItStep]),
                                                                          this->mc_SignalIndex[u32_ItStep]);
          const C_PuiSdNodeCanSignal * const pc_UiSignal = C_PuiSdHandler::h_GetInstance()->GetUiCanSignal(
-            this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
-               this->mc_UniqueId[u32_ItStep]),
+            this->mpc_MessageSyncManager->GetMessageIdForUniqueId(this->mc_UniqueId[u32_ItStep]),
             this->mc_SignalIndex[u32_ItStep]);
 
          tgl_assert(pc_Signal != NULL);
@@ -299,29 +298,19 @@ void C_SdBueUnoSignalAddDeleteBaseCommand::m_Remove(void)
 {
    if (this->mpc_MessageSyncManager != NULL)
    {
-      for (uint32_t u32_ItStep = this->mc_UniqueId.size(); u32_ItStep > 0UL; --u32_ItStep)
+      for (uint32_t u32_ItStep = static_cast<uint32_t>(this->mc_UniqueId.size()); u32_ItStep > 0UL; --u32_ItStep)
       {
-         tgl_assert(this->mpc_MessageSyncManager->DeleteCanSignal(this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
-                                                                     this->mc_UniqueId[static_cast<std::vector<uint64_t>
-                                                                                                   ::
-                                                                                                   size_type>(u32_ItStep
-                                                                                                              -
-                                                                                                              1UL)]),
-                                                                  this->mc_SignalIndex[static_cast<std::vector<uint32_t>
-                                                                                                   ::
-                                                                                                   size_type>(u32_ItStep
-                                                                                                              -
-                                                                                                              1UL)]) ==
+         tgl_assert(this->mpc_MessageSyncManager->DeleteCanSignal(
+                       this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
+                          this->mc_UniqueId[static_cast<std::vector<uint64_t>::size_type>(u32_ItStep) - 1UL]),
+                       this->mc_SignalIndex[static_cast<std::vector<uint32_t>::size_type>(u32_ItStep) - 1UL]) ==
                     C_NO_ERR);
          if (this->mpc_MessageTreeWidget != NULL)
          {
-            this->mpc_MessageTreeWidget->InternalDeleteSignal(this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
-                                                                 this->mc_UniqueId[static_cast<std::vector<uint64_t>::
-                                                                                               size_type>(u32_ItStep -
-                                                                                                          1UL)]),
-                                                              this->mc_SignalIndex[static_cast<std::vector<uint32_t>::
-                                                                                               size_type>(u32_ItStep -
-                                                                                                          1UL)]);
+            this->mpc_MessageTreeWidget->InternalDeleteSignal(
+               this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
+                  this->mc_UniqueId[static_cast<std::vector<uint64_t>::size_type>(u32_ItStep) - 1UL]),
+               this->mc_SignalIndex[static_cast<std::vector<uint32_t>::size_type>(u32_ItStep) - 1UL]);
          }
       }
    }

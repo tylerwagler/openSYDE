@@ -44,7 +44,7 @@ public:
    static void h_AddElementToList(QListWidget * const opc_ListWidget, const QString & orc_Text,
                                   const QString & orc_IconPath, const QString & orc_IconPathDark = "",
                                   const QString & orc_ToolTipContent = "", const QString & orc_ToolTipHeading = "");
-   static void h_AddFinalSpacer(QVBoxLayout * const opc_Layout, QListWidget * const opc_ListWidget);
+   static void h_AddFinalSpacer(QVBoxLayout * const opc_Layout, const QListWidget * const opc_ListWidget);
 
    static const int32_t hs32_LABEL_SIZE;
    static const int32_t hs32_HEADING_SPACER_SIZE_TOP;

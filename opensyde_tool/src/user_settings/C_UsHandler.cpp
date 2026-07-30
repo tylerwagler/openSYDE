@@ -139,8 +139,7 @@ void C_UsHandler::SetDefault(void)
    this->mc_RecentColors.fill(QColor(255, 255, 255, 255), 6);
 
    ms32_ScreenshotGifSucessTimeout = 3000;
-   mc_PathHandlingSelection = "";
-   mc_SkipTspImportSelection = "";
+   this->mc_ToolSettings.SetDefault();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -432,30 +431,15 @@ int32_t C_UsHandler::GetScreenshotGifSucessTimeout() const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get the currently selected option for path handling
-
-   \retval   Relative
-   \retval   Absolute
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_UsHandler::GetPathHandlingSelection() const
-{
-   return this->mc_PathHandlingSelection;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get TSP shortcut usage
+/*! \brief  Get tool settings
 
    \return
-   bool
-
-   \retval   true    TSP shortcut dialog will not appear after adding a new node (Import is skipped always)
-   \retval   false   TSP shortcut dialog will appear after adding a new node
+   Tool settings
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_UsHandler::GetSkipTspSelection() const
+C_UsToolSettings C_UsHandler::GetToolSettings() const
 {
-   return this->mc_SkipTspImportSelection;
+   return this->mc_ToolSettings;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1290,23 +1274,12 @@ void C_UsHandler::SetNextRecentColorButtonNumber(const int32_t os32_NextRecentCo
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set flag whether TSP Import on adding a Node shall be skipped always
 
-   \param[in]       orc_Selection     can be "Ask User" or "Skip"
+   \param[in]  orc_ToolSettings  Tool settings
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsHandler::SetSkipTspSelection(const QString & orc_Selection)
+void C_UsHandler::SetToolSettings(const C_UsToolSettings & orc_ToolSettings)
 {
-   this->mc_SkipTspImportSelection = orc_Selection;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set flag for the currently selected option for the path handling
-
-   \param[in]       orc_Selection     can be "Ask User", "Relative" or "Absolute"
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_UsHandler::SetPathHandlingSelection(const QString & orc_Selection)
-{
-   this->mc_PathHandlingSelection = orc_Selection;
+   this->mc_ToolSettings = orc_ToolSettings;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

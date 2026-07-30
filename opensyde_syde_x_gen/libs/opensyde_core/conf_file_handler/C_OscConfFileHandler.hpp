@@ -27,6 +27,7 @@ namespace opensyde_core
 class C_OscConfFileHandler
 {
 public:
+   C_OscConfFileHandler();
    virtual ~C_OscConfFileHandler();
 
    int32_t LoadSettings(const stw::scl::C_SclString & orc_Path);

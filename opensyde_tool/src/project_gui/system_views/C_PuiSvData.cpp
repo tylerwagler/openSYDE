@@ -1379,7 +1379,8 @@ void C_PuiSvData::OnSyncNodeApplicationAdded(const uint32_t ou32_NodeIndex, cons
       if ((pc_App != NULL) && (pc_Node != NULL))
       {
          C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-         rc_Update.OnSyncNodeApplicationAdded(ou32_ApplicationIndex, pc_App->e_Type, pc_App->c_ResultPaths.size(),
+         rc_Update.OnSyncNodeApplicationAdded(ou32_ApplicationIndex, pc_App->e_Type,
+                                              static_cast<uint32_t>(pc_App->c_ResultPaths.size()),
                                               pc_Node->c_Applications);
       }
    }
@@ -1435,7 +1436,7 @@ void C_PuiSvData::OnSyncNodeApplicationAboutToBeDeleted(const uint32_t ou32_Node
       {
          C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[ou32_NodeIndex];
          rc_Update.OnSyncNodeApplicationAboutToBeDeleted(ou32_ApplicationIndex, pc_App->e_Type,
-                                                         pc_App->c_ResultPaths.size());
+                                                         static_cast<uint32_t>(pc_App->c_ResultPaths.size()));
       }
    }
 }
@@ -1460,8 +1461,8 @@ void C_PuiSvData::OnSyncNodeApplicationAboutToBeChangedFromParamSetHalc(const ui
       if (pc_App != NULL)
       {
          C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-         rc_Update.OnSyncNodeApplicationAboutToBeChangedFromParamSetHalc(ou32_ApplicationIndex, pc_App->e_Type,
-                                                                         pc_App->c_ResultPaths.size());
+         rc_Update.OnSyncNodeApplicationAboutToBeChangedFromParamSetHalc(
+            ou32_ApplicationIndex, pc_App->e_Type, static_cast<uint32_t>(pc_App->c_ResultPaths.size()));
       }
    }
 }
@@ -1489,7 +1490,7 @@ void C_PuiSvData::OnSyncNodeApplicationChangedToParamSetHalc(const uint32_t ou32
       {
          C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[ou32_NodeIndex];
          rc_Update.OnSyncNodeApplicationChangedToParamSetHalc(ou32_ApplicationIndex, pc_App->e_Type,
-                                                              pc_App->c_ResultPaths.size(),
+                                                              static_cast<uint32_t>(pc_App->c_ResultPaths.size()),
                                                               pc_Node->c_Applications);
       }
    }
@@ -2086,7 +2087,8 @@ int32_t C_PuiSvData::AddReadRailItem(const C_OscNodeDataPoolListElementId & orc_
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvData::AddDashboard(const C_PuiSvDashboard & orc_Dashboard, const bool oq_AutoAdapt)
 {
-   tgl_assert(InsertDashboard(this->mc_Dashboards.size(), orc_Dashboard, oq_AutoAdapt, NULL) == C_NO_ERR);
+   tgl_assert(InsertDashboard(
+                 static_cast<uint32_t>(this->mc_Dashboards.size()), orc_Dashboard, oq_AutoAdapt, NULL) == C_NO_ERR);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

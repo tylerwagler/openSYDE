@@ -182,16 +182,8 @@ int32_t C_OscDeviceGroup::LoadGroup(C_SclIniFile & orc_Ini, const C_SclString & 
          }
          else
          {
-            C_SclString c_FullDevicePath;
+            const C_SclString c_FullDevicePath = h_GetFullDevicePathFromDeviceIniEntry(c_DevicePath, orc_BasePath);
             C_OscDeviceDefinition c_DeviceDefinition;
-            if (TglFileExists(c_DevicePath) == 0)
-            {
-               c_FullDevicePath = orc_BasePath + c_DevicePath;
-            }
-            else
-            {
-               c_FullDevicePath = c_DevicePath;
-            }
 
             if (C_OscDeviceDefinitionFiler::h_Load(c_DeviceDefinition, c_FullDevicePath) == C_NO_ERR)
             {
@@ -217,6 +209,29 @@ int32_t C_OscDeviceGroup::LoadGroup(C_SclIniFile & orc_Ini, const C_SclString & 
 void C_OscDeviceGroup::SetGroupName(const C_SclString & orc_GroupName)
 {
    this->mc_GroupName = orc_GroupName;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get full device path from device ini entry
+
+   \param[in]  orc_IniEntryPath  Ini entry path
+   \param[in]  orc_BasePath      Base path
+
+   \return
+   Full device path from device ini entry
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_SclString C_OscDeviceGroup::h_GetFullDevicePathFromDeviceIniEntry(const C_SclString & orc_IniEntryPath,
+                                                                    const C_SclString & orc_BasePath)
+{
+   C_SclString c_FullDevicePath = orc_BasePath + orc_IniEntryPath;
+
+   // Check first if device is stored relative to devices.ini
+   if (TglFileExists(c_FullDevicePath) == 0)
+   {
+      c_FullDevicePath = orc_IniEntryPath;
+   }
+   return c_FullDevicePath;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

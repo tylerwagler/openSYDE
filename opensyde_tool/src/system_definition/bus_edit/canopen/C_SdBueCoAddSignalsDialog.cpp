@@ -231,7 +231,7 @@ void C_SdBueCoAddSignalsDialog::m_OnSearch(const QString & orc_Text) const
    {
       m_HandleHiding();
       this->mpc_Ui->pc_GroupBoxSearchNoElementsFound->setVisible(false);
-      m_UpdateSelection(this->mpc_Ui->pc_TreeView->GetSelectedSignals().size());
+      m_UpdateSelection(static_cast<int32_t>(this->mpc_Ui->pc_TreeView->GetSelectedSignals().size()));
    }
    else
    {
@@ -242,7 +242,7 @@ void C_SdBueCoAddSignalsDialog::m_OnSearch(const QString & orc_Text) const
       }
       else
       {
-         m_UpdateSelection(this->mpc_Ui->pc_TreeView->GetSelectedSignals().size());
+         m_UpdateSelection(static_cast<uint32_t>(this->mpc_Ui->pc_TreeView->GetSelectedSignals().size()));
       }
       this->mpc_Ui->pc_GroupBoxInitialSignalNoElements->setVisible(false);
    }

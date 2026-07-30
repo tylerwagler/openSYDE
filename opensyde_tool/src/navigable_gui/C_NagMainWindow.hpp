@@ -23,6 +23,7 @@
 #include "C_NagMainWidget.hpp"
 #include "C_NagUseCaseViewWidget.hpp"
 #include "C_NagUseCaseWidget.hpp"
+#include "C_NagCryptoAgentStarterThread.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -113,6 +114,7 @@ private:
    C_NagUseCaseViewWidget * mpc_UseCaseWidget;
    C_NagUseCaseWidget * mpc_ActiveWidget;
    stw::opensyde_gui_logic::C_SyvManager mc_SystemViewManager;
+   stw::opensyde_gui_logic::C_NagCryptoAgentStarterThread mc_CryptoAgentStarterThread;
 
    bool mq_InitialProjectLoaded;
    bool mq_BlockDragAndDrop;

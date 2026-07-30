@@ -545,12 +545,7 @@ void C_GiSvNodeSyvUpdate::GenerateHint(void)
          {
             c_Text =
                C_GtGetText::h_GetText(
-                  "Node update disabled."
-                  "\nPossible reasons: "
-                  "\n- There are no active Data Blocks declared (SYSTEM DEFINITION / Node / Properties)"
-                  "\n- Update setting is disabled on connected node interface (SYSTEM DEFINITION / Node / Properties)"
-                  "\n- Node has no protocol support"
-                  "\n- Update Package does not contain any files for this node");
+                  "Node has no protocol support");
          }
          else
          {
@@ -793,6 +788,10 @@ void C_GiSvNodeSyvUpdate::m_SetSvgForTopLeftIcon()
       const QString c_Svg = m_GetSvgForTopLeftIcon();
       this->mpc_IconTopLeft->SetSvg(c_Svg);
    }
+   else
+   {
+      this->mpc_IconTopLeft->SetSvg("");
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -862,31 +861,35 @@ void C_GiSvNodeSyvUpdate::m_GetCurrentNodeSecurityState(bool & orq_Authenticatio
             this->mc_NodeData.GetSubNodeByNodeIndex(c_NodeIndices[u32_ItDevice]);
          if (pc_SubDevice != NULL)
          {
-            const C_OscSuSequencesNodeConnectStates & rc_ConnectStates = pc_SubDevice->GetNodeConnectStates();
-            if (rc_ConnectStates.c_AvailableFeatures.q_SupportsSecurityAuthentication)
+            if ((pc_SubDevice->GetValidStatus()) && (pc_SubDevice->IsNodeConnectStatesSet()))
             {
-               orq_AuthenticationNecessary = orq_AuthenticationNecessary || rc_ConnectStates.q_AuthenticationNecessary;
-               if (opq_AuthenticationSupported != NULL)
+               const C_OscSuSequencesNodeConnectStates & rc_ConnectStates = pc_SubDevice->GetNodeConnectStates();
+               if (rc_ConnectStates.c_AvailableFeatures.q_SupportsSecurityAuthentication)
                {
-                  *opq_AuthenticationSupported = true;
+                  orq_AuthenticationNecessary = orq_AuthenticationNecessary ||
+                                                rc_ConnectStates.q_AuthenticationNecessary;
+                  if (opq_AuthenticationSupported != NULL)
+                  {
+                     *opq_AuthenticationSupported = true;
+                  }
                }
-            }
-            if (rc_ConnectStates.c_AvailableFeatures.q_SupportsSecurityTrafficEncryption)
-            {
-               orq_TrafficEncryptionNecessary = orq_TrafficEncryptionNecessary ||
-                                                rc_ConnectStates.q_TrafficEncryptionNecessary;
-               if (opq_TrafficEncryptionSupported != NULL)
+               if (rc_ConnectStates.c_AvailableFeatures.q_SupportsSecurityTrafficEncryption)
                {
-                  *opq_TrafficEncryptionSupported = true;
+                  orq_TrafficEncryptionNecessary = orq_TrafficEncryptionNecessary ||
+                                                   rc_ConnectStates.q_TrafficEncryptionNecessary;
+                  if (opq_TrafficEncryptionSupported != NULL)
+                  {
+                     *opq_TrafficEncryptionSupported = true;
+                  }
                }
-            }
-            if (rc_ConnectStates.c_AvailableFeatures.q_SupportsDebuggerOn &&
-                rc_ConnectStates.c_AvailableFeatures.q_SupportsDebuggerOff)
-            {
-               orq_DebuggerEnabled = orq_DebuggerEnabled && rc_ConnectStates.q_DebuggerEnabled;
-               if (opq_DebuggerChangeSupported != NULL)
+               if (rc_ConnectStates.c_AvailableFeatures.q_SupportsDebuggerOn &&
+                   rc_ConnectStates.c_AvailableFeatures.q_SupportsDebuggerOff)
                {
-                  *opq_DebuggerChangeSupported = true;
+                  orq_DebuggerEnabled = orq_DebuggerEnabled && rc_ConnectStates.q_DebuggerEnabled;
+                  if (opq_DebuggerChangeSupported != NULL)
+                  {
+                     *opq_DebuggerChangeSupported = true;
+                  }
                }
             }
          }

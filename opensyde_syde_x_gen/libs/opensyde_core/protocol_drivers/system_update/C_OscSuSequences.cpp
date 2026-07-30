@@ -381,7 +381,7 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(const std::vector<C_SclString> 
       if (s32_Return != C_NO_ERR)
       {
          (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_CHECK_DEVICE_NAME_COMM_ERROR, s32_Return, 10U,
-                                mc_CurrentNode, "Could not read device name from device. Details:" +
+                                mc_CurrentNode, "Could not read device name from device. Details: " +
                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NrCode));
          s32_Return = C_COM;
       }
@@ -1874,7 +1874,7 @@ int32_t C_OscSuSequences::m_WriteFingerPrintOsy(void)
    if (s32_Return != C_NO_ERR)
    {
       (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FINGERPRINT_ERROR, s32_Return, 30U, mc_CurrentNode,
-                             "Could not write fingerprint. Details:" +
+                             "Could not write fingerprint. Details: " +
                              C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NrCode));
       s32_Return = C_COM;
    }
@@ -2000,7 +2000,7 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
       {
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_SET_SESSION_ERROR, s32_Return, ou8_ProgressToReport,
                                 mc_CurrentNode,
-                                "Error activating PreProgramming session. Details:" +
+                                "Error activating PreProgramming session. Details: " +
                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NrCode));
 
          if (s32_Return != C_CHECKSUM)
@@ -2026,7 +2026,7 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
       {
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_DEVICE_NAME_ERROR, s32_Return, ou8_ProgressToReport,
                                 mc_CurrentNode,
-                                "Error reading device name. Details:" +
+                                "Error reading device name. Details: " +
                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NrCode));
          s32_Return = C_COM;
       }
@@ -2044,7 +2044,7 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
       {
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_SECURITY_ERROR, s32_Return,
                                 ou8_ProgressToReport, mc_CurrentNode,
-                                "Error setting security level for reading flash block information. Details:" +
+                                "Error setting security level for reading flash block information. Details: " +
                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NrCode));
          if (s32_Return != C_CHECKSUM)
          {
@@ -2064,7 +2064,7 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
             if (s32_Return != C_NO_ERR)
             {
                (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_ERROR, s32_Return, ou8_ProgressToReport,
-                                      mc_CurrentNode, "Error reading flash block information. Details:" +
+                                      mc_CurrentNode, "Error reading flash block information. Details: " +
                                       C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NrCode));
                s32_Return = C_COM;
             }
@@ -2087,7 +2087,7 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
       if (s32_Return != C_NO_ERR)
       {
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASHLOADER_INFO_ERROR, s32_Return, ou8_ProgressToReport,
-                                mc_CurrentNode, "Error reading even more information. Details:" +
+                                mc_CurrentNode, "Error reading even more information. Details: " +
                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NrCode));
          s32_Return = C_COM;
       }
@@ -2113,7 +2113,7 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
       {
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASHLOADER_CHECK_DEBUGGER_ACTIVATION_ERROR, s32_Return,
                                 ou8_ProgressToReport,
-                                mc_CurrentNode, "Error reading debugger activation state. Details:" +
+                                mc_CurrentNode, "Error reading debugger activation state. Details: " +
                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NrCode));
          s32_Return = C_COM;
       }
@@ -2957,7 +2957,7 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                         if (s32_Return != C_NO_ERR)
                         {
                            (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR, s32_Return, 30U,
-                                                  mc_CurrentNode, "Request to set active session failed. Details:" +
+                                                  mc_CurrentNode, "Request to set active session failed. Details: " +
                                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
                                                                                                            u8_NrCode));
 
@@ -3171,7 +3171,7 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                                  (void)m_ReportProgress(
                                     eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR, s32_Return, 50U,
                                     mc_CurrentNode,
-                                    "Request to set active session for routing device failed. Details:" +
+                                    "Request to set active session for routing device failed. Details: " +
                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NrCode));
 
                                  // Node is not reachable

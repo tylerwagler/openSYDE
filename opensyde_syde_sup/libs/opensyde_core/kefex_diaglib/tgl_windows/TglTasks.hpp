@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <windows.h>
 #include "stwtypes.hpp"
+#include "C_SclString.hpp"
 #include "C_SclDynamicArray.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -43,6 +44,9 @@ public:
    bool TryAcquire(void);
    void Release(void);
 };
+
+int32_t TglStartProcessDetached(const stw::scl::C_SclString & orc_BinaryPath,
+                                const stw::scl::C_SclString & orc_Parameters);
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
 }

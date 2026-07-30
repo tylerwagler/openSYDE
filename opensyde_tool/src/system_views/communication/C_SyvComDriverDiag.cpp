@@ -159,12 +159,9 @@ int32_t C_SyvComDriverDiag::InitDiag(void)
 
    if (s32_Return == C_NO_ERR)
    {
-      // pem folder is optional -> no error handling
-      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
-
       s32_Return = C_OscComDriverProtocol::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst(),
                                                 u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDllDispatcher,
-                                                this->mpc_EthernetDispatcher, &this->mc_PemDatabase);
+                                                this->mpc_EthernetDispatcher);
    }
 
    // Get active diag nodes
@@ -1970,7 +1967,7 @@ int32_t C_SyvComDriverDiag::m_StartRoutingDiag(QString & orc_ErrorDetails, std::
                 (s32_Return == C_NO_ERR) &&
                 (this->GetClientId().u8_BusIdentifier == this->mc_ServerIds[u32_ActiveNode].u8_BusIdentifier))
             {
-               s32_Return = this->ReConnectNode(this->mc_ServerIds[u32_ActiveNode]);
+               s32_Return = this->ReConnectNode(this->mc_ServerIds[u32_ActiveNode], &u32_ErrorActiveNodeIndex);
             }
 
             if (s32_Return != C_NO_ERR)

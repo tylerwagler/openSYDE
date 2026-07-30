@@ -1,0 +1,32 @@
+---------------------------------------------------------------------
+File:      about.txt
+Content:   Information about this project
+---------------------------------------------------------------------
+
+Description:
+============
+openSYDE Crypto Agent.
+
+Purpose:
+
+Tool to solve security-related challenges for openSYDE.
+Initially it will support calculating the response for secure authentication challenges based on 
+the seed value provided by server nodes.
+
+So the required key material does not need to be stored with the actual client tool (e.g. GUI, SYDEsup),
+but with the Crypto Agent.
+
+This implementation serves as an example/reference implementation.
+Own implementations can be derived to provide a solution that fits the exact infrastructure and security related requirement
+of the usage scenario.
+See create_your_own/deriving.txt for more information.
+
+
+Platform:
+=========
+Prebuilt binaries of this example/reference implementation are provided for:
+* MS Windows (Win11 verified)
+* Ubuntu Linux x64 
+** Built for Ubuntu 24.04
+** OpenSSL linked statically; but dynamic glibc >= 2.38 required
+** Binary should be compatible with e.g. Ubuntu 24.04 or newer; Debian Trixie or newer

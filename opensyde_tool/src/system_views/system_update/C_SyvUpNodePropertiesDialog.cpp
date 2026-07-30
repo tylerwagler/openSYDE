@@ -1146,8 +1146,10 @@ QString C_SyvUpNodePropertiesDialog::mh_GetProgressLogConnectStatesStringForSubN
                                           ((rc_States.q_TrafficEncryptionNecessary == true) ? c_Yes : c_No),
                                           1);
 
-      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText("Security access"),
-                                          ((rc_States.q_SecurityAccessError == false) ? c_Ok : c_Failed),
+      c_Text += mh_GetTableLineForBrowser(C_GtGetText::h_GetText(
+                                             "Security access"),
+                                          ((rc_States.q_TrafficEncryptionNecessary ==
+                                            true) ? ((rc_States.q_SecurityAccessError == false) ? c_Ok : c_Failed) : "-"),
                                           2);
 
       c_Text +=

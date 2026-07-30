@@ -1,0 +1,26 @@
+---------------------------------------------------------------------
+File:      build.txt
+Content:   How to build this project
+---------------------------------------------------------------------
+
+Used Tools:
+===========
+MinGW / GCC with cmake and ninja were used to provide the ready made binaries.
+For Windows see the paths in the build scripts for used versions.
+
+Using any C++2003 compliant toolchain should work (adaptions in cmakelists.txt might be needed if not using GCC/MinGW).
+
+Required Library Installation:
+==============================
+Linux:
+   libssl-dev (sudo apt install libssl-dev)
+
+How to build for release:
+=========================
+Windows:
+   cd ../bat
+   build_release.bat (paths to compiler, cmake, ninja might need to be adapted in "build_incremental.bat" depending on the installation)
+Linux:
+   cd ../bat
+   chmod +x ./build_release.sh
+   ./build_release.sh

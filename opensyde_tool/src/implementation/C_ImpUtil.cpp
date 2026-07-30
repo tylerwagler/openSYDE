@@ -701,8 +701,8 @@ QString C_ImpUtil::h_AskUserToSaveRelativePath(QWidget * const opc_Parent, const
    else if (C_Uti::h_IsPathRelativeToDir(orc_Path, orc_AbsoluteReferenceDir, c_PathAbsolute, c_PathRelative) == true)
    {
       //only show this thing if user settings say so or nothing is set yet
-      if ((C_UsHandler::h_GetInstance()->GetPathHandlingSelection() == "") ||
-          (C_UsHandler::h_GetInstance()->GetPathHandlingSelection() == "Ask User"))
+      if ((C_UsHandler::h_GetInstance()->GetToolSettings().GetPathHandlingSelection() == "") ||
+          (C_UsHandler::h_GetInstance()->GetToolSettings().GetPathHandlingSelection() == "Ask User"))
       {
          C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::eQUESTION);
          c_Message.SetHeading(C_GtGetText::h_GetText("Relative Path"));
@@ -727,7 +727,7 @@ QString C_ImpUtil::h_AskUserToSaveRelativePath(QWidget * const opc_Parent, const
             c_Return = c_PathRelative;
             if (c_Message.GetCheckboxState() == true)
             {
-               C_UsHandler::h_GetInstance()->SetPathHandlingSelection("Relative");
+               mh_SetUserSettingsPathHandlingSelection("Relative");
             }
          }
          else
@@ -735,7 +735,7 @@ QString C_ImpUtil::h_AskUserToSaveRelativePath(QWidget * const opc_Parent, const
             c_Return = c_PathAbsolute;
             if (c_Message.GetCheckboxState() == true)
             {
-               C_UsHandler::h_GetInstance()->SetPathHandlingSelection("Absolute");
+               mh_SetUserSettingsPathHandlingSelection("Absolute");
             }
          }
       }
@@ -743,11 +743,11 @@ QString C_ImpUtil::h_AskUserToSaveRelativePath(QWidget * const opc_Parent, const
       {
          //in case the path handling shall be remembered we need to check which way is currently desired
          //to get the correct return value
-         if (C_UsHandler::h_GetInstance()->GetPathHandlingSelection() == "Relative")
+         if (C_UsHandler::h_GetInstance()->GetToolSettings().GetPathHandlingSelection() == "Relative")
          {
             c_Return = c_PathRelative;
          }
-         else if (C_UsHandler::h_GetInstance()->GetPathHandlingSelection() == "Absolute")
+         else if (C_UsHandler::h_GetInstance()->GetToolSettings().GetPathHandlingSelection() == "Absolute")
          {
             c_Return = c_PathAbsolute;
          }
@@ -827,8 +827,8 @@ QStringList C_ImpUtil::h_AskUserToSaveRelativePath(QWidget * const opc_Parent, c
          c_PathsRelative.append(c_PathRelative);
       }
 
-      if ((C_UsHandler::h_GetInstance()->GetPathHandlingSelection() == "") ||
-          (C_UsHandler::h_GetInstance()->GetPathHandlingSelection() == "Ask User"))
+      if ((C_UsHandler::h_GetInstance()->GetToolSettings().GetPathHandlingSelection() == "") ||
+          (C_UsHandler::h_GetInstance()->GetToolSettings().GetPathHandlingSelection() == "Ask User"))
       {
          // ask user
          C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::eQUESTION,
@@ -858,7 +858,7 @@ QStringList C_ImpUtil::h_AskUserToSaveRelativePath(QWidget * const opc_Parent, c
             c_Return = c_PathsRelative;
             if (c_Message.GetCheckboxState() == true)
             {
-               C_UsHandler::h_GetInstance()->SetPathHandlingSelection("Relative");
+               mh_SetUserSettingsPathHandlingSelection("Relative");
             }
          }
          else
@@ -866,7 +866,7 @@ QStringList C_ImpUtil::h_AskUserToSaveRelativePath(QWidget * const opc_Parent, c
             c_Return = c_PathsAbsolute;
             if (c_Message.GetCheckboxState() == true)
             {
-               C_UsHandler::h_GetInstance()->SetPathHandlingSelection("Absolute");
+               mh_SetUserSettingsPathHandlingSelection("Absolute");
             }
          }
       }
@@ -1147,19 +1147,19 @@ int32_t C_ImpUtil::mh_ExecuteCodeGenerator(const QString & orc_NodeName, const Q
       c_CodeGenFileInfo.absolutePath() + "/" + c_CodeGenFileInfo.completeBaseName() + "_file_list.txt");
 
    // provide arguments
-   c_Arguments.push_back("-s"); // system definition
-   c_Arguments.push_back(c_SysDefPath);
-   c_Arguments.push_back("-d"); // devices ini file
-   c_Arguments.push_back(C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini"));
-   c_Arguments.push_back("-o"); // export folder
-   c_Arguments.push_back(orc_ExportFolder);
-   c_Arguments.push_back("-n"); // node name
-   c_Arguments.push_back(orc_NodeName);
-   c_Arguments.push_back("-a"); // application name
-   c_Arguments.push_back(orc_AppName);
+   c_Arguments.append("-s"); // system definition
+   c_Arguments.append(c_SysDefPath);
+   c_Arguments.append("-d"); // devices ini file
+   c_Arguments.append(C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini"));
+   c_Arguments.append("-o"); // export folder
+   c_Arguments.append(orc_ExportFolder);
+   c_Arguments.append("-n"); // node name
+   c_Arguments.append(orc_NodeName);
+   c_Arguments.append("-a"); // application name
+   c_Arguments.append(orc_AppName);
    if (orq_Erase == true)
    {
-      c_Arguments.push_back("-e"); // erase folder (only if user confirmed)
+      c_Arguments.append("-e"); // erase folder (only if user confirmed)
    }
 
    // call file generation exe with arguments
@@ -1319,4 +1319,18 @@ int32_t C_ImpUtil::mh_ExecuteCodeGenerator(const QString & orc_NodeName, const Q
    }
 
    return s32_Return; //lint !e429  //no memory leak for pc_Process because of the Qt memory management
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Set user settings path handling selection
+
+   \param[in]  orc_PathHandlingSelection  Path handling selection
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_ImpUtil::mh_SetUserSettingsPathHandlingSelection(const QString & orc_PathHandlingSelection)
+{
+   C_UsToolSettings c_ToolSettings = C_UsHandler::h_GetInstance()->GetToolSettings();
+
+   c_ToolSettings.SetPathHandlingSelection(orc_PathHandlingSelection);
+   C_UsHandler::h_GetInstance()->SetToolSettings(c_ToolSettings);
 }

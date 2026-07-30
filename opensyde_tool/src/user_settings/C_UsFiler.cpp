@@ -25,6 +25,7 @@
 
 using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_core;
 using namespace stw::scl;
 using namespace stw::errors;
 
@@ -897,11 +898,26 @@ void C_UsFiler::mh_SaveCommon(const C_UsHandler & orc_UserSettings, C_SclIniFile
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsFiler::mh_SaveEnvironment(const C_UsHandler & orc_UserSettings, C_SclIniFile & orc_Ini)
 {
+   const C_UsToolSettings c_ToolSettings = orc_UserSettings.GetToolSettings();
+   const C_OscCryptoAgentSettings & rc_CryptoAgentSettings = c_ToolSettings.GetCryptoAgentSettings();
+
    //Path handling
    orc_Ini.WriteString("Environment", "PathHandlingSelection",
-                       orc_UserSettings.GetPathHandlingSelection().toStdString().c_str());
+                       c_ToolSettings.GetPathHandlingSelection().toStdString().c_str());
+   //Skip TSP import
    orc_Ini.WriteString("Environment", "SkipTspImportSelection",
-                       orc_UserSettings.GetSkipTspSelection().toStdString().c_str());
+                       c_ToolSettings.GetSkipTspSelection().toStdString().c_str());
+   //Crypto Agent
+   orc_Ini.WriteString("Environment", "CryptoAgentExecutablePath", rc_CryptoAgentSettings.c_CryptoAgentExecutablePath);
+   orc_Ini.WriteString("Environment", "CryptoAgentConfigFilePath", rc_CryptoAgentSettings.c_CryptoAgentConfigFilePath);
+   for (uint32_t u32_It = 0UL; u32_It < 4UL; ++u32_It)
+   {
+      orc_Ini.WriteInteger("Environment", "CryptoAgentIp" + QString::number(u32_It).toStdString(),
+                           rc_CryptoAgentSettings.au8_CryptoAgentIp[u32_It]);
+   }
+   orc_Ini.WriteInteger("Environment", "CryptoAgentPort", rc_CryptoAgentSettings.u16_CryptoAgentPort);
+   orc_Ini.WriteBool("Environment", "CryptoAgentAutoStart", rc_CryptoAgentSettings.q_CryptoAgentAutoStart);
+   orc_Ini.WriteBool("Environment", "CryptoAgentAutoStop", rc_CryptoAgentSettings.q_CryptoAgentAutoStop);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2038,12 +2054,33 @@ void C_UsFiler::mh_LoadCommon(C_UsHandler & orc_UserSettings, C_SclIniFile & orc
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsFiler::mh_LoadEnvironment(C_UsHandler & orc_UserSettings, C_SclIniFile & orc_Ini)
 {
-   //Path handling
-   orc_UserSettings.SetPathHandlingSelection(orc_Ini.ReadString("Environment", "PathHandlingSelection", "").c_str());
+   C_UsToolSettings c_ToolSettings;
+   C_OscCryptoAgentSettings c_CryptoAgentSettings;
 
+   //Path handling
+   c_ToolSettings.SetPathHandlingSelection(orc_Ini.ReadString("Environment", "PathHandlingSelection", "").c_str());
    //Skip TSP import
-   orc_UserSettings.SetSkipTspSelection(orc_Ini.ReadString("Environment", "SkipTspImportSelection",
-                                                           "").c_str());
+   c_ToolSettings.SetSkipTspSelection(orc_Ini.ReadString("Environment", "SkipTspImportSelection",
+                                                         "").c_str());
+   //Crypto Agent
+   c_CryptoAgentSettings.c_CryptoAgentExecutablePath = orc_Ini.ReadString("Environment", "CryptoAgentExecutablePath",
+                                                                          "../connectors/crypto_agent/osy_crypto_agent.exe");
+   c_CryptoAgentSettings.c_CryptoAgentConfigFilePath = orc_Ini.ReadString("Environment", "CryptoAgentConfigFilePath",
+                                                                          "./osy_crypto_agent.conf");
+   c_CryptoAgentSettings.au8_CryptoAgentIp[0UL] =
+      static_cast<uint8_t>(orc_Ini.ReadInteger("Environment", "CryptoAgentIp0", 127UL));
+   c_CryptoAgentSettings.au8_CryptoAgentIp[1UL] =
+      static_cast<uint8_t>(orc_Ini.ReadInteger("Environment", "CryptoAgentIp1", 0UL));
+   c_CryptoAgentSettings.au8_CryptoAgentIp[2UL] =
+      static_cast<uint8_t>(orc_Ini.ReadInteger("Environment", "CryptoAgentIp2", 0UL));
+   c_CryptoAgentSettings.au8_CryptoAgentIp[3UL] =
+      static_cast<uint8_t>(orc_Ini.ReadInteger("Environment", "CryptoAgentIp3", 1UL));
+   c_CryptoAgentSettings.u16_CryptoAgentPort =
+      static_cast<uint16_t>(orc_Ini.ReadInteger("Environment", "CryptoAgentPort", 50963UL));
+   c_CryptoAgentSettings.q_CryptoAgentAutoStart = orc_Ini.ReadBool("Environment", "CryptoAgentAutoStart", true);
+   c_CryptoAgentSettings.q_CryptoAgentAutoStop = orc_Ini.ReadBool("Environment", "CryptoAgentAutoStop", true);
+   c_ToolSettings.SetCryptoAgentSettings(c_CryptoAgentSettings);
+   orc_UserSettings.SetToolSettings(c_ToolSettings);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

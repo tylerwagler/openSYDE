@@ -12,7 +12,9 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_SclString.hpp"
 #include "C_CanDispatcher.hpp"
+#include "C_OscIpDispatcher.hpp"
 #include "C_OscProtocolDriverOsyTpCan.hpp"
+#include "C_OscProtocolDriverOsyTpIp.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
 #include "C_OscComFlashloaderInformation.hpp"
 #include "C_OscHexFile.hpp"
@@ -33,6 +35,9 @@ public:
    virtual ~C_OscBuSequences(void);
    int32_t Init(stw::can::C_CanDispatcher * const opc_CanDispatcher, const int32_t os32_CanBitrate,
                 const uint8_t ou8_NodeId);
+   int32_t Init(stw::can::C_CanDispatcher * const opc_CanDispatcher, C_OscIpDispatcher * const opc_IpDispatcher,
+                const int32_t os32_CanBitrate, const uint8_t (&orau8_IpAddress)[4], const uint8_t ou8_NodeId,
+                const uint8_t ou8_BusId = 0U);
    int32_t ActivateFlashLoader(const uint32_t ou32_FlashloaderResetWaitTime);
    int32_t ReadDeviceInformation(void);
    int32_t UpdateNode(const stw::scl::C_SclString & orc_HexFilePath, const uint32_t ou32_RequestDownloadTimeout,
@@ -56,8 +61,11 @@ protected:
 private:
    // driver instances:
    stw::can::C_CanDispatcher * mpc_CanDispatcher;
-   stw::opensyde_core::C_OscProtocolDriverOsyTpCan mc_TpCan;
-   stw::opensyde_core::C_OscProtocolDriverOsy mc_OsyProtocol;
+   C_OscIpDispatcher * mpc_IpDispatcher;
+   C_OscProtocolDriverOsyTpCan * mpc_TpCan;
+   C_OscProtocolDriverOsyTpIp * mpc_TpIp;
+
+   C_OscProtocolDriverOsy mc_OsyProtocol;
 
    int32_t ms32_CanBitrate; // CAN bitrate in kBit/s
 };

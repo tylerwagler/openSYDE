@@ -87,7 +87,7 @@ void C_OgeTedToolTipContent::m_AdjustMinimumSize()
       if (s32_LongestTextLength < c_Strings[s32_Pos].length())
       {
          c_LongestText = c_Strings[s32_Pos];
-         s32_LongestTextLength = c_LongestText.length();
+         s32_LongestTextLength = static_cast<int32_t>(c_LongestText.length());
       }
    }
 

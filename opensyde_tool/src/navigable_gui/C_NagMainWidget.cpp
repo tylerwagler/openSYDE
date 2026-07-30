@@ -747,7 +747,7 @@ void C_NagMainWidget::m_SettingsClicked()
    new C_NagToolSettingsPopupDialog(*c_New);
 
    //Resize
-   c_New->SetSize(QSize(700, 400));
+   c_New->SetSize(QSize(900, 700));
 
    c_New->exec();
 

@@ -40,6 +40,7 @@ using namespace stw::scl;
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 static bool m_FileAgeDosTime(const C_SclString & orc_FileName, uint16_t * const opu16_Date,
                              uint16_t * const opu16_Time);
+static uint64_t m_FileTimeToUnixSeconds(const FILETIME & orc_FileTimeUtc);
 static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
                           C_SclDynamicArray<C_TglFileSearchRecord> & orc_FoundFiles,
                           const bool oq_IncludeDirectories = false,
@@ -67,6 +68,31 @@ static bool m_FileAgeDosTime(const C_SclString & orc_FileName, uint16_t * const 
       }
    }
    return q_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Convert Windows file time to Unix timestamp seconds
+
+   \param[in]  orc_FileTimeUtc   Windows FILETIME in UTC
+
+   \return
+   UTC seconds since Unix epoch; 0 if value is before Unix epoch
+*/
+//----------------------------------------------------------------------------------------------------------------------
+static uint64_t m_FileTimeToUnixSeconds(const FILETIME & orc_FileTimeUtc)
+{
+   const uint64_t u64_FILETIME_TO_UNIX_EPOCH_100NS = 116444736000000000ULL;
+   const uint64_t u64_100NS_PER_SECOND = 10000000ULL;
+   uint64_t u64_Retval = 0ULL;
+   uint64_t u64_FileTime;
+
+   u64_FileTime = (static_cast<uint64_t>(orc_FileTimeUtc.dwHighDateTime) << 32U) |
+                  static_cast<uint64_t>(orc_FileTimeUtc.dwLowDateTime);
+   if (u64_FileTime >= u64_FILETIME_TO_UNIX_EPOCH_100NS)
+   {
+      u64_Retval = (u64_FileTime - u64_FILETIME_TO_UNIX_EPOCH_100NS) / u64_100NS_PER_SECOND;
+   }
+   return u64_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -289,6 +315,8 @@ static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
    {
       orc_FoundFiles.IncLength();
       orc_FoundFiles[orc_FoundFiles.GetHigh()].c_FileName = t_FindFileData.cFileName;
+      orc_FoundFiles[orc_FoundFiles.GetHigh()].u64_LastWriteTimeUtcSeconds =
+         m_FileTimeToUnixSeconds(t_FindFileData.ftLastWriteTime);
       if (opc_IsDirectory != NULL)
       {
          opc_IsDirectory->IncLength();
@@ -304,6 +332,8 @@ static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
       {
          orc_FoundFiles.IncLength();
          orc_FoundFiles[orc_FoundFiles.GetHigh()].c_FileName = t_FindFileData.cFileName;
+         orc_FoundFiles[orc_FoundFiles.GetHigh()].u64_LastWriteTimeUtcSeconds =
+            m_FileTimeToUnixSeconds(t_FindFileData.ftLastWriteTime);
          if (opc_IsDirectory != NULL)
          {
             opc_IsDirectory->IncLength();

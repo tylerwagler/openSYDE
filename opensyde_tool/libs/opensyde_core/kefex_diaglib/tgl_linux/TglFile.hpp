@@ -32,8 +32,8 @@ namespace tgl
 class C_TglFileSearchRecord
 {
 public:
-   stw::scl::C_SclString c_FileName; ///< name of found file (with full path)
-   //for now we only need the name ...
+   stw::scl::C_SclString c_FileName;     ///< name of found file (with full path)
+   uint64_t u64_LastWriteTimeUtcSeconds; ///< last write time in UTC seconds since Unix epoch; 0 if unavailable
 };
 
 bool TglFileAgeString(const stw::scl::C_SclString & orc_FileName, stw::scl::C_SclString & orc_String);

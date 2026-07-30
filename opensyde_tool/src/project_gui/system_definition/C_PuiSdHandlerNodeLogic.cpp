@@ -613,7 +613,7 @@ void C_PuiSdHandlerNodeLogic::SetUiNodeBox(const uint32_t ou32_NodeIndex, const 
 uint32_t C_PuiSdHandlerNodeLogic::AddNodeAndSort(C_OscNode & orc_OscNode, const C_PuiSdNode & orc_UiNode,
                                                  const QString & orc_SubDeviceName, const QString & orc_MainDevice)
 {
-   const uint32_t u32_Index = mc_CoreDefinition.c_Nodes.size();
+   const uint32_t u32_Index = static_cast<uint32_t>(mc_CoreDefinition.c_Nodes.size());
    //Extract device name if the device was already set
    const C_SclString c_DeviceName = (orc_OscNode.pc_DeviceDefinition !=
                                      NULL) ? orc_OscNode.pc_DeviceDefinition->GetDisplayName() : "";
@@ -659,8 +659,8 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
                                                       const std::vector<QString> & orc_NodeNames,
                                                       const QString & orc_MainDevice, const QString & orc_NameProposal)
 {
-   const uint32_t u32_NodeIndex = mc_CoreDefinition.c_Nodes.size();
-   const uint32_t u32_NodeSquadIndex = mc_CoreDefinition.c_NodeSquads.size();
+   const uint32_t u32_NodeIndex = static_cast<uint32_t>(mc_CoreDefinition.c_Nodes.size());
+   const uint32_t u32_NodeSquadIndex = static_cast<uint32_t>(mc_CoreDefinition.c_NodeSquads.size());
 
    std::vector<stw::scl::C_SclString> c_NodeNames;
    C_SclString c_Name;
@@ -2489,7 +2489,8 @@ int32_t C_PuiSdHandlerNodeLogic::AddApplication(const uint32_t ou32_NodeIndex, C
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       const C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      tgl_assert(this->InsertApplication(ou32_NodeIndex, rc_Node.c_Applications.size(), orc_OscContent) == C_NO_ERR);
+      tgl_assert(this->InsertApplication(ou32_NodeIndex, static_cast<uint32_t>(rc_Node.c_Applications.size()),
+                                         orc_OscContent) == C_NO_ERR);
    }
    else
    {
@@ -6351,7 +6352,8 @@ void C_PuiSdHandlerNodeLogic::m_CleanUpComDataPool(const uint32_t & oru32_NodeIn
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[oru32_NodeIndex];
       C_PuiSdNode & rc_UiNode = this->mc_UiNodes[oru32_NodeIndex];
       tgl_assert(rc_Node.c_ComProtocols.size() == rc_UiNode.c_UiCanProtocols.size());
-      for (uint32_t u32_ItProtocol = rc_Node.c_ComProtocols.size(); u32_ItProtocol > 0UL; --u32_ItProtocol)
+      for (uint32_t u32_ItProtocol = static_cast<uint32_t>(rc_Node.c_ComProtocols.size()); u32_ItProtocol > 0UL;
+           --u32_ItProtocol)
       {
          const uint32_t u32_Index = u32_ItProtocol - 1UL;
          const C_OscCanProtocol & rc_Protcol = rc_Node.c_ComProtocols[u32_Index];

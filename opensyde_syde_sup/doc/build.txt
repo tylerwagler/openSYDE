@@ -3,28 +3,17 @@ File:      build.txt
 Content:   How to build this project
 ---------------------------------------------------------------------
 
-Used Compiler:
-==============
-Windows: 
-   MinGW 8.1.0
-   CMake 3.19.2
-   Ninja 1.10.0
-Ubuntu 20.04: 
-   GCC 9.4.0
-   CMake 3.16.3
+Used Tools:
+===========
+MinGW / GCC with cmake and ninja were used to provide the ready made binaries.
+For Windows see the paths in the build scripts for used versions.
+
+Using any C++2003 compliant toolchain should work (adaptions in cmakelists.txt might be needed if not using GCC/MinGW).
 
 Required Library Installation:
 ==============================
-Ubuntu 20.04:
-   libssl-dev:amd64 (sudo apt install libssl-dev:amd64)
-Required version of OpenSSL:
-   At the time of writing V1.1.1 of the OpenSSL or newer is sufficient.
-   Future versions of SYDEsup might need >= V3 of the OpenSSL library.
-
-Editor:
-=======
-Windows: Qt Creator 4.14.2
-Ubuntu: Qt Creator 4.11.0
+Linux:
+   libssl-dev (sudo apt install libssl-dev)
 
 How to build:
 =============
@@ -38,10 +27,17 @@ Ubuntu:
 Other targets:
    check infos in directory "target_integration" 
 
-
 How to use in Qt Creator:
 =========================
 Open project file CMakeLists.txt in Qt Creator and add CMAKE_TOOLCHAIN_FILE 
 variable to build settings (value = path to e.g. toolchain_windows.cmake).
 To get the resulting binary directly in result directory, 
 add build step "install" in project configuration.
+
+How to use in VS Code:
+=========================
+Make a toolchain file known to VS Code by adding the following lines to your .vscode/settings.json:
+   "cmake.configureSettings": {
+        "CMAKE_TOOLCHAIN_FILE": "${workspaceFolder}/pjt/toolchain_windows.cmake"
+    }
+Open command palette and run "CMake: Delete Cache and Reconfigure" to apply the setting.

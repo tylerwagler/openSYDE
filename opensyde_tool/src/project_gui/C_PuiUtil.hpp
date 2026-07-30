@@ -32,6 +32,7 @@ public:
    static QString h_GetResolvedAbsPathFromProject(const QString & orc_Path);
    static QString h_GetResolvedAbsPathFromExe(const QString & orc_Path, const QString & orc_DbProjectPath = "");
    static QString h_GetResolvedAbsPathFromDbProject(const QString & orc_DbProjectPath, const QString & orc_Path);
+   static void h_ChangeRelativePathsInUserDevicesIniToDevicesFolder(void);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

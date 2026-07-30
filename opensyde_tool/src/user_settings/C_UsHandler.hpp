@@ -25,6 +25,7 @@
 #include "C_UsCommunication.hpp"
 #include "C_UsNode.hpp"
 #include "C_UsSystemView.hpp"
+#include "C_UsToolSettings.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -72,8 +73,7 @@ public:
    QVector<QColor> GetRecentColors(void) const;
    int32_t GetNextRecentColorButtonNumber(void) const;
    int32_t GetScreenshotGifSucessTimeout(void) const;
-   QString GetPathHandlingSelection(void) const;
-   QString GetSkipTspSelection(void) const;
+   C_UsToolSettings GetToolSettings(void) const;
 
    void GetMostRecentFolder(QString & orc_Str) const;
    void GetRecentFolders(QStringList & orc_Folders) const;
@@ -143,8 +143,7 @@ public:
    void SetCurrentSaveAsPath(const QString & orc_Value);
    void SetRecentColors(const QVector<QColor> & orc_RecentColorsVector);
    void SetNextRecentColorButtonNumber(const int32_t os32_NextRecentColorButtonNumber);
-   void SetSkipTspSelection(const QString & orc_Selection);
-   void SetPathHandlingSelection(const QString & orc_Selection);
+   void SetToolSettings(const C_UsToolSettings & orc_ToolSettings);
 
    void AddToRecentProjects(const QString & orc_Str);
    void RemoveOfRecentProjects(const QString & orc_Str);
@@ -298,8 +297,7 @@ private:
    bool mq_PerformanceMeasurementActive;   ///< Flag if performance measurement is active (log entries)
 
    //Environment Section
-   QString mc_PathHandlingSelection;  ///< Currently chosen option (Relative or Absolute)
-   QString mc_SkipTspImportSelection; ///< Flag if TSP Import on Node Adding shall always be skipped
+   C_UsToolSettings mc_ToolSettings;
 
    QString mc_CurrentSaveAsPath;              ///< Current save as base path
    QVector<QColor> mc_RecentColors;           ///< Recent colors from color picker

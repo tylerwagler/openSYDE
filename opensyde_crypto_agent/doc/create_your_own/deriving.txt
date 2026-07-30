@@ -1,0 +1,23 @@
+How to derive your own implementation
+=====================================
+The reference implementation of the openSYDE Crypto Agent uses locally stored
+.pem files containing the private keys for openSYDE protocol authentication.
+
+Technically is is possible to run the Crypto Agent on another machine to limit 
+exposure of those files. 
+For this scenario take note that the TCP protocol between client tools and the Crypto Agent
+is neither authenticated not encrypted. So without additional means (e.g. firewall, SSL proxy) 
+anyone with network access to the server running the Crypto Agent service could use the service.
+
+To further adapt to specific security needs and server infrastructure users can create their
+own implementation.
+The TCP protocol is described in protocol.txt. But it is strongly recommended to base a
+derived implementation on the existing code. So the ready-made infrastructure can be reused.
+
+The main entry point to your own implementation is C_CasServerLogic::m_ServiceHandlerSolveAuthChallenge.
+This function implements the .pem-folder based reference implementation.
+Reimplement it according to your needs.
+
+The Python test cases in src/test could be used as a basis for testing your own implementation.
+As is some are generic for the interface while some are specific to the implementation.
+See scripts in ../bat for scripted execution (paths might need adaptation).

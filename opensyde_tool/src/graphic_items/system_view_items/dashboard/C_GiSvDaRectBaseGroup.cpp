@@ -1325,6 +1325,8 @@ void C_GiSvDaRectBaseGroup::mousePressEvent(QGraphicsSceneMouseEvent * const opc
       if (((this->mq_EditContentModeEnabled == true) || (this->mq_EditModeActive == false)) &&
           (this->IsMousePosRelevantForProxyWidgetInteraction(opc_Event->scenePos()) == true))
       {
+         QWidget * const pc_EmbeddedWidget = this->mpc_ProxyWidget->widget();
+
          //Start proxy widget interaction
          this->mq_ProxyWidgetInteractionActive = true;
          Q_EMIT (this->SigWidgetHandling(true));
@@ -1334,7 +1336,18 @@ void C_GiSvDaRectBaseGroup::mousePressEvent(QGraphicsSceneMouseEvent * const opc
             Q_EMIT (this->SigSelected(this, true));
          }
 
+         // Qt6: Make proxy the scene's focus item explicitly, so the embedded widget
+         // receives keyboard focus and the cursor is visible
+         this->mpc_ProxyWidget->setFocus(Qt::MouseFocusReason);
+
+         // Qt6: Also ensure the embedded widget gets actual focus
+         if (pc_EmbeddedWidget != NULL)
+         {
+            pc_EmbeddedWidget->setFocus(Qt::MouseFocusReason);
+         }
+
          this->mpc_ProxyWidget->TriggerMousePressEvent(opc_Event);
+
          opc_Event->accept();
       }
       else

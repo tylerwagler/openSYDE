@@ -75,6 +75,10 @@ public:
    static void h_GetNumberAtStringEnd(const stw::scl::C_SclString & orc_ProposedName,
                                       stw::scl::C_SclString & orc_CutString, int32_t & ors32_Number);
 
+   // IP address utilities
+   static int32_t h_StringToIp4(const stw::scl::C_SclString & orc_IpString, uint8_t(&orau8_Ip)[4]);
+   static stw::scl::C_SclString h_Ip4ToString(const uint8_t(&orau8_Ip)[4]);
+
    // Path variables
    static const stw::scl::C_SclString hc_PATH_VARIABLE_OPENSYDE_BIN;
    static const stw::scl::C_SclString hc_PATH_VARIABLE_OPENSYDE_PROJ;

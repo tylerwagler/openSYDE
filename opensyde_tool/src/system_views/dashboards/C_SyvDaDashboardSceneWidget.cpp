@@ -285,7 +285,20 @@ void C_SyvDaDashboardSceneWidget::HandleManualOperationFinished(const int32_t os
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSceneWidget::SetFocus(void) const
 {
-   this->mpc_Ui->pc_GraphicsView->setFocus();
+   if (this->mpc_Scene != NULL)
+   {
+      QGraphicsView * const pc_View = this->mpc_Ui->pc_GraphicsView;
+      this->mpc_Scene->setFocus();
+
+      // Qt6: The scene only becomes active when the viewport receives QEvent::WindowActivate.
+      // When switching tabs in an already active window, this does not happen automatically.
+      if ((this->mpc_Scene->isActive() == false) && (pc_View != NULL) &&
+          (pc_View->viewport() != NULL))
+      {
+         QEvent c_ActivateEvent(QEvent::WindowActivate);
+         QApplication::sendEvent(pc_View->viewport(), &c_ActivateEvent);
+      }
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

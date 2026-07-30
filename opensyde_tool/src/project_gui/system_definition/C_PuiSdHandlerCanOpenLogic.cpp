@@ -1246,8 +1246,8 @@ int32_t C_PuiSdHandlerCanOpenLogic::m_DeleteCanOpenManagerMessageVectors(
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   for (uint32_t u32_ItMessage = orc_MessageVector.size(); (u32_ItMessage > 0UL) && (s32_Retval == C_NO_ERR);
-        --u32_ItMessage)
+   for (uint32_t u32_ItMessage = static_cast<uint32_t>(orc_MessageVector.size());
+        (u32_ItMessage > 0UL) && (s32_Retval == C_NO_ERR); --u32_ItMessage)
    {
       const uint32_t u32_MessageIndex = u32_ItMessage - 1UL;
       const C_OscCanMessage & rc_Message = orc_MessageVector[u32_MessageIndex];

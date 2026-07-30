@@ -270,6 +270,7 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreMultiColumnLeafSortFilter.cpp
    ${PROJECT_ROOT}/src/user_settings/C_UsHandler.cpp
    ${PROJECT_ROOT}/src/user_settings/C_UsFiler.cpp
+   ${PROJECT_ROOT}/src/user_settings/C_UsToolSettings.cpp
    ${PROJECT_ROOT}/src/project_operations/C_PopListItem.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeContextMenu.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.cpp
@@ -296,6 +297,7 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/navigable_gui/C_NagToolBarWidget.cpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagUseCaseViewWidget.cpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagUseCaseWidget.cpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagCryptoAgentStarterThread.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiCanBus.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiBus.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiSimpleLine.cpp
@@ -1063,6 +1065,7 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/navigable_gui/C_NagTopTreeDelegate.hpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagTopTreeModel.hpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagTopTreeView.hpp
+   ${PROJECT_ROOT}/src/navigable_gui/C_NagCryptoAgentStarterThread.hpp
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesPopUpDialog.hpp
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableModel.hpp
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableView.hpp
@@ -1172,6 +1175,7 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/user_settings/C_UsHandler.hpp
    ${PROJECT_ROOT}/src/constants.hpp
    ${PROJECT_ROOT}/src/user_settings/C_UsFiler.hpp
+   ${PROJECT_ROOT}/src/user_settings/C_UsToolSettings.hpp
    ${PROJECT_ROOT}/src/project_operations/C_PopListItem.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeContextMenu.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.hpp

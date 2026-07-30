@@ -115,7 +115,7 @@ QPainterPath C_GiBiLineBounding::GetShape(void)
          this->m_AppendLineBoundingPointsTop(s32_It, s32_It + 1);
       }
       m_ConsolidateLine(0, static_cast<int32_t>(this->mc_Bounding.size() - 1));
-      s32_FirstPointInSecondSegment = this->mc_Bounding.size();
+      s32_FirstPointInSecondSegment = static_cast<int32_t>(this->mc_Bounding.size());
       for (int32_t s32_It = static_cast<int32_t>(this->mc_Points.size() - 1); s32_It > 0; --s32_It)
       {
          this->m_AppendLineBoundingPointsTop(s32_It, s32_It - 1);

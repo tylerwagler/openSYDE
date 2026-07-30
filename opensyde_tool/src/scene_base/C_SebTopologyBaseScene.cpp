@@ -523,7 +523,7 @@ uint64_t C_SebTopologyBaseScene::m_GetNewUniqueBusConnectorId(const QMap<C_PuiBs
       //Offset for standard content of Bus Connector part of map
       if (opc_AdditionalConnectionData != NULL)
       {
-         u32_Offset = opc_AdditionalConnectionData->size();
+         u32_Offset = static_cast<uint32_t>(opc_AdditionalConnectionData->size());
       }
       else
       {

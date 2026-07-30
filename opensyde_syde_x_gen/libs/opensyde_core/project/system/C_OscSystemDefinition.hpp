@@ -96,6 +96,9 @@ public:
    int32_t SetNodeName(const uint32_t ou32_NodeIndex, const stw::scl::C_SclString & orc_NodeName);
    int32_t GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex, uint32_t & oru32_NodeSquadIndex) const;
 
+   stw::scl::C_SclString GetLastLoadedFilePath(void) const;
+   void SetLastLoadedFilePath(const stw::scl::C_SclString  &  orc_Value);
+
    static C_OscDeviceManager hc_Devices;     ///< container of device types known in the system
    std::vector<C_OscNode> c_Nodes;           ///< all nodes that are part of this system definition
    std::vector<C_OscNodeSquad> c_NodeSquads; ///< all multi CPU based devices with sub nodes of this system definition
@@ -103,6 +106,8 @@ public:
    uint32_t u32_NameMaxCharLimit;            ///< global limit for naming length checks
 
 private:
+   stw::scl::C_SclString mc_LastLoadedFilePath;
+
    uint32_t m_GetDataPoolHash(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex) const;
    uint32_t m_GetRelatedProtocolHash(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex) const;
 

@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include <limits>
-#define MINIZ_NO_ZLIB_COMPATIBLE_NAMES //prevent namespace pollution
 #include "miniz.h"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"

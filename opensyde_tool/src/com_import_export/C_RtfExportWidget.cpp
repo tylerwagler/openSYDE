@@ -456,8 +456,8 @@ int32_t C_RtfExportWidget::ExportToRtf(const C_SclString & orc_RtfPath, const C_
       osc_write_log_info("RTF File Export", "Content ready, call DocuCreator ...");
 
       QStringList c_Arguments;
-      c_Arguments.push_back("-c");
-      c_Arguments.push_back(c_SclStringDocuCreatorConfigPath.c_str());
+      c_Arguments.append("-c");
+      c_Arguments.append(c_SclStringDocuCreatorConfigPath.c_str());
 
       QProcess * const pc_Process = new QProcess(new QObject());
       // execute DocuCreator

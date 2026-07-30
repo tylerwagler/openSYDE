@@ -175,7 +175,7 @@ void C_SdBueMessageRxList::AddNodes(const std::vector<QString> & orc_EntryNames,
          this->mpc_Ui->pc_GroupBoxNotEmpty->setVisible(true);
       }
 
-      this->m_HandleWidgetSize(u32_MinSize, orc_EntryNames.size());
+      this->m_HandleWidgetSize(u32_MinSize, static_cast<uint32_t>(orc_EntryNames.size()));
    }
    else
    {

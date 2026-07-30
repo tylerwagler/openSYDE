@@ -154,7 +154,7 @@ int32_t C_CieExportDbc::h_ExportNetwork(const stw::scl::C_SclString & orc_File,
       c_Message = "Inserting messages for network ...";
       osc_write_log_info("DBC file export", c_Message);
       s32_Return = mh_SetMessages(orc_Definition.c_Nodes, c_DbcNetwork.messages);
-      mhc_ExportStatistic.u32_NumOfMessages = c_DbcNetwork.messages.size(); // in any case
+      mhc_ExportStatistic.u32_NumOfMessages = static_cast<uint32_t>(c_DbcNetwork.messages.size()); // in any case
    }
 
    // save DBC export to file

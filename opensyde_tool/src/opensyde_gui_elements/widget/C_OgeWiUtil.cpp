@@ -263,7 +263,8 @@ int32_t C_OgeWiUtil::h_GetNextOptimalPointSize(const QFont & orc_Font, const QSi
       const float32_t f32_WidgetHeight = static_cast<float32_t>(orc_Size.height()) * of32_HeightScaling;
       const int32_t s32_WidgetHeight = static_cast<int32_t>(f32_WidgetHeight);
       const int32_t s32_Init = std::max(std::max(orc_Font.pointSize(), orc_Font.pixelSize()), 1);
-      QFont c_Font(orc_Font.family(), s32_Init, orc_Font.weight(), orc_Font.italic());
+      QFont c_Font(orc_Font.family(), s32_Init, static_cast<int32_t>(orc_Font.weight()),
+                   orc_Font.italic());
 
       s32_Retval = s32_Init;
       for (int32_t s32_StepWidth = 2; s32_StepWidth > 0; --s32_StepWidth)

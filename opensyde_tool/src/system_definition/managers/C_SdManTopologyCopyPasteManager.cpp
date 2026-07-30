@@ -132,10 +132,8 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
          switch (pc_CurItem->type())
          {
          case ms32_GRAPHICS_ITEM_NODE:
-            C_SdManTopologyCopyPasteManager::mh_CopyFromSceneToManagerHandleNode(dynamic_cast<const C_GiNode *>(
-                                                                                    pc_CurItem),
-                                                                                 c_Snapshot, orc_NormalizedZetValues,
-                                                                                 *c_ItItem);
+            C_SdManTopologyCopyPasteManager::mh_CopyFromSceneToManagerHandleNode(
+               dynamic_cast<const C_GiNode *>(pc_CurItem), c_Snapshot, orc_NormalizedZetValues, *c_ItItem);
             break;
          case ms32_GRAPHICS_ITEM_CANBUS: //Same data element
          case ms32_GRAPHICS_ITEM_ETHERNETBUS:
@@ -148,16 +146,12 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
                const C_PuiSdBus * const pc_UiBus = C_PuiSdHandler::h_GetInstance()->GetUiBus(u32_Index);
                if ((pc_OscBus != NULL) && (pc_UiBus != NULL))
                {
-                  c_MapOldIndexToNewIndex.insert(u32_Index, c_Snapshot.c_OscBuses.size());
+                  c_MapOldIndexToNewIndex.insert(u32_Index, static_cast<uint32_t>(c_Snapshot.c_OscBuses.size()));
                   c_Snapshot.c_OscBuses.push_back(*pc_OscBus);
                   c_Snapshot.c_UiBuses.push_back(*pc_UiBus);
-                  C_SebBaseCopyPasteManager::mh_HandleZetValueLine(*c_ItItem, orc_NormalizedZetValues,
-                                                                   c_Snapshot.c_UiBuses[static_cast<std::vector<C_PuiSdBus>
-                                                                                                    ::size_type>(
-                                                                                           c_Snapshot.
-                                                                                           c_UiBuses
-                                                                                           .size() -
-                                                                                           1UL)]);
+                  C_SebBaseCopyPasteManager::mh_HandleZetValueLine(
+                     *c_ItItem, orc_NormalizedZetValues, c_Snapshot.c_UiBuses[
+                        static_cast<std::vector<C_PuiSdBus>::size_type>(c_Snapshot.c_UiBuses.size() - 1UL)]);
                }
             }
             break;
@@ -171,14 +165,10 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
                {
                   c_Snapshot.c_TextElements.push_back(C_PuiSdHandler::h_GetInstance()->c_Elements.c_TextElements[
                                                          u32_Index]);
-                  C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues,
-                                                                  c_Snapshot.c_TextElements[static_cast<std::vector<C_PuiBsTextElement>
-                                                                                                        ::size_type>(
-                                                                                               c_Snapshot.c_TextElements
-                                                                                               .
-                                                                                               size()
-                                                                                               -
-                                                                                               1UL)]);
+                  C_SebBaseCopyPasteManager::mh_HandleZetValueBox(
+                     *c_ItItem, orc_NormalizedZetValues,
+                     c_Snapshot.c_TextElements[static_cast<std::vector<C_PuiBsTextElement>::size_type>(
+                                                  c_Snapshot.c_TextElements.size() - 1UL)]);
                }
             }
             break;
@@ -191,14 +181,10 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
                if (u32_Index < C_PuiSdHandler::h_GetInstance()->c_BusTextElements.size())
                {
                   c_Snapshot.c_BusTextElements.push_back(C_PuiSdHandler::h_GetInstance()->c_BusTextElements[u32_Index]);
-                  C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues,
-                                                                  c_Snapshot.c_BusTextElements[static_cast<std::vector<C_PuiSdTextElementBus>
-                                                                                                           ::size_type>(
-                                                                                                  c_Snapshot.
-                                                                                                  c_BusTextElements
-                                                                                                  .size()
-                                                                                                  -
-                                                                                                  1UL)]);
+                  C_SebBaseCopyPasteManager::mh_HandleZetValueBox(
+                     *c_ItItem, orc_NormalizedZetValues, c_Snapshot.c_BusTextElements[
+                        static_cast<std::vector<C_PuiSdTextElementBus>::size_type>(
+                           c_Snapshot.c_BusTextElements.size() - 1UL)]);
                }
             }
             break;
@@ -211,13 +197,10 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
                if (u32_Index < C_PuiSdHandler::h_GetInstance()->c_Elements.c_Boundaries.size())
                {
                   c_Snapshot.c_Boundaries.push_back(C_PuiSdHandler::h_GetInstance()->c_Elements.c_Boundaries[u32_Index]);
-                  C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues,
-                                                                  c_Snapshot.c_Boundaries[static_cast<std::vector<C_PuiBsBoundary>
-                                                                                                      ::size_type>(
-                                                                                             c_Snapshot.
-                                                                                             c_Boundaries
-                                                                                             .size() -
-                                                                                             1UL)]);
+                  C_SebBaseCopyPasteManager::mh_HandleZetValueBox(
+                     *c_ItItem, orc_NormalizedZetValues,
+                     c_Snapshot.c_Boundaries[
+                        static_cast<std::vector<C_PuiBsBoundary>::size_type>(c_Snapshot.c_Boundaries.size() - 1UL)]);
                }
             }
             break;
@@ -230,13 +213,9 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
                if (u32_Index < C_PuiSdHandler::h_GetInstance()->c_Elements.c_Images.size())
                {
                   c_Snapshot.c_Images.push_back(C_PuiSdHandler::h_GetInstance()->c_Elements.c_Images[u32_Index]);
-                  C_SebBaseCopyPasteManager::mh_HandleZetValueBox(*c_ItItem, orc_NormalizedZetValues,
-                                                                  c_Snapshot.c_Images[static_cast<std::vector<C_PuiBsImage>
-                                                                                                  ::size_type>(
-                                                                                         c_Snapshot.
-                                                                                         c_Images.
-                                                                                         size() -
-                                                                                         1UL)]);
+                  C_SebBaseCopyPasteManager::mh_HandleZetValueBox(
+                     *c_ItItem, orc_NormalizedZetValues, c_Snapshot.c_Images[
+                        static_cast<std::vector<C_PuiBsImage>::size_type>(c_Snapshot.c_Images.size() - 1UL)]);
                }
             }
             break;
@@ -249,13 +228,10 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
                if (u32_Index < C_PuiSdHandler::h_GetInstance()->c_Elements.c_LineArrows.size())
                {
                   c_Snapshot.c_LineArrows.push_back(C_PuiSdHandler::h_GetInstance()->c_Elements.c_LineArrows[u32_Index]);
-                  C_SebBaseCopyPasteManager::mh_HandleZetValueLine(*c_ItItem, orc_NormalizedZetValues,
-                                                                   c_Snapshot.c_LineArrows[static_cast<std::vector<C_PuiBsLineArrow>
-                                                                                                       ::size_type>(
-                                                                                              c_Snapshot.
-                                                                                              c_LineArrows
-                                                                                              .size() -
-                                                                                              1UL)]);
+                  C_SebBaseCopyPasteManager::mh_HandleZetValueLine(
+                     *c_ItItem, orc_NormalizedZetValues,
+                     c_Snapshot.c_LineArrows[
+                        static_cast<std::vector<C_PuiBsLineArrow>::size_type>(c_Snapshot.c_LineArrows.size() - 1UL)]);
                }
             }
             break;
@@ -411,12 +387,9 @@ void C_SdManTopologyCopyPasteManager::mh_CopyFromSceneToManagerHandleNode(const 
          {
             orc_Snapshot.c_OscNodes.push_back(*pc_OscNode);
             orc_Snapshot.c_UiNodes.push_back(*pc_UiNode);
-            C_SebBaseCopyPasteManager::mh_HandleZetValueBox(opc_NodeItemOrigin, orc_NormalizedZetValues,
-                                                            orc_Snapshot.c_UiNodes[static_cast<std::vector<C_PuiSdNode>
-                                                                                               ::size_type>(
-                                                                                      orc_Snapshot.c_UiNodes.size()
-                                                                                      -
-                                                                                      1UL)]);
+            C_SebBaseCopyPasteManager::mh_HandleZetValueBox(
+               opc_NodeItemOrigin, orc_NormalizedZetValues,  orc_Snapshot.c_UiNodes[
+                  static_cast<std::vector<C_PuiSdNode>::size_type>(orc_Snapshot.c_UiNodes.size() - 1UL)]);
          }
       }
    }
@@ -465,20 +438,13 @@ void C_SdManTopologyCopyPasteManager::mh_CopyFromSceneToManagerHandleMultiNode(c
                   C_PuiSdHandler::h_GetInstance()->GetUiNode(c_Indices[u32_ItNode]);
                if ((pc_OscNode != NULL) && (pc_UiNode != NULL))
                {
-                  c_Group.c_SubNodeIndexes.push_back(orc_Snapshot.c_OscNodes.size());
+                  c_Group.c_SubNodeIndexes.push_back(static_cast<uint32_t>(orc_Snapshot.c_OscNodes.size()));
                   orc_Snapshot.c_OscNodes.push_back(*pc_OscNode);
                   orc_Snapshot.c_UiNodes.push_back(*pc_UiNode);
-                  C_SebBaseCopyPasteManager::mh_HandleZetValueBox(opc_NodeItemOrigin, orc_NormalizedZetValues,
-                                                                  orc_Snapshot.c_UiNodes[static_cast<std::
-                                                                                                     vector<C_PuiSdNode>
-                                                                                                     ::
-                                                                                                     size_type>(
-                                                                                            orc_Snapshot.
-                                                                                            c_UiNodes
-                                                                                            .
-                                                                                            size()
-                                                                                            -
-                                                                                            1UL)]);
+                  C_SebBaseCopyPasteManager::mh_HandleZetValueBox(
+                     opc_NodeItemOrigin, orc_NormalizedZetValues,
+                     orc_Snapshot.c_UiNodes[
+                        static_cast<std::vector<C_PuiSdNode>::size_type>(orc_Snapshot.c_UiNodes.size() - 1UL)]);
                }
             }
             tgl_assert(c_Group.c_SubNodeIndexes.size() == pc_Group->c_SubNodeIndexes.size());

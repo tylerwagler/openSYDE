@@ -95,8 +95,6 @@ C_OscComDriverFlash::~C_OscComDriverFlash(void)
    \param[in]  orc_ActiveNodes         Flags for all available nodes in the system
    \param[in]  opc_CanDispatcher       Pointer to concrete CAN dispatcher
    \param[in]  opc_IpDispatcher        Pointer to concrete IP dispatcher
-   \param[in]  opc_SecurityPemDb       Pointer to PEM database (optional)
-                                       Needed if nodes with enabled security are used in the system
 
    \return
    C_NO_ERR      Operation success
@@ -112,11 +110,10 @@ C_OscComDriverFlash::~C_OscComDriverFlash(void)
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscComDriverFlash::Init(const C_OscSystemDefinition & orc_SystemDefinition,
                                   const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes,
-                                  C_CanDispatcher * const opc_CanDispatcher, C_OscIpDispatcher * const opc_IpDispatcher,
-                                  C_OscSecurityPemDatabase * const opc_SecurityPemDb)
+                                  C_CanDispatcher * const opc_CanDispatcher, C_OscIpDispatcher * const opc_IpDispatcher)
 {
    int32_t s32_Return = C_OscComDriverProtocol::Init(orc_SystemDefinition, ou32_ActiveBusIndex, orc_ActiveNodes,
-                                                     opc_CanDispatcher, opc_IpDispatcher, opc_SecurityPemDb);
+                                                     opc_CanDispatcher, opc_IpDispatcher);
 
    if (s32_Return == C_NO_ERR)
    {
@@ -1428,8 +1425,7 @@ int32_t C_OscComDriverFlash::SendOsyEcuReset(const C_OscProtocolDriverOsyNode & 
 
    \return
    C_NO_ERR    Session and security access set successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly or
-               PEM database was needed but not set.
+   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly
    C_NOACT     Nodes has no openSYDE protocol
    C_WARN      Error response received
    C_TIMEOUT   Expected response not received within timeout
@@ -1463,8 +1459,7 @@ int32_t C_OscComDriverFlash::SendOsySetPreProgrammingMode(C_OscProtocolDriverOsy
    \return
    C_NO_ERR    Session and security access set successfully
    C_RANGE     openSYDE protocol not found
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly or
-               PEM database was needed but not set.
+   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly
    C_NOACT     Nodes has no openSYDE protocol
    C_WARN      Error response received
    C_TIMEOUT   Expected response not received within timeout
@@ -1530,8 +1525,7 @@ int32_t C_OscComDriverFlash::SendOsySetPreProgrammingMode(const C_OscProtocolDri
    \return
    C_NO_ERR    Session and security access set successfully
    C_RANGE     openSYDE protocol not found
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly or
-               PEM database was needed but not set.
+   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly
    C_NOACT     Nodes has no openSYDE protocol
    C_WARN      Error response received
    C_TIMEOUT   Expected response not received within timeout
@@ -1579,8 +1573,7 @@ int32_t C_OscComDriverFlash::SendOsySetProgrammingMode(const C_OscProtocolDriver
    \return
    C_NO_ERR    Session and security access set successfully
    C_RANGE     openSYDE protocol not found
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly or
-               PEM database was needed but not set.
+   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly
    C_NOACT     Nodes has no openSYDE protocol
    C_WARN      Error response received
    C_TIMEOUT   Expected response not received within timeout

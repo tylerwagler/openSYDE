@@ -486,13 +486,10 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
 
                if (q_Match == true)
                {
-                  osc_write_log_info("", "q_Match==true");
-
                   // Matching error response found!
                   // special handling for "responsePending": rewind Rx timeout expectation
                   if (orc_Service.c_Data[2] == hu8_NR_CODE_RESPONSE_PENDING)
                   {
-                     osc_write_log_info("", "ResponsePending detected, rewinding timeout ...");
                      u32_StartTime = stw::tgl::TglGetTickCount();
                      // The response of the server resets the session timeouts
                      u32_LastWaitTimeHandled = u32_StartTime;

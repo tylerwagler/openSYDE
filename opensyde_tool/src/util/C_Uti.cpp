@@ -534,6 +534,18 @@ QString C_Uti::h_GetExePath(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get devices ini path
+
+   \return
+   Devices ini path
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_Uti::h_GetDevicesIniPath()
+{
+   return C_Uti::h_GetAbsolutePathFromExe("../devices");
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set current directory to exe directory
 
    Depending on how the binary is executed those might be different when starting
@@ -544,21 +556,6 @@ QString C_Uti::h_GetExePath(void)
 void C_Uti::h_SetCurrentDirectoryToExeDirectory(void)
 {
    QDir::setCurrent(C_Uti::h_GetExePath());
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get PEM database path
-
-   \return
-   PEM database path
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_Uti::h_GetPemDbPath()
-{
-   QDir c_Directory(C_Uti::h_GetExePath());
-
-   c_Directory.cd("certificates");
-   return c_Directory.absolutePath();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -350,7 +350,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
       c_TcpService.sin_addr.S_un.S_un_b.s_b2  = orc_Connection.au8_IpAddress[1];
       c_TcpService.sin_addr.S_un.S_un_b.s_b3  = orc_Connection.au8_IpAddress[2];
       c_TcpService.sin_addr.S_un.S_un_b.s_b4  = orc_Connection.au8_IpAddress[3];
-      c_TcpService.sin_port = htons(mhu16_UDP_TCP_PORT); //server port
+      c_TcpService.sin_port = htons(mu16_UdpTcpPort); //server port
 
       //lint -e{929,740,9176}  Side-effect of the POSIX-style API. Match is guaranteed by the API.
       x_Return =
@@ -389,35 +389,63 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
             osc_write_log_warning("openSYDE IP-TP",
                                   "TCP connect select() failed. IP-Address: " + mh_IpToText(
                                      orc_Connection.au8_IpAddress) + " No connection within timeout");
-            // No error. The connection to the concrete target can be established later
-            q_Error = false;
+            q_Error = true;
             break;
          case 1:
-            //lint -e{1924,9119,9177} //macro defined by API; no problem
-            if (FD_ISSET(orc_Connection.x_Socket, &c_SocketWriteSet))
             {
-               // Get port of client for logging (the byte order must be changed of the read port by ntohs)
-               sockaddr_in c_SocketInfo;
-               int x_Size = //lint !e8080 !e970 //using type to match library interface
-                            sizeof(c_SocketInfo);
+               // A non-blocking connect can signal writable for both success and failure.
+               // SO_ERROR is the authoritative result.
+               int x_SoError = 0; //lint !e8080 !e970 //using type to match library interface
+               int x_OptLen =     //lint !e8080 !e970 //using type to match library interface
+                              sizeof(x_SoError);
+               const int x_GetSockOptRet = //lint !e8080 !e970 //using type to match library interface
+                                           //lint -e{9176} //API used as intended
+                                           getsockopt(orc_Connection.x_Socket, SOL_SOCKET, SO_ERROR,
+                                                      reinterpret_cast<char_t *>(&x_SoError), &x_OptLen);
 
-               //lint -e{929,740,9176}  Side-effect of the POSIX-style API. Match is guaranteed by the API.
-               getsockname(orc_Connection.x_Socket, reinterpret_cast<sockaddr *>(&c_SocketInfo), &x_Size);
+               if (x_GetSockOptRet == SOCKET_ERROR)
+               {
+                  osc_write_log_error("openSYDE IP-TP",
+                                      "TCP connect getsockopt(SO_ERROR) failed. IP-Address: " +
+                                      mh_IpToText(orc_Connection.au8_IpAddress) +
+                                      " Error: " + C_SclString::IntToStr(WSAGetLastError()));
+                  q_Error = true;
+               }
+               else if (x_SoError != 0)
+               {
+                  osc_write_log_error("openSYDE IP-TP",
+                                      "TCP connect failed. IP-Address: " +
+                                      mh_IpToText(orc_Connection.au8_IpAddress) +
+                                      " SO_ERROR: " + C_SclString::IntToStr(x_SoError));
+                  q_Error = true;
+               }
+               //lint -e{1924,9119,9177} //macro defined by API; no problem
+               else if (FD_ISSET(orc_Connection.x_Socket, &c_SocketWriteSet))
+               {
+                  // Get port of client for logging (the byte order must be changed of the read port by ntohs)
+                  sockaddr_in c_SocketInfo;
+                  int x_Size = //lint !e8080 !e970 //using type to match library interface
+                               sizeof(c_SocketInfo);
 
-               //event caused by write (= connect finished)
-               osc_write_log_info("openSYDE IP-TP",
-                                  "TCP connect select() OK. IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress) +
-                                  " on client port: " + C_SclString::IntToStr(ntohs(c_SocketInfo.sin_port)));
+                  //lint -e{929,740,9176}  Side-effect of the POSIX-style API. Match is guaranteed by the API.
+                  getsockname(orc_Connection.x_Socket, reinterpret_cast<sockaddr *>(&c_SocketInfo), &x_Size);
+
+                  //event caused by write (= connect finished successfully)
+                  osc_write_log_info("openSYDE IP-TP",
+                                     "TCP connect select() OK. IP-Address: " +
+                                     mh_IpToText(orc_Connection.au8_IpAddress) +
+                                     " on client port: " + C_SclString::IntToStr(ntohs(c_SocketInfo.sin_port)));
+               }
+               else
+               {
+                  //event caused by error (= connect failed; e.g. rejected)
+                  osc_write_log_error("openSYDE IP-TP",
+                                      "TCP connect select() failed. IP-Address: " +
+                                      mh_IpToText(orc_Connection.au8_IpAddress));
+                  q_Error = true;
+               }
+               break;
             }
-            else
-            {
-               //event caused by error (= connect failed; e.g. rejected)
-               osc_write_log_error("openSYDE IP-TP",
-                                   "TCP connect select() failed. IP-Address: " +
-                                   mh_IpToText(orc_Connection.au8_IpAddress));
-               q_Error = true;
-            }
-            break;
          default:
             osc_write_log_error("openSYDE IP-TP",
                                 "TCP connect select() failed. Unknown problem: " + C_SclString::IntToStr(
@@ -490,7 +518,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
       c_UdpService.sin_addr.s_addr = htonl(ou32_IpToBindTo);
       if (oq_ServerPort == true)
       {
-         c_UdpService.sin_port = htons(mhu16_UDP_TCP_PORT); //provide port
+         c_UdpService.sin_port = htons(mu16_UdpTcpPort); //provide port
       }
       else
       {
@@ -1136,7 +1164,7 @@ int32_t C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & orc_Data)
          {
             sockaddr_in c_TargetAddress;
             c_TargetAddress.sin_family = AF_INET;
-            c_TargetAddress.sin_port = htons(mhu16_UDP_TCP_PORT);      //target port [REQ DoIp-011]
+            c_TargetAddress.sin_port = htons(mu16_UdpTcpPort);         //target port [REQ DoIp-011]
             c_TargetAddress.sin_addr.s_addr = htonl(INADDR_BROADCAST); //lint !e9105 //constant defined by API;
             //no problem
             const int x_NumToSend = static_cast<int>(orc_Data.size()); //lint !e8080 !e970 //using type to match library

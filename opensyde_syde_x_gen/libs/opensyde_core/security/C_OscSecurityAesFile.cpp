@@ -202,7 +202,7 @@ int32_t C_OscSecurityAesFile::h_EncryptFile(const C_SclString & orc_Key, const C
    \return
    C_NO_ERR    success
    C_RD_WR     input file does not exist or could not be loaded
-   C_CONFIG    input file size is not a multiple of 16
+   C_CONFIG    input file size is not a multiple of 16 or is zero
    C_CHECKSUM  input file is invalid; PKCS#7 value is > 16 or > file size (checked after decryption)
    C_NOACT     output file could not be written
 */
@@ -232,7 +232,7 @@ int32_t C_OscSecurityAesFile::h_DecryptFile(const C_SclString & orc_Key, const C
       const uint32_t u32_InputFileSize = TglFileSize(orc_InFilePath);
 
       //is the file correctly padded ?
-      if ((u32_InputFileSize % 16U) != 0U)
+      if ((u32_InputFileSize == 0U) || ((u32_InputFileSize % 16U) != 0U))
       {
          s32_Return = C_CONFIG;
       }

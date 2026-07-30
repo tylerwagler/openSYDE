@@ -103,6 +103,10 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(C_OscSystemDefini
                                              orc_PathSystemDefinition, oq_UseDeviceDefinitions,
                                              opu16_ReadFileVersion, opc_NodesToLoad, oq_SkipContent,
                                              opc_ExpectedNodeName, opc_ErrorDetailsMissingDevices);
+         if (s32_Retval == C_NO_ERR)
+         {
+            orc_SystemDefinition.SetLastLoadedFilePath(orc_PathSystemDefinition);
+         }
       }
       else
       {
@@ -590,6 +594,13 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
       {
          osc_write_log_error("Loading System Definition", "Could not load Device definitions.");
          s32_Retval = C_CONFIG;
+      }
+      else
+      {
+         const stw::scl::C_SclString c_Folder = TglExtractFilePath(orc_PathDeviceDefinitions);
+         const stw::scl::C_SclString c_UserFilePath = c_Folder + "user_devices.ini";
+         // Optional
+         C_OscSystemDefinition::hc_Devices.LoadFromFile(c_UserFilePath, true, NULL);
       }
    }
 

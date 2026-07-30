@@ -474,7 +474,7 @@ void C_SdBueMessageSelectorTreeWidget::AddSignalWithStartBit(const C_OscCanMessa
       const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(orc_MessageId);
       if (pc_Message != NULL)
       {
-         const uint32_t u32_ItSignal = pc_Message->c_Signals.size();
+         const uint32_t u32_ItSignal = static_cast<uint32_t>(pc_Message->c_Signals.size());
 
          //Core
          if (oq_MultiplexedSignal == true)
@@ -964,7 +964,7 @@ void C_SdBueMessageSelectorTreeWidget::Paste(void)
                   }
                   else
                   {
-                     const uint32_t u32_SignalIndex = pc_Message->c_Signals.size();
+                     const uint32_t u32_SignalIndex = static_cast<uint32_t>(pc_Message->c_Signals.size());
 
                      //For other message the current signal colors might not work
                      if (q_IsOtherMessage)
@@ -1088,7 +1088,7 @@ void C_SdBueMessageSelectorTreeWidget::PasteSignal(const C_OscCanMessageIdentifi
             const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(orc_MessageId);
             if (pc_Message != NULL)
             {
-               const uint32_t u32_SignalIndex = pc_Message->c_Signals.size();
+               const uint32_t u32_SignalIndex = static_cast<uint32_t>(pc_Message->c_Signals.size());
 
                //Reset colors
                c_UiSignals.clear();
@@ -2001,7 +2001,7 @@ void C_SdBueMessageSelectorTreeWidget::dropEvent(QDropEvent * const opc_Event)
                                  {
                                     std::vector<C_OscCanMessageIdentificationIndices> c_TargetMessageIds;
                                     std::vector<uint32_t> c_TargetSignalIndices;
-                                    uint32_t u32_SignalCounter = pc_Message->c_Signals.size();
+                                    uint32_t u32_SignalCounter = static_cast<uint32_t>(pc_Message->c_Signals.size());
                                     c_TargetMessageIds.reserve(c_SourceMessageIds.size());
                                     c_TargetSignalIndices.reserve(c_SourceMessageIds.size());
                                     for (uint32_t u32_ItMessage = 0; u32_ItMessage < c_SourceMessageIds.size();
@@ -2251,7 +2251,7 @@ void C_SdBueMessageSelectorTreeWidget::m_AddSignal(const uint32_t ou32_MessageIn
 
    if (pc_Message != NULL)
    {
-      const uint32_t u32_ItSignal = pc_Message->c_Signals.size();
+      const uint32_t u32_ItSignal = static_cast<uint32_t>(pc_Message->c_Signals.size());
       const uint16_t u16_StartBit = C_SdBueMessageSelectorTreeWidget::mh_GetStartBit(c_MessageId);
 
       if (this->me_ProtocolType != C_OscCanProtocol::eCAN_OPEN)
@@ -2791,10 +2791,9 @@ int32_t C_SdBueMessageSelectorTreeWidget::m_GetMessageIdForAdd(C_OscCanMessageId
                                                                          u32_InterfaceIndex, u32_DatapoolIndex);
       if (pc_MessageContainer != NULL)
       {
-         orc_MessageId = C_OscCanMessageIdentificationIndices(u32_NodeIndex,
-                                                              this->me_ProtocolType,
-                                                              u32_InterfaceIndex, u32_DatapoolIndex, true,
-                                                              pc_MessageContainer->c_TxMessages.size());
+         orc_MessageId = C_OscCanMessageIdentificationIndices(
+            u32_NodeIndex, this->me_ProtocolType, u32_InterfaceIndex, u32_DatapoolIndex, true,
+            static_cast<uint32_t>(pc_MessageContainer->c_TxMessages.size()));
       }
       else
       {

@@ -159,7 +159,7 @@ public:
 
    void GetValueAsScaledString(const float64_t of64_Factor, const float64_t of64_Offset, std::string & orc_Output,
                                const uint32_t ou32_Index, const bool oq_AllowRangeAdaptation = true,
-                               const bool oq_AllowSpecialHandling = false) const;
+                               const bool oq_MaxFloatPrecision = false) const;
    void GetAnyValueAsFloat32(float32_t & orf32_Output, const uint32_t ou32_Index) const;
    void GetAnyValueAsFloat64(float64_t & orf64_Output, const uint32_t ou32_Index) const;
 

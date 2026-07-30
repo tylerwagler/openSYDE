@@ -196,7 +196,7 @@ int32_t C_OgeCbxTableBase::GetValue(int64_t & ors64_Value, QString & orc_ErrorDe
 void C_OgeCbxTableBase::SetValue(const int64_t os64_Value)
 {
    const QString c_Search = QString::number(os64_Value);
-   const int32_t s32_Index = this->mc_Values.indexOf(c_Search); // -1 if not found
+   const int32_t s32_Index = static_cast<int32_t>(this->mc_Values.indexOf(c_Search)); // -1 if not found
 
    if (this->isEditable() == false)
    {

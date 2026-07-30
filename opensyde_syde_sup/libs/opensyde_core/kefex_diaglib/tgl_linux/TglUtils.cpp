@@ -12,9 +12,9 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <cstring>
+#include <cstdlib>
 #include <unistd.h>
 #include <err.h>
-#include <pwd.h>
 #include <climits>
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
@@ -85,10 +85,15 @@ void stw::tgl::TglReportAssertionDetail(const char_t * const opcn_DetailInfo, co
 
    Reports the name of the currently logged in system user (i.e. the user running the active process)
 
-   Known issue: in the following scenario this function will return false:
-      - compiling this with a 32-bit compiler on a 64-bit machine
-      - that machine doesn't have the 32-bit (i386) verion of libnss-sss installed
-      - user is no local user on the machine but a network user (LDAP)
+   Our approach simply uses environment variables typically present on
+    Linux systems. It is not perfect but should work in most cases.
+
+   We do not use the getpwuid(getuid()) of glibc/NSS here.
+   It has a number of issues associated with it:
+   * it depends on the NSS configuration of the system
+   * it depends on dynamic functionality even if linking glibc statically
+   ** so problems could turn up at run-time (even crashes; see #118070)
+   * will not work if the user is not a local user on the machine (e.g. LDAP user reported as <user>@<domain>)
 
    \param[out]    orc_UserName     name of logged in user
 
@@ -99,19 +104,26 @@ void stw::tgl::TglReportAssertionDetail(const char_t * const opcn_DetailInfo, co
 //----------------------------------------------------------------------------------------------------------------------
 bool stw::tgl::TglGetSystemUserName(C_SclString & orc_UserName)
 {
-   struct passwd * pc_PassWord;
-   bool q_Return = false;
+   bool q_Return = true;
 
-   pc_PassWord = getpwuid(geteuid());
-   if (pc_PassWord != NULL)
+   const char_t * pcn_User = std::getenv("LOGNAME");
+   if ((pcn_User == NULL) || (pcn_User[0] == '\0'))
    {
-      orc_UserName = pc_PassWord->pw_name;
-      q_Return    = true;
+      pcn_User = std::getenv("USER");
+   }
+
+   if ((pcn_User != NULL) && (pcn_User[0] != '\0'))
+   {
+      orc_UserName = pcn_User;
    }
    else
    {
-      orc_UserName = "\?\?\?\?\?";
+      //We could use another very technical fallback with e.g. concat a string with the result of "geteuid()".
+      //But something like user_1234 is not very useful for the user of the application.
+      orc_UserName = "?\?\?\?\?";
+      q_Return = false;
    }
+
    return q_Return;
 }
 

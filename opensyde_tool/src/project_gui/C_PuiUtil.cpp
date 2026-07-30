@@ -17,6 +17,8 @@
 #include "constants.hpp"
 
 #include "C_Uti.hpp"
+#include "TglFile.hpp"
+#include "C_SclIniFile.hpp"
 #include "C_PuiUtil.hpp"
 #include "C_PuiProject.hpp"
 #include "C_OscUtils.hpp"
@@ -216,4 +218,52 @@ QString C_PuiUtil::h_GetResolvedAbsPathFromDbProject(const QString & orc_DbProje
    c_Return = C_PuiUtil::h_GetResolvedAbsPathFromProject(c_Return);
 
    return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Change relative paths in user devices ini to devices folder
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_PuiUtil::h_ChangeRelativePathsInUserDevicesIniToDevicesFolder()
+{
+   const stw::scl::C_SclString c_IniFilePath =
+      C_Uti::h_GetAbsolutePathFromExe("../devices/user_devices.ini").toStdString().c_str();
+
+   if (stw::tgl::TglFileExists(c_IniFilePath))
+   {
+      stw::scl::C_SclIniFile c_IniFile(c_IniFilePath);
+      const int32_t s32_NumDevices = c_IniFile.ReadInteger("User Nodes", "DeviceCount", 0);
+      if (s32_NumDevices > 0)
+      {
+         const QDir c_DirIni(C_Uti::h_GetDevicesIniPath());
+
+         const stw::scl::C_SclString c_IniPath = stw::tgl::TglExtractFilePath(c_IniFilePath);
+         const QDir c_DirExe(C_Uti::h_GetExePath());
+         // Read in all devices in the list in order
+         for (int32_t s32_ItDevice = 0; s32_ItDevice < s32_NumDevices; ++s32_ItDevice)
+         {
+            const stw::scl::C_SclString c_DevicePath =
+               c_IniFile.ReadString("User Nodes", "Device" + stw::scl::C_SclString::IntToStr(s32_ItDevice + 1), "");
+            const QDir c_DirNewDevice(c_DevicePath.c_str());
+            if (c_DirNewDevice.isRelative())
+            {
+               // Check relative to devices case
+               const stw::scl::C_SclString c_CompletePathFromIni = c_IniPath + c_DevicePath;
+               if (stw::tgl::TglFileExists(c_CompletePathFromIni) == false)
+               {
+                  const stw::scl::C_SclString c_CompletePathFromExe =
+                     c_DirExe.absoluteFilePath(c_DevicePath.c_str()).toStdString().c_str();
+                  // Check relative to exe case
+                  if (stw::tgl::TglFileExists(c_CompletePathFromExe) == true)
+                  {
+                     const stw::scl::C_SclString c_NewDevicePath =
+                        c_DirIni.relativeFilePath(c_CompletePathFromExe.c_str()).toStdString().c_str();
+                     c_IniFile.WriteString("User Nodes", "Device" + stw::scl::C_SclString::IntToStr(
+                                              s32_ItDevice + 1), c_NewDevicePath);
+                  }
+               }
+            }
+         }
+      }
+   }
 }

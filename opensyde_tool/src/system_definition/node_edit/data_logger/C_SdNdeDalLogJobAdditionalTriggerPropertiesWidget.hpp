@@ -54,6 +54,8 @@ private:
       eCS_CONNECTED
    };
 
+   static const int32_t mhs32_OPERATION_INDEX_EQUAL;
+
    void m_HandleOperationEnabledState(const bool oq_AdditionalTriggerEnabled) const;
    void m_HandleEditFieldsEnabledState(const bool oq_Enabled) const;
    void m_InitSupportedOperations();

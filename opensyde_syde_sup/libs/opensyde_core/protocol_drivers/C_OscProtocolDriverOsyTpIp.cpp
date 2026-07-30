@@ -406,6 +406,43 @@ const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set node ID of one node
+
+   Send broadcast to change the node ID of one specific node.
+   Only the node with a specified serial number is expected to send a response and change its node ID.
+   The function will return as soon as it has received one response.
+
+   Incoming UDP responses to other services will be dumped: we are strictly handshaking here ...
+
+   \param[in]    orc_SerialNumber      serial number of server to change IP on
+   \param[in]    orc_NewNodeId         New bus id and node id for the interface
+   \param[out]   orau8_ResponseIp      IP address the response was received from
+   \param[out]   opu8_ErrorResult      if not NULL: code of error response (if C_WARN is returned)
+
+   \return
+   C_NO_ERR   no problems
+   C_WARN     error response
+   C_COM      could not send request
+   C_CONFIG   no dispatcher installed
+   C_RANGE    serial number is invalid or wrong format of serial number is configured
+   C_TIMEOUT  no response within timeout
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSerialNumber & orc_SerialNumber,
+                                                          const C_OscProtocolDriverOsyNode & orc_NewNodeId,
+                                                          uint8_t (&orau8_ResponseIp)[4],
+                                                          uint8_t * const opu8_ErrorResult) const
+{
+   const uint8_t au8_ZERO_IP[4] = {0, 0, 0, 0};
+
+   // Mode flag. Bit 1 is IP address, bit 2 is node identifier
+   return m_BroadcastSetIpAddress(orc_SerialNumber, au8_ZERO_IP, au8_ZERO_IP, au8_ZERO_IP,
+                                  orc_NewNodeId,
+                                  0x02, orau8_ResponseIp,
+                                  opu8_ErrorResult);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set IP address of one node
 
    Send broadcast to change the IP address of one specific node.
@@ -439,128 +476,49 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
                                                           uint8_t (&orau8_ResponseIp)[4],
                                                           uint8_t * const opu8_ErrorResult) const
 {
-   int32_t s32_Return = C_TIMEOUT;
+   // Mode flag. Bit 1 is IP address, bit 2 is node identifier
+   return m_BroadcastSetIpAddress(orc_SerialNumber, orau8_NewIpAddress, orau8_NetMask, orau8_DefaultGateway,
+                                  orc_NewNodeId,
+                                  0x03,
+                                  orau8_ResponseIp,
+                                  opu8_ErrorResult);
+}
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set node ID extended of one node
 
-   std::vector<uint8_t> c_Request;
-   if (mpc_Dispatcher == NULL)
-   {
-      s32_Return = C_CONFIG;
-   }
-   else if ((orc_SerialNumber.q_IsValid == false) ||
-            (orc_SerialNumber.q_ExtFormatUsed == true))
-   {
-      s32_Return = C_RANGE;
-   }
-   else
-   {
-      C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_REQ, 21U);
-      int32_t s32_ReturnLocal;
-      c_Header.ComposeHeader(c_Request);
-      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE], &orc_SerialNumber.au8_SerialNumber[0], 6);
-      // Mode flag. Bit 1 is IP address, bit 2 is node identifier
-      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6] = 0x03;
-      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 7], &orau8_NewIpAddress[0], 4);
-      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 11], &orau8_NetMask[0], 4);
-      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 15], &orau8_DefaultGateway[0], 4);
-      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 19] = orc_NewNodeId.u8_BusIdentifier;
-      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 20] = orc_NewNodeId.u8_NodeIdentifier;
+   Send broadcast to change the node ID of one specific node.
+   Only the node with a specified serial number is expected to send a response and change its node ID.
+   The function will return as soon as it has received one response.
 
-      s32_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
-      if (s32_ReturnLocal != C_NO_ERR)
-      {
-         m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
-      }
-      else
-      {
-         const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
-         std::vector<uint8_t> c_Response;
-         bool q_Done = false;
+   Incoming UDP responses to other services will be dumped: we are strictly handshaking here ...
 
-         while (((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime) && (q_Done == false))
-         {
-            //check for response
-            s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
-            if (s32_ReturnLocal == C_NO_ERR)
-            {
-               if (c_Response.size() == (C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 9U))
-               {
-                  //header OK ?
-                  s32_ReturnLocal = c_Header.DecodeHeader(c_Response);
-                  switch (s32_ReturnLocal)
-                  {
-                  case C_NO_ERR:
-                     //sanity check: does payload size match response size ?
-                     if ((c_Header.u32_PayloadSize ==
-                          static_cast<uint32_t>((c_Response.size() - C_DoIpHeader::hu8_DOIP_HEADER_SIZE))) &&
-                         (c_Header.u16_PayloadType == C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_RES))
-                     {
-                        //looks legit; check payload ...
-                        const int x_SnrOk = //lint !e970 !e8080 //using type to match library interface
-                                            std::memcmp(&orc_SerialNumber.au8_SerialNumber[0],
-                                                        &c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2], 6U);
-                        if (x_SnrOk != 0)
-                        {
-                           m_LogWarningWithHeaderAndIp(
-                              "SetIpAddress: response with unexpected serial number. Ignoring.",
-                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                        }
-                        else
-                        {
-                           if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U] == 0U)
-                           {
-                              s32_Return = C_NO_ERR;
-                           }
-                           else if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U] == 3U)
-                           {
-                              m_LogWarningWithHeaderAndIp(
-                                 "SetIpAddress: could not perform action. Node has security feature activated.",
-                                 TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                              if (opu8_ErrorResult != NULL)
-                              {
-                                 (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U];
-                              }
-                           }
-                           else
-                           {
-                              s32_Return = C_WARN;
-                              if (opu8_ErrorResult != NULL)
-                              {
-                                 (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U];
-                              }
-                           }
-                           q_Done = true;
-                        }
-                     }
-                     else
-                     {
-                        m_LogWarningWithHeaderAndIp(
-                           "UDP response with unexpected payload size or type received. Ignoring.", TGL_UTIL_FUNC_ID,
-                           orau8_ResponseIp);
-                     }
-                     break;
-                  case C_CONFIG:
-                     m_LogWarningWithHeaderAndIp("UDP response with unexpected version received. Ignoring.",
-                                                 TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                     break;
-                  default:
-                     //unexpected ...
-                     m_LogWarningWithHeaderAndIp("Internal error parsing DoIp header.", TGL_UTIL_FUNC_ID,
-                                                 orau8_ResponseIp);
-                     break;
-                  }
-               }
-               else
-               {
-                  m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
-                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
-                                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-               }
-            }
-         }
-      }
-   }
-   return s32_Return;
+   \param[in]    orc_SerialNumber                   serial number of server to change IP on
+   \param[in]    orc_NewNodeId                      New bus id and node id for the interface
+   \param[in]    ou8_SubNodeId                      Sub node id of node for identification in case of a multi CPU node
+   \param[out]   orau8_ResponseIp                   IP address the response was received from
+   \param[out]   opu8_ErrorResult                   if not NULL: code of error response (if C_WARN is returned)
+
+   \return
+   C_NO_ERR   no problems
+   C_WARN     error response
+   C_COM      could not send request
+   C_CONFIG   no dispatcher installed
+   C_TIMEOUT  no response within timeout
+   C_RANGE    serial number (orc_SerialNumber) is to long (maximum is 29 byte) or empty
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscProtocolSerialNumber & orc_SerialNumber,
+                                                                  const C_OscProtocolDriverOsyNode & orc_NewNodeId,
+                                                                  const uint8_t ou8_SubNodeId,
+                                                                  uint8_t(&orau8_ResponseIp)[4],
+                                                                  uint8_t * const opu8_ErrorResult) const
+{
+   const uint8_t au8_ZERO_IP[4] = {0, 0, 0, 0};
+
+   // Mode flag. Bit 1 is IP address, bit 2 is node identifier
+   return m_BroadcastSetIpAddressExtended(orc_SerialNumber, au8_ZERO_IP, au8_ZERO_IP, au8_ZERO_IP,
+                                          orc_NewNodeId, ou8_SubNodeId,
+                                          0x02, orau8_ResponseIp, opu8_ErrorResult);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -599,166 +557,10 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
                                                                   uint8_t(&orau8_ResponseIp)[4],
                                                                   uint8_t * const opu8_ErrorResult) const
 {
-   int32_t s32_Return = C_TIMEOUT;
-
-   std::vector<uint8_t> c_Request;
-   if (mpc_Dispatcher == NULL)
-   {
-      s32_Return = C_CONFIG;
-   }
-   else if ((orc_SerialNumber.q_IsValid == false) ||
-            (orc_SerialNumber.q_ExtFormatUsed == false))
-   {
-      s32_Return = C_RANGE;
-   }
-   else
-   {
-      const uint8_t u8_SerialNumberLength = orc_SerialNumber.u8_SerialNumberByteLength;
-      const std::vector<uint8_t> c_SerialNumberRaw = orc_SerialNumber.GetSerialNumberAsRawData();
-      C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_EXT_REQ,
-                            (static_cast<uint32_t>(18U) + u8_SerialNumberLength));
-      int32_t s32_ReturnLocal;
-
-      c_Header.ComposeHeader(c_Request);
-      // Mode flag. Bit 1 is IP address, bit 2 is node identifier
-      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE] = 0x03;
-      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 1], &orau8_NewIpAddress[0], 4);
-      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 5], &orau8_NetMask[0], 4);
-      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 9], &orau8_DefaultGateway[0], 4);
-      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 13] = orc_NewNodeId.u8_BusIdentifier;
-      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 14] = orc_NewNodeId.u8_NodeIdentifier;
-
-      // Extended part
-      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 15] = ou8_SubNodeId;
-      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 16] = orc_SerialNumber.u8_SerialNumberManufacturerFormat;
-      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 17] = u8_SerialNumberLength;
-      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 18],
-                        &c_SerialNumberRaw[0], u8_SerialNumberLength);
-
-      s32_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
-      if (s32_ReturnLocal != C_NO_ERR)
-      {
-         m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
-      }
-      else
-      {
-         const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
-         std::vector<uint8_t> c_Response;
-         bool q_Done = false;
-
-         while (((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime) && (q_Done == false))
-         {
-            //check for response
-            s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
-            if (s32_ReturnLocal == C_NO_ERR)
-            {
-               if (static_cast<uint32_t>(c_Response.size()) ==
-                   (static_cast<uint32_t>(C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6U) + u8_SerialNumberLength))
-               {
-                  //header OK ?
-                  s32_ReturnLocal = c_Header.DecodeHeader(c_Response);
-                  switch (s32_ReturnLocal)
-                  {
-                  case C_NO_ERR:
-                     //sanity check: does payload size match response size ?
-                     if ((c_Header.u32_PayloadSize ==
-                          static_cast<uint32_t>((c_Response.size() - C_DoIpHeader::hu8_DOIP_HEADER_SIZE))) &&
-                         (c_Header.u16_PayloadType == C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_EXT_RES))
-                     {
-                        //looks legit; check payload ...
-                        const bool q_SubNodeIdOk = (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 3] ==
-                                                    ou8_SubNodeId);
-                        const bool q_SnManufacturerFormatOk = (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 4] ==
-                                                               orc_SerialNumber.u8_SerialNumberManufacturerFormat);
-                        const bool q_SnLengthOk = (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 5] ==
-                                                   u8_SerialNumberLength);
-                        const int x_SnrOk = //lint !e970 !e8080 //using type to match library interface
-                                            std::memcmp(&c_SerialNumberRaw[0],
-                                                        &c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6U],
-                                                        u8_SerialNumberLength);
-
-                        if (q_SubNodeIdOk == false)
-                        {
-                           m_LogWarningWithHeaderAndIp(
-                              "SetIpAddress: response with unexpected sub node id. Ignoring.",
-                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                        }
-                        else if (q_SnManufacturerFormatOk == false)
-                        {
-                           m_LogWarningWithHeaderAndIp(
-                              "SetIpAddress: response with unexpected manufacturer format. Ignoring.",
-                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                        }
-                        else if (q_SnLengthOk == false)
-                        {
-                           m_LogWarningWithHeaderAndIp(
-                              "SetIpAddress: response with unexpected serial number length. Ignoring.",
-                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                        }
-                        else if (x_SnrOk != 0)
-                        {
-                           m_LogWarningWithHeaderAndIp(
-                              "SetIpAddress: response with unexpected serial number. Ignoring.",
-                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                        }
-                        else
-                        {
-                           if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U] == 0U)
-                           {
-                              s32_Return = C_NO_ERR;
-                           }
-                           else if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U] == 3U)
-                           {
-                              m_LogWarningWithHeaderAndIp(
-                                 "SetIpAddress: could not perform action. Node has security feature activated.",
-                                 TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                              if (opu8_ErrorResult != NULL)
-                              {
-                                 (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U];
-                              }
-                           }
-                           else
-                           {
-                              s32_Return = C_WARN;
-                              if (opu8_ErrorResult != NULL)
-                              {
-                                 (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U];
-                              }
-                           }
-                           q_Done = true;
-                        }
-                     }
-                     else
-                     {
-                        m_LogWarningWithHeaderAndIp(
-                           "UDP response with unexpected payload size or type received. Ignoring.", TGL_UTIL_FUNC_ID,
-                           orau8_ResponseIp);
-                     }
-                     break;
-                  case C_CONFIG:
-                     m_LogWarningWithHeaderAndIp("UDP response with unexpected version received. Ignoring.",
-                                                 TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                     break;
-                  default:
-                     //unexpected ...
-                     m_LogWarningWithHeaderAndIp("Internal error parsing DoIp header.", TGL_UTIL_FUNC_ID,
-                                                 orau8_ResponseIp);
-                     break;
-                  }
-               }
-               else
-               {
-                  m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
-                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
-                                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-               }
-            }
-         }
-      }
-   }
-
-   return s32_Return;
+   // Mode flag. Bit 1 is IP address, bit 2 is node identifier
+   return m_BroadcastSetIpAddressExtended(orc_SerialNumber, orau8_NewIpAddress, orau8_NetMask, orau8_DefaultGateway,
+                                          orc_NewNodeId, ou8_SubNodeId,
+                                          0x03, orau8_ResponseIp, opu8_ErrorResult);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1004,6 +806,364 @@ void C_OscProtocolDriverOsyTpIp::m_ComposeRequest(const C_OscProtocolDriverOsySe
    {
       (void)std::memcpy(&orc_Request[12], &orc_Service.c_Data[0], orc_Service.c_Data.size());
    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set IP address of one node
+
+   Send broadcast to change the IP address of one specific node.
+   Only the node with a specified serial number is expected to send a response and change its IP address.
+   The function will return as soon as it has received one response.
+
+   Incoming UDP responses to other services will be dumped: we are strictly handshaking here ...
+
+   \param[in]    orc_SerialNumber      serial number of server to change IP on
+   \param[in]    orau8_NewIpAddress    IP address to set
+   \param[in]    orau8_NetMask         Net mask to set
+   \param[in]    orau8_DefaultGateway  Default gateway to set
+   \param[in]    orc_NewNodeId         New bus id and node id for the interface
+   \param[in]    ou8_Mode              Mode flag. Bit 1 is IP address, bit 2 is node identifier
+   \param[out]   orau8_ResponseIp      IP address the response was received from
+   \param[out]   opu8_ErrorResult      if not NULL: code of error response (if C_WARN is returned)
+
+   \return
+   C_NO_ERR   no problems
+   C_WARN     error response
+   C_COM      could not send request
+   C_CONFIG   no dispatcher installed
+   C_RANGE    serial number is invalid or wrong format of serial number is configured
+   C_TIMEOUT  no response within timeout
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscProtocolDriverOsyTpIp::m_BroadcastSetIpAddress(const C_OscProtocolSerialNumber & orc_SerialNumber,
+                                                            const uint8_t(&orau8_NewIpAddress)[4],
+                                                            const uint8_t(&orau8_NetMask)[4],
+                                                            const uint8_t(&orau8_DefaultGateway)[4],
+                                                            const C_OscProtocolDriverOsyNode & orc_NewNodeId,
+                                                            const uint8_t ou8_Mode, uint8_t(&orau8_ResponseIp)[4],
+                                                            uint8_t * const opu8_ErrorResult) const
+{
+   int32_t s32_Return = C_TIMEOUT;
+
+   std::vector<uint8_t> c_Request;
+   if (mpc_Dispatcher == NULL)
+   {
+      s32_Return = C_CONFIG;
+   }
+   else if ((orc_SerialNumber.q_IsValid == false) ||
+            (orc_SerialNumber.q_ExtFormatUsed == true))
+   {
+      s32_Return = C_RANGE;
+   }
+   else
+   {
+      C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_REQ, 21U);
+      int32_t s32_ReturnLocal;
+      c_Header.ComposeHeader(c_Request);
+      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE], &orc_SerialNumber.au8_SerialNumber[0], 6);
+      // Mode flag. Bit 1 is IP address, bit 2 is node identifier
+      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6] = ou8_Mode;
+      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 7], &orau8_NewIpAddress[0], 4);
+      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 11], &orau8_NetMask[0], 4);
+      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 15], &orau8_DefaultGateway[0], 4);
+      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 19] = orc_NewNodeId.u8_BusIdentifier;
+      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 20] = orc_NewNodeId.u8_NodeIdentifier;
+
+      s32_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
+      if (s32_ReturnLocal != C_NO_ERR)
+      {
+         m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
+         s32_Return = C_COM;
+      }
+      else
+      {
+         const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
+         std::vector<uint8_t> c_Response;
+         bool q_Done = false;
+
+         while (((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime) && (q_Done == false))
+         {
+            //check for response
+            s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
+            if (s32_ReturnLocal == C_NO_ERR)
+            {
+               if (c_Response.size() == (C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 9U))
+               {
+                  //header OK ?
+                  s32_ReturnLocal = c_Header.DecodeHeader(c_Response);
+                  switch (s32_ReturnLocal)
+                  {
+                  case C_NO_ERR:
+                     //sanity check: does payload size match response size ?
+                     if ((c_Header.u32_PayloadSize ==
+                          static_cast<uint32_t>((c_Response.size() - C_DoIpHeader::hu8_DOIP_HEADER_SIZE))) &&
+                         (c_Header.u16_PayloadType == C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_RES))
+                     {
+                        //looks legit; check payload ...
+                        const int x_SnrOk = //lint !e970 !e8080 //using type to match library interface
+                                            std::memcmp(&orc_SerialNumber.au8_SerialNumber[0],
+                                                        &c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2], 6U);
+                        if (x_SnrOk != 0)
+                        {
+                           m_LogWarningWithHeaderAndIp(
+                              "SetIpAddress: response with unexpected serial number. Ignoring.",
+                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
+                        }
+                        else
+                        {
+                           if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U] == 0U)
+                           {
+                              s32_Return = C_NO_ERR;
+                           }
+                           else if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U] == 3U)
+                           {
+                              m_LogWarningWithHeaderAndIp(
+                                 "SetIpAddress: could not perform action. Node has security feature activated.",
+                                 TGL_UTIL_FUNC_ID, orau8_ResponseIp);
+                              if (opu8_ErrorResult != NULL)
+                              {
+                                 (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U];
+                              }
+                           }
+                           else
+                           {
+                              s32_Return = C_WARN;
+                              if (opu8_ErrorResult != NULL)
+                              {
+                                 (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U];
+                              }
+                           }
+                           q_Done = true;
+                        }
+                     }
+                     else
+                     {
+                        m_LogWarningWithHeaderAndIp(
+                           "UDP response with unexpected payload size or type received. Ignoring.", TGL_UTIL_FUNC_ID,
+                           orau8_ResponseIp);
+                     }
+                     break;
+                  case C_CONFIG:
+                     m_LogWarningWithHeaderAndIp("UDP response with unexpected version received. Ignoring.",
+                                                 TGL_UTIL_FUNC_ID, orau8_ResponseIp);
+                     break;
+                  default:
+                     //unexpected ...
+                     m_LogWarningWithHeaderAndIp("Internal error parsing DoIp header.", TGL_UTIL_FUNC_ID,
+                                                 orau8_ResponseIp);
+                     break;
+                  }
+               }
+               else
+               {
+                  m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
+                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
+                                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
+               }
+            }
+         }
+      }
+   }
+   return s32_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set IP address extended of one node
+
+   Send broadcast to change the IP address of one specific node.
+   Only the node with a specified serial number is expected to send a response and change its IP address.
+   The function will return as soon as it has received one response.
+
+   Incoming UDP responses to other services will be dumped: we are strictly handshaking here ...
+
+   \param[in]    orc_SerialNumber                   serial number of server to change IP on
+   \param[in]    orau8_NewIpAddress                 IP address to set
+   \param[in]    orau8_NetMask                      Net mask to set
+   \param[in]    orau8_DefaultGateway               Default gateway to set
+   \param[in]    orc_NewNodeId                      New bus id and node id for the interface
+   \param[in]    ou8_SubNodeId                      Sub node id of node for identification in case of a multi CPU node
+   \param[in]    ou8_Mode                            Mode for setting IP address
+   \param[out]   orau8_ResponseIp                   IP address the response was received from
+   \param[out]   opu8_ErrorResult                   if not NULL: code of error response (if C_WARN is returned)
+
+   \return
+   C_NO_ERR   no problems
+   C_WARN     error response
+   C_COM      could not send request
+   C_CONFIG   no dispatcher installed
+   C_TIMEOUT  no response within timeout
+   C_RANGE    serial number (orc_SerialNumber) is to long (maximum is 29 byte) or empty
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscProtocolDriverOsyTpIp::m_BroadcastSetIpAddressExtended(const C_OscProtocolSerialNumber & orc_SerialNumber,
+                                                                    const uint8_t(&orau8_NewIpAddress)[4],
+                                                                    const uint8_t(&orau8_NetMask)[4],
+                                                                    const uint8_t(&orau8_DefaultGateway)[4],
+                                                                    const C_OscProtocolDriverOsyNode & orc_NewNodeId,
+                                                                    const uint8_t ou8_SubNodeId, const uint8_t ou8_Mode,
+                                                                    uint8_t(&orau8_ResponseIp)[4],
+                                                                    uint8_t * const opu8_ErrorResult) const
+{
+   int32_t s32_Return = C_TIMEOUT;
+
+   std::vector<uint8_t> c_Request;
+   if (mpc_Dispatcher == NULL)
+   {
+      s32_Return = C_CONFIG;
+   }
+   else if ((orc_SerialNumber.q_IsValid == false) ||
+            (orc_SerialNumber.q_ExtFormatUsed == false))
+   {
+      s32_Return = C_RANGE;
+   }
+   else
+   {
+      const uint8_t u8_SerialNumberLength = orc_SerialNumber.u8_SerialNumberByteLength;
+      const std::vector<uint8_t> c_SerialNumberRaw = orc_SerialNumber.GetSerialNumberAsRawData();
+      C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_EXT_REQ,
+                            (static_cast<uint32_t>(18U) + u8_SerialNumberLength));
+      int32_t s32_ReturnLocal;
+
+      c_Header.ComposeHeader(c_Request);
+      // Mode flag. Bit 1 is IP address, bit 2 is node identifier
+      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE] = ou8_Mode;
+      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 1], &orau8_NewIpAddress[0], 4);
+      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 5], &orau8_NetMask[0], 4);
+      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 9], &orau8_DefaultGateway[0], 4);
+      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 13] = orc_NewNodeId.u8_BusIdentifier;
+      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 14] = orc_NewNodeId.u8_NodeIdentifier;
+
+      // Extended part
+      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 15] = ou8_SubNodeId;
+      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 16] = orc_SerialNumber.u8_SerialNumberManufacturerFormat;
+      c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 17] = u8_SerialNumberLength;
+      (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 18],
+                        &c_SerialNumberRaw[0], u8_SerialNumberLength);
+
+      s32_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
+      if (s32_ReturnLocal != C_NO_ERR)
+      {
+         m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
+         s32_Return = C_COM;
+      }
+      else
+      {
+         const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
+         std::vector<uint8_t> c_Response;
+         bool q_Done = false;
+
+         while (((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime) && (q_Done == false))
+         {
+            //check for response
+            s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
+            if (s32_ReturnLocal == C_NO_ERR)
+            {
+               if (static_cast<uint32_t>(c_Response.size()) ==
+                   (static_cast<uint32_t>(C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6U) + u8_SerialNumberLength))
+               {
+                  //header OK ?
+                  s32_ReturnLocal = c_Header.DecodeHeader(c_Response);
+                  switch (s32_ReturnLocal)
+                  {
+                  case C_NO_ERR:
+                     //sanity check: does payload size match response size ?
+                     if ((c_Header.u32_PayloadSize ==
+                          static_cast<uint32_t>((c_Response.size() - C_DoIpHeader::hu8_DOIP_HEADER_SIZE))) &&
+                         (c_Header.u16_PayloadType == C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_EXT_RES))
+                     {
+                        //looks legit; check payload ...
+                        const bool q_SubNodeIdOk = (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 3] ==
+                                                    ou8_SubNodeId);
+                        const bool q_SnManufacturerFormatOk = (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 4] ==
+                                                               orc_SerialNumber.u8_SerialNumberManufacturerFormat);
+                        const bool q_SnLengthOk = (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 5] ==
+                                                   u8_SerialNumberLength);
+                        const int x_SnrOk = //lint !e970 !e8080 //using type to match library interface
+                                            std::memcmp(&c_SerialNumberRaw[0],
+                                                        &c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6U],
+                                                        u8_SerialNumberLength);
+
+                        if (q_SubNodeIdOk == false)
+                        {
+                           m_LogWarningWithHeaderAndIp(
+                              "SetIpAddress: response with unexpected sub node id. Ignoring.",
+                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
+                        }
+                        else if (q_SnManufacturerFormatOk == false)
+                        {
+                           m_LogWarningWithHeaderAndIp(
+                              "SetIpAddress: response with unexpected manufacturer format. Ignoring.",
+                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
+                        }
+                        else if (q_SnLengthOk == false)
+                        {
+                           m_LogWarningWithHeaderAndIp(
+                              "SetIpAddress: response with unexpected serial number length. Ignoring.",
+                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
+                        }
+                        else if (x_SnrOk != 0)
+                        {
+                           m_LogWarningWithHeaderAndIp(
+                              "SetIpAddress: response with unexpected serial number. Ignoring.",
+                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
+                        }
+                        else
+                        {
+                           if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U] == 0U)
+                           {
+                              s32_Return = C_NO_ERR;
+                           }
+                           else if (c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U] == 3U)
+                           {
+                              m_LogWarningWithHeaderAndIp(
+                                 "SetIpAddress: could not perform action. Node has security feature activated.",
+                                 TGL_UTIL_FUNC_ID, orau8_ResponseIp);
+                              if (opu8_ErrorResult != NULL)
+                              {
+                                 (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U];
+                              }
+                           }
+                           else
+                           {
+                              s32_Return = C_WARN;
+                              if (opu8_ErrorResult != NULL)
+                              {
+                                 (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U];
+                              }
+                           }
+                           q_Done = true;
+                        }
+                     }
+                     else
+                     {
+                        m_LogWarningWithHeaderAndIp(
+                           "UDP response with unexpected payload size or type received. Ignoring.", TGL_UTIL_FUNC_ID,
+                           orau8_ResponseIp);
+                     }
+                     break;
+                  case C_CONFIG:
+                     m_LogWarningWithHeaderAndIp("UDP response with unexpected version received. Ignoring.",
+                                                 TGL_UTIL_FUNC_ID, orau8_ResponseIp);
+                     break;
+                  default:
+                     //unexpected ...
+                     m_LogWarningWithHeaderAndIp("Internal error parsing DoIp header.", TGL_UTIL_FUNC_ID,
+                                                 orau8_ResponseIp);
+                     break;
+                  }
+               }
+               else
+               {
+                  m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
+                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
+                                              TGL_UTIL_FUNC_ID, orau8_ResponseIp);
+               }
+            }
+         }
+      }
+   }
+
+   return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

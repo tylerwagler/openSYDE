@@ -96,11 +96,10 @@ void C_SebUnoAddDeleteBaseCommand::m_StoreCommon(C_PuiBsElements & orc_Storage, 
                   if (u32_Index < orc_AllElements.c_LineArrows.size())
                   {
                      orc_Storage.c_LineArrows.push_back(orc_AllElements.c_LineArrows[u32_Index]);
-                     orc_MapTypeAndIndexToId.insert(C_PuiBsTemporaryDataId(this->m_GetLineArrowType(),
-                                                                           orc_Storage.c_LineArrows.size()
-                                                                           -
-                                                                           1UL),
-                                                    u64_CurUniqueId);
+                     orc_MapTypeAndIndexToId.insert(
+                        C_PuiBsTemporaryDataId(this->m_GetLineArrowType(),
+                                               static_cast<uint32_t>(orc_Storage.c_LineArrows.size()) - 1UL),
+                        u64_CurUniqueId);
                   }
                }
                //Boundary
@@ -110,11 +109,10 @@ void C_SebUnoAddDeleteBaseCommand::m_StoreCommon(C_PuiBsElements & orc_Storage, 
                   if (u32_Index < orc_AllElements.c_Boundaries.size())
                   {
                      orc_Storage.c_Boundaries.push_back(orc_AllElements.c_Boundaries[u32_Index]);
-                     orc_MapTypeAndIndexToId.insert(C_PuiBsTemporaryDataId(this->m_GetBoundaryType(),
-                                                                           orc_Storage.c_Boundaries.size()
-                                                                           -
-                                                                           1UL),
-                                                    u64_CurUniqueId);
+                     orc_MapTypeAndIndexToId.insert(
+                        C_PuiBsTemporaryDataId(this->m_GetBoundaryType(),
+                                               static_cast<uint32_t>(orc_Storage.c_Boundaries.size()) - 1UL),
+                        u64_CurUniqueId);
                   }
                }
                //Image
@@ -124,10 +122,10 @@ void C_SebUnoAddDeleteBaseCommand::m_StoreCommon(C_PuiBsElements & orc_Storage, 
                   if (u32_Index < orc_AllElements.c_Images.size())
                   {
                      orc_Storage.c_Images.push_back(orc_AllElements.c_Images[u32_Index]);
-                     orc_MapTypeAndIndexToId.insert(C_PuiBsTemporaryDataId(this->m_GetImageType(),
-                                                                           orc_Storage.c_Images.size() -
-                                                                           1UL),
-                                                    u64_CurUniqueId);
+                     orc_MapTypeAndIndexToId.insert(
+                        C_PuiBsTemporaryDataId(this->m_GetImageType(),
+                                               static_cast<uint32_t>(orc_Storage.c_Images.size()) - 1UL),
+                        u64_CurUniqueId);
                   }
                }
                //Text element
@@ -137,10 +135,10 @@ void C_SebUnoAddDeleteBaseCommand::m_StoreCommon(C_PuiBsElements & orc_Storage, 
                   if (u32_Index < orc_AllElements.c_TextElements.size())
                   {
                      orc_Storage.c_TextElements.push_back(orc_AllElements.c_TextElements[u32_Index]);
-                     orc_MapTypeAndIndexToId.insert(C_PuiBsTemporaryDataId(this->m_GetTextElementType(),
-                                                                           orc_Storage.c_TextElements.
-                                                                           size() - 1UL),
-                                                    u64_CurUniqueId);
+                     orc_MapTypeAndIndexToId.insert(
+                        C_PuiBsTemporaryDataId(this->m_GetTextElementType(),
+                                               static_cast<uint32_t>(orc_Storage.c_TextElements.size()) - 1UL),
+                        u64_CurUniqueId);
                   }
                }
             }

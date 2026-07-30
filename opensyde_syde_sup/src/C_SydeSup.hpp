@@ -17,9 +17,9 @@
 #include "C_SupSuSequences.hpp"
 #include "C_Can.hpp"
 #include "C_OscIpDispatcher.hpp"
-#include "C_OscSecurityPemDatabase.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscViewData.hpp"
+#include "C_OscCryptoAgentSettings.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -77,7 +77,7 @@ public:
       eERR_UPDATE_SYSDEF               = 65,
       eERR_UPDATE_CHECKSUM             = 66,
       eERR_UPDATE_NO_NVM               = 67,
-      eERR_UPDATE_CERTIFICATE_PATH     = 68,
+      // 68 was eERR_UPDATE_CERTIFICATE_PATH which is deprecated as we have the crypto agent now
       eERR_UPDATE_AUTHENTICATION       = 69,
 
       eERR_THREAD_UPDATE_IN_PROGRESS   = 70,
@@ -116,18 +116,19 @@ protected:
    bool mq_Quiet;
    bool mq_OnlyNecessaryFiles;
    E_OperationMode me_OperationMode;
+   stw::scl::C_SclString mc_ConfigFilePath;
    stw::scl::C_SclString mc_OperationMode;
    stw::scl::C_SclString mc_SupFilePath;
    stw::scl::C_SclString mc_CanDriver;
    stw::scl::C_SclString mc_LogPath;
    stw::scl::C_SclString mc_LogFile;
    stw::scl::C_SclString mc_UnzipPath;
-   stw::scl::C_SclString mc_CertFolderPath;
    stw::scl::C_SclString mc_OsyProjectPath;
    stw::scl::C_SclString mc_ViewName;
    stw::scl::C_SclString mc_DeviceDefPath;
    stw::scl::C_SclString mc_PubKeyPemPath; //path to pem file with public key in case of secure update package
-   stw::scl::C_SclString mc_Password; //optional password if the secure update package is also encrypted
+   stw::scl::C_SclString mc_Password;      //optional password if the secure update package is also encrypted
+   stw::opensyde_core::C_OscCryptoAgentSettings mc_CryptoAgentSettings;
 
    C_SydeSup::E_Result m_InitOptionalParameters(void);
 
@@ -155,9 +156,7 @@ private:
                           std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite) const;
    std::vector<uint8_t> m_GetActiveNodeTypes(const stw::opensyde_core::C_OscSystemDefinition & orc_SystemDefinition,
                                              const std::vector<uint8_t> & orc_ActiveNodes) const;
-
-   // Security PEM database
-   stw::opensyde_core::C_OscSecurityPemDatabase mc_PemDatabase;
+   int32_t m_LoadConfigFile(void);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -48,6 +48,13 @@ class C_OscCanUtil
 public:
    C_OscCanUtil(void);
 
+   enum E_J1939TransportProtocol ///< J1939 transport protocol
+   {
+      eJTP_NONE, ///< J1939 transport protocol: none
+      eJTP_CMDT, ///< J1939 transport protocol: CMDT
+      eJTP_BAM   ///< J1939 transport protocol: BAM
+   };
+
    static bool h_IsSignalInMessage(const uint8_t ou8_Dlc, const stw::opensyde_core::C_OscCanSignal & orc_Signal);
 
    static void h_GetSignalValue(const uint8_t(&orau8_CanDb)[8], const stw::opensyde_core::C_OscCanSignal & orc_Signal,
@@ -64,6 +71,8 @@ public:
    static void h_GetJ1939PgInfoFromCanId(const uint32_t ou32_CanId, C_OscCanUtilJ1939PgInfo & orc_PgInfo);
    static void h_GetCanIdFromJ1939PgInfo(const C_OscCanUtilJ1939PgInfo & orc_PgInfo, uint32_t & oru32_CanId);
    static uint32_t h_GetVisiblePgn(const uint32_t ou32_Pgn);
+   static void h_GetJ1939TransportProtocolFromCanIdAndDlc(const uint32_t ou32_CanId, const uint16_t ou16_MessageDlc,
+                                                          E_J1939TransportProtocol & ore_J1939TransportProtocol);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

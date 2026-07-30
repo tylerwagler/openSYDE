@@ -323,7 +323,8 @@ void C_CieImportReportWidget::m_OkClicked(void)
    {
       C_CieImportDataAssignment & rc_CurData = this->mc_ImportedAssignedData[u32_ItNodes];
       uint32_t u32_NumberCommDps =
-         C_PuiSdHandler::h_GetInstance()->GetOscCanDataPools(rc_CurData.u32_OsyNodeIndex, this->me_ProtocolType).size();
+         static_cast<uint32_t>(C_PuiSdHandler::h_GetInstance()->
+                               GetOscCanDataPools(rc_CurData.u32_OsyNodeIndex, this->me_ProtocolType).size());
 
       // reset
       rc_CurData.s32_DatapoolIndexForNew = -1;

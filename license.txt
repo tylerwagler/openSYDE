@@ -17,13 +17,14 @@ The following components were used resp. are provided as source code:
 
 Component             License                   Folder                                                   Details
 ==========================================================================================================================================
-openSYDE GUI          GPL V3                    opensyde_tool\src                                  
-openSYDE CAN Monitor  GPL V3                    opensyde_tool\src               
-SYDEflash             GPL V3                    opensyde_tool\src                   
-openSYDE Core         GPL V3 or proprietary     opensyde_tool\libs\opensyde_core                   
+openSYDE GUI          GPL V3                    opensyde_tool\src               
+openSYDE CAN Monitor  GPL V3                    opensyde_tool\src
+SYDEflash             GPL V3                    opensyde_tool\src
+openSYDE Core         GPL V3 or proprietary     opensyde_tool\libs\opensyde_core
 SYDE Coder C          GPL V3 or proprietary     opensyde_syde_coder_c
 SYDE Gen X            GPL V3 or proprietary     opensyde_syde_gen_x
-SYDEsup               GPL V3 or proprietary     opensyde_syde_sup                                  
+SYDEsup               GPL V3 or proprietary     opensyde_syde_sup
+openSYDE Crypto Agent GPL V3 or proprietary     opensyde_crypto_agent
 cmd_line_flash_tool   GPL V3 or proprietary     opensyde_cmd_line_flash_tool                       
 Qt 6.8.3              LGPL 3                    <no sources provided> (*)                                http://doc.qt.io/qt-6/licensing.html
 gettext               LPGL 2.1                  libraries\gettext-0.24                                   https://www.gnu.org/software/gettext/

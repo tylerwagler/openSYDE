@@ -1168,7 +1168,7 @@ void C_PuiSvHandlerFilerV1::mh_LoadParamColumnPositionIndices(std::vector<int32_
             }
             else
             {
-               s32_Index = orc_Items.size();
+               s32_Index = static_cast<int32_t>(orc_Items.size());
             }
             orc_Items.push_back(s32_Index);
             //Next

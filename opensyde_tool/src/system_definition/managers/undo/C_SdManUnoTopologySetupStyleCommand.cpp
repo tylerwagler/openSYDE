@@ -141,8 +141,9 @@ void C_SdManUnoTopologySetupStyleCommand::m_CreateMapAndSaveState(const vector<Q
             //Map
             u32_Index = static_cast<uint32_t>(pc_Snapshot->c_UiBuses.size());
             orc_Map.insert(pc_Bus->GetId(),
-                           C_PuiBsTemporaryDataId(static_cast<int32_t>(C_PuiSdDataElement::eBUS), u32_Index));
-            pc_Snapshot->c_UiBuses.resize(static_cast<std::vector<C_PuiSdBus>::size_type>(u32_Index + 1UL));
+                           C_PuiBsTemporaryDataId(static_cast<int32_t>(C_PuiSdDataElement::eBUS),
+                                                  static_cast<uint32_t>(u32_Index)));
+            pc_Snapshot->c_UiBuses.resize(static_cast<std::vector<C_PuiSdBus>::size_type>(u32_Index) + 1UL);
             //Content
             {
                C_PuiSdBus & rc_UiBus = pc_Snapshot->c_UiBuses[u32_Index];

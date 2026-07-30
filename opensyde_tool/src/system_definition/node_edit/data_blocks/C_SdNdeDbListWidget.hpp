@@ -40,8 +40,6 @@ public:
    void AddApplication(const uint32_t ou32_NodeIndex, const uint32_t ou32_ApplicationIndex);
    void UpdateApplications(void) const;
 
-   void dropEvent(QDropEvent * const opc_Event) override;
-
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
 
@@ -53,6 +51,7 @@ Q_SIGNALS:
    void SigOwnedDataPoolsChanged(void) const;
 
 protected:
+   void dropEvent(QDropEvent * const opc_Event) override;
    void startDrag(const Qt::DropActions oc_SupportedActions) override;
 
 private:

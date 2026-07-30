@@ -15,7 +15,7 @@
 #include <cstring>
 #include <unistd.h>
 #include <fcntl.h>
-#include <errno.h>
+#include <cerrno>
 #include <sys/select.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
@@ -312,7 +312,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_Connectio
                    (static_cast<uint32_t>(orc_Connection.au8_IpAddress[2]) << 8U) +
                    orc_Connection.au8_IpAddress[3];
       c_RemoteAddr.sin_addr.s_addr = htonl(u32_IpAddr);
-      c_RemoteAddr.sin_port = htons(mhu16_UDP_TCP_PORT); //server port
+      c_RemoteAddr.sin_port = htons(mu16_UdpTcpPort); //server port
 
       //lint -e{9176}  Side-effect of the POSIX-style API. Match is guaranteed by the API.
       x_Return =
@@ -339,45 +339,70 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_Connectio
          x_Return = select(orc_Connection.s32_Socket + 1, NULL, &c_SocketWriteSet, &c_SocketErrorSet, &c_TimeOut);
          switch (x_Return)
          {
-         case -1:
+         case -1: //error; see errno for details
             c_ErrnoStr = strerror(errno);
             osc_write_log_error("openSYDE IP-TP",
                                 "TCP connect select() failed. IP-Address: " + mh_IpToText(
                                    orc_Connection.au8_IpAddress) + " Error: " + c_ErrnoStr);
             q_Error = true;
             break;
-         case 0:
-            //no event -> timeout
+         case 0: // no event -> timeout
             osc_write_log_warning("openSYDE IP-TP",
                                   "TCP connect select() failed. IP-Address: " + mh_IpToText(
                                      orc_Connection.au8_IpAddress) + " No connection within timeout");
-            // No error. The connection to the concrete target can be established later
-            q_Error = false;
+            q_Error = true;
             break;
          case 1:
-            if (FD_ISSET(orc_Connection.s32_Socket, &c_SocketWriteSet))
             {
-               // Get port of client for logging (the byte order must be changed of the read port by ntohs)
-               sockaddr_in c_SocketAddr;
-               socklen_t x_Size = sizeof(c_SocketAddr); //lint !e8080 //matching used API
+               // A non-blocking connect can signal writable for both success and failure.
+               // SO_ERROR is the authoritative result.
+               int x_SoError = 0;                      //lint !e8080 !e970 //using type to match library interface
+               socklen_t x_OptLen = sizeof(x_SoError); //lint !e8080 //matching used API
+               const int x_GetSockOptRet =             //lint !e8080 !e970 //using type to match library interface
+                                           getsockopt(orc_Connection.s32_Socket, SOL_SOCKET, SO_ERROR, &x_SoError,
+                                                      &x_OptLen);
 
-               //lint -e{9176}  Side-effect of the POSIX-style API. Match is guaranteed by the API.
-               getsockname(orc_Connection.s32_Socket, reinterpret_cast<sockaddr *>(&c_SocketAddr), &x_Size);
+               if (x_GetSockOptRet != 0)
+               {
+                  c_ErrnoStr = strerror(errno);
+                  osc_write_log_error("openSYDE IP-TP",
+                                      "TCP connect getsockopt(SO_ERROR) failed. IP-Address: " +
+                                      mh_IpToText(orc_Connection.au8_IpAddress) + " Error: " + c_ErrnoStr);
+                  q_Error = true;
+               }
+               else if (x_SoError != 0)
+               {
+                  c_ErrnoStr = strerror(x_SoError);
+                  osc_write_log_error("openSYDE IP-TP",
+                                      "TCP connect failed. IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress) +
+                                      " SO_ERROR: " + C_SclString::IntToStr(x_SoError) + " (" + c_ErrnoStr + ")");
+                  q_Error = true;
+               }
+               else if (FD_ISSET(orc_Connection.s32_Socket, &c_SocketWriteSet))
+               {
+                  // Get port of client for logging (the byte order must be changed of the read port by ntohs)
+                  sockaddr_in c_SocketAddr;
+                  socklen_t x_Size = sizeof(c_SocketAddr); //lint !e8080 //matching used API
 
-               //event caused by write (= connect finished)
-               osc_write_log_info("openSYDE IP-TP",
-                                  "TCP connect select() OK. IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress) +
-                                  " on client port: " + C_SclString::IntToStr(ntohs(c_SocketAddr.sin_port)));
+                  //lint -e{9176}  Side-effect of the POSIX-style API. Match is guaranteed by the API.
+                  getsockname(orc_Connection.s32_Socket, reinterpret_cast<sockaddr *>(&c_SocketAddr), &x_Size);
+
+                  // event caused by write (= connect finished successfully)
+                  osc_write_log_info("openSYDE IP-TP",
+                                     "TCP connect select() OK. IP-Address: " + mh_IpToText(
+                                        orc_Connection.au8_IpAddress) +
+                                     " on client port: " + C_SclString::IntToStr(ntohs(c_SocketAddr.sin_port)));
+               }
+               else
+               {
+                  // event caused by error (= connect failed; e.g. rejected)
+                  osc_write_log_error("openSYDE IP-TP",
+                                      "TCP connect select() failed. IP-Address: " +
+                                      mh_IpToText(orc_Connection.au8_IpAddress));
+                  q_Error = true;
+               }
+               break;
             }
-            else
-            {
-               //event caused by error (= connect failed; e.g. rejected)
-               osc_write_log_error("openSYDE IP-TP",
-                                   "TCP connect select() failed. IP-Address: " +
-                                   mh_IpToText(orc_Connection.au8_IpAddress));
-               q_Error = true;
-            }
-            break;
          default:
             osc_write_log_error("openSYDE IP-TP",
                                 "TCP connect select() failed. Unknown problem: " + C_SclString::IntToStr(
@@ -448,7 +473,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConfigureUdpSocket(const bool oq_ServerPor
          const int x_ENABLED = 1; //lint !e8080 !e970 //using type to match library interface
          setsockopt(ors32_Socket, SOL_SOCKET, SO_REUSEADDR, &x_ENABLED, sizeof(x_ENABLED));
 
-         c_LocalAddr.sin_port = htons(mhu16_UDP_TCP_PORT); //provide port
+         c_LocalAddr.sin_port = htons(mu16_UdpTcpPort); //provide port
       }
       else
       {
@@ -620,6 +645,7 @@ int32_t C_OscIpDispatcherLinuxSock::IsTcpConnected(const uint32_t ou32_Handle)
       {
          // Resource temporarily unavailable. It means that no bytes could be read, because of an empty queue.
          // But the connection is already established.
+         //lint -e{948} //EWOULDBLOCK and EAGAIN really should be identical
          tgl_assert(EWOULDBLOCK == EAGAIN); //those should be identical
          if (errno == EWOULDBLOCK)
          {
@@ -866,11 +892,11 @@ int32_t C_OscIpDispatcherLinuxSock::ReadTcp(const uint32_t ou32_Handle, std::vec
       }
       else
       {
-         int x_Return;       //lint !e8080 !e970 //using type to match library interface
-         int x_SizeInBuffer; //lint !e8080 !e970 //using type to match library interface
          //do we have enough bytes in RX buffer ?
-         x_Return = ioctl(this->mc_SocketsTcp[ou32_Handle].s32_Socket, FIONREAD, &x_SizeInBuffer);
-         if ((x_Return == 0) && (static_cast<size_t>(x_SizeInBuffer) >= orc_Data.size()))
+         int x_SizeInBuffer;  //lint !e8080 !e970 //using type to match library interface
+         const int x_Return = //lint !e8080 !e970 //using type to match library interface
+                              ioctl(this->mc_SocketsTcp[ou32_Handle].s32_Socket, FIONREAD, &x_SizeInBuffer);
+         if ((x_Return == 0) && (x_SizeInBuffer >= static_cast<int>(orc_Data.size()))) //lint !e970 //using API type
          {
             //enough bytes: read
             const ssize_t x_BytesRead = //lint !e970 !e8080 //using type to match library interface
@@ -1088,7 +1114,7 @@ int32_t C_OscIpDispatcherLinuxSock::SendUdp(const std::vector<uint8_t> & orc_Dat
          {
             sockaddr_in c_TargetAddress;
             c_TargetAddress.sin_family = AF_INET;
-            c_TargetAddress.sin_port = htons(mhu16_UDP_TCP_PORT); //target port [REQ DoIp-011]
+            c_TargetAddress.sin_port = htons(mu16_UdpTcpPort); //target port [REQ DoIp-011]
             c_TargetAddress.sin_addr.s_addr = htonl(INADDR_BROADCAST);
             //lint -e{9176}  Side-effect of the POSIX-style API. Match is guaranteed by the API.
             const ssize_t x_Retval = //lint !e8080 !e970 //using type to match library interface
@@ -1145,25 +1171,26 @@ int32_t C_OscIpDispatcherLinuxSock::ReadUdp(std::vector<uint8_t> & orc_Data, uin
    else
    {
       //do we have a package in RX buffer ?
-      int x_SizeInBuffer; //lint !e8080 !e970 //using type to match library interface
-      int x_Return =      //lint !e8080 !e970 //using type to match library interface
-                     ioctl(ms32_SocketUdpServer, FIONREAD, &x_SizeInBuffer);
+      int x_SizeInBuffer;  //lint !e8080 !e970 //using type to match library interface
+      const int x_Return = //lint !e8080 !e970 //using type to match library interface
+                           ioctl(ms32_SocketUdpServer, FIONREAD, &x_SizeInBuffer);
 
       if ((x_Return == 0) && (x_SizeInBuffer >= 1))
       {
          sockaddr_in c_Sender;
          socklen_t x_AddressSize = sizeof(c_Sender); //lint !e8080 //using type to match library interface
+         ssize_t x_NumBytesRead;                     //lint !e8080 //using type to match library interface
          //enough bytes: read
          orc_Data.resize(x_SizeInBuffer);
 
          //lint -e{9176}     Side-effect of the POSIX-style API. Match is guaranteed by the API.
-         x_Return = recvfrom(ms32_SocketUdpServer, &orc_Data[0],
-                             orc_Data.size(), 0, reinterpret_cast<sockaddr *>(&c_Sender),
-                             &x_AddressSize);
+         x_NumBytesRead = recvfrom(ms32_SocketUdpServer, &orc_Data[0],
+                                   orc_Data.size(), 0, reinterpret_cast<sockaddr *>(&c_Sender),
+                                   &x_AddressSize);
 
          //there might be more than one package in the buffer; recvfrom only reads one
          //so we check whether we have more than zero bytes:
-         if (x_Return > 0)
+         if (x_NumBytesRead > 0)
          {
             //extract sender address
             const uint32_t u32_IpAddr = ntohl(c_Sender.sin_addr.s_addr);
@@ -1172,9 +1199,9 @@ int32_t C_OscIpDispatcherLinuxSock::ReadUdp(std::vector<uint8_t> & orc_Data, uin
             orau8_Ip[2] = static_cast<uint8_t>(u32_IpAddr >> 8U);
             orau8_Ip[3] = static_cast<uint8_t>(u32_IpAddr);
 
-            if (x_Return != static_cast<int>(orc_Data.size())) //lint !e970 //using type to match library interface
+            if (x_NumBytesRead != static_cast<ssize_t>(orc_Data.size()))
             {
-               orc_Data.resize(x_Return); //we only need the data we really received
+               orc_Data.resize(x_NumBytesRead); //we only need the data we really received
             }
 
             //filter out local reception of broadcasts we sent ourselves
@@ -1197,7 +1224,7 @@ int32_t C_OscIpDispatcherLinuxSock::ReadUdp(std::vector<uint8_t> & orc_Data, uin
             osc_write_log_error("openSYDE IP-TP",
                                 "ReadUdp unexpected error: data reported as available but reading failed. Reported size: " +
                                 C_SclString::IntToStr(
-                                   orc_Data.size()) + " Read size: " + C_SclString::IntToStr(s32_Return));
+                                   orc_Data.size()) + " Read size: " + C_SclString::IntToStr(x_NumBytesRead));
             s32_Return = C_RD_WR;
          }
       }

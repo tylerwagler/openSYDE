@@ -179,6 +179,8 @@ bool stw::tgl::TglFileExists(const C_SclString & orc_FileName)
 
    Scans the file-system for files matching the specified pattern.
    Files with all attributes are detected.
+   Note that the function could return inconsistent results as scanning for the files and
+    their properties is done in two separate (non-atomic) steps.
 
    \param[in]     orc_SearchPattern search pattern (* and ? wildcards are possible)
    \param[out]    orc_FoundFiles    array with found files (without path, just name + extension)
@@ -211,8 +213,21 @@ int32_t stw::tgl::TglFileFind(const C_SclString & orc_SearchPattern,
             //lint -e{9130} //API defined by library
             if (fnmatch(c_Pattern.c_str(), pc_Entry->d_name, FNM_PATHNAME | FNM_NOESCAPE) == 0)
             {
+               const C_SclString c_FullPath = TglFileIncludeTrailingDelimiter(c_Path) + pc_Entry->d_name;
+               struct stat c_FileStat;
+
                orc_FoundFiles.IncLength();
                orc_FoundFiles[orc_FoundFiles.GetHigh()].c_FileName = pc_Entry->d_name;
+               //preset to zero in case we cannot get the file time for some reason
+               orc_FoundFiles[orc_FoundFiles.GetHigh()].u64_LastWriteTimeUtcSeconds = 0ULL;
+               if (stat(c_FullPath.c_str(), &c_FileStat) == 0)
+               {
+                  if (c_FileStat.st_mtime >= 0)
+                  {
+                     orc_FoundFiles[orc_FoundFiles.GetHigh()].u64_LastWriteTimeUtcSeconds =
+                        static_cast<uint64_t>(c_FileStat.st_mtime);
+                  }
+               }
                s32_Error = C_NO_ERR;
             }
          }

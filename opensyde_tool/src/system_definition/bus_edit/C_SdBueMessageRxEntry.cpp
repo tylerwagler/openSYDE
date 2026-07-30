@@ -141,7 +141,7 @@ void C_SdBueMessageRxEntry::Init(const QString & orc_EntryName, const uint32_t o
                                  const std::vector<QString> & orc_DatapoolNames, const bool oq_NodeLayer,
                                  const bool oq_ReadOnly)
 {
-   const uint32_t u32_NumEntries = orc_DatapoolIndexes.size();
+   const uint32_t u32_NumEntries = static_cast<uint32_t>(orc_DatapoolIndexes.size());
 
    tgl_assert(orc_DatapoolIndexes.size() > 0);
    tgl_assert(orc_DatapoolIndexes.size() == orc_ReceiveTimeoutValues.size());

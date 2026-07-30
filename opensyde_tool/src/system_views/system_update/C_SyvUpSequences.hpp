@@ -133,9 +133,6 @@ private:
    //results of STW Flashloader device information scans:
    std::vector<uint32_t> mc_ReportXflDeviceInformationNodeIndex;
    std::vector<C_XflDeviceInformation> mc_ReportXflDeviceInformation;
-
-   // Security PEM database
-   stw::opensyde_core::C_OscSecurityPemDatabase mc_PemDatabase;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

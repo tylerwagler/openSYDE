@@ -21,7 +21,6 @@
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSupServiceUpdatePackageV1.hpp"
-// TODO GS #include "C_OscSupServiceUpdatePackageCreate.hpp"
 #include "C_OscViewData.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
@@ -40,6 +39,7 @@ using namespace stw::opensyde_core;
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
+const stw::scl::C_SclString C_SupCreatePackage::mhc_LOGGING_CATEGORY = "Create Update Package";
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -310,7 +310,7 @@ void C_SupCreatePackage::m_GetUpdatePackage(const C_OscViewData & orc_View,
                   TglExpandFileName(rc_NodeUpdateInfo.GetPemFilePath(), TglExtractFilePath(mc_OsyProjectPath)) :
                   rc_NodeUpdateInfo.GetPemFilePath();
                rc_AppsToWrite.c_PemFile = c_AbsolutePath;
-               C_SydeSup::h_WriteLog(mc_LoggingCategory,
+               C_SydeSup::h_WriteLog(mhc_LOGGING_CATEGORY,
                                      "For node \"" + rc_Node.c_Properties.c_Name + "\" use PEM file: " +
                                      c_AbsolutePath, false, mq_Quiet);
             }
@@ -402,7 +402,7 @@ void C_SupCreatePackage::m_GetDataBlocksToWrite(const C_OscViewNodeUpdate & orc_
                      }
 
                      orc_ApplicationToWrite.c_FilesToFlash.push_back(c_RealPath);
-                     C_SydeSup::h_WriteLog(mc_LoggingCategory,
+                     C_SydeSup::h_WriteLog(mhc_LOGGING_CATEGORY,
                                            "For node \"" + orc_Node.c_Properties.c_Name + "\" and application \"" +
                                            rc_DataBlock.c_Name + "\" use file: " + c_RealPath, false, mq_Quiet);
                   }
@@ -445,7 +445,7 @@ void C_SupCreatePackage::m_GetFileBasedFilesToWrite(const C_OscViewNodeUpdate & 
                TglExpandFileName(c_Paths[u32_FileCounter], c_OsyProjDir) : c_Paths[u32_FileCounter];
             orc_ApplicationToWrite.c_FilesToFlash.push_back(c_AbsolutePath);
 
-            C_SydeSup::h_WriteLog(mc_LoggingCategory,
+            C_SydeSup::h_WriteLog(mhc_LOGGING_CATEGORY,
                                   "For node \"" + orc_Node.c_Properties.c_Name + "\" use file: " + c_AbsolutePath,
                                   false, mq_Quiet);
          }
@@ -498,7 +498,7 @@ void C_SupCreatePackage::m_GetParamSetsToWrite(const C_OscViewNodeUpdate & orc_N
             }
             orc_ApplicationToWrite.c_FilesToWriteToNvm.push_back(c_RealPath);
 
-            C_SydeSup::h_WriteLog(mc_LoggingCategory,
+            C_SydeSup::h_WriteLog(mhc_LOGGING_CATEGORY,
                                   "For node \"" + orc_Node.c_Properties.c_Name + "\" use parameter set image file: " +
                                   c_RealPath, false, mq_Quiet);
          }

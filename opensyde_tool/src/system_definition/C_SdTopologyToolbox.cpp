@@ -298,7 +298,7 @@ void C_SdTopologyToolbox::dropEvent(QDropEvent * const opc_Event)
    }
 
    c_UserDeviceDefPaths = C_ImpUtil::h_AskUserToSaveRelativePath(this, c_UserDeviceDefPaths,
-                                                                 C_Uti::h_GetExePath());
+                                                                 C_Uti::h_GetDevicesIniPath());
    s32_AddDeviceCount = this->m_AddUserNodesToIni(c_UserDeviceDefPaths, c_Errors);
    this->m_ErrorHandlingUserFeedback(c_Errors, s32_AddDeviceCount, s32_DeviceCount);
 
@@ -560,7 +560,7 @@ void C_SdTopologyToolbox::m_FileBrowseDialog(void)
          }
 
          c_UserDeviceDefPaths =
-            C_ImpUtil::h_AskUserToSaveRelativePath(this, c_UserDeviceDefPaths, C_Uti::h_GetExePath());
+            C_ImpUtil::h_AskUserToSaveRelativePath(this, c_UserDeviceDefPaths, C_Uti::h_GetDevicesIniPath());
          s32_AddDeviceCount = this->m_AddUserNodesToIni(c_UserDeviceDefPaths, c_Errors);
          this->m_ErrorHandlingUserFeedback(c_Errors, s32_AddDeviceCount, s32_DeviceCount);
       }

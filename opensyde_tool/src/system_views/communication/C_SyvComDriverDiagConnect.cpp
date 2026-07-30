@@ -252,8 +252,8 @@ void C_SyvComDriverDiagConnect::m_RunSetDiagnosticMode(void)
                                     "Authentication between openSYDE Tool and device(s) has failed. Access denied."));
          C_OscLoggingHandler::h_Flush();
          this->mc_ErrorMessageDetails = C_GtGetText::h_GetText("Possible reasons:<br/>"
-                                                               "- Associated private key (*.pem) not found in /certificates folder (most common)<br/>"
-                                                               "- Failure during authenfication process<br/>"
+                                                               "- Associated private key not found on crypto agent certificates folder (most common)<br/>"
+                                                               "- Failure during authentication process<br/>"
                                                                "For more information see ") +
                                         C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLE_GUIDE_COLOR_LINK,
                                                          C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) +

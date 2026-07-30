@@ -46,6 +46,9 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_OscBuSequences::C_OscBuSequences(void) :
    mpc_CanDispatcher(NULL),
+   mpc_IpDispatcher(NULL),
+   mpc_TpCan(NULL),
+   mpc_TpIp(NULL),
    ms32_CanBitrate(125)
 {
 }
@@ -57,10 +60,23 @@ C_OscBuSequences::C_OscBuSequences(void) :
 C_OscBuSequences::~C_OscBuSequences()
 {
    this->mpc_CanDispatcher = NULL; //do not delete ! not owned by us
-}
+   this->mpc_IpDispatcher = NULL;  //do not delete ! not owned by us
 
+   if (this->mpc_TpCan != NULL)
+   {
+      delete this->mpc_TpCan;
+      this->mpc_TpCan = NULL;
+   }
+   if (this->mpc_TpIp != NULL)
+   {
+      delete this->mpc_TpIp;
+      this->mpc_TpIp = NULL;
+   }
+}
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Initialize transport protocol and openSYDE protocol driver.
+
+   CAN only variant
 
    \param[in]  opc_CanDispatcher Pointer to concrete CAN dispatcher
    \param[in]  os32_CanBitrate   CAN Bitrate in kBit/s
@@ -74,6 +90,32 @@ C_OscBuSequences::~C_OscBuSequences()
 int32_t C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatcher, const int32_t os32_CanBitrate,
                                const uint8_t ou8_NodeId)
 {
+   const uint8_t au8_ZERO_IP[4] = {0, 0, 0, 0};
+
+   return this->Init(opc_CanDispatcher, NULL, os32_CanBitrate, au8_ZERO_IP, ou8_NodeId, 0U);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Initialize transport protocol and openSYDE protocol driver.
+
+   CAN and Ethernet variant. Only one of the dispatchers can be used, not both at the same time.
+
+   \param[in]  opc_CanDispatcher Pointer to concrete CAN dispatcher
+   \param[in]  opc_IpDispatcher  Pointer to concrete IP dispatcher
+   \param[in]  os32_CanBitrate   CAN Bitrate in kBit/s (only relevant if CAN dispatcher is used)
+   \param[in]  orau8_IpAddress   IP address of the server node (only relevant if IP dispatcher is used)
+   \param[in]  ou8_NodeId        Server node ID
+   \param[in]  ou8_BusId         Server bus ID (only relevant if IP dispatcher is used)
+
+   \return
+   C_NO_ERR    everything ok
+   else        error occured, see log file for details
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatcher,
+                               C_OscIpDispatcher * const opc_IpDispatcher, const int32_t os32_CanBitrate,
+                               const uint8_t (&orau8_IpAddress)[4], const uint8_t ou8_NodeId, const uint8_t ou8_BusId)
+{
    int32_t s32_Return = C_NO_ERR;
    const C_SclString c_LogActivity = "Initialization";
 
@@ -86,28 +128,82 @@ int32_t C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatch
    ms32_CanBitrate = os32_CanBitrate;
 
    this->mpc_CanDispatcher = opc_CanDispatcher;
+   this->mpc_IpDispatcher = opc_IpDispatcher;
 
-   if (this->mpc_CanDispatcher == NULL)
+   if ((this->mpc_CanDispatcher == NULL) && (this->mpc_IpDispatcher == NULL))
    {
       s32_Return = C_COM;
-      osc_write_log_error(c_LogActivity, "Could not used CAN! CAN Dispatcher is invalid.");
+      osc_write_log_error(c_LogActivity, "Could not use CAN or IP! Both dispatchers are invalid.");
+   }
+   else if ((this->mpc_CanDispatcher != NULL) && (this->mpc_IpDispatcher != NULL))
+   {
+      s32_Return = C_COM;
+      osc_write_log_error(c_LogActivity, "Can only use CAN or IP! Both dispatchers are valid.");
+   }
+   else
+   {
+      // Nothing to do
    }
 
    if (s32_Return == C_NO_ERR)
    {
-      s32_Return = mc_TpCan.SetDispatcher(this->mpc_CanDispatcher);
-      if (s32_Return != C_NO_ERR)
+      // CAN usage
+      if (this->mpc_CanDispatcher != NULL)
       {
-         osc_write_log_error(c_LogActivity, "Setting CAN dispatcher for CAN transport protocol failed!");
+         this->mpc_TpCan = new C_OscProtocolDriverOsyTpCan(static_cast<uint16_t>(os32_CanBitrate));
+
+         s32_Return = mpc_TpCan->SetDispatcher(this->mpc_CanDispatcher);
+         if (s32_Return != C_NO_ERR)
+         {
+            osc_write_log_error(c_LogActivity, "Setting CAN dispatcher for CAN transport protocol failed!");
+         }
+         else
+         {
+            s32_Return = mc_OsyProtocol.SetTransportProtocol(mpc_TpCan);
+            if (s32_Return != C_NO_ERR)
+            {
+               osc_write_log_error(c_LogActivity,
+                                   "Setting CAN transport protocol to the openSYDE protocol driver failed!");
+            }
+         }
       }
-      else
+      else if (this->mpc_IpDispatcher != NULL)
       {
-         s32_Return = mc_OsyProtocol.SetTransportProtocol(&mc_TpCan);
+         // IP usage
+         uint32_t u32_IpDispatcherHandle;
+
+         this->mpc_TpIp = new C_OscProtocolDriverOsyTpIp();
+
+         // TCP preparation
+         s32_Return = mpc_IpDispatcher->InitTcp(orau8_IpAddress, u32_IpDispatcherHandle);
          if (s32_Return != C_NO_ERR)
          {
             osc_write_log_error(c_LogActivity,
-                                "Setting CAN transport protocol to the openSYDE protocol driver failed!");
+                                "Could not set up TCP connection.");
          }
+         else
+         {
+            osc_write_log_info(c_LogActivity, "TCP connection to target device established.");
+
+            s32_Return = this->mpc_TpIp->SetDispatcher(this->mpc_IpDispatcher, u32_IpDispatcherHandle);
+            if (s32_Return != C_NO_ERR)
+            {
+               osc_write_log_error(c_LogActivity, "Setting IP dispatcher for IP transport protocol failed!");
+            }
+            else
+            {
+               s32_Return = mc_OsyProtocol.SetTransportProtocol(this->mpc_TpIp);
+               if (s32_Return != C_NO_ERR)
+               {
+                  osc_write_log_error(c_LogActivity,
+                                      "Setting IP transport protocol to the openSYDE protocol driver failed!");
+               }
+            }
+         }
+      }
+      else
+      {
+         // Nothing to do
       }
    }
 
@@ -118,7 +214,7 @@ int32_t C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatch
       c_Client.u8_NodeIdentifier = 126;
       c_Client.u8_BusIdentifier = 0U;
       c_Server.u8_NodeIdentifier = ou8_NodeId;
-      c_Server.u8_BusIdentifier = 0U;
+      c_Server.u8_BusIdentifier = ou8_BusId;
 
       s32_Return = mc_OsyProtocol.SetNodeIdentifiers(c_Client, c_Server);
       if (s32_Return != C_NO_ERR)
@@ -153,82 +249,152 @@ int32_t C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_FlashloaderRes
    const uint32_t u32_SCAN_TIME_MS = 5000U;
    uint32_t u32_WaitTime = ou32_FlashloaderResetWaitTime;
 
-   m_ReportProgress(s32_Return, "Starting the flashloader activation ...");
-
    if (u32_WaitTime < u32_SCAN_TIME_MS)
    {
       // The scan time is necessary for the manual triggering of the nodes
       u32_WaitTime = u32_SCAN_TIME_MS;
    }
 
-   s32_Return = mc_OsyProtocol.OsyRequestProgramming(&u8_NumberCode);
+   m_ReportProgress(s32_Return, "Starting the flashloader activation ...");
+
+   s32_Return = mc_OsyProtocol.ReConnect();
    if (s32_Return != C_NO_ERR)
    {
-      //not a showstopper; user can still use the "manual reset" approach
-      C_SclString c_Text;
-      c_Text.PrintFormatted("Could not set the \"request programming\" flag: Failed with result %d. "
-                            "You still have the chance to reset the device manually ...", s32_Return);
-      m_ReportProgress(C_WARN, c_Text);
+      osc_write_log_error(c_LogActivity, "Could not connect to the target device!");
    }
    else
    {
-      osc_write_log_info(c_LogActivity, "Succesfully set the \"request programming\" flag.");
+      osc_write_log_info(c_LogActivity, "Connection to target device established.");
    }
 
-   //request "ResetToFlashloader"
-   s32_Return = mc_OsyProtocol.OsyEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
-   if (s32_Return != C_NO_ERR)
+   if (s32_Return == C_NO_ERR)
    {
-      //also not a showstopper; user can still use the "manual reset" approach
-      C_SclString c_Text;
-      osc_write_log_warning(c_LogActivity, "Could not request an ECU reset.");
-
-      c_Text.PrintFormatted("You now have %u seconds time to turn on your target device ...",
-                            u32_SCAN_TIME_MS / 1000);
-      m_ReportProgress(C_WARN, c_Text);
-   }
-   else
-   {
-      osc_write_log_info(c_LogActivity, "ECU reset successful.");
-   }
-
-   // Always continue with broadcast. If previous steps did not work, user can do the manual reset while we broadcast.
-   const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
-
-   do
-   {
-      // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast
-      s32_Return = mc_TpCan.BroadcastSendEnterPreProgrammingSession();
-      if (s32_Return != C_NO_ERR)
-      {
-         osc_write_log_error(c_LogActivity,
-                             "Sending broadcast to enter preprogramming session failed with result " +
-                             C_SclString::IntToStr(s32_Return));
-
-         s32_Return = C_COM;
-      }
+      s32_Return = mc_OsyProtocol.OsyRequestProgramming(&u8_NumberCode);
 
       if (s32_Return != C_NO_ERR)
       {
-         break;
+         //not a showstopper; user can still use the "manual reset" approach
+         C_SclString c_Text;
+         c_Text.PrintFormatted("Could not set the \"request programming\" flag: Failed with result %d. "
+                               "You still have the chance to reset the device manually ...", s32_Return);
+         m_ReportProgress(C_WARN, c_Text);
+         s32_Return = C_NO_ERR;
       }
-
-      TglSleep(5);
+      else
+      {
+         osc_write_log_info(c_LogActivity, "Succesfully set the \"request programming\" flag.");
+      }
    }
-   while (TglGetTickCount() < (u32_WaitTime + u32_StartTime));
 
-   if (this->mpc_CanDispatcher != NULL)
+   if (s32_Return == C_NO_ERR)
    {
-      //Previous broadcasts might have caused responses placed in the receive queues of the device
-      // specific driver instances. Dump them.
-      (void)this->mpc_CanDispatcher->DispatchIncoming();
+      //request "ResetToFlashloader"
+      s32_Return = mc_OsyProtocol.OsyEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
+
+      if (s32_Return != C_NO_ERR)
+      {
+         if (this->mpc_TpCan != NULL)
+         {
+            //also not a showstopper in case of CAN; user can still use the "manual reset" approach
+            C_SclString c_Text;
+            osc_write_log_warning(c_LogActivity, "Could not request an ECU reset.");
+
+            c_Text.PrintFormatted("You now have %u seconds time to turn on your target device ...",
+                                  u32_WaitTime / 1000);
+            m_ReportProgress(C_WARN, c_Text);
+            s32_Return = C_NO_ERR;
+         }
+         else
+         {
+            osc_write_log_error(c_LogActivity, "Could not request an ECU reset.");
+         }
+      }
+      else
+      {
+         osc_write_log_info(c_LogActivity, "ECU reset successful.");
+      }
    }
-   mc_TpCan.ClearDispatcherQueue();
+   mc_OsyProtocol.Disconnect();
+
+   if (s32_Return == C_NO_ERR)
+   {
+      if (this->mpc_TpCan != NULL)
+      {
+         // In case of CAN: Always continue with broadcast.
+         // If previous steps did not work, user can do the manual reset while we broadcast.
+         const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
+
+         do
+         {
+            // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast
+            s32_Return = this->mpc_TpCan->BroadcastSendEnterPreProgrammingSession();
+
+            if (s32_Return != C_NO_ERR)
+            {
+               osc_write_log_error(c_LogActivity,
+                                   "Sending broadcast to enter preprogramming session failed with result " +
+                                   C_SclString::IntToStr(s32_Return));
+
+               s32_Return = C_COM;
+            }
+
+            if (s32_Return != C_NO_ERR)
+            {
+               break;
+            }
+
+            TglSleep(5);
+         }
+         while (TglGetTickCount() < (u32_WaitTime + u32_StartTime));
+
+         if (this->mpc_CanDispatcher != NULL)
+         {
+            //Previous broadcasts might have caused responses placed in the receive queues of the device
+            // specific driver instances. Dump them.
+            (void)this->mpc_CanDispatcher->DispatchIncoming();
+         }
+         mpc_TpCan->ClearDispatcherQueue();
+      }
+      else
+      {
+         // In case of IP: Just wait for the specified time, then try to connect and bring node to preprogramming
+         // session.
+         TglSleep(ou32_FlashloaderResetWaitTime);
+         if (this->mpc_CanDispatcher != NULL)
+         {
+            //Previous broadcasts might have caused responses placed in the receive queues of the device
+            // specific driver instances. Dump them.
+            (void)this->mpc_CanDispatcher->DispatchIncoming();
+         }
+
+         // try to reconnect after reset
+         s32_Return = mc_OsyProtocol.ReConnect();
+         if (s32_Return != C_NO_ERR)
+         {
+            osc_write_log_error(c_LogActivity, "Could not connect to the target device!");
+         }
+         else
+         {
+            osc_write_log_info(c_LogActivity, "Connection to target device established.");
+
+            //try to enter preprogramming session
+            s32_Return =
+               mc_OsyProtocol.OsyDiagnosticSessionControl(C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PREPROGRAMMING,
+                                                          &u8_NumberCode);
+            if (s32_Return != C_NO_ERR)
+            {
+               osc_write_log_error(c_LogActivity, "Could not activate the preprogramming session! Details: " +
+                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+            }
+         }
+
+         mc_OsyProtocol.Disconnect();
+      }
+   }
 
    if (s32_Return != C_NO_ERR)
    {
-      osc_write_log_error(c_LogActivity, "Could not connect to the target device! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+      osc_write_log_error(c_LogActivity, "Could not connect to the target device!");
    }
 
    if (s32_Return == C_NO_ERR)
@@ -258,135 +424,151 @@ int32_t C_OscBuSequences::ReadDeviceInformation(void)
 
    m_ReportProgress(s32_Return, "Starting to read the device information...");
 
-   s32_Return = mc_OsyProtocol.OsyReadHardwareNumber(c_Info.u32_EcuArticleNumber, &u8_NumberCode);
-
+   s32_Return = mc_OsyProtocol.ReConnect();
    if (s32_Return != C_NO_ERR)
    {
-      osc_write_log_error("Read Article Number", "Could not read the device's article number! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+      osc_write_log_error("Read device information", "Could not connect to the target device!");
    }
    else
    {
-      s32_Return = mc_OsyProtocol.OsyReadHardwareVersionNumber(c_Info.c_EcuHardwareVersionNumber, &u8_NumberCode);
+      osc_write_log_info("Read device information", "Connection to target device established.");
    }
 
-   if (s32_Return != C_NO_ERR)
-   {
-      osc_write_log_error("Read Hardware Version", "Could not read the device's hardware version number! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
-   }
-   else
-   {
-      s32_Return = mc_OsyProtocol.OsyReadDeviceName(c_DeviceName, &u8_NumberCode);
-   }
-
-   if (s32_Return != C_NO_ERR)
-   {
-      osc_write_log_error("Read Device Name", "Could not read the device's device name! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
-   }
-   else
-   {
-      s32_Return = mc_OsyProtocol.OsyReadProtocolVersion(c_Info.au8_ProtocolVersion, &u8_NumberCode);
-   }
-
-   if (s32_Return != C_NO_ERR)
-   {
-      osc_write_log_error("Read Protocol Version", "Could not read the device's protocol version! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
-   }
-   else
-   {
-      s32_Return = mc_OsyProtocol.OsyReadBootSoftwareIdentification(c_Info.au8_FlashloaderSoftwareVersion,
-                                                                    &u8_NumberCode);
-   }
-
-   if (s32_Return != C_NO_ERR)
-   {
-      osc_write_log_error("Read Flashloader Versions",
-                          "Could not read the device's flashloader implementation version! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
-   }
-   else
-   {
-      s32_Return = mc_OsyProtocol.OsyReadFlashloaderProtocolVersion(c_Info.au8_FlashloaderProtocolVersion,
-                                                                    &u8_NumberCode);
-   }
-
-   if (s32_Return != C_NO_ERR)
-   {
-      osc_write_log_error("Read Flashloader Versions",
-                          "Could not read the device's flashloader protocol version! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
-   }
-   else
-   {
-      s32_Return = mc_OsyProtocol.OsyReadFlashCount(c_Info.u32_FlashCount, &u8_NumberCode);
-   }
-
-   if (s32_Return != C_NO_ERR)
-   {
-      osc_write_log_error("Read Flash Count", "Could not read number of times the device has been flashed! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
-   }
-   else
-   {
-      s32_Return = mc_OsyProtocol.OsyReadApplicationSoftwareFingerprint(c_Info.au8_FlashFingerprintDate,
-                                                                        c_Info.au8_FlashFingerprintTime,
-                                                                        c_Info.c_FlashFingerprintUserName,
-                                                                        &u8_NumberCode);
-   }
-
-   if (s32_Return != C_NO_ERR)
-   {
-      osc_write_log_error("Read Fingerprint",
-                          "Could not read the device's application software fingerprint! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
-   }
-   else
-   {
-      s32_Return = mc_OsyProtocol.OsyReadListOfFeatures(c_Info.c_AvailableFeatures, &u8_NumberCode);
-   }
-
-   if (s32_Return != C_NO_ERR)
-   {
-      osc_write_log_error("Read Features",
-                          "Could not read the device's list of available features! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
-   }
-   else
-   {
-      if (c_Info.c_AvailableFeatures.q_MaxNumberOfBlockLengthAvailable == true)
-      {
-         s32_Return = mc_OsyProtocol.OsyReadMaxNumberOfBlockLength(c_Info.u16_MaxNumberOfBlockLength, &u8_NumberCode);
-      }
-      if (s32_Return != C_NO_ERR)
-      {
-         c_Info.u16_MaxNumberOfBlockLength = 0U;
-         osc_write_log_error("Read MaxNumberOfBlockLength",
-                             "Could not read the device's maximum number of block length! Details: " +
-                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
-      }
-   }
-
-   // read serial number after reading available features!
    if (s32_Return == C_NO_ERR)
    {
-      if (c_Info.c_AvailableFeatures.q_ExtendedSerialNumberModeImplemented == false)
+      s32_Return = mc_OsyProtocol.OsyReadHardwareNumber(c_Info.u32_EcuArticleNumber, &u8_NumberCode);
+
+      if (s32_Return != C_NO_ERR)
       {
-         s32_Return = mc_OsyProtocol.OsyReadEcuSerialNumber(c_Info.c_SerialNumber, &u8_NumberCode);
+         osc_write_log_error("Read Article Number", "Could not read the device's article number! Details: " +
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
       }
       else
       {
-         s32_Return = mc_OsyProtocol.OsyReadEcuSerialNumberExt(c_Info.c_SerialNumber, &u8_NumberCode);
+         s32_Return = mc_OsyProtocol.OsyReadHardwareVersionNumber(c_Info.c_EcuHardwareVersionNumber, &u8_NumberCode);
       }
 
       if (s32_Return != C_NO_ERR)
       {
-         osc_write_log_error("Read Serial Number", "Could not read the device's serial number! Details: " +
+         osc_write_log_error("Read Hardware Version", "Could not read the device's hardware version number! Details: " +
                              C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
       }
+      else
+      {
+         s32_Return = mc_OsyProtocol.OsyReadDeviceName(c_DeviceName, &u8_NumberCode);
+      }
+
+      if (s32_Return != C_NO_ERR)
+      {
+         osc_write_log_error("Read Device Name", "Could not read the device's device name! Details: " +
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+      }
+      else
+      {
+         s32_Return = mc_OsyProtocol.OsyReadProtocolVersion(c_Info.au8_ProtocolVersion, &u8_NumberCode);
+      }
+
+      if (s32_Return != C_NO_ERR)
+      {
+         osc_write_log_error("Read Protocol Version", "Could not read the device's protocol version! Details: " +
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+      }
+      else
+      {
+         s32_Return = mc_OsyProtocol.OsyReadBootSoftwareIdentification(c_Info.au8_FlashloaderSoftwareVersion,
+                                                                       &u8_NumberCode);
+      }
+
+      if (s32_Return != C_NO_ERR)
+      {
+         osc_write_log_error("Read Flashloader Versions",
+                             "Could not read the device's flashloader implementation version! Details: " +
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+      }
+      else
+      {
+         s32_Return = mc_OsyProtocol.OsyReadFlashloaderProtocolVersion(c_Info.au8_FlashloaderProtocolVersion,
+                                                                       &u8_NumberCode);
+      }
+
+      if (s32_Return != C_NO_ERR)
+      {
+         osc_write_log_error("Read Flashloader Versions",
+                             "Could not read the device's flashloader protocol version! Details: " +
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+      }
+      else
+      {
+         s32_Return = mc_OsyProtocol.OsyReadFlashCount(c_Info.u32_FlashCount, &u8_NumberCode);
+      }
+
+      if (s32_Return != C_NO_ERR)
+      {
+         osc_write_log_error("Read Flash Count", "Could not read number of times the device has been flashed! Details: " +
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
+                                                                                      u8_NumberCode));
+      }
+      else
+      {
+         s32_Return = mc_OsyProtocol.OsyReadApplicationSoftwareFingerprint(c_Info.au8_FlashFingerprintDate,
+                                                                           c_Info.au8_FlashFingerprintTime,
+                                                                           c_Info.c_FlashFingerprintUserName,
+                                                                           &u8_NumberCode);
+      }
+
+      if (s32_Return != C_NO_ERR)
+      {
+         osc_write_log_error("Read Fingerprint",
+                             "Could not read the device's application software fingerprint! Details: " +
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+      }
+      else
+      {
+         s32_Return = mc_OsyProtocol.OsyReadListOfFeatures(c_Info.c_AvailableFeatures, &u8_NumberCode);
+      }
+
+      if (s32_Return != C_NO_ERR)
+      {
+         osc_write_log_error("Read Features",
+                             "Could not read the device's list of available features! Details: " +
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+      }
+      else
+      {
+         if (c_Info.c_AvailableFeatures.q_MaxNumberOfBlockLengthAvailable == true)
+         {
+            s32_Return =
+               mc_OsyProtocol.OsyReadMaxNumberOfBlockLength(c_Info.u16_MaxNumberOfBlockLength, &u8_NumberCode);
+         }
+         if (s32_Return != C_NO_ERR)
+         {
+            c_Info.u16_MaxNumberOfBlockLength = 0U;
+            osc_write_log_error("Read MaxNumberOfBlockLength",
+                                "Could not read the device's maximum number of block length! Details: " +
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+         }
+      }
+
+      // read serial number after reading available features!
+      if (s32_Return == C_NO_ERR)
+      {
+         if (c_Info.c_AvailableFeatures.q_ExtendedSerialNumberModeImplemented == false)
+         {
+            s32_Return = mc_OsyProtocol.OsyReadEcuSerialNumber(c_Info.c_SerialNumber, &u8_NumberCode);
+         }
+         else
+         {
+            s32_Return = mc_OsyProtocol.OsyReadEcuSerialNumberExt(c_Info.c_SerialNumber, &u8_NumberCode);
+         }
+
+         if (s32_Return != C_NO_ERR)
+         {
+            osc_write_log_error("Read Serial Number", "Could not read the device's serial number! Details: " +
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+         }
+      }
    }
+   this->mc_OsyProtocol.Disconnect();
 
    m_ReportProgress(s32_Return, "Read device information finished.");
    const uint8_t u8_PROGRESS_PERCENTAGE = 2;
@@ -437,6 +619,19 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
       {
          s32_Return = C_RD_WR;
          osc_write_log_error(c_LogActivity, "Could not get the HEX file split into handy chunks!");
+      }
+   }
+
+   if (s32_Return == C_NO_ERR)
+   {
+      s32_Return = mc_OsyProtocol.ReConnect();
+      if (s32_Return != C_NO_ERR)
+      {
+         osc_write_log_error(c_LogActivity, "Could not connect to the target device!");
+      }
+      else
+      {
+         osc_write_log_info(c_LogActivity, "Connection to target device established.");
       }
    }
 
@@ -721,6 +916,8 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
       }
    }
 
+   mc_OsyProtocol.Disconnect();
+
    if (s32_Return == C_NO_ERR)
    {
       c_LogActivity = "Update Node";
@@ -748,17 +945,31 @@ int32_t C_OscBuSequences::ResetSystem(void)
 
    m_ReportProgress(s32_Return, "Starting system reset... ");
 
-   osc_write_log_info(c_LogActivity, "Resetting the target device ...");
-   s32_Return = mc_OsyProtocol.OsyEcuReset();
+   s32_Return = mc_OsyProtocol.ReConnect();
    if (s32_Return != C_NO_ERR)
    {
-      osc_write_log_error(c_LogActivity, "Could not reset the target device!");
+      osc_write_log_error(c_LogActivity, "Could not connect to the target device!");
    }
    else
    {
-      TglSleep(500); //wait a little to make sure the device has performed the reset
-      osc_write_log_error(c_LogActivity, "Successfully sent reset to target device!");
+      osc_write_log_info(c_LogActivity, "Connection to target device established.");
    }
+
+   if (s32_Return == C_NO_ERR)
+   {
+      osc_write_log_info(c_LogActivity, "Resetting the target device ...");
+      s32_Return = mc_OsyProtocol.OsyEcuReset();
+      if (s32_Return != C_NO_ERR)
+      {
+         osc_write_log_error(c_LogActivity, "Could not reset the target device!");
+      }
+      else
+      {
+         TglSleep(500); //wait a little to make sure the device has performed the reset
+         osc_write_log_info(c_LogActivity, "Successfully sent reset to target device!");
+      }
+   }
+   mc_OsyProtocol.Disconnect();
 
    m_ReportProgress(s32_Return, "System reset finished.");
 
@@ -840,7 +1051,15 @@ int32_t C_OscBuSequences::h_ReadHexFile(const C_SclString & orc_HexFilePath, C_O
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscBuSequences::PrepareForDestruction(void)
 {
-   mc_TpCan.SetDispatcher(NULL); //we are about to destroy the dispatcher; make sure TP disconnects from it
+   //we are about to destroy the dispatcher; make sure TP disconnects from it
+   if (this->mpc_TpCan != NULL)
+   {
+      mpc_TpCan->SetDispatcher(NULL);
+   }
+   if (this->mpc_TpIp != NULL)
+   {
+      mpc_TpIp->SetDispatcher(NULL, 0U);
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

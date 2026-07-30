@@ -130,7 +130,7 @@ void C_GiLiLine::Init(const std::vector<QPointF> & orc_Points)
    //Lines
    mc_Lines.clear();
    mc_Lines.reserve(mc_Points.size() - 1);
-   for (int32_t s32_ItPoint = 0L; (s32_ItPoint + 1) < mc_Points.size(); ++s32_ItPoint)
+   for (int32_t s32_ItPoint = 0L; (s32_ItPoint + 1) < static_cast<int32_t>(mc_Points.size()); ++s32_ItPoint)
    {
       this->m_AddLineAt(s32_ItPoint);
    }

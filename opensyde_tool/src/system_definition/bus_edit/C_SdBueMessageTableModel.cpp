@@ -203,7 +203,7 @@ int32_t C_SdBueMessageTableModel::rowCount(const QModelIndex & orc_Parent) const
 
    if (!orc_Parent.isValid())
    {
-      s32_Retval = this->mc_MsgInfoAll.size();
+      s32_Retval = static_cast<int32_t>(this->mc_MsgInfoAll.size());
    }
    return s32_Retval;
 }
@@ -1117,15 +1117,15 @@ QVariant C_SdBueMessageTableModel::m_GetMessageIcon(const C_OscCanMessageIdentif
                }
             }
          }
-         c_Tmp.push_back(QString::number(20));
+         c_Tmp.append(QString::number(20));
          if ((((q_NameValid == false) || (q_IdValid == false)) || (q_SignalsValid == false)) ||
              (q_HasTx == false))
          {
-            c_Tmp.push_back("://images/system_definition/IconMessageError.svg");
+            c_Tmp.append("://images/system_definition/IconMessageError.svg");
          }
          else
          {
-            c_Tmp.push_back("://images/system_definition/IconMessage.svg");
+            c_Tmp.append("://images/system_definition/IconMessage.svg");
          }
          c_Retval = c_Tmp;
       }

@@ -323,53 +323,7 @@ bool C_GiSvSubNodeData::CheckUpdateDisabledState(void) const
          }
          else
          {
-            if (pc_Node->c_Applications.size() > 0UL)
-            {
-               q_Retval = false;
-            }
-            else
-            {
-               tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
-               if (pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].q_FlashloaderStwCan == true)
-               {
-                  //STW flashloader with no data block
-                  q_Retval = true;
-               }
-               else
-               {
-                  const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-                  if (pc_View != NULL)
-                  {
-                     const C_OscViewNodeUpdate * const pc_UpdateInfo =
-                        pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex);
-                     if (pc_UpdateInfo != NULL)
-                     {
-                        if (((pc_UpdateInfo->GetParamInfos().size() == 0UL) &&
-                             (pc_UpdateInfo->GetPemFilePath().IsEmpty() == true)) &&
-                            (pc_UpdateInfo->GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED).size() == 0UL))
-                        {
-                           //No file associated
-                           q_Retval = true;
-                        }
-                        else
-                        {
-                           //Any file associated
-                           q_Retval = false;
-                        }
-                     }
-                     else
-                     {
-                        //Unexpected
-                        q_Retval = false;
-                     }
-                  }
-                  else
-                  {
-                     //Unexpected
-                     q_Retval = false;
-                  }
-               }
-            }
+            q_Retval = false;
          }
       }
       else
@@ -883,16 +837,9 @@ void C_GiSvSubNodeData::m_CheckThirdParty(void)
                this->me_InitialStatus = C_SyvUtil::eI_UPDATE_DISABLED;
                this->me_UpdateStatus = C_SyvUtil::eU_UPDATE_DISABLED;
             }
-            //Check if update is necessary
-            else if ((pc_Node->c_Applications.size() > 0) ||
-                     (this->CheckAlwaysUpdate() == true))
-            {
-               this->me_InitialStatus = C_SyvUtil::eI_TO_BE_UPDATED;
-            }
             else
             {
-               this->me_InitialStatus = C_SyvUtil::eI_UPDATE_DISABLED;
-               this->me_UpdateStatus = C_SyvUtil::eU_UPDATE_DISABLED;
+               this->me_InitialStatus = C_SyvUtil::eI_TO_BE_UPDATED;
             }
          }
       }

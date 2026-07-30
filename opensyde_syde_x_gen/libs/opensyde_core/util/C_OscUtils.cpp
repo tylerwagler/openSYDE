@@ -492,7 +492,7 @@ bool C_OscUtils::h_IsScalingActive(const float64_t of64_Factor, const float64_t 
    \param[in]  of64_Value                 Original unscaled value
    \param[in]  of64_Factor                Scaling factor
    \param[in]  of64_Offset                Scaling offset
-   \param[in]  oq_AllowRangeAdaptation    Allow range adaptation
+   \param[in]  oq_AllowRangeAdaptation    Allow range adaptation (limit float values to min/max to prevent INF/NAN)
 
    \return
    Scaled value
@@ -663,6 +663,9 @@ void C_OscUtils::h_FileToString(const C_SclString & orc_FilePath, C_SclString & 
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Range check float
+
+   If the value is outside the range of representable values for float64_t, it will be set to the maximum or minimum.
+   So the value will not become e.g. INF or NAN which might cause problems in further processing.
 
    \param[out]  orf64_Value   Value
 */
@@ -1116,6 +1119,78 @@ void C_OscUtils::h_GetNumberAtStringEnd(const C_SclString & orc_ProposedName, C_
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Convert string to IP address
+
+   \param[in]       orc_IpString    IP address as string
+   \param[out]      orau8_Ip        IP address as 4-byte array
+
+   \retval   C_NO_ERR   IP address conversion successful
+   \retval   C_CONFIG   IP address conversion failed
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscUtils::h_StringToIp4(const stw::scl::C_SclString & orc_IpString, uint8_t (&orau8_Ip)[4])
+{
+   int32_t s32_Result = C_NO_ERR;
+
+   if (orc_IpString.Trim() == "")
+   {
+      s32_Result = C_CONFIG;
+   }
+   else
+   {
+      //check for 4-bytes separated by dots
+      C_SclDynamicArray<C_SclString> c_Bytes;
+      orc_IpString.Trim().Tokenize(".", c_Bytes);
+      if (c_Bytes.GetLength() != 4)
+      {
+         s32_Result = C_CONFIG;
+      }
+      else
+      {
+         //check for valid byte values and convert to uint8
+         int32_t as32_ByteValues[4];
+         for (uint8_t u8_Byte = 0; u8_Byte < 4U; u8_Byte++)
+         {
+            as32_ByteValues[u8_Byte] = c_Bytes[u8_Byte].Trim().ToIntDef(-1);
+            if ((as32_ByteValues[u8_Byte] < 0) || (as32_ByteValues[u8_Byte] > 255))
+            {
+               s32_Result = C_CONFIG;
+               break;
+            }
+         }
+         //write to uint8 array
+         if (s32_Result == C_NO_ERR)
+         {
+            for (uint8_t u8_Byte = 0; u8_Byte < 4U; u8_Byte++)
+            {
+               orau8_Ip[u8_Byte] = static_cast<uint8_t>(as32_ByteValues[u8_Byte]);
+            }
+         }
+      }
+   }
+
+   return s32_Result;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Convert Ip4 address to string
+
+   \param[in]       orau8_Ip     IP address as 4-byte array
+
+   \return
+   IP address as string
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_SclString C_OscUtils::h_Ip4ToString(const uint8_t (&orau8_Ip)[4])
+{
+   C_SclString c_Result;
+
+   c_Result.PrintFormatted("%i.%i.%i.%i", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
+
+   return c_Result;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Get base name and current conflict number from string
 
    \param[in]   orc_ConflictingValue   Conflicting value
@@ -1125,7 +1200,7 @@ void C_OscUtils::h_GetNumberAtStringEnd(const C_SclString & orc_ProposedName, C_
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscUtils::mh_GetBaseNameAndCurrentConflictNumberFromString(const C_SclString & orc_ConflictingValue,
-                                                                  const stw::scl::C_SclString & orc_SkipName,
+                                                                  const C_SclString & orc_SkipName,
                                                                   C_SclString & orc_CutString, int32_t & ors32_Number)
 {
    //Search for the SkipName if the skip name is a valid string

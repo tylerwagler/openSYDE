@@ -183,8 +183,7 @@ private:
       std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_UsedServerIds);
 
    int32_t m_ConfigureNodes(const bool oq_ViaCan,
-                            std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_UsedServerIds,
-                            const bool oq_EnterPreProgrammingRequired = true);
+                            std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_UsedServerIds);
 
    int32_t m_CheckConfOpenSydeDevices(const std::vector<C_SyvDcDeviceConfiguation> & orc_DeviceConfiguration)
    const;
@@ -232,9 +231,6 @@ private:
    bool mq_SecurityFeatureUsed; //security protocol feature active?
    // Service execution result
    int32_t ms32_Result;
-
-   // Security PEM database
-   stw::opensyde_core::C_OscSecurityPemDatabase mc_PemDatabase;
 
    static const uint32_t mhu32_DEFAULT_SCAN_TIME_MS = 5000U;
 };

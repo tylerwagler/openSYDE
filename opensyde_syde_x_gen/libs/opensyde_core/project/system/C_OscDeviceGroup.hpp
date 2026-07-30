@@ -41,6 +41,8 @@ public:
    stw::scl::C_SclString GetGroupName(void) const;
 
    const std::vector<C_OscDeviceDefinition> & GetDevices(void) const;
+   static stw::scl::C_SclString h_GetFullDevicePathFromDeviceIniEntry(const stw::scl::C_SclString & orc_IniEntryPath,
+                                                                      const stw::scl::C_SclString & orc_BasePath);
 
 private:
    stw::scl::C_SclString mc_GroupName;            ///< Group name

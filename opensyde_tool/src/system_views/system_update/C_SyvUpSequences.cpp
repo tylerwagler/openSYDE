@@ -142,12 +142,9 @@ int32_t C_SyvUpSequences::InitUpSequences(const uint32_t ou32_ViewIndex)
 
    if (s32_Return == C_NO_ERR)
    {
-      // pem folder is optional -> no error handling
-      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
-
       s32_Return = C_OscComSequencesBase::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinition(),
                                                u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDllDispatcher,
-                                               this->mpc_EthernetDispatcher, &this->mc_PemDatabase);
+                                               this->mpc_EthernetDispatcher);
    }
 
    return s32_Return;

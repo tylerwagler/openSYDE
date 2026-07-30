@@ -15,6 +15,7 @@
 #include "stwtypes.hpp"
 #include "C_CieConverter.hpp"
 #include "C_CieImportDataAssignment.hpp"
+#include "C_PuiSdNodeCanMessageSyncManager.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -88,6 +89,8 @@ private:
                                     std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData, const
                                     std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_UiSignalData, const
                                     std::vector<std::pair<int32_t, int32_t> > & orc_MessageOverrideIndices, const bool oq_UniqueAddRequested);
+   static int32_t mh_HandleSignalsOfMatchingMessage(const C_PuiSdNodeCanMessageSyncManager & orc_SyncManager,
+                                                    const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MatchingMessageId, const std::vector<stw::opensyde_core::C_OscCanSignal> & orc_CorePreviousSignals, const std::vector<stw::opensyde_core::C_OscCanSignal> & orc_CoreNewSignals, const std::vector<C_PuiSdNodeCanSignal> & orc_UiNewSignals, const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_CoreNewSignalData, const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_UiNewSignalData);
    static QString mh_ConstructMessageName(const stw::scl::C_SclString & orc_Nodename,
                                           const stw::scl::C_SclString & orc_TpdoRpdo, const uint32_t ou32_MessageIndex);
 };

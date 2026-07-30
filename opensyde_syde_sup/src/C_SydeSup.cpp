@@ -29,8 +29,10 @@
 #include "TglFile.hpp"
 #include "C_SupSuSequences.hpp"
 #include "C_SupCreatePackage.hpp"
+#include "C_SupConfig.hpp"
 #include "C_OscUtilBinaryHash.hpp"
 #include "C_OscHexFile.hpp"
+#include "C_OscCryptoAgentAccessUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -61,18 +63,23 @@ C_SydeSup::C_SydeSup(void) :
    mq_Quiet(false),
    mq_OnlyNecessaryFiles(false),
    me_OperationMode(eMODE_UPDATE),
+   mc_ConfigFilePath(""),
    mc_OperationMode(""),
    mc_SupFilePath(""),
    mc_CanDriver(""),
    mc_LogPath(""),
    mc_LogFile(""),
    mc_UnzipPath(""),
-   mc_CertFolderPath(""),
    mc_OsyProjectPath(""),
    mc_ViewName(""),
-   mc_DeviceDefPath("")
-
+   mc_DeviceDefPath(""),
+   mc_PubKeyPemPath(""),
+   mc_Password(""),
+   mc_CryptoAgentSettings()
 {
+   // as we do not know where the crypto agent executable will be located, we disable auto start/stop by default here
+   mc_CryptoAgentSettings.q_CryptoAgentAutoStart = false;
+   mc_CryptoAgentSettings.q_CryptoAgentAutoStop = false;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -95,6 +102,7 @@ C_SydeSup::~C_SydeSup(void)
    * -h for help
    * -v for version
    * -m for manual page
+   * -c for config file
    * -o for operation mode (one of: update, createpackage)
    * -n for only transfer files if necessary
    * -q for quiet
@@ -107,7 +115,6 @@ C_SydeSup::~C_SydeSup(void)
    * -w for view name
    * -k for PEM file
    * -x for password
-   * -c for certificate files
 
    \param[in]  os32_Argc   number of command line arguments
    \param[in]  oppcn_Argv  command line arguments
@@ -125,9 +132,11 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t 
    bool q_ShowHelp = false;
    bool q_ShowManPage = false;
    bool q_ShowVersionOnly = false;
+   bool q_ConfigFileLoadError = false;
+   bool q_ConfigFileIpPortDefaultsUsed = false;
    const C_SclString c_Version = m_GetApplicationVersion(TglGetExePath());
    const C_SclString c_BinaryHash = C_OscUtilBinaryHash::h_CreateBinaryHash();
-
+   const C_SclString c_CmdParameters = "hmvqnp:o:i:z:l:c:s:w:d:k:x:";
    mq_Quiet = false;
 
    const struct option ac_Options[] =
@@ -164,7 +173,7 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t 
          "logdir",            required_argument,   NULL,    'l'
       },
       {
-         "certificatesdir",   required_argument,   NULL,    'c'
+         "configfile",        required_argument,   NULL,    'c'
       },
       {
          "opensydeproject",   required_argument,   NULL,    's'
@@ -186,10 +195,36 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t 
       }
    };
 
+   // first: check for config file and load it if specified
+   // Parse full command line here so '-c' is found at any position.
    do
    {
       int32_t s32_Index;
-      s32_Result = getopt_long(os32_Argc, oppcn_Argv, "hmvqnp:o:i:z:l:c:s:w:d:k:x:", &ac_Options[0], &s32_Index);
+      s32_Result = getopt_long(os32_Argc, oppcn_Argv, c_CmdParameters.c_str(), &ac_Options[0], &s32_Index);
+      if (s32_Result == static_cast<int32_t>('c'))
+      {
+         mc_ConfigFilePath = optarg;
+         const int32_t s32_ConfigFileResult = this->m_LoadConfigFile();
+         if (s32_ConfigFileResult == C_DEFAULT)
+         {
+            q_ConfigFileIpPortDefaultsUsed = true;
+         }
+         if ((s32_ConfigFileResult != C_NO_ERR) && (s32_ConfigFileResult != C_DEFAULT))
+         {
+            q_ConfigFileLoadError = true;
+         }
+      }
+   }
+   while ((s32_Result != -1) && (e_Return == eOK));
+
+   // reset getopt parser state for second pass
+   optind = 1;
+
+   // now: load all other command line parameters and overwrite config file settings if provided
+   do
+   {
+      int32_t s32_Index;
+      s32_Result = getopt_long(os32_Argc, oppcn_Argv, c_CmdParameters.c_str(), &ac_Options[0], &s32_Index);
       if (s32_Result != -1)
       {
          switch (s32_Result)
@@ -226,7 +261,7 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t 
             mc_LogPath = optarg;
             break;
          case 'c':
-            mc_CertFolderPath = optarg;
+            // already handled above
             break;
          case 's':
             mc_OsyProjectPath = optarg;
@@ -252,7 +287,7 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t 
          }
       }
    }
-   while (s32_Result != -1);
+   while ((s32_Result != -1) && (e_Return == eOK));
 
    if ((q_ShowVersionOnly == true) && (q_ShowHelp == false))
    {
@@ -283,20 +318,27 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t 
          this->m_PrintInformation(q_ShowManPage);
          e_Return = eERR_PARSE_COMMAND_LINE;
       }
-      else if ((mc_SupFilePath == "") || (q_ParseError == true))
+      else if (q_ConfigFileLoadError == true)
+      {
+         // logging not yet set up -> print directly to console
+         this->m_PrintVersion(c_Version, c_BinaryHash, !mq_Quiet);
+         std::cout << "Error: Could not load config file at provided path: " << mc_ConfigFilePath.c_str() << &std::endl;
+         std::cout << "Error: Invalid or missing command line parameters, try -h." << &std::endl;
+         e_Return = eERR_PARSE_COMMAND_LINE;
+      }
+      else if (q_ParseError == true)
       {
          // logging not yet set up -> print directly to console
          this->m_PrintVersion(c_Version, c_BinaryHash, !mq_Quiet);
          std::cout << "Error: Invalid or missing command line parameters, try -h." << &std::endl;
          e_Return = eERR_PARSE_COMMAND_LINE;
       }
-      else if ((mc_PubKeyPemPath == "") && (mc_Password != ""))
+      else if (mc_SupFilePath == "")
       {
          // logging not yet set up -> print directly to console
          this->m_PrintVersion(c_Version, c_BinaryHash, !mq_Quiet);
-         std::cout <<
-            "Error: Parameter \"-x\" is optional and only allowed in combination with a given pem file (\"-k\")" <<
-            &std::endl;
+         std::cout << "Error: Empty package file path provided." << &std::endl;
+         std::cout << "Error: Invalid or missing command line parameters, try -h." << &std::endl;
          e_Return = eERR_PARSE_COMMAND_LINE;
       }
       else
@@ -325,6 +367,34 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t 
                e_Return = eERR_PARSE_COMMAND_LINE;
                h_WriteLog("Initialize Parameters",
                           "Missing command line parameter for creating a Service Update Package, try -h. ", true);
+            }
+         }
+         // And check crypto agent paramters in update mode
+         if ((e_Return == eOK) && (me_OperationMode == eMODE_UPDATE))
+         {
+            if (q_ConfigFileIpPortDefaultsUsed == true)
+            {
+               h_WriteLog("Initialize Parameters",
+                          "Could not parse IP adress or port from config file " + mc_ConfigFilePath + ". "
+                          "Using default value '127.0.0.1' or '50963', depending on which setting could not be parsed.",
+                          true);
+            }
+            if (mc_CryptoAgentSettings.q_CryptoAgentAutoStart == true)
+            {
+               if ((TglFileExists(mc_CryptoAgentSettings.c_CryptoAgentExecutablePath) == false))
+               {
+                  e_Return = eERR_PARSE_COMMAND_LINE;
+                  h_WriteLog("Initialize Parameters",
+                             "Crypto agent auto start is enabled but executable \"" +
+                             mc_CryptoAgentSettings.c_CryptoAgentExecutablePath + "\" is not found, "
+                             "check your config file \"" + mc_ConfigFilePath + "\"!", true);
+               }
+            }
+
+            // initialize crypto agent
+            if (e_Return == eOK)
+            {
+               C_OscCryptoAgentAccessUtil::h_SetCryptoAgentSettings(mc_CryptoAgentSettings);
             }
          }
       }
@@ -446,6 +516,9 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
    std::vector<uint8_t> c_ActiveNodes;
    std::vector<uint32_t> c_NodesUpdateOrder;
    std::vector<C_OscSuSequences::C_DoFlash> c_ApplicationsToWrite;
+
+   // handle crypto agent
+   C_OscCryptoAgentAccessUtil::h_HandleCryptoAgentAutostart();
 
    //if file extension is not empty we can assume it's a file and we further need to check whether the extension
    //matches, otherwise mc_SUPFilePath is a directory
@@ -580,27 +653,6 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
       }
    }
 
-   // optional step: load pem database if cmd line parameter is not empty
-   if (e_Result == eOK)
-   {
-      if (s32_Return == C_NO_ERR)
-      {
-         //parse pem database if cmd line parameter is not empty
-         if (mc_CertFolderPath != "")
-         {
-            s32_Return = mc_PemDatabase.ParseFolder(mc_CertFolderPath.c_str());
-
-            if (s32_Return != C_NO_ERR)
-            {
-               e_Result = eERR_UPDATE_CERTIFICATE_PATH;
-               s32_Return = C_DEFAULT;
-               h_WriteLog("Load PEM database",
-                          "Could not load certificates (PEM files) at path \"" + this->mc_CertFolderPath + "\"");
-            }
-         }
-      }
-   }
-
    // initialize sequence if previous step (unpacking if Ethernet, CAN initializing if CAN) was successful
    if (e_Result == eOK)
    {
@@ -608,7 +660,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
       {
          // initialize sequence
          s32_Return = c_Sequence.Init(c_SystemDefinition, u32_ActiveBusIndex, c_ActiveNodes, mpc_CanDispatcher,
-                                      mpc_EthDispatcher, &this->mc_PemDatabase);
+                                      mpc_EthDispatcher);
          // tell report methods to not print to console
          c_Sequence.SetQuiet(mq_Quiet);
       }
@@ -725,7 +777,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
    // inform user about errors
    this->m_PrintStringFromError(e_Result);
 
-   // conclude (reset system and close CAN driver)
+   // conclude (reset system and close CAN driver and handle crypto agent)
    this->m_Conclude(c_Sequence, q_ResetSystem);
 
    return e_Result;
@@ -910,6 +962,10 @@ void C_SydeSup::m_PrintInformation(const bool oq_Detailed) const
 
    // show parameter help
    std::cout << "\nCommand Line Parameters:\n--------------------------------\n\n"
+      "All command line parameters can be set in a configuration file as well. Just create a file like sydesup.conf and "
+      "hand it over with the parameter -c, e.g. \"-c sydesup.conf\". Command line parameters overwrite config file "
+      "settings, so you can e.g. set default values in configuration file and only overwrite some of them in command "
+      "line if necessary.\n\n"
       "Flag   Alternative         Description                                     Default         Example\n"
       "---------------------------------------------------------------------------------------------------------------\n"
       "General\n"
@@ -925,6 +981,8 @@ void C_SydeSup::m_PrintInformation(const bool oq_Detailed) const
                      (this->m_GetDefaultLogLocation().Length() < 16) ?
                      (16 - this->m_GetDefaultLogLocation().Length()) : 0), ' ') <<
       "-l ." << c_PathDelimiter.c_str() << "MyLogDir\n"
+      "-c     --configfile        Configuration file                              <none>          -c ." <<
+      c_PathDelimiter.c_str() << "sydesup.conf\n"
       "-o     --operationmode     Set mode: \"update\" or \"createpackage\"           update          -o createpackage\n\n"
       "Package Creation\n"
       "---------------------\n"
@@ -952,11 +1010,6 @@ void C_SydeSup::m_PrintInformation(const bool oq_Detailed) const
       this->m_GetUnzipLocationDefaultExample().c_str() << "\n\n"
       "In update mode the package file parameter \"-p\" is mandatory, all others are optional.\n"
       "If the active bus in the given Service Update Package is of CAN type, a CAN interface must be provided.\n\n"
-      "Secure Authentication\n"
-      "---------------------\n"
-      "-c     --certificatesdir   Directory for certificates (PEM files) for      <none>          -c ." <<
-      c_PathDelimiter.c_str() << "MyCertificatesDir\n"
-      "                           secure authentication with the openSYDE server\n\n"
       "Secure Update\n"
       "---------------------\n"
       "-k     --publickey         Path to PEM file holding the public key for     <none>          -k public_crt.pem\n"
@@ -1208,16 +1261,10 @@ void C_SydeSup::m_PrintStringFromError(const E_Result & ore_Result) const
       c_Activity = "Update System";
       c_Error = "At least one feature of the openSYDE Flashloader is not available for NVM writing.";
       break;
-   case eERR_UPDATE_CERTIFICATE_PATH:
-      c_Activity = "Load Certificates";
-      c_Error = "Could not load certificates (PEM files) at path \"" + this->mc_CertFolderPath + "\"";
-      break;
    case eERR_UPDATE_AUTHENTICATION:
       c_Activity = "Update System";
-      c_Error = "Authentication between sydesup and device(s) has failed. Access denied."
-                "Possible reasons:\n"
-                "- Associated private key (*.pem) not found in certificates folder (most common)\n"
-                "- Failure during authenfication process";
+      c_Error = "Authentication between SYDEsup and device(s) has failed. Access denied."
+                "Possible reason: Failure during authentication process with crypto agent";
       break;
 
    // results regarding thread process issues
@@ -1317,6 +1364,9 @@ void C_SydeSup::m_Conclude(C_SupSuSequences & orc_Sequence, const bool & orq_Res
 
    // close CAN
    this->m_CloseCan();
+
+   // close crypto agent
+   C_OscCryptoAgentAccessUtil::h_HandleCryptoAgentAutostop();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1618,4 +1668,56 @@ std::vector<uint8_t> C_SydeSup::m_GetActiveNodeTypes(const C_OscSystemDefinition
    }
 
    return c_ActiveNodeTypes;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Load configuration file
+
+   Write loaded parameters into member variables
+
+   \retval   true   Configuration file loaded successfully
+   \retval   false  Failed to load configuration file
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_SydeSup::m_LoadConfigFile(void)
+{
+   int32_t s32_Return = C_NO_ERR;
+
+   if (TglFileExists(mc_ConfigFilePath.c_str()) == false)
+   {
+      s32_Return = C_CONFIG;
+   }
+   else
+   {
+      C_SupConfig c_Config;
+      const int32_t s32_Result = c_Config.LoadSettings(mc_ConfigFilePath);
+
+      // C_CONFIG means a default IP address or port is used; this is okay but we tell the caller about it
+      if ((s32_Result != C_NO_ERR) && (s32_Result != C_CONFIG))
+      {
+         s32_Return = C_CONFIG;
+      }
+      else
+      {
+         if (s32_Result == C_CONFIG)
+         {
+            s32_Return = C_DEFAULT;
+         }
+         mq_Quiet = c_Config.q_Quiet;
+         mq_OnlyNecessaryFiles = c_Config.q_NecessaryFiles;
+         mc_OperationMode = c_Config.c_OperationMode;
+         mc_SupFilePath = c_Config.c_SupFilePath;
+         mc_CanDriver = c_Config.c_CanDriver;
+         mc_LogPath = c_Config.c_LogPath;
+         mc_UnzipPath = c_Config.c_UnzipPath;
+         mc_OsyProjectPath = c_Config.c_ProjectPath;
+         mc_ViewName = c_Config.c_UpdateViewName;
+         mc_DeviceDefPath = c_Config.c_DeviceDefinitionPath;
+         mc_PubKeyPemPath = c_Config.c_PublicKeyPath;
+         mc_Password = c_Config.c_Password;
+         mc_CryptoAgentSettings = c_Config.c_CryptoAgentSettings;
+      }
+   }
+
+   return s32_Return;
 }

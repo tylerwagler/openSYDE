@@ -70,6 +70,7 @@ private:
                                           const QString & orc_CodeGenerator, const bool & orq_Erase);
    static int32_t mh_ExportCodeNode(const uint32_t ou32_NodeIndex, const std::vector<uint32_t> & orc_AppIndices,
                                     std::vector<stw::opensyde_gui::C_ImpCodeGenerationReportWidget::C_ReportData> & orc_ExportInfo, const bool & orq_Erase);
+   static void mh_SetUserSettingsPathHandlingSelection(const QString & orc_PathHandlingSelection);
    //lint -e{8080} //using type expected by the library for API compatibility
    static WINBOOL CALLBACK mh_EnumWindowsCallback(HWND opc_Handle, const LPARAM ox_LoParam);
 };

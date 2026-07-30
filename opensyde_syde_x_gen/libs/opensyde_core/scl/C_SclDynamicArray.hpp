@@ -38,9 +38,6 @@ namespace scl
 ///Template-based array with dynamic size
 template <class T> class C_SclDynamicArray
 {
-private:
-   std::vector<T> mc_Array; ///< actual container wrapped by this class
-
 public:
    C_SclDynamicArray(void);
    C_SclDynamicArray(const C_SclDynamicArray<T> & orc_Src);
@@ -61,6 +58,8 @@ public:
 
    void SetLength(const int32_t os32_Length);
    void IncLength(const int32_t os32_By = 1);
+
+   std::vector<T> c_TheVector; ///< actual container wrapped by this class
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -77,9 +76,9 @@ public:
 template <class T> void C_SclDynamicArray<T>::SetLength(const int32_t os32_Length)
 {
    //do not set if it's the same Length again
-   if (os32_Length != static_cast<int32_t>(mc_Array.size()))
+   if (os32_Length != static_cast<int32_t>(c_TheVector.size()))
    {
-      mc_Array.resize(os32_Length);
+      c_TheVector.resize(os32_Length);
    }
 }
 
@@ -96,7 +95,7 @@ template <class T> void C_SclDynamicArray<T>::SetLength(const int32_t os32_Lengt
 //lint -e{1960}  false positive in PC-Lint: as an inline function implementation this can be reused
 template <class T> void C_SclDynamicArray<T>::IncLength(const int32_t os32_By)
 {
-   this->SetLength(static_cast<int32_t>(mc_Array.size()) + os32_By);
+   this->SetLength(static_cast<int32_t>(c_TheVector.size()) + os32_By);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -111,7 +110,7 @@ template <class T> void C_SclDynamicArray<T>::IncLength(const int32_t os32_By)
 //lint -e{1960}  false positive in PC-Lint: as an inline function implementation this can be reused
 template <class T> int32_t C_SclDynamicArray<T>::GetLength(void) const
 {
-   return static_cast<int32_t>(mc_Array.size());
+   return static_cast<int32_t>(c_TheVector.size());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -130,7 +129,7 @@ template <class T> int32_t C_SclDynamicArray<T>::GetHigh(void) const
 {
    int32_t s32_Return;
 
-   s32_Return = static_cast<int32_t>(mc_Array.size()) - 1;
+   s32_Return = static_cast<int32_t>(c_TheVector.size()) - 1;
    if (s32_Return < 0)
    {
       s32_Return = 0;
@@ -153,7 +152,7 @@ template <class T> int32_t C_SclDynamicArray<T>::GetHigh(void) const
 //lint -e{1960}  false positive in PC-Lint: as an inline function implementation this can be reused
 template <class T> T & C_SclDynamicArray<T>::operator [](const int32_t os32_Index)
 {
-   return mc_Array[os32_Index];
+   return c_TheVector[os32_Index];
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -171,7 +170,7 @@ template <class T> T & C_SclDynamicArray<T>::operator [](const int32_t os32_Inde
 //lint -e{1960}  false positive in PC-Lint: as an inline function implementation this can be reused
 template <class T> const T & C_SclDynamicArray<T>::operator [](const int32_t os32_Index) const
 {
-   return mc_Array.operator [](os32_Index);
+   return c_TheVector.operator [](os32_Index);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -225,7 +224,7 @@ template <class T> C_SclDynamicArray<T> & C_SclDynamicArray<T>::operator =(const
 {
    if (this != &orc_Src)
    {
-      mc_Array = orc_Src.mc_Array;
+      this->c_TheVector = orc_Src.c_TheVector;
    }
    return (*this);
 }
@@ -249,9 +248,9 @@ template <class T> void C_SclDynamicArray<T>::Delete(const int32_t os32_Index)
    {
       throw "C_SclDynamicArray::Delete at Invalid Position !";
    }
-   typename std::vector<T>::iterator c_Index = mc_Array.begin();
+   typename std::vector<T>::iterator c_Index = c_TheVector.begin();
    c_Index += os32_Index;
-   (void)mc_Array.erase(c_Index);
+   (void)c_TheVector.erase(c_Index);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -274,9 +273,9 @@ template <class T> void C_SclDynamicArray<T>::Insert(const int32_t os32_Index, c
    {
       throw "C_SclDynamicArray::Insert at Invalid Position !";
    }
-   typename std::vector<T>::iterator c_Index = mc_Array.begin();
+   typename std::vector<T>::iterator c_Index = c_TheVector.begin();
    c_Index += os32_Index;
-   (void)mc_Array.insert(c_Index, orc_Src);
+   (void)c_TheVector.insert(c_Index, orc_Src);
 }
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

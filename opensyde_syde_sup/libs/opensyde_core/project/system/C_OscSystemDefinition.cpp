@@ -1850,6 +1850,29 @@ int32_t C_OscSystemDefinition::GetNodeSquadIndexWithNodeIndex(const uint32_t ou3
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Set last loaded file path
+
+   \param[in]  orc_Value   Value
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscSystemDefinition::SetLastLoadedFilePath(const stw::scl::C_SclString & orc_Value)
+{
+   this->mc_LastLoadedFilePath = orc_Value;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get last loaded file path
+
+   \return
+   Last loaded file path
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_SclString C_OscSystemDefinition::GetLastLoadedFilePath(void) const
+{
+   return this->mc_LastLoadedFilePath;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get hash for datapool
 
    \param[in]  ou32_NodeIndex       Node index

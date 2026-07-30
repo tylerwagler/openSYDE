@@ -126,5 +126,5 @@ void C_OgeLabContextMenuBase::m_Copy() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeLabContextMenuBase::m_SelectAll()
 {
-   this->setSelection(0, this->text().length());
+   this->setSelection(0, static_cast<int32_t>(this->text().length()));
 }

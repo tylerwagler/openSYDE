@@ -94,7 +94,7 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::UpdateData(
 void C_SdBueJ1939AddMessagesFromCatalogTreeModel::m_FillMessageInfo()
 {
    this->mpc_InvisibleRootItem = new C_TblTreeModelCheckableItem();
-   this->mpc_InvisibleRootItem->ReserveChildrenSpace(this->mc_MessagesImportedFromCatalog.size());
+   this->mpc_InvisibleRootItem->ReserveChildrenSpace(static_cast<uint32_t>(this->mc_MessagesImportedFromCatalog.size()));
 
    this->mc_MessageInfoList.clear();
    this->mc_MessageInfoList.reserve(this->mc_MessagesImportedFromCatalog.size());
@@ -135,7 +135,7 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::m_FillMessageInfo()
 
          {
             // Add signal details to the tree
-            const uint32_t u32_SignalCount = rc_Message.c_CanMessage.c_Signals.size();
+            const uint32_t u32_SignalCount = static_cast<uint32_t>(rc_Message.c_CanMessage.c_Signals.size());
 
             if (u32_SignalCount > 0)
             {

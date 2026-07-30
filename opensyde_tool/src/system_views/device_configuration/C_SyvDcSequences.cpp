@@ -193,12 +193,9 @@ int32_t C_SyvDcSequences::InitDcSequences(const uint32_t ou32_ViewIndex)
 
    if (s32_Return == C_NO_ERR)
    {
-      // pem folder is optional -> no error handling
-      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
-
       s32_Return = C_OscComSequencesBase::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinition(),
                                                u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDllDispatcher,
-                                               this->mpc_EthernetDispatcher, &this->mc_PemDatabase);
+                                               this->mpc_EthernetDispatcher);
    }
 
    return s32_Return;
@@ -1936,7 +1933,6 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevices(void)
    this->m_RunConfEthOpenSydeDevicesProgress(0U);
    if (this->mpc_ComDriver != NULL)
    {
-      bool q_EnterPreProgrammingRequired = true;
       // Vector with server ids of all configured nodes and its connected and actual used bus
       std::vector<C_OscProtocolDriverOsyNode> c_UsedServerIds;
 
@@ -1954,16 +1950,13 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevices(void)
          else
          {
             s32_Return = this->m_RunConfEthOpenSydeDevicesWithoutBroadcasts(c_UsedServerIds);
-            //we already entered PreProgramming; no need to do this anymore; otherwise m_ConfigureNodes would try
-            // via a broadcast which would fail if traffic encryption is active
-            q_EnterPreProgrammingRequired = false;
          }
       }
 
       //from here on the sequence is the same as for CAN: use utility function
       if (s32_Return == C_NO_ERR)
       {
-         s32_Return = m_ConfigureNodes(false, c_UsedServerIds, q_EnterPreProgrammingRequired);
+         s32_Return = m_ConfigureNodes(false, c_UsedServerIds);
       }
    }
 
@@ -2316,7 +2309,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
    Contains the final part of the sequence which is identical for CAN and Ethernet:
 
    Sequence:
-   * broadcast: "enter flashloader"
+   * broadcast: "request programming"
    * broadcast: "ecu reset"
    * wait a little (all nodes should now be in the default session of the flashloader)
    * try to connect to all nodes
@@ -2334,7 +2327,6 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
 
    \param[in]  oq_ViaCan            true: running via CAN; false: running via Etherner (only used for user feedback)
    \param[in]  orc_UsedServerIds    Vector with server ids of all configured nodes and their connected and used bus
-   \param[in]  oq_EnterPreProgrammingRequired  true: function will try to enter PreProgramming state for all nodes
 
    \return
    C_NO_ERR    all devices are configured
@@ -2345,11 +2337,11 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
-                                           std::vector<C_OscProtocolDriverOsyNode> & orc_UsedServerIds,
-                                           const bool oq_EnterPreProgrammingRequired)
+                                           std::vector<C_OscProtocolDriverOsyNode> & orc_UsedServerIds)
 {
-   int32_t s32_Return = C_NO_ERR;
+   int32_t s32_Return;
    uint32_t u32_DeviceCounter;
+   bool q_RequestNotAccepted;
 
    // Progress calculation for sequence 30%
    if (oq_ViaCan == true)
@@ -2363,26 +2355,23 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
 
    tgl_assert(this->mc_DeviceConfiguration.size() == orc_UsedServerIds.size());
 
-   if (oq_EnterPreProgrammingRequired == true)
+   // * broadcast: "request programming"
+   // This broadcast ist possible if secure authentication or traffic encryption are active as it is not "secured"
+   s32_Return = this->mpc_ComDriver->SendOsyBroadcastRequestProgramming(q_RequestNotAccepted);
+   if (s32_Return == C_NO_ERR)
    {
-      // * broadcast: "RequestProgramming"
-      bool q_RequestNotAccepted;
-      s32_Return = this->mpc_ComDriver->SendOsyBroadcastRequestProgramming(q_RequestNotAccepted);
-      if (s32_Return == C_NO_ERR)
+      // Check the result
+      if (q_RequestNotAccepted == true)
       {
-         // Check the result
-         if (q_RequestNotAccepted == true)
-         {
-            // at least one node answered with a negative response
-            s32_Return = C_WARN;
-         }
+         // at least one node answered with a negative response
+         s32_Return = C_WARN;
       }
-      if (s32_Return != C_NO_ERR)
-      {
-         osc_write_log_error("Configure openSYDE devices",
-                             "openSYDE broadcast request programming failed with error: " +
-                             C_SclString::IntToStr(s32_Return));
-      }
+   }
+   if (s32_Return != C_NO_ERR)
+   {
+      osc_write_log_error("Configure openSYDE devices",
+                          "openSYDE broadcast request programming failed with error: " +
+                          C_SclString::IntToStr(s32_Return));
    }
 
    // * broadcast: "ecu reset"
@@ -2398,6 +2387,7 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
          this->m_RunConfEthOpenSydeDevicesProgress(50U);
       }
 
+      // This broadcast ist possible if secure authentication or traffic encryption are active as it is not "secured"
       s32_Return = this->mpc_ComDriver->SendOsyBroadcastEcuReset(
          C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
 
@@ -2815,7 +2805,6 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevices(void)
 
    if (this->mpc_ComDriver != NULL)
    {
-      bool q_EnterPreProgrammingRequired = true;
       // Vector with server ids of all configured nodes and its connected and actual used bus
       std::vector<C_OscProtocolDriverOsyNode> c_UsedServerIds;
 
@@ -2834,16 +2823,13 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevices(void)
          {
             // Security is enabled on at least one node, so no broadcasts can be used
             s32_Return = m_RunConfCanOpenSydeDevicesWithoutBroadcasts(c_UsedServerIds);
-            //we already entered PreProgramming; no need to do this anymore; otherwise m_ConfigureNodes would try
-            // via a broadcast which would fail if traffic encryption is active
-            q_EnterPreProgrammingRequired = false;
          }
       }
 
       //from here on the sequence is the same as for Ethernet: use utility function
       if (s32_Return == C_NO_ERR)
       {
-         s32_Return = m_ConfigureNodes(true, c_UsedServerIds, q_EnterPreProgrammingRequired);
+         s32_Return = m_ConfigureNodes(true, c_UsedServerIds);
       }
    }
 

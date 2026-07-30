@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include "stwtypes.hpp"
+#include "C_OgeLeFilePath.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
 
@@ -49,7 +50,12 @@ private:
 
    void m_OkClicked(void);
    void m_CancelClicked(void);
-   void m_InitEnvironmentSection(void);
+   void m_LoadEnvironmentSection(void);
+   void m_OnClickPathExecutable(void);
+   void m_OnClickPathConfigFile(void);
+   void m_HandleFileSelect(opensyde_gui_elements::C_OgeLeFilePath & orc_Widget, const QString & orc_Heading,
+                           const QString & orc_Filter, const QString & orc_Extension,
+                           const QString & orc_ReferenceFolder);
 
    //Avoid call
    C_NagToolSettingsPopupDialog(const C_NagToolSettingsPopupDialog &);

@@ -1,0 +1,123 @@
+openSYDE Crypto Agent TCP Protocol
+=================================
+
+Overview
+--------
+This document describes the TCP protocol used by the openSYDE Crypto Agent.
+The protocol is binary and request/response based.
+
+Default settings (reference configuration):
+- Default TCP port: 50963
+- Default bind address: 127.0.0.1
+
+Transport Framing
+-----------------
+Each message on TCP is framed as:
+- 4 bytes: payload length (uint32, big endian)
+- N bytes: payload
+
+Notes:
+- The server reads exactly one request per connection and then closes the client socket.
+- The server sends one response per valid request payload.
+- If header or payload cannot be read completely, the request is ignored.
+
+Generic Payload Structure
+-------------------------
+Request payload:
+- Byte 0: service_id
+- Following bytes: service-specific parameters
+
+Response payload:
+- Byte 0: echoed service_id
+- Byte 1: result_code
+- Following bytes: service-specific response data or informative error detail text encoded as "string"
+
+Result codes:
+- 0x00: NO_ERROR
+- 0x01: SERVICE_NOT_SUPPORTED: unknown service requested
+- 0x02: MALFORMED_REQUEST: protocol error
+- 0x03: SERVICE FAILED: failed to perform requested service
+
+Field Encodings
+---------------
+- uint8: 1 byte
+- uint16: 2 bytes, big endian
+- byte_vector: uint16 length + raw bytes
+- string: encoded as byte_vector (uint16 length + raw bytes)
+
+Service: ping (0x00)
+--------------------
+Purpose:
+- Health check / capability probe.
+
+Request parameters:
+- None
+
+Request payload:
+- service_id = 0x00
+
+Response on success (result_code = 0x00):
+- protocol_version (uint16, big endian), currently 0x0001
+- reserved (uint16, big endian), currently 0x0000
+- application_name (string)
+- application_version (string)
+
+Expected behavior:
+- Returns immediately with server identity/version data.
+- No state change.
+
+Service: shutdown (0x01)
+------------------------
+Purpose:
+- Request graceful server shutdown.
+
+Request parameters:
+- None
+
+Request payload:
+- service_id = 0x01
+
+Response on success (result_code = 0x00):
+- No additional fields
+
+Expected behavior:
+- Server acknowledges request and triggers platform shutdown.
+- Listener loop exits shortly afterwards.
+
+Service: solve_auth_challenge (0x02)
+------------------------------------
+Purpose:
+- Solve a server authentication challenge and return the challenge response.
+
+Request payload fields (in order):
+| # | Field | Type | Constraints / Description |
+| - | ----- | ---- | ------------------------- |
+| 1 | service_id | uint8 | Must be 0x02 |
+| 2 | request_version | uint8 | For future protocol changes; must be 0x01 |
+| 3 | auth_algorithm | uint8 | 0x00 = RSA_1024 |
+| 4 | sa_level | uint8 | Desired security access level |
+| 5 | project_name | string | Max 255 bytes; openSYDE project name |
+| 6 | device_type | string | Max 28 bytes; device type from system definition |
+| 7 | node_name | string | Max 31 bytes; node name from system definition |
+| 8 | sub_node_id | uint8 | Sub-node from system definition (for multi-cpu nodes) |
+| 9 | ecu_serial_number_manufacturer_id | uint8 | 0x00 = STW |
+| 10 | ecu_serial_number | byte_vector | Max 29 bytes; for STW devices: 6 BCD bytes |
+| 11 | server_certificate_serial_number | byte_vector | Max 20 bytes; certificate serial number as reported by server node |
+| 12 | server_challenge_value | byte_vector | Max 8 bytes; authentication challenge value as reported by server node |
+
+Parsing and validation behavior:
+- All fields must be present in the exact order above.
+- No trailing bytes are allowed after the last field.
+- Any violation returns MALFORMED_REQUEST (0x02) with additional informative text
+
+Response on success (result_code = 0x00):
+- challenge_response (byte_vector)
+
+Response on service-level failure (result_code = 0x03):
+- error_detail (string)
+
+Unsupported Service IDs
+-----------------------
+If service_id is not recognized:
+- result_code = 0x01 (SERVICE_NOT_SUPPORTED)
+- error_detail (string) = "Unknown service"

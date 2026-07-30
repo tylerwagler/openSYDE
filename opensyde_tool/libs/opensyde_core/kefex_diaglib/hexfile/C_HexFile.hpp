@@ -56,7 +56,10 @@ struct T_HexLine
 class C_HexDataDumpBlock
 {
 public:
+   bool operator < (const C_HexDataDumpBlock & orc_Other);
+
    uint32_t u32_AddressOffset;
+   //keep type and name for compatibility with existing applications
    stw::scl::C_SclDynamicArray<uint8_t> au8_Data;
 };
 
@@ -64,6 +67,8 @@ public:
 class C_HexDataDump
 {
 public:
+   void SortBlocksByAddressOffset(void);
+   //keep type and name for compatibility with existing applications
    stw::scl::C_SclDynamicArray<C_HexDataDumpBlock> at_Blocks;
 };
 

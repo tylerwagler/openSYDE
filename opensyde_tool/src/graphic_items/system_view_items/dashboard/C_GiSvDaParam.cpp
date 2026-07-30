@@ -557,11 +557,11 @@ int32_t C_GiSvDaParam::DeleteLists(const std::vector<stw::opensyde_core::C_OscNo
             {
                C_PuiSvDbParam c_Copy = *pc_Param;
                //Check each element (back to front!)
-               for (uint32_t u32_ItElement = pc_Param->c_DataPoolElementsConfig.size(); u32_ItElement > 0UL;
-                    --u32_ItElement)
+               for (uint32_t u32_ItElement = static_cast<uint32_t>(pc_Param->c_DataPoolElementsConfig.size());
+                    u32_ItElement > 0UL; --u32_ItElement)
                {
                   const C_PuiSvDbNodeDataElementConfig & rc_Config =
-                     pc_Param->c_DataPoolElementsConfig[static_cast<uint32_t>(u32_ItElement) - 1U];
+                     pc_Param->c_DataPoolElementsConfig[static_cast<uint32_t>(u32_ItElement - 1U)];
                   //Each found list
                   for (uint32_t u32_ItListId = 0; u32_ItListId < orc_ListIds.size(); ++u32_ItListId)
                   {
@@ -589,18 +589,18 @@ int32_t C_GiSvDaParam::DeleteLists(const std::vector<stw::opensyde_core::C_OscNo
                {
                   const C_OscNodeDataPoolListId & rc_ListId = orc_ListIds[u32_ItListId];
                   //Handle expansion (back to front!)
-                  for (uint32_t u32_ItExpansion = c_Copy.c_ExpandedItems.size(); u32_ItExpansion > 0UL;
-                       --u32_ItExpansion)
+                  for (uint32_t u32_ItExpansion = static_cast<uint32_t>(c_Copy.c_ExpandedItems.size());
+                       u32_ItExpansion > 0UL; --u32_ItExpansion)
                   {
                      const C_PuiSvDbExpandedTreeIndex & rc_Expanded =
-                        c_Copy.c_ExpandedItems[static_cast<uint32_t>(u32_ItExpansion) - 1U];
+                        c_Copy.c_ExpandedItems[static_cast<uint32_t>(u32_ItExpansion - 1U)];
                      if (((rc_Expanded.c_ExpandedId.u32_NodeIndex == rc_ListId.u32_NodeIndex) &&
                           (rc_Expanded.c_ExpandedId.u32_DataPoolIndex == rc_ListId.u32_DataPoolIndex)) &&
                          (rc_Expanded.c_ExpandedId.u32_ListIndex == rc_ListId.u32_ListIndex))
                      {
                         //New item at current position
                         c_Copy.c_ExpandedItems.erase(c_Copy.c_ExpandedItems.begin() +
-                                                     (static_cast<int32_t>(u32_ItExpansion) - 1));
+                                                     (static_cast<int32_t>(u32_ItExpansion - 1)));
                      }
                   }
                }

@@ -129,12 +129,13 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Add(void)
                   if ((pc_Container != NULL) && (pc_Container->c_RxMessages.size() > 0UL))
                   {
                      //Should be the newest Rx message
-                     const C_OscCanMessageIdentificationIndices c_Tmp(rc_CurMessageId.u32_NodeIndex,
-                                                                      this->mc_LastMessageId[u32_ItStep].e_ComProtocol,
-                                                                      rc_CurMessageId.u32_InterfaceIndex,
-                                                                      rc_CurMessageId.u32_DatapoolIndex,
-                                                                      false,
-                                                                      pc_Container->c_RxMessages.size() - 1UL);
+                     const C_OscCanMessageIdentificationIndices c_Tmp(
+                        rc_CurMessageId.u32_NodeIndex,
+                        this->mc_LastMessageId[u32_ItStep].e_ComProtocol,
+                        rc_CurMessageId.u32_InterfaceIndex,
+                        rc_CurMessageId.u32_DatapoolIndex,
+                        false,
+                        static_cast<uint32_t>(pc_Container->c_RxMessages.size()) - 1UL);
                      tgl_assert(this->mpc_MessageSyncManager->SetCanMessageDirection(c_Tmp, true) ==
                                 C_NO_ERR);
                   }
@@ -194,14 +195,9 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Store(void)
             std::vector<C_OscNodeDataPoolListElement> c_OscSignalCommons;
             std::vector<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
             C_PuiSdNodeCanMessage c_UiMessage;
-            tgl_assert(C_PuiSdHandler::h_GetInstance()->GetCanMessageComplete(this->mpc_MessageSyncManager->
-                                                                              GetMessageIdForUniqueId(this->
-                                                                                                      mc_UniqueId[
-                                                                                                         u32_ItStep]),
-                                                                              c_Message,
-                                                                              c_OscSignalCommons, c_UiSignalCommons,
-                                                                              c_UiMessage) ==
-                       C_NO_ERR);
+            tgl_assert(C_PuiSdHandler::h_GetInstance()->GetCanMessageComplete(
+                          this->mpc_MessageSyncManager->GetMessageIdForUniqueId(this->mc_UniqueId[u32_ItStep]),
+                          c_Message, c_OscSignalCommons, c_UiSignalCommons, c_UiMessage) == C_NO_ERR);
             this->mc_Message[u32_ItStep] = c_Message;
             this->mc_OscSignalCommons[u32_ItStep] = c_OscSignalCommons;
             this->mc_UiSignalCommons[u32_ItStep] = c_UiSignalCommons;
@@ -209,11 +205,8 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Store(void)
          }
          {
             const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingIds =
-               this->mpc_MessageSyncManager->GetMatchingMessageVector(this->mpc_MessageSyncManager->
-                                                                      GetMessageIdForUniqueId(
-                                                                         this->
-                                                                         mc_UniqueId
-                                                                         [u32_ItStep]));
+               this->mpc_MessageSyncManager->GetMatchingMessageVector(
+                  this->mpc_MessageSyncManager->GetMessageIdForUniqueId(this->mc_UniqueId[u32_ItStep]));
             this->mc_MatchingIds[u32_ItStep] = c_MatchingIds;
          }
       }
@@ -235,22 +228,19 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Remove(void)
       {
          this->mpc_MessageTreeWidget->DisconnectSelectionHandling();
       }
-      for (uint32_t u32_ItStep = this->mc_UniqueId.size(); u32_ItStep > 0; --u32_ItStep)
+      for (uint32_t u32_ItStep = static_cast<uint32_t>(this->mc_UniqueId.size()); u32_ItStep > 0; --u32_ItStep)
       {
-         tgl_assert(this->mpc_MessageSyncManager->DeleteCanMessage(this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
-                                                                      this->
-                                                                      mc_UniqueId[static_cast<std::vector<uint64_t>
-                                                                                              ::size_type>(u32_ItStep -
-                                                                                                           1UL)])) ==
+         tgl_assert(this->mpc_MessageSyncManager->DeleteCanMessage(
+                       this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
+                          this->mc_UniqueId[static_cast<std::vector<uint64_t>::size_type>(u32_ItStep) - 1UL])) ==
                     C_NO_ERR);
          if (this->mpc_MessageTreeWidget != NULL)
          {
             //At this point we can't get the message ID by unique ID because it was already deleted
             // but this should be no problem as we do always remember the message ID anyways
             u32_InternalMessageIndex =
-               this->mpc_MessageTreeWidget->InternalDeleteMessage(this->mc_LastMessageId[static_cast<std::vector<uint64_t>
-                                                                                                     ::size_type>(
-                                                                                            u32_ItStep - 1UL)]);
+               this->mpc_MessageTreeWidget->InternalDeleteMessage(
+                  this->mc_LastMessageId[static_cast<std::vector<uint64_t>::size_type>(u32_ItStep) - 1UL]);
          }
       }
       if (this->mpc_MessageTreeWidget != NULL)

@@ -239,7 +239,7 @@ void C_SyvDaItTaModel::UpdateValue(void)
                   {
                      const C_PuiSvDbNodeDataElementConfig & rc_Config =
                         pc_Item->c_DataPoolElementsConfig[u32_ItConfig];
-                     if (rc_Config.c_ElementId.CheckSameDataElement(c_Id))
+                     if (rc_Config.c_ElementId == c_Id)
                      {
                         //Set unscaled value
                         if (u32_ItConfig < this->mc_UnscaledLastDataValues.size())

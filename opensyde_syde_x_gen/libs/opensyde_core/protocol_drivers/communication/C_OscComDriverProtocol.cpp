@@ -30,6 +30,7 @@
 #include "C_OscProtocolDriverOsyTpIp.hpp"
 #include "C_OscRoutingCalculation.hpp"
 #include "C_OscSecurityRsa.hpp"
+#include "C_OscCryptoAgentAccessUtil.hpp"
 #include "TglUtils.hpp"
 #include "TglTime.hpp"
 
@@ -67,8 +68,7 @@ C_OscComDriverProtocol::C_OscComDriverProtocol(void) :
    mpc_SysDef(NULL),
    mu32_ActiveBusIndex(0U),
    mu32_ActiveNodeCount(0),
-   mpc_IpDispatcher(NULL),
-   mpc_SecurityPemDb(NULL)
+   mpc_IpDispatcher(NULL)
 {
    //Check if client and server use same float standard, see #84517 for more details
    tgl_assert(std::numeric_limits<float32_t>::is_iec559);
@@ -102,9 +102,8 @@ C_OscComDriverProtocol::~C_OscComDriverProtocol(void)
 
    this->mpc_CanTransportProtocolBroadcast = NULL;
    this->mpc_IpTransportProtocolBroadcast = NULL;
-   this->mpc_IpDispatcher = NULL;  //do not delete ! not owned by us
-   this->mpc_SecurityPemDb = NULL; //do not delete ! not owned by us
-   this->mpc_SysDef = NULL;        //do not delete ! not owned by us
+   this->mpc_IpDispatcher = NULL; //do not delete ! not owned by us
+   this->mpc_SysDef = NULL;       //do not delete ! not owned by us
 
    C_OscProtocolSecuritySubLayer::h_ClearAll(); //no longer needed
 }
@@ -117,8 +116,6 @@ C_OscComDriverProtocol::~C_OscComDriverProtocol(void)
    \param[in]  orc_ActiveNodes         Flags for all available nodes in the system
    \param[in]  opc_CanDispatcher       Pointer to concrete CAN dispatcher
    \param[in]  opc_IpDispatcher        Pointer to concrete IP dispatcher
-   \param[in]  opc_SecurityPemDb       Pointer to PEM database (optional)
-                                       Needed if nodes with enabled security are used in the system
 
    \return
    C_NO_ERR      Operation success
@@ -135,8 +132,7 @@ C_OscComDriverProtocol::~C_OscComDriverProtocol(void)
 int32_t C_OscComDriverProtocol::Init(const C_OscSystemDefinition & orc_SystemDefinition,
                                      const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes,
                                      C_CanDispatcher * const opc_CanDispatcher,
-                                     C_OscIpDispatcher * const opc_IpDispatcher,
-                                     C_OscSecurityPemDatabase * const opc_SecurityPemDb)
+                                     C_OscIpDispatcher * const opc_IpDispatcher)
 {
    int32_t s32_Retval = C_NOACT;
    uint32_t u32_Counter;
@@ -172,7 +168,6 @@ int32_t C_OscComDriverProtocol::Init(const C_OscSystemDefinition & orc_SystemDef
       this->mc_ActiveNodesSystem = orc_ActiveNodes;
       this->mpc_SysDef = &orc_SystemDefinition;
       this->mpc_IpDispatcher = opc_IpDispatcher;
-      this->mpc_SecurityPemDb = opc_SecurityPemDb;
 
       //No check for connected because error check passed
       s32_Retval = m_InitRoutesAndActiveNodes();
@@ -827,7 +822,8 @@ bool C_OscComDriverProtocol::IsInitialized(void) const
    * selected node exists
    * selected node is an openSYDE node
 
-   \param[in]  orc_ServerId   node to re-connect to
+   \param[in]   orc_ServerId                 node to re-connect to
+   \param[out]  opu32_ErrorActiveNodeIndex   Error active node index
 
    \return
    C_NO_ERR   re-connected
@@ -836,7 +832,8 @@ bool C_OscComDriverProtocol::IsInitialized(void) const
    C_CONFIG   no transport protocol installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::ReConnectNode(const stw::opensyde_core::C_OscProtocolDriverOsyNode & orc_ServerId) const
+int32_t C_OscComDriverProtocol::ReConnectNode(const stw::opensyde_core::C_OscProtocolDriverOsyNode & orc_ServerId,
+                                              uint32_t * const opu32_ErrorActiveNodeIndex) const
 {
    int32_t s32_Return = C_RANGE;
    bool q_Found;
@@ -848,6 +845,10 @@ int32_t C_OscComDriverProtocol::ReConnectNode(const stw::opensyde_core::C_OscPro
       if (pc_ProtocolOsy != NULL)
       {
          s32_Return = pc_ProtocolOsy->ReConnect();
+         if ((s32_Return != C_NO_ERR) && (opu32_ErrorActiveNodeIndex != NULL))
+         {
+            *opu32_ErrorActiveNodeIndex = u32_ActiveNodeIndex;
+         }
       }
    }
    return s32_Return;
@@ -1426,8 +1427,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionIdWithExpectation(const uint32_t
 
    \return
    C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly or
-               PEM database was needed but not set.
+   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly
    C_NOACT     Nodes has no openSYDE protocol
    C_COM       Communication problem
    C_WARN      Error response
@@ -1465,8 +1465,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(const uint32_t ou32_Acti
 
    \return
    C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly or
-               PEM database was needed but not set.
+   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly
    C_NOACT     Nodes has no openSYDE protocol
    C_COM       Communication problem
    C_WARN      Error response
@@ -1573,77 +1572,100 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                if (q_SecureAuthenticationActive == true)
                {
                   //we need to calculate the proper key based on the challenge we got:
-                  //check pem database on NULL
-                  if (mpc_SecurityPemDb != NULL)
+                  std::vector<uint8_t> c_CertSnr;
+                  std::vector<uint8_t> c_RandomValue;
+                  c_RandomValue.resize(8, 0U);
+
+                  c_RandomValue[0] = static_cast<uint8_t>(u64_Seed >> 56U);
+                  c_RandomValue[1] = static_cast<uint8_t>(u64_Seed >> 48U);
+                  c_RandomValue[2] = static_cast<uint8_t>(u64_Seed >> 40U);
+                  c_RandomValue[3] = static_cast<uint8_t>(u64_Seed >> 32U);
+                  c_RandomValue[4] = static_cast<uint8_t>(u64_Seed >> 24U);
+                  c_RandomValue[5] = static_cast<uint8_t>(u64_Seed >> 16U);
+                  c_RandomValue[6] = static_cast<uint8_t>(u64_Seed >> 8U);
+                  c_RandomValue[7] = static_cast<uint8_t>(u64_Seed);
+                  if (ou8_SecurityLevel == 7U)
                   {
-                     const C_OscSecurityPemKeyInfo * pc_PemKeyInfo = NULL;
-                     if (ou8_SecurityLevel == 7U)
-                     {
-                        pc_PemKeyInfo = this->mpc_SecurityPemDb->GetLevel7PemInformation();
-                     }
-                     else
-                     {
-                        //we need the server's certificate snr to look up the correct key
-                        std::vector<uint8_t> c_CertSnr;
-                        s32_Return = opc_ExistingProtocol->OsyReadAuthenticationCertificateSerialNumber(c_CertSnr,
-                                                                                                        opu8_NrCode);
+                     s32_Return = opc_ExistingProtocol->OsyReadAuthenticationCertificateSerialNumberL7(c_CertSnr,
+                                                                                                       opu8_NrCode);
+                  }
+                  else
+                  {
+                     //we need the server's certificate snr to look up the correct key
+                     s32_Return = opc_ExistingProtocol->OsyReadAuthenticationCertificateSerialNumber(c_CertSnr,
+                                                                                                     opu8_NrCode);
+                  }
 
-                        if (s32_Return == C_NO_ERR)
+                  if (s32_Return == C_NO_ERR)
+                  {
+                     uint8_t u8_NumberCode;
+                     C_OscProtocolSerialNumber c_SerialNumberExt;
+                     // Secure authentication only available with extended serial number
+                     s32_Return = opc_ExistingProtocol->OsyReadEcuSerialNumberExt(c_SerialNumberExt, &u8_NumberCode);
+                     if (s32_Return == C_NO_ERR)
+                     {
+                        C_OscProtocolDriverOsyNode c_ClientId;
+                        C_OscProtocolDriverOsyNode c_ServerId;
+                        uint32_t u32_NodeIndex;
+                        opc_ExistingProtocol->GetNodeIdentifiers(c_ClientId, c_ServerId);
+                        if (this->GetNodeIndex(c_ServerId, u32_NodeIndex) == true)
                         {
-                           //get PEM file by serial number from database
-                           pc_PemKeyInfo = this->mpc_SecurityPemDb->GetPemFileBySerialNumber(c_CertSnr);
-                        }
-                     }
-
-                     if (pc_PemKeyInfo != NULL)
-                     {
-                        std::vector<uint8_t> c_RandomValue;
-                        std::vector<uint8_t> c_PrivKey;
-                        c_AuthenticationSignature.resize(128, 0U);
-                        c_RandomValue.resize(8, 0U);
-
-                        c_RandomValue[0] = static_cast<uint8_t>(u64_Seed >> 56U);
-                        c_RandomValue[1] = static_cast<uint8_t>(u64_Seed >> 48U);
-                        c_RandomValue[2] = static_cast<uint8_t>(u64_Seed >> 40U);
-                        c_RandomValue[3] = static_cast<uint8_t>(u64_Seed >> 32U);
-                        c_RandomValue[4] = static_cast<uint8_t>(u64_Seed >> 24U);
-                        c_RandomValue[5] = static_cast<uint8_t>(u64_Seed >> 16U);
-                        c_RandomValue[6] = static_cast<uint8_t>(u64_Seed >> 8U);
-                        c_RandomValue[7] = static_cast<uint8_t>(u64_Seed);
-
-                        //get private authentication key from PEM file:
-                        c_PrivKey = pc_PemKeyInfo->GetPrivateKey();
-
-                        //calculate RSA signature with private key and random value from server (u64_Seed)
-                        s32_Return =
-                           C_OscSecurityRsa::h_SignSignature(c_PrivKey, c_RandomValue, c_AuthenticationSignature);
-
-                        if ((s32_Return != C_NO_ERR) || (c_AuthenticationSignature.size() != 128U))
-                        {
-                           C_SclString c_Tmp;
-                           c_Tmp.PrintFormatted("Error on calculating RSA signature: %d; signature size: %d",
-                                                s32_Return, static_cast<int32_t>(c_AuthenticationSignature.size()));
-                           osc_write_log_error("Security Access", c_Tmp.c_str());
-                           s32_Return = C_CHECKSUM;
-                        }
-                     }
-                     else
-                     {
-                        if (ou8_SecurityLevel == 7U)
-                        {
-                           osc_write_log_error("Security Access", "No level 7 PEM file found in database.");
+                           if ((this->mpc_SysDef != NULL) && (u32_NodeIndex < this->mpc_SysDef->c_Nodes.size()))
+                           {
+                              //get RSA signature by serial number from crypto agent
+                              s32_Return = m_HandleCryptoAgentCommunication(c_CertSnr,
+                                                                            ou8_SecurityLevel,
+                                                                            c_RandomValue,
+                                                                            c_AuthenticationSignature,
+                                                                            this->mpc_SysDef->GetLastLoadedFilePath(),
+                                                                            this->mpc_SysDef->c_Nodes[u32_NodeIndex],
+                                                                            c_ServerId.u8_NodeIdentifier, c_SerialNumberExt.c_SerialNumberExt,
+                                                                            c_SerialNumberExt.u8_SerialNumberManufacturerFormat);
+                           }
+                           else
+                           {
+                              osc_write_log_error("Security Access", "Node not found.");
+                              s32_Return = C_CONFIG;
+                           }
                         }
                         else
                         {
-                           osc_write_log_error("Security Access", "No PEM file found for received serial number.");
+                           osc_write_log_error("Security Access", "Node not found.");
+                           s32_Return = C_CONFIG;
                         }
+                     }
+                     else
+                     {
+                        osc_write_log_error("Read Serial Number", "Could not read the device's serial number! Details: " +
+                                            C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
+                                                                                                     u8_NumberCode));
+                     }
+                  }
+
+                  if (s32_Return == C_NO_ERR)
+                  {
+                     if (c_AuthenticationSignature.size() != 128U)
+                     {
+                        C_SclString c_Tmp;
+                        c_Tmp.PrintFormatted("Error on calculating RSA signature: %d; signature size: %d",
+                                             s32_Return, static_cast<int32_t>(c_AuthenticationSignature.size()));
+                        osc_write_log_error("Security Access", c_Tmp.c_str());
                         s32_Return = C_CHECKSUM;
                      }
                   }
                   else
                   {
-                     osc_write_log_error("Security Access", "PEM database not initialized.");
-                     s32_Return = C_CONFIG;
+                     if (ou8_SecurityLevel == 7U)
+                     {
+                        osc_write_log_error("Security Access",
+                                            "Could not solve L7 authentication challenge using the Crypto Agent.");
+                     }
+                     else
+                     {
+                        osc_write_log_error("Security Access",
+                                            "Could not solve authentication challenge using the Crypto Agent.");
+                     }
+                     s32_Return = C_CHECKSUM;
                   }
                }
 
@@ -1737,6 +1759,43 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
    }
 
    return s32_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get rsa signature by serial number
+
+   \param[in]      orc_SerialNumber                         Serial number
+   \param[in]      ou8_SecurityLevel                        Security level
+   \param[in]      orc_ServerChallengeValue                 Server challenge value
+   \param[in,out]  orc_RsaSignature                         Rsa signature
+   \param[in]      orc_LastLoadedSystemDefinitionFilePath   Last loaded system definition file path
+   \param[in]      orc_Node                                 Node
+   \param[in]      ou8_NodeIdentifier                       Node identifier
+   \param[in]      orc_SerialNumberExtended                 Serial number extended
+   \param[in]      ou8_SerialNumberManufacturerFormat       Serial number manufacturer format
+
+   \return
+   STW error codes
+
+   \retval   C_NO_ERR   Rsa signature valid
+   \retval   C_NOACT    No connection
+   \retval   C_COM      Error during communication
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscComDriverProtocol::m_HandleCryptoAgentCommunication(const std::vector<uint8_t> & orc_SerialNumber,
+                                                                 const uint8_t ou8_SecurityLevel,
+                                                                 const std::vector<uint8_t> & orc_ServerChallengeValue,
+                                                                 std::vector<uint8_t> & orc_RsaSignature,
+                                                                 const stw::scl::C_SclString &  orc_LastLoadedSystemDefinitionFilePath, const C_OscNode & orc_Node, const uint8_t ou8_NodeIdentifier, const stw::scl::C_SclString & orc_SerialNumberExtended,
+                                                                 const uint8_t ou8_SerialNumberManufacturerFormat) const
+{
+   return C_OscCryptoAgentAccessUtil::h_GetRsaSignatureBySerialNumber(orc_SerialNumber,
+                                                                      ou8_SecurityLevel,
+                                                                      orc_ServerChallengeValue,
+                                                                      orc_RsaSignature,
+                                                                      orc_LastLoadedSystemDefinitionFilePath, orc_Node,
+                                                                      ou8_NodeIdentifier, orc_SerialNumberExtended,
+                                                                      ou8_SerialNumberManufacturerFormat);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

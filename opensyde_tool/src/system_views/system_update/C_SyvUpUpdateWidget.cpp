@@ -1363,9 +1363,9 @@ void C_SyvUpUpdateWidget::m_Connect(void)
             C_OgeWiCustomMessage::E_Outputs e_Output;
             c_MessageBox.SetHeading(C_GtGetText::h_GetText("Transferring Secure Authentication"));
             c_MessageBox.SetDescription(C_GtGetText::h_GetText(
-                                           "The Update Package contains PEM file(s) or activates authentication for at "
-                                           "least one node. After transfer, access will only be possible with a valid "
-                                           "private key.\n\n"
+                                           "Attention: The Update Package contains authentication PEM file(s) or activates "
+                                           "authentication for at least one node. After transfer, access will only be "
+                                           "possible with a valid private key.\n\n"
                                            "Are you sure you want to continue?\n"));
             c_MessageBox.SetCustomMinHeight(240, 240);
             c_MessageBox.SetOkButtonText(C_GtGetText::h_GetText("Continue"));
@@ -2193,8 +2193,8 @@ void C_SyvUpUpdateWidget::m_Timer(void)
          c_MessageAuth.SetDescription(C_GtGetText::h_GetText(
                                          "Authentication between openSYDE Tool and device(s) has failed. Access denied."));
          c_MessageAuth.SetDetails(C_GtGetText::h_GetText("Possible reasons:<br/>"
-                                                         "- Associated private key (*.pem) not found in /certificates folder (most common)<br/>"
-                                                         "- Failure during authenfication process<br/>"
+                                                         "- Associated private key not found on crypto agent certificates folder (most common)<br/>"
+                                                         "- Failure during authentication process<br/>"
                                                          "For more information see ") +
                                   C_Uti::h_GetLink(C_GtGetText::h_GetText("log file"), mc_STYLESHEET_GUIDE_COLOR_LINK,
                                                    C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) +

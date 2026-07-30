@@ -33,7 +33,7 @@ private:
    stw::scl::C_SclString mc_ViewName;
    stw::scl::C_SclString mc_DeviceDefPath;
    stw::scl::C_SclString mc_TempDir;
-   const stw::scl::C_SclString mc_LoggingCategory = "Create Update Package";
+   static const stw::scl::C_SclString mhc_LOGGING_CATEGORY;
 
    C_SydeSup::E_Result m_FindView(const std::vector<stw::opensyde_core::C_OscViewData> & orc_Views,
                                   stw::opensyde_core::C_OscViewData & orc_View);
