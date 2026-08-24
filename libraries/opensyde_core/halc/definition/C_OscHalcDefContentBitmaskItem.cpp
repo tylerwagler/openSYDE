@@ -17,9 +17,11 @@
 #include "stwerrors.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscHalcDefContentBitmaskItem.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
+using namespace stw::scl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
@@ -63,7 +65,7 @@ C_OscHalcDefContentBitmaskItem::~C_OscHalcDefContentBitmaskItem()
    C_RANGE  String invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefContentBitmaskItem::SetValueByString(const stw::scl::C_SclString & orc_Item)
+int32_t C_OscHalcDefContentBitmaskItem::SetValueByString(const std::string & orc_Item)
 {
    return C_OscHalcDefContentBitmaskItem::mh_ParseUintFromString(orc_Item, this->u64_Value);
 }
@@ -78,8 +80,8 @@ int32_t C_OscHalcDefContentBitmaskItem::SetValueByString(const stw::scl::C_SclSt
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefContentBitmaskItem::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Display.c_str(), this->c_Display.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Display.c_str(), this->c_Display.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_ApplyValueSetting, sizeof(this->q_ApplyValueSetting), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u64_Value, sizeof(this->u64_Value), oru32_HashValue);
 }
@@ -94,8 +96,8 @@ void C_OscHalcDefContentBitmaskItem::CalcHash(uint32_t & oru32_HashValue) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefContentBitmaskItem::CalcHashStructure(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Display.c_str(), this->c_Display.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Display.c_str(), this->c_Display.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u64_Value, sizeof(this->u64_Value), oru32_HashValue);
 }
 
@@ -110,26 +112,26 @@ void C_OscHalcDefContentBitmaskItem::CalcHashStructure(uint32_t & oru32_HashValu
    C_RANGE  String invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefContentBitmaskItem::mh_ParseUintFromString(const stw::scl::C_SclString & orc_Item,
+int32_t C_OscHalcDefContentBitmaskItem::mh_ParseUintFromString(const std::string & orc_Item,
                                                                uint64_t & oru64_Value)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (orc_Item.LowerCase() == "true")
+   if (LowerCaseCompat(orc_Item) == "true")
    {
       oru64_Value = 1ULL;
    }
-   else if (orc_Item.LowerCase() == "false")
+   else if (LowerCaseCompat(orc_Item) == "false")
    {
       oru64_Value = 0ULL;
    }
    else
    {
-      if (((orc_Item.Length() > 2UL) && (orc_Item[1] == '0')) && (orc_Item[2] == 'x'))
+      if (((orc_Item.length() > 2UL) && (orc_Item[1] == '0')) && (orc_Item[2] == 'x'))
       {
-         const stw::scl::C_SclString c_Hex = orc_Item.SubString(3UL, orc_Item.Length() - 2UL);
+          const std::string c_Hex = SubStringCompat(orc_Item, 3UL, orc_Item.length() - 2UL);
          std::stringstream c_Stream(c_Hex.c_str());
-         (c_Stream >> &std::hex) >> oru64_Value;
+         (c_Stream >> std::hex) >> oru64_Value;
          if (c_Stream.fail())
          {
             s32_Retval = C_RANGE;

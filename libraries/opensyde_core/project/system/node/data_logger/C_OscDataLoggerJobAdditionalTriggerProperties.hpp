@@ -32,7 +32,7 @@ public:
    bool q_Enable;                                              ///< flag to enable additional trigger
    C_OscNodeDataPoolListElementOptArrayOptValidId c_ElementId; ///< Selected element for additional trigger
    C_OscNodeDataPoolContent c_Threshold;                       ///< Selected threshold for additional trigger
-   stw::scl::C_SclString c_Operation;                          ///< Which operator to use for additional trigger
+   std::string c_Operation;                          ///< Which operator to use for additional trigger
                                                                // threshold
    C_OscDataLoggerJobAdditionalTriggerExpertMode c_ExpertMode; ///< Expert mode properties
 };

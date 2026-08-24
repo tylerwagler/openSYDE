@@ -14,16 +14,16 @@
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include <cstring>
+#include <sstream>
+#include <iomanip>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_Md5Checksum.hpp"
-#include "C_SclString.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::errors;
 using namespace stw::md5;
-using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -310,11 +310,11 @@ int32_t C_Md5Checksum::mh_Md5Done(C_HashState * const opc_HashState, uint8_t * c
    Calculated MD5 (empty string if there are problems)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_Md5Checksum::GetMD5(const C_SclString & orc_FilePath)
+std::string C_Md5Checksum::GetMD5(const std::string & orc_FilePath)
 {
    //open the file as a binary file in readonly mode, denying write access
    std::FILE * pc_File;
-   C_SclString c_Return;
+   std::string c_Return;
 
    pc_File = std::fopen(orc_FilePath.c_str(), "rb");
    if (pc_File == NULL)
@@ -337,11 +337,11 @@ C_SclString C_Md5Checksum::GetMD5(const C_SclString & orc_FilePath)
    Calculated MD5 (empty string if there are problems)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_Md5Checksum::GetMD5(std::FILE * const opc_File)
+std::string C_Md5Checksum::GetMD5(std::FILE * const opc_File)
 {
    const uint32_t u32_BufferSize = 4096; //checksum the file in blocks of 4096 bytes
    uint8_t au8_Data[u32_BufferSize];     //buffer for data read from the file
-   C_SclString c_StrMd5;
+   std::string c_StrMd5;
    C_HashState c_Hash;
    uint8_t au8_Result[16];
 
@@ -366,12 +366,12 @@ C_SclString C_Md5Checksum::GetMD5(std::FILE * const opc_File)
 
    mh_Md5Done(&c_Hash, au8_Result);
 
-   //Convert the hexadecimal checksum to a C_SclString
+   //Convert the hexadecimal checksum to a string
    for (uint8_t u8_Byte = 0U; u8_Byte < 16U; u8_Byte++)
    {
-      C_SclString c_Str;
-      c_Str.PrintFormatted("%02x", au8_Result[u8_Byte]);
-      c_StrMd5 += c_Str;
+      std::ostringstream c_Stream;
+      c_Stream << std::hex << std::setw(2) << std::setfill('0') << static_cast<uint32_t>(au8_Result[u8_Byte]);
+      c_StrMd5 += c_Stream.str();
    }
    return c_StrMd5;
 }
@@ -386,10 +386,10 @@ C_SclString C_Md5Checksum::GetMD5(std::FILE * const opc_File)
    Calculated MD5 (empty string if there are problems)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_Md5Checksum::GetMD5(const uint8_t * const opu8_Data, const uint32_t ou32_Length)
+std::string C_Md5Checksum::GetMD5(const uint8_t * const opu8_Data, const uint32_t ou32_Length)
 {
    //calculate and return the checksum
-   C_SclString c_StrMd5;
+   std::string c_StrMd5;
    C_HashState c_Hash;
    uint8_t au8_Result[16];
 
@@ -397,12 +397,11 @@ C_SclString C_Md5Checksum::GetMD5(const uint8_t * const opu8_Data, const uint32_
    mh_Md5Process(&c_Hash, opu8_Data, ou32_Length);
    mh_Md5Done(&c_Hash, au8_Result);
 
-   //Convert the hexadecimal checksum to a C_SclString
    for (uint8_t u8_Byte = 0U; u8_Byte < 16U; u8_Byte++)
    {
-      C_SclString c_Str;
-      c_Str.PrintFormatted("%02x", au8_Result[u8_Byte]);
-      c_StrMd5 += c_Str;
+      std::ostringstream c_Stream;
+      c_Stream << std::hex << std::setw(2) << std::setfill('0') << static_cast<uint32_t>(au8_Result[u8_Byte]);
+      c_StrMd5 += c_Stream.str();
    }
    return c_StrMd5;
 }

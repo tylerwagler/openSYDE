@@ -14,9 +14,12 @@
 
 #include <iostream>
 #include <cstring>
+#include <sstream>
+#include <iomanip>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
+#include "C_SclStringCompat.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
@@ -38,6 +41,18 @@ using namespace stw::scl;
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+
+/* -- Helper -------------------------------------------------------------------------------------------------------- */
+namespace
+{
+   template <typename T>
+   std::string mh_IntToHex(const T orc_Val, const uint32_t ou32_Digits)
+   {
+      std::stringstream c_Stream;
+      c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Val;
+      return c_Stream.str();
+   }
+}
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
@@ -247,14 +262,14 @@ int32_t C_OscProtocolDriverOsy::Disconnect(void)
    \param[in]   ou8_NrCode        Negative response code (if os32_ReturnCode is C_WARN)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscProtocolDriverOsy::m_LogServiceError(const C_SclString & orc_Service, const int32_t os32_ReturnCode,
+void C_OscProtocolDriverOsy::m_LogServiceError(const std::string & orc_Service, const int32_t os32_ReturnCode,
                                                const uint8_t ou8_NrCode) const
 {
    if (os32_ReturnCode != C_NO_ERR)
    {
       bool q_IsHardError; //we want to log error responses just as "warnings"
 
-      const C_SclString c_ErrorText =
+      const std::string c_ErrorText =
          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(os32_ReturnCode, ou8_NrCode, &q_IsHardError);
       m_LogErrorWithHeader("openSYDE protocol driver", "Service " + orc_Service + " failed. Error: " + c_ErrorText,
                            TGL_UTIL_FUNC_ID, q_IsHardError);
@@ -756,7 +771,7 @@ int32_t C_OscProtocolDriverOsy::m_ReadDataByIdentifier(const uint16_t ou16_Ident
    C_COM      communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_ReadStringDataIdentifier(const uint16_t ou16_DataIdentifier, C_SclString & orc_String,
+int32_t C_OscProtocolDriverOsy::m_ReadStringDataIdentifier(const uint16_t ou16_DataIdentifier, std::string & orc_String,
                                                            uint8_t & oru8_NrCode)
 {
    int32_t s32_Return;
@@ -958,7 +973,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadHardwareNumber(uint32_t & oru32_HardwareN
    C_COM      communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadHardwareVersionNumber(C_SclString & orc_HardwareVersionNumber,
+int32_t C_OscProtocolDriverOsy::OsyReadHardwareVersionNumber(std::string & orc_HardwareVersionNumber,
                                                              uint8_t * const opu8_NrCode)
 
 {
@@ -1112,7 +1127,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadMaxNumberOfBlockLength(uint16_t & oru16_M
    C_COM      communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadDeviceName(C_SclString & orc_DeviceName, uint8_t * const opu8_NrCode)
+int32_t C_OscProtocolDriverOsy::OsyReadDeviceName(std::string & orc_DeviceName, uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return;
    uint8_t u8_NrErrorCode = 0U;
@@ -1148,7 +1163,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDeviceName(C_SclString & orc_DeviceName, 
    C_COM      communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadApplicationName(C_SclString & orc_ApplicationName, uint8_t * const opu8_NrCode)
+int32_t C_OscProtocolDriverOsy::OsyReadApplicationName(std::string & orc_ApplicationName, uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return;
    uint8_t u8_NrErrorCode = 0U;
@@ -1184,7 +1199,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadApplicationName(C_SclString & orc_Applica
    C_COM      communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadApplicationVersion(C_SclString & orc_ApplicationVersion,
+int32_t C_OscProtocolDriverOsy::OsyReadApplicationVersion(std::string & orc_ApplicationVersion,
                                                           uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return;
@@ -1323,7 +1338,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadActiveDiagnosticSession(uint8_t & oru8_Se
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsyReadApplicationSoftwareFingerprint(uint8_t (&orau8_Date)[3],
                                                                       uint8_t (&orau8_Time)[3],
-                                                                      C_SclString & orc_Username,
+                                                                      std::string & orc_Username,
                                                                       uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return;
@@ -1372,7 +1387,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadApplicationSoftwareFingerprint(uint8_t (&
    C_COM      communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyReadFileBasedTransferExitResult(C_SclString & orc_TransferExitResult,
+int32_t C_OscProtocolDriverOsy::OsyReadFileBasedTransferExitResult(std::string & orc_TransferExitResult,
                                                                    uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return;
@@ -1527,25 +1542,25 @@ int32_t C_OscProtocolDriverOsy::OsyReadSubNodeId(uint8_t & oru8_SubNodeId, uint8
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsyWriteApplicationSoftwareFingerprint(const uint8_t (&orau8_Date)[3],
                                                                        const uint8_t (&orau8_Time)[3],
-                                                                       const C_SclString & orc_UserName,
+                                                                       const std::string & orc_UserName,
                                                                        uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return;
 
    std::vector<uint8_t> c_Data;
-   C_SclString c_UserName = orc_UserName;
+   std::string c_UserName = orc_UserName;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (c_UserName.Length() > 20)
+   if (c_UserName.length() > 20)
    {
-      c_UserName.SetLength(20);
+      c_UserName.resize(20);
    }
 
-   c_Data.resize(7U + static_cast<size_t>(c_UserName.Length()));
+   c_Data.resize(7U + static_cast<size_t>(c_UserName.length()));
    (void)std::memcpy(&c_Data[0], &orau8_Date[0], 3U);
    (void)std::memcpy(&c_Data[3], &orau8_Time[0], 3U);
-   c_Data[6] = static_cast<uint8_t>(c_UserName.Length());
-   (void)std::memcpy(&c_Data[7], c_UserName.c_str(), c_UserName.Length());
+   c_Data[6] = static_cast<uint8_t>(c_UserName.length());
+   (void)std::memcpy(&c_Data[7], c_UserName.c_str(), c_UserName.length());
 
    s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_APPLICATION_SOFTWARE_FINGERPRINT, c_Data, u8_NrErrorCode);
    if (opu8_NrCode != NULL)
@@ -1599,8 +1614,8 @@ int32_t C_OscProtocolDriverOsy::OsyFactoryMode(const uint8_t ou8_Operation, uint
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::FactoryMode(Operation: %d)", ou8_Operation);
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::FactoryMode(Operation: %d)", ou8_Operation);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
    return s32_Return;
@@ -2438,8 +2453,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolData(const uint8_t ou8_DataPoolIn
 
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("ReadDataPoolData(Client indexes: Datapool: %d, List: %d, Element: %d)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("ReadDataPoolData(Client indexes: Datapool: %d, List: %d, Element: %d)",
                                  ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
@@ -2539,8 +2554,8 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolData(const uint8_t ou8_DataPoolI
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("WriteDataPoolData(Client indexes: Datapool: %d, List: %d, Element: %d, Size: %u)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("WriteDataPoolData(Client indexes: Datapool: %d, List: %d, Element: %d, Size: %u)",
                                  ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
                                  static_cast<uint32_t>(orc_DataToWrite.size()));
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
@@ -2712,8 +2727,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataCyclic(const uint8_t ou8_Data
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted(
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat(
          "ReadDataPoolDataCyclic(Client indexes: Datapool: %d, List: %d, Element: %d, Rail: %d)",
          ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, ou8_TransmissionRail);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
@@ -2829,8 +2844,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataChangeDriven(const uint8_t ou
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted(
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat(
          "ReadDataPoolDataChangeDriven(Client indexes: Datapool: %d, List: %d, Element: %d, Rail: %d, Hysteresis: 0x%08X)",
          ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, ou8_TransmissionRail,
          ou32_Hysteresis);
@@ -3004,8 +3019,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolMetaData(const uint8_t ou8_DataPo
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::ReadDataPoolMetaData(Client indexes: Datapool: %d)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::ReadDataPoolMetaData(Client indexes: Datapool: %d)",
                                  ou8_DataPoolIndex);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
@@ -3065,8 +3080,8 @@ int32_t C_OscProtocolDriverOsy::OsyVerifyDataPool(const uint8_t ou8_DataPoolInde
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::VerifyDataPool(Client indexes: Datapool: %d, Checksum: 0x%08X)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::VerifyDataPool(Client indexes: Datapool: %d, Checksum: 0x%08X)",
                                  ou8_DataPoolIndex,
                                  ou32_DataPoolChecksum);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
@@ -3136,8 +3151,8 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteDiagnosisCommunication(const uint8_t 
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::SetRouteDiagnosisCommunication(InputType: %d, InputIndex: %d, "
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::SetRouteDiagnosisCommunication(InputType: %d, InputIndex: %d, "
                                  "OutputType: %d, OutputIndex: %d, SourceId: %d, TargetId: %d)",
                                  ou8_InputChannelType,
                                  ou8_InputChannelIndex,
@@ -3257,8 +3272,8 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteIp2IpCommunication(const uint8_t ou8_
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::OsySetRouteIp2IpCommunication("
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::OsySetRouteIp2IpCommunication("
                                  "OutputType: %d, OutputIndex: %d, SourceId: %d, TargetId: %d, "
                                  "IP: [%d.%d.%d.%d])",
                                  ou8_OutputChannelType,
@@ -3323,8 +3338,8 @@ int32_t C_OscProtocolDriverOsy::OsyCheckRouteIp2IpCommunication(uint8_t & oru8_S
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::OsyCheckRouteIp2IpCommunication()");
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::OsyCheckRouteIp2IpCommunication()");
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
 
@@ -3401,8 +3416,8 @@ int32_t C_OscProtocolDriverOsy::OsySendCanMessage(const uint8_t ou8_ChannelIndex
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::SendCanMessage(Channel: %d, Id: 0x%08X, DLC: %d)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::SendCanMessage(Channel: %d, Id: 0x%08X, DLC: %d)",
                                  ou8_ChannelIndex,
                                  orc_CanMessage.u32_ID,
                                  orc_CanMessage.u8_DLC);
@@ -3465,8 +3480,8 @@ int32_t C_OscProtocolDriverOsy::OsySetTunnelCanMessages(const uint8_t ou8_CanCha
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::SetTunnelCanMessages(Channel: %d, Filter-Id: 0x%08X, Mask: 0x%08X)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::SetTunnelCanMessages(Channel: %d, Filter-Id: 0x%08X, Mask: 0x%08X)",
                                  ou8_CanChannelIndex,
                                  ou32_FilterId,
                                  ou32_FilterMask);
@@ -3531,13 +3546,13 @@ int32_t C_OscProtocolDriverOsy::OsyStopTunnelCanMessages(uint8_t * const opu8_Nr
                                       false: log as "WARNING"
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscProtocolDriverOsy::m_LogErrorWithHeader(const C_SclString & orc_Activity,
-                                                  const stw::scl::C_SclString & orc_Information,
+void C_OscProtocolDriverOsy::m_LogErrorWithHeader(const std::string & orc_Activity,
+                                                  const std::string & orc_Information,
                                                   const char_t * const opcn_Function, const bool oq_AsError) const
 {
-   const C_SclString c_LogText = "openSYDE protocol driver node " +
-                                 C_SclString::IntToStr(mc_ServerId.u8_BusIdentifier) + "." +
-                                 C_SclString::IntToStr(mc_ServerId.u8_NodeIdentifier) + ": " + orc_Information;
+   const std::string c_LogText = "openSYDE protocol driver node " +
+                                 std::to_string(mc_ServerId.u8_BusIdentifier) + "." +
+                                 std::to_string(mc_ServerId.u8_NodeIdentifier) + ": " + orc_Information;
 
    if (oq_AsError == true)
    {
@@ -3740,9 +3755,9 @@ void C_OscProtocolDriverOsy::m_OsyReadDataPoolDataEventReceived(const uint8_t ou
    (void)orc_Value;
    m_LogErrorWithHeader("Asynchronous communication",
                         "Unhandled reception of async ReadDataPoolEventDriven response "
-                        "(Client indexes: Datapool index: " + C_SclString::IntToStr(ou8_DataPoolIndex) +
-                        " List index: " + C_SclString::IntToStr(ou16_ListIndex) +
-                        " Element index: " + C_SclString::IntToStr(ou16_ElementIndex) +
+                        "(Client indexes: Datapool index: " + std::to_string(ou8_DataPoolIndex) +
+                        " List index: " + std::to_string(ou16_ListIndex) +
+                        " Element index: " + std::to_string(ou16_ElementIndex) +
                         "). Ignoring.", TGL_UTIL_FUNC_ID);
 }
 
@@ -3764,10 +3779,10 @@ void C_OscProtocolDriverOsy::m_OsyReadDataPoolDataEventErrorReceived(const uint8
 {
    m_LogErrorWithHeader("Asynchronous communication",
                         "Unhandled reception of async ReadDataPoolEventDriven negative response"
-                        " (Client indexes: Datapool index: " + C_SclString::IntToStr(ou8_DataPoolIndex) +
-                        " List index: " + C_SclString::IntToStr(ou16_ListIndex) +
-                        " Element index: " + C_SclString::IntToStr(ou16_ElementIndex) + " NRC: " +
-                        C_SclString::IntToHex(ou8_NrCode, 2) + "). Ignoring.", TGL_UTIL_FUNC_ID);
+                        " (Client indexes: Datapool index: " + std::to_string(ou8_DataPoolIndex) +
+                        " List index: " + std::to_string(ou16_ListIndex) +
+                        " Element index: " + std::to_string(ou16_ElementIndex) + " NRC: " +
+                        mh_IntToHex(ou8_NrCode, 2) + "). Ignoring.", TGL_UTIL_FUNC_ID);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3822,8 +3837,8 @@ int32_t C_OscProtocolDriverOsy::OsyCheckFlashMemoryAvailable(const uint32_t ou32
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::CheckFlashMemoryAvailable(Address: 0x%08X, Size: 0x%08X)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::CheckFlashMemoryAvailable(Address: 0x%08X, Size: 0x%08X)",
                                  ou32_StartAddress, ou32_Size);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
@@ -4101,8 +4116,8 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessRequestSeed(const uint8_t ou8_S
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("SecurityAccessRequestSeed(Level: %d)", ou8_SecurityLevel);
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("SecurityAccessRequestSeed(Level: %d)", ou8_SecurityLevel);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
 
@@ -4156,8 +4171,8 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_Secur
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("SecurityAccessSendKey(Level: %d, Key: 0x%08X)", ou8_SecurityLevel, ou32_SecurityKey);
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("SecurityAccessSendKey(Level: %d, Key: 0x%08X)", ou8_SecurityLevel, ou32_SecurityKey);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
 
@@ -4275,8 +4290,8 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_Secur
 
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("SecurityAccessSendKey(Level: %d)", ou8_SecurityLevel);
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("SecurityAccessSendKey(Level: %d)", ou8_SecurityLevel);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
 
@@ -4439,7 +4454,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncResponse(const C_OscProtocolDriverO
          default:
             //this is nothing we can handle; report in log
             m_LogErrorWithHeader("Asynchronous communication", "Unexpectedly received service response to service ID 0x" +
-                                 C_SclString::IntToHex(u8_ServiceId,
+                                 mh_IntToHex(u8_ServiceId,
                                                        2) + ". Ignoring.", TGL_UTIL_FUNC_ID);
 
             break;
@@ -4460,7 +4475,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncResponse(const C_OscProtocolDriverO
          default:
             //this is nothing we can handle; report in log
             m_LogErrorWithHeader("Asynchronous communication", "Unexpectedly received negative response to service ID 0x" +
-                                 C_SclString::IntToHex(orc_ReceivedService.c_Data[1],
+                                 mh_IntToHex(orc_ReceivedService.c_Data[1],
                                                        2) + ". Ignoring.", TGL_UTIL_FUNC_ID);
 
             break;
@@ -4800,11 +4815,11 @@ int32_t C_OscProtocolDriverOsy::m_SendRequest(const C_OscProtocolDriverOsyServic
       }
       if (q_NeedsEncryption == true)
       {
-         s32_Return = this->pc_SecuritySubLayer->WrapRequest(orc_Service, c_EncryptedRequest);
+         s32_Return = this->pc_SecuritySubLayer->WrapRequest(orc_Service, c_EncryptedRequest).value();
          if (s32_Return != C_NO_ERR)
          {
             osc_write_log_error("Traffic encryption", "Could not create SecuredDataTransmission request. Detail: " +
-                                C_SclString::IntToStr(s32_Return));
+                                std::to_string(s32_Return));
             s32_Return = C_CHECKSUM;
          }
          pc_Request = &c_EncryptedRequest;
@@ -4855,7 +4870,7 @@ int32_t C_OscProtocolDriverOsy::m_ReadResponse(C_OscProtocolDriverOsyService & o
           ((orc_Service.c_Data[0]) == (mhu8_OSY_SI_SECURED_DATA_TRANSMISSION | 0x40U)))
       {
          C_OscProtocolDriverOsyService c_DecryptedResponse;
-         s32_Return = this->pc_SecuritySubLayer->UnwrapResponse(orc_Service, c_DecryptedResponse);
+         s32_Return = this->pc_SecuritySubLayer->UnwrapResponse(orc_Service, c_DecryptedResponse).value();
          if (s32_Return == C_NO_ERR)
          {
             orc_Service = c_DecryptedResponse;
@@ -4864,7 +4879,7 @@ int32_t C_OscProtocolDriverOsy::m_ReadResponse(C_OscProtocolDriverOsyService & o
          {
             osc_write_log_error("Traffic encryption",
                                 "Could not decrypt incoming SecuredDataTransmission response. Detail: " +
-                                C_SclString::IntToStr(s32_Return));
+                                std::to_string(s32_Return));
             s32_Return = C_CHECKSUM;
          }
       }
@@ -5002,8 +5017,8 @@ int32_t C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_StartAddr
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RequestDownload(Address: 0x%08X, Size: 0x%08X, MaxBlockLength: %u)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RequestDownload(Address: 0x%08X, Size: 0x%08X, MaxBlockLength: %u)",
                                  ou32_StartAddress, ou32_Size, oru32_MaxBlockLength);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
@@ -5042,7 +5057,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_StartAddr
    C_COM      communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const C_SclString & orc_FilePath, const uint32_t ou32_FileSize,
+int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string & orc_FilePath, const uint32_t ou32_FileSize,
                                                        uint32_t & oru32_MaxBlockLength, uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return;
@@ -5056,13 +5071,13 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const C_SclString & orc_F
    {
       s32_Return = C_CONFIG;
    }
-   else if (orc_FilePath.Length() > 0xFFFF)
+   else if (orc_FilePath.length() > 0xFFFF)
    {
       s32_Return = C_RANGE;
    }
    else
    {
-      const uint16_t u16_PathLength = static_cast<uint16_t>(orc_FilePath.Length());
+      const uint16_t u16_PathLength = static_cast<uint16_t>(orc_FilePath.length());
 
       c_Request.c_Data.resize(10 + static_cast<size_t>(u16_PathLength));
       c_Request.c_Data[0U] = mhu8_OSY_SI_REQUEST_FILE_TRANSFER;
@@ -5140,8 +5155,8 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const C_SclString & orc_F
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RequestFileTransfer(Path: %s, Size: %u, MaxBlockLength: %u)", orc_FilePath.c_str(),
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RequestFileTransfer(Path: %s, Size: %u, MaxBlockLength: %u)", orc_FilePath.c_str(),
                                  ou32_FileSize, oru32_MaxBlockLength);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
@@ -5224,8 +5239,8 @@ int32_t C_OscProtocolDriverOsy::OsyTransferData(const uint8_t ou8_BlockSequenceC
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("TransferData(Sequence: %d, Size: %u)", ou8_BlockSequenceCounter,
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("TransferData(Sequence: %d, Size: %u)", ou8_BlockSequenceCounter,
                                  static_cast<uint32_t>(orc_Data.size()));
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
@@ -5316,8 +5331,8 @@ int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitAddressBased(const bool oq
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RequestTransferExitAddressBased(WithSignatureAddress: %d, SignatureAddress: 0x%08X)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RequestTransferExitAddressBased(WithSignatureAddress: %d, SignatureAddress: 0x%08X)",
                                  (oq_SendSignatureBlockAddress == true) ? 1 : 0, ou32_SignatureBlockAddress);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
@@ -5397,8 +5412,8 @@ int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitFileBased(const uint8_t (&
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RequestTransferExitFileBased(Signature: [%d,%d,%d,%d,%d,%d,%d,%d]",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RequestTransferExitFileBased(Signature: [%d,%d,%d,%d,%d,%d,%d,%d]",
                                  orau8_Signature[0], orau8_Signature[1], orau8_Signature[2], orau8_Signature[3],
                                  orau8_Signature[4], orau8_Signature[5], orau8_Signature[6], orau8_Signature[7]);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
@@ -5528,8 +5543,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(const uint32_t ou32_Memor
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("ReadMemoryByAddress(Address: 0x%08X, Size: 0x%08X)", ou32_MemoryAddress,
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("ReadMemoryByAddress(Address: 0x%08X, Size: 0x%08X)", ou32_MemoryAddress,
                                  static_cast<uint32_t>(orc_DataRecord.size()));
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
@@ -5674,8 +5689,8 @@ int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t ou32_Memo
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("WriteMemoryByAddress(Address: 0x%08X, Size: 0x%08X)", ou32_MemoryAddress,
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("WriteMemoryByAddress(Address: 0x%08X, Size: 0x%08X)", ou32_MemoryAddress,
                                  static_cast<uint32_t>(orc_DataRecord.size()));
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
@@ -5733,8 +5748,8 @@ int32_t C_OscProtocolDriverOsy::OsyNotifyNvmDataChanges(const uint8_t ou8_DataPo
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::NotifyNvmDataChanges(Client indexes: Datapool: %d, List: %d)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::NotifyNvmDataChanges(Client indexes: Datapool: %d, List: %d)",
                                  ou8_DataPoolIndex, ou8_ListIndex);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
@@ -5883,8 +5898,8 @@ int32_t C_OscProtocolDriverOsy::OsyEcuReset(const uint8_t ou8_ResetType)
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("EcuReset(Type: %d)", ou8_ResetType);
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("EcuReset(Type: %d)", ou8_ResetType);
       m_LogServiceError(c_ErrorText, s32_Return, 0);
    }
    return s32_Return;
@@ -5946,8 +5961,8 @@ int32_t C_OscProtocolDriverOsy::OsySetNodeIdForChannel(const uint8_t ou8_Channel
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::SetNodeIdForChannel(Type: %d, Index: %d, BusId: %d, NodeId: %d)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::SetNodeIdForChannel(Type: %d, Index: %d, BusId: %d, NodeId: %d)",
                                  ou8_ChannelType, ou8_ChannelIndex, orc_NewNodeId.u8_BusIdentifier,
                                  orc_NewNodeId.u8_NodeIdentifier);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
@@ -6007,8 +6022,8 @@ int32_t C_OscProtocolDriverOsy::OsySetBitrate(const uint8_t ou8_ChannelType, con
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::SetBitrate(Type: %d, Index: %d, Bitrate: %u)",
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::SetBitrate(Type: %d, Index: %d, Bitrate: %u)",
                                  ou8_ChannelType, ou8_ChannelIndex, ou32_Bitrate);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
@@ -6147,8 +6162,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlo
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::ReadFlashBlockData(Block: %d)", ou8_FlashBlock);
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::ReadFlashBlockData(Block: %d)", ou8_FlashBlock);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
    }
 
@@ -6246,8 +6261,8 @@ int32_t C_OscProtocolDriverOsy::OsyConfigureFlashloaderCommunicationChannel(cons
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted(
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat(
          "RoutineControl::ConfigureFlashloaderCommunicationChannel(Type: %d, Index: %d, Active: %d)",
          ou8_ChannelType, ou8_ChannelIndex, (oq_Activated == true) ? 1 : 0);
       m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
@@ -6311,8 +6326,8 @@ int32_t C_OscProtocolDriverOsy::OsySetIpAddressForChannel(const uint8_t ou8_Chan
    }
    if (s32_Return != C_NO_ERR)
    {
-      C_SclString c_ErrorText;
-      c_ErrorText.PrintFormatted("RoutineControl::SetIpAddressForChannel(Type: %d, Index: %d, IP: [%d.%d.%d.%d], "
+      std::string c_ErrorText;
+      c_ErrorText = PrintFormattedCompat("RoutineControl::SetIpAddressForChannel(Type: %d, Index: %d, IP: [%d.%d.%d.%d], "
                                  " NetMask: [%d.%d.%d.%d], Gateway: [%d.%d.%d.%d]",
                                  ou8_ChannelType, ou8_ChannelIndex,
                                  orau8_IpAddress[0], orau8_IpAddress[1], orau8_IpAddress[2], orau8_IpAddress[3],
@@ -6389,11 +6404,11 @@ C_OscProtocolDriverOsy::C_DataPoolMetaData::C_DataPoolMetaData(void) :
    string representation
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(const int32_t os32_FunctionResult,
+std::string C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(const int32_t os32_FunctionResult,
                                                                      const uint8_t ou8_NrCode,
                                                                      bool * const opq_IsHardError)
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    if (opq_IsHardError != NULL)
    {
@@ -6489,7 +6504,7 @@ C_SclString C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(const int32
       c_Text = "Security handling error";
       break;
    default:
-      c_Text = ("Undefined error code " + C_SclString::IntToStr(os32_FunctionResult));
+      c_Text = ("Undefined error code " + std::to_string(os32_FunctionResult));
       break;
    }
    return c_Text;

@@ -218,7 +218,7 @@ void C_OscNodeDataPoolListElementOptArrayId::CalcHash(uint32_t & oru32_HashValue
    stw::scl::C_SclChecksums::CalcCRC32(&this->mu32_ArrayElementIndex, sizeof(this->mu32_ArrayElementIndex),
                                        oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(this->mc_HalChannelName.c_str(),
-                                       this->mc_HalChannelName.Length(), oru32_HashValue);
+                                       this->mc_HalChannelName.length(), oru32_HashValue);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -228,7 +228,7 @@ void C_OscNodeDataPoolListElementOptArrayId::CalcHash(uint32_t & oru32_HashValue
    Current HAL channel name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscNodeDataPoolListElementOptArrayId::GetHalChannelName(void) const
+std::string C_OscNodeDataPoolListElementOptArrayId::GetHalChannelName(void) const
 {
    return this->mc_HalChannelName;
 }
@@ -239,7 +239,7 @@ stw::scl::C_SclString C_OscNodeDataPoolListElementOptArrayId::GetHalChannelName(
    \param[in]  orc_Value   Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolListElementOptArrayId::SetHalChannelName(const stw::scl::C_SclString & orc_Value)
+void C_OscNodeDataPoolListElementOptArrayId::SetHalChannelName(const std::string & orc_Value)
 {
    this->mc_HalChannelName = orc_Value;
 }

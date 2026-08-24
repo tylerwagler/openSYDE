@@ -23,7 +23,6 @@
 
 using namespace stw::errors;
 using namespace stw::tgl;
-using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 

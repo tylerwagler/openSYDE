@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <map>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscSystemBus.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -34,14 +34,14 @@ public:
    bool IsRoutingAvailable(const C_OscSystemBus::E_Type oe_Type) const;
    bool IsDiagnosisAvailable(const C_OscSystemBus::E_Type oe_Type) const;
    bool IsConnected(const C_OscSystemBus::E_Type oe_Type, const uint8_t ou8_InterfaceNumber) const;
-   static stw::scl::C_SclString h_GetInterfaceNameLower(const C_OscSystemBus::E_Type oe_Type,
+   static std::string h_GetInterfaceNameLower(const C_OscSystemBus::E_Type oe_Type,
                                                         const uint8_t ou8_InterfaceNumber);
 
-   stw::scl::C_SclString c_SubDeviceName; ///< Name of sub device
+   std::string c_SubDeviceName; ///< Name of sub device
 
-   std::map<stw::scl::C_SclString, bool> c_ConnectedInterfaces;
+   std::map<std::string, bool> c_ConnectedInterfaces;
 
-   std::vector<stw::scl::C_SclString> c_OtherAcceptedNames; ///< Other compatible names for this device
+   std::vector<std::string> c_OtherAcceptedNames; ///< Other compatible names for this device
 
    ///is programming supported enabled?
    bool q_ProgrammingSupport;

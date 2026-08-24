@@ -10,6 +10,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <sstream>
+#include <iomanip>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscExportHalc.hpp"
@@ -19,6 +21,7 @@
 
 #include "C_OscExportUti.hpp"
 #include "C_OscHalcMagicianUtil.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -26,6 +29,16 @@ using namespace stw::errors;
 using namespace stw::scl;
 using namespace stw::tgl;
 using namespace stw::opensyde_core;
+
+/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
+namespace {
+   template <typename T>
+   std::string mh_IntToHex(T val, uint32_t digits) {
+      std::stringstream ss;
+      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
+      return ss.str();
+   }
+}
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -48,7 +61,7 @@ using namespace stw::opensyde_core;
    File name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscExportHalc::h_GetFileName(const bool oq_IsSafe)
+std::string C_OscExportHalc::h_GetFileName(const bool oq_IsSafe)
 {
    return (oq_IsSafe == true) ? "hal_safe_configuration" : "hal_non_safe_configuration";
 }
@@ -97,10 +110,10 @@ uint16_t C_OscExportHalc::h_ConvertOverallCodeVersion(const uint16_t ou16_GenCod
    C_NOACT     Datapool is not of type HALC
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportHalc::h_CreateSourceCode(const stw::scl::C_SclString & orc_Path, const uint16_t ou16_GenCodeVersion,
+int32_t C_OscExportHalc::h_CreateSourceCode(const std::string & orc_Path, const uint16_t ou16_GenCodeVersion,
                                             const C_OscHalcConfig & orc_HalcConfig,
                                             const C_OscNodeDataPool & orc_Datapool,
-                                            const stw::scl::C_SclString & orc_ExportToolInfo)
+                                            const std::string & orc_ExportToolInfo)
 {
    int32_t s32_Retval = C_NO_ERR;
    uint32_t u32_HashValue = 0U;
@@ -108,7 +121,7 @@ int32_t C_OscExportHalc::h_CreateSourceCode(const stw::scl::C_SclString & orc_Pa
    //calculate hash value from a combination of HALC configuration and Datapool definition:
    orc_HalcConfig.CalcHash(u32_HashValue);
    orc_Datapool.CalcHash(u32_HashValue);
-   const C_SclString c_ProjectId = C_SclString::IntToStr(u32_HashValue);
+   const std::string c_ProjectId = std::to_string(u32_HashValue);
 
    // make sure version is known
    if (ou16_GenCodeVersion > C_OscNodeApplication::hu16_HIGHEST_KNOWN_CODE_VERSION)
@@ -158,10 +171,10 @@ int32_t C_OscExportHalc::h_CreateSourceCode(const stw::scl::C_SclString & orc_Pa
    C_RD_WR     Operation failure: cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportHalc::mh_CreateHeaderFile(const stw::scl::C_SclString & orc_ExportToolInfo,
-                                             const stw::scl::C_SclString & orc_Path,
+int32_t C_OscExportHalc::mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
+                                             const std::string & orc_Path,
                                              const C_OscHalcConfig & orc_HalcConfig,
-                                             const stw::scl::C_SclString & orc_ProjectId, const bool oq_IsSafe,
+                                             const std::string & orc_ProjectId, const bool oq_IsSafe,
                                              const uint16_t ou16_GenCodeVersion)
 {
    int32_t s32_Retval;
@@ -212,10 +225,10 @@ int32_t C_OscExportHalc::mh_CreateHeaderFile(const stw::scl::C_SclString & orc_E
    C_RD_WR     Operation failure: cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportHalc::mh_CreateImplementationFile(const stw::scl::C_SclString & orc_ExportToolInfo,
-                                                     const stw::scl::C_SclString & orc_Path,
+int32_t C_OscExportHalc::mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
+                                                     const std::string & orc_Path,
                                                      const C_OscHalcConfig & orc_HalcConfig,
-                                                     const stw::scl::C_SclString & orc_ProjectId, const bool oq_IsSafe,
+                                                     const std::string & orc_ProjectId, const bool oq_IsSafe,
                                                      const uint16_t ou16_GenCodeVersion)
 {
    int32_t s32_Retval;
@@ -264,10 +277,10 @@ int32_t C_OscExportHalc::mh_CreateImplementationFile(const stw::scl::C_SclString
    \param[in]      oq_IsSafe           true: generate code for safe HALC
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportHalc::mh_AddHeader(const C_SclString & orc_ExportToolInfo, C_SclStringList & orc_Data,
+void C_OscExportHalc::mh_AddHeader(const std::string & orc_ExportToolInfo, C_SclStringList & orc_Data,
                                    const bool oq_FileType, const bool oq_IsSafe)
 {
-   const C_SclString c_Tmp = (oq_FileType == mhq_IS_IMPLEMENTATION_FILE) ? "Source file with constant definitions" :
+   const std::string c_Tmp = (oq_FileType == mhq_IS_IMPLEMENTATION_FILE) ? "Source file with constant definitions" :
                              "Header file with constant and global definitions";
 
    orc_Data.Append(C_OscExportUti::h_GetHeaderSeparator());
@@ -287,7 +300,7 @@ void C_OscExportHalc::mh_AddHeader(const C_SclString & orc_ExportToolInfo, C_Scl
 
    if (oq_FileType == mhq_IS_HEADER_FILE)
    {
-      const C_SclString c_HeaderGuard = h_GetFileName(oq_IsSafe).UpperCase() + "H";
+      const std::string c_HeaderGuard = UpperCaseCompat(h_GetFileName(oq_IsSafe)) + "H";
 
       orc_Data.Append("#ifndef " + c_HeaderGuard);
       orc_Data.Append("#define " + c_HeaderGuard);
@@ -318,7 +331,7 @@ void C_OscExportHalc::mh_AddIncludes(C_SclStringList & orc_Data, const bool oq_F
    {
       orc_Data.Append("#include <stddef.h> //for NULL");
       orc_Data.Append("#include \"" + h_GetFileName(oq_IsSafe) + ".h\"");
-      orc_Data.Append("#include \"" + C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe).LowerCase() +
+      orc_Data.Append("#include \"" + LowerCaseCompat(C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe)) +
                       "_data_pool.h\"");
       orc_Data.Append("");
    }
@@ -336,10 +349,10 @@ void C_OscExportHalc::mh_AddIncludes(C_SclStringList & orc_Data, const bool oq_F
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportHalc::mh_AddDefines(C_SclStringList & orc_Data, const C_OscHalcConfig & orc_HalcConfig,
-                                    const C_SclString & orc_ProjectId, const bool oq_FileType, const bool oq_IsSafe,
+                                    const std::string & orc_ProjectId, const bool oq_FileType, const bool oq_IsSafe,
                                     const uint16_t ou16_GenCodeVersion)
 {
-   const C_SclString c_MagicName = mh_GetMagicName(orc_ProjectId, oq_IsSafe);
+   const std::string c_MagicName = mh_GetMagicName(orc_ProjectId, oq_IsSafe);
 
    orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Defines"));
 
@@ -356,7 +369,7 @@ void C_OscExportHalc::mh_AddDefines(C_SclStringList & orc_Data, const C_OscHalcC
 
             if (pc_Domain != NULL)
             {
-               const C_SclString c_DataPoolName = C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe) + "_";
+               const std::string c_DataPoolName = C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe) + "_";
                uint32_t u32_NumberOfAssignedChannels = 0U;
                // add define for each assigned channel
 
@@ -367,9 +380,9 @@ void C_OscExportHalc::mh_AddDefines(C_SclStringList & orc_Data, const C_OscHalcC
                                      oq_IsSafe) == false)
                   {
                      orc_Data.Append(
-                        "#define " + c_DataPoolName + pc_Domain->c_SingularName.UpperCase() + "_INDEX_" +
-                        rc_ChannelConfig.c_Name.UpperCase() + " (" +
-                        C_SclString::IntToStr(u32_NumberOfAssignedChannels) + "U)");
+                        "#define " + c_DataPoolName + UpperCaseCompat(pc_Domain->c_SingularName) + "_INDEX_" +
+                        UpperCaseCompat(rc_ChannelConfig.c_Name) + " (" +
+                        std::to_string(u32_NumberOfAssignedChannels) + "U)");
                      u32_NumberOfAssignedChannels++;
                   }
                }
@@ -379,8 +392,8 @@ void C_OscExportHalc::mh_AddDefines(C_SclStringList & orc_Data, const C_OscHalcC
                if (pc_Domain->c_ChannelConfigs.size() > 0U)
                {
                   orc_Data.Append(
-                     "#define " + c_DataPoolName + "NUMBER_OF_" + pc_Domain->c_Name.UpperCase() + " (" +
-                     C_SclString::IntToStr(u32_NumberOfAssignedChannels) + "U)");
+                     "#define " + c_DataPoolName + "NUMBER_OF_" + UpperCaseCompat(pc_Domain->c_Name) + " (" +
+                     std::to_string(u32_NumberOfAssignedChannels) + "U)");
                   orc_Data.Append("");
                }
             }
@@ -391,7 +404,7 @@ void C_OscExportHalc::mh_AddDefines(C_SclStringList & orc_Data, const C_OscHalcC
    {
       orc_Data.Append("///check for correct version of structure definitions");
       orc_Data.Append("#if OSY_HAL_DEFINITION_FORMAT_VERSION != 0x" +
-                      C_SclString::IntToHex(static_cast<int64_t>(C_OscExportHalc::h_ConvertOverallCodeVersion(
+                      mh_IntToHex(static_cast<int64_t>(C_OscExportHalc::h_ConvertOverallCodeVersion(
                                                                     ou16_GenCodeVersion)), 4U) + "U");
 
       orc_Data.Append("///if compilation fails here the HALC driver version does not match the format version of the "
@@ -400,7 +413,7 @@ void C_OscExportHalc::mh_AddDefines(C_SclStringList & orc_Data, const C_OscHalcC
       orc_Data.Append("#endif");
       orc_Data.Append("");
       orc_Data.Append("#if OSY_HAL_DEFINITION_VERSION != 0x" +
-                      C_SclString::IntToHex(static_cast<int64_t>(orc_HalcConfig.u32_ContentVersion), 4U) + "U");
+                      mh_IntToHex(static_cast<int64_t>(orc_HalcConfig.u32_ContentVersion), 4U) + "U");
       orc_Data.Append("///if compilation fails here the HALC driver version does not match the version of the PC-side "
                       "HALC definition");
       orc_Data.Append("static T_osy_non_existing_type_" + orc_ProjectId + " mt_Variable;");
@@ -424,7 +437,7 @@ void C_OscExportHalc::mh_AddGlobalVariables(C_SclStringList & orc_Data, const C_
                                             const bool oq_FileType, const bool oq_IsSafe)
 {
    //compose name of HAL configuration structure based on name of Datapool
-   const C_SclString c_ConfigurationStructureName = "gt_" + C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe) +
+   const std::string c_ConfigurationStructureName = "gt_" + C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe) +
                                                     "_Configuration";
 
    orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
@@ -449,7 +462,7 @@ void C_OscExportHalc::mh_AddGlobalVariables(C_SclStringList & orc_Data, const C_
          for (uint32_t u32_DomainIt = 0U; u32_DomainIt < u32_DomainNumber; u32_DomainIt++)
          {
             const C_OscHalcConfigDomain * const pc_Domain = orc_HalcConfig.GetDomainConfigDataConst(u32_DomainIt);
-            C_SclString c_Tmp;
+            std::string c_Tmp;
 
             if (pc_Domain != NULL)
             {
@@ -478,7 +491,7 @@ void C_OscExportHalc::mh_AddGlobalVariables(C_SclStringList & orc_Data, const C_
                {
                   // add channel number resp. its define
                   orc_Data.Append("      " + C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe) + "_NUMBER_OF_" +
-                                  pc_Domain->c_Name.UpperCase() + ",");
+                                  UpperCaseCompat(pc_Domain->c_Name) + ",");
 
                   //set actual data to use for values and parameters:
                   pc_ChannelValues = &pc_Domain->c_ChannelValues;
@@ -509,13 +522,13 @@ void C_OscExportHalc::mh_AddGlobalVariables(C_SclStringList & orc_Data, const C_
                   q_BracketIsOpen = true;
 
                   // result should be an array of length channel number resp. no array if less than 2 channels
-                  const C_SclString c_Head = "         &gt_" +
+                  const std::string c_Head = "         &gt_" +
                                              C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe) +
                                              "_DataPoolValues.t_ConfigurationValues." +
                                              ((u32_NumberOfAssignedChannels > 1U) ? "a" : "");
-                  const C_SclString c_TailNoComma =
-                     ((u32_NumberOfAssignedChannels > 1U) ? "[0]" : static_cast<C_SclString>(""));
-                  const C_SclString c_Tail = c_TailNoComma + ",";
+                  const std::string c_TailNoComma =
+                     ((u32_NumberOfAssignedChannels > 1U) ? "[0]" : static_cast<std::string>(""));
+                  const std::string c_Tail = c_TailNoComma + ",";
 
                   // add channel number pointer if we have channels and if dropping is active ...
                   if ((q_DomainHasChannels == true) &&
@@ -642,9 +655,9 @@ void C_OscExportHalc::mh_AddGlobalVariables(C_SclStringList & orc_Data, const C_
    Magic name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscExportHalc::mh_GetMagicName(const C_SclString & orc_ProjectId, const bool oq_IsSafe)
+std::string C_OscExportHalc::mh_GetMagicName(const std::string & orc_ProjectId, const bool oq_IsSafe)
 {
-   const C_SclString c_Prefix = C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe);
+   const std::string c_Prefix = C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe);
 
    return c_Prefix + "_CONFIGURATION_PROJECT_ID_" + orc_ProjectId;
 }
@@ -669,11 +682,11 @@ void C_OscExportHalc::mh_AddDpListElementReferences(stw::scl::C_SclStringList & 
                                                     const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
                                                     const std::vector<C_OscHalcConfigChannel> & orc_ConfigArray,
                                                     const C_OscHalcDefDomain::E_VariableSelector & ore_Type,
-                                                    const C_SclString & orc_DomainSingularName, const bool oq_IsArray,
+                                                    const std::string & orc_DomainSingularName, const bool oq_IsArray,
                                                     const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode,
                                                     const bool oq_IsSafe)
 {
-   C_SclString c_Tmp;
+   std::string c_Tmp;
    bool q_AtLeastOneChannelIsAssigned = false;
 
    //We only can/need to add pointers to something useful if at least one of the channels is assigned to this
@@ -749,15 +762,15 @@ void C_OscExportHalc::mh_AddDpListElementReferences(stw::scl::C_SclStringList & 
    Parameter variable string, e.g. &gt_HAL_DataPoolValues.t_ConfigurationValues.au8_InputScaleValue[0]
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscExportHalc::mh_GetDpListElementReference(const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
+std::string C_OscExportHalc::mh_GetDpListElementReference(const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
                                                           const C_OscHalcDefDomain::E_VariableSelector & ore_Type,
                                                           const C_OscHalcDefElement & orc_Element,
                                                           const uint32_t ou32_StructIndex,
                                                           const uint32_t ou32_ElementIndex,
-                                                          const C_SclString & orc_DomainSingularName,
+                                                          const std::string & orc_DomainSingularName,
                                                           const bool oq_IsArray, const bool oq_IsSafe)
 {
-   C_SclString c_Return;
+   std::string c_Return;
 
    tgl_assert(C_OscHalcMagicianUtil::h_GetVariableName(orc_DefinitionArray, ou32_StructIndex,
                                                        ou32_ElementIndex, orc_DomainSingularName,

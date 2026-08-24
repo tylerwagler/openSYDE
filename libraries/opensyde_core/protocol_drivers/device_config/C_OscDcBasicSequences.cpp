@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -69,7 +70,7 @@ int32_t C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const opc_CanDis
 {
    int32_t s32_Return = C_NO_ERR;
 
-   const C_SclString c_LogActivity = "Initialization";
+   const std::string c_LogActivity = "Initialization";
 
    m_ReportProgress(s32_Return, "Starting the initialization of CAN driver and protocol ... ");
 
@@ -138,7 +139,7 @@ int32_t C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const opc_CanDis
 int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_FlashloaderResetWaitTime)
 {
    int32_t s32_Return = C_NO_ERR;
-   const C_SclString c_LogActivity = "Scan Activate Flashloader";
+   const std::string c_LogActivity = "Scan Activate Flashloader";
    const uint32_t u32_SCAN_TIME_MS = 5000U;
    uint32_t u32_WaitTime = ou32_FlashloaderResetWaitTime;
 
@@ -155,12 +156,12 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
    s32_Return = this->mc_TpCan.BroadcastRequestProgramming(c_Results);
 
    m_ReportProgress(C_NO_ERR, "Broadcasting \"request programming\" flag: " +
-                    C_SclString::IntToStr(c_Results.size()) + " device(s) answered. ");
+                    std::to_string(c_Results.size()) + " device(s) answered. ");
 
    if (s32_Return != C_NO_ERR)
    {
       osc_write_log_error(c_LogActivity,
-                          "openSYDE ECU reset broadcast failed with error: " + C_SclString::IntToStr(s32_Return));
+                          "openSYDE ECU reset broadcast failed with error: " + std::to_string(s32_Return));
    }
    else
    {
@@ -188,7 +189,7 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
       if (s32_Return != C_NO_ERR)
       {
          osc_write_log_error(c_LogActivity,
-                             "openSYDE request node reset failed with error: " + C_SclString::IntToStr(s32_Return));
+                             "openSYDE request node reset failed with error: " + std::to_string(s32_Return));
       }
    }
 
@@ -198,8 +199,8 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
    // If no devices answered, give hint about "reset your device NOW"
    if (c_Results.size() == 0)
    {
-      C_SclString c_Text;
-      c_Text.PrintFormatted("You now have %u seconds time to turn on your target device ...",
+      std::string c_Text;
+      c_Text = PrintFormattedCompat("You now have %u seconds time to turn on your target device ...",
                             u32_SCAN_TIME_MS / 1000);
       m_ReportProgress(C_WARN, c_Text);
    }
@@ -212,7 +213,7 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
       {
          osc_write_log_error(c_LogActivity,
                              "Sending broadcast to enter preprogramming session failed with result " +
-                             C_SclString::IntToStr(s32_Return));
+                             std::to_string(s32_Return));
 
          s32_Return = C_COM;
       }
@@ -258,7 +259,7 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
 int32_t C_OscDcBasicSequences::ScanGetInfo(void)
 {
    int32_t s32_Return = C_NO_ERR;
-   const C_SclString c_LogActivity = "Scan Device Info";
+   const std::string c_LogActivity = "Scan Device Info";
 
    std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults> c_ReadSnResult;
    std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberExtendedResults> c_ReadSnResultExt;
@@ -271,7 +272,7 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void)
    if (s32_Return != C_NO_ERR)
    {
       osc_write_log_error(c_LogActivity, "openSYDE serial number broadcast failed with error: " +
-                          C_SclString::IntToStr(s32_Return));
+                          std::to_string(s32_Return));
    }
    else
 
@@ -283,9 +284,9 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void)
       bool q_SecurityFeatureUsed = false;
 
       osc_write_log_info("Scan CAN for openSYDE devices",
-                         "Sequence finished. Standard nodes found: " + C_SclString::IntToStr(c_ReadSnResult.size()));
+                         "Sequence finished. Standard nodes found: " + std::to_string(c_ReadSnResult.size()));
       osc_write_log_info("Scan CAN for openSYDE devices",
-                         "Sequence finished. Extended nodes found: " + C_SclString::IntToStr(c_ReadSnResultExt.size()));
+                         "Sequence finished. Extended nodes found: " + std::to_string(c_ReadSnResultExt.size()));
 
       // Fill the result container with the standard results
       for (u32_ResultCounter = 0U; u32_ResultCounter < c_ReadSnResult.size(); ++u32_ResultCounter)
@@ -334,7 +335,7 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void)
                   osc_write_log_error(c_LogActivity,
                                       "At least one node has the security feature activated and at least"
                                       " one node ID is not unique. Node ID: "  +
-                                      C_SclString::IntToStr(c_DeviceInfoResult[u32_ResultCounter].u8_NodeId));
+                                      std::to_string(c_DeviceInfoResult[u32_ResultCounter].u8_NodeId));
                }
                break;
             }
@@ -350,7 +351,7 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void)
       if (s32_Return == C_NO_ERR)
       {
          C_OscProtocolDriverOsyNode c_CurSenderId;
-         C_SclString c_Result;
+         std::string c_Result;
          uint8_t u8_NumberCode = 0;
          uint32_t u32_UniqueIdIndicesCounter;
          C_OscProtocolDriverOsyNode c_Client;
@@ -403,7 +404,7 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void)
             }
          }
       }
-      m_ReportProgress(s32_Return, "Found " + C_SclString::IntToStr(c_DeviceInfoResult.size()) + " device(s).");
+      m_ReportProgress(s32_Return, "Found " + std::to_string(c_DeviceInfoResult.size()) + " device(s).");
       m_ReportDevicesInfoRead(c_DeviceInfoResult, q_SecurityFeatureUsed);
    }
 
@@ -481,7 +482,7 @@ int32_t C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, 
          bool q_AuthenticationActive;
          bool q_TrafficEncryptionActive;
          std::vector<uint8_t> c_TrafficEncryptionInitVector;
-         C_SclString c_LogActivity;
+         std::string c_LogActivity;
 
          c_LogActivity = "Security Access";
          s32_Return = mc_OsyProtocol.OsySecurityAccessRequestSeed(u8_SECURITY_LEVEL, q_SecureMode, u64_Seed,
@@ -509,9 +510,9 @@ int32_t C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, 
                //Do not consider this an error: older server implementations could return a value of zero
                // to signal that the level was already unlocked. This is described as valid in the UDS standard
                // but not on the openSYDE protocol specification. In any case we need to ignore to stay compatible.
-               const C_SclString c_Tmp =
+               const std::string c_Tmp =
                   "Received seed in non secure mode does not match the expected value, expected: 42, got " +
-                  C_SclString::IntToStr(u64_Seed);
+                  std::to_string(u64_Seed);
                osc_write_log_warning(c_LogActivity, c_Tmp.c_str());
             }
 
@@ -526,10 +527,10 @@ int32_t C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, 
       //now we can start setting the Node ID and Bitrate
       if (s32_Return == C_NO_ERR)
       {
-         const C_SclString c_LogActivity = "NodeConfiguration";
+         const std::string c_LogActivity = "NodeConfiguration";
          const C_OscProtocolDriverOsyNode c_NewServerId(0, ou8_NewNodeId);
-         C_SclString c_ProgressLogMsg = "";
-         c_ProgressLogMsg.PrintFormatted(
+         std::string c_ProgressLogMsg = "";
+         c_ProgressLogMsg = PrintFormattedCompat(
             "Configuring Node ID \"%d\" to Node with current ID \"%d\" on Interface CAN %u.",
             ou8_NewNodeId, ou8_CurrentNodeId, ou8_InterfaceIndex + 1U);
          s32_Return = mc_OsyProtocol.OsySetNodeIdForChannel(0, ou8_InterfaceIndex, c_NewServerId, &u8_Nrc);
@@ -542,7 +543,7 @@ int32_t C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, 
          else
          {
             c_ProgressLogMsg = "";
-            c_ProgressLogMsg.PrintFormatted(
+            c_ProgressLogMsg = PrintFormattedCompat(
                "Configuring Bitrate %u kbit/s to Node on Interface CAN %u.",
                ou32_Bitrate, ou8_InterfaceIndex + 1U);
             s32_Return = mc_OsyProtocol.OsySetBitrate(0, ou8_InterfaceIndex, ou32_Bitrate * 1000U,
@@ -573,32 +574,32 @@ int32_t C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, 
    String with information
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscDcBasicSequences::h_DevicesInfoToString(
+std::string C_OscDcBasicSequences::h_DevicesInfoToString(
    const std::vector<C_OscDcDeviceInformation> & orc_DeviceInfoResult, const bool oq_SecurityFeatureUsed)
 {
-   C_SclString c_Information;
+   std::string c_Information;
 
-   c_Information = "Found " + C_SclString::IntToStr(orc_DeviceInfoResult.size()) + " device(s): \n";
+   c_Information = "Found " + std::to_string(orc_DeviceInfoResult.size()) + " device(s): \n";
 
    for (uint32_t u32_ItDevices = 0; u32_ItDevices < orc_DeviceInfoResult.size(); ++u32_ItDevices)
    {
       const C_OscDcDeviceInformation & rc_CurDevice = orc_DeviceInfoResult[u32_ItDevices];
-      c_Information += " Device #" + C_SclString::IntToStr(u32_ItDevices + 1) + "\n";
+      c_Information += " Device #" + std::to_string(u32_ItDevices + 1) + "\n";
       if (rc_CurDevice.q_DeviceNameValid == true)
       {
          c_Information += "   Device name: " + rc_CurDevice.c_DeviceName + "\n";
       }
       if (rc_CurDevice.q_NodeIdValid == true)
       {
-         c_Information += "   Node ID: " + C_SclString::IntToStr(rc_CurDevice.u8_NodeId) + "\n";
+         c_Information += "   Node ID: " + std::to_string(rc_CurDevice.u8_NodeId) + "\n";
       }
       if (rc_CurDevice.q_IpAddressValid == true)
       {
          c_Information += "   IP address: ";
-         c_Information += C_SclString::IntToStr(rc_CurDevice.au8_IpAddress[0]) + ".";
-         c_Information += C_SclString::IntToStr(rc_CurDevice.au8_IpAddress[1]) + ".";
-         c_Information += C_SclString::IntToStr(rc_CurDevice.au8_IpAddress[2]) + ".";
-         c_Information += C_SclString::IntToStr(rc_CurDevice.au8_IpAddress[3]) + "\n";
+         c_Information += std::to_string(rc_CurDevice.au8_IpAddress[0]) + ".";
+         c_Information += std::to_string(rc_CurDevice.au8_IpAddress[1]) + ".";
+         c_Information += std::to_string(rc_CurDevice.au8_IpAddress[2]) + ".";
+         c_Information += std::to_string(rc_CurDevice.au8_IpAddress[3]) + "\n";
       }
       if (rc_CurDevice.c_SerialNumber.q_IsValid == true)
       {
@@ -606,7 +607,7 @@ C_SclString C_OscDcBasicSequences::h_DevicesInfoToString(
       }
       if (rc_CurDevice.q_ExtendedInfoValid == true)
       {
-         c_Information += "   Sub node ID: " + C_SclString::IntToStr(rc_CurDevice.u8_SubNodeId) + "\n";
+         c_Information += "   Sub node ID: " + std::to_string(rc_CurDevice.u8_SubNodeId) + "\n";
          c_Information += "   Security activated: ";
          c_Information += rc_CurDevice.q_SecurityActivated ? "yes" : "no";
          c_Information += "\n";
@@ -644,9 +645,9 @@ void C_OscDcBasicSequences::PrepareForDestruction(void)
    \param[in]  orc_Information   Text information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDcBasicSequences::m_ReportProgress(const int32_t os32_Result, const C_SclString & orc_Information)
+void C_OscDcBasicSequences::m_ReportProgress(const int32_t os32_Result, const std::string & orc_Information)
 {
-   std::cout << "Info: " << orc_Information.c_str() << " Result: " << os32_Result << std::endl;
+   std::cout << "Info: " << orc_Information << " Result: " << os32_Result << std::endl;
 
    if (os32_Result == C_NO_ERR)
    {
@@ -675,5 +676,5 @@ void C_OscDcBasicSequences::m_ReportProgress(const int32_t os32_Result, const C_
 void C_OscDcBasicSequences::m_ReportDevicesInfoRead(const std::vector<C_OscDcDeviceInformation> & orc_DeviceInfoResult,
                                                     const bool oq_SecurityFeatureUsed)
 {
-   std::cout << h_DevicesInfoToString(orc_DeviceInfoResult, oq_SecurityFeatureUsed).c_str() << std::endl;
+   std::cout << h_DevicesInfoToString(orc_DeviceInfoResult, oq_SecurityFeatureUsed) << std::endl;
 }

@@ -52,8 +52,8 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscTargetSupportPackageFiler::h_Load(C_OscTargetSupportPackage & orc_TargetSupportPackage,
-                                               stw::scl::C_SclString & orc_NodePath,
-                                               const stw::scl::C_SclString & orc_Path)
+                                               std::string & orc_NodePath,
+                                               const std::string & orc_Path)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -98,12 +98,12 @@ int32_t C_OscTargetSupportPackageFiler::h_Load(C_OscTargetSupportPackage & orc_T
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscTargetSupportPackageFiler::mh_Load(C_OscTargetSupportPackage & orc_TargetSupportPackage,
-                                                stw::scl::C_SclString & orc_NodePath,
+                                                std::string & orc_NodePath,
                                                 C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   stw::scl::C_SclString c_Text;
+   std::string c_Text;
 
    //"empty" target support package to have a clearly defined status:
    orc_TargetSupportPackage.Clear();
@@ -123,7 +123,7 @@ int32_t C_OscTargetSupportPackageFiler::mh_Load(C_OscTargetSupportPackage & orc_
          uint16_t u16_FileVersion = 0U;
          try
          {
-            u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().ToInt());
+            u16_FileVersion = static_cast<uint16_t>(std::stoi(orc_XmlParser.GetNodeContent()));
          }
          catch (...)
          {
@@ -136,7 +136,7 @@ int32_t C_OscTargetSupportPackageFiler::mh_Load(C_OscTargetSupportPackage & orc_
          if (s32_Return == C_NO_ERR)
          {
             osc_write_log_info("Loading target support package", "Value of \"file-version\": " +
-                               stw::scl::C_SclString::IntToStr(u16_FileVersion));
+                               std::to_string(u16_FileVersion));
             //Check file version
             if ((u16_FileVersion != 3U))
             {

@@ -21,8 +21,9 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscIpDispatcherWinSock.hpp"
 #include "TglFile.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclIniFile.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -263,11 +264,11 @@ int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
                   // a physical local interface
                   if (ntohl(c_IpAddr.S_un.S_addr) != 0x7F000001U)
                   {
-                     C_SclString c_Info;
+                     std::string c_Info;
 
                      mc_LocalInterfaceIps.push_back(ntohl(c_IpAddr.S_un.S_addr)); //add to list of known interfaces
 
-                     c_Info =  "Local IP interface used with IP: " + static_cast<C_SclString>(inet_ntoa(c_IpAddr)) +
+                     c_Info =  "Local IP interface used with IP: " + static_cast<std::string>(inet_ntoa(c_IpAddr)) +
                               ", name of adapter: \"" + pc_Adapter->FriendlyName +
                               "\"";
 
@@ -286,7 +287,7 @@ int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
    else
    {
       osc_write_log_error("openSYDE IP-TP", "UDP init failed. Could not get IP addresses with error: " +
-                          C_SclString::IntToStr(u32_RetVal));
+                          std::to_string(u32_RetVal));
    }
 
    delete[] pc_Addresses;
@@ -318,7 +319,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
    orc_Connection.x_Socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
    if (orc_Connection.x_Socket == m_WsInvalidSocket())
    {
-      osc_write_log_error("openSYDE IP-TP", "Error at TCP socket(): " + C_SclString::IntToStr(WSAGetLastError()) +
+      osc_write_log_error("openSYDE IP-TP", "Error at TCP socket(): " + std::to_string(WSAGetLastError()) +
                           " IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
       q_Error = true;
    }
@@ -334,7 +335,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
       if (ioctlsocket(orc_Connection.x_Socket, m_WsFionBio(), &x_Mode) == SOCKET_ERROR)
       {
          osc_write_log_error("openSYDE IP-TP",
-                             "TCP socket ioctlsocket() failed. Error: " + C_SclString::IntToStr(WSAGetLastError()) +
+                             "TCP socket ioctlsocket() failed. Error: " + std::to_string(WSAGetLastError()) +
                              "IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
          q_Error = true;
       }
@@ -358,7 +359,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
       //for this non-blocking TCP socket the function should immediately return with WSAEWOULDBLOCK:
       if ((x_Return == SOCKET_ERROR) && (WSAGetLastError() != WSAEWOULDBLOCK))
       {
-         osc_write_log_error("openSYDE IP-TP", "TCP connect() failed. Error: " + C_SclString::IntToStr(
+         osc_write_log_error("openSYDE IP-TP", "TCP connect() failed. Error: " + std::to_string(
                                 WSAGetLastError()));
          q_Error = true;
       }
@@ -381,7 +382,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
             osc_write_log_error("openSYDE IP-TP",
                                 "TCP connect select() failed. IP-Address: " + mh_IpToText(
                                    orc_Connection.au8_IpAddress) +
-                                " Error: " + C_SclString::IntToStr(WSAGetLastError()));
+                                " Error: " + std::to_string(WSAGetLastError()));
             q_Error = true;
             break;
          case 0:
@@ -407,7 +408,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
                //event caused by write (= connect finished)
                osc_write_log_info("openSYDE IP-TP",
                                   "TCP connect select() OK. IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress) +
-                                  " on client port: " + C_SclString::IntToStr(ntohs(c_SocketInfo.sin_port)));
+                                  " on client port: " + std::to_string(ntohs(c_SocketInfo.sin_port)));
             }
             else
             {
@@ -420,7 +421,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
             break;
          default:
             osc_write_log_error("openSYDE IP-TP",
-                                "TCP connect select() failed. Unknown problem: " + C_SclString::IntToStr(
+                                "TCP connect select() failed. Unknown problem: " + std::to_string(
                                    x_Return) + " IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
             q_Error = true;
             break;
@@ -454,7 +455,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
    orx_Socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
    if (orx_Socket == m_WsInvalidSocket())
    {
-      osc_write_log_error("openSYDE IP-TP", "Error at UDP socket(): " + C_SclString::IntToStr(WSAGetLastError()));
+      osc_write_log_error("openSYDE IP-TP", "Error at UDP socket(): " + std::to_string(WSAGetLastError()));
       q_Error = true;
    }
    else
@@ -471,7 +472,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
       if (x_Return == SOCKET_ERROR)
       {
          osc_write_log_error("openSYDE IP-TP",
-                             "UDP set broadcast permission failed. Error: " + C_SclString::IntToStr(
+                             "UDP set broadcast permission failed. Error: " + std::to_string(
                                 WSAGetLastError()));
          (void)closesocket(orx_Socket);
          q_Error = true;
@@ -505,7 +506,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
       if (x_Return == SOCKET_ERROR)
       {
          osc_write_log_error("openSYDE IP-TP",
-                             "UDP bind() failed. Error: " + C_SclString::IntToStr(WSAGetLastError()));
+                             "UDP bind() failed. Error: " + std::to_string(WSAGetLastError()));
          q_Error = true;
       }
       else
@@ -521,7 +522,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
       u_long x_Mode = 1U;
       if (ioctlsocket(orx_Socket, m_WsFionBio(), &x_Mode) == SOCKET_ERROR)
       {
-         osc_write_log_error("openSYDE IP-TP", "TCP socket ioctlsocket() failed. Error: " + C_SclString::IntToStr(
+         osc_write_log_error("openSYDE IP-TP", "TCP socket ioctlsocket() failed. Error: " + std::to_string(
                                 WSAGetLastError()));
          q_Error = true;
       }
@@ -542,11 +543,11 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
    test representation of IP
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscIpDispatcherWinSock::mh_IpToText(const uint8_t (&orau8_Ip)[4])
+std::string C_OscIpDispatcherWinSock::mh_IpToText(const uint8_t (&orau8_Ip)[4])
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
-   c_Text.PrintFormatted("%d.%d.%d.%d", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
+   c_Text = PrintFormattedCompat("%d.%d.%d.%d", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
    return c_Text;
 }
 
@@ -759,7 +760,7 @@ int32_t C_OscIpDispatcherWinSock::CloseTcp(const uint32_t ou32_Handle)
       osc_write_log_info("openSYDE IP-TP",
                          "TCP closesocket() OK. IP-Address: " +
                          mh_IpToText(this->mc_SocketsTcp[ou32_Handle].au8_IpAddress) +
-                         " on client port: " + C_SclString::IntToStr(ntohs(c_SocketInfo.sin_port)));
+                         " on client port: " + std::to_string(ntohs(c_SocketInfo.sin_port)));
    }
 
    return s32_Return;
@@ -845,7 +846,7 @@ int32_t C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const std:
 
                osc_write_log_error("openSYDE IP-TP",
                                    "SendTcp: Could not send TCP service. Data lost. Error: " +
-                                   C_SclString::IntToStr(x_Error) +
+                                   std::to_string(x_Error) +
                                    " IP-Address: " + mh_IpToText(this->mc_SocketsTcp[ou32_Handle].au8_IpAddress));
                if ((x_Error == WSAECONNABORTED) || (x_Error == WSAECONNRESET))
                {
@@ -861,8 +862,8 @@ int32_t C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const std:
             {
                osc_write_log_error("openSYDE IP-TP",
                                    "SendTcp: Could not send all data: tried: " +
-                                   C_SclString::IntToStr(orc_Data.size()) +
-                                   "sent: " + C_SclString::IntToStr(x_BytesSent));
+                                   std::to_string(orc_Data.size()) +
+                                   "sent: " + std::to_string(x_BytesSent));
             }
             s32_Return = C_RD_WR;
          }
@@ -943,7 +944,7 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, std::vecto
          else if (x_Return == SOCKET_ERROR)
          {
             osc_write_log_error("openSYDE IP-TP", "Could not read TCP: buffer count could not be read. Error: " +
-                                C_SclString::IntToStr(WSAGetLastError()) + " IP-Address: " +
+                                std::to_string(WSAGetLastError()) + " IP-Address: " +
                                 mh_IpToText(this->mc_SocketsTcp[ou32_Handle].au8_IpAddress));
          }
          else
@@ -1150,7 +1151,7 @@ int32_t C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & orc_Data)
             if (x_Return != x_NumToSend)
             {
                osc_write_log_error("openSYDE IP-TP",
-                                   "SendUdp sendto error: " + C_SclString::IntToStr(WSAGetLastError()));
+                                   "SendUdp sendto error: " + std::to_string(WSAGetLastError()));
                s32_Return = C_RD_WR;
             }
          }
@@ -1254,8 +1255,8 @@ int32_t C_OscIpDispatcherWinSock::ReadUdp(std::vector<uint8_t> & orc_Data, uint8
                   //comm error: no data read even though it was reported by ioctl
                   osc_write_log_error("openSYDE IP-TP",
                                       "ReadUdp unexpected error: data reported as available but reading failed. Reported size: " +
-                                      C_SclString::IntToStr(
-                                         orc_Data.size()) + " Read size: " + C_SclString::IntToStr(x_Return));
+                                      std::to_string(
+                                         orc_Data.size()) + " Read size: " + std::to_string(x_Return));
                   s32_Return = C_RD_WR;
                }
             }
@@ -1279,14 +1280,15 @@ int32_t C_OscIpDispatcherWinSock::ReadUdp(std::vector<uint8_t> & orc_Data, uint8
    \param[in] orc_FileLocation Log file location path and file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscIpDispatcherWinSock::LoadConfigFile(const C_SclString & orc_FileLocation)
+void C_OscIpDispatcherWinSock::LoadConfigFile(const std::string & orc_FileLocation)
 {
    if (TglFileExists(orc_FileLocation) == true)
    {
       C_SclIniFile c_Ini(orc_FileLocation);
-      const C_SclString c_Help = c_Ini.ReadString("ETH_CONFIG", "ETH_INTERFACE_NAME", "");
-
-      c_Help.Tokenize(",", this->mc_PreferredInterfaceNames.Strings);
+      const std::string c_Help = c_Ini.ReadString("ETH_CONFIG", "ETH_INTERFACE_NAME", "");
+      std::vector<std::string> c_Tokens;
+      TokenizeCompat(c_Help, ",", c_Tokens);
+      this->mc_PreferredInterfaceNames.Strings.assign(c_Tokens.begin(), c_Tokens.end());
    }
    else
    {

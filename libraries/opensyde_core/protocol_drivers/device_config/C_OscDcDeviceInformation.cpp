@@ -15,7 +15,6 @@
 #include "C_OscDcDeviceInformation.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -53,7 +52,7 @@ C_OscDcDeviceInformation::C_OscDcDeviceInformation(void) :
    \param[in]  orc_DeviceName    New device name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDcDeviceInformation::SetDeviceName(const C_SclString & orc_DeviceName)
+void C_OscDcDeviceInformation::SetDeviceName(const std::string & orc_DeviceName)
 {
    this->c_DeviceName = orc_DeviceName;
    this->q_DeviceNameValid = true;

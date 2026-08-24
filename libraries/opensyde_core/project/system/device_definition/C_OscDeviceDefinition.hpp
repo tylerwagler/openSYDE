@@ -15,7 +15,7 @@
 #include <vector>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 #include "C_OscSubDeviceDefinition.hpp"
 #include "C_OscSupportedCanInterfaceFeatures.hpp"
@@ -37,13 +37,13 @@ public:
    //lint -sem(stw::opensyde_core::C_OscDeviceDefinition::Clear,initializer)
    void Clear(void);
 
-   stw::scl::C_SclString GetDisplayName(void) const;
+   std::string GetDisplayName(void) const;
 
-   stw::scl::C_SclString c_DeviceName;        ///< full device name used for checks
-   stw::scl::C_SclString c_DeviceNameAlias;   ///< full displayed name of device
-   stw::scl::C_SclString c_DeviceDescription; ///< text describing device
-   stw::scl::C_SclString c_ImagePath;         ///< path to file with image of device (e.g. JPG)
-   stw::scl::C_SclString c_FilePath;          ///< used for service update package (#24474)
+   std::string c_DeviceName;        ///< full device name used for checks
+   std::string c_DeviceNameAlias;   ///< full displayed name of device
+   std::string c_DeviceDescription; ///< text describing device
+   std::string c_ImagePath;         ///< path to file with image of device (e.g. JPG)
+   std::string c_FilePath;          ///< used for service update package (#24474)
    uint8_t u8_NumCanBusses;                   ///< number of CAN buses present on device
    uint8_t u8_NumEthernetBusses;              ///< number of ethernet interfaces present on device
 
@@ -52,15 +52,15 @@ public:
    std::vector<C_OscSupportedCanInterfaceFeatures> c_SupportedCanFeatures; ///< supported CAN features per interface
 
    uint8_t u8_ManufacturerId;                        ///< manufacturer id used by device configuration
-   stw::scl::C_SclString c_ManufacturerDisplayValue; ///< manufacturer string, displayed in device configuration, also
+   std::string c_ManufacturerDisplayValue; ///< manufacturer string, displayed in device configuration, also
                                                      // used for Toolbox Eco-Partners
-   stw::scl::C_SclString c_CompanyLogoLink;          ///< link to company logo (Eco-Partners)
-   stw::scl::C_SclString c_ProductPageLink;          ///< link to product page (Eco-Partner devices)
-   stw::scl::C_SclString c_ToolboxIcon;              ///< link to Toolbox Icon (Eco-Partners)
+   std::string c_CompanyLogoLink;          ///< link to company logo (Eco-Partners)
+   std::string c_ProductPageLink;          ///< link to product page (Eco-Partner devices)
+   std::string c_ToolboxIcon;              ///< link to Toolbox Icon (Eco-Partners)
 
    std::vector<C_OscSubDeviceDefinition> c_SubDevices;
 
-   static const stw::scl::C_SclString hc_DEFAULT_COMPANY_NAME;
+   static const std::string hc_DEFAULT_COMPANY_NAME;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

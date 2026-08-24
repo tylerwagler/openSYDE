@@ -17,12 +17,16 @@
 #include <cmath>
 #include <limits>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
 #include <algorithm>
+#include <string>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
 #include "TglFile.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -37,11 +41,11 @@ const float64_t C_OscUtils::mhf64_EPSILON = 1e-5;
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_BIN = "%{OPENSYDE_BINARY}";
-const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_PROJ = "%{OPENSYDE_PROJECT}";
-const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_DATABLOCK_PROJ = "%{PROJECT_DIR}";
-const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_USER_NAME = "%{USER_NAME}";
-const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME = "%{COMPUTER_NAME}";
+const std::string C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_BIN = "%{OPENSYDE_BINARY}";
+const std::string C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_PROJ = "%{OPENSYDE_PROJECT}";
+const std::string C_OscUtils::hc_PATH_VARIABLE_DATABLOCK_PROJ = "%{PROJECT_DIR}";
+const std::string C_OscUtils::hc_PATH_VARIABLE_USER_NAME = "%{USER_NAME}";
+const std::string C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME = "%{COMPUTER_NAME}";
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
@@ -66,13 +70,13 @@ const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME = "%{COMP
    false -> violation of rules
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscUtils::h_CheckValidCeName(const stw::scl::C_SclString & orc_Name, const bool oq_AutomaticCeStringAdaptation,
+bool C_OscUtils::h_CheckValidCeName(const std::string & orc_Name, const bool oq_AutomaticCeStringAdaptation,
                                     const uint16_t ou16_MaxLength)
 {
    char_t cn_Char;
    bool q_IsValid = true;
 
-   if (orc_Name.Length() == 0)
+   if (orc_Name.length() == 0)
    {
       q_IsValid = false;
    }
@@ -83,7 +87,7 @@ bool C_OscUtils::h_CheckValidCeName(const stw::scl::C_SclString & orc_Name, cons
       if (oq_AutomaticCeStringAdaptation == false)
       {
          // no automatic c string adaptation
-         for (u32_Index = 0; u32_Index < orc_Name.Length(); u32_Index++)
+         for (u32_Index = 0; u32_Index < orc_Name.length(); u32_Index++)
          {
             // first char of name
             cn_Char = orc_Name.c_str()[u32_Index];
@@ -103,7 +107,7 @@ bool C_OscUtils::h_CheckValidCeName(const stw::scl::C_SclString & orc_Name, cons
       else
       {
          // automatic c string adaptation
-         for (u32_Index = 0; u32_Index < orc_Name.Length(); u32_Index++)
+         for (u32_Index = 0; u32_Index < orc_Name.length(); u32_Index++)
          {
             // fist char of name
             cn_Char = orc_Name.c_str()[u32_Index];
@@ -125,7 +129,7 @@ bool C_OscUtils::h_CheckValidCeName(const stw::scl::C_SclString & orc_Name, cons
       if (q_IsValid == true)
       {
          // -> should not be longer than ou16_MaxLength characters
-         if (orc_Name.Length() > static_cast<uint32_t>(ou16_MaxLength))
+         if (orc_Name.length() > static_cast<uint32_t>(ou16_MaxLength))
          {
             q_IsValid = false;
          }
@@ -183,7 +187,7 @@ bool C_OscUtils::h_IsFloat32NearlyEqual(const float32_t & orf32_Float1, const fl
    C_NOACT   could not create folder
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscUtils::h_CreateFolderRecursively(const C_SclString & orc_Folder)
+int32_t C_OscUtils::h_CreateFolderRecursively(const std::string & orc_Folder)
 {
    //lint -e{8080} //using type expected by the library for compatibility
    size_t x_CharIndex = 0U;
@@ -259,9 +263,9 @@ int32_t C_OscUtils::h_CreateFolderRecursively(const C_SclString & orc_Folder)
    Niceified string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_NiceifyStringForFileName(const C_SclString & orc_String)
+std::string C_OscUtils::h_NiceifyStringForFileName(const std::string & orc_String)
 {
-   C_SclString c_Result;
+   std::string c_Result;
    bool q_Blank = true;
 
    //check fringe cases; "." and ".." have special meaning in most file systems and are no valid directory names
@@ -275,7 +279,7 @@ C_SclString C_OscUtils::h_NiceifyStringForFileName(const C_SclString & orc_Strin
    }
    else
    {
-      for (uint32_t u32_Index = 0U; u32_Index < orc_String.Length(); u32_Index++)
+      for (uint32_t u32_Index = 0U; u32_Index < orc_String.length(); u32_Index++)
       {
          const char_t cn_Character = orc_String.c_str()[u32_Index];
 
@@ -290,7 +294,7 @@ C_SclString C_OscUtils::h_NiceifyStringForFileName(const C_SclString & orc_Strin
               (cn_Character != '=') && (cn_Character != '@') && (cn_Character != '[') && (cn_Character != ']') &&
               (cn_Character != '^') && (cn_Character != '\'') && (cn_Character != '~')))
          {
-            c_Result += C_SclString::IntToStr(cn_Character);
+            c_Result += std::to_string(cn_Character);
          }
          else
          {
@@ -330,11 +334,11 @@ C_SclString C_OscUtils::h_NiceifyStringForFileName(const C_SclString & orc_Strin
    Niceified string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_NiceifyStringForCeComment(const C_SclString & orc_String)
+std::string C_OscUtils::h_NiceifyStringForCeComment(const std::string & orc_String)
 {
-   C_SclString c_Result = orc_String;
+   std::string c_Result = orc_String;
 
-   for (uint32_t u32_Index = 1U; u32_Index <= orc_String.Length(); u32_Index++)
+   for (uint32_t u32_Index = 1U; u32_Index <= orc_String.length(); u32_Index++)
    {
       const char_t cn_Character = c_Result[u32_Index];
       const uint32_t u32_NextIndex = u32_Index + 1U;
@@ -346,13 +350,13 @@ C_SclString C_OscUtils::h_NiceifyStringForCeComment(const C_SclString & orc_Stri
       {
          c_Result[u32_Index] = '_';
       }
-      else if ((u32_Index < orc_String.Length()) && (cn_Character == '*') &&
+      else if ((u32_Index < orc_String.length()) && (cn_Character == '*') &&
                (c_Result[u32_NextIndex] == '/'))
       {
          //prevent adding end of C comment
          c_Result[u32_Index] = '_';
       }
-      else if ((u32_Index == orc_String.Length()) && (cn_Character == '\\'))
+      else if ((u32_Index == orc_String.length()) && (cn_Character == '\\'))
       {
          //prevent continuing C++ comment
          c_Result[u32_Index] = '_';
@@ -379,10 +383,10 @@ C_SclString C_OscUtils::h_NiceifyStringForCeComment(const C_SclString & orc_Stri
    \retval   false   The string is not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscUtils::h_CheckValidFileName(const C_SclString & orc_String)
+bool C_OscUtils::h_CheckValidFileName(const std::string & orc_String)
 {
    bool q_Return = true;
-   const C_SclString c_Temp = h_NiceifyStringForFileName(orc_String);
+   const std::string c_Temp = h_NiceifyStringForFileName(orc_String);
 
    if (c_Temp != orc_String)
    {
@@ -410,27 +414,27 @@ bool C_OscUtils::h_CheckValidFileName(const C_SclString & orc_String)
    \retval   false   The string invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscUtils::h_CheckValidFilePath(const C_SclString & orc_String)
+bool C_OscUtils::h_CheckValidFilePath(const std::string & orc_String)
 {
    bool q_Return = true;
 
-   if (orc_String.IsEmpty() == true)
+   if (orc_String.empty() == true)
    {
       q_Return = false;
    }
    else
    {
       bool q_AtLeastOneOtherChar = false;
-      std::vector<C_SclString> c_SplitStrings;
-      orc_String.Tokenize("\\/", c_SplitStrings);
+      std::vector<std::string> c_SplitStrings;
+      TokenizeCompat(orc_String, "\\/", c_SplitStrings);
 
       for (int32_t s32_Index = 0U; (s32_Index < static_cast<int32_t>(c_SplitStrings.size())) && (q_Return == true); s32_Index++)
       {
-         const C_SclString & rc_Substring = c_SplitStrings[s32_Index];
+         const std::string & rc_Substring = c_SplitStrings[s32_Index];
 
          // empty sub-strings are okay here, because they result from two consecutive (back-)slashes or from
          // trailing/leading(back-)slash
-         if (rc_Substring.IsEmpty() == false)
+         if (rc_Substring.empty() == false)
          {
             q_AtLeastOneOtherChar = true;
 
@@ -440,7 +444,7 @@ bool C_OscUtils::h_CheckValidFilePath(const C_SclString & orc_String)
                // skip if complete string starts with drive name or "."
                if ((s32_Index > 0) || (rc_Substring != ".")) /* . at beginning is allowed */
                {
-                  if ((rc_Substring.Length() != 2U) || (rc_Substring.SubString(2, 1) != ':')) /* drive names e.g. C: */
+                  if ((rc_Substring.length() != 2U) || (SubStringCompat(rc_Substring, 2, 1) != ":")) /* drive names e.g. C: */
                   {
                      q_Return = h_CheckValidFileName(rc_Substring);
                   }
@@ -548,34 +552,36 @@ float64_t C_OscUtils::h_GetValueUnscaled(const float64_t of64_Value, const float
    serial number string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_PosSerialNumberToString(const uint8_t * const opu8_SerialNumber)
+std::string C_OscUtils::h_PosSerialNumberToString(const uint8_t * const opu8_SerialNumber)
 {
-   C_SclString c_Result;
+   std::string c_Result;
 
    if (opu8_SerialNumber != NULL)
    {
+      std::ostringstream c_Stream;
       if (opu8_SerialNumber[0] < static_cast<uint8_t>(0x20))
       {
          //format up to and including 2019. E.g: 05.123456.1001
-         c_Result.PrintFormatted("%02X.%02X%02X%02X.%02X%02X",
-                                 static_cast<uint32_t>(opu8_SerialNumber[0]),
-                                 static_cast<uint32_t>(opu8_SerialNumber[1]),
-                                 static_cast<uint32_t>(opu8_SerialNumber[2]),
-                                 static_cast<uint32_t>(opu8_SerialNumber[3]),
-                                 static_cast<uint32_t>(opu8_SerialNumber[4]),
-                                 static_cast<uint32_t>(opu8_SerialNumber[5]));
+         c_Stream << std::hex << std::uppercase << std::setfill('0')
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[0]) << "."
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[1])
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[2])
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[3]) << "."
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[4])
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[5]);
       }
       else
       {
          //format from 2020. E.g: 200012345678
-         c_Result.PrintFormatted("%02X%02X%02X%02X%02X%02X",
-                                 static_cast<uint32_t>(opu8_SerialNumber[0]),
-                                 static_cast<uint32_t>(opu8_SerialNumber[1]),
-                                 static_cast<uint32_t>(opu8_SerialNumber[2]),
-                                 static_cast<uint32_t>(opu8_SerialNumber[3]),
-                                 static_cast<uint32_t>(opu8_SerialNumber[4]),
-                                 static_cast<uint32_t>(opu8_SerialNumber[5]));
+         c_Stream << std::hex << std::uppercase << std::setfill('0')
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[0])
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[1])
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[2])
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[3])
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[4])
+                  << std::setw(2) << static_cast<uint32_t>(opu8_SerialNumber[5]);
       }
+      c_Result = c_Stream.str();
    }
 
    return c_Result;
@@ -596,18 +602,18 @@ C_SclString C_OscUtils::h_PosSerialNumberToString(const uint8_t * const opu8_Ser
    \retval   empty string  if length of orc_RawSerialNumber does not match the expectations
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_FsnSerialNumberToString(const uint8_t ou8_ManufacturerFormat,
-                                                  const stw::scl::C_SclString & orc_RawSerialNumber)
+std::string C_OscUtils::h_FsnSerialNumberToString(const uint8_t ou8_ManufacturerFormat,
+                                                  const std::string & orc_RawSerialNumber)
 {
-   C_SclString c_Result;
+   std::string c_Result;
 
-   if ((orc_RawSerialNumber.Length() > 0) &&
-       (orc_RawSerialNumber.Length() <= 29))
+   if ((orc_RawSerialNumber.length() > 0) &&
+       (orc_RawSerialNumber.length() <= 29))
    {
       if (ou8_ManufacturerFormat == 0U)
       {
          // Must match exactly
-         if (orc_RawSerialNumber.Length() == 6)
+         if (orc_RawSerialNumber.length() == 6)
          {
             // STW POS format
             //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?&
@@ -633,7 +639,7 @@ C_SclString C_OscUtils::h_FsnSerialNumberToString(const uint8_t ou8_Manufacturer
    \param[out]  orc_OutputString    File content
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscUtils::h_FileToString(const C_SclString & orc_FilePath, C_SclString & orc_OutputString)
+void C_OscUtils::h_FileToString(const std::string & orc_FilePath, std::string & orc_OutputString)
 {
    std::string c_Input;
    {
@@ -687,11 +693,11 @@ void C_OscUtils::h_RangeCheckFloat(float64_t & orf64_Value)
    C_RD_WR     read/write error (see log file for details)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscUtils::h_CopyFile(const C_SclString & orc_SourceFile, const C_SclString & orc_TargetFile,
-                               C_SclString * const opc_ErrorPath, C_SclString * const opc_ErrorMessage)
+int32_t C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const std::string & orc_TargetFile,
+                               std::string * const opc_ErrorPath, std::string * const opc_ErrorMessage)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_ErrorMessage = "";
+   std::string c_ErrorMessage = "";
 
    std::fstream c_Input(orc_SourceFile.c_str(), std::fstream::in | std::fstream::binary);
    if (c_Input.fail() == true)
@@ -761,9 +767,9 @@ int32_t C_OscUtils::h_CopyFile(const C_SclString & orc_SourceFile, const C_SclSt
    Command line arguments as string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_GetCommandLineAsString(const int32_t os32_Argc, char_t * const * const oppcn_Argv)
+std::string C_OscUtils::h_GetCommandLineAsString(const int32_t os32_Argc, char_t * const * const oppcn_Argv)
 {
-   C_SclString c_CommandLine;
+   std::string c_CommandLine;
 
    for (int32_t s32_Argument = 0; s32_Argument < os32_Argc; s32_Argument++)
    {
@@ -797,29 +803,29 @@ C_SclString C_OscUtils::h_GetCommandLineAsString(const int32_t os32_Argc, char_t
    Path without Data Block project path dependencies (might still contain placeholder variables or be relative)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_MakeIndependentOfDbProjectPath(const C_SclString & orc_DbProjectPath,
-                                                         const C_SclString & orc_OsydeProjectPath,
-                                                         const C_SclString & orc_Path)
+std::string C_OscUtils::h_MakeIndependentOfDbProjectPath(const std::string & orc_DbProjectPath,
+                                                         const std::string & orc_OsydeProjectPath,
+                                                         const std::string & orc_Path)
 {
-   C_SclString c_Return = orc_Path;
+   std::string c_Return = orc_Path;
 
-   const uint32_t u32_Pos = c_Return.Pos(hc_PATH_VARIABLE_DATABLOCK_PROJ);
+   const uint32_t u32_Pos = PosCompat(c_Return, hc_PATH_VARIABLE_DATABLOCK_PROJ);
 
    if (u32_Pos != 0U)
    {
-      c_Return.ReplaceAll(hc_PATH_VARIABLE_DATABLOCK_PROJ, orc_DbProjectPath);
+      ReplaceAllCompat(c_Return, hc_PATH_VARIABLE_DATABLOCK_PROJ, orc_DbProjectPath);
 
       // remove all double slashes but the first (network paths)
-      if (c_Return.Pos("//") == 1)
+      if (PosCompat(c_Return, "//") == 1)
       {
          c_Return = '/' + c_Return;
       }
-      c_Return.ReplaceAll("//", "/");
+      ReplaceAllCompat(c_Return, "//", "/");
    }
    else
    {
       // concatenate if placeholder-resolved path would be relative
-      const C_SclString c_ResolvedPath = C_OscUtils::h_ResolvePlaceholderVariables(orc_Path, orc_OsydeProjectPath);
+      const std::string c_ResolvedPath = C_OscUtils::h_ResolvePlaceholderVariables(orc_Path, orc_OsydeProjectPath);
 
       if (TglIsRelativePath(c_ResolvedPath) == true)
       {
@@ -844,14 +850,14 @@ C_SclString C_OscUtils::h_MakeIndependentOfDbProjectPath(const C_SclString & orc
    Resolved path
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_ResolvePlaceholderVariables(const C_SclString & orc_Path,
-                                                      const C_SclString & orc_OsydeProjectPath,
-                                                      const C_SclString & orc_DbProjectPath)
+std::string C_OscUtils::h_ResolvePlaceholderVariables(const std::string & orc_Path,
+                                                      const std::string & orc_OsydeProjectPath,
+                                                      const std::string & orc_DbProjectPath)
 {
-   C_SclString c_Return = orc_Path;
+   std::string c_Return = orc_Path;
 
    // first check for indicator %
-   uint32_t u32_Pos = c_Return.Pos("%");
+   uint32_t u32_Pos = PosCompat(c_Return, "%");
 
    if (u32_Pos != 0U)
    {
@@ -859,14 +865,14 @@ C_SclString C_OscUtils::h_ResolvePlaceholderVariables(const C_SclString & orc_Pa
       c_Return = C_OscUtils::h_ResolveProjIndependentPlaceholderVariables(c_Return);
 
       // resolve project-specific variables
-      c_Return.ReplaceAll(hc_PATH_VARIABLE_OPENSYDE_PROJ, orc_OsydeProjectPath);
+      ReplaceAllCompat(c_Return, hc_PATH_VARIABLE_OPENSYDE_PROJ, orc_OsydeProjectPath);
 
-      u32_Pos = c_Return.Pos(hc_PATH_VARIABLE_DATABLOCK_PROJ);
+      u32_Pos = PosCompat(c_Return, hc_PATH_VARIABLE_DATABLOCK_PROJ);
       if (u32_Pos != 0U)
       {
-         const C_SclString c_PathWithResolvedPlaceholders =
+         const std::string c_PathWithResolvedPlaceholders =
             C_OscUtils::h_ResolvePlaceholderVariables(orc_DbProjectPath, "");
-         c_Return.ReplaceAll(hc_PATH_VARIABLE_DATABLOCK_PROJ, c_PathWithResolvedPlaceholders);
+         ReplaceAllCompat(c_Return, hc_PATH_VARIABLE_DATABLOCK_PROJ, c_PathWithResolvedPlaceholders);
          // occurrences of orc_DbProjectPath in itself get replaced with ""
       }
    }
@@ -886,31 +892,31 @@ C_SclString C_OscUtils::h_ResolvePlaceholderVariables(const C_SclString & orc_Pa
    Resolved path
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_ResolveProjIndependentPlaceholderVariables(const C_SclString & orc_Path)
+std::string C_OscUtils::h_ResolveProjIndependentPlaceholderVariables(const std::string & orc_Path)
 {
-   C_SclString c_Return = orc_Path;
-   C_SclString c_Replacement;
+   std::string c_Return = orc_Path;
+   std::string c_Replacement;
 
-   uint32_t u32_Pos = c_Return.Pos(hc_PATH_VARIABLE_OPENSYDE_BIN);
+   uint32_t u32_Pos = PosCompat(c_Return, hc_PATH_VARIABLE_OPENSYDE_BIN);
 
    if (u32_Pos != 0U)
    {
       c_Replacement = TglExtractFilePath(TglGetExePath());
-      c_Return.ReplaceAll(hc_PATH_VARIABLE_OPENSYDE_BIN, c_Replacement);
+      ReplaceAllCompat(c_Return, hc_PATH_VARIABLE_OPENSYDE_BIN, c_Replacement);
    }
 
-   u32_Pos = c_Return.Pos(hc_PATH_VARIABLE_USER_NAME);
+   u32_Pos = PosCompat(c_Return, hc_PATH_VARIABLE_USER_NAME);
    if (u32_Pos != 0U)
    {
       tgl_assert(TglGetSystemUserName(c_Replacement) == true);
-      c_Return.ReplaceAll(hc_PATH_VARIABLE_USER_NAME, c_Replacement);
+      ReplaceAllCompat(c_Return, hc_PATH_VARIABLE_USER_NAME, c_Replacement);
    }
 
-   u32_Pos = c_Return.Pos(hc_PATH_VARIABLE_COMPUTER_NAME);
+   u32_Pos = PosCompat(c_Return, hc_PATH_VARIABLE_COMPUTER_NAME);
    if (u32_Pos != 0U)
    {
       tgl_assert(TglGetSystemMachineName(c_Replacement) == true);
-      c_Return.ReplaceAll(hc_PATH_VARIABLE_COMPUTER_NAME, c_Replacement);
+      ReplaceAllCompat(c_Return, hc_PATH_VARIABLE_COMPUTER_NAME, c_Replacement);
    }
 
    return c_Return;
@@ -928,18 +934,18 @@ C_SclString C_OscUtils::h_ResolveProjIndependentPlaceholderVariables(const C_Scl
    Absolute file path if input fulfills assumptions
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_ConcatPathIfNecessary(const C_SclString & orc_BaseDir,
-                                                const C_SclString & orc_RelativeOrAbsolutePath)
+std::string C_OscUtils::h_ConcatPathIfNecessary(const std::string & orc_BaseDir,
+                                                const std::string & orc_RelativeOrAbsolutePath)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
-   const C_SclString c_Path = TglExtractFilePath(orc_RelativeOrAbsolutePath);
+   const std::string c_Path = TglExtractFilePath(orc_RelativeOrAbsolutePath);
 
    bool q_IsRelativePath = TglIsRelativePath(c_Path);
 
    //special scenario: if the path starts with "\\" or "//" is is a UNC network path
    //for our purpose we consider it an absolute path (concatting would have weird results)
-   if ((orc_RelativeOrAbsolutePath.Length() >= 2U) &&
+   if ((orc_RelativeOrAbsolutePath.length() >= 2U) &&
        (((orc_RelativeOrAbsolutePath[1] == '/') && (orc_RelativeOrAbsolutePath[2] == '/')) ||
         ((orc_RelativeOrAbsolutePath[1] == '\\') && (orc_RelativeOrAbsolutePath[2] == '\\'))))
    {
@@ -951,7 +957,7 @@ C_SclString C_OscUtils::h_ConcatPathIfNecessary(const C_SclString & orc_BaseDir,
       c_Retval = orc_BaseDir + "/" + orc_RelativeOrAbsolutePath;
 
       //replace all "\" by "/":
-      c_Retval.ReplaceAll("\\", "/");
+      ReplaceAllCompat(c_Retval, "\\", "/");
    }
    else
    {
@@ -959,11 +965,11 @@ C_SclString C_OscUtils::h_ConcatPathIfNecessary(const C_SclString & orc_BaseDir,
    }
 
    // remove all double slashes but the first (network paths)
-   if (c_Retval.Pos("//") == 1U)
+   if (PosCompat(c_Retval, "//") == 1U)
    {
       c_Retval = '/' + c_Retval;
    }
-   c_Retval.ReplaceAll("//", "/");
+   ReplaceAllCompat(c_Retval, "//", "/");
 
    return c_Retval;
 }
@@ -980,22 +986,22 @@ C_SclString C_OscUtils::h_ConcatPathIfNecessary(const C_SclString & orc_BaseDir,
    Unique node name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscUtils::h_GetUniqueName(const std::map<C_SclString, bool> & orc_ExistingStrings,
-                                                  const stw::scl::C_SclString & orc_ProposedName,
+std::string C_OscUtils::h_GetUniqueName(const std::map<std::string, bool> & orc_ExistingStrings,
+                                                  const std::string & orc_ProposedName,
                                                   const uint32_t ou32_MaxCharLimit,
-                                                  const stw::scl::C_SclString & orc_SkipName)
+                                                  const std::string & orc_SkipName)
 {
-   C_SclString c_Retval = orc_ProposedName;
+   std::string c_Retval = orc_ProposedName;
    bool q_Conflict;
    int32_t s32_MaxDeviation;
-   C_SclString c_BaseStr;
+   std::string c_BaseStr;
 
-   std::map<C_SclString, bool>::const_iterator c_ItString;
+   std::map<std::string, bool>::const_iterator c_ItString;
 
    //Apply restriction
-   if ((ou32_MaxCharLimit > 0UL) && (c_Retval.Length() > ou32_MaxCharLimit))
+   if ((ou32_MaxCharLimit > 0UL) && (c_Retval.length() > ou32_MaxCharLimit))
    {
-      c_Retval = c_Retval.SubString(1UL, ou32_MaxCharLimit);
+      c_Retval = SubStringCompat(c_Retval, 1UL, ou32_MaxCharLimit);
    }
 
    do
@@ -1012,14 +1018,14 @@ stw::scl::C_SclString C_OscUtils::h_GetUniqueName(const std::map<C_SclString, bo
             s32_MaxDeviation = 1;
          }
          {
-            const C_SclString c_Appendix = '_' + C_SclString::IntToStr(s32_MaxDeviation + static_cast<int32_t>(1));
+            const std::string c_Appendix = '_' + std::to_string(s32_MaxDeviation + static_cast<int32_t>(1));
             c_Retval = c_BaseStr + c_Appendix;
-            if ((ou32_MaxCharLimit > 0UL) && (c_Retval.Length() > ou32_MaxCharLimit))
+            if ((ou32_MaxCharLimit > 0UL) && (c_Retval.length() > ou32_MaxCharLimit))
             {
-               const uint32_t u32_ReqLength = c_Appendix.Length();
+               const uint32_t u32_ReqLength = c_Appendix.length();
                if (u32_ReqLength < ou32_MaxCharLimit)
                {
-                  c_Retval = c_BaseStr.SubString(1UL, ou32_MaxCharLimit - c_Appendix.Length()) + c_Appendix;
+                  c_Retval = SubStringCompat(c_BaseStr, 1UL, ou32_MaxCharLimit - c_Appendix.length()) + c_Appendix;
                }
             }
          }
@@ -1037,10 +1043,10 @@ stw::scl::C_SclString C_OscUtils::h_GetUniqueName(const std::map<C_SclString, bo
    \param[out]  ors32_Number        Number at end (else -1)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscUtils::h_GetNumberAtStringEnd(const C_SclString & orc_ProposedName, C_SclString & orc_CutString,
+void C_OscUtils::h_GetNumberAtStringEnd(const std::string & orc_ProposedName, std::string & orc_CutString,
                                         int32_t & ors32_Number)
 {
-   C_SclString c_Number;
+   std::string c_Number;
    bool q_UnderscoreDetected = false;
    bool q_NumberDetected = false;
    uint32_t u32_ItStr;
@@ -1049,7 +1055,7 @@ void C_OscUtils::h_GetNumberAtStringEnd(const C_SclString & orc_ProposedName, C_
    orc_CutString = orc_ProposedName;
    ors32_Number = -1;
 
-   for (u32_ItStr = orc_ProposedName.Length(); u32_ItStr > 0; --u32_ItStr)
+   for (u32_ItStr = orc_ProposedName.length(); u32_ItStr > 0; --u32_ItStr)
    {
       if ((orc_ProposedName[u32_ItStr] >= '0') && (orc_ProposedName[u32_ItStr] <= '9'))
       {
@@ -1069,11 +1075,11 @@ void C_OscUtils::h_GetNumberAtStringEnd(const C_SclString & orc_ProposedName, C_
    if ((q_NumberDetected == true) && (q_UnderscoreDetected == true))
    {
       //Cut string
-      orc_CutString = orc_ProposedName.SubString(1, u32_ItStr - 1);                    //Without underscore
-      c_Number = orc_ProposedName.SubString(u32_ItStr + 1, orc_ProposedName.Length()); //Without underscore
+      orc_CutString = SubStringCompat(orc_ProposedName, 1, u32_ItStr - 1);                    //Without underscore
+      c_Number = SubStringCompat(orc_ProposedName, u32_ItStr + 1, orc_ProposedName.length()); //Without underscore
       try
       {
-         ors32_Number = c_Number.ToInt();
+          ors32_Number = std::stoi(c_Number);
       }
       catch (...)
       {
@@ -1090,12 +1096,12 @@ void C_OscUtils::h_GetNumberAtStringEnd(const C_SclString & orc_ProposedName, C_
    \param[out]  ors32_Number           Number at end (else -1)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscUtils::mh_GetBaseNameAndCurrentConflictNumberFromString(const C_SclString & orc_ConflictingValue,
-                                                                  const stw::scl::C_SclString & orc_SkipName,
-                                                                  C_SclString & orc_CutString, int32_t & ors32_Number)
+void C_OscUtils::mh_GetBaseNameAndCurrentConflictNumberFromString(const std::string & orc_ConflictingValue,
+                                                                  const std::string & orc_SkipName,
+                                                                  std::string & orc_CutString, int32_t & ors32_Number)
 {
    //Search for the SkipName if the skip name is a valid string
-   const uint32_t u32_Pos = orc_SkipName.IsEmpty() ? 0UL : orc_ConflictingValue.LastPos(orc_SkipName);
+   const uint32_t u32_Pos = orc_SkipName.empty() ? 0UL : LastPosCompat(orc_ConflictingValue, orc_SkipName);
 
    if (u32_Pos == 0UL)
    {
@@ -1107,11 +1113,11 @@ void C_OscUtils::mh_GetBaseNameAndCurrentConflictNumberFromString(const C_SclStr
       //Hint: SubString and LastPos start counting at 1
       const uint32_t u32_ZeroBasedpos = u32_Pos - 1UL;
       //Extract the part of the string that may be adapted
-      const C_SclString c_StringAfterSkip = orc_ConflictingValue.SubString(
-         (u32_ZeroBasedpos + orc_SkipName.Length()) + 1UL,
-         (orc_ConflictingValue.Length() - orc_SkipName.Length()) - u32_ZeroBasedpos);
-      const C_SclString c_SkippedPart =
-         orc_ConflictingValue.SubString(1UL, u32_ZeroBasedpos + orc_SkipName.Length());
+      const std::string c_StringAfterSkip = SubStringCompat(orc_ConflictingValue,
+         (u32_ZeroBasedpos + orc_SkipName.length()) + 1UL,
+         (orc_ConflictingValue.length() - orc_SkipName.length()) - u32_ZeroBasedpos);
+      const std::string c_SkippedPart =
+         SubStringCompat(orc_ConflictingValue, 1UL, u32_ZeroBasedpos + orc_SkipName.length());
       //Search remaining part for any number
       h_GetNumberAtStringEnd(c_StringAfterSkip, orc_CutString, ors32_Number);
       //Add skipped part to base string again

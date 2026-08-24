@@ -13,7 +13,7 @@
 #include <set>
 
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 #include "C_OscRoutingCalculation.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -22,7 +22,6 @@
 using namespace std;
 
 using namespace stw::errors;
-using namespace stw::scl;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -254,7 +253,7 @@ void C_OscRoutingCalculation::m_SearchRoute(void)
          else if (s32_Result != C_NO_ERR)
          {
             osc_write_log_info("Routing calculation", "No valid route found (target node index: " +
-                               C_SclString::IntToStr(this->mu32_TargetNodeIndex) +
+                               std::to_string(this->mu32_TargetNodeIndex) +
                                "). CAN to Ethernet routing is not possible.");
             // A route was available, but was removed due to limitations. No valid routes are left
             this->ms32_ResultState = s32_Result;
@@ -262,7 +261,7 @@ void C_OscRoutingCalculation::m_SearchRoute(void)
          else
          {
             osc_write_log_info("Routing calculation", "No route found (target node index: " +
-                               C_SclString::IntToStr(this->mu32_TargetNodeIndex) + ")");
+                               std::to_string(this->mu32_TargetNodeIndex) + ")");
             // No route available
             this->ms32_ResultState = C_COM;
          }
@@ -387,14 +386,14 @@ int32_t C_OscRoutingCalculation::m_CheckTargetNodeConfig(void) const
       // Minimum one function (diagnosis or update) is active but no bus is connected to a matching interface
       // No routing possible
       osc_write_log_info("Routing calculation", "No connected bus found (target node index: " +
-                         C_SclString::IntToStr(this->mu32_TargetNodeIndex) + ")");
+                         std::to_string(this->mu32_TargetNodeIndex) + ")");
       s32_Return = C_COM;
    }
    else
    {
       // Target node must not be routed, because the relevant function is deactivated on all buses
       osc_write_log_info("Routing calculation", "No usable bus found (target node index: " +
-                         C_SclString::IntToStr(this->mu32_TargetNodeIndex) + ")");
+                         std::to_string(this->mu32_TargetNodeIndex) + ")");
       s32_Return = C_NOACT;
    }
 

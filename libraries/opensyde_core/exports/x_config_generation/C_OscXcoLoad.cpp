@@ -27,7 +27,7 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscXcoLoad::mhc_USE_CASE = "Unpacking X-Config Package";
+const std::string C_OscXcoLoad::mhc_USE_CASE = "Unpacking X-Config Package";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -75,14 +75,14 @@ const stw::scl::C_SclString C_OscXcoLoad::mhc_USE_CASE = "Unpacking X-Config Pac
    C_DEFAULT   error code of a called core function (should not occur for valid and compatible update package)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoLoad::h_ProcessPackage(const C_SclString & orc_PackagePath, const C_SclString & orc_TargetUnzipPath,
-                                       C_OscXcoManifest & orc_Manifest, C_SclString & orc_SystemDefinitionPath,
-                                       C_SclString & orc_DeviceDefinitionPath, C_SclStringList & orc_WarningMessages,
-                                       C_SclString & orc_ErrorMessage)
+int32_t C_OscXcoLoad::h_ProcessPackage(const std::string & orc_PackagePath, const std::string & orc_TargetUnzipPath,
+                                       C_OscXcoManifest & orc_Manifest, std::string & orc_SystemDefinitionPath,
+                                       std::string & orc_DeviceDefinitionPath, C_SclStringList & orc_WarningMessages,
+                                       std::string & orc_ErrorMessage)
 {
    int32_t s32_Return;
 
-   const stw::scl::C_SclString c_TargetUnzipPath = C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(
+   const std::string c_TargetUnzipPath = C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(
       orc_TargetUnzipPath);
 
    mh_Init();
@@ -97,7 +97,7 @@ int32_t C_OscXcoLoad::h_ProcessPackage(const C_SclString & orc_PackagePath, cons
       // Device-bundles live in the device_definitions/ subfolder; the scanner walks the folder.
       orc_DeviceDefinitionPath = c_TargetUnzipPath + TglFileIncludeTrailingDelimiter(hc_INI_DEV_FOLDER);
 
-      const stw::scl::C_SclString c_ManifestPath = c_TargetUnzipPath + C_OscXcoManifestFiler::hc_FILE_NAME;
+      const std::string c_ManifestPath = c_TargetUnzipPath + C_OscXcoManifestFiler::hc_FILE_NAME;
       s32_Return = C_OscXcoManifestFiler::h_LoadFile(orc_Manifest, c_ManifestPath);
    }
 
@@ -121,8 +121,8 @@ int32_t C_OscXcoLoad::h_ProcessPackage(const C_SclString & orc_PackagePath, cons
    \retval   C_RD_WR    could not unzip update package from disk to target path
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoLoad::mh_CheckParamsToProcessPackage(const stw::scl::C_SclString & orc_PackagePath,
-                                                     const stw::scl::C_SclString & orc_TargetUnzipPath)
+int32_t C_OscXcoLoad::mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
+                                                     const std::string & orc_TargetUnzipPath)
 {
    int32_t s32_Return = C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(orc_PackagePath,
                                                                                          orc_TargetUnzipPath,
@@ -167,12 +167,12 @@ int32_t C_OscXcoLoad::mh_CheckParamsToProcessPackage(const stw::scl::C_SclString
                          tool specific error codes)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoLoad::mh_CheckXcfgFiles(const stw::scl::C_SclString & orc_PackagePath)
+int32_t C_OscXcoLoad::mh_CheckXcfgFiles(const std::string & orc_PackagePath)
 {
    int32_t s32_Return;
 
-   std::vector<stw::scl::C_SclString> c_NecessaryFilesTop;    //those are the files we look for
-   std::vector<stw::scl::C_SclString> c_NecessaryFilesSysDef; //those are the files we look for
+   std::vector<std::string> c_NecessaryFilesTop;    //those are the files we look for
+   std::vector<std::string> c_NecessaryFilesSysDef; //those are the files we look for
 
    c_NecessaryFilesTop.push_back(C_OscXcoManifestFiler::hc_FILE_NAME); //".syde_pkg"
    c_NecessaryFilesSysDef.push_back(hc_XCFG_SYSDEF);                   //".syde_sysdef"

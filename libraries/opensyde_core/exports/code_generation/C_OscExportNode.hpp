@@ -28,33 +28,33 @@ class C_OscExportNode
 {
 public:
    static int32_t h_CreateSourceCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                     const stw::scl::C_SclString & orc_Path,
-                                     std::vector<stw::scl::C_SclString> & orc_Files,
-                                     const stw::scl::C_SclString & orc_ExportToolName = "",
-                                     const stw::scl::C_SclString & orc_ExportToolVersion = "");
+                                     const std::string & orc_Path,
+                                     std::vector<std::string> & orc_Files,
+                                     const std::string & orc_ExportToolName = "",
+                                     const std::string & orc_ExportToolVersion = "");
 
 protected:
    static int32_t mh_CreateOsyInitCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                       const stw::scl::C_SclString & orc_Path,
-                                       std::vector<stw::scl::C_SclString> & orc_Files,
-                                       const stw::scl::C_SclString & orc_ExportToolInfo = "");
+                                       const std::string & orc_Path,
+                                       std::vector<std::string> & orc_Files,
+                                       const std::string & orc_ExportToolInfo = "");
    static int32_t mh_CreateDatapoolCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                        const stw::scl::C_SclString & orc_Path,
-                                        std::vector<stw::scl::C_SclString> & orc_Files,
-                                        const stw::scl::C_SclString & orc_ExportToolInfo = "");
+                                        const std::string & orc_Path,
+                                        std::vector<std::string> & orc_Files,
+                                        const std::string & orc_ExportToolInfo = "");
    static int32_t mh_CreateCommStackCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                         const stw::scl::C_SclString & orc_Path,
-                                         std::vector<stw::scl::C_SclString> & orc_Files,
-                                         const stw::scl::C_SclString & orc_ExportToolInfo = "");
+                                         const std::string & orc_Path,
+                                         std::vector<std::string> & orc_Files,
+                                         const std::string & orc_ExportToolInfo = "");
    static int32_t mh_CreateHalConfigCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                         const stw::scl::C_SclString & orc_Path,
-                                         std::vector<stw::scl::C_SclString> & orc_Files,
-                                         const stw::scl::C_SclString & orc_ExportToolInfo = "");
+                                         const std::string & orc_Path,
+                                         std::vector<std::string> & orc_Files,
+                                         const std::string & orc_ExportToolInfo = "");
    static int32_t mh_CreateHalNvmData(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                      const stw::scl::C_SclString & orc_Path,
-                                      std::vector<stw::scl::C_SclString> & orc_Files,
-                                      const stw::scl::C_SclString & orc_ExportToolName,
-                                      const stw::scl::C_SclString & orc_ExportToolVersion);
+                                      const std::string & orc_Path,
+                                      std::vector<std::string> & orc_Files,
+                                      const std::string & orc_ExportToolName,
+                                      const std::string & orc_ExportToolVersion);
 
    static int32_t mh_CheckPrerequisites(const C_OscNode & orc_Node);
    static int32_t mh_GetAdaptedComDataPool(const C_OscNode & orc_Node, const uint32_t ou32_DataPoolIndex,

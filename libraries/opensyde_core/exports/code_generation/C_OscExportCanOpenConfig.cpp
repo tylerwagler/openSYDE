@@ -13,6 +13,8 @@
 #include "precomp_headers.hpp"
 
 #include <algorithm> //for sort
+#include <sstream>
+#include <iomanip>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -21,12 +23,23 @@
 #include "C_OscExportDataPool.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::errors;
 using namespace stw::scl;
 using namespace stw::opensyde_core;
+
+/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
+namespace {
+   template <typename T>
+   std::string mh_IntToHex(T val, uint32_t digits) {
+      std::stringstream ss;
+      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
+      return ss.str();
+   }
+}
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -62,7 +75,7 @@ C_OscExportCanOpenConciseEntry::C_OscExportCanOpenConciseEntry() :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscExportCanOpenConciseEntry::C_OscExportCanOpenConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
                                                                const std::vector<uint8_t> & orc_Payload,
-                                                               const C_SclString & orc_Comment) :
+                                                               const std::string & orc_Comment) :
    u16_Index(ou16_Index),
    u8_SubIndex(ou8_SubIndex),
    c_Payload(orc_Payload),
@@ -89,7 +102,7 @@ C_OscExportCanOpenConciseEntry::~C_OscExportCanOpenConciseEntry()
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
                                                      const std::vector<uint8_t> & orc_Payload,
-                                                     const C_SclString & orc_Comment)
+                                                     const std::string & orc_Comment)
 {
    u16_Index = ou16_Index;
    u8_SubIndex = ou8_SubIndex;
@@ -107,7 +120,7 @@ void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, 
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
-                                                     const uint8_t ou8_Value, const stw::scl::C_SclString & orc_Comment)
+                                                     const uint8_t ou8_Value, const std::string & orc_Comment)
 {
    std::vector<uint8_t> c_ThePayload;
    c_ThePayload.push_back(ou8_Value);
@@ -126,7 +139,7 @@ void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
                                                      const uint16_t ou16_Value,
-                                                     const stw::scl::C_SclString & orc_Comment)
+                                                     const std::string & orc_Comment)
 {
    std::vector<uint8_t> c_ThePayload;
    c_ThePayload.push_back(static_cast<uint8_t>(ou16_Value));
@@ -146,7 +159,7 @@ void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
                                                      const uint32_t ou32_Value,
-                                                     const stw::scl::C_SclString & orc_Comment)
+                                                     const std::string & orc_Comment)
 {
    std::vector<uint8_t> c_ThePayload;
    c_ThePayload.push_back(static_cast<uint8_t>(ou32_Value));
@@ -163,26 +176,26 @@ void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, 
    \return string containing all data from ConciseEntry object
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscExportCanOpenConciseEntry::GetConciseString(void) const
+std::string C_OscExportCanOpenConciseEntry::GetConciseString(void) const
 {
    const uint32_t u32_PayloadSize = static_cast<uint32_t>(this->c_Payload.size());
-   C_SclString c_Retval = "0x" + C_SclString::IntToHex(static_cast<uint8_t>(this->u16_Index), 2U).UpperCase() + "U, " +
-                          "0x" +
-                          C_SclString::IntToHex(static_cast<uint8_t>(this->u16_Index >> 8U), 2U).UpperCase() + "U, " +
-                          "0x" + C_SclString::IntToHex(this->u8_SubIndex, 2U).UpperCase() + "U, " +
-                          "0x" + C_SclString::IntToHex(u32_PayloadSize, 2U).UpperCase() + "U, " +
-                          "0x" + C_SclString::IntToHex(u32_PayloadSize >> 8U, 2U).UpperCase() + "U, " +
-                          "0x" + C_SclString::IntToHex(u32_PayloadSize >> 16U, 2U).UpperCase() + "U, " +
-                          "0x" + C_SclString::IntToHex(u32_PayloadSize >> 24U, 2U).UpperCase() + "U, ";
+   std::string c_Retval = "0x" + mh_IntToHex(static_cast<uint8_t>(this->u16_Index), 2U) + "U, " +
+                           "0x" +
+                           mh_IntToHex(static_cast<uint8_t>(this->u16_Index >> 8U), 2U) + "U, " +
+                           "0x" + mh_IntToHex(this->u8_SubIndex, 2U) + "U, " +
+                           "0x" + mh_IntToHex(u32_PayloadSize, 2U) + "U, " +
+                           "0x" + mh_IntToHex(u32_PayloadSize >> 8U, 2U) + "U, " +
+                           "0x" + mh_IntToHex(u32_PayloadSize >> 16U, 2U) + "U, " +
+                           "0x" + mh_IntToHex(u32_PayloadSize >> 24U, 2U) + "U, ";
 
-   C_SclString c_PayloadString;
+   std::string c_PayloadString;
 
    for (uint8_t u8_It = 0; u8_It < c_Payload.size(); ++u8_It)
    {
-      c_PayloadString += "0x" + C_SclString::IntToHex(c_Payload[u8_It], 2).UpperCase() + "U, ";
+      c_PayloadString += "0x" + mh_IntToHex(c_Payload[u8_It], 2) + "U, ";
    }
    //remove last comma + whitespace
-   c_PayloadString.Delete(c_PayloadString.LastPos(","), 2U);
+   DeleteCompat(c_PayloadString, LastPosCompat(c_PayloadString, ","), 2U);
    c_Retval += c_PayloadString;
 
    return c_Retval;
@@ -196,12 +209,12 @@ C_SclString C_OscExportCanOpenConciseEntry::GetConciseString(void) const
    \return Num of entries in bytes + comment
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscExportCanOpenConciseEntry::h_GetNumOfEntriesString(const uint32_t ou32_NumOfEntries)
+std::string C_OscExportCanOpenConciseEntry::h_GetNumOfEntriesString(const uint32_t ou32_NumOfEntries)
 {
-   return "0x" + C_SclString::IntToHex(static_cast<uint8_t>(ou32_NumOfEntries), 2U).UpperCase() + "U, " +
-          "0x" + C_SclString::IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 8U), 2U).UpperCase() + "U, " +
-          "0x" + C_SclString::IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 16U), 2U).UpperCase() + "U, " +
-          "0x" + C_SclString::IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 24U), 2U).UpperCase() + "U, " +
+   return "0x" + mh_IntToHex(static_cast<uint8_t>(ou32_NumOfEntries), 2U) + "U, " +
+           "0x" + mh_IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 8U), 2U) + "U, " +
+           "0x" + mh_IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 16U), 2U) + "U, " +
+           "0x" + mh_IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 24U), 2U) + "U, " +
           "                                                 ///< Number of entries";
 }
 
@@ -244,12 +257,12 @@ uint32_t C_OscExportCanOpenConciseEntry::h_GetConciseArraySize(
    \return     assembled file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscExportCanOpenConfig::h_GetFileName(const uint8_t ou8_InterfaceIndex)
+std::string C_OscExportCanOpenConfig::h_GetFileName(const uint8_t ou8_InterfaceIndex)
 {
    //assemble file name
    //add interface index
-   const C_SclString c_Text = "osco_man_config_can" +
-                              C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U);
+   const std::string c_Text = "osco_man_config_can" +
+                              std::to_string(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U);
 
    return c_Text;
 }
@@ -309,11 +322,11 @@ uint16_t C_OscExportCanOpenConfig::h_ConvertOverallCodeVersion(const uint16_t ou
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const C_SclString & orc_Path, const C_OscNode & orc_Node,
+int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
                                                      const uint16_t ou16_ApplicationIndex,
                                                      const uint8_t ou8_InterfaceIndex,
                                                      const uint32_t ou32_DatapoolIndex,
-                                                     const C_SclString & orc_ExportToolInfo)
+                                                     const std::string & orc_ExportToolInfo)
 {
    int32_t s32_Return = C_NO_ERR;
    C_OscNodeApplication c_Application;
@@ -324,7 +337,7 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const C_SclString & orc_Pat
    }
    else
    {
-      osc_write_log_error("Creating source code", "Application index " + C_SclString::IntToStr(
+      osc_write_log_error("Creating source code", "Application index " + std::to_string(
                              ou16_ApplicationIndex) + "out of range.");
       s32_Return = C_RANGE;
    }
@@ -347,7 +360,7 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const C_SclString & orc_Pat
             osc_write_log_error("Creating source code",
                                 "Did not generate code for application \"" + c_Application.c_Name +
                                 "\" because code format version \"" +
-                                C_SclString::IntToStr(c_Application.u16_GenCodeVersion) + "\" is unknown.");
+                                std::to_string(c_Application.u16_GenCodeVersion) + "\" is unknown.");
             s32_Return = C_NOACT;
          }
       }
@@ -368,7 +381,7 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const C_SclString & orc_Pat
          //calculate hash value over the current state of the Datapool and protocol definitions
          pc_Protocol->CalcHash(u32_HashValue);
          pc_DataPool->CalcHash(u32_HashValue);
-         const C_SclString c_ProjectId = C_SclString::IntToStr(u32_HashValue);
+         const std::string c_ProjectId = std::to_string(u32_HashValue);
 
          //create header file
          s32_Return = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, orc_Node, rc_Messages,
@@ -409,12 +422,12 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const C_SclString & orc_Pat
    C_RD_WR     cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenConfig::mh_CreateHeaderFile(const C_SclString & orc_ExportInfoTool,
-                                                      const C_SclString & orc_Path, const C_OscNode & orc_Node,
+int32_t C_OscExportCanOpenConfig::mh_CreateHeaderFile(const std::string & orc_ExportInfoTool,
+                                                      const std::string & orc_Path, const C_OscNode & orc_Node,
                                                       const C_OscCanMessageContainer & orc_MsgContainer,
                                                       const C_OscNodeApplication & orc_Application,
                                                       const uint8_t ou8_InterfaceIndex,
-                                                      const C_SclString & orc_ProjectId)
+                                                      const std::string & orc_ProjectId)
 {
    int32_t s32_Return;
    C_SclStringList c_Data;
@@ -442,7 +455,7 @@ int32_t C_OscExportCanOpenConfig::mh_CreateHeaderFile(const C_SclString & orc_Ex
    c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
    c_Data.Append("///Stack configuration");
    c_Data.Append("extern const T_osco_man_manager_configuration gt_osco_man_can" +
-                 C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_ProtocolConfiguration;");
+                 std::to_string(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_ProtocolConfiguration;");
    c_Data.Append("");
 
    //add function prototypes
@@ -477,13 +490,13 @@ int32_t C_OscExportCanOpenConfig::mh_CreateHeaderFile(const C_SclString & orc_Ex
    C_RD_WR     cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenConfig::mh_CreateImplementationFile(const C_SclString & orc_ExportInfoTool,
-                                                              const C_SclString & orc_Path, const C_OscNode & orc_Node,
+int32_t C_OscExportCanOpenConfig::mh_CreateImplementationFile(const std::string & orc_ExportInfoTool,
+                                                              const std::string & orc_Path, const C_OscNode & orc_Node,
                                                               const C_OscCanMessageContainer & orc_MsgContainer,
                                                               const C_OscNodeApplication & orc_Application,
                                                               const C_OscNodeDataPool & orc_Datapool,
                                                               const uint8_t ou8_InterfaceIndex,
-                                                              const C_SclString & orc_ProjectId)
+                                                              const std::string & orc_ProjectId)
 {
    int32_t s32_Return = C_CONFIG;
 
@@ -552,7 +565,7 @@ int32_t C_OscExportCanOpenConfig::mh_CreateImplementationFile(const C_SclString 
    \param[in]      oq_FileType            .c or .h file selected
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportCanOpenConfig::mh_AddHeader(const C_SclString & orc_ExportToolInfo, C_SclStringList & orc_Data,
+void C_OscExportCanOpenConfig::mh_AddHeader(const std::string & orc_ExportToolInfo, C_SclStringList & orc_Data,
                                             const uint8_t ou8_InterfaceIndex, const bool oq_FileType)
 {
    orc_Data.Append(C_OscExportUti::h_GetHeaderSeparator());
@@ -564,7 +577,7 @@ void C_OscExportCanOpenConfig::mh_AddHeader(const C_SclString & orc_ExportToolIn
          "   \\brief       openSYDE CANopen Manager data definition (Source file with constant definitions)");
       orc_Data.Append("");
       orc_Data.Append("   Defines the communication configuration for protocol type CANopen on CAN interface " +
-                      C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + ".");
+                      std::to_string(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + ".");
       orc_Data.Append("");
       orc_Data.Append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
    }
@@ -580,7 +593,7 @@ void C_OscExportCanOpenConfig::mh_AddHeader(const C_SclString & orc_ExportToolIn
 
    if (oq_FileType == mhq_IS_HEADER_FILE)
    {
-      const C_SclString c_HeaderGuard = h_GetFileName(ou8_InterfaceIndex).UpperCase() + "H";
+      const std::string c_HeaderGuard = UpperCaseCompat(h_GetFileName(ou8_InterfaceIndex)) + "H";
       orc_Data.Append("#ifndef " + c_HeaderGuard);
       orc_Data.Append("#define " + c_HeaderGuard);
    }
@@ -604,7 +617,7 @@ void C_OscExportCanOpenConfig::mh_AddIncludes(C_SclStringList & orc_Data, const 
    orc_Data.Append("#include <stddef.h>");
    orc_Data.Append("");
 
-   orc_Data.Append("#include \"osco_man_config_can" + C_SclString::IntToStr(
+   orc_Data.Append("#include \"osco_man_config_can" + std::to_string(
                       static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + ".h\"");
 
    orc_Data.Append("#include \"stwtypes.h\"");
@@ -631,10 +644,10 @@ void C_OscExportCanOpenConfig::mh_AddIncludes(C_SclStringList & orc_Data, const 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenConfig::mh_AddDefines(C_SclStringList & orc_Data, const C_OscNode & orc_Node,
                                              const C_OscCanMessageContainer & orc_MsgContainer,
-                                             const uint8_t ou8_InterfaceIndex, const C_SclString & orc_ProjectId,
+                                             const uint8_t ou8_InterfaceIndex, const std::string & orc_ProjectId,
                                              const uint16_t ou16_GenCodeVersion, const bool oq_FileType)
 {
-   const C_SclString c_MagicName = mh_GetMagicName(orc_ProjectId, ou8_InterfaceIndex);
+   const std::string c_MagicName = mh_GetMagicName(orc_ProjectId, ou8_InterfaceIndex);
 
    orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Defines"));
 
@@ -644,7 +657,7 @@ void C_OscExportCanOpenConfig::mh_AddDefines(C_SclStringList & orc_Data, const C
       uint32_t u32_DevCnt = 0;
       uint32_t u32_TxPdoCnt = 0;
       uint32_t u32_RxPdoCnt = 0;
-      const C_SclString c_InterfaceIndex = C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U);
+      const std::string c_InterfaceIndex = std::to_string(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U);
 
       //get the CANopen manager info via interface index
       const std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_Iterator =
@@ -664,13 +677,13 @@ void C_OscExportCanOpenConfig::mh_AddDefines(C_SclStringList & orc_Data, const C
       for (c_DeviceIt = c_OscoManInfo.c_CanOpenDevices.begin(); c_DeviceIt != c_OscoManInfo.c_CanOpenDevices.end();
            ++c_DeviceIt)
       {
-         orc_Data.Append("#define OSCO_MAN_CAN" + c_InterfaceIndex + "_DEVICE" + C_SclString::IntToStr(
-                            u32_DevCnt + 1U) + " (" + C_SclString::IntToStr(u32_DevCnt) + "U)");
+         orc_Data.Append("#define OSCO_MAN_CAN" + c_InterfaceIndex + "_DEVICE" + std::to_string(
+                            u32_DevCnt + 1U) + " (" + std::to_string(u32_DevCnt) + "U)");
          u32_DevCnt++;
       }
 
       orc_Data.Append("#define OSCO_MAN_CAN" + c_InterfaceIndex + "_NUMBER_OF_DEVICES (" +
-                      C_SclString::IntToStr(c_OscoManInfo.c_CanOpenDevices.size()) + "U)");
+                      std::to_string(c_OscoManInfo.c_CanOpenDevices.size()) + "U)");
       orc_Data.Append("");
       orc_Data.Append("///Index of TX PDOs");
 
@@ -678,7 +691,7 @@ void C_OscExportCanOpenConfig::mh_AddDefines(C_SclStringList & orc_Data, const C
       {
          if (orc_MsgContainer.c_TxMessages[u16_MsgIndex].q_CanOpenManagerMessageActive == true)
          {
-            const C_SclString c_MsgName = orc_MsgContainer.c_TxMessages[u16_MsgIndex].c_Name.UpperCase();
+            const std::string c_MsgName = stw::scl::UpperCaseCompat(orc_MsgContainer.c_TxMessages[u16_MsgIndex].c_Name);
 
             //count active TX PDO(s) that contain signals
             if (orc_MsgContainer.c_TxMessages[u16_MsgIndex].c_Signals.size() > 0)
@@ -688,17 +701,17 @@ void C_OscExportCanOpenConfig::mh_AddDefines(C_SclStringList & orc_Data, const C
 
             if (u32_TxPdoCnt > 0)
             {
-               orc_Data.Append("#define OSCO_MAN_CAN" + c_InterfaceIndex + "_TX_PDO_INDEX_" + c_MsgName + " (" + C_SclString::IntToStr(
+               orc_Data.Append("#define OSCO_MAN_CAN" + c_InterfaceIndex + "_TX_PDO_INDEX_" + c_MsgName + " (" + std::to_string(
                                   u32_TxPdoCnt - 1U) + "U)");
             }
          }
       }
       orc_Data.Append("#define OSCO_MAN_CAN" + c_InterfaceIndex + "_NUMBER_OF_TX_PDOS (" +
-                      C_SclString::IntToStr(u32_TxPdoCnt) + "U)");
+                      std::to_string(u32_TxPdoCnt) + "U)");
 
       //number of TX signals
       orc_Data.Append("#define OSCO_MAN_CAN" + c_InterfaceIndex + "_NUMBER_OF_TX_SIGNALS (" +
-                      C_SclString::IntToStr(mh_GetTotalNumOfPdoSignals(orc_MsgContainer, true)) + "U)");
+                      std::to_string(mh_GetTotalNumOfPdoSignals(orc_MsgContainer, true)) + "U)");
       orc_Data.Append("");
       orc_Data.Append("///Index of RX PDOs");
 
@@ -706,7 +719,7 @@ void C_OscExportCanOpenConfig::mh_AddDefines(C_SclStringList & orc_Data, const C
       {
          if (orc_MsgContainer.c_RxMessages[u16_MsgIndex].q_CanOpenManagerMessageActive == true)
          {
-            const C_SclString c_MsgName = orc_MsgContainer.c_RxMessages[u16_MsgIndex].c_Name.UpperCase();
+            const std::string c_MsgName = UpperCaseCompat(orc_MsgContainer.c_RxMessages[u16_MsgIndex].c_Name);
 
             //count active RX PDO(s) that contain signals
             if (orc_MsgContainer.c_RxMessages[u16_MsgIndex].c_Signals.size() > 0)
@@ -718,16 +731,16 @@ void C_OscExportCanOpenConfig::mh_AddDefines(C_SclStringList & orc_Data, const C
             {
                orc_Data.Append(
                   "#define OSCO_MAN_CAN" + c_InterfaceIndex + "_RX_PDO_INDEX_" + c_MsgName + " (" +
-                  C_SclString::IntToStr(u32_RxPdoCnt - 1U) + "U)");
+                  std::to_string(u32_RxPdoCnt - 1U) + "U)");
             }
          }
       }
       orc_Data.Append("#define OSCO_MAN_CAN" + c_InterfaceIndex + "_NUMBER_OF_RX_PDOS (" +
-                      C_SclString::IntToStr(u32_RxPdoCnt) + "U)");
+                      std::to_string(u32_RxPdoCnt) + "U)");
 
       //number of RX signals
       orc_Data.Append("#define OSCO_MAN_CAN" + c_InterfaceIndex + "_NUMBER_OF_RX_SIGNALS (" +
-                      C_SclString::IntToStr(mh_GetTotalNumOfPdoSignals(orc_MsgContainer, false)) + "U)");
+                      std::to_string(mh_GetTotalNumOfPdoSignals(orc_MsgContainer, false)) + "U)");
    }
    else
    {
@@ -735,7 +748,7 @@ void C_OscExportCanOpenConfig::mh_AddDefines(C_SclStringList & orc_Data, const C
       {
          orc_Data.Append("///check for correct version of structure definitions");
          orc_Data.Append("#if OSCO_MAN_CONFIG_DEFINITION_VERSION != 0x" +
-                         C_SclString::IntToHex(static_cast<int64_t>(C_OscExportCanOpenConfig::
+                         mh_IntToHex(static_cast<int64_t>(C_OscExportCanOpenConfig::
                                                                     h_ConvertOverallCodeVersion(
                                                                        ou16_GenCodeVersion)), 4U) + "U");
          orc_Data.Append("///if compilation fails here the openSYDE library version does not match the version of the "
@@ -763,7 +776,7 @@ void C_OscExportCanOpenConfig::mh_AddDefines(C_SclStringList & orc_Data, const C
    \param[in]       ou16_GenCodeVersion   converted version of code generation. Caller is responsible for conversion
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportCanOpenConfig::mh_AddGlobalVariables(C_SclStringList & orc_Data, const C_SclString & orc_DatapoolName,
+void C_OscExportCanOpenConfig::mh_AddGlobalVariables(C_SclStringList & orc_Data, const std::string & orc_DatapoolName,
                                                      const C_OscNode & orc_Node,
                                                      const C_OscCanMessageContainer & orc_MsgContainer,
                                                      const uint8_t ou8_InterfaceIndex,
@@ -874,7 +887,7 @@ void C_OscExportCanOpenConfig::mh_AddSignalDefinitions(C_SclStringList & orc_Dat
          if (rc_CurrentSignalList.size() > 0)
          {
             orc_Data.Append("static const T_osco_man_pdo_signal_definition mat_Pdo_" +
-                            rc_CurrentMsg.c_Name + "[" + rc_CurrentSignalList.size() + "] =");
+                            rc_CurrentMsg.c_Name + "[" + std::to_string(rc_CurrentSignalList.size()) + "] =");
             orc_Data.Append("{");
             mh_ConvertSignalsToStrings(orc_Data, orc_DatapoolList, rc_CurrentMsg.c_Signals, ou32_SignalListIndex, true);
             orc_Data.Append("};");
@@ -900,19 +913,19 @@ void C_OscExportCanOpenConfig::mh_AddPdoDefinitions(C_SclStringList & orc_Data,
                                                     const uint8_t ou8_InterfaceIndex, const bool oq_IsTx,
                                                     const bool oq_RemoveLastComma)
 {
-   C_SclString c_Define;
-   C_SclString c_TxOrRx;
+   std::string c_Define;
+   std::string c_TxOrRx;
 
    //generate define and part of struct name depending on TX or RX
    if (oq_IsTx)
    {
-      c_Define = "[OSCO_MAN_CAN" + C_SclString::IntToStr(
+      c_Define = "[OSCO_MAN_CAN" + std::to_string(
          static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_NUMBER_OF_TX_PDOS]";
       c_TxOrRx = "Tx";
    }
    else
    {
-      c_Define = "[OSCO_MAN_CAN" + C_SclString::IntToStr(
+      c_Define = "[OSCO_MAN_CAN" + std::to_string(
          static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_NUMBER_OF_RX_PDOS]";
       c_TxOrRx = "Rx";
    }
@@ -928,16 +941,16 @@ void C_OscExportCanOpenConfig::mh_AddPdoDefinitions(C_SclStringList & orc_Data,
       if ((rc_CurrentMessage.q_CanOpenManagerMessageActive == true) &&
           (rc_CurrentMessage.c_Signals.empty() == false))
       {
-         const C_SclString c_IdExt = rc_CurrentMessage.q_IsExtended ? "1U" : "0U";
+         const std::string c_IdExt = rc_CurrentMessage.q_IsExtended ? "1U" : "0U";
 
          //EventTime depends on whether PDO is TX or RX
-         const C_SclString c_EventTime =
-            oq_IsTx ? C_SclString::IntToStr(rc_CurrentMessage.u32_CycleTimeMs) : C_SclString::IntToStr(
+         const std::string c_EventTime =
+            oq_IsTx ? std::to_string(rc_CurrentMessage.u32_CycleTimeMs) : std::to_string(
                rc_CurrentMessage.u32_TimeoutMs);
 
-         const C_SclString c_StructName = "&mat_Pdo_" + rc_CurrentMessage.c_Name + "[0]";
-         C_SclString c_TransmissionType;
-         C_SclString c_Text;
+         const std::string c_StructName = "&mat_Pdo_" + rc_CurrentMessage.c_Name + "[0]";
+         std::string c_TransmissionType;
+         std::string c_Text;
 
          tgl_assert(rc_CurrentMessage.u16_DelayTimeMs <= 6553U);
          //we need a resolution of 100 micro-seconds on embedded side
@@ -957,7 +970,7 @@ void C_OscExportCanOpenConfig::mh_AddPdoDefinitions(C_SclStringList & orc_Data,
          else if (rc_CurrentMessage.e_TxMethod == C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_1_TO_240)
          {
             c_TransmissionType = "OSCO_MAN_MANAGER_COMM_METHOD_SYNC_AFTER_X_SYNC + " +
-                                 C_SclString::IntToStr(static_cast<uint32_t>(rc_CurrentMessage.
+                                 std::to_string(static_cast<uint32_t>(rc_CurrentMessage.
                                                                              u8_CanOpenTxMethodAdditionalInfo)) + "U";
          }
          else
@@ -968,10 +981,10 @@ void C_OscExportCanOpenConfig::mh_AddPdoDefinitions(C_SclStringList & orc_Data,
          //array contains: COB-ID, COB-ID Extension, COMM-Method, InhibitTime, EventTimer, NumSignals, pointer to
          //first element of array "signal definitions".
          //See code example in /doc/file_specifications/Generated_C_Code/CANopenManager_Definition
-         c_Text = "   { 0x" + C_SclString::IntToHex(rc_CurrentMessage.u32_CanId, 3U) + "U, " + c_IdExt +
+         c_Text = "   { 0x" + mh_IntToHex(rc_CurrentMessage.u32_CanId, 3U) + "U, " + c_IdExt +
                   ", " + c_TransmissionType + ", " +
-                  C_SclString::IntToStr(static_cast<uint32_t>(u16_InhibitTime)) + "U, " +
-                  c_EventTime + "U, " + C_SclString::IntToStr(rc_CurrentMessage.c_Signals.size()) + "U, " +
+                  std::to_string(static_cast<uint32_t>(u16_InhibitTime)) + "U, " +
+                  c_EventTime + "U, " + std::to_string(rc_CurrentMessage.c_Signals.size()) + "U, " +
                   c_StructName + " }";
 
          if ((oq_RemoveLastComma == false) || (u16_MsgIndex < (orc_Messages.size() - 1U)))
@@ -1017,7 +1030,7 @@ std::vector<uint32_t> C_OscExportCanOpenConfig::mh_AddDeviceSpecificConciseData(
            ++c_DeviceIt)
       {
          uint32_t u32_ArraySize;
-         C_SclString c_NumOfEntries;
+         std::string c_NumOfEntries;
          const C_OscCanOpenManagerDeviceInfo & rc_CurrentDevice = c_DeviceIt->second;
          const uint32_t u32_NodeIndex = c_DeviceIt->first.u32_NodeIndex;
          std::vector<C_OscExportCanOpenConciseEntry> c_ConciseEntries;
@@ -1032,8 +1045,8 @@ std::vector<uint32_t> C_OscExportCanOpenConfig::mh_AddDeviceSpecificConciseData(
          u32_ArraySize = C_OscExportCanOpenConciseEntry::h_GetConciseArraySize(c_ConciseEntries);
          c_Retval.push_back(u32_ArraySize);
 
-         orc_Data.Append("static const uint8 mau8_Device" + C_SclString::IntToStr(u32_DevCnt) +
-                         "ConciseDcf[" + C_SclString::IntToStr(u32_ArraySize) + "] =");
+         orc_Data.Append("static const uint8 mau8_Device" + std::to_string(u32_DevCnt) +
+                         "ConciseDcf[" + std::to_string(u32_ArraySize) + "] =");
          orc_Data.Append("{");
 
          //the number of all entries needs to be in first place
@@ -1044,7 +1057,7 @@ std::vector<uint32_t> C_OscExportCanOpenConfig::mh_AddDeviceSpecificConciseData(
          //unpack ConciseEntries and convert everything to string
          for (uint32_t u32_ConciseIt = 0; u32_ConciseIt < c_ConciseEntries.size(); ++u32_ConciseIt)
          {
-            C_SclString c_Entry = c_ConciseEntries[u32_ConciseIt].GetConciseString();
+            std::string c_Entry = c_ConciseEntries[u32_ConciseIt].GetConciseString();
             const uint32_t u32_PayloadSize = static_cast<uint32_t>(c_ConciseEntries[u32_ConciseIt].c_Payload.size());
 
             //add comma until last entry has reached
@@ -1114,7 +1127,7 @@ void C_OscExportCanOpenConfig::mh_AddDeviceSettings(C_SclStringList & orc_Data,
       uint32_t u32_DevCnt = 1U;
 
       orc_Data.Append("static const T_osco_man_devices_settings mat_DeviceSettings[OSCO_MAN_CAN" +
-                      C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_NUMBER_OF_DEVICES] =");
+                      std::to_string(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_NUMBER_OF_DEVICES] =");
       orc_Data.Append("{");
       --c_Abort;
 
@@ -1124,38 +1137,38 @@ void C_OscExportCanOpenConfig::mh_AddDeviceSettings(C_SclStringList & orc_Data,
          //u32_DevCount starts with one, but to access vector we need 0-based
          const uint32_t u32_Index = u32_DevCnt - 1U;
          const C_OscCanOpenManagerDeviceInfo rc_CurrentDevice = c_DeviceIt->second;
-         const C_SclString c_OptionalDev = rc_CurrentDevice.q_DeviceOptional ? "1U" : "0U";
-         const C_SclString c_NoInit = rc_CurrentDevice.q_NoInitialization ? "1U" : "0U";
-         const C_SclString c_HbProducerTime = rc_CurrentDevice.q_EnableHeartbeatProducing ? C_SclString::IntToStr(
+         const std::string c_OptionalDev = rc_CurrentDevice.q_DeviceOptional ? "1U" : "0U";
+         const std::string c_NoInit = rc_CurrentDevice.q_NoInitialization ? "1U" : "0U";
+         const std::string c_HbProducerTime = rc_CurrentDevice.q_EnableHeartbeatProducing ? std::to_string(
             static_cast<uint32_t>(rc_CurrentDevice.u16_HeartbeatProducerTimeMs)) + "U" : "0U";
-         C_SclString c_Text;
+         std::string c_Text;
 
          //in code version == 1, there is no FactorySetting
          if (ou16_GenCodeVersion < 2)
          {
-            c_Text = "   { " + C_SclString::IntToStr(static_cast<uint32_t>(rc_CurrentDevice.u8_NodeIdValue)) + "U, " +
+            c_Text = "   { " + std::to_string(static_cast<uint32_t>(rc_CurrentDevice.u8_NodeIdValue)) + "U, " +
                      c_OptionalDev + ", " + c_NoInit + ", " + c_HbProducerTime + ", " +
-                     C_SclString::IntToStr(orc_ConcSizes[u32_Index]) + "U, " + "&mau8_Device" +
-                     C_SclString::IntToStr(u32_DevCnt) + "ConciseDcf[0] }";
+                     std::to_string(orc_ConcSizes[u32_Index]) + "U, " + "&mau8_Device" +
+                     std::to_string(u32_DevCnt) + "ConciseDcf[0] }";
          }
          else
          {
-            C_SclString c_FactorySettingsSub;
+            std::string c_FactorySettingsSub;
             //FactorySettings = active -> write actual value into array
             if (rc_CurrentDevice.q_FactorySettingsActive == true)
             {
                c_FactorySettingsSub =
-                  C_SclString::IntToStr(static_cast<uint32_t>(rc_CurrentDevice.u8_ResetNodeObjectDictionarySubIndex)) +
+                  std::to_string(static_cast<uint32_t>(rc_CurrentDevice.u8_ResetNodeObjectDictionarySubIndex)) +
                   "U";
             }
             else
             {
                c_FactorySettingsSub = "0U"; //disabled
             }
-            c_Text = "   { " + C_SclString::IntToStr(static_cast<uint32_t>(rc_CurrentDevice.u8_NodeIdValue)) + "U, " +
+            c_Text = "   { " + std::to_string(static_cast<uint32_t>(rc_CurrentDevice.u8_NodeIdValue)) + "U, " +
                      c_OptionalDev + ", " + c_NoInit + ", " + c_FactorySettingsSub + ", " + c_HbProducerTime + ", " +
-                     C_SclString::IntToStr(orc_ConcSizes[u32_Index]) + "U, " + "&mau8_Device" +
-                     C_SclString::IntToStr(u32_DevCnt) + "ConciseDcf[0] }";
+                     std::to_string(orc_ConcSizes[u32_Index]) + "U, " + "&mau8_Device" +
+                     std::to_string(u32_DevCnt) + "ConciseDcf[0] }";
          }
 
          if (c_DeviceIt != c_Abort)
@@ -1185,25 +1198,25 @@ void C_OscExportCanOpenConfig::mh_AddDeviceSettings(C_SclStringList & orc_Data,
    \param[in]       ou16_GenCodeVersion   converted version of code generation
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportCanOpenConfig::mh_AddManagerConfig(C_SclStringList & orc_Data, const C_SclString & orc_DatapoolName,
+void C_OscExportCanOpenConfig::mh_AddManagerConfig(C_SclStringList & orc_Data, const std::string & orc_DatapoolName,
                                                    const C_OscCanOpenManagerInfo & orc_ManInfo,
                                                    const uint32_t ou32_ManInstance, const uint8_t ou8_InterfaceIndex,
                                                    const bool oq_TxExists, const bool oq_RxExists,
                                                    const bool oq_ReferenceDataPool, const uint16_t ou16_GenCodeVersion)
 {
    orc_Data.Append("const T_osco_man_manager_configuration gt_osco_man_can" +
-                   C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_ProtocolConfiguration =");
+                   std::to_string(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_ProtocolConfiguration =");
    orc_Data.Append("{");
-   orc_Data.Append("   " + C_SclString::IntToStr(
+   orc_Data.Append("   " + std::to_string(
                       static_cast<uint32_t>(ou8_InterfaceIndex)) + "U, ///< selected CAN channel");
-   orc_Data.Append("   " + C_SclString::IntToStr(ou32_ManInstance) + "U, ///< CANopen Manager instance");
+   orc_Data.Append("   " + std::to_string(ou32_ManInstance) + "U, ///< CANopen Manager instance");
    orc_Data.Append("   {");
 
    //creates T_osco_man_manager_settings
    mh_CreateManSettings(orc_Data, orc_ManInfo, ou16_GenCodeVersion);
 
    orc_Data.Append("   },");
-   orc_Data.Append("   OSCO_MAN_CAN" + C_SclString::IntToStr(
+   orc_Data.Append("   OSCO_MAN_CAN" + std::to_string(
                       static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_NUMBER_OF_DEVICES, ///< Number of Devices");
 
    if (orc_ManInfo.c_CanOpenDevices.size() > 0)
@@ -1242,7 +1255,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
    const C_OscCanOpenObjectDictionary & rc_Od = orc_DeviceInfo.GetEdsFileContent();
    const C_OscCanOpenObjectData * pc_OdObject;
    C_OscExportCanOpenConciseEntry c_Entry = C_OscExportCanOpenConciseEntry();
-   C_SclString c_Comment;
+   std::string c_Comment;
 
    //SYNC (_538)
    pc_OdObject = rc_Od.GetCanOpenObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_SYNC);
@@ -1313,7 +1326,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
                u32_Value = 0U;
             }
 
-            c_Comment = "Set Heartbeat Consumer " + C_SclString::IntToStr(u8_It);
+            c_Comment = "Set Heartbeat Consumer " + std::to_string(u8_It);
             c_Entry.SetConciseEntry(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_HEARTBEAT_CONSUMER, u8_It, u32_Value,
                                     c_Comment);
             orc_ConciseEntries.push_back(c_Entry);
@@ -1375,7 +1388,7 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
       {
          uint16_t u16_ObjectIndex;
          int32_t s32_Return;
-         C_SclString c_PdoCommentText;
+         std::string c_PdoCommentText;
          const C_OscCanOpenObjectDictionary & rc_Od = orc_DeviceInfo.GetEdsFileContent();
          C_OscExportCanOpenConciseEntry c_Entry = C_OscExportCanOpenConciseEntry();
          bool q_CobIdIsRo;
@@ -1393,7 +1406,7 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
          }
          u16_ObjectIndex += rc_CurrentPdo.u16_CanOpenManagerPdoIndex;
          c_PdoCommentText +=
-            C_SclString::IntToStr(static_cast<uint32_t>(rc_CurrentPdo.u16_CanOpenManagerPdoIndex) + 1U);
+            std::to_string(static_cast<uint32_t>(rc_CurrentPdo.u16_CanOpenManagerPdoIndex) + 1U);
 
          //check if COB-ID is missing or RO
          s32_Return = rc_Od.IsCobIdRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_CobIdIsRo);
@@ -1631,11 +1644,11 @@ void C_OscExportCanOpenConfig::mh_CreateManSettings(C_SclStringList & orc_Data,
 {
    const uint16_t u16_HbProducerTime =
       orc_ManInfo.q_EnableHeartbeatProducing ? orc_ManInfo.u16_HeartbeatProducerTimeMs : 0U;
-   const C_SclString c_Autostart = orc_ManInfo.q_AutostartCanOpenManager ? "1U" : "0U";
+   const std::string c_Autostart = orc_ManInfo.q_AutostartCanOpenManager ? "1U" : "0U";
 
-   C_SclString c_Define;
+   std::string c_Define;
 
-   orc_Data.Append("      " + C_SclString::IntToStr(
+   orc_Data.Append("      " + std::to_string(
                       static_cast<uint32_t>(orc_ManInfo.u8_NodeIdValue)) + "U, ///< Manager Node ID");
    orc_Data.Append("      " + c_Autostart + ", ///< Autostart enabled");
 
@@ -1645,13 +1658,13 @@ void C_OscExportCanOpenConfig::mh_CreateManSettings(C_SclStringList & orc_Data,
    mh_GetDefineNmtStop(c_Define, orc_ManInfo.e_NmtErrorBehaviour);
    orc_Data.Append("      " + c_Define + ",");
 
-   orc_Data.Append("      " + C_SclString::IntToStr(
+   orc_Data.Append("      " + std::to_string(
                       static_cast<uint32_t>(u16_HbProducerTime)) +
                    "U, ///< Heartbeat producer time [ms]");
 
    if (ou16_GenCodeVersion < 2)
    {
-      orc_Data.Append("      " + C_SclString::IntToStr(static_cast<uint32_t>(orc_ManInfo.u16_GlobalSdoTimeoutMs)) +
+      orc_Data.Append("      " + std::to_string(static_cast<uint32_t>(orc_ManInfo.u16_GlobalSdoTimeoutMs)) +
                       "U ///< SDO timeout [ms]");
    }
    else
@@ -1668,11 +1681,11 @@ void C_OscExportCanOpenConfig::mh_CreateManSettings(C_SclStringList & orc_Data,
          u32_SyncWindowLength = orc_ManInfo.u32_SyncWindowLengthUs;
       }
 
-      orc_Data.Append("      " + C_SclString::IntToStr(static_cast<uint32_t>(orc_ManInfo.u16_GlobalSdoTimeoutMs)) +
+      orc_Data.Append("      " + std::to_string(static_cast<uint32_t>(orc_ManInfo.u16_GlobalSdoTimeoutMs)) +
                       "U, ///< SDO timeout [ms]");
-      orc_Data.Append("      " + C_SclString::IntToStr(
+      orc_Data.Append("      " + std::to_string(
                          u32_SyncCyclePeriod) + "U, ///< SYNC Cycle Period in us");
-      orc_Data.Append("      " + C_SclString::IntToStr(
+      orc_Data.Append("      " + std::to_string(
                          u32_SyncWindowLength) + "U ///< SYNC Window length in us");
    }
 }
@@ -1688,13 +1701,13 @@ void C_OscExportCanOpenConfig::mh_CreateManSettings(C_SclStringList & orc_Data,
    \param[in]       oq_ReferenceDataPool  true: reference DP; otherwise reference NULL
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportCanOpenConfig::mh_CreatePdoConfig(C_SclStringList & orc_Data, const C_SclString & orc_DatapoolName,
+void C_OscExportCanOpenConfig::mh_CreatePdoConfig(C_SclStringList & orc_Data, const std::string & orc_DatapoolName,
                                                   const uint8_t ou8_InterfaceIndex, const bool oq_TxExists,
                                                   const bool oq_RxExists, const bool oq_ReferenceDataPool)
 {
-   orc_Data.Append("      OSCO_MAN_CAN" + C_SclString::IntToStr(
+   orc_Data.Append("      OSCO_MAN_CAN" + std::to_string(
                       static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_NUMBER_OF_TX_PDOS,");
-   orc_Data.Append("      OSCO_MAN_CAN" + C_SclString::IntToStr(
+   orc_Data.Append("      OSCO_MAN_CAN" + std::to_string(
                       static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_NUMBER_OF_RX_PDOS,");
    if (oq_TxExists)
    {
@@ -1750,10 +1763,10 @@ void C_OscExportCanOpenConfig::mh_ConvertSignalsToStrings(C_SclStringList & orc_
       const uint32_t u32_DataElementIndex = c_Signal.u32_ComDataElementIndex;
       const C_OscNodeDataPoolContent::E_Type e_ElementType =
          orc_DatapoolList.c_Elements[u32_DataElementIndex].c_Value.GetType();
-      C_SclString c_Text;
+      std::string c_Text;
 
       c_Text = "   { OSY_DPA_ELEMENT_TYPE_" + C_OscExportUti::h_GetElementTypeAsString(e_ElementType) + ", " +
-               C_SclString::IntToStr(ou32_SignalListIndex) + "U, " + C_SclString::IntToStr(u32_DataElementIndex) +
+               std::to_string(ou32_SignalListIndex) + "U, " + std::to_string(u32_DataElementIndex) +
                "U }";
 
       if ((oq_RemoveLastComma == false) || (u16_SignalIndex < (c_SignalsSorted.size() - 1U)))
@@ -1773,11 +1786,11 @@ void C_OscExportCanOpenConfig::mh_ConvertSignalsToStrings(C_SclStringList & orc_
    \return Magic name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscExportCanOpenConfig::mh_GetMagicName(const C_SclString & orc_ProjectId,
+std::string C_OscExportCanOpenConfig::mh_GetMagicName(const std::string & orc_ProjectId,
                                                       const uint8_t ou8_InterfaceIndex)
 {
-   const C_SclString c_MagicName = "OSCO_MAN_CAN" +
-                                   C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
+   const std::string c_MagicName = "OSCO_MAN_CAN" +
+                                   std::to_string(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
                                    "_PROJECT_ID_" + orc_ProjectId;
 
    return c_MagicName;
@@ -1794,7 +1807,7 @@ C_SclString C_OscExportCanOpenConfig::mh_GetMagicName(const C_SclString & orc_Pr
    \return Define string
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportCanOpenConfig::mh_GetDefineNmlStart(C_SclString & orc_String, const bool oq_StartDevices,
+void C_OscExportCanOpenConfig::mh_GetDefineNmlStart(std::string & orc_String, const bool oq_StartDevices,
                                                     const bool oq_NmtStartAll)
 {
    if ((oq_StartDevices == true) && (oq_NmtStartAll == false))
@@ -1823,7 +1836,7 @@ void C_OscExportCanOpenConfig::mh_GetDefineNmlStart(C_SclString & orc_String, co
    \param[in]       oe_NmtBehavior     NMT error behavior definition
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportCanOpenConfig::mh_GetDefineNmtStop(C_SclString & orc_String,
+void C_OscExportCanOpenConfig::mh_GetDefineNmtStop(std::string & orc_String,
                                                    const C_OscCanOpenManagerInfo::E_NmtErrorBehaviourType oe_NmtBehavior)
 {
    switch (oe_NmtBehavior)

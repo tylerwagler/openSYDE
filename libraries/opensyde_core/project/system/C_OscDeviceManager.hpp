@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscDeviceGroup.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -30,15 +30,15 @@ class C_OscDeviceManager
 public:
    C_OscDeviceManager(void);
 
-   const C_OscDeviceDefinition * LookForDevice(const stw::scl::C_SclString & orc_Name,
-                                               const stw::scl::C_SclString & orc_MainDeviceName,
+   const C_OscDeviceDefinition * LookForDevice(const std::string & orc_Name,
+                                               const std::string & orc_MainDeviceName,
                                                uint32_t & oru32_SubDeviceIndex) const;
 
    std::vector<C_OscDeviceGroup> GetDeviceGroups(void) const;
 
    bool WasLoaded(void) const;
 
-   int32_t LoadFromPaths(const std::vector<stw::scl::C_SclString> & orc_RootPaths);
+   int32_t LoadFromPaths(const std::vector<std::string> & orc_RootPaths);
 
 private:
    bool mq_WasLoaded;

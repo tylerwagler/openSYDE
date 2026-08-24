@@ -16,6 +16,7 @@
 #include "stwerrors.hpp"
 #include "C_OscExportCanOpenInit.hpp"
 #include "C_OscExportUti.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -41,7 +42,7 @@ using namespace stw::opensyde_core;
    \return filename
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscExportCanOpenInit::h_GetFileName()
+std::string C_OscExportCanOpenInit::h_GetFileName()
 {
    return "osco_man_config_init";
 }
@@ -61,15 +62,15 @@ C_SclString C_OscExportCanOpenInit::h_GetFileName()
    C_RD_WR  Operation failure: cannot store files
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FilePath, const C_OscNode & orc_Node,
+int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const std::string & orc_FilePath, const C_OscNode & orc_Node,
                                                    const std::vector<uint8_t> & orc_IfWithCanOpenMan,
-                                                   const C_SclString & orc_ExportToolInfo)
+                                                   const std::string & orc_ExportToolInfo)
 {
    int32_t s32_Return;
 
    C_SclStringList c_Data;
-   C_SclString c_DefineValue;
-   C_SclString c_Subject;
+   std::string c_DefineValue;
+   std::string c_Subject;
 
    //header file:
    c_Data.Append(C_OscExportUti::h_GetHeaderSeparator());
@@ -80,8 +81,8 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    c_Data.Append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
    c_Data.Append("*/");
    c_Data.Append(C_OscExportUti::h_GetHeaderSeparator());
-   c_Data.Append("#ifndef " + h_GetFileName().UpperCase() + "H");
-   c_Data.Append("#define " + h_GetFileName().UpperCase() + "H");
+    c_Data.Append("#ifndef " + UpperCaseCompat(h_GetFileName()) + "H");
+    c_Data.Append("#define " + UpperCaseCompat(h_GetFileName()) + "H");
    c_Data.Append("");
    c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Includes"));
    c_Data.Append("#include \"stwtypes.h\"");
@@ -92,7 +93,7 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
       const uint32_t u32_InterfaceIndex = static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]);
-      c_Data.Append("#include \"osco_man_config_can" + C_SclString::IntToStr(u32_InterfaceIndex + 1U) + ".h\"");
+      c_Data.Append("#include \"osco_man_config_can" + std::to_string(u32_InterfaceIndex + 1U) + ".h\"");
    }
 
    c_Data.Append("");
@@ -104,12 +105,12 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
       const uint32_t u32_InterfaceIndex = static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]);
-      c_Data.Append("#define OSCO_MAN_CONFIG_INIT_CONFIG_INDEX_CAN" + C_SclString::IntToStr(
-                       u32_InterfaceIndex + 1U) + " (" + C_SclString::IntToStr(u32_IfIt) + "U)");
+      c_Data.Append("#define OSCO_MAN_CONFIG_INIT_CONFIG_INDEX_CAN" + std::to_string(
+                       u32_InterfaceIndex + 1U) + " (" + std::to_string(u32_IfIt) + "U)");
    }
 
    c_Data.Append("#define OSCO_MAN_CONFIG_INIT_NUM_CONFIGURATIONS (" +
-                 C_SclString::IntToStr(orc_Node.c_CanOpenManagers.size()) + "U)");
+                 std::to_string(orc_Node.c_CanOpenManagers.size()) + "U)");
    c_Data.Append("");
 
    //put together the string for define "total number of TX PDOs"
@@ -175,7 +176,7 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    if (s32_Return == C_NO_ERR)
    {
       //now for the c file:
-      C_SclString c_ProtocolConfig;
+      std::string c_ProtocolConfig;
 
       c_Data.Clear();
 
@@ -208,8 +209,8 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
       //generate string with ProtocolConfiguration struct for each interface
       for (uint8_t u8_IfIt = 0; u8_IfIt < orc_IfWithCanOpenMan.size(); ++u8_IfIt)
       {
-         const C_SclString c_InterfaceIndex =
-            C_SclString::IntToStr(static_cast<uint32_t>(orc_IfWithCanOpenMan[u8_IfIt]) + 1U);
+         const std::string c_InterfaceIndex =
+            std::to_string(static_cast<uint32_t>(orc_IfWithCanOpenMan[u8_IfIt]) + 1U);
          c_ProtocolConfig = "   &gt_osco_man_can" + c_InterfaceIndex + "_ProtocolConfiguration";
 
          if (u8_IfIt < static_cast<uint32_t>(orc_IfWithCanOpenMan.size() - 1U))
@@ -255,15 +256,15 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    \param[in]       orc_Subject            "subject" the string is composed for (can be "PDOS" or "SIGNALS")
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportCanOpenInit::mh_ComposeDefineNumTotal(C_SclString & orc_DefineValue,
+void C_OscExportCanOpenInit::mh_ComposeDefineNumTotal(std::string & orc_DefineValue,
                                                       const std::vector<uint8_t> & orc_IfWithCanOpenMan,
-                                                      const bool oq_IsTx, const C_SclString & orc_Subject)
+                                                      const bool oq_IsTx, const std::string & orc_Subject)
 {
-   const C_SclString c_PdoType = oq_IsTx ? "TX" : "RX";
+   const std::string c_PdoType = oq_IsTx ? "TX" : "RX";
 
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
-      const C_SclString c_InterfaceIndex = C_SclString::IntToStr(
+      const std::string c_InterfaceIndex = std::to_string(
          static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]) + 1U);
 
       orc_DefineValue += "OSCO_MAN_CAN" + c_InterfaceIndex + "_NUMBER_OF_" + c_PdoType + "_" + orc_Subject;
@@ -285,12 +286,12 @@ void C_OscExportCanOpenInit::mh_ComposeDefineNumTotal(C_SclString & orc_DefineVa
    \param[in]       orc_IfWithCanOpenMan   vector with all interface indices, which contain a CANopen manager
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportCanOpenInit::mh_ComposeDefineNumDevices(C_SclString & orc_DefineValue,
+void C_OscExportCanOpenInit::mh_ComposeDefineNumDevices(std::string & orc_DefineValue,
                                                         const std::vector<uint8_t> & orc_IfWithCanOpenMan)
 {
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
-      const C_SclString c_InterfaceIndex = C_SclString::IntToStr(
+      const std::string c_InterfaceIndex = std::to_string(
          static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]) + 1U);
 
       orc_DefineValue += "OSCO_MAN_CAN" + c_InterfaceIndex + "_NUMBER_OF_DEVICES";

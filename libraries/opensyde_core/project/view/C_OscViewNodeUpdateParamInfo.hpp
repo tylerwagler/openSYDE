@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -32,14 +32,14 @@ public:
    void CalcHash(uint32_t & oru32_HashValue) const;
 
    //Set
-   void SetContent(const stw::scl::C_SclString & orc_FilePath, const uint32_t ou32_LastKnownCrc);
+   void SetContent(const std::string & orc_FilePath, const uint32_t ou32_LastKnownCrc);
 
    //Get
-   const stw::scl::C_SclString & GetPath(void) const;
+   const std::string & GetPath(void) const;
    uint32_t GetLastKnownCrc(void) const;
 
 private:
-   stw::scl::C_SclString mc_FilePath;
+   std::string mc_FilePath;
    uint32_t mu32_LastKnownCrc;
 };
 

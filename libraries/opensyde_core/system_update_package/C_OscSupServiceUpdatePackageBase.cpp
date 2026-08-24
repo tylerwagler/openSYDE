@@ -16,7 +16,9 @@
 #include <iterator>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
+#include <sstream>
+#include <iomanip>
 #include "C_OscSupServiceUpdatePackageBase.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemDefinition.hpp"
@@ -46,11 +48,11 @@ using namespace std;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const C_SclString C_OscSupServiceUpdatePackageBase::mhc_PACKAGE_EXT = ".syde_sup";
-const C_SclString C_OscSupServiceUpdatePackageBase::mhc_PACKAGE_EXT_TMP = ".syde_sup_tmp"; // intermediate directory
+const std::string C_OscSupServiceUpdatePackageBase::mhc_PACKAGE_EXT = ".syde_sup";
+const std::string C_OscSupServiceUpdatePackageBase::mhc_PACKAGE_EXT_TMP = ".syde_sup_tmp"; // intermediate directory
                                                                                            // before creating zip
                                                                                            // archive
-const C_SclString C_OscSupServiceUpdatePackageBase::mhc_SUP_SYSDEF = "sup_system_definition.syde_sysdef";
+const std::string C_OscSupServiceUpdatePackageBase::mhc_SUP_SYSDEF = "sup_system_definition.syde_sysdef";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -61,7 +63,7 @@ stw::scl::C_SclStringList C_OscSupServiceUpdatePackageBase::mhc_WarningMessages;
                                                                                  // position
                                                                                  // of
                                                                                  // active node is not available
-stw::scl::C_SclString C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage;        // description of error which caused
+std::string C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage;        // description of error which caused
                                                                                  // the
                                                                                  // service update package to fail
 
@@ -76,7 +78,7 @@ stw::scl::C_SclString C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage;       
    service update package extension
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscSupServiceUpdatePackageBase::h_GetPackageExtension()
+std::string C_OscSupServiceUpdatePackageBase::h_GetPackageExtension()
 {
    return mhc_PACKAGE_EXT;
 }
@@ -97,9 +99,9 @@ C_SclString C_OscSupServiceUpdatePackageBase::h_GetPackageExtension()
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageBase::mh_CheckCommonSecurityParameters(
-   const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<C_SclString> & orc_EncryptNodesPassword,
+   const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<std::string> & orc_EncryptNodesPassword,
    const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys, const uint32_t ou32_NumNodes,
-   const C_SclString & orc_Mode, const stw::scl::C_SclString & orc_Function)
+   const std::string & orc_Mode, const std::string & orc_Function)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -146,18 +148,18 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_CheckCommonSecurityParameters(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_GetSydeSecureDefFileNames(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                                    const C_SclString & orc_TargetPath,
-                                                                    std::vector<C_SclString> & orc_AbsPath,
-                                                                    std::vector<C_SclString> & orc_RelPath)
+                                                                    const std::string & orc_TargetPath,
+                                                                    std::vector<std::string> & orc_AbsPath,
+                                                                    std::vector<std::string> & orc_RelPath)
 {
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
    {
       const C_OscNode & rc_Node = orc_SystemDefinition.c_Nodes[u32_ItNode];
-      const C_SclString c_Folder = TglFileIncludeTrailingDelimiter(C_OscUtils::h_NiceifyStringForFileName(
+      const std::string c_Folder = TglFileIncludeTrailingDelimiter(C_OscUtils::h_NiceifyStringForFileName(
                                                                       rc_Node.c_Properties.c_Name));
-      const C_SclString c_File = "secure_update_collection.syde_sucdef";
-      const C_SclString c_RelPath = c_File;
-      const C_SclString c_AbsPath = orc_TargetPath + c_Folder + c_RelPath;
+      const std::string c_File = "secure_update_collection.syde_sucdef";
+      const std::string c_RelPath = c_File;
+      const std::string c_AbsPath = orc_TargetPath + c_Folder + c_RelPath;
       orc_AbsPath.push_back(c_AbsPath);
       orc_RelPath.push_back(c_RelPath);
    }
@@ -173,15 +175,15 @@ void C_OscSupServiceUpdatePackageBase::mh_GetSydeSecureDefFileNames(const C_OscS
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_GetNodeFolderNames(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                             const C_SclString & orc_TargetPath,
-                                                             std::vector<C_SclString> & orc_AbsPath,
-                                                             std::vector<C_SclString> & orc_RelPath)
+                                                             const std::string & orc_TargetPath,
+                                                             std::vector<std::string> & orc_AbsPath,
+                                                             std::vector<std::string> & orc_RelPath)
 {
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
    {
       const C_OscNode & rc_Node = orc_SystemDefinition.c_Nodes[u32_ItNode];
-      const C_SclString c_RelFile = C_OscUtils::h_NiceifyStringForFileName(rc_Node.c_Properties.c_Name);
-      const C_SclString c_AbsFile = TglFileIncludeTrailingDelimiter(orc_TargetPath + c_RelFile);
+      const std::string c_RelFile = C_OscUtils::h_NiceifyStringForFileName(rc_Node.c_Properties.c_Name);
+      const std::string c_AbsFile = TglFileIncludeTrailingDelimiter(orc_TargetPath + c_RelFile);
       orc_AbsPath.push_back(c_AbsFile);
       orc_RelPath.push_back(c_RelFile);
    }
@@ -198,8 +200,8 @@ void C_OscSupServiceUpdatePackageBase::mh_GetNodeFolderNames(const C_OscSystemDe
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_AdaptEncryptionParameters(const std::vector<uint8_t> & orc_InEncryptNodes,
-                                                                    const std::vector<C_SclString> & orc_InEncryptNodesPassword, const uint32_t ou32_NodeCount, std::vector<uint8_t> & orc_OutEncryptNodes,
-                                                                    std::vector<C_SclString> & orc_OutEncryptNodesPassword)
+                                                                    const std::vector<std::string> & orc_InEncryptNodesPassword, const uint32_t ou32_NodeCount, std::vector<uint8_t> & orc_OutEncryptNodes,
+                                                                    std::vector<std::string> & orc_OutEncryptNodesPassword)
 {
    orc_OutEncryptNodes = orc_InEncryptNodes;
    orc_OutEncryptNodesPassword = orc_InEncryptNodesPassword;
@@ -265,8 +267,8 @@ void C_OscSupServiceUpdatePackageBase::mh_AdaptCommonSignatureParameters(
    \retval   C_RD_WR    File not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const C_SclString & orc_SourcePath,
-                                                        const std::set<C_SclString> & orc_SupFiles,
+int32_t C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const std::string & orc_SourcePath,
+                                                        const std::set<std::string> & orc_SupFiles,
                                                         uint8_t (&orau8_Digest)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH],
                                                         const bool oq_PathsAreAbsolute)
 {
@@ -276,11 +278,11 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const C_SclString & orc_
 
    if (s32_Retval == C_NO_ERR)
    {
-      for (std::set<C_SclString>::const_iterator c_ItFile = orc_SupFiles.begin();
+      for (std::set<std::string>::const_iterator c_ItFile = orc_SupFiles.begin();
            (c_ItFile != orc_SupFiles.end()) && (s32_Retval == C_NO_ERR);
            ++c_ItFile)
       {
-         const C_SclString c_CompleteFilePath = oq_PathsAreAbsolute ? *c_ItFile : orc_SourcePath + *c_ItFile;
+         const std::string c_CompleteFilePath = oq_PathsAreAbsolute ? *c_ItFile : orc_SourcePath + *c_ItFile;
          s32_Retval = mh_AddFileToDigest(c_CompleteFilePath, c_Signature);
       }
    }
@@ -304,7 +306,7 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const C_SclString & orc_
    \retval   C_RD_WR    File not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(const C_SclString & orc_FilePath,
+int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(const std::string & orc_FilePath,
                                                              C_OscSecurityEcdsa & orc_Signature)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -397,7 +399,7 @@ void C_OscSupServiceUpdatePackageBase::mh_Init()
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_GetWarningsAndErrors(C_SclStringList & orc_WarningMessages,
-                                                               C_SclString & orc_ErrorMessage)
+                                                               std::string & orc_ErrorMessage)
 {
    orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
    orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller
@@ -411,7 +413,7 @@ void C_OscSupServiceUpdatePackageBase::mh_GetWarningsAndErrors(C_SclStringList &
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_DigestToString(
-   const uint8_t (&orau8_DigestBin)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH], C_SclString & orc_Digest)
+   const uint8_t (&orau8_DigestBin)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH], std::string & orc_Digest)
 {
    orc_Digest = "";
    for (uint32_t u32_ItByte = 0UL; u32_ItByte < C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH; ++u32_ItByte)

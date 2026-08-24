@@ -22,7 +22,7 @@
 #include <winsock.h>
 #include "stwtypes.hpp"
 #include "C_OscIpDispatcher.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclStringList.hpp"
 #include "TglTasks.hpp"
 
@@ -86,7 +86,7 @@ private:
    //lint -e{8080} //using type to match library interface
    int32_t m_ConfigureUdpSocket(const bool oq_ServerPort, const uint32_t ou32_IpToBindTo, SOCKET & orx_Socket) const;
 
-   static stw::scl::C_SclString mh_IpToText(const uint8_t (&orau8_Ip)[4]);
+   static std::string mh_IpToText(const uint8_t (&orau8_Ip)[4]);
 
 public:
    C_OscIpDispatcherWinSock(void);
@@ -110,7 +110,7 @@ public:
    virtual int32_t SendUdp(const std::vector<uint8_t> & orc_Data);
    virtual int32_t ReadUdp(std::vector<uint8_t> &orc_Data, uint8_t(&orau8_Ip)[4]);
 
-   void LoadConfigFile(const stw::scl::C_SclString & orc_FileLocation);
+   void LoadConfigFile(const std::string & orc_FileLocation);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

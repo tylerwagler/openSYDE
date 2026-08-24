@@ -19,7 +19,7 @@
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
 #include "C_CanDispatcher.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -119,7 +119,7 @@ private:
                                                             uint8_t * const opu8_NrCode = NULL) const;
 
 protected:
-   void m_LogWarningWithHeader(const stw::scl::C_SclString & orc_Information, const char_t * const opcn_Function) const;
+   void m_LogWarningWithHeader(const std::string & orc_Information, const char_t * const opcn_Function) const;
 
 public:
    ///container for results reported by "ReadSerialNumber" broadcast service

@@ -25,34 +25,34 @@ static std::string CompactXml(const std::string & or_Xml)
 TEST(XmlParser, CreateEmptyDocument)
 {
    stw::opensyde_core::C_OscXmlParser c_Parser;
-   stw::scl::C_SclString c_Xml;
+   std::string c_Xml;
    c_Parser.SaveToString(c_Xml);
-   EXPECT_TRUE(std::string(c_Xml.c_str()).find("<?xml") != std::string::npos);
+   EXPECT_TRUE(c_Xml.find("<?xml") != std::string::npos);
 }
 
 TEST(XmlParser, CreateSingleRoot)
 {
    stw::opensyde_core::C_OscXmlParser c_Parser;
    c_Parser.CreateNodeChild("root");
-   const std::string c_Compact = CompactXml(std::string(c_Parser.GetCurrentNodeName().c_str()));
+   const std::string c_Compact = CompactXml(c_Parser.GetCurrentNodeName());
    // CreateNodeChild does NOT select the new node; current node is still NULL
-   EXPECT_TRUE(std::string(c_Parser.GetCurrentNodeName().c_str()).empty());
+   EXPECT_TRUE(c_Parser.GetCurrentNodeName().empty());
 }
 
 TEST(XmlParser, CreateNodeWithContent)
 {
    stw::opensyde_core::C_OscXmlParser c_Parser;
    c_Parser.CreateNodeChild("root", "Hello World");
-   stw::scl::C_SclString c_Xml;
+   std::string c_Xml;
    c_Parser.SaveToString(c_Xml);
-   EXPECT_TRUE(std::string(c_Xml.c_str()).find("Hello World") != std::string::npos);
+   EXPECT_TRUE(c_Xml.find("Hello World") != std::string::npos);
 }
 
 TEST(XmlParser, CreateAndSelectRoot)
 {
    stw::opensyde_core::C_OscXmlParser c_Parser;
    c_Parser.CreateAndSelectNodeChild("root");
-   EXPECT_EQ("root", std::string(c_Parser.GetCurrentNodeName().c_str()));
+   EXPECT_EQ("root", c_Parser.GetCurrentNodeName());
 }
 
 TEST(XmlParser, CreateNestedNodes)
@@ -61,9 +61,9 @@ TEST(XmlParser, CreateNestedNodes)
    c_Parser.CreateNodeChild("root");
    c_Parser.SelectRoot();
    c_Parser.CreateNodeChild("child", "value");
-   stw::scl::C_SclString c_Xml;
+   std::string c_Xml;
    c_Parser.SaveToString(c_Xml);
-   EXPECT_TRUE(std::string(c_Xml.c_str()).find("<child>value</child>") != std::string::npos);
+   EXPECT_TRUE(c_Xml.find("<child>value</child>") != std::string::npos);
 }
 
 TEST(XmlParser, SelectNodeChild_ByName)
@@ -77,7 +77,7 @@ TEST(XmlParser, SelectNodeChild_ByName)
    c_Parser.SelectNodeParent();
 
    c_Parser.SelectNodeChild("beta");
-   EXPECT_EQ("beta", std::string(c_Parser.GetCurrentNodeName().c_str()));
+   EXPECT_EQ("beta", c_Parser.GetCurrentNodeName());
 }
 
 TEST(XmlParser, SelectNodeNext)
@@ -93,16 +93,16 @@ TEST(XmlParser, SelectNodeNext)
    c_Parser.SelectNodeParent();
 
    c_Parser.SelectNodeChild(""); // select first child
-   EXPECT_EQ("first", std::string(c_Parser.GetCurrentNodeName().c_str()));
+   EXPECT_EQ("first", c_Parser.GetCurrentNodeName());
 
-   stw::scl::C_SclString c_Name = c_Parser.SelectNodeNext("");
-   EXPECT_EQ("second", std::string(c_Name.c_str()));
-
-   c_Name = c_Parser.SelectNodeNext("");
-   EXPECT_EQ("third", std::string(c_Name.c_str()));
+   std::string c_Name = c_Parser.SelectNodeNext("");
+   EXPECT_EQ("second", c_Name);
 
    c_Name = c_Parser.SelectNodeNext("");
-   EXPECT_TRUE(std::string(c_Name.c_str()).empty());
+   EXPECT_EQ("third", c_Name);
+
+   c_Name = c_Parser.SelectNodeNext("");
+   EXPECT_TRUE(c_Name.empty());
 }
 
 TEST(XmlParser, SetGetStringAttribute)
@@ -110,7 +110,7 @@ TEST(XmlParser, SetGetStringAttribute)
    stw::opensyde_core::C_OscXmlParser c_Parser;
    c_Parser.CreateAndSelectNodeChild("root");
    c_Parser.SetAttributeString("name", "test_value");
-   EXPECT_EQ("test_value", std::string(c_Parser.GetAttributeString("name").c_str()));
+   EXPECT_EQ("test_value", c_Parser.GetAttributeString("name"));
 }
 
 TEST(XmlParser, SetGetIntegerAttributes)
@@ -158,7 +158,7 @@ TEST(XmlParser, AttributeDefaults)
    stw::opensyde_core::C_OscXmlParser c_Parser;
    c_Parser.CreateAndSelectNodeChild("root");
 
-   EXPECT_EQ("default_str", std::string(c_Parser.GetAttributeString("nonexistent", "default_str").c_str()));
+   EXPECT_EQ("default_str", c_Parser.GetAttributeString("nonexistent", "default_str"));
    EXPECT_EQ(42,            c_Parser.GetAttributeSint32("nonexistent", 42));
    EXPECT_EQ(99U,           c_Parser.GetAttributeUint32("nonexistent", 99U));
    EXPECT_TRUE(             c_Parser.GetAttributeBool("nonexistent", true));
@@ -181,17 +181,17 @@ TEST(XmlParser, RoundTrip_Simple)
    c_Writer.SetAttributeString("version", "1.0");
    c_Writer.CreateNodeChild("mode", "production");
 
-   stw::scl::C_SclString c_Xml;
+   std::string c_Xml;
    c_Writer.SaveToString(c_Xml);
 
    stw::opensyde_core::C_OscXmlParser c_Reader;
    ASSERT_EQ(0, c_Reader.LoadFromString(c_Xml));
 
-   EXPECT_EQ("config", std::string(c_Reader.SelectRoot().c_str()));
-   EXPECT_EQ("1.0", std::string(c_Reader.GetAttributeString("version").c_str()));
+   EXPECT_EQ("config", c_Reader.SelectRoot());
+   EXPECT_EQ("1.0", c_Reader.GetAttributeString("version"));
 
    c_Reader.SelectNodeChild("mode");
-   EXPECT_EQ("production", std::string(c_Reader.GetNodeContent().c_str()));
+   EXPECT_EQ("production", c_Reader.GetNodeContent());
 }
 
 TEST(XmlParser, RoundTrip_ComplexHierarchy)
@@ -209,24 +209,24 @@ TEST(XmlParser, RoundTrip_ComplexHierarchy)
    c_Writer.CreateAndSelectNodeChild("bus");
    c_Writer.SetAttributeString("type", "CAN");
 
-   stw::scl::C_SclString c_Xml;
+   std::string c_Xml;
    c_Writer.SaveToString(c_Xml);
 
    stw::opensyde_core::C_OscXmlParser c_Reader;
    ASSERT_EQ(0, c_Reader.LoadFromString(c_Xml));
 
-   EXPECT_EQ("system", std::string(c_Reader.SelectRoot().c_str()));
-   EXPECT_EQ("test_system", std::string(c_Reader.GetAttributeString("name").c_str()));
+   EXPECT_EQ("system", c_Reader.SelectRoot());
+   EXPECT_EQ("test_system", c_Reader.GetAttributeString("name"));
 
    c_Reader.SelectNodeChild("node");
-   EXPECT_EQ("42", std::string(c_Reader.GetAttributeString("id").c_str()));
+   EXPECT_EQ("42", c_Reader.GetAttributeString("id"));
    c_Reader.SelectNodeChild("param");
-   EXPECT_EQ("value1", std::string(c_Reader.GetNodeContent().c_str()));
+   EXPECT_EQ("value1", c_Reader.GetNodeContent());
    c_Reader.SelectNodeParent();
    c_Reader.SelectNodeParent();
 
    c_Reader.SelectNodeChild("bus");
-   EXPECT_EQ("CAN", std::string(c_Reader.GetAttributeString("type").c_str()));
+   EXPECT_EQ("CAN", c_Reader.GetAttributeString("type"));
 }
 
 TEST(XmlParser, LoadInvalidXml_ReturnsError)
@@ -239,14 +239,14 @@ TEST(XmlParser, SelectRootOnEmptyDocument_ReturnsEmpty)
 {
    stw::opensyde_core::C_OscXmlParser c_Parser;
    c_Parser.LoadFromString("<?xml version=\"1.0\"?>");
-   EXPECT_TRUE(std::string(c_Parser.SelectRoot().c_str()).empty());
+   EXPECT_TRUE(c_Parser.SelectRoot().empty());
 }
 
 TEST(XmlParser, GetNodeContent_NoContent)
 {
    stw::opensyde_core::C_OscXmlParser c_Parser;
    c_Parser.CreateAndSelectNodeChild("empty");
-   EXPECT_EQ("", std::string(c_Parser.GetNodeContent().c_str()));
+   EXPECT_EQ("", c_Parser.GetNodeContent());
 }
 
 TEST(XmlParser, GetAttributes_Enumerate)
@@ -264,9 +264,9 @@ TEST(XmlParser, GetAttributes_Enumerate)
    for (const auto & rc_Attr : c_Attrs)
    {
       const std::string c_Name(rc_Attr.c_Name.c_str());
-      if (c_Name == "a") { q_FoundA = true; EXPECT_EQ("1", std::string(rc_Attr.c_Value.c_str())); }
-      if (c_Name == "b") { q_FoundB = true; EXPECT_EQ("2", std::string(rc_Attr.c_Value.c_str())); }
-      if (c_Name == "c") { q_FoundC = true; EXPECT_EQ("3", std::string(rc_Attr.c_Value.c_str())); }
+      if (c_Name == "a") { q_FoundA = true; EXPECT_EQ("1", rc_Attr.c_Value); }
+      if (c_Name == "b") { q_FoundB = true; EXPECT_EQ("2", rc_Attr.c_Value); }
+      if (c_Name == "c") { q_FoundC = true; EXPECT_EQ("3", rc_Attr.c_Value); }
    }
    EXPECT_TRUE(q_FoundA);
    EXPECT_TRUE(q_FoundB);
@@ -286,12 +286,12 @@ TEST(XmlParser, DeleteNode)
    c_Parser.DeleteNode();
 
    c_Parser.SelectNodeChild("");
-   EXPECT_EQ("keep", std::string(c_Parser.GetCurrentNodeName().c_str()));
+   EXPECT_EQ("keep", c_Parser.GetCurrentNodeName());
 }
 
 TEST(XmlParser, SaveAndLoadFile)
 {
-   const stw::scl::C_SclString c_TmpFile = "/tmp/opensyde_test_xml.xml";
+   const std::string c_TmpFile = "/tmp/opensyde_test_xml.xml";
 
    stw::opensyde_core::C_OscXmlParser c_Writer;
    c_Writer.CreateAndSelectNodeChild("testdata");
@@ -301,8 +301,8 @@ TEST(XmlParser, SaveAndLoadFile)
    stw::opensyde_core::C_OscXmlParser c_Reader;
    ASSERT_EQ(0, c_Reader.LoadFromFile(c_TmpFile));
 
-   EXPECT_EQ("testdata", std::string(c_Reader.SelectRoot().c_str()));
-   EXPECT_EQ("value", std::string(c_Reader.GetAttributeString("key").c_str()));
+   EXPECT_EQ("testdata", c_Reader.SelectRoot());
+   EXPECT_EQ("value", c_Reader.GetAttributeString("key"));
 
    std::remove(c_TmpFile.c_str());
 }

@@ -19,7 +19,7 @@
 #include <list>
 #include "stwtypes.hpp"
 #include "C_OscIpDispatcher.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "TglTasks.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -76,7 +76,7 @@ private:
    int32_t m_ConnectTcp(C_TcpConnection & orc_Connection) const;
    int32_t m_ConfigureUdpSocket(const bool oq_ServerPort, const uint32_t ou32_IpToBindTo, int32_t & ors32_Socket) const;
 
-   static stw::scl::C_SclString mh_IpToText(const uint8_t (&orau8_Ip)[4]);
+   static std::string mh_IpToText(const uint8_t (&orau8_Ip)[4]);
 
 public:
    C_OscIpDispatcherLinuxSock(void);

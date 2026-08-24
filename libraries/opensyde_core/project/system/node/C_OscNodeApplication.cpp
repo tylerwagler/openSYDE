@@ -70,20 +70,20 @@ C_OscNodeApplication::C_OscNodeApplication(void) :
 void C_OscNodeApplication::CalcHash(uint32_t & oru32_HashValue) const
 {
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_Active, sizeof(this->q_Active), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u8_ProcessId, sizeof(this->u8_ProcessId), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_ProjectPath.c_str(), this->c_ProjectPath.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_IdeCall.c_str(), this->c_IdeCall.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_ProjectPath.c_str(), this->c_ProjectPath.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_IdeCall.c_str(), this->c_IdeCall.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(this->c_CodeGeneratorPath.c_str(),
-                                       this->c_CodeGeneratorPath.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_GeneratePath.c_str(), this->c_GeneratePath.Length(), oru32_HashValue);
+                                       this->c_CodeGeneratorPath.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_GeneratePath.c_str(), this->c_GeneratePath.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u16_GenCodeVersion, sizeof(this->u16_GenCodeVersion), oru32_HashValue);
    for (uint32_t u32_Counter = 0U; u32_Counter < this->c_ResultPaths.size(); ++u32_Counter)
    {
       stw::scl::C_SclChecksums::CalcCRC32(this->c_ResultPaths[u32_Counter].c_str(),
-                                          this->c_ResultPaths[u32_Counter].Length(), oru32_HashValue);
+                                          this->c_ResultPaths[u32_Counter].length(), oru32_HashValue);
    }
 }
 
@@ -96,9 +96,9 @@ void C_OscNodeApplication::CalcHash(uint32_t & oru32_HashValue) const
    Stringified application type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeApplication::h_ApplicationToString(const C_OscNodeApplication::E_Type & ore_Application)
+std::string C_OscNodeApplication::h_ApplicationToString(const C_OscNodeApplication::E_Type & ore_Application)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_Application)
    {
@@ -125,7 +125,7 @@ C_SclString C_OscNodeApplication::h_ApplicationToString(const C_OscNodeApplicati
    \param[out] ore_Type   Application type
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeApplication::h_StringToApplication(const C_SclString & orc_String,
+void C_OscNodeApplication::h_StringToApplication(const std::string & orc_String,
                                                  C_OscNodeApplication::E_Type & ore_Type)
 {
    if (orc_String == "binary")

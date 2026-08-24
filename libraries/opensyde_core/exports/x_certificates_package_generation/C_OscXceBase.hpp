@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclStringList.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -25,22 +25,22 @@ namespace opensyde_core
 class C_OscXceBase
 {
 public:
-   static stw::scl::C_SclString h_GetPackageExtension();
+   static std::string h_GetPackageExtension();
 
-   static const stw::scl::C_SclString hc_PACKAGE_EXT;
-   static const stw::scl::C_SclString hc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
+   static const std::string hc_PACKAGE_EXT;
+   static const std::string hc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
 
 protected:
    static stw::scl::C_SclStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
                                                          // not available
-   static stw::scl::C_SclString mhc_ErrorMessage;        // description of error which caused the service update package
+   static std::string mhc_ErrorMessage;        // description of error which caused the service update package
                                                          // to fail
-   static const stw::scl::C_SclString mhc_CERTIFICATES_FOLDER;
-   static const stw::scl::C_SclString mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER;
+   static const std::string mhc_CERTIFICATES_FOLDER;
+   static const std::string mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER;
 
    static void mh_Init(void);
    static void mh_GetWarningsAndErrors(stw::scl::C_SclStringList & orc_WarningMessages,
-                                       stw::scl::C_SclString & orc_ErrorMessage);
+                                       std::string & orc_ErrorMessage);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

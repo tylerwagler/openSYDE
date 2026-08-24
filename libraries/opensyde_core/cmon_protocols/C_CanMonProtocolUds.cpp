@@ -12,13 +12,24 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <sstream>
+#include <iomanip>
 #include "stwtypes.hpp"
 #include "C_CanMonProtocolUds.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::cmon_protocol;
-using namespace stw::scl;
 using namespace stw::can;
+
+/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
+namespace {
+   template <typename T>
+   std::string mh_IntToHex(T val, uint32_t digits) {
+      std::stringstream ss;
+      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
+      return ss.str();
+   }
+}
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -111,10 +122,10 @@ C_CanMonProtocolUds::C_CanMonProtocolUds(void) :
    Text interpretation of service identifier
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolUds::mh_ServiceIdToText(const uint8_t ou8_Sid, const bool oq_IsResponse,
+std::string C_CanMonProtocolUds::mh_ServiceIdToText(const uint8_t ou8_Sid, const bool oq_IsResponse,
                                                      const bool oq_IsNegativeResponse)
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    if (oq_IsNegativeResponse == true)
    {
@@ -204,7 +215,7 @@ C_SclString C_CanMonProtocolUds::mh_ServiceIdToText(const uint8_t ou8_Sid, const
       c_Text += "LinkControl";
       break;
    default:
-      c_Text += "UnknownService(0x" + C_SclString::IntToHex(ou8_Sid, 2) + ")";
+      c_Text += "UnknownService(0x" + mh_IntToHex(ou8_Sid, 2) + ")";
       break;
    }
 
@@ -221,10 +232,10 @@ C_SclString C_CanMonProtocolUds::mh_ServiceIdToText(const uint8_t ou8_Sid, const
    Text interpretation of sub-function
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceId,
+std::string C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceId,
                                                        const uint8_t ou8_SubFunc)
 {
-   C_SclString c_Text;
+   std::string c_Text;
    const bool q_SuppressResponse = ((ou8_SubFunc & 0x80U) != 0U) ? true : false;
    const uint8_t u8_SubFuncVal = (ou8_SubFunc & 0x7FU);
 
@@ -261,7 +272,7 @@ C_SclString C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "systemSupplierSpecific3";
          break;
       default:
-         c_Text += "unknown(0x" + C_SclString::IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
@@ -285,7 +296,7 @@ C_SclString C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "disableRapidPowerShutdown";
          break;
       default:
-         c_Text += "unknown(0x" + C_SclString::IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
@@ -293,11 +304,11 @@ C_SclString C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
       c_Text += " ACCESS:";
       if ((u8_SubFuncVal % 2U) == 1U)
       {
-         c_Text += "requestSeed(level=" + C_SclString::IntToStr(static_cast<int32_t>(u8_SubFuncVal)) + ")";
+         c_Text += "requestSeed(level=" + std::to_string(static_cast<int32_t>(u8_SubFuncVal)) + ")";
       }
       else
       {
-         c_Text += "sendKey(level=" + C_SclString::IntToStr(static_cast<int32_t>(u8_SubFuncVal)) + ")";
+         c_Text += "sendKey(level=" + std::to_string(static_cast<int32_t>(u8_SubFuncVal)) + ")";
       }
       break;
    case SID_COMMUNICATION_CONTROL:
@@ -323,12 +334,12 @@ C_SclString C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "enableRxAndTxWithEnhancedAddress";
          break;
       default:
-         c_Text += "unknown(0x" + C_SclString::IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
    case SID_TESTER_PRESENT:
-      c_Text += " SUBFUNC:0x" + C_SclString::IntToHex(u8_SubFuncVal, 2);
+      c_Text += " SUBFUNC:0x" + mh_IntToHex(u8_SubFuncVal, 2);
       break;
    case SID_ACCESS_TIMING_PARAMETER:
       c_Text += " TIMING:";
@@ -347,7 +358,7 @@ C_SclString C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "setTimingParamsToGivenValues";
          break;
       default:
-         c_Text += "unknown(0x" + C_SclString::IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
@@ -362,7 +373,7 @@ C_SclString C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "off";
          break;
       default:
-         c_Text += "unknown(0x" + C_SclString::IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
@@ -377,12 +388,12 @@ C_SclString C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
          c_Text += "transitionBaudrate";
          break;
       default:
-         c_Text += "unknown(0x" + C_SclString::IntToHex(u8_SubFuncVal, 2) + ")";
+         c_Text += "unknown(0x" + mh_IntToHex(u8_SubFuncVal, 2) + ")";
          break;
       }
       break;
    default:
-      c_Text += " SUBFUNC:0x" + C_SclString::IntToHex(u8_SubFuncVal, 2);
+      c_Text += " SUBFUNC:0x" + mh_IntToHex(u8_SubFuncVal, 2);
       break;
    }
 
@@ -398,9 +409,9 @@ C_SclString C_CanMonProtocolUds::mh_SubFunctionToText(const uint8_t ou8_ServiceI
    Text interpretation of NRC
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolUds::mh_NegativeResponseCodeToText(const uint8_t ou8_Nrc)
+std::string C_CanMonProtocolUds::mh_NegativeResponseCodeToText(const uint8_t ou8_Nrc)
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    switch (ou8_Nrc)
    {
@@ -477,7 +488,7 @@ C_SclString C_CanMonProtocolUds::mh_NegativeResponseCodeToText(const uint8_t ou8
       c_Text = "voltageTooLow";
       break;
    default:
-      c_Text = "unknownNRC(0x" + C_SclString::IntToHex(ou8_Nrc, 2) + ")";
+      c_Text = "unknownNRC(0x" + mh_IntToHex(ou8_Nrc, 2) + ")";
       break;
    }
 
@@ -493,7 +504,7 @@ C_SclString C_CanMonProtocolUds::mh_NegativeResponseCodeToText(const uint8_t ou8
    Text interpretation
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolUds::mh_SessionToText(const uint8_t ou8_Session)
+std::string C_CanMonProtocolUds::mh_SessionToText(const uint8_t ou8_Session)
 {
    switch (ou8_Session)
    {
@@ -506,7 +517,7 @@ C_SclString C_CanMonProtocolUds::mh_SessionToText(const uint8_t ou8_Session)
    case 0x60U:
       return "safe";
    default:
-      return "unknown(0x" + C_SclString::IntToHex(ou8_Session, 2) + ")";
+      return "unknown(0x" + mh_IntToHex(ou8_Session, 2) + ")";
    }
 }
 
@@ -519,7 +530,7 @@ C_SclString C_CanMonProtocolUds::mh_SessionToText(const uint8_t ou8_Session)
    Text interpretation
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolUds::mh_ResetTypeToText(const uint8_t ou8_ResetType)
+std::string C_CanMonProtocolUds::mh_ResetTypeToText(const uint8_t ou8_ResetType)
 {
    switch (ou8_ResetType)
    {
@@ -534,7 +545,7 @@ C_SclString C_CanMonProtocolUds::mh_ResetTypeToText(const uint8_t ou8_ResetType)
    case 0x05U:
       return "disableRapidPowerShutdown";
    default:
-      return "unknown(0x" + C_SclString::IntToHex(ou8_ResetType, 2) + ")";
+      return "unknown(0x" + mh_IntToHex(ou8_ResetType, 2) + ")";
    }
 }
 
@@ -547,7 +558,7 @@ C_SclString C_CanMonProtocolUds::mh_ResetTypeToText(const uint8_t ou8_ResetType)
    Text interpretation
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolUds::mh_DataIdentifierToText(const uint16_t ou16_Did)
+std::string C_CanMonProtocolUds::mh_DataIdentifierToText(const uint16_t ou16_Did)
 {
    switch (ou16_Did)
    {
@@ -585,7 +596,7 @@ C_SclString C_CanMonProtocolUds::mh_DataIdentifierToText(const uint16_t ou16_Did
    case 0xFF00U:
       return "udsVersion";
    default:
-      return "DID(0x" + C_SclString::IntToHex(ou16_Did, 4) + ")";
+      return "DID(0x" + mh_IntToHex(ou16_Did, 4) + ")";
    }
 }
 
@@ -598,14 +609,14 @@ C_SclString C_CanMonProtocolUds::mh_DataIdentifierToText(const uint16_t ou16_Did
    Text interpretation
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolUds::mh_RoutineIdentifierToText(const uint16_t ou16_Rid)
+std::string C_CanMonProtocolUds::mh_RoutineIdentifierToText(const uint16_t ou16_Rid)
 {
    switch (ou16_Rid)
    {
    case 0xFF00U:
       return "RoutineCtrlUdsVersion";
    default:
-      return "RID(0x" + C_SclString::IntToHex(ou16_Rid, 4) + ")";
+      return "RID(0x" + mh_IntToHex(ou16_Rid, 4) + ")";
    }
 }
 
@@ -618,13 +629,13 @@ C_SclString C_CanMonProtocolUds::mh_RoutineIdentifierToText(const uint16_t ou16_
    Text interpretation
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolUds::mh_AccessTypeToText(const uint8_t ou8_AccessType)
+std::string C_CanMonProtocolUds::mh_AccessTypeToText(const uint8_t ou8_AccessType)
 {
    if ((ou8_AccessType % 2U) == 1U)
    {
-      return "requestSeed(level=" + C_SclString::IntToStr(static_cast<int32_t>(ou8_AccessType)) + ")";
+      return "requestSeed(level=" + std::to_string(static_cast<int32_t>(ou8_AccessType)) + ")";
    }
-   return "sendKey(level=" + C_SclString::IntToStr(static_cast<int32_t>(ou8_AccessType)) + ")";
+   return "sendKey(level=" + std::to_string(static_cast<int32_t>(ou8_AccessType)) + ")";
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -636,9 +647,9 @@ C_SclString C_CanMonProtocolUds::mh_AccessTypeToText(const uint8_t ou8_AccessTyp
    Text interpretation of CAN message ("" if the message cannot be interpreted)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+std::string C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    if (orc_Msg.u8_DLC < 1U)
    {
@@ -665,12 +676,12 @@ C_SclString C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
       break;
    case PCI_CF:
       // Consecutive Frame: sequence number in lower nibble
-      return "CF(seq=" + C_SclString::IntToStr(static_cast<int32_t>(orc_Msg.au8_Data[0] & 0x0FU)) + ")";
+      return "CF(seq=" + std::to_string(static_cast<int32_t>(orc_Msg.au8_Data[0] & 0x0FU)) + ")";
    case PCI_FC:
       // Flow Control
-      return "FC(sts=" + C_SclString::IntToStr(static_cast<int32_t>((orc_Msg.au8_Data[0] & 0x0FU))) +
-             ",bs=" + C_SclString::IntToStr(static_cast<int32_t>(orc_Msg.au8_Data[1])) +
-             ",stmin=" + C_SclString::IntToStr(static_cast<int32_t>(orc_Msg.au8_Data[2])) + ")";
+      return "FC(sts=" + std::to_string(static_cast<int32_t>((orc_Msg.au8_Data[0] & 0x0FU))) +
+             ",bs=" + std::to_string(static_cast<int32_t>(orc_Msg.au8_Data[1])) +
+             ",stmin=" + std::to_string(static_cast<int32_t>(orc_Msg.au8_Data[2])) + ")";
    default:
       return "";
    }
@@ -762,7 +773,7 @@ C_SclString C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
          const uint8_t u8_AddrFormat = pu8_ServiceData[1];
          const uint8_t u8_NumAddrBytes = (u8_AddrFormat & 0x0FU);
          const uint8_t u8_NumSizeBytes = (u8_AddrFormat >> 4U);
-         c_Text += " ADDR_FORMAT:0x" + C_SclString::IntToHex(u8_AddrFormat, 2);
+         c_Text += " ADDR_FORMAT:0x" + mh_IntToHex(u8_AddrFormat, 2);
          u8_Consumed = 2U + u8_NumAddrBytes + u8_NumSizeBytes;
          if (u8_Consumed > u8_ServiceLen)
          {
@@ -787,7 +798,7 @@ C_SclString C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
       if (u8_ServiceLen >= 2U)
       {
          const uint8_t u8_DataFormat = pu8_ServiceData[1];
-         c_Text += " DFMT:0x" + C_SclString::IntToHex(u8_DataFormat, 2);
+         c_Text += " DFMT:0x" + mh_IntToHex(u8_DataFormat, 2);
          u8_Consumed = 2U;
          // Remaining bytes are address + size (format-dependent)
       }
@@ -796,7 +807,7 @@ C_SclString C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
       // Block sequence counter
       if (u8_ServiceLen >= 2U)
       {
-         c_Text += " BLKSEQ:" + C_SclString::IntToStr(static_cast<int32_t>(pu8_ServiceData[1]));
+         c_Text += " BLKSEQ:" + std::to_string(static_cast<int32_t>(pu8_ServiceData[1]));
          u8_Consumed = 2U;
       }
       break;
@@ -834,7 +845,7 @@ C_SclString C_CanMonProtocolUds::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
    Protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolUds::GetProtocolName(void) const
+std::string C_CanMonProtocolUds::GetProtocolName(void) const
 {
    return "UDS (ISO 14229)";
 }

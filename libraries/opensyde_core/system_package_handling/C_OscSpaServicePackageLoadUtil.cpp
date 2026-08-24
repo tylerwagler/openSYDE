@@ -46,9 +46,9 @@ using namespace stw::opensyde_core;
    Unzip path
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(const stw::scl::C_SclString & orc_TargetUnzipPath)
+std::string C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(const std::string & orc_TargetUnzipPath)
 {
-   stw::scl::C_SclString c_TargetUnzipPath;
+   std::string c_TargetUnzipPath;
    if (orc_TargetUnzipPath != "")
    {
       // add trailing path delimiter in case there is none
@@ -78,9 +78,9 @@ stw::scl::C_SclString C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(const stw::
    \retval   C_RD_WR    could not unzip X-Config package from disk to target path
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(const stw::scl::C_SclString & orc_PackagePath,
-                                                                         const stw::scl::C_SclString & orc_TargetUnzipPath, const stw::scl::C_SclString & orc_UseCase,
-                                                                         stw::scl::C_SclString & orc_ErrorMessage)
+int32_t C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(const std::string & orc_PackagePath,
+                                                                         const std::string & orc_TargetUnzipPath, const std::string & orc_UseCase,
+                                                                         std::string & orc_ErrorMessage)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -145,8 +145,8 @@ int32_t C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(const s
                          tool specific error codes)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(const stw::scl::C_SclString & orc_PackagePath,
-                                                            const std::vector<stw::scl::C_SclString> & orc_NecessaryFiles)
+int32_t C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(const std::string & orc_PackagePath,
+                                                            const std::vector<std::string> & orc_NecessaryFiles)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -158,16 +158,16 @@ int32_t C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(const stw::scl::C_Sc
       {
          break;
       }
-      const stw::scl::C_SclString c_FileExt = TglExtractFileExtension(orc_NecessaryFiles[u32_It]);
+      const std::string c_FileExt = TglExtractFileExtension(orc_NecessaryFiles[u32_It]);
       //define search pattern for TGL_FileFind including the package path, otherwise function would search the whole
       //system. This probably would slow us down. We first search for a certain extension and in second step for
       //specific name.
-      const stw::scl::C_SclString c_SearchPattern = TglFileIncludeTrailingDelimiter(orc_PackagePath) + "*" + c_FileExt;
+      const std::string c_SearchPattern = TglFileIncludeTrailingDelimiter(orc_PackagePath) + "*" + c_FileExt;
 
       TglFileFind(c_SearchPattern, c_Files);
 
       //only one of the specified files is allowed
-      if (c_Files.GetLength() == 1)
+      if (c_Files.size() == 1)
       {
          //if the correct amount of files is present, we need to have a match on the exact name, otherwise -> fail.
          if (c_Files[0].c_FileName != orc_NecessaryFiles[u32_It])

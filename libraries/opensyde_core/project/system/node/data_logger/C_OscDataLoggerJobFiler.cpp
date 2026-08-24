@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
@@ -22,6 +23,7 @@
 #include "C_OscDataLoggerJobFiler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::scl;
 using namespace stw::tgl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
@@ -54,7 +56,7 @@ const uint16_t C_OscDataLoggerJobFiler::mhu16_FILE_VERSION_1 = 1;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDataLoggerJobFiler::h_LoadFile(std::vector<C_OscDataLoggerJob> & orc_Config,
-                                            const stw::scl::C_SclString & orc_Path)
+                                            const std::string & orc_Path)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -84,7 +86,7 @@ int32_t C_OscDataLoggerJobFiler::h_LoadFile(std::vector<C_OscDataLoggerJob> & or
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDataLoggerJobFiler::h_SaveFile(const std::vector<C_OscDataLoggerJob> & orc_Config,
-                                            const stw::scl::C_SclString & orc_Path)
+                                            const std::string & orc_Path)
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
@@ -137,7 +139,7 @@ int32_t C_OscDataLoggerJobFiler::h_LoadData(std::vector<C_OscDataLoggerJob> & or
          s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
          if (s32_Retval == C_NO_ERR)
          {
-            stw::scl::C_SclString c_NodeName = orc_XmlParser.SelectNodeChild("job");
+            std::string c_NodeName = orc_XmlParser.SelectNodeChild("job");
             if (c_NodeName == "job")
             {
                do
@@ -156,8 +158,8 @@ int32_t C_OscDataLoggerJobFiler::h_LoadData(std::vector<C_OscDataLoggerJob> & or
             }
             if (u32_ExpectedSize != orc_Config.size())
             {
-               stw::scl::C_SclString c_Tmp;
-               c_Tmp.PrintFormatted("Unexpected data loggers count, expected: %u, got %u", u32_ExpectedSize,
+               std::string c_Tmp;
+               c_Tmp = PrintFormattedCompat("Unexpected data loggers count, expected: %u, got %u", u32_ExpectedSize,
                                     static_cast<uint32_t>(orc_Config.size()));
                orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext("length", c_Tmp);
             }
@@ -180,7 +182,7 @@ void C_OscDataLoggerJobFiler::h_SaveData(const std::vector<C_OscDataLoggerJob> &
 {
    //File version
    tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
-   orc_XmlParser.SetNodeContent(stw::scl::C_SclString::IntToStr(mhu16_FILE_VERSION_1));
+   orc_XmlParser.SetNodeContent(std::to_string(mhu16_FILE_VERSION_1));
    //Return
    orc_XmlParser.SelectNodeParent();
    tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("jobs") == "jobs");
@@ -685,7 +687,7 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerExpertModeTriggerDat
       s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
       if (s32_Retval == C_NO_ERR)
       {
-         stw::scl::C_SclString c_NodeName = orc_XmlParser.SelectNodeChild("trigger-data-element-id");
+         std::string c_NodeName = orc_XmlParser.SelectNodeChild("trigger-data-element-id");
          if (c_NodeName == "trigger-data-element-id")
          {
             do
@@ -704,8 +706,8 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerExpertModeTriggerDat
          }
          if (u32_ExpectedSize != orc_Config.size())
          {
-            stw::scl::C_SclString c_Tmp;
-            c_Tmp.PrintFormatted("Unexpected data logger trigger data element ids count, expected: %u, got %u",
+            std::string c_Tmp;
+            c_Tmp = PrintFormattedCompat("Unexpected data logger trigger data element ids count, expected: %u, got %u",
                                  u32_ExpectedSize,
                                  static_cast<uint32_t>(orc_Config.size()));
             orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext("length", c_Tmp);
@@ -760,7 +762,7 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElements(
       s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
       if (s32_Retval == C_NO_ERR)
       {
-         stw::scl::C_SclString c_NodeName = orc_XmlParser.SelectNodeChild("configured-data-element");
+         std::string c_NodeName = orc_XmlParser.SelectNodeChild("configured-data-element");
          if (c_NodeName == "configured-data-element")
          {
             do
@@ -779,8 +781,8 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElements(
          }
          if (u32_ExpectedSize != orc_Config.size())
          {
-            stw::scl::C_SclString c_Tmp;
-            c_Tmp.PrintFormatted("Unexpected data logger data elements count, expected: %u, got %u", u32_ExpectedSize,
+            std::string c_Tmp;
+            c_Tmp = PrintFormattedCompat("Unexpected data logger data elements count, expected: %u, got %u", u32_ExpectedSize,
                                  static_cast<uint32_t>(orc_Config.size()));
             orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext("length", c_Tmp);
          }
@@ -880,10 +882,10 @@ void C_OscDataLoggerJobFiler::mh_SaveConfiguredDataElement(const C_OscDataLogger
    Stringified log file type type
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscDataLoggerJobFiler::mh_LogFileTypeTypeToString(
+std::string C_OscDataLoggerJobFiler::mh_LogFileTypeTypeToString(
    const C_OscDataLoggerJobProperties::E_LogFileFormat & ore_Type)
 {
-   stw::scl::C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_Type)
    {
@@ -911,7 +913,7 @@ stw::scl::C_SclString C_OscDataLoggerJobFiler::mh_LogFileTypeTypeToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_StringToLogFileType(const stw::scl::C_SclString & orc_String,
+int32_t C_OscDataLoggerJobFiler::mh_StringToLogFileType(const std::string & orc_String,
                                                         C_OscDataLoggerJobProperties::E_LogFileFormat & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -941,10 +943,10 @@ int32_t C_OscDataLoggerJobFiler::mh_StringToLogFileType(const stw::scl::C_SclStr
    Stringified local log trigger type
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscDataLoggerJobFiler::mh_LocalLogTriggerTypeToString(
+std::string C_OscDataLoggerJobFiler::mh_LocalLogTriggerTypeToString(
    const C_OscDataLoggerJobProperties::E_LocalLogTrigger & ore_Type)
 {
-   stw::scl::C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_Type)
    {
@@ -975,7 +977,7 @@ stw::scl::C_SclString C_OscDataLoggerJobFiler::mh_LocalLogTriggerTypeToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_StringToLocalLogTriggerType(const stw::scl::C_SclString & orc_String,
+int32_t C_OscDataLoggerJobFiler::mh_StringToLocalLogTriggerType(const std::string & orc_String,
                                                                 C_OscDataLoggerJobProperties::E_LocalLogTrigger & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1009,10 +1011,10 @@ int32_t C_OscDataLoggerJobFiler::mh_StringToLocalLogTriggerType(const stw::scl::
    Stringified use case type to string
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscDataLoggerJobFiler::mh_UseCaseTypeToString(
+std::string C_OscDataLoggerJobFiler::mh_UseCaseTypeToString(
    const C_OscDataLoggerJobProperties::E_UseCase & ore_Type)
 {
-   stw::scl::C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_Type)
    {
@@ -1043,7 +1045,7 @@ stw::scl::C_SclString C_OscDataLoggerJobFiler::mh_UseCaseTypeToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_StringToUseCaseType(const stw::scl::C_SclString & orc_String,
+int32_t C_OscDataLoggerJobFiler::mh_StringToUseCaseType(const std::string & orc_String,
                                                         C_OscDataLoggerJobProperties::E_UseCase & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;

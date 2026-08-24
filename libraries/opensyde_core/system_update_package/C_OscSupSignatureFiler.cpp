@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <string>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_OscXmlParser.hpp"
@@ -24,13 +25,13 @@ using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 static const uint16_t mu16_FILE_VERSION = 1U;
-static const stw::scl::C_SclString mc_SIG_TYPE = "ECDSA secp256r1";
+static const std::string mc_SIG_TYPE = "ECDSA secp256r1";
 // XML node names of service update package definition
-static const stw::scl::C_SclString mc_ROOT_NAME = "opensyde-secure-update-collection-signature"; // xml root node
-static const stw::scl::C_SclString mc_FILE_VERSION = "file-version";                             // xml node
-static const stw::scl::C_SclString mc_NODE_SIG = "signature";                                    // xml node
-static const stw::scl::C_SclString mc_NODE_SIG_TYPE_ATTR = "type";                               // xml node attribute
-static const stw::scl::C_SclString mc_NODE_SIG_VALUE_ATTR = "value";                             // xml node attribute
+static const std::string mc_ROOT_NAME = "opensyde-secure-update-collection-signature"; // xml root node
+static const std::string mc_FILE_VERSION = "file-version";                             // xml node
+static const std::string mc_NODE_SIG = "signature";                                    // xml node
+static const std::string mc_NODE_SIG_TYPE_ATTR = "type";                               // xml node attribute
+static const std::string mc_NODE_SIG_VALUE_ATTR = "value";                             // xml node attribute
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -55,8 +56,8 @@ static const stw::scl::C_SclString mc_NODE_SIG_VALUE_ATTR = "value";            
    \retval   C_RD_WR    File not created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupSignatureFiler::h_CreateSignatureFile(const stw::scl::C_SclString & orc_Path,
-                                                      const stw::scl::C_SclString & orc_Signature)
+int32_t C_OscSupSignatureFiler::h_CreateSignatureFile(const std::string & orc_Path,
+                                                      const std::string & orc_Signature)
 {
    int32_t s32_Result;
 
@@ -68,7 +69,7 @@ int32_t C_OscSupSignatureFiler::h_CreateSignatureFile(const stw::scl::C_SclStrin
 
    //File version
    tgl_assert(c_XmlParser.CreateAndSelectNodeChild(mc_FILE_VERSION) == mc_FILE_VERSION);
-   c_XmlParser.SetNodeContent(stw::scl::C_SclString::IntToStr(mu16_FILE_VERSION));
+   c_XmlParser.SetNodeContent(std::to_string(mu16_FILE_VERSION));
    tgl_assert(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
    //signature
@@ -99,8 +100,8 @@ int32_t C_OscSupSignatureFiler::h_CreateSignatureFile(const stw::scl::C_SclStrin
    \retval   C_RD_WR    File not read
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupSignatureFiler::h_LoadSignatureFile(const stw::scl::C_SclString & orc_Path,
-                                                    stw::scl::C_SclString & orc_Signature)
+int32_t C_OscSupSignatureFiler::h_LoadSignatureFile(const std::string & orc_Path,
+                                                    std::string & orc_Signature)
 {
    int32_t s32_Result;
    C_OscXmlParser c_XmlParser;
@@ -112,15 +113,15 @@ int32_t C_OscSupSignatureFiler::h_LoadSignatureFile(const stw::scl::C_SclString 
 
       // file version
       tgl_assert(c_XmlParser.SelectNodeChild(mc_FILE_VERSION) == mc_FILE_VERSION);
-      const stw::scl::C_SclString c_FileVersion = c_XmlParser.GetNodeContent();
-      const uint32_t u32_FileVersion = static_cast<uint32_t>(c_FileVersion.ToInt());
+      const std::string c_FileVersion = c_XmlParser.GetNodeContent();
+      const uint32_t u32_FileVersion = static_cast<uint32_t>(std::stoi(c_FileVersion));
       tgl_assert(c_XmlParser.SelectRoot() == mc_ROOT_NAME);
 
       if (u32_FileVersion == mu16_FILE_VERSION)
       {
          //signature
          tgl_assert(c_XmlParser.SelectNodeChild(mc_NODE_SIG) == mc_NODE_SIG);
-         const stw::scl::C_SclString c_SigType = c_XmlParser.GetAttributeString(mc_NODE_SIG_TYPE_ATTR);
+         const std::string c_SigType = c_XmlParser.GetAttributeString(mc_NODE_SIG_TYPE_ATTR);
          tgl_assert(c_SigType == mc_SIG_TYPE);
          orc_Signature = c_XmlParser.GetAttributeString(mc_NODE_SIG_VALUE_ATTR);
 
@@ -137,7 +138,7 @@ int32_t C_OscSupSignatureFiler::h_LoadSignatureFile(const stw::scl::C_SclString 
    Signature file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscSupSignatureFiler::h_GetSignatureFileName()
+std::string C_OscSupSignatureFiler::h_GetSignatureFileName()
 {
    return "signature.syde_sucsig";
 }

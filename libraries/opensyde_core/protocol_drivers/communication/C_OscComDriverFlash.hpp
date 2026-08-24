@@ -18,7 +18,7 @@
 #include "C_OscComDriverProtocol.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
 #include "C_OscComFlashloaderInformation.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -105,7 +105,7 @@ public:
                                                    uint8_t * const opu8_ErrorResult = NULL) const;
 
    int32_t SendOsyReadDeviceName(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                 stw::scl::C_SclString & orc_DeviceName, uint8_t * const opu8_NrCode = NULL);
+                                 std::string & orc_DeviceName, uint8_t * const opu8_NrCode = NULL);
    int32_t SendOsyReadSerialNumber(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                    C_OscProtocolSerialNumber & orc_SerialNumberExt,
                                    uint8_t * const opu8_NrCode = NULL) const;
@@ -125,13 +125,13 @@ public:
                                             uint8_t * const opu8_NrCode = NULL) const;
    int32_t SendOsyWriteApplicationSoftwareFingerprint(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                       const uint8_t (&orau8_Date)[3], const uint8_t (&orau8_Time)[3],
-                                                      const stw::scl::C_SclString & orc_Username,
+                                                      const std::string & orc_Username,
                                                       uint8_t * const opu8_NrCode = NULL) const;
    int32_t SendOsyRequestDownload(const C_OscProtocolDriverOsyNode & orc_ServerId, const uint32_t ou32_StartAddress,
                                   const uint32_t ou32_Size, uint32_t & oru32_MaxBlockLength,
                                   uint8_t * const opu8_NrCode = NULL) const;
    int32_t SendOsyRequestFileTransfer(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                      const stw::scl::C_SclString & orc_FilePath, const uint32_t ou32_FileSize,
+                                      const std::string & orc_FilePath, const uint32_t ou32_FileSize,
                                       uint32_t & oru32_MaxBlockLength, uint8_t * const opu8_NrCode = NULL) const;
 
    int32_t SendOsyTransferData(const C_OscProtocolDriverOsyNode & orc_ServerId, const uint8_t ou8_BlockSequenceCounter,
@@ -144,7 +144,7 @@ public:
                                                const uint32_t ou32_CrcOverData,
                                                uint8_t * const opu8_NrCode = NULL) const;
    int32_t SendOsyRequestFileBasedTransferExitResult(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                                     stw::scl::C_SclString & orc_Result,
+                                                     std::string & orc_Result,
                                                      uint8_t * const opu8_NrCode = NULL) const;
 
    int32_t SendOsyRequestProgramming(const C_OscProtocolDriverOsyNode & orc_ServerId) const;

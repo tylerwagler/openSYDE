@@ -27,18 +27,18 @@ namespace opensyde_core
 class C_OscComMessageLoggerFileBase
 {
 public:
-   C_OscComMessageLoggerFileBase(const stw::scl::C_SclString & orc_FilePath,
-                                 const stw::scl::C_SclString & orc_ProtocolName);
+   C_OscComMessageLoggerFileBase(const std::string & orc_FilePath,
+                                 const std::string & orc_ProtocolName);
    virtual ~C_OscComMessageLoggerFileBase(void);
 
    virtual int32_t OpenFile(void);
    virtual void AddMessageToFile(const C_OscComMessageLoggerData & orc_MessageData) = 0;
 
-   void SetProtocolName(const stw::scl::C_SclString & orc_ProtocolName);
+   void SetProtocolName(const std::string & orc_ProtocolName);
 
 protected:
-   stw::scl::C_SclString mc_FilePath;
-   stw::scl::C_SclString mc_ProtocolName;
+   std::string mc_FilePath;
+   std::string mc_ProtocolName;
 
 private:
    //Avoid call

@@ -22,7 +22,6 @@
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::tgl;
 
 using namespace stw::errors;
@@ -60,7 +59,7 @@ C_OscParamSetHandler::C_OscParamSetHandler(void)
    C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetHandler::CreateCleanFileWithoutCrc(const C_SclString & orc_FilePath,
+int32_t C_OscParamSetHandler::CreateCleanFileWithoutCrc(const std::string & orc_FilePath,
                                                         const bool oq_InterpretedDataOnly) const
 {
    int32_t s32_Return = C_NO_ERR;
@@ -125,7 +124,7 @@ int32_t C_OscParamSetHandler::CreateCleanFileWithoutCrc(const C_SclString & orc_
    C_CONFIG   file does not contain essential information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetHandler::ReadFile(const C_SclString & orc_FilePath, const bool oq_IgnoreCrc,
+int32_t C_OscParamSetHandler::ReadFile(const std::string & orc_FilePath, const bool oq_IgnoreCrc,
                                        const bool oq_InterpretedDataOnly, uint16_t * const opu16_FileCrc,
                                        bool * const opq_MissingOptionalContent)
 {
@@ -187,8 +186,8 @@ int32_t C_OscParamSetHandler::ReadFile(const C_SclString & orc_FilePath, const b
    }
    if (s32_Retval != C_NO_ERR)
    {
-      const C_SclString c_Text = "Could not load file \"" + orc_FilePath + "\". Error code: " +
-                                 C_SclString::IntToStr(s32_Retval);
+      const std::string c_Text = "Could not load file \"" + orc_FilePath + "\". Error code: " +
+                                 std::to_string(s32_Retval);
       osc_write_log_error("Loading Dataset data", c_Text);
    }
 
@@ -207,7 +206,7 @@ int32_t C_OscParamSetHandler::ReadFile(const C_SclString & orc_FilePath, const b
    C_RANGE  File does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetHandler::h_UpdateCrcForFile(const C_SclString & orc_FilePath)
+int32_t C_OscParamSetHandler::h_UpdateCrcForFile(const std::string & orc_FilePath)
 {
    return C_OscParamSetFilerBase::h_AddCrc(orc_FilePath);
 }
@@ -303,7 +302,7 @@ int32_t C_OscParamSetHandler::AddInterpretedDataForNode(const C_OscParamSetInter
    Else Valid raw node data
 */
 //----------------------------------------------------------------------------------------------------------------------
-const C_OscParamSetRawNode * C_OscParamSetHandler::GetRawDataForNode(const C_SclString & orc_NodeName) const
+const C_OscParamSetRawNode * C_OscParamSetHandler::GetRawDataForNode(const std::string & orc_NodeName) const
 {
    const C_OscParamSetRawNode * pc_Retval = NULL;
 
@@ -392,7 +391,7 @@ int32_t C_OscParamSetHandler::m_LoadNodes(C_OscXmlParser & orc_XmlParser, const 
 
    if (orc_XmlParser.SelectNodeChild("nodes") == "nodes")
    {
-      C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("node");
+      std::string c_SelectedNode = orc_XmlParser.SelectNodeChild("node");
 
       if (c_SelectedNode == "node")
       {

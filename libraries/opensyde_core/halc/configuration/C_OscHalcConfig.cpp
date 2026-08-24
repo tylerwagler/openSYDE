@@ -192,8 +192,8 @@ int32_t C_OscHalcConfig::SetDomainConfig(const uint32_t ou32_Index, const C_OscH
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfig::SetDomainChannelConfig(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                                const bool oq_UseChannelIndex, const stw::scl::C_SclString & orc_Name,
-                                                const stw::scl::C_SclString & orc_Comment, const bool oq_SafetyRelevant,
+                                                const bool oq_UseChannelIndex, const std::string & orc_Name,
+                                                const std::string & orc_Comment, const bool oq_SafetyRelevant,
                                                 const uint32_t ou32_UseCaseIndex)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -316,7 +316,7 @@ int32_t C_OscHalcConfig::ResetDomainChannelUseCase(const uint32_t ou32_DomainInd
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfig::SetDomainChannelConfigName(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
                                                     const bool oq_UseChannelIndex,
-                                                    const stw::scl::C_SclString & orc_Name)
+                                                    const std::string & orc_Name)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -363,7 +363,7 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigName(const uint32_t ou32_DomainIn
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfig::SetDomainChannelConfigComment(const uint32_t ou32_DomainIndex,
                                                        const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                                       const stw::scl::C_SclString & orc_Comment)
+                                                       const std::string & orc_Comment)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -753,7 +753,7 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementEnum(const uint32
                                                                     const uint32_t ou32_ParameterIndex,
                                                                     const uint32_t ou32_ElementIndex,
                                                                     const bool oq_UseChannelIndex,
-                                                                    const stw::scl::C_SclString & orc_DisplayName)
+                                                                    const std::string & orc_DisplayName)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -853,7 +853,7 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementBitmask(const uin
                                                                        const uint32_t ou32_ParameterIndex,
                                                                        const uint32_t ou32_ElementIndex,
                                                                        const bool oq_UseChannelIndex,
-                                                                       const stw::scl::C_SclString & orc_DisplayName,
+                                                                       const std::string & orc_DisplayName,
                                                                        const bool oq_Value)
 {
    int32_t s32_Retval = C_NO_ERR;

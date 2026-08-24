@@ -157,7 +157,7 @@ int32_t C_OscSecurityPemDatabase::ParseFolder(const std::string & orc_FolderPath
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   const stw::scl::C_SclString c_SclFolderPathWithDelimiter =
+   const std::string c_SclFolderPathWithDelimiter =
       stw::tgl::TglFileIncludeTrailingDelimiter(orc_FolderPath);
    const std::string c_FolderPathWithDelimiter = c_SclFolderPathWithDelimiter.c_str();
 
@@ -173,9 +173,9 @@ int32_t C_OscSecurityPemDatabase::ParseFolder(const std::string & orc_FolderPath
          C_OscSecurityPemDatabase::m_TryAddKeyFromPath(c_CurFolderPath, true);
       }
       osc_write_log_info("Read PEM database",
-                         "Imported " + stw::scl::C_SclString::IntToStr(
+                         "Imported " + std::to_string(
                             this->mc_StoredPemFiles.size()) + " valid PEM files of the total seen " +
-                         stw::scl::C_SclString::IntToStr(
+                         std::to_string(
                             c_Files.size()) + " PEM files in folder \"" + c_FolderPathWithDelimiter + "\".");
    }
    else
@@ -287,11 +287,11 @@ std::vector<std::string> C_OscSecurityPemDatabase::mh_GetPemFiles(const std::str
    std::vector<C_TglFileSearchRecord> c_FilesScl;
 
    TglFileFind(orc_FolderPath + "*", c_FilesScl);
-   for (int32_t s32_It = 0; s32_It < c_FilesScl.GetLength(); ++s32_It)
+   for (int32_t s32_It = 0; s32_It < c_FilesScl.size(); ++s32_It)
    {
       const C_TglFileSearchRecord & rc_FileRecord = c_FilesScl[s32_It];
-      const stw::scl::C_SclString c_FileNameScl = rc_FileRecord.c_FileName;
-      const stw::scl::C_SclString c_Extension = TglExtractFileExtension(c_FileNameScl);
+      const std::string c_FileNameScl = rc_FileRecord.c_FileName;
+      const std::string c_Extension = TglExtractFileExtension(c_FileNameScl);
       if (c_Extension == ".pem")
       {
          c_Retval.push_back(orc_FolderPath + c_FileNameScl.c_str());

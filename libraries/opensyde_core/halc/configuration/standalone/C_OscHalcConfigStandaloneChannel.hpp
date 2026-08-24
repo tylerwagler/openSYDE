@@ -9,7 +9,7 @@
 #define C_OSCHALCCONFIGSTANDALONECHANNEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -25,7 +25,7 @@ class C_OscHalcConfigStandaloneChannel
 public:
    C_OscHalcConfigStandaloneChannel(void);
 
-   std::vector<stw::scl::C_SclString> c_ParameterIds;
+   std::vector<std::string> c_ParameterIds;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

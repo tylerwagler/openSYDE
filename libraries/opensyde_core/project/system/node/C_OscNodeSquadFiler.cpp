@@ -68,7 +68,7 @@ int32_t C_OscNodeSquadFiler::h_LoadNodeGroups(std::vector<C_OscNodeSquad> & orc_
       s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_LengthNodeGroup);
       if (s32_Retval == C_NO_ERR)
       {
-         stw::scl::C_SclString c_NodeName;
+         std::string c_NodeName;
          orc_NodeGroups.reserve(u32_LengthNodeGroup);
          c_NodeName = orc_XmlParser.SelectNodeChild("node-group");
          if (c_NodeName == "node-group")
@@ -90,9 +90,9 @@ int32_t C_OscNodeSquadFiler::h_LoadNodeGroups(std::vector<C_OscNodeSquad> & orc_
                {
                   s32_Retval = C_CONFIG;
                   osc_write_log_error("Loading system definition",
-                                      "Expected " + stw::scl::C_SclString::IntToStr(
+                                      "Expected " + std::to_string(
                                          u32_LengthNodeGroup) + " node groups but received " +
-                                      stw::scl::C_SclString::IntToStr(orc_NodeGroups.size()) + " node groups.");
+                                      std::to_string(orc_NodeGroups.size()) + " node groups.");
                }
                if (s32_Retval == C_NO_ERR)
                {
@@ -140,7 +140,7 @@ int32_t C_OscNodeSquadFiler::h_LoadNodeGroup(C_OscNodeSquad & orc_NodeGroup, C_O
             s32_Retval = orc_XmlParser.SelectNodeChildError("sub-node-index");
             if (s32_Retval == C_NO_ERR)
             {
-               stw::scl::C_SclString c_NodeName;
+               std::string c_NodeName;
                do
                {
                   uint32_t u32_Value;
@@ -158,9 +158,9 @@ int32_t C_OscNodeSquadFiler::h_LoadNodeGroup(C_OscNodeSquad & orc_NodeGroup, C_O
                   {
                      s32_Retval = C_CONFIG;
                      osc_write_log_error("Loading system definition",
-                                         "Expected " + stw::scl::C_SclString::IntToStr(
+                                         "Expected " + std::to_string(
                                             u32_LengthSubIndices) + " sub node indices but received " +
-                                         stw::scl::C_SclString::IntToStr(
+                                         std::to_string(
                                             orc_NodeGroup.c_SubNodeIndexes.size()) + " sub node indices.");
                   }
                }

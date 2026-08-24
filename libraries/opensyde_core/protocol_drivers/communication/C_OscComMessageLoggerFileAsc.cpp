@@ -21,6 +21,7 @@
 #include "C_OscComMessageLoggerFileAsc.hpp"
 #include "TglFile.hpp"
 #include "TglTime.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -50,8 +51,8 @@ using namespace stw::opensyde_core;
    \param[in]  oq_RelativeTimeStampActive   Mode for writing CAN timestamp (relative or absolute)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscComMessageLoggerFileAsc::C_OscComMessageLoggerFileAsc(const C_SclString & orc_FilePath,
-                                                           const C_SclString & orc_ProtocolName,
+C_OscComMessageLoggerFileAsc::C_OscComMessageLoggerFileAsc(const std::string & orc_FilePath,
+                                                           const std::string & orc_ProtocolName,
                                                            const bool oq_HexActive,
                                                            const bool oq_RelativeTimeStampActive) :
    C_OscComMessageLoggerFileBase(orc_FilePath, orc_ProtocolName),
@@ -72,8 +73,8 @@ C_OscComMessageLoggerFileAsc::~C_OscComMessageLoggerFileAsc(void)
    {
       if (this->mc_File.is_open() == true)
       {
-         const C_SclString c_EndLine = "End TriggerBlock";
-         this->mc_File.write(c_EndLine.c_str(), c_EndLine.Length());
+         const std::string c_EndLine = "End TriggerBlock";
+         this->mc_File.write(c_EndLine.c_str(), c_EndLine.length());
          this->mc_File.close();
       }
    }
@@ -103,7 +104,7 @@ int32_t C_OscComMessageLoggerFileAsc::OpenFile(void)
       this->mc_File.close();
    }
 
-   if (this->mc_FilePath.SubString(this->mc_FilePath.Length() - 3U, 4U).LowerCase() != ".asc")
+   if (LowerCaseCompat(SubStringCompat(this->mc_FilePath, this->mc_FilePath.length() - 3U, 4U)) != ".asc")
    {
       // Missing file extension
       this->mc_FilePath += ".asc";
@@ -140,8 +141,8 @@ void C_OscComMessageLoggerFileAsc::AddMessageToFile(const C_OscComMessageLoggerD
    if (this->mc_File.is_open() == true)
    {
       uint32_t u32_SignalCounter;
-      C_SclString c_LogEntry = "   ";
-      C_SclString c_Temp;
+      std::string c_LogEntry = "   ";
+      std::string c_Temp;
 
       // Timestamp
       if (this->mq_RelativeTimeStampActive == true)
@@ -160,11 +161,11 @@ void C_OscComMessageLoggerFileAsc::AddMessageToFile(const C_OscComMessageLoggerD
       // ASC specification defines a width of fixed 15 chars for CAN Id. Plus one for the space to the direction
       if (this->mq_HexActive == true)
       {
-         c_Temp.PrintFormatted("%-16s", orc_MessageData.c_CanIdHex.c_str());
+         c_Temp = PrintFormattedCompat("%-16s", orc_MessageData.c_CanIdHex.c_str());
       }
       else
       {
-         c_Temp.PrintFormatted("%-16s", orc_MessageData.c_CanIdDec.c_str());
+         c_Temp = PrintFormattedCompat("%-16s", orc_MessageData.c_CanIdDec.c_str());
       }
       c_LogEntry += c_Temp;
 
@@ -245,7 +246,7 @@ void C_OscComMessageLoggerFileAsc::AddMessageToFile(const C_OscComMessageLoggerD
          c_LogEntry += "\n";
       }
 
-      this->mc_File.write(c_LogEntry.c_str(), c_LogEntry.Length());
+      this->mc_File.write(c_LogEntry.c_str(), c_LogEntry.length());
    }
 }
 
@@ -263,8 +264,8 @@ void C_OscComMessageLoggerFileAsc::m_WriteHeader(void)
 {
    if (this->mc_File.is_open() == true)
    {
-      C_SclString c_Header;
-      const C_SclString c_TimeString = mh_GetAscTimeString();
+      std::string c_Header;
+      const std::string c_TimeString = mh_GetAscTimeString();
 
       // First line is date and time
       c_Header = "date " + c_TimeString + "\n";
@@ -297,7 +298,7 @@ void C_OscComMessageLoggerFileAsc::m_WriteHeader(void)
       c_Header += "// version 7.2.0\n";
       c_Header += "Begin Triggerblock " + c_TimeString + "\n";
 
-      this->mc_File.write(c_Header.c_str(), c_Header.Length());
+      this->mc_File.write(c_Header.c_str(), c_Header.length());
    }
 }
 
@@ -308,10 +309,10 @@ void C_OscComMessageLoggerFileAsc::m_WriteHeader(void)
    Time and date in defined format
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
+std::string C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
 {
-   C_SclString c_Result;
-   C_SclString c_Temp;
+   std::string c_Result;
+   std::string c_Temp;
 
    // Getting weekday
    const std::time_t x_Time = std::time(NULL);      //lint !e8080 using type expected by the library for compatibility
@@ -320,20 +321,20 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
 
    c_Result += mh_GetDay(c_Time.tm_wday) + " ";
    c_Result += mh_GetMonth(c_Time.tm_mon) + " ";
-   c_Result += C_SclString::IntToStr(c_Time.tm_mday) + " ";
+   c_Result += std::to_string(c_Time.tm_mday) + " ";
    // Hours
-   c_Temp.PrintFormatted("%.2d", c_Time.tm_hour);
+   c_Temp = PrintFormattedCompat("%.2d", c_Time.tm_hour);
    c_Result += c_Temp + ":";
    // Minutes
-   c_Temp.PrintFormatted("%.2d", c_Time.tm_min);
+   c_Temp = PrintFormattedCompat("%.2d", c_Time.tm_min);
    c_Result += c_Temp + ":";
    // Seconds
-   c_Temp.PrintFormatted("%.2d", c_Time.tm_sec);
+   c_Temp = PrintFormattedCompat("%.2d", c_Time.tm_sec);
    c_Result += c_Temp + ".";
    // Get the milliseconds
-   c_Temp.PrintFormatted("%.3u", u32_TimeMs % 1000U);
+   c_Temp = PrintFormattedCompat("%.3u", u32_TimeMs % 1000U);
    c_Result += c_Temp + " ";
-   c_Result += C_SclString::IntToStr(1900 + c_Time.tm_year);
+   c_Result += std::to_string(1900 + c_Time.tm_year);
 
    return c_Result;
 }
@@ -347,9 +348,9 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
    Weekday
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLoggerFileAsc::mh_GetDay(const int32_t os32_Day)
+std::string C_OscComMessageLoggerFileAsc::mh_GetDay(const int32_t os32_Day)
 {
-   C_SclString c_Day;
+   std::string c_Day;
 
    switch (os32_Day)
    {
@@ -392,9 +393,9 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_GetDay(const int32_t os32_Day)
    Weekday
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLoggerFileAsc::mh_GetMonth(const int32_t os32_Month)
+std::string C_OscComMessageLoggerFileAsc::mh_GetMonth(const int32_t os32_Month)
 {
-   C_SclString c_Month;
+   std::string c_Month;
 
    switch (os32_Month)
    {
@@ -457,13 +458,13 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_GetMonth(const int32_t os32_Month)
    Adapted string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLoggerFileAsc::mh_AdaptTimeStamp(const uint64_t ou64_TimeStamp)
+std::string C_OscComMessageLoggerFileAsc::mh_AdaptTimeStamp(const uint64_t ou64_TimeStamp)
 {
-   C_SclString c_TimeStamp;
+   std::string c_TimeStamp;
 
-   c_TimeStamp.PrintFormatted("%d.%.6d", static_cast<int32_t>(ou64_TimeStamp / 1000000ULL),
+   c_TimeStamp = PrintFormattedCompat("%d.%.6d", static_cast<int32_t>(ou64_TimeStamp / 1000000ULL),
                               static_cast<int32_t>(ou64_TimeStamp % 1000000ULL));
-   c_TimeStamp.PrintFormatted("%9s", c_TimeStamp.c_str());
+   c_TimeStamp = PrintFormattedCompat("%9s", c_TimeStamp.c_str());
 
    return c_TimeStamp;
 }

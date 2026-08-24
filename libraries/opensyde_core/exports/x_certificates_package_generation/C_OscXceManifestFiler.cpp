@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
@@ -22,11 +23,14 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
+using namespace stw::scl;
 using namespace stw::errors;
+using namespace stw::scl;
 using namespace stw::opensyde_core;
+using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscXceManifestFiler::hc_FILE_NAME = "manifest.syde_pkg";
+const std::string C_OscXceManifestFiler::hc_FILE_NAME = "manifest.syde_pkg";
 const uint16_t C_OscXceManifestFiler::mhu16_FILE_VERSION_1 = 1;
 const uint16_t C_OscXceManifestFiler::mhu16_PACKAGE_VERSION_1 = 1;
 
@@ -56,7 +60,7 @@ const uint16_t C_OscXceManifestFiler::mhu16_PACKAGE_VERSION_1 = 1;
                manifest file could not be loaded
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const stw::scl::C_SclString & orc_Path)
+int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const std::string & orc_Path)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -103,7 +107,7 @@ int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const s
    C_CONFIG   data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, const stw::scl::C_SclString & orc_Path)
+int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, const std::string & orc_Path)
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
@@ -141,7 +145,7 @@ int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, c
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
-   stw::scl::C_SclString c_Types;
+   std::string c_Types;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
                                                              "Loading manifest data");
 
@@ -201,7 +205,7 @@ void C_OscXceManifestFiler::h_SaveData(const C_OscXceManifest & orc_Config, C_Os
 {
    //File version
    tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
-   orc_XmlParser.SetNodeContent(stw::scl::C_SclString::IntToStr(mhu16_FILE_VERSION_1));
+   orc_XmlParser.SetNodeContent(std::to_string(mhu16_FILE_VERSION_1));
    //Return
    orc_XmlParser.SelectNodeParent();
    //Package
@@ -211,7 +215,7 @@ void C_OscXceManifestFiler::h_SaveData(const C_OscXceManifest & orc_Config, C_Os
    orc_XmlParser.SelectNodeParent();
    //Config
    tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("x-app-security-certificates") == "x-app-security-certificates");
-   orc_XmlParser.CreateNodeChild("package-version", stw::scl::C_SclString::IntToStr(mhu16_PACKAGE_VERSION_1));
+   orc_XmlParser.CreateNodeChild("package-version", std::to_string(mhu16_PACKAGE_VERSION_1));
    tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("secure-authentication") == "secure-authentication");
    orc_XmlParser.SetAttributeString("certificates-path", orc_Config.c_CertificatesPath);
    //Return
@@ -250,7 +254,7 @@ int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscX
          if (s32_Retval == C_NO_ERR)
          {
             uint32_t u32_ActualCount = 0UL;
-            stw::scl::C_SclString c_NodeUpdatePackageParameters = orc_XmlParser.SelectNodeChild(
+            std::string c_NodeUpdatePackageParameters = orc_XmlParser.SelectNodeChild(
                "update-package-parameters");
             //Clear any existing configuration
             orc_Config.clear();
@@ -278,8 +282,8 @@ int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscX
             }
             if (u32_ExpectedCount != u32_ActualCount)
             {
-               stw::scl::C_SclString c_Tmp;
-               c_Tmp.PrintFormatted("Unexpected update package parameters count, expected: %u, got %u",
+               std::string c_Tmp;
+               c_Tmp = PrintFormattedCompat("Unexpected update package parameters count, expected: %u, got %u",
                                     u32_ExpectedCount,
                                     u32_ActualCount);
                orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext("length", c_Tmp);

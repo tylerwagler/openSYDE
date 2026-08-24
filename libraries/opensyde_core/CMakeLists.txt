@@ -41,8 +41,8 @@
 # )
 # </example>
 
-# minimum 3.16 for precompiled headers
-cmake_minimum_required(VERSION 3.16)
+# minimum 3.24 for FetchContent, FILE_SET, and modern CMake policies
+cmake_minimum_required(VERSION 3.24)
 project("opensyde_core")
 
 # --- libcan dependency -----------------------------------------------------------------------------------------------
@@ -129,7 +129,6 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclDateTime.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclIniFile.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclString.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclStringList.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscXmlParser.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscXmlParserLog.cpp
@@ -145,10 +144,11 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclDateTime.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclIniFile.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclString.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclStringList.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/stwerrors.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/stwerrors.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/C_OscErrorCategory.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/C_OscErrorCategory.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwtypes/stwtypes.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwtypes/stwtypes.h
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscXmlParser.hpp
@@ -801,6 +801,7 @@ else()
    )
 
    set(OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock
    )
 endif()
@@ -838,6 +839,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND NOT OPENSYDE_CORE_SKIP_LINUX_DRIVERS)
 
    set(OPENSYDE_CORE_LINUX_DRIVERS_INCLUDE_DIRECTORIES
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock
    )
 elseif(OPENSYDE_CORE_SKIP_LINUX_DRIVERS)
@@ -881,7 +883,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/security/C_OscSecurityEcdsa.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/security/C_OscSecurityEcdhAes.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/security/C_OscSecurityRsa.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/security/aes/AES.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/security/C_OscSecurityPem.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/security/C_OscSecurityPemBase.hpp
@@ -893,12 +894,10 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/security/C_OscSecurityEcdsa.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/security/C_OscSecurityEcdhAes.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/security/C_OscSecurityRsa.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/security/aes/AES.h
    )
 
    set(OPENSYDE_CORE_SECURITY_INCLUDE_DIRECTORIES
       ${CMAKE_CURRENT_SOURCE_DIR}/security
-      ${CMAKE_CURRENT_SOURCE_DIR}/security/aes
    )
 endif()
 

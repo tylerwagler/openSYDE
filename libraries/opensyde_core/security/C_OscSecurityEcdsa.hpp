@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 
-#include "C_SclString.hpp"
+#include <string>
 
 #include "openssl/evp.h"
 
@@ -48,8 +48,8 @@ public:
       uint8_t au8_Rpart[hu32_SECP256R1_SIGNATURE_PART_LENGTH_MAX]; //r part as binary
       uint8_t au8_Spart[hu32_SECP256R1_SIGNATURE_PART_LENGTH_MAX]; //s part as binary
 
-      int32_t GetAsDerString(stw::scl::C_SclString & orc_Signature) const;
-      int32_t SetFromDerString(const stw::scl::C_SclString & orc_Signature);
+      int32_t GetAsDerString(std::string & orc_Signature) const;
+      int32_t SetFromDerString(const std::string & orc_Signature);
    };
 
    C_OscSecurityEcdsa();
@@ -61,7 +61,7 @@ public:
    static int32_t h_CalcEcdsaSecp256r1Signature(const uint8_t(&orau8_Digest)[hu32_SHA256_FINAL_LENGTH],
                                                 const uint8_t(&orau8_PrivateKey)[hu32_SECP256R1_PRIVATE_KEY_LENGTH],
                                                 C_Ecdsa256Signature & orc_Signature,
-                                                stw::scl::C_SclString & orc_ErrorMessage);
+                                                std::string & orc_ErrorMessage);
 
    static int32_t h_VerifyEcdsaSecp256r1Signature(const uint8_t(&orau8_PublicKey)[hu32_SECP256R1_PUBLIC_KEY_LENGTH],
                                                   const C_Ecdsa256Signature & orc_Signature,

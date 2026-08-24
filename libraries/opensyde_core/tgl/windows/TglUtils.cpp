@@ -16,11 +16,10 @@
 #include <lmcons.h> //for UNLEN
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
-using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -47,10 +46,10 @@ using namespace stw::scl;
 void stw::tgl::TglReportAssertion(const char_t * const opcn_Module, const char_t * const opcn_Func,
                                   const int32_t os32_Line)
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
-   c_Text = static_cast<C_SclString>("Extremely nasty error\n (assertion in module ") + opcn_Module + ", function " +
-            opcn_Func + ", line " + C_SclString::IntToStr(os32_Line) + ") !";
+   c_Text = static_cast<std::string>("Extremely nasty error\n (assertion in module ") + opcn_Module + ", function " +
+            opcn_Func + ", line " + std::to_string(os32_Line) + ") !";
    MessageBoxA(GetFocus(), c_Text.c_str(), "Error", MB_OK); //lint !e1960
                                                             //provided by system headers; no problems expected
 }
@@ -69,10 +68,10 @@ void stw::tgl::TglReportAssertion(const char_t * const opcn_Module, const char_t
 void stw::tgl::TglReportAssertionDetail(const char_t * const opcn_DetailInfo, const char_t * const opcn_Module,
                                         const char_t * const opcn_Func, const int32_t os32_Line)
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
-   c_Text = static_cast<C_SclString>(opcn_DetailInfo) + "\nfunction  " + opcn_Func + "\nassertion in module  " +
-            opcn_Module + ", line  " + C_SclString::IntToStr(os32_Line) + "!";
+   c_Text = static_cast<std::string>(opcn_DetailInfo) + "\nfunction  " + opcn_Func + "\nassertion in module  " +
+            opcn_Module + ", line  " + std::to_string(os32_Line) + "!";
    MessageBoxA(GetFocus(), c_Text.c_str(), "Detailed-Error", MB_OK); //lint !e1960
                                                                      //provided by system headers; no problems expected
 }
@@ -89,7 +88,7 @@ void stw::tgl::TglReportAssertionDetail(const char_t * const opcn_DetailInfo, co
    false     error -> orc_UserName not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglGetSystemUserName(C_SclString & orc_UserName)
+bool stw::tgl::TglGetSystemUserName(std::string & orc_UserName)
 {
    char_t acn_WinUserName[UNLEN + 1];
    DWORD u32_Size = sizeof(acn_WinUserName);
@@ -119,7 +118,7 @@ bool stw::tgl::TglGetSystemUserName(C_SclString & orc_UserName)
    false     error -> orc_MachineName not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglGetSystemMachineName(C_SclString & orc_MachineName)
+bool stw::tgl::TglGetSystemMachineName(std::string & orc_MachineName)
 {
    char_t acn_WinSystemName[MAX_COMPUTERNAME_LENGTH + 1];
    DWORD u32_Size = sizeof(acn_WinSystemName);
@@ -169,7 +168,7 @@ void stw::tgl::TglHandleSystemMessages(void)
    -1  could not set variable
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t stw::tgl::TglSetEnvironmentVariable(const C_SclString & orc_Name, const C_SclString & orc_Value)
+int32_t stw::tgl::TglSetEnvironmentVariable(const std::string & orc_Name, const std::string & orc_Value)
 {
    int x_Return;
 

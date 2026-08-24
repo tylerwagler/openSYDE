@@ -9,7 +9,7 @@
 #define C_OSCXCEUPDATEPACKAGEPARAMETERS_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -25,8 +25,8 @@ class C_OscXceUpdatePackageParameters
 public:
    C_OscXceUpdatePackageParameters();
 
-   stw::scl::C_SclString c_Password;
-   stw::scl::C_SclString c_AuthenticationKeyPath;
+   std::string c_Password;
+   std::string c_AuthenticationKeyPath;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

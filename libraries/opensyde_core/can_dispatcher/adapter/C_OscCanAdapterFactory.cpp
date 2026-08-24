@@ -25,7 +25,6 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
-using namespace stw::scl;
 using namespace stw::can;
 using namespace stw::opensyde_core;
 
@@ -53,14 +52,14 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_CanDispatcher * C_OscCanAdapterFactory::h_CreateAdapter(const C_OscCanAdapterConfig & orc_Config,
-                                                          C_SclString & orc_ErrorDescription)
+                                                          std::string & orc_ErrorDescription)
 {
    orc_ErrorDescription = "";
 
    std::unique_ptr< ::can::ICanBackend> c_Backend = ::can::ICanBackend::create(orc_Config.e_BackendKind);
    if (c_Backend == NULL)
    {
-      orc_ErrorDescription = static_cast<C_SclString>("Backend not compiled in: ") +
+      orc_ErrorDescription = static_cast<std::string>("Backend not compiled in: ") +
                              ::can::backendKindToString(orc_Config.e_BackendKind).c_str();
       return NULL;
    }
@@ -98,7 +97,7 @@ bool C_OscCanAdapterFactory::h_IsBackendAvailable(const ::can::BackendKind oe_Ki
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscCanAdapterFactory::h_GetBackendDisplayName(const ::can::BackendKind oe_Kind)
+std::string C_OscCanAdapterFactory::h_GetBackendDisplayName(const ::can::BackendKind oe_Kind)
 {
-   return static_cast<C_SclString>(::can::backendKindToString(oe_Kind).c_str());
+   return static_cast<std::string>(::can::backendKindToString(oe_Kind).c_str());
 }

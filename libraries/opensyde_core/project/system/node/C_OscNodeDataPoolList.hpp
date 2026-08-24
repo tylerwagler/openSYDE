@@ -15,7 +15,7 @@
 #include <iostream>
 #include <vector>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscNodeDataPoolListElement.hpp"
 #include "C_OscNodeDataPoolDataSet.hpp"
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
@@ -57,8 +57,8 @@ public:
    void GetCrcAsBigEndianBlob(std::vector<uint8_t> & orc_Data) const;
    void GetCrcAsLittleEndianBlob(std::vector<uint8_t> & orc_Data) const;
 
-   stw::scl::C_SclString c_Name;                         ///< User data list name
-   stw::scl::C_SclString c_Comment;                      ///< User data list comment
+   std::string c_Name;                         ///< User data list name
+   std::string c_Comment;                      ///< User data list comment
    bool q_NvmCrcActive;                                  ///< Flag if NvM list checksum is used
    uint32_t u32_NvmCrc;                                  ///< NvM list checksum
    uint32_t u32_NvmStartAddress;                         ///< NvM start address of data list

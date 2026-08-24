@@ -28,36 +28,36 @@ class C_OscXceCreate :
    public C_OscXceBase
 {
 public:
-   static int32_t h_CreatePackage(const stw::scl::C_SclString & orc_PackagePath,
-                                  const std::vector<stw::scl::C_SclString> & orc_CertificatesPath,
+   static int32_t h_CreatePackage(const std::string & orc_PackagePath,
+                                  const std::vector<std::string> & orc_CertificatesPath,
                                   const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
                                   stw::scl::C_SclStringList & orc_WarningMessages,
-                                  stw::scl::C_SclString & orc_ErrorMessage,
-                                  const stw::scl::C_SclString & orc_TemporaryDirectory = "");
+                                  std::string & orc_ErrorMessage,
+                                  const std::string & orc_TemporaryDirectory = "");
 
 private:
-   static const stw::scl::C_SclString mhc_USE_CASE;
+   static const std::string mhc_USE_CASE;
 
-   static int32_t mh_CheckParamsToCreatePackage(const stw::scl::C_SclString & orc_PackagePath,
-                                                const std::vector<stw::scl::C_SclString> & orc_CertificatesPath,
+   static int32_t mh_CheckParamsToCreatePackage(const std::string & orc_PackagePath,
+                                                const std::vector<std::string> & orc_CertificatesPath,
                                                 const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
-   static int32_t mh_CheckFileExists(const stw::scl::C_SclString & orc_Path);
+   static int32_t mh_CheckFileExists(const std::string & orc_Path);
    static C_OscXceManifest mh_CreateManifest(
       const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
-   static int32_t mh_PrepareCertFiles(const stw::scl::C_SclString & orc_TmpPath,
-                                      const std::vector<stw::scl::C_SclString> & orc_CertificatesPath,
+   static int32_t mh_PrepareCertFiles(const std::string & orc_TmpPath,
+                                      const std::vector<std::string> & orc_CertificatesPath,
                                       std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
-                                      std::set<stw::scl::C_SclString> & orc_XcertFiles);
-   static stw::scl::C_SclString mh_GenOutFilePathPart(const stw::scl::C_SclString & orc_InPath,
-                                                      const stw::scl::C_SclString & orc_TargetFolder);
-   static int32_t mh_CopyFile(const stw::scl::C_SclString & orc_InPath, const stw::scl::C_SclString & orc_OutBasePath,
-                              const stw::scl::C_SclString & orc_OutFolder, std::map<stw::scl::C_SclString,
+                                      std::set<std::string> & orc_XcertFiles);
+   static std::string mh_GenOutFilePathPart(const std::string & orc_InPath,
+                                                      const std::string & orc_TargetFolder);
+   static int32_t mh_CopyFile(const std::string & orc_InPath, const std::string & orc_OutBasePath,
+                              const std::string & orc_OutFolder, std::map<std::string,
                                                                                     bool> & orc_ExistingFiles,
-                              std::set<stw::scl::C_SclString> & orc_XcertFiles,
-                              stw::scl::C_SclString * const opc_OutFilePath = NULL);
-   static stw::scl::C_SclString mh_GetUniqueFileName(const stw::scl::C_SclString & orc_InPath,
-                                                     const stw::scl::C_SclString & orc_OutFolder,
-                                                     std::map<stw::scl::C_SclString,
+                              std::set<std::string> & orc_XcertFiles,
+                              std::string * const opc_OutFilePath = NULL);
+   static std::string mh_GetUniqueFileName(const std::string & orc_InPath,
+                                                     const std::string & orc_OutFolder,
+                                                     std::map<std::string,
                                                               bool> & orc_ExistingFiles);
 };
 

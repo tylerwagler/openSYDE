@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include <map>
 
@@ -22,7 +23,9 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::opensyde_core;
+using namespace stw::scl;
 using namespace stw::errors;
+using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const uint32_t C_OscNodeDataPool::hu32_DEFAULT_NVM_SIZE = 1000UL;
@@ -71,9 +74,9 @@ C_OscNodeDataPool::C_OscNodeDataPool(void) :
 void C_OscNodeDataPool::CalcHash(uint32_t & oru32_HashValue) const
 {
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->au8_Version[0], sizeof(this->au8_Version), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->s32_RelatedDataBlockIndex, sizeof(this->s32_RelatedDataBlockIndex),
                                        oru32_HashValue);
    // pc_RelatedApplication is dynamic
@@ -373,7 +376,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
             if (u32_ItElement != oru32_ListIndex)
             {
                const C_OscNodeDataPoolList & rc_List = this->c_Lists[u32_ItElement];
-               if (rc_CheckedList.c_Name.LowerCase() == rc_List.c_Name.LowerCase())
+               if (LowerCaseCompat(rc_CheckedList.c_Name) == LowerCaseCompat(rc_List.c_Name))
                {
                   *opq_NameConflict = true;
                }
@@ -439,7 +442,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
       //Check elements
       if (opq_ElementsInvalid != NULL)
       {
-         std::map<stw::scl::C_SclString, uint32_t> c_PreviousNames;
+         std::map<std::string, uint32_t> c_PreviousNames;
          static std::map<uint32_t, bool> hc_PreviousResults;
          bool q_NameInvalid;
          bool q_MinOverMax;
@@ -451,8 +454,8 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
          {
             //Overarching checks
             const C_OscNodeDataPoolListElement & rc_Element = rc_CheckedList.c_Elements[u32_ItElement];
-            const std::map<stw::scl::C_SclString,
-                           uint32_t>::const_iterator c_ItElement = c_PreviousNames.find(rc_Element.c_Name.LowerCase());
+            const std::map<std::string,
+                           uint32_t>::const_iterator c_ItElement = c_PreviousNames.find(LowerCaseCompat(rc_Element.c_Name));
             if (c_ItElement != c_PreviousNames.end())
             {
                *opq_ElementsInvalid = true;
@@ -484,7 +487,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
                //Check if check was already performed in the past
                const std::map<uint32_t, bool>::const_iterator c_ItErr = hc_PreviousResults.find(u32_Hash);
                //Append new name
-               c_PreviousNames[rc_Element.c_Name.LowerCase()] = u32_ItElement;
+               c_PreviousNames[LowerCaseCompat(rc_Element.c_Name)] = u32_ItElement;
                //Element specific checks
                if (c_ItErr == hc_PreviousResults.end())
                {

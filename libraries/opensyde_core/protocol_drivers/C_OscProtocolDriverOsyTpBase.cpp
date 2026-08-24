@@ -16,13 +16,12 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
-using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 

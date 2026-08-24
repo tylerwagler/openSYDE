@@ -392,10 +392,10 @@ bool C_OscCanProtocol::h_ListIsComTx(const C_OscNodeDataPoolList & orc_List)
 {
    bool q_Retval = false;
 
-   if (orc_List.c_Name.Length() >= 2)
+   if (orc_List.c_Name.length() >= 2)
    {
       //Check second to last letter
-      if (orc_List.c_Name[orc_List.c_Name.Length() - 1] == 'T')
+      if (orc_List.c_Name[orc_List.c_Name.length() - 1] == 'T')
       {
          q_Retval = true;
       }

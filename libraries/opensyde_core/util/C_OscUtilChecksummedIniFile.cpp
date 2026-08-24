@@ -43,7 +43,7 @@ static const uint16_t mu16_CHECKSUM_VERSION = 2U;
    \param[in]     orc_FileName     path to INI file
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscUtilChecksummedIniFile::C_OscUtilChecksummedIniFile(const C_SclString & orc_FileName) :
+C_OscUtilChecksummedIniFile::C_OscUtilChecksummedIniFile(const std::string & orc_FileName) :
    C_SclIniFile(orc_FileName)
 {
 }
@@ -80,8 +80,8 @@ uint16_t C_OscUtilChecksummedIniFile::m_CalcCheckSum(const bool oq_Fast)
          u32_NumDirectives = c_DirectivesValues.GetCount();
          for (uint32_t u32_Directive = 0U; u32_Directive < u32_NumDirectives; u32_Directive++)
          {
-            const C_SclString & rc_String = c_DirectivesValues.Strings[u32_Directive];
-            for (uint32_t u32_Byte = 0U; u32_Byte < rc_String.Length(); u32_Byte++)
+            const std::string & rc_String = c_DirectivesValues.Strings[u32_Directive];
+            for (uint32_t u32_Byte = 0U; u32_Byte < rc_String.length(); u32_Byte++)
             {
                uint8_t u8_Value;
                u8_Value = static_cast<uint8_t>(rc_String.c_str()[u32_Byte]);

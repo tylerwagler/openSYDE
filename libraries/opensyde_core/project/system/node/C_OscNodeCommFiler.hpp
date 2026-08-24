@@ -29,15 +29,15 @@ class C_OscNodeCommFiler
 {
 public:
    static int32_t h_LoadNodeComProtocolFile(C_OscCanProtocol & orc_NodeComProtocol,
-                                            const stw::scl::C_SclString & orc_FilePath,
+                                            const std::string & orc_FilePath,
                                             const std::vector<C_OscNodeDataPool> & orc_NodeDataPools);
    static int32_t h_LoadNodeComProtocol(C_OscCanProtocol & orc_NodeComProtocol, C_OscXmlParserBase & orc_XmlParser,
                                         const std::vector<C_OscNodeDataPool> & orc_NodeDataPools);
    static int32_t h_SaveNodeComProtocolFile(const C_OscCanProtocol & orc_NodeComProtocol,
-                                            const stw::scl::C_SclString & orc_FilePath,
-                                            const stw::scl::C_SclString & orc_DatapoolName);
+                                            const std::string & orc_FilePath,
+                                            const std::string & orc_DatapoolName);
    static void h_SaveNodeComProtocol(const C_OscCanProtocol & orc_NodeComProtocol, C_OscXmlParserBase & orc_XmlParser,
-                                     const stw::scl::C_SclString & orc_DatapoolName);
+                                     const std::string & orc_DatapoolName);
    static int32_t h_LoadNodeComMessageContainers(std::vector<C_OscCanMessageContainer> & orc_NodeComMessageContainers,
                                                  C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeComMessageContainers(
@@ -64,11 +64,11 @@ public:
                                       const bool oq_CanOpenOnly = false);
    static void h_SaveNodeComSignal(const C_OscCanSignal & orc_NodeComSignal, C_OscXmlParserBase & orc_XmlParser,
                                    const C_OscCanProtocol::E_Type oe_ProtocolType);
-   static stw::scl::C_SclString h_CommunicationProtocolToString(
+   static std::string h_CommunicationProtocolToString(
       const C_OscCanProtocol::E_Type & ore_CommunicationProtocol);
-   static int32_t h_StringToCommunicationProtocol(const stw::scl::C_SclString & orc_String,
+   static int32_t h_StringToCommunicationProtocol(const std::string & orc_String,
                                                   C_OscCanProtocol::E_Type & ore_Type);
-   static stw::scl::C_SclString h_GetFileName(const stw::scl::C_SclString & orc_DatapoolName);
+   static std::string h_GetFileName(const std::string & orc_DatapoolName);
    static void h_SaveNodeOwnerIndex(const C_OscCanInterfaceId & orc_OwnerNodeIndex, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadNodeOwnerIndex(C_OscCanInterfaceId & orc_OwnerNodeIndex,
                                        const C_OscXmlParserBase & orc_XmlParser);
@@ -84,17 +84,17 @@ private:
    static int32_t mh_LoadSignalCanOpenPart(C_OscCanSignal & orc_NodeCommSignal, C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveSignalJ1939Part(const C_OscCanSignal & orc_NodeCommSignal, C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadSignalJ1939Part(C_OscCanSignal & orc_NodeCommSignal, C_OscXmlParserBase & orc_XmlParser);
-   static stw::scl::C_SclString mh_CommunicationByteOrderToString(
+   static std::string mh_CommunicationByteOrderToString(
       const C_OscCanSignal::E_ByteOrderType & ore_CommunicationByteOrder);
-   static int32_t mh_StringToCommunicationByteOrder(const stw::scl::C_SclString & orc_String,
+   static int32_t mh_StringToCommunicationByteOrder(const std::string & orc_String,
                                                     C_OscCanSignal::E_ByteOrderType & ore_Type);
-   static stw::scl::C_SclString mh_CommunicationMuxTypeToString(
+   static std::string mh_CommunicationMuxTypeToString(
       const C_OscCanSignal::E_MultiplexerType & ore_CommunicationByteOrder);
-   static int32_t mh_StringToCommunicationMuxType(const stw::scl::C_SclString & orc_String,
+   static int32_t mh_StringToCommunicationMuxType(const std::string & orc_String,
                                                   C_OscCanSignal::E_MultiplexerType & ore_Type);
-   static stw::scl::C_SclString mh_NodeComMessageTxMethodToString(
+   static std::string mh_NodeComMessageTxMethodToString(
       const C_OscCanMessage::E_TxMethodType & ore_NodeComMessageTxMethod);
-   static void mh_StringToNodeComMessageTxMethod(const stw::scl::C_SclString & orc_String,
+   static void mh_StringToNodeComMessageTxMethod(const std::string & orc_String,
                                                  C_OscCanMessage::E_TxMethodType & ore_Type);
 };
 

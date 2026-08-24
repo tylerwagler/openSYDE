@@ -40,17 +40,17 @@ TEST(Logging, StartPerformanceTimer_IdsIncreaseMonotonically)
 TEST(Logging, StwError_Consistency)
 {
    // Verify that every defined error code maps to its own name
-   EXPECT_EQ("C_NO_ERR",   std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(0).c_str()));
-   EXPECT_EQ("C_UNKNOWN_ERR", std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-1).c_str()));
-   EXPECT_EQ("C_WARN",     std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-2).c_str()));
-   EXPECT_EQ("C_DEFAULT",  std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-3).c_str()));
-   EXPECT_EQ("C_BUSY",     std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-4).c_str()));
-   EXPECT_EQ("C_RANGE",    std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-5).c_str()));
-   EXPECT_EQ("C_OVERFLOW", std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-6).c_str()));
-   EXPECT_EQ("C_RD_WR",    std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-7).c_str()));
-   EXPECT_EQ("C_NOACT",    std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-8).c_str()));
-   EXPECT_EQ("C_COM",      std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-9).c_str()));
-   EXPECT_EQ("C_CONFIG",   std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-10).c_str()));
-   EXPECT_EQ("C_CHECKSUM", std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-11).c_str()));
-   EXPECT_EQ("C_TIMEOUT",  std::string(stw::opensyde_core::C_OscLoggingHandler::h_StwError(-12).c_str()));
+   EXPECT_EQ("C_NO_ERR",   stw::opensyde_core::C_OscLoggingHandler::h_StwError(0));
+   EXPECT_EQ("C_UNKNOWN_ERR", stw::opensyde_core::C_OscLoggingHandler::h_StwError(-1));
+   EXPECT_EQ("C_WARN",     stw::opensyde_core::C_OscLoggingHandler::h_StwError(-2));
+   EXPECT_EQ("C_DEFAULT",  stw::opensyde_core::C_OscLoggingHandler::h_StwError(-3));
+   EXPECT_EQ("C_BUSY",     stw::opensyde_core::C_OscLoggingHandler::h_StwError(-4));
+   EXPECT_EQ("C_RANGE",    stw::opensyde_core::C_OscLoggingHandler::h_StwError(-5));
+   EXPECT_EQ("C_OVERFLOW", stw::opensyde_core::C_OscLoggingHandler::h_StwError(-6));
+   EXPECT_EQ("C_RD_WR",    stw::opensyde_core::C_OscLoggingHandler::h_StwError(-7));
+   EXPECT_EQ("C_NOACT",    stw::opensyde_core::C_OscLoggingHandler::h_StwError(-8));
+   EXPECT_EQ("C_COM",      stw::opensyde_core::C_OscLoggingHandler::h_StwError(-9));
+   EXPECT_EQ("C_CONFIG",   stw::opensyde_core::C_OscLoggingHandler::h_StwError(-10));
+   EXPECT_EQ("C_CHECKSUM", stw::opensyde_core::C_OscLoggingHandler::h_StwError(-11));
+   EXPECT_EQ("C_TIMEOUT",  stw::opensyde_core::C_OscLoggingHandler::h_StwError(-12));
 }

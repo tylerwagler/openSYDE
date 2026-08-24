@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscNodeProperties.hpp"
 #include "C_OscNodeDataPool.hpp"
 #include "C_OscNodeApplication.hpp"
@@ -127,7 +127,7 @@ public:
                        const uint32_t * const opu32_SkipInterfaceIndex = NULL,
                        const bool * const opq_SkipMessageIsTxFlag = NULL,
                        const uint32_t * const opu32_SkipMessageIndex = NULL) const;
-   void CheckMessageName(const uint32_t ou32_InterfaceIndex, const stw::scl::C_SclString & orc_MessageName,
+   void CheckMessageName(const uint32_t ou32_InterfaceIndex, const std::string & orc_MessageName,
                          bool & orq_Valid, const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = NULL,
                          const uint32_t * const opu32_SkipInterfaceIndex = NULL,
                          const bool * const opq_SkipMessageIsTxFlag = NULL,
@@ -150,7 +150,7 @@ public:
 
    const C_OscDeviceDefinition * pc_DeviceDefinition; ///< Pointer to device definition
    uint32_t u32_SubDeviceIndex;
-   stw::scl::C_SclString c_DeviceType; ///< Node type: for non multi-cpu devices (C_OscDeviceDefinition::c_DeviceName =
+   std::string c_DeviceType; ///< Node type: for non multi-cpu devices (C_OscDeviceDefinition::c_DeviceName =
    ///< C_OscNode::c_DeviceType) for multi-cpu devices (C_OscSubDeviceDefinition::c_DeviceName =
    ///< C_OscNode::c_DeviceType).
    ///< Simply put: When the device type of multi-cpu device is needed:

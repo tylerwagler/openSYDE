@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclStringList.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -35,7 +35,7 @@ extern const char_t APPLICATION_INFO_MAGIC_V2[APPLICATION_INFO_MAGIC_LENGTH_V2];
 class C_OscApplicationInfoBlock
 {
 private:
-   stw::scl::C_SclString m_GetNonTerminatedString(const char_t * opcn_Chars, const uint8_t ou8_MaxLength) const;
+   std::string m_GetNonTerminatedString(const char_t * opcn_Chars, const uint8_t ou8_MaxLength) const;
 
    int32_t m_ParsePayload(const uint8_t * const opu8_Data, const uint16_t ou16_NumBytesAvailable,
                           const uint8_t ou8_BlockVersion);
@@ -71,17 +71,17 @@ public:
    uint8_t u8_LenAdditionalInfo;
    char_t acn_AdditionalInfo[255]; ///< does not hurt on PC side, if we simply use the theoretical max. of 255 bytes
 
-   stw::scl::C_SclString GetDeviceID(void) const;
-   stw::scl::C_SclString GetDate(void) const;
-   stw::scl::C_SclString GetTime(void) const;
-   stw::scl::C_SclString GetProjectName(void) const;
-   stw::scl::C_SclString GetProjectVersion(void) const;
-   stw::scl::C_SclString GetAdditionalInfo(void) const;
+   std::string GetDeviceID(void) const;
+   std::string GetDate(void) const;
+   std::string GetTime(void) const;
+   std::string GetProjectName(void) const;
+   std::string GetProjectVersion(void) const;
+   std::string GetAdditionalInfo(void) const;
 
    void AddInfoToList(stw::scl::C_SclStringList & orc_List) const;
 
    int32_t GetInfoLevel(void) const;
-   stw::scl::C_SclString GetInfoLevelAsString(void) const;
+   std::string GetInfoLevelAsString(void) const;
 
    bool ContainsDeviceID(void) const;
    bool ContainsDateAndTime(void) const;

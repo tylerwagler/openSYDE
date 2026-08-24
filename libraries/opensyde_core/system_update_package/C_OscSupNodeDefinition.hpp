@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -33,11 +33,11 @@ public:
 
    uint8_t u8_Active;
    uint32_t u32_Position;
-   std::vector<stw::scl::C_SclString> c_ApplicationFileNames; // with relative path
-   std::vector<stw::scl::C_SclString> c_NvmFileNames;         // with relative path
-   stw::scl::C_SclString c_PemFile;
+   std::vector<std::string> c_ApplicationFileNames; // with relative path
+   std::vector<std::string> c_NvmFileNames;         // with relative path
+   std::string c_PemFile;
    uint8_t u8_SignaturePresent;
-   stw::scl::C_SclString c_SignatureFile;
+   std::string c_SignatureFile;
 
    /// Node configuration flags for secure authentication state
    bool q_SendSecureAuthenticationEnabledState;

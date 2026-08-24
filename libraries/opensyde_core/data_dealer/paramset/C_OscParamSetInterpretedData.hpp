@@ -31,7 +31,7 @@ public:
 
    void Clear();
    void AddInterpretedFileData(const C_OscParamSetInterpretedFileInfoData & orc_FileInfo);
-   const C_OscParamSetInterpretedNode * GetInterpretedDataForNode(const stw::scl::C_SclString & orc_NodeName) const;
+   const C_OscParamSetInterpretedNode * GetInterpretedDataForNode(const std::string & orc_NodeName) const;
 
    C_OscParamSetInterpretedFileInfoData c_FileInfo;
    //Interpreted file content

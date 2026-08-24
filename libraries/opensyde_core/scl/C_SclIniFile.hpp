@@ -10,7 +10,7 @@
     while only using ANSI C++ (with STL in this case).
    So cf. the documentation of the VCL TIniFile for details on most API functions.
 
-   Instead of AnsiString/UnicodeString the C_SclString class is used (which is not Unicode-capable).
+   Instead of AnsiString/UnicodeString the std::string class is used (which is not Unicode-capable).
    Loosely Based on CDataFile class by Gary McNickle <gary#sunstorm.net>.
 
    Additionally the following is supported:
@@ -41,7 +41,6 @@
 #include <string>
 #include <vector>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
 #include "C_SclStringList.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -70,9 +69,9 @@ namespace scl
 class C_SclIniKey
 {
 public:
-   C_SclString c_Key;     ///< key (text before the "=")
-   C_SclString c_Value;   ///< value (text after the "=")
-   C_SclString c_Comment; ///< comment preceding the key
+   std::string c_Key;     ///< key (text before the "=")
+   std::string c_Value;   ///< value (text after the "=")
+   std::string c_Comment; ///< comment preceding the key
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -88,12 +87,12 @@ public:
    C_SclIniSection();
 
    //Returns the requested key (if found) from the Section. Returns NULL otherwise.
-   C_SclIniKey * GetKey(const C_SclString & orc_Key);
+   C_SclIniKey * GetKey(const std::string & orc_Key);
    //Return value of specified key (or empty string if not found)
-   C_SclString GetValue(const C_SclString & orc_Key);
+   std::string GetValue(const std::string & orc_Key);
 
-   C_SclString c_Name;                    ///< name (text within "[""]")
-   C_SclString c_Comment;                 ///< comment preceding the section
+   std::string c_Name;                    ///< name (text within "[""]")
+   std::string c_Comment;                 ///< comment preceding the section
    std::vector<C_SclIniKey> c_Keys; ///< key/value pairs contained in this section
 };
 
@@ -103,40 +102,40 @@ class C_SclIniFile
 {
 protected:
    // Utility Methods
-   static void mh_GetNextPair(const C_SclString & orc_CommandLine, C_SclString & orc_Key, C_SclString & orc_Value);
+   static void mh_GetNextPair(const std::string & orc_CommandLine, std::string & orc_Key, std::string & orc_Value);
 
    // Returns the requested key (if found) from the requested Section. Returns NULL otherwise.
-   C_SclIniKey * m_GetKey(const C_SclString & orc_Key, const C_SclString & orc_Section);
+   C_SclIniKey * m_GetKey(const std::string & orc_Key, const std::string & orc_Section);
 
    // Returns the requested section (if found), NULL otherwise.
-   C_SclIniSection * m_GetSection(const C_SclString & orc_Section);
+   C_SclIniSection * m_GetSection(const std::string & orc_Section);
 
-   // Our default access method. Returns a const reference to the raw C_SclString value.
+   // Our default access method. Returns a const reference to the raw std::string value.
    // Note that this returns keys specific to the given section only.
-   const C_SclString & m_GetValue(const C_SclString & orc_Key, const C_SclString & orc_Section);
+   const std::string & m_GetValue(const std::string & orc_Key, const std::string & orc_Section);
 
-   // Utility to perform Trim on an C_SclString without the need to copy it over
+   // Utility to perform Trim on an std::string without the need to copy it over
    // Will save performance when parsing .ini files
-   static void mh_CopyLessTrim(C_SclString & orc_String);
+   static void mh_CopyLessTrim(std::string & orc_String);
 
    // Sets the value of a given key. Will create the key if it is not found.
    // If oq_ForceAppend==true a new key will be appended to the end of the section
    // without checking if this key already exists. Caution: This could produce a
    // corrupted INI file but makes a big performance improvement when generating a
    // new file.
-   bool m_SetValue(const C_SclString & orc_Section, const C_SclString & orc_Key, const C_SclString & orc_Value,
+   bool m_SetValue(const std::string & orc_Section, const std::string & orc_Key, const std::string & orc_Value,
                    const bool oq_ForceAppend);
 
    // Parses a string into a proper comment token/comment.
-   static C_SclString mh_CommentStr(const C_SclString & orc_Comment);
+   static std::string mh_CommentStr(const std::string & orc_Comment);
 
    // File handling methods
-   bool m_Load(const C_SclString & orc_FileName);
+   bool m_Load(const std::string & orc_FileName);
 
    // Key/Section handling methods
    // CreateSection: Creates the new section if it does not already
    // exist. Section is created with no keys.
-   C_SclIniSection * m_CreateSection(const C_SclString & orc_Section);
+   C_SclIniSection * m_CreateSection(const std::string & orc_Section);
 
    std::vector<C_SclIniSection> mc_Sections; ///< Our list of sections
    bool mq_Dirty;                                  ///< Tracks whether or not data has changed.
@@ -144,44 +143,44 @@ protected:
 
 public:
    // Constructors & Destructors
-   C_SclIniFile(const C_SclString & orc_FileName);
+   C_SclIniFile(const std::string & orc_FileName);
    virtual ~C_SclIniFile() SCL_WILL_THROW;
 
-   C_SclString ReadString (const C_SclString & orc_Section, const C_SclString & orc_Key,
-                           const C_SclString & orc_Default);
-   int32_t   ReadInteger(const C_SclString & orc_Section, const C_SclString & orc_Key, const int32_t os32_Default);
-   bool      ReadBool   (const C_SclString & orc_Section, const C_SclString & orc_Key, const bool oq_Default);
-   float64_t ReadFloat  (const C_SclString & orc_Section, const C_SclString & orc_Key, const float64_t of64_Default);
+   std::string ReadString (const std::string & orc_Section, const std::string & orc_Key,
+                           const std::string & orc_Default);
+   int32_t   ReadInteger(const std::string & orc_Section, const std::string & orc_Key, const int32_t os32_Default);
+   bool      ReadBool   (const std::string & orc_Section, const std::string & orc_Key, const bool oq_Default);
+   float64_t ReadFloat  (const std::string & orc_Section, const std::string & orc_Key, const float64_t of64_Default);
 
    //convenience shortcuts for commonly used stw_types:
-   uint8_t   ReadUint8 (const C_SclString & orc_Section, const C_SclString & orc_Key, const uint8_t ou8_Default);
-   uint16_t  ReadUint16(const C_SclString & orc_Section, const C_SclString & orc_Key, const uint16_t ou16_Default);
+   uint8_t   ReadUint8 (const std::string & orc_Section, const std::string & orc_Key, const uint8_t ou8_Default);
+   uint16_t  ReadUint16(const std::string & orc_Section, const std::string & orc_Key, const uint16_t ou16_Default);
 
-   void WriteString (const C_SclString & orc_Section, const C_SclString & orc_Key, const C_SclString & orc_Value,
+   void WriteString (const std::string & orc_Section, const std::string & orc_Key, const std::string & orc_Value,
                      const bool oq_ForceAppend = false);
-   void WriteInteger(const C_SclString & orc_Section, const C_SclString & orc_Key, const int32_t os32_Value,
+   void WriteInteger(const std::string & orc_Section, const std::string & orc_Key, const int32_t os32_Value,
                      const bool oq_ForceAppend = false);
-   void WriteBool   (const C_SclString & orc_Section, const C_SclString & orc_Key, const bool oq_Value,
+   void WriteBool   (const std::string & orc_Section, const std::string & orc_Key, const bool oq_Value,
                      const bool oq_ForceAppend = false);
-   void WriteFloat  (const C_SclString & orc_Section, const C_SclString & orc_Key, const float64_t of64_Value,
+   void WriteFloat  (const std::string & orc_Section, const std::string & orc_Key, const float64_t of64_Value,
                      const bool oq_ForceAppend = false);
 
-   void EraseSection(const C_SclString & orc_Section);
-   void DeleteKey(const C_SclString & orc_Section, const C_SclString & orc_Key);
+   void EraseSection(const std::string & orc_Section);
+   void DeleteKey(const std::string & orc_Section, const std::string & orc_Key);
 
    void UpdateFile(void);
 
-   bool SectionExists(const C_SclString & orc_Section);
-   bool ValueExists(const C_SclString & orc_Section, const C_SclString & orc_Key);
+   bool SectionExists(const std::string & orc_Section);
+   bool ValueExists(const std::string & orc_Section, const std::string & orc_Key);
 
-   void ReadSection(const C_SclString & orc_Section, C_SclStringList * const opc_Strings, const bool oq_Append = false);
-   void ReadSectionValues(const C_SclString & orc_Section, C_SclStringList * const opc_Strings,
+   void ReadSection(const std::string & orc_Section, C_SclStringList * const opc_Strings, const bool oq_Append = false);
+   void ReadSectionValues(const std::string & orc_Section, C_SclStringList * const opc_Strings,
                           const bool oq_Append = false);
    void ReadSections(C_SclStringList * const opc_Strings, const bool oq_Append = false) const;
 
    void GetFileAsStringList(C_SclStringList & orc_Strings) const;
 
-   C_SclString FileName; ///< path to ini file; can be used after creation to store data in another ini file
+   std::string FileName; ///< path to ini file; can be used after creation to store data in another ini file
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclChecksums.hpp"
 #include "C_OscViewNodeUpdateParamInfo.hpp"
 
@@ -53,10 +53,10 @@ C_OscViewNodeUpdateParamInfo::C_OscViewNodeUpdateParamInfo(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscViewNodeUpdateParamInfo::CalcHash(uint32_t & oru32_HashValue) const
 {
-   const C_SclString c_Data = this->mc_FilePath;
+   const std::string c_Data = this->mc_FilePath;
 
    C_SclChecksums::CalcCRC32(&this->mu32_LastKnownCrc, sizeof(this->mu32_LastKnownCrc), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(c_Data.c_str(), c_Data.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(c_Data.c_str(), c_Data.length(), oru32_HashValue);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ void C_OscViewNodeUpdateParamInfo::CalcHash(uint32_t & oru32_HashValue) const
    \param[in] ou32_LastKnownCrc Last known CRC value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewNodeUpdateParamInfo::SetContent(const C_SclString & orc_FilePath, const uint32_t ou32_LastKnownCrc)
+void C_OscViewNodeUpdateParamInfo::SetContent(const std::string & orc_FilePath, const uint32_t ou32_LastKnownCrc)
 {
    this->mc_FilePath = orc_FilePath;
    this->mu32_LastKnownCrc = ou32_LastKnownCrc;
@@ -79,7 +79,7 @@ void C_OscViewNodeUpdateParamInfo::SetContent(const C_SclString & orc_FilePath, 
    Current path
 */
 //----------------------------------------------------------------------------------------------------------------------
-const C_SclString & C_OscViewNodeUpdateParamInfo::GetPath(void) const
+const std::string & C_OscViewNodeUpdateParamInfo::GetPath(void) const
 {
    return this->mc_FilePath;
 }

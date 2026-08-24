@@ -13,14 +13,14 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscDeviceDefinition.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "TglUtils.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscDeviceDefinition::hc_DEFAULT_COMPANY_NAME = "Sensor-Technik Wiedemann GmbH";
+const std::string C_OscDeviceDefinition::hc_DEFAULT_COMPANY_NAME = "Sensor-Technik Wiedemann GmbH";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -80,9 +80,9 @@ void C_OscDeviceDefinition::Clear(void)
    String to display
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscDeviceDefinition::GetDisplayName(void) const
+std::string C_OscDeviceDefinition::GetDisplayName(void) const
 {
-   stw::scl::C_SclString c_Retval;
+   std::string c_Retval;
    if (this->c_DeviceNameAlias == "")
    {
       c_Retval = this->c_DeviceName;

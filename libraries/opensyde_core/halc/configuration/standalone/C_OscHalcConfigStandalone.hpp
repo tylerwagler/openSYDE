@@ -25,7 +25,7 @@ class C_OscHalcConfigStandalone
 public:
    C_OscHalcConfigStandalone(void);
 
-   stw::scl::C_SclString c_DeviceType;
+   std::string c_DeviceType;
    uint32_t u32_DefinitionContentVersion;
    std::vector<C_OscHalcConfigStandaloneDomain> c_Domains;
 };

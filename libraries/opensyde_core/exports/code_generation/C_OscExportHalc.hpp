@@ -27,49 +27,49 @@ namespace opensyde_core
 class C_OscExportHalc
 {
 public:
-   static stw::scl::C_SclString h_GetFileName(const bool oq_IsSafe);
+   static std::string h_GetFileName(const bool oq_IsSafe);
    static uint16_t h_ConvertOverallCodeVersion(const uint16_t ou16_GenCodeVersion);
-   static int32_t h_CreateSourceCode(const stw::scl::C_SclString & orc_Path, const uint16_t ou16_GenCodeVersion,
+   static int32_t h_CreateSourceCode(const std::string & orc_Path, const uint16_t ou16_GenCodeVersion,
                                      const C_OscHalcConfig & orc_HalcConfig,
                                      const stw::opensyde_core::C_OscNodeDataPool & orc_Datapool,
-                                     const stw::scl::C_SclString & orc_ExportToolInfo);
+                                     const std::string & orc_ExportToolInfo);
 
 protected:
    static const bool mhq_IS_HEADER_FILE = false;
    static const bool mhq_IS_IMPLEMENTATION_FILE = true;
 
-   static int32_t mh_CreateHeaderFile(const stw::scl::C_SclString & orc_ExportToolInfo,
-                                      const stw::scl::C_SclString & orc_Path, const C_OscHalcConfig & orc_HalcConfig,
-                                      const stw::scl::C_SclString & orc_ProjectId, const bool oq_IsSafe,
+   static int32_t mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
+                                      const std::string & orc_Path, const C_OscHalcConfig & orc_HalcConfig,
+                                      const std::string & orc_ProjectId, const bool oq_IsSafe,
                                       const uint16_t ou16_GenCodeVersion);
 
-   static int32_t mh_CreateImplementationFile(const stw::scl::C_SclString & orc_ExportToolInfo,
-                                              const stw::scl::C_SclString & orc_Path,
+   static int32_t mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
+                                              const std::string & orc_Path,
                                               const C_OscHalcConfig & orc_HalcConfig,
-                                              const stw::scl::C_SclString & orc_ProjectId, const bool oq_IsSafe,
+                                              const std::string & orc_ProjectId, const bool oq_IsSafe,
                                               const uint16_t ou16_GenCodeVersion);
 
-   static void mh_AddHeader(const stw::scl::C_SclString & orc_ExportToolInfo, stw::scl::C_SclStringList & orc_Data,
+   static void mh_AddHeader(const std::string & orc_ExportToolInfo, stw::scl::C_SclStringList & orc_Data,
                             const bool oq_FileType, const bool oq_IsSafe);
    static void mh_AddIncludes(stw::scl::C_SclStringList & orc_Data, const bool oq_FileType, const bool oq_IsSafe);
    static void mh_AddDefines(stw::scl::C_SclStringList & orc_Data,  const C_OscHalcConfig & orc_HalcConfig,
-                             const stw::scl::C_SclString & orc_ProjectId, const bool oq_FileType, const bool oq_IsSafe,
+                             const std::string & orc_ProjectId, const bool oq_FileType, const bool oq_IsSafe,
                              const uint16_t ou16_GenCodeVersion);
    static void mh_AddGlobalVariables(stw::scl::C_SclStringList & orc_Data, const C_OscHalcConfig & orc_HalcConfig,
                                      const bool oq_FileType, const bool oq_IsSafe);
-   static stw::scl::C_SclString mh_GetMagicName(const stw::scl::C_SclString & orc_ProjectId, const bool oq_IsSafe);
+   static std::string mh_GetMagicName(const std::string & orc_ProjectId, const bool oq_IsSafe);
    static void mh_AddDpListElementReferences(stw::scl::C_SclStringList & orc_Data,
                                              const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
                                              const std::vector<C_OscHalcConfigChannel> & orc_ConfigArray,
                                              const C_OscHalcDefDomain::E_VariableSelector & ore_Type,
-                                             const stw::scl::C_SclString & orc_DomainSingularName,
+                                             const std::string & orc_DomainSingularName,
                                              const bool oq_IsArray, const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode,
                                              const bool oq_IsSafe);
-   static stw::scl::C_SclString mh_GetDpListElementReference(
+   static std::string mh_GetDpListElementReference(
       const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
       const C_OscHalcDefDomain::E_VariableSelector & ore_Type, const C_OscHalcDefElement & orc_Element,
       const uint32_t ou32_StructIndex, const uint32_t ou32_ElementIndex,
-      const stw::scl::C_SclString & orc_DomainSingularName, const bool oq_IsArray, const bool oq_IsSafe);
+      const std::string & orc_DomainSingularName, const bool oq_IsArray, const bool oq_IsSafe);
    static bool mh_DropChannel(const bool oq_IsChannelSafe, const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode,
                               const bool oq_IsSafeCase);
 };

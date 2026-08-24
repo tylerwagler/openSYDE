@@ -90,9 +90,9 @@ void C_OscNodeComInterfaceSettings::CalcHash(uint32_t & oru32_HashValue) const
    stw::scl::C_SclChecksums::CalcCRC32(&this->mq_IsBusConnected, sizeof(this->mq_IsBusConnected), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_BusIndex, sizeof(this->u32_BusIndex), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(this->c_LastSyncedDbcSha256.c_str(),
-                                       this->c_LastSyncedDbcSha256.Length(), oru32_HashValue);
+                                       this->c_LastSyncedDbcSha256.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(this->c_LastSyncedProjectMsgHash.c_str(),
-                                       this->c_LastSyncedProjectMsgHash.Length(), oru32_HashValue);
+                                       this->c_LastSyncedProjectMsgHash.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_DbcProtocol, sizeof(this->e_DbcProtocol), oru32_HashValue);
 }
 

@@ -18,11 +18,10 @@
 #include <climits>
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
-#include "C_SclString.hpp"
+
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
-using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -49,10 +48,10 @@ using namespace stw::scl;
 void stw::tgl::TglReportAssertion(const char_t * const opcn_Module, const char_t * const opcn_Func,
                                   const int32_t os32_Line)
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
-   c_Text = static_cast<C_SclString>("Extremely nasty error\n (assertion in module ") + opcn_Module + ", function " +
-            opcn_Func + ", line " + C_SclString::IntToStr(os32_Line) + ") !";
+   c_Text = std::string("Extremely nasty error\n (assertion in module ") + opcn_Module + ", function " +
+            opcn_Func + ", line " + std::to_string(os32_Line) + ") !";
    warnx("%s", c_Text.c_str());
 }
 
@@ -70,12 +69,12 @@ void stw::tgl::TglReportAssertion(const char_t * const opcn_Module, const char_t
 void stw::tgl::TglReportAssertionDetail(const char_t * const opcn_DetailInfo, const char_t * const opcn_Module,
                                         const char_t * const opcn_Func, const int32_t os32_Line)
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
-   c_Text = static_cast<C_SclString>(opcn_DetailInfo) +
+   c_Text = std::string(opcn_DetailInfo) +
             "\nfunction  " + opcn_Func +
             "\nassertion in module  " + opcn_Module +
-            ", line  " + C_SclString::IntToStr(os32_Line) +
+            ", line  " + std::to_string(os32_Line) +
             "!";
    warnx("%s", c_Text.c_str());
 }
@@ -97,7 +96,7 @@ void stw::tgl::TglReportAssertionDetail(const char_t * const opcn_DetailInfo, co
    false     error -> oc_UserName not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglGetSystemUserName(C_SclString & orc_UserName)
+bool stw::tgl::TglGetSystemUserName(std::string & orc_UserName)
 {
    struct passwd * pc_PassWord;
    bool q_Return = false;
@@ -127,7 +126,7 @@ bool stw::tgl::TglGetSystemUserName(C_SclString & orc_UserName)
    false     error -> orc_MachineName not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglGetSystemMachineName(C_SclString & orc_MachineName)
+bool stw::tgl::TglGetSystemMachineName(std::string & orc_MachineName)
 {
    char_t acn_HostName[HOST_NAME_MAX + 1];
    const int x_Result = //lint !e8080 !e970  type defined by API we use
@@ -186,7 +185,7 @@ void stw::tgl::TglHandleSystemMessages(void)
    -1  could not set variable
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t stw::tgl::TglSetEnvironmentVariable(const C_SclString & orc_Name, const C_SclString & orc_Value)
+int32_t stw::tgl::TglSetEnvironmentVariable(const std::string & orc_Name, const std::string & orc_Value)
 {
    (void)orc_Name;
    (void)orc_Value;
@@ -195,9 +194,9 @@ int32_t stw::tgl::TglSetEnvironmentVariable(const C_SclString & orc_Name, const 
 #if 0
    int32_t s32_Return = -1;
    char_t acn_String[1024];
-   const C_SclString c_String = orc_Name + "=" + orc_Value;
+   const std::string c_String = orc_Name + "=" + orc_Value;
 
-   if (c_String.Length() < sizeof(acn_String))
+   if (c_String.length() < sizeof(acn_String))
    {
       std::strcpy(acn_String, c_String.c_str());
       s32_Return = putenv(acn_String);

@@ -15,14 +15,13 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscSystemBusFiler.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "TglUtils.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
-using namespace stw::scl;
 
 using namespace stw::errors;
 
@@ -193,8 +192,8 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemBusFiler::h_SaveBus(const C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser)
 {
-   const C_SclString c_BitRate(orc_Bus.u64_BitRate);
-   const C_SclString c_RxTimeout(orc_Bus.u16_RxTimeoutOffsetMs);
+   const std::string c_BitRate = std::to_string(orc_Bus.u64_BitRate);
+   const std::string c_RxTimeout = std::to_string(orc_Bus.u16_RxTimeoutOffsetMs);
 
    //Name
    tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("name") == "name");

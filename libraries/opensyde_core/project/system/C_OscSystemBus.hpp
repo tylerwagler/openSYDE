@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscCanProtocol.hpp"
 #include "C_OscNodeDataPool.hpp"
 
@@ -44,8 +44,8 @@ public:
    bool CheckErrorBusId(void) const;
 
    E_Type e_Type;                   ///< type of bus (e.g. CAN / Ethernet)
-   stw::scl::C_SclString c_Name;    ///< unique name of bus
-   stw::scl::C_SclString c_Comment; ///< user comment
+   std::string c_Name;    ///< unique name of bus
+   std::string c_Comment; ///< user comment
    uint64_t u64_BitRate;            ///< bitrate of bus in bits / second
    bool q_UseCanFd;                 ///< Flag to use CAN-FD on bus
    uint64_t u64_CanFdBitRate;       ///< CAN-FD bitrate of bus in bits / second

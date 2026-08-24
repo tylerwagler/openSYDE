@@ -27,7 +27,7 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const C_SclString C_OscXcoCreate::mhc_USE_CASE = "Creating X-Config Package";
+const std::string C_OscXcoCreate::mhc_USE_CASE = "Creating X-Config Package";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -80,12 +80,12 @@ const C_SclString C_OscXcoCreate::mhc_USE_CASE = "Creating X-Config Package";
                could not delete temporary result folder
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoCreate::h_CreatePackage(const stw::scl::C_SclString & orc_PackagePath,
+int32_t C_OscXcoCreate::h_CreatePackage(const std::string & orc_PackagePath,
                                         const C_OscSystemDefinition & orc_SystemDefinition,
                                         const C_OscXcoManifest & orc_Manifest,
                                         stw::scl::C_SclStringList & orc_WarningMessages,
-                                        stw::scl::C_SclString & orc_ErrorMessage,
-                                        const stw::scl::C_SclString & orc_TemporaryDirectory)
+                                        std::string & orc_ErrorMessage,
+                                        const std::string & orc_TemporaryDirectory)
 {
    int32_t s32_Return;
 
@@ -93,11 +93,11 @@ int32_t C_OscXcoCreate::h_CreatePackage(const stw::scl::C_SclString & orc_Packag
 
    mh_Init();
 
-   C_SclString c_PackagePathTmp;                           // temporary package path before
+   std::string c_PackagePathTmp;                           // temporary package path before
                                                            // creating zip archive
-   const C_SclString c_TargetZipArchive = orc_PackagePath; // complete path of target zip
+   const std::string c_TargetZipArchive = orc_PackagePath; // complete path of target zip
                                                            // archive
-   std::set<stw::scl::C_SclString> c_XcfgFiles;            // unique container with
+   std::set<std::string> c_XcfgFiles;            // unique container with
                                                            // relative file paths for zip
                                                            // archive
    // fill with constant file names
@@ -108,7 +108,7 @@ int32_t C_OscXcoCreate::h_CreatePackage(const stw::scl::C_SclString & orc_Packag
 
    if (s32_Return == C_NO_ERR)
    {
-      std::vector<stw::scl::C_SclString> c_AllStaticSubFolders;
+      std::vector<std::string> c_AllStaticSubFolders;
       c_AllStaticSubFolders.push_back(hc_XCFG_SYSDEF_FOLDER);
       c_AllStaticSubFolders.push_back(hc_INI_DEV_FOLDER);
       s32_Return = C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(orc_PackagePath,
@@ -124,7 +124,7 @@ int32_t C_OscXcoCreate::h_CreatePackage(const stw::scl::C_SclString & orc_Packag
    }
    if (s32_Return == C_NO_ERR)
    {
-      const C_SclString c_ManifestPath = c_PackagePathTmp + C_OscXcoManifestFiler::hc_FILE_NAME;
+      const std::string c_ManifestPath = c_PackagePathTmp + C_OscXcoManifestFiler::hc_FILE_NAME;
       s32_Return = C_OscXcoManifestFiler::h_SaveFile(orc_Manifest, c_ManifestPath);
       if (s32_Return != C_NO_ERR)
       {
@@ -140,7 +140,7 @@ int32_t C_OscXcoCreate::h_CreatePackage(const stw::scl::C_SclString & orc_Packag
    // * system definition file
    if (s32_Return == C_NO_ERR)
    {
-      const stw::scl::C_SclString c_SysDefPath = TglFileIncludeTrailingDelimiter(
+      const std::string c_SysDefPath = TglFileIncludeTrailingDelimiter(
          c_PackagePathTmp + hc_XCFG_SYSDEF_FOLDER);
 
       s32_Return = C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(orc_SystemDefinition,
@@ -153,7 +153,7 @@ int32_t C_OscXcoCreate::h_CreatePackage(const stw::scl::C_SclString & orc_Packag
    // device.ini and device definition files
    if (s32_Return == C_NO_ERR)
    {
-      const stw::scl::C_SclString c_DevDefPath = TglFileIncludeTrailingDelimiter(c_PackagePathTmp + hc_INI_DEV_FOLDER);
+      const std::string c_DevDefPath = TglFileIncludeTrailingDelimiter(c_PackagePathTmp + hc_INI_DEV_FOLDER);
 
       s32_Return = C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
          orc_SystemDefinition, mhc_USE_CASE,
@@ -194,7 +194,7 @@ int32_t C_OscXcoCreate::h_CreatePackage(const stw::scl::C_SclString & orc_Packag
    C_NOACT     active node index is not in system definition
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoCreate::mh_CheckParamsToCreatePackage(const C_SclString & orc_PackagePath,
+int32_t C_OscXcoCreate::mh_CheckParamsToCreatePackage(const std::string & orc_PackagePath,
                                                       const C_OscSystemDefinition & orc_SystemDefinition,
                                                       const C_OscXcoManifest & orc_Manifest)
 {

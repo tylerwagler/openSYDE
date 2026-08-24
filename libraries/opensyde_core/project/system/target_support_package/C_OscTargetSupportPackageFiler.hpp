@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscTargetSupportPackage.hpp"
 #include "C_OscXmlParser.hpp"
 
@@ -27,10 +27,10 @@ class C_OscTargetSupportPackageFiler
 {
 public:
    static int32_t h_Load(stw::opensyde_core::C_OscTargetSupportPackage & orc_TargetSupportPackage,
-                         stw::scl::C_SclString & orc_NodePath, const stw::scl::C_SclString & orc_Path);
+                         std::string & orc_NodePath, const std::string & orc_Path);
 
 private:
-   static int32_t mh_Load(C_OscTargetSupportPackage & orc_TargetSupportPackage, stw::scl::C_SclString & orc_NodePath,
+   static int32_t mh_Load(C_OscTargetSupportPackage & orc_TargetSupportPackage, std::string & orc_NodePath,
                           C_OscXmlParserBase & orc_XmlParser);
 };
 

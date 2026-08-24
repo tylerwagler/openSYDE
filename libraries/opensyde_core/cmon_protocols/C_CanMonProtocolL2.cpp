@@ -12,12 +12,13 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include "C_SclStringCompat.hpp"
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolL2.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -47,10 +48,10 @@ using namespace stw::can;
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+std::string C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text;
-   C_SclString c_Help;
+   std::string c_Text;
+   std::string c_Help;
    char_t cn_XTD;
    char_t cn_RTR;
    int32_t j;
@@ -63,10 +64,10 @@ C_SclString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
 
    if (mq_Decimal == false)
    {
-      (void)c_Text.PrintFormatted("%08X%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
+      c_Text = PrintFormattedCompat("%08X%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
       for (j = 0; j < u8_Len; j++)
       {
-         (void)c_Help.PrintFormatted(" %02X ", orc_Msg.au8_Data[j]);
+         c_Help = PrintFormattedCompat(" %02X ", orc_Msg.au8_Data[j]);
          c_Text += c_Help;
       }
       for (; j < 8; j++)
@@ -76,10 +77,10 @@ C_SclString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
    }
    else
    {
-      (void)c_Text.PrintFormatted("%8d%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
+      c_Text = PrintFormattedCompat("%8d%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
       for (j = 0; j < u8_Len; j++)
       {
-         (void)c_Help.PrintFormatted("%3d ", orc_Msg.au8_Data[j]);
+         c_Help = PrintFormattedCompat("%3d ", orc_Msg.au8_Data[j]);
          c_Text += c_Help;
       }
    }
@@ -93,7 +94,7 @@ C_SclString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
    Text representation of protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolL2::GetProtocolName(void) const
+std::string C_CanMonProtocolL2::GetProtocolName(void) const
 {
    return "CAN Layer 2";
 }

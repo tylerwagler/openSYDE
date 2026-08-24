@@ -11,7 +11,7 @@
 
 #include "stwtypes.hpp"
 #include "stw_can.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclIniFile.hpp"
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -31,14 +31,14 @@ protected:
    bool mq_Decimal;
 
    //general:
-   stw::scl::C_SclString m_GetValueDecHex(const uint32_t ou32_Value) const;
-   stw::scl::C_SclString m_GetByteAsStringFormat(const uint8_t ou8_Value) const;
-   stw::scl::C_SclString m_GetWordAsStringFormat(const uint16_t ou16_Value) const;
+   std::string m_GetValueDecHex(const uint32_t ou32_Value) const;
+   std::string m_GetByteAsStringFormat(const uint8_t ou8_Value) const;
+   std::string m_GetWordAsStringFormat(const uint16_t ou16_Value) const;
    static uint32_t mh_BytesToDwordLowHigh(const uint8_t oau8_Bytes[4]);
    static uint16_t mh_BytesToWordLowHigh(const uint8_t oau8_Bytes[2]);
    static uint16_t mh_BytesToWordHighLow(const uint8_t oau8_Bytes[2]);
    static uint32_t mh_BytesToDwordHighLow(const uint8_t oau8_Bytes[4]);
-   static stw::scl::C_SclString mh_SerialNumberToString(const uint8_t * const opu8_SerialNumber);
+   static std::string mh_SerialNumberToString(const uint8_t * const opu8_SerialNumber);
 
 public:
    C_CanMonProtocolBase(void);
@@ -56,7 +56,7 @@ public:
       CAN message in string representation
    */
    //-----------------------------------------------------------------------------
-   virtual stw::scl::C_SclString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const = 0;
+   virtual std::string MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -68,13 +68,13 @@ public:
       string representation of protocol name
    */
    //-----------------------------------------------------------------------------
-   virtual stw::scl::C_SclString GetProtocolName(void) const = 0;
+   virtual std::string GetProtocolName(void) const = 0;
 
    virtual void SetDecimal(const bool oq_Decimal);
 
    //overload if we have something to save (use protocol abbreviation as prefix for directives !)
-   virtual int32_t SaveParamsToIni(stw::scl::C_SclIniFile & orc_IniFile, const stw::scl::C_SclString & orc_Section);
-   virtual int32_t LoadParamsFromIni(stw::scl::C_SclIniFile & orc_IniFile, const stw::scl::C_SclString & orc_Section);
+   virtual int32_t SaveParamsToIni(stw::scl::C_SclIniFile & orc_IniFile, const std::string & orc_Section);
+   virtual int32_t LoadParamsFromIni(stw::scl::C_SclIniFile & orc_IniFile, const std::string & orc_Section);
 };
 
 //----------------------------------------------------------------------------------------------------------------------

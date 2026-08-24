@@ -18,6 +18,7 @@
 #include "stwerrors.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
+#include "C_SclStringCompat.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
 
@@ -60,7 +61,7 @@ C_OscNodeDataPoolFiler::C_OscNodeDataPoolFiler(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool & orc_NodeDataPool,
-                                                   const C_SclString & orc_FilePath)
+                                                   const std::string & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_FilePath,
@@ -72,7 +73,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool & orc_NodeD
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(std::stoi(c_XmlParser.GetNodeContent()));
       }
       catch (...)
       {
@@ -84,7 +85,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool & orc_NodeD
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading Datapool", "Value of \"file-version\": " +
-                            C_SclString::IntToStr(u16_FileVersion));
+                            std::to_string(u16_FileVersion));
          //Check file version
          if (u16_FileVersion != 1U)
          {
@@ -547,7 +548,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElement(C_OscNodeDataPoolListEleme
    {
       if (orc_XmlParser.SelectNodeChild("value-descriptions") == "value-descriptions")
       {
-         C_SclString c_CurValueDesc = orc_XmlParser.SelectNodeChild("value-description");
+         std::string c_CurValueDesc = orc_XmlParser.SelectNodeChild("value-description");
          if (c_CurValueDesc == "value-description")
          {
             do
@@ -614,7 +615,7 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolElement(const C_OscNodeDataPoolListEl
    if (orc_NodeDataPoolListElement.c_ValueDescription.empty() == false)
    {
       orc_XmlParser.CreateAndSelectNodeChild("value-descriptions");
-      for (std::map<int64_t, stw::scl::C_SclString>::const_iterator c_It =
+      for (std::map<int64_t, std::string>::const_iterator c_It =
               orc_NodeDataPoolListElement.c_ValueDescription.begin();
            c_It != orc_NodeDataPoolListElement.c_ValueDescription.end(); ++c_It)
       {
@@ -646,7 +647,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolLists(std::vector<C_OscNodeDataPoo
                                                     C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_CurNodeList;
+   std::string c_CurNodeList;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -689,8 +690,8 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolLists(std::vector<C_OscNodeDataPoo
    {
       if (u32_ExpectedSize != orc_NodeDataPoolLists.size())
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected list count, expected: %u, got %u", u32_ExpectedSize,
+         std::string c_Tmp;
+         c_Tmp = PrintFormattedCompat("Unexpected list count, expected: %u, got %u", u32_ExpectedSize,
                               static_cast<uint32_t>(orc_NodeDataPoolLists.size()));
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
@@ -743,7 +744,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(
    std::vector<C_OscNodeDataPoolListElement> & orc_NodeDataPoolListElements, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_CurNodeDataElement;
+   std::string c_CurNodeDataElement;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -784,8 +785,8 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(
    {
       if (u32_ExpectedSize != orc_NodeDataPoolListElements.size())
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected data element count, expected: %u, got %u", u32_ExpectedSize,
+         std::string c_Tmp;
+         c_Tmp = PrintFormattedCompat("Unexpected data element count, expected: %u, got %u", u32_ExpectedSize,
                               static_cast<uint32_t>(orc_NodeDataPoolListElements.size()));
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
@@ -843,7 +844,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElementDataSetValues(const C_O
                                                                        C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_CurNodeDataSetValue = orc_XmlParser.SelectNodeChild("data-set-value");
+   std::string c_CurNodeDataSetValue = orc_XmlParser.SelectNodeChild("data-set-value");
 
    if (c_CurNodeDataSetValue == "data-set-value")
    {
@@ -912,7 +913,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(
    std::vector<C_OscNodeDataPoolDataSet> & orc_NodeDataPoolListDataSets, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_CurNodeDataSet = orc_XmlParser.SelectNodeChild("data-set");
+   std::string c_CurNodeDataSet = orc_XmlParser.SelectNodeChild("data-set");
 
    orc_NodeDataPoolListDataSets.clear();
    if (c_CurNodeDataSet == "data-set")
@@ -991,9 +992,9 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolListDataSets(
    Stringified data pool type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeDataPoolFiler::h_DataPoolToString(const C_OscNodeDataPool::E_Type & ore_DataPool)
+std::string C_OscNodeDataPoolFiler::h_DataPoolToString(const C_OscNodeDataPool::E_Type & ore_DataPool)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_DataPool)
    {
@@ -1030,7 +1031,7 @@ C_SclString C_OscNodeDataPoolFiler::h_DataPoolToString(const C_OscNodeDataPool::
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_StringToDataPool(const C_SclString & orc_String, C_OscNodeDataPool::E_Type & ore_Type)
+int32_t C_OscNodeDataPoolFiler::h_StringToDataPool(const std::string & orc_String, C_OscNodeDataPool::E_Type & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1154,7 +1155,7 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolElementType(const C_OscNodeDataPoolCo
 int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
                                                            C_OscXmlParserBase & orc_XmlParser,
                                                            const bool oq_CheckDataType,
-                                                           stw::scl::C_SclString * const opc_CheckDataTypeErrorDetails)
+                                                           std::string * const opc_CheckDataTypeErrorDetails)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1208,7 +1209,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(C_OscNodeDataPoolCont
    else
    {
       //Array
-      C_SclString c_CurNode = orc_XmlParser.SelectNodeChild("element");
+      std::string c_CurNode = orc_XmlParser.SelectNodeChild("element");
       if (c_CurNode == "element")
       {
          uint32_t u32_CurIndex = 0U;
@@ -1299,7 +1300,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(C_OscNodeDataPoolCont
    \param[in,out]  orc_XmlParser             XML parser
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPoolElementValue(const stw::scl::C_SclString & orc_NodeName,
+void C_OscNodeDataPoolFiler::h_SaveDataPoolElementValue(const std::string & orc_NodeName,
                                                         const C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
                                                         C_OscXmlParserBase & orc_XmlParser)
 {
@@ -1529,7 +1530,7 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolContentV1(const C_OscNodeDataPoolCont
    Automatically generated file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeDataPoolFiler::h_GetFileName(const C_SclString & orc_DatapoolName)
+std::string C_OscNodeDataPoolFiler::h_GetFileName(const std::string & orc_DatapoolName)
 {
    return "dp_" + C_OscSystemFilerUtil::h_PrepareItemNameForFileName(orc_DatapoolName) + "_core.xml";
 }
@@ -1548,7 +1549,7 @@ C_SclString C_OscNodeDataPoolFiler::h_GetFileName(const C_SclString & orc_Datapo
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeDataPoolContent::E_Type oe_ContentType,
                                                                 const C_OscXmlParserBase & orc_XmlParser,
-                                                                stw::scl::C_SclString * const opc_CheckDataTypeErrorDetails)
+                                                                std::string * const opc_CheckDataTypeErrorDetails)
 {
    int32_t s32_Retval = C_CONFIG;
 
@@ -1652,8 +1653,8 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
    {
       if (opc_CheckDataTypeErrorDetails != NULL)
       {
-         const stw::scl::C_SclString c_Val = orc_XmlParser.GetAttributeString("value");
-         const stw::scl::C_SclString c_DataType =
+         const std::string c_Val = orc_XmlParser.GetAttributeString("value");
+         const std::string c_DataType =
             C_OscNodeDataPoolFiler::mh_NodeDataPoolContentToString(oe_ContentType);
 
          *opc_CheckDataTypeErrorDetails = "\"" + c_Val + "\" not in range of data type " + c_DataType;
@@ -1706,7 +1707,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(C_OscNodeDataPoolContent
       //Array
       if (orc_XmlParser.SelectNodeChild("array") == "array")
       {
-         C_SclString c_CurNode = orc_XmlParser.SelectNodeChild("element");
+         std::string c_CurNode = orc_XmlParser.SelectNodeChild("element");
          if (c_CurNode == "element")
          {
             do
@@ -1793,7 +1794,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(C_OscNodeDataPoolContent
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeDataPoolFiler::h_SaveDataPoolFile(const C_OscNodeDataPool & orc_NodeDataPool,
-                                                   const C_SclString & orc_FilePath)
+                                                   const std::string & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath,
@@ -1830,10 +1831,10 @@ int32_t C_OscNodeDataPoolFiler::h_SaveDataPoolFile(const C_OscNodeDataPool & orc
    Stringified node data pool content type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeDataPoolFiler::mh_NodeDataPoolContentToString(
+std::string C_OscNodeDataPoolFiler::mh_NodeDataPoolContentToString(
    const C_OscNodeDataPoolContent::E_Type & ore_NodeDataPoolContent)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_NodeDataPoolContent)
    {
@@ -1885,7 +1886,7 @@ C_SclString C_OscNodeDataPoolFiler::mh_NodeDataPoolContentToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolContent(const C_SclString & orc_String,
+int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolContent(const std::string & orc_String,
                                                                C_OscNodeDataPoolContent::E_Type & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1948,10 +1949,10 @@ int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolContent(const C_SclString
    Stringified node data pool element access type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeDataPoolFiler::mh_NodeDataPoolElementAccessToString(
+std::string C_OscNodeDataPoolFiler::mh_NodeDataPoolElementAccessToString(
    const C_OscNodeDataPoolListElement::E_Access & ore_NodeDataPoolElementAccess)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_NodeDataPoolElementAccess)
    {
@@ -1979,7 +1980,7 @@ C_SclString C_OscNodeDataPoolFiler::mh_NodeDataPoolElementAccessToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolElementAccess(const C_SclString & orc_String,
+int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolElementAccess(const std::string & orc_String,
                                                                      C_OscNodeDataPoolListElement::E_Access & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;

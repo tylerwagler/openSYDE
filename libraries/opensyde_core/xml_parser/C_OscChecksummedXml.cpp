@@ -15,7 +15,9 @@
 #include "stwerrors.hpp"
 #include "C_OscChecksummedXml.hpp"
 
-#include "C_SclString.hpp"
+#include <sstream>
+#include <iomanip>
+#include <string>
 #include "C_SclChecksums.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -25,7 +27,7 @@ using namespace stw::scl;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-static const C_SclString mc_NAME_CRC_ATTRIBUTE = "file_crc";
+static const std::string mc_NAME_CRC_ATTRIBUTE = "file_crc";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -34,6 +36,17 @@ static const C_SclString mc_NAME_CRC_ATTRIBUTE = "file_crc";
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+
+namespace {
+/// Helper: integer to hexadecimal string (zero-padded, uppercase, no "0x" prefix)
+template <typename T>
+std::string mh_IntToHex(const T orc_Value, const uint32_t ou32_Digits)
+{
+   std::stringstream c_Stream;
+   c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Value;
+   return c_Stream.str();
+}
+}
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
@@ -67,14 +80,14 @@ C_OscChecksummedXml::C_OscChecksummedXml(void) :
    C_CHECKSUM  data was read but CRC is not correct
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscChecksummedXml::LoadFromFile(const C_SclString & orc_FileName)
+int32_t C_OscChecksummedXml::LoadFromFile(const std::string & orc_FileName)
 {
    int32_t s32_Return;
 
    s32_Return = C_OscXmlParser::LoadFromFile(orc_FileName);
    if (s32_Return == C_NO_ERR)
    {
-      const C_SclString c_Text = this->SelectRoot();
+       const std::string c_Text = this->SelectRoot();
       if (c_Text == "")
       {
          s32_Return = C_RD_WR;
@@ -115,7 +128,7 @@ int32_t C_OscChecksummedXml::LoadFromFile(const C_SclString & orc_FileName)
    C_NOACT    could not write data from file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscChecksummedXml::SaveToFile(const C_SclString & orc_FileName)
+int32_t C_OscChecksummedXml::SaveToFile(const std::string & orc_FileName)
 {
    int32_t s32_Return;
    const uint16_t u16_CrcCalc = this->m_CalcXmlCrc();
@@ -126,7 +139,7 @@ int32_t C_OscChecksummedXml::SaveToFile(const C_SclString & orc_FileName)
    }
    else
    {
-      this->SetAttributeString(mc_NAME_CRC_ATTRIBUTE, "0x" + C_SclString::IntToHex(u16_CrcCalc, 4));
+      this->SetAttributeString(mc_NAME_CRC_ATTRIBUTE, "0x" + mh_IntToHex(u16_CrcCalc, 4));
 
       s32_Return = C_OscXmlParser::SaveToFile(orc_FileName);
    }
@@ -137,8 +150,8 @@ int32_t C_OscChecksummedXml::SaveToFile(const C_SclString & orc_FileName)
 
 void C_OscChecksummedXml::m_CalcXmlCrcNode(uint16_t & oru16_Crc)
 {
-   C_SclString c_NodeLv1;
-   C_SclString c_Text;
+    std::string c_NodeLv1;
+    std::string c_Text;
 
    c_NodeLv1 = this->SelectNodeChild();
 
@@ -147,17 +160,17 @@ void C_OscChecksummedXml::m_CalcXmlCrcNode(uint16_t & oru16_Crc)
    while (c_NodeLv1 != "")
    {
       std::vector<C_OscXmlAttribute> c_Attributes;
-      C_SclChecksums::CalcCRC16(c_NodeLv1.c_str(), c_NodeLv1.Length(), oru16_Crc);
+      C_SclChecksums::CalcCRC16(c_NodeLv1.c_str(), c_NodeLv1.length(), oru16_Crc);
       c_Attributes = this->GetAttributes();
       for (uint32_t u32_Index = 0U; u32_Index < c_Attributes.size(); u32_Index++)
       {
          C_SclChecksums::CalcCRC16(c_Attributes[u32_Index].c_Name.c_str(),
-                                   c_Attributes[u32_Index].c_Name.Length(), oru16_Crc);
+                                   c_Attributes[u32_Index].c_Name.length(), oru16_Crc);
          C_SclChecksums::CalcCRC16(c_Attributes[u32_Index].c_Value.c_str(),
-                                   c_Attributes[u32_Index].c_Value.Length(), oru16_Crc);
+                                   c_Attributes[u32_Index].c_Value.length(), oru16_Crc);
       }
       c_Text = this->GetNodeContent();
-      C_SclChecksums::CalcCRC16(c_Text.c_str(), c_Text.Length(), oru16_Crc);
+      C_SclChecksums::CalcCRC16(c_Text.c_str(), c_Text.length(), oru16_Crc);
 
       //sub-nodes ?
       m_CalcXmlCrcNode(oru16_Crc);
@@ -176,27 +189,27 @@ void C_OscChecksummedXml::m_CalcXmlCrcNode(uint16_t & oru16_Crc)
 uint16_t C_OscChecksummedXml::m_CalcXmlCrc(void)
 {
    std::vector<C_OscXmlAttribute> c_Attributes;
-   C_SclString c_Text;
+    std::string c_Text;
    uint16_t u16_Crc = 0x1D0FU; //set CCITT25 start value
 
    c_Text = this->SelectRoot();
 
-   C_SclChecksums::CalcCRC16(c_Text.c_str(), c_Text.Length(), u16_Crc);
+   C_SclChecksums::CalcCRC16(c_Text.c_str(), c_Text.length(), u16_Crc);
    c_Attributes = this->GetAttributes();
    for (uint32_t u32_Index = 0U; u32_Index < c_Attributes.size(); u32_Index++)
    {
       if (c_Attributes[u32_Index].c_Name != mc_NAME_CRC_ATTRIBUTE) //skip CRC value
       {
          C_SclChecksums::CalcCRC16(c_Attributes[u32_Index].c_Name.c_str(),
-                                   c_Attributes[u32_Index].c_Name.Length(), u16_Crc);
+                                   c_Attributes[u32_Index].c_Name.length(), u16_Crc);
          C_SclChecksums::CalcCRC16(c_Attributes[u32_Index].c_Value.c_str(),
-                                   c_Attributes[u32_Index].c_Value.Length(), u16_Crc);
+                                   c_Attributes[u32_Index].c_Value.length(), u16_Crc);
       }
    }
 
    mu16_CrcDepth = 1U;
    c_Text = this->GetNodeContent();
-   C_SclChecksums::CalcCRC16(c_Text.c_str(), c_Text.Length(), u16_Crc);
+   C_SclChecksums::CalcCRC16(c_Text.c_str(), c_Text.length(), u16_Crc);
    C_SclChecksums::CalcCRC16(&mu16_CrcDepth, 2U, u16_Crc);
 
    //subnodes:

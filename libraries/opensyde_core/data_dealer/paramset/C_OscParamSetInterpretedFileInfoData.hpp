@@ -12,7 +12,7 @@
 #define C_OSCPARAMSETINTERPRETEDFILEINFODATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -29,27 +29,27 @@ public:
    C_OscParamSetInterpretedFileInfoData(void);
 
    void Clear(void);
-   void AddInterpretedFileData(const stw::scl::C_SclString & orc_DateTime, const stw::scl::C_SclString & orc_Creator,
-                               const stw::scl::C_SclString & orc_ToolName,
-                               const stw::scl::C_SclString & orc_ToolVersion,
-                               const stw::scl::C_SclString & orc_ProjectName,
-                               const stw::scl::C_SclString & orc_ProjectVersion,
-                               const stw::scl::C_SclString & orc_UserComment);
+   void AddInterpretedFileData(const std::string & orc_DateTime, const std::string & orc_Creator,
+                               const std::string & orc_ToolName,
+                               const std::string & orc_ToolVersion,
+                               const std::string & orc_ProjectName,
+                               const std::string & orc_ProjectVersion,
+                               const std::string & orc_UserComment);
 
    //Date and time of creation
-   stw::scl::C_SclString c_DateTime;
+   std::string c_DateTime;
    //User who created this file
-   stw::scl::C_SclString c_Creator;
+   std::string c_Creator;
    //Name of tool used for creating this param set file
-   stw::scl::C_SclString c_ToolName;
+   std::string c_ToolName;
    //Version of tool used for creating this param set file
-   stw::scl::C_SclString c_ToolVersion;
+   std::string c_ToolVersion;
    //Name of project used for creating this param set file
-   stw::scl::C_SclString c_ProjectName;
+   std::string c_ProjectName;
    //Version of project used for creating this param set file
-   stw::scl::C_SclString c_ProjectVersion;
+   std::string c_ProjectVersion;
    //Optional user comment for this param set file
-   stw::scl::C_SclString c_UserComment;
+   std::string c_UserComment;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

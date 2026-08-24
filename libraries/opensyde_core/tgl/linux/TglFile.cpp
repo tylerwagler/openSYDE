@@ -23,8 +23,9 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclDateTime.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -60,7 +61,7 @@ static int m_RemoveFile(const char_t * const opcn_Pathname, const struct stat * 
    false     error -> orc_String not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglFileAgeString(const C_SclString & orc_FileName, C_SclString & orc_String)
+bool stw::tgl::TglFileAgeString(const std::string & orc_FileName, std::string & orc_String)
 {
    C_SclDateTime c_DateTime;
    struct stat c_Stat;
@@ -103,7 +104,7 @@ bool stw::tgl::TglFileAgeString(const C_SclString & orc_FileName, C_SclString & 
    else      size of file in bytes
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t stw::tgl::TglFileSize(const C_SclString & orc_FileName)
+int32_t stw::tgl::TglFileSize(const std::string & orc_FileName)
 {
    int32_t s32_Size = -1;
 
@@ -134,7 +135,7 @@ int32_t stw::tgl::TglFileSize(const C_SclString & orc_FileName)
    false      directory does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglDirectoryExists(const C_SclString & orc_Path)
+bool stw::tgl::TglDirectoryExists(const std::string & orc_Path)
 {
    int32_t s32_Ret;
    struct stat c_Status;
@@ -157,7 +158,7 @@ bool stw::tgl::TglDirectoryExists(const C_SclString & orc_Path)
    false      file does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglFileExists(const C_SclString & orc_FileName)
+bool stw::tgl::TglFileExists(const std::string & orc_FileName)
 {
    bool q_Return = false;
    struct stat c_Stat;
@@ -188,13 +189,13 @@ bool stw::tgl::TglFileExists(const C_SclString & orc_FileName)
    C_NOACT      no files found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t stw::tgl::TglFileFind(const C_SclString & orc_SearchPattern,
-                              std::vector<C_TglFileSearchRecord> & orc_FoundFiles)
+int32_t stw::tgl::TglFileFind(const std::string & orc_SearchPattern,
+                               std::vector<C_TglFileSearchRecord> & orc_FoundFiles)
 {
    int32_t s32_Error = C_CONFIG;
    DIR * pc_Dir;
    struct dirent * pc_Entry;
-   const C_SclString c_Path = TglExtractFilePath(orc_SearchPattern);
+   const std::string c_Path = TglExtractFilePath(orc_SearchPattern);
 
    orc_FoundFiles.clear();
 
@@ -205,7 +206,7 @@ int32_t stw::tgl::TglFileFind(const C_SclString & orc_SearchPattern,
       {
          if (pc_Entry->d_type == DT_REG)
          {
-            const C_SclString c_Pattern = TglExtractFileName(orc_SearchPattern);
+            const std::string c_Pattern = TglExtractFileName(orc_SearchPattern);
             //lint -emacro(835 9130,FNM_PATHNAME)  //system macros do bad things; quality ensured by supplier
             //lint -emacro(835 9130,FNM_NOESCAPE)  //system macros do bad things; quality ensured by supplier
             //lint -e{9130} //API defined by library
@@ -235,23 +236,23 @@ int32_t stw::tgl::TglFileFind(const C_SclString & orc_SearchPattern,
    path with delimiter
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglFileIncludeTrailingDelimiter(const C_SclString & orc_Path)
+std::string stw::tgl::TglFileIncludeTrailingDelimiter(const std::string & orc_Path)
 {
-   C_SclString c_Path;
+    std::string c_Path;
 
-   if (orc_Path.Length() == 0)
-   {
-      c_Path = "/";
-   }
-   else if (orc_Path.operator [](orc_Path.Length()) != '/')
-   {
-      c_Path = orc_Path + "/";
-   }
-   else
-   {
-      c_Path = orc_Path;
-   }
-   return c_Path;
+    if (orc_Path.length() == 0)
+    {
+       c_Path = "/";
+    }
+    else if (orc_Path.operator [](orc_Path.length() - 1U) != '/')
+    {
+       c_Path = orc_Path + "/";
+    }
+    else
+    {
+       c_Path = orc_Path;
+    }
+    return c_Path;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -267,17 +268,17 @@ C_SclString stw::tgl::TglFileIncludeTrailingDelimiter(const C_SclString & orc_Pa
    extension (includes the ".")
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglExtractFileExtension(const C_SclString & orc_Path)
+std::string stw::tgl::TglExtractFileExtension(const std::string & orc_Path)
 {
-   uint32_t u32_Pos;
-   C_SclString c_Extension = "";
+    uint32_t u32_Pos;
+    std::string c_Extension = "";
 
-   u32_Pos = orc_Path.LastPos(".");
-   if (u32_Pos != 0U)
-   {
-      c_Extension = orc_Path.SubString(u32_Pos, INT_MAX); //get everything starting with the "."
-   }
-   return c_Extension;
+    u32_Pos = LastPosCompat(orc_Path, ".");
+    if (u32_Pos != 0U)
+    {
+       c_Extension = SubStringCompat(orc_Path, u32_Pos, INT_MAX); //get everything starting with the "."
+    }
+    return c_Extension;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -294,19 +295,19 @@ C_SclString stw::tgl::TglExtractFileExtension(const C_SclString & orc_Path)
    new file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglChangeFileExtension(const C_SclString & orc_Path, const C_SclString & orc_Extension)
+std::string stw::tgl::TglChangeFileExtension(const std::string & orc_Path, const std::string & orc_Extension)
 {
-   uint32_t u32_Pos;
-   C_SclString c_NewPath = orc_Path;
+    uint32_t u32_Pos;
+    std::string c_NewPath = orc_Path;
 
-   u32_Pos = c_NewPath.LastPos(".");
-   if (u32_Pos != 0U)
-   {
-      //there is a file extension !
-      c_NewPath = c_NewPath.Delete(u32_Pos, INT_MAX); //remove everything from and including the "."
-      c_NewPath += orc_Extension;
-   }
-   return c_NewPath;
+    u32_Pos = LastPosCompat(c_NewPath, ".");
+    if (u32_Pos != 0U)
+    {
+       //there is a file extension !
+       DeleteCompat(c_NewPath, u32_Pos, INT_MAX); //remove everything from and including the "."
+       c_NewPath += orc_Extension;
+    }
+    return c_NewPath;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -315,54 +316,54 @@ C_SclString stw::tgl::TglChangeFileExtension(const C_SclString & orc_Path, const
    \return  full path including "/binary" (including extension if any); empty string on error
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglGetExePath(void)
+std::string stw::tgl::TglGetExePath(void)
 {
-   std::vector<char_t> c_VecPath;
-   C_SclString c_Arg;
-   C_SclString c_Path;
-   bool q_Success = false;
+    std::vector<char_t> c_VecPath;
+    std::string c_Arg;
+    std::string c_Path;
+    bool q_Success = false;
 
-   c_VecPath.resize(1, 0);
+    c_VecPath.resize(1, 0);
 
-   c_Arg = "/proc/" + C_SclString::IntToStr(getpid()) + "/exe";
+    c_Arg = "/proc/" + std::to_string(getpid()) + "/exe";
 
-   do
-   {
-      ssize_t x_Return;  //lint !e8080  type defined by API we use
-      size_t x_BuffSize; //lint !e8080  type defined by API we use
-      c_VecPath.resize(c_VecPath.size() + PATH_MAX, 0);
-      // Reserving one byte for null termination
-      x_BuffSize = c_VecPath.size() - 1;
+    do
+    {
+       ssize_t x_Return;  //lint !e8080  type defined by API we use
+       size_t x_BuffSize; //lint !e8080  type defined by API we use
+       c_VecPath.resize(c_VecPath.size() + PATH_MAX, 0);
+       // Reserving one byte for null termination
+       x_BuffSize = c_VecPath.size() - 1;
 
-      x_Return = readlink(c_Arg.c_str(), &c_VecPath[0], x_BuffSize);
+       x_Return = readlink(c_Arg.c_str(), &c_VecPath[0], x_BuffSize);
 
-      if ((x_Return >= 0) && (x_Return < static_cast<ssize_t>(x_BuffSize)))
-      {
-         // Success: Buffer was big enough and no error occurred
-         q_Success = true;
-      }
-      else if (x_Return < 0)
-      {
-         // A not buffer size specific error which can not be fixed by trying again with a bigger buffer size
-         // Special case: The error "errno == ENAMETOOLONG" seems no to be fixable by
-         // increasing the buffer size in all cases. Risking an endless loop
-         break;
-      }
-      else
-      {
-         // The buffer was probably too small, try a further iteration with an increased buffer size:
-         // sn_Return is bigger or equal to sn_BuffSize. This is an indicator for a truncated part of the path
-      }
-   }
-   while (q_Success == false);
+       if ((x_Return >= 0) && (x_Return < static_cast<ssize_t>(x_BuffSize)))
+       {
+          // Success: Buffer was big enough and no error occurred
+          q_Success = true;
+       }
+       else if (x_Return < 0)
+       {
+          // A not buffer size specific error which can not be fixed by trying again with a bigger buffer size
+          // Special case: The error "errno == ENAMETOOLONG" seems no to be fixable by
+          // increasing the buffer size in all cases. Risking an endless loop
+          break;
+       }
+       else
+       {
+          // The buffer was probably too small, try a further iteration with an increased buffer size:
+          // sn_Return is bigger or equal to sn_BuffSize. This is an indicator for a truncated part of the path
+       }
+    }
+    while (q_Success == false);
 
-   if (q_Success == true)
-   {
-      //we got a path ...
-      c_Path = &c_VecPath[0];
-   }
+    if (q_Success == true)
+    {
+       //we got a path ...
+       c_Path = &c_VecPath[0];
+    }
 
-   return c_Path;
+    return c_Path;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -377,18 +378,18 @@ C_SclString stw::tgl::TglGetExePath(void)
    file path   (including final "\" or ":")
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglExtractFilePath(const C_SclString & orc_Path)
+std::string stw::tgl::TglExtractFilePath(const std::string & orc_Path)
 {
-   uint32_t u32_Return;
-   C_SclString c_Path = ".";
+    uint32_t u32_Return;
+    std::string c_Path = ".";
 
-   u32_Return = orc_Path.LastPos("/");
+    u32_Return = LastPosCompat(orc_Path, "/");
 
-   if (u32_Return != 0U)
-   {
-      c_Path = orc_Path.SubString(1U, u32_Return);
-   }
-   return c_Path;
+    if (u32_Return != 0U)
+    {
+       c_Path = SubStringCompat(orc_Path, 1U, u32_Return);
+    }
+    return c_Path;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -403,22 +404,22 @@ C_SclString stw::tgl::TglExtractFilePath(const C_SclString & orc_Path)
    file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglExtractFileName(const C_SclString & orc_Path)
+std::string stw::tgl::TglExtractFileName(const std::string & orc_Path)
 {
-   uint32_t u32_Return;
-   C_SclString c_FileName;
+    uint32_t u32_Return;
+    std::string c_FileName;
 
-   u32_Return = orc_Path.LastPos("/");
+    u32_Return = LastPosCompat(orc_Path, "/");
 
-   if (u32_Return != 0U)
-   {
-      c_FileName = orc_Path.SubString(u32_Return + 1, orc_Path.Length());
-   }
-   else
-   {
-      c_FileName = orc_Path;
-   }
-   return c_FileName;
+    if (u32_Return != 0U)
+    {
+       c_FileName = SubStringCompat(orc_Path, u32_Return + 1, orc_Path.length());
+    }
+    else
+    {
+       c_FileName = orc_Path;
+    }
+    return c_FileName;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -434,20 +435,20 @@ C_SclString stw::tgl::TglExtractFileName(const C_SclString & orc_Path)
    Absolute path; empty string on error
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglExpandFileName(const C_SclString & orc_RelativePath, const C_SclString & orc_BasePath)
+std::string stw::tgl::TglExpandFileName(const std::string & orc_RelativePath, const std::string & orc_BasePath)
 {
-   char_t acn_Buffer[PATH_MAX];
-   C_SclString c_FullPath;
+    char_t acn_Buffer[PATH_MAX];
+    std::string c_FullPath;
 
-   const C_SclString c_RelPath = orc_BasePath + "/" + orc_RelativePath;
-   const char_t * const pcn_Path = realpath(c_RelPath.c_str(), &acn_Buffer[0]);
+    const std::string c_RelPath = orc_BasePath + "/" + orc_RelativePath;
+    const char_t * const pcn_Path = realpath(c_RelPath.c_str(), &acn_Buffer[0]);
 
-   if (pcn_Path != NULL)
-   {
-      c_FullPath = pcn_Path;
-   }
+    if (pcn_Path != NULL)
+    {
+       c_FullPath = pcn_Path;
+    }
 
-   return c_FullPath;
+    return c_FullPath;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -463,7 +464,7 @@ C_SclString stw::tgl::TglExpandFileName(const C_SclString & orc_RelativePath, co
    -1    could not create directory
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t stw::tgl::TglCreateDirectory(const C_SclString & orc_Directory)
+int32_t stw::tgl::TglCreateDirectory(const std::string & orc_Directory)
 {
    int32_t s32_Ret;
    int32_t s32_Result = -1;
@@ -533,7 +534,7 @@ static int m_RemoveFile(const char_t * const opcn_Pathname, const struct stat * 
    -1    could not remove directory
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t stw::tgl::TglRemoveDirectory(const C_SclString & orc_Directory, const bool oq_ContentOnly)
+int32_t stw::tgl::TglRemoveDirectory(const std::string & orc_Directory, const bool oq_ContentOnly)
 {
    int32_t s32_Ret = -1;
 
@@ -570,13 +571,13 @@ int32_t stw::tgl::TglRemoveDirectory(const C_SclString & orc_Directory, const bo
    false  path is an absolute path
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglIsRelativePath(const C_SclString & orc_Path)
+bool stw::tgl::TglIsRelativePath(const std::string & orc_Path)
 {
    bool q_IsAbsolute = false;
 
-   if (orc_Path.Length() >= 1U)
+   if (orc_Path.length() >= 1U)
    {
-      if (orc_Path[1] == '/')
+      if (orc_Path[0] == '/')
       {
          q_IsAbsolute = true;
       }

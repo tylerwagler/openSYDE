@@ -26,9 +26,9 @@ class C_OscHalcConfigStandaloneFiler
 public:
    C_OscHalcConfigStandaloneFiler(void);
 
-   static int32_t h_LoadFileStandalone(C_OscHalcConfigStandalone & orc_IoData, const stw::scl::C_SclString & orc_Path);
+   static int32_t h_LoadFileStandalone(C_OscHalcConfigStandalone & orc_IoData, const std::string & orc_Path);
    static int32_t h_SaveFileStandalone(const C_OscHalcConfigStandalone & orc_IoData,
-                                       const stw::scl::C_SclString & orc_Path);
+                                       const std::string & orc_Path);
    static int32_t h_LoadDataStandalone(C_OscHalcConfigStandalone & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_SaveDataStandalone(const C_OscHalcConfigStandalone & orc_IoData,
                                        C_OscXmlParserBase & orc_XmlParser);

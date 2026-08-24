@@ -63,8 +63,8 @@ using namespace stw::tgl;
    C_RANGE    orc_Path is empty
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProjectFiler::h_Save(C_OscProject & orc_Project, const C_SclString & orc_Path,
-                                  const C_SclString & orc_OpenSydeVersion)
+int32_t C_OscProjectFiler::h_Save(C_OscProject & orc_Project, const std::string & orc_Path,
+                                  const std::string & orc_OpenSydeVersion)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -119,13 +119,13 @@ int32_t C_OscProjectFiler::h_Save(C_OscProject & orc_Project, const C_SclString 
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const C_SclString & orc_Path)
+int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const std::string & orc_Path)
 {
    int32_t s32_Retval;
 
    if (TglFileExists(orc_Path) == true)
    {
-      C_SclString c_Tmp;
+      std::string c_Tmp;
       //Open file
       C_OscXmlParser c_Xml;
       s32_Retval = c_Xml.LoadFromFile(orc_Path);
@@ -210,10 +210,10 @@ int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const C_SclString 
    C_NOACT    could not write to file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProjectFiler::mh_SaveInternal(C_OscProject & orc_Project, const C_SclString & orc_Path,
-                                           const C_SclString & orc_OpenSydeVersion, const bool oq_New)
+int32_t C_OscProjectFiler::mh_SaveInternal(C_OscProject & orc_Project, const std::string & orc_Path,
+                                           const std::string & orc_OpenSydeVersion, const bool oq_New)
 {
-   C_SclString c_Tmp;
+   std::string c_Tmp;
    //Open file
    C_OscXmlParser c_Xml;
    int32_t s32_Return;

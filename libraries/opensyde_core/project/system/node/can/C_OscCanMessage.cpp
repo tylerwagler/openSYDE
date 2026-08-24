@@ -16,11 +16,13 @@
 #include <map>
 
 #include "C_OscCanMessage.hpp"
+#include "C_SclStringCompat.hpp"
 #include "C_SclChecksums.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::opensyde_core;
+using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -105,8 +107,8 @@ bool C_OscCanMessage::operator !=(const C_OscCanMessage & orc_Cmp) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanMessage::CalcHash(uint32_t & oru32_HashValue, const bool oq_R20Compatible) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_CanId, sizeof(this->u32_CanId), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsExtended, sizeof(this->q_IsExtended), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u16_Dlc, sizeof(this->u16_Dlc), oru32_HashValue);
@@ -550,7 +552,7 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
                         {
                            const C_OscNodeDataPoolListElement & rc_ListElement =
                               opc_List->c_Elements[rc_SignalData.u32_ComDataElementIndex];
-                           if (rc_CurrentElement.c_Name.LowerCase() == rc_ListElement.c_Name.LowerCase())
+                           if (LowerCaseCompat(rc_CurrentElement.c_Name) == LowerCaseCompat(rc_ListElement.c_Name))
                            {
                               *opq_NameConflict = true;
                               break;

@@ -49,11 +49,11 @@ public:
    int32_t SetNodeUpdateInformation(const uint32_t ou32_NodeIndex,
                                     const C_OscViewNodeUpdate & orc_NodeUpdateInformation);
    int32_t SetNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
-                                        const stw::scl::C_SclString & orc_Value,
+                                        const std::string & orc_Value,
                                         const C_OscViewNodeUpdate::E_GenericFileType oe_Type);
    int32_t SetNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
                                              const C_OscViewNodeUpdateParamInfo & orc_Value);
-   int32_t SetNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex, const stw::scl::C_SclString & orc_Value);
+   int32_t SetNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex, const std::string & orc_Value);
    int32_t SetNodeUpdateInformationSkipUpdateOfPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
                                                     const bool oq_SkipFile,
                                                     const C_OscViewNodeUpdate::E_GenericFileType oe_Type);
@@ -65,14 +65,14 @@ public:
                                           const C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger,
                                           const C_OscViewNodeUpdate::E_StateTrafficEncryption oe_StateTrafficEncryption);
    int32_t SetNodeUpdateInformationParamInfoContent(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
-                                                    const stw::scl::C_SclString & orc_FilePath,
+                                                    const std::string & orc_FilePath,
                                                     const uint32_t ou32_LastKnownCrc);
-   int32_t AddNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const stw::scl::C_SclString & orc_Value,
+   int32_t AddNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const std::string & orc_Value,
                                         const C_OscViewNodeUpdate::E_GenericFileType oe_Type);
    int32_t AddNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex,
                                              const C_OscViewNodeUpdateParamInfo & orc_Value);
-   const stw::scl::C_SclString & GetName(void) const;
-   void SetName(const stw::scl::C_SclString & orc_Value);
+   const std::string & GetName(void) const;
+   void SetName(const std::string & orc_Value);
    void SetPcConnected(const bool oq_Connected, const uint32_t ou32_BusIndex);
 
    //Sync to system definition
@@ -99,7 +99,7 @@ protected:
    ///< Equal to system definition nodes count.
 
 private:
-   stw::scl::C_SclString mc_Name;             ///< System view name
+   std::string mc_Name;             ///< System view name
    stw::opensyde_core::C_OscViewPc mc_PcData; ///< Data for PC element
 };
 

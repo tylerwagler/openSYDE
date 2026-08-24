@@ -18,6 +18,7 @@
 #define C_OSCSECURITYECDHAES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include <openssl/evp.h>
 #include "stwtypes.hpp"
 #include "C_OscSecurityAesCbc.hpp"
@@ -41,14 +42,14 @@ public:
    static const uint32_t hu32_PRIVATE_KEY_LENGTH = 32U;
    static const uint32_t hu32_AES_KEY_LENGTH = 16U;
 
-   int32_t CreateEcKeys(uint8_t(&orau8_PublicKey)[hu32_PUBLIC_KEY_LENGTH]);
-   int32_t DeriveAesKey(const uint8_t(&orau8_OthersPublicKey)[hu32_PUBLIC_KEY_LENGTH]);
-   int32_t AesEncrypt(const uint8_t (&orau8_AesInitVector)[stw::opensyde_core::C_OscSecurityAesCbc::hu32_IV_LENGTH],
-                      const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output) const;
-   int32_t AesDecrypt(const uint8_t (&orau8_AesInitVector)[stw::opensyde_core::C_OscSecurityAesCbc::hu32_IV_LENGTH],
-                      const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output) const;
+   std::error_code CreateEcKeys(uint8_t(&orau8_PublicKey)[hu32_PUBLIC_KEY_LENGTH]);
+   std::error_code DeriveAesKey(const uint8_t(&orau8_OthersPublicKey)[hu32_PUBLIC_KEY_LENGTH]);
+   std::error_code AesEncrypt(const uint8_t (&orau8_AesInitVector)[stw::opensyde_core::C_OscSecurityAesCbc::hu32_IV_LENGTH],
+                               const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output) const;
+   std::error_code AesDecrypt(const uint8_t (&orau8_AesInitVector)[stw::opensyde_core::C_OscSecurityAesCbc::hu32_IV_LENGTH],
+                               const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output) const;
 
-   int32_t GetAesKey(uint8_t(&orau8_AesKey)[hu32_AES_KEY_LENGTH]) const;
+   std::error_code GetAesKey(uint8_t(&orau8_AesKey)[hu32_AES_KEY_LENGTH]) const;
 
 protected:
    EVP_PKEY * mpc_TheKey;

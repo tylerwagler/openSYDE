@@ -16,7 +16,8 @@
 #include <map>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
+#include "C_SclStringList.hpp"
 #include "C_SclIniFile.hpp"
 #include "C_OscCanOpenEdsInfoBlock.hpp"
 
@@ -70,17 +71,17 @@ public:
 
    static const uint8_t hu8_NUM_SUBS_WE_ARE_A_SUB      = 0xFFU;
 
-   stw::scl::C_SclString c_Name;   //object name
+   std::string c_Name;   //object name
    uint16_t u16_Index;             //object index
    uint8_t u8_SubIndex;            //object subindex
    uint8_t u8_DataType;            //CANopen data type
-   stw::scl::C_SclString c_Access; //access permission ("RW", "RO", "RWW", "CONST", "WO")
+   std::string c_Access; //access permission ("RW", "RO", "RWW", "CONST", "WO")
    uint8_t u8_NumSubs;             //number of sub-indexes (0xFF: we are a sub)
-   stw::scl::C_SclString c_DefaultValue;
-   stw::scl::C_SclString c_ParameterValue;
-   stw::scl::C_SclString c_LowLimit;
-   stw::scl::C_SclString c_HighLimit;
-   stw::scl::C_SclString c_Denotation;
+   std::string c_DefaultValue;
+   std::string c_ParameterValue;
+   std::string c_LowLimit;
+   std::string c_HighLimit;
+   std::string c_Denotation;
    bool q_IsMappableIntoPdo;
 
    C_OscCanOpenObjectData();
@@ -96,7 +97,7 @@ public:
    bool IsFloatDataType(void) const;    //REAL32 or REAL64
    bool IsStringDataType(void) const;   //VISIBLE_STRING, UNICODE_STRING
 
-   void DataTypeToTextAndSize(stw::scl::C_SclString * const opc_Text, uint8_t * const opu8_Size) const;
+   void DataTypeToTextAndSize(std::string * const opc_Text, uint8_t * const opu8_Size) const;
 
    void SetSize(const uint16_t ou16_Size);
    uint16_t GetSize(void) const;
@@ -121,12 +122,12 @@ public:
 class C_OscCanOpenObjectDictionary
 {
 private:
-   int32_t m_CheckForExistingObjects(const stw::scl::C_SclString & orc_Blockname, stw::scl::C_SclIniFile & orc_IniFile);
+   int32_t m_CheckForExistingObjects(const std::string & orc_Blockname, stw::scl::C_SclIniFile & orc_IniFile);
    int32_t m_GetObjectDescription(const uint16_t ou16_Index, const uint8_t ou8_SubIndex, const bool oq_IsSubIndex,
                                   stw::scl::C_SclIniSection & orc_Section, C_OscCanOpenObjectData & orc_Object);
    void m_RememberFileHash();
 
-   stw::scl::C_SclString mc_LastError;
+   std::string mc_LastError;
    uint32_t mu32_OriginalFileHash;
 
    int32_t m_IsSectionRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx, const uint8_t ou8_OdSubIndex,
@@ -167,8 +168,8 @@ public:
 
    C_OscCanOpenObjectDictionary();
 
-   int32_t LoadFromFile(const stw::scl::C_SclString & orc_File);
-   stw::scl::C_SclString GetLastErrorText() const;
+   int32_t LoadFromFile(const std::string & orc_File);
+   std::string GetLastErrorText() const;
    void CalcHash(uint32_t & oru32_HashValue) const;
 
    //General

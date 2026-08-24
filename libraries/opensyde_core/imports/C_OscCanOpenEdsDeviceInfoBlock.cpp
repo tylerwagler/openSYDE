@@ -66,12 +66,12 @@ C_OscCanOpenEdsDeviceInfoBlock::C_OscCanOpenEdsDeviceInfoBlock() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanOpenEdsDeviceInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
 {
-   C_SclChecksums::CalcCRC32(this->c_VendorName.c_str(), this->c_VendorName.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_VendorNumber.c_str(), this->c_VendorNumber.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_ProductName.c_str(), this->c_ProductName.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_ProductNumber.c_str(), this->c_ProductNumber.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_RevisionNumber.c_str(), this->c_RevisionNumber.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_OrderCode.c_str(), this->c_OrderCode.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_VendorName.c_str(), this->c_VendorName.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_VendorNumber.c_str(), this->c_VendorNumber.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_ProductName.c_str(), this->c_ProductName.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_ProductNumber.c_str(), this->c_ProductNumber.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_RevisionNumber.c_str(), this->c_RevisionNumber.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_OrderCode.c_str(), this->c_OrderCode.length(), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_BaudRate10, sizeof(this->q_BaudRate10), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_BaudRate20, sizeof(this->q_BaudRate20), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_BaudRate50, sizeof(this->q_BaudRate50), oru32_HashValue);
@@ -84,7 +84,7 @@ void C_OscCanOpenEdsDeviceInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
    C_SclChecksums::CalcCRC32(&this->q_SimpleBootUpSlave, sizeof(this->q_SimpleBootUpSlave), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u8_Granularity, sizeof(this->u8_Granularity), oru32_HashValue);
    C_SclChecksums::CalcCRC32(this->c_DynamicChannelsSupported.c_str(),
-                             this->c_DynamicChannelsSupported.Length(), oru32_HashValue);
+                             this->c_DynamicChannelsSupported.length(), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_GroupMessaging, sizeof(this->q_GroupMessaging), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u16_NrOfRxPdo, sizeof(this->u16_NrOfRxPdo), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u16_NrOfTxPdo, sizeof(this->u16_NrOfTxPdo), oru32_HashValue);
@@ -105,11 +105,11 @@ void C_OscCanOpenEdsDeviceInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsDeviceInfoBlock::LoadFromIni(stw::scl::C_SclIniFile & orc_File,
-                                                    stw::scl::C_SclString & orc_LastError)
+                                                    std::string & orc_LastError)
 {
    //lint -e{8062} Kept for later error reporting
    const int32_t s32_Retval = C_NO_ERR;
-   const stw::scl::C_SclString c_SectionName = "DeviceInfo";
+   const std::string c_SectionName = "DeviceInfo";
 
    orc_LastError = "";
 
@@ -175,11 +175,11 @@ uint8_t C_OscCanOpenEdsDeviceInfoBlock::GetGranularity() const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadStringValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                                                     const stw::scl::C_SclString & orc_SectionName,
-                                                                     const stw::scl::C_SclString & orc_KeyName,
-                                                                     stw::scl::C_SclString & orc_OutputValue,
-                                                                     stw::scl::C_SclString & orc_ErrorMessage,
-                                                                     const stw::scl::C_SclString & orc_DefaultValue)
+                                                                     const std::string & orc_SectionName,
+                                                                     const std::string & orc_KeyName,
+                                                                     std::string & orc_OutputValue,
+                                                                     std::string & orc_ErrorMessage,
+                                                                     const std::string & orc_DefaultValue)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -214,10 +214,10 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadStringValueFromIniFile(stw::scl::C
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU8ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                                                 const stw::scl::C_SclString & orc_SectionName,
-                                                                 const stw::scl::C_SclString & orc_KeyName,
+                                                                 const std::string & orc_SectionName,
+                                                                 const std::string & orc_KeyName,
                                                                  uint8_t & oru8_OutputValue,
-                                                                 stw::scl::C_SclString & orc_ErrorMessage,
+                                                                 std::string & orc_ErrorMessage,
                                                                  const uint8_t ou8_DefaultValue)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -253,10 +253,10 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU8ValueFromIniFile(stw::scl::C_Scl
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU16ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                                                  const stw::scl::C_SclString & orc_SectionName,
-                                                                  const stw::scl::C_SclString & orc_KeyName,
+                                                                  const std::string & orc_SectionName,
+                                                                  const std::string & orc_KeyName,
                                                                   uint16_t & oru16_OutputValue,
-                                                                  stw::scl::C_SclString & orc_ErrorMessage,
+                                                                  std::string & orc_ErrorMessage,
                                                                   const uint16_t ou16_DefaultValue)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -292,10 +292,10 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU16ValueFromIniFile(stw::scl::C_Sc
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadBoolValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                                                   const stw::scl::C_SclString & orc_SectionName,
-                                                                   const stw::scl::C_SclString & orc_KeyName,
+                                                                   const std::string & orc_SectionName,
+                                                                   const std::string & orc_KeyName,
                                                                    bool & orq_OutputValue,
-                                                                   stw::scl::C_SclString & orc_ErrorMessage,
+                                                                   std::string & orc_ErrorMessage,
                                                                    const bool oq_DefaultValue)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -320,8 +320,8 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadBoolValueFromIniFile(stw::scl::C_S
    \param[in,out]  orc_ErrorMessage    Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingSectionError(const stw::scl::C_SclString & orc_SectionName,
-                                                                 stw::scl::C_SclString & orc_ErrorMessage)
+void C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingSectionError(const std::string & orc_SectionName,
+                                                                 std::string & orc_ErrorMessage)
 {
    orc_ErrorMessage = "Error: Could not find section \"" + orc_SectionName + "\".";
 }
@@ -334,9 +334,9 @@ void C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingSectionError(const stw::scl:
    \param[in,out]  orc_ErrorMessage    Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(const stw::scl::C_SclString & orc_SectionName,
-                                                             const stw::scl::C_SclString & orc_KeyName,
-                                                             stw::scl::C_SclString & orc_ErrorMessage)
+void C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(const std::string & orc_SectionName,
+                                                             const std::string & orc_KeyName,
+                                                             std::string & orc_ErrorMessage)
 {
    orc_ErrorMessage = "Error: Could not find key \"" + orc_KeyName + "\" in section \"" + orc_SectionName + "\".";
 }

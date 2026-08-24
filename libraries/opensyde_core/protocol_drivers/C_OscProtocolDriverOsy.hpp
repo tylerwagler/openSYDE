@@ -67,7 +67,7 @@ private:
    std::map<uint8_t, uint8_t> mc_DataPoolMappingClientToServer;
    std::map<uint8_t, uint8_t> mc_DataPoolMappingServerToClient;
 
-   void m_LogServiceError(const stw::scl::C_SclString & orc_Service, const int32_t os32_ReturnCode,
+   void m_LogServiceError(const std::string & orc_Service, const int32_t os32_ReturnCode,
                           const uint8_t ou8_NrCode) const;
 
    //check for exactly one incoming non-async service:
@@ -81,7 +81,7 @@ private:
    int32_t m_ReadDataByIdentifier(const uint16_t ou16_Identifier, const uint16_t ou16_ExpectedPayloadSize,
                                   const bool oq_ExactSizeExpected, std::vector<uint8_t> & orc_ReadData,
                                   uint8_t & oru8_NrCode);
-   int32_t m_ReadStringDataIdentifier(const uint16_t ou16_DataIdentifier, stw::scl::C_SclString & orc_String,
+   int32_t m_ReadStringDataIdentifier(const uint16_t ou16_DataIdentifier, std::string & orc_String,
                                       uint8_t & oru8_NrCode);
    int32_t m_WriteDataByIdentifier(const uint16_t ou16_Identifier, const std::vector<uint8_t> & orc_WriteData,
                                    uint8_t & oru8_NrCode);
@@ -196,7 +196,7 @@ private:
    static const uint16_t mhu16_OSY_MAX_NUM_DATA_POOL_LIST_ELEMENTS = 2048U;
 
 protected:
-   void m_LogErrorWithHeader(const stw::scl::C_SclString & orc_Activity, const stw::scl::C_SclString & orc_Information,
+   void m_LogErrorWithHeader(const std::string & orc_Activity, const std::string & orc_Information,
                              const char_t * const opcn_Function, const bool oq_AsError = true) const;
 
    virtual void m_OsyReadDataPoolDataEventReceived(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
@@ -217,14 +217,14 @@ public:
       //lint -sem(stw::opensyde_core::C_OscProtocolDriverOsy::C_FlashBlockInfo::ClearContent,initializer)
       void ClearContent(void);
 
-      stw::scl::C_SclString c_ApplicationName;
-      stw::scl::C_SclString c_ApplicationVersion;
-      stw::scl::C_SclString c_BuildDate;
-      stw::scl::C_SclString c_BuildTime;
+      std::string c_ApplicationName;
+      std::string c_ApplicationVersion;
+      std::string c_BuildDate;
+      std::string c_BuildTime;
       uint32_t u32_BlockStartAddress; ///< first occupied address
       uint32_t u32_BlockEndAddress;   ///< highest occupied address
       uint8_t u8_SignatureValid;      ///< 0 = valid; 1 = invalid
-      stw::scl::C_SclString c_AdditionalInformation;
+      std::string c_AdditionalInformation;
 
       static const uint8_t hu8_ID_BLOCK_ADDRESSES        = 1U;
       static const uint8_t hu8_ID_RESULT_SIGNATURE       = 2U;
@@ -241,7 +241,7 @@ public:
       C_DataPoolMetaData(void);
 
       uint8_t au8_Version[3];       ///< 0:Major, 1:Minor, 2:Release
-      stw::scl::C_SclString c_Name; ///< Data pool name
+      std::string c_Name; ///< Data pool name
    };
 
    ///list of features supported by server
@@ -289,7 +289,7 @@ public:
    void RegisterDataPoolMapping(const std::map<uint8_t, uint8_t> & orc_Mapping);
    void ClearDataPoolMapping(void);
 
-   static stw::scl::C_SclString h_GetOpenSydeServiceErrorDetails(const int32_t os32_FunctionResult,
+   static std::string h_GetOpenSydeServiceErrorDetails(const int32_t os32_FunctionResult,
                                                                  const uint8_t ou8_NrCode,
                                                                  bool * const opq_IsHardError = NULL);
 
@@ -300,13 +300,13 @@ public:
    //Device information services:
    int32_t OsyReadEcuSerialNumber(C_OscProtocolSerialNumber & orc_SerialNumber, uint8_t * const opu8_NrCode = NULL);
    int32_t OsyReadHardwareNumber(uint32_t & oru32_HardwareNumber, uint8_t * const opu8_NrCode = NULL);
-   int32_t OsyReadHardwareVersionNumber(stw::scl::C_SclString & orc_HardwareVersionNumber,
+   int32_t OsyReadHardwareVersionNumber(std::string & orc_HardwareVersionNumber,
                                         uint8_t * const opu8_NrCode = NULL);
    int32_t OsyReadListOfFeatures(C_ListOfFeatures & orc_ListOfFeatures, uint8_t * const opu8_NrCode = NULL);
    int32_t OsyReadMaxNumberOfBlockLength(uint16_t & oru16_MaxNumberOfBlockLength, uint8_t * const opu8_NrCode = NULL);
-   int32_t OsyReadDeviceName(stw::scl::C_SclString & orc_DeviceName, uint8_t * const opu8_NrCode = NULL);
-   int32_t OsyReadApplicationName(stw::scl::C_SclString & orc_ApplicationName, uint8_t * const opu8_NrCode = NULL);
-   int32_t OsyReadApplicationVersion(stw::scl::C_SclString & orc_ApplicationVersion,
+   int32_t OsyReadDeviceName(std::string & orc_DeviceName, uint8_t * const opu8_NrCode = NULL);
+   int32_t OsyReadApplicationName(std::string & orc_ApplicationName, uint8_t * const opu8_NrCode = NULL);
+   int32_t OsyReadApplicationVersion(std::string & orc_ApplicationVersion,
                                      uint8_t * const opu8_NrCode = NULL);
    int32_t OsyReadActiveDiagnosticSession(uint8_t & oru8_SessionId, uint8_t * const opu8_NrCode = NULL);
    int32_t OsyReadBootSoftwareIdentification(uint8_t(&orau8_Version)[3],
@@ -321,9 +321,9 @@ public:
    int32_t OsyReadFlashCount(uint32_t & oru32_FlashCount, uint8_t * const opu8_NrCode = NULL);
    int32_t OsyReadApplicationSoftwareFingerprint(uint8_t(&orau8_Date)[3],
                                                  uint8_t(&orau8_Time)[3],
-                                                 stw::scl::C_SclString & orc_Username,
+                                                 std::string & orc_Username,
                                                  uint8_t * const opu8_NrCode = NULL);
-   int32_t OsyReadFileBasedTransferExitResult(stw::scl::C_SclString & orc_TransferExitResult,
+   int32_t OsyReadFileBasedTransferExitResult(std::string & orc_TransferExitResult,
                                               uint8_t * const opu8_NrCode = NULL);
    int32_t OsyReadEcuSerialNumberExt(C_OscProtocolSerialNumber & orc_SerialNumberExt,
                                      uint8_t * const opu8_NrCode = NULL);
@@ -403,7 +403,7 @@ public:
                                     uint8_t * const opu8_NrCode = NULL);
    int32_t OsyRequestDownload(const uint32_t ou32_StartAddress, const uint32_t ou32_Size,
                               uint32_t & oru32_MaxBlockLength, uint8_t * const opu8_NrCode = NULL);
-   int32_t OsyRequestFileTransfer(const stw::scl::C_SclString & orc_FilePath, const uint32_t ou32_FileSize,
+   int32_t OsyRequestFileTransfer(const std::string & orc_FilePath, const uint32_t ou32_FileSize,
                                   uint32_t & oru32_MaxBlockLength, uint8_t * const opu8_NrCode = NULL);
    int32_t OsyTransferData(const uint8_t ou8_BlockSequenceCounter, const std::vector<uint8_t> & orc_Data,
                            uint8_t * const opu8_NrCode = NULL);
@@ -412,7 +412,7 @@ public:
                                               uint8_t * const opu8_NrCode = NULL);
    int32_t OsyRequestTransferExitFileBased(const uint8_t(&orau8_Signature)[8], uint8_t * const opu8_NrCode = NULL);
    int32_t OsyWriteApplicationSoftwareFingerprint(const uint8_t (&orau8_Date)[3], const uint8_t (&orau8_Time)[3],
-                                                  const stw::scl::C_SclString & orc_UserName,
+                                                  const std::string & orc_UserName,
                                                   uint8_t * const opu8_NrCode = NULL);
    int32_t OsyFactoryMode(const uint8_t ou8_Operation, uint8_t * const opu8_NrCode = NULL);
 

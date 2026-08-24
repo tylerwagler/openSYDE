@@ -20,6 +20,7 @@
 
 #include "C_SclStringList.hpp"
 #include "stwtypes.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -48,7 +49,7 @@ using namespace stw::scl;
    index of new string
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint32_t C_SclStringList::Add(const C_SclString & orc_String)
+uint32_t C_SclStringList::Add(const std::string & orc_String)
 {
    Strings.push_back(orc_String);
    return static_cast<uint32_t>(Strings.size()) - 1U;
@@ -63,7 +64,7 @@ uint32_t C_SclStringList::Add(const C_SclString & orc_String)
    \param[in]  orc_String   string to append
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclStringList::Append(const C_SclString & orc_String)
+void C_SclStringList::Append(const std::string & orc_String)
 {
    this->Add(orc_String);
 }
@@ -106,7 +107,7 @@ void C_SclStringList::Delete(const uint32_t ou32_Index)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SclStringList::Exchange(const uint32_t ou32_Index1, const uint32_t ou32_Index2)
 {
-   C_SclString c_Temp;
+   std::string c_Temp;
 
    c_Temp = Strings[static_cast<int32_t>(ou32_Index2)];
    Strings[static_cast<int32_t>(ou32_Index2)] = Strings[static_cast<int32_t>(ou32_Index1)];
@@ -122,7 +123,7 @@ void C_SclStringList::Exchange(const uint32_t ou32_Index1, const uint32_t ou32_I
    \param[in]  orc_String   string to insert
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclStringList::Insert(const uint32_t ou32_Index, const C_SclString & orc_String)
+void C_SclStringList::Insert(const uint32_t ou32_Index, const std::string & orc_String)
 {
    Strings.insert(Strings.begin() + ou32_Index, orc_String);
 }
@@ -138,13 +139,13 @@ void C_SclStringList::Insert(const uint32_t ou32_Index, const C_SclString & orc_
    \return  ou32_Index   index of string (0 = first string in list; -1 = string not found)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SclStringList::IndexOf(const C_SclString & orc_String)
+int32_t C_SclStringList::IndexOf(const std::string & orc_String)
 {
    int32_t s32_Index;
 
    for (s32_Index = 0; s32_Index < static_cast<int32_t>(Strings.size()); s32_Index++)
    {
-      if (Strings[s32_Index].AnsiCompareIc(orc_String) == 0)
+      if (LowerCaseCompat(Strings[s32_Index]).compare(LowerCaseCompat(orc_String)) == 0)
       {
          return s32_Index;
       }
@@ -164,9 +165,9 @@ int32_t C_SclStringList::IndexOf(const C_SclString & orc_String)
    \return  concatenated string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SclStringList::GetText(const C_SclString orc_LineSeparator) const
+std::string C_SclStringList::GetText(const std::string orc_LineSeparator) const
 {
-   C_SclString c_Text;
+   std::string c_Text;
    int32_t s32_Index;
 
    for (s32_Index = 0; s32_Index < static_cast<int32_t>(Strings.size()); s32_Index++)
@@ -203,7 +204,7 @@ uint32_t C_SclStringList::GetCount(void) const
    \param[in]     orc_FileName     path to file
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclStringList::LoadFromFile(const C_SclString & orc_FileName)
+void C_SclStringList::LoadFromFile(const std::string & orc_FileName)
 {
    std::FILE * pc_File;
    long x_FileSize;
@@ -303,7 +304,7 @@ void C_SclStringList::LoadFromFile(const C_SclString & orc_FileName)
          s32_Len--; //one character less in this string
       }
 
-      Strings[u32_Line].AsStdString()->assign(pcn_String, s32_Len); //assign with setting length is quite fast
+       Strings[u32_Line].assign(pcn_String, s32_Len); //assign with setting length is quite fast
    }
 
    delete[] pcn_Buffer;
@@ -323,7 +324,7 @@ void C_SclStringList::LoadFromFile(const C_SclString & orc_FileName)
    \param[in]     orc_FileName     path to file
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclStringList::SaveToFile(const C_SclString & orc_FileName)
+void C_SclStringList::SaveToFile(const std::string & orc_FileName)
 {
    int32_t s32_Line;
    uint32_t u32_NumWritten;
@@ -336,8 +337,8 @@ void C_SclStringList::SaveToFile(const C_SclString & orc_FileName)
 
    for (int32_t s32_Line = 0; s32_Line < static_cast<int32_t>(Strings.size()); s32_Line++)
    {
-      u32_NumWritten = std::fwrite(Strings[s32_Line].c_str(), 1U, Strings[s32_Line].Length(), pc_File);
-      if (u32_NumWritten != Strings[s32_Line].Length())
+      u32_NumWritten = std::fwrite(Strings[s32_Line].c_str(), 1U, Strings[s32_Line].length(), pc_File);
+      if (u32_NumWritten != Strings[s32_Line].length())
       {
          (void)std::fclose(pc_File);
          throw ("C_SclStringList::SaveToFile: could not write to file");
@@ -370,20 +371,20 @@ void C_SclStringList::SaveToFile(const C_SclString & orc_FileName)
    else:                empty string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SclStringList::Values(const C_SclString & orc_Key) const
+std::string C_SclStringList::Values(const std::string & orc_Key) const
 {
    int32_t s32_Index;
-   C_SclString c_Help = "";
-   const C_SclString c_Search = orc_Key.UpperCase() + "=";
+   std::string c_Help = "";
+   const std::string c_Search = UpperCaseCompat(orc_Key) + "=";
 
    for (s32_Index = 0; s32_Index < static_cast<int32_t>(Strings.size()); s32_Index++)
    {
       //performance boost: first check only first character:
       if (static_cast<char_t>(std::toupper(Strings[s32_Index].c_str()[0])) == (c_Search.c_str()[0]))
       {
-         if (Strings[s32_Index].UpperCase().Pos(c_Search) == 1U) //key + "="
+         if (PosCompat(UpperCaseCompat(Strings[s32_Index]), c_Search) == 1U) //key + "="
          {
-            c_Help = Strings[s32_Index].SubString(c_Search.Length() + 1, INT_MAX);
+             c_Help = SubStringCompat(Strings[s32_Index], c_Search.length() + 1, INT_MAX);
             break;
          }
       }
@@ -405,21 +406,21 @@ C_SclString C_SclStringList::Values(const C_SclString & orc_Key) const
    else:                 -1
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SclStringList::IndexOfName(const C_SclString & orc_Name) const
+int32_t C_SclStringList::IndexOfName(const std::string & orc_Name) const
 {
    bool q_Found = false;
    int32_t s32_Index;
-   const C_SclString c_Search = orc_Name.UpperCase();
-   C_SclString c_Remainder;
+   const std::string c_Search = UpperCaseCompat(orc_Name);
+   std::string c_Remainder;
    uint32_t u32_Pos;
 
    for (s32_Index = 0; s32_Index < static_cast<int32_t>(Strings.size()); s32_Index++)
    {
-      u32_Pos = Strings[s32_Index].UpperCase().Pos(c_Search);
+      u32_Pos = PosCompat(UpperCaseCompat(Strings[s32_Index]), c_Search);
       if (u32_Pos == 1U)
       {
          //there must be a subsequent "=" (may be preceeded by blanks)
-         c_Remainder = Strings[s32_Index].SubString(orc_Name.Length() + 1, Strings[s32_Index].Length()).TrimLeft();
+          c_Remainder = TrimLeftCompat(SubStringCompat(Strings[s32_Index], orc_Name.length() + 1, Strings[s32_Index].length()));
          if (c_Remainder.c_str()[0] == '=')
          {
             q_Found = true;
@@ -447,15 +448,15 @@ int32_t C_SclStringList::IndexOfName(const C_SclString & orc_Name) const
    else:                        empty string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SclStringList::ValueFromIndex(const uint32_t ou32_Index) const
+std::string C_SclStringList::ValueFromIndex(const uint32_t ou32_Index) const
 {
    uint32_t u32_Pos;
-   C_SclString c_Help;
+   std::string c_Help;
 
-   u32_Pos = Strings[ou32_Index].Pos("=");
+   u32_Pos = PosCompat(Strings[ou32_Index], "=");
    if (u32_Pos != 0U)
    {
-      c_Help = Strings[ou32_Index].SubString(u32_Pos + 1U, INT_MAX);
+      c_Help = SubStringCompat(Strings[ou32_Index], u32_Pos + 1U, INT_MAX);
    }
    else
    {
@@ -492,7 +493,7 @@ void C_SclStringList::Sort(void)
 {
    int32_t s32_Index;
    int32_t s32_Position;
-   C_SclString t_Key;
+   std::string t_Key;
 
    for (s32_Index = 1; s32_Index < static_cast<int32_t>(Strings.size()); s32_Index++)
    {

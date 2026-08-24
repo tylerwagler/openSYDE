@@ -18,7 +18,6 @@
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
@@ -50,7 +49,7 @@ C_OscXmlParserLog::C_OscXmlParserLog() :
    \param[in]  orc_Text    Text
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserLog::SetLogHeading(const C_SclString & orc_Text)
+void C_OscXmlParserLog::SetLogHeading(const std::string & orc_Text)
 {
    this->mc_LogHeading = orc_Text;
 }
@@ -69,7 +68,7 @@ void C_OscXmlParserLog::SetLogHeading(const C_SclString & orc_Text)
    \retval   C_CONFIG   Root not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::SelectRootError(const C_SclString & orc_Name)
+int32_t C_OscXmlParserLog::SelectRootError(const std::string & orc_Name)
 {
    const int32_t s32_Retval = C_OscXmlParser::SelectRootError(orc_Name);
 
@@ -95,7 +94,7 @@ int32_t C_OscXmlParserLog::SelectRootError(const C_SclString & orc_Name)
    \retval   C_CONFIG   Node switch failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::SelectNodeChildError(const C_SclString & orc_Name)
+int32_t C_OscXmlParserLog::SelectNodeChildError(const std::string & orc_Name)
 {
    const int32_t s32_Retval = C_OscXmlParser::SelectNodeChildError(orc_Name);
 
@@ -122,7 +121,7 @@ int32_t C_OscXmlParserLog::SelectNodeChildError(const C_SclString & orc_Name)
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeStringError(const C_SclString & orc_Name, C_SclString & orc_Value) const
+int32_t C_OscXmlParserLog::GetAttributeStringError(const std::string & orc_Name, std::string & orc_Value) const
 {
    const int32_t s32_Retval = C_OscXmlParser::GetAttributeStringError(orc_Name, orc_Value);
 
@@ -150,7 +149,7 @@ int32_t C_OscXmlParserLog::GetAttributeStringError(const C_SclString & orc_Name,
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeSint32Error(const C_SclString & orc_Name, int32_t & ors32_Value) const
+int32_t C_OscXmlParserLog::GetAttributeSint32Error(const std::string & orc_Name, int32_t & ors32_Value) const
 {
    const int32_t s32_Retval = C_OscXmlParser::GetAttributeSint32Error(orc_Name, ors32_Value);
 
@@ -178,7 +177,7 @@ int32_t C_OscXmlParserLog::GetAttributeSint32Error(const C_SclString & orc_Name,
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeUint32Error(const C_SclString & orc_Name, uint32_t & oru32_Value) const
+int32_t C_OscXmlParserLog::GetAttributeUint32Error(const std::string & orc_Name, uint32_t & oru32_Value) const
 {
    const int32_t s32_Retval = C_OscXmlParser::GetAttributeUint32Error(orc_Name, oru32_Value);
 
@@ -206,7 +205,7 @@ int32_t C_OscXmlParserLog::GetAttributeUint32Error(const C_SclString & orc_Name,
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeSint64Error(const C_SclString & orc_Name, int64_t & ors64_Value) const
+int32_t C_OscXmlParserLog::GetAttributeSint64Error(const std::string & orc_Name, int64_t & ors64_Value) const
 {
    const int32_t s32_Retval = C_OscXmlParser::GetAttributeSint64Error(orc_Name, ors64_Value);
 
@@ -234,7 +233,7 @@ int32_t C_OscXmlParserLog::GetAttributeSint64Error(const C_SclString & orc_Name,
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeUint64Error(const C_SclString & orc_Name, uint64_t & oru64_Value) const
+int32_t C_OscXmlParserLog::GetAttributeUint64Error(const std::string & orc_Name, uint64_t & oru64_Value) const
 {
    const int32_t s32_Retval = C_OscXmlParser::GetAttributeUint64Error(orc_Name, oru64_Value);
 
@@ -262,7 +261,7 @@ int32_t C_OscXmlParserLog::GetAttributeUint64Error(const C_SclString & orc_Name,
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeBoolError(const C_SclString & orc_Name, bool & orq_Value) const
+int32_t C_OscXmlParserLog::GetAttributeBoolError(const std::string & orc_Name, bool & orq_Value) const
 {
    const int32_t s32_Retval = C_OscXmlParser::GetAttributeBoolError(orc_Name, orq_Value);
 
@@ -289,7 +288,7 @@ int32_t C_OscXmlParserLog::GetAttributeBoolError(const C_SclString & orc_Name, b
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeFloat32Error(const C_SclString & orc_Name, float32_t & orf32_Value) const
+int32_t C_OscXmlParserLog::GetAttributeFloat32Error(const std::string & orc_Name, float32_t & orf32_Value) const
 {
    const int32_t s32_Retval = C_OscXmlParser::GetAttributeFloat32Error(orc_Name, orf32_Value);
 
@@ -316,7 +315,7 @@ int32_t C_OscXmlParserLog::GetAttributeFloat32Error(const C_SclString & orc_Name
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeFloat64Error(const C_SclString & orc_Name, float64_t & orf64_Value) const
+int32_t C_OscXmlParserLog::GetAttributeFloat64Error(const std::string & orc_Name, float64_t & orf64_Value) const
 {
    const int32_t s32_Retval = C_OscXmlParser::GetAttributeFloat64Error(orc_Name, orf64_Value);
 
@@ -334,12 +333,13 @@ int32_t C_OscXmlParserLog::GetAttributeFloat64Error(const C_SclString & orc_Name
    \param[in]  orc_ErrorMessage  Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserLog::ReportErrorForNodeContentAppendXmlContext(const C_SclString & orc_ErrorMessage)
+void C_OscXmlParserLog::ReportErrorForNodeContentAppendXmlContext(const std::string & orc_ErrorMessage)
 const
 {
    if (this->mc_LogHeading != "")
    {
-      const C_SclString c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+       const std::string c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+
       osc_write_log_error(this->mc_LogHeading,
                           orc_ErrorMessage + " in node \"" + this->GetCurrentNodeName() + "\"" + c_XmlLineInfoText +
                           ".");
@@ -353,13 +353,14 @@ const
    \param[in]  orc_ErrorMessage  Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserLog::ReportErrorForAttributeContentAppendXmlContext(const C_SclString & orc_Attribute,
-                                                                       const C_SclString & orc_ErrorMessage)
+void C_OscXmlParserLog::ReportErrorForAttributeContentAppendXmlContext(const std::string & orc_Attribute,
+                                                                       const std::string & orc_ErrorMessage)
 const
 {
    if (this->mc_LogHeading != "")
    {
-      const C_SclString c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+       const std::string c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+
       osc_write_log_error(this->mc_LogHeading,
                           orc_ErrorMessage + " in attribute \"" + orc_Attribute + "\" in node \"" + this->GetCurrentNodeName() +
                           "\"" + c_XmlLineInfoText + ".");
@@ -372,12 +373,13 @@ const
    \param[in]  orc_ErrorMessage  Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserLog::ReportErrorForNodeContentStartingWithXmlContext(const C_SclString & orc_ErrorMessage)
+void C_OscXmlParserLog::ReportErrorForNodeContentStartingWithXmlContext(const std::string & orc_ErrorMessage)
 const
 {
    if (this->mc_LogHeading != "")
    {
-      const C_SclString c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+       const std::string c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+
       osc_write_log_error(this->mc_LogHeading,
                           "Node \"" + this->GetCurrentNodeName() + "\"" + c_XmlLineInfoText + " " + orc_ErrorMessage +
                           ".");
@@ -391,13 +393,14 @@ const
    \param[in]  orc_ErrorMessage  Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserLog::ReportErrorForAttributeContentStartingWithXmlContext(const C_SclString & orc_Attribute,
-                                                                             const C_SclString & orc_ErrorMessage)
+void C_OscXmlParserLog::ReportErrorForAttributeContentStartingWithXmlContext(const std::string & orc_Attribute,
+                                                                             const std::string & orc_ErrorMessage)
 const
 {
    if (this->mc_LogHeading != "")
    {
-      const C_SclString c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+       const std::string c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+
       osc_write_log_error(this->mc_LogHeading,
                           "Attribute \"" + orc_Attribute + "\" in node \"" + this->GetCurrentNodeName() +
                           "\"" + c_XmlLineInfoText + " " + orc_ErrorMessage +  ".");
@@ -410,11 +413,12 @@ const
    \param[in]  orc_RootNodeName  Root node name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserLog::m_ReportErrorForRootNodeMissing(const C_SclString & orc_RootNodeName) const
+void C_OscXmlParserLog::m_ReportErrorForRootNodeMissing(const std::string & orc_RootNodeName) const
 {
    if (this->mc_LogHeading != "")
    {
-      C_SclString c_FoundRootNodeText;
+       std::string c_FoundRootNodeText;
+
       if (this->GetCurrentNodeName() != "")
       {
          c_FoundRootNodeText = " (Found \"" + this->GetCurrentNodeName() + "\" instead)";
@@ -431,11 +435,12 @@ void C_OscXmlParserLog::m_ReportErrorForRootNodeMissing(const C_SclString & orc_
    \param[in]  orc_MissingNodeName  Missing node name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserLog::ReportErrorForNodeMissing(const C_SclString & orc_MissingNodeName) const
+void C_OscXmlParserLog::ReportErrorForNodeMissing(const std::string & orc_MissingNodeName) const
 {
    if (this->mc_LogHeading != "")
    {
-      const C_SclString c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+       const std::string c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+
       osc_write_log_error(this->mc_LogHeading,
                           "Could not find node \"" + orc_MissingNodeName + "\" in node \"" + this->GetCurrentNodeName() +
                           "\"" + c_XmlLineInfoText + ".");
@@ -448,11 +453,12 @@ void C_OscXmlParserLog::ReportErrorForNodeMissing(const C_SclString & orc_Missin
    \param[in]  orc_AttributeName    Attribute name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserLog::m_ReportErrorForAttributeMissing(const C_SclString & orc_AttributeName) const
+void C_OscXmlParserLog::m_ReportErrorForAttributeMissing(const std::string & orc_AttributeName) const
 {
    if (this->mc_LogHeading != "")
    {
-      const C_SclString c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+       const std::string c_XmlLineInfoText = m_GetCurrentXmlLineInfoText();
+
       osc_write_log_error(this->mc_LogHeading,
                           "Could not find attribute \"" + orc_AttributeName + "\" in node \"" + this->GetCurrentNodeName() +
                           "\"" + c_XmlLineInfoText + ".");
@@ -466,14 +472,15 @@ void C_OscXmlParserLog::m_ReportErrorForAttributeMissing(const C_SclString & orc
    Current XML line info text
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscXmlParserLog::m_GetCurrentXmlLineInfoText() const
+std::string C_OscXmlParserLog::m_GetCurrentXmlLineInfoText() const
 {
-   C_SclString c_Retval;
+    std::string c_Retval;
+
    const uint32_t u32_Line = this->GetFileLineForCurrentNode();
 
    if (u32_Line != 0)
    {
-      c_Retval = " (XML line " + C_SclString::IntToStr(u32_Line) + ")";
+      c_Retval = " (XML line " + std::to_string(u32_Line) + ")";
    }
 
    return c_Retval;

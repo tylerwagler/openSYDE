@@ -29,7 +29,7 @@ class C_OscParamSetInterpretedNode
 public:
    C_OscParamSetInterpretedNode(void);
 
-   stw::scl::C_SclString c_Name;                              ///< Node name
+   std::string c_Name;                              ///< Node name
    std::vector<C_OscParamSetInterpretedDataPool> c_DataPools; ///< Interpreted data pools, used by this parameter set
 };
 

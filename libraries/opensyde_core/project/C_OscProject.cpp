@@ -17,6 +17,7 @@
 #include "TglUtils.hpp"
 #include "C_OscProject.hpp"
 #include "C_SclChecksums.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -44,8 +45,8 @@ using namespace stw::errors;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProject::C_OscProject(void) :
-   c_CreationTime(C_SclDateTime::Now()),
-   c_ModificationTime(C_SclDateTime::Now()),
+   c_CreationTime(stw::scl::C_SclDateTime::Now()),
+   c_ModificationTime(stw::scl::C_SclDateTime::Now()),
    c_OpenSydeVersion("0.01r0"),
    c_Template("Empty project"),
    c_Version("0.01r0b0")
@@ -72,11 +73,11 @@ C_OscProject::~C_OscProject(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProject::CalcHash(uint32_t & oru32_HashValue) const
 {
-   C_SclChecksums::CalcCRC32(this->c_Editor.c_str(), this->c_Editor.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_OpenSydeVersion.c_str(), this->c_OpenSydeVersion.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Editor.c_str(), this->c_Editor.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_OpenSydeVersion.c_str(), this->c_OpenSydeVersion.length(), oru32_HashValue);
    // no need to check c_Author, c_CreationTime & c_ModificationTime
-   C_SclChecksums::CalcCRC32(this->c_Template.c_str(), this->c_Template.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_Version.c_str(), this->c_Version.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Template.c_str(), this->c_Template.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Version.c_str(), this->c_Version.length(), oru32_HashValue);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -90,12 +91,12 @@ void C_OscProject::CalcHash(uint32_t & oru32_HashValue) const
    Formatted date
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscProject::h_GetTimeFormatted(const C_SclDateTime & orc_Time)
+std::string C_OscProject::h_GetTimeFormatted(const stw::scl::C_SclDateTime & orc_Time)
 {
-   const C_SclString c_StrTime = orc_Time.DateTimeToString();
+   const std::string c_StrTime = orc_Time.DateTimeToString();
 
    //Remove seconds
-   return c_StrTime.SubString(1, 16);
+   return SubStringCompat(c_StrTime, 1, 16);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -112,22 +113,22 @@ C_SclString C_OscProject::h_GetTimeFormatted(const C_SclDateTime & orc_Time)
    Time (current time of orc_Str is invalid)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclDateTime C_OscProject::h_GetTimeOfString(const C_SclString & orc_Str)
+stw::scl::C_SclDateTime C_OscProject::h_GetTimeOfString(const std::string & orc_Str)
 {
-   C_SclDateTime c_Retval;
+   stw::scl::C_SclDateTime c_Retval;
    bool q_Err = true;
 
-   std::vector<C_SclString> c_Dyn;
-   orc_Str.Tokenize(". :", c_Dyn);
+   std::vector<std::string> c_Dyn;
+   TokenizeCompat(orc_Str, ". :", c_Dyn);
    if (c_Dyn.size() == 5)
    {
       try
       {
-         c_Retval.mu16_Day   = static_cast<uint16_t>(c_Dyn[0].ToInt());
-         c_Retval.mu16_Month = static_cast<uint16_t>(c_Dyn[1].ToInt());
-         c_Retval.mu16_Year  = static_cast<uint16_t>(c_Dyn[2].ToInt());
-         c_Retval.mu16_Hour  = static_cast<uint16_t>(c_Dyn[3].ToInt());
-         c_Retval.mu16_Minute = static_cast<uint16_t>(c_Dyn[4].ToInt());
+         c_Retval.mu16_Day   = static_cast<uint16_t>(std::stoi(c_Dyn[0]));
+         c_Retval.mu16_Month = static_cast<uint16_t>(std::stoi(c_Dyn[1]));
+         c_Retval.mu16_Year  = static_cast<uint16_t>(std::stoi(c_Dyn[2]));
+         c_Retval.mu16_Hour  = static_cast<uint16_t>(std::stoi(c_Dyn[3]));
+         c_Retval.mu16_Minute = static_cast<uint16_t>(std::stoi(c_Dyn[4]));
          c_Retval.mu16_Second = 0U;
          q_Err = false;
       }
@@ -138,7 +139,7 @@ C_SclDateTime C_OscProject::h_GetTimeOfString(const C_SclString & orc_Str)
    }
    if (q_Err == true)
    {
-      c_Retval = C_SclDateTime::Now();
+      c_Retval = stw::scl::C_SclDateTime::Now();
    }
    return c_Retval;
 }

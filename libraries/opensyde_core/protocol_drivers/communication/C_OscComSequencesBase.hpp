@@ -19,7 +19,7 @@
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscComDriverFlash.hpp"
 
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

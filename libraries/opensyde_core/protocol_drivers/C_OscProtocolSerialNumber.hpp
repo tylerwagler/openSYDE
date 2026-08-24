@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -35,13 +35,13 @@ public:
    void SetPosSerialNumber(const uint8_t (&orau8_SerialNumber)[6]);
    int32_t SetExtSerialNumber(const std::vector<uint8_t> & orc_SerialNumber,
                               const uint8_t ou8_SerialNumberManufacturerFormat);
-   int32_t SetExtSerialNumber(const stw::scl::C_SclString & orc_SerialNumber,
+   int32_t SetExtSerialNumber(const std::string & orc_SerialNumber,
                               const uint8_t ou8_SerialNumberManufacturerFormat);
    std::vector<uint8_t> GetSerialNumberAsRawData(void) const;
-   stw::scl::C_SclString GetSerialNumberAsFormattedString(void) const;
-   stw::scl::C_SclString GetSerialNumberAsPlainString(void) const;
+   std::string GetSerialNumberAsFormattedString(void) const;
+   std::string GetSerialNumberAsPlainString(void) const;
 
-   static bool h_SerialNumberFromStringToArray(const stw::scl::C_SclString & orc_SerialNumber,
+   static bool h_SerialNumberFromStringToArray(const std::string & orc_SerialNumber,
                                                uint8_t(&orau8_SerialNumber)[6]);
 
    bool q_IsValid;         ///< flag if a valid serial number was already set
@@ -56,7 +56,7 @@ public:
    // Values used for a serial number in FSN format
    // Special case: u8_SerialNumberManufacturerFormat equals 0, the old STW standard format POS is used
    // despite of the used extended format.
-   stw::scl::C_SclString c_SerialNumberExt;   ///< serial number of sender in FSN format
+   std::string c_SerialNumberExt;   ///< serial number of sender in FSN format
    uint8_t u8_SerialNumberManufacturerFormat; ///< defines the used manufacturer format for the sn
 };
 

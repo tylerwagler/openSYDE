@@ -19,8 +19,8 @@
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscXceBase::hc_PACKAGE_EXT = ".syde_xcert";
-const stw::scl::C_SclString C_OscXceBase::hc_PACKAGE_EXT_TMP = ".syde_xcert_tmp"; // intermediate directory
+const std::string C_OscXceBase::hc_PACKAGE_EXT = ".syde_xcert";
+const std::string C_OscXceBase::hc_PACKAGE_EXT_TMP = ".syde_xcert_tmp"; // intermediate directory
                                                                                   // before creating zip
                                                                                   // archive
 
@@ -33,11 +33,11 @@ stw::scl::C_SclStringList C_OscXceBase::mhc_WarningMessages; // global warnings 
                                                              // position
                                                              // of
                                                              // active node is not available
-stw::scl::C_SclString C_OscXceBase::mhc_ErrorMessage;        // description of error which caused
+std::string C_OscXceBase::mhc_ErrorMessage;        // description of error which caused
                                                              // the
                                                              // service update package to fail
-const stw::scl::C_SclString C_OscXceBase::mhc_CERTIFICATES_FOLDER = "authentication_certificates";
-const stw::scl::C_SclString C_OscXceBase::mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER = "update_certificates";
+const std::string C_OscXceBase::mhc_CERTIFICATES_FOLDER = "authentication_certificates";
+const std::string C_OscXceBase::mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER = "update_certificates";
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -50,7 +50,7 @@ const stw::scl::C_SclString C_OscXceBase::mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER =
    service update package extension
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscXceBase::h_GetPackageExtension()
+std::string C_OscXceBase::h_GetPackageExtension()
 {
    return hc_PACKAGE_EXT;
 }
@@ -73,7 +73,7 @@ void C_OscXceBase::mh_Init()
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscXceBase::mh_GetWarningsAndErrors(stw::scl::C_SclStringList & orc_WarningMessages,
-                                           stw::scl::C_SclString & orc_ErrorMessage)
+                                           std::string & orc_ErrorMessage)
 {
    orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
    orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller

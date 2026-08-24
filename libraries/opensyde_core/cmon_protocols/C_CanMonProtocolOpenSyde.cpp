@@ -10,9 +10,12 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include "C_SclStringCompat.hpp"
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include <cctype>
+#include <sstream>
+#include <iomanip>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolOpenSyde.hpp"
@@ -23,6 +26,16 @@ using namespace stw::errors;
 using namespace stw::cmon_protocol;
 using namespace stw::scl;
 using namespace stw::can;
+
+/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
+namespace {
+   template <typename T>
+   std::string mh_IntToHex(T val, uint32_t digits) {
+      std::stringstream ss;
+      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
+      return ss.str();
+   }
+}
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 //have the protocol constants here as copies, so we can put this class into a library of its own
@@ -189,10 +202,10 @@ using namespace stw::can;
    Text interpretation of address information
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::m_AddressInformationToText(
+std::string C_CanMonProtocolOpenSyde::m_AddressInformationToText(
    const C_CanMonProtocolOpenSyde::T_CanAddressInformation & orc_CanAddressInformation) const
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    if (orc_CanAddressInformation.u8_RoutingMode == OSY_CTP_ROUTING_ACTIVE)
    {
@@ -244,7 +257,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_AddressInformationToText(
    Text interpretation of data pool data identifier
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::m_DataPoolIdentifierToText(const uint32_t ou32_DataPoolIdentifier,
+std::string C_CanMonProtocolOpenSyde::m_DataPoolIdentifierToText(const uint32_t ou32_DataPoolIdentifier,
                                                                  const bool oq_IsResponse,
                                                                  const T_CanAddressInformation & orc_CanAddressInformation)
 const
@@ -253,7 +266,7 @@ const
    const uint8_t u8_DataPoolIndex = static_cast<uint8_t>(ou32_DataPoolIdentifier >> 18) & 0x1FU;
    const uint8_t u8_ListIndex = static_cast<uint16_t>(ou32_DataPoolIdentifier >> 11) & 0x7FU;
    const uint16_t u16_ElementIndex = static_cast<uint16_t>(ou32_DataPoolIdentifier) & 0x7FFU;
-   C_SclString c_Text;
+   std::string c_Text;
 
    // Not necessary for base class implementation
    static_cast<void>(oq_IsResponse);
@@ -367,12 +380,12 @@ C_CanMonProtocolOpenSyde::C_CanMonProtocolOpenSyde(void) :
    Text interpretation of service identifier
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::m_ServiceIdToText(const uint8_t ou8_ServiceData,
+std::string C_CanMonProtocolOpenSyde::m_ServiceIdToText(const uint8_t ou8_ServiceData,
                                                         const bool oq_IsNegativeResponse) const
 {
    const bool q_IsResponse = ((ou8_ServiceData & 0x40U) == 0x40U) ? true : false;
    const uint8_t u8_Service = (ou8_ServiceData & 0xBFU);
-   C_SclString c_Text;
+   std::string c_Text;
 
    if (oq_IsNegativeResponse == true)
    {
@@ -463,9 +476,9 @@ C_SclString C_CanMonProtocolOpenSyde::m_ServiceIdToText(const uint8_t ou8_Servic
    Text interpretation of session ID
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::m_SessionIdToText(const uint8_t ou8_SessionId) const
+std::string C_CanMonProtocolOpenSyde::m_SessionIdToText(const uint8_t ou8_SessionId) const
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    switch (ou8_SessionId)
    {
@@ -504,14 +517,14 @@ C_SclString C_CanMonProtocolOpenSyde::m_SessionIdToText(const uint8_t ou8_Sessio
    Text interpretation of service identifier
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const opu8_ServiceData,
+std::string C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const opu8_ServiceData,
                                                           const uint8_t ou8_ServiceSize,
                                                           const T_CanAddressInformation & orc_CanAddressInformation,
                                                           const bool oq_IsSingleFrame) const
 {
    const bool q_IsResponse = ((opu8_ServiceData[0] & 0x40U) == 0x40U) ? true : false;
    const uint8_t u8_Service = (opu8_ServiceData[0] & 0xBFU);
-   C_SclString c_Text;
+   std::string c_Text;
    uint8_t u8_FirstRawByte = 1U; //index of first raw data byte to handle (to be displayed as dump data)
 
    switch (u8_Service)
@@ -734,7 +747,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
          {
             // Special case: Extended request
             c_Text += "Ext";
-            c_Text += "  BlockNumber: " + C_SclString::IntToStr(opu8_ServiceData[1]);
+            c_Text += "  BlockNumber: " + std::to_string(opu8_ServiceData[1]);
             // Byte 3 is reserved
             u8_FirstRawByte = ou8_ServiceSize; //everything displayed ...
          }
@@ -756,7 +769,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
          else
          {
             // For the response it is not possible to tell the difference between standard and extended format
-            C_SclString c_Snr;
+            std::string c_Snr;
             const uint8_t u8_BlockNumber = opu8_ServiceData[1] & 0x0FU;
             const uint8_t u8_SubNodeId = static_cast<uint8_t>((opu8_ServiceData[1] & 0xF0U) >> 4U);
             const uint32_t u32_UniqueId = (static_cast<uint32_t>(opu8_ServiceData[2]) << 16U) +
@@ -767,31 +780,31 @@ C_SclString C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
             c_Snr = this->mh_SerialNumberToString(&opu8_ServiceData[1]);
             c_Text += "  Std SNR POS: " + c_Snr;
 
-            c_Text += "  Ext SNR BlockNumber: " + C_SclString::IntToStr(u8_BlockNumber);
-            c_Text += "  SubNodeId: " + C_SclString::IntToStr(u8_SubNodeId);
-            c_Text += "  UniqueId: " + C_SclString::IntToHex(u32_UniqueId, 6);
+            c_Text += "  Ext SNR BlockNumber: " + std::to_string(u8_BlockNumber);
+            c_Text += "  SubNodeId: " + std::to_string(u8_SubNodeId);
+            c_Text += "  UniqueId: " + mh_IntToHex(u32_UniqueId, 6);
 
             if (u8_BlockNumber == 0)
             {
                // First byte reserved
-               c_Text += "  Options: " + C_SclString::IntToStr(opu8_ServiceData[5]);
-               c_Text += "  Manufacturer Format: " + C_SclString::IntToStr(opu8_ServiceData[6]);
+               c_Text += "  Options: " + std::to_string(opu8_ServiceData[5]);
+               c_Text += "  Manufacturer Format: " + std::to_string(opu8_ServiceData[6]);
             }
             else if (u8_BlockNumber == 1)
             {
-               C_SclString c_Text2;
+               std::string c_Text2;
 
-               c_Text += "  Length: " + C_SclString::IntToStr(opu8_ServiceData[5]);
+               c_Text += "  Length: " + std::to_string(opu8_ServiceData[5]);
                c_Text += "  SNR FSN First sign: ";
                c_Text += static_cast<char_t>(opu8_ServiceData[6]);
 
                // Potential STW BCD packed in extended service
-               c_Text2.PrintFormatted("  SNR POS First signs: %02x", opu8_ServiceData[6]);
+               c_Text2 = PrintFormattedCompat("  SNR POS First signs: %02x", opu8_ServiceData[6]);
                c_Text += c_Text2;
             }
             else
             {
-               C_SclString c_Text2;
+               std::string c_Text2;
 
                // The serial number itself
                c_Text += "  SNR FSN Part: ";
@@ -805,12 +818,12 @@ C_SclString C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
                // Potential STW BCD packed in extended service
                if (u8_BlockNumber <= 3U)
                {
-                  c_Text2.PrintFormatted("  SNR POS Part: %02x%02x", opu8_ServiceData[5], opu8_ServiceData[6]);
+                  c_Text2 = PrintFormattedCompat("  SNR POS Part: %02x%02x", opu8_ServiceData[5], opu8_ServiceData[6]);
                   c_Text += c_Text2;
                }
                else if (u8_BlockNumber == 4U)
                {
-                  c_Text2.PrintFormatted("  SNR POS Last signs: %02x", opu8_ServiceData[5]);
+                  c_Text2 = PrintFormattedCompat("  SNR POS Last signs: %02x", opu8_ServiceData[5]);
                   c_Text += c_Text2;
                }
                else
@@ -1024,9 +1037,9 @@ C_SclString C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
    Text interpretation of negative response code
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::m_NegativeResponseCodeToText(const uint8_t ou8_NrCode) const
+std::string C_CanMonProtocolOpenSyde::m_NegativeResponseCodeToText(const uint8_t ou8_NrCode) const
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    switch (ou8_NrCode)
    {
@@ -1120,23 +1133,23 @@ C_SclString C_CanMonProtocolOpenSyde::m_NegativeResponseCodeToText(const uint8_t
    Text interpretation of data
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::m_GetSupposedlyAsciiText(const uint8_t ou8_NumBytes,
+std::string C_CanMonProtocolOpenSyde::m_GetSupposedlyAsciiText(const uint8_t ou8_NumBytes,
                                                                const uint8_t * const opu8_Data)
 const
 {
-   C_SclString c_Text = "\"";
-   C_SclString c_Text2;
+   std::string c_Text = "\"";
+   std::string c_Text2;
    uint8_t u8_Index;
 
    for (u8_Index = 0U; u8_Index < ou8_NumBytes; u8_Index++)
    {
       if (std::isprint(opu8_Data[u8_Index]) == 0)
       {
-         c_Text2.PrintFormatted("[\\x%02X]", opu8_Data[u8_Index]);
+         c_Text2 = PrintFormattedCompat("[\\x%02X]", opu8_Data[u8_Index]);
       }
       else
       {
-         (void)c_Text2.PrintFormatted("%c", opu8_Data[u8_Index]);
+         c_Text2 = PrintFormattedCompat("%c", opu8_Data[u8_Index]);
       }
       c_Text += c_Text2;
    }
@@ -1156,11 +1169,11 @@ const
    Text interpretation of data
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::mh_ThreeByteVersionToString(const uint8_t * const opu8_Version)
+std::string C_CanMonProtocolOpenSyde::mh_ThreeByteVersionToString(const uint8_t * const opu8_Version)
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
-   c_Text.PrintFormatted("%d.%02dr%d", opu8_Version[0], opu8_Version[1], opu8_Version[2]);
+   c_Text = PrintFormattedCompat("%d.%02dr%d", opu8_Version[0], opu8_Version[1], opu8_Version[2]);
    return c_Text;
 }
 
@@ -1177,13 +1190,13 @@ C_SclString C_CanMonProtocolOpenSyde::mh_ThreeByteVersionToString(const uint8_t 
    Text interpretation of data identifier
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool oq_IsWrite,
+std::string C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool oq_IsWrite,
                                                                     const uint16_t ou16_DataIdentifier,
                                                                     const bool oq_IsResponse,
                                                                     const uint8_t ou8_PayloadSize,
                                                                     const uint8_t * const opu8_Payload) const
 {
-   C_SclString c_Text;
+   std::string c_Text;
    uint8_t u8_FirstRawByte = 0U;
 
    switch (ou16_DataIdentifier)
@@ -1346,8 +1359,8 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
          }
          else
          {
-            C_SclString c_Text2;
-            c_Text2.PrintFormatted("  CERTIFICATESNR:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1],
+            std::string c_Text2;
+            c_Text2 = PrintFormattedCompat("  CERTIFICATESNR:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1],
                                    opu8_Payload[2]);
 
             c_Text += c_Text2;
@@ -1365,8 +1378,8 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
          }
          else
          {
-            C_SclString c_Text2;
-            c_Text2.PrintFormatted("  CERTIFICATESNR:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1],
+            std::string c_Text2;
+            c_Text2 = PrintFormattedCompat("  CERTIFICATESNR:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1],
                                    opu8_Payload[2]);
 
             c_Text += c_Text2;
@@ -1443,8 +1456,8 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
          }
          else
          {
-            C_SclString c_Text2;
-            c_Text2.PrintFormatted("  PUBLICKEY:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
+            std::string c_Text2;
+            c_Text2 = PrintFormattedCompat("  PUBLICKEY:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
 
             c_Text += c_Text2;
             u8_FirstRawByte = 3U; //finished here ...
@@ -1511,17 +1524,17 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
          }
          else
          {
-            C_SclString c_Text2;
+            std::string c_Text2;
 
             if (opu8_Payload[0] < static_cast<uint8_t>(0x20))
             {
                //format up to and including 2019. E.g: 05.123456.1001
-               c_Text2.PrintFormatted("  SNR:%02x.%02x%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
+               c_Text2 = PrintFormattedCompat("  SNR:%02x.%02x%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
             }
             else
             {
                //format from 2020. E.g: 200012345678
-               c_Text2.PrintFormatted("  SNR:%02x%02x%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
+               c_Text2 = PrintFormattedCompat("  SNR:%02x%02x%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
             }
 
             c_Text += c_Text2;
@@ -1535,8 +1548,8 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
       {
          if (ou8_PayloadSize > 2U)
          {
-            c_Text += "  SNR Manufacturer Format: " + C_SclString::IntToStr(opu8_Payload[0]);
-            c_Text += "  SNR Length: " + C_SclString::IntToStr(opu8_Payload[1]);
+            c_Text += "  SNR Manufacturer Format: " + std::to_string(opu8_Payload[0]);
+            c_Text += "  SNR Length: " + std::to_string(opu8_Payload[1]);
             if (opu8_Payload[0] != 0U)
             {
                c_Text += "  SNR First sign: ";
@@ -1544,9 +1557,9 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
             }
             else
             {
-               C_SclString c_Text2;
+               std::string c_Text2;
                // STW BCD packed in extended service
-               c_Text2.PrintFormatted("  SNR First signs: %02x", opu8_Payload[2]);
+               c_Text2 = PrintFormattedCompat("  SNR First signs: %02x", opu8_Payload[2]);
                c_Text += c_Text2;
             }
             u8_FirstRawByte = ou8_PayloadSize; //finished here ...
@@ -1613,11 +1626,11 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
    Text interpretation of routine data
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_RoutineIdentifier,
+std::string C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_RoutineIdentifier,
                                                           const bool oq_IsResponse, const uint8_t ou8_DataSize,
                                                           const uint8_t * const opu8_Data) const
 {
-   C_SclString c_Text;
+   std::string c_Text;
    uint8_t u8_FirstRawByte = 0U;
 
    switch (ou16_RoutineIdentifier)
@@ -1744,8 +1757,8 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
       {
          if (ou8_DataSize == 3U)
          {
-            C_SclString c_Text2;
-            c_Text2.PrintFormatted("  SNR POS First Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
+            std::string c_Text2;
+            c_Text2 = PrintFormattedCompat("  SNR POS First Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
             c_Text += c_Text2;
             u8_FirstRawByte = ou8_DataSize; //finished here ...
          }
@@ -1761,8 +1774,8 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
       {
          if (ou8_DataSize == 3U)
          {
-            C_SclString c_Text2;
-            c_Text2.PrintFormatted("  SNR POS Last Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
+            std::string c_Text2;
+            c_Text2 = PrintFormattedCompat("  SNR POS Last Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
             c_Text += c_Text2;
             u8_FirstRawByte = ou8_DataSize; //finished here ...
          }
@@ -1778,8 +1791,8 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
       {
          if (ou8_DataSize == 2U)
          {
-            c_Text += "  BusId: " + C_SclString::IntToStr(opu8_Data[0]);
-            c_Text += "  NodeId: " + C_SclString::IntToStr(opu8_Data[1]);
+            c_Text += "  BusId: " + std::to_string(opu8_Data[0]);
+            c_Text += "  NodeId: " + std::to_string(opu8_Data[1]);
             u8_FirstRawByte = ou8_DataSize; //finished here ...
          }
          else
@@ -1795,8 +1808,8 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
          if (ou8_DataSize == 3U)
          {
             // Byte 0 is reserved
-            c_Text += "  BusId: " + C_SclString::IntToStr(opu8_Data[1]);
-            c_Text += "  NodeId: " + C_SclString::IntToStr(opu8_Data[2]);
+            c_Text += "  BusId: " + std::to_string(opu8_Data[1]);
+            c_Text += "  NodeId: " + std::to_string(opu8_Data[2]);
             u8_FirstRawByte = ou8_DataSize; //finished here ...
          }
          else
@@ -1811,9 +1824,9 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
       {
          if (ou8_DataSize == 3U)
          {
-            c_Text += "  SubNodeId: " + C_SclString::IntToStr(opu8_Data[0]);
-            c_Text += "  SNR Manufacturer Format: " + C_SclString::IntToStr(opu8_Data[1]);
-            c_Text += "  SNR Length: " + C_SclString::IntToStr(opu8_Data[2]);
+            c_Text += "  SubNodeId: " + std::to_string(opu8_Data[0]);
+            c_Text += "  SNR Manufacturer Format: " + std::to_string(opu8_Data[1]);
+            c_Text += "  SNR Length: " + std::to_string(opu8_Data[2]);
             u8_FirstRawByte = ou8_DataSize; //finished here ...
          }
          else
@@ -1833,7 +1846,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
    case UDS_H_ROUTINE_CTRL_SET_NODEID_BY_SERIALNUMBER_EXT_11: // Similar service
    case UDS_H_ROUTINE_CTRL_SET_NODEID_BY_SERIALNUMBER_EXT_12: // Similar service
       //no details reported for now
-      c_Text = "SetNodeIdBySerialNumberExtPart" + C_SclString::IntToStr(
+      c_Text = "SetNodeIdBySerialNumberExtPart" + std::to_string(
          (ou16_RoutineIdentifier - UDS_H_ROUTINE_CTRL_SET_NODEID_BY_SERIALNUMBER_EXT_1) + 1U);
 
       if (oq_IsResponse == false)
@@ -1852,9 +1865,9 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
                 ((ou16_RoutineIdentifier == UDS_H_ROUTINE_CTRL_SET_NODEID_BY_SERIALNUMBER_EXT_3) ||
                  (ou16_RoutineIdentifier == UDS_H_ROUTINE_CTRL_SET_NODEID_BY_SERIALNUMBER_EXT_4)))
             {
-               C_SclString c_Text2;
+               std::string c_Text2;
                // POS could be possible, but can not be differed. Show both possibilities
-               c_Text2.PrintFormatted("  SNR POS Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
+               c_Text2 = PrintFormattedCompat("  SNR POS Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
                c_Text += c_Text2;
             }
             u8_FirstRawByte = ou8_DataSize; //finished here ...
@@ -1912,10 +1925,10 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+std::string C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text;
-   C_SclString c_Error;
+   std::string c_Text;
+   std::string c_Error;
 
    if (orc_Msg.u8_XTD == 1U) //29bit ID ?
    {
@@ -2001,7 +2014,7 @@ C_SclString C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
                }
                break;
             case ISO15765_N_PCI_CF:
-               c_Text += (" CF  SN " + C_SclString::IntToStr(orc_Msg.au8_Data[0] & 0x0FU));
+               c_Text += (" CF  SN " + std::to_string(orc_Msg.au8_Data[0] & 0x0FU));
                if (orc_Msg.u8_DLC < 2) //CF with no data byte does not make sense
                {
                   c_Error = "DLC too short (not >= 2)";
@@ -2071,10 +2084,10 @@ C_SclString C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
                   else
                   {
                      //we should have data:
-                     C_SclString c_Snr;
+                     std::string c_Snr;
                      uint32_t u32_SubNodeId = static_cast<uint32_t>(orc_Msg.au8_Data[1] & 0xF0U) >> 4U;
                      c_Snr = this->mh_SerialNumberToString(&orc_Msg.au8_Data[2]);
-                     c_Text += "  SubNodeId: " + C_SclString::IntToStr(u32_SubNodeId);
+                     c_Text += "  SubNodeId: " + std::to_string(u32_SubNodeId);
                      c_Text += "  SNR: " + c_Snr;
                   }
                }
@@ -2094,14 +2107,14 @@ C_SclString C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
                      uint32_t u32_SnrSignCounter;
                      bool q_DlcCorrect = true;
 
-                     c_Text += "  BlockNumber: " + C_SclString::IntToStr(u32_BlockNr);
-                     c_Text += "  SubNodeId: " + C_SclString::IntToStr(u32_SubNodeId);
+                     c_Text += "  BlockNumber: " + std::to_string(u32_BlockNr);
+                     c_Text += "  SubNodeId: " + std::to_string(u32_SubNodeId);
 
                      if ((u32_BlockNr == 0U) &&
                          (orc_Msg.u8_DLC > 4U)) // SNR must have a length of at least 1
                      {
-                        c_Text += "  SNR Manufacturer Format: " + C_SclString::IntToStr(orc_Msg.au8_Data[2]);
-                        c_Text += "  SNR Length: " + C_SclString::IntToStr(orc_Msg.au8_Data[3]);
+                        c_Text += "  SNR Manufacturer Format: " + std::to_string(orc_Msg.au8_Data[2]);
+                        c_Text += "  SNR Length: " + std::to_string(orc_Msg.au8_Data[3]);
                         u32_SnrSignStartIndex = 4U;
                      }
                      else if (u32_BlockNr > 0U)
@@ -2153,7 +2166,7 @@ C_SclString C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
                else
                {
                   //it's an OMFO (openSYDE multi-frame following)
-                  c_Text += ("O SN " + C_SclString::IntToStr(orc_Msg.au8_Data[0] & 0x0FU));
+                  c_Text += ("O SN " + std::to_string(orc_Msg.au8_Data[0] & 0x0FU));
 
                   u16_NumBytes = orc_Msg.u8_DLC - 1U;
 
@@ -2197,11 +2210,11 @@ C_SclString C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
    Text representation of raw data
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::m_RawDataToString(const uint8_t ou8_NumBytes,
+std::string C_CanMonProtocolOpenSyde::m_RawDataToString(const uint8_t ou8_NumBytes,
                                                         const uint8_t * const opu8_Data) const
 {
    uint8_t u8_Index;
-   C_SclString c_Text = "  DATA[";
+   std::string c_Text = "  DATA[";
 
    for (u8_Index = 0U; u8_Index < ou8_NumBytes; u8_Index++)
    {
@@ -2222,7 +2235,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_RawDataToString(const uint8_t ou8_NumByt
    Text representation of protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolOpenSyde::GetProtocolName(void) const
+std::string C_CanMonProtocolOpenSyde::GetProtocolName(void) const
 {
    return "STW openSYDE";
 }

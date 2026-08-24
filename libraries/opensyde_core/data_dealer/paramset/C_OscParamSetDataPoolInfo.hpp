@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -30,7 +30,7 @@ class C_OscParamSetDataPoolInfo
 public:
    C_OscParamSetDataPoolInfo(void);
 
-   stw::scl::C_SclString c_Name; ///< Data pool name
+   std::string c_Name; ///< Data pool name
    uint32_t u32_DataPoolCrc;     ///< Data pool CRC
    uint32_t u32_NvmStartAddress; ///< NvM start address of data pool
    uint32_t u32_NvmSize;         ///< NvM size of data pool

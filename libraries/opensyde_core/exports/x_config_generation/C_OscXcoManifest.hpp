@@ -9,7 +9,7 @@
 #define C_OSCXCOMANIFEST_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -25,7 +25,7 @@ class C_OscXcoManifest
 public:
    C_OscXcoManifest();
 
-   stw::scl::C_SclString c_NodeName;
+   std::string c_NodeName;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscTargetSupportPackageV2.hpp"
 #include "C_OscXmlParser.hpp"
 
@@ -30,7 +30,7 @@ class C_OscTargetSupportPackageV2Filer
 {
 public:
    static int32_t h_Load(stw::opensyde_core::C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
-                         const stw::scl::C_SclString & orc_Path);
+                         const std::string & orc_Path);
 
 private:
    static int32_t mh_Load(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage, C_OscXmlParserBase & orc_XmlParser);

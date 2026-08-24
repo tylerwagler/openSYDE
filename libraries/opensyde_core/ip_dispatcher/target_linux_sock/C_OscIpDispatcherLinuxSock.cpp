@@ -27,7 +27,8 @@
 #include "stwerrors.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscIpDispatcherLinuxSock.hpp"
-#include "C_SclString.hpp"
+#include <string>
+#include "C_SclStringCompat.hpp"
 
 //A few module-wide PC-lint definitions.
 //The macros from the socket API have a few non-compliant issues.
@@ -221,7 +222,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_GetAllInstalledInterfaceIps(void)
                // a physical local interface
                if (ntohl(pc_InAddr->sin_addr.s_addr) != 0x7F000001U)
                {
-                  const C_SclString c_IpStr = inet_ntoa(pc_InAddr->sin_addr);
+                  const std::string c_IpStr = inet_ntoa(pc_InAddr->sin_addr);
                   osc_write_log_info("openSYDE IP-TP", "Got a interface: " + c_IpStr);
 
                   mc_LocalInterfaceIps.push_back(ntohl(pc_InAddr->sin_addr.s_addr));
@@ -235,7 +236,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_GetAllInstalledInterfaceIps(void)
    }
    else
    {
-      const C_SclString c_ErrnoStr = strerror(errno);
+      const std::string c_ErrnoStr = strerror(errno);
       osc_write_log_error("openSYDE IP-TP", "getifaddrs() failed. Error: " + c_ErrnoStr);
       s32_Return = C_NOACT;
    }
@@ -268,7 +269,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_Connectio
    orc_Connection.s32_Socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
    if (orc_Connection.s32_Socket < 0)
    {
-      const C_SclString c_ErrnoStr = strerror(errno);
+      const std::string c_ErrnoStr = strerror(errno);
       osc_write_log_error("openSYDE IP-TP", "Error at TCP socket(): " + c_ErrnoStr +
                           " IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
       q_Error = true;
@@ -293,7 +294,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_Connectio
       }
       if (x_Return != 0)
       {
-         const C_SclString c_ErrnoStr = strerror(errno);
+         const std::string c_ErrnoStr = strerror(errno);
          osc_write_log_error("openSYDE IP-TP",
                              "TCP socket set non-blocking failed. Error: " + c_ErrnoStr +
                              "IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
@@ -320,13 +321,13 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_Connectio
       //for this non-blocking TCP socket the function should immediately return with EINPROGRESS:
       if ((x_Return == -1) && (errno != EINPROGRESS))
       {
-         const C_SclString c_ErrnoStr = strerror(errno);
+         const std::string c_ErrnoStr = strerror(errno);
          osc_write_log_error("openSYDE IP-TP", "TCP connect() failed. Error: " + c_ErrnoStr);
          q_Error = true;
       }
       else
       {
-         C_SclString c_ErrnoStr;
+         std::string c_ErrnoStr;
          fd_set c_SocketWriteSet; //monitor for connect completion
          fd_set c_SocketErrorSet; //monitor for connect error
          timeval c_TimeOut;       //connection timeout
@@ -367,7 +368,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_Connectio
                //event caused by write (= connect finished)
                osc_write_log_info("openSYDE IP-TP",
                                   "TCP connect select() OK. IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress) +
-                                  " on client port: " + C_SclString::IntToStr(ntohs(c_SocketAddr.sin_port)));
+                                  " on client port: " + std::to_string(ntohs(c_SocketAddr.sin_port)));
             }
             else
             {
@@ -380,7 +381,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_Connectio
             break;
          default:
             osc_write_log_error("openSYDE IP-TP",
-                                "TCP connect select() failed. Unknown problem: " + C_SclString::IntToStr(
+                                "TCP connect select() failed. Unknown problem: " + std::to_string(
                                    x_Return) + " IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
             q_Error = true;
             break;
@@ -413,7 +414,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConfigureUdpSocket(const bool oq_ServerPor
    ors32_Socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
    if (ors32_Socket < 0)
    {
-      const C_SclString c_ErrnoStr = strerror(errno);
+      const std::string c_ErrnoStr = strerror(errno);
       osc_write_log_error("openSYDE IP-TP", "Error at UDP socket(): " + c_ErrnoStr);
       q_Error = true;
    }
@@ -429,7 +430,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConfigureUdpSocket(const bool oq_ServerPor
       x_Return = setsockopt(ors32_Socket, SOL_SOCKET, SO_BROADCAST, &x_ENABLED, sizeof(x_ENABLED));
       if (x_Return < 0)
       {
-         const C_SclString c_ErrnoStr = strerror(errno);
+         const std::string c_ErrnoStr = strerror(errno);
          osc_write_log_error("openSYDE IP-TP", "UDP set broadcast permission failed. Error: " + c_ErrnoStr);
          (void)close(ors32_Socket);
          q_Error = true;
@@ -461,7 +462,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConfigureUdpSocket(const bool oq_ServerPor
       x_Return = bind(ors32_Socket, reinterpret_cast<const sockaddr *>(&c_LocalAddr), sizeof(c_LocalAddr));
       if (x_Return < 0)
       {
-         const C_SclString c_ErrnoStr = strerror(errno);
+         const std::string c_ErrnoStr = strerror(errno);
          osc_write_log_error("openSYDE IP-TP", "UDP bind() failed. Error: " + c_ErrnoStr);
          q_Error = true;
       }
@@ -482,7 +483,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConfigureUdpSocket(const bool oq_ServerPor
       }
       if (x_Return != 0)
       {
-         const C_SclString c_ErrnoStr = strerror(errno);
+         const std::string c_ErrnoStr = strerror(errno);
          osc_write_log_error("openSYDE IP-TP", "TCP socket ioctlsocket() failed. Error: " + c_ErrnoStr);
          q_Error = true;
       }
@@ -500,11 +501,11 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConfigureUdpSocket(const bool oq_ServerPor
    text representation of IP
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscIpDispatcherLinuxSock::mh_IpToText(const uint8_t (&orau8_Ip)[4])
+std::string C_OscIpDispatcherLinuxSock::mh_IpToText(const uint8_t (&orau8_Ip)[4])
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
-   c_Text.PrintFormatted("%d.%d.%d.%d", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
+   c_Text = PrintFormattedCompat("%d.%d.%d.%d", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
    return c_Text;
 }
 
@@ -717,7 +718,7 @@ int32_t C_OscIpDispatcherLinuxSock::CloseTcp(const uint32_t ou32_Handle)
       osc_write_log_info("openSYDE IP-TP",
                          "TCP closesocket() OK. IP-Address: " +
                          mh_IpToText(this->mc_SocketsTcp[ou32_Handle].au8_IpAddress) +
-                         " on client port: " + C_SclString::IntToStr(ntohs(c_SocketInfo.sin_port)));
+                         " on client port: " + std::to_string(ntohs(c_SocketInfo.sin_port)));
    }
 
    return s32_Return;
@@ -797,7 +798,7 @@ int32_t C_OscIpDispatcherLinuxSock::SendTcp(const uint32_t ou32_Handle, const st
          {
             if (x_BytesSent == -1)
             {
-               const C_SclString c_ErrnoStr = strerror(errno);
+               const std::string c_ErrnoStr = strerror(errno);
                osc_write_log_error("openSYDE IP-TP",
                                    "SendTcp: Could not send TCP service. Data lost. Error: " + c_ErrnoStr +
                                    " IP-Address: " + mh_IpToText(this->mc_SocketsTcp[ou32_Handle].au8_IpAddress));
@@ -815,8 +816,8 @@ int32_t C_OscIpDispatcherLinuxSock::SendTcp(const uint32_t ou32_Handle, const st
             {
                osc_write_log_error("openSYDE IP-TP",
                                    "SendTcp: Could not send all data: tried: " +
-                                   C_SclString::IntToStr(orc_Data.size()) +
-                                   "sent: " + C_SclString::IntToStr(x_BytesSent));
+                                   std::to_string(orc_Data.size()) +
+                                   "sent: " + std::to_string(x_BytesSent));
             }
             s32_Return = C_RD_WR;
          }
@@ -891,7 +892,7 @@ int32_t C_OscIpDispatcherLinuxSock::ReadTcp(const uint32_t ou32_Handle, std::vec
          }
          else if (x_Return == -1)
          {
-            const C_SclString c_ErrnoStr = strerror(errno);
+            const std::string c_ErrnoStr = strerror(errno);
             osc_write_log_error("openSYDE IP-TP", "Could not read TCP: buffer count could not be read. Error: " +
                                 c_ErrnoStr + " IP-Address: " +
                                 mh_IpToText(this->mc_SocketsTcp[ou32_Handle].au8_IpAddress));
@@ -1098,7 +1099,7 @@ int32_t C_OscIpDispatcherLinuxSock::SendUdp(const std::vector<uint8_t> & orc_Dat
                                             sizeof(c_TargetAddress));
             if (x_Retval != static_cast<ssize_t>(orc_Data.size()))
             {
-               const C_SclString c_ErrnoStr = strerror(errno);
+               const std::string c_ErrnoStr = strerror(errno);
                osc_write_log_error("openSYDE IP-TP", "SendUdp sendto error: " + c_ErrnoStr);
                s32_Return = C_RD_WR;
             }
@@ -1196,8 +1197,8 @@ int32_t C_OscIpDispatcherLinuxSock::ReadUdp(std::vector<uint8_t> & orc_Data, uin
             //comm error: no data read even though it was reported by ioctl
             osc_write_log_error("openSYDE IP-TP",
                                 "ReadUdp unexpected error: data reported as available but reading failed. Reported size: " +
-                                C_SclString::IntToStr(
-                                   orc_Data.size()) + " Read size: " + C_SclString::IntToStr(s32_Return));
+                                std::to_string(
+                                   orc_Data.size()) + " Read size: " + std::to_string(s32_Return));
             s32_Return = C_RD_WR;
          }
       }

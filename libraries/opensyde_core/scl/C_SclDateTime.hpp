@@ -17,7 +17,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -43,9 +43,9 @@ public:
    uint16_t mu16_Second; ///< 0 .. 59
 
    static C_SclDateTime Now(void);
-   C_SclString TimeToString(void) const;     ///< format: "hh:mm:ss"
-   C_SclString DateToString(void) const;     ///< format: "dd.mm.yyyy"
-   C_SclString DateTimeToString(void) const; ///< format: "dd.mm.yyyy hh:mm:ss"
+   std::string TimeToString(void) const;     ///< format: "hh:mm:ss"
+   std::string DateToString(void) const;     ///< format: "dd.mm.yyyy"
+   std::string DateTimeToString(void) const; ///< format: "dd.mm.yyyy hh:mm:ss"
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

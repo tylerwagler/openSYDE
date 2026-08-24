@@ -51,7 +51,7 @@ C_OscDataLoggerDataElementReference::C_OscDataLoggerDataElementReference() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDataLoggerDataElementReference::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_CustomName.c_str(), this->c_CustomName.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_CustomName.c_str(), this->c_CustomName.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_UseCustomName,
                                        sizeof(this->q_UseCustomName),
                                        oru32_HashValue);

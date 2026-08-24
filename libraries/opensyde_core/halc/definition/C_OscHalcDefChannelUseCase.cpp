@@ -57,9 +57,9 @@ C_OscHalcDefChannelUseCase::~C_OscHalcDefChannelUseCase()
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefChannelUseCase::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Id.c_str(), this->c_Id.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Display.c_str(), this->c_Display.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Id.c_str(), this->c_Id.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Display.c_str(), this->c_Display.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
 
    c_Value.CalcHash(oru32_HashValue);
 

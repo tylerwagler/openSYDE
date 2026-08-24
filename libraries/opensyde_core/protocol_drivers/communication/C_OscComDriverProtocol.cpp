@@ -16,12 +16,13 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include <limits>
 #include <iostream>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "TglUtils.hpp"
 #include "C_OscComDriverProtocol.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -1113,9 +1114,9 @@ C_OscProtocolDriverOsy * C_OscComDriverProtocol::m_GetOsyProtocol(const C_OscPro
    Node name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComDriverProtocol::m_GetActiveNodeName(const uint32_t ou32_ActiveNodeIndex) const
+std::string C_OscComDriverProtocol::m_GetActiveNodeName(const uint32_t ou32_ActiveNodeIndex) const
 {
-   C_SclString c_Retval = "Unknown";
+   std::string c_Retval = "Unknown";
 
    if (ou32_ActiveNodeIndex < this->mc_ActiveNodesIndexes.size())
    {
@@ -1545,9 +1546,9 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                   //Do not consider this an error: older server implementations could return a value of zero
                   // to signal that the level was already unlocked. This is described as valid in the UDS standard
                   // but not on the openSYDE protocol specification. In any case we need to ignore to stay compatible.
-                  const C_SclString c_Tmp =
+                  const std::string c_Tmp =
                      "Received seed in non secure mode does not match the expected value, expected: 42, got " +
-                     C_SclString::IntToStr(u64_Seed);
+                     std::to_string(u64_Seed);
                   osc_write_log_warning("Security Access", c_Tmp.c_str());
                }
             }
@@ -1620,8 +1621,8 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
 
                         if ((s32_Return != C_NO_ERR) || (c_AuthenticationSignature.size() != 128U))
                         {
-                           C_SclString c_Tmp;
-                           c_Tmp.PrintFormatted("Error on calculating RSA signature: %d; signature size: %d",
+                           std::string c_Tmp;
+                           c_Tmp = PrintFormattedCompat("Error on calculating RSA signature: %d; signature size: %d",
                                                 s32_Return, static_cast<int32_t>(c_AuthenticationSignature.size()));
                            osc_write_log_error("Security Access", c_Tmp.c_str());
                            s32_Return = C_CHECKSUM;
@@ -1651,7 +1652,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                {
                   //get own public key; we need to sent it to the server
                   s32_Return = opc_ExistingProtocol->pc_SecuritySubLayer->GetEcdhPublicKey(
-                     c_TrafficEncryptionPublicClientKey);
+                     c_TrafficEncryptionPublicClientKey).value();
                   if (s32_Return != C_NO_ERR)
                   {
                      osc_write_log_error("Security Access",
@@ -1674,8 +1675,8 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
 
                   if (s32_Return != C_NO_ERR)
                   {
-                     C_SclString c_Tmp;
-                     c_Tmp.PrintFormatted("Error performing SecurityAccess service: %d", s32_Return);
+                     std::string c_Tmp;
+                     c_Tmp = PrintFormattedCompat("Error performing SecurityAccess service: %d", s32_Return);
                      osc_write_log_error("Security Access", c_Tmp.c_str());
                      s32_Return = C_CHECKSUM;
                   }
@@ -1686,7 +1687,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                {
                   C_OscProtocolSecuritySubLayer & rc_Ssl = (*opc_ExistingProtocol->pc_SecuritySubLayer);
 
-                  s32_Return = rc_Ssl.SetAesInitVector(c_TrafficEncryptionInitVector);
+                  s32_Return = rc_Ssl.SetAesInitVector(c_TrafficEncryptionInitVector).value();
                   if (s32_Return != C_NO_ERR)
                   {
                      //this should not happen in real life: the only known reason would be an invalid size
@@ -1697,7 +1698,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                   }
                   else
                   {
-                     s32_Return = rc_Ssl.DeriveAesKey(c_TrafficEncryptionPublicServerKey);
+                     s32_Return = rc_Ssl.DeriveAesKey(c_TrafficEncryptionPublicServerKey).value();
                      if (s32_Return != C_NO_ERR)
                      {
                         osc_write_log_error("Security Access", "Traffic encryption: Could not derive AES key.");
@@ -2104,14 +2105,14 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
    {
       osc_write_log_info("Start IP to IP Routing",
                          "IP to IP Routing to node " +
-                         C_SclString::IntToStr(this->mc_ActiveNodesIndexes[ou32_ActiveNode]) +
-                         " over " + C_SclString::IntToStr(this->mc_Routes[ou32_ActiveNode].c_VecRoutePoints.size()) +
+                         std::to_string(this->mc_ActiveNodesIndexes[ou32_ActiveNode]) +
+                         " over " + std::to_string(this->mc_Routes[ou32_ActiveNode].c_VecRoutePoints.size()) +
                          " routing points started.");
    }
    else if (s32_Return != C_NO_ERR)
    {
       osc_write_log_error("Start IP to IP Routing",
-                          "Error on starting IP to IP routing to node " + C_SclString::IntToStr(
+                          "Error on starting IP to IP routing to node " + std::to_string(
                              this->mc_ActiveNodesIndexes[ou32_ActiveNode]) + " with error " +
                           C_OscLoggingHandler::h_StwError(s32_Return));
    }
@@ -2423,14 +2424,14 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
    if (s32_Return == C_NO_ERR)
    {
       osc_write_log_info("Start Routing",
-                         "Routing to node " + C_SclString::IntToStr(this->mc_ActiveNodesIndexes[ou32_ActiveNode]) +
-                         " over " + C_SclString::IntToStr(this->mc_Routes[ou32_ActiveNode].c_VecRoutePoints.size()) +
+                         "Routing to node " + std::to_string(this->mc_ActiveNodesIndexes[ou32_ActiveNode]) +
+                         " over " + std::to_string(this->mc_Routes[ou32_ActiveNode].c_VecRoutePoints.size()) +
                          " routing points started.");
    }
    else
    {
       osc_write_log_error("Start Routing",
-                          "Error on starting routing to node " + C_SclString::IntToStr(
+                          "Error on starting routing to node " + std::to_string(
                              this->mc_ActiveNodesIndexes[ou32_ActiveNode]) + " with error " +
                           C_OscLoggingHandler::h_StwError(s32_Return));
 
@@ -2445,7 +2446,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
          }
 
          osc_write_log_error("Start Routing", "This error is caused by following scenario: "
-                             "The openSYDE node " + C_SclString::IntToStr(u32_TunnelRouter) +
+                             "The openSYDE node " + std::to_string(u32_TunnelRouter) +
                              ", which is used as router to communicate with the node with "
                              "the STW Flashloader, has the security feature traffic encryption activated. "
                              "This scenario is not supported and causes this error.");
@@ -2513,7 +2514,7 @@ void C_OscComDriverProtocol::m_StopRouting(const uint32_t ou32_ActiveNode)
       }
 
       osc_write_log_info("Stop Routing",
-                         "Routing to node " + C_SclString::IntToStr(this->mc_ActiveNodesIndexes[ou32_ActiveNode]) +
+                         "Routing to node " + std::to_string(this->mc_ActiveNodesIndexes[ou32_ActiveNode]) +
                          " stopped.");
    }
 
@@ -2681,7 +2682,7 @@ int32_t C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32_t ou32_
             if (s32_Retval != C_NO_ERR)
             {
                osc_write_log_error("Stop Routing",
-                                   "Error on stopping routing to node " + C_SclString::IntToStr(
+                                   "Error on stopping routing to node " + std::to_string(
                                       orc_Point.u32_NodeIndex) + " with error " +
                                    C_OscLoggingHandler::h_StwError(s32_Retval));
             }
@@ -2689,7 +2690,7 @@ int32_t C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32_t ou32_
          else
          {
             osc_write_log_error("Stop Routing",
-                                "Error on setting security access on node " + C_SclString::IntToStr(
+                                "Error on setting security access on node " + std::to_string(
                                    orc_Point.u32_NodeIndex) + " with error " +
                                 C_OscLoggingHandler::h_StwError(s32_Retval));
          }
@@ -3063,7 +3064,7 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
                s32_Retval = pc_TransportProtocol->SetDispatcher(this->mpc_CanDispatcher);
                if (s32_Retval != C_NO_ERR)
                {
-                  C_SclString c_Text = "Node \"";
+                  std::string c_Text = "Node \"";
                   c_Text += this->m_GetActiveNodeName(u32_ItActiveNode);
                   c_Text += "\" - SetDispatcher - error: ";
                   c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
@@ -3075,7 +3076,7 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
             }
             else
             {
-               C_SclString c_Text = "Node \"";
+               std::string c_Text = "Node \"";
                c_Text += this->m_GetActiveNodeName(u32_ItActiveNode);
                c_Text += "\" - SetNodeIdentifiers - error: ";
                c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
@@ -3096,7 +3097,7 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
                s32_Retval = this->mpc_CanTransportProtocolBroadcast->SetDispatcher(this->mpc_CanDispatcher);
                if (s32_Retval != C_NO_ERR)
                {
-                  C_SclString c_Text = "Broadcast - SetDispatcher - error: ";
+                  std::string c_Text = "Broadcast - SetDispatcher - error: ";
                   c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
                   c_Text += "\nC_CONFIG   could not register with dispatcher\n"
                             "C_NOACT    could not configure Rx filter\n";
@@ -3106,7 +3107,7 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
             }
             else
             {
-               C_SclString c_Text = "Broadcast - SetNodeIdentifiers - error: ";
+               std::string c_Text = "Broadcast - SetNodeIdentifiers - error: ";
                c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
                c_Text += "\nC_RANGE    client and/or server identifier out of range\n"
                          "C_NOACT    could not reconfigure Rx filters\n";
@@ -3265,14 +3266,14 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
                      {
                         osc_write_log_error("Ethernet initialization",
                                             "Could not get index of IP to CAN router. Error Code: " +
-                                            C_SclString::IntToStr(s32_Retval));
+                                            std::to_string(s32_Retval));
                      }
                   }
                   else
                   {
                      osc_write_log_error("Ethernet initialization",
                                          "Could not get index of IP to IP router. Error Code: " +
-                                         C_SclString::IntToStr(s32_Retval));
+                                         std::to_string(s32_Retval));
                   }
 
                   if (s32_Retval != C_NO_ERR)
@@ -3308,7 +3309,7 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
                      if (s32_Retval != C_NO_ERR)
                      {
                         osc_write_log_error("Ethernet initialization", "Could not set IP dispatcher. Error Code: " +
-                                            C_SclString::IntToStr(s32_Retval));
+                                            std::to_string(s32_Retval));
 
                         //Invalid configuration = programming error
                         s32_Retval = C_OVERFLOW;
@@ -3317,7 +3318,7 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
                   else
                   {
                      osc_write_log_error("Ethernet initialization", "Could not set node identifiers. Error Code: " +
-                                         C_SclString::IntToStr(s32_Retval));
+                                         std::to_string(s32_Retval));
 
                      //Invalid configuration = programming error
                      s32_Retval = C_OVERFLOW;
@@ -3333,7 +3334,7 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
                   {
                      //Invalid configuration = programming error
                      osc_write_log_error("Ethernet initialization", "Could not set broadcast dispatcher. Error Code: " +
-                                         C_SclString::IntToStr(
+                                         std::to_string(
                                             s32_Retval));
 
                      s32_Retval = C_OVERFLOW;
@@ -3343,7 +3344,7 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
             else
             {
                osc_write_log_error("Ethernet initialization", "Could not initialize UDP. Error Code: " +
-                                   C_SclString::IntToStr(s32_Retval));
+                                   std::to_string(s32_Retval));
                s32_Retval = C_COM;
             }
          }
@@ -3537,11 +3538,11 @@ int32_t C_OscComDriverProtocol::m_InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t
 
       if (s32_Retval != C_NO_ERR)
       {
-         C_SclString c_Text;
+         std::string c_Text;
 
          // Using the IP address of the router if IP to IP routing is used.
          // In case of no routing u32_Ip2IpRouterActiveNode equals u32_ItActiveNode
-         c_Text.PrintFormatted("Could not set up TCP connection to %d.%d.%d.%d",
+         c_Text = PrintFormattedCompat("Could not set up TCP connection to %d.%d.%d.%d",
                                orau8_Ip[0],
                                orau8_Ip[1],
                                orau8_Ip[2],

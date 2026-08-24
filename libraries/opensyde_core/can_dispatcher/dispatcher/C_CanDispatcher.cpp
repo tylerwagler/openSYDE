@@ -330,7 +330,7 @@ int32_t C_CanDispatcher::DispatchIncoming(void)
       if (s32_Return == C_NO_ERR)
       {
          s32_NumMessages++;
-         for (s32_Loop = 0; s32_Loop < mc_InstalledClients.GetLength(); s32_Loop++)
+         for (s32_Loop = 0; s32_Loop < mc_InstalledClients.size(); s32_Loop++)
          {
             if (mc_InstalledClients[s32_Loop].c_RXFilter.DoesMessagePass(t_Msg) == true)
             {
@@ -368,24 +368,24 @@ int32_t C_CanDispatcher::RegisterClient(uint16_t & oru16_Handle, const C_CanRxFi
    uint16_t u16_Handle;
    bool q_Found = false;
 
-   if (mc_InstalledClients.GetHigh() >= 0xFFFF)
+   if (mc_InstalledClients.size() >= 0xFFFF)
    {
       return C_OVERFLOW;
    }
 
-   mc_InstalledClients.IncLength(1);
+   mc_InstalledClients.emplace_back();
    if (opc_RXFilter != NULL)
    {
-      mc_InstalledClients[mc_InstalledClients.GetHigh()].c_RXFilter = *opc_RXFilter;
+      mc_InstalledClients.back().c_RXFilter = *opc_RXFilter;
    }
    else
    {
-      mc_InstalledClients[mc_InstalledClients.GetHigh()].c_RXFilter.PassAll();
+      mc_InstalledClients.back().c_RXFilter.PassAll();
    }
-   mc_InstalledClients[mc_InstalledClients.GetHigh()].c_RXQueue.SetMaxSize(oru32_BufferSize);
+   mc_InstalledClients.back().c_RXQueue.SetMaxSize(oru32_BufferSize);
 
    //is there a free one ?
-   for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.GetLength(); u16_Handle++)
+   for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.size(); u16_Handle++)
    {
       if (mc_ClientsByHandle[u16_Handle] == NULL)
       {
@@ -397,12 +397,12 @@ int32_t C_CanDispatcher::RegisterClient(uint16_t & oru16_Handle, const C_CanRxFi
    if (q_Found == true)
    {
       //insert here !
-      mc_InstalledClients[mc_InstalledClients.GetHigh()].u16_Handle = u16_Handle;
+      mc_InstalledClients.back().u16_Handle = u16_Handle;
    }
    else
    {
-      mc_InstalledClients[mc_InstalledClients.GetHigh()].u16_Handle =
-         static_cast<uint16_t>(mc_ClientsByHandle.GetLength());
+      mc_InstalledClients.back().u16_Handle =
+         static_cast<uint16_t>(mc_ClientsByHandle.size());
    }
 
    m_ResyncShortcutPointers();
@@ -426,7 +426,7 @@ int32_t C_CanDispatcher::RemoveClient(const uint16_t ou16_Handle)
 {
    uint16_t u16_Index;
 
-   if (ou16_Handle >= mc_ClientsByHandle.GetLength())
+   if (ou16_Handle >= mc_ClientsByHandle.size())
    {
       return C_NOACT;
    }
@@ -437,11 +437,11 @@ int32_t C_CanDispatcher::RemoveClient(const uint16_t ou16_Handle)
    }
 
    //find it in the list:
-   for (u16_Index = 0U; u16_Index < mc_InstalledClients.GetLength(); u16_Index++)
+   for (u16_Index = 0U; u16_Index < mc_InstalledClients.size(); u16_Index++)
    {
       if (mc_ClientsByHandle[ou16_Handle] == &mc_InstalledClients[u16_Index])
       {
-         mc_InstalledClients.Delete(u16_Index);
+         mc_InstalledClients.erase(mc_InstalledClients.begin() + u16_Index);
          break;
       }
    }
@@ -457,34 +457,34 @@ void C_CanDispatcher::m_ResyncShortcutPointers(void)
    uint16_t u16_Handle;
    uint16_t u16_Max;
 
-   if (mc_InstalledClients.GetLength() == 0)
+   if (mc_InstalledClients.size() == 0)
    {
-      mc_ClientsByHandle.SetLength(0);
+      mc_ClientsByHandle.clear();
       return;
    }
 
    //get greatest handle number:
    u16_Max = 0U;
-   for (u16_Index = 0U; u16_Index < mc_InstalledClients.GetLength(); u16_Index++)
+   for (u16_Index = 0U; u16_Index < mc_InstalledClients.size(); u16_Index++)
    {
       if (mc_InstalledClients[u16_Index].u16_Handle > u16_Max)
       {
          u16_Max = mc_InstalledClients[u16_Index].u16_Handle;
       }
    }
-   mc_ClientsByHandle.SetLength(static_cast<int32_t>(u16_Max) + 1);
+   mc_ClientsByHandle.resize(static_cast<size_t>(u16_Max) + 1U);
 
    //preset all pointers to zero:
-   for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.GetLength(); u16_Handle++)
+   for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.size(); u16_Handle++)
    {
       mc_ClientsByHandle[u16_Handle] = NULL;
    }
 
-   for (u16_Index = 0U; u16_Index < mc_InstalledClients.GetLength(); u16_Index++)
+   for (u16_Index = 0U; u16_Index < mc_InstalledClients.size(); u16_Index++)
    {
       //find client with this handle
       u16_Handle = mc_InstalledClients[u16_Index].u16_Handle;
-      if (u16_Handle > mc_ClientsByHandle.GetHigh())
+      if ((mc_ClientsByHandle.empty()) || (u16_Handle > (mc_ClientsByHandle.size() - 1U)))
       {
          return; //internal problem
       }
@@ -511,7 +511,7 @@ int32_t C_CanDispatcher::ReadFromQueue(const uint16_t ou16_Handle, T_STWCAN_Msg_
 {
    int32_t s32_Return;
 
-   if (ou16_Handle >= mc_ClientsByHandle.GetLength())
+   if (ou16_Handle >= mc_ClientsByHandle.size())
    {
       return C_RANGE;
    }
@@ -542,7 +542,7 @@ int32_t C_CanDispatcher::ClearQueue(const uint16_t ou16_Handle)
 {
    int32_t s32_Return = C_RANGE;
 
-   if ((ou16_Handle < mc_ClientsByHandle.GetLength()) &&
+   if ((ou16_Handle < mc_ClientsByHandle.size()) &&
        (mc_ClientsByHandle[ou16_Handle] != NULL))
    {
       s32_Return = C_NO_ERR;
@@ -595,7 +595,7 @@ int32_t C_CanDispatcher::CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
    if (s32_Return == C_NO_ERR)
    {
       //dispatch to installed clients:
-      for (s32_Loop = 0; s32_Loop < mc_InstalledClients.GetLength(); s32_Loop++)
+      for (s32_Loop = 0; s32_Loop < mc_InstalledClients.size(); s32_Loop++)
       {
          if (mc_InstalledClients[s32_Loop].c_RXFilter.DoesMessagePass(orc_Message) == true)
          {
@@ -629,7 +629,7 @@ int32_t C_CanDispatcher::CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CanDispatcher::SetRXFilter(const uint16_t ou16_Handle, const C_CanRxFilter & orc_RXFilter)
 {
-   if (ou16_Handle >= mc_ClientsByHandle.GetLength())
+   if (ou16_Handle >= mc_ClientsByHandle.size())
    {
       return C_RANGE;
    }

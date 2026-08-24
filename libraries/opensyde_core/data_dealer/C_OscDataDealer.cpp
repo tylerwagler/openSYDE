@@ -12,6 +12,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -22,7 +23,9 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::errors;
+using namespace stw::scl;
 using namespace stw::opensyde_core;
+using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -453,8 +456,8 @@ int32_t C_OscDataDealer::NvmWrite(const uint8_t ou8_DataPoolIndex, const uint16_
 void C_OscDataDealer::m_OnReadDataPoolEventReceived(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                     const uint16_t ou16_ElementIndex)
 {
-   stw::scl::C_SclString c_Info;
-   c_Info.PrintFormatted("C_OscDataDealer: ReadDataPool event received but no notification handler implemented. " \
+   std::string c_Info;
+   c_Info = PrintFormattedCompat("C_OscDataDealer: ReadDataPool event received but no notification handler implemented. " \
                          "Element (dp: %d list: %d element: %d) !", ou8_DataPoolIndex, ou16_ListIndex,
                          ou16_ElementIndex);
    osc_write_log_warning("Asynchronous communication", c_Info);
@@ -476,8 +479,8 @@ void C_OscDataDealer::m_OnReadDataPoolEventReceived(const uint8_t ou8_DataPoolIn
 void C_OscDataDealer::m_OnReadDataPoolEventErrorReceived(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                          const uint16_t ou16_ElementIndex, const uint8_t ou8_ErrorCode)
 {
-   stw::scl::C_SclString c_Info;
-   c_Info.PrintFormatted("C_OscDataDealer: ReadDataPool error event received but no notification handler " \
+   std::string c_Info;
+   c_Info = PrintFormattedCompat("C_OscDataDealer: ReadDataPool error event received but no notification handler " \
                          "implemented. Element (dp: %d list: %d element: %d) Code: %d !", ou8_DataPoolIndex,
                          ou16_ListIndex, ou16_ElementIndex, ou8_ErrorCode);
    osc_write_log_warning("Asynchronous communication", c_Info);
@@ -499,8 +502,8 @@ void C_OscDataDealer::m_OnReadDataPoolEventErrorReceived(const uint8_t ou8_DataP
 void C_OscDataDealer::m_OnReadDataPoolNvmEventReceived(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                        const uint16_t ou16_ElementIndex)
 {
-   stw::scl::C_SclString c_Info;
-   c_Info.PrintFormatted("C_OscDataDealer: NvmRead event received but no notification handler implemented. " \
+   std::string c_Info;
+   c_Info = PrintFormattedCompat("C_OscDataDealer: NvmRead event received but no notification handler implemented. " \
                          "Element (dp: %d list: %d element: %d) !", ou8_DataPoolIndex, ou16_ListIndex,
                          ou16_ElementIndex);
    osc_write_log_warning("Asynchronous communication", c_Info);
@@ -585,8 +588,8 @@ void C_OscDataDealer::m_ReadDataPoolDataEventReceived(const uint8_t ou8_DataPool
                                                                                                ou16_ElementIndex);
       if (pc_Element == NULL)
       {
-         stw::scl::C_SclString c_Error;
-         c_Error.PrintFormatted("C_OscDataDealer: ReadDataPool event received but referenced Datapool element (" \
+         std::string c_Error;
+         c_Error = PrintFormattedCompat("C_OscDataDealer: ReadDataPool event received but referenced Datapool element (" \
                                 "dp: %d list: %d element: %d) not known!", ou8_DataPoolIndex, ou16_ListIndex,
                                 ou16_ElementIndex);
          osc_write_log_warning("Asynchronous communication", c_Error);
@@ -600,8 +603,8 @@ void C_OscDataDealer::m_ReadDataPoolDataEventReceived(const uint8_t ou8_DataPool
          //So we do not check for an exact match but for "do we have enough ?"
          if (orc_Value.size() < pc_Element->GetSizeByte())
          {
-            stw::scl::C_SclString c_Error;
-            c_Error.PrintFormatted("C_OscDataDealer: ReadDataPool event received but size does not match Datapool " \
+            std::string c_Error;
+            c_Error = PrintFormattedCompat("C_OscDataDealer: ReadDataPool event received but size does not match Datapool " \
                                    "element (dp: %d list: %d element: %d)!", ou8_DataPoolIndex, ou16_ListIndex,
                                    ou16_ElementIndex);
             osc_write_log_warning("Asynchronous communication", c_Error);
@@ -689,8 +692,8 @@ void C_OscDataDealer::m_ReadDataPoolDataEventErrorReceived(const uint8_t ou8_Dat
                                                                                                      ou16_ElementIndex);
       if (pc_Element == NULL)
       {
-         stw::scl::C_SclString c_Error;
-         c_Error.PrintFormatted("C_OscDataDealer: ReadDataPool error event received but referenced Datapool element " \
+         std::string c_Error;
+         c_Error = PrintFormattedCompat("C_OscDataDealer: ReadDataPool error event received but referenced Datapool element " \
                                 "(dp: %d list: %d element: %d) not known!", ou8_DataPoolIndex, ou16_ListIndex,
                                 ou16_ElementIndex);
          osc_write_log_warning("Asynchronous communication", c_Error);

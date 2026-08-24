@@ -11,10 +11,13 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include <iostream>
 #include <cstring>
 #include <algorithm>
+#include <sstream>
+#include <iomanip>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "TglTime.hpp"
@@ -39,6 +42,18 @@ using namespace stw::tgl;
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+
+/* -- Helper -------------------------------------------------------------------------------------------------------- */
+namespace
+{
+   template <typename T>
+   std::string mh_IntToHex(const T orc_Val, const uint32_t ou32_Digits)
+   {
+      std::stringstream c_Stream;
+      c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Val;
+      return c_Stream.str();
+   }
+}
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
@@ -374,7 +389,7 @@ const
                else
                {
                   m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
-                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
+                                              std::to_string(c_Response.size()) + ") received. Ignoring.",
                                               TGL_UTIL_FUNC_ID, au8_Ip);
                }
             }
@@ -553,7 +568,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
                else
                {
                   m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
-                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
+                                              std::to_string(c_Response.size()) + ") received. Ignoring.",
                                               TGL_UTIL_FUNC_ID, orau8_ResponseIp);
                }
             }
@@ -750,7 +765,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
                else
                {
                   m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
-                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
+                                              std::to_string(c_Response.size()) + ") received. Ignoring.",
                                               TGL_UTIL_FUNC_ID, orau8_ResponseIp);
                }
             }
@@ -857,7 +872,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
                else
                {
                   m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
-                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
+                                              std::to_string(c_Response.size()) + ") received. Ignoring.",
                                               TGL_UTIL_FUNC_ID, au8_Ip);
                }
             }
@@ -1169,7 +1184,7 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void)
                   {
                      //nothing we can handle ...
                      m_LogWarningWithHeader("Unexpected payload type received: 0x" +
-                                            C_SclString::IntToHex(mc_RxState.c_ServiceHeader.u16_PayloadType, 4) +
+                                            mh_IntToHex(mc_RxState.c_ServiceHeader.u16_PayloadType, 4) +
                                             "Incoming TCP response dumped.", TGL_UTIL_FUNC_ID);
                   }
                }
@@ -1208,13 +1223,13 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void)
    \param[in]     opcn_Function       function name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeader(const C_SclString & orc_Information,
+void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeader(const std::string & orc_Information,
                                                         const char_t * const opcn_Function) const
 {
    C_OscLoggingHandler::h_WriteLogError("openSYDE IP-TP",
-                                        "openSYDE IP-TP node " + C_SclString::IntToStr(
+                                        "openSYDE IP-TP node " + std::to_string(
                                            mc_ServerId.u8_BusIdentifier) + "." +
-                                        C_SclString::IntToStr(
+                                        std::to_string(
                                            mc_ServerId.u8_NodeIdentifier) + ": " + orc_Information, __FILE__,
                                         opcn_Function);
 }
@@ -1233,13 +1248,13 @@ void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeader(const C_SclString & orc_
    \param[in]     orau8_Ip            IP address to report
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeaderAndIp(const C_SclString & orc_Information,
+void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeaderAndIp(const std::string & orc_Information,
                                                              const char_t * const opcn_Function,
                                                              const uint8_t (&orau8_Ip)[4]) const
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
-   c_Text.PrintFormatted("[IP: %d.%d.%d.%d]: ", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
+   c_Text = PrintFormattedCompat("[IP: %d.%d.%d.%d]: ", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
    c_Text += orc_Information;
 
    m_LogWarningWithHeader(c_Text, opcn_Function);

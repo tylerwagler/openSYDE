@@ -903,7 +903,7 @@ int32_t C_OscHalcMagicianGenerator::mh_GenerateVariablesForDomain(const C_OscHal
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcMagicianGenerator::mh_GenerateVariablesForVector(
-   const std::vector<C_OscHalcDefStruct> & orc_Definition, const stw::scl::C_SclString & orc_DomainSingularName,
+   const std::vector<C_OscHalcDefStruct> & orc_Definition, const std::string & orc_DomainSingularName,
    const bool oq_IsSafe, const std::vector<uint32_t> & orc_RelevantChannels, const bool oq_AddDataset,
    C_OscNodeDataPoolList & orc_List)
 {
@@ -937,7 +937,7 @@ int32_t C_OscHalcMagicianGenerator::mh_GenerateVariablesForVector(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcMagicianGenerator::mh_GenerateVariablesForVectorElement(
    const std::vector<C_OscHalcDefStruct> & orc_Definition, const uint32_t ou32_DefinitionElementIndex,
-   const stw::scl::C_SclString & orc_DomainSingularName,   const bool oq_IsSafe,
+   const std::string & orc_DomainSingularName,   const bool oq_IsSafe,
    const std::vector<uint32_t> & orc_RelevantChannels, const bool oq_AddDataset, C_OscNodeDataPoolList & orc_List)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -991,7 +991,7 @@ int32_t C_OscHalcMagicianGenerator::mh_AddVariableToList(const C_OscHalcDefEleme
                                                          const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
                                                          const uint32_t ou32_ParameterIndexStruct,
                                                          const uint32_t ou32_ParameterIndexElement,
-                                                         const stw::scl::C_SclString & orc_DomainSingularName,
+                                                         const std::string & orc_DomainSingularName,
                                                          const bool oq_IsSafe,
                                                          const std::vector<uint32_t> & orc_RelevantChannels,
                                                          const bool oq_AddDataset, C_OscNodeDataPoolList & orc_List)
@@ -1323,7 +1323,7 @@ int32_t C_OscHalcMagicianGenerator::mh_ConvertToDatapoolAndResize(const C_OscHal
    \param[in]      oq_AddDataset    Add dataset
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcMagicianGenerator::mh_InitList(C_OscNodeDataPoolList & orc_List, const stw::scl::C_SclString & orc_Name,
+void C_OscHalcMagicianGenerator::mh_InitList(C_OscNodeDataPoolList & orc_List, const std::string & orc_Name,
                                              const bool oq_AddDataset)
 {
    orc_List.c_DataSets.clear();

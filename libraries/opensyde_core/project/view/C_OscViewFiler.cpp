@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -58,7 +59,7 @@ C_OscViewFiler::C_OscViewFiler(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_LoadSystemViewsFile(std::vector<C_OscViewData> & orc_Views,
-                                              const C_SclString & orc_PathSystemViews,
+                                              const std::string & orc_PathSystemViews,
                                               const std::vector<C_OscNode> & orc_OscNodes)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -102,13 +103,13 @@ int32_t C_OscViewFiler::h_LoadSystemViewsFile(std::vector<C_OscViewData> & orc_V
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
                                        const std::vector<C_OscNode> & orc_OscNodes, C_OscXmlParserBase & orc_XmlParser,
-                                       const C_SclString & orc_BasePath)
+                                       const std::string & orc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
 
    if (orc_XmlParser.SelectNodeChild("opensyde-system-views") == "opensyde-system-views")
    {
-      C_SclString c_CurrentViewNode;
+      std::string c_CurrentViewNode;
       uint32_t u32_ExpectedSize = 0UL;
       const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -128,9 +129,9 @@ int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
          do
          {
             C_OscViewData c_View;
-            if (orc_BasePath.IsEmpty() == false)
+            if (orc_BasePath.empty() == false)
             {
-               const C_SclString c_File =
+               const std::string c_File =
                   C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, orc_XmlParser.GetNodeContent());
                s32_Retval = mh_LoadViewFileOsc(c_View, c_File, orc_OscNodes);
             }
@@ -151,8 +152,8 @@ int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
       {
          if (u32_ExpectedSize != orc_Views.size())
          {
-            C_SclString c_Tmp;
-            c_Tmp.PrintFormatted("Unexpected view count, expected: %u, got %u", u32_ExpectedSize,
+            std::string c_Tmp;
+            c_Tmp = PrintFormattedCompat("Unexpected view count, expected: %u, got %u", u32_ExpectedSize,
                                  static_cast<uint32_t>(orc_Views.size()));
             osc_write_log_warning("Load file", c_Tmp.c_str());
          }
@@ -274,10 +275,10 @@ void C_OscViewFiler::h_SaveNodeUpdateInformation(const std::vector<C_OscViewNode
         ++u32_ItNodeActiveFlag)
    {
       const C_OscViewNodeUpdate & rc_NodeUpdateInformation = orc_NodeUpdateInformation[u32_ItNodeActiveFlag];
-      const std::vector<C_SclString> & rc_DataBlockPaths = rc_NodeUpdateInformation.GetPaths(
+      const std::vector<std::string> & rc_DataBlockPaths = rc_NodeUpdateInformation.GetPaths(
          C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
       const std::vector<C_OscViewNodeUpdateParamInfo> & rc_ParamSetPaths = rc_NodeUpdateInformation.GetParamInfos();
-      const std::vector<C_SclString> & rc_FileBasedPaths = rc_NodeUpdateInformation.GetPaths(
+      const std::vector<std::string> & rc_FileBasedPaths = rc_NodeUpdateInformation.GetPaths(
          C_OscViewNodeUpdate::eFTP_FILE_BASED);
       std::vector<bool> c_SkipFlags;
       const std::vector<bool> & rc_PathSkipFlags = rc_NodeUpdateInformation.GetSkipUpdateOfPathsFlags(
@@ -346,20 +347,20 @@ void C_OscViewFiler::h_SavePc(const C_OscViewPc & orc_OscPc, C_OscXmlParserBase 
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_StringToSecurityOptionDebugger(const C_SclString & orc_String,
+int32_t C_OscViewFiler::h_StringToSecurityOptionDebugger(const std::string & orc_String,
                                                          C_OscViewNodeUpdate::E_StateDebugger & ore_State)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (orc_String.AnsiCompare("activate") == 0)
+   if (orc_String == "activate" == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_DEB_ACTIVATE;
    }
-   else if (orc_String.AnsiCompare("deactivate") == 0)
+   else if (orc_String == "deactivate" == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_DEB_DEACTIVATE;
    }
-   else if (orc_String.AnsiCompare("no-change") == 0)
+   else if (orc_String == "no-change" == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_DEB_NO_CHANGE;
    }
@@ -383,20 +384,20 @@ int32_t C_OscViewFiler::h_StringToSecurityOptionDebugger(const C_SclString & orc
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_StringToSecurityOptionAuthentication(const C_SclString & orc_String,
+int32_t C_OscViewFiler::h_StringToSecurityOptionAuthentication(const std::string & orc_String,
                                                                C_OscViewNodeUpdate::E_StateSecureAuthentication & ore_State)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (orc_String.AnsiCompare("activate") == 0)
+   if (orc_String == "activate" == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_SEC_ACTIVATE;
    }
-   else if (orc_String.AnsiCompare("deactivate") == 0)
+   else if (orc_String == "deactivate" == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_SEC_DEACTIVATE;
    }
-   else if (orc_String.AnsiCompare("no-change") == 0)
+   else if (orc_String == "no-change" == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_SEC_NO_CHANGE;
    }
@@ -420,20 +421,20 @@ int32_t C_OscViewFiler::h_StringToSecurityOptionAuthentication(const C_SclString
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_StringToSecurityOptionEncryption(const C_SclString & orc_String,
+int32_t C_OscViewFiler::h_StringToSecurityOptionEncryption(const std::string & orc_String,
                                                            C_OscViewNodeUpdate::E_StateTrafficEncryption & ore_State)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (orc_String.AnsiCompare("activate") == 0)
+   if (orc_String == "activate" == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_TEN_ACTIVATE;
    }
-   else if (orc_String.AnsiCompare("deactivate") == 0)
+   else if (orc_String == "deactivate" == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_TEN_DEACTIVATE;
    }
-   else if (orc_String.AnsiCompare("no-change") == 0)
+   else if (orc_String == "no-change" == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_TEN_NO_CHANGE;
    }
@@ -455,9 +456,9 @@ int32_t C_OscViewFiler::h_StringToSecurityOptionEncryption(const C_SclString & o
    Stringified option
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscViewFiler::h_SecurityOptionDebuggerToString(const C_OscViewNodeUpdate::E_StateDebugger oe_State)
+std::string C_OscViewFiler::h_SecurityOptionDebuggerToString(const C_OscViewNodeUpdate::E_StateDebugger oe_State)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (oe_State)
    {
@@ -486,10 +487,10 @@ C_SclString C_OscViewFiler::h_SecurityOptionDebuggerToString(const C_OscViewNode
    Stringified option
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscViewFiler::h_SecurityOptionAuthenticationToString(
+std::string C_OscViewFiler::h_SecurityOptionAuthenticationToString(
    const C_OscViewNodeUpdate::E_StateSecureAuthentication oe_State)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (oe_State)
    {
@@ -518,10 +519,10 @@ C_SclString C_OscViewFiler::h_SecurityOptionAuthenticationToString(
    Stringified option
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscViewFiler::h_SecurityOptionEncryptionToString(
+std::string C_OscViewFiler::h_SecurityOptionEncryptionToString(
    const C_OscViewNodeUpdate::E_StateTrafficEncryption oe_State)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (oe_State)
    {
@@ -561,7 +562,7 @@ int32_t C_OscViewFiler::mh_LoadNodeActiveFlags(std::vector<uint8_t> & orc_NodeAc
    orc_NodeActiveFlags.clear();
    if (orc_XmlParser.SelectNodeChild("active-nodes") == "active-nodes")
    {
-      C_SclString c_CurrentNodeActiveFlagNode = orc_XmlParser.SelectNodeChild("active-node");
+      std::string c_CurrentNodeActiveFlagNode = orc_XmlParser.SelectNodeChild("active-node");
       if (c_CurrentNodeActiveFlagNode == "active-node")
       {
          do
@@ -612,7 +613,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUp
    //Previous implementation
    if (orc_XmlParser.SelectNodeChild("node-update-informations") == "node-update-informations")
    {
-      C_SclString c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild("node-update-information");
+      std::string c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild("node-update-information");
       if (c_CurrentNodeUpdateInformationNode == "node-update-information")
       {
          uint32_t u32_Counter = 0U;
@@ -649,7 +650,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUp
       //New implementation
       if (orc_XmlParser.SelectNodeChild("node-update-information") == "node-update-information")
       {
-         C_SclString c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild(
+         std::string c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild(
             "node-specific-update-information");
          if (c_CurrentNodeUpdateInformationNode == "node-specific-update-information")
          {
@@ -713,22 +714,22 @@ void C_OscViewFiler::mh_LoadPc(C_OscViewPc & orc_OscPc, const C_OscXmlParserBase
    \param[in,out]  orc_XmlParser       XML parser
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::mh_LoadNodeUpdateInformationPaths(std::vector<C_SclString> & orc_Paths,
-                                                       const C_SclString & orc_XmlTagBaseName,
+void C_OscViewFiler::mh_LoadNodeUpdateInformationPaths(std::vector<std::string> & orc_Paths,
+                                                       const std::string & orc_XmlTagBaseName,
                                                        C_OscXmlParserBase & orc_XmlParser)
 {
-   const C_SclString c_ParentName = static_cast<C_SclString>(orc_XmlTagBaseName + "s");
-   const C_SclString c_ChildName = orc_XmlTagBaseName;
+   const std::string c_ParentName = static_cast<std::string>(orc_XmlTagBaseName + "s");
+   const std::string c_ChildName = orc_XmlTagBaseName;
 
    orc_Paths.clear();
    if (orc_XmlParser.SelectNodeChild(c_ParentName) == c_ParentName)
    {
-      C_SclString c_CurrentPathNode = orc_XmlParser.SelectNodeChild(c_ChildName);
+      std::string c_CurrentPathNode = orc_XmlParser.SelectNodeChild(c_ChildName);
       if (c_CurrentPathNode == c_ChildName)
       {
          do
          {
-            const C_SclString c_Content = orc_XmlParser.GetNodeContent();
+            const std::string c_Content = orc_XmlParser.GetNodeContent();
             orc_Paths.push_back(c_Content);
             //Next
             c_CurrentPathNode = orc_XmlParser.SelectNodeNext(c_ChildName);
@@ -759,7 +760,7 @@ void C_OscViewFiler::mh_LoadNodeUpdateInformationPaths(std::vector<C_SclString> 
 int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & orc_NodeUpdateInformation,
                                                         C_OscXmlParserBase & orc_XmlParser, const C_OscNode & orc_Node)
 {
-   std::vector<C_SclString> c_Paths;
+   std::vector<std::string> c_Paths;
    std::vector<bool> c_SkipFlags;
    int32_t s32_Retval = C_NO_ERR;
 
@@ -775,7 +776,7 @@ int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & or
    //Previous format (assuming these can only be data blocks!)
    if (orc_XmlParser.SelectNodeChild("paths") == "paths")
    {
-      C_SclString c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild("path");
+      std::string c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild("path");
       if (c_CurrentNodeUpdateInformationNode == "path")
       {
          do
@@ -812,7 +813,7 @@ int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & or
    else
    {
       std::vector<C_OscViewNodeUpdateParamInfo> c_ParamInfo;
-      std::vector<C_SclString> c_FileBasedPaths;
+      std::vector<std::string> c_FileBasedPaths;
       std::vector<bool> c_PathSkipFlags;
       std::vector<bool> c_ParamSetSkipFlags;
       std::vector<bool> c_FileBasedSkipFlags;
@@ -884,13 +885,13 @@ void C_OscViewFiler::mh_LoadNodeUpdateInformationParam(std::vector<C_OscViewNode
    orc_Info.clear();
    if (orc_XmlParser.SelectNodeChild("param-sets") == "param-sets")
    {
-      C_SclString c_CurrentPathNode = orc_XmlParser.SelectNodeChild("param-set");
+      std::string c_CurrentPathNode = orc_XmlParser.SelectNodeChild("param-set");
       if (c_CurrentPathNode == "param-set")
       {
          do
          {
             bool q_Error = false;
-            C_SclString c_Path;
+            std::string c_Path;
             uint32_t u32_LastKnownCrc;
             C_OscViewNodeUpdateParamInfo c_Content;
             if (orc_XmlParser.SelectNodeChild("path") == "path")
@@ -945,7 +946,7 @@ void C_OscViewFiler::mh_LoadNodeUpdateInformationSkipUpdateOfFiles(std::vector<b
    orc_Flags.clear();
    if (orc_XmlParser.SelectNodeChild("skip-update-of-files") == "skip-update-of-files")
    {
-      C_SclString c_CurrentNodeActiveFlagNode = orc_XmlParser.SelectNodeChild("skip-update-of-file");
+      std::string c_CurrentNodeActiveFlagNode = orc_XmlParser.SelectNodeChild("skip-update-of-file");
       if (c_CurrentNodeActiveFlagNode == "skip-update-of-file")
       {
          do
@@ -1098,7 +1099,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformationSecurityStates(C_OscViewNode
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const C_SclString & orc_FilePath,
+int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const std::string & orc_FilePath,
                                            const std::vector<C_OscNode> & orc_OscNodes)
 {
    C_OscXmlParser c_XmlParser;
@@ -1111,7 +1112,7 @@ int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const C_Scl
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(std::stoi(c_XmlParser.GetNodeContent()));
       }
       catch (...)
       {
@@ -1123,7 +1124,7 @@ int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const C_Scl
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading view", "Value of \"file-version\": " +
-                            C_SclString::IntToStr(u16_FileVersion));
+                            std::to_string(u16_FileVersion));
          //Check file version
          if ((u16_FileVersion != 1U) && (u16_FileVersion != 2U))
          {
@@ -1171,17 +1172,17 @@ int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const C_Scl
                                        to the "node-specific-update-information" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::mh_SaveNodeUpdateInformationPaths(const std::vector<C_SclString> & orc_Paths,
-                                                       const C_SclString & orc_XmlTagBaseName,
+void C_OscViewFiler::mh_SaveNodeUpdateInformationPaths(const std::vector<std::string> & orc_Paths,
+                                                       const std::string & orc_XmlTagBaseName,
                                                        C_OscXmlParserBase & orc_XmlParser)
 {
-   const C_SclString c_ParentName = static_cast<C_SclString>(orc_XmlTagBaseName + "s");
-   const C_SclString c_ChildName = orc_XmlTagBaseName;
+   const std::string c_ParentName = static_cast<std::string>(orc_XmlTagBaseName + "s");
+   const std::string c_ChildName = orc_XmlTagBaseName;
 
    orc_XmlParser.CreateAndSelectNodeChild(c_ParentName);
    for (uint32_t u32_ItPath = 0; u32_ItPath < orc_Paths.size(); ++u32_ItPath)
    {
-      const C_SclString & rc_Path = orc_Paths[u32_ItPath];
+      const std::string & rc_Path = orc_Paths[u32_ItPath];
       orc_XmlParser.CreateNodeChild(c_ChildName, rc_Path);
    }
    //Return

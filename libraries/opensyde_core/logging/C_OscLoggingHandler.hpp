@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <fstream>
 #include <map>
-#include "C_SclString.hpp"
+#include <string>
 #include "TglUtils.hpp"
 #include "TglTime.hpp"
 #include "TglTasks.hpp"
@@ -54,21 +54,24 @@ public:
                                       const bool oq_AutoFlushWarningsAndErrors = false);
    static void h_SetWriteToConsoleActive(const bool oq_Active);
    static void h_SetMeasurePerformanceActive(const bool oq_Active);
-   static void h_SetCompleteLogFileLocation(const stw::scl::C_SclString & orc_CompleteLogFileLocation);
-   static const stw::scl::C_SclString & h_GetCompleteLogFileLocation(void);
+    static void h_SetCompleteLogFileLocation(const std::string & orc_CompleteLogFileLocation);
+    static const std::string & h_GetCompleteLogFileLocation(void);
 
-   //Logging call
-   static void h_WriteLogInfo(const stw::scl::C_SclString & orc_Activity, const stw::scl::C_SclString & orc_Message,
-                              const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
-   static void h_WriteLogWarning(const stw::scl::C_SclString & orc_Activity, const stw::scl::C_SclString & orc_Message,
-                                 const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
-   static void h_WriteLogError(const stw::scl::C_SclString & orc_Activity, const stw::scl::C_SclString & orc_Message,
+
+    //Logging call
+    static void h_WriteLogInfo(const std::string & orc_Activity, const std::string & orc_Message,
                                const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
-   static void h_WriteLogPerformance(const uint16_t ou16_TimerId, const stw::scl::C_SclString & orc_Message,
-                                     const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+    static void h_WriteLogWarning(const std::string & orc_Activity, const std::string & orc_Message,
+                                  const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+    static void h_WriteLogError(const std::string & orc_Activity, const std::string & orc_Message,
+                                const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+    static void h_WriteLogPerformance(const uint16_t ou16_TimerId, const std::string & orc_Message,
+                                      const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+
 
    static uint16_t h_StartPerformanceTimer(void);
-   static stw::scl::C_SclString h_StwError(const int32_t os32_Error);
+    static std::string h_StwError(const int32_t os32_Error);
+
 
    //Utility functions
    static void h_Flush(void);
@@ -82,14 +85,16 @@ private:
    static bool mhq_MeasureTime;
    static bool mhq_LogInitErrorsToConsole;
    static std::map<uint16_t, uint32_t> mhc_StartTimes; ///< first: Timer ID, second: start time
-   static stw::scl::C_SclString mhc_FileName;
+    static std::string mhc_FileName;
+
    static stw::tgl::C_TglCriticalSection mhc_ConsoleCriticalSection;
    static stw::tgl::C_TglCriticalSection mhc_FileCriticalSection;
    static std::ofstream mhc_File;
 
-   static void mh_WriteLog(const stw::scl::C_SclString & orc_Type, const stw::scl::C_SclString & orc_Activity,
-                           const stw::scl::C_SclString & orc_Message, const char_t * const opcn_Class = NULL,
-                           const char_t * const opcn_Function = NULL);
+    static void mh_WriteLog(const std::string & orc_Type, const std::string & orc_Activity,
+                            const std::string & orc_Message, const char_t * const opcn_Class = NULL,
+                            const char_t * const opcn_Function = NULL);
+
    static void mh_OpenFile(void);
    //Avoid calling
    C_OscLoggingHandler(void);

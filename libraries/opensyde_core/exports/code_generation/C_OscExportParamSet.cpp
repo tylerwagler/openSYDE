@@ -52,9 +52,9 @@ using namespace stw::opensyde_core;
    file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscExportParamSet::h_GetFileName(const C_OscNodeApplication & orc_DataBlock, const bool oq_IsSafe)
+std::string C_OscExportParamSet::h_GetFileName(const C_OscNodeApplication & orc_DataBlock, const bool oq_IsSafe)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    tgl_assert(orc_DataBlock.c_ResultPaths.size() > 0);
 
@@ -95,11 +95,11 @@ C_SclString C_OscExportParamSet::h_GetFileName(const C_OscNodeApplication & orc_
    C_CONFIG    Internal data invalid (e.g. incorrect number of lists or datasets in HALC NVM Datapool)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportParamSet::h_CreateParameterSetImage(const C_SclString & orc_Path, const C_OscNode & orc_Node,
+int32_t C_OscExportParamSet::h_CreateParameterSetImage(const std::string & orc_Path, const C_OscNode & orc_Node,
                                                        const uint16_t ou16_ApplicationIndex,
-                                                       std::vector<C_SclString> & orc_Files,
-                                                       const C_SclString & orc_ExportToolName,
-                                                       const C_SclString & orc_ExportToolVersion)
+                                                       std::vector<std::string> & orc_Files,
+                                                       const std::string & orc_ExportToolName,
+                                                       const std::string & orc_ExportToolVersion)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -367,12 +367,12 @@ int32_t C_OscExportParamSet::mh_FillRawEntries(const C_OscNodeDataPool & orc_SdD
    file info class instance
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscParamSetInterpretedFileInfoData C_OscExportParamSet::mh_GetFileInfo(const C_SclString & orc_ExportToolName,
-                                                                         const C_SclString & orc_ExportToolVersion)
+C_OscParamSetInterpretedFileInfoData C_OscExportParamSet::mh_GetFileInfo(const std::string & orc_ExportToolName,
+                                                                         const std::string & orc_ExportToolVersion)
 {
    C_OscParamSetInterpretedFileInfoData c_Info;
 
-   C_SclString c_Tmp;
+   std::string c_Tmp;
    C_TglDateTime c_DateTime;
 
    TglGetDateTimeNow(c_DateTime);
@@ -409,14 +409,14 @@ C_OscParamSetInterpretedFileInfoData C_OscExportParamSet::mh_GetFileInfo(const C
 int32_t C_OscExportParamSet::mh_WriteParameterSetImage(const C_OscParamSetRawNode & orc_RawNode,
                                                        const C_OscParamSetInterpretedNode & orc_IntNode,
                                                        const bool oq_IsSafe, const C_OscNodeApplication & orc_DataBlock,
-                                                       const C_SclString & orc_Path,
-                                                       std::vector<C_SclString> & orc_Files,
-                                                       const C_SclString & orc_ExportToolName,
-                                                       const C_SclString & orc_ExportToolVersion)
+                                                       const std::string & orc_Path,
+                                                       std::vector<std::string> & orc_Files,
+                                                       const std::string & orc_ExportToolName,
+                                                       const std::string & orc_ExportToolVersion)
 {
    int32_t s32_Retval;
 
-   const C_SclString c_Path = TglFileIncludeTrailingDelimiter(orc_Path) +
+   const std::string c_Path = TglFileIncludeTrailingDelimiter(orc_Path) +
                               h_GetFileName(orc_DataBlock, oq_IsSafe);
    const C_OscParamSetInterpretedFileInfoData c_FileInfo = mh_GetFileInfo(orc_ExportToolName, orc_ExportToolVersion);
 

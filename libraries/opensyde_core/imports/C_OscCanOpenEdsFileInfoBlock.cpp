@@ -54,21 +54,21 @@ C_OscCanOpenEdsFileInfoBlock::C_OscCanOpenEdsFileInfoBlock() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanOpenEdsFileInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_FileName.c_str(), this->c_FileName.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_FileName.c_str(), this->c_FileName.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u8_FileVersion, sizeof(this->u8_FileVersion),
                                        oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u8_FileRevision, sizeof(this->u8_FileRevision),
                                        oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_EdsVersion.c_str(), this->c_EdsVersion.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Description.c_str(), this->c_Description.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreationTime.c_str(), this->c_CreationTime.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreationDate.c_str(), this->c_CreationDate.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreatedBy.c_str(), this->c_CreatedBy.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_EdsVersion.c_str(), this->c_EdsVersion.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Description.c_str(), this->c_Description.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreationTime.c_str(), this->c_CreationTime.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreationDate.c_str(), this->c_CreationDate.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreatedBy.c_str(), this->c_CreatedBy.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(this->c_ModificationTime.c_str(),
-                                       this->c_ModificationTime.Length(), oru32_HashValue);
+                                       this->c_ModificationTime.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(this->c_ModificationDate.c_str(),
-                                       this->c_ModificationDate.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_ModifiedBy.c_str(), this->c_ModifiedBy.Length(), oru32_HashValue);
+                                       this->c_ModificationDate.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_ModifiedBy.c_str(), this->c_ModifiedBy.length(), oru32_HashValue);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -85,11 +85,11 @@ void C_OscCanOpenEdsFileInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsFileInfoBlock::LoadFromIni(stw::scl::C_SclIniFile & orc_File,
-                                                  stw::scl::C_SclString & orc_LastError)
+                                                  std::string & orc_LastError)
 {
    //lint -e{8062} Kept for later error reporting
    const int32_t s32_Retval = C_NO_ERR;
-   const stw::scl::C_SclString c_SectionName = "FileInfo";
+   const std::string c_SectionName = "FileInfo";
 
    orc_LastError = "";
 

@@ -18,7 +18,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include "C_SclDateTime.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscXmlParser.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -38,16 +38,16 @@ public:
 
    void CalcHash(uint32_t & oru32_HashValue) const;
 
-   static stw::scl::C_SclString h_GetTimeFormatted(const stw::scl::C_SclDateTime & orc_Time);
-   static stw::scl::C_SclDateTime h_GetTimeOfString(const stw::scl::C_SclString & orc_Str);
+   static std::string h_GetTimeFormatted(const stw::scl::C_SclDateTime & orc_Time);
+   static stw::scl::C_SclDateTime h_GetTimeOfString(const std::string & orc_Str);
 
-   stw::scl::C_SclString c_Author;             ///< Author (person who created this project)
-   stw::scl::C_SclString c_Editor;             ///< Editor (person who last modified this project)
+   std::string c_Author;             ///< Author (person who created this project)
+   std::string c_Editor;             ///< Editor (person who last modified this project)
    stw::scl::C_SclDateTime c_CreationTime;     ///< Time of creation
    stw::scl::C_SclDateTime c_ModificationTime; ///< Time of last known modification
-   stw::scl::C_SclString c_OpenSydeVersion;    ///< openSYDE version used to save this project
-   stw::scl::C_SclString c_Template;           ///< Template this project is based on
-   stw::scl::C_SclString c_Version;            ///< project version
+   std::string c_OpenSydeVersion;    ///< openSYDE version used to save this project
+   std::string c_Template;           ///< Template this project is based on
+   std::string c_Version;            ///< project version
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -57,8 +57,8 @@ C_OscDataLoggerJobProperties::C_OscDataLoggerJobProperties() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDataLoggerJobProperties::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_UseCase,
                                        sizeof(this->e_UseCase),
                                        oru32_HashValue);
@@ -78,6 +78,6 @@ void C_OscDataLoggerJobProperties::CalcHash(uint32_t & oru32_HashValue) const
                                        sizeof(this->e_LocalLogTrigger),
                                        oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(this->c_LogDestinationDirectory.c_str(),
-                                       this->c_LogDestinationDirectory.Length(), oru32_HashValue);
+                                       this->c_LogDestinationDirectory.length(), oru32_HashValue);
    c_AdditionalTriggerProperties.CalcHash(oru32_HashValue);
 }

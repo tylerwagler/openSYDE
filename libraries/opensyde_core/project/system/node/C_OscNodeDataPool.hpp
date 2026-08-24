@@ -15,7 +15,7 @@
 
 #include <vector>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscNodeApplication.hpp"
 #include "C_OscNodeDataPoolList.hpp"
 
@@ -67,10 +67,10 @@ public:
    };
 
    E_Type e_Type;                     ///< Data pool type
-   stw::scl::C_SclString c_Name;      ///< User data pool name
+   std::string c_Name;      ///< User data pool name
    uint8_t au8_Version[3];            ///< User data pool version Major, minor, release
    uint16_t u16_DefinitionCrcVersion; ///< Version of data pool definition CRC
-   stw::scl::C_SclString c_Comment;   ///< User data pool comment
+   std::string c_Comment;   ///< User data pool comment
    int32_t s32_RelatedDataBlockIndex; ///< Related application index
    ///< -1, No application selected
    ///< Else valid application assumed

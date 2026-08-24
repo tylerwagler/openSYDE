@@ -1,5 +1,8 @@
+#include "C_SclStringCompat.hpp"
 #include "precomp_headers.hpp" //pre-compiled headers
 
+#include <sstream>
+#include <iomanip>
 #include "stw_can.hpp"
 
 #include "stwtypes.hpp"
@@ -11,6 +14,15 @@ using namespace stw::cmon_protocol;
 using namespace stw::scl;
 using namespace stw::can;
 
+//---------------------------------------------------------------------------
+namespace {
+   template <typename T>
+   std::string mh_IntToHex(T val, uint32_t digits) {
+      std::stringstream ss;
+      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
+      return ss.str();
+   }
+}
 //---------------------------------------------------------------------------
 //have the protocol constants here as copies, so we can put this class into a library of its own
 // without having to add all the protocol header files
@@ -85,11 +97,11 @@ static const uint32_t SDO_ERROR_DYNAMIC_OD_ERROR          = 0x08000023U;
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+std::string C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text;
-   C_SclString c_Help;
-   C_SclString c_Help2;
+   std::string c_Text;
+   std::string c_Help;
+   std::string c_Help2;
    uint16_t u16_Index;
    uint8_t u16_SubIndex;
    uint32_t u32_Size;
@@ -103,7 +115,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
       {
          c_Text = "HB/Guard " +
                   m_GetByteAsStringFormat(static_cast<uint8_t>(orc_Msg.u32_ID - (GUARD_AREA_LOW - 1))) + " : TGL:" +
-                  C_SclString::IntToStr(orc_Msg.au8_Data[0] >> 7) + " : ST:";
+                  std::to_string(orc_Msg.au8_Data[0] >> 7) + " : ST:";
          switch (orc_Msg.au8_Data[0] & 0x7FU)
          {
          case 0:
@@ -289,7 +301,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             {
                //expedited
                c_Help = c_Help + "INIT UPLOAD EXP RES ";
-               (void)c_Help2.PrintFormatted("%X,%02X  ", u16_Index, u16_SubIndex);
+               c_Help2 = PrintFormattedCompat("%X,%02X  ", u16_Index, u16_SubIndex);
                if ((orc_Msg.au8_Data[0] & 0x01U) == 0x01U) //size is indicated
                {
                   u32_Size = 4 - ((orc_Msg.au8_Data[0] & 0x0CU) >> 2);
@@ -311,7 +323,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             {
                //segmented
                c_Help = c_Help + "INIT UPLOAD SEG RES ";
-               (void)c_Help2.PrintFormatted("%X,%02X  ", u16_Index, u16_SubIndex);
+               c_Help2 = PrintFormattedCompat("%X,%02X  ", u16_Index, u16_SubIndex);
                u32_Size =  mh_BytesToDwordLowHigh(&orc_Msg.au8_Data[4]);
                c_Help2 += ("Size: " + m_GetValueDecHex(u32_Size));
                c_Text = c_Help + c_Help2;
@@ -340,7 +352,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             c_Help = c_Help + "INIT DOWNLOAD RES ";
             u16_Index = mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]);
             u16_SubIndex = orc_Msg.au8_Data[3];
-            (void)c_Help2.PrintFormatted("%X,%02X", u16_Index, u16_SubIndex);
+            c_Help2 = PrintFormattedCompat("%X,%02X", u16_Index, u16_SubIndex);
             c_Text = c_Help + c_Help2;
             break;
          case SCS_SEGMENT_DOWNLOAD:
@@ -351,7 +363,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             c_Help = c_Help + "ABORT ";
             u16_Index = mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]);
             u16_SubIndex = orc_Msg.au8_Data[3];
-            (void)c_Help2.PrintFormatted("%X,%02X  Reason:", u16_Index, u16_SubIndex);
+            c_Help2 = PrintFormattedCompat("%X,%02X  Reason:", u16_Index, u16_SubIndex);
             for (j = 0; j < 4; j++)
             {
                c_Help2 += (m_GetByteAsStringFormat(orc_Msg.au8_Data[j + 4]) + " ");
@@ -470,7 +482,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             c_Help = c_Help + "INIT UPLOAD REQ ";
             u16_Index = mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]);
             u16_SubIndex = orc_Msg.au8_Data[3];
-            (void)c_Help2.PrintFormatted("%X,%02X  ", u16_Index, u16_SubIndex);
+            c_Help2 = PrintFormattedCompat("%X,%02X  ", u16_Index, u16_SubIndex);
             c_Text = c_Help + c_Help2;
             break;
          case CCS_SEGMENT_UPLOAD:
@@ -479,7 +491,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
          case CCS_INIT_DOWNLOAD:
             u16_Index = mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]);
             u16_SubIndex = orc_Msg.au8_Data[3];
-            (void)c_Help2.PrintFormatted("%X,%02X  ", u16_Index, u16_SubIndex);
+            c_Help2 = PrintFormattedCompat("%X,%02X  ", u16_Index, u16_SubIndex);
             if ((orc_Msg.au8_Data[0] & 0x02U) == 0x02U)
             {
                //expedited
@@ -532,7 +544,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             c_Help = c_Help + "ABORT ";
             u16_Index = mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]);
             u16_SubIndex = orc_Msg.au8_Data[3];
-            (void)c_Help2.PrintFormatted("%X,%02X  Reason:", u16_Index, u16_SubIndex);
+            c_Help2 = PrintFormattedCompat("%X,%02X  Reason:", u16_Index, u16_SubIndex);
             for (j = 0; j < 4; j++)
             {
                c_Help2 += (m_GetByteAsStringFormat(orc_Msg.au8_Data[j + 4]) + " ");
@@ -555,7 +567,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
    Text representation of protocol name
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolCanOpen::GetProtocolName(void) const
+std::string C_CanMonProtocolCanOpen::GetProtocolName(void) const
 {
    return "CANopen";
 }

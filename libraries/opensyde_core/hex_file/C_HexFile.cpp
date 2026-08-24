@@ -1006,14 +1006,14 @@ uint32_t C_HexFile::CreateHexFile(const C_HexDataDump & orc_Dump, const uint32_t
 
    if (u32_Error == NO_ERR)
    {
-      for (s32_Block = 0U; s32_Block < orc_Dump.at_Blocks.GetLength(); s32_Block++)
+      for (s32_Block = 0U; s32_Block < orc_Dump.at_Blocks.size(); s32_Block++)
       {
          s32_Length = 0;
          pc_Block = &orc_Dump.at_Blocks[s32_Block];
 
-         mu32_NumRawBytes += static_cast<uint32_t>(pc_Block->au8_Data.GetLength());
+         mu32_NumRawBytes += static_cast<uint32_t>(pc_Block->au8_Data.size());
          for (u32_OffsetInBlock = 0U;
-              u32_OffsetInBlock < static_cast<uint32_t>(pc_Block->au8_Data.GetLength());
+              u32_OffsetInBlock < static_cast<uint32_t>(pc_Block->au8_Data.size());
               u32_OffsetInBlock++)
          {
             u32_AbsoluteAddress = pc_Block->u32_AddressOffset + u32_OffsetInBlock;
@@ -2232,9 +2232,9 @@ int32_t C_HexFile::GetDataByAddress(const uint32_t ou32_Address, uint16_t & oru1
       return -1;
    }
 
-   for (s32_Block = 0; s32_Block < pc_HexFileData->at_Blocks.GetLength(); s32_Block++)
+   for (s32_Block = 0; s32_Block < pc_HexFileData->at_Blocks.size(); s32_Block++)
    {
-      u32_BlockLength = pc_HexFileData->at_Blocks[s32_Block].au8_Data.GetLength();
+      u32_BlockLength = pc_HexFileData->at_Blocks[s32_Block].au8_Data.size();
       if ((ou32_Address <= (pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset + u32_BlockLength)) &&
           (ou32_Address >= pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset))
       {
@@ -2344,9 +2344,9 @@ int32_t C_HexFile::FindPattern(uint32_t & oru32_Address, const uint8_t ou8_Patte
       return -1;
    }
 
-   for (s32_Block = 0; s32_Block < pc_HexFileData->at_Blocks.GetLength(); s32_Block++)
+   for (s32_Block = 0; s32_Block < pc_HexFileData->at_Blocks.size(); s32_Block++)
    {
-      u32_BlockLength = pc_HexFileData->at_Blocks[s32_Block].au8_Data.GetLength();
+      u32_BlockLength = pc_HexFileData->at_Blocks[s32_Block].au8_Data.size();
       if (oru32_Address < (pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset + u32_BlockLength))
       {
          //is the start address exactly in this block ?
@@ -2458,7 +2458,7 @@ const C_HexDataDump * C_HexFile::GetDataDump(uint32_t & oru32_ErrorResult)
    //now size the array accordingly:
    try
    {
-      mc_Dump.at_Blocks.SetLength(u32_NumBlocks);
+      mc_Dump.at_Blocks.resize(u32_NumBlocks);
    }
    catch (...)
    {
@@ -2490,7 +2490,7 @@ const C_HexDataDump * C_HexFile::GetDataDump(uint32_t & oru32_ErrorResult)
             //new block -> set size of last one
             try
             {
-               mc_Dump.at_Blocks[s32_BlockIndex].au8_Data.SetLength(u32_BlockSize);
+               mc_Dump.at_Blocks[s32_BlockIndex].au8_Data.resize(u32_BlockSize);
             }
             catch (...)
             {
@@ -2508,7 +2508,7 @@ const C_HexDataDump * C_HexFile::GetDataDump(uint32_t & oru32_ErrorResult)
    //final block:
    try
    {
-      mc_Dump.at_Blocks[s32_BlockIndex].au8_Data.SetLength(u32_BlockSize);
+      mc_Dump.at_Blocks[s32_BlockIndex].au8_Data.resize(u32_BlockSize);
    }
    catch (...)
    {

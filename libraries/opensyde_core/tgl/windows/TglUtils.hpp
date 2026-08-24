@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 #if __cplusplus >= 201103L //C++11 ?
 #define TGL_UTIL_FUNC_ID __func__
@@ -46,11 +46,11 @@ namespace tgl
 void TglReportAssertion(const char_t * const opcn_Module, const char_t * const opcn_Func, const int32_t os32_Line);
 void TglReportAssertionDetail(const char_t * const opcn_DetailInfo, const char_t * const opcn_Module,
                               const char_t * const opcn_Func, const int32_t os32_Line);
-bool TglGetSystemUserName(stw::scl::C_SclString & orc_UserName);
-bool TglGetSystemMachineName(stw::scl::C_SclString & orc_MachineName);
+bool TglGetSystemUserName(std::string & orc_UserName);
+bool TglGetSystemMachineName(std::string & orc_MachineName);
 void TglHandleSystemMessages(void);
 
-int32_t TglSetEnvironmentVariable(const stw::scl::C_SclString & orc_Name, const stw::scl::C_SclString & orc_Value);
+int32_t TglSetEnvironmentVariable(const std::string & orc_Name, const std::string & orc_Value);
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
 }

@@ -12,15 +12,18 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp" //pre-compiled headers
 
+#include <string>
 #include <sstream>   //for std::istringstream
+#include <iomanip>
 #include <algorithm> //for std::sort
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscCanOpenObjectDictionary.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclIniFile.hpp"
 #include "TglFile.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -28,13 +31,23 @@ using namespace stw::scl;
 using namespace stw::tgl;
 using namespace stw::opensyde_core;
 
+/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
+namespace {
+   template <typename T>
+   std::string mh_IntToHex(T val, uint32_t digits) {
+      std::stringstream ss;
+      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
+      return ss.str();
+   }
+}
+
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_TextAndSize
 {
 public:
-   C_SclString c_Text;
+   std::string c_Text;
    uint8_t u8_Size;
 
    bool q_IsInteger;
@@ -50,7 +63,7 @@ class C_EdsFile :
    public C_SclIniFile
 {
 public:
-   C_EdsFile(const C_SclString & orc_FileName) :
+   C_EdsFile(const std::string & orc_FileName) :
       C_SclIniFile(orc_FileName)
    {
    }
@@ -168,10 +181,10 @@ void C_OscCanOpenObjectDictionary::m_RememberFileHash()
 {
    this->mu32_OriginalFileHash = 0xFFFFFFFFU;
 
-   for (int32_t s32_Line = 0; s32_Line < this->c_TextFileContent.Strings.GetLength(); s32_Line++)
+   for (int32_t s32_Line = 0; s32_Line < this->c_TextFileContent.Strings.size(); s32_Line++)
    {
       stw::scl::C_SclChecksums::CalcCRC32(this->c_TextFileContent.Strings[s32_Line].c_str(),
-                                          this->c_TextFileContent.Strings[s32_Line].Length(),
+                                          this->c_TextFileContent.Strings[s32_Line].length(),
                                           this->mu32_OriginalFileHash);
    }
 }
@@ -195,7 +208,7 @@ void C_OscCanOpenObjectDictionary::m_RememberFileHash()
                 use GetLastErrorText() to get details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
+int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -214,18 +227,18 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
       //go through all sections and set up c_Objects
       std::vector<C_SclIniSection> & rc_Sections = c_IniFile.GetIniSections();
 
-      for (int32_t s32_Section = 0U; s32_Section < rc_Sections.GetLength(); s32_Section++)
+      for (int32_t s32_Section = 0U; s32_Section < rc_Sections.size(); s32_Section++)
       {
          //We are only interested in the sections describing objects or objects with subobjects.
          //All other sections will be ignored.
          C_SclIniSection & rc_Section = rc_Sections[s32_Section];
-         const C_SclString & rc_SectionName = rc_Section.c_Name;
-         if (rc_SectionName.Length() == 4)
+         const std::string & rc_SectionName = rc_Section.c_Name;
+         if (rc_SectionName.length() == 4)
          {
             //Pattern: [<4 hex digits>sub<1 or 2 hex digits>, e.g. [12AB]
             try
             {
-               const uint16_t u16_Index = static_cast<uint16_t>(("0x" + rc_SectionName.SubString(1, 4)).ToInt());
+               const uint16_t u16_Index = static_cast<uint16_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 1, 4)));
                //create new map entry or use existing depending on sequence of sections in EDS file
                C_OscCanOpenObject & rc_Object = c_OdObjects[u16_Index];
 
@@ -236,14 +249,14 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
                //Do not handle as an error. Malformed entry or valid section with size of 4.
             }
          }
-         else if ((rc_SectionName.Length() > (4 + 3)) && (rc_SectionName.Pos("sub") == 5))
+          else if ((rc_SectionName.length() > (4 + 3)) && (PosCompat(rc_SectionName, "sub") == 5))
          {
             //Pattern: [<4 hex digits>sub<1 or 2 hex digits>, e.g. [12ABsubCD]
             try
             {
-               const uint16_t u16_Index = static_cast<uint16_t>(("0x" + rc_SectionName.SubString(1, 4)).ToInt());
+               const uint16_t u16_Index = static_cast<uint16_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 1, 4)));
                //1 or 2 characters:
-               const uint8_t u8_SubIndex = static_cast<uint8_t>(("0x" + rc_SectionName.SubString(8, 2)).ToInt());
+                const uint8_t u8_SubIndex = static_cast<uint8_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 8, 2)));
 
                //create new map entry or use existing
                C_OscCanOpenObject & rc_Object = c_OdObjects[u16_Index];
@@ -289,7 +302,7 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
 
       if (s32_Return == C_NO_ERR)
       {
-         C_SclString c_InfoError;
+         std::string c_InfoError;
          s32_Return = this->c_InfoBlock.LoadFromFile(c_IniFile, c_InfoError);
          if (s32_Return != C_NO_ERR)
          {
@@ -321,7 +334,7 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
    C_CONFIG    at least one referenced object does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const C_SclString & orc_Blockname,
+int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const std::string & orc_Blockname,
                                                                 C_SclIniFile & orc_IniFile)
 {
    int32_t s32_Return = C_NO_ERR;
@@ -330,8 +343,8 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const C_SclStrin
 
    for (int32_t s32_Loop = 0; s32_Loop < u16_NumEntries; s32_Loop++)
    {
-      const C_SclString c_Directive = C_SclString::IntToStr(s32_Loop + 1);
-      const C_SclString c_Index = orc_IniFile.ReadString(orc_Blockname, c_Directive, "");
+      const std::string c_Directive = std::to_string(s32_Loop + 1);
+      const std::string c_Index = orc_IniFile.ReadString(orc_Blockname, c_Directive, "");
       if (c_Index == "")
       {
          mc_LastError = orc_Blockname + ": SupportedObjects inconsistent with object list !";
@@ -344,7 +357,7 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const C_SclStrin
          //is the index numeric as expected?
          try
          {
-            u16_Index = static_cast<uint16_t>(c_Index.ToInt());
+            u16_Index = static_cast<uint16_t>(std::stoi(c_Index));
          }
          catch (...)
          {
@@ -359,7 +372,7 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const C_SclStrin
             if (c_Object == c_OdObjects.end())
             {
                mc_LastError = orc_Blockname + ": References object 0x" +
-                              C_SclString::IntToHex(u16_Index, 4) + "which is not described in the file.";
+                              mh_IntToHex(u16_Index, 4) + "which is not described in the file.";
                s32_Return = C_CONFIG;
             }
          }
@@ -391,7 +404,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
    //Use table to speed up search. Using C_SclIniSection::GetValue could "circle" through the entries depending
    // on their sequence in the file. Keep number of string comparisons to a minimum.
    //upper case, so we only need to do this call on the side of the file content:
-   const C_SclString ac_StringsToSearchFor[u32_NUM_STRINGS_TO_SEARCH] =
+   const std::string ac_StringsToSearchFor[u32_NUM_STRINGS_TO_SEARCH] =
    {
       "PARAMETERNAME",
       "ACCESSTYPE",
@@ -436,9 +449,9 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
    orc_Object.q_IsMappableIntoPdo = false;
 
    std::vector<C_SclIniKey> & rc_Keys = orc_Section.c_Keys;
-   for (int32_t s32_Key = 0; s32_Key < rc_Keys.GetLength(); s32_Key++)
+   for (int32_t s32_Key = 0; s32_Key < rc_Keys.size(); s32_Key++)
    {
-      const C_SclString c_KeyUpperCase = rc_Keys[s32_Key].c_Key.UpperCase();
+      const std::string c_KeyUpperCase = UpperCaseCompat(rc_Keys[s32_Key].c_Key);
 
       for (uint32_t u32_StringIndex = 0U; u32_StringIndex < u32_NUM_STRINGS_TO_SEARCH; u32_StringIndex++)
       {
@@ -446,7 +459,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
              (c_KeyUpperCase == ac_StringsToSearchFor[u32_StringIndex]))
          {
             //got one !
-            const C_SclString & rc_Value = rc_Keys[s32_Key].c_Value;
+            const std::string & rc_Value = rc_Keys[s32_Key].c_Value;
             aq_StringsAlreadyFound[u32_StringIndex] = true; //no need to string compare this one again
 
             switch (u32_StringIndex)
@@ -455,29 +468,29 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
                orc_Object.c_Name = rc_Value;
                break;
             case 1:
-               orc_Object.c_Access = rc_Value.UpperCase();
+               orc_Object.c_Access = UpperCaseCompat(rc_Value);
                break;
             case 2:
                try
                {
-                  orc_Object.u8_NumSubs = static_cast<uint8_t>(rc_Value.ToInt());
+orc_Object.u8_NumSubs = static_cast<uint8_t>(std::stoi(rc_Value));
+                }
+                catch (...)
+                {
+                   mc_LastError = PrintFormattedCompat("File contains non-numeric SubNumber for object %04X.%02X !",
+                                               static_cast<uint32_t>(ou16_Index),
+                                               static_cast<uint32_t>(ou8_SubIndex));
+                   s32_Return = C_CONFIG;
+                }
+                break;
+             case 3:
+                try
+                {
+                   orc_Object.u8_DataType = static_cast<uint8_t>(std::stoi(rc_Value));
                }
                catch (...)
                {
-                  mc_LastError.PrintFormatted("File contains non-numeric SubNumber for object %04X.%02X !",
-                                              static_cast<uint32_t>(ou16_Index),
-                                              static_cast<uint32_t>(ou8_SubIndex));
-                  s32_Return = C_CONFIG;
-               }
-               break;
-            case 3:
-               try
-               {
-                  orc_Object.u8_DataType = static_cast<uint8_t>(rc_Value.ToInt());
-               }
-               catch (...)
-               {
-                  mc_LastError.PrintFormatted("File contains non-numeric DataType for object %04X.%02X !",
+                  mc_LastError = PrintFormattedCompat("File contains non-numeric DataType for object %04X.%02X !",
                                               static_cast<uint32_t>(ou16_Index),
                                               static_cast<uint32_t>(ou8_SubIndex));
                   s32_Return = C_CONFIG;
@@ -495,7 +508,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
             case 7:
                try
                {
-                  const int32_t s32_Value = rc_Value.ToInt();
+                  const int32_t s32_Value = std::stoi(rc_Value);
                   if (s32_Value == 0)
                   {
                      orc_Object.q_IsMappableIntoPdo = false;
@@ -507,7 +520,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
                   else
                   {
                      orc_Object.q_IsMappableIntoPdo = false;
-                     mc_LastError.PrintFormatted(
+                     mc_LastError = PrintFormattedCompat(
                         "Invalid boolean value \"%s\" found in entry \"PDOMapping\" for object %04X.%02X !",
                         rc_Value.c_str(),
                         static_cast<uint32_t>(ou16_Index),
@@ -517,7 +530,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
                }
                catch (...)
                {
-                  mc_LastError.PrintFormatted(
+                  mc_LastError = PrintFormattedCompat(
                      "Could not parse entry \"PDOMapping\" value \"%s\" for object %04X.%02X !",
                      rc_Value.c_str(),
                      static_cast<uint32_t>(ou16_Index),
@@ -625,17 +638,17 @@ uint16_t C_OscCanOpenObjectData::GetSize(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanOpenObjectData::CalcHash(uint32_t & oru32_HashValue) const
 {
-   C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u16_Index, sizeof(this->u16_Index), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u8_SubIndex, sizeof(this->u8_SubIndex), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u8_DataType, sizeof(this->u8_DataType), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_Access.c_str(), this->c_Access.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Access.c_str(), this->c_Access.length(), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u8_NumSubs, sizeof(this->u8_NumSubs), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_DefaultValue.c_str(), this->c_DefaultValue.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_ParameterValue.c_str(), this->c_ParameterValue.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_LowLimit.c_str(), this->c_LowLimit.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_HighLimit.c_str(), this->c_HighLimit.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_Denotation.c_str(), this->c_Denotation.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_DefaultValue.c_str(), this->c_DefaultValue.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_ParameterValue.c_str(), this->c_ParameterValue.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_LowLimit.c_str(), this->c_LowLimit.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_HighLimit.c_str(), this->c_HighLimit.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Denotation.c_str(), this->c_Denotation.length(), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_IsMappableIntoPdo, sizeof(this->q_IsMappableIntoPdo), oru32_HashValue);
 }
 
@@ -653,7 +666,7 @@ void C_OscCanOpenObjectData::SetSize(const uint16_t ou16_Size)
    \param[out]  opu8_Size   size of object
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenObjectData::DataTypeToTextAndSize(C_SclString * const opc_Text, uint8_t * const opu8_Size) const
+void C_OscCanOpenObjectData::DataTypeToTextAndSize(std::string * const opc_Text, uint8_t * const opu8_Size) const
 {
    if ((u8_DataType < mu8_NUM_DATA_TYPES) && (u8_DataType > hu8_DATA_TYPE_INVALID))
    {
@@ -703,7 +716,7 @@ C_OscCanOpenObjectData::C_OscCanOpenObjectData() :
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsReadable(void) const
 {
-   const C_SclString c_Help = c_Access.UpperCase();
+   const std::string c_Help = UpperCaseCompat(c_Access);
 
    return ((c_Help  == "RO") || (c_Help == "RW") || (c_Help == "RWW") || (c_Help == "RWR") || (c_Help == "CONST"));
 }
@@ -718,7 +731,7 @@ bool C_OscCanOpenObjectData::IsReadable(void) const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsWriteable(void) const
 {
-   const C_SclString c_Help = c_Access.UpperCase();
+   const std::string c_Help = UpperCaseCompat(c_Access);
 
    return ((c_Help == "RW") || (c_Help == "RWW") || (c_Help == "RWR") || (c_Help == "WO"));
 }
@@ -750,7 +763,7 @@ bool C_OscCanOpenObjectData::IsMappableIntoPdo() const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsMappableIntoTxPdo() const
 {
-   const C_SclString c_Help = c_Access.UpperCase();
+   const std::string c_Help = UpperCaseCompat(c_Access);
 
    return this->IsMappableIntoPdo() &&
           ((c_Help == "RO") || (c_Help == "RW") || (c_Help == "RWR") || (c_Help == "CONST"));
@@ -768,7 +781,7 @@ bool C_OscCanOpenObjectData::IsMappableIntoTxPdo() const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsMappableIntoRxPdo() const
 {
-   const C_SclString c_Help = c_Access.UpperCase();
+   const std::string c_Help = UpperCaseCompat(c_Access);
 
    return this->IsMappableIntoPdo() && ((c_Help == "WO") || (c_Help == "RW") || (c_Help == "RWW"));
 }
@@ -851,7 +864,7 @@ bool C_OscCanOpenObjectData::IsStringDataType(void) const
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_OscCanOpenObjectDictionary::GetLastErrorText(void) const
+std::string C_OscCanOpenObjectDictionary::GetLastErrorText(void) const
 {
    return mc_LastError;
 }

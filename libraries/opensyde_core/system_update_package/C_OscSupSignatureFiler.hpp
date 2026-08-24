@@ -22,10 +22,10 @@ namespace opensyde_core
 class C_OscSupSignatureFiler
 {
 public:
-   static int32_t h_CreateSignatureFile(const stw::scl::C_SclString & orc_Path,
-                                        const stw::scl::C_SclString & orc_Signature);
-   static int32_t h_LoadSignatureFile(const stw::scl::C_SclString & orc_Path, stw::scl::C_SclString & orc_Signature);
-   static stw::scl::C_SclString h_GetSignatureFileName(void);
+   static int32_t h_CreateSignatureFile(const std::string & orc_Path,
+                                        const std::string & orc_Signature);
+   static int32_t h_LoadSignatureFile(const std::string & orc_Path, std::string & orc_Signature);
+   static std::string h_GetSignatureFileName(void);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

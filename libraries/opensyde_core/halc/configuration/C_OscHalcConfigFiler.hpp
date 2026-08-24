@@ -26,18 +26,18 @@ namespace opensyde_core
 class C_OscHalcConfigFiler
 {
 public:
-   static int32_t h_LoadFile(C_OscHalcConfig & orc_IoData, const stw::scl::C_SclString & orc_Path,
-                             const stw::scl::C_SclString & orc_BasePath);
-   static int32_t h_SaveFile(const C_OscHalcConfig & orc_IoData, const stw::scl::C_SclString & orc_Path,
-                             const stw::scl::C_SclString & orc_BasePath,
-                             std::vector<stw::scl::C_SclString> * const opc_CreatedFiles);
+   static int32_t h_LoadFile(C_OscHalcConfig & orc_IoData, const std::string & orc_Path,
+                             const std::string & orc_BasePath);
+   static int32_t h_SaveFile(const C_OscHalcConfig & orc_IoData, const std::string & orc_Path,
+                             const std::string & orc_BasePath,
+                             std::vector<std::string> * const opc_CreatedFiles);
    static int32_t h_LoadData(C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
-                             const stw::scl::C_SclString & orc_BasePath);
+                             const std::string & orc_BasePath);
    static int32_t h_SaveData(const C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
-                             const stw::scl::C_SclString & orc_BasePath,
-                             std::vector<stw::scl::C_SclString> * const opc_CreatedFiles);
+                             const std::string & orc_BasePath,
+                             std::vector<std::string> * const opc_CreatedFiles);
 
-   static int32_t h_PrepareForFile(const stw::scl::C_SclString & orc_Path);
+   static int32_t h_PrepareForFile(const std::string & orc_Path);
 
    static int32_t h_SaveIoDomain(const C_OscHalcConfigDomain & orc_IoDomain, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadIoDomain(C_OscHalcConfigDomain & orc_IoDomain, C_OscXmlParserBase & orc_XmlParser);
@@ -48,37 +48,37 @@ private:
    C_OscHalcConfigFiler();
 
    static int32_t mh_SaveIoDataBase(const C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
-                                    const stw::scl::C_SclString & orc_BasePath,
-                                    std::vector<stw::scl::C_SclString> * const opc_CreatedFiles);
+                                    const std::string & orc_BasePath,
+                                    std::vector<std::string> * const opc_CreatedFiles);
    static int32_t mh_SaveIoDomains(const C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_SaveIoChannels(const std::vector<C_OscHalcConfigChannel> & orc_Channels,
                                     C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_SaveIoChannel(const C_OscHalcConfigChannel & orc_Channel, C_OscXmlParserBase & orc_XmlParser,
-                                   const stw::scl::C_SclString & orc_NodeName,
-                                   const stw::scl::C_SclString & orc_NodeParentName);
+                                   const std::string & orc_NodeName,
+                                   const std::string & orc_NodeParentName);
    static int32_t mh_SaveIoParameterStructs(const std::vector<C_OscHalcConfigParameterStruct> & orc_ParameterStructs,
                                             C_OscXmlParserBase & orc_XmlParser,
-                                            const stw::scl::C_SclString & orc_NodeName);
+                                            const std::string & orc_NodeName);
    static int32_t mh_SaveIoParameterStruct(const C_OscHalcConfigParameterStruct & orc_ParameterStruct,
                                            C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_SaveIoParameters(const std::vector<C_OscHalcConfigParameter> & orc_Parameters,
                                       C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_SaveIoParameter(const C_OscHalcConfigParameter & orc_Parameter, C_OscXmlParserBase & orc_XmlParser,
-                                     const stw::scl::C_SclString & orc_BaseNode);
+                                     const std::string & orc_BaseNode);
    static int32_t mh_LoadIoDataBase(C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
-                                    const stw::scl::C_SclString & orc_BasePath);
+                                    const std::string & orc_BasePath);
    static int32_t mh_LoadIoDomains(C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadIoChannel(C_OscHalcConfigChannel & orc_IoChannel, C_OscXmlParserBase & orc_XmlParser,
-                                   const stw::scl::C_SclString & orc_NodeName);
+                                   const std::string & orc_NodeName);
    static int32_t mh_LoadIoParameterStructs(std::vector<C_OscHalcConfigParameterStruct> & orc_ParameterStructs,
                                             C_OscXmlParserBase & orc_XmlParser,
-                                            const stw::scl::C_SclString & orc_NodeName);
+                                            const std::string & orc_NodeName);
    static int32_t mh_LoadIoParameterStruct(C_OscHalcConfigParameterStruct & orc_ParameterStruct,
                                            C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadIoParameters(std::vector<C_OscHalcConfigParameter> & orc_Parameters,
                                       C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadIoParameter(C_OscHalcConfigParameter & orc_Parameter, C_OscXmlParserBase & orc_XmlParser,
-                                     const stw::scl::C_SclString & orc_BaseName);
+                                     const std::string & orc_BaseName);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

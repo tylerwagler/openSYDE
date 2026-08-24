@@ -79,8 +79,8 @@ void C_OscNodeProperties::CalcHash(uint32_t & oru32_HashValue) const
 {
    uint32_t u32_Counter;
 
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_DiagnosticServer, sizeof(this->e_DiagnosticServer), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_FlashLoader, sizeof(this->e_FlashLoader), oru32_HashValue);
 

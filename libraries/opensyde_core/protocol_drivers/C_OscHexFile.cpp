@@ -14,7 +14,8 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscHexFile.hpp"
-#include "C_SclString.hpp"
+#include "C_SclStringCompat.hpp"
+#include <string>
 #include "C_SclChecksums.hpp"
 #include "TglUtils.hpp"
 
@@ -33,9 +34,9 @@ using namespace stw::tgl;
    Textual representation of error.
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscHexFile::ErrorCodeToErrorText(const uint32_t ou32_ErrorCode) const
+std::string C_OscHexFile::ErrorCodeToErrorText(const uint32_t ou32_ErrorCode) const
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    switch (ou32_ErrorCode & ERR_MASK)
    {
@@ -44,16 +45,16 @@ C_SclString C_OscHexFile::ErrorCodeToErrorText(const uint32_t ou32_ErrorCode) co
       break;
    case WRN_RECORD_OVERLAY:
       //ou32_ErrorCode only contains lowest 7 nibbles!
-      c_Text.PrintFormatted("Error in Hexfile: Address 0x%08x used twice !", this->GetLastOverlayErrorAddress());
+      c_Text = PrintFormattedCompat("Error in Hexfile: Address 0x%08x used twice !", this->GetLastOverlayErrorAddress());
       break;
    case ERR_HEXLINE_SYNTAX:
-      c_Text.PrintFormatted("Error reading hex file: Wrong syntax in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
+      c_Text = PrintFormattedCompat("Error reading hex file: Wrong syntax in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
       break;
    case ERR_HEXLINE_CHECKSUM:
-      c_Text.PrintFormatted("Error reading hex file: Wrong checksum in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
+      c_Text = PrintFormattedCompat("Error reading hex file: Wrong checksum in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
       break;
    case ERR_HEXLINE_COMMAND:
-      c_Text.PrintFormatted("Error reading hex file: Wrong command in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
+      c_Text = PrintFormattedCompat("Error reading hex file: Wrong command in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
       break;
    case ERR_NOT_ENOUGH_MEMORY:
       c_Text = "Error reading hex file: Out of memory";
@@ -102,7 +103,7 @@ int32_t C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscApplicati
    s32_Return = C_NO_ERR;
    char_t acn_Magic[APPLICATION_INFO_MAGIC_LENGTH_V2];
 
-   orc_InfoBlocks.SetLength(0);
+   orc_InfoBlocks.clear();
 
    while (true)
    {
@@ -183,8 +184,7 @@ int32_t C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscApplicati
          {
             //we have all the data !
             //-> add to array
-            orc_InfoBlocks.IncLength();
-            orc_InfoBlocks[orc_InfoBlocks.GetHigh()] = c_Block;
+            orc_InfoBlocks.emplace_back(c_Block);
             if (oq_OnlyOneBlock == true)
             {
                break;
@@ -232,7 +232,7 @@ int32_t C_OscHexFile::CalcFileChecksum(uint32_t & oru32_Checksum)
    }
 
    oru32_Checksum = static_cast<uint32_t>(~0x56489437U); //fixed start value !
-   for (uint32_t u32_Index = 0U; u32_Index < static_cast<uint32_t>(pc_Dump->at_Blocks.GetLength()); u32_Index++)
+   for (uint32_t u32_Index = 0U; u32_Index < static_cast<uint32_t>(pc_Dump->at_Blocks.size()); u32_Index++)
    {
       //address (serialize to make the code endian-safe):
       const uint32_t u32_AddressOffset = pc_Dump->at_Blocks[u32_Index].u32_AddressOffset;
@@ -249,7 +249,7 @@ int32_t C_OscHexFile::CalcFileChecksum(uint32_t & oru32_Checksum)
 
       //data:
       C_SclChecksums::CalcCRC32(&pc_Dump->at_Blocks[u32_Index].au8_Data[0],
-                                pc_Dump->at_Blocks[u32_Index].au8_Data.GetLength(), oru32_Checksum);
+                                pc_Dump->at_Blocks[u32_Index].au8_Data.size(), oru32_Checksum);
    }
 
    oru32_Checksum = ~oru32_Checksum;
@@ -304,21 +304,21 @@ int32_t C_OscHexFile::GetSignatureBlockAddress(uint32_t & oru32_Address)
    C_CONFIG     ambiguous device-IDs in hex-file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHexFile::ScanDeviceIdFromHexFile(C_SclString & orc_DeviceId)
+int32_t C_OscHexFile::ScanDeviceIdFromHexFile(std::string & orc_DeviceId)
 {
    int32_t s32_Return;
-   C_SclString c_DeviceId = "";
+   std::string c_DeviceId = "";
 
    std::vector<C_OscApplicationInfoBlock> c_InfoBlocks;
    s32_Return = this->GetApplicationInformationBlocks(c_InfoBlocks, 0x0U, false, false, true);
-   if ((s32_Return == C_NO_ERR) && (c_InfoBlocks.GetLength() > 0))
+   if ((s32_Return == C_NO_ERR) && (c_InfoBlocks.size() > 0))
    {
       int32_t s32_Index;
-      for (s32_Index = 0; s32_Index < c_InfoBlocks.GetLength(); s32_Index++)
+      for (s32_Index = 0; s32_Index < c_InfoBlocks.size(); s32_Index++)
       {
          if (c_InfoBlocks[s32_Index].ContainsDeviceID() == true)
          {
-            const C_SclString c_Help = c_InfoBlocks[s32_Index].GetDeviceID();
+            const std::string c_Help = c_InfoBlocks[s32_Index].GetDeviceID();
             if (c_DeviceId == "") //no device-ID seen yet ...
             {
                c_DeviceId = c_Help;
@@ -374,13 +374,13 @@ int32_t C_OscHexFile::ScanApplicationInformationBlockFromHexFile(C_OscApplicatio
    s32_Return = this->GetApplicationInformationBlocks(c_InfoBlocks, 0x0U, false, false, true);
    tgl_assert(s32_Return == C_NO_ERR); //no plausible reasons documented
 
-   if (c_InfoBlocks.GetLength() == 0)
+   if (c_InfoBlocks.size() == 0)
    {
       s32_Return = C_NOACT;
    }
-   else if (c_InfoBlocks.GetLength() > 1)
+   else if (c_InfoBlocks.size() > 1)
    {
-      for (int32_t s32_Pos = 1; s32_Pos < c_InfoBlocks.GetLength(); s32_Pos++)
+      for (int32_t s32_Pos = 1; s32_Pos < c_InfoBlocks.size(); s32_Pos++)
       {
          // compare every device name with first device name, this is enough because all must be equal
          if (c_InfoBlocks[0].GetDeviceID() != c_InfoBlocks[s32_Pos].GetDeviceID())

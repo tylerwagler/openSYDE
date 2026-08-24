@@ -14,6 +14,7 @@
 
 #include <cmath>
 #include <limits>
+#include <string>
 #include <sstream>
 #include <iomanip>
 #include <cstdlib>
@@ -22,12 +23,23 @@
 #include "C_SclIniFile.hpp"
 #include "C_OscImportEdsDcf.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;
 using namespace stw::tgl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
+
+/* -- Anonymous Helpers --------------------------------------------------------------------------------------------- */
+namespace {
+   template <typename T>
+   std::string mh_IntToHex(T val, uint32_t digits) {
+      std::stringstream ss;
+      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
+      return ss.str();
+   }
+}
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -67,14 +79,14 @@ using namespace stw::opensyde_core;
    C_CONFIG Parsing error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::h_Import(const C_SclString & orc_FilePath, const uint8_t ou8_NodeId,
+int32_t C_OscImportEdsDcf::h_Import(const std::string & orc_FilePath, const uint8_t ou8_NodeId,
                                     C_OscEdsDcfImportMessageGroup & orc_AllRxMessageData,
                                     C_OscEdsDcfImportMessageGroup & orc_AllTxMessageData,
-                                    std::vector<std::vector<C_SclString> > & orc_ImportMessagesPerMessage,
-                                    C_SclString & orc_ParsingError, const C_OscCanProtocol::E_Type oe_ImportForProtocol,
+                                    std::vector<std::vector<std::string> > & orc_ImportMessagesPerMessage,
+                                    std::string & orc_ParsingError, const C_OscCanProtocol::E_Type oe_ImportForProtocol,
                                     C_OscEdsDcfImportMessageGroup & orc_AllInvalidRxMessageData,
                                     C_OscEdsDcfImportMessageGroup & orc_AllInvalidTxMessageData,
-                                    std::vector<std::vector<C_SclString> > & orc_InvalidImportMessagesPerMessage)
+                                    std::vector<std::vector<std::string> > & orc_InvalidImportMessagesPerMessage)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -89,7 +101,7 @@ int32_t C_OscImportEdsDcf::h_Import(const C_SclString & orc_FilePath, const uint
    if (TglFileExists(orc_FilePath) == true)
    {
       bool q_Eds = true;
-      const C_SclString c_Extension = TglExtractFileExtension(orc_FilePath).LowerCase();
+      const std::string c_Extension = LowerCaseCompat(TglExtractFileExtension(orc_FilePath));
       if (c_Extension == ".eds")
       {
          q_Eds = true;
@@ -401,9 +413,9 @@ int32_t C_OscImportEdsDcf::h_ParseSignalContent(const std::map<uint16_t,
    Object name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscImportEdsDcf::h_GetObjectName(const C_OscCanOpenObjectData & orc_CoObject)
+std::string C_OscImportEdsDcf::h_GetObjectName(const C_OscCanOpenObjectData & orc_CoObject)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    if (orc_CoObject.c_Denotation != "")
    {
@@ -426,9 +438,9 @@ C_SclString C_OscImportEdsDcf::h_GetObjectName(const C_OscCanOpenObjectData & or
    CO object value
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscImportEdsDcf::h_GetCoObjectValue(const C_OscCanOpenObjectData & orc_CoObject, const bool oq_IsEds)
+std::string C_OscImportEdsDcf::h_GetCoObjectValue(const C_OscCanOpenObjectData & orc_CoObject, const bool oq_IsEds)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    if (oq_IsEds == true)
    {
@@ -436,7 +448,7 @@ C_SclString C_OscImportEdsDcf::h_GetCoObjectValue(const C_OscCanOpenObjectData &
    }
    else
    {
-      if (orc_CoObject.c_ParameterValue.IsEmpty())
+      if (orc_CoObject.c_ParameterValue.empty())
       {
          c_Retval = orc_CoObject.c_DefaultValue;
       }
@@ -524,11 +536,11 @@ int32_t C_OscImportEdsDcf::mh_ParseMessages(const uint32_t ou32_StartingId, cons
                                             const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
                                             const std::vector<uint32_t> & orc_Dummies,
                                             C_OscEdsDcfImportMessageGroup & orc_AllMessageData, const bool oq_IsEds,
-                                            std::vector<std::vector<C_SclString> > & orc_ImportMessages,
+                                            std::vector<std::vector<std::string> > & orc_ImportMessages,
                                             const bool oq_IsTx, const bool oq_RestrictForCanOpenUsage,
                                             const bool oq_ImportSrdoUseCase,
                                             C_OscEdsDcfImportMessageGroup & orc_AllInvalidMessageData,
-                                            std::vector<std::vector<stw::scl::C_SclString> > & orc_InvalidImportMessages)
+                                            std::vector<std::vector<std::string> > & orc_InvalidImportMessages)
 {
    int32_t s32_Retval = C_NO_ERR;
    const uint16_t u16_EndIdOffset = oq_ImportSrdoUseCase ? 0x40U : 0x200U;
@@ -630,7 +642,7 @@ int32_t C_OscImportEdsDcf::mh_ParseMessages(const uint32_t ou32_StartingId, cons
                      std::stringstream c_Stream;
                      const uint32_t u32_Id = u32_CobId & 0x1FFFFFFFUL;
                      c_Stream << "Skipped message as marked as inactive (highest bit set in COB_ID) ";
-                     c_Stream << &std::hex << u32_Id;
+                     c_Stream << std::hex << u32_Id;
                      mh_AddUserMessage(ou32_StartingId + u32_ItMessage, "COB-ID used by PDO",
                                        c_Stream.str().c_str(), u8_CobIdSubIndex,
                                        true);
@@ -749,20 +761,20 @@ int32_t C_OscImportEdsDcf::mh_ParseMessageContent(const uint32_t ou32_StartingId
                                                   const std::vector<uint32_t> & orc_Dummies,
                                                   C_OscEdsDcfImportMessageGroup & orc_AllMessageData,
                                                   const bool oq_IsEds,
-                                                  std::vector<std::vector<C_SclString> > & orc_ImportMessages,
+                                                  std::vector<std::vector<std::string> > & orc_ImportMessages,
                                                   const bool oq_IsTx, const bool oq_RestrictForCanOpenUsage,
                                                   const bool oq_ImportSrdoUseCase,
                                                   const C_OscCanOpenObjectData & orc_CoMessageMainObject,
                                                   const uint32_t ou32_ItMessage, const uint32_t ou32_CobId,
                                                   C_OscEdsDcfImportMessageGroup & orc_AllInvalidMessageData,
-                                                  std::vector<std::vector<stw::scl::C_SclString> > & orc_InvalidImportMessages,
+                                                  std::vector<std::vector<std::string> > & orc_InvalidImportMessages,
                                                   const bool oq_CobIdIncludesNodeId)
 {
    const uint16_t u16_MappingOffset = oq_ImportSrdoUseCase ? 0x80U : 0x200U;
    int32_t s32_Retval = C_NO_ERR;
    bool q_AddToSkippedMessages = false;
 
-   std::vector<C_SclString> c_CurMessages;
+   std::vector<std::string> c_CurMessages;
    C_OscCanMessage c_Message;
    //Name
    if (oq_IsEds)
@@ -914,7 +926,7 @@ int32_t C_OscImportEdsDcf::mh_ParseMessageContent(const uint32_t ou32_StartingId
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscImportEdsDcf::mh_LoadMessageTransmissionType(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
                                                           const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                                   C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_ImportSrdoUseCase, std::vector<C_SclString> & orc_CurMessages,
+                                                                                                   C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_ImportSrdoUseCase, std::vector<std::string> & orc_CurMessages,
                                                           C_OscCanMessage & orc_Message)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -936,7 +948,7 @@ int32_t C_OscImportEdsDcf::mh_LoadMessageTransmissionType(const uint32_t ou32_St
             mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
                               "the message type \"synchronous\" was converted to \"cyclic\".\n"
                               "Cycle time set default to " +
-                              C_SclString::IntToStr(
+                              std::to_string(
                                  orc_Message.u32_CycleTimeMs) + "ms.", u8_ActualSubIndex, false,
                               &orc_CurMessages);
          }
@@ -986,7 +998,7 @@ void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(const uint32_t ou3
                                                               const std::map<uint16_t,
                                                                              C_OscCanOpenObject> & orc_CoObjects,
                                                               const bool oq_IsEds, bool & orq_AddToSkippedMessages,
-                                                              std::vector<C_SclString> & orc_CurMessages,
+                                                              std::vector<std::string> & orc_CurMessages,
                                                               C_OscCanMessage & orc_Message)
 {
    const C_OscCanOpenObjectData * const pc_CoMessageTransTypeObject =
@@ -1023,7 +1035,7 @@ void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(const uint32_t ou3
                orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
                mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
                                  "the message type \"CANopen type " +
-                                 C_SclString::IntToStr(
+                                 std::to_string(
                                     u32_TransmissionType) + "\" was converted to \"async, manufacturer specific (254)\".",
                                  C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE, false,
                                  &orc_CurMessages);
@@ -1033,7 +1045,7 @@ void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(const uint32_t ou3
                orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
                mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
                                  "the message type \"CANopen type " +
-                                 C_SclString::IntToStr(
+                                 std::to_string(
                                     u32_TransmissionType) + "\" was found which is not supported"
                                  " and cannot be changed because it is read only.",
                                  C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE, false,
@@ -1077,13 +1089,13 @@ void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(const uint32_t ou3
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscImportEdsDcf::mh_LoadEventTimerSection(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
                                                  const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                          C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_IsTx, std::vector<C_SclString> & orc_CurMessages,
+                                                                                          C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_IsTx, std::vector<std::string> & orc_CurMessages,
                                                  C_OscCanMessage & orc_Message)
 {
    if (oq_IsTx == false)
    {
       bool q_UseDefault = false;
-      C_SclString c_Reason;
+      std::string c_Reason;
 
       // Event-timer only relevant for Rx because it equals the timeout time
       const C_OscCanOpenObjectData * const pc_CoMessageEventTimerObject =
@@ -1129,7 +1141,7 @@ void C_OscImportEdsDcf::mh_LoadEventTimerSection(const uint32_t ou32_StartingId,
          {
             mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Event-timer",
                               c_Reason + ", default set to: " +
-                              C_SclString::IntToStr(
+                              std::to_string(
                                  orc_Message.u32_TimeoutMs) + "ms", C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER, false,
                               &orc_CurMessages);
          }
@@ -1159,11 +1171,11 @@ void C_OscImportEdsDcf::mh_LoadEventTimerSection(const uint32_t ou32_StartingId,
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscImportEdsDcf::mh_LoadSrdoCyclicSection(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
                                                  const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                          C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, std::vector<C_SclString> & orc_CurMessages,
+                                                                                          C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, std::vector<std::string> & orc_CurMessages,
                                                  C_OscCanMessage & orc_Message)
 {
    bool q_UseDefault = false;
-   C_SclString c_Reason;
+   std::string c_Reason;
 
    const C_OscCanOpenObjectData * const pc_CoMessageCycleTimeObject =
       mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
@@ -1210,7 +1222,7 @@ void C_OscImportEdsDcf::mh_LoadSrdoCyclicSection(const uint32_t ou32_StartingId,
       {
          mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Cycle-time",
                            c_Reason + ", default set to: " +
-                           C_SclString::IntToStr(
+                           std::to_string(
                               orc_Message.u32_TimeoutMs) + "ms", C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_CYCLE_TIME, false,
                            &orc_CurMessages);
       }
@@ -1299,7 +1311,7 @@ void C_OscImportEdsDcf::mh_LoadEventTimerSectionCanOpen(const uint32_t ou32_Star
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscImportEdsDcf::mh_LoadInhibitTimeSectionCanOpen(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
                                                          const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                                  C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, std::vector<C_SclString> & orc_CurMessages,
+                                                                                                  C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, std::vector<std::string> & orc_CurMessages,
                                                          C_OscCanMessage & orc_Message)
 {
    const C_OscCanOpenObjectData * const pc_CoMessageInhibitTimeObject =
@@ -1318,9 +1330,9 @@ void C_OscImportEdsDcf::mh_LoadInhibitTimeSectionCanOpen(const uint32_t ou32_Sta
          if ((u32_InhibitTime % 10) != 0)
          {
             mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Inhibit-time",
-                              "Inhibit time cannot \"" + stw::scl::C_SclString::IntToStr(
+                              "Inhibit time cannot \"" + std::to_string(
                                  u32_InhibitTime * 100U) + "\" ns cannot be used, and has been rounded to \"" +
-                              stw::scl::C_SclString::IntToStr(orc_Message.u16_DelayTimeMs) + "\" ms",
+                              std::to_string(orc_Message.u16_DelayTimeMs) + "\" ms",
                               C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_INHIBIT_TIME, false,
                               &orc_CurMessages);
          }
@@ -1369,7 +1381,7 @@ int32_t C_OscImportEdsDcf::mh_ParseSignals(const uint32_t ou32_CoMessageId, cons
                                            std::vector<uint8_t> & orc_SignalDefaultMinMaxValuesUsed,
                                            const bool oq_IsEds, const bool oq_RestrictForCanOpenUsage,
                                            const bool oq_ImportSrdoUseCase,
-                                           std::vector<C_SclString> & orc_ImportMessages)
+                                           std::vector<std::string> & orc_ImportMessages)
 {
    int32_t s32_Retval = C_NO_ERR;
    //PDO mapping parameter
@@ -1441,11 +1453,11 @@ int32_t C_OscImportEdsDcf::mh_ParseSignals(const uint32_t ou32_CoMessageId, cons
                            {
                               mh_AddUserMessage(u32_CoRefId, "",
                                                 "mapping signal bit length " +
-                                                stw::scl::C_SclString::IntToStr(
+                                                std::to_string(
                                                    u16_ExpectedLength) + " did not match to bit length from data type " +
-                                                stw::scl::C_SclString::IntToStr(
+                                                std::to_string(
                                                    c_CurSignal.u16_ComBitLength) + ". Using bit length " +
-                                                stw::scl::C_SclString::IntToStr(c_CurSignal.u16_ComBitLength),
+                                                std::to_string(c_CurSignal.u16_ComBitLength),
                                                 static_cast<int32_t>(u32_CoRefIdSub), false, &orc_ImportMessages);
                            }
                            u32_StartBitCounter += c_CurSignal.u16_ComBitLength;
@@ -1535,7 +1547,7 @@ int32_t C_OscImportEdsDcf::mh_ParseSignals(const uint32_t ou32_CoMessageId, cons
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const C_SclString & orc_CoValue, const uint8_t ou8_NodeId,
+int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const std::string & orc_CoValue, const uint8_t ou8_NodeId,
                                               uint32_t & oru32_Value, bool * const opq_IncludesNodeId)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1547,11 +1559,11 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const C_SclString & orc_CoValue, c
       *opq_IncludesNodeId = false;
    }
 
-   if (orc_CoValue.Length() > 0)
+   if (orc_CoValue.length() > 0)
    {
-      C_SclString c_LowerCaseNoWhiteSpaceNumber;
+      std::string c_LowerCaseNoWhiteSpaceNumber;
       //Remove whitespace and $
-      for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.Length(); ++u32_ItChar)
+      for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length(); ++u32_ItChar)
       {
          const char_t cn_Character = orc_CoValue[u32_ItChar + 1U];
          if ((cn_Character == ' ') || (cn_Character == '$'))
@@ -1564,19 +1576,19 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const C_SclString & orc_CoValue, c
          }
       }
       //Lower case
-      c_LowerCaseNoWhiteSpaceNumber = c_LowerCaseNoWhiteSpaceNumber.LowerCase();
-      if (c_LowerCaseNoWhiteSpaceNumber.Length() > 0)
+      c_LowerCaseNoWhiteSpaceNumber = LowerCaseCompat(c_LowerCaseNoWhiteSpaceNumber);
+      if (c_LowerCaseNoWhiteSpaceNumber.length() > 0)
       {
-         std::vector<C_SclString> c_Tokens;
-         c_LowerCaseNoWhiteSpaceNumber.Tokenize("+", c_Tokens);
+         std::vector<std::string> c_Tokens;
+         TokenizeCompat(c_LowerCaseNoWhiteSpaceNumber, "+", c_Tokens);
          if (c_Tokens.size() > 0UL)
          {
             for (uint32_t u32_ItToken = 0;
                  (u32_ItToken < static_cast<uint32_t>(c_Tokens.size())) && (s32_Retval == C_NO_ERR);
                  ++u32_ItToken)
             {
-               const C_SclString & rc_CurToken = c_Tokens[u32_ItToken];
-               if (rc_CurToken.Pos("nodeid") == 0)
+               const std::string & rc_CurToken = c_Tokens[u32_ItToken];
+                if (PosCompat(rc_CurToken, "nodeid") == 0)
                {
                   uint32_t u32_CurNumber;
                   //Number
@@ -1630,17 +1642,17 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const C_SclString & orc_CoValue, c
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_Get64IntegerValue(const C_SclString & orc_CoValue, int64_t & ors64_Value)
+int32_t C_OscImportEdsDcf::mh_Get64IntegerValue(const std::string & orc_CoValue, int64_t & ors64_Value)
 {
    int32_t s32_Retval = C_NO_ERR;
 
    ors64_Value = 0UL;
 
-   if (orc_CoValue.Length() > 0)
+   if (orc_CoValue.length() > 0)
    {
-      C_SclString c_ReducedString;
+      std::string c_ReducedString;
       //Remove whitespace and $
-      for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.Length(); ++u32_ItChar)
+      for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length(); ++u32_ItChar)
       {
          const char_t cn_Character = orc_CoValue[u32_ItChar + 1U];
          if ((cn_Character == ' ') || (cn_Character == '$'))
@@ -1654,11 +1666,11 @@ int32_t C_OscImportEdsDcf::mh_Get64IntegerValue(const C_SclString & orc_CoValue,
       }
 
       //Try to convert it
-      if (c_ReducedString.Length() > 0)
+      if (c_ReducedString.length() > 0)
       {
          try
          {
-            ors64_Value = c_ReducedString.ToInt64();
+            ors64_Value = std::stoll(c_ReducedString);
          }
          catch (...)
          {
@@ -1689,13 +1701,13 @@ int32_t C_OscImportEdsDcf::mh_Get64IntegerValue(const C_SclString & orc_CoValue,
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_GetIntegerValueSimple(const C_SclString & orc_CoValue, uint32_t & oru32_Value)
+int32_t C_OscImportEdsDcf::mh_GetIntegerValueSimple(const std::string & orc_CoValue, uint32_t & oru32_Value)
 {
    int32_t s32_Retval;
 
    oru32_Value = 0U;
 
-   if (orc_CoValue.Length() > 0)
+   if (orc_CoValue.length() > 0)
    {
       char_t * pcn_Ptr = NULL;
 
@@ -1734,11 +1746,11 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValueSimple(const C_SclString & orc_CoVa
    \param[in,out]  opc_ImportMessages     Import result messages
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscImportEdsDcf::mh_AddUserMessage(const uint32_t ou32_CoObjectId, const C_SclString & orc_CoSectionName,
-                                          const C_SclString & orc_ErrorMessage, const int32_t os32_CoSubSectionId,
-                                          const bool oq_IsError, std::vector<C_SclString> * const opc_ImportMessages)
+void C_OscImportEdsDcf::mh_AddUserMessage(const uint32_t ou32_CoObjectId, const std::string & orc_CoSectionName,
+                                          const std::string & orc_ErrorMessage, const int32_t os32_CoSubSectionId,
+                                          const bool oq_IsError, std::vector<std::string> * const opc_ImportMessages)
 {
-   C_SclString c_Message;
+   std::string c_Message;
 
    //Object ID in file
    c_Message += "Object ";
@@ -1786,9 +1798,9 @@ void C_OscImportEdsDcf::mh_AddUserMessage(const uint32_t ou32_CoObjectId, const 
    Number as hex
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscImportEdsDcf::mh_GetNumberAsHex(const uint32_t ou32_Number)
+std::string C_OscImportEdsDcf::mh_GetNumberAsHex(const uint32_t ou32_Number)
 {
-   const C_SclString c_HexObjectIdUpperCase = C_SclString::IntToHex(ou32_Number, 1).UpperCase();
+   const std::string c_HexObjectIdUpperCase = mh_IntToHex(ou32_Number, 1);
 
    return c_HexObjectIdUpperCase;
 }
@@ -2122,7 +2134,7 @@ int32_t C_OscImportEdsDcf::mh_CalcMinMaxInit(const C_OscCanOpenObjectData * cons
    \param[out]  orc_Dummies   Found and valid dummy data types
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscImportEdsDcf::mh_LoadDummies(const C_SclString & orc_FilePath, std::vector<uint32_t> & orc_Dummies)
+void C_OscImportEdsDcf::mh_LoadDummies(const std::string & orc_FilePath, std::vector<uint32_t> & orc_Dummies)
 {
    try
    {
@@ -2135,9 +2147,9 @@ void C_OscImportEdsDcf::mh_LoadDummies(const C_SclString & orc_FilePath, std::ve
          for (uint32_t u32_ItPossibleDummy = 1U; u32_ItPossibleDummy <= 0x1B; ++u32_ItPossibleDummy)
          {
             std::stringstream c_Stream;
-            C_SclString c_CurString;
-            c_Stream << std::setw(4) << std::setfill('0') << &std::hex << u32_ItPossibleDummy;
-            c_CurString = static_cast<C_SclString>("Dummy") + c_Stream.str().c_str();
+            std::string c_CurString;
+            c_Stream << std::setw(4) << std::setfill('0') << std::hex << u32_ItPossibleDummy;
+            c_CurString = std::string("Dummy") + c_Stream.str().c_str();
             //Check if entry exists
             if (c_StringList.IndexOf(c_CurString) >= 0L)
             {

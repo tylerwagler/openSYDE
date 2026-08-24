@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_CanDispatcher.hpp"
 #include "C_OscCanAdapterConfig.hpp"
 
@@ -29,10 +29,10 @@ class C_OscCanAdapterFactory
 {
 public:
    static stw::can::C_CanDispatcher * h_CreateAdapter(const C_OscCanAdapterConfig & orc_Config,
-                                                      stw::scl::C_SclString & orc_ErrorDescription);
+                                                      std::string & orc_ErrorDescription);
 
    static bool h_IsBackendAvailable(const ::can::BackendKind oe_Kind);
-   static stw::scl::C_SclString h_GetBackendDisplayName(const ::can::BackendKind oe_Kind);
+   static std::string h_GetBackendDisplayName(const ::can::BackendKind oe_Kind);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

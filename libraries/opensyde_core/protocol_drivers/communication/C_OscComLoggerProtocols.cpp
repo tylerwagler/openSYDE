@@ -16,7 +16,6 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
-using namespace stw::scl;
 using namespace stw::can;
 using namespace stw::opensyde_core;
 using namespace stw::cmon_protocol;
@@ -57,9 +56,9 @@ C_OscComLoggerProtocols::C_OscComLoggerProtocols(void) :
    Empty string in case of no matching message to the configured protocol
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComLoggerProtocols::MessageToStringProtocolOnly(const T_STWCAN_Msg_RX & orc_Msg) const
+std::string C_OscComLoggerProtocols::MessageToStringProtocolOnly(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text = "";
+   std::string c_Text = "";
 
    if (static_cast<int32_t>(me_ActiveProtocol) < gs32_CMON_NUM_PROTOCOLS)
    {

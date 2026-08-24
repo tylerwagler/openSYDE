@@ -38,7 +38,6 @@
 #include <iostream>
 #include <fstream>
 
-#include "C_SclString.hpp"
 #include "C_OscUtils.hpp"
 
 #endif

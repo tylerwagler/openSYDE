@@ -13,9 +13,11 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
+using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -46,8 +48,8 @@ C_OscSystemNameMaxCharLimitChangeReportItem::C_OscSystemNameMaxCharLimitChangeRe
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscSystemNameMaxCharLimitChangeReportItem::C_OscSystemNameMaxCharLimitChangeReportItem(
-   const stw::scl::C_SclString oc_Type, const stw::scl::C_SclString oc_OriginalName,
-   const stw::scl::C_SclString oc_NewName) :
+   const std::string oc_Type, const std::string oc_OriginalName,
+   const std::string oc_NewName) :
    c_Type(oc_Type),
    c_OriginalName(oc_OriginalName),
    c_NewName(oc_NewName)
@@ -64,13 +66,13 @@ C_OscSystemNameMaxCharLimitChangeReportItem::C_OscSystemNameMaxCharLimitChangeRe
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(const uint32_t ou32_NameMaxCharLimit,
-                                                                               const stw::scl::C_SclString & orc_Type,
-                                                                               stw::scl::C_SclString & orc_Name,
+                                                                               const std::string & orc_Type,
+                                                                               std::string & orc_Name,
                                                                                std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
 {
-   if (orc_Name.Length() > ou32_NameMaxCharLimit)
+   if (orc_Name.length() > ou32_NameMaxCharLimit)
    {
-      const stw::scl::C_SclString c_NewNameTmp = orc_Name.SubString(1UL, ou32_NameMaxCharLimit);
+      const std::string c_NewNameTmp = SubStringCompat(orc_Name, 1UL, ou32_NameMaxCharLimit);
       if (opc_ChangedItems != NULL)
       {
          const C_OscSystemNameMaxCharLimitChangeReportItem c_Entry(orc_Type, orc_Name, c_NewNameTmp);

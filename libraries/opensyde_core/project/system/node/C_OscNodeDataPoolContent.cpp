@@ -25,7 +25,8 @@
 #include <limits>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
+#include "C_SclStringCompat.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscUtils.hpp"
@@ -2990,8 +2991,8 @@ void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Facto
          case C_OscNodeDataPoolContent::eFLOAT32:
             if (oq_AllowSpecialHandling == true)
             {
-               C_SclString c_Precison;
-               c_Precison.PrintFormatted("%.9g", this->GetValueF32());
+               std::string c_Precison;
+               c_Precison = FloatToStrCompat(this->GetValueF32());
                c_Stream << c_Precison.c_str();
             }
             else
@@ -3002,8 +3003,8 @@ void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Facto
          case C_OscNodeDataPoolContent::eFLOAT64:
             if (oq_AllowSpecialHandling == true)
             {
-               C_SclString c_Precison;
-               c_Precison.PrintFormatted("%.17g", this->GetValueF64());
+               std::string c_Precison;
+               c_Precison = FloatToStrCompat(this->GetValueF64());
                c_Stream << c_Precison.c_str();
             }
             else

@@ -24,12 +24,12 @@ namespace opensyde_core
 class C_OscXceManifestFiler
 {
 public:
-   static int32_t h_LoadFile(C_OscXceManifest & orc_Config, const stw::scl::C_SclString & orc_Path);
-   static int32_t h_SaveFile(const C_OscXceManifest & orc_Config, const stw::scl::C_SclString & orc_Path);
+   static int32_t h_LoadFile(C_OscXceManifest & orc_Config, const std::string & orc_Path);
+   static int32_t h_SaveFile(const C_OscXceManifest & orc_Config, const std::string & orc_Path);
    static int32_t h_LoadData(C_OscXceManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveData(const C_OscXceManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser);
 
-   static const stw::scl::C_SclString hc_FILE_NAME;
+   static const std::string hc_FILE_NAME;
 
 private:
    static const uint16_t mhu16_FILE_VERSION_1;

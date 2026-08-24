@@ -9,7 +9,7 @@
 #define C_OSCDCBASICSEQUENCES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <string>
 #include "C_CanDispatcher.hpp"
 #include "C_OscProtocolDriverOsyTpCan.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
@@ -37,13 +37,13 @@ public:
    int32_t ConfigureDevice(const uint8_t ou8_CurrentNodeId, const uint8_t ou8_NewNodeId, const uint32_t ou32_Bitrate,
                            const uint8_t ou8_InterfaceIndex);
 
-   static stw::scl::C_SclString h_DevicesInfoToString(
+   static std::string h_DevicesInfoToString(
       const std::vector<C_OscDcDeviceInformation> & orc_DeviceInfoResult, const bool oq_SecurityFeatureUsed);
 
    void PrepareForDestruction(void);
 
 protected:
-   virtual void m_ReportProgress(const int32_t os32_Result, const stw::scl::C_SclString & orc_Information);
+   virtual void m_ReportProgress(const int32_t os32_Result, const std::string & orc_Information);
    virtual void m_ReportDevicesInfoRead(const std::vector<C_OscDcDeviceInformation> & orc_DeviceInfoResult,
                                         const bool oq_SecurityFeatureUsed);
 

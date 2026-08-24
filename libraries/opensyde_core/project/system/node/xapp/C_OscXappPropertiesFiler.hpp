@@ -25,18 +25,18 @@ class C_OscXappPropertiesFiler
 {
 public:
    static int32_t h_LoadXappPropertiesFile(C_OscXappProperties & orc_XappProperties,
-                                           const stw::scl::C_SclString & orc_FilePath);
+                                           const std::string & orc_FilePath);
    static int32_t h_LoadXappProperties(C_OscXappProperties & orc_XappProperties, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_SaveXappPropertiesFile(const C_OscXappProperties & orc_XappProperties,
-                                           const stw::scl::C_SclString & orc_FilePath);
+                                           const std::string & orc_FilePath);
    static void h_SaveXappProperties(const C_OscXappProperties & orc_XappProperties, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadCommInterfaceId(C_OscSystemBus::E_Type & ore_Type, uint8_t & oru8_InterfaceNumber,
                                         C_OscXmlParserBase & orc_XmlParser,
-                                        const stw::scl::C_SclString & orc_ParentNodeName,
-                                        const stw::scl::C_SclString & orc_UseCase);
+                                        const std::string & orc_ParentNodeName,
+                                        const std::string & orc_UseCase);
    static void h_SaveCommInterfaceId(const C_OscSystemBus::E_Type oe_Type, const uint8_t ou8_InterfaceNumber,
                                      C_OscXmlParserBase & orc_XmlParser);
-   static stw::scl::C_SclString h_GetFileName(void);
+   static std::string h_GetFileName(void);
 
 private:
    C_OscXappPropertiesFiler();

@@ -15,6 +15,7 @@
 #include <cstring>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscProtocolSecuritySubLayer.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "TglUtils.hpp"
@@ -123,24 +124,22 @@ void C_OscProtocolSecuritySubLayer::h_ClearAll()
    If not done so already create set of private and public ECDH keys and store in class fields.
 
    \return
-   \retval  C_NO_ERR    keys create
-   \retval  C_NOACT     could not create keys
+   std::error_code with Errc::success on success, Errc::noact on failure
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolSecuritySubLayer::InitEcdhKeys()
+std::error_code C_OscProtocolSecuritySubLayer::InitEcdhKeys()
 {
-   int32_t s32_Result = C_NO_ERR;
-
    //once per life time of instance
    if (mq_EcdhKeysInitialized == false)
    {
-      s32_Result = mc_Ecdh.CreateEcKeys(mau8_EcdhPublicKey);
-      if (s32_Result == C_NO_ERR)
+      const std::error_code c_Result = mc_Ecdh.CreateEcKeys(mau8_EcdhPublicKey);
+      if (c_Result == Errc::success)
       {
          this->mq_EcdhKeysInitialized = true;
       }
+      return c_Result;
    }
-   return s32_Result;
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -151,21 +150,21 @@ int32_t C_OscProtocolSecuritySubLayer::InitEcdhKeys()
    \param[out]    orc_TrafficEncryptionPublicClientKey   ECDH public key in compressed format
 
    \return
-   \retval  C_NO_ERR    key provided
-   \retval  C_NOACT     no key available; trying to create failed
+   std::error_code with Errc::success on success, Errc::noact on failure
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolSecuritySubLayer::GetEcdhPublicKey(std::vector<uint8_t> & orc_TrafficEncryptionPublicClientKey)
+std::error_code C_OscProtocolSecuritySubLayer::GetEcdhPublicKey(
+   std::vector<uint8_t> & orc_TrafficEncryptionPublicClientKey)
 {
-   const int32_t s32_Result = this->InitEcdhKeys();
+   const std::error_code c_Result = this->InitEcdhKeys();
 
-   if (s32_Result == C_NO_ERR)
+   if (c_Result == Errc::success)
    {
       orc_TrafficEncryptionPublicClientKey.resize(C_OscSecurityEcdhAes::hu32_PUBLIC_KEY_LENGTH);
       (void)std::memcpy(&orc_TrafficEncryptionPublicClientKey[0], &this->mau8_EcdhPublicKey[0],
                         C_OscSecurityEcdhAes::hu32_PUBLIC_KEY_LENGTH);
    }
-   return s32_Result;
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -178,31 +177,32 @@ int32_t C_OscProtocolSecuritySubLayer::GetEcdhPublicKey(std::vector<uint8_t> & o
    \param[in]   orc_OthersPublicKey    Others public key
 
    \return
-   \retval   C_NO_ERR   success, key is orau8_AesKey
-   \retval   C_RANGE    invalid parameter
-   \retval   C_NOACT    could not derive key
-   \retval   C_CONFIG   own ECDH keys were not initialized
+   std::error_code with Errc::success on success,
+   Errc::range if invalid parameter,
+   Errc::noact if could not derive key,
+   Errc::config if own ECDH keys were not initialized
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolSecuritySubLayer::DeriveAesKey(const std::vector<uint8_t> & orc_OthersPublicKey)
+std::error_code C_OscProtocolSecuritySubLayer::DeriveAesKey(const std::vector<uint8_t> & orc_OthersPublicKey)
 {
-   int32_t s32_Result = C_CONFIG;
-
-   if (mq_EcdhKeysInitialized == true)
+   if (mq_EcdhKeysInitialized == false)
    {
-      s32_Result = C_RANGE;
-      if (orc_OthersPublicKey.size() == C_OscSecurityEcdhAes::hu32_PUBLIC_KEY_LENGTH)
-      {
-         uint8_t au8_OthersKey[C_OscSecurityEcdhAes::hu32_PUBLIC_KEY_LENGTH];
-         (void)std::memcpy(&au8_OthersKey[0], &orc_OthersPublicKey[0], C_OscSecurityEcdhAes::hu32_PUBLIC_KEY_LENGTH);
-         s32_Result = mc_Ecdh.DeriveAesKey(au8_OthersKey);
-         if (s32_Result == C_NO_ERR)
-         {
-            mq_AesKeyDerived = true;
-         }
-      }
+      return Errc::config;
    }
-   return s32_Result;
+
+   if (orc_OthersPublicKey.size() != C_OscSecurityEcdhAes::hu32_PUBLIC_KEY_LENGTH)
+   {
+      return Errc::range;
+   }
+
+   uint8_t au8_OthersKey[C_OscSecurityEcdhAes::hu32_PUBLIC_KEY_LENGTH];
+   (void)std::memcpy(&au8_OthersKey[0], &orc_OthersPublicKey[0], C_OscSecurityEcdhAes::hu32_PUBLIC_KEY_LENGTH);
+   const std::error_code c_Result = mc_Ecdh.DeriveAesKey(au8_OthersKey);
+   if (c_Result == Errc::success)
+   {
+      mq_AesKeyDerived = true;
+   }
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -213,21 +213,19 @@ int32_t C_OscProtocolSecuritySubLayer::DeriveAesKey(const std::vector<uint8_t> &
    \param[out]    orc_InitVector   AES init vector
 
    \return
-   \retval  C_NO_ERR    vector set
-   \retval  C_RANGE     invalid vector
+   std::error_code with Errc::success on success, Errc::range if invalid vector
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolSecuritySubLayer::SetAesInitVector(const std::vector<uint8_t> & orc_InitVector)
+std::error_code C_OscProtocolSecuritySubLayer::SetAesInitVector(const std::vector<uint8_t> & orc_InitVector)
 {
-   int32_t s32_Result = C_RANGE;
-
-   if (orc_InitVector.size() == C_OscSecurityAesCbc::hu32_IV_LENGTH)
+   if (orc_InitVector.size() != C_OscSecurityAesCbc::hu32_IV_LENGTH)
    {
-      (void)std::memcpy(&this->mau8_AesInitVectorRequest[0], &orc_InitVector[0], C_OscSecurityAesCbc::hu32_IV_LENGTH);
-      (void)std::memcpy(&this->mau8_AesInitVectorResponse[0], &orc_InitVector[0], C_OscSecurityAesCbc::hu32_IV_LENGTH);
-      s32_Result = C_NO_ERR;
+      return Errc::range;
    }
-   return s32_Result;
+
+   (void)std::memcpy(&this->mau8_AesInitVectorRequest[0], &orc_InitVector[0], C_OscSecurityAesCbc::hu32_IV_LENGTH);
+   (void)std::memcpy(&this->mau8_AesInitVectorResponse[0], &orc_InitVector[0], C_OscSecurityAesCbc::hu32_IV_LENGTH);
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -265,13 +263,11 @@ bool C_OscProtocolSecuritySubLayerBase::GetEncryptionIsActive() const
    \param[out]    orc_Output      encrypted data
 
    \return
-   \retval C_NO_ERR     no problems
-   \retval C_CONFIG     encryption engine not initialized or not set active
-   \retval C_CHECKSUM   encryption failed
+   std::error_code with Errc::success on success, Errc::config on failure
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolSecuritySubLayer::m_Encrypt(const std::vector<uint8_t> & orc_Input,
-                                                 std::vector<uint8_t> & orc_Output)
+std::error_code C_OscProtocolSecuritySubLayer::m_Encrypt(const std::vector<uint8_t> & orc_Input,
+                                                         std::vector<uint8_t> & orc_Output)
 {
    return mc_Ecdh.AesEncrypt(this->mau8_AesInitVectorRequest, orc_Input, orc_Output);
 }
@@ -285,13 +281,11 @@ int32_t C_OscProtocolSecuritySubLayer::m_Encrypt(const std::vector<uint8_t> & or
    \param[out]    orc_Output      decrypted data
 
    \return
-   \retval C_NO_ERR     no problems
-   \retval C_CONFIG     decryption engine not initialized or not set active
-   \retval C_CHECKSUM   decryption failed
+   std::error_code with Errc::success on success, Errc::config on failure
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolSecuritySubLayer::m_Decrypt(const std::vector<uint8_t> & orc_Input,
-                                                 std::vector<uint8_t> & orc_Output)
+std::error_code C_OscProtocolSecuritySubLayer::m_Decrypt(const std::vector<uint8_t> & orc_Input,
+                                                         std::vector<uint8_t> & orc_Output)
 {
    return mc_Ecdh.AesDecrypt(this->mau8_AesInitVectorResponse, orc_Input, orc_Output);
 }
@@ -305,44 +299,44 @@ int32_t C_OscProtocolSecuritySubLayer::m_Decrypt(const std::vector<uint8_t> & or
    \param[out]    orc_WrappedService      wrapped up, encrypted service
 
    \return
-   \retval C_NO_ERR     no problems
-   \retval C_CONFIG     encryption engine not initialized or not set active
-   \retval C_CHECKSUM   encryption failed
+   std::error_code with Errc::success on success,
+   Errc::config if encryption engine not initialized or not set active,
+   Errc::checksum if encryption failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolSecuritySubLayerBase::WrapRequest(const C_OscProtocolDriverOsyService & orc_UnwrappedService,
-                                                       C_OscProtocolDriverOsyService & orc_WrappedService)
+std::error_code C_OscProtocolSecuritySubLayerBase::WrapRequest(
+   const C_OscProtocolDriverOsyService & orc_UnwrappedService,
+   C_OscProtocolDriverOsyService & orc_WrappedService)
 {
-   int32_t s32_Result = C_CONFIG;
-
-   if ((this->mq_EncryptionIsActive == true) && (this->mq_AesKeyDerived == true))
+   if ((this->mq_EncryptionIsActive == false) || (this->mq_AesKeyDerived == false))
    {
-      std::vector<uint8_t> c_EncryptedData;
-      s32_Result = m_Encrypt(orc_UnwrappedService.c_Data, c_EncryptedData);
-      if (s32_Result == C_NO_ERR)
-      {
-         orc_WrappedService.q_CanTransferWithoutFlowControl = false; //this service always needs a flow control
-
-         orc_WrappedService.c_Data.resize(4U + c_EncryptedData.size());
-         orc_WrappedService.c_Data[0] = mhu8_OSY_SI_SECURED_DATA_TRANSMISSION;
-         orc_WrappedService.c_Data[1] = 0x00U; // 16bit APAR: Bit0 is set (request message); other bits are constants
-         orc_WrappedService.c_Data[2] = 0x19U;
-         orc_WrappedService.c_Data[3] = 0x00U; // algorithm: AES-CBC-128 with PKCS#7
-         (void)std::memcpy(&orc_WrappedService.c_Data[4], &c_EncryptedData[0], c_EncryptedData.size());
-
-         tgl_assert(c_EncryptedData.size() >= C_OscSecurityAesCbc::hu32_IV_LENGTH);
-
-         //remember last 16 bytes of encrypted result as new init vector for following services:
-         (void)std::memcpy(&this->mau8_AesInitVectorRequest[0],
-                           &c_EncryptedData[c_EncryptedData.size() - C_OscSecurityAesCbc::hu32_IV_LENGTH],
-                           C_OscSecurityAesCbc::hu32_IV_LENGTH);
-      }
-      else
-      {
-         s32_Result = C_CHECKSUM;
-      }
+      return Errc::config;
    }
-   return s32_Result;
+
+   std::vector<uint8_t> c_EncryptedData;
+   const std::error_code c_Result = m_Encrypt(orc_UnwrappedService.c_Data, c_EncryptedData);
+   if (c_Result != Errc::success)
+   {
+      return Errc::checksum;
+   }
+
+   orc_WrappedService.q_CanTransferWithoutFlowControl = false; //this service always needs a flow control
+
+   orc_WrappedService.c_Data.resize(4U + c_EncryptedData.size());
+   orc_WrappedService.c_Data[0] = mhu8_OSY_SI_SECURED_DATA_TRANSMISSION;
+   orc_WrappedService.c_Data[1] = 0x00U; // 16bit APAR: Bit0 is set (request message); other bits are constants
+   orc_WrappedService.c_Data[2] = 0x19U;
+   orc_WrappedService.c_Data[3] = 0x00U; // algorithm: AES-CBC-128 with PKCS#7
+   (void)std::memcpy(&orc_WrappedService.c_Data[4], &c_EncryptedData[0], c_EncryptedData.size());
+
+   tgl_assert(c_EncryptedData.size() >= C_OscSecurityAesCbc::hu32_IV_LENGTH);
+
+   //remember last 16 bytes of encrypted result as new init vector for following services:
+   (void)std::memcpy(&this->mau8_AesInitVectorRequest[0],
+                     &c_EncryptedData[c_EncryptedData.size() - C_OscSecurityAesCbc::hu32_IV_LENGTH],
+                     C_OscSecurityAesCbc::hu32_IV_LENGTH);
+
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -354,48 +348,52 @@ int32_t C_OscProtocolSecuritySubLayerBase::WrapRequest(const C_OscProtocolDriver
    \param[out]    orc_UnwrappedService  unwrapped, decrypted service
 
    \return
-   \retval C_NO_ERR     no problems
-   \retval C_RANGE      orc_WrappedService is not a valid SecuredDataTransmission service
-   \retval C_CONFIG     encryption engine not initialized or not set active
-   \retval C_CHECKSUM   decryption failed
+   std::error_code with Errc::success on success,
+   Errc::range if orc_WrappedService is not a valid SecuredDataTransmission service,
+   Errc::config if encryption engine not initialized or not set active,
+   Errc::checksum if decryption failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolSecuritySubLayerBase::UnwrapResponse(const C_OscProtocolDriverOsyService & orc_WrappedService,
-                                                          C_OscProtocolDriverOsyService & orc_UnwrappedService)
+std::error_code C_OscProtocolSecuritySubLayerBase::UnwrapResponse(
+   const C_OscProtocolDriverOsyService & orc_WrappedService,
+   C_OscProtocolDriverOsyService & orc_UnwrappedService)
 {
-   int32_t s32_Result = C_CONFIG;
-
-   if ((this->mq_EncryptionIsActive == true) && (this->mq_AesKeyDerived == true))
+   if ((this->mq_EncryptionIsActive == false) || (this->mq_AesKeyDerived == false))
    {
-      s32_Result = C_RANGE;
-
-      //Encrypted data must have a size that is a multiple of 16
-      //We need at least one block of data to work on.
-      if ((orc_WrappedService.c_Data.size() >= (4U + C_OscSecurityAesCbc::hu32_IV_LENGTH)) &&
-          (orc_WrappedService.c_Data[0] == (mhu8_OSY_SI_SECURED_DATA_TRANSMISSION | 0x40U)) &&
-          (orc_WrappedService.c_Data[1] == 0x00U) && //APAR HB
-          (orc_WrappedService.c_Data[2] == 0x18U) && //APAR LB (is response?)
-          (orc_WrappedService.c_Data[3] == 0x00U))   //algorithm == AES-CBC-128 with PKCS#7
-      {
-         //We have a SecuredDataTransmission response. Yeah. Try to decrypt content.
-         std::vector<uint8_t> c_EncryptedData;
-         c_EncryptedData.resize(orc_WrappedService.c_Data.size() - 4);
-         (void)std::memcpy(&c_EncryptedData[0], &orc_WrappedService.c_Data[4], c_EncryptedData.size());
-
-         s32_Result = m_Decrypt(c_EncryptedData, orc_UnwrappedService.c_Data);
-         if (s32_Result == C_NO_ERR)
-         {
-            //remember last 16 bytes of encrypted data as new init vector for following services:
-            (void)std::memcpy(&this->mau8_AesInitVectorResponse[0],
-                              &c_EncryptedData[c_EncryptedData.size() - C_OscSecurityAesCbc::hu32_IV_LENGTH],
-                              C_OscSecurityAesCbc::hu32_IV_LENGTH);
-         }
-         else
-         {
-            s32_Result = C_CHECKSUM;
-         }
-      }
+      return Errc::config;
    }
 
-   return s32_Result;
+   if (orc_WrappedService.c_Data.size() < 4U)
+   {
+      return Errc::range;
+   }
+
+   if ((orc_WrappedService.c_Data[0] != (mhu8_OSY_SI_SECURED_DATA_TRANSMISSION | 0x40U)) ||
+       (orc_WrappedService.c_Data[1] != 0x40U) ||
+       (orc_WrappedService.c_Data[2] != 0x19U) ||
+       (orc_WrappedService.c_Data[3] != 0x00U))
+   {
+      return Errc::range;
+   }
+
+   const std::vector<uint8_t> c_EncryptedData(orc_WrappedService.c_Data.begin() + 4,
+                                               orc_WrappedService.c_Data.end());
+
+   std::vector<uint8_t> c_DecryptedData;
+   const std::error_code c_Result = m_Decrypt(c_EncryptedData, c_DecryptedData);
+   if (c_Result != Errc::success)
+   {
+      return Errc::checksum;
+   }
+
+   orc_UnwrappedService.c_Data.swap(c_DecryptedData);
+
+   tgl_assert(c_EncryptedData.size() >= C_OscSecurityAesCbc::hu32_IV_LENGTH);
+
+   //remember last 16 bytes of encrypted result as new init vector for following services:
+   (void)std::memcpy(&this->mau8_AesInitVectorResponse[0],
+                     &c_EncryptedData[c_EncryptedData.size() - C_OscSecurityAesCbc::hu32_IV_LENGTH],
+                     C_OscSecurityAesCbc::hu32_IV_LENGTH);
+
+   return Errc::success;
 }

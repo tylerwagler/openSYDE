@@ -15,7 +15,7 @@
 #include <set>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscCanSignal.hpp"
 #include "C_OscNodeDataPoolList.hpp"
 #include "C_OscCanInterfaceId.hpp"
@@ -70,8 +70,8 @@ public:
                                      uint32_t * const opu32_MultiplexerIndex = NULL);
    void GetMultiplexerValues(std::set<uint16_t> & orc_Values) const;
 
-   stw::scl::C_SclString c_Name;    ///< Message name
-   stw::scl::C_SclString c_Comment; ///< Message comment
+   std::string c_Name;    ///< Message name
+   std::string c_Comment; ///< Message comment
    uint32_t u32_CanId;              ///< CAN message identifier
    bool q_IsExtended;               ///< Flag if message id is using extended format
    uint16_t u16_Dlc;                ///< CAN message data length code

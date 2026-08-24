@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "stwtypes.hpp"
 #include "C_OscCanMessageContainer.hpp"
@@ -20,6 +21,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::opensyde_core;
+using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -250,7 +252,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
                if (q_Skip == false)
                {
                   const C_OscCanMessage & rc_CurrentMessage = this->c_TxMessages[u32_ItMessage];
-                  if (rc_Message.c_Name.LowerCase() == rc_CurrentMessage.c_Name.LowerCase())
+                  if (LowerCaseCompat(rc_Message.c_Name) == LowerCaseCompat(rc_CurrentMessage.c_Name))
                   {
                      *opq_NameConflict = true;
                   }
@@ -274,7 +276,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
                if (q_Skip == false)
                {
                   const C_OscCanMessage & rc_CurrentMessage = this->c_RxMessages[u32_ItMessage];
-                  if (rc_Message.c_Name.LowerCase() == rc_CurrentMessage.c_Name.LowerCase())
+                  if (LowerCaseCompat(rc_Message.c_Name) == LowerCaseCompat(rc_CurrentMessage.c_Name))
                   {
                      *opq_NameConflict = true;
                   }

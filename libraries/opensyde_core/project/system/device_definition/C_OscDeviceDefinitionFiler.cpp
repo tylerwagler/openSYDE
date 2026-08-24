@@ -11,10 +11,11 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
 #include "C_OscUtils.hpp"
@@ -118,13 +119,13 @@ void C_OscDeviceDefinitionFiler::mh_ParseOpenSydeFlashloaderParameter(const C_Os
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDefinition, C_OscXmlParser & orc_Parser,
-                                            const C_SclString & orc_Path)
+                                            const std::string & orc_Path)
 {
    int32_t s32_Return;
 
    uint32_t u32_Value;
 
-   stw::scl::C_SclString c_Text;
+   std::string c_Text;
 
    s32_Return = orc_Parser.SelectNodeChildError("global");
    if (s32_Return == C_NO_ERR)
@@ -376,11 +377,11 @@ int32_t C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDe
 int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & orc_SubDeviceDefinition,
                                                      C_OscXmlParser & orc_Parser,
                                                      const C_OscDeviceDefinition & orc_DeviceDefinition,
-                                                     const C_SclString & orc_Path)
+                                                     const std::string & orc_Path)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   stw::scl::C_SclString c_Text;
+   std::string c_Text;
 
    if (orc_Parser.SelectNodeChild("sub-device-name") == "sub-device-name")
    {
@@ -403,7 +404,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
                s32_Return = orc_Parser.GetAttributeBoolError("connected", q_Tmp);
                if (s32_Return == C_NO_ERR)
                {
-                  orc_SubDeviceDefinition.c_ConnectedInterfaces[c_Text.LowerCase()] = q_Tmp;
+                  orc_SubDeviceDefinition.c_ConnectedInterfaces[LowerCaseCompat(c_Text)] = q_Tmp;
                }
             }
             c_Text = orc_Parser.SelectNodeNext("interface");
@@ -423,7 +424,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
       {
          do
          {
-            const stw::scl::C_SclString c_Tmp = orc_Parser.GetNodeContent();
+            const std::string c_Tmp = orc_Parser.GetNodeContent();
             orc_SubDeviceDefinition.c_OtherAcceptedNames.push_back(c_Tmp);
             c_Text = orc_Parser.SelectNodeNext("other-accepted-name");
          }
@@ -511,7 +512,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
 
             osc_write_log_info("Loading device definition",
                                "Due to compatibility all flashloader reset wait times set to the"
-                               " same configuration value (" + C_SclString::IntToStr(u32_Value) +
+                               " same configuration value (" + std::to_string(u32_Value) +
                                " ms) for XML file \"" + orc_Path + "\".");
 
             c_Text = orc_Parser.SelectNodeParent(); //back to parent ...
@@ -536,7 +537,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
                osc_write_log_info("Loading device definition",
                                   "Default value for flashloader reset wait time "
                                   "u32_FlashloaderResetWaitTimeNoChangesCan (" +
-                                  C_SclString::IntToStr(orc_SubDeviceDefinition.
+                                  std::to_string(orc_SubDeviceDefinition.
                                                         u32_FlashloaderResetWaitTimeNoChangesCan) +
                                   " ms) for XML file \"" + orc_Path + "\" used.");
             }
@@ -557,7 +558,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
                osc_write_log_info("Loading device definition",
                                   "Default value for flashloader reset wait time "
                                   "u32_FlashloaderResetWaitTimeNoChangesEthernet (" +
-                                  C_SclString::IntToStr(orc_SubDeviceDefinition.
+                                  std::to_string(orc_SubDeviceDefinition.
                                                         u32_FlashloaderResetWaitTimeNoChangesEthernet) +
                                   " ms) for XML file \"" + orc_Path + "\" used.");
             }
@@ -578,7 +579,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
                osc_write_log_info("Loading device definition",
                                   "Default value for flashloader reset wait time "
                                   "u32_FlashloaderResetWaitTimeNoFundamentalChangesCan (" +
-                                  C_SclString::IntToStr(orc_SubDeviceDefinition.
+                                  std::to_string(orc_SubDeviceDefinition.
                                                         u32_FlashloaderResetWaitTimeNoFundamentalChangesCan) +
                                   " ms) for XML file \"" + orc_Path + "\" used.");
             }
@@ -599,7 +600,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
                osc_write_log_info("Loading device definition",
                                   "Default value for flashloader reset wait time "
                                   "u32_FlashloaderResetWaitTimeNoFundamentalChangesEthernet (" +
-                                  C_SclString::IntToStr(orc_SubDeviceDefinition.
+                                  std::to_string(orc_SubDeviceDefinition.
                                                         u32_FlashloaderResetWaitTimeNoFundamentalChangesEthernet) +
                                   " ms) for XML file \"" + orc_Path + "\" used.");
             }
@@ -621,7 +622,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
                osc_write_log_info("Loading device definition",
                                   "Default value for flashloader reset wait time "
                                   "u32_FlashloaderResetWaitTimeFundamentalChangesCan (" +
-                                  C_SclString::IntToStr(orc_SubDeviceDefinition.
+                                  std::to_string(orc_SubDeviceDefinition.
                                                         u32_FlashloaderResetWaitTimeFundamentalChangesCan) +
                                   " ms) for XML file \"" + orc_Path + "\" used.");
             }
@@ -642,7 +643,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
                osc_write_log_info("Loading device definition",
                                   "Default value for flashloader reset wait time "
                                   "u32_FlashloaderResetWaitTimeFundamentalChangesEthernet (" +
-                                  C_SclString::IntToStr(orc_SubDeviceDefinition.
+                                  std::to_string(orc_SubDeviceDefinition.
                                                         u32_FlashloaderResetWaitTimeFundamentalChangesEthernet) +
                                   " ms) for XML file \"" + orc_Path + "\" used.");
             }
@@ -719,7 +720,7 @@ void C_OscDeviceDefinitionFiler::mh_SaveSubDevice(const C_OscSubDeviceDefinition
    orc_Parser.CreateAndSelectNodeChild("sub-device");
    orc_Parser.CreateNodeChild("sub-device-name", orc_SubDeviceDefinition.c_SubDeviceName);
    orc_Parser.CreateAndSelectNodeChild("connected-interfaces");
-   for (std::map<stw::scl::C_SclString, bool>::const_iterator c_It =
+   for (std::map<std::string, bool>::const_iterator c_It =
            orc_SubDeviceDefinition.c_ConnectedInterfaces.begin();
         c_It != orc_SubDeviceDefinition.c_ConnectedInterfaces.end(); ++c_It)
    {
@@ -821,12 +822,12 @@ int32_t C_OscDeviceDefinitionFiler::mh_HandleConnectedInterfaces(C_OscDeviceDefi
          for (uint32_t u32_ItCan = 0UL; u32_ItCan < static_cast<uint32_t>(orc_DeviceDefinition.u8_NumCanBusses);
               ++u32_ItCan)
          {
-            rc_SubDevice.c_ConnectedInterfaces["can" + stw::scl::C_SclString::IntToStr(u32_ItCan + 1U)] = true;
+            rc_SubDevice.c_ConnectedInterfaces["can" + std::to_string(u32_ItCan + 1U)] = true;
          }
          for (uint32_t u32_ItEth = 0UL; u32_ItEth < static_cast<uint32_t>(orc_DeviceDefinition.u8_NumEthernetBusses);
               ++u32_ItEth)
          {
-            rc_SubDevice.c_ConnectedInterfaces["eth" + stw::scl::C_SclString::IntToStr(u32_ItEth + 1U)] = true;
+            rc_SubDevice.c_ConnectedInterfaces["eth" + std::to_string(u32_ItEth + 1U)] = true;
          }
       }
    }
@@ -837,7 +838,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_HandleConnectedInterfaces(C_OscDeviceDefi
            (u32_ItSubDev < orc_DeviceDefinition.c_SubDevices.size()) && (s32_Return == C_NO_ERR); ++u32_ItSubDev)
       {
          const C_OscSubDeviceDefinition & rc_SubDevice = orc_DeviceDefinition.c_SubDevices[u32_ItSubDev];
-         if (rc_SubDevice.c_SubDeviceName.IsEmpty())
+         if (rc_SubDevice.c_SubDeviceName.empty())
          {
             s32_Return = C_CONFIG;
             osc_write_log_error("Loading device definition", "sub device name empty in multiple sub device setting");
@@ -846,7 +847,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_HandleConnectedInterfaces(C_OscDeviceDefi
               (u32_ItCan < static_cast<uint32_t>(orc_DeviceDefinition.u8_NumCanBusses)) && (s32_Return == C_NO_ERR);
               ++u32_ItCan)
          {
-            const stw::scl::C_SclString c_Interface = "can" + stw::scl::C_SclString::IntToStr(u32_ItCan + 1U);
+            const std::string c_Interface = "can" + std::to_string(u32_ItCan + 1U);
             if (rc_SubDevice.c_ConnectedInterfaces.count(c_Interface) != 1UL)
             {
                s32_Return = C_CONFIG;
@@ -859,7 +860,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_HandleConnectedInterfaces(C_OscDeviceDefi
               (s32_Return == C_NO_ERR);
               ++u32_ItEth)
          {
-            const stw::scl::C_SclString c_Interface = "eth" + stw::scl::C_SclString::IntToStr(u32_ItEth + 1U);
+            const std::string c_Interface = "eth" + std::to_string(u32_ItEth + 1U);
             if (rc_SubDevice.c_ConnectedInterfaces.count(c_Interface) != 1UL)
             {
                s32_Return = C_CONFIG;
@@ -954,7 +955,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_CheckNotConnectedInterfaceByType(
       }
       if (!q_IsUsed)
       {
-         const stw::scl::C_SclString c_Interface = C_OscSubDeviceDefinition::h_GetInterfaceNameLower(oe_Type,
+         const std::string c_Interface = C_OscSubDeviceDefinition::h_GetInterfaceNameLower(oe_Type,
                                                                                                      u8_ItInterface);
          s32_Retval = C_CONFIG;
          osc_write_log_error("Loading device definition", "Could not find usage for interface " + c_Interface);
@@ -1226,7 +1227,7 @@ void C_OscDeviceDefinitionFiler::mh_SaveFeatures(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDefinition,
-                                           const stw::scl::C_SclString & orc_Path)
+                                           const std::string & orc_Path)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -1246,7 +1247,7 @@ int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDef
       s32_Return = c_Xml.LoadFromFile(orc_Path); //open XML file
       if (s32_Return == C_NO_ERR)
       {
-         C_SclString c_Text;
+         std::string c_Text;
          //Check if root node exists:
          c_Text = c_Xml.SelectRoot();
 
@@ -1262,7 +1263,7 @@ int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDef
                uint16_t u16_FileVersion = 0U;
                try
                {
-                  u16_FileVersion = static_cast<uint16_t>(c_Xml.GetNodeContent().ToInt());
+                  u16_FileVersion = static_cast<uint16_t>(std::stoi(c_Xml.GetNodeContent()));
                }
                catch (...)
                {
@@ -1275,7 +1276,7 @@ int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDef
                if (s32_Return == C_NO_ERR)
                {
                   osc_write_log_info("Loading device definition", "Value of \"file-version\": " +
-                                     C_SclString::IntToStr(u16_FileVersion));
+                                     std::to_string(u16_FileVersion));
 
                   //Return
                   c_Xml.SelectNodeParent();
@@ -1329,7 +1330,7 @@ int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDef
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDeviceDefinitionFiler::h_Save(const C_OscDeviceDefinition & orc_DeviceDefinition,
-                                           const C_SclString & orc_Path)
+                                           const std::string & orc_Path)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -1350,7 +1351,7 @@ int32_t C_OscDeviceDefinitionFiler::h_Save(const C_OscDeviceDefinition & orc_Dev
       C_OscXmlParser c_Xml;
       c_Xml.CreateNodeChild("opensyde-device-definition"); //root node
       c_Xml.SelectRoot();
-      c_Xml.CreateNodeChild("file-version", "0x" + C_SclString::IntToHex(mhu16_FILE_VERSION, 4U));
+      c_Xml.CreateNodeChild("file-version", "0x" + IntToHexCompat(mhu16_FILE_VERSION, 4U));
 
       c_Xml.CreateAndSelectNodeChild("global");
       c_Xml.CreateNodeChild("device-name", orc_DeviceDefinition.c_DeviceName);

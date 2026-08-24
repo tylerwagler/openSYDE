@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <string>
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
@@ -26,19 +27,19 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF = "service_update_package.syde_supdef";
+const std::string C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF = "service_update_package.syde_supdef";
 static const uint16_t mu16_FILE_VERSION_2 = 2U;
-static const stw::scl::C_SclString mc_FILE_VERSION_2_1 = "0x000102";
+static const std::string mc_FILE_VERSION_2_1 = "0x000102";
 // XML node names of service update package definition
-static const stw::scl::C_SclString mc_FILE_VERSION = "file-version";                // xml node
-static const stw::scl::C_SclString mc_BUS_INDEX = "bus-index-client";               // xml node
-static const stw::scl::C_SclString mc_ROOT_NAME = "opensyde-updatepack-definition"; // xml root node
-static const stw::scl::C_SclString mc_NODES = "nodes";                              // xml node
-static const stw::scl::C_SclString mc_NODE = "node";                                // xml node
-static const stw::scl::C_SclString mc_NODE_ACTIVE_ATTR = "active";                  // xml node attribute
-static const stw::scl::C_SclString mc_NODE_POSITION_ATTR = "position";              // xml node attribute
-static const stw::scl::C_SclString mc_NODE_UPDATE = "update_package";               // xml node
-static const stw::scl::C_SclString mc_NODE_FILE_ATTR = "file";                      // xml node attribute
+static const std::string mc_FILE_VERSION = "file-version";                // xml node
+static const std::string mc_BUS_INDEX = "bus-index-client";               // xml node
+static const std::string mc_ROOT_NAME = "opensyde-updatepack-definition"; // xml root node
+static const std::string mc_NODES = "nodes";                              // xml node
+static const std::string mc_NODE = "node";                                // xml node
+static const std::string mc_NODE_ACTIVE_ATTR = "active";                  // xml node attribute
+static const std::string mc_NODE_POSITION_ATTR = "position";              // xml node attribute
+static const std::string mc_NODE_UPDATE = "update_package";               // xml node
+static const std::string mc_NODE_FILE_ATTR = "file";                      // xml node attribute
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -68,12 +69,12 @@ static const stw::scl::C_SclString mc_NODE_FILE_ATTR = "file";                  
    C_RD_WR     read/write error (see log file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const stw::scl::C_SclString & orc_Path,
+int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const std::string & orc_Path,
                                                               const C_OscSupDefinition & orc_SupDefContent,
-                                                              const std::vector<stw::scl::C_SclString> & orc_Files,
+                                                              const std::vector<std::string> & orc_Files,
                                                               const bool oq_UseMinorVersion1)
 {
-   const stw::scl::C_SclString c_FileName = TglFileIncludeTrailingDelimiter(orc_Path) + hc_PACKAGE_UPDATE_DEF;
+   const std::string c_FileName = TglFileIncludeTrailingDelimiter(orc_Path) + hc_PACKAGE_UPDATE_DEF;
    int32_t s32_Result;
 
    // fill update package definition
@@ -90,14 +91,14 @@ int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const stw::scl::C_
    }
    else
    {
-      c_XmlParser.SetNodeContent(stw::scl::C_SclString::IntToStr(mu16_FILE_VERSION_2));
+      c_XmlParser.SetNodeContent(std::to_string(mu16_FILE_VERSION_2));
    }
    tgl_assert(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
    mh_SaveNodes(c_XmlParser, orc_SupDefContent.c_Nodes, orc_Files);
 
    tgl_assert(c_XmlParser.CreateAndSelectNodeChild(mc_BUS_INDEX) == mc_BUS_INDEX);
-   c_XmlParser.SetNodeContent(stw::scl::C_SclString::IntToStr(orc_SupDefContent.u32_ActiveBusIndex));
+   c_XmlParser.SetNodeContent(std::to_string(orc_SupDefContent.u32_ActiveBusIndex));
 
    //Return
    tgl_assert(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
@@ -131,15 +132,15 @@ int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const stw::scl::C_
    \retval   C_RD_WR    read/write error (see log file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const stw::scl::C_SclString & orc_TargetUnzipPath,
+int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const std::string & orc_TargetUnzipPath,
                                                             const bool oq_IsZip,
-                                                            const stw::scl::C_SclString & orc_PackagePath,
+                                                            const std::string & orc_PackagePath,
                                                             uint32_t & oru32_FileVersion,
-                                                            stw::scl::C_SclString &  orc_FilePackagePath,
+                                                            std::string &  orc_FilePackagePath,
                                                             uint32_t & oru32_ActiveBusIndex,
                                                             std::vector<uint8_t> & orc_ActiveNodes,
                                                             std::vector<uint32_t> & orc_UpdatePosition,
-                                                            std::vector<stw::scl::C_SclString> & orc_PackageFiles)
+                                                            std::vector<std::string> & orc_PackageFiles)
 {
    int32_t s32_Retval;
    C_OscXmlParser c_XmlParser;
@@ -161,8 +162,8 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const stw::scl::C_Sc
 
       // file version
       tgl_assert(c_XmlParser.SelectNodeChild(mc_FILE_VERSION) == mc_FILE_VERSION);
-      const stw::scl::C_SclString c_FileVersion = c_XmlParser.GetNodeContent();
-      oru32_FileVersion = static_cast<uint32_t>(c_FileVersion.ToInt());
+      const std::string c_FileVersion = c_XmlParser.GetNodeContent();
+       oru32_FileVersion = static_cast<uint32_t>(std::stoi(c_FileVersion));
       tgl_assert(c_XmlParser.SelectRoot() == mc_ROOT_NAME); // we shall have a valid and
       // compatible update package
 
@@ -170,8 +171,8 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const stw::scl::C_Sc
       {
          // active bus index
          tgl_assert(c_XmlParser.SelectNodeChild(mc_BUS_INDEX) == mc_BUS_INDEX);
-         const stw::scl::C_SclString c_BusIndex = c_XmlParser.GetNodeContent();
-         oru32_ActiveBusIndex = static_cast<uint32_t>(c_BusIndex.ToInt());
+         const std::string c_BusIndex = c_XmlParser.GetNodeContent();
+          oru32_ActiveBusIndex = static_cast<uint32_t>(std::stoi(c_BusIndex));
 
          // get active nodes with update positions and files to flash
 
@@ -198,7 +199,7 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const stw::scl::C_Sc
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupDefinitionFiler::mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser,
                                            const std::vector<C_OscSupNodeDefinition> & orc_Nodes,
-                                           const std::vector<stw::scl::C_SclString> & orc_Files)
+                                           const std::vector<std::string> & orc_Files)
 {
    //Nodes
    tgl_assert(orc_XmlParser.CreateAndSelectNodeChild(mc_NODES) == mc_NODES);
@@ -254,18 +255,18 @@ void C_OscSupDefinitionFiler::mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser,
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupDefinitionFiler::mh_LoadNodes(C_OscXmlParserBase & orc_XmlParser, std::vector<uint8_t> & orc_ActiveNodes,
                                            std::vector<uint32_t> & orc_UpdatePosition,
-                                           std::vector<stw::scl::C_SclString> & orc_PackageFiles)
+                                           std::vector<std::string> & orc_PackageFiles)
 {
    tgl_assert(orc_XmlParser.SelectNodeChild(mc_NODES) == mc_NODES);
 
    tgl_assert(orc_XmlParser.SelectNodeChild(mc_NODE) == mc_NODE);
 
    // go through all nodes
-   stw::scl::C_SclString c_SelectedNode;
+   std::string c_SelectedNode;
    do
    {
       // get content of node
-      stw::scl::C_SclString c_File;
+      std::string c_File;
       uint32_t u32_UpdatePosition = 0U;
       const uint8_t u8_NodeActive = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32(mc_NODE_ACTIVE_ATTR));
       orc_ActiveNodes.push_back(u8_NodeActive);

@@ -14,7 +14,8 @@
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolBase.hpp"
 
-#include "C_SclString.hpp"
+#include <string>
+#include "C_SclStringCompat.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -37,7 +38,7 @@ using namespace stw::scl;
    else      -> error writing data
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocolBase::SaveParamsToIni(C_SclIniFile & orc_IniFile, const C_SclString & orc_Section)
+int32_t C_CanMonProtocolBase::SaveParamsToIni(C_SclIniFile & orc_IniFile, const std::string & orc_Section)
 {
    (void)orc_IniFile;
    (void)orc_Section;
@@ -59,7 +60,7 @@ int32_t C_CanMonProtocolBase::SaveParamsToIni(C_SclIniFile & orc_IniFile, const 
    else      -> error reading data
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocolBase::LoadParamsFromIni(C_SclIniFile & orc_IniFile, const C_SclString & orc_Section)
+int32_t C_CanMonProtocolBase::LoadParamsFromIni(C_SclIniFile & orc_IniFile, const std::string & orc_Section)
 {
    (void)orc_IniFile;
    (void)orc_Section;
@@ -147,17 +148,17 @@ uint32_t C_CanMonProtocolBase::mh_BytesToDwordHighLow(const uint8_t oau8_Bytes[4
    value in string format
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolBase::m_GetValueDecHex(const uint32_t ou32_Value) const
+std::string C_CanMonProtocolBase::m_GetValueDecHex(const uint32_t ou32_Value) const
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    if (mq_Decimal == true)
    {
-      (void)c_Text.PrintFormatted("%u", ou32_Value);
+      c_Text = PrintFormattedCompat("%u", ou32_Value);
    }
    else
    {
-      (void)c_Text.PrintFormatted("%X", ou32_Value);
+      c_Text = PrintFormattedCompat("%X", ou32_Value);
    }
    return c_Text;
 }
@@ -179,17 +180,17 @@ C_SclString C_CanMonProtocolBase::m_GetValueDecHex(const uint32_t ou32_Value) co
    value in string format
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolBase::m_GetWordAsStringFormat(const uint16_t ou16_Value) const
+std::string C_CanMonProtocolBase::m_GetWordAsStringFormat(const uint16_t ou16_Value) const
 {
-   C_SclString c_Help;
+   std::string c_Help;
 
    if (mq_Decimal == true)
    {
-      (void)c_Help.PrintFormatted("%05d", ou16_Value);
+      c_Help = PrintFormattedCompat("%05d", ou16_Value);
    }
    else
    {
-      (void)c_Help.PrintFormatted(" %04X", ou16_Value);
+      c_Help = PrintFormattedCompat(" %04X", ou16_Value);
    }
    return c_Help;
 }
@@ -211,17 +212,17 @@ C_SclString C_CanMonProtocolBase::m_GetWordAsStringFormat(const uint16_t ou16_Va
    value in string format
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolBase::m_GetByteAsStringFormat(const uint8_t ou8_Value) const
+std::string C_CanMonProtocolBase::m_GetByteAsStringFormat(const uint8_t ou8_Value) const
 {
-   C_SclString c_Help;
+   std::string c_Help;
 
    if (mq_Decimal == true)
    {
-      (void)c_Help.PrintFormatted("%03d", ou8_Value);
+      c_Help = PrintFormattedCompat("%03d", ou8_Value);
    }
    else
    {
-      (void)c_Help.PrintFormatted(" %02X", ou8_Value);
+      c_Help = PrintFormattedCompat(" %02X", ou8_Value);
    }
    return c_Help;
 }
@@ -260,23 +261,23 @@ C_CanMonProtocolBase::~C_CanMonProtocolBase(void)
    serial number string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolBase::mh_SerialNumberToString(const uint8_t * const opu8_SerialNumber)
+std::string C_CanMonProtocolBase::mh_SerialNumberToString(const uint8_t * const opu8_SerialNumber)
 {
-   C_SclString c_Result;
+   std::string c_Result;
 
    if (opu8_SerialNumber != NULL)
    {
       if (opu8_SerialNumber[0] < static_cast<uint8_t>(0x20))
       {
          //format up to and including 2019. E.g: 05.123456.1001
-         c_Result.PrintFormatted("%02X.%02X%02X%02X.%02X%02X",
+         c_Result = PrintFormattedCompat("%02X.%02X%02X%02X.%02X%02X",
                                  opu8_SerialNumber[0], opu8_SerialNumber[1], opu8_SerialNumber[2], opu8_SerialNumber[3],
                                  opu8_SerialNumber[4], opu8_SerialNumber[5]);
       }
       else
       {
          //format from 2020. E.g: 200012345678
-         c_Result.PrintFormatted("%02X%02X%02X%02X%02X%02X",
+         c_Result = PrintFormattedCompat("%02X%02X%02X%02X%02X%02X",
                                  opu8_SerialNumber[0], opu8_SerialNumber[1], opu8_SerialNumber[2], opu8_SerialNumber[3],
                                  opu8_SerialNumber[4], opu8_SerialNumber[5]);
       }

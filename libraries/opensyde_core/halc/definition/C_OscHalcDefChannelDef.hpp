@@ -9,7 +9,7 @@
 #define C_OSCHALCDEFCHANNEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -25,7 +25,7 @@ class C_OscHalcDefChannelDef
 public:
    C_OscHalcDefChannelDef(void);
 
-   stw::scl::C_SclString c_Name; ///< Name of this channel
+   std::string c_Name; ///< Name of this channel
 
    void CalcHash(uint32_t & oru32_HashValue) const;
 };

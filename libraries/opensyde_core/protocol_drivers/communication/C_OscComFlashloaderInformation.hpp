@@ -36,16 +36,16 @@ public:
                                               // holds both variants: POS and FSN depending of c_AvailableFeatures.
                                               // q_ExtendedSerialNumberModeImplemented and the manufacturer format
    uint32_t u32_EcuArticleNumber;             ///< article number of device
-   stw::scl::C_SclString c_EcuHardwareVersionNumber;
+   std::string c_EcuHardwareVersionNumber;
    uint8_t au8_FlashFingerprintDate[3]; ///< last date of flashing yy.mm.dd
    uint8_t au8_FlashFingerprintTime[3]; ///< last time of flashing hh.mm.ss
-   stw::scl::C_SclString c_FlashFingerprintUserName;
+   std::string c_FlashFingerprintUserName;
 
    C_OscProtocolDriverOsy::C_ListOfFeatures c_AvailableFeatures; ///< Available features of flashloader
    uint16_t u16_MaxNumberOfBlockLength;                          ///< maximum size of service the server can handle
 
-   stw::scl::C_SclString GetEcuSerialNumber(void) const;
-   stw::scl::C_SclString GetEcuSerialNumberFormatDescription(void) const;
+   std::string GetEcuSerialNumber(void) const;
+   std::string GetEcuSerialNumberFormatDescription(void) const;
 
    stw::scl::C_SclStringList FlashloaderInformationToText() const;
 };

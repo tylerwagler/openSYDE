@@ -15,7 +15,7 @@
 
 #include "stwtypes.hpp"
 #include "C_CanMonProtocolBase.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -44,9 +44,9 @@ protected:
       uint8_t u8_RoutingMode;          ///< routing configured or not
    };
 
-   virtual stw::scl::C_SclString m_AddressInformationToText(const T_CanAddressInformation & orc_CanAddressInformation)
+   virtual std::string m_AddressInformationToText(const T_CanAddressInformation & orc_CanAddressInformation)
    const;
-   virtual stw::scl::C_SclString m_DataPoolIdentifierToText(const uint32_t ou32_DataPoolIdentifier,
+   virtual std::string m_DataPoolIdentifierToText(const uint32_t ou32_DataPoolIdentifier,
                                                             const bool oq_IsResponse,
                                                             const T_CanAddressInformation & orc_CanAddressInformation)
    const;
@@ -54,27 +54,27 @@ protected:
 private:
    static int32_t mh_DisassembleCanId(const uint32_t ou32_CanId, T_CanAddressInformation & or_CanAddressInformation);
 
-   static stw::scl::C_SclString mh_ThreeByteVersionToString(const uint8_t * const opu8_Version);
-   stw::scl::C_SclString m_RawDataToString(const uint8_t ou8_NumBytes, const uint8_t * const opu8_Data) const;
-   stw::scl::C_SclString m_GetSupposedlyAsciiText(const uint8_t ou8_NumBytes, const uint8_t * const opu8_Data) const;
-   stw::scl::C_SclString m_ServiceIdToText(const uint8_t ou8_ServiceData,
+   static std::string mh_ThreeByteVersionToString(const uint8_t * const opu8_Version);
+   std::string m_RawDataToString(const uint8_t ou8_NumBytes, const uint8_t * const opu8_Data) const;
+   std::string m_GetSupposedlyAsciiText(const uint8_t ou8_NumBytes, const uint8_t * const opu8_Data) const;
+   std::string m_ServiceIdToText(const uint8_t ou8_ServiceData,
                                            const bool oq_IsNegativeResponse = false) const;
-   stw::scl::C_SclString m_SessionIdToText(const uint8_t ou8_SessionId) const;
-   stw::scl::C_SclString m_ServiceDataToText(const uint8_t * const opu8_ServiceData, const uint8_t ou8_ServiceSize,
+   std::string m_SessionIdToText(const uint8_t ou8_SessionId) const;
+   std::string m_ServiceDataToText(const uint8_t * const opu8_ServiceData, const uint8_t ou8_ServiceSize,
                                              const T_CanAddressInformation & orc_CanAddressInformation,
                                              const bool oq_IsSingleFrame) const;
-   stw::scl::C_SclString m_NegativeResponseCodeToText(const uint8_t ou8_NrCode) const;
-   stw::scl::C_SclString m_DataIdentifierAndDataToText(const bool oq_IsWrite, const uint16_t ou16_DataIdentifier,
+   std::string m_NegativeResponseCodeToText(const uint8_t ou8_NrCode) const;
+   std::string m_DataIdentifierAndDataToText(const bool oq_IsWrite, const uint16_t ou16_DataIdentifier,
                                                        const bool oq_IsResponse, const uint8_t ou8_PayloadSize,
                                                        const uint8_t * const opu8_Payload) const;
-   stw::scl::C_SclString m_RoutineDataToText(const uint16_t ou16_RoutineIdentifier, const bool oq_IsResponse,
+   std::string m_RoutineDataToText(const uint16_t ou16_RoutineIdentifier, const bool oq_IsResponse,
                                              const uint8_t ou8_DataSize, const uint8_t * const opu8_Data) const;
 
 public:
    C_CanMonProtocolOpenSyde(void);
 
-   virtual stw::scl::C_SclString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
-   virtual stw::scl::C_SclString GetProtocolName(void) const;
+   virtual std::string MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
+   virtual std::string GetProtocolName(void) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

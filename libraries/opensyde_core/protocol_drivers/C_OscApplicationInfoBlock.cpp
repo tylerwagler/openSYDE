@@ -18,6 +18,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscApplicationInfoBlock.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -356,10 +357,10 @@ int32_t C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const opu8_Data
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_OscApplicationInfoBlock::m_GetNonTerminatedString(const char_t * const opcn_Chars,
+std::string C_OscApplicationInfoBlock::m_GetNonTerminatedString(const char_t * const opcn_Chars,
                                                                 const uint8_t ou8_MaxLength) const
 {
-   C_SclString c_Help;
+   std::string c_Help;
    char_t * pcn_Text;
 
    pcn_Text = new char_t[ou8_MaxLength + 1];
@@ -367,7 +368,7 @@ C_SclString C_OscApplicationInfoBlock::m_GetNonTerminatedString(const char_t * c
    (void)memcpy(pcn_Text, opcn_Chars, ou8_MaxLength);
    c_Help = pcn_Text;
    delete[] pcn_Text;
-   c_Help = c_Help.TrimRight();
+   c_Help = TrimRightCompat(c_Help);
    return c_Help;
 }
 
@@ -376,7 +377,7 @@ C_SclString C_OscApplicationInfoBlock::m_GetNonTerminatedString(const char_t * c
 void C_OscApplicationInfoBlock::AddInfoToList(C_SclStringList & orc_List) const
 {
    (void)orc_List.Add("Block type:      " + GetInfoLevelAsString());
-   (void)orc_List.Add("Version:         " + C_SclString::IntToStr(u8_StructVersion));
+   (void)orc_List.Add("Version:         " + std::to_string(u8_StructVersion));
 
    if (ContainsDeviceID() == true)
    {
@@ -426,10 +427,10 @@ void C_OscApplicationInfoBlock::AddInfoToList(C_SclStringList & orc_List) const
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_OscApplicationInfoBlock::GetInfoLevelAsString(void) const
+std::string C_OscApplicationInfoBlock::GetInfoLevelAsString(void) const
 {
    int32_t s32_Return;
-   C_SclString c_Text;
+   std::string c_Text;
 
    s32_Return = GetInfoLevel();
    switch (s32_Return)
@@ -554,42 +555,42 @@ bool C_OscApplicationInfoBlock::ContainsAdditionalInfo(void) const
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_OscApplicationInfoBlock::GetDeviceID(void) const
+std::string C_OscApplicationInfoBlock::GetDeviceID(void) const
 {
    return m_GetNonTerminatedString(&acn_DeviceID[0], static_cast<uint8_t>(sizeof(acn_DeviceID)));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_OscApplicationInfoBlock::GetDate(void) const
+std::string C_OscApplicationInfoBlock::GetDate(void) const
 {
    return m_GetNonTerminatedString(&acn_Date[0], static_cast<uint8_t>(sizeof(acn_Date)));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_OscApplicationInfoBlock::GetTime(void) const
+std::string C_OscApplicationInfoBlock::GetTime(void) const
 {
    return m_GetNonTerminatedString(&acn_Time[0], static_cast<uint8_t>(sizeof(acn_Time)));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_OscApplicationInfoBlock::GetProjectName(void) const
+std::string C_OscApplicationInfoBlock::GetProjectName(void) const
 {
    return m_GetNonTerminatedString(&acn_ProjectName[0], static_cast<uint8_t>(sizeof(acn_ProjectName)));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_OscApplicationInfoBlock::GetProjectVersion(void) const
+std::string C_OscApplicationInfoBlock::GetProjectVersion(void) const
 {
    return m_GetNonTerminatedString(&acn_ProjectVersion[0], static_cast<uint8_t>(sizeof(acn_ProjectVersion)));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_OscApplicationInfoBlock::GetAdditionalInfo(void) const
+std::string C_OscApplicationInfoBlock::GetAdditionalInfo(void) const
 {
    return m_GetNonTerminatedString(&acn_AdditionalInfo[0], u8_LenAdditionalInfo);
 }

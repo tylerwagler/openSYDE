@@ -27,7 +27,6 @@
 #include "C_OscUtils.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::tgl;
 
 using namespace stw::errors;
@@ -78,9 +77,9 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::h_CreateSourceCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                            const C_SclString & orc_Path, std::vector<C_SclString> & orc_Files,
-                                            const C_SclString & orc_ExportToolName,
-                                            const C_SclString & orc_ExportToolVersion)
+                                            const std::string & orc_Path, std::vector<std::string> & orc_Files,
+                                            const std::string & orc_ExportToolName,
+                                            const std::string & orc_ExportToolVersion)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -134,7 +133,7 @@ int32_t C_OscExportNode::h_CreateSourceCode(const C_OscNode & orc_Node, const ui
 
    if (orc_Node.c_Applications[ou16_ApplicationIndex].e_Type == C_OscNodeApplication::ePROGRAMMABLE_APPLICATION)
    {
-      const C_SclString c_ExportToolInfo = orc_ExportToolName + " " + orc_ExportToolVersion;
+      const std::string c_ExportToolInfo = orc_ExportToolName + " " + orc_ExportToolVersion;
 
       // export openSYDE initialization
       if (s32_Retval == C_NO_ERR)
@@ -189,8 +188,8 @@ int32_t C_OscExportNode::h_CreateSourceCode(const C_OscNode & orc_Node, const ui
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateOsyInitCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                              const C_SclString & orc_Path, std::vector<C_SclString> & orc_Files,
-                                              const C_SclString & orc_ExportToolInfo)
+                                              const std::string & orc_Path, std::vector<std::string> & orc_Files,
+                                              const std::string & orc_ExportToolInfo)
 {
    int32_t s32_Retval;
 
@@ -235,8 +234,8 @@ int32_t C_OscExportNode::mh_CreateOsyInitCode(const C_OscNode & orc_Node, const 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateDatapoolCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                               const C_SclString & orc_Path, std::vector<C_SclString> & orc_Files,
-                                               const C_SclString & orc_ExportToolInfo)
+                                               const std::string & orc_Path, std::vector<std::string> & orc_Files,
+                                               const std::string & orc_ExportToolInfo)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -387,8 +386,8 @@ int32_t C_OscExportNode::mh_CreateDatapoolCode(const C_OscNode & orc_Node, const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateCommStackCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                                const C_SclString & orc_Path, std::vector<C_SclString> & orc_Files,
-                                                const C_SclString & orc_ExportToolInfo)
+                                                const std::string & orc_Path, std::vector<std::string> & orc_Files,
+                                                const std::string & orc_ExportToolInfo)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -491,8 +490,8 @@ int32_t C_OscExportNode::mh_CreateCommStackCode(const C_OscNode & orc_Node, cons
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateHalConfigCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                                const C_SclString & orc_Path, std::vector<C_SclString> & orc_Files,
-                                                const C_SclString & orc_ExportToolInfo)
+                                                const std::string & orc_Path, std::vector<std::string> & orc_Files,
+                                                const std::string & orc_ExportToolInfo)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -525,7 +524,7 @@ int32_t C_OscExportNode::mh_CreateHalConfigCode(const C_OscNode & orc_Node, cons
                   //Handle file names
                   if (s32_Retval == C_NO_ERR)
                   {
-                     const C_SclString c_FileName = C_OscExportHalc::h_GetFileName(rc_HalDataPool.q_IsSafety);
+                     const std::string c_FileName = C_OscExportHalc::h_GetFileName(rc_HalDataPool.q_IsSafety);
 
                      C_OscExportUti::h_CollectFilePaths(orc_Files, orc_Path, c_FileName, true);
                   }
@@ -560,9 +559,9 @@ int32_t C_OscExportNode::mh_CreateHalConfigCode(const C_OscNode & orc_Node, cons
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateHalNvmData(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                             const C_SclString & orc_Path, std::vector<C_SclString> & orc_Files,
-                                             const C_SclString & orc_ExportToolName,
-                                             const C_SclString & orc_ExportToolVersion)
+                                             const std::string & orc_Path, std::vector<std::string> & orc_Files,
+                                             const std::string & orc_ExportToolName,
+                                             const std::string & orc_ExportToolVersion)
 {
    int32_t s32_Retval = C_NO_ERR;
 

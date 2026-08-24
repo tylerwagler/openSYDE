@@ -13,10 +13,13 @@
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include <fstream>
+#include <string>
+#include <sstream>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscXmlParser.hpp"
 #include "tinyxml2.h"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;
@@ -113,7 +116,7 @@ C_OscXmlParser::~C_OscXmlParser(void)
    C_NOACT    could not read data from file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParser::LoadFromFile(const C_SclString & orc_FileName)
+int32_t C_OscXmlParser::LoadFromFile(const std::string & orc_FileName)
 {
    tinyxml2::XMLError e_Error;
    int32_t s32_Return = C_NO_ERR;
@@ -141,7 +144,7 @@ int32_t C_OscXmlParser::LoadFromFile(const C_SclString & orc_FileName)
    C_NOACT    could not write data to file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParser::SaveToFile(const C_SclString & orc_FileName)
+int32_t C_OscXmlParser::SaveToFile(const std::string & orc_FileName)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -163,9 +166,9 @@ int32_t C_OscXmlParser::SaveToFile(const C_SclString & orc_FileName)
    name of root element ("" on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscXmlParserBase::SelectRoot(void)
+std::string C_OscXmlParserBase::SelectRoot(void)
 {
-   C_SclString c_RootName;
+   std::string c_RootName;
 
    mpc_CurrentNode = mc_Document.RootElement();
    if (mpc_CurrentNode != NULL)
@@ -189,7 +192,7 @@ C_SclString C_OscXmlParserBase::SelectRoot(void)
    \retval   C_CONFIG   Root not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserBase::SelectRootError(const C_SclString & orc_Name)
+int32_t C_OscXmlParserBase::SelectRootError(const std::string & orc_Name)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -212,9 +215,9 @@ int32_t C_OscXmlParserBase::SelectRootError(const C_SclString & orc_Name)
    name of selected element ("" on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscXmlParserBase::SelectNodeNext(const C_SclString & orc_Name)
+std::string C_OscXmlParserBase::SelectNodeNext(const std::string & orc_Name)
 {
-   C_SclString c_Name;
+   std::string c_Name;
 
    tinyxml2::XMLElement * const pc_Save = mpc_CurrentNode;
 
@@ -253,9 +256,9 @@ C_SclString C_OscXmlParserBase::SelectNodeNext(const C_SclString & orc_Name)
    name of selected element ("" on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscXmlParserBase::SelectNodeChild(const C_SclString & orc_Name)
+std::string C_OscXmlParserBase::SelectNodeChild(const std::string & orc_Name)
 {
-   C_SclString c_Name;
+   std::string c_Name;
 
    tinyxml2::XMLElement * pc_Element = NULL;
 
@@ -302,7 +305,7 @@ C_SclString C_OscXmlParserBase::SelectNodeChild(const C_SclString & orc_Name)
    \retval   C_CONFIG   Node switch failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserBase::SelectNodeChildError(const C_SclString & orc_Name)
+int32_t C_OscXmlParserBase::SelectNodeChildError(const std::string & orc_Name)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -322,9 +325,9 @@ int32_t C_OscXmlParserBase::SelectNodeChildError(const C_SclString & orc_Name)
    name of selected element ("" on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscXmlParserBase::SelectNodeParent(void)
+std::string C_OscXmlParserBase::SelectNodeParent(void)
 {
-   C_SclString c_Name;
+   std::string c_Name;
 
    if (mpc_CurrentNode != NULL)
    {
@@ -349,9 +352,9 @@ C_SclString C_OscXmlParserBase::SelectNodeParent(void)
    Content of selected element ("" on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscXmlParserBase::GetNodeContent(void) const
+std::string C_OscXmlParserBase::GetNodeContent(void) const
 {
-   C_SclString c_Content;
+   std::string c_Content;
 
    if (mpc_CurrentNode != NULL)
    {
@@ -377,7 +380,7 @@ C_SclString C_OscXmlParserBase::GetNodeContent(void) const
    false  attribute does not exists (or: no element selected)
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscXmlParserBase::AttributeExists(const C_SclString & orc_Name) const
+bool C_OscXmlParserBase::AttributeExists(const std::string & orc_Name) const
 {
    bool q_Return = false;
 
@@ -399,7 +402,7 @@ bool C_OscXmlParserBase::AttributeExists(const C_SclString & orc_Name) const
    Current node name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscXmlParserBase::GetCurrentNodeName(void) const
+std::string C_OscXmlParserBase::GetCurrentNodeName(void) const
 {
    return (mpc_CurrentNode == NULL) ? "" : mpc_CurrentNode->Name();
 }
@@ -428,9 +431,9 @@ uint32_t C_OscXmlParserBase::GetFileLineForCurrentNode(void) const
    Content of selected attribute ("" on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscXmlParserBase::GetAttributeString(const C_SclString & orc_Name, const C_SclString & orc_Default) const
+std::string C_OscXmlParserBase::GetAttributeString(const std::string & orc_Name, const std::string & orc_Default) const
 {
-   C_SclString c_Value = orc_Default;
+   std::string c_Value = orc_Default;
 
    if (mpc_CurrentNode != NULL)
    {
@@ -456,10 +459,10 @@ C_SclString C_OscXmlParserBase::GetAttributeString(const C_SclString & orc_Name,
    value (zero on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserBase::GetAttributeSint32(const C_SclString & orc_Name, const int32_t os32_Default) const
+int32_t C_OscXmlParserBase::GetAttributeSint32(const std::string & orc_Name, const int32_t os32_Default) const
 {
    int32_t s32_Value = os32_Default;
-   C_SclString c_Text;
+   std::string c_Text;
 
    //do not use XMLElement::Query function: it can not handle hexadecimal values with "0x"
    c_Text = this->GetAttributeString(orc_Name);
@@ -467,7 +470,7 @@ int32_t C_OscXmlParserBase::GetAttributeSint32(const C_SclString & orc_Name, con
    {
       try
       {
-         s32_Value = c_Text.ToInt();
+          s32_Value = std::stoi(c_Text);
       }
       catch (...)
       {
@@ -489,10 +492,10 @@ int32_t C_OscXmlParserBase::GetAttributeSint32(const C_SclString & orc_Name, con
    value (zero on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint32_t C_OscXmlParserBase::GetAttributeUint32(const C_SclString & orc_Name, const uint32_t ou32_Default) const
+uint32_t C_OscXmlParserBase::GetAttributeUint32(const std::string & orc_Name, const uint32_t ou32_Default) const
 {
    uint32_t u32_Value = ou32_Default;
-   C_SclString c_Text;
+   std::string c_Text;
 
    //do not use XMLElement::Query function: it can not handle hexadecimal values with "0x"
    c_Text = this->GetAttributeString(orc_Name);
@@ -500,7 +503,7 @@ uint32_t C_OscXmlParserBase::GetAttributeUint32(const C_SclString & orc_Name, co
    {
       try
       {
-         u32_Value = static_cast<uint32_t>(c_Text.ToInt());
+          u32_Value = static_cast<uint32_t>(std::stoi(c_Text));
       }
       catch (...)
       {
@@ -522,10 +525,10 @@ uint32_t C_OscXmlParserBase::GetAttributeUint32(const C_SclString & orc_Name, co
    value (zero on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int64_t C_OscXmlParserBase::GetAttributeSint64(const C_SclString & orc_Name, const int64_t os64_Default) const
+int64_t C_OscXmlParserBase::GetAttributeSint64(const std::string & orc_Name, const int64_t os64_Default) const
 {
    int64_t s64_Value = os64_Default;
-   C_SclString c_Text;
+   std::string c_Text;
 
    //do not use XMLElement::Query function: it can not handle hexadecimal values with "0x"
    c_Text = this->GetAttributeString(orc_Name);
@@ -533,7 +536,7 @@ int64_t C_OscXmlParserBase::GetAttributeSint64(const C_SclString & orc_Name, con
    {
       try
       {
-         s64_Value = c_Text.ToInt64();
+          s64_Value = std::stoll(c_Text);
       }
       catch (...)
       {
@@ -555,18 +558,18 @@ int64_t C_OscXmlParserBase::GetAttributeSint64(const C_SclString & orc_Name, con
    value (zero on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint64_t C_OscXmlParserBase::GetAttributeUint64(const C_SclString & orc_Name, const uint64_t ou64_Default) const
+uint64_t C_OscXmlParserBase::GetAttributeUint64(const std::string & orc_Name, const uint64_t ou64_Default) const
 {
    uint64_t u64_Value = ou64_Default;
-   C_SclString c_Text;
+   std::string c_Text;
 
    c_Text = this->GetAttributeString(orc_Name);
    if (c_Text != "")
    {
-      if ((c_Text.Length() >= 2) && ((c_Text[1] == '0') && (c_Text[2] == 'x')))
+      if ((c_Text.length() >= 2) && ((c_Text[1] == '0') && (c_Text[2] == 'x')))
       {
          //do not use XMLElement::Query function: it can not handle hexadecimal values with "0x"
-         std::istringstream c_Stream(c_Text.SubString(3UL, c_Text.Length() - 2UL).c_str());
+          std::istringstream c_Stream(SubStringCompat(c_Text, 3UL, c_Text.length() - 2UL).c_str());
          c_Stream >> std::hex >> u64_Value;
          if (c_Stream.fail() == true)
          {
@@ -601,7 +604,7 @@ uint64_t C_OscXmlParserBase::GetAttributeUint64(const C_SclString & orc_Name, co
    false  attribute value is false (also returned on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscXmlParserBase::GetAttributeBool(const C_SclString & orc_Name, const bool oq_Default) const
+bool C_OscXmlParserBase::GetAttributeBool(const std::string & orc_Name, const bool oq_Default) const
 {
    bool q_Value = oq_Default;
 
@@ -628,7 +631,7 @@ bool C_OscXmlParserBase::GetAttributeBool(const C_SclString & orc_Name, const bo
    value (0.0F on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-float32_t C_OscXmlParserBase::GetAttributeFloat32(const C_SclString & orc_Name, const float32_t of32_Default) const
+float32_t C_OscXmlParserBase::GetAttributeFloat32(const std::string & orc_Name, const float32_t of32_Default) const
 {
    float32_t f32_Value = of32_Default;
 
@@ -655,7 +658,7 @@ float32_t C_OscXmlParserBase::GetAttributeFloat32(const C_SclString & orc_Name, 
    value (0.0 on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_OscXmlParserBase::GetAttributeFloat64(const C_SclString & orc_Name, const float64_t of64_Default) const
+float64_t C_OscXmlParserBase::GetAttributeFloat64(const std::string & orc_Name, const float64_t of64_Default) const
 {
    float64_t f64_Value = of64_Default;
 
@@ -685,7 +688,7 @@ float64_t C_OscXmlParserBase::GetAttributeFloat64(const C_SclString & orc_Name, 
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserBase::GetAttributeStringError(const C_SclString & orc_Name, C_SclString & orc_Value) const
+int32_t C_OscXmlParserBase::GetAttributeStringError(const std::string & orc_Name, std::string & orc_Value) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -717,7 +720,7 @@ int32_t C_OscXmlParserBase::GetAttributeStringError(const C_SclString & orc_Name
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserBase::GetAttributeSint32Error(const C_SclString & orc_Name, int32_t & ors32_Value) const
+int32_t C_OscXmlParserBase::GetAttributeSint32Error(const std::string & orc_Name, int32_t & ors32_Value) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -749,7 +752,7 @@ int32_t C_OscXmlParserBase::GetAttributeSint32Error(const C_SclString & orc_Name
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserBase::GetAttributeUint32Error(const C_SclString & orc_Name, uint32_t & oru32_Value) const
+int32_t C_OscXmlParserBase::GetAttributeUint32Error(const std::string & orc_Name, uint32_t & oru32_Value) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -781,7 +784,7 @@ int32_t C_OscXmlParserBase::GetAttributeUint32Error(const C_SclString & orc_Name
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserBase::GetAttributeSint64Error(const C_SclString & orc_Name, int64_t & ors64_Value) const
+int32_t C_OscXmlParserBase::GetAttributeSint64Error(const std::string & orc_Name, int64_t & ors64_Value) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -813,7 +816,7 @@ int32_t C_OscXmlParserBase::GetAttributeSint64Error(const C_SclString & orc_Name
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserBase::GetAttributeUint64Error(const C_SclString & orc_Name, uint64_t & oru64_Value) const
+int32_t C_OscXmlParserBase::GetAttributeUint64Error(const std::string & orc_Name, uint64_t & oru64_Value) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -845,7 +848,7 @@ int32_t C_OscXmlParserBase::GetAttributeUint64Error(const C_SclString & orc_Name
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserBase::GetAttributeBoolError(const C_SclString & orc_Name, bool & orq_Value) const
+int32_t C_OscXmlParserBase::GetAttributeBoolError(const std::string & orc_Name, bool & orq_Value) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -876,7 +879,7 @@ int32_t C_OscXmlParserBase::GetAttributeBoolError(const C_SclString & orc_Name, 
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserBase::GetAttributeFloat32Error(const C_SclString & orc_Name, float32_t & orf32_Value) const
+int32_t C_OscXmlParserBase::GetAttributeFloat32Error(const std::string & orc_Name, float32_t & orf32_Value) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -907,7 +910,7 @@ int32_t C_OscXmlParserBase::GetAttributeFloat32Error(const C_SclString & orc_Nam
    \retval   C_CONFIG   Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserBase::GetAttributeFloat64Error(const C_SclString & orc_Name, float64_t & orf64_Value) const
+int32_t C_OscXmlParserBase::GetAttributeFloat64Error(const std::string & orc_Name, float64_t & orf64_Value) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -930,7 +933,7 @@ int32_t C_OscXmlParserBase::GetAttributeFloat64Error(const C_SclString & orc_Nam
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175} intentionally no functionality in default implementation
-void C_OscXmlParserBase::ReportErrorForNodeContentAppendXmlContext(const C_SclString & orc_ErrorMessage)
+void C_OscXmlParserBase::ReportErrorForNodeContentAppendXmlContext(const std::string & orc_ErrorMessage)
 const
 {
    //Does not report in the base implementation as base class does not handle error reporting
@@ -946,8 +949,8 @@ const
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175} intentionally no functionality in default implementation
-void C_OscXmlParserBase::ReportErrorForAttributeContentAppendXmlContext(const C_SclString & orc_Attribute,
-                                                                        const C_SclString & orc_ErrorMessage)
+void C_OscXmlParserBase::ReportErrorForAttributeContentAppendXmlContext(const std::string & orc_Attribute,
+                                                                        const std::string & orc_ErrorMessage)
 const
 {
    //Does not report in the base implementation as base class does not handle error reporting
@@ -963,7 +966,7 @@ const
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175} intentionally no functionality in default implementation
-void C_OscXmlParserBase::ReportErrorForNodeContentStartingWithXmlContext(const C_SclString & orc_ErrorMessage)
+void C_OscXmlParserBase::ReportErrorForNodeContentStartingWithXmlContext(const std::string & orc_ErrorMessage)
 const
 {
    //Does not report in the base implementation as base class does not handle error reporting
@@ -979,8 +982,8 @@ const
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175} intentionally no functionality in default implementation
-void C_OscXmlParserBase::ReportErrorForAttributeContentStartingWithXmlContext(const C_SclString & orc_Attribute,
-                                                                              const C_SclString & orc_ErrorMessage)
+void C_OscXmlParserBase::ReportErrorForAttributeContentStartingWithXmlContext(const std::string & orc_Attribute,
+                                                                              const std::string & orc_ErrorMessage)
 const
 {
    //Does not report in the base implementation as base class does not handle error reporting
@@ -996,7 +999,7 @@ const
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175} intentionally no functionality in default implementation
-void C_OscXmlParserBase::ReportErrorForNodeMissing(const C_SclString & orc_MissingNodeName) const
+void C_OscXmlParserBase::ReportErrorForNodeMissing(const std::string & orc_MissingNodeName) const
 {
    //Does not report in the base implementation as base class does not handle error reporting
    //Also e.g in ParseFromString case errors in log file might be misleading
@@ -1043,7 +1046,7 @@ std::vector<C_OscXmlAttribute> C_OscXmlParserBase::GetAttributes(void) const
    \param[in]  orc_Content    content of new node
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::CreateNodeChild(const C_SclString & orc_Name, const C_SclString & orc_Content)
+void C_OscXmlParserBase::CreateNodeChild(const std::string & orc_Name, const std::string & orc_Content)
 {
    tinyxml2::XMLElement * const pc_Node = mc_Document.NewElement("");
    if (orc_Content != "")
@@ -1073,9 +1076,9 @@ void C_OscXmlParserBase::CreateNodeChild(const C_SclString & orc_Name, const C_S
    \return   name of the new node
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscXmlParserBase::CreateAndSelectNodeChild(const C_SclString & orc_Name)
+std::string C_OscXmlParserBase::CreateAndSelectNodeChild(const std::string & orc_Name)
 {
-   C_SclString c_Name;
+   std::string c_Name;
 
    this->CreateNodeChild(orc_Name);
    if (mpc_CurrentNode != NULL)
@@ -1104,9 +1107,9 @@ C_SclString C_OscXmlParserBase::CreateAndSelectNodeChild(const C_SclString & orc
    \return  if a node was selected: name of deleted node (otherwise "")
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscXmlParserBase::DeleteNode(void)
+std::string C_OscXmlParserBase::DeleteNode(void)
 {
-   C_SclString c_Name;
+   std::string c_Name;
 
    if (mpc_CurrentNode != NULL)
    {
@@ -1126,7 +1129,7 @@ C_SclString C_OscXmlParserBase::DeleteNode(void)
    \param[in]  orc_Content    new content
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::SetNodeContent(const C_SclString & orc_Content)
+void C_OscXmlParserBase::SetNodeContent(const std::string & orc_Content)
 {
    if (mpc_CurrentNode != NULL)
    {
@@ -1143,7 +1146,7 @@ void C_OscXmlParserBase::SetNodeContent(const C_SclString & orc_Content)
    \param[in]  orc_Value   new value of attribute
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::SetAttributeString(const C_SclString & orc_Name, const C_SclString & orc_Value)
+void C_OscXmlParserBase::SetAttributeString(const std::string & orc_Name, const std::string & orc_Value)
 {
    if (mpc_CurrentNode != NULL)
    {
@@ -1160,7 +1163,7 @@ void C_OscXmlParserBase::SetAttributeString(const C_SclString & orc_Name, const 
    \param[in]  os32_Value  new value of attribute
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::SetAttributeSint32(const C_SclString & orc_Name, const int32_t os32_Value)
+void C_OscXmlParserBase::SetAttributeSint32(const std::string & orc_Name, const int32_t os32_Value)
 {
    if (mpc_CurrentNode != NULL)
    {
@@ -1177,7 +1180,7 @@ void C_OscXmlParserBase::SetAttributeSint32(const C_SclString & orc_Name, const 
    \param[in]  ou32_Value  new value of attribute
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::SetAttributeUint32(const C_SclString & orc_Name, const uint32_t ou32_Value)
+void C_OscXmlParserBase::SetAttributeUint32(const std::string & orc_Name, const uint32_t ou32_Value)
 {
    if (mpc_CurrentNode != NULL)
    {
@@ -1194,7 +1197,7 @@ void C_OscXmlParserBase::SetAttributeUint32(const C_SclString & orc_Name, const 
    \param[in]  os64_Value  new value of attribute
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::SetAttributeSint64(const C_SclString & orc_Name, const int64_t os64_Value)
+void C_OscXmlParserBase::SetAttributeSint64(const std::string & orc_Name, const int64_t os64_Value)
 {
    if (mpc_CurrentNode != NULL)
    {
@@ -1211,7 +1214,7 @@ void C_OscXmlParserBase::SetAttributeSint64(const C_SclString & orc_Name, const 
    \param[in]  ou64_Value  new value of attribute
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::SetAttributeUint64(const C_SclString & orc_Name, const uint64_t ou64_Value)
+void C_OscXmlParserBase::SetAttributeUint64(const std::string & orc_Name, const uint64_t ou64_Value)
 {
    if (mpc_CurrentNode != NULL)
    {
@@ -1230,7 +1233,7 @@ void C_OscXmlParserBase::SetAttributeUint64(const C_SclString & orc_Name, const 
    \param[in]  oq_Value    new value of attribute
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::SetAttributeBool(const C_SclString & orc_Name, const bool oq_Value)
+void C_OscXmlParserBase::SetAttributeBool(const std::string & orc_Name, const bool oq_Value)
 {
    if (mpc_CurrentNode != NULL)
    {
@@ -1247,7 +1250,7 @@ void C_OscXmlParserBase::SetAttributeBool(const C_SclString & orc_Name, const bo
    \param[in]  of32_Value  new value of attribute
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::SetAttributeFloat32(const C_SclString & orc_Name, const float32_t of32_Value)
+void C_OscXmlParserBase::SetAttributeFloat32(const std::string & orc_Name, const float32_t of32_Value)
 {
    if (mpc_CurrentNode != NULL)
    {
@@ -1264,7 +1267,7 @@ void C_OscXmlParserBase::SetAttributeFloat32(const C_SclString & orc_Name, const
    \param[in]  of64_Value  new value of attribute
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParserBase::SetAttributeFloat64(const C_SclString & orc_Name, const float64_t of64_Value)
+void C_OscXmlParserBase::SetAttributeFloat64(const std::string & orc_Name, const float64_t of64_Value)
 {
    if (mpc_CurrentNode != NULL)
    {
@@ -1285,13 +1288,13 @@ void C_OscXmlParserBase::SetAttributeFloat64(const C_SclString & orc_Name, const
    C_NOACT    could not parse data from string
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParser::LoadFromString(const C_SclString & orc_String)
+int32_t C_OscXmlParser::LoadFromString(const std::string & orc_String)
 {
    tinyxml2::XMLError e_Error;
    int32_t s32_Return = C_NO_ERR;
    mc_Document.Clear();
 
-   e_Error = this->mc_Document.Parse(orc_String.c_str(), orc_String.Length());
+   e_Error = this->mc_Document.Parse(orc_String.c_str(), orc_String.length());
    if (e_Error != tinyxml2::XML_SUCCESS)
    {
       s32_Return = C_NOACT;
@@ -1309,9 +1312,9 @@ int32_t C_OscXmlParser::LoadFromString(const C_SclString & orc_String)
    \param[out]  orc_String    Resulting XML data
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXmlParser::SaveToString(C_SclString & orc_String) const
+void C_OscXmlParser::SaveToString(std::string & orc_String) const
 {
    tinyxml2::XMLPrinter c_Printer;
    this->mc_Document.Print(&c_Printer);
-   orc_String = static_cast<C_SclString>(c_Printer.CStr());
+   orc_String = static_cast<std::string>(c_Printer.CStr());
 }

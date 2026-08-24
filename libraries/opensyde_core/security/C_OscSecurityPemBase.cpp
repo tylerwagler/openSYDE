@@ -121,7 +121,7 @@ int32_t C_OscSecurityPemBase::LoadFromFile(const std::string & orc_FileName, std
 
    if (TglFileExists(orc_FileName.c_str()))
    {
-      stw::scl::C_SclString c_FileContent;
+      std::string c_FileContent;
       C_OscUtils::h_FileToString(orc_FileName.c_str(), c_FileContent);
       {
          const std::string c_PemFileContent(c_FileContent.c_str());

@@ -16,7 +16,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_HexFile.hpp"
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscComFlashloaderInformation.hpp"
@@ -43,7 +43,7 @@ public:
    class C_OsyDeviceInformation
    {
    public:
-      stw::scl::C_SclString c_DeviceName;                                   ///< name of device
+      std::string c_DeviceName;                                   ///< name of device
       std::vector<C_OscProtocolDriverOsy::C_FlashBlockInfo> c_Applications; ///< list of applications present on the
                                                                             // device
       C_OscComFlashloaderInformation c_MoreInformation;                     ///< collection of additional information
@@ -56,14 +56,14 @@ public:
       C_DoFlash(void);
 
       ///list of files to flash (keep size to 0 to not flash any files)
-      std::vector<stw::scl::C_SclString> c_FilesToFlash;
+      std::vector<std::string> c_FilesToFlash;
       ///list of parameter files to write to NVM (keep size to 0 to not write any files)
-      std::vector<stw::scl::C_SclString> c_FilesToWriteToNvm;
+      std::vector<std::string> c_FilesToWriteToNvm;
       ///optional list of names to allow (other than the device name itself)
-      std::vector<stw::scl::C_SclString> c_OtherAcceptedDeviceNames;
+      std::vector<std::string> c_OtherAcceptedDeviceNames;
 
       ///optional PEM file (empty string for no PEM file)
-      stw::scl::C_SclString c_PemFile;
+      std::string c_PemFile;
 
       /// Node configuration flags for secure authentication state
       bool q_SendSecureAuthenticationEnabledState;
@@ -86,10 +86,10 @@ public:
    public:
       bool operator == (const C_ApplicationProperties & orc_Source) const;
 
-      stw::scl::C_SclString c_Name;
-      stw::scl::C_SclString c_Version;
-      stw::scl::C_SclString c_BuildDate;
-      stw::scl::C_SclString c_BuildTime;
+      std::string c_Name;
+      std::string c_Version;
+      std::string c_BuildDate;
+      std::string c_BuildTime;
    };
 
    //constants for steps reported by "m_ReportProgress"
@@ -221,9 +221,9 @@ public:
 
    static int32_t h_CreateTemporaryFolder(const std::vector<C_OscNode> & orc_Nodes,
                                           const std::vector<uint8_t> & orc_ActiveNodes,
-                                          const stw::scl::C_SclString & orc_TargetPath,
+                                          const std::string & orc_TargetPath,
                                           std::vector<C_DoFlash> & orc_ApplicationsToWrite,
-                                          stw::scl::C_SclString * const opc_ErrorPath = NULL);
+                                          std::string * const opc_ErrorPath = NULL);
    static void h_CheckForChangedApplications(const std::vector<C_ApplicationProperties> & orc_ClientSideApplications,
                                              const std::vector<C_ApplicationProperties> & orc_ServerSideApplications,
                                              std::vector<uint8_t> & orc_ApplicationsPresentOnServer);
@@ -249,10 +249,10 @@ public:
 protected:
    //functions we use to report to application:
    virtual bool m_ReportProgress(const E_ProgressStep oe_Step, const int32_t os32_Result, const uint8_t ou8_Progress,
-                                 const stw::scl::C_SclString & orc_Information);
+                                 const std::string & orc_Information);
    virtual bool m_ReportProgress(const E_ProgressStep oe_Step, const int32_t os32_Result, const uint8_t ou8_Progress,
                                  const C_OscProtocolDriverOsyNode & orc_Server,
-                                 const stw::scl::C_SclString & orc_Information);
+                                 const std::string & orc_Information);
 
    virtual void m_ReportOpenSydeFlashloaderInformationRead(const C_OsyDeviceInformation & orc_Info,
                                                            const uint32_t ou32_NodeIndex);
@@ -271,8 +271,8 @@ private:
    std::vector<C_OscSuSequencesNodeConnectStates> mc_ConnectStatesNodes;
    std::vector<C_OscSuSequencesNodeUpdateStates> mc_UpdateStatesNodes;
 
-   int32_t m_FlashNodeOpenSydeHex(const std::vector<stw::scl::C_SclString> & orc_FilesToFlash,
-                                  const std::vector<stw::scl::C_SclString> & orc_OtherAcceptedDeviceNames,
+   int32_t m_FlashNodeOpenSydeHex(const std::vector<std::string> & orc_FilesToFlash,
+                                  const std::vector<std::string> & orc_OtherAcceptedDeviceNames,
                                   const uint32_t ou32_RequestDownloadTimeout, const uint32_t ou32_TransferDataTimeout,
                                   bool & orq_SetProgrammingMode,
                                   std::vector<C_OscSuSequencesNodeHexFileStates> & orc_StateHexFiles);
@@ -280,21 +280,21 @@ private:
                                      const uint32_t ou32_SignatureAddress, const uint32_t ou32_RequestDownloadTimeout,
                                      const uint32_t ou32_TransferDataTimeout,
                                      C_OscSuSequencesNodeHexFileStates & orc_StateHexFile);
-   int32_t m_FlashNodeOpenSydeFile(const std::vector<stw::scl::C_SclString> & orc_FilesToFlash,
+   int32_t m_FlashNodeOpenSydeFile(const std::vector<std::string> & orc_FilesToFlash,
                                    const uint32_t ou32_RequestDownloadTimeout, const uint32_t ou32_TransferDataTimeout,
                                    const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
                                    bool & orq_SetProgrammingMode,
                                    std::vector<C_OscSuSequencesNodeOtherFileStates> & orc_StateOtherFiles);
-   int32_t m_FlashOneFileOpenSydeFile(const stw::scl::C_SclString & orc_FileToFlash,
+   int32_t m_FlashOneFileOpenSydeFile(const std::string & orc_FileToFlash,
                                       const uint32_t ou32_RequestDownloadTimeout,
                                       const uint32_t ou32_TransferDataTimeout,
                                       const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
                                       C_OscSuSequencesNodeOtherFileStates & orc_StateOtherFile);
-   int32_t m_WriteNvmOpenSyde(const std::vector<stw::scl::C_SclString> & orc_FilesToWrite,
+   int32_t m_WriteNvmOpenSyde(const std::vector<std::string> & orc_FilesToWrite,
                               const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
                               const bool oq_SetProgrammingMode,
                               std::vector<C_OscSuSequencesNodePsiFileStates> & orc_StatePsiFiles);
-   int32_t m_WritePemOpenSydeFile(const stw::scl::C_SclString & orc_FileToWrite,
+   int32_t m_WritePemOpenSydeFile(const std::string & orc_FileToWrite,
                                   const C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ProtocolFeatures,
                                   bool & orq_SetProgrammingMode,
                                   C_OscSuSequencesNodeSecuritySettingsStates & orc_StateSecuritySettings);

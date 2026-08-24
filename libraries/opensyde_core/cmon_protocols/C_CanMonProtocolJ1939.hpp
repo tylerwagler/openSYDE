@@ -13,7 +13,7 @@
 
 #include "stwtypes.hpp"
 #include "C_CanMonProtocolBase.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -28,15 +28,15 @@ class C_CanMonProtocolJ1939 :
 {
 public:
    C_CanMonProtocolJ1939(void);
-   virtual stw::scl::C_SclString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
-   virtual stw::scl::C_SclString GetProtocolName(void) const;
+   virtual std::string MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
+   virtual std::string GetProtocolName(void) const;
 
 private:
-   stw::scl::C_SclString m_PgnToString(const uint32_t ou32_Pgn) const;
+   std::string m_PgnToString(const uint32_t ou32_Pgn) const;
    uint32_t m_GetPgn(const uint8_t * const opu8_Data) const;
-   stw::scl::C_SclString m_GetMessageSize(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
-   stw::scl::C_SclString m_GetData(const stw::can::T_STWCAN_Msg_RX & orc_Msg, const uint8_t ou8_StartIdx) const;
-   stw::scl::C_SclString m_GetName(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
+   std::string m_GetMessageSize(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
+   std::string m_GetData(const stw::can::T_STWCAN_Msg_RX & orc_Msg, const uint8_t ou8_StartIdx) const;
+   std::string m_GetName(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
 };
 
 //----------------------------------------------------------------------------------------------------------------------

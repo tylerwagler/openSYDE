@@ -31,7 +31,6 @@
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
-using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -75,8 +74,8 @@ C_OscDeviceManager::C_OscDeviceManager(void) :
    NULL:     device definition not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-const C_OscDeviceDefinition * C_OscDeviceManager::LookForDevice(const C_SclString & orc_Name,
-                                                                const C_SclString & orc_MainDeviceName,
+const C_OscDeviceDefinition * C_OscDeviceManager::LookForDevice(const std::string & orc_Name,
+                                                                const std::string & orc_MainDeviceName,
                                                                 uint32_t & oru32_SubDeviceIndex) const
 {
    const C_OscDeviceDefinition * pc_Device = NULL;
@@ -138,20 +137,20 @@ bool C_OscDeviceManager::WasLoaded(void) const
    C_NO_ERR  Scan completed (with or without devices found)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<C_SclString> & orc_RootPaths)
+int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<std::string> & orc_RootPaths)
 {
    namespace fs = std::filesystem;
 
    this->mc_DeviceGroups.clear();
    this->mq_WasLoaded = false;
 
-   std::set<C_SclString> c_KnownDeviceNames;
+   std::set<std::string> c_KnownDeviceNames;
    // std::map gives a deterministic alphabetical group ordering at flatten time.
-   std::map<C_SclString, C_OscDeviceGroup> c_GroupsByName;
+   std::map<std::string, C_OscDeviceGroup> c_GroupsByName;
 
    for (uint32_t u32_ItRoot = 0U; u32_ItRoot < orc_RootPaths.size(); ++u32_ItRoot)
    {
-      const C_SclString & rc_RootStr = orc_RootPaths[u32_ItRoot];
+      const std::string & rc_RootStr = orc_RootPaths[u32_ItRoot];
       const fs::path c_RootPath(rc_RootStr.c_str());
 
       std::error_code c_Ec;
@@ -168,7 +167,7 @@ int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<C_SclString> & orc_R
       {
          osc_write_log_warning("Loading device definitions",
                                "Failed to open device root \"" + rc_RootStr + "\": " +
-                               C_SclString(c_Ec.message().c_str()));
+                               std::string(c_Ec.message().c_str()));
          continue;
       }
 
@@ -179,7 +178,7 @@ int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<C_SclString> & orc_R
          {
             osc_write_log_warning("Loading device definitions",
                                   "Filesystem walk error under \"" + rc_RootStr + "\": " +
-                                  C_SclString(c_Ec.message().c_str()));
+                                  std::string(c_Ec.message().c_str()));
             c_Ec.clear();
             continue;
          }
@@ -198,7 +197,7 @@ int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<C_SclString> & orc_R
          // Top-level device folders (parent == root) yield an empty group name.
          std::error_code c_RelEc;
          const fs::path c_GroupRel = fs::relative(c_DeviceFolder.parent_path(), c_RootPath, c_RelEc);
-         C_SclString c_GroupName;
+         std::string c_GroupName;
          if (c_RelEc || c_GroupRel.empty() || (c_GroupRel == fs::path(".")))
          {
             c_GroupName = "";
@@ -209,7 +208,7 @@ int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<C_SclString> & orc_R
          }
 
          C_OscDeviceDefinition c_Device;
-         const C_SclString c_ManifestStr(c_ManifestPath.string().c_str());
+         const std::string c_ManifestStr(c_ManifestPath.string().c_str());
          const int32_t s32_LoadResult = C_OscDeviceDefinitionFiler::h_Load(c_Device, c_ManifestStr);
          if (s32_LoadResult != C_NO_ERR)
          {
@@ -229,7 +228,7 @@ int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<C_SclString> & orc_R
          c_KnownDeviceNames.insert(c_Device.c_DeviceName);
 
          C_OscDeviceGroup & rc_Group = c_GroupsByName[c_GroupName];
-         if (rc_Group.GetGroupName().IsEmpty() && (c_GroupName.IsEmpty() == false))
+         if (rc_Group.GetGroupName().empty() && (c_GroupName.empty() == false))
          {
             rc_Group.SetGroupName(c_GroupName);
          }
@@ -238,7 +237,7 @@ int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<C_SclString> & orc_R
    }
 
    this->mc_DeviceGroups.reserve(c_GroupsByName.size());
-   for (std::map<C_SclString, C_OscDeviceGroup>::iterator c_ItGroup = c_GroupsByName.begin();
+   for (std::map<std::string, C_OscDeviceGroup>::iterator c_ItGroup = c_GroupsByName.begin();
         c_ItGroup != c_GroupsByName.end(); ++c_ItGroup)
    {
       this->mc_DeviceGroups.push_back(c_ItGroup->second);

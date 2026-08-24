@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscNodeDataPoolListElementOptArrayId.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -30,10 +30,10 @@ public:
    C_OscDataLoggerJobAdditionalTriggerExpertMode();
 
    void CalcHash(uint32_t & oru32_HashValue) const;
-   static void h_ReplaceUiVarNames(stw::scl::C_SclString & orc_Expression);
+   static void h_ReplaceUiVarNames(std::string & orc_Expression);
 
    bool q_Enable;                                                               ///< flag to enable expert mode
-   stw::scl::C_SclString c_TriggerConfiguration;                                ///< trigger configuration, only
+   std::string c_TriggerConfiguration;                                ///< trigger configuration, only
                                                                                 // valid if enabled flag is set
    std::vector<C_OscNodeDataPoolListElementOptArrayId> c_TriggerDataElementIds; ///< data element IDs configured in
                                                                                 // trigger string

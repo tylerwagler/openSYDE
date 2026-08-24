@@ -16,7 +16,6 @@
 #include "C_OscParamSetInterpretedData.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 
 using namespace stw::opensyde_core;
 
@@ -72,7 +71,7 @@ void C_OscParamSetInterpretedData::AddInterpretedFileData(const C_OscParamSetInt
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscParamSetInterpretedNode * C_OscParamSetInterpretedData::GetInterpretedDataForNode(
-   const C_SclString & orc_NodeName)
+   const std::string & orc_NodeName)
 const
 {
    const C_OscParamSetInterpretedNode * pc_Retval = NULL;

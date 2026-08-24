@@ -18,7 +18,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::opensyde_core;
-using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -56,15 +55,15 @@ C_OscDeviceGroup::C_OscDeviceGroup(void)
    NULL:      define not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-const C_OscDeviceDefinition * C_OscDeviceGroup::LookForDevice(const C_SclString & orc_Name,
-                                                              const C_SclString & orc_MainDeviceName,
+const C_OscDeviceDefinition * C_OscDeviceGroup::LookForDevice(const std::string & orc_Name,
+                                                              const std::string & orc_MainDeviceName,
                                                               uint32_t & oru32_SubDeviceIndex) const
 {
    const C_OscDeviceDefinition * pc_Device = NULL;
 
    for (uint32_t u32_ItDevice = 0U; (u32_ItDevice < this->mc_Devices.size()) && (pc_Device == NULL); ++u32_ItDevice)
    {
-      if (orc_MainDeviceName.IsEmpty())
+      if (orc_MainDeviceName.empty())
       {
          oru32_SubDeviceIndex = 0UL;
          if (this->mc_Devices[u32_ItDevice].c_DeviceName == orc_Name)
@@ -99,7 +98,7 @@ const C_OscDeviceDefinition * C_OscDeviceGroup::LookForDevice(const C_SclString 
    \param[in]  orc_GroupName  New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDeviceGroup::SetGroupName(const C_SclString & orc_GroupName)
+void C_OscDeviceGroup::SetGroupName(const std::string & orc_GroupName)
 {
    this->mc_GroupName = orc_GroupName;
 }
@@ -111,7 +110,7 @@ void C_OscDeviceGroup::SetGroupName(const C_SclString & orc_GroupName)
    group name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscDeviceGroup::GetGroupName(void) const
+std::string C_OscDeviceGroup::GetGroupName(void) const
 {
    return mc_GroupName;
 }

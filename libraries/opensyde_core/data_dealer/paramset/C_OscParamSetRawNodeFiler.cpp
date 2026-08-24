@@ -13,12 +13,14 @@
 #include "precomp_headers.hpp"
 
 #include <cstdio>
+#include <string>
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_OscChecksummedXml.hpp"
 #include "C_OscParamSetRawNodeFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;
@@ -124,7 +126,7 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntries(std::vector<C_OscParamSetRawEn
    orc_Entries.clear();
    if (orc_XmlParser.SelectNodeChild("raw") == "raw")
    {
-      C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("raw-entry");
+      std::string c_SelectedNode = orc_XmlParser.SelectNodeChild("raw-entry");
 
       if (c_SelectedNode == "raw-entry")
       {
@@ -214,7 +216,7 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
    {
       try
       {
-         orc_Entry.u32_StartAddress = static_cast<uint32_t>(orc_XmlParser.GetNodeContent().ToInt64());
+         orc_Entry.u32_StartAddress = static_cast<uint32_t>(std::stoll(orc_XmlParser.GetNodeContent()));
       }
       catch (...)
       {
@@ -234,16 +236,16 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
    {
       if (orc_XmlParser.SelectNodeChild("value") == "value")
       {
-         const C_SclString c_Content = orc_XmlParser.GetNodeContent();
-         std::vector<C_SclString> c_Tokens;
-         c_Content.Tokenize(";", c_Tokens);
-         orc_Entry.c_Bytes.reserve(c_Tokens.size());
-         for (int32_t s32_It = 0; (s32_It < c_Tokens.size()) && (s32_Retval == C_NO_ERR); ++s32_It)
-         {
-            const C_SclString & rc_Token = c_Tokens[s32_It];
+          const std::string c_Content = orc_XmlParser.GetNodeContent();
+          std::vector<std::string> c_Tokens;
+          TokenizeCompat(c_Content, ";", c_Tokens);
+          orc_Entry.c_Bytes.reserve(c_Tokens.size());
+          for (int32_t s32_It = 0; (s32_It < c_Tokens.size()) && (s32_Retval == C_NO_ERR); ++s32_It)
+          {
+             const std::string & rc_Token = c_Tokens[s32_It];
             try
             {
-               orc_Entry.c_Bytes.push_back(static_cast<uint8_t>(rc_Token.ToInt()));
+               orc_Entry.c_Bytes.push_back(static_cast<uint8_t>(std::stoi(rc_Token)));
             }
             catch (...)
             {
@@ -269,7 +271,7 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
          uint32_t u32_Size = 0;
          try
          {
-            u32_Size = static_cast<uint32_t>(orc_XmlParser.GetNodeContent().ToInt64());
+            u32_Size = static_cast<uint32_t>(std::stoll(orc_XmlParser.GetNodeContent()));
          }
          catch (...)
          {
@@ -309,17 +311,17 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & orc_Entr
 void C_OscParamSetRawNodeFiler::mh_SaveEntry(const C_OscParamSetRawEntry & orc_Entry,
                                              C_OscXmlParserBase & orc_XmlParser)
 {
-   C_SclString c_Bytes;
+   std::string c_Bytes;
 
-   orc_XmlParser.CreateNodeChild("address", C_SclString::IntToStr(orc_Entry.u32_StartAddress));
-   orc_XmlParser.CreateNodeChild("size", C_SclString::IntToStr(orc_Entry.c_Bytes.size()));
+   orc_XmlParser.CreateNodeChild("address", std::to_string(orc_Entry.u32_StartAddress));
+   orc_XmlParser.CreateNodeChild("size", std::to_string(orc_Entry.c_Bytes.size()));
    if (orc_Entry.c_Bytes.size() > 0)
    {
-      c_Bytes = C_SclString::IntToStr(orc_Entry.c_Bytes[0]);
+      c_Bytes = std::to_string(orc_Entry.c_Bytes[0]);
       for (uint32_t u32_It = 1; u32_It < orc_Entry.c_Bytes.size(); ++u32_It)
       {
          c_Bytes += ';';
-         c_Bytes += C_SclString::IntToStr(orc_Entry.c_Bytes[u32_It]);
+         c_Bytes += std::to_string(orc_Entry.c_Bytes[u32_It]);
       }
    }
    else

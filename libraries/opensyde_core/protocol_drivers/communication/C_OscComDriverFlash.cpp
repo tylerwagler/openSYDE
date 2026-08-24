@@ -23,7 +23,6 @@
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::can;
-using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -518,7 +517,7 @@ const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscComDriverFlash::SendOsyReadDeviceName(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                                   C_SclString & orc_DeviceName, uint8_t * const opu8_NrCode)
+                                                   std::string & orc_DeviceName, uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return = C_RANGE;
    C_OscProtocolDriverOsy * const pc_ExistingProtocol = this->m_GetOsyProtocol(orc_ServerId);
@@ -1139,7 +1138,7 @@ int32_t C_OscComDriverFlash::SendOsyCheckFlashMemoryAvailable(const C_OscProtoco
 int32_t C_OscComDriverFlash::SendOsyWriteApplicationSoftwareFingerprint(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                                         const uint8_t (&orau8_Date)[3],
                                                                         const uint8_t (&orau8_Time)[3],
-                                                                        const C_SclString & orc_Username,
+                                                                        const std::string & orc_Username,
                                                                         uint8_t * const opu8_NrCode) const
 {
    int32_t s32_Return = C_RANGE;
@@ -1207,7 +1206,7 @@ int32_t C_OscComDriverFlash::SendOsyRequestDownload(const C_OscProtocolDriverOsy
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscComDriverFlash::SendOsyRequestFileTransfer(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                                        const C_SclString & orc_FilePath, const uint32_t ou32_FileSize,
+                                                        const std::string & orc_FilePath, const uint32_t ou32_FileSize,
                                                         uint32_t & oru32_MaxBlockLength,
                                                         uint8_t * const opu8_NrCode) const
 {
@@ -1351,7 +1350,7 @@ int32_t C_OscComDriverFlash::SendOsyRequestTransferExitFileBased(const C_OscProt
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscComDriverFlash::SendOsyRequestFileBasedTransferExitResult(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                                                       C_SclString & orc_Result,
+                                                                       std::string & orc_Result,
                                                                        uint8_t * const opu8_NrCode) const
 {
    int32_t s32_Return = C_RANGE;

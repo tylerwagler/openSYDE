@@ -16,6 +16,9 @@
 #include "precomp_headers.hpp"
 
 #include <algorithm>
+#include <string>
+#include <sstream>
+#include <iomanip>
 
 #include "stwerrors.hpp"
 
@@ -28,6 +31,7 @@
 #include "C_CanMonProtocol.hpp"
 #include "C_OscCanUtil.hpp"
 #include "C_OscComMessageLoggerFileAsc.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -41,8 +45,8 @@ using namespace stw::cmon_protocol;
 const uint64_t C_OscComMessageLogger::mhu64_MAX_TIMESTAMP_DAY_OF_TIME =
    ((((24ULL * 60ULL) * 60ULL) * 1000ULL) * 1000ULL);
 
-const stw::scl::C_SclString C_OscComMessageLogger::mhc_ECES_MESSAGE_COUNTER = "ECeS_Message_Counter";
-const stw::scl::C_SclString C_OscComMessageLogger::mhc_ECES_CHECKSUM = "ECeS_Checksum";
+const std::string C_OscComMessageLogger::mhc_ECES_MESSAGE_COUNTER = "ECeS_Message_Counter";
+const std::string C_OscComMessageLogger::mhc_ECES_CHECKSUM = "ECeS_Checksum";
 const uint32_t C_OscComMessageLogger::mhu32_ECES_MAX_MESSAGE_COUNTER = 255;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
@@ -52,6 +56,18 @@ const uint32_t C_OscComMessageLogger::mhu32_ECES_MAX_MESSAGE_COUNTER = 255;
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+
+/* -- Helper -------------------------------------------------------------------------------------------------------- */
+namespace
+{
+   template <typename T>
+   std::string mh_IntToHex(const T orc_Val, const uint32_t ou32_Digits)
+   {
+      std::stringstream c_Stream;
+      c_Stream << std::hex << std::uppercase << std::setw(ou32_Digits) << std::setfill('0') << orc_Val;
+      return c_Stream.str();
+   }
+}
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
@@ -213,9 +229,9 @@ void C_OscComMessageLogger::Start(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComMessageLogger::SetProtocol(const e_CanMonL7Protocols oe_Protocol)
 {
-   C_SclString c_ProtocolName;
+   std::string c_ProtocolName;
 
-   std::map<stw::scl::C_SclString, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
+   std::map<std::string, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
 
    this->me_Protocol = oe_Protocol;
    this->mc_ProtocolHex.SetProtocolMode(oe_Protocol);
@@ -245,7 +261,7 @@ void C_OscComMessageLogger::SetProtocol(const e_CanMonL7Protocols oe_Protocol)
    C_COM       no CAN bus in system definition
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::AddOsySysDef(const C_SclString & orc_PathSystemDefinition,
+int32_t C_OscComMessageLogger::AddOsySysDef(const std::string & orc_PathSystemDefinition,
                                             std::vector<C_OscSystemBus> & orc_Buses)
 {
    return this->AddOsySysDef(orc_PathSystemDefinition, 0xFFFFFFFFUL, orc_Buses);
@@ -269,10 +285,10 @@ int32_t C_OscComMessageLogger::AddOsySysDef(const C_SclString & orc_PathSystemDe
    C_WARN      specified bus index was not found or is no CAN bus
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::AddOsySysDef(const C_SclString & orc_PathSystemDefinition, const uint32_t ou32_BusIndex,
+int32_t C_OscComMessageLogger::AddOsySysDef(const std::string & orc_PathSystemDefinition, const uint32_t ou32_BusIndex,
                                             std::vector<C_OscSystemBus> & orc_Buses)
 {
-   const C_SclString c_FileExtension = stw::tgl::TglExtractFileExtension(orc_PathSystemDefinition).LowerCase();
+   const std::string c_FileExtension = LowerCaseCompat(stw::tgl::TglExtractFileExtension(orc_PathSystemDefinition));
    int32_t s32_Return = C_RANGE;
 
    if (c_FileExtension == ".syde_sysdef")
@@ -350,7 +366,7 @@ int32_t C_OscComMessageLogger::AddOsySysDef(const C_SclString & orc_PathSystemDe
    if (s32_Return != C_NO_ERR)
    {
       osc_write_log_error("Loading System Definition", "Could not load System Definition. Error code: " +
-                          C_SclString::IntToStr(s32_Return));
+                          std::to_string(s32_Return));
    }
 
    return s32_Return;
@@ -368,12 +384,12 @@ int32_t C_OscComMessageLogger::AddOsySysDef(const C_SclString & orc_PathSystemDe
    C_WARN      specified bus index was not found or is no CAN bus
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::SetOsySysDefBus(const C_SclString & orc_PathSystemDefinition,
+int32_t C_OscComMessageLogger::SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
                                                const uint32_t ou32_BusIndex)
 {
    int32_t s32_Return = C_NOACT;
 
-   const std::map<stw::scl::C_SclString,
+   const std::map<std::string,
                   C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef = this->mc_OsySysDefs.find(
       orc_PathSystemDefinition);
 
@@ -406,12 +422,12 @@ int32_t C_OscComMessageLogger::SetOsySysDefBus(const C_SclString & orc_PathSyste
    C_RANGE     openSYDE system definition not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::GetOsySysDef(const C_SclString & orc_PathSystemDefinition,
+int32_t C_OscComMessageLogger::GetOsySysDef(const std::string & orc_PathSystemDefinition,
                                             C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition)
 {
    int32_t s32_Return = C_RANGE;
 
-   std::map<stw::scl::C_SclString, C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef;
+   std::map<std::string, C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef;
 
    c_ItSysDef = this->mc_OsySysDefs.find(orc_PathSystemDefinition);
    if (c_ItSysDef != this->mc_OsySysDefs.end())
@@ -434,11 +450,11 @@ int32_t C_OscComMessageLogger::GetOsySysDef(const C_SclString & orc_PathSystemDe
    C_NOACT     No database found with this path
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::RemoveDatabase(const C_SclString & orc_Path)
+int32_t C_OscComMessageLogger::RemoveDatabase(const std::string & orc_Path)
 {
    int32_t s32_Return = C_NOACT;
 
-   const std::map<stw::scl::C_SclString,
+   const std::map<std::string,
                   C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef = this->mc_OsySysDefs.find(
       orc_Path);
 
@@ -467,15 +483,15 @@ int32_t C_OscComMessageLogger::RemoveDatabase(const C_SclString & orc_Path)
    C_NOACT     No database found with this path
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::ActivateDatabase(const C_SclString & orc_Path, const bool oq_Active)
+int32_t C_OscComMessageLogger::ActivateDatabase(const std::string & orc_Path, const bool oq_Active)
 {
    int32_t s32_Return = C_NOACT;
 
-   const std::map<stw::scl::C_SclString, bool>::iterator c_ItFlag = this->mc_DatabaseActiveFlags.find(orc_Path);
+   const std::map<std::string, bool>::iterator c_ItFlag = this->mc_DatabaseActiveFlags.find(orc_Path);
 
    if (c_ItFlag != this->mc_DatabaseActiveFlags.end())
    {
-      const std::map<stw::scl::C_SclString, C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef =
+      const std::map<std::string, C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef =
          this->mc_OsySysDefs.find(orc_Path);
 
       c_ItFlag->second = oq_Active;
@@ -512,18 +528,18 @@ int32_t C_OscComMessageLogger::ActivateDatabase(const C_SclString & orc_Path, co
    C_NO_ERR    File added successfully
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::AddLogFileAsc(const C_SclString & orc_FilePath, const bool oq_HexActive,
+int32_t C_OscComMessageLogger::AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
                                              const bool oq_RelativeTimeStampActive)
 {
    int32_t s32_Return;
    C_OscComMessageLoggerFileAsc * pc_File;
-   C_SclString c_ProtocolName;
+   std::string c_ProtocolName;
 
    this->mc_ProtocolDec.GetProtocolName(this->me_Protocol, c_ProtocolName);
    pc_File = new C_OscComMessageLoggerFileAsc(orc_FilePath, c_ProtocolName, oq_HexActive, oq_RelativeTimeStampActive);
    s32_Return = pc_File->OpenFile();
 
-   this->mc_LoggingFiles.insert(std::pair<C_SclString,
+   this->mc_LoggingFiles.insert(std::pair<std::string,
                                           C_OscComMessageLoggerFileBase * const>(orc_FilePath, pc_File));
 
    return s32_Return; //lint !e429  //no memory leak of pc_File because of handling of instance in map mc_LoggingFiles
@@ -541,11 +557,11 @@ int32_t C_OscComMessageLogger::AddLogFileAsc(const C_SclString & orc_FilePath, c
    C_NOACT     No file with this path registered
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComMessageLogger::RemoveLogFile(const C_SclString & orc_FilePath)
+int32_t C_OscComMessageLogger::RemoveLogFile(const std::string & orc_FilePath)
 {
    int32_t s32_Return = C_NOACT;
 
-   std::map<stw::scl::C_SclString, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
+   std::map<std::string, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
 
    c_ItFile = this->mc_LoggingFiles.find(orc_FilePath);
 
@@ -568,7 +584,7 @@ int32_t C_OscComMessageLogger::RemoveLogFile(const C_SclString & orc_FilePath)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComMessageLogger::RemoveAllLogFiles(void)
 {
-   std::map<stw::scl::C_SclString, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
+   std::map<std::string, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
 
    for (c_ItFile = this->mc_LoggingFiles.begin(); c_ItFile != this->mc_LoggingFiles.end(); ++c_ItFile)
    {
@@ -658,7 +674,7 @@ int32_t C_OscComMessageLogger::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
    {
       if (this->m_CheckFilter(orc_Msg) == true)
       {
-         std::map<stw::scl::C_SclString, C_OscComMessageLoggerFileBase * const>::const_iterator c_ItFileLogger;
+         std::map<std::string, C_OscComMessageLoggerFileBase * const>::const_iterator c_ItFileLogger;
          bool q_OpenSydeInterpretationFound = false;
 
          // Parse message and fill C_OscComMessageLoggerData for all further steps.
@@ -884,9 +900,9 @@ bool C_OscComMessageLogger::m_CheckFilter(const T_STWCAN_Msg_RX & orc_Msg)
    Empty string if no protocol is configured or the CAN message does not match to the configured protocol
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLogger::m_GetProtocolStringHex(const T_STWCAN_Msg_RX & orc_Msg) const
+std::string C_OscComMessageLogger::m_GetProtocolStringHex(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Result = "";
+   std::string c_Result = "";
 
    if ((this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE) &&
        (this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_CAN_TP))
@@ -907,9 +923,9 @@ C_SclString C_OscComMessageLogger::m_GetProtocolStringHex(const T_STWCAN_Msg_RX 
    Empty string if no protocol is configured or the CAN message does not match to the configured protocol
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLogger::m_GetProtocolStringDec(const T_STWCAN_Msg_RX & orc_Msg) const
+std::string C_OscComMessageLogger::m_GetProtocolStringDec(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Result = "";
+   std::string c_Result = "";
 
    if ((this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE) &&
        (this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_CAN_TP))
@@ -932,18 +948,18 @@ C_SclString C_OscComMessageLogger::m_GetProtocolStringDec(const T_STWCAN_Msg_RX 
    \param[in] ou32_BusIndex            Used CAN bus index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscComMessageLogger::m_InsertOsySysDef(const C_SclString & orc_PathSystemDefinition,
+void C_OscComMessageLogger::m_InsertOsySysDef(const std::string & orc_PathSystemDefinition,
                                               const C_OscSystemDefinition & orc_OsySysDef, const uint32_t ou32_BusIndex)
 {
    const C_OscComMessageLoggerOsySysDefConfig c_SysDefConfig(orc_OsySysDef, ou32_BusIndex);
 
-   std::map<stw::scl::C_SclString, C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItNewConfig;
+   std::map<std::string, C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItNewConfig;
 
-   c_ItNewConfig = this->mc_OsySysDefs.insert(std::pair<C_SclString,
+   c_ItNewConfig = this->mc_OsySysDefs.insert(std::pair<std::string,
                                                         C_OscComMessageLoggerOsySysDefConfig>(orc_PathSystemDefinition,
                                                                                               c_SysDefConfig)).first;
    // Register the database in the activation flag map
-   this->mc_DatabaseActiveFlags.insert(std::pair<C_SclString, bool>(orc_PathSystemDefinition, true));
+   this->mc_DatabaseActiveFlags.insert(std::pair<std::string, bool>(orc_PathSystemDefinition, true));
 
    this->mc_ProtocolDec.AddOsySysDef(&(c_ItNewConfig->second));
    this->mc_ProtocolHex.AddOsySysDef(&(c_ItNewConfig->second));
@@ -966,7 +982,7 @@ bool C_OscComMessageLogger::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
 {
    bool q_Return = false;
 
-   std::map<stw::scl::C_SclString, C_OscComMessageLoggerOsySysDefConfig>::const_iterator c_ItSysDef;
+   std::map<std::string, C_OscComMessageLoggerOsySysDefConfig>::const_iterator c_ItSysDef;
 
    this->mpc_OsySysDefMessage = NULL;
    this->mpc_OsySysDefDataPoolList = NULL;
@@ -1150,7 +1166,7 @@ bool C_OscComMessageLogger::m_InterpretSysDef(C_OscComMessageLoggerData & orc_Me
                {
                   try
                   {
-                     u16_MultiplexValue = static_cast<uint16_t>(rc_Signal.c_RawValueDec.ToInt());
+                     u16_MultiplexValue = static_cast<uint16_t>(std::stoi(rc_Signal.c_RawValueDec));
                      rc_Signal.c_Name += " (Multiplexer)";
                      q_MultiplexerFound = true;
                      u32_MultiplexerIndex = u32_Counter;
@@ -1208,9 +1224,9 @@ bool C_OscComMessageLogger::m_InterpretSysDef(C_OscComMessageLoggerData & orc_Me
    Empty string if mpc_OsySysDefMessage or mpc_OsySysDefDataPoolList is NULL
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLogger::m_GetOsySysDefStringHex(void) const
+std::string C_OscComMessageLogger::m_GetOsySysDefStringHex(void) const
 {
-   C_SclString c_Return = "";
+   std::string c_Return = "";
 
    if ((this->mpc_OsySysDefDataPoolList != NULL) &&
        (this->mpc_OsySysDefMessage != NULL))
@@ -1233,9 +1249,9 @@ C_SclString C_OscComMessageLogger::m_GetOsySysDefStringHex(void) const
    Empty string if mpc_OsySysDefMessage or mpc_OsySysDefDataPoolList is NULL
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLogger::m_GetOsySysDefStringDec(void) const
+std::string C_OscComMessageLogger::m_GetOsySysDefStringDec(void) const
 {
-   C_SclString c_Return = "";
+   std::string c_Return = "";
 
    if ((this->mpc_OsySysDefDataPoolList != NULL) &&
        (this->mpc_OsySysDefMessage != NULL))
@@ -1321,8 +1337,8 @@ void C_OscComMessageLogger::mh_InterpretCanSignalValue(C_OscComMessageLoggerData
       }
       else
       {
-         orc_Signal.c_RawValueDec = C_SclString::IntToStr(u64_Value);
-         orc_Signal.c_RawValueHex = C_SclString::IntToHex(static_cast<int64_t>(u64_Value), 1).UpperCase();
+         orc_Signal.c_RawValueDec = std::to_string(u64_Value);
+         orc_Signal.c_RawValueHex = mh_IntToHex(static_cast<int64_t>(u64_Value), 1);
       }
 
       // Interpreted value
@@ -1352,7 +1368,7 @@ void C_OscComMessageLogger::mh_InterpretCanSignalValue(C_OscComMessageLoggerData
    Empty string if no match found
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLogger::m_GetProtocolStringHexHook(void) const
+std::string C_OscComMessageLogger::m_GetProtocolStringHexHook(void) const
 {
    return "";
 }
@@ -1367,7 +1383,7 @@ C_SclString C_OscComMessageLogger::m_GetProtocolStringHexHook(void) const
    Empty string if no match found
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLogger::m_GetProtocolStringDecHook(void) const
+std::string C_OscComMessageLogger::m_GetProtocolStringDecHook(void) const
 {
    return "";
 }
@@ -1395,15 +1411,15 @@ void C_OscComMessageLogger::m_ConvertCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
    this->mc_HandledCanMessage.c_CanMsg = orc_Msg;
 
    // Prepare the data for the ui
-   this->mc_HandledCanMessage.c_CanIdDec = C_SclString::IntToStr(orc_Msg.u32_ID);
-   this->mc_HandledCanMessage.c_CanIdHex = C_SclString::IntToHex(orc_Msg.u32_ID, 1).UpperCase();
+   this->mc_HandledCanMessage.c_CanIdDec = std::to_string(orc_Msg.u32_ID);
+   this->mc_HandledCanMessage.c_CanIdHex = mh_IntToHex(orc_Msg.u32_ID, 1);
    if (orc_Msg.u8_XTD > 0U)
    {
       // Extended Id
       this->mc_HandledCanMessage.c_CanIdDec += "x";
       this->mc_HandledCanMessage.c_CanIdHex += "x";
    }
-   this->mc_HandledCanMessage.c_CanDlc = C_SclString::IntToStr(orc_Msg.u8_DLC);
+   this->mc_HandledCanMessage.c_CanDlc = std::to_string(orc_Msg.u8_DLC);
    this->mc_HandledCanMessage.q_IsTx = oq_IsTx;
 
    this->mc_HandledCanMessage.c_CanDataDec = "";
@@ -1418,8 +1434,8 @@ void C_OscComMessageLogger::m_ConvertCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
             this->mc_HandledCanMessage.c_CanDataDec += " ";
          }
       }
-      this->mc_HandledCanMessage.c_CanDataDec += C_SclString::IntToStr(orc_Msg.au8_Data[u8_DbCounter]);
-      this->mc_HandledCanMessage.c_CanDataHex += C_SclString::IntToHex(orc_Msg.au8_Data[u8_DbCounter], 2).UpperCase();
+      this->mc_HandledCanMessage.c_CanDataDec += std::to_string(orc_Msg.au8_Data[u8_DbCounter]);
+      this->mc_HandledCanMessage.c_CanDataHex += mh_IntToHex(orc_Msg.au8_Data[u8_DbCounter], 2);
 
       if (u8_DbCounter < (orc_Msg.u8_DLC - 1U))
       {
@@ -1477,7 +1493,7 @@ void C_OscComMessageLogger::m_ConvertCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
       {
          // Standard id
          this->mc_MsgCounterStandardId[orc_Msg.u32_ID] = this->mc_MsgCounterStandardId[orc_Msg.u32_ID] + 1U;
-         this->mc_HandledCanMessage.c_Counter = C_SclString::IntToStr(this->mc_MsgCounterStandardId[orc_Msg.u32_ID]);
+         this->mc_HandledCanMessage.c_Counter = std::to_string(this->mc_MsgCounterStandardId[orc_Msg.u32_ID]);
       }
       else
       {
@@ -1499,7 +1515,7 @@ void C_OscComMessageLogger::m_ConvertCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
       else
       {
          c_ItCounter->second = c_ItCounter->second + 1;
-         this->mc_HandledCanMessage.c_Counter = C_SclString::IntToStr(c_ItCounter->second);
+         this->mc_HandledCanMessage.c_Counter = std::to_string(c_ItCounter->second);
       }
    }
 }
@@ -1669,20 +1685,20 @@ void C_OscComMessageLogger::m_CheckAndHandleEcesMessage()
       C_OscComMessageLoggerDataSignal & rc_Signal = this->mc_HandledCanMessage.c_Signals[u32_Counter];
 
       // Look for special signal "ECeS_Message_Counter" in the message received
-      if (rc_Signal.c_Name.AnsiCompareIc(mhc_ECES_MESSAGE_COUNTER) == 0)
+      if (LowerCaseCompat(rc_Signal.c_Name).compare(LowerCaseCompat(mhc_ECES_MESSAGE_COUNTER)) == 0)
       {
          // Search for the unique ECeS message (based on CAN Id) in the saved ECeS messages
-         const std::map<uint32_t,  C_SclString>::iterator c_Iterator = this->mc_EcesMessages.find(
+         const std::map<uint32_t,  std::string>::iterator c_Iterator = this->mc_EcesMessages.find(
             this->mpc_OsySysDefMessage->u32_CanId);
 
          this->mc_HandledCanMessage.c_Status = "Counter OK. ";
-         C_SclString c_DifferenceValue = "";
+         std::string c_DifferenceValue = "";
 
          // Validate message counter with previous message with same CAN Id
          if (c_Iterator != this->mc_EcesMessages.end())
          {
             // compare the message counter values (ideally the counter of the received message should be +1)
-            int32_t s32_CounterDiff = rc_Signal.c_Value.ToInt() - c_Iterator->second.ToInt();
+            int32_t s32_CounterDiff = std::stoi(rc_Signal.c_Value) - std::stoi(c_Iterator->second);
 
             // When max value of counter is reached, ensure that the increment is valid
             // E.g if max value = 255, next counter value = 0. Hence s32_CounterDiff = -255.
@@ -1698,12 +1714,12 @@ void C_OscComMessageLogger::m_CheckAndHandleEcesMessage()
                this->mc_HandledCanMessage.c_Status = "Counter Invalid. ";
             }
 
-            c_DifferenceValue = C_SclString::IntToStr(s32_CounterDiff);
+            c_DifferenceValue = std::to_string(s32_CounterDiff);
 
             // Insert a "+" sign for positive difference value
             if (s32_CounterDiff >= 1)
             {
-               c_DifferenceValue = c_DifferenceValue.Insert("+", 0);
+               InsertCompat(c_DifferenceValue, "+", 0);
             }
             this->mc_HandledCanMessage.c_Status += "Diff: " + c_DifferenceValue +
                                                    "; Prev. Counter = " + c_Iterator->second + ". ";
@@ -1712,12 +1728,12 @@ void C_OscComMessageLogger::m_CheckAndHandleEcesMessage()
             this->mc_EcesMessages.erase(this->mpc_OsySysDefMessage->u32_CanId);
          }
 
-         this->mc_EcesMessages.insert(std::pair<uint32_t, C_SclString>(this->mpc_OsySysDefMessage->u32_CanId,
+         this->mc_EcesMessages.insert(std::pair<uint32_t, std::string>(this->mpc_OsySysDefMessage->u32_CanId,
                                                                        rc_Signal.c_Value));
       }
 
       // Look for special signal "ECeS_Checksum" in the message received
-      else if (rc_Signal.c_Name.AnsiCompareIc(mhc_ECES_CHECKSUM) == 0)
+      else if (LowerCaseCompat(rc_Signal.c_Name).compare(LowerCaseCompat(mhc_ECES_CHECKSUM)) == 0)
       {
          const uint8_t u8_OrigCrcValue = static_cast<uint8_t>(this->mc_HandledCanMessage.c_CanMsg.au8_Data[7]);
          const uint8_t u8_CalculatedCrcValue = C_OscComAutoSupport::h_GetCyclicRedundancyCheckCalculation(6,
@@ -1786,7 +1802,7 @@ bool C_OscComMessageLogger::m_CheckIfEcosMessage(const stw::can::T_STWCAN_Msg_RX
 {
    bool q_Return = false;
 
-   std::map<stw::scl::C_SclString, C_OscComMessageLoggerOsySysDefConfig>::const_iterator c_ItSysDef;
+   std::map<std::string, C_OscComMessageLoggerOsySysDefConfig>::const_iterator c_ItSysDef;
 
    for (c_ItSysDef = this->mc_OsySysDefs.begin(); c_ItSysDef != this->mc_OsySysDefs.end(); ++c_ItSysDef)
    {

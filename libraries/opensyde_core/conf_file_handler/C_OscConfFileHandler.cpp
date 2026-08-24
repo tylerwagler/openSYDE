@@ -17,10 +17,11 @@
 
 #include "C_OscConfFileHandler.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::errors;
 using namespace stw::scl;
+using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -53,7 +54,7 @@ C_OscConfFileHandler::~C_OscConfFileHandler()
    \retval C_CONFIG  required setting content not found
 */
 //---------------------------------------------------------------------------------------------------------------------/
-int32_t C_OscConfFileHandler::LoadSettings(const C_SclString & orc_Path)
+int32_t C_OscConfFileHandler::LoadSettings(const std::string & orc_Path)
 {
    C_SclStringList c_StringListSource;
    C_SclStringList c_StringListWithoutComments;
@@ -75,9 +76,9 @@ int32_t C_OscConfFileHandler::LoadSettings(const C_SclString & orc_Path)
       //extract only lines without comments:
       for (uint32_t u32_Line = 0U; u32_Line < c_StringListSource.GetCount(); u32_Line++)
       {
-         const C_SclString c_Line = c_StringListSource.Strings[u32_Line].Trim();
+          const std::string c_Line = TrimCompat(c_StringListSource.Strings[u32_Line]);
 
-         if ((c_Line != "") && (c_Line.Pos("#") == 0))
+         if ((c_Line != "") && (PosCompat(c_Line, "#") == 0))
          {
             c_StringListWithoutComments.Add(c_StringListSource.Strings[u32_Line]);
          }
@@ -110,8 +111,8 @@ int32_t C_OscConfFileHandler::LoadSettings(const C_SclString & orc_Path)
                      failed to save settings file
 */
 //---------------------------------------------------------------------------------------------------------------------/
-int32_t C_OscConfFileHandler::mh_ReplaceSettings(const stw::scl::C_SclString & orc_Path,
-                                                 const std::vector<std::pair<C_SclString, C_SclString> > & orc_Configs)
+int32_t C_OscConfFileHandler::mh_ReplaceSettings(const std::string & orc_Path,
+                                                  const std::vector<std::pair<std::string, std::string> > & orc_Configs)
 {
    C_SclStringList c_StringList;
    int32_t s32_Result = C_NO_ERR;
@@ -132,8 +133,8 @@ int32_t C_OscConfFileHandler::mh_ReplaceSettings(const stw::scl::C_SclString & o
       // Replacing or adding all entries
       for (u32_Counter = 0U; u32_Counter < orc_Configs.size(); u32_Counter++)
       {
-         const std::pair<C_SclString, C_SclString> & rc_KeyValuePair = orc_Configs[u32_Counter];
-         const C_SclString c_NewEntry = rc_KeyValuePair.first + "=" + rc_KeyValuePair.second;
+          const std::pair<std::string, std::string> & rc_KeyValuePair = orc_Configs[u32_Counter];
+          const std::string c_NewEntry = rc_KeyValuePair.first + "=" + rc_KeyValuePair.second;
          const int32_t s32_Index = c_StringList.IndexOfName(rc_KeyValuePair.first);
 
          if (s32_Index == -1)

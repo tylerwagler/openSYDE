@@ -21,7 +21,7 @@
 #include <deque>
 #include "stwtypes.hpp"
 #include "TglTasks.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

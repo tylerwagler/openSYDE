@@ -68,7 +68,7 @@ void C_OscCanOpenManagerDeviceInfo::CalcHash(uint32_t & oru32_HashValue) const
 {
    //Do not include c_ProjectEdsFilePath, mq_EdsFileContentLoaded as they are only utilities for delayed loading,
    // not parts of the data
-   C_SclChecksums::CalcCRC32(this->c_OriginalEdsFileName.c_str(), this->c_OriginalEdsFileName.Length(),
+   C_SclChecksums::CalcCRC32(this->c_OriginalEdsFileName.c_str(), this->c_OriginalEdsFileName.length(),
                              oru32_HashValue);
    this->mc_EdsFileContent.CalcHash(oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_DeviceOptional, sizeof(this->q_DeviceOptional), oru32_HashValue);

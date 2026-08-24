@@ -11,10 +11,11 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "TglUtils.hpp"
 #include "C_OscNodeFiler.hpp"
 #include "C_OscNodeCommFiler.hpp"
@@ -57,7 +58,7 @@ using namespace stw::opensyde_core;
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode & orc_Node, const C_SclString & orc_FilePath,
+int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode & orc_Node, const std::string & orc_FilePath,
                                        const bool oq_SkipContent)
 {
    C_OscXmlParser c_XmlParser;
@@ -70,7 +71,7 @@ int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode & orc_Node, const C_SclString &
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(std::stoi(c_XmlParser.GetNodeContent()));
       }
       catch (...)
       {
@@ -82,7 +83,7 @@ int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode & orc_Node, const C_SclString &
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading node definition", "Value of \"file-version\": " +
-                            C_SclString::IntToStr(u16_FileVersion));
+                            std::to_string(u16_FileVersion));
          //Check file version
          if (u16_FileVersion != 1U)
          {
@@ -139,7 +140,7 @@ int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode & orc_Node, const C_SclString &
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::h_LoadNode(C_OscNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
-                                   const stw::scl::C_SclString & orc_BasePath, const bool oq_SkipContent)
+                                   const std::string & orc_BasePath, const bool oq_SkipContent)
 {
    int32_t s32_Retval;
    bool q_AutoNvmStartAddressHere;
@@ -221,9 +222,9 @@ int32_t C_OscNodeFiler::h_LoadNode(C_OscNode & orc_Node, C_OscXmlParserBase & or
    C_CONFIG   file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_SaveNodeFile(const C_OscNode & orc_Node, const C_SclString & orc_FilePath,
-                                       std::vector<C_SclString> * const opc_CreatedFiles, const std::map<uint32_t,
-                                                                                                         C_SclString> & orc_NodeIndicesToNameMap)
+int32_t C_OscNodeFiler::h_SaveNodeFile(const C_OscNode & orc_Node, const std::string & orc_FilePath,
+                                       std::vector<std::string> * const opc_CreatedFiles, const std::map<uint32_t,
+                                                                                                         std::string> & orc_NodeIndicesToNameMap)
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath,
@@ -271,9 +272,9 @@ int32_t C_OscNodeFiler::h_SaveNodeFile(const C_OscNode & orc_Node, const C_SclSt
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::h_SaveNode(const C_OscNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
-                                   const stw::scl::C_SclString & orc_BasePath,
-                                   std::vector<C_SclString> * const opc_CreatedFiles, const std::map<uint32_t,
-                                                                                                     C_SclString> & orc_NodeIndicesToNameMap)
+                                   const std::string & orc_BasePath,
+                                   std::vector<std::string> * const opc_CreatedFiles, const std::map<uint32_t,
+                                                                                                     std::string> & orc_NodeIndicesToNameMap)
 {
    int32_t s32_Retval;
 
@@ -331,11 +332,11 @@ int32_t C_OscNodeFiler::h_SaveNode(const C_OscNode & orc_Node, C_OscXmlParserBas
 int32_t C_OscNodeFiler::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & orc_NodeComProtocols,
                                                const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
                                                C_OscXmlParserBase & orc_XmlParser,
-                                               const stw::scl::C_SclString & orc_BasePath)
+                                               const std::string & orc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   C_SclString c_CurNodeComProtocol;
+   std::string c_CurNodeComProtocol;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -357,7 +358,7 @@ int32_t C_OscNodeFiler::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & o
          C_OscCanProtocol c_CurComProtocol;
          if (s32_Retval == C_NO_ERR)
          {
-            if (orc_BasePath.IsEmpty())
+            if (orc_BasePath.empty())
             {
                s32_Retval = C_OscNodeCommFiler::h_LoadNodeComProtocol(c_CurComProtocol, orc_XmlParser,
                                                                       orc_NodeDataPools);
@@ -387,8 +388,8 @@ int32_t C_OscNodeFiler::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & o
    {
       if (u32_ExpectedSize != orc_NodeComProtocols.size())
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected comm protocol count, expected: %u, got %u", u32_ExpectedSize,
+         std::string c_Tmp;
+         c_Tmp = PrintFormattedCompat("Unexpected comm protocol count, expected: %u, got %u", u32_ExpectedSize,
                               static_cast<uint32_t>(orc_NodeComProtocols.size()));
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
@@ -417,8 +418,8 @@ int32_t C_OscNodeFiler::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & o
 int32_t C_OscNodeFiler::h_SaveNodeComProtocols(const std::vector<C_OscCanProtocol> & orc_NodeComProtocols,
                                                const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
                                                C_OscXmlParserBase & orc_XmlParser,
-                                               const stw::scl::C_SclString & orc_BasePath,
-                                               std::vector<C_SclString> * const opc_CreatedFiles)
+                                               const std::string & orc_BasePath,
+                                               std::vector<std::string> * const opc_CreatedFiles)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -432,15 +433,15 @@ int32_t C_OscNodeFiler::h_SaveNodeComProtocols(const std::vector<C_OscCanProtoco
       if (rc_CurProtocol.u32_DataPoolIndex < orc_NodeDataPools.size())
       {
          const C_OscNodeDataPool & rc_CurDatapool = orc_NodeDataPools[rc_CurProtocol.u32_DataPoolIndex];
-         if (orc_BasePath.IsEmpty())
+         if (orc_BasePath.empty())
          {
             //To string
             C_OscNodeCommFiler::h_SaveNodeComProtocol(rc_CurProtocol, orc_XmlParser, rc_CurDatapool.c_Name);
          }
          else
          {
-            const C_SclString c_FileName = C_OscNodeCommFiler::h_GetFileName(rc_CurDatapool.c_Name);
-            const C_SclString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
+            const std::string c_FileName = C_OscNodeCommFiler::h_GetFileName(rc_CurDatapool.c_Name);
+            const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
             //Save comm definition file
             s32_Retval = C_OscNodeCommFiler::h_SaveNodeComProtocolFile(orc_NodeComProtocols[u32_ItComProtocol],
                                                                        c_CombinedFileName,
@@ -458,7 +459,7 @@ int32_t C_OscNodeFiler::h_SaveNodeComProtocols(const std::vector<C_OscCanProtoco
       {
          s32_Retval = C_CONFIG;
          osc_write_log_error("Saving system definition",
-                             "Invalid index " + C_SclString::IntToStr(
+                             "Invalid index " + std::to_string(
                                 rc_CurProtocol.u32_DataPoolIndex) + " for comm protocol");
       }
       //Return
@@ -476,7 +477,7 @@ int32_t C_OscNodeFiler::h_SaveNodeComProtocols(const std::vector<C_OscCanProtoco
    Automatically generated folder name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeFiler::h_GetFolderName(const C_SclString & orc_NodeName)
+std::string C_OscNodeFiler::h_GetFolderName(const std::string & orc_NodeName)
 {
    return "node_" + C_OscSystemFilerUtil::h_PrepareItemNameForFileName(orc_NodeName);
 }
@@ -488,7 +489,7 @@ C_SclString C_OscNodeFiler::h_GetFolderName(const C_SclString & orc_NodeName)
    Automatically generated file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeFiler::h_GetFileName(void)
+std::string C_OscNodeFiler::h_GetFileName(void)
 {
    return "node_core.xml";
 }
@@ -678,7 +679,7 @@ int32_t C_OscNodeFiler::mh_LoadComInterface(std::vector<C_OscNodeComInterfaceSet
                                             C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_CurNode = orc_XmlParser.SelectNodeChild("communication-interface");
+   std::string c_CurNode = orc_XmlParser.SelectNodeChild("communication-interface");
 
    if (c_CurNode == "communication-interface")
    {
@@ -833,11 +834,11 @@ void C_OscNodeFiler::mh_SaveComInterface(const std::vector<C_OscNodeComInterface
       orc_XmlParser.SetAttributeBool("update-available", rc_CurComInterface.q_IsUpdateEnabled);
       orc_XmlParser.SetAttributeBool("routing-available", rc_CurComInterface.q_IsRoutingEnabled);
       orc_XmlParser.SetAttributeBool("diagnosis-available", rc_CurComInterface.q_IsDiagnosisEnabled);
-      if (rc_CurComInterface.c_LastSyncedDbcSha256.IsEmpty() == false)
+      if (rc_CurComInterface.c_LastSyncedDbcSha256.empty() == false)
       {
          orc_XmlParser.SetAttributeString("dbc-sha256", rc_CurComInterface.c_LastSyncedDbcSha256);
       }
-      if (rc_CurComInterface.c_LastSyncedProjectMsgHash.IsEmpty() == false)
+      if (rc_CurComInterface.c_LastSyncedProjectMsgHash.empty() == false)
       {
          orc_XmlParser.SetAttributeString("dbc-project-msg-hash", rc_CurComInterface.c_LastSyncedProjectMsgHash);
       }
@@ -911,7 +912,7 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
 
    if (orc_XmlParser.SelectNodeChild("applications") == "applications")
    {
-      C_SclString c_CurNode;
+      std::string c_CurNode;
       uint32_t u32_ExpectedSize = 0UL;
       const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -1077,8 +1078,8 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
                   {
                      if (u32_ExpectedOutputfileNumber != c_CurApplication.c_ResultPaths.size())
                      {
-                        C_SclString c_Tmp;
-                        c_Tmp.PrintFormatted("Unexpected output file count, expected: %u, got %u",
+                        std::string c_Tmp;
+                        c_Tmp = PrintFormattedCompat("Unexpected output file count, expected: %u, got %u",
                                              u32_ExpectedOutputfileNumber,
                                              static_cast<uint32_t>(c_CurApplication.c_ResultPaths.size()));
                         osc_write_log_warning("Load file", c_Tmp.c_str());
@@ -1115,8 +1116,8 @@ int32_t C_OscNodeFiler::mh_LoadApplications(std::vector<C_OscNodeApplication> & 
       {
          if (u32_ExpectedSize != orc_NodeApplications.size())
          {
-            C_SclString c_Tmp;
-            c_Tmp.PrintFormatted("Unexpected application count, expected: %u, got %u", u32_ExpectedSize,
+            std::string c_Tmp;
+            c_Tmp = PrintFormattedCompat("Unexpected application count, expected: %u, got %u", u32_ExpectedSize,
                                  static_cast<uint32_t>(orc_NodeApplications.size()));
             osc_write_log_warning("Load file", c_Tmp.c_str());
          }
@@ -1195,7 +1196,7 @@ void C_OscNodeFiler::mh_SaveApplications(const std::vector<C_OscNodeApplication>
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode & orc_Node, C_OscXmlParserBase & orc_XmlParser,
-                                         const stw::scl::C_SclString & orc_BasePath)
+                                         const std::string & orc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1203,7 +1204,7 @@ int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode & orc_Node, C_OscXmlParserBas
    orc_Node.c_DataPools.clear();
    if (orc_XmlParser.SelectNodeChild("data-pools") == "data-pools")
    {
-      C_SclString c_CurNode;
+      std::string c_CurNode;
       uint32_t u32_ExpectedSize = 0UL;
       const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -1220,7 +1221,7 @@ int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode & orc_Node, C_OscXmlParserBas
          do
          {
             C_OscNodeDataPool c_CurDataPool;
-            if (orc_BasePath.IsEmpty())
+            if (orc_BasePath.empty())
             {
                s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPool(c_CurDataPool, orc_XmlParser);
             }
@@ -1253,8 +1254,8 @@ int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode & orc_Node, C_OscXmlParserBas
          {
             if (u32_ExpectedSize != orc_Node.c_DataPools.size())
             {
-               C_SclString c_Tmp;
-               c_Tmp.PrintFormatted("Unexpected Datapool count, expected: %u, got %u", u32_ExpectedSize,
+               std::string c_Tmp;
+               c_Tmp = PrintFormattedCompat("Unexpected Datapool count, expected: %u, got %u", u32_ExpectedSize,
                                     static_cast<uint32_t>(orc_Node.c_DataPools.size()));
                osc_write_log_warning("Load file", c_Tmp.c_str());
             }
@@ -1290,8 +1291,8 @@ int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode & orc_Node, C_OscXmlParserBas
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
-                                         C_OscXmlParserBase & orc_XmlParser, const stw::scl::C_SclString & orc_BasePath,
-                                         std::vector<C_SclString> * const opc_CreatedFiles)
+                                         C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
+                                         std::vector<std::string> * const opc_CreatedFiles)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1302,15 +1303,15 @@ int32_t C_OscNodeFiler::mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & 
    {
       const C_OscNodeDataPool & rc_CurDatapool = orc_NodeDataPools[u32_ItDataPool];
       orc_XmlParser.CreateAndSelectNodeChild("data-pool");
-      if (orc_BasePath.IsEmpty())
+      if (orc_BasePath.empty())
       {
          //To string
          C_OscNodeDataPoolFiler::h_SaveDataPool(rc_CurDatapool, orc_XmlParser);
       }
       else
       {
-         const C_SclString c_FileName = C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
-         const C_SclString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
+         const std::string c_FileName = C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
+         const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Save datapool file
          s32_Retval = C_OscNodeDataPoolFiler::h_SaveDataPoolFile(rc_CurDatapool, c_CombinedFileName);
          //Set file reference
@@ -1342,7 +1343,7 @@ int32_t C_OscNodeFiler::mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig & orc_Config, C_OscXmlParserBase & orc_XmlParser,
-                                    const C_SclString & orc_BasePath)
+                                    const std::string & orc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1350,7 +1351,7 @@ int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig & orc_Config, C_OscXmlParser
    orc_Config.Clear();
    if (orc_XmlParser.SelectNodeChild("halc-file") == "halc-file")
    {
-      if (orc_BasePath.IsEmpty())
+      if (orc_BasePath.empty())
       {
          //From string
          s32_Retval = C_OscHalcConfigFiler::h_LoadData(orc_Config, orc_XmlParser, orc_BasePath);
@@ -1388,24 +1389,24 @@ int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig & orc_Config, C_OscXmlParser
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXmlParserBase & orc_XmlParser,
-                                    const C_SclString & orc_BasePath, std::vector<C_SclString> * const opc_CreatedFiles)
+                                    const std::string & orc_BasePath, std::vector<std::string> * const opc_CreatedFiles)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (!orc_Config.c_FileString.IsEmpty())
+   if (!orc_Config.c_FileString.empty())
    {
       orc_XmlParser.CreateAndSelectNodeChild("halc-file");
-      if (orc_BasePath.IsEmpty())
+      if (orc_BasePath.empty())
       {
          //To string
          s32_Retval = C_OscHalcConfigFiler::h_SaveData(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
       }
       else
       {
-         // const C_SclString c_FileName = C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
+         // const std::string c_FileName = C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
          //Fix
-         const C_SclString c_FileName = "halc.xml";
-         const C_SclString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
+         const std::string c_FileName = "halc.xml";
+         const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Save datapool file
          s32_Retval = C_OscHalcConfigFiler::h_SaveFile(orc_Config, c_CombinedFileName, orc_BasePath,
                                                        opc_CreatedFiles);
@@ -1438,7 +1439,7 @@ int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXml
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
-                                               C_OscXmlParserBase & orc_XmlParser, const C_SclString & orc_BasePath)
+                                               C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1446,7 +1447,7 @@ int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(std::map<uint8_t, C_OscCanOpenMan
    orc_Config.clear();
    if (orc_XmlParser.SelectNodeChild("can-open-managers-file") == "can-open-managers-file")
    {
-      if (orc_BasePath.IsEmpty())
+      if (orc_BasePath.empty())
       {
          //From string
          s32_Retval = C_OscCanOpenManagerFiler::h_LoadData(orc_Config, orc_XmlParser, orc_BasePath);
@@ -1487,17 +1488,17 @@ int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(std::map<uint8_t, C_OscCanOpenMan
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
-                                               C_OscXmlParserBase & orc_XmlParser, const C_SclString & orc_BasePath,
-                                               std::vector<C_SclString> * const opc_CreatedFiles,
+                                               C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
+                                               std::vector<std::string> * const opc_CreatedFiles,
                                                const std::map<uint32_t,
-                                                              stw::scl::C_SclString> & orc_NodeIndicesToNameMap)
+                                                              std::string> & orc_NodeIndicesToNameMap)
 {
    int32_t s32_Retval = C_NO_ERR;
 
    if (orc_Config.size() > 0)
    {
       orc_XmlParser.CreateAndSelectNodeChild("can-open-managers-file");
-      if (orc_BasePath.IsEmpty())
+      if (orc_BasePath.empty())
       {
          //To string
          C_OscCanOpenManagerFiler::h_SaveData(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
@@ -1505,10 +1506,10 @@ int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(const std::map<uint8_t, C_OscCanO
       }
       else
       {
-         // const C_SclString c_FileName = C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
+         // const std::string c_FileName = C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
          //Fix
-         const C_SclString c_FileName = "can_open_managers.xml";
-         const C_SclString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
+         const std::string c_FileName = "can_open_managers.xml";
+         const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Save datapool file
          s32_Retval = C_OscCanOpenManagerFiler::h_SaveFile(orc_Config, c_CombinedFileName, orc_BasePath,
                                                            opc_CreatedFiles, orc_NodeIndicesToNameMap);
@@ -1542,7 +1543,7 @@ int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(const std::map<uint8_t, C_OscCanO
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_LoadDataLoggers(std::vector<C_OscDataLoggerJob> & orc_Config,
-                                           C_OscXmlParserBase & orc_XmlParser, const C_SclString & orc_BasePath)
+                                           C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1550,7 +1551,7 @@ int32_t C_OscNodeFiler::mh_LoadDataLoggers(std::vector<C_OscDataLoggerJob> & orc
    orc_Config.clear();
    if (orc_XmlParser.SelectNodeChild("data-loggers-file") == "data-loggers-file")
    {
-      if (orc_BasePath.IsEmpty())
+      if (orc_BasePath.empty())
       {
          //From string
          s32_Retval = C_OscDataLoggerJobFiler::h_LoadData(orc_Config, orc_XmlParser);
@@ -1586,25 +1587,25 @@ int32_t C_OscNodeFiler::mh_LoadDataLoggers(std::vector<C_OscDataLoggerJob> & orc
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_SaveDataLoggers(const std::vector<C_OscDataLoggerJob> & orc_Config,
-                                           C_OscXmlParserBase & orc_XmlParser, const C_SclString & orc_BasePath,
-                                           std::vector<C_SclString> * const opc_CreatedFiles)
+                                           C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath,
+                                           std::vector<std::string> * const opc_CreatedFiles)
 {
    int32_t s32_Retval = C_NO_ERR;
 
    if (orc_Config.size() > 0)
    {
       orc_XmlParser.CreateAndSelectNodeChild("data-loggers-file");
-      if (orc_BasePath.IsEmpty())
+      if (orc_BasePath.empty())
       {
          //To string
          C_OscDataLoggerJobFiler::h_SaveData(orc_Config, orc_XmlParser);
       }
       else
       {
-         // const C_SclString c_FileName = C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
+         // const std::string c_FileName = C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
          //Fix
-         const C_SclString c_FileName = "data_loggers.xml";
-         const C_SclString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
+         const std::string c_FileName = "data_loggers.xml";
+         const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Save datapool file
          s32_Retval = C_OscDataLoggerJobFiler::h_SaveFile(orc_Config, c_CombinedFileName);
          //Set file reference
@@ -1637,7 +1638,7 @@ int32_t C_OscNodeFiler::mh_SaveDataLoggers(const std::vector<C_OscDataLoggerJob>
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_LoadXappProperties(C_OscXappProperties & orc_Config, C_OscXmlParserBase & orc_XmlParser,
-                                              const C_SclString & orc_BasePath)
+                                              const std::string & orc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1645,7 +1646,7 @@ int32_t C_OscNodeFiler::mh_LoadXappProperties(C_OscXappProperties & orc_Config, 
    orc_Config.Initialize();
    if (orc_XmlParser.SelectNodeChild("x-app-properties-file") == "x-app-properties-file")
    {
-      if (orc_BasePath.IsEmpty())
+      if (orc_BasePath.empty())
       {
          //From string
          s32_Retval = C_OscXappPropertiesFiler::h_LoadXappProperties(orc_Config, orc_XmlParser);
@@ -1806,25 +1807,25 @@ void C_OscNodeFiler::mh_SaveOsyServerSettings(const C_OscNodeOpenSydeServerSetti
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_SaveXappProperties(const C_OscNode & orc_Config, C_OscXmlParserBase & orc_XmlParser,
-                                              const C_SclString & orc_BasePath,
-                                              std::vector<C_SclString> * const opc_CreatedFiles)
+                                              const std::string & orc_BasePath,
+                                              std::vector<std::string> * const opc_CreatedFiles)
 {
    int32_t s32_Retval = C_NO_ERR;
 
    if (orc_Config.c_Properties.q_XappSupport)
    {
       orc_XmlParser.CreateAndSelectNodeChild("x-app-properties-file");
-      if (orc_BasePath.IsEmpty())
+      if (orc_BasePath.empty())
       {
          //To string
          C_OscXappPropertiesFiler::h_SaveXappProperties(orc_Config.c_XappProperties, orc_XmlParser);
       }
       else
       {
-         // const C_SclString c_FileName = C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
+         // const std::string c_FileName = C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
          //Fix
-         const C_SclString c_FileName = C_OscXappPropertiesFiler::h_GetFileName();
-         const C_SclString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
+         const std::string c_FileName = C_OscXappPropertiesFiler::h_GetFileName();
+         const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Save datapool file
          s32_Retval =
             C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(orc_Config.c_XappProperties, c_CombinedFileName);
@@ -1852,10 +1853,10 @@ int32_t C_OscNodeFiler::mh_SaveXappProperties(const C_OscNode & orc_Config, C_Os
    Stringified diagnostic server type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeFiler::mh_DiagnosticServerToString(
+std::string C_OscNodeFiler::mh_DiagnosticServerToString(
    const C_OscNodeProperties::E_DiagnosticServerProtocol & ore_DiagnosticProtocol)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_DiagnosticProtocol)
    {
@@ -1883,7 +1884,7 @@ C_SclString C_OscNodeFiler::mh_DiagnosticServerToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_StringToDiagnosticServer(const C_SclString & orc_String,
+int32_t C_OscNodeFiler::mh_StringToDiagnosticServer(const std::string & orc_String,
                                                     C_OscNodeProperties::E_DiagnosticServerProtocol & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1920,9 +1921,9 @@ int32_t C_OscNodeFiler::mh_StringToDiagnosticServer(const C_SclString & orc_Stri
    Stringified flash loader type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeFiler::mh_FlashLoaderToString(const C_OscNodeProperties::E_FlashLoaderProtocol & ore_FlashLoader)
+std::string C_OscNodeFiler::mh_FlashLoaderToString(const C_OscNodeProperties::E_FlashLoaderProtocol & ore_FlashLoader)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_FlashLoader)
    {
@@ -1950,7 +1951,7 @@ C_SclString C_OscNodeFiler::mh_FlashLoaderToString(const C_OscNodeProperties::E_
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_StringToFlashLoader(const C_SclString & orc_String,
+int32_t C_OscNodeFiler::mh_StringToFlashLoader(const std::string & orc_String,
                                                C_OscNodeProperties::E_FlashLoaderProtocol & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1987,10 +1988,10 @@ int32_t C_OscNodeFiler::mh_StringToFlashLoader(const C_SclString & orc_String,
    Stringified max service size mode type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeFiler::mh_MaxServiceSizeModeTypeToString(
+std::string C_OscNodeFiler::mh_MaxServiceSizeModeTypeToString(
    const C_OscNodeOpenSydeServerSettings::E_MaxServiceSizeModeType & ore_MaxServiceSizeModeType)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_MaxServiceSizeModeType)
    {
@@ -2018,7 +2019,7 @@ C_SclString C_OscNodeFiler::mh_MaxServiceSizeModeTypeToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_StringToMaxServiceSizeModeType(const stw::scl::C_SclString & orc_String,
+int32_t C_OscNodeFiler::mh_StringToMaxServiceSizeModeType(const std::string & orc_String,
                                                           C_OscNodeOpenSydeServerSettings::E_MaxServiceSizeModeType & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;

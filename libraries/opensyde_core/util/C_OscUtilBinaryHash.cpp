@@ -16,8 +16,10 @@
 #include "C_OscUtilBinaryHash.hpp"
 #include "TglFile.hpp"
 #include "C_Md5Checksum.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::scl;
 using namespace stw::opensyde_core;
 using namespace stw::tgl;
 using namespace stw::md5;
@@ -25,7 +27,7 @@ using namespace stw::md5;
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
 bool C_OscUtilBinaryHash::mhq_HashCompleted = false;
-stw::scl::C_SclString C_OscUtilBinaryHash::mhc_BinaryHash = "";
+std::string C_OscUtilBinaryHash::mhc_BinaryHash = "";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -51,13 +53,13 @@ C_OscUtilBinaryHash::C_OscUtilBinaryHash(void)
    \return  void
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscUtilBinaryHash::h_CreateBinaryHash(void)
+std::string C_OscUtilBinaryHash::h_CreateBinaryHash(void)
 {
-   const stw::scl::C_SclString c_ExePath = stw::tgl::TglGetExePath();
+   const std::string c_ExePath = stw::tgl::TglGetExePath();
 
    if (h_GetHashBool() == false)
    {
-      mhc_BinaryHash = stw::md5::C_Md5Checksum::GetMD5(c_ExePath).UpperCase();
+      mhc_BinaryHash = UpperCaseCompat(stw::md5::C_Md5Checksum::GetMD5(c_ExePath));
       h_SetHashBool(true);
    }
    return mhc_BinaryHash;

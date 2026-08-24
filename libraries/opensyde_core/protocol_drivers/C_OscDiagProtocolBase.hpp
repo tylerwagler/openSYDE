@@ -18,7 +18,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -481,7 +481,7 @@ public:
    //-----------------------------------------------------------------------------
    virtual int32_t DataPoolReadMetaData(const uint8_t ou8_DataPoolIndex,
                                         uint8_t(&orau8_Version)[3],
-                                        stw::scl::C_SclString & orc_Name,
+                                        std::string & orc_Name,
                                         uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------

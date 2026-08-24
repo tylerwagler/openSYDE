@@ -19,7 +19,7 @@
 #include <list>
 #include "tinyxml2.h"
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -35,8 +35,8 @@ namespace opensyde_core
 class C_OscXmlAttribute
 {
 public:
-   stw::scl::C_SclString c_Name;  ///< name of attribute
-   stw::scl::C_SclString c_Value; ///< value of attribute
+   std::string c_Name;  ///< name of attribute
+   std::string c_Value; ///< value of attribute
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -61,80 +61,80 @@ public:
    virtual ~C_OscXmlParserBase(void);
 
    // init node system - selects second node, if available; first node is declaration
-   stw::scl::C_SclString SelectRoot(void);
-   virtual int32_t SelectRootError(const stw::scl::C_SclString & orc_Name);
+   std::string SelectRoot(void);
+   virtual int32_t SelectRootError(const std::string & orc_Name);
 
    // node navigation - returns current node
    // select first/next node (with name) after current node      (go forward)
-   stw::scl::C_SclString SelectNodeNext(const stw::scl::C_SclString & orc_Name = "");
+   std::string SelectNodeNext(const std::string & orc_Name = "");
    // select first child node (with name) of current node        (go deeper)
-   stw::scl::C_SclString SelectNodeChild(const stw::scl::C_SclString & orc_Name = "");
-   virtual int32_t SelectNodeChildError(const stw::scl::C_SclString & orc_Name);
+   std::string SelectNodeChild(const std::string & orc_Name = "");
+   virtual int32_t SelectNodeChildError(const std::string & orc_Name);
    // select parent node of current node                         (go up)
-   stw::scl::C_SclString SelectNodeParent(void);
+   std::string SelectNodeParent(void);
 
    //append new child node under the current node with content
    // if the document is still empty this will create the root node
-   void CreateNodeChild(const stw::scl::C_SclString & orc_Name, const stw::scl::C_SclString & orc_Content = "");
+   void CreateNodeChild(const std::string & orc_Name, const std::string & orc_Content = "");
    //append new child node under the current node and select it; returns new child node name
-   stw::scl::C_SclString CreateAndSelectNodeChild(const stw::scl::C_SclString & orc_Name);
+   std::string CreateAndSelectNodeChild(const std::string & orc_Name);
    // delete current node
-   stw::scl::C_SclString DeleteNode(void);
+   std::string DeleteNode(void);
 
    // node text content
-   void SetNodeContent(const stw::scl::C_SclString & orc_Content);
-   stw::scl::C_SclString GetNodeContent(void) const;
+   void SetNodeContent(const std::string & orc_Content);
+   std::string GetNodeContent(void) const;
 
    // node attribute operations
-   bool AttributeExists(const stw::scl::C_SclString & orc_Name) const;
+   bool AttributeExists(const std::string & orc_Name) const;
 
-   stw::scl::C_SclString GetCurrentNodeName(void) const;
+   std::string GetCurrentNodeName(void) const;
    uint32_t GetFileLineForCurrentNode(void) const;
 
    // set attribute values
-   void SetAttributeString(const stw::scl::C_SclString & orc_Name, const stw::scl::C_SclString & orc_Value);
-   void SetAttributeSint32(const stw::scl::C_SclString & orc_Name, const int32_t os32_Value);
-   void SetAttributeUint32(const stw::scl::C_SclString & orc_Name, const uint32_t ou32_Value);
-   void SetAttributeSint64(const stw::scl::C_SclString & orc_Name, const int64_t os64_Value);
-   void SetAttributeUint64(const stw::scl::C_SclString & orc_Name, const uint64_t ou64_Value);
-   void SetAttributeBool(const stw::scl::C_SclString & orc_Name, const bool oq_Value);
-   void SetAttributeFloat32(const stw::scl::C_SclString & orc_Name, const float32_t of32_Value);
-   void SetAttributeFloat64(const stw::scl::C_SclString & orc_Name, const float64_t of64_Value);
+   void SetAttributeString(const std::string & orc_Name, const std::string & orc_Value);
+   void SetAttributeSint32(const std::string & orc_Name, const int32_t os32_Value);
+   void SetAttributeUint32(const std::string & orc_Name, const uint32_t ou32_Value);
+   void SetAttributeSint64(const std::string & orc_Name, const int64_t os64_Value);
+   void SetAttributeUint64(const std::string & orc_Name, const uint64_t ou64_Value);
+   void SetAttributeBool(const std::string & orc_Name, const bool oq_Value);
+   void SetAttributeFloat32(const std::string & orc_Name, const float32_t of32_Value);
+   void SetAttributeFloat64(const std::string & orc_Name, const float64_t of64_Value);
 
    // get attribute values
-   stw::scl::C_SclString GetAttributeString(const stw::scl::C_SclString & orc_Name,
-                                            const stw::scl::C_SclString & orc_Default = "") const;
-   int32_t GetAttributeSint32(const stw::scl::C_SclString & orc_Name, const int32_t os32_Default = 0L) const;
-   uint32_t GetAttributeUint32(const stw::scl::C_SclString & orc_Name, const uint32_t ou32_Default = 0UL) const;
-   int64_t GetAttributeSint64(const stw::scl::C_SclString & orc_Name, const int64_t os64_Default = 0LL) const;
-   uint64_t GetAttributeUint64(const stw::scl::C_SclString & orc_Name, const uint64_t ou64_Default = 0ULL) const;
-   bool GetAttributeBool(const stw::scl::C_SclString & orc_Name, const bool oq_Default = false) const;
-   float32_t GetAttributeFloat32(const stw::scl::C_SclString & orc_Name, const float32_t of32_Default = 0.0F) const;
-   float64_t GetAttributeFloat64(const stw::scl::C_SclString & orc_Name, const float64_t of64_Default = 0.0) const;
+   std::string GetAttributeString(const std::string & orc_Name,
+                                            const std::string & orc_Default = "") const;
+   int32_t GetAttributeSint32(const std::string & orc_Name, const int32_t os32_Default = 0L) const;
+   uint32_t GetAttributeUint32(const std::string & orc_Name, const uint32_t ou32_Default = 0UL) const;
+   int64_t GetAttributeSint64(const std::string & orc_Name, const int64_t os64_Default = 0LL) const;
+   uint64_t GetAttributeUint64(const std::string & orc_Name, const uint64_t ou64_Default = 0ULL) const;
+   bool GetAttributeBool(const std::string & orc_Name, const bool oq_Default = false) const;
+   float32_t GetAttributeFloat32(const std::string & orc_Name, const float32_t of32_Default = 0.0F) const;
+   float64_t GetAttributeFloat64(const std::string & orc_Name, const float64_t of64_Default = 0.0) const;
 
    // get attribute values (includes error check)
-   virtual int32_t GetAttributeStringError(const stw::scl::C_SclString & orc_Name,
-                                           stw::scl::C_SclString & orc_Value) const;
-   virtual int32_t GetAttributeSint32Error(const stw::scl::C_SclString & orc_Name, int32_t & ors32_Value) const;
-   virtual int32_t GetAttributeUint32Error(const stw::scl::C_SclString & orc_Name, uint32_t & oru32_Value) const;
-   virtual int32_t GetAttributeSint64Error(const stw::scl::C_SclString & orc_Name, int64_t & ors64_Value) const;
-   virtual int32_t GetAttributeUint64Error(const stw::scl::C_SclString & orc_Name, uint64_t & oru64_Value) const;
-   virtual int32_t GetAttributeBoolError(const stw::scl::C_SclString & orc_Name, bool & orq_Value) const;
-   virtual int32_t GetAttributeFloat32Error(const stw::scl::C_SclString & orc_Name, float32_t & orf32_Value) const;
-   virtual int32_t GetAttributeFloat64Error(const stw::scl::C_SclString & orc_Name, float64_t & orf64_Value) const;
+   virtual int32_t GetAttributeStringError(const std::string & orc_Name,
+                                           std::string & orc_Value) const;
+   virtual int32_t GetAttributeSint32Error(const std::string & orc_Name, int32_t & ors32_Value) const;
+   virtual int32_t GetAttributeUint32Error(const std::string & orc_Name, uint32_t & oru32_Value) const;
+   virtual int32_t GetAttributeSint64Error(const std::string & orc_Name, int64_t & ors64_Value) const;
+   virtual int32_t GetAttributeUint64Error(const std::string & orc_Name, uint64_t & oru64_Value) const;
+   virtual int32_t GetAttributeBoolError(const std::string & orc_Name, bool & orq_Value) const;
+   virtual int32_t GetAttributeFloat32Error(const std::string & orc_Name, float32_t & orf32_Value) const;
+   virtual int32_t GetAttributeFloat64Error(const std::string & orc_Name, float64_t & orf64_Value) const;
 
    //Base reporting functions
-   virtual void ReportErrorForNodeContentAppendXmlContext(const stw::scl::C_SclString & orc_ErrorMessage)
+   virtual void ReportErrorForNodeContentAppendXmlContext(const std::string & orc_ErrorMessage)
    const;
-   virtual void ReportErrorForAttributeContentAppendXmlContext(const stw::scl::C_SclString & orc_Attribute,
-                                                               const stw::scl::C_SclString & orc_ErrorMessage)
+   virtual void ReportErrorForAttributeContentAppendXmlContext(const std::string & orc_Attribute,
+                                                               const std::string & orc_ErrorMessage)
    const;
-   virtual void ReportErrorForNodeContentStartingWithXmlContext(const stw::scl::C_SclString & orc_ErrorMessage)
+   virtual void ReportErrorForNodeContentStartingWithXmlContext(const std::string & orc_ErrorMessage)
    const;
-   virtual void ReportErrorForAttributeContentStartingWithXmlContext(const stw::scl::C_SclString & orc_Attribute,
-                                                                     const stw::scl::C_SclString & orc_ErrorMessage)
+   virtual void ReportErrorForAttributeContentStartingWithXmlContext(const std::string & orc_Attribute,
+                                                                     const std::string & orc_ErrorMessage)
    const;
-   virtual void ReportErrorForNodeMissing(const stw::scl::C_SclString & orc_MissingNodeName) const;
+   virtual void ReportErrorForNodeMissing(const std::string & orc_MissingNodeName) const;
 
    // get all attributes
    std::vector<C_OscXmlAttribute> GetAttributes(void) const;
@@ -157,12 +157,12 @@ public:
    virtual ~C_OscXmlParser(void);
 
    // open xml file; create XML declaration
-   virtual int32_t LoadFromFile(const stw::scl::C_SclString & orc_FileName);
-   virtual int32_t SaveToFile(const stw::scl::C_SclString & orc_FileName);
+   virtual int32_t LoadFromFile(const std::string & orc_FileName);
+   virtual int32_t SaveToFile(const std::string & orc_FileName);
 
    // parse xml string; create XML declaration
-   int32_t LoadFromString(const stw::scl::C_SclString & orc_String);
-   void SaveToString(stw::scl::C_SclString & orc_String) const;
+   int32_t LoadFromString(const std::string & orc_String);
+   void SaveToString(std::string & orc_String) const;
 };
 
 //----------------------------------------------------------------------------------------------------------------------

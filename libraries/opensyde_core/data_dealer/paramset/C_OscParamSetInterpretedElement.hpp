@@ -12,7 +12,7 @@
 #define C_OSCPARAMSETINTERPRETEDELEMENT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscNodeDataPoolContent.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -30,7 +30,7 @@ class C_OscParamSetInterpretedElement
 public:
    C_OscParamSetInterpretedElement(void);
 
-   stw::scl::C_SclString c_Name;        ///< Element name
+   std::string c_Name;        ///< Element name
    C_OscNodeDataPoolContent c_NvmValue; ///< Element parameter value
 };
 

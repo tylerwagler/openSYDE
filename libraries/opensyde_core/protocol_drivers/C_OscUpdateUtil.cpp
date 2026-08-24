@@ -11,12 +11,11 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscUpdateUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -73,7 +72,7 @@ uint32_t C_OscUpdateUtil::h_GetAdaptedTransferDataTimeout(const uint32_t ou32_De
    osc_write_log_info("Update Node",
                       "Used \"transferdatatimeout\" by adding an offset for compensating a "
                       "potential high bus load: " +
-                      C_SclString::IntToStr(u32_AdaptedTime) + "ms");
+                      std::to_string(u32_AdaptedTime) + "ms");
 
    return u32_AdaptedTime;
 }

@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -49,7 +50,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeCommFiler::h_LoadNodeComProtocolFile(C_OscCanProtocol & orc_NodeComProtocol,
-                                                      const C_SclString & orc_FilePath,
+                                                      const std::string & orc_FilePath,
                                                       const std::vector<C_OscNodeDataPool> & orc_NodeDataPools)
 {
    C_OscXmlParser c_XmlParser;
@@ -62,7 +63,7 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComProtocolFile(C_OscCanProtocol & orc_Nod
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(std::stoi(c_XmlParser.GetNodeContent()));
       }
       catch (...)
       {
@@ -74,7 +75,7 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComProtocolFile(C_OscCanProtocol & orc_Nod
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading node definition", "Value of \"file-version\": " +
-                            C_SclString::IntToStr(u16_FileVersion));
+                            std::to_string(u16_FileVersion));
          //Check file version
          if (u16_FileVersion != 1U)
          {
@@ -139,7 +140,7 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComProtocol(C_OscCanProtocol & orc_NodeCom
    if (orc_XmlParser.AttributeExists("data-pool-name") == true)
    {
       bool q_Found = false;
-      const C_SclString c_DatapoolName = orc_XmlParser.GetAttributeString("data-pool-name");
+      const std::string c_DatapoolName = orc_XmlParser.GetAttributeString("data-pool-name");
       for (uint32_t u32_ItDatapool = 0UL; u32_ItDatapool < orc_NodeDataPools.size(); ++u32_ItDatapool)
       {
          const C_OscNodeDataPool & rc_CurDatapool = orc_NodeDataPools[u32_ItDatapool];
@@ -206,8 +207,8 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComProtocol(C_OscCanProtocol & orc_NodeCom
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeCommFiler::h_SaveNodeComProtocolFile(const C_OscCanProtocol & orc_NodeComProtocol,
-                                                      const C_SclString & orc_FilePath,
-                                                      const C_SclString & orc_DatapoolName)
+                                                      const std::string & orc_FilePath,
+                                                      const std::string & orc_DatapoolName)
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath,
@@ -248,7 +249,7 @@ int32_t C_OscNodeCommFiler::h_SaveNodeComProtocolFile(const C_OscCanProtocol & o
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeCommFiler::h_SaveNodeComProtocol(const C_OscCanProtocol & orc_NodeComProtocol,
-                                               C_OscXmlParserBase & orc_XmlParser, const C_SclString & orc_DatapoolName)
+                                               C_OscXmlParserBase & orc_XmlParser, const std::string & orc_DatapoolName)
 {
    orc_XmlParser.SetAttributeString("data-pool-name", orc_DatapoolName);
    orc_XmlParser.CreateNodeChild("communication-protocol",
@@ -280,7 +281,7 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComMessageContainers(
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   C_SclString c_CurNodeComMessageContainer;
+   std::string c_CurNodeComMessageContainer;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -320,8 +321,8 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComMessageContainers(
    {
       if (u32_ExpectedSize != orc_NodeComMessageContainers.size())
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected comm message container count, expected: %u, got %u", u32_ExpectedSize,
+         std::string c_Tmp;
+         c_Tmp = PrintFormattedCompat("Unexpected comm message container count, expected: %u, got %u", u32_ExpectedSize,
                               static_cast<uint32_t>(orc_NodeComMessageContainers.size()));
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
@@ -462,7 +463,7 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComMessages(std::vector<C_OscCanMessage> &
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   C_SclString c_CurNodeComMessage;
+   std::string c_CurNodeComMessage;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -503,8 +504,8 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComMessages(std::vector<C_OscCanMessage> &
    {
       if (u32_ExpectedSize != orc_NodeComMessages.size())
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected messages count, expected: %u, got %u", u32_ExpectedSize,
+         std::string c_Tmp;
+         c_Tmp = PrintFormattedCompat("Unexpected messages count, expected: %u, got %u", u32_ExpectedSize,
                               static_cast<uint32_t>(orc_NodeComMessages.size()));
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
@@ -681,7 +682,7 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComSignals(std::vector<C_OscCanSignal> & o
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   C_SclString c_CurNodeComSignal;
+   std::string c_CurNodeComSignal;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -722,8 +723,8 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComSignals(std::vector<C_OscCanSignal> & o
    {
       if (u32_ExpectedSize != orc_NodeComSignals.size())
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected comm signal count, expected: %u, got %u", u32_ExpectedSize,
+         std::string c_Tmp;
+         c_Tmp = PrintFormattedCompat("Unexpected comm signal count, expected: %u, got %u", u32_ExpectedSize,
                               static_cast<uint32_t>(orc_NodeComSignals.size()));
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
@@ -874,10 +875,10 @@ void C_OscNodeCommFiler::h_SaveNodeComSignal(const C_OscCanSignal & orc_NodeComS
    Stringified communication protocol type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeCommFiler::h_CommunicationProtocolToString(
+std::string C_OscNodeCommFiler::h_CommunicationProtocolToString(
    const C_OscCanProtocol::E_Type & ore_CommunicationProtocol)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_CommunicationProtocol)
    {
@@ -914,7 +915,7 @@ C_SclString C_OscNodeCommFiler::h_CommunicationProtocolToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeCommFiler::h_StringToCommunicationProtocol(const C_SclString & orc_String,
+int32_t C_OscNodeCommFiler::h_StringToCommunicationProtocol(const std::string & orc_String,
                                                             C_OscCanProtocol::E_Type & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -957,7 +958,7 @@ int32_t C_OscNodeCommFiler::h_StringToCommunicationProtocol(const C_SclString & 
    Automatically generated file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeCommFiler::h_GetFileName(const C_SclString & orc_DatapoolName)
+std::string C_OscNodeCommFiler::h_GetFileName(const std::string & orc_DatapoolName)
 {
    return "comm_" + C_OscSystemFilerUtil::h_PrepareItemNameForFileName(orc_DatapoolName) + "_core.xml";
 }
@@ -1132,7 +1133,7 @@ int32_t C_OscNodeCommFiler::mh_LoadNodeOwnerIndices(C_OscCanInterfaceId & orc_Ow
       s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
       if (s32_Retval == C_NO_ERR)
       {
-         stw::scl::C_SclString c_NodeName = orc_XmlParser.SelectNodeChild("node-owner-index");
+         std::string c_NodeName = orc_XmlParser.SelectNodeChild("node-owner-index");
          if (c_NodeName == "node-owner-index")
          {
             do
@@ -1154,8 +1155,8 @@ int32_t C_OscNodeCommFiler::mh_LoadNodeOwnerIndices(C_OscCanInterfaceId & orc_Ow
       {
          if (u32_ExpectedSize != 1)
          {
-            C_SclString c_Tmp;
-            c_Tmp.PrintFormatted("Unexpected node owner indices count, expected: %u, got %u", u32_ExpectedSize,
+            std::string c_Tmp;
+            c_Tmp = PrintFormattedCompat("Unexpected node owner indices count, expected: %u, got %u", u32_ExpectedSize,
                                  1U);
             osc_write_log_warning("Load file", c_Tmp.c_str());
          }
@@ -1268,10 +1269,10 @@ int32_t C_OscNodeCommFiler::mh_LoadSignalJ1939Part(C_OscCanSignal & orc_NodeComm
    Stringified node data pool communication byte order type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeCommFiler::mh_CommunicationByteOrderToString(
+std::string C_OscNodeCommFiler::mh_CommunicationByteOrderToString(
    const C_OscCanSignal::E_ByteOrderType & ore_CommunicationByteOrder)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_CommunicationByteOrder)
    {
@@ -1298,7 +1299,7 @@ C_SclString C_OscNodeCommFiler::mh_CommunicationByteOrderToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeCommFiler::mh_StringToCommunicationByteOrder(const C_SclString & orc_String,
+int32_t C_OscNodeCommFiler::mh_StringToCommunicationByteOrder(const std::string & orc_String,
                                                               C_OscCanSignal::E_ByteOrderType & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1330,10 +1331,10 @@ int32_t C_OscNodeCommFiler::mh_StringToCommunicationByteOrder(const C_SclString 
    Stringified node data pool communication mux type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeCommFiler::mh_CommunicationMuxTypeToString(
+std::string C_OscNodeCommFiler::mh_CommunicationMuxTypeToString(
    const C_OscCanSignal::E_MultiplexerType & ore_CommunicationByteOrder)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_CommunicationByteOrder)
    {
@@ -1363,7 +1364,7 @@ C_SclString C_OscNodeCommFiler::mh_CommunicationMuxTypeToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeCommFiler::mh_StringToCommunicationMuxType(const C_SclString & orc_String,
+int32_t C_OscNodeCommFiler::mh_StringToCommunicationMuxType(const std::string & orc_String,
                                                             C_OscCanSignal::E_MultiplexerType & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1399,10 +1400,10 @@ int32_t C_OscNodeCommFiler::mh_StringToCommunicationMuxType(const C_SclString & 
    Stringified node data pool communication message transmission method type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscNodeCommFiler::mh_NodeComMessageTxMethodToString(
+std::string C_OscNodeCommFiler::mh_NodeComMessageTxMethodToString(
    const C_OscCanMessage::E_TxMethodType & ore_NodeComMessageTxMethod)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_NodeComMessageTxMethod)
    {
@@ -1441,7 +1442,7 @@ C_SclString C_OscNodeCommFiler::mh_NodeComMessageTxMethodToString(
    \param[out]  ore_Type      Node data pool communication message transmission method type
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeCommFiler::mh_StringToNodeComMessageTxMethod(const C_SclString & orc_String,
+void C_OscNodeCommFiler::mh_StringToNodeComMessageTxMethod(const std::string & orc_String,
                                                            C_OscCanMessage::E_TxMethodType & ore_Type)
 {
    if (orc_String == "cyclic")

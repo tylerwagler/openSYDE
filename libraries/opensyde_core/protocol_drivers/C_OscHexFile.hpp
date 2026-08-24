@@ -14,7 +14,7 @@
 #include "stwtypes.hpp"
 #include "C_HexFile.hpp"
 #include "C_OscApplicationInfoBlock.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include <vector>
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ class C_OscHexFile :
    public stw::hex_file::C_HexFile
 {
 public:
-   stw::scl::C_SclString ErrorCodeToErrorText(const uint32_t ou32_ErrorCode) const;
+   std::string ErrorCodeToErrorText(const uint32_t ou32_ErrorCode) const;
 
    //STW specific: find application information block(s) and return all information contained there:
    int32_t GetApplicationInformationBlocks(std::vector<C_OscApplicationInfoBlock> & orc_InfoBlocks,
@@ -38,7 +38,7 @@ public:
    int32_t CalcFileChecksum(uint32_t & oru32_Checksum);
 
    int32_t GetSignatureBlockAddress(uint32_t & oru32_Address);
-   int32_t ScanDeviceIdFromHexFile(stw::scl::C_SclString & orc_DeviceId);
+   int32_t ScanDeviceIdFromHexFile(std::string & orc_DeviceId);
    int32_t ScanApplicationInformationBlockFromHexFile(C_OscApplicationInfoBlock & orc_InfoBlock);
 };
 

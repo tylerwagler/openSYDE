@@ -15,9 +15,11 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscHalcConfigDomain.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
+using namespace stw::scl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
@@ -123,7 +125,7 @@ void C_OscHalcConfigDomain::CheckChannelNameUnique(const uint32_t ou32_ChannelIn
          if (u32_ItCompChannels != ou32_ChannelIndex) // skip current channel to avoid comparison "with itself"
          {
             const C_OscHalcConfigChannel & rc_ComparedChannel = this->c_ChannelConfigs[u32_ItCompChannels];
-            if (rc_CheckedChannel.c_Name.LowerCase() == rc_ComparedChannel.c_Name.LowerCase())
+            if (LowerCaseCompat(rc_CheckedChannel.c_Name) == LowerCaseCompat(rc_ComparedChannel.c_Name))
             {
                *opq_NameConflict = true;
                break; // if we have one conflict we can stop searching
@@ -150,7 +152,7 @@ void C_OscHalcConfigDomain::CheckChannelNameUnique(const uint32_t ou32_ChannelIn
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigDomain::CheckChannelLinked(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
                                                   bool & orq_IsLinked,
-                                                  std::vector<stw::scl::C_SclString> * const opc_LinkedChannelNames,
+                                                  std::vector<std::string> * const opc_LinkedChannelNames,
                                                   std::vector<uint32_t> * const opc_LinkedChannelIndices,
                                                   const uint32_t * const opu32_UseCaseIndex) const
 {
@@ -504,7 +506,7 @@ void C_OscHalcConfigDomain::mh_AddParameters(const std::vector<C_OscHalcDefStruc
    Channel configuration
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscHalcConfigChannel C_OscHalcConfigDomain::mh_InitConfigFromName(const stw::scl::C_SclString & orc_Name)
+C_OscHalcConfigChannel C_OscHalcConfigDomain::mh_InitConfigFromName(const std::string & orc_Name)
 {
    C_OscHalcConfigChannel c_NewChannel;
 
@@ -533,7 +535,7 @@ C_OscHalcConfigChannel C_OscHalcConfigDomain::m_InitChannelConfig(const uint32_t
       // Default Name
       c_NewChannel =
          C_OscHalcConfigDomain::mh_InitConfigFromName(this->c_SingularName + "_" +
-                                                      stw::scl::C_SclString::IntToStr(ou32_ChannelIndex + 1));
+                                                      std::to_string(ou32_ChannelIndex + 1));
 
       //Default use case
       c_NewChannel.u32_UseCaseIndex = this->m_InitChannelUseCase(ou32_ChannelIndex);

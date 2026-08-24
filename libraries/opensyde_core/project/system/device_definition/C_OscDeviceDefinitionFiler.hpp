@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscDeviceDefinition.hpp"
 #include "C_OscXmlParser.hpp"
 
@@ -38,10 +38,10 @@ private:
                                                     uint32_t & oru32_TransferDataTimeout, bool & orq_IsFileBased);
 
    static int32_t mh_Load(C_OscDeviceDefinition & orc_DeviceDefinition, C_OscXmlParser & orc_Parser,
-                          const stw::scl::C_SclString & orc_Path);
+                          const std::string & orc_Path);
    static int32_t mh_LoadSubDevice(C_OscSubDeviceDefinition & orc_SubDeviceDefinition, C_OscXmlParser & orc_Parser,
                                    const C_OscDeviceDefinition & orc_DeviceDefinition,
-                                   const stw::scl::C_SclString & orc_Path);
+                                   const std::string & orc_Path);
    static void mh_SaveSubDevice(const C_OscSubDeviceDefinition & orc_SubDeviceDefinition, C_OscXmlParser & orc_Parser);
    static int32_t mh_HandleConnectedInterfaces(C_OscDeviceDefinition & orc_DeviceDefinition);
    static int32_t mh_CheckContentErrors(const C_OscDeviceDefinition & orc_DeviceDefinition);
@@ -64,8 +64,8 @@ private:
                                C_OscXmlParser & orc_Parser);
 
 public:
-   static int32_t h_Load(C_OscDeviceDefinition & orc_DeviceDefinition, const stw::scl::C_SclString & orc_Path);
-   static int32_t h_Save(const C_OscDeviceDefinition & orc_DeviceDefinition, const stw::scl::C_SclString & orc_Path);
+   static int32_t h_Load(C_OscDeviceDefinition & orc_DeviceDefinition, const std::string & orc_Path);
+   static int32_t h_Save(const C_OscDeviceDefinition & orc_DeviceDefinition, const std::string & orc_Path);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

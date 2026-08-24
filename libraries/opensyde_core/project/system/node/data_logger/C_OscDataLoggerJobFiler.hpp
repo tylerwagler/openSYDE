@@ -24,9 +24,9 @@ namespace opensyde_core
 class C_OscDataLoggerJobFiler
 {
 public:
-   static int32_t h_LoadFile(std::vector<C_OscDataLoggerJob> & orc_Config, const stw::scl::C_SclString & orc_Path);
+   static int32_t h_LoadFile(std::vector<C_OscDataLoggerJob> & orc_Config, const std::string & orc_Path);
    static int32_t h_SaveFile(const std::vector<C_OscDataLoggerJob> & orc_Config,
-                             const stw::scl::C_SclString & orc_Path);
+                             const std::string & orc_Path);
    static int32_t h_LoadData(std::vector<C_OscDataLoggerJob> & orc_Config, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveData(const std::vector<C_OscDataLoggerJob> & orc_Config, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadDataElementId(C_OscNodeDataPoolListElementId & orc_Config, C_OscXmlParserBase & orc_XmlParser);
@@ -71,16 +71,16 @@ private:
                                                C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveConfiguredDataElement(const C_OscDataLoggerDataElementReference & orc_Config,
                                             C_OscXmlParserBase & orc_XmlParser);
-   static stw::scl::C_SclString mh_LogFileTypeTypeToString(
+   static std::string mh_LogFileTypeTypeToString(
       const C_OscDataLoggerJobProperties::E_LogFileFormat & ore_Type);
-   static int32_t mh_StringToLogFileType(const stw::scl::C_SclString & orc_String,
+   static int32_t mh_StringToLogFileType(const std::string & orc_String,
                                          C_OscDataLoggerJobProperties::E_LogFileFormat & ore_Type);
-   static stw::scl::C_SclString mh_LocalLogTriggerTypeToString(
+   static std::string mh_LocalLogTriggerTypeToString(
       const C_OscDataLoggerJobProperties::E_LocalLogTrigger & ore_Type);
-   static int32_t mh_StringToLocalLogTriggerType(const stw::scl::C_SclString & orc_String,
+   static int32_t mh_StringToLocalLogTriggerType(const std::string & orc_String,
                                                  C_OscDataLoggerJobProperties::E_LocalLogTrigger & ore_Type);
-   static stw::scl::C_SclString mh_UseCaseTypeToString(const C_OscDataLoggerJobProperties::E_UseCase & ore_Type);
-   static int32_t mh_StringToUseCaseType(const stw::scl::C_SclString & orc_String,
+   static std::string mh_UseCaseTypeToString(const C_OscDataLoggerJobProperties::E_UseCase & ore_Type);
+   static int32_t mh_StringToUseCaseType(const std::string & orc_String,
                                          C_OscDataLoggerJobProperties::E_UseCase & ore_Type);
 };
 

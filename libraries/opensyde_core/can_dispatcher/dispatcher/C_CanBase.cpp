@@ -21,7 +21,6 @@
 
 using namespace stw::errors;
 using namespace stw::can;
-using namespace stw::scl;
 using namespace stw::tgl;
 
 /* -- Defines ------------------------------------------------------------------------------------------------------- */
@@ -57,7 +56,7 @@ void C_CanBase::SetCommChannel(const uint8_t ou8_CommChannel)
 {
    if (mu8_CANOpened == 1U)
    {
-      throw "Error in C_CAN_Base::SetDLLCommChannel: Channel can not be modified after being initialized !";
+      throw std::logic_error("Error in C_CAN_Base::SetDLLCommChannel: Channel can not be modified after being initialized !");
    }
    else
    {

@@ -26,7 +26,7 @@ class C_OscDcDeviceInformation
 public:
    C_OscDcDeviceInformation(void);
 
-   void SetDeviceName(const stw::scl::C_SclString & orc_DeviceName);
+   void SetDeviceName(const std::string & orc_DeviceName);
    void SetNodeId(const uint8_t ou8_NodeId);
    void SetIpAddress(const uint8_t (&orau8_IpAddress)[4]);
    void SetSerialNumber(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber);
@@ -34,7 +34,7 @@ public:
 
    bool IsSerialNumberIdentical(const C_OscDcDeviceInformation & orc_Cmp) const;
 
-   stw::scl::C_SclString c_DeviceName;
+   std::string c_DeviceName;
    bool q_DeviceNameValid;
 
    uint8_t u8_NodeId;

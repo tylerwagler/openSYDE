@@ -16,7 +16,6 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
-using namespace stw::scl;
 using namespace stw::opensyde_core;
 using namespace stw::cmon_protocol;
 
@@ -97,10 +96,10 @@ void C_OscComLoggerProtocolOpenSyde::RemoveOsySysDef(const C_OscComMessageLogger
    Text interpretation of address information
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
+std::string C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
    const C_CanMonProtocolOpenSyde::T_CanAddressInformation & orc_CanAddressInformation) const
 {
-   C_SclString c_Text = "";
+   std::string c_Text = "";
 
    std::list<const C_OscComMessageLoggerOsySysDefConfig *>::const_iterator c_ItConfig;
    bool q_ValidInterpretationFound = false;
@@ -112,8 +111,8 @@ C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
       uint32_t u32_TargetBusIndex = 0U;
       bool q_SourceBusFound = false;
       bool q_TargetBusFound = false;
-      C_SclString c_SourceBusName = "";
-      C_SclString c_TargetBusName = "";
+      std::string c_SourceBusName = "";
+      std::string c_TargetBusName = "";
 
       // Get the corrected bus indexes and names
       if (orc_CanAddressInformation.u8_RoutingMode == OSY_CTP_ROUTING_INACTIVE)
@@ -166,8 +165,8 @@ C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
           (q_TargetBusFound == true))
       {
          uint32_t u32_NodeCounter;
-         C_SclString c_SourceNodeName;
-         C_SclString c_TargetNodeName;
+         std::string c_SourceNodeName;
+         std::string c_TargetNodeName;
          bool q_SourceNodeFound = false;
          bool q_TargetNodeFound = false;
 
@@ -291,12 +290,12 @@ C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
    Text interpretation of data pool data identifier
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComLoggerProtocolOpenSyde::m_DataPoolIdentifierToText(const uint32_t ou32_DataPoolIdentifier,
+std::string C_OscComLoggerProtocolOpenSyde::m_DataPoolIdentifierToText(const uint32_t ou32_DataPoolIdentifier,
                                                                        const bool oq_IsResponse,
                                                                        const T_CanAddressInformation & orc_CanAddressInformation)
 const
 {
-   C_SclString c_Text = "";
+   std::string c_Text = "";
 
    std::list<const C_OscComMessageLoggerOsySysDefConfig *>::const_iterator c_ItConfig;
    bool q_ValidElementFound = false;

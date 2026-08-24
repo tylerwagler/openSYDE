@@ -11,7 +11,7 @@
     while only using ANSI C++.
    So cf. the documentation of the VCL TStringList for details on most API functions.
 
-   The C_SclString is used as a base (-> no unicode).
+   The std::string is used as a base (-> no unicode).
 
    What is NOT implemented (compared to Borland VCL TStringList):
    - OnChange and OnChanging callbacks
@@ -27,7 +27,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
-#include "C_SclString.hpp"
+#include <string>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -44,29 +44,29 @@ class C_SclStringList
 private:
 public:
    //from VCL:
-   uint32_t Add(const C_SclString & orc_String);
-   void Append(const C_SclString & orc_String);
+   uint32_t Add(const std::string & orc_String);
+   void Append(const std::string & orc_String);
 
    void Clear(void);
    void Delete(const uint32_t ou32_Index);
    void Exchange(const uint32_t ou32_Index1, const uint32_t ou32_Index2);
-   void Insert(const uint32_t ou32_Index, const C_SclString & orc_String);
-   int32_t IndexOf(const C_SclString & orc_String);
+   void Insert(const uint32_t ou32_Index, const std::string & orc_String);
+   int32_t IndexOf(const std::string & orc_String);
 
-   C_SclString GetText(const C_SclString orc_LineSeparator = "\r\n") const;
+   std::string GetText(const std::string orc_LineSeparator = "\r\n") const;
    uint32_t GetCount(void) const;
 
-   void LoadFromFile(const C_SclString & orc_FileName);
-   void SaveToFile(const C_SclString & orc_FileName);
+   void LoadFromFile(const std::string & orc_FileName);
+   void SaveToFile(const std::string & orc_FileName);
 
-   int32_t IndexOfName(const C_SclString & orc_Name) const;
-   C_SclString ValueFromIndex(const uint32_t ou32_Index) const;
-   C_SclString Values(const C_SclString & orc_Key) const;
+   int32_t IndexOfName(const std::string & orc_Name) const;
+   std::string ValueFromIndex(const uint32_t ou32_Index) const;
+   std::string Values(const std::string & orc_Key) const;
    void AddStrings(const C_SclStringList * const opc_Strings);
 
    void Sort(void);
 
-   std::vector<C_SclString> Strings; ///< actual strings
+   std::vector<std::string> Strings; ///< actual strings
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

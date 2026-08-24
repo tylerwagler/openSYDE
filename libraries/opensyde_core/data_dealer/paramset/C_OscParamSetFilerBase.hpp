@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscXmlParser.hpp"
 #include "C_OscParamSetDataPoolInfo.hpp"
 #include "C_OscParamSetInterpretedFileInfoData.hpp"
@@ -31,7 +31,7 @@ namespace opensyde_core
 class C_OscParamSetFilerBase
 {
 public:
-   static int32_t h_AddCrc(const stw::scl::C_SclString & orc_Path);
+   static int32_t h_AddCrc(const std::string & orc_Path);
    static int32_t h_CheckFileVersion(C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveFileVersion(C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveFileInfo(C_OscXmlParserBase & orc_XmlParser,
@@ -42,8 +42,8 @@ public:
 protected:
    C_OscParamSetFilerBase(void);
 
-   static int32_t mh_LoadNodeName(stw::scl::C_SclString & orc_Name, C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveNodeName(const stw::scl::C_SclString & orc_Name, C_OscXmlParserBase & orc_XmlParser);
+   static int32_t mh_LoadNodeName(std::string & orc_Name, C_OscXmlParserBase & orc_XmlParser);
+   static void mh_SaveNodeName(const std::string & orc_Name, C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadDataPoolInfos(std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
                                        C_OscXmlParserBase & orc_XmlParser, bool & orq_MissingOptionalContent);
    static void mh_SaveDataPoolInfos(const std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,

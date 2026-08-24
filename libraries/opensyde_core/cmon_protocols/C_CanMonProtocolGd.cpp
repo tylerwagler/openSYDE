@@ -16,7 +16,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolGd.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -73,7 +73,7 @@ using namespace stw::can;
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolGd::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+std::string C_CanMonProtocolGd::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
    bool q_IsRequest;
    uint8_t u8_SenderSegment;
@@ -84,13 +84,13 @@ C_SclString C_CanMonProtocolGd::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
    uint16_t u16_Data;
    uint16_t u16_NumberOfBytes;
    uint32_t u32_SysTime;
-   C_SclString c_Text;
-   C_SclString c_Help;
-   C_SclString c_HelpSender;
-   C_SclString c_HelpReceiver;
-   C_SclString c_HelpTime;
-   C_SclString c_HelpHystHigh;
-   C_SclString c_HelpHystLow;
+   std::string c_Text;
+   std::string c_Help;
+   std::string c_HelpSender;
+   std::string c_HelpReceiver;
+   std::string c_HelpTime;
+   std::string c_HelpHystHigh;
+   std::string c_HelpHystLow;
 
    if ((orc_Msg.u32_ID < 0x600) || (orc_Msg.u32_ID > 0x6FFU))
    {
@@ -344,12 +344,12 @@ C_SclString C_CanMonProtocolGd::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
       //abort individual and global request
       if (orc_Msg.au8_Data[0] == 0xFFU)
       {
-         //it´s an abort global request
+         //itï¿½s an abort global request
          c_Text = c_HelpSender + ", ABORT GLOBAL REQ";
       }
       else
       {
-         //it´s an abort individual request
+         //itï¿½s an abort individual request
          c_Text = c_HelpSender + " -> " + c_HelpReceiver + ", ABORT INDIVIDUAL REQ IDX: " +
                   m_GetValueDecHex(u16_VariableIndex);
       }
@@ -603,7 +603,7 @@ C_SclString C_CanMonProtocolGd::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
    Text representation of protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolGd::GetProtocolName(void) const
+std::string C_CanMonProtocolGd::GetProtocolName(void) const
 {
    return "WD Generic Driver";
 }

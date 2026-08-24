@@ -15,11 +15,13 @@
 #include "precomp_headers.hpp"
 
 #include <cstring>
+#include <string>
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -195,7 +197,7 @@ int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const std::vector<uint8_t>
       c_Text.resize(orc_SerialNumber.size() + 1); // plus 1 for termination
       (void)std::memcpy(&c_Text[0], &orc_SerialNumber[0], orc_SerialNumber.size());
       c_Text[c_Text.size() - 1] = '\0'; //add termination
-      this->c_SerialNumberExt = static_cast<C_SclString>(&c_Text[0]);
+      this->c_SerialNumberExt = std::string(&c_Text[0]);
       this->q_FsnSerialNumber = true;
    }
    else
@@ -230,7 +232,7 @@ int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const std::vector<uint8_t>
    C_RANGE     Serial number has zero length or is to long
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const stw::scl::C_SclString & orc_SerialNumber,
+int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const std::string & orc_SerialNumber,
                                                       const uint8_t ou8_SerialNumberManufacturerFormat)
 {
    int32_t s32_Return = C_NO_ERR;
@@ -248,10 +250,10 @@ int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const stw::scl::C_SclStrin
    }
    else
    {
-      if ((orc_SerialNumber.Length() > 0) && (orc_SerialNumber.Length() <= 29))
+      if ((orc_SerialNumber.length() > 0) && (orc_SerialNumber.length() <= 29))
       {
          this->c_SerialNumberExt = orc_SerialNumber;
-         this->u8_SerialNumberByteLength = static_cast<uint8_t>(orc_SerialNumber.Length());
+         this->u8_SerialNumberByteLength = static_cast<uint8_t>(orc_SerialNumber.length());
          this->q_FsnSerialNumber = true;
       }
       else
@@ -283,10 +285,10 @@ std::vector<uint8_t> C_OscProtocolSerialNumber::GetSerialNumberAsRawData(void) c
 
    if (this->q_FsnSerialNumber == true)
    {
-      c_SerialNumber.resize(this->c_SerialNumberExt.Length());
+      c_SerialNumber.resize(this->c_SerialNumberExt.length());
       // Use the FSN string serial number
-      memcpy(&c_SerialNumber[0], &this->c_SerialNumberExt.c_str()[0], this->c_SerialNumberExt.Length());
-      tgl_assert(this->c_SerialNumberExt.Length() == this->u8_SerialNumberByteLength);
+      memcpy(&c_SerialNumber[0], &this->c_SerialNumberExt.c_str()[0], this->c_SerialNumberExt.length());
+      tgl_assert(this->c_SerialNumberExt.length() == this->u8_SerialNumberByteLength);
    }
    else
    {
@@ -310,9 +312,9 @@ std::vector<uint8_t> C_OscProtocolSerialNumber::GetSerialNumberAsRawData(void) c
    Formatted serial number string
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscProtocolSerialNumber::GetSerialNumberAsFormattedString(void) const
+std::string C_OscProtocolSerialNumber::GetSerialNumberAsFormattedString(void) const
 {
-   C_SclString c_Return;
+   std::string c_Return;
 
    if (this->q_FsnSerialNumber == false)
    {
@@ -339,9 +341,9 @@ stw::scl::C_SclString C_OscProtocolSerialNumber::GetSerialNumberAsFormattedStrin
    Serial number as string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscProtocolSerialNumber::GetSerialNumberAsPlainString(void) const
+std::string C_OscProtocolSerialNumber::GetSerialNumberAsPlainString(void) const
 {
-   C_SclString c_Return;
+   std::string c_Return;
 
    if (this->q_FsnSerialNumber == true)
    {
@@ -365,18 +367,18 @@ C_SclString C_OscProtocolSerialNumber::GetSerialNumberAsPlainString(void) const
    \retval   false   String does not match
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscProtocolSerialNumber::h_SerialNumberFromStringToArray(const C_SclString & orc_SerialNumber,
+bool C_OscProtocolSerialNumber::h_SerialNumberFromStringToArray(const std::string & orc_SerialNumber,
                                                                 uint8_t (&orau8_SerialNumber)[6])
 {
    bool q_Return = false;
-   C_SclString c_CompleteString;
+   std::string c_CompleteString;
 
    //format up to and including 2019. E.g: 05.123456.1001
-   if (orc_SerialNumber.Length() == 14)
+   if (orc_SerialNumber.length() == 14)
    {
-      std::vector<C_SclString> c_Tokens;
+      std::vector<std::string> c_Tokens;
       //Get all numbers
-      orc_SerialNumber.Tokenize(".", c_Tokens);
+      TokenizeCompat(orc_SerialNumber, ".", c_Tokens);
       if (c_Tokens.size() == 3)
       {
          //Combine all numbers
@@ -387,7 +389,7 @@ bool C_OscProtocolSerialNumber::h_SerialNumberFromStringToArray(const C_SclStrin
       }
    }
    //format from 2020. E.g: 200012345678
-   else if (orc_SerialNumber.Length() == 12)
+   else if (orc_SerialNumber.length() == 12)
    {
       //no convert needed
       c_CompleteString = orc_SerialNumber;
@@ -395,23 +397,23 @@ bool C_OscProtocolSerialNumber::h_SerialNumberFromStringToArray(const C_SclStrin
    else
    {
       //invalid format, should never happen
-      C_SclString c_Error;
-      c_Error.PrintFormatted("Invalid serial number format. String: \"%s\".", c_CompleteString.c_str());
+      std::string c_Error;
+      c_Error = PrintFormattedCompat("Invalid serial number format. String: \"%s\".", c_CompleteString.c_str());
       osc_write_log_error("Convert serial number string to array", c_Error);
    }
 
    //get bytes
-   if (c_CompleteString.Length() == 12)
+   if (c_CompleteString.length() == 12)
    {
       uint32_t u32_ItByte = 0U;
       q_Return = true;
       //For each 2 numbers assign one byte
-      for (uint32_t u32_ItChar = 1U; u32_ItChar < c_CompleteString.Length(); u32_ItChar += 2)
+      for (uint32_t u32_ItChar = 0U; u32_ItChar < c_CompleteString.length(); u32_ItChar += 2)
       {
-         C_SclString c_SubString = c_CompleteString[u32_ItChar];
-         c_SubString += c_CompleteString[u32_ItChar + 1];
+          std::string c_SubString(1, c_CompleteString[u32_ItChar]);
+          c_SubString += std::string(1, c_CompleteString[u32_ItChar + 1]);
          c_SubString = "0x" + c_SubString;
-         orau8_SerialNumber[u32_ItByte] = static_cast<uint8_t>(c_SubString.ToInt());
+         orau8_SerialNumber[u32_ItByte] = static_cast<uint8_t>(std::stoi(c_SubString));
          //Next byte
          ++u32_ItByte;
       }

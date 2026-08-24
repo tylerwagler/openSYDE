@@ -16,7 +16,7 @@
 
 #include "stwtypes.hpp"
 #include "stw_can.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscCanSignal.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -45,12 +45,12 @@ public:
 
    bool operator <(const C_OscComMessageLoggerDataSignal & orc_Cmp) const;
 
-   stw::scl::C_SclString c_Name;
-   stw::scl::C_SclString c_Value;
-   stw::scl::C_SclString c_Unit;
-   stw::scl::C_SclString c_RawValueDec;
-   stw::scl::C_SclString c_RawValueHex;
-   stw::scl::C_SclString c_Comment;
+   std::string c_Name;
+   std::string c_Value;
+   std::string c_Unit;
+   std::string c_RawValueDec;
+   std::string c_RawValueHex;
+   std::string c_Comment;
    bool q_DlcError;
 
    stw::opensyde_core::C_OscCanSignal c_OscSignal;
@@ -63,25 +63,25 @@ public:
    virtual ~C_OscComMessageLoggerData(void);
 
    void SortSignals(void);
-   static stw::scl::C_SclString h_GetTimestampAsString(const uint64_t ou64_TimeStamp);
+   static std::string h_GetTimestampAsString(const uint64_t ou64_TimeStamp);
 
    uint64_t u64_TimeStampRelative;
    uint64_t u64_TimeStampAbsoluteStart;
    uint64_t u64_TimeStampAbsoluteTimeOfDay;
-   stw::scl::C_SclString c_TimeStampRelative;
-   stw::scl::C_SclString c_TimeStampAbsoluteStart;
-   stw::scl::C_SclString c_TimeStampAbsoluteTimeOfDay;
-   stw::scl::C_SclString c_CanIdDec;
-   stw::scl::C_SclString c_CanIdHex;
-   stw::scl::C_SclString c_CanDlc;
+   std::string c_TimeStampRelative;
+   std::string c_TimeStampAbsoluteStart;
+   std::string c_TimeStampAbsoluteTimeOfDay;
+   std::string c_CanIdDec;
+   std::string c_CanIdHex;
+   std::string c_CanDlc;
    bool q_CanDlcError;
-   stw::scl::C_SclString c_CanDataDec;
-   stw::scl::C_SclString c_CanDataHex;
-   stw::scl::C_SclString c_Name;
-   stw::scl::C_SclString c_ProtocolTextDec;
-   stw::scl::C_SclString c_ProtocolTextHex;
-   stw::scl::C_SclString c_Counter;
-   stw::scl::C_SclString c_Status;
+   std::string c_CanDataDec;
+   std::string c_CanDataHex;
+   std::string c_Name;
+   std::string c_ProtocolTextDec;
+   std::string c_ProtocolTextHex;
+   std::string c_Counter;
+   std::string c_Status;
 
    std::vector<C_OscComMessageLoggerDataSignal> c_Signals;
 

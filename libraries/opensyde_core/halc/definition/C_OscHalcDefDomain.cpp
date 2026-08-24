@@ -59,10 +59,10 @@ C_OscHalcDefDomain::~C_OscHalcDefDomain(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefDomain::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Id.c_str(), this->c_Id.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_SingularName.c_str(), this->c_SingularName.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Id.c_str(), this->c_Id.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_SingularName.c_str(), this->c_SingularName.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_Category, sizeof(this->e_Category), oru32_HashValue);
 
    for (uint32_t u32_It = 0UL; u32_It < this->c_Channels.size(); ++u32_It)

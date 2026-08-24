@@ -76,20 +76,20 @@ void C_OscNodeDataPoolListElement::CalcHash(uint32_t & oru32_HashValue) const
 {
    uint32_t u32_Counter;
 
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
    this->c_MinValue.CalcHash(oru32_HashValue);
    this->c_MaxValue.CalcHash(oru32_HashValue);
    //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
    stw::scl::C_SclChecksums::CalcCRC32(&this->f64_Factor, sizeof(this->f64_Factor), oru32_HashValue);
    //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
    stw::scl::C_SclChecksums::CalcCRC32(&this->f64_Offset, sizeof(this->f64_Offset), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Unit.c_str(), this->c_Unit.Length(), oru32_HashValue);
-   for (std::map<int64_t, stw::scl::C_SclString>::const_iterator c_It = this->c_ValueDescription.begin();
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Unit.c_str(), this->c_Unit.length(), oru32_HashValue);
+   for (std::map<int64_t, std::string>::const_iterator c_It = this->c_ValueDescription.begin();
         c_It != this->c_ValueDescription.end(); ++c_It)
    {
       stw::scl::C_SclChecksums::CalcCRC32(&c_It->first, sizeof(c_It->first), oru32_HashValue);
-      stw::scl::C_SclChecksums::CalcCRC32(c_It->second.c_str(), c_It->second.Length(), oru32_HashValue);
+      stw::scl::C_SclChecksums::CalcCRC32(c_It->second.c_str(), c_It->second.length(), oru32_HashValue);
    }
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_Access, sizeof(this->e_Access), oru32_HashValue);
    //Only relevant in this case
@@ -121,20 +121,20 @@ void C_OscNodeDataPoolListElement::CalcHashElement(uint32_t & oru32_HashValue, c
 {
    uint32_t u32_Counter;
 
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
    this->c_MinValue.CalcHashElement(oru32_HashValue, ou32_Index);
    this->c_MaxValue.CalcHashElement(oru32_HashValue, ou32_Index);
    //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
    stw::scl::C_SclChecksums::CalcCRC32(&this->f64_Factor, sizeof(this->f64_Factor), oru32_HashValue);
    //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
    stw::scl::C_SclChecksums::CalcCRC32(&this->f64_Offset, sizeof(this->f64_Offset), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Unit.c_str(), this->c_Unit.Length(), oru32_HashValue);
-   for (std::map<int64_t, stw::scl::C_SclString>::const_iterator c_It = this->c_ValueDescription.begin();
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Unit.c_str(), this->c_Unit.length(), oru32_HashValue);
+   for (std::map<int64_t, std::string>::const_iterator c_It = this->c_ValueDescription.begin();
         c_It != this->c_ValueDescription.end(); ++c_It)
    {
       stw::scl::C_SclChecksums::CalcCRC32(&c_It->first, sizeof(c_It->first), oru32_HashValue);
-      stw::scl::C_SclChecksums::CalcCRC32(c_It->second.c_str(), c_It->second.Length(), oru32_HashValue);
+      stw::scl::C_SclChecksums::CalcCRC32(c_It->second.c_str(), c_It->second.length(), oru32_HashValue);
    }
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_Access, sizeof(this->e_Access), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_DiagEventCall, sizeof(this->q_DiagEventCall), oru32_HashValue);
@@ -159,20 +159,20 @@ void C_OscNodeDataPoolListElement::CalcHashStructure(uint32_t & oru32_HashValue)
 {
    uint32_t u32_Counter;
 
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
    this->c_MinValue.CalcHashStructure(oru32_HashValue);
    this->c_MaxValue.CalcHashStructure(oru32_HashValue);
    //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
    stw::scl::C_SclChecksums::CalcCRC32(&this->f64_Factor, sizeof(this->f64_Factor), oru32_HashValue);
    //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
    stw::scl::C_SclChecksums::CalcCRC32(&this->f64_Offset, sizeof(this->f64_Offset), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Unit.c_str(), this->c_Unit.Length(), oru32_HashValue);
-   for (std::map<int64_t, stw::scl::C_SclString>::const_iterator c_It = this->c_ValueDescription.begin();
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Unit.c_str(), this->c_Unit.length(), oru32_HashValue);
+   for (std::map<int64_t, std::string>::const_iterator c_It = this->c_ValueDescription.begin();
         c_It != this->c_ValueDescription.end(); ++c_It)
    {
       stw::scl::C_SclChecksums::CalcCRC32(&c_It->first, sizeof(c_It->first), oru32_HashValue);
-      stw::scl::C_SclChecksums::CalcCRC32(c_It->second.c_str(), c_It->second.Length(), oru32_HashValue);
+      stw::scl::C_SclChecksums::CalcCRC32(c_It->second.c_str(), c_It->second.length(), oru32_HashValue);
    }
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_Access, sizeof(this->e_Access), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_DiagEventCall, sizeof(this->q_DiagEventCall), oru32_HashValue);

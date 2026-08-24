@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <list>
 
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -26,16 +26,16 @@ class C_OscSystemNameMaxCharLimitChangeReportItem
 {
 public:
    C_OscSystemNameMaxCharLimitChangeReportItem();
-   C_OscSystemNameMaxCharLimitChangeReportItem(const stw::scl::C_SclString oc_Type,
-                                               const stw::scl::C_SclString oc_OriginalName,
-                                               const stw::scl::C_SclString oc_NewName);
+   C_OscSystemNameMaxCharLimitChangeReportItem(const std::string oc_Type,
+                                               const std::string oc_OriginalName,
+                                               const std::string oc_NewName);
 
-   stw::scl::C_SclString c_Type;
-   stw::scl::C_SclString c_OriginalName;
-   stw::scl::C_SclString c_NewName;
+   std::string c_Type;
+   std::string c_OriginalName;
+   std::string c_NewName;
 
    static void h_HandleNameMaxCharLimitItem(const uint32_t ou32_NameMaxCharLimit,
-                                            const stw::scl::C_SclString & orc_Type, stw::scl::C_SclString & orc_Name,
+                                            const std::string & orc_Type, std::string & orc_Name,
                                             std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
 };
 

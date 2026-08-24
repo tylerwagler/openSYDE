@@ -12,6 +12,7 @@
 #define C_OSCEXPORTOSYINIT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <string>
 #include <vector>
 
 #include "stwtypes.hpp"
@@ -31,10 +32,10 @@ namespace opensyde_core
 class C_OscExportOsyInit
 {
 public:
-   static stw::scl::C_SclString h_GetFileName(void);
-   static int32_t h_CreateSourceCode(const stw::scl::C_SclString & orc_FilePath, const C_OscNode & orc_Node,
+   static std::string h_GetFileName(void);
+   static int32_t h_CreateSourceCode(const std::string & orc_FilePath, const C_OscNode & orc_Node,
                                      const bool oq_RunsDpd, const uint16_t ou16_ApplicationIndex,
-                                     const stw::scl::C_SclString & orc_ExportToolInfo = "");
+                                     const std::string & orc_ExportToolInfo = "");
 
 protected:
    static bool mh_IsDpdInitRequired(const C_OscNodeComInterfaceSettings & orc_Settings);

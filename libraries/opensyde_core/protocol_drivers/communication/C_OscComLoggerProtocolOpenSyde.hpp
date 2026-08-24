@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <list>
 
-#include "C_SclString.hpp"
+#include <string>
 
 #include "C_CanMonProtocolOpenSyde.hpp"
 #include "C_OscComMessageLoggerOsySysDefConfig.hpp"
@@ -38,9 +38,9 @@ public:
    void RemoveOsySysDef(const C_OscComMessageLoggerOsySysDefConfig * const opc_SysDefConfig);
 
 protected:
-   virtual stw::scl::C_SclString m_AddressInformationToText(const T_CanAddressInformation & orc_CanAddressInformation)
+   virtual std::string m_AddressInformationToText(const T_CanAddressInformation & orc_CanAddressInformation)
    const;
-   virtual stw::scl::C_SclString m_DataPoolIdentifierToText(const uint32_t ou32_DataPoolIdentifier,
+   virtual std::string m_DataPoolIdentifierToText(const uint32_t ou32_DataPoolIdentifier,
                                                             const bool oq_IsResponse,
                                                             const T_CanAddressInformation & orc_CanAddressInformation)
    const;

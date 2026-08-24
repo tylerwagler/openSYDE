@@ -27,17 +27,17 @@ class C_OscXcoCreate :
    public C_OscXcoBase
 {
 public:
-   static int32_t h_CreatePackage(const stw::scl::C_SclString & orc_PackagePath,
+   static int32_t h_CreatePackage(const std::string & orc_PackagePath,
                                   const C_OscSystemDefinition & orc_SystemDefinition,
                                   const C_OscXcoManifest & orc_Manifest,
                                   stw::scl::C_SclStringList & orc_WarningMessages,
-                                  stw::scl::C_SclString & orc_ErrorMessage,
-                                  const stw::scl::C_SclString & orc_TemporaryDirectory = "");
+                                  std::string & orc_ErrorMessage,
+                                  const std::string & orc_TemporaryDirectory = "");
 
 private:
-   static const stw::scl::C_SclString mhc_USE_CASE;
+   static const std::string mhc_USE_CASE;
 
-   static int32_t mh_CheckParamsToCreatePackage(const stw::scl::C_SclString & orc_PackagePath,
+   static int32_t mh_CheckParamsToCreatePackage(const std::string & orc_PackagePath,
                                                 const C_OscSystemDefinition & orc_SystemDefinition,
                                                 const C_OscXcoManifest & orc_Manifest);
 };

@@ -72,8 +72,8 @@ C_OscSystemBus::~C_OscSystemBus(void)
 void C_OscSystemBus::CalcHash(uint32_t & oru32_HashValue) const
 {
    C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.length(), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u64_BitRate, sizeof(this->u64_BitRate), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_UseCanFd, sizeof(this->q_UseCanFd), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u64_CanFdBitRate, sizeof(this->u64_CanFdBitRate), oru32_HashValue);
@@ -101,13 +101,13 @@ bool C_OscSystemBus::h_CompareNameGreater(const C_OscSystemBus & orc_Bus1, const
 {
    bool q_Retval;
 
-   if (orc_Bus1.c_Name.Length() == orc_Bus2.c_Name.Length())
+   if (orc_Bus1.c_Name.length() == orc_Bus2.c_Name.length())
    {
       q_Retval = (orc_Bus1.c_Name < orc_Bus2.c_Name);
    }
    else
    {
-      q_Retval = orc_Bus1.c_Name.Length() < orc_Bus2.c_Name.Length();
+      q_Retval = orc_Bus1.c_Name.length() < orc_Bus2.c_Name.length();
    }
    return q_Retval;
 }

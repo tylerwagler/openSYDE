@@ -21,6 +21,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglUtils.hpp"
 
 #include "C_OscSecurityEcdhAes.hpp"
@@ -79,20 +80,18 @@ C_OscSecurityEcdhAes::~C_OscSecurityEcdhAes()
 
    \param[out]       orau8_AesKey          AES key
 
-   \retval  C_NO_ERR    key read
-   \retval  C_NOACT     no key available
+   \return
+   std::error_code with Errc::success on success, Errc::noact if no key available
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdhAes::GetAesKey(uint8_t(&orau8_AesKey)[hu32_AES_KEY_LENGTH]) const
+std::error_code C_OscSecurityEcdhAes::GetAesKey(uint8_t(&orau8_AesKey)[hu32_AES_KEY_LENGTH]) const
 {
-   int32_t s32_Result = C_NOACT;
-
    if (C_OscSecurityEcdhAes::mpu8_AesKey != NULL)
    {
-      s32_Result = C_NO_ERR;
       (void)std::memcpy(&orau8_AesKey[0], C_OscSecurityEcdhAes::mpu8_AesKey, hu32_AES_KEY_LENGTH);
+      return Errc::success;
    }
-   return s32_Result;
+   return Errc::noact;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -192,14 +191,12 @@ EVP_PKEY * C_OscSecurityEcdhAes::mh_CreateEvpPkeyFromRawPublicKey(
 
    \param[out]    orau8_PublicKey          Public key in compressed format
 
-   \retval  C_NO_ERR    keys available
-   \retval  C_NOACT     error trying to perform operation
+   \return
+   std::error_code with Errc::success on success, Errc::noact on failure
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdhAes::CreateEcKeys(uint8_t (&orau8_PublicKey)[hu32_PUBLIC_KEY_LENGTH])
+std::error_code C_OscSecurityEcdhAes::CreateEcKeys(uint8_t (&orau8_PublicKey)[hu32_PUBLIC_KEY_LENGTH])
 {
-   int32_t s32_Result = C_NOACT;
-
    if (mpc_TheKey != NULL)
    {
       EVP_PKEY_free(mpc_TheKey);
@@ -251,12 +248,18 @@ int32_t C_OscSecurityEcdhAes::CreateEcKeys(uint8_t (&orau8_PublicKey)[hu32_PUBLI
             if ((x_Result == 1) && (mpc_TheKey != NULL))
             {
                //extract binary keys and remember:
-               s32_Result = m_ExtractCompressedPublicKey(orau8_PublicKey);
+               const int32_t s32_ExtractResult = m_ExtractCompressedPublicKey(orau8_PublicKey);
+               if (s32_ExtractResult == C_NO_ERR)
+               {
+                  EVP_PKEY_CTX_free(pc_KeyContext);
+                  return Errc::success;
+               }
             }
+            EVP_PKEY_CTX_free(pc_KeyContext);
          }
       }
    }
-   return s32_Result;
+   return Errc::noact;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -272,14 +275,12 @@ int32_t C_OscSecurityEcdhAes::CreateEcKeys(uint8_t (&orau8_PublicKey)[hu32_PUBLI
 
    \param[in]   orau8_OthersPublicKey    Others public key
 
-   \retval   C_NO_ERR   success, key stored
-   \retval   C_NOACT    error occurred
+   \return
+   std::error_code with Errc::success on success, Errc::noact on failure
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdhAes::DeriveAesKey(const uint8_t (&orau8_OthersPublicKey)[hu32_PUBLIC_KEY_LENGTH])
+std::error_code C_OscSecurityEcdhAes::DeriveAesKey(const uint8_t (&orau8_OthersPublicKey)[hu32_PUBLIC_KEY_LENGTH])
 {
-   int32_t s32_Result = C_NOACT;
-
    if (mpc_TheKey != NULL)
    {
       EVP_PKEY_CTX * const pc_DeriveContext = EVP_PKEY_CTX_new(mpc_TheKey, NULL);
@@ -328,17 +329,13 @@ int32_t C_OscSecurityEcdhAes::DeriveAesKey(const uint8_t (&orau8_OthersPublicKey
                {
                   //use first 16bytes as AES key:
                   (void)std::memcpy(this->mpu8_AesKey, &au8_Sha256Digest[0], hu32_AES_KEY_LENGTH);
-                  s32_Result = C_NO_ERR;
+                  return Errc::success;
                }
-            }
-            else
-            {
-               s32_Result  = C_NOACT;
             }
          }
       }
    }
-   return s32_Result;
+   return Errc::noact;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -350,13 +347,13 @@ int32_t C_OscSecurityEcdhAes::DeriveAesKey(const uint8_t (&orau8_OthersPublicKey
    \param[in]   orc_Input              Input data
    \param[out]  orc_Output             Output data
 
-   \retval   C_NO_ERR   encryption done
-   \retval   else       encryption failed
+   \return
+   std::error_code with Errc::success on success, Errc::config on failure
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdhAes::AesEncrypt(const uint8_t (&orau8_AesInitVector)[C_OscSecurityAesCbc::hu32_IV_LENGTH],
-                                         const std::vector<uint8_t> & orc_Input,
-                                         std::vector<uint8_t> & orc_Output) const
+std::error_code C_OscSecurityEcdhAes::AesEncrypt(const uint8_t (&orau8_AesInitVector)[C_OscSecurityAesCbc::hu32_IV_LENGTH],
+                                                  const std::vector<uint8_t> & orc_Input,
+                                                  std::vector<uint8_t> & orc_Output) const
 {
    tgl_assert(this->mpu8_AesKey != NULL);
    const uint8_t(&orau8_Key)[C_OscSecurityAesCbc::hu32_IV_LENGTH] =
@@ -373,13 +370,13 @@ int32_t C_OscSecurityEcdhAes::AesEncrypt(const uint8_t (&orau8_AesInitVector)[C_
    \param[in]   orc_Input              Input data
    \param[out]  orc_Output             Output data
 
-   \retval   C_NO_ERR   decryption done
-   \retval   else       decryption failed
+   \return
+   std::error_code with Errc::success on success, Errc::config on failure
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdhAes::AesDecrypt(const uint8_t (&orau8_AesInitVector)[C_OscSecurityAesCbc::hu32_IV_LENGTH],
-                                         const std::vector<uint8_t> & orc_Input,
-                                         std::vector<uint8_t> & orc_Output) const
+std::error_code C_OscSecurityEcdhAes::AesDecrypt(const uint8_t (&orau8_AesInitVector)[C_OscSecurityAesCbc::hu32_IV_LENGTH],
+                                                  const std::vector<uint8_t> & orc_Input,
+                                                  std::vector<uint8_t> & orc_Output) const
 {
    tgl_assert(this->mpu8_AesKey != NULL);
    const uint8_t(&orau8_Key)[C_OscSecurityAesCbc::hu32_IV_LENGTH] =

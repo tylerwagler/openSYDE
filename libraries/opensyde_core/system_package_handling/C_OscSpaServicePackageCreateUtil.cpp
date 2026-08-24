@@ -24,6 +24,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscSpaServicePackageCreateUtil.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;
@@ -60,11 +61,11 @@ using namespace stw::opensyde_core;
                invalid package name with no package extension
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const C_SclString & orc_PackagePath,
-                                                                  const C_SclString & orc_UseCase,
-                                                                  const C_SclString & orc_PackageExtension,
-                                                                  const C_SclString & orc_PackageExtensionTmp,
-                                                                  C_SclString & orc_ErrorMessage,
+int32_t C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const std::string & orc_PackagePath,
+                                                                  const std::string & orc_UseCase,
+                                                                  const std::string & orc_PackageExtension,
+                                                                  const std::string & orc_PackageExtensionTmp,
+                                                                  std::string & orc_ErrorMessage,
                                                                   const bool oq_CheckFileExist)
 {
    int32_t s32_Return = C_NO_ERR;
@@ -83,11 +84,11 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const C_SclStr
    // does target directory for package exist ?
    if (s32_Return == C_NO_ERR)
    {
-      const C_SclString c_TargetDir = TglExtractFilePath(orc_PackagePath);
+      const std::string c_TargetDir = TglExtractFilePath(orc_PackagePath);
 
       // package name without path or './' leads to target directory "",
       // which should not lead to error as it will result in creating package next to executable
-      if ((c_TargetDir.IsEmpty() == false) && (TglDirectoryExists(c_TargetDir) == false))
+      if ((c_TargetDir.empty() == false) && (TglDirectoryExists(c_TargetDir) == false))
       {
          orc_ErrorMessage = "Target directory \"" + c_TargetDir + "\" does not exist.";
          osc_write_log_error(orc_UseCase, orc_ErrorMessage);
@@ -99,9 +100,9 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const C_SclStr
    if (s32_Return == C_NO_ERR)
    {
       // package name must contain ".syde_sup" and ".syde_sup" must be the last characters of the given path
-      if ((orc_PackagePath.Pos(orc_PackageExtension) == 0) ||
-          (orc_PackagePath.Length() !=
-           ((orc_PackagePath.Pos(orc_PackageExtension) + orc_PackageExtension.Length()) - 1)))
+      if ((PosCompat(orc_PackagePath, orc_PackageExtension) == 0) ||
+           (orc_PackagePath.length() !=
+            ((PosCompat(orc_PackagePath, orc_PackageExtension) + orc_PackageExtension.length()) - 1)))
       {
          orc_ErrorMessage = "Package name must have extension \"" + orc_PackageExtension + "\".";
          osc_write_log_error(orc_UseCase, orc_ErrorMessage);
@@ -112,8 +113,8 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const C_SclStr
    // does temporary result folder exist ? (would be really strange, but who knows)
    if (s32_Return == C_NO_ERR)
    {
-      C_SclString c_TmpPackagePath = orc_PackagePath.SubString(1, orc_PackagePath.Pos(orc_PackageExtension) - 1) +
-                                     orc_PackageExtensionTmp;
+       std::string c_TmpPackagePath = SubStringCompat(orc_PackagePath, 1, PosCompat(orc_PackagePath, orc_PackageExtension) - 1) +
+                                      orc_PackageExtensionTmp;
       // add trailing path delimiter to temporary folder if not present
       c_TmpPackagePath = TglFileIncludeTrailingDelimiter(c_TmpPackagePath);
       if ((TglFileExists(c_TmpPackagePath) == true) || (TglDirectoryExists(c_TmpPackagePath) == true))
@@ -138,15 +139,15 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(const C_SclStr
    \param[in,out]  orc_UsedTempPath                Used temp path
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSpaServicePackageCreateUtil::h_GetTempFolderName(const C_SclString & orc_PackagePath,
-                                                           const C_SclString & orc_TemporaryDirectory,
-                                                           const C_SclString & orc_UseCase,
-                                                           const C_SclString & orc_PackageExtension,
-                                                           const C_SclString & orc_TemporaryPackageExtension,
-                                                           C_SclString & orc_UsedTempPath)
+void C_OscSpaServicePackageCreateUtil::h_GetTempFolderName(const std::string & orc_PackagePath,
+                                                           const std::string & orc_TemporaryDirectory,
+                                                           const std::string & orc_UseCase,
+                                                           const std::string & orc_PackageExtension,
+                                                           const std::string & orc_TemporaryPackageExtension,
+                                                           std::string & orc_UsedTempPath)
 {
    // path for temporary folder to create contents
-   if (orc_TemporaryDirectory.IsEmpty() == true)
+   if (orc_TemporaryDirectory.empty() == true)
    {
       orc_UsedTempPath = orc_PackagePath;
    }
@@ -158,8 +159,8 @@ void C_OscSpaServicePackageCreateUtil::h_GetTempFolderName(const C_SclString & o
       // TglExpandFileName() in the linux tgl only works for existing paths, but our path does not yet exist,
       // so we need to expand the path manually
    }
-   orc_UsedTempPath = orc_UsedTempPath.SubString(1, orc_UsedTempPath.Pos(orc_PackageExtension) - 1) +
-                      orc_TemporaryPackageExtension;
+   orc_UsedTempPath = SubStringCompat(orc_UsedTempPath, 1, PosCompat(orc_UsedTempPath, orc_PackageExtension) - 1) +
+                       orc_TemporaryPackageExtension;
 
    // add trailing path delimiter to temporary folder if not present
    orc_UsedTempPath = TglFileIncludeTrailingDelimiter(orc_UsedTempPath);
@@ -186,16 +187,16 @@ void C_OscSpaServicePackageCreateUtil::h_GetTempFolderName(const C_SclString & o
    \retval   C_RD_WR    could not create temporary folders
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(const C_SclString & orc_PackagePath,
-                                                                          const C_SclString & orc_TemporaryDirectory,
-                                                                          const C_SclString & orc_UseCase,
-                                                                          const C_SclString & orc_PackageExtension,
-                                                                          const C_SclString & orc_TemporaryPackageExtension, const std::vector<C_SclString> & orc_AllStaticSubFolders, C_SclString & orc_UsedTempPath,
-                                                                          C_SclString & orc_ErrorMessage)
+int32_t C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(const std::string & orc_PackagePath,
+                                                                          const std::string & orc_TemporaryDirectory,
+                                                                          const std::string & orc_UseCase,
+                                                                          const std::string & orc_PackageExtension,
+                                                                          const std::string & orc_TemporaryPackageExtension, const std::vector<std::string> & orc_AllStaticSubFolders, std::string & orc_UsedTempPath,
+                                                                          std::string & orc_ErrorMessage)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   stw::scl::C_SclString c_ErrorPath;
+   std::string c_ErrorPath;
    C_OscSpaServicePackageCreateUtil::h_GetTempFolderName(orc_PackagePath, orc_TemporaryDirectory,
                                                          orc_UseCase, orc_PackageExtension,
                                                          orc_TemporaryPackageExtension, orc_UsedTempPath);
@@ -252,17 +253,17 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(const 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                                 const C_SclString & orc_SystemDefinitionFileName,
-                                                                 const C_SclString & orc_UseCase,
-                                                                 const C_SclString & orc_UsedTempPath,
-                                                                 const C_SclString & orc_OutFilePrefix,
-                                                                 std::set<C_SclString> & orc_AllCreatedFiles,
-                                                                 C_SclString & orc_ErrorMessage)
+                                                                 const std::string & orc_SystemDefinitionFileName,
+                                                                 const std::string & orc_UseCase,
+                                                                 const std::string & orc_UsedTempPath,
+                                                                 const std::string & orc_OutFilePrefix,
+                                                                 std::set<std::string> & orc_AllCreatedFiles,
+                                                                 std::string & orc_ErrorMessage)
 {
    // take current system definition of view (is required) and store to file
-   const C_SclString c_SysDefPath = orc_UsedTempPath + orc_SystemDefinitionFileName;
+   const std::string c_SysDefPath = orc_UsedTempPath + orc_SystemDefinitionFileName;
 
-   std::vector<C_SclString> c_AdditionalFiles;
+   std::vector<std::string> c_AdditionalFiles;
    int32_t s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(orc_SystemDefinition,
                                                                                c_SysDefPath, &c_AdditionalFiles);
    if (s32_Return == C_NO_ERR)
@@ -302,9 +303,9 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(const C_OscSyst
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
-   const C_OscSystemDefinition & orc_SystemDefinition, const C_SclString & orc_UseCase,
-   const C_SclString & orc_UsedTempPath, const C_SclString & orc_OutFilePrefix,
-   std::set<C_SclString> & orc_AllCreatedFiles, C_SclString & orc_ErrorMessage)
+   const C_OscSystemDefinition & orc_SystemDefinition, const std::string & orc_UseCase,
+   const std::string & orc_UsedTempPath, const std::string & orc_OutFilePrefix,
+   std::set<std::string> & orc_AllCreatedFiles, std::string & orc_ErrorMessage)
 {
    namespace fs = std::filesystem;
    int32_t s32_Return = C_NO_ERR;
@@ -312,7 +313,7 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
    // Collect unique device manifests, keyed by source file path so duplicate uses across
    // multiple nodes only produce one bundle. Value is the device's canonical name, which
    // becomes the bundle folder name in the package.
-   std::map<C_SclString, C_SclString> c_DevicesByPath;
+   std::map<std::string, std::string> c_DevicesByPath;
    for (uint32_t u32_Pos = 0U; u32_Pos < orc_SystemDefinition.c_Nodes.size(); ++u32_Pos)
    {
       const C_OscDeviceDefinition * const pc_DeviceDefinition =
@@ -324,25 +325,25 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
       }
    }
 
-   const C_SclString c_TempPathTrailing = TglFileIncludeTrailingDelimiter(orc_UsedTempPath);
+   const std::string c_TempPathTrailing = TglFileIncludeTrailingDelimiter(orc_UsedTempPath);
 
    // For each unique device, write a folder bundle: <device_name>/device.syd
-   for (std::map<C_SclString, C_SclString>::const_iterator c_It = c_DevicesByPath.begin();
+   for (std::map<std::string, std::string>::const_iterator c_It = c_DevicesByPath.begin();
         (c_It != c_DevicesByPath.end()) && (s32_Return == C_NO_ERR);
         ++c_It)
    {
-      const C_SclString & rc_SrcPath = c_It->first;
-      const C_SclString & rc_DeviceName = c_It->second;
+      const std::string & rc_SrcPath = c_It->first;
+      const std::string & rc_DeviceName = c_It->second;
 
-      const C_SclString c_TargetDir = c_TempPathTrailing + rc_DeviceName;
-      const C_SclString c_TargetFile = c_TargetDir + "/device.syd";
+      const std::string c_TargetDir = c_TempPathTrailing + rc_DeviceName;
+      const std::string c_TargetFile = c_TargetDir + "/device.syd";
 
       std::error_code c_Ec;
       fs::create_directories(fs::path(c_TargetDir.c_str()), c_Ec);
       if (c_Ec)
       {
          orc_ErrorMessage = "Could not create device-bundle folder \"" + c_TargetDir +
-                            "\": " + C_SclString(c_Ec.message().c_str());
+                            "\": " + std::string(c_Ec.message().c_str());
          osc_write_log_error(orc_UseCase, orc_ErrorMessage);
          s32_Return = C_RD_WR;
          continue;
@@ -382,11 +383,11 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
    \retval   C_NOACT     could not add data to zip file (does the path to the file exist ?)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSpaServicePackageCreateUtil::h_CreateZip(const C_SclString & orc_UseCase,
-                                                      const C_SclString & orc_UsedTempPath,
-                                                      const C_SclString & orc_ZipFilePath,
-                                                      const std::set<C_SclString> & orc_AllCreatedFiles,
-                                                      C_SclString & orc_ErrorMessage)
+int32_t C_OscSpaServicePackageCreateUtil::h_CreateZip(const std::string & orc_UseCase,
+                                                      const std::string & orc_UsedTempPath,
+                                                      const std::string & orc_ZipFilePath,
+                                                      const std::set<std::string> & orc_AllCreatedFiles,
+                                                      std::string & orc_ErrorMessage)
 {
    const int32_t s32_Return =
       C_OscZipFile::h_CreateZipFile(orc_UsedTempPath, orc_AllCreatedFiles, orc_ZipFilePath, &orc_ErrorMessage);
@@ -407,15 +408,15 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CreateZip(const C_SclString & orc_Us
    \param[in,out]  orc_ErrorMessage    Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder(const C_SclString & orc_UseCase,
-                                                           const C_SclString & orc_UsedTempPath, int32_t & ors32_ErrVal,
-                                                           C_SclString & orc_ErrorMessage)
+void C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder(const std::string & orc_UseCase,
+                                                           const std::string & orc_UsedTempPath, int32_t & ors32_ErrVal,
+                                                           std::string & orc_ErrorMessage)
 {
    const int32_t s32_Tmp = TglRemoveDirectory(orc_UsedTempPath, false);
 
    if (s32_Tmp != 0)
    {
-      const C_SclString c_Message = "Could not delete temporary result folder \"" + orc_UsedTempPath + "\".";
+      const std::string c_Message = "Could not delete temporary result folder \"" + orc_UsedTempPath + "\".";
       osc_write_log_error(orc_UseCase, c_Message);
       if ((ors32_ErrVal == C_NO_ERR) || (ors32_ErrVal == C_WARN)) // do not redefine error in case we had even a
       // problem

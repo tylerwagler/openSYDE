@@ -19,8 +19,8 @@
 #define CMD5CHECKSUMHPP
 
 #include <cstdio>
+#include <string>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
 
 namespace stw
 {
@@ -31,9 +31,9 @@ class C_Md5Checksum
 public:
    //according to the STW coding rules these functions should get a "h_" prefix
    //but we drop it for compatibility with existing applications
-   static stw::scl::C_SclString GetMD5(const uint8_t * const opu8_Data, const uint32_t ou32_Length);
-   static stw::scl::C_SclString GetMD5(std::FILE * const opc_File);
-   static stw::scl::C_SclString GetMD5(const stw::scl::C_SclString & orc_FilePath);
+   static std::string GetMD5(const uint8_t * const opu8_Data, const uint32_t ou32_Length);
+   static std::string GetMD5(std::FILE * const opc_File);
+   static std::string GetMD5(const std::string & orc_FilePath);
 
 protected:
 private:

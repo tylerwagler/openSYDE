@@ -12,14 +12,16 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "AES.h"
+#include <cstring>
+#include <openssl/evp.h>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscSecurityAesCbc.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
-using namespace std;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -36,12 +38,13 @@ using namespace std;
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Encrypt given array with AES-128 using CBC mode and PKCS#7 padding
 
-   The algorithm only can work with blocks of 16 bytes. So we apply PKCS#7 algorithm to fill up.
-   The library we use supports padding, but only with zeros, not with PKCS#7. So we do this manually.
+   Uses OpenSSL EVP to perform AES-128-CBC encryption with PKCS#7 padding.
 
    Steps:
-   * append padding values with PKCS#7 algorithm
+   * create cipher context
+   * set up AES-128-CBC encryption with PKCS#7 padding
    * perform encryption
+   * finalize (flushes any remaining ciphertext from padding)
    * write to output array
 
    \param[in]   orau8_Key           128bit key to use for encryption
@@ -50,133 +53,139 @@ using namespace std;
    \param[out]  orc_Output          Output data
 
    \return
-   C_NO_ERR    success
-   C_CONFIG    output size changed while encryption with library (very unexpected and reason unknown)
+   std::error_code with Errc::success on success, Errc::config on failure
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityAesCbc::h_Encrypt(const uint8_t (&orau8_Key)[hu32_KEY_LENGTH],
-                                       const uint8_t (&orau8_InitVector)[hu32_IV_LENGTH],
-                                       const vector<uint8_t> & orc_Input, vector<uint8_t> & orc_Output)
+std::error_code C_OscSecurityAesCbc::h_Encrypt(const uint8_t (&orau8_Key)[hu32_KEY_LENGTH],
+                                               const uint8_t (&orau8_InitVector)[hu32_IV_LENGTH],
+                                               const std::vector<uint8_t> & orc_Input,
+                                               std::vector<uint8_t> & orc_Output)
 {
-   int32_t s32_Return = C_NO_ERR;
-
-   const uint32_t u32_InputSize = static_cast<uint32_t>(orc_Input.size());
-   const uint8_t u8_Pkcs7Size = static_cast<uint8_t>(16U - (u32_InputSize % 16U));
-   const uint32_t u32_PaddedInputSize = u32_InputSize + static_cast<uint32_t>(u8_Pkcs7Size);
-
-   vector<uint8_t> c_PaddedInput = orc_Input;
-   uint8_t au8_KeyCopy[hu32_KEY_LENGTH];
-   uint8_t au8_InitVectCopy[hu32_KEY_LENGTH];
-
-   uint8_t * pu8_EncryptedData;
-   unsigned int x_EncryptedSize; //lint !e8080 !e970  //using type to match library interface
-   AES c_Aes(128);
-
-   // use copies because library parameters are unfortunately not const
-   memcpy(au8_KeyCopy, orau8_Key, hu32_KEY_LENGTH);
-   memcpy(au8_InitVectCopy, orau8_InitVector, hu32_IV_LENGTH);
-
-   //add PKCS#7 values:
-   c_PaddedInput.resize(u32_PaddedInputSize);
-   for (uint8_t u8_ByteIndex = 0U; u8_ByteIndex < u8_Pkcs7Size; u8_ByteIndex++)
+   // Allocate cipher context
+   EVP_CIPHER_CTX * const pc_Ctx = EVP_CIPHER_CTX_new();
+   if (pc_Ctx == NULL)
    {
-      c_PaddedInput[static_cast<size_t>(u32_InputSize) + u8_ByteIndex] = u8_Pkcs7Size;
+      return Errc::config;
    }
 
-   // do the encryption
-   pu8_EncryptedData = c_Aes.EncryptCBC(
-      &c_PaddedInput[0],
-      static_cast<unsigned int>(u32_PaddedInputSize), //lint !e970  //using type to match library interface
-      &au8_KeyCopy[0],
-      &au8_InitVectCopy[0],
-      x_EncryptedSize);
-
-   //size should not have changed
-   if (x_EncryptedSize != u32_PaddedInputSize)
+   // Set up AES-128-CBC encryption
+   const int x_Result = EVP_EncryptInit_ex(pc_Ctx, EVP_aes_128_cbc(), NULL, orau8_Key, orau8_InitVector);
+   if (x_Result != 1)
    {
-      s32_Return = C_CONFIG;
+      EVP_CIPHER_CTX_free(pc_Ctx);
+      return Errc::config;
    }
-   else
-   {
-      //write to output array
-      orc_Output.assign(pu8_EncryptedData, &pu8_EncryptedData[x_EncryptedSize]);
-   }
-   //clean up memory allocated by AES library:
-   delete[] pu8_EncryptedData;
 
-   return s32_Return;
+   // PKCS#7 padding is enabled by default in OpenSSL EVP
+   // Determine maximum output size (may be up to one block larger than input due to padding)
+   const size_t u32_InputSize = orc_Input.size();
+   const size_t u32_MaxOutputSize = u32_InputSize + 16U; // AES block size is 16 bytes
+   std::vector<uint8_t> c_TempOutput(u32_MaxOutputSize);
+   int x_OutLen = 0;
+   int x_FinalLen = 0;
+
+   // Perform encryption
+   if (EVP_EncryptUpdate(pc_Ctx, &c_TempOutput[0], &x_OutLen,
+                         &orc_Input[0], static_cast<int>(u32_InputSize)) != 1)
+   {
+      EVP_CIPHER_CTX_free(pc_Ctx);
+      return Errc::config;
+   }
+
+   // Finalize (flush any remaining ciphertext from padding)
+   if (EVP_EncryptFinal_ex(pc_Ctx, &c_TempOutput[static_cast<size_t>(x_OutLen)], &x_FinalLen) != 1)
+   {
+      EVP_CIPHER_CTX_free(pc_Ctx);
+      return Errc::config;
+   }
+
+   // Copy output
+   orc_Output.assign(c_TempOutput.begin(),
+                     c_TempOutput.begin() + static_cast<size_t>(x_OutLen) + static_cast<size_t>(x_FinalLen));
+
+   EVP_CIPHER_CTX_free(pc_Ctx);
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Decrypt given text with AES-128 using CBC mode and PKCS#7 padding
 
-   The size of the text must be a multiple of 16bytes resp. 32hex characters.
-   The text must have been written with PKCS#7 algorithm.
+   Uses OpenSSL EVP to perform AES-128-CBC decryption with PKCS#7 padding.
 
    Steps:
+   * create cipher context
+   * set up AES-128-CBC decryption with PKCS#7 padding
    * perform decryption
-   * size decrypted data according to PKCS#7 algorithm
+   * finalize (PKCS#7 padding is verified and stripped automatically)
+   * write to output array
 
    \param[in]   orau8_Key           128bit key to use for decryption
    \param[in]   orau8_InitVector    128bit initialization vector
-   \param[in]   orc_Input           Encrypted input string (assumed to be a hex string))
-   \param[out]  orc_Output          Decrypted output string
+   \param[in]   orc_Input           Encrypted input data
+   \param[out]  orc_Output          Decrypted output data
 
    \return
-   C_NO_ERR    success
-   C_CONFIG    input text length is no multiple of 16bytes
-   C_CHECKSUM  input text is invalid; PKCS#7 value is > 16 or > file size (checked after decryption)
+   std::error_code with Errc::success on success,
+   Errc::config if input length is not a multiple of 16 bytes or decryption failed,
+   Errc::checksum if padding is invalid (likely wrong key or corrupted data)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityAesCbc::h_Decrypt(const uint8_t (&orau8_Key)[hu32_KEY_LENGTH],
-                                       const uint8_t (&orau8_InitVector)[hu32_IV_LENGTH],
-                                       const vector<uint8_t> & orc_Input, vector<uint8_t> & orc_Output)
+std::error_code C_OscSecurityAesCbc::h_Decrypt(const uint8_t (&orau8_Key)[hu32_KEY_LENGTH],
+                                               const uint8_t (&orau8_InitVector)[hu32_IV_LENGTH],
+                                               const std::vector<uint8_t> & orc_Input,
+                                               std::vector<uint8_t> & orc_Output)
 {
-   int32_t s32_Return = C_NO_ERR;
-   const uint32_t u32_InputSize = static_cast<uint32_t>(orc_Input.size());
+   const size_t u32_InputSize = orc_Input.size();
 
-   // check inputs: input text correctly padded to 16 bytes resp. 32 hex characters?
+   // check inputs: input text correctly padded to 16 bytes?
    if ((u32_InputSize % 16U) != 0U)
    {
-      s32_Return = C_CONFIG;
+      return Errc::config;
    }
-   else
+
+   // Allocate cipher context
+   EVP_CIPHER_CTX * const pc_Ctx = EVP_CIPHER_CTX_new();
+   if (pc_Ctx == NULL)
    {
-      uint8_t * pu8_DecryptedData;
-      uint8_t u8_Pkcs7Value;
-      AES c_Aes(128);
-      uint8_t au8_KeyCopy[hu32_KEY_LENGTH];
-      uint8_t au8_InitVectCopy[hu32_KEY_LENGTH];
-      vector<uint8_t> c_InputCopy;
-
-      // use copies because library parameters are unfortunately not const
-      memcpy(au8_KeyCopy, orau8_Key, hu32_KEY_LENGTH);
-      memcpy(au8_InitVectCopy, orau8_InitVector, hu32_IV_LENGTH);
-      c_InputCopy = orc_Input;
-
-      // do the decryption
-      pu8_DecryptedData = c_Aes.DecryptCBC(
-         &c_InputCopy[0],
-         static_cast<unsigned int>(u32_InputSize), //lint !e970  //using type to match library interface
-         &au8_KeyCopy[0],
-         &au8_InitVectCopy[0]);
-
-      //get padding length of PKCS#7 padding
-      u8_Pkcs7Value = pu8_DecryptedData[u32_InputSize - 1];
-      if ((u8_Pkcs7Value > 16) || (u8_Pkcs7Value > u32_InputSize))
-      {
-         //this is unexpected; possible reasons: incorrect key; not a text encrypted with AES + PKCS#7
-         s32_Return = C_CHECKSUM;
-      }
-      else
-      {
-         //write to output array
-         orc_Output.assign(pu8_DecryptedData, &pu8_DecryptedData[static_cast<uint32_t>(u32_InputSize - u8_Pkcs7Value)]);
-      }
-
-      //clean up memory allocated by AES library:
-      delete[] pu8_DecryptedData;
+      return Errc::config;
    }
 
-   return s32_Return;
+   // Set up AES-128-CBC decryption
+   const int x_Result = EVP_DecryptInit_ex(pc_Ctx, EVP_aes_128_cbc(), NULL, orau8_Key, orau8_InitVector);
+   if (x_Result != 1)
+   {
+      EVP_CIPHER_CTX_free(pc_Ctx);
+      return Errc::config;
+   }
+
+   // PKCS#7 padding is enabled by default in OpenSSL EVP
+   // Output size will be at most input size
+   std::vector<uint8_t> c_TempOutput(u32_InputSize);
+   int x_OutLen = 0;
+   int x_FinalLen = 0;
+
+   // Perform decryption
+   if (EVP_DecryptUpdate(pc_Ctx, &c_TempOutput[0], &x_OutLen,
+                         &orc_Input[0], static_cast<int>(u32_InputSize)) != 1)
+   {
+      EVP_CIPHER_CTX_free(pc_Ctx);
+      return Errc::config;
+   }
+
+   // Finalize: this is where PKCS#7 padding is verified.
+   // If the padding is invalid (wrong key or corrupted data), this will fail.
+   if (EVP_DecryptFinal_ex(pc_Ctx, &c_TempOutput[static_cast<size_t>(x_OutLen)], &x_FinalLen) != 1)
+   {
+      EVP_CIPHER_CTX_free(pc_Ctx);
+      // Invalid padding -> likely incorrect key or corrupted data
+      return Errc::checksum;
+   }
+
+   // Copy output (padding already stripped by EVP)
+   orc_Output.assign(c_TempOutput.begin(),
+                     c_TempOutput.begin() + static_cast<size_t>(x_OutLen) +
+                        static_cast<size_t>(x_FinalLen));
+
+   EVP_CIPHER_CTX_free(pc_Ctx);
+   return Errc::success;
 }

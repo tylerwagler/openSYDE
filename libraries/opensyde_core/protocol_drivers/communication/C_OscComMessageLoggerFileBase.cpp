@@ -21,7 +21,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::errors;
-using namespace stw::scl;
 using namespace stw::tgl;
 using namespace stw::opensyde_core;
 
@@ -44,8 +43,8 @@ using namespace stw::opensyde_core;
    \param[in]  orc_ProtocolName  Name of current set protocol
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscComMessageLoggerFileBase::C_OscComMessageLoggerFileBase(const stw::scl::C_SclString & orc_FilePath,
-                                                             const C_SclString & orc_ProtocolName) :
+C_OscComMessageLoggerFileBase::C_OscComMessageLoggerFileBase(const std::string & orc_FilePath,
+                                                             const std::string & orc_ProtocolName) :
    mc_FilePath(orc_FilePath),
    mc_ProtocolName(orc_ProtocolName)
 {
@@ -72,7 +71,7 @@ C_OscComMessageLoggerFileBase::~C_OscComMessageLoggerFileBase(void)
 int32_t C_OscComMessageLoggerFileBase::OpenFile(void)
 {
    int32_t s32_Return = C_NO_ERR;
-   const C_SclString c_FolderPath = TglExtractFilePath(this->mc_FilePath);
+   const std::string c_FolderPath = TglExtractFilePath(this->mc_FilePath);
 
    // Check and create folder
    if (TglDirectoryExists(c_FolderPath) == false)
@@ -106,7 +105,7 @@ int32_t C_OscComMessageLoggerFileBase::OpenFile(void)
    \param[in]     orc_ProtocolName         Current protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscComMessageLoggerFileBase::SetProtocolName(const C_SclString & orc_ProtocolName)
+void C_OscComMessageLoggerFileBase::SetProtocolName(const std::string & orc_ProtocolName)
 {
    this->mc_ProtocolName = orc_ProtocolName;
 }

@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include <map>
 
@@ -24,8 +25,11 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::errors;
+using namespace stw::scl;
 using namespace stw::opensyde_core;
+using namespace stw::scl;
 using namespace stw::tgl;
+using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -827,7 +831,7 @@ void C_OscNode::CalcHash(uint32_t & oru32_HashValue) const
 {
    uint32_t u32_Counter;
 
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_DeviceType.c_str(), this->c_DeviceType.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_DeviceType.c_str(), this->c_DeviceType.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_DatapoolAutoNvmStartAddress,
                                        sizeof(this->q_DatapoolAutoNvmStartAddress),
                                        oru32_HashValue);
@@ -1000,13 +1004,13 @@ bool C_OscNode::h_CompareNameGreater(const C_OscNode & orc_Node1, const C_OscNod
 {
    bool q_Retval;
 
-   if (orc_Node1.c_Properties.c_Name.Length() == orc_Node2.c_Properties.c_Name.Length())
+   if (orc_Node1.c_Properties.c_Name.length() == orc_Node2.c_Properties.c_Name.length())
    {
       q_Retval = (orc_Node1.c_Properties.c_Name < orc_Node2.c_Properties.c_Name);
    }
    else
    {
-      q_Retval = orc_Node1.c_Properties.c_Name.Length() < orc_Node2.c_Properties.c_Name.Length();
+      q_Retval = orc_Node1.c_Properties.c_Name.length() < orc_Node2.c_Properties.c_Name.length();
    }
    return q_Retval;
 }
@@ -1705,7 +1709,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
             if (u32_ItElement != ou32_DataPoolIndex)
             {
                const C_OscNodeDataPool & rc_CurrentDataPool = this->c_DataPools[u32_ItElement];
-               if (rc_CheckedDataPool.c_Name.LowerCase() == rc_CurrentDataPool.c_Name.LowerCase())
+               if (LowerCaseCompat(rc_CheckedDataPool.c_Name) == LowerCaseCompat(rc_CurrentDataPool.c_Name))
                {
                   *opq_NameConflict = true;
                   break;
@@ -1856,7 +1860,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
          }
          else
          {
-            std::map<stw::scl::C_SclString, uint32_t> c_PreviousNames;
+            std::map<std::string, uint32_t> c_PreviousNames;
             static std::map<uint32_t, bool> hc_PreviousResults;
             bool q_CheckSize;
             bool q_NameInvalid;
@@ -1882,8 +1886,8 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
             {
                //Overarching checks
                const C_OscNodeDataPoolList & rc_List = rc_CheckedDataPool.c_Lists[u32_ItList];
-               const std::map<stw::scl::C_SclString,
-                              uint32_t>::const_iterator c_ItList = c_PreviousNames.find(rc_List.c_Name.LowerCase());
+               const std::map<std::string,
+                              uint32_t>::const_iterator c_ItList = c_PreviousNames.find(LowerCaseCompat(rc_List.c_Name));
                if (c_ItList != c_PreviousNames.end())
                {
                   *opq_IsErrorInListOrMessage = true;
@@ -1915,7 +1919,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
                   //Check if check was already performed in the past
                   const std::map<uint32_t, bool>::const_iterator c_ItErr = hc_PreviousResults.find(u32_Hash);
                   //Append new name
-                  c_PreviousNames[rc_List.c_Name.LowerCase()] = u32_ItList;
+                  c_PreviousNames[LowerCaseCompat(rc_List.c_Name)] = u32_ItList;
                   //Element specific checks
                   if (c_ItErr == hc_PreviousResults.end())
                   {
@@ -2031,7 +2035,7 @@ void C_OscNode::CheckMessageId(const uint32_t ou32_InterfaceIndex, const C_OscCa
                                           (Use-case: skip current message to avoid conflict with itself)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNode::CheckMessageName(const uint32_t ou32_InterfaceIndex, const stw::scl::C_SclString & orc_MessageName,
+void C_OscNode::CheckMessageName(const uint32_t ou32_InterfaceIndex, const std::string & orc_MessageName,
                                  bool & orq_Valid, const C_OscCanProtocol::E_Type * const ope_SkipComProtocol,
                                  const uint32_t * const opu32_SkipInterfaceIndex,
                                  const bool * const opq_SkipMessageIsTxFlag,

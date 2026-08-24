@@ -9,6 +9,7 @@
 #define C_OSCEXPORTUTI_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <string>
 #include "C_SclStringList.hpp"
 #include "C_OscNodeDataPool.hpp"
 
@@ -24,31 +25,31 @@ namespace opensyde_core
 class C_OscExportUti
 {
 public:
-   static stw::scl::C_SclString h_GetSectionSeparator(const stw::scl::C_SclString & orc_SectionName);
-   static stw::scl::C_SclString h_GetHeaderSeparator(void);
-   static stw::scl::C_SclString h_GetCreationToolInfo(const stw::scl::C_SclString & orc_ExportToolInfo);
+   static std::string h_GetSectionSeparator(const std::string & orc_SectionName);
+   static std::string h_GetHeaderSeparator(void);
+   static std::string h_GetCreationToolInfo(const std::string & orc_ExportToolInfo);
    static void h_AddExternCeStart(stw::scl::C_SclStringList & orc_Data);
    static void h_AddExternCeEnd(stw::scl::C_SclStringList & orc_Data);
-   static void h_AddProjectIdDef(stw::scl::C_SclStringList & orc_Data, const stw::scl::C_SclString & orc_MagicName,
+   static void h_AddProjectIdDef(stw::scl::C_SclStringList & orc_Data, const std::string & orc_MagicName,
                                  const bool oq_HeaderFile);
    static void h_AddProjIdFunctionPrototype(stw::scl::C_SclStringList & orc_Data,
-                                            const stw::scl::C_SclString & orc_MagicName);
-   static int32_t h_SaveToFile(stw::scl::C_SclStringList & orc_Data, const stw::scl::C_SclString & orc_Path,
-                               const stw::scl::C_SclString & orc_FileName, const bool oq_HeaderFile);
-   static void h_CollectFilePaths(std::vector<stw::scl::C_SclString> & orc_FilePaths,
-                                  const stw::scl::C_SclString & orc_Path, const stw::scl::C_SclString & orc_FileName,
+                                            const std::string & orc_MagicName);
+   static int32_t h_SaveToFile(stw::scl::C_SclStringList & orc_Data, const std::string & orc_Path,
+                               const std::string & orc_FileName, const bool oq_HeaderFile);
+   static void h_CollectFilePaths(std::vector<std::string> & orc_FilePaths,
+                                  const std::string & orc_Path, const std::string & orc_FileName,
                                   const bool oq_SourceCode);
 
-   static stw::scl::C_SclString h_GetTypePrefix(const C_OscNodeDataPoolContent::E_Type oe_Type, const bool oq_IsArray);
-   static stw::scl::C_SclString h_GetElementTypeAsString(const C_OscNodeDataPoolContent::E_Type oe_Type);
-   static stw::scl::C_SclString h_GetElementCeName(const stw::scl::C_SclString & orc_Name, const bool oq_IsArray,
+   static std::string h_GetTypePrefix(const C_OscNodeDataPoolContent::E_Type oe_Type, const bool oq_IsArray);
+   static std::string h_GetElementTypeAsString(const C_OscNodeDataPoolContent::E_Type oe_Type);
+   static std::string h_GetElementCeName(const std::string & orc_Name, const bool oq_IsArray,
                                                    const C_OscNodeDataPoolContent::E_Type oe_Type,
-                                                   const stw::scl::C_SclString & orc_ArrayPos = "0");
+                                                   const std::string & orc_ArrayPos = "0");
 
-   static stw::scl::C_SclString h_FloatToStrGe(const float32_t of32_Value,  bool * const opq_InfOrNan = NULL);
-   static stw::scl::C_SclString h_FloatToStrGe(const float64_t of64_Value, bool * const opq_InfOrNan = NULL);
-   static bool h_CheckInfOrNan(const stw::scl::C_SclString & orc_String);
-   static void h_AddDecimalPointIfNone(stw::scl::C_SclString & orc_FloatString);
+   static std::string h_FloatToStrGe(const float32_t of32_Value,  bool * const opq_InfOrNan = NULL);
+   static std::string h_FloatToStrGe(const float64_t of64_Value, bool * const opq_InfOrNan = NULL);
+   static bool h_CheckInfOrNan(const std::string & orc_String);
+   static void h_AddDecimalPointIfNone(std::string & orc_FloatString);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

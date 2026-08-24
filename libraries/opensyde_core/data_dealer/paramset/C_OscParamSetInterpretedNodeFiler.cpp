@@ -22,7 +22,6 @@
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::tgl;
 
 using namespace stw::errors;
@@ -138,7 +137,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadDataPools(
    orc_DataPools.clear();
    if (orc_XmlParser.SelectNodeChild("interpreted") == "interpreted")
    {
-      C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("datapool");
+      std::string c_SelectedNode = orc_XmlParser.SelectNodeChild("datapool");
 
       if (c_SelectedNode == "datapool")
       {
@@ -283,7 +282,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadLists(std::vector<C_OscParamSe
    orc_Lists.clear();
    if (orc_XmlParser.SelectNodeChild("lists") == "lists")
    {
-      C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("list");
+      std::string c_SelectedNode = orc_XmlParser.SelectNodeChild("list");
 
       if (c_SelectedNode == "list")
       {
@@ -427,7 +426,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElements(std::vector<C_OscPara
    orc_Elements.clear();
    if (orc_XmlParser.SelectNodeChild("elements") == "elements")
    {
-      C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("element");
+      std::string c_SelectedNode = orc_XmlParser.SelectNodeChild("element");
 
       if (c_SelectedNode == "element")
       {
@@ -526,7 +525,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElement(C_OscParamSetInterpret
       s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolElementType(orc_Element.c_NvmValue, orc_XmlParser);
       if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("value") == "value"))
       {
-         C_SclString c_Error;
+         std::string c_Error;
          s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(orc_Element.c_NvmValue, orc_XmlParser, true,
                                                                          &c_Error);
          if (s32_Retval != C_NO_ERR)

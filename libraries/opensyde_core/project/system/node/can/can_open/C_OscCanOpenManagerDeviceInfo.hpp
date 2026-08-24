@@ -38,10 +38,10 @@ public:
    const C_OscCanOpenObjectDictionary & GetEdsFileContent() const;
    void SetEdsFileContent(const C_OscCanOpenObjectDictionary & orc_NewContent);
 
-   stw::scl::C_SclString c_ProjectEdsFilePath; ///< Absolute file path to EDS file for delayed loading; not part of the
+   std::string c_ProjectEdsFilePath; ///< Absolute file path to EDS file for delayed loading; not part of the
                                                // file's content
 
-   stw::scl::C_SclString c_OriginalEdsFileName; ///< File name of original EDS file
+   std::string c_OriginalEdsFileName; ///< File name of original EDS file
 
    std::vector<C_OscCanOpenManagerMappableSignal> c_EdsFileMappableSignals; ///< All parsed and valid mappable signals
    bool q_DeviceOptional;                                                   ///< Flag for CANopen manager to consider

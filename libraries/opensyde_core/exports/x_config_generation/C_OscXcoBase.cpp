@@ -20,13 +20,13 @@ using namespace stw::scl;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const C_SclString C_OscXcoBase::hc_PACKAGE_EXT = ".syde_xcfg";
-const C_SclString C_OscXcoBase::hc_PACKAGE_EXT_TMP = ".syde_xcfg_tmp"; // intermediate directory
+const std::string C_OscXcoBase::hc_PACKAGE_EXT = ".syde_xcfg";
+const std::string C_OscXcoBase::hc_PACKAGE_EXT_TMP = ".syde_xcfg_tmp"; // intermediate directory
                                                                        // before creating zip
                                                                        // archive
-const C_SclString C_OscXcoBase::hc_XCFG_SYSDEF = "xcfg_system_definition.syde_sysdef";
-const C_SclString C_OscXcoBase::hc_XCFG_SYSDEF_FOLDER = "system_definition";
-const C_SclString C_OscXcoBase::hc_INI_DEV_FOLDER = "device_definitions";
+const std::string C_OscXcoBase::hc_XCFG_SYSDEF = "xcfg_system_definition.syde_sysdef";
+const std::string C_OscXcoBase::hc_XCFG_SYSDEF_FOLDER = "system_definition";
+const std::string C_OscXcoBase::hc_INI_DEV_FOLDER = "device_definitions";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -37,7 +37,7 @@ stw::scl::C_SclStringList C_OscXcoBase::mhc_WarningMessages; // global warnings 
                                                              // position
                                                              // of
                                                              // active node is not available
-stw::scl::C_SclString C_OscXcoBase::mhc_ErrorMessage;        // description of error which caused
+std::string C_OscXcoBase::mhc_ErrorMessage;        // description of error which caused
                                                              // the
                                                              // service update package to fail
 
@@ -52,7 +52,7 @@ stw::scl::C_SclString C_OscXcoBase::mhc_ErrorMessage;        // description of e
    service update package extension
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscXcoBase::h_GetPackageExtension()
+std::string C_OscXcoBase::h_GetPackageExtension()
 {
    return hc_PACKAGE_EXT;
 }
@@ -74,7 +74,7 @@ void C_OscXcoBase::mh_Init()
    \param[in,out]  orc_ErrorMessage       Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXcoBase::mh_GetWarningsAndErrors(C_SclStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage)
+void C_OscXcoBase::mh_GetWarningsAndErrors(C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage)
 {
    orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
    orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller

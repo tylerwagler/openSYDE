@@ -9,7 +9,7 @@
 #define C_OSCDATALOGGERJOBPROPERTIES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscDataLoggerJobAdditionalTriggerProperties.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -48,15 +48,15 @@ public:
 
    void CalcHash(uint32_t & oru32_HashValue) const;
 
-   stw::scl::C_SclString c_Name;                                                ///< data logger job name
-   stw::scl::C_SclString c_Comment;                                             ///< data logger job comment
+   std::string c_Name;                                                ///< data logger job name
+   std::string c_Comment;                                             ///< data logger job comment
    E_UseCase e_UseCase;                                                         ///< selected local log trigger
    E_LogFileFormat e_LogFileFormat;                                             ///< selected log file format
    uint32_t u32_MaxLogEntries;                                                  ///< max log entries
    uint32_t u32_MaxLogDurationSec;                                              ///< max log duration in seconds
    uint32_t u32_LogIntervalMs;                                                  ///< logging interval in milliseconds
    E_LocalLogTrigger e_LocalLogTrigger;                                         ///< selected local log trigger
-   stw::scl::C_SclString c_LogDestinationDirectory;                             ///< log destination directory
+   std::string c_LogDestinationDirectory;                             ///< log destination directory
    C_OscDataLoggerJobAdditionalTriggerProperties c_AdditionalTriggerProperties; ///< additional trigger config
 };
 

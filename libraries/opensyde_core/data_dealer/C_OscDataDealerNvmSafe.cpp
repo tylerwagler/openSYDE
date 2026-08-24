@@ -20,6 +20,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -959,7 +960,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
    C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeCreateCleanFileWithoutCrc(const C_SclString & orc_Path,
+int32_t C_OscDataDealerNvmSafe::NvmSafeCreateCleanFileWithoutCrc(const std::string & orc_Path,
                                                                  const C_OscParamSetInterpretedFileInfoData & orc_FileInfo)
 {
    int32_t s32_Retval;
@@ -1010,7 +1011,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCreateCleanFileWithoutCrc(const C_SclStri
    C_CONFIG   file does not contain essential information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithoutCrc(const C_SclString & orc_Path)
+int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithoutCrc(const std::string & orc_Path)
 {
    int32_t s32_Retval;
 
@@ -1051,7 +1052,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithoutCrc(const C_SclString & or
                or no valid pointer to the original instance of "C_OscNode" is set in "C_OscDataDealer"
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(const C_SclString & orc_Path,
+int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(const std::string & orc_Path,
                                                                   std::vector<C_OscNodeDataPoolListId> & orc_DataPoolLists)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1205,7 +1206,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(const C_SclStr
               specified file is present but structure is invalid (e.g. invalid XML file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeUpdateCrcForFile(const C_SclString & orc_Path)
+int32_t C_OscDataDealerNvmSafe::NvmSafeUpdateCrcForFile(const std::string & orc_Path)
 {
    int32_t s32_Retval;
 
@@ -1252,7 +1253,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeUpdateCrcForFile(const C_SclString & orc_
    C_CHECKSUM specified file is present but checksum is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithCrc(const C_SclString & orc_Path)
+int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithCrc(const std::string & orc_Path)
 {
    int32_t s32_Retval = this->mc_ImageFileHandler.ReadFile(orc_Path, false);
 
@@ -1261,8 +1262,8 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithCrc(const C_SclString & orc_P
       //data for one file contained ?
       if (this->mc_ImageFileHandler.GetNumberOfNodes() != 1U)
       {
-         C_SclString c_Error;
-         c_Error.PrintFormatted(
+         std::string c_Error;
+         c_Error = PrintFormattedCompat(
             "File \"%s\"  Expected: contains parameters for one device  Found: contains parameters for %u devices\n",
             orc_Path.c_str(), this->mc_ImageFileHandler.GetNumberOfNodes());
          this->mc_ImageFileHandler.ClearContent();
@@ -1310,7 +1311,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithCrc(const C_SclString & orc_P
    C_UNKNOWN_ERR <undefined>  Communication protocol failed with non-specified error code
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const C_SclString & orc_Path, int32_t & ors32_ResultDetail)
+int32_t C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const std::string & orc_Path, int32_t & ors32_ResultDetail)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1358,7 +1359,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const C_SclString &
                         //Not documented error was returned by function
                         s32_Retval = C_UNKNOWN_ERR;
                         osc_write_log_info("Parametrization", "Not documented error code " +
-                                           C_SclString::IntToStr(s32_Retval) + " was returned by NvmWrite");
+                                           std::to_string(s32_Retval) + " was returned by NvmWrite");
                         break;
                      }
                      if (s32_Retval != C_NO_ERR)

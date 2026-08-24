@@ -26,16 +26,16 @@ namespace opensyde_core
 class C_OscExportCanOpenInit
 {
 public:
-   static stw::scl::C_SclString h_GetFileName(void);
-   static int32_t h_CreateSourceCode(const stw::scl::C_SclString & orc_FilePath, const C_OscNode & orc_Node,
+   static std::string h_GetFileName(void);
+   static int32_t h_CreateSourceCode(const std::string & orc_FilePath, const C_OscNode & orc_Node,
                                      const std::vector<uint8_t> & orc_IfWithCanOpenMan,
-                                     const stw::scl::C_SclString & orc_ExportToolInfo = "");
+                                     const std::string & orc_ExportToolInfo = "");
 
 protected:
-   static void mh_ComposeDefineNumTotal(stw::scl::C_SclString & orc_DefineValue,
+   static void mh_ComposeDefineNumTotal(std::string & orc_DefineValue,
                                         const std::vector<uint8_t> & orc_IfWithCanOpenMan, const bool oq_IsTx,
-                                        const stw::scl::C_SclString & orc_Subject);
-   static void mh_ComposeDefineNumDevices(stw::scl::C_SclString & orc_DefineValue,
+                                        const std::string & orc_Subject);
+   static void mh_ComposeDefineNumDevices(std::string & orc_DefineValue,
                                           const std::vector<uint8_t> & orc_IfWithCanOpenMan);
 };
 

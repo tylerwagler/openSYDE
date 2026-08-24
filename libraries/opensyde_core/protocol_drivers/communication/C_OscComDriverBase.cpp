@@ -18,7 +18,7 @@
 #include "stwerrors.hpp"
 
 #include "C_OscComDriverBase.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "TglTime.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscComAutoSupport.hpp"
@@ -26,7 +26,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::errors;
-using namespace stw::scl;
 using namespace stw::can;
 using namespace stw::opensyde_core;
 
@@ -340,8 +339,8 @@ void C_OscComDriverBase::DistributeMessages(void)
             {
                //ignore invalid can message
                osc_write_log_error("Reading CAN message",
-                                   "Ignored CAN message (ID: " + C_SclString::IntToStr(
-                                      c_Msg.u32_ID) + ") due to invalid DLC (" + C_SclString::IntToStr(c_Msg.u8_DLC));
+                                   "Ignored CAN message (ID: " + std::to_string(
+                                      c_Msg.u32_ID) + ") due to invalid DLC (" + std::to_string(c_Msg.u8_DLC));
             }
          }
       }
@@ -497,7 +496,7 @@ int32_t C_OscComDriverBase::SendCanMessageDirect(T_STWCAN_Msg_TX & orc_Msg)
    if (s32_Return != C_NO_ERR)
    {
       osc_write_log_error("Sending CAN message", "Could not send CAN message. Error code: " +
-                          C_SclString::IntToStr(s32_Return));
+                          std::to_string(s32_Return));
    }
 
    return s32_Return;

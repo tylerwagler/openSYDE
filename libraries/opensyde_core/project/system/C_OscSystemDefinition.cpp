@@ -18,11 +18,12 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscSystemDefinition.hpp"
 #include "TglUtils.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -502,7 +503,7 @@ const
             if (u32_ItNode != ou32_NodeIndex)
             {
                uint32_t u32_GroupIndex;
-               stw::scl::C_SclString c_CurName;
+               std::string c_CurName;
                if (C_OscNodeSquad::h_CheckIsMultiDevice(u32_ItNode, this->c_NodeSquads, &u32_GroupIndex))
                {
                   tgl_assert(u32_GroupIndex < this->c_NodeSquads.size());
@@ -517,7 +518,7 @@ const
                   const C_OscNode & rc_CurrentNode = this->c_Nodes[u32_ItNode];
                   c_CurName = rc_CurrentNode.c_Properties.c_Name;
                }
-               if (rc_CheckedNode.c_Properties.c_Name.LowerCase() == c_CurName.LowerCase())
+               if (LowerCaseCompat(rc_CheckedNode.c_Properties.c_Name) == LowerCaseCompat(c_CurName))
                {
                   *opq_NameConflict = true;
                   break;
@@ -976,7 +977,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
             if (u32_ItBus != ou32_BusIndex)
             {
                const C_OscSystemBus & rc_CurrentBus = this->c_Buses[u32_ItBus];
-               if (rc_CheckedBus.c_Name.LowerCase() == rc_CurrentBus.c_Name.LowerCase())
+               if (LowerCaseCompat(rc_CheckedBus.c_Name) == LowerCaseCompat(rc_CurrentBus.c_Name))
                {
                   *opq_NameConflict = true;
                }
@@ -1273,7 +1274,7 @@ const
    C_RANGE  Bus does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::CheckMessageNameBus(const uint32_t ou32_BusIndex, const C_SclString & orc_MessageName,
+int32_t C_OscSystemDefinition::CheckMessageNameBus(const uint32_t ou32_BusIndex, const std::string & orc_MessageName,
                                                    bool & orq_Valid,
                                                    const C_OscCanMessageIdentificationIndices * const opc_SkipMessage)
 const
@@ -1650,11 +1651,11 @@ void C_OscSystemDefinition::GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusI
    \param[in]      orc_MainDeviceName  Main device name (empty if none)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinition::AddNode(C_OscNode & orc_Node, const stw::scl::C_SclString & orc_SubDeviceName,
-                                    const stw::scl::C_SclString & orc_MainDeviceName)
+void C_OscSystemDefinition::AddNode(C_OscNode & orc_Node, const std::string & orc_SubDeviceName,
+                                    const std::string & orc_MainDeviceName)
 {
-   const stw::scl::C_SclString c_SubDeviceName =
-      orc_SubDeviceName.IsEmpty() ? orc_Node.c_DeviceType : orc_SubDeviceName;
+   const std::string c_SubDeviceName =
+      orc_SubDeviceName.empty() ? orc_Node.c_DeviceType : orc_SubDeviceName;
 
    orc_Node.pc_DeviceDefinition = C_OscSystemDefinition::hc_Devices.LookForDevice(c_SubDeviceName,
                                                                                   orc_MainDeviceName,
@@ -1679,8 +1680,8 @@ void C_OscSystemDefinition::AddNode(C_OscNode & orc_Node, const stw::scl::C_SclS
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinition::AddNodeSquad(std::vector<C_OscNode> & orc_Nodes,
-                                         const std::vector<stw::scl::C_SclString> & orc_SubDeviceNames,
-                                         const stw::scl::C_SclString & orc_MainDeviceName)
+                                         const std::vector<std::string> & orc_SubDeviceNames,
+                                         const std::string & orc_MainDeviceName)
 {
    tgl_assert(orc_Nodes.size() == orc_SubDeviceNames.size());
    if (orc_Nodes.size() == orc_SubDeviceNames.size())
@@ -1801,7 +1802,7 @@ int32_t C_OscSystemDefinition::DeleteNode(const uint32_t ou32_NodeIndex)
    \retval   C_RANGE    No node squad found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::SetNodeName(const uint32_t ou32_NodeIndex, const C_SclString & orc_NodeName)
+int32_t C_OscSystemDefinition::SetNodeName(const uint32_t ou32_NodeIndex, const std::string & orc_NodeName)
 {
    int32_t s32_Return = C_RANGE;
 
@@ -2019,7 +2020,7 @@ void C_OscSystemDefinition::m_HandleNameMaxCharLimitNodeName(const uint32_t ou32
    if (s32_SquadReturn == C_NO_ERR)
    {
       C_OscNodeSquad & rc_Squad = this->c_NodeSquads[u32_SquadIndex];
-      const stw::scl::C_SclString c_OldName = rc_Squad.c_BaseName;
+      const std::string c_OldName = rc_Squad.c_BaseName;
       C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit,
                                                                                 "multi-node-name",
                                                                                 rc_Squad.c_BaseName,

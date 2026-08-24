@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include <cstring>
 #include <iostream>
@@ -474,10 +475,10 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingConsecutiveFrame(const T_ST
       }
       else
       {
-         C_SclString c_Tmp;
+         std::string c_Tmp;
          //incorrect sequence: abort
          mc_RxService.e_Status = C_ServiceState::eIDLE;
-         c_Tmp.PrintFormatted("Consecutive frame with incorrect sequence number received. Expected: %u, Received: %u",
+         c_Tmp = PrintFormattedCompat("Consecutive frame with incorrect sequence number received. Expected: %u, Received: %u",
                               static_cast<uint32_t>(mc_RxService.u8_SequenceNumber),
                               orc_CanMessage.au8_Data[0] & 0x0FU);
          m_LogWarningWithHeader(c_Tmp.c_str(), TGL_UTIL_FUNC_ID);
@@ -1562,7 +1563,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
 
                                        if (rc_CurrentResult.c_SerialNumber.q_FsnSerialNumber == true)
                                        {
-                                          if (rc_CurrentResult.c_SerialNumber.c_SerialNumberExt.Length() <
+                                          if (rc_CurrentResult.c_SerialNumber.c_SerialNumberExt.length() <
                                               rc_CurrentResult.c_SerialNumber.u8_SerialNumberByteLength)
                                           {
                                              // Serial number is not finished yet
@@ -1642,7 +1643,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
                    (c_ItResult->second.c_SerialNumber.u8_SerialNumberByteLength <= 29) &&
   // Check for FSN serial number ext length
                    (((c_ItResult->second.c_SerialNumber.q_FsnSerialNumber == true) &&
-                     (c_ItResult->second.c_SerialNumber.c_SerialNumberExt.Length() ==
+                     (c_ItResult->second.c_SerialNumber.c_SerialNumberExt.length() ==
                       c_ItResult->second.c_SerialNumber.u8_SerialNumberByteLength)) ||
   // Check for POS serial number length for exact 6 byte
                     ((c_ItResult->second.c_SerialNumber.q_FsnSerialNumber == false) &&
@@ -2134,12 +2135,12 @@ void C_OscProtocolDriverOsyTpCan::ClearDispatcherQueue(void)
    \param[in]     opcn_Function       function name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscProtocolDriverOsyTpCan::m_LogWarningWithHeader(const stw::scl::C_SclString & orc_Information,
+void C_OscProtocolDriverOsyTpCan::m_LogWarningWithHeader(const std::string & orc_Information,
                                                          const char_t * const opcn_Function) const
 {
-   C_OscLoggingHandler::h_WriteLogError("openSYDE CAN-TP", "openSYDE CAN-TP node " + C_SclString::IntToStr(
+   C_OscLoggingHandler::h_WriteLogError("openSYDE CAN-TP", "openSYDE CAN-TP node " + std::to_string(
                                            mc_ServerId.u8_BusIdentifier) + "." +
-                                        C_SclString::IntToStr(
+                                        std::to_string(
                                            mc_ServerId.u8_NodeIdentifier) + ": " + orc_Information, __FILE__,
                                         opcn_Function);
 }

@@ -16,8 +16,9 @@
 //lint -estring(829,*ctime*)   //this module is specifically for Windows targets; no trouble with unspecified
 // behavior expected
 #include <ctime>
+#include <sstream>
+#include <iomanip>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
 #include "C_SclDateTime.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -91,12 +92,13 @@ C_SclDateTime C_SclDateTime::Now(void)
    time as string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SclDateTime::TimeToString(void) const
+std::string C_SclDateTime::TimeToString(void) const
 {
-   C_SclString c_String;
-
-   c_String.PrintFormatted("%02d:%02d:%02d", mu16_Hour, mu16_Minute, mu16_Second);
-   return c_String;
+   std::ostringstream c_Stream;
+   c_Stream << std::setw(2) << std::setfill('0') << mu16_Hour << ":"
+            << std::setw(2) << std::setfill('0') << mu16_Minute << ":"
+            << std::setw(2) << std::setfill('0') << mu16_Second;
+   return c_Stream.str();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -108,12 +110,13 @@ C_SclString C_SclDateTime::TimeToString(void) const
    date as string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SclDateTime::DateToString(void) const
+std::string C_SclDateTime::DateToString(void) const
 {
-   C_SclString c_String;
-
-   c_String.PrintFormatted("%02d.%02d.%04d", mu16_Day, mu16_Month, mu16_Year);
-   return c_String;
+   std::ostringstream c_Stream;
+   c_Stream << std::setw(2) << std::setfill('0') << mu16_Day << "."
+            << std::setw(2) << std::setfill('0') << mu16_Month << "."
+            << std::setw(4) << std::setfill('0') << mu16_Year;
+   return c_Stream.str();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -125,13 +128,16 @@ C_SclString C_SclDateTime::DateToString(void) const
    date as string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SclDateTime::DateTimeToString(void) const
+std::string C_SclDateTime::DateTimeToString(void) const
 {
-   C_SclString c_String;
-
-   c_String.PrintFormatted("%02d.%02d.%04d %02d:%02d:%02d", mu16_Day,  mu16_Month,  mu16_Year,
-                           mu16_Hour, mu16_Minute, mu16_Second);
-   return c_String;
+   std::ostringstream c_Stream;
+   c_Stream << std::setw(2) << std::setfill('0') << mu16_Day << "."
+            << std::setw(2) << std::setfill('0') << mu16_Month << "."
+            << std::setw(4) << std::setfill('0') << mu16_Year << " "
+            << std::setw(2) << std::setfill('0') << mu16_Hour << ":"
+            << std::setw(2) << std::setfill('0') << mu16_Minute << ":"
+            << std::setw(2) << std::setfill('0') << mu16_Second;
+   return c_Stream.str();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

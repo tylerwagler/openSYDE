@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include "C_CanMonProtocolBase.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -29,21 +29,21 @@ class C_CanMonProtocolUds :
    public C_CanMonProtocolBase
 {
 private:
-   static stw::scl::C_SclString mh_ServiceIdToText(const uint8_t ou8_Sid, const bool oq_IsResponse,
+   static std::string mh_ServiceIdToText(const uint8_t ou8_Sid, const bool oq_IsResponse,
                                                     const bool oq_IsNegativeResponse);
-   static stw::scl::C_SclString mh_SubFunctionToText(const uint8_t ou8_ServiceId, const uint8_t ou8_SubFunc);
-   static stw::scl::C_SclString mh_NegativeResponseCodeToText(const uint8_t ou8_Nrc);
-   static stw::scl::C_SclString mh_SessionToText(const uint8_t ou8_Session);
-   static stw::scl::C_SclString mh_ResetTypeToText(const uint8_t ou8_ResetType);
-   static stw::scl::C_SclString mh_DataIdentifierToText(const uint16_t ou16_Did);
-   static stw::scl::C_SclString mh_RoutineIdentifierToText(const uint16_t ou16_Rid);
-   static stw::scl::C_SclString mh_AccessTypeToText(const uint8_t ou8_AccessType);
+   static std::string mh_SubFunctionToText(const uint8_t ou8_ServiceId, const uint8_t ou8_SubFunc);
+   static std::string mh_NegativeResponseCodeToText(const uint8_t ou8_Nrc);
+   static std::string mh_SessionToText(const uint8_t ou8_Session);
+   static std::string mh_ResetTypeToText(const uint8_t ou8_ResetType);
+   static std::string mh_DataIdentifierToText(const uint16_t ou16_Did);
+   static std::string mh_RoutineIdentifierToText(const uint16_t ou16_Rid);
+   static std::string mh_AccessTypeToText(const uint8_t ou8_AccessType);
 
 public:
    C_CanMonProtocolUds(void);
 
-   virtual stw::scl::C_SclString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
-   virtual stw::scl::C_SclString GetProtocolName(void) const;
+   virtual std::string MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
+   virtual std::string GetProtocolName(void) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

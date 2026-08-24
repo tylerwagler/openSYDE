@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclIniFile.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -27,12 +27,12 @@ class C_OscCanOpenEdsDeviceInfoBlock
 public:
    C_OscCanOpenEdsDeviceInfoBlock();
 
-   stw::scl::C_SclString c_VendorName;     ///< Vendor name, max 244 characters
-   stw::scl::C_SclString c_VendorNumber;   ///< Vendor number, also see object dictionary index 1018, sub-index 1
-   stw::scl::C_SclString c_ProductName;    ///< Product name, max 243 characters
-   stw::scl::C_SclString c_ProductNumber;  ///< Product number, also see object dictionary index 1018, sub-index 2
-   stw::scl::C_SclString c_RevisionNumber; ///< Revision number, also see object dictionary index 1018, sub-index 3
-   stw::scl::C_SclString c_OrderCode;      ///< Product order code, max 245 characters
+   std::string c_VendorName;     ///< Vendor name, max 244 characters
+   std::string c_VendorNumber;   ///< Vendor number, also see object dictionary index 1018, sub-index 1
+   std::string c_ProductName;    ///< Product name, max 243 characters
+   std::string c_ProductNumber;  ///< Product number, also see object dictionary index 1018, sub-index 2
+   std::string c_RevisionNumber; ///< Revision number, also see object dictionary index 1018, sub-index 3
+   std::string c_OrderCode;      ///< Product order code, max 245 characters
    bool q_BaudRate10;                      ///< Support of baud rate 10 kbit/s
    bool q_BaudRate20;                      ///< Support of baud rate 20 kbit/s
    bool q_BaudRate50;                      ///< Support of baud rate 50 kbit/s
@@ -46,7 +46,7 @@ public:
    uint8_t u8_Granularity;                 ///< Minimum size of a mappable object in bits, allowed for the PDO mapping
                                            // on
    ///< this CANopen device
-   stw::scl::C_SclString c_DynamicChannelsSupported; ///< The value indicates the facility of dynamic variable
+   std::string c_DynamicChannelsSupported; ///< The value indicates the facility of dynamic variable
    ///< generation. If the value is unequal to "0", the additional section DynamicChannels exists
    bool q_GroupMessaging;  ///< The value indicates, if multiplexed PDOs configuration is supported
    uint16_t u16_NrOfRxPdo; ///< Number of supported receive PDOs
@@ -54,36 +54,36 @@ public:
    bool q_LssSupported;    ///< The value indicates information whether LSS functionality is supported.
 
    void CalcHash(uint32_t & oru32_HashValue) const;
-   int32_t LoadFromIni(stw::scl::C_SclIniFile & orc_File, stw::scl::C_SclString & orc_LastError);
+   int32_t LoadFromIni(stw::scl::C_SclIniFile & orc_File, std::string & orc_LastError);
 
    uint8_t GetGranularity(void) const;
 
    static int32_t h_LoadStringValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                               const stw::scl::C_SclString & orc_SectionName,
-                                               const stw::scl::C_SclString & orc_KeyName,
-                                               stw::scl::C_SclString & orc_OutputValue,
-                                               stw::scl::C_SclString & orc_ErrorMessage,
-                                               const stw::scl::C_SclString & orc_DefaultValue = "");
+                                               const std::string & orc_SectionName,
+                                               const std::string & orc_KeyName,
+                                               std::string & orc_OutputValue,
+                                               std::string & orc_ErrorMessage,
+                                               const std::string & orc_DefaultValue = "");
    static int32_t h_LoadU8ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                           const stw::scl::C_SclString & orc_SectionName,
-                                           const stw::scl::C_SclString & orc_KeyName, uint8_t & oru8_OutputValue,
-                                           stw::scl::C_SclString & orc_ErrorMessage,
+                                           const std::string & orc_SectionName,
+                                           const std::string & orc_KeyName, uint8_t & oru8_OutputValue,
+                                           std::string & orc_ErrorMessage,
                                            const uint8_t ou8_DefaultValue = 0);
    static int32_t h_LoadU16ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                            const stw::scl::C_SclString & orc_SectionName,
-                                            const stw::scl::C_SclString & orc_KeyName, uint16_t & oru16_OutputValue,
-                                            stw::scl::C_SclString & orc_ErrorMessage,
+                                            const std::string & orc_SectionName,
+                                            const std::string & orc_KeyName, uint16_t & oru16_OutputValue,
+                                            std::string & orc_ErrorMessage,
                                             const uint16_t ou16_DefaultValue = 0);
    static int32_t h_LoadBoolValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                             const stw::scl::C_SclString & orc_SectionName,
-                                             const stw::scl::C_SclString & orc_KeyName, bool & orq_OutputValue,
-                                             stw::scl::C_SclString & orc_ErrorMessage,
+                                             const std::string & orc_SectionName,
+                                             const std::string & orc_KeyName, bool & orq_OutputValue,
+                                             std::string & orc_ErrorMessage,
                                              const bool oq_DefaultValue = false);
-   static void h_ReportMissingSectionError(const stw::scl::C_SclString & orc_SectionName,
-                                           stw::scl::C_SclString & orc_ErrorMessage);
-   static void h_ReportMissingKeyError(const stw::scl::C_SclString & orc_SectionName,
-                                       const stw::scl::C_SclString & orc_KeyName,
-                                       stw::scl::C_SclString & orc_ErrorMessage);
+   static void h_ReportMissingSectionError(const std::string & orc_SectionName,
+                                           std::string & orc_ErrorMessage);
+   static void h_ReportMissingKeyError(const std::string & orc_SectionName,
+                                       const std::string & orc_KeyName,
+                                       std::string & orc_ErrorMessage);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

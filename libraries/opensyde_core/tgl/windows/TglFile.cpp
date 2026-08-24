@@ -20,8 +20,9 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclDateTime.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -38,17 +39,17 @@ using namespace stw::scl;
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
-static bool m_FileAgeDosTime(const C_SclString & orc_FileName, uint16_t * const opu16_Date,
+static bool m_FileAgeDosTime(const std::string & orc_FileName, uint16_t * const opu16_Date,
                              uint16_t * const opu16_Time);
-static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
+static int32_t m_FileFind(const std::string & orc_SearchPattern,
                           std::vector<C_TglFileSearchRecord> & orc_FoundFiles,
                           const bool oq_IncludeDirectories = false,
                           std::vector<uint8_t> * const opc_IsDirectory = NULL);
-static bool m_CheckUncShare(const C_SclString & orc_Path);
+static bool m_CheckUncShare(const std::string & orc_Path);
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 //utility: get operating system file age
-static bool m_FileAgeDosTime(const C_SclString & orc_FileName, uint16_t * const opu16_Date, uint16_t * const opu16_Time)
+static bool m_FileAgeDosTime(const std::string & orc_FileName, uint16_t * const opu16_Date, uint16_t * const opu16_Time)
 {
    HANDLE pv_Handle;
    WIN32_FIND_DATAA t_FindData;
@@ -83,7 +84,7 @@ static bool m_FileAgeDosTime(const C_SclString & orc_FileName, uint16_t * const 
    false     path is not an existing UNC share
 */
 //----------------------------------------------------------------------------------------------------------------------
-static bool m_CheckUncShare(const C_SclString & orc_Path)
+static bool m_CheckUncShare(const std::string & orc_Path)
 {
    bool q_Return = false;
    uint32_t u32_Attrib = GetFileAttributesA(orc_Path.c_str());
@@ -91,14 +92,14 @@ static bool m_CheckUncShare(const C_SclString & orc_Path)
    if (u32_Attrib == INVALID_FILE_ATTRIBUTES)
    {
       // check beginning of path for "//" or "\\"
-      if ((orc_Path.SubString(1, 2) == "//") || (orc_Path.SubString(1, 2) == "\\\\"))
+       if ((SubStringCompat(orc_Path, 1, 2) == "//") || (SubStringCompat(orc_Path, 1, 2) == "\\\\"))
       {
-         const size_t un_CharIndex = orc_Path.AsStdString()->find_first_of("\\/", 2);
+         const size_t un_CharIndex = orc_Pathfind_first_of("\\/", 2);
          // check if no deeper UNC path like "\\mypc\shared"
-         if ((un_CharIndex == orc_Path.Length()) || // case path ends on slash
+         if ((un_CharIndex == orc_Path.length()) || // case path ends on slash
              (un_CharIndex == std::string::npos))   // case path does not contain another slash
          {
-            const C_SclString c_SubPath = orc_Path + "\\randomsubdir";
+            const std::string c_SubPath = orc_Path + "\\randomsubdir";
             uint32_t u32_LastErr;
 
             // check for a random sub-directory if it exists
@@ -132,7 +133,7 @@ static bool m_CheckUncShare(const C_SclString & orc_Path)
    false     error -> oc_String not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglFileAgeString(const C_SclString & orc_FileName, C_SclString & orc_String)
+bool stw::tgl::TglFileAgeString(const std::string & orc_FileName, std::string & orc_String)
 {
    bool q_Return;
    uint16_t u16_Time;
@@ -174,7 +175,7 @@ bool stw::tgl::TglFileAgeString(const C_SclString & orc_FileName, C_SclString & 
    else      size of file in bytes
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t stw::tgl::TglFileSize(const C_SclString & orc_FileName)
+int32_t stw::tgl::TglFileSize(const std::string & orc_FileName)
 {
    std::FILE * pc_File;
    int32_t s32_Size = -1;
@@ -202,7 +203,7 @@ int32_t stw::tgl::TglFileSize(const C_SclString & orc_FileName)
    false      directory does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglDirectoryExists(const C_SclString & orc_Path)
+bool stw::tgl::TglDirectoryExists(const std::string & orc_Path)
 {
    bool q_Return = false;
    const uint32_t u32_Attrib = GetFileAttributesA(orc_Path.c_str());
@@ -234,7 +235,7 @@ bool stw::tgl::TglDirectoryExists(const C_SclString & orc_Path)
    false      file does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglFileExists(const C_SclString & orc_FileName)
+bool stw::tgl::TglFileExists(const std::string & orc_FileName)
 {
    bool q_Return = false;
    HANDLE pv_Handle;
@@ -266,7 +267,7 @@ bool stw::tgl::TglFileExists(const C_SclString & orc_FileName)
    C_NOACT      no files found
 */
 //----------------------------------------------------------------------------------------------------------------------
-static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
+static int32_t m_FileFind(const std::string & orc_SearchPattern,
                           std::vector<C_TglFileSearchRecord> & orc_FoundFiles, const bool oq_IncludeDirectories,
                           std::vector<uint8_t> * const opc_IsDirectory)
 {
@@ -330,7 +331,7 @@ static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
    C_CONFIG     directory invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t stw::tgl::TglFileFind(const C_SclString & orc_SearchPattern,
+int32_t stw::tgl::TglFileFind(const std::string & orc_SearchPattern,
                               std::vector<C_TglFileSearchRecord> & orc_FoundFiles)
 {
    return m_FileFind(orc_SearchPattern, orc_FoundFiles);
@@ -351,14 +352,14 @@ int32_t stw::tgl::TglFileFind(const C_SclString & orc_SearchPattern,
    path with delimiter
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglFileIncludeTrailingDelimiter(const C_SclString & orc_Path)
+std::string stw::tgl::TglFileIncludeTrailingDelimiter(const std::string & orc_Path)
 {
-   if (orc_Path.Length() == 0)
+   if (orc_Path.length() == 0)
    {
       return "\\";
    }
-   if ((orc_Path.operator [](orc_Path.Length()) != '\\') &&
-       (orc_Path.operator [](orc_Path.Length()) != '/'))
+   if ((orc_Path.operator [](orc_Path.length()) != '\\') &&
+       (orc_Path.operator [](orc_Path.length()) != '/'))
    {
       return orc_Path + "\\";
    }
@@ -378,13 +379,13 @@ C_SclString stw::tgl::TglFileIncludeTrailingDelimiter(const C_SclString & orc_Pa
    extension (includes the ".")
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglExtractFileExtension(const C_SclString & orc_Path)
+std::string stw::tgl::TglExtractFileExtension(const std::string & orc_Path)
 {
-   C_SclString c_Extension;
+   std::string c_Extension;
    char_t acn_Ext[_MAX_EXT + 1];
 
    _splitpath(orc_Path.c_str(), NULL, NULL, NULL, &acn_Ext[0]);
-   c_Extension = static_cast<C_SclString>(acn_Ext);
+   c_Extension = static_cast<std::string>(acn_Ext);
    return c_Extension;
 }
 
@@ -402,16 +403,16 @@ C_SclString stw::tgl::TglExtractFileExtension(const C_SclString & orc_Path)
    new file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglChangeFileExtension(const C_SclString & orc_Path, const C_SclString & orc_Extension)
+std::string stw::tgl::TglChangeFileExtension(const std::string & orc_Path, const std::string & orc_Extension)
 {
    uint32_t u32_Pos;
-   C_SclString c_NewPath = orc_Path;
+   std::string c_NewPath = orc_Path;
 
-   u32_Pos = c_NewPath.LastPos(".");
+   u32_Pos = LastPosCompat(c_NewPath, ".");
    if (u32_Pos != 0U)
    {
       //there is a file extension !
-      c_NewPath = c_NewPath.Delete(u32_Pos, INT_MAX); //remove everything from and including the "."
+      DeleteCompat(c_NewPath, u32_Pos, INT_MAX); //remove everything from and including the "."
       c_NewPath += orc_Extension;
    }
    return c_NewPath;
@@ -423,11 +424,11 @@ C_SclString stw::tgl::TglChangeFileExtension(const C_SclString & orc_Path, const
    \return  full path including "/binary" (including extension if any); empty string on error
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglGetExePath(void)
+std::string stw::tgl::TglGetExePath(void)
 {
    uint32_t u32_Return;
    char_t acn_Path[MAX_PATH];
-   C_SclString c_Path;
+   std::string c_Path;
 
    u32_Return = GetModuleFileNameA(NULL, acn_Path, MAX_PATH);
    if (u32_Return != 0)
@@ -450,14 +451,14 @@ C_SclString stw::tgl::TglGetExePath(void)
    file path   (including final "\", "/" or ":")
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglExtractFilePath(const C_SclString & orc_Path)
+std::string stw::tgl::TglExtractFilePath(const std::string & orc_Path)
 {
-   C_SclString c_Path;
+   std::string c_Path;
    char_t acn_Drive[_MAX_DRIVE + 1];
    char_t acn_Dir[_MAX_DIR + 1];
 
    _splitpath(orc_Path.c_str(), acn_Drive, acn_Dir, NULL, NULL);
-   c_Path = static_cast<C_SclString>(acn_Drive) + acn_Dir;
+   c_Path = static_cast<std::string>(acn_Drive) + acn_Dir;
    return c_Path;
 }
 
@@ -473,14 +474,14 @@ C_SclString stw::tgl::TglExtractFilePath(const C_SclString & orc_Path)
    file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglExtractFileName(const C_SclString & orc_Path)
+std::string stw::tgl::TglExtractFileName(const std::string & orc_Path)
 {
-   C_SclString c_FileName;
+   std::string c_FileName;
    char_t acn_Name[_MAX_FNAME + 1];
    char_t acn_Ext[_MAX_EXT + 1];
 
    _splitpath(orc_Path.c_str(), NULL, NULL, &acn_Name[0], &acn_Ext[0]);
-   c_FileName = static_cast<C_SclString>(acn_Name) + acn_Ext;
+   c_FileName = static_cast<std::string>(acn_Name) + acn_Ext;
    return c_FileName;
 }
 
@@ -497,11 +498,11 @@ C_SclString stw::tgl::TglExtractFileName(const C_SclString & orc_Path)
    Absolute path; empty string on error
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString stw::tgl::TglExpandFileName(const C_SclString & orc_RelativePath, const C_SclString & orc_BasePath)
+std::string stw::tgl::TglExpandFileName(const std::string & orc_RelativePath, const std::string & orc_BasePath)
 {
    uint32_t u32_Return;
    char_t acn_OriginalDirectory[MAX_PATH];
-   C_SclString c_FullPath = "";
+   std::string c_FullPath = "";
 
    //get original CWD:
    u32_Return = GetCurrentDirectoryA(MAX_PATH, acn_OriginalDirectory);
@@ -538,7 +539,7 @@ C_SclString stw::tgl::TglExpandFileName(const C_SclString & orc_RelativePath, co
    -1    could not create directory
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t stw::tgl::TglCreateDirectory(const C_SclString & orc_Directory)
+int32_t stw::tgl::TglCreateDirectory(const std::string & orc_Directory)
 {
    BOOL x_Return;
    int32_t s32_Result = 0;
@@ -569,10 +570,10 @@ int32_t stw::tgl::TglCreateDirectory(const C_SclString & orc_Directory)
    -1    could not remove directory
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t stw::tgl::TglRemoveDirectory(const C_SclString & orc_Directory, const bool oq_ContentOnly)
+int32_t stw::tgl::TglRemoveDirectory(const std::string & orc_Directory, const bool oq_ContentOnly)
 {
-   C_SclString c_FilePath; // Filepath
-   C_SclString c_Pattern;  // Pattern
+   std::string c_FilePath; // Filepath
+   std::string c_Pattern;  // Pattern
    int32_t s32_Return;
    uint32_t u32_Index;
 
@@ -666,14 +667,14 @@ int32_t stw::tgl::TglRemoveDirectory(const C_SclString & orc_Directory, const bo
    false  path is an absolute path
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::tgl::TglIsRelativePath(const C_SclString & orc_Path)
+bool stw::tgl::TglIsRelativePath(const std::string & orc_Path)
 {
    bool q_IsAbsolute = false;
 
-   if (orc_Path.Length() >= 3U)
+   if (orc_Path.length() >= 3U)
    {
-      if ((orc_Path[2] == ':') &&
-          ((orc_Path[3] == '\\') || (orc_Path[3] == '/')))
+      if ((orc_Path[1] == ':') &&
+          ((orc_Path[2] == '\\') || (orc_Path[2] == '/')))
       {
          q_IsAbsolute = true;
       }

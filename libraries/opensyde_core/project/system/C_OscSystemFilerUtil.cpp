@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include <cstdio>
 
@@ -48,9 +49,9 @@ using namespace stw::errors;
    \return  string representation of oe_Type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscSystemFilerUtil::h_BusTypeEnumToString(const C_OscSystemBus::E_Type oe_Type)
+std::string C_OscSystemFilerUtil::h_BusTypeEnumToString(const C_OscSystemBus::E_Type oe_Type)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    if (oe_Type == C_OscSystemBus::eETHERNET)
    {
@@ -74,7 +75,7 @@ C_SclString C_OscSystemFilerUtil::h_BusTypeEnumToString(const C_OscSystemBus::E_
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_BusTypeStringToEnum(const stw::scl::C_SclString & orc_Type,
+int32_t C_OscSystemFilerUtil::h_BusTypeStringToEnum(const std::string & orc_Type,
                                                     C_OscSystemBus::E_Type & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -112,7 +113,7 @@ int32_t C_OscSystemFilerUtil::h_BusTypeStringToEnum(const stw::scl::C_SclString 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemFilerUtil::h_GetParserForExistingFile(C_OscXmlParser & orc_FileXmlParser,
-                                                         const C_SclString & orc_Path, const C_SclString & orc_RootNode)
+                                                         const std::string & orc_Path, const std::string & orc_RootNode)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -154,8 +155,8 @@ int32_t C_OscSystemFilerUtil::h_GetParserForExistingFile(C_OscXmlParser & orc_Fi
    C_NOACT    existing file could not be deleted
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_GetParserForNewFile(C_OscXmlParser & orc_FileXmlParser, const C_SclString & orc_Path,
-                                                    const C_SclString & orc_RootNode)
+int32_t C_OscSystemFilerUtil::h_GetParserForNewFile(C_OscXmlParser & orc_FileXmlParser, const std::string & orc_Path,
+                                                    const std::string & orc_RootNode)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -187,7 +188,7 @@ int32_t C_OscSystemFilerUtil::h_GetParserForNewFile(C_OscXmlParser & orc_FileXml
    C_NOACT    folder could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_CreateFolder(const C_SclString & orc_Path)
+int32_t C_OscSystemFilerUtil::h_CreateFolder(const std::string & orc_Path)
 {
    int32_t s32_Retval;
 
@@ -220,9 +221,9 @@ int32_t C_OscSystemFilerUtil::h_CreateFolder(const C_SclString & orc_Path)
    Item name ready for file name usage
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscSystemFilerUtil::h_PrepareItemNameForFileName(const C_SclString & orc_ItemName)
+std::string C_OscSystemFilerUtil::h_PrepareItemNameForFileName(const std::string & orc_ItemName)
 {
-   return C_OscUtils::h_NiceifyStringForFileName(orc_ItemName.LowerCase());
+   return C_OscUtils::h_NiceifyStringForFileName(LowerCaseCompat(orc_ItemName));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -235,10 +236,10 @@ C_SclString C_OscSystemFilerUtil::h_PrepareItemNameForFileName(const C_SclString
    Full, combined path
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscSystemFilerUtil::h_CombinePaths(const C_SclString & orc_BasePathName,
-                                                 const C_SclString & orc_SubFolderFileName)
+std::string C_OscSystemFilerUtil::h_CombinePaths(const std::string & orc_BasePathName,
+                                                 const std::string & orc_SubFolderFileName)
 {
-   const C_SclString c_BasePath = TglExtractFilePath(orc_BasePathName);
+   const std::string c_BasePath = TglExtractFilePath(orc_BasePathName);
 
    return c_BasePath + orc_SubFolderFileName;
 }
@@ -260,13 +261,13 @@ C_SclString C_OscSystemFilerUtil::h_CombinePaths(const C_SclString & orc_BasePat
    \retval   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_SaveStringToFile(const C_SclString & orc_CompleteFileAsString,
-                                                 const C_SclString & orc_CompleteFilePath,
-                                                 const C_SclString & orc_LogHeading)
+int32_t C_OscSystemFilerUtil::h_SaveStringToFile(const std::string & orc_CompleteFileAsString,
+                                                 const std::string & orc_CompleteFilePath,
+                                                 const std::string & orc_LogHeading)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   const C_SclString c_Folder = TglExtractFilePath(orc_CompleteFilePath);
+   const std::string c_Folder = TglExtractFilePath(orc_CompleteFilePath);
 
    if (TglDirectoryExists(c_Folder) == false)
    {
@@ -286,7 +287,7 @@ int32_t C_OscSystemFilerUtil::h_SaveStringToFile(const C_SclString & orc_Complet
       {
          bool q_HasFailed;
 
-         c_File.write(orc_CompleteFileAsString.c_str(), orc_CompleteFileAsString.Length());
+         c_File.write(orc_CompleteFileAsString.c_str(), orc_CompleteFileAsString.length());
          q_HasFailed = c_File.fail();
          c_File.close();
          if (q_HasFailed == true)
@@ -313,8 +314,8 @@ int32_t C_OscSystemFilerUtil::h_SaveStringToFile(const C_SclString & orc_Complet
    \param[out]  orc_SystemDefintionPath   System defintion path
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemDefinition(const C_SclString & orc_ProjectPath,
-                                                                C_SclString & orc_SystemDefintionPath)
+void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemDefinition(const std::string & orc_ProjectPath,
+                                                                std::string & orc_SystemDefintionPath)
 {
    orc_SystemDefintionPath = TglExtractFilePath(orc_ProjectPath) + "system_definition/" +
                              TglChangeFileExtension(TglExtractFileName(orc_ProjectPath), ".syde_sysdef");
@@ -327,8 +328,8 @@ void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemDefinition(const C_SclStrin
    \param[out]  orc_SystemViewsPath    System views path
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemViews(const C_SclString & orc_ProjectPath,
-                                                           C_SclString & orc_SystemViewsPath)
+void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemViews(const std::string & orc_ProjectPath,
+                                                           std::string & orc_SystemViewsPath)
 {
    orc_SystemViewsPath = TglExtractFilePath(orc_ProjectPath) + "system_views/" +
                          TglChangeFileExtension(TglExtractFileName(orc_ProjectPath), ".syde_sysviews");
@@ -343,10 +344,10 @@ void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemViews(const C_SclString & o
    Stringified export scaling support type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscSystemFilerUtil::h_CodeExportScalingTypeToString(
+std::string C_OscSystemFilerUtil::h_CodeExportScalingTypeToString(
    const C_OscNodeCodeExportSettings::E_Scaling & ore_Scaling)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
    switch (ore_Scaling)
    {
@@ -378,7 +379,7 @@ C_SclString C_OscSystemFilerUtil::h_CodeExportScalingTypeToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_StringToCodeExportScalingType(const C_SclString & orc_String,
+int32_t C_OscSystemFilerUtil::h_StringToCodeExportScalingType(const std::string & orc_String,
                                                               C_OscNodeCodeExportSettings::E_Scaling & ore_Scaling)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -420,8 +421,8 @@ int32_t C_OscSystemFilerUtil::h_StringToCodeExportScalingType(const C_SclString 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemFilerUtil::h_CheckVersion(C_OscXmlParserBase & orc_XmlParser,
-                                             const uint16_t ou16_ExpectedFileVersion, const C_SclString & orc_TagName,
-                                             const C_SclString & orc_UseCase)
+                                             const uint16_t ou16_ExpectedFileVersion, const std::string & orc_TagName,
+                                             const std::string & orc_UseCase)
 {
    int32_t s32_Retval = orc_XmlParser.SelectNodeChildError(orc_TagName);
 
@@ -431,7 +432,7 @@ int32_t C_OscSystemFilerUtil::h_CheckVersion(C_OscXmlParserBase & orc_XmlParser,
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(std::stoi(orc_XmlParser.GetNodeContent()));
       }
       catch (...)
       {
@@ -443,7 +444,7 @@ int32_t C_OscSystemFilerUtil::h_CheckVersion(C_OscXmlParserBase & orc_XmlParser,
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info(orc_UseCase, "Value of \"" + orc_TagName + "\": " +
-                            C_SclString::IntToStr(u16_FileVersion));
+                            std::to_string(u16_FileVersion));
          //Check file version
          if (u16_FileVersion != ou16_ExpectedFileVersion)
          {

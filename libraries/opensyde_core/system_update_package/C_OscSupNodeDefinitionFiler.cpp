@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <string>
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
@@ -28,32 +29,32 @@ using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 static const uint16_t mu16_FILE_VERSION_1 = 1U;
-static const stw::scl::C_SclString mc_FILE_VERSION_1_1 = "0x000101";
+static const std::string mc_FILE_VERSION_1_1 = "0x000101";
 const uint8_t C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE = 1U;
 // XML node names of service update package definition
-static const stw::scl::C_SclString mc_ROOT_NAME = "opensyde-secure-update-collection-definition"; // xml root node
-static const stw::scl::C_SclString mc_FILE_VERSION = "file-version";                              // xml node
-static const stw::scl::C_SclString mc_FILES = "files";                                            // xml node
-static const stw::scl::C_SclString mc_FILE = "file";                                              // xml node
-static const stw::scl::C_SclString mc_PARAM_FILES = "param-files";                                // xml node
-static const stw::scl::C_SclString mc_PARAM_FILE = "param-file";                                  // xml node
-static const stw::scl::C_SclString mc_PEM_FILE_CONFIG = "pem-file-config";                        // xml node
-static const stw::scl::C_SclString mc_PEM_FILE = "pem-file";                                      // xml node
-static const stw::scl::C_SclString mc_PEM_FILE_CONFIG_SEC_ENAB_ATTR = "security-enabled";         // xml node
+static const std::string mc_ROOT_NAME = "opensyde-secure-update-collection-definition"; // xml root node
+static const std::string mc_FILE_VERSION = "file-version";                              // xml node
+static const std::string mc_FILES = "files";                                            // xml node
+static const std::string mc_FILE = "file";                                              // xml node
+static const std::string mc_PARAM_FILES = "param-files";                                // xml node
+static const std::string mc_PARAM_FILE = "param-file";                                  // xml node
+static const std::string mc_PEM_FILE_CONFIG = "pem-file-config";                        // xml node
+static const std::string mc_PEM_FILE = "pem-file";                                      // xml node
+static const std::string mc_PEM_FILE_CONFIG_SEC_ENAB_ATTR = "security-enabled";         // xml node
                                                                                                   // attribute
-static const stw::scl::C_SclString mc_PEM_FILE_CONFIG_SEC_SEND_ATTR = "security-send";            // xml node
+static const std::string mc_PEM_FILE_CONFIG_SEC_SEND_ATTR = "security-send";            // xml node
                                                                                                   // attribute
-static const stw::scl::C_SclString mc_PEM_FILE_CONFIG_DEB_ENAB_ATTR = "debugger-enabled";         // xml node attribute
-static const stw::scl::C_SclString mc_PEM_FILE_CONFIG_DEB_SEND_ATTR = "debugger-send";            // xml node attribute
-static const stw::scl::C_SclString mc_SECURITY = "security-config";                               // xml node
-static const stw::scl::C_SclString mc_SECURITY_AUTHENTICATION = "secure-authentication";          // xml node
-static const stw::scl::C_SclString mc_SECURITY_TRAFFIC_ENCRYPTION = "traffic-encryption-config";  // xml node
-static const stw::scl::C_SclString mc_SECURITY_DEBUGGER_CONFIG = "debugger-config";               // xml node
-static const stw::scl::C_SclString mc_SECURITY_ENAB_ATTR = "enabled";                             // xml node attribute
-static const stw::scl::C_SclString mc_SECURITY_SEND_ATTR = "send";                                // xml node attribute
-static const stw::scl::C_SclString mc_FILE_NAME_ATTR = "name";                                    // xml node attribute
-static const stw::scl::C_SclString mc_SIG_FILE = "secure-signature-file";                         // xml node
-static const stw::scl::C_SclString mc_SIG_FILE_ATTR = "name";                                     // xml node
+static const std::string mc_PEM_FILE_CONFIG_DEB_ENAB_ATTR = "debugger-enabled";         // xml node attribute
+static const std::string mc_PEM_FILE_CONFIG_DEB_SEND_ATTR = "debugger-send";            // xml node attribute
+static const std::string mc_SECURITY = "security-config";                               // xml node
+static const std::string mc_SECURITY_AUTHENTICATION = "secure-authentication";          // xml node
+static const std::string mc_SECURITY_TRAFFIC_ENCRYPTION = "traffic-encryption-config";  // xml node
+static const std::string mc_SECURITY_DEBUGGER_CONFIG = "debugger-config";               // xml node
+static const std::string mc_SECURITY_ENAB_ATTR = "enabled";                             // xml node attribute
+static const std::string mc_SECURITY_SEND_ATTR = "send";                                // xml node attribute
+static const std::string mc_FILE_NAME_ATTR = "name";                                    // xml node attribute
+static const std::string mc_SIG_FILE = "secure-signature-file";                         // xml node
+static const std::string mc_SIG_FILE_ATTR = "name";                                     // xml node
                                                                                                   // attribute
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
@@ -81,7 +82,7 @@ static const stw::scl::C_SclString mc_SIG_FILE_ATTR = "name";                   
    \retval   C_CONFIG   Input invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::h_SaveNodes(const std::vector<stw::scl::C_SclString> & orc_Files,
+int32_t C_OscSupNodeDefinitionFiler::h_SaveNodes(const std::vector<std::string> & orc_Files,
                                                  const std::vector<C_OscSupNodeDefinition> & orc_Nodes,
                                                  const bool oq_UseMinorVersion1)
 {
@@ -124,13 +125,13 @@ int32_t C_OscSupNodeDefinitionFiler::h_SaveNodes(const std::vector<stw::scl::C_S
    \retval   C_RD_WR    read/write error (see log file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<stw::scl::C_SclString> & orc_Files,
-                                                 const std::vector<stw::scl::C_SclString> & orc_NodeFoldersAbs,
+int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::string> & orc_Files,
+                                                 const std::vector<std::string> & orc_NodeFoldersAbs,
                                                  const std::vector<uint8_t> & orc_ActiveNodes,
                                                  std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                                                  std::map<uint32_t, uint32_t> & orc_UpdateOrderByNodes,
                                                  const std::vector<uint32_t> & orc_UpdatePosition,
-                                                 std::vector<stw::scl::C_SclString> & orc_Signatures,
+                                                 std::vector<std::string> & orc_Signatures,
                                                  const bool oq_UseMinorVersion1)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -144,7 +145,7 @@ int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<stw::scl::C_S
       for (uint32_t u32_NodeCounter = 0; (u32_NodeCounter < orc_ActiveNodes.size()) && (s32_Retval == C_NO_ERR);
            ++u32_NodeCounter)
       {
-         stw::scl::C_SclString c_Signature;
+         std::string c_Signature;
          C_OscSuSequences::C_DoFlash c_DoFlash;
          if (orc_ActiveNodes[u32_NodeCounter] == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE)
          {
@@ -219,7 +220,7 @@ int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<stw::scl::C_S
    \retval   C_RD_WR    File(s) could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::mh_SaveNode(const stw::scl::C_SclString & orc_File,
+int32_t C_OscSupNodeDefinitionFiler::mh_SaveNode(const std::string & orc_File,
                                                  const C_OscSupNodeDefinition & orc_Node,
                                                  const bool oq_UseMinorVersion1)
 {
@@ -236,7 +237,7 @@ int32_t C_OscSupNodeDefinitionFiler::mh_SaveNode(const stw::scl::C_SclString & o
    }
    else
    {
-      c_XmlParser.SetNodeContent(stw::scl::C_SclString::IntToStr(mu16_FILE_VERSION_1));
+      c_XmlParser.SetNodeContent(std::to_string(mu16_FILE_VERSION_1));
    }
    tgl_assert(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
@@ -274,17 +275,17 @@ int32_t C_OscSupNodeDefinitionFiler::mh_SaveNode(const stw::scl::C_SclString & o
    \param[in]      orc_ElementNodeName    XML node name to use on item level
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupNodeDefinitionFiler::mh_LoadFilesSection(std::vector<stw::scl::C_SclString> & orc_Files,
+void C_OscSupNodeDefinitionFiler::mh_LoadFilesSection(std::vector<std::string> & orc_Files,
                                                       const uint32_t ou32_NodeCounter, const uint32_t ou32_UpdatePos,
                                                       std::map<uint32_t, uint32_t> & orc_PositionMap,
-                                                      const stw::scl::C_SclString & orc_NodeFolderAbs,
+                                                      const std::string & orc_NodeFolderAbs,
                                                       C_OscXmlParserBase & orc_XmlParser,
-                                                      const stw::scl::C_SclString & orc_BaseNodeName,
-                                                      const stw::scl::C_SclString & orc_ElementNodeName)
+                                                      const std::string & orc_BaseNodeName,
+                                                      const std::string & orc_ElementNodeName)
 {
    if (orc_XmlParser.SelectNodeChild(orc_BaseNodeName) == orc_BaseNodeName)
    {
-      stw::scl::C_SclString c_SelectedNode;
+      std::string c_SelectedNode;
       // node has applications to update
       orc_PositionMap.insert(std::pair<uint32_t, uint32_t>(ou32_NodeCounter, ou32_UpdatePos));
       // get update application paths
@@ -294,8 +295,8 @@ void C_OscSupNodeDefinitionFiler::mh_LoadFilesSection(std::vector<stw::scl::C_Sc
       do
       {
          // we have to take care of OS dependent path delimiters for windows '\\'
-         const stw::scl::C_SclString c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR);
-         const stw::scl::C_SclString c_FilePath = TglFileIncludeTrailingDelimiter(
+         const std::string c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR);
+         const std::string c_FilePath = TglFileIncludeTrailingDelimiter(
             orc_NodeFolderAbs) + c_XmlAttr;
          orc_Files.push_back(c_FilePath);
          c_SelectedNode = orc_XmlParser.SelectNodeNext(orc_ElementNodeName);
@@ -320,7 +321,7 @@ void C_OscSupNodeDefinitionFiler::mh_LoadFilesSection(std::vector<stw::scl::C_Sc
 void C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSectionVersion1(C_OscSuSequences::C_DoFlash & orc_DoFlash,
                                                                   const uint32_t ou32_NodeCounter,
                                                                   const uint32_t ou32_UpdatePos, std::map<uint32_t,
-                                                                                                          uint32_t> & orc_PositionMap, const stw::scl::C_SclString & orc_NodeFolderAbs,
+                                                                                                          uint32_t> & orc_PositionMap, const std::string & orc_NodeFolderAbs,
                                                                   C_OscXmlParserBase & orc_XmlParser)
 {
    if (orc_XmlParser.SelectNodeChild(mc_PEM_FILE_CONFIG) == mc_PEM_FILE_CONFIG)
@@ -329,10 +330,10 @@ void C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSectionVersion1(C_OscSuSequenc
       if (orc_XmlParser.SelectNodeChild(mc_PEM_FILE) == mc_PEM_FILE)
       {
          // we have to take care of OS dependent path delimiters for windows '\\'
-         const stw::scl::C_SclString c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR);
+         const std::string c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR);
          if (c_XmlAttr != "")
          {
-            const stw::scl::C_SclString c_FilePath = TglFileIncludeTrailingDelimiter(
+            const std::string c_FilePath = TglFileIncludeTrailingDelimiter(
                orc_NodeFolderAbs) + c_XmlAttr;
             orc_DoFlash.c_PemFile = c_FilePath;
          }
@@ -376,7 +377,7 @@ int32_t C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSectionVersion1Minor1(C_Osc
                                                                            const uint32_t ou32_UpdatePos,
                                                                            std::map<uint32_t,
                                                                                     uint32_t> & orc_PositionMap,
-                                                                           const stw::scl::C_SclString & orc_NodeFolderAbs,
+                                                                           const std::string & orc_NodeFolderAbs,
                                                                            C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = orc_XmlParser.SelectNodeChildError(mc_SECURITY);
@@ -453,12 +454,12 @@ void C_OscSupNodeDefinitionFiler::mh_DecideNodeRequiresFlashForSecurity(const C_
    \retval   C_CONFIG   Input invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::mh_LoadPemConfigOption(const stw::scl::C_SclString & orc_NodeName,
+int32_t C_OscSupNodeDefinitionFiler::mh_LoadPemConfigOption(const std::string & orc_NodeName,
                                                             bool & orq_SendOption, bool & orq_EnabledOption,
                                                             const bool oq_AddFileOption,
                                                             C_OscXmlParserBase & orc_XmlParser,
-                                                            const stw::scl::C_SclString & orc_NodeFolderAbs,
-                                                            stw::scl::C_SclString * const opc_FileName)
+                                                            const std::string & orc_NodeFolderAbs,
+                                                            std::string * const opc_FileName)
 {
    int32_t s32_Retval = orc_XmlParser.SelectNodeChildError(orc_NodeName);
 
@@ -482,10 +483,10 @@ int32_t C_OscSupNodeDefinitionFiler::mh_LoadPemConfigOption(const stw::scl::C_Sc
          if (opc_FileName != NULL)
          {
             // we have to take care of OS dependent path delimiters for windows '\\'
-            const stw::scl::C_SclString c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR);
+            const std::string c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR);
             if (c_XmlAttr != "")
             {
-               const stw::scl::C_SclString c_FilePath = TglFileIncludeTrailingDelimiter(orc_NodeFolderAbs) + c_XmlAttr;
+               const std::string c_FilePath = TglFileIncludeTrailingDelimiter(orc_NodeFolderAbs) + c_XmlAttr;
                *opc_FileName = c_FilePath;
             }
             else
@@ -512,10 +513,10 @@ int32_t C_OscSupNodeDefinitionFiler::mh_LoadPemConfigOption(const stw::scl::C_Sc
    \param[in]      orc_ElementNodeName    XML node name to use on item level
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupNodeDefinitionFiler::mh_SaveFiles(const std::vector<stw::scl::C_SclString> & orc_Files,
+void C_OscSupNodeDefinitionFiler::mh_SaveFiles(const std::vector<std::string> & orc_Files,
                                                C_OscXmlParserBase & orc_XmlParser,
-                                               const stw::scl::C_SclString & orc_BaseNodeName,
-                                               const stw::scl::C_SclString & orc_ElementNodeName)
+                                               const std::string & orc_BaseNodeName,
+                                               const std::string & orc_ElementNodeName)
 {
    if (orc_Files.size() > 0)
    {
@@ -601,11 +602,11 @@ void C_OscSupNodeDefinitionFiler::mh_SavePemConfigVersion1Minor1(const C_OscSupN
    \param[in]      oc_FileName         File name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupNodeDefinitionFiler::mh_SavePemConfigOption(const stw::scl::C_SclString & orc_NodeName,
+void C_OscSupNodeDefinitionFiler::mh_SavePemConfigOption(const std::string & orc_NodeName,
                                                          const bool oq_SendOption, const bool oq_EnabledOption,
                                                          const bool oq_AddFileOption,
                                                          C_OscXmlParserBase & orc_XmlParser,
-                                                         const stw::scl::C_SclString oc_FileName)
+                                                         const std::string oc_FileName)
 {
    tgl_assert(orc_XmlParser.CreateAndSelectNodeChild(orc_NodeName) == orc_NodeName);
    orc_XmlParser.SetAttributeBool(mc_SECURITY_SEND_ATTR, oq_SendOption);
@@ -655,16 +656,16 @@ void C_OscSupNodeDefinitionFiler::mh_SaveSignatureFile(const C_OscSupNodeDefinit
    \retval   C_RD_WR    File not read
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::mh_LoadSignatureFile(const stw::scl::C_SclString & orc_NodeFolderAbs,
-                                                          stw::scl::C_SclString & orc_Signature,
+int32_t C_OscSupNodeDefinitionFiler::mh_LoadSignatureFile(const std::string & orc_NodeFolderAbs,
+                                                          std::string & orc_Signature,
                                                           C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
    if (orc_XmlParser.SelectNodeChild(mc_SIG_FILE) == mc_SIG_FILE)
    {
-      const stw::scl::C_SclString c_XmlAttr = orc_XmlParser.GetAttributeString(mc_SIG_FILE_ATTR);
-      const stw::scl::C_SclString c_PackagePathTmp = TglFileIncludeTrailingDelimiter(orc_NodeFolderAbs) +
+      const std::string c_XmlAttr = orc_XmlParser.GetAttributeString(mc_SIG_FILE_ATTR);
+      const std::string c_PackagePathTmp = TglFileIncludeTrailingDelimiter(orc_NodeFolderAbs) +
                                                      TglExtractFileName(c_XmlAttr);
       s32_Retval = C_OscSupSignatureFiler::h_LoadSignatureFile(c_PackagePathTmp, orc_Signature);
 
@@ -696,7 +697,7 @@ int32_t C_OscSupNodeDefinitionFiler::mh_CheckFileVersion(const bool oq_UseMinorV
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().ToInt());
+          u16_FileVersion = static_cast<uint16_t>(std::stoi(orc_XmlParser.GetNodeContent()));
       }
       catch (...)
       {
@@ -709,7 +710,7 @@ int32_t C_OscSupNodeDefinitionFiler::mh_CheckFileVersion(const bool oq_UseMinorV
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading secure update collection definition", "Value of \"file-version\": " +
-                            stw::scl::C_SclString::IntToStr(u16_FileVersion));
+                            std::to_string(u16_FileVersion));
          //Check file version
          if (((oq_UseMinorVersion1 == false) && (u16_FileVersion != 1U)) ||
              ((oq_UseMinorVersion1 == true) && (u16_FileVersion != 0x101U)))
