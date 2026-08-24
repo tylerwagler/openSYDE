@@ -357,7 +357,7 @@ void C_SyvUpInformationWidget::InitUpdatePackage(
             c_Files.reserve(rc_Device.c_FilesToFlash.size());
             for (uint32_t u32_ItFile = 0; u32_ItFile < rc_Device.c_FilesToFlash.size(); ++u32_ItFile)
             {
-               const stw::scl::C_SclString & rc_File = rc_Device.c_FilesToFlash[u32_ItFile];
+               const std::string & rc_File = rc_Device.c_FilesToFlash[u32_ItFile];
                bool q_UseFileSize = true;
                //Check which case it is
                if ((u32_NodeIndex < orc_IsFileBased.size()) && (orc_IsFileBased[u32_NodeIndex] == false))
@@ -389,7 +389,7 @@ void C_SyvUpInformationWidget::InitUpdatePackage(
             c_ParamFiles.reserve(rc_Device.c_FilesToWriteToNvm.size());
             for (uint32_t u32_ItFile = 0; u32_ItFile < rc_Device.c_FilesToWriteToNvm.size(); ++u32_ItFile)
             {
-               const stw::scl::C_SclString & rc_File = rc_Device.c_FilesToWriteToNvm[u32_ItFile];
+               const std::string & rc_File = rc_Device.c_FilesToWriteToNvm[u32_ItFile];
                C_OscParamSetHandler c_FileHandler;
                if (c_FileHandler.ReadFile(rc_File, false, true, NULL) == C_NO_ERR)
                {

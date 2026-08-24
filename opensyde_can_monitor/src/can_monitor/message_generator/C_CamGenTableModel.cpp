@@ -465,7 +465,7 @@ QVariant C_CamGenTableModel::data(const QModelIndex & orc_Index, const int32_t o
                c_Retval = "Send now";
                break;
             case eKEY:
-               if (pc_Message->c_Key.IsEmpty())
+               if (pc_Message->c_Key.empty())
                {
                   c_Retval = "<none>";
                }
@@ -1226,7 +1226,7 @@ Qt::ItemFlags C_CamGenTableModel::flags(const QModelIndex & orc_Index) const
          {
             const C_CamProMessageData * const pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(
                static_cast<uint32_t>(orc_Index.row()));
-            if ((pc_Message != NULL) && (pc_Message->c_DataBaseFilePath.IsEmpty() == true))
+            if ((pc_Message != NULL) && (pc_Message->c_DataBaseFilePath.empty() == true))
             {
                c_Retval = c_Retval | Qt::ItemIsEditable | Qt::ItemIsEnabled;
             }
@@ -1250,7 +1250,7 @@ Qt::ItemFlags C_CamGenTableModel::flags(const QModelIndex & orc_Index) const
          {
             const C_CamProMessageData * const pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(
                static_cast<uint32_t>(orc_Index.row()));
-            if ((pc_Message != NULL) && (pc_Message->c_DataBaseFilePath.IsEmpty() == true))
+            if ((pc_Message != NULL) && (pc_Message->c_DataBaseFilePath.empty() == true))
             {
                c_Retval = c_Retval | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
             }

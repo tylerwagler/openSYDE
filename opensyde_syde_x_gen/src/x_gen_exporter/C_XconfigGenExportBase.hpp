@@ -15,7 +15,7 @@
 #include <vector>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscSystemDefinition.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -48,7 +48,7 @@ public:
                                                     // script not found)
    };
 
-   static stw::scl::C_SclString h_GetApplicationVersion(const stw::scl::C_SclString & orc_FileName);
+   static std::string h_GetApplicationVersion(const std::string & orc_FileName);
 
    virtual ~C_XconfigGenExportBase(void);
 
@@ -61,35 +61,35 @@ public:
 private:
    void m_PrintCommandLineParameters(void) const;
    E_ResultCode m_CreateNodeCode(const stw::opensyde_core::C_OscNode & orc_Node,
-                                 const stw::scl::C_SclString & orc_OutputPath);
-   void m_PrintCodeCreationInformation(const stw::scl::C_SclString & orc_NodeName,
+                                 const std::string & orc_OutputPath);
+   void m_PrintCodeCreationInformation(const std::string & orc_NodeName,
                                        const stw::opensyde_core::C_OscNodeApplication & orc_Application,
                                        const bool oq_GenerationSuccessful,
-                                       std::vector<stw::scl::C_SclString> & orc_CreatedFiles);
-   void m_PrintCodeFormatUnknownInfo(const stw::scl::C_SclString & orc_NodeName,
+                                       std::vector<std::string> & orc_CreatedFiles);
+   void m_PrintCodeFormatUnknownInfo(const std::string & orc_NodeName,
                                      const stw::opensyde_core::C_OscNodeApplication & orc_Application);
 
 protected:
    //parameters from command line:
-   stw::scl::C_SclString mc_SystemDefinitionFilePath;
-   stw::scl::C_SclString mc_OutputPath;
-   stw::scl::C_SclString mc_DeviceDefinitions;
-   stw::scl::C_SclString mc_DeviceName;      //name of device for which to create code ("" -> all)
-   stw::scl::C_SclString mc_ApplicationName; //name of application for which to create code ("" -> all)
+   std::string mc_SystemDefinitionFilePath;
+   std::string mc_OutputPath;
+   std::string mc_DeviceDefinitions;
+   std::string mc_DeviceName;      //name of device for which to create code ("" -> all)
+   std::string mc_ApplicationName; //name of application for which to create code ("" -> all)
    bool mq_EraseTargetFolder;
 
    //parsed system definition
    stw::opensyde_core::C_OscSystemDefinition mc_SystemDefinition;
 
    //application executable information (set by ::Init)
-   stw::scl::C_SclString mc_ExeName;
-   stw::scl::C_SclString mc_ExeVersion; //Format: V<M>.<mm>r<r>
-   stw::scl::C_SclString mc_LogFileName;
-   stw::scl::C_SclString mc_ListOfFilesFileName;
-   stw::scl::C_SclString mc_BinaryHash;
+   std::string mc_ExeName;
+   std::string mc_ExeVersion; //Format: V<M>.<mm>r<r>
+   std::string mc_LogFileName;
+   std::string mc_ListOfFilesFileName;
+   std::string mc_BinaryHash;
 
    //list of created source code files; to be filled by GenerateSourceCode
-   std::vector<stw::scl::C_SclString> mc_CreatedFiles;
+   std::vector<std::string> mc_CreatedFiles;
 
    //-------------------------------------------------------------------------------------------------------------------
    /*!
@@ -111,8 +111,8 @@ protected:
    //-------------------------------------------------------------------------------------------------------------------
    virtual E_ResultCode m_CreateApplicationCode(const stw::opensyde_core::C_OscNode & orc_Node,
                                                 const stw::opensyde_core::C_OscSystemDefinition & orc_SystemDefinition,
-                                                const stw::scl::C_SclString & orc_OutputPath,
-                                                std::vector<stw::scl::C_SclString> & orc_CreatedFiles) = 0;
+                                                const std::string & orc_OutputPath,
+                                                std::vector<std::string> & orc_CreatedFiles) = 0;
 
    //-------------------------------------------------------------------------------------------------------------------
    /*!

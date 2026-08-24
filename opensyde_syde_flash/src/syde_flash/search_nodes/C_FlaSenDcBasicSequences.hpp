@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QObject>
-#include "C_SclString.hpp"
+#include <string>
 #include "C_CanDispatcher.hpp"
 #include "C_OscDcBasicSequences.hpp"
 #include "C_SyvComDriverThread.hpp"
@@ -34,7 +34,7 @@ public:
    C_FlaSenDcBasicSequences(void);
    ~C_FlaSenDcBasicSequences(void) noexcept override;
 
-   int32_t InitDcSequences(const stw::scl::C_SclString & orc_CanChannelId, const int32_t os32_CanBitrate);
+   int32_t InitDcSequences(const std::string & orc_CanChannelId, const int32_t os32_CanBitrate);
    int32_t StartScanEnterFlashloader(const uint32_t ou32_FlashloaderResetWaitTime);
    int32_t StartScanGetInfo(void);
    int32_t StartResetSystem(void);
@@ -64,7 +64,7 @@ Q_SIGNALS:
                                  const bool oq_SecurityFeatureUsed);
 
 protected:
-   void m_ReportProgress(const int32_t os32_Result, const stw::scl::C_SclString & orc_Information) override;
+   void m_ReportProgress(const int32_t os32_Result, const std::string & orc_Information) override;
    void m_ReportDevicesInfoRead(const std::vector<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
                                 const bool oq_SecurityFeatureUsed) override;
 

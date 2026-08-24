@@ -50,7 +50,7 @@ QString C_SdTooltipUtil::h_GetToolTipContentMessage(const stw::opensyde_core::C_
    QString c_Tmp;
 
    // Comment
-   if (orc_Message.c_Comment.IsEmpty() == false)
+   if (orc_Message.c_Comment.empty() == false)
    {
       c_ToolTipContent = orc_Message.c_Comment.c_str();
       c_ToolTipContent.append("\n\n");
@@ -164,7 +164,7 @@ QString C_SdTooltipUtil::h_GetToolTipContentSignal(const C_OscCanSignal & orc_Si
    }
 
    // Comment
-   if (orc_DpListElement.c_Comment.IsEmpty() == false)
+   if (orc_DpListElement.c_Comment.empty() == false)
    {
       c_ToolTipContent.append(orc_DpListElement.c_Comment.c_str());
       c_ToolTipContent.append("\n\n");
@@ -217,7 +217,7 @@ QString C_SdTooltipUtil::h_GetToolTipContentSignal(const C_OscCanSignal & orc_Si
       }
    }
 
-   if (orc_DpListElement.c_Unit.IsEmpty() == false)
+   if (orc_DpListElement.c_Unit.empty() == false)
    {
       c_ToolTipContent.append("\n");
       c_ToolTipContent.append(static_cast<QString>("   ") + "Unit: ");

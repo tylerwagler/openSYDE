@@ -311,7 +311,7 @@ private:
                           QString & orc_SetupWarningMessage, std::vector<QString> & orc_ErrorMessages,
                           std::set<uint32_t> & orc_NodesWithDashboardRoutingError,
                           std::set<uint32_t> & orc_NodesRelevantForDashboardRouting) const;
-   std::map<stw::scl::C_SclString, bool> m_GetExistingViewNames(void) const;
+   std::map<std::string, bool> m_GetExistingViewNames(void) const;
 
    static C_PuiSvHandler * mhpc_Singleton;
    std::vector<bool> mc_SdNodeErrors;

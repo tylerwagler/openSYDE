@@ -24,8 +24,8 @@ public:
    C_BasicUpdateSequence();
 
 protected:
-   virtual void m_ReportProgress(const int32_t os32_Result, const stw::scl::C_SclString & orc_Information);
-   virtual void m_ReportFlashloaderInformationRead(const stw::scl::C_SclString & orc_DeviceName,
+   virtual void m_ReportProgress(const int32_t os32_Result, const std::string & orc_Information);
+   virtual void m_ReportFlashloaderInformationRead(const std::string & orc_DeviceName,
                                                    const stw::opensyde_core::C_OscComFlashloaderInformation & orc_Information);
 };
 

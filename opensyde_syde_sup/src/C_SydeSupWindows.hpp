@@ -11,7 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscIpDispatcherWinSock.hpp"
 #include "C_SydeSup.hpp"
 
@@ -30,10 +30,10 @@ public:
 
 private:
    virtual E_Result m_OpenEthernet(void);
-   virtual stw::scl::C_SclString m_GetApplicationVersion(const stw::scl::C_SclString & orc_ApplicationFileName) const;
-   virtual stw::scl::C_SclString m_GetDefaultLogLocation(void) const;
-   virtual stw::scl::C_SclString m_GetUnzipLocationDefaultExample(void) const;
-   virtual stw::scl::C_SclString m_GetCanInterfaceUsageExample(void) const;
+   virtual std::string m_GetApplicationVersion(const std::string & orc_ApplicationFileName) const;
+   virtual std::string m_GetDefaultLogLocation(void) const;
+   virtual std::string m_GetUnzipLocationDefaultExample(void) const;
+   virtual std::string m_GetCanInterfaceUsageExample(void) const;
 
    stw::opensyde_core::C_OscIpDispatcherWinSock mc_EthDispatcher;
 };

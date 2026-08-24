@@ -117,18 +117,18 @@ void C_SupSuSequences::ClearActiveDeviceInformation()
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SupSuSequences::m_ReportProgress(const stw::opensyde_core::C_OscSuSequences::E_ProgressStep oe_Step,
                                         const int32_t os32_Result, const uint8_t ou8_Progress,
-                                        const stw::scl::C_SclString & orc_Information)
+                                        const std::string & orc_Information)
 {
    (void) ou8_Progress; // progress numbers not interesting for console application
    const bool q_Error = m_CheckErrorCase(oe_Step);
-   C_SclString c_Text = "";
+   std::string c_Text = "";
 
    c_Text += m_GetStepName(oe_Step) + ":  ";
 
    // show result only in error case
    if (q_Error == true)
    {
-      c_Text += "Result: " + C_SclString::IntToStr(os32_Result);
+      c_Text += "Result: " + std::to_string(os32_Result);
    }
 
    c_Text += " " + orc_Information;
@@ -162,24 +162,24 @@ bool C_SupSuSequences::m_ReportProgress(const stw::opensyde_core::C_OscSuSequenc
 bool C_SupSuSequences::m_ReportProgress(const stw::opensyde_core::C_OscSuSequences::E_ProgressStep oe_Step,
                                         const int32_t os32_Result, const uint8_t ou8_Progress,
                                         const stw::opensyde_core::C_OscProtocolDriverOsyNode & orc_Server,
-                                        const stw::scl::C_SclString & orc_Information)
+                                        const std::string & orc_Information)
 {
    (void) ou8_Progress; // progress numbers not interesting for console application
 
    {
       const bool q_Error = m_CheckErrorCase(oe_Step);
-      C_SclString c_Text = "";
+      std::string c_Text = "";
 
       c_Text += m_GetStepName(oe_Step) + ":  ";
 
       // show result only in error case
       if (q_Error == true)
       {
-         c_Text += "Result: " + C_SclString::IntToStr(os32_Result);
+         c_Text += "Result: " + std::to_string(os32_Result);
       }
 
-      c_Text += " Bus Id: " + C_SclString::IntToStr(orc_Server.u8_BusIdentifier);
-      c_Text += " Node Id: " + C_SclString::IntToStr(orc_Server.u8_NodeIdentifier);
+      c_Text += " Bus Id: " + std::to_string(orc_Server.u8_BusIdentifier);
+      c_Text += " Node Id: " + std::to_string(orc_Server.u8_NodeIdentifier);
       c_Text += " " + orc_Information;
 
       // write to log file and console
@@ -205,8 +205,8 @@ void C_SupSuSequences::m_ReportOpenSydeFlashloaderInformationRead(
    const stw::opensyde_core::C_OscSuSequences::C_OsyDeviceInformation & orc_Info, const uint32_t ou32_NodeIndex)
 {
    C_SclStringList c_Text;
-   C_SclString c_Message = "openSYDE device information found for node with index " +
-                           C_SclString::IntToStr(ou32_NodeIndex) + "\n";
+   std::string c_Message = "openSYDE device information found for node with index " +
+                           std::to_string(ou32_NodeIndex) + "\n";
 
    h_OpenSydeFlashloaderInformationToText(orc_Info, c_Text);
    for (uint32_t u32_Line = 0U; u32_Line < c_Text.GetCount(); u32_Line++)
@@ -364,9 +364,9 @@ bool C_SupSuSequences::m_CheckErrorCase(const C_OscSuSequences::E_ProgressStep o
    Name of the specific step
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SupSuSequences::m_GetStepName(const E_ProgressStep oe_Step) const
+std::string C_SupSuSequences::m_GetStepName(const E_ProgressStep oe_Step) const
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    switch (oe_Step)
    {
@@ -700,7 +700,7 @@ C_SclString C_SupSuSequences::m_GetStepName(const E_ProgressStep oe_Step) const
    \param[in]     orq_Error       True: log as error; false: log as information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SupSuSequences::m_WriteLog(const stw::scl::C_SclString & orc_Text, const bool & orq_IsError) const
+void C_SupSuSequences::m_WriteLog(const std::string & orc_Text, const bool & orq_IsError) const
 {
    C_SydeSup::h_WriteLog("Report Progress", orc_Text, orq_IsError, mq_Quiet);
 }

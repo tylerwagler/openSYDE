@@ -588,7 +588,7 @@ QString C_ImpUtil::h_GetSydeXgenPath(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString C_ImpUtil::h_GetAbsoluteGeneratedDir(const C_OscNodeApplication & orc_Application,
-                                             const C_SclString & orc_NodeName)
+                                             const std::string & orc_NodeName)
 {
    QString c_Return;
    QString c_GenerateDir = orc_Application.c_GeneratePath.c_str();
@@ -615,9 +615,9 @@ QString C_ImpUtil::h_GetAbsoluteGeneratedDir(const C_OscNodeApplication & orc_Ap
    Default directory for generated files
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_ImpUtil::h_GetDefaultGeneratedDir(const C_SclString & orc_ApplicationName, const C_SclString & orc_NodeName)
+QString C_ImpUtil::h_GetDefaultGeneratedDir(const std::string & orc_ApplicationName, const std::string & orc_NodeName)
 {
-   C_SclString c_Return = "./opensyde_generated/";
+   std::string c_Return = "./opensyde_generated/";
 
    c_Return += C_OscUtils::h_NiceifyStringForFileName(orc_NodeName);
    c_Return += "/";
@@ -1134,7 +1134,7 @@ int32_t C_ImpUtil::mh_ExecuteCodeGenerator(const QString & orc_NodeName, const Q
    QStringList c_Arguments;
    QProcess * const pc_Process = new QProcess(new QObject());
    QFile c_FileListFile;
-   C_SclString c_ErrorText;
+   std::string c_ErrorText;
    QString c_SysDefPath;
 
    // get system definition path (always absolute because pui project get path is always absolute)
@@ -1261,7 +1261,7 @@ int32_t C_ImpUtil::mh_ExecuteCodeGenerator(const QString & orc_NodeName, const Q
             break;
          case 10: // eRESULT_HELPING --> we do not call help option, so why should this error occur? --> unknown
          default:
-            c_ErrorText = "Unknown error occurred. Exit code: " + C_SclString::IntToStr(s32_ProcessExitCode);
+            c_ErrorText = "Unknown error occurred. Exit code: " + std::to_string(s32_ProcessExitCode);
             s32_Return = C_UNKNOWN_ERR;
             break;
          }

@@ -605,7 +605,7 @@ void C_CamProHandler::InsertMessage(const uint32_t ou32_Index, const C_CamProMes
    if (oq_AllowAdaption == true)
    {
       //Only allow name adaptation if name is not necessary for database identification
-      if (c_MessageData.c_DataBaseFilePath.IsEmpty())
+      if (c_MessageData.c_DataBaseFilePath.empty())
       {
          c_MessageData.c_Name = C_OscUtils::h_GetUniqueName(this->m_GetAllMessageNames(), c_MessageData.c_Name, 0UL);
       }
@@ -859,7 +859,7 @@ std::vector<uint32_t> C_CamProHandler::GetInvalidMessagesWithNoDatabase(void) co
    {
       const C_CamProMessageData & rc_Message = this->mc_Messages[u32_ItMessage];
       //Check if database
-      if (rc_Message.c_DataBaseFilePath.IsEmpty() == false)
+      if (rc_Message.c_DataBaseFilePath.empty() == false)
       {
          bool q_Found = false;
          for (uint32_t u32_ItDb = 0UL; u32_ItDb < this->mc_Databases.size(); ++u32_ItDb)
@@ -925,7 +925,7 @@ QString C_CamProHandler::h_GetCompleteMessageName(const C_CamProMessageData & or
 {
    QString c_Retval;
 
-   if (orc_Message.c_DataBaseFilePath.IsEmpty() == true)
+   if (orc_Message.c_DataBaseFilePath.empty() == true)
    {
       c_Retval = orc_Message.c_Name.c_str();
    }
@@ -986,7 +986,7 @@ QString C_CamProHandler::GetCurrentProjDir(void) const
    C_CONFIG    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CamProHandler::LoadFromFile(const stw::scl::C_SclString & orc_Path)
+int32_t C_CamProHandler::LoadFromFile(const std::string & orc_Path)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -1049,7 +1049,7 @@ int32_t C_CamProHandler::LoadFromFile(const stw::scl::C_SclString & orc_Path)
    C_COM      could not create folder
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CamProHandler::SaveToFile(const stw::scl::C_SclString & orc_Path)
+int32_t C_CamProHandler::SaveToFile(const std::string & orc_Path)
 {
    int32_t s32_Return = C_NO_ERR;
    const QFileInfo c_File(orc_Path.c_str());
@@ -1244,9 +1244,9 @@ void C_CamProHandler::m_CalcHash(uint32_t & oru32_HashValue) const
    All current message names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<stw::scl::C_SclString, bool> C_CamProHandler::m_GetAllMessageNames(void) const
+std::map<std::string, bool> C_CamProHandler::m_GetAllMessageNames(void) const
 {
-   std::map<stw::scl::C_SclString, bool> c_Retval;
+   std::map<std::string, bool> c_Retval;
    for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < this->mc_Messages.size(); ++u32_ItMessage)
    {
       const C_CamProMessageData & rc_Message = this->mc_Messages[u32_ItMessage];

@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include <QFileInfo>
 
@@ -132,7 +133,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(const QString & orc_File,
 
                if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
                {
-                  const QString c_AppDeviceType = c_FileApplicationInfo.GetDeviceID().Trim().UpperCase().c_str();
+                  const QString c_AppDeviceType = UpperCaseCompat(TrimCompat(c_FileApplicationInfo.GetDeviceID())).c_str();
                   // No check with Alias necessary due to check with real device type defined with target integration
                   if ((QString::compare(this->mc_DeviceType.trimmed(), c_AppDeviceType, Qt::CaseInsensitive) == 0))
                   {
@@ -153,8 +154,9 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(const QString & orc_File,
                              ++u32_ItName)
                         {
                            const QString c_AllowedDevice =
+                              UpperCaseCompat(TrimCompat(
                               pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].
-                              c_OtherAcceptedNames[u32_ItName].Trim().UpperCase().c_str();
+                              c_OtherAcceptedNames[u32_ItName])).c_str();
                            if (QString::compare(c_AllowedDevice, c_AppDeviceType, Qt::CaseInsensitive) == 0)
                            {
                               q_FileIsOk = true;
@@ -672,7 +674,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::m_InitSpecificItem(const stw::opensyd
 
       if (rc_Datablock.e_Type != C_OscNodeApplication::ePARAMETER_SET_HALC)
       {
-         std::vector<C_SclString> c_ViewDatablockPaths = orc_UpdateInfo.GetPaths(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
+         std::vector<std::string> c_ViewDatablockPaths = orc_UpdateInfo.GetPaths(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
          std::vector<bool> c_ViewDatablockSkipFlags = orc_UpdateInfo.GetSkipUpdateOfPathsFlags(
             C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
          C_SyvUpPacListNodeItemDatablockWidget * const pc_FileWidget =

@@ -44,9 +44,9 @@ public:
    static QString h_GetSydeCoderCePath(void);
    static QString h_GetSydeXgenPath(void);
    static QString h_GetAbsoluteGeneratedDir(const stw::opensyde_core::C_OscNodeApplication & orc_Application,
-                                            const stw::scl::C_SclString & orc_NodeName);
-   static QString h_GetDefaultGeneratedDir(const stw::scl::C_SclString & orc_ApplicationName,
-                                           const stw::scl::C_SclString & orc_NodeName);
+                                            const std::string & orc_NodeName);
+   static QString h_GetDefaultGeneratedDir(const std::string & orc_ApplicationName,
+                                           const std::string & orc_NodeName);
    static bool h_CheckProjForCodeGeneration(QWidget * const opc_Parent);
    static QString h_AskUserToSaveRelativePath(QWidget * const opc_Parent, const QString & orc_Path,
                                               const QString & orc_AbsoluteReferenceDir);

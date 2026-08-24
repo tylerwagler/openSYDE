@@ -14,7 +14,7 @@
 
 #include "stwerrors.hpp"
 #include "constants.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "TglUtils.hpp"
 #include "C_Uti.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -1101,7 +1101,7 @@ void C_SyvUpUpdateWidget::m_CheckOpenSydeFlashloaderInformation(const std::vecto
                orc_OsyDeviceInformation[u32_NodesInformationCounter];
             const C_OscNode * const pc_Node =
                C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodesPackageCounter);
-            stw::scl::C_SclString c_NodeName;
+            std::string c_NodeName;
 
             if (pc_Node != NULL)
             {
@@ -1315,8 +1315,8 @@ void C_SyvUpUpdateWidget::m_Connect(void)
       if (s32_Return == C_NO_ERR)
       {
          QString c_ErrorPath;
-         const C_SclString c_ExePath = C_Uti::h_GetExePath().toStdString().c_str();
-         const C_SclString c_TemporaryPath = c_ExePath + "/" + mhc_TEMP_FOLDER.toStdString().c_str() + "/";
+         const std::string c_ExePath = C_Uti::h_GetExePath().toStdString().c_str();
+         const std::string c_TemporaryPath = c_ExePath + "/" + mhc_TEMP_FOLDER.toStdString().c_str() + "/";
 
          // Copy all files to a temporary folder to have them "safe"
          s32_Return = this->mpc_UpSequences->SyvUpCreateTemporaryFolder(c_TemporaryPath,
@@ -2902,7 +2902,7 @@ bool C_SyvUpUpdateWidget::mh_IsSecurityWarningNecessary(
    for (uint32_t u32_It = 0UL; u32_It < orc_NodesToFlash.size(); ++u32_It)
    {
       const C_OscSuSequences::C_DoFlash & rc_Flash = orc_NodesToFlash[u32_It];
-      if ((!rc_Flash.c_PemFile.IsEmpty()) ||
+      if ((!rc_Flash.c_PemFile.empty()) ||
           (rc_Flash.q_SendSecureAuthenticationEnabledState && rc_Flash.q_SecureAuthenticationEnabled))
       {
          q_Retval = true;

@@ -100,7 +100,7 @@ void C_CamProClipBoardHelper::mh_GetNewParser(C_OscXmlParser & orc_XmlParser)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProClipBoardHelper::mh_StoreParserInClipBoard(const C_OscXmlParser & orc_XmlParser)
 {
-   stw::scl::C_SclString c_String;
+   std::string c_String;
    orc_XmlParser.SaveToString(c_String);
    C_CamProClipBoardHelper::mh_SetClipBoard(c_String.c_str());
 }

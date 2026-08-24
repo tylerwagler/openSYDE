@@ -1533,7 +1533,7 @@ bool C_SdNdeCoConfigTreeModel::m_CheckIfCoManagerCanBeActivated(const uint32_t o
          const QString c_InterfaceName = C_PuiSdUtil::h_GetInterfaceName(c_ComInterface.e_InterfaceType,
                                                                          u8_ManagerIntfNumber);
 
-         const stw::scl::C_SclString c_Text = "The CANopen Manager can't be activated for this interface because there " \
+         const std::string c_Text = "The CANopen Manager can't be activated for this interface because there " \
                                               "already exists a CANopen Manager on this bus with node \"" +
                                               pc_ManagerNodeToCheck->c_Properties.c_Name +
                                               "\" at interface \"" + c_InterfaceName.toStdString() + "\".";

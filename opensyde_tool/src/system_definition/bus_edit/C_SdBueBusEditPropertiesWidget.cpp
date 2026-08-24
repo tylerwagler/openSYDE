@@ -786,7 +786,7 @@ void C_SdBueBusEditPropertiesWidget::m_RegisterNameChange(void)
 
    if (hq_InProgress == false)
    {
-      std::vector<stw::scl::C_SclString> c_ExistingNames;
+      std::vector<std::string> c_ExistingNames;
       hq_InProgress = true;
       if (C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(this->mpc_Ui->pc_LineEditBusName->text().toStdString()
                                                                  .
@@ -803,7 +803,7 @@ void C_SdBueBusEditPropertiesWidget::m_RegisterNameChange(void)
          c_Details.append("Used bus names:\n");
          for (uint32_t u32_ItExistingName = 0UL; u32_ItExistingName < c_ExistingNames.size(); ++u32_ItExistingName)
          {
-            const C_SclString & rc_Name = c_ExistingNames[u32_ItExistingName];
+            const std::string & rc_Name = c_ExistingNames[u32_ItExistingName];
             c_Details.append(static_cast<QString>("\"%1\"\n").arg(rc_Name.c_str()));
          }
          c_Message.SetDetails(c_Details);

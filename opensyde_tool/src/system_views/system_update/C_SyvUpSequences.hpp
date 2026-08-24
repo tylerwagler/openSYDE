@@ -43,7 +43,7 @@ public:
    int32_t InitUpSequences(const uint32_t ou32_ViewIndex);
    int32_t ReinitDispatcher(void);
    void CloseDispatcher(void);
-   int32_t SyvUpCreateTemporaryFolder(const stw::scl::C_SclString & orc_TargetPath,
+   int32_t SyvUpCreateTemporaryFolder(const std::string & orc_TargetPath,
                                       std::vector<C_DoFlash> & orc_ApplicationsToWrite, QString & orc_ErrorPath) const;
 
    int32_t StartActivateFlashloader(void);
@@ -89,10 +89,10 @@ Q_SIGNALS:
 
 protected:
    bool m_ReportProgress(const E_ProgressStep oe_Step, const int32_t os32_Result, const uint8_t ou8_Progress,
-                         const stw::scl::C_SclString & orc_Information) override;
+                         const std::string & orc_Information) override;
    bool m_ReportProgress(const E_ProgressStep oe_Step, const int32_t os32_Result, const uint8_t ou8_Progress,
                          const stw::opensyde_core::C_OscProtocolDriverOsyNode & orc_Server,
-                         const stw::scl::C_SclString & orc_Information) override;
+                         const std::string & orc_Information) override;
    void m_ReportOpenSydeFlashloaderInformationRead(const C_OsyDeviceInformation & orc_Info,
                                                    const uint32_t ou32_NodeIndex) override;
 
@@ -104,7 +104,7 @@ private:
    static void mh_ThreadFunc(void * const opv_Instance);
    void m_ThreadFunc(void);
 
-   static void mh_WriteLog(const C_OscSuSequences::E_ProgressStep oe_Step, const stw::scl::C_SclString & orc_Text);
+   static void mh_WriteLog(const C_OscSuSequences::E_ProgressStep oe_Step, const std::string & orc_Text);
 
    C_SyvComDriverThread * mpc_Thread;
    QMutex mc_Lock;

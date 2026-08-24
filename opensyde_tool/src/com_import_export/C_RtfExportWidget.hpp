@@ -11,7 +11,7 @@
 
 #include "stwtypes.hpp"
 #include "C_OgePopUpContentBase.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclStringList.hpp"
 #include "C_SdTopologyWidget.hpp"
 
@@ -36,17 +36,17 @@ public:
    explicit C_RtfExportWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent);
    ~C_RtfExportWidget(void) noexcept override;
 
-   int32_t GetRtfPath(stw::scl::C_SclString & orc_RtfPath) const;
-   int32_t GetCompanyName(stw::scl::C_SclString & orc_CompanyName) const;
-   int32_t GetCompanyLogoPath(stw::scl::C_SclString & orc_CompanyLogoPath) const;
+   int32_t GetRtfPath(std::string & orc_RtfPath) const;
+   int32_t GetCompanyName(std::string & orc_CompanyName) const;
+   int32_t GetCompanyLogoPath(std::string & orc_CompanyLogoPath) const;
 
-   void SetRtfPath(const stw::scl::C_SclString & orc_RtfPath) const;
-   void SetCompanyName(const stw::scl::C_SclString & orc_CompanyName) const;
-   void SetCompanyLogoPath(const stw::scl::C_SclString & orc_CompanyLogoPath) const;
+   void SetRtfPath(const std::string & orc_RtfPath) const;
+   void SetCompanyName(const std::string & orc_CompanyName) const;
+   void SetCompanyLogoPath(const std::string & orc_CompanyLogoPath) const;
 
-   int32_t ExportToRtf(const stw::scl::C_SclString & orc_RtfPath, const stw::scl::C_SclString & orc_CompanyName,
-                       const stw::scl::C_SclString & orc_CompanyLogoPath, C_SdTopologyWidget * const opc_Widget,
-                       stw::scl::C_SclStringList & orc_WarningMessages, stw::scl::C_SclString & orc_ErrorMessage);
+   int32_t ExportToRtf(const std::string & orc_RtfPath, const std::string & orc_CompanyName,
+                       const std::string & orc_CompanyLogoPath, C_SdTopologyWidget * const opc_Widget,
+                       stw::scl::C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage);
 
    void InitStaticNames(void) const;
 
@@ -56,36 +56,36 @@ protected:
    {
    public:
       // Project
-      stw::scl::C_SclString c_Title;
-      stw::scl::C_SclString c_Name;
-      stw::scl::C_SclString c_Version;
-      stw::scl::C_SclString c_Created;
-      stw::scl::C_SclString c_Author;
-      stw::scl::C_SclString c_SysDefPath;
-      stw::scl::C_SclString c_DevicesIniPath;
-      stw::scl::C_SclString c_OutputPath;
-      stw::scl::C_SclString c_NetworkTopologyImage;
+      std::string c_Title;
+      std::string c_Name;
+      std::string c_Version;
+      std::string c_Created;
+      std::string c_Author;
+      std::string c_SysDefPath;
+      std::string c_DevicesIniPath;
+      std::string c_OutputPath;
+      std::string c_NetworkTopologyImage;
       // openSYDE
-      stw::scl::C_SclString c_OpenSydeVersion;
+      std::string c_OpenSydeVersion;
       // Company
-      stw::scl::C_SclString c_CompanyName;
-      stw::scl::C_SclString c_CompanyLogoPath;
+      std::string c_CompanyName;
+      std::string c_CompanyLogoPath;
    };
 
    int32_t m_CheckSettings(void) const;
 
 private:
    Ui::C_RtfExportWidget * mpc_Ui;
-   std::map<stw::scl::C_SclString, stw::scl::C_SclString> mc_NodeMapping;
+   std::map<std::string, std::string> mc_NodeMapping;
    stw::scl::C_SclStringList mc_Warnings;
-   stw::scl::C_SclString mc_Error;
+   std::string mc_Error;
 
    void m_OkClicked(void);
    void m_CancelClicked(void);
    void m_RtfPathClicked(void);
    void m_LogoPathClicked(void) const;
 
-   int32_t m_CreateConfigXml(const stw::scl::C_SclString & orc_Path,
+   int32_t m_CreateConfigXml(const std::string & orc_Path,
                              const C_ExportXmlStructure & orc_ExportXmlStructure) const;
 
    //Avoid call

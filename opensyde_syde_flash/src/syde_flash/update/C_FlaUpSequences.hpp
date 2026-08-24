@@ -64,8 +64,8 @@ Q_SIGNALS:
 protected:
    void m_ReportProgressPercentage(const uint8_t ou8_ProgressInPercentage,
                                    const bool oq_IsCaluclatedPercentage) override;
-   void m_ReportProgress(const int32_t os32_Result, const stw::scl::C_SclString & orc_Information) override;
-   void m_ReportFlashloaderInformationRead(const stw::scl::C_SclString & orc_DeviceName,
+   void m_ReportProgress(const int32_t os32_Result, const std::string & orc_Information) override;
+   void m_ReportFlashloaderInformationRead(const std::string & orc_DeviceName,
                                            const stw::opensyde_core::C_OscComFlashloaderInformation & orc_Information)
    override;
    void m_CurrentHexFileSizeInBytes(const uint64_t ou64_CurrentHexFileSizeInBytes) override;

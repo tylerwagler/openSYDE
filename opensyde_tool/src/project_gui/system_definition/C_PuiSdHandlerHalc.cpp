@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
@@ -21,6 +22,7 @@
 #include "C_OscHalcMagicianDatapoolListHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::scl;
 using namespace stw::tgl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
@@ -625,8 +627,8 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfig(const uint32_t ou32_NodeI
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfig(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                                        const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                                       const stw::scl::C_SclString & orc_Name,
-                                                       const stw::scl::C_SclString & orc_Comment,
+                                                       const std::string & orc_Name,
+                                                       const std::string & orc_Comment,
                                                        const bool oq_SafetyRelevant, const uint32_t ou32_UseCaseIndex)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -731,7 +733,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfigName(const uint32_t ou32_N
                                                            const uint32_t ou32_DomainIndex,
                                                            const uint32_t ou32_ChannelIndex,
                                                            const bool oq_UseChannelIndex,
-                                                           const stw::scl::C_SclString & orc_Name)
+                                                           const std::string & orc_Name)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -767,7 +769,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfigComment(const uint32_t ou3
                                                               const uint32_t ou32_DomainIndex,
                                                               const uint32_t ou32_ChannelIndex,
                                                               const bool oq_UseChannelIndex,
-                                                              const stw::scl::C_SclString & orc_Comment)
+                                                              const std::string & orc_Comment)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1001,7 +1003,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelParameterConfigElementEnum(const
                                                                            const uint32_t ou32_ParameterIndex,
                                                                            const uint32_t ou32_ElementIndex,
                                                                            const bool oq_UseChannelIndex,
-                                                                           const stw::scl::C_SclString & orc_DisplayName)
+                                                                           const std::string & orc_DisplayName)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1044,7 +1046,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelParameterConfigElementBitmask(co
                                                                               const uint32_t ou32_ParameterIndex,
                                                                               const uint32_t ou32_ElementIndex,
                                                                               const bool oq_UseChannelIndex,
-                                                                              const stw::scl::C_SclString & orc_DisplayName,
+                                                                              const std::string & orc_DisplayName,
                                                                               const bool oq_Value)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1559,12 +1561,12 @@ int32_t C_PuiSdHandlerHalc::CheckHalcDomainChannelLinked(const uint32_t ou32_Nod
 
    if (pc_Domain != NULL)
    {
-      std::vector<stw::scl::C_SclString> c_LinkedChannelNames;
+      std::vector<std::string> c_LinkedChannelNames;
       s32_Retval = pc_Domain->CheckChannelLinked(ou32_ChannelIndex, oq_UseChannelIndex, orq_IsLinked,
                                                  &c_LinkedChannelNames, opc_LinkedChannelIndices, opu32_UseCaseIndex);
       if (opc_LinkedChannelNames != NULL)
       {
-         for (std::vector<stw::scl::C_SclString>::const_iterator c_ItNames = c_LinkedChannelNames.begin();
+         for (std::vector<std::string>::const_iterator c_ItNames = c_LinkedChannelNames.begin();
               c_ItNames != c_LinkedChannelNames.end(); ++c_ItNames)
          {
             opc_LinkedChannelNames->emplace_back((*c_ItNames).c_str());
@@ -1817,7 +1819,7 @@ int32_t C_PuiSdHandlerHalc::HalcGenerateDatapools(const uint32_t ou32_NodeIndex)
          if (s32_Retval == C_NO_ERR)
          {
             //Check if new datapools should be generated
-            if (rc_OscNode.c_HalcConfig.c_FileString.IsEmpty() == false)
+            if (rc_OscNode.c_HalcConfig.c_FileString.empty() == false)
             {
                std::vector<C_OscNodeDataPool> c_Datapools;
                const C_OscHalcMagicianGenerator c_Magician(&rc_OscNode);
@@ -1998,7 +2000,7 @@ int32_t C_PuiSdHandlerHalc::HalcResetDataBlocks(const uint32_t ou32_NodeIndex)
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_PuiSdHandlerHalc::CheckHalcChannelNameAvailable(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
-                                                       const stw::scl::C_SclString & orc_ChannelName,
+                                                       const std::string & orc_ChannelName,
                                                        const uint32_t * const opu32_ChannelIndexToSkip) const
 {
    bool q_Retval = true;
@@ -2022,7 +2024,7 @@ bool C_PuiSdHandlerHalc::CheckHalcChannelNameAvailable(const uint32_t ou32_NodeI
          if (q_Skip == false)
          {
             const C_OscHalcConfigChannel & rc_Channel = pc_Domain->c_ChannelConfigs[u32_ItChannel];
-            if (rc_Channel.c_Name.LowerCase() == orc_ChannelName.LowerCase())
+            if (LowerCaseCompat(rc_Channel.c_Name) == LowerCaseCompat(orc_ChannelName))
             {
                q_Retval = false;
             }

@@ -1547,7 +1547,7 @@ const
    \param[in,out]  opq_DuplicateName   Optional output for duplicate name check result
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSdNodeCanMessageSyncManager::CheckMessageNameBus(const C_SclString & orc_MessageName, bool & orq_Valid,
+void C_PuiSdNodeCanMessageSyncManager::CheckMessageNameBus(const std::string & orc_MessageName, bool & orq_Valid,
                                                            const C_OscCanMessageIdentificationIndices * const opc_SkipMessage, bool * const opq_InvalidName,
                                                            bool * const opq_DuplicateName)
 const

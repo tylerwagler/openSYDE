@@ -109,8 +109,8 @@ public:
    //File access
    QString GetCurrentFilePath(void) const;
    QString GetCurrentProjDir(void) const;
-   int32_t LoadFromFile(const stw::scl::C_SclString & orc_Path);
-   int32_t SaveToFile(const stw::scl::C_SclString & orc_Path);
+   int32_t LoadFromFile(const std::string & orc_Path);
+   int32_t SaveToFile(const std::string & orc_Path);
    bool CheckChanges(void) const;
 
    //General
@@ -143,7 +143,7 @@ private:
    C_CamProHandler(void);
    uint32_t m_GetHash(void) const;
    void m_CalcHash(uint32_t & oru32_HashValue) const;
-   std::map<stw::scl::C_SclString, bool> m_GetAllMessageNames(void) const;
+   std::map<std::string, bool> m_GetAllMessageNames(void) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

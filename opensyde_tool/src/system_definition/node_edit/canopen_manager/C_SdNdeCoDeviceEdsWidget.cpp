@@ -234,7 +234,7 @@ void C_SdNdeCoDeviceEdsWidget::m_SetDetails(void)
       const C_OscCanOpenObjectDictionary c_CanOpenObjDictionary = pc_CanOpenDeviceInfo->GetEdsFileContent();
 
       this->mpc_Ui->pc_LabFileCurrent->setText(
-         pc_CanOpenDeviceInfo->c_OriginalEdsFileName.AsStdString()->c_str());
+         pc_CanOpenDeviceInfo->c_OriginalEdsFileName.c_str());
 
       if (C_SdUtil::h_GetEdsFileDetails(c_CanOpenObjDictionary) != "")
       {

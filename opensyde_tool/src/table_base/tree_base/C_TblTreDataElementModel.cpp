@@ -1524,7 +1524,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(C_TblTreIte
                                                                      const bool oq_UseCaseVarNecessary,
                                                                      const bool oq_SafetyFlagVarNecessary,
                                                                      const bool oq_IsParam,
-                                                                     const stw::scl::C_SclString & orc_DomainSingularName, const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements, const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues, const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements, const QString & orc_HalChannelOrDomainName,
+                                                                     const std::string & orc_DomainSingularName, const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements, const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues, const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements, const QString & orc_HalChannelOrDomainName,
                                                                      const bool oq_ShowStringElements)
 {
    C_TblTreItem * const pc_ListItem = new C_TblTreItem();

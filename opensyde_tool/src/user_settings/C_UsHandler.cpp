@@ -2060,7 +2060,7 @@ void C_UsHandler::SetProjSdNodeExpandedCanOpenTree(const QString & orc_NodeName,
                                                    const std::map<uint8_t,
                                                                   bool> & orc_Devices, const std::map<std::pair<uint8_t,
                                                                                                                 std::pair<uint8_t,
-                                                                                                                          stw::scl::C_SclString> >,
+                                                                                                                          std::string> >,
                                                                                                       bool> & orc_Device)
 {
    if (this->mc_ProjSdNode.contains(orc_NodeName) == true)

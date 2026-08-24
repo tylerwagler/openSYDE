@@ -16,7 +16,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -73,7 +73,7 @@ public:
 
    // Error tracking
    bool q_Error;
-   stw::scl::C_SclString c_ErrorDescription;
+   std::string c_ErrorDescription;
 };
 
 ///Result of processing one CAN frame through the TP decoder
@@ -103,7 +103,7 @@ public:
    // Reassembly result
    bool q_ReassemblyComplete;     ///< true if a multi-frame message was fully reassembled
    bool q_Error;                  ///< true if a TP protocol error was detected
-   stw::scl::C_SclString c_ErrorDescription;
+   std::string c_ErrorDescription;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -52,7 +52,7 @@ C_BasicUpdateSequence::C_BasicUpdateSequence(void) :
    \param[in]  orc_Information   Text information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_BasicUpdateSequence::m_ReportProgress(const int32_t os32_Result, const stw::scl::C_SclString & orc_Information)
+void C_BasicUpdateSequence::m_ReportProgress(const int32_t os32_Result, const std::string & orc_Information)
 {
    if (os32_Result == C_NO_ERR)
    {
@@ -82,7 +82,7 @@ void C_BasicUpdateSequence::m_ReportProgress(const int32_t os32_Result, const st
    \param[in]  orc_Information   Information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_BasicUpdateSequence::m_ReportFlashloaderInformationRead(const C_SclString & orc_DeviceName,
+void C_BasicUpdateSequence::m_ReportFlashloaderInformationRead(const std::string & orc_DeviceName,
                                                                const C_OscComFlashloaderInformation & orc_Information)
 {
    C_SclStringList c_Text;

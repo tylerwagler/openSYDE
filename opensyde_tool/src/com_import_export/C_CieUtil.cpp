@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include <QApplication>
 
@@ -183,7 +184,7 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
       C_UsHandler::h_GetInstance()->SetProjSdTopologyLastKnownExportPath(c_FileInfo.absoluteDir().absolutePath());
       if (c_Extension == "dbc")
       {
-         C_SclString c_Error;
+         std::string c_Error;
          C_SclStringList c_Warnings;
 
          // import network of DBC file
@@ -196,7 +197,7 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
 
          if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN))
          {
-            std::map<C_SclString, C_SclString> c_NodeMapping;
+            std::map<std::string, std::string> c_NodeMapping;
             int32_t s32_Tmp = C_CieExportDbc::h_GetNodeMapping(c_NodeMapping);
 
             tgl_assert(s32_Tmp == C_NO_ERR);
@@ -221,22 +222,22 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
                      // build up additional warnings (there can be also one from export itself)
                      if (ou32_NumOfNodes != u32_NumOfOutputNodes)
                      {
-                        c_Warnings.Add("Number of input nodes (" + C_SclString::IntToStr(ou32_NumOfNodes) +
+                        c_Warnings.Add("Number of input nodes (" + std::to_string(ou32_NumOfNodes) +
                                        ") does not match number of exported nodes (" +
-                                       C_SclString::IntToStr(u32_NumOfOutputNodes) + ").");
+                                       std::to_string(u32_NumOfOutputNodes) + ").");
                      }
                      if (ou32_NumOfMessages != u32_NumOfOutputMessages)
                      {
-                        c_Warnings.Add("Number of input messages (" + C_SclString::IntToStr(
+                        c_Warnings.Add("Number of input messages (" + std::to_string(
                                           ou32_NumOfMessages) +
                                        ") does not match number of exported messages (" +
-                                       C_SclString::IntToStr(u32_NumOfOutputMessages) + ").");
+                                       std::to_string(u32_NumOfOutputMessages) + ").");
                      }
                      if (ou32_NumOfSignals != u32_NumOfOutputSignals)
                      {
-                        c_Warnings.Add("Number of input signals (" + C_SclString::IntToStr(ou32_NumOfSignals) +
+                        c_Warnings.Add("Number of input signals (" + std::to_string(ou32_NumOfSignals) +
                                        ") does not match number of exported signals (" +
-                                       C_SclString::IntToStr(u32_NumOfOutputSignals) + ").");
+                                       std::to_string(u32_NumOfOutputSignals) + ").");
                      }
                   }
                }
@@ -300,17 +301,17 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
    \param[in]      oq_AlwaysAppendNameInComment    Always append name in comment
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CieUtil::h_AdaptName(C_SclString & orc_Name, C_SclString & orc_Comment, const bool oq_AlwaysAppendNameInComment)
+void C_CieUtil::h_AdaptName(std::string & orc_Name, std::string & orc_Comment, const bool oq_AlwaysAppendNameInComment)
 {
-   C_SclString c_NewName = orc_Name;
+   std::string c_NewName = orc_Name;
 
    //eliminate all spaces:
-   c_NewName.ReplaceAll(" ", "");
+   ReplaceAllCompat(c_NewName, " ", "");
 
    //cut string:
-   if (c_NewName.Length() > C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit())
+   if (c_NewName.length() > C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit())
    {
-      c_NewName.Delete(C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit() + 1, c_NewName.Length());
+      DeleteCompat(c_NewName, C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit() + 1, c_NewName.length());
    }
 
    if ((orc_Name == c_NewName) && (oq_AlwaysAppendNameInComment == false))
@@ -319,7 +320,7 @@ void C_CieUtil::h_AdaptName(C_SclString & orc_Name, C_SclString & orc_Comment, c
    }
    else
    {
-      stw::scl::C_SclString c_Addition;
+      std::string c_Addition;
       if (orc_Comment != "")
       {
          c_Addition = "\n";
@@ -431,13 +432,13 @@ int32_t C_CieUtil::h_GetDeviceInfo(const uint32_t ou32_DeviceNodeIndex, const ui
       {
          const C_OscNodeComInterfaceSettings & rc_CurInterface =
             pc_Node->c_Properties.c_ComInterfaces[ou32_DeviceNodeInterfaceIndex];
-         stw::scl::C_SclString c_ParsingError;
+         std::string c_ParsingError;
          C_OscEdsDcfImportMessageGroup c_OscRxMessageData;
          C_OscEdsDcfImportMessageGroup c_OscTxMessageData;
-         std::vector<std::vector<stw::scl::C_SclString> > c_ImportMessagesPerMessage;
+         std::vector<std::vector<std::string> > c_ImportMessagesPerMessage;
          C_OscEdsDcfImportMessageGroup c_InvalidOscRxMessageData;
          C_OscEdsDcfImportMessageGroup c_InvalidOscTxMessageData;
-         std::vector<std::vector<stw::scl::C_SclString> > c_InvalidImportMessagesPerMessage;
+         std::vector<std::vector<std::string> > c_InvalidImportMessagesPerMessage;
          s32_Retval = C_OscImportEdsDcf::h_Import(
             C_PuiUtil::h_GetAbsolutePathFromProject(
                orc_EdsPath).toStdString().c_str(),
@@ -556,13 +557,13 @@ void C_CieUtil::h_ReportEdsImportError(QWidget * const opc_ParentWidget, const i
 //----------------------------------------------------------------------------------------------------------------------
 QString C_CieUtil::h_GetMessageName(const C_OscNode & orc_Node, const bool oq_IsTx, const uint32_t ou32_MessageIndex,
                                     const C_OscCanProtocol::E_Type oe_ProtocolType,
-                                    const stw::scl::C_SclString * const opc_NodeNameReplacement, const bool oq_IsSrdo,
+                                    const std::string * const opc_NodeNameReplacement, const bool oq_IsSrdo,
                                     uint32_t & oru32_SrdoIndex)
 {
    QString c_Retval;
 
-   stw::scl::C_SclString c_Nodename;
-   stw::scl::C_SclString c_TpdoRpdo = "RPDO";
+   std::string c_Nodename;
+   std::string c_TpdoRpdo = "RPDO";
    if (opc_NodeNameReplacement != NULL)
    {
       c_Nodename = *opc_NodeNameReplacement;
@@ -571,9 +572,9 @@ QString C_CieUtil::h_GetMessageName(const C_OscNode & orc_Node, const bool oq_Is
    {
       c_Nodename = orc_Node.c_Properties.c_Name;
    }
-   if (c_Nodename.Length() > (C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit() - 7UL))
+   if (c_Nodename.length() > (C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit() - 7UL))
    {
-      c_Nodename = c_Nodename.SubString(1, C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit() - 7UL);
+      c_Nodename = SubStringCompat(c_Nodename, 1, C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit() - 7UL);
    }
    if (oe_ProtocolType == C_OscCanProtocol::eCAN_OPEN)
    {
@@ -658,7 +659,7 @@ int32_t C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex, const C_OscCan
 
    C_CieConverter::C_CieCommDefinition c_CommDef;
    C_SclStringList c_WarningMessages;
-   C_SclString c_ErrorMessage;
+   std::string c_ErrorMessage;
 
    // import network of DBC file
    QApplication::setOverrideCursor(Qt::WaitCursor); // big DBC file can take some time to load
@@ -856,13 +857,13 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
          {
             const C_OscNodeComInterfaceSettings & rc_CurInterface =
                pc_Node->c_Properties.c_ComInterfaces[u32_InterfaceIndex];
-            C_SclString c_ParsingError;
+            std::string c_ParsingError;
             C_OscEdsDcfImportMessageGroup c_OscRxMessageData;
             C_OscEdsDcfImportMessageGroup c_OscTxMessageData;
-            std::vector<std::vector<C_SclString> > c_ImportMessagesPerMessage;
+            std::vector<std::vector<std::string> > c_ImportMessagesPerMessage;
             C_OscEdsDcfImportMessageGroup c_InvalidOscRxMessageData;
             C_OscEdsDcfImportMessageGroup c_InvalidOscTxMessageData;
-            std::vector<std::vector<C_SclString> > c_InvalidImportMessagesPerMessage;
+            std::vector<std::vector<std::string> > c_InvalidImportMessagesPerMessage;
             const int32_t s32_ImportResult = C_OscImportEdsDcf::h_Import(
                orc_FullFilePath.toStdString().c_str(), rc_CurInterface.u8_NodeId,
                c_OscRxMessageData,
@@ -1273,8 +1274,8 @@ int32_t C_CieUtil::mh_InsertMessages(const uint32_t ou32_NodeIndex, const C_OscC
    Constructed message name
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_CieUtil::mh_ConstructMessageName(const stw::scl::C_SclString & orc_Nodename,
-                                           const stw::scl::C_SclString & orc_TpdoRpdo, const uint32_t ou32_MessageIndex)
+QString C_CieUtil::mh_ConstructMessageName(const std::string & orc_Nodename,
+                                           const std::string & orc_TpdoRpdo, const uint32_t ou32_MessageIndex)
 {
    const QString c_Retval = static_cast<QString>((orc_Nodename + "_" + orc_TpdoRpdo + "%1").c_str()).
                             arg(QString::number(ou32_MessageIndex + 1));

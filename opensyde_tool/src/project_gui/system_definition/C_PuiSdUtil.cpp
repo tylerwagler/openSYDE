@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "stwerrors.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -929,9 +930,9 @@ bool C_PuiSdUtil::h_CheckXappNodeReachable(const uint32_t ou32_SdNodeIndex, cons
    false Already in use
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeIndex, const C_SclString & orc_Name,
+bool C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeIndex, const std::string & orc_Name,
                                                      const uint32_t * const opu32_DataLoggerJobIndexToSkip,
-                                                     std::vector<C_SclString> * const opc_ExistingNames)
+                                                     std::vector<std::string> * const opc_ExistingNames)
 {
    bool q_Retval = true;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
@@ -950,9 +951,9 @@ bool C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeInd
          }
          if (q_Skip == false)
          {
-            const stw::scl::C_SclString c_CurName = pc_Node->c_DataLoggerJobs[u32_ItDataLogger].c_Properties.c_Name;
+            const std::string c_CurName = pc_Node->c_DataLoggerJobs[u32_ItDataLogger].c_Properties.c_Name;
             //Check conflict
-            if (c_CurName.LowerCase() == orc_Name.LowerCase())
+            if (LowerCaseCompat(c_CurName) == LowerCaseCompat(orc_Name))
             {
                q_Retval = false;
             }

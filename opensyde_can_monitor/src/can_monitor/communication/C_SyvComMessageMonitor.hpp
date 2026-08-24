@@ -56,29 +56,29 @@ public:
    void Stop(void) override;
 
    // openSYDE system definition handling
-   int32_t StartAddOsySysDef(const stw::scl::C_SclString & orc_PathSystemDefinition);
-   int32_t StartAddOsySysDef(const stw::scl::C_SclString & orc_PathSystemDefinition, const uint32_t ou32_BusIndex);
+   int32_t StartAddOsySysDef(const std::string & orc_PathSystemDefinition);
+   int32_t StartAddOsySysDef(const std::string & orc_PathSystemDefinition, const uint32_t ou32_BusIndex);
 
-   int32_t SetOsySysDefBus(const stw::scl::C_SclString & orc_PathSystemDefinition,
+   int32_t SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
                            const uint32_t ou32_BusIndex) override;
-   int32_t GetOsySysDef(const stw::scl::C_SclString & orc_PathSystemDefinition,
+   int32_t GetOsySysDef(const std::string & orc_PathSystemDefinition,
                         stw::opensyde_core::C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition)
    override;
 
    // DBC handling
-   int32_t StartAddDbcFile(const stw::scl::C_SclString & orc_PathDbc);
-   int32_t GetDbcFile(const stw::scl::C_SclString & orc_PathDbc,
+   int32_t StartAddDbcFile(const std::string & orc_PathDbc);
+   int32_t GetDbcFile(const std::string & orc_PathDbc,
                       C_CieConverter::C_CieCommDefinition & orc_DbcDefinition);
 
    // Generic database handling
-   int32_t RemoveDatabase(const stw::scl::C_SclString & orc_Path) override;
-   int32_t ActivateDatabase(const stw::scl::C_SclString & orc_Path, const bool oq_Active) override;
+   int32_t RemoveDatabase(const std::string & orc_Path) override;
+   int32_t ActivateDatabase(const std::string & orc_Path, const bool oq_Active) override;
 
    // Logging handling
-   int32_t AddLogFileAsc(const stw::scl::C_SclString & orc_FilePath, const bool oq_HexActive,
+   int32_t AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
                          const bool oq_RelativeTimeStampActive) override;
-   virtual int32_t AddLogFileBlf(const stw::scl::C_SclString & orc_FilePath);
-   int32_t RemoveLogFile(const stw::scl::C_SclString & orc_FilePath) override;
+   virtual int32_t AddLogFileBlf(const std::string & orc_FilePath);
+   int32_t RemoveLogFile(const std::string & orc_FilePath) override;
    void RemoveAllLogFiles(void) override;
 
    // Filter handling
@@ -115,15 +115,15 @@ protected:
 
    bool m_CheckFilter(const stw::can::T_STWCAN_Msg_RX & orc_Msg) override;
 
-   void m_InsertOsySysDef(const stw::scl::C_SclString & orc_PathSystemDefinition,
+   void m_InsertOsySysDef(const std::string & orc_PathSystemDefinition,
                           const stw::opensyde_core::C_OscSystemDefinition & orc_OsySysDef,
                           const uint32_t ou32_BusIndex) override;
    bool m_CheckSysDef(const stw::can::T_STWCAN_Msg_RX & orc_Msg) override;
    bool m_InterpretSysDef(stw::opensyde_core::C_OscComMessageLoggerData & orc_MessageData) const override;
 
    bool m_CheckInterpretation(stw::opensyde_core::C_OscComMessageLoggerData & orc_MessageData) override;
-   stw::scl::C_SclString m_GetProtocolStringHexHook(void) const override;
-   stw::scl::C_SclString m_GetProtocolStringDecHook(void) const override;
+   std::string m_GetProtocolStringHexHook(void) const override;
+   std::string m_GetProtocolStringDecHook(void) const override;
 
 private:
    enum E_LoadingActivity
@@ -134,7 +134,7 @@ private:
       eADD_DBC_FILE
    };
 
-   int32_t m_AddDbcFile(const stw::scl::C_SclString & orc_PathDbc);
+   int32_t m_AddDbcFile(const std::string & orc_PathDbc);
    const C_CieConverter::C_CieCanMessage * m_CheckDbcFile(const stw::can::T_STWCAN_Msg_RX & orc_Msg);
    bool m_InterpretDbcFile(const C_CieConverter::C_CieCanMessage * const opc_DbcMessage,
                            stw::opensyde_core::C_OscComMessageLoggerData & orc_MessageData) const;
@@ -148,7 +148,7 @@ private:
    E_LoadingActivity me_LoadingActivity;
 
    // Loading execution parameter
-   stw::scl::C_SclString mc_Path;
+   std::string mc_Path;
    uint32_t mu32_BusIndex;
 
    // Loading execution result
@@ -169,7 +169,7 @@ private:
    uint32_t mu32_TxErrors;
 
    // DBC files
-   std::map<stw::scl::C_SclString, C_CieConverter::C_CieCommDefinition> mc_DbcFiles;
+   std::map<std::string, C_CieConverter::C_CieCommDefinition> mc_DbcFiles;
 
    // CAN-TP (ISO 15765-2) decoder
    C_CamCanTpDecoder mc_CanTpDecoder;

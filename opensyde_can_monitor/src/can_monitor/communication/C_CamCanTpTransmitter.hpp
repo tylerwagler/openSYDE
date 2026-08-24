@@ -19,7 +19,7 @@
 #include <deque>
 #include "stwtypes.hpp"
 #include "stw_can.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

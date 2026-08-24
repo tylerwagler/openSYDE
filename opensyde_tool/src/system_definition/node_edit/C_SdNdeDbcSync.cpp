@@ -442,7 +442,7 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
             // Step 1: parse DBC headlessly.
             C_CieConverter::C_CieCommDefinition c_CommDef;
             stw::scl::C_SclStringList c_Warnings;
-            stw::scl::C_SclString c_ParseError;
+            std::string c_ParseError;
             const int32_t s32_ParseResult =
                C_CieImportDbc::h_ImportNetwork(c_DbcPath.toStdString().c_str(),
                                                c_CommDef, c_Warnings, c_ParseError, true);
@@ -723,7 +723,7 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
 
                   // Write the DBC.
                   stw::scl::C_SclStringList c_ExportWarnings;
-                  stw::scl::C_SclString c_ExportError;
+                  std::string c_ExportError;
                   const int32_t s32_Export = C_CieExportDbc::h_ExportNetwork(
                      c_DbcPath.toStdString().c_str(), c_CommDef, c_ExportWarnings, c_ExportError);
 

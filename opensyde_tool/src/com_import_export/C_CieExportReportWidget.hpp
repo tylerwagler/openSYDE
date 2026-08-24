@@ -36,14 +36,14 @@ public:
    ~C_CieExportReportWidget(void) override;
 
    void InitStaticNames(void) const;
-   void SetMessageData(const std::map<stw::scl::C_SclString, stw::scl::C_SclString> & orc_NodeMapping,
+   void SetMessageData(const std::map<std::string, std::string> & orc_NodeMapping,
                        const stw::opensyde_gui_logic::C_CieExportDbc::C_ExportStatistic & orc_ExportStatistic,
                        const stw::scl::C_SclStringList & orc_Warnings);
 
 
 private:
    Ui::C_CieExportReportWidget * mpc_Ui;
-   std::map<stw::scl::C_SclString, stw::scl::C_SclString> mc_NodeMapping;
+   std::map<std::string, std::string> mc_NodeMapping;
    stw::opensyde_gui_logic::C_CieExportDbc::C_ExportStatistic mc_ExportStatistic;
    stw::scl::C_SclStringList mc_Warnings;
    const QString mc_FilePath;

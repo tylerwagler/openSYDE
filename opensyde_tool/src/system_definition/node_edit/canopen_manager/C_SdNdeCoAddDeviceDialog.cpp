@@ -97,7 +97,7 @@ C_SdNdeCoAddDeviceDialog::C_SdNdeCoAddDeviceDialog(stw::opensyde_gui_elements::C
    if (c_ComInterface.GetBusConnected() == true)
    {
       this->mu32_BusIndex = c_ComInterface.u32_BusIndex;
-      this->m_FillUpComboBox(c_ComInterface.u32_BusIndex, pc_Node->c_Properties.c_Name.AsStdString()->c_str());
+      this->m_FillUpComboBox(c_ComInterface.u32_BusIndex, pc_Node->c_Properties.c_Name.c_str());
    }
    else
    {
@@ -176,7 +176,7 @@ int32_t C_SdNdeCoAddDeviceDialog::GetNodeSelection(uint32_t & oru32_NodeIndex, u
    Current EDS file path
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SdNdeCoAddDeviceDialog::GetEdsFile(void)
+std::string C_SdNdeCoAddDeviceDialog::GetEdsFile(void)
 {
    return C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath()).toStdString().c_str();
 }
@@ -433,9 +433,9 @@ void C_SdNdeCoAddDeviceDialog::m_OnLoadEds(void)
 {
    bool q_Invalid = false;
    C_OscCanOpenObjectDictionary c_CanOpenObjDictionary;
-   const C_SclString c_File =
+   const std::string c_File =
       C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath()).toStdString().c_str();
-   const QFileInfo c_FileInfo(c_File.AsStdString()->c_str());
+   const QFileInfo c_FileInfo(c_File.c_str());
 
    if (c_CanOpenObjDictionary.LoadFromFile(c_File) == C_NO_ERR)
    {
@@ -458,7 +458,7 @@ void C_SdNdeCoAddDeviceDialog::m_OnLoadEds(void)
       this->mpc_Ui->pc_TedHtmlReport->setPlainText("<EDS file description>");
    }
 
-   if ((QFile::exists(c_File.AsStdString()->c_str()) == true) &&
+   if ((QFile::exists(c_File.c_str()) == true) &&
        (C_SdNdeCoAddDeviceDialog::mhc_SUFFIX.contains(c_FileInfo.suffix())) &&
        (q_Invalid == false))
    {

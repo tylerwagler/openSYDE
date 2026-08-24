@@ -15,7 +15,7 @@
 #include <QWidget>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -89,10 +89,10 @@ private:
    void m_OnClear(void);
    void m_OnIndexClicked(const QModelIndex & orc_ModelIndex);
    int32_t m_LoadConcreteProject(uint16_t * const opu16_FileVersion,
-                                 std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices);
+                                 std::vector<std::string> * const opc_ErrorDetailsMissingDevices);
    int32_t m_GetPassword(QString & orc_Password);
    void m_CancelPasswordDialog(uint16_t ou16_ProjectFileVersion,
-                               std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices);
+                               std::vector<std::string> * const opc_ErrorDetailsMissingDevices);
    void m_SetNameStringLength(void);
 
    Ui::C_NagMainWidget * mpc_Ui;

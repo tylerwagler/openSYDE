@@ -14,7 +14,7 @@
 #include <QAbstractTableModel>
 
 #include "C_OscDataLoggerDataElementReference.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -72,11 +72,11 @@ private:
    {
    public:
       //      uint32_t u32_DataElementId;
-      stw::scl::C_SclString c_DataElementName;
-      stw::scl::C_SclString c_Location;
-      stw::scl::C_SclString c_Namespace;
-      stw::scl::C_SclString c_LoggingName;
-      stw::scl::C_SclString c_Comment;
+      std::string c_DataElementName;
+      std::string c_Location;
+      std::string c_Namespace;
+      std::string c_LoggingName;
+      std::string c_Comment;
    };
 
    std::vector<C_DalLogJobData> mc_LoggingDataList;

@@ -33,7 +33,7 @@
 #include "C_PuiProject.hpp"
 #include "C_Uti.hpp"
 #include "C_PuiUtil.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_UsHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

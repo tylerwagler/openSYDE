@@ -15,7 +15,7 @@
 
 #include <vector>
 #include <QString>
-#include "C_SclString.hpp"
+#include <string>
 #include "stwtypes.hpp"
 #include "C_OscNodeSquad.hpp"
 #include "C_OscSystemBus.hpp"
@@ -73,9 +73,9 @@ public:
                                          const C_PuiSdNodeConnectionId & orc_ConnectionId,
                                          std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
    static bool h_CheckXappNodeReachable(const uint32_t ou32_SdNodeIndex, const uint32_t ou32_TargetNodeIndex);
-   static bool h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeIndex, const stw::scl::C_SclString & orc_Name,
+   static bool h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeIndex, const std::string & orc_Name,
                                                   const uint32_t * const opu32_DataLoggerJobIndexToSkip,
-                                                  std::vector<stw::scl::C_SclString> * const opc_ExistingNames = NULL);
+                                                  std::vector<std::string> * const opc_ExistingNames = NULL);
 
 private:
    C_PuiSdUtil(void);

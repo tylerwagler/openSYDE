@@ -319,7 +319,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_LinkClicked(const QUrl & orc_Li
 void C_SdBueJ1939AddMessagesFromCatalogDialog::m_LoadCatalog()
 {
    C_SclStringList c_WarningMessages;
-   C_SclString c_ErrorMessage;
+   std::string c_ErrorMessage;
    const QString c_FullFilePath = this->mc_CatalogFilePath;
 
    stw::opensyde_gui_logic::C_CieConverter::C_CieCommDefinition c_CieCommDef;

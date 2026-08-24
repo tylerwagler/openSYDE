@@ -246,7 +246,7 @@ void C_SyvSeDllConfigurationDialog::m_TestConnectionClicked(void) const
       c_Config.u32_BitrateBps = static_cast<uint32_t>(this->mu64_Bitrate);
    }
 
-   stw::scl::C_SclString c_Error;
+   std::string c_Error;
    C_CanDispatcher * const pc_Dispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
 
    C_OgeWiCustomMessage c_MessageBox(this->parentWidget());

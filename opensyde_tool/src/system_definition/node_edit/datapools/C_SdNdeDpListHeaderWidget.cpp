@@ -552,7 +552,7 @@ void C_SdNdeDpListHeaderWidget::m_UpdateUi(void)
       this->mpc_Ui->pc_LabelComment->SetToolTipInformation("Comment",
                                                            pc_List->c_Comment.c_str());
 
-      if (pc_List->c_Comment.IsEmpty() == true)
+      if (pc_List->c_Comment.empty() == true)
       {
          this->mpc_Ui->pc_PushButtonComment->SetSvg("://images/system_definition/IconCommentAdd.svg");
       }
@@ -746,7 +746,7 @@ void C_SdNdeDpListHeaderWidget::m_OpenDataSetEdit(void)
 void C_SdNdeDpListHeaderWidget::m_CheckName(void) const
 {
    QString c_Content;
-   const stw::scl::C_SclString c_Name = this->mpc_Ui->pc_LineEditName->GetName().toStdString().c_str();
+   const std::string c_Name = this->mpc_Ui->pc_LineEditName->GetName().toStdString().c_str();
 
    //check
    bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(c_Name);

@@ -700,9 +700,9 @@ void C_SyvUpPacListWidget::ImportConfig(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, const bool oq_SecureFile,
                                                       const std::vector<uint8_t> & orc_EncryptNodes,
-                                                      const std::vector<C_SclString> & orc_EncryptNodesPassword,
+                                                      const std::vector<std::string> & orc_EncryptNodesPassword,
                                                       const std::vector<uint8_t> & orc_AddSignatureNodes,
-                                                      const std::vector<C_SclString> & orc_NodeSignaturePemFiles,
+                                                      const std::vector<std::string> & orc_NodeSignaturePemFiles,
                                                       const QString oc_CurrentSelectedVersion)
 {
    const C_PuiSvData * const pc_ViewData = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
@@ -800,7 +800,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
          tgl_assert(s32_Return == C_NO_ERR);
 
          C_SclStringList c_Warnings;
-         C_SclString c_Error;
+         std::string c_Error;
          if (s32_Return == C_NO_ERR)
          {
             // In case of skipped files, check if some nodes do not need to be active for the package anymore

@@ -186,7 +186,7 @@ bool C_SdNdeDalLogJobAdditionalTriggerDialog::m_SaveTriggerCondition()
    if (this->mq_TriggerConditionValid == true)
    {
       // Note: The expression may be empty, in that case an empty condition will be stored.
-      const C_SclString c_TriggerCondition = this->mpc_Ui->pc_TextEditTriggerCondition->toPlainText().toStdString();
+      const std::string c_TriggerCondition = this->mpc_Ui->pc_TextEditTriggerCondition->toPlainText().toStdString();
 
       // save the expression
       C_PuiSdHandler::h_GetInstance()->SetDataLoggerAdditionalTriggerExpertModeString(this->mu32_NodeIndex,
@@ -286,12 +286,12 @@ void C_SdNdeDalLogJobAdditionalTriggerDialog::m_ValidateTriggerCondition()
 {
    bool q_IsSyntaxValid = false;
    bool q_AreVariablesValid = false;
-   const C_SclString c_TriggerCondition = this->mpc_Ui->pc_TextEditTriggerCondition->toPlainText().toStdString();
+   const std::string c_TriggerCondition = this->mpc_Ui->pc_TextEditTriggerCondition->toPlainText().toStdString();
 
    std::string c_ErrorString("");
 
    // if no trigger condition exists
-   if (c_TriggerCondition.IsEmpty() == false)
+   if (c_TriggerCondition.empty() == false)
    {
       const bool q_ReturnVal = C_SdNdeDalTriggerCheckHelper::h_Check(this->mu32_NodeIndex,
                                                                      c_TriggerCondition,
@@ -342,14 +342,14 @@ void C_SdNdeDalLogJobAdditionalTriggerDialog::m_ValidateTriggerCondition()
 void C_SdNdeDalLogJobAdditionalTriggerDialog::m_GetAdditionalTriggerCondition()
 {
    // Fetch the trigger condition string and set it to the edit box
-   const C_SclString c_TriggerCondition = C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(this->mu32_NodeIndex,
+   const std::string c_TriggerCondition = C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(this->mu32_NodeIndex,
                                                                                             this->mu32_DataLoggerJobIndex)
                                           ->c_Properties.
                                           c_AdditionalTriggerProperties.c_ExpertMode.c_TriggerConfiguration;
 
    disconnect(this->mpc_Ui->pc_TextEditTriggerCondition, &QTextEdit::textChanged, this,
               &C_SdNdeDalLogJobAdditionalTriggerDialog::m_ValidateTriggerCondition);
-   if (c_TriggerCondition.IsEmpty() == false)
+   if (c_TriggerCondition.empty() == false)
    {
       this->mpc_Ui->pc_TextEditTriggerCondition->setText(c_TriggerCondition.c_str());
       this->mpc_Ui->pc_TextEditTriggerCondition->moveCursor(QTextCursor::End);

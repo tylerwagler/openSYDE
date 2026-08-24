@@ -2557,7 +2557,7 @@ int32_t C_PuiSvHandler::CheckViewError(const uint32_t ou32_Index, bool * const o
             if (u32_ItView != ou32_Index)
             {
                const C_PuiSvData & rc_CurData = this->mc_Views[u32_ItView];
-               if (rc_CurData.GetName().AnsiCompare(rc_CheckedData.GetName()) == 0)
+               if (rc_CurData.GetName() == rc_CheckedData.GetName())
                {
                   c_Details.q_NameInvalid = true;
                }
@@ -3335,7 +3335,7 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
                if (q_Ok)
                {
                   osc_write_log_info("Loading views", "Value of \"file-version\": " +
-                                     stw::scl::C_SclString::IntToStr(s32_FileVersion));
+                                     std::to_string(s32_FileVersion));
                   if (s32_FileVersion == 1)
                   {
                      osc_write_log_error("Loading views",
@@ -3421,7 +3421,7 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
    else
    {
       osc_write_log_error("Loading views",
-                          static_cast<stw::scl::C_SclString>("Could not find system views file \"") + orc_Path.toStdString().c_str() +
+                          static_cast<std::string>("Could not find system views file \"") + orc_Path.toStdString().c_str() +
                           "\".");
       s32_Retval = C_RANGE;
    }
@@ -4450,9 +4450,9 @@ int32_t C_PuiSvHandler::m_CheckRouting(const uint32_t ou32_ViewIndex,
    Vector of pointers to all currently registered view names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<stw::scl::C_SclString, bool> C_PuiSvHandler::m_GetExistingViewNames(void) const
+std::map<std::string, bool> C_PuiSvHandler::m_GetExistingViewNames(void) const
 {
-   std::map<stw::scl::C_SclString, bool> c_Retval;
+   std::map<std::string, bool> c_Retval;
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_Views.size(); ++u32_ItView)
    {
       const C_PuiSvData & rc_Data = this->mc_Views[u32_ItView];

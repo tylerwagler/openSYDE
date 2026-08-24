@@ -16,7 +16,7 @@
 #include <QWidget>
 #include <QString>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -32,7 +32,7 @@ class C_PopErrorHandling
 public:
    static void h_ProjectLoadErr(const int32_t & ors32_Err, const QString & orc_Path, QWidget * const opc_Parent,
                                 const uint16_t ou16_SystemDefinitionVersion,
-                                const std::vector<stw::scl::C_SclString> & orc_ErrorDetailsMissingDevices);
+                                const std::vector<std::string> & orc_ErrorDetailsMissingDevices);
    static void h_ProjectSaveErr(const int32_t & ors32_Err, QWidget * const opc_Parent);
    static void h_ServiceProjectSaveErr(const int32_t & ors32_Err, QWidget * const opc_Parent);
    static void h_GetTextInitializeErr(const int32_t & ors32_Err);

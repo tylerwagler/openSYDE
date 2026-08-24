@@ -2098,7 +2098,7 @@ void C_SdBueSignalPropertiesWidget::m_UpdateUiForChange(const E_Change oe_Change
    {
       QTableWidget * const pc_Table = this->mpc_Ui->pc_TableValueDescriptions;
       pc_Table->setRowCount(0);
-      for (std::map<int64_t, stw::scl::C_SclString>::const_iterator c_It =
+      for (std::map<int64_t, std::string>::const_iterator c_It =
               this->mc_DataOscSignalCommon.c_ValueDescription.begin();
            c_It != this->mc_DataOscSignalCommon.c_ValueDescription.end(); ++c_It)
       {

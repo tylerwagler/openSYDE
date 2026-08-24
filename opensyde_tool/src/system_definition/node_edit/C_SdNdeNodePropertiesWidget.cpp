@@ -539,7 +539,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
             }
 
             //company logo and product page link
-            if ((pc_DevDef->c_ManufacturerDisplayValue.IsEmpty() == false) &&
+            if ((pc_DevDef->c_ManufacturerDisplayValue.empty() == false) &&
                 (pc_DevDef->c_ManufacturerDisplayValue != "Sensor-Technik Wiedemann GmbH"))
             {
                QFileInfo c_FileInfoCompLogo;
@@ -1445,7 +1445,7 @@ void C_SdNdeNodePropertiesWidget::m_SupportedProtocolChange(void)
 void C_SdNdeNodePropertiesWidget::m_CheckNodeName(void)
 {
    //check
-   const C_SclString c_Text = this->mpc_Ui->pc_LineEditNodeName->text().toStdString().c_str();
+   const std::string c_Text = this->mpc_Ui->pc_LineEditNodeName->text().toStdString().c_str();
    const bool q_NameIsUnique = C_PuiSdHandler::h_GetInstance()->CheckNodeNameAvailable(c_Text, &this->mu32_NodeIndex,
                                                                                        NULL);
    const bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(c_Text);
@@ -1525,7 +1525,7 @@ void C_SdNdeNodePropertiesWidget::m_RegisterNameChange(void)
 
    if (hq_InProgress == false)
    {
-      std::vector<stw::scl::C_SclString> c_ExistingNames;
+      std::vector<std::string> c_ExistingNames;
       hq_InProgress = true;
 
       if (C_PuiSdHandler::h_GetInstance()->CheckNodeNameAvailable(
@@ -1543,7 +1543,7 @@ void C_SdNdeNodePropertiesWidget::m_RegisterNameChange(void)
          c_Details.append("Used node names:\n");
          for (uint32_t u32_ItExistingName = 0UL; u32_ItExistingName < c_ExistingNames.size(); ++u32_ItExistingName)
          {
-            const C_SclString & rc_Name = c_ExistingNames[u32_ItExistingName];
+            const std::string & rc_Name = c_ExistingNames[u32_ItExistingName];
             c_Details.append(static_cast<QString>("\"%1\"\n").arg(rc_Name.c_str()));
          }
          c_Message.SetDetails(c_Details);

@@ -39,9 +39,9 @@ public:
    int32_t SetDataLoggerEnabled(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataLoggerJobIndex,
                                 const bool oq_Enabled);
    int32_t SetDataLoggerProperties(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataLoggerJobIndex,
-                                   const stw::scl::C_SclString & orc_Name, const stw::scl::C_SclString & orc_Comment,
+                                   const std::string & orc_Name, const std::string & orc_Comment,
                                    const stw::opensyde_core::C_OscDataLoggerJobProperties::E_UseCase oe_UseCase,
-                                   const stw::opensyde_core::C_OscDataLoggerJobProperties::E_LogFileFormat oe_LogFileFormat, const uint32_t ou32_MaxLogEntries, const uint32_t ou32_MaxLogDurationSec, const uint32_t ou32_LogIntervalMs, const stw::opensyde_core::C_OscDataLoggerJobProperties::E_LocalLogTrigger oe_LocalLogTrigger, const stw::scl::C_SclString & orc_LogDestinationDirectory);
+                                   const stw::opensyde_core::C_OscDataLoggerJobProperties::E_LogFileFormat oe_LogFileFormat, const uint32_t ou32_MaxLogEntries, const uint32_t ou32_MaxLogDurationSec, const uint32_t ou32_LogIntervalMs, const stw::opensyde_core::C_OscDataLoggerJobProperties::E_LocalLogTrigger oe_LocalLogTrigger, const std::string & orc_LogDestinationDirectory);
    int32_t SetDataLoggerAdditionalTriggerProperties(const uint32_t ou32_NodeIndex,
                                                     const uint32_t ou32_DataLoggerJobIndex,
                                                     const stw::opensyde_core::C_OscDataLoggerJobAdditionalTriggerProperties & orc_Data);
@@ -49,7 +49,7 @@ public:
                                                            const uint32_t ou32_DataLoggerJobIndex, const bool oq_Data);
    int32_t SetDataLoggerAdditionalTriggerExpertModeString(const uint32_t ou32_NodeIndex,
                                                           const uint32_t ou32_DataLoggerJobIndex,
-                                                          const stw::scl::C_SclString & orc_Data);
+                                                          const std::string & orc_Data);
    int32_t SetXappInterface(const uint32_t ou32_NodeIndex,
                             const opensyde_core::C_OscSystemBus::E_Type oe_ConnectedInterfaceType,
                             const uint8_t ou8_ConnectedInterfaceNumber);
@@ -62,7 +62,7 @@ public:
                                    const uint32_t ou32_DataLoggerDataElementIndex);
    int32_t SetDataLoggerElementProperties(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataLoggerJobIndex,
                                           const uint32_t ou32_DataLoggerDataElementIndex, const bool oq_UseCustomName,
-                                          const stw::scl::C_SclString & orc_CustomName);
+                                          const std::string & orc_CustomName);
 
    const std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                   C_PuiSdLastKnownHalElementId> & GetLastKnownHalcCrcs(void) const;
@@ -167,7 +167,7 @@ private:
 
    void m_HandlePossibleRouteChange(void);
    void m_ValidateAllRoutesForOneNode(const uint32_t ou32_Index);
-   static std::map<stw::scl::C_SclString, bool> mh_GetExistingDataLoggerNames(
+   static std::map<std::string, bool> mh_GetExistingDataLoggerNames(
       const stw::opensyde_core::C_OscNode & orc_Node);
    static void mh_HandleSyncDataElementInvalid(
       stw::opensyde_core::C_OscDataLoggerJobAdditionalTriggerProperties & orc_Trigger);

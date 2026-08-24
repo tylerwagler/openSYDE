@@ -55,7 +55,7 @@ private:
    class C_DalLogJob
    {
    public:
-      stw::scl::C_SclString c_Name;
+      std::string c_Name;
       bool q_Enabled;
    };
 

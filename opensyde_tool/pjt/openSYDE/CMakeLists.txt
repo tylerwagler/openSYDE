@@ -1,5 +1,5 @@
-# minimum 3.16 for precompiled headers
-cmake_minimum_required(VERSION 3.16)
+# minimum 3.24 for FetchContent, FILE_SET, and modern CMake policies
+cmake_minimum_required(VERSION 3.24)
 
 if(POLICY CMP0177)
    cmake_policy(SET CMP0177 NEW)

@@ -21,7 +21,7 @@
 #include "C_CieDataPoolListStructure.hpp"
 #include "C_CieConverter.hpp"
 #include "C_OscCanMessage.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscCanProtocol.hpp"
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -43,7 +43,7 @@ using namespace stw::scl;
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-static const stw::scl::C_SclString mc_MessageLineBreak = "\n"; // must be '\n' for later converting in HTML tag <br>
+static const std::string mc_MessageLineBreak = "\n"; // must be '\n' for later converting in HTML tag <br>
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -100,7 +100,7 @@ C_CieDataPoolListStructure C_CieDataPoolListAdapter::h_GetStructureFromDbcFileIm
 C_CieDataPoolListStructure C_CieDataPoolListAdapter::h_GetStructureFromDcfAndEdsFileImport(
    const C_OscEdsDcfImportMessageGroup & orc_OscRxMessageData,
    const C_OscEdsDcfImportMessageGroup & orc_OscTxMessageData,
-   const std::vector<std::vector<stw::scl::C_SclString> > & orc_InfoMessagesPerMessage)
+   const std::vector<std::vector<std::string> > & orc_InfoMessagesPerMessage)
 {
    C_CieDataPoolListStructure c_Retval;
 
@@ -129,12 +129,12 @@ C_CieDataPoolListStructure C_CieDataPoolListAdapter::h_GetStructureFromDcfAndEds
       for (uint32_t u32_ItInfoMessage = 0; u32_ItInfoMessage < orc_InfoMessagesPerMessage.size(); ++u32_ItInfoMessage)
       {
          QString c_CombinedMessages;
-         const std::vector<stw::scl::C_SclString> & rc_MessagesForOneCanMessage =
+         const std::vector<std::string> & rc_MessagesForOneCanMessage =
             orc_InfoMessagesPerMessage[u32_ItInfoMessage];
          for (uint32_t u32_ItGroupedMessage = 0; u32_ItGroupedMessage < rc_MessagesForOneCanMessage.size();
               ++u32_ItGroupedMessage)
          {
-            const stw::scl::C_SclString & rc_OneMessage = rc_MessagesForOneCanMessage[u32_ItGroupedMessage];
+            const std::string & rc_OneMessage = rc_MessagesForOneCanMessage[u32_ItGroupedMessage];
             c_CombinedMessages += rc_OneMessage.c_str();
             c_CombinedMessages += mc_MessageLineBreak.c_str();
          }
@@ -200,7 +200,7 @@ void C_CieDataPoolListAdapter::mh_FillUpCoreStructureByDbcValues(
       // restore warnings
       if (c_CanMessageIter->c_Warnings.GetCount() > 0)
       {
-         stw::scl::C_SclString c_Tmp;
+         std::string c_Tmp;
          for (uint32_t u32_Pos = 0; u32_Pos < c_CanMessageIter->c_Warnings.GetCount(); u32_Pos++)
          {
             c_Tmp += c_CanMessageIter->c_Warnings.Strings[u32_Pos];
@@ -538,10 +538,10 @@ int32_t C_CieDataPoolListAdapter::h_ConvertToDbcImportMessage(const uint32_t ou3
          }
          else
          {
-            const C_SclString c_Message = "Can't find data elements for signal with position \"" +
-                                          C_SclString::IntToStr(u32_PosSignal) + "\" in message \"" +
+            const std::string c_Message = "Can't find data elements for signal with position \"" +
+                                          std::to_string(u32_PosSignal) + "\" in message \"" +
                                           orc_OscCanMessage.c_Name + "\" in bus \"" +
-                                          C_SclString::IntToStr(ou32_BusIndex) + "\".";
+                                          std::to_string(ou32_BusIndex) + "\".";
             orc_Warnings.Append(c_Message);
             osc_write_log_warning("DBC Export", c_Message);
             s32_Return = C_WARN;
@@ -550,8 +550,8 @@ int32_t C_CieDataPoolListAdapter::h_ConvertToDbcImportMessage(const uint32_t ou3
    }
    else
    {
-      const C_SclString c_Message = "Can't find valid signal for message \"" + orc_OscCanMessage.c_Name +
-                                    "\" in bus \"" + C_SclString::IntToStr(ou32_BusIndex) + "\".";
+      const std::string c_Message = "Can't find valid signal for message \"" + orc_OscCanMessage.c_Name +
+                                    "\" in bus \"" + std::to_string(ou32_BusIndex) + "\".";
       orc_Warnings.Append(c_Message);
       osc_write_log_warning("DBC Export", c_Message);
       s32_Return = C_WARN;

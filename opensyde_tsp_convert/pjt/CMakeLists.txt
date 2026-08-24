@@ -1,5 +1,5 @@
-# minimum 3.16 for precompiled headers
-cmake_minimum_required(VERSION 3.16)
+# minimum 3.24 for FetchContent, FILE_SET, and modern CMake policies
+cmake_minimum_required(VERSION 3.24)
 
 project("osy_tsp_convert")
 
@@ -51,13 +51,15 @@ else()
 endif()
 add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/osy_core)
 
-# warn a lot
+# warn a lot — C++17 to match the rest of openSYDE
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS "-Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized \
    -Wdeclaration-after-statement -Wsign-compare -Wstrict-prototypes -Wmissing-prototypes \
    -Wdouble-promotion -Wfloat-equal -Wmissing-include-dirs -Wshadow -Wundef \
    -Wunused-macros -Wcast-align -Wlogical-op -Wno-multichar -Wredundant-decls -Wnested-externs \
    -Wno-deprecated-declarations")
-set(CMAKE_CXX_FLAGS "-std=c++98 -Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized -Wsign-compare  \
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized -Wsign-compare  \
    -Wmissing-include-dirs -Wshadow -Wlogical-op -Wno-multichar -Wredundant-decls -Wno-deprecated-declarations")
 
 # link standard libraries statically (fully static only on Windows)

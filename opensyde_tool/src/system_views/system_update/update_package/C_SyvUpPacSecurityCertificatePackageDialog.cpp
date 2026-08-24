@@ -23,7 +23,7 @@
 #include "C_OscSecurityPem.hpp"
 #include "C_OscSecurityPemSecUpdate.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -130,17 +130,17 @@ QString C_SyvUpPacSecurityCertificatePackageDialog::GetPassword() const
 /*! \brief  Get pem files
 
    \return
-   std::vector<stw::scl::C_SclString>   returns vector of Pem Files
+   std::vector<std::string>   returns vector of Pem Files
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<stw::scl::C_SclString> C_SyvUpPacSecurityCertificatePackageDialog::GetPemFiles()
+std::vector<std::string> C_SyvUpPacSecurityCertificatePackageDialog::GetPemFiles()
 {
-   std::vector<stw::scl::C_SclString> c_PemFilePaths;
+   std::vector<std::string> c_PemFilePaths;
    QStringList c_PemFiles = this->mpc_Ui->pc_PEMFilesWidget->GetPemFilePaths();
 
    for (const QString & rc_FilePath : c_PemFiles)
    {
-      const stw::scl::C_SclString c_File(rc_FilePath.toStdString());
+      const std::string c_File(rc_FilePath.toStdString());
       c_PemFilePaths.push_back(c_File);
    }
 

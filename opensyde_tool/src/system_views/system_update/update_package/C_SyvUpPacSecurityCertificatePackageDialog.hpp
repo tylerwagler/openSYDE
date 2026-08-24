@@ -12,7 +12,7 @@
 #include <QVBoxLayout>
 #include "C_OgePopUpContentBase.hpp"
 #include "C_SyvUpPacPemFilesListWidget.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -39,7 +39,7 @@ public:
 
    QString GetPublicKeyPath(void) const;
    QString GetPassword(void) const;
-   std::vector<stw::scl::C_SclString> GetPemFiles(void);
+   std::vector<std::string> GetPemFiles(void);
    bool GetOptionAddPemFiles(void) const;
    bool GetOptionAddSecureAuthentication(void) const;
 

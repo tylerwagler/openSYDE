@@ -22,7 +22,7 @@
 
 #include "stwtypes.hpp"
 #include "C_CieExportDbc.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include <Vector/DBC.h>
 #include "C_CieConverter.hpp"
 #include "C_OscCanSignal.hpp"
@@ -57,9 +57,9 @@ const std::string C_CieExportDbc::mhc_MSG_SEND_TYPE = "GenMsgSendType";
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 stw::scl::C_SclStringList C_CieExportDbc::mhc_WarningMessages;         // global warnings e.g. why some messages could
                                                                        // not be exported
-stw::scl::C_SclString C_CieExportDbc::mhc_ErrorMessage;                // description of error which caused the export
+std::string C_CieExportDbc::mhc_ErrorMessage;                // description of error which caused the export
                                                                        // to fail
-std::map<C_SclString, C_SclString> C_CieExportDbc::mhc_NodeMapping;    // to receive niceified names after export to DBC
+std::map<std::string, std::string> C_CieExportDbc::mhc_NodeMapping;    // to receive niceified names after export to DBC
                                                                        // file
 bool C_CieExportDbc::mhq_ValidDbcExport = false;                       // for public getter functions
 C_CieExportDbc::C_ExportStatistic C_CieExportDbc::mhc_ExportStatistic; // for public getter function of export
@@ -95,13 +95,13 @@ C_CieExportDbc::C_ExportStatistic C_CieExportDbc::mhc_ExportStatistic; // for pu
    C_BUSY          error on writing to DBC file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CieExportDbc::h_ExportNetwork(const stw::scl::C_SclString & orc_File,
+int32_t C_CieExportDbc::h_ExportNetwork(const std::string & orc_File,
                                         const C_CieConverter::C_CieCommDefinition & orc_Definition,
                                         stw::scl::C_SclStringList & orc_WarningMessages,
-                                        stw::scl::C_SclString & orc_ErrorMessage)
+                                        std::string & orc_ErrorMessage)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_Message;
+   std::string c_Message;
 
    Vector::DBC::Network c_DbcNetwork;
 
@@ -218,7 +218,7 @@ int32_t C_CieExportDbc::h_ExportNetwork(const stw::scl::C_SclString & orc_File,
    C_NOACT      no valid export to DBC file executed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CieExportDbc::h_GetNodeMapping(std::map<C_SclString, C_SclString> & orc_NodeMapping)
+int32_t C_CieExportDbc::h_GetNodeMapping(std::map<std::string, std::string> & orc_NodeMapping)
 {
    int32_t s32_Return = C_NOACT;
 
@@ -282,8 +282,8 @@ int32_t C_CieExportDbc::mh_SetNodes(const std::vector<C_CieConverter::C_CieNode>
       {
          // key
          // the same content as value node name --> tested by example file (SLS AMG)
-         C_SclString c_Niceified = mh_NiceifyStringForDbcSymbol(c_Iter->c_Properties.c_Name);
-         mhc_NodeMapping.emplace(std::pair<C_SclString, C_SclString>(c_Iter->c_Properties.c_Name, c_Niceified));
+         std::string c_Niceified = mh_NiceifyStringForDbcSymbol(c_Iter->c_Properties.c_Name);
+         mhc_NodeMapping.emplace(std::pair<std::string, std::string>(c_Iter->c_Properties.c_Name, c_Niceified));
          std::string c_Name = mh_EscapeCriticalSymbols(c_Niceified).c_str();
 
          // value
@@ -319,12 +319,12 @@ int32_t C_CieExportDbc::mh_SetNodes(const std::vector<C_CieConverter::C_CieNode>
 int32_t C_CieExportDbc::mh_SetMessages(const std::vector<C_CieConverter::C_CieNode> & orc_CieNodes, std::map<uint32_t,
                                                                                                              Vector::DBC::Message> & orc_DbcMessages)
 {
-   C_SclString c_Message;
+   std::string c_Message;
 
    std::vector<C_CieConverter::C_CieNode>::const_iterator c_Iter;
    for (c_Iter = orc_CieNodes.begin(); c_Iter != orc_CieNodes.end(); ++c_Iter)
    {
-      const stw::scl::C_SclString c_NodeName = mh_NiceifyStringForDbcSymbol(c_Iter->c_Properties.c_Name);
+      const std::string c_NodeName = mh_NiceifyStringForDbcSymbol(c_Iter->c_Properties.c_Name);
 
       // get Tx messages of node
       std::vector<C_CieConverter::C_CieNodeMessage>::const_iterator c_MsgIter;
@@ -491,7 +491,7 @@ int32_t C_CieExportDbc::mh_SetSignals(const std::vector<C_CieConverter::C_CieCan
       tgl_assert(s32_Return == C_NO_ERR);
 
       // emit DBC value-table entries inline as VAL_ records (no VAL_TABLE_ deduplication)
-      for (std::map<int64_t, stw::scl::C_SclString>::const_iterator c_It = rc_CieSignal.c_ValueDescription.begin();
+      for (std::map<int64_t, std::string>::const_iterator c_It = rc_CieSignal.c_ValueDescription.begin();
            c_It != rc_CieSignal.c_ValueDescription.end(); ++c_It)
       {
          c_DbcSignal.valueDescriptions[c_It->first] = c_It->second.c_str();
@@ -511,14 +511,14 @@ int32_t C_CieExportDbc::mh_SetSignals(const std::vector<C_CieConverter::C_CieCan
                for (const auto & rc_Receiver : rc_Node.c_RxMessages)
                {
                   // if we have the same message, then check if message is receiver of signal
-                  if (rc_Receiver.c_CanMessage.c_Name.AnsiCompare(orc_DbcMessage.name.c_str()) == 0)
+                  if (rc_Receiver.c_CanMessage.c_Name == orc_DbcMessage.name.c_str())
                   {
                      const std::vector<C_CieConverter::C_CieCanSignal> & rc_Signals =
                         rc_Receiver.c_CanMessage.c_Signals;
                      for (const auto & rc_Signal : rc_Signals)
                      {
                         // check if node with Rx messages has signal
-                        if (rc_Signal.c_Element.c_Name.AnsiCompare(c_DbcSignal.name.c_str()) == 0)
+                        if (rc_Signal.c_Element.c_Name == c_DbcSignal.name.c_str())
                         {
                            // receiver for signal found -> add node as receiver if not already exists
                            c_DbcSignal.receivers.insert(c_NodeName);
@@ -688,7 +688,7 @@ int32_t C_CieExportDbc::mh_SetTransmission(const C_CieConverter::C_CieNodeMessag
                                            Vector::DBC::Message & orc_DbcMessage)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_Message = "Setting transmission mode of message \"" + orc_Message.c_CanMessage.c_Name + "\"...";
+   std::string c_Message = "Setting transmission mode of message \"" + orc_Message.c_CanMessage.c_Name + "\"...";
 
    osc_write_log_info("DBC file export", c_Message);
 
@@ -977,9 +977,9 @@ void C_CieExportDbc::mh_SetAttributeDefinitions(std::map<std::string,
    Niceified string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CieExportDbc::mh_NiceifyStringForDbcSymbol(const C_SclString & orc_String)
+std::string C_CieExportDbc::mh_NiceifyStringForDbcSymbol(const std::string & orc_String)
 {
-   C_SclString c_Result;
+   std::string c_Result;
 
    // first character must not contain a digit, in this case place '_' before digit.
    if (std::isdigit(orc_String.c_str()[0]) != 0)
@@ -988,12 +988,12 @@ C_SclString C_CieExportDbc::mh_NiceifyStringForDbcSymbol(const C_SclString & orc
       c_Result = '_';
    }
 
-   for (uint32_t u32_Index = 0U; u32_Index < orc_String.Length(); u32_Index++)
+   for (uint32_t u32_Index = 0U; u32_Index < orc_String.length(); u32_Index++)
    {
       const char_t cn_Character = orc_String.c_str()[u32_Index];
       if ((std::isalnum(cn_Character) == 0) && (cn_Character != '_'))
       {
-         c_Result += C_SclString::IntToStr(cn_Character);
+         c_Result += std::to_string(cn_Character);
       }
       else
       {
@@ -1017,11 +1017,11 @@ C_SclString C_CieExportDbc::mh_NiceifyStringForDbcSymbol(const C_SclString & orc
    Escaped string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CieExportDbc::mh_EscapeCriticalSymbols(const C_SclString & orc_String)
+std::string C_CieExportDbc::mh_EscapeCriticalSymbols(const std::string & orc_String)
 {
-   C_SclString c_Retval;
+   std::string c_Retval;
 
-   for (int32_t s32_Char = 0; s32_Char < static_cast<int32_t>(orc_String.Length()); ++s32_Char)
+   for (int32_t s32_Char = 0; s32_Char < static_cast<int32_t>(orc_String.length()); ++s32_Char)
    {
       const char_t cn_Char = orc_String[static_cast<uint32_t>(s32_Char + 1)];
       if (cn_Char == '\"')

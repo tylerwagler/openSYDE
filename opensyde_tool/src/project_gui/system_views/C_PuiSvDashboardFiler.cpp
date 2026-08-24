@@ -197,7 +197,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
    }
    if (orc_XmlParser.AttributeExists("tab-type"))
    {
-      const stw::scl::C_SclString c_TabTypeString = orc_XmlParser.GetAttributeString("tab-type");
+      const std::string c_TabTypeString = orc_XmlParser.GetAttributeString("tab-type");
       C_PuiSvDashboard::E_TabType e_TabType;
       if (C_PuiSvDashboardFiler::mh_StringToTabType(c_TabTypeString.c_str(), e_TabType) == C_NO_ERR)
       {
@@ -432,7 +432,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChart(C_PuiSvDbTabChart & orc_Widget, C
       s32_Retval = C_PuiSvDashboardFiler::mh_LoadWidgetBase(orc_Widget, orc_XmlParser);
       if (orc_XmlParser.SelectNodeChild("active-flags") == "active-flags")
       {
-         C_SclString c_CurrentWidgetNode2 = orc_XmlParser.SelectNodeChild("active-flag");
+         std::string c_CurrentWidgetNode2 = orc_XmlParser.SelectNodeChild("active-flag");
          if (c_CurrentWidgetNode2 == "active-flag")
          {
             do
@@ -465,7 +465,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChart(C_PuiSvDbTabChart & orc_Widget, C
 
       if (orc_XmlParser.SelectNodeChild("color-indexes") == "color-indexes")
       {
-         C_SclString c_CurrentWidgetNode2 = orc_XmlParser.SelectNodeChild("color-index");
+         std::string c_CurrentWidgetNode2 = orc_XmlParser.SelectNodeChild("color-index");
          if (c_CurrentWidgetNode2 == "color-index")
          {
             do
@@ -604,7 +604,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadLabels(std::vector<C_PuiSvDbLabel> & orc_W
    orc_Widgets.clear();
    if (orc_XmlParser.SelectNodeChild("labels") == "labels")
    {
-      C_SclString c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("label");
+      std::string c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("label");
       if (c_CurrentWidgetNode == "label")
       {
          do
@@ -671,7 +671,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParams(std::vector<C_PuiSvDbParam> & orc_W
    orc_Widgets.clear();
    if (orc_XmlParser.SelectNodeChild("params") == "params")
    {
-      C_SclString c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("param");
+      std::string c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("param");
       if (c_CurrentWidgetNode == "param")
       {
          do
@@ -733,7 +733,7 @@ void C_PuiSvDashboardFiler::mh_LoadParamExpandedItems(std::vector<C_PuiSvDbExpan
    orc_Items.clear();
    if (orc_XmlParser.SelectNodeChild("expanded-tree-items") == "expanded-tree-items")
    {
-      C_SclString c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("expanded-tree-item");
+      std::string c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("expanded-tree-item");
       if (c_CurrentWidgetNode == "expanded-tree-item")
       {
          do
@@ -774,7 +774,7 @@ void C_PuiSvDashboardFiler::mh_LoadParamColumnPositionIndices(std::vector<int32_
    orc_Items.clear();
    if (orc_XmlParser.SelectNodeChild("column-position-indices") == "column-position-indices")
    {
-      C_SclString c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("column-position-index");
+      std::string c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("column-position-index");
       if (c_CurrentWidgetNode == "column-position-index")
       {
          do
@@ -821,7 +821,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadPieCharts(std::vector<C_PuiSvDbPieChart> &
    orc_Widgets.clear();
    if (orc_XmlParser.SelectNodeChild("pie-charts") == "pie-charts")
    {
-      C_SclString c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("pie-chart");
+      std::string c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("pie-chart");
       if (c_CurrentWidgetNode == "pie-chart")
       {
          do
@@ -869,7 +869,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadSpinBoxes(std::vector<C_PuiSvDbSpinBox> & 
    orc_Widgets.clear();
    if (orc_XmlParser.SelectNodeChild("spin-boxes") == "spin-boxes")
    {
-      C_SclString c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("spin-box");
+      std::string c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("spin-box");
       if (c_CurrentWidgetNode == "spin-box")
       {
          do
@@ -938,7 +938,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTables(std::vector<C_PuiSvDbTable> & orc_W
    orc_Widgets.clear();
    if (orc_XmlParser.SelectNodeChild("tables") == "tables")
    {
-      C_SclString c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("table");
+      std::string c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("table");
       if (c_CurrentWidgetNode == "table")
       {
          do
@@ -949,7 +949,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTables(std::vector<C_PuiSvDbTable> & orc_W
             //Columns
             if (orc_XmlParser.SelectNodeChild("columns") == "columns")
             {
-               C_SclString c_CurrentColumnNode = orc_XmlParser.SelectNodeChild("column");
+               std::string c_CurrentColumnNode = orc_XmlParser.SelectNodeChild("column");
                if (c_CurrentColumnNode == "column")
                {
                   do
@@ -1012,7 +1012,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadSliders(std::vector<C_PuiSvDbSlider> & orc
    orc_Widgets.clear();
    if (orc_XmlParser.SelectNodeChild("sliders") == "sliders")
    {
-      C_SclString c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("slider");
+      std::string c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("slider");
       if (c_CurrentWidgetNode == "slider")
       {
          do
@@ -1082,7 +1082,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadProgressBars(std::vector<C_PuiSvDbProgress
    orc_Widgets.clear();
    if (orc_XmlParser.SelectNodeChild("progress-bars") == "progress-bars")
    {
-      C_SclString c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("progress-bar");
+      std::string c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("progress-bar");
       if (c_CurrentWidgetNode == "progress-bar")
       {
          do
@@ -1171,7 +1171,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadToggles(std::vector<C_PuiSvDbToggle> & orc
    orc_Widgets.clear();
    if (orc_XmlParser.SelectNodeChild("toggles") == "toggles")
    {
-      C_SclString c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("toggle");
+      std::string c_CurrentWidgetNode = orc_XmlParser.SelectNodeChild("toggle");
       if (c_CurrentWidgetNode == "toggle")
       {
          do
@@ -1249,7 +1249,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadWidgetBase(C_PuiSvDbWidgetBase & orc_Widge
       }
       if ((orc_XmlParser.SelectNodeChild("data-pool-elements") == "data-pool-elements") && (s32_Retval == C_NO_ERR))
       {
-         C_SclString c_CurrentDataPoolElementNode = orc_XmlParser.SelectNodeChild("data-pool-element");
+         std::string c_CurrentDataPoolElementNode = orc_XmlParser.SelectNodeChild("data-pool-element");
          if (c_CurrentDataPoolElementNode == "data-pool-element")
          {
             do
@@ -1513,7 +1513,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamDataSetIndices(std::vector<int32_t> &
    orc_Values.clear();
    if (orc_XmlParser.SelectNodeChild("data-set-selections") == "data-set-selections")
    {
-      C_SclString c_CurrentValueNode = orc_XmlParser.SelectNodeChild("data-set-selection");
+      std::string c_CurrentValueNode = orc_XmlParser.SelectNodeChild("data-set-selection");
       if (c_CurrentValueNode == "data-set-selection")
       {
          do
@@ -1563,7 +1563,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamValues(std::vector<C_OscNodeDataPoolC
    orc_Values.clear();
    if (orc_XmlParser.SelectNodeChild("values") == "values")
    {
-      C_SclString c_CurrentValueNode = orc_XmlParser.SelectNodeChild("value");
+      std::string c_CurrentValueNode = orc_XmlParser.SelectNodeChild("value");
       if (c_CurrentValueNode == "value")
       {
          do
@@ -1607,7 +1607,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamTables(std::vector<std::vector<int32_
    orc_Values.clear();
    if (orc_XmlParser.SelectNodeChild("tables") == "tables")
    {
-      C_SclString c_CurrentValueNode = orc_XmlParser.SelectNodeChild("table");
+      std::string c_CurrentValueNode = orc_XmlParser.SelectNodeChild("table");
       if (c_CurrentValueNode == "table")
       {
          do
@@ -1654,7 +1654,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamColumns(std::vector<int32_t> & orc_Va
    orc_Values.clear();
    if (orc_XmlParser.SelectNodeChild("columns") == "columns")
    {
-      C_SclString c_CurrentValueNode = orc_XmlParser.SelectNodeChild("column");
+      std::string c_CurrentValueNode = orc_XmlParser.SelectNodeChild("column");
       if (c_CurrentValueNode == "column")
       {
          do
@@ -1704,7 +1704,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChartScreenRegion(std::vector<std::arra
    orc_ScreenRegion.clear();
    if (orc_XmlParser.SelectNodeChild("screen-regions") == "screen-regions")
    {
-      C_SclString c_CurrentValueNode = orc_XmlParser.SelectNodeChild("screen-region");
+      std::string c_CurrentValueNode = orc_XmlParser.SelectNodeChild("screen-region");
       if (c_CurrentValueNode == "screen-region")
       {
          do

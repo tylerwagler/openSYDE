@@ -184,7 +184,7 @@ private:
    int32_t m_GetAllDatapoolMetadata(const uint32_t ou32_ActiveDiagNodeIndex, QString & orc_ErrorDetails);
    int32_t m_CheckOsyDatapoolsAndCreateMapping(const uint32_t ou32_ActiveDiagNodeIndex, QString & orc_ErrorDetails);
    int32_t m_GetReadDatapoolMetadata(const uint32_t ou32_ActiveDiagNodeIndex,
-                                     const stw::scl::C_SclString & orc_DatapoolName,
+                                     const std::string & orc_DatapoolName,
                                      uint32_t & oru32_ServerDatapoolIndex,
                                      stw::opensyde_core::C_OscProtocolDriverOsy::C_DataPoolMetaData & orc_Metadata)
    const;

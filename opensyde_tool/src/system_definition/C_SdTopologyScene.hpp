@@ -252,9 +252,9 @@ private:
    void m_InitNodeComIfSettings(stw::opensyde_core::C_OscNode & orc_OscNode, const QString & orc_NodeType,
                                 const QString & orc_MainDevice) const;
 
-   bool m_ActivateTspShortcut (const scl::C_SclString & orc_NodeName, const uint32_t & oru32_SubNodeIndex);
+   bool m_ActivateTspShortcut (const std::string & orc_NodeName, const uint32_t & oru32_SubNodeIndex);
    void m_AddTspForAllSubNodes(const uint32_t & oru32_SubDevicesSize, const uint32_t & oru32_OriginalOscNodeSize,
-                               const scl::C_SclString & orc_NodeName);
+                               const std::string & orc_NodeName);
    bool m_ShowShortcutTspOption(const QString & orc_NodeName, const uint32_t & oru32_OriginalOscNodeSize,
                                 const uint32_t & oru32_SubDevicesSize);
 

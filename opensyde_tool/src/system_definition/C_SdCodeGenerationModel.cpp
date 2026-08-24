@@ -105,8 +105,8 @@ int32_t C_SdCodeGenerationModel::Init(const std::vector<uint32_t> & orc_ElementI
             if (rc_Application.e_Type != C_OscNodeApplication::eBINARY)
             {
                C_TblTreeModelCheckableItem * const pc_ApplicationItem = new C_TblTreeModelCheckableItem();
-               const stw::scl::C_SclString c_Indentation = "\n   ";
-               stw::scl::C_SclString c_ToolTip;
+               const std::string c_Indentation = "\n   ";
+               std::string c_ToolTip;
                if (rc_Application.e_Type == C_OscNodeApplication::ePROGRAMMABLE_APPLICATION)
                {
                   if (rc_Node.c_Properties.q_XappSupport == true)
@@ -116,7 +116,7 @@ int32_t C_SdCodeGenerationModel::Init(const std::vector<uint32_t> & orc_ElementI
                   else
                   {
                      pc_ApplicationItem->c_Name = (rc_Application.c_Name + " (Source Code; Structure Version: " +
-                                                   rc_Application.u16_GenCodeVersion + ")").c_str();
+                                                   std::to_string(rc_Application.u16_GenCodeVersion) + ")").c_str();
                   }
                }
                else if (rc_Application.e_Type == C_OscNodeApplication::ePARAMETER_SET_HALC)

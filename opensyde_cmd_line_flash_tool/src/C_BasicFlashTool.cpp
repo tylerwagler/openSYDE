@@ -19,6 +19,7 @@
 #else
 #include <sys/select.h>
 #include <unistd.h>
+#include "C_SclStringCompat.hpp"
 
 // Linux equivalent of the Windows kbhit(): returns >0 if a byte is available on stdin.
 static int kbhit(void)
@@ -106,11 +107,11 @@ C_BasicFlashTool::~C_BasicFlashTool()
 //----------------------------------------------------------------------------------------------------------------------
 void C_BasicFlashTool::Init(const int32_t os32_Argc, char_t * const * const oppcn_Argv)
 {
-   C_SclString c_LogFile;
+   std::string c_LogFile;
    C_TglDateTime c_DateTime;
-   C_SclString c_ExeName;
-   const C_SclString c_ExeVersion = mh_GetApplicationVersion(TglGetExePath());
-   const C_SclString c_BinaryHash = C_OscUtilBinaryHash::h_CreateBinaryHash();
+   std::string c_ExeName;
+   const std::string c_ExeVersion = mh_GetApplicationVersion(TglGetExePath());
+   const std::string c_BinaryHash = C_OscUtilBinaryHash::h_CreateBinaryHash();
 #ifdef _WIN32
    {
       char_t acn_ApplicationName[MAX_PATH + 1];
@@ -131,13 +132,13 @@ void C_BasicFlashTool::Init(const int32_t os32_Argc, char_t * const * const oppc
    c_LogFile = C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime);
    // Convert  2023-08-28 09:47:50.459 to  2023-08-28_09-47-50
    // i.e. replace " " with "_", replace ":" with "-" and cut decimals (number of characters is always the same)
-   c_LogFile = c_LogFile.Insert("_", 11); // " "
-   c_LogFile = c_LogFile.Delete(12, 1);
-   c_LogFile = c_LogFile.Insert("-", 14); // first ":"
-   c_LogFile = c_LogFile.Delete(15, 1);
-   c_LogFile = c_LogFile.Insert("-", 17); //second ":"
-   c_LogFile = c_LogFile.Delete(18, 1);
-   c_LogFile = c_LogFile.Delete(20, 4); // remove ".123"
+   c_LogFile = InsertCompat(c_LogFile, "_", 11); // " "
+   c_LogFile = DeleteCompat(c_LogFile, 12, 1);
+   c_LogFile = InsertCompat(c_LogFile, "-", 14); // first ":"
+   c_LogFile = DeleteCompat(c_LogFile, 15, 1);
+   c_LogFile = InsertCompat(c_LogFile, "-", 17); //second ":"
+   c_LogFile = DeleteCompat(c_LogFile, 18, 1);
+   c_LogFile = DeleteCompat(c_LogFile, 20, 4); // remove ".123"
    c_LogFile = "./Logs/" + c_LogFile + ".syde_log";
 
    C_OscLoggingHandler::h_SetCompleteLogFileLocation(c_LogFile);
@@ -227,7 +228,7 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::ParseCommandLine(const int32_t os32
          case 'n':
             try
             {
-               mu8_NodeId = static_cast<uint8_t>(static_cast<C_SclString>(optarg).ToInt64());
+               mu8_NodeId = static_cast<uint8_t>(std::stoll(optarg));
             }
             catch (...)
             {
@@ -243,7 +244,7 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::ParseCommandLine(const int32_t os32
          case 'b':
             try
             {
-               ms32_CanBitrate = static_cast<C_SclString>(optarg).ToInt();
+               ms32_CanBitrate = std::stoi(optarg);
             }
             catch (...)
             {
@@ -259,7 +260,7 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::ParseCommandLine(const int32_t os32
          case 'w':
             try
             {
-               mu32_FlashloaderResetWaitTime = static_cast<C_SclString>(optarg).ToInt();
+               mu32_FlashloaderResetWaitTime = std::stoi(optarg);
             }
             catch (...)
             {
@@ -269,7 +270,7 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::ParseCommandLine(const int32_t os32
          case 'r':
             try
             {
-               mu32_RequestDownloadTimeout = static_cast<C_SclString>(optarg).ToInt();
+               mu32_RequestDownloadTimeout = std::stoi(optarg);
             }
             catch (...)
             {
@@ -279,7 +280,7 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::ParseCommandLine(const int32_t os32
          case 't':
             try
             {
-               mu32_TransferDataTimeout = static_cast<C_SclString>(optarg).ToInt();
+               mu32_TransferDataTimeout = std::stoi(optarg);
             }
             catch (...)
             {
@@ -310,19 +311,19 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::ParseCommandLine(const int32_t os32
    }
    else
    {
-      const C_SclString c_LogActivity = "Parameter Value";
-      const C_SclString c_ExitApplonError = (mq_ExitApplOnError == true) ? "yes" : "no";
-      const C_SclString c_StartAppl = (mq_StartAppl == true) ? "yes" : "no";
-      osc_write_log_info(c_LogActivity, "Node ID: " + C_SclString::IntToStr(mu8_NodeId));
+      const std::string c_LogActivity = "Parameter Value";
+      const std::string c_ExitApplonError = (mq_ExitApplOnError == true) ? "yes" : "no";
+      const std::string c_StartAppl = (mq_StartAppl == true) ? "yes" : "no";
+      osc_write_log_info(c_LogActivity, "Node ID: " + std::to_string(mu8_NodeId));
       osc_write_log_info(c_LogActivity, "HEX file path: " + mc_HexFilePath);
       osc_write_log_info(c_LogActivity, "CAN driver: " + mc_CanDriver);
-      osc_write_log_info(c_LogActivity, "Bitrate in kBit/s: " + C_SclString::IntToStr(ms32_CanBitrate));
+      osc_write_log_info(c_LogActivity, "Bitrate in kBit/s: " + std::to_string(ms32_CanBitrate));
       osc_write_log_info(c_LogActivity, "Flashloader reset wait time: " +
-                         C_SclString::IntToStr(mu32_FlashloaderResetWaitTime));
+                         std::to_string(mu32_FlashloaderResetWaitTime));
       osc_write_log_info(c_LogActivity, "Request download timeout: " +
-                         C_SclString::IntToStr(mu32_RequestDownloadTimeout));
+                         std::to_string(mu32_RequestDownloadTimeout));
       osc_write_log_info(c_LogActivity, "Transfer data timeout: " +
-                         C_SclString::IntToStr(mu32_TransferDataTimeout));
+                         std::to_string(mu32_TransferDataTimeout));
       osc_write_log_info(c_LogActivity, "Exit application on error: " + c_ExitApplonError);
       osc_write_log_info(c_LogActivity, "Start application: " + c_StartAppl);
    }
@@ -353,14 +354,14 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
    stw::opensyde_core::C_OscCanAdapterConfig c_Config =
       stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
 #ifndef _WIN32
-   if (mc_CanDriver.IsEmpty() == false)
+   if (mc_CanDriver.empty() == false)
    {
       c_Config.c_ChannelId = mc_CanDriver.c_str();
    }
 #endif
    c_Config.u32_BitrateBps = static_cast<uint32_t>(ms32_CanBitrate) * 1000U;
 
-   stw::scl::C_SclString c_Error;
+   std::string c_Error;
    stw::can::C_CanDispatcher * const pc_LocalDispatcher =
       stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
    if (pc_LocalDispatcher == NULL)
@@ -434,12 +435,12 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 
    if (e_Result == eRESULT_OK)
    {
-      std::cout << "\nUpdate of node with ID " << C_SclString::IntToStr(mu8_NodeId).c_str() << " successful! " <<
+      std::cout << "\nUpdate of node with ID " << std::to_string(mu8_NodeId).c_str() << " successful! " <<
          std::endl;
    }
    else
    {
-      std::cout << "\nError: Update of node with ID " << C_SclString::IntToStr(mu8_NodeId).c_str() <<
+      std::cout << "\nError: Update of node with ID " << std::to_string(mu8_NodeId).c_str() <<
          " failed! Result code: " << static_cast<int32_t>(e_Result) << ". See log file for details. " << std::endl;
 
       if (mq_ExitApplOnError == false)
@@ -464,9 +465,9 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
    string with version information ("V?.??r?" on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_BasicFlashTool::mh_GetApplicationVersion(const stw::scl::C_SclString & orc_FileName)
+std::string C_BasicFlashTool::mh_GetApplicationVersion(const std::string & orc_FileName)
 {
-   C_SclString c_Version = "V?.\?\?r?";
+   std::string c_Version = "V?.\?\?r?";
 
 #ifdef _WIN32
    VS_FIXEDFILEINFO * pc_Info;
@@ -485,7 +486,7 @@ C_SclString C_BasicFlashTool::mh_GetApplicationVersion(const stw::scl::C_SclStri
                             reinterpret_cast<PVOID *>(&pc_Info), //lint !e9176
                             &u32_ValSize) != FALSE)
          {
-            c_Version.PrintFormatted("V%lu.%02lur%lu", (pc_Info->dwFileVersionMS >> 16U),
+            c_Version = PrintFormattedCompat("V%lu.%02lur%lu", (pc_Info->dwFileVersionMS >> 16U),
                                      pc_Info->dwFileVersionMS & 0x0000FFFFUL,
                                      (pc_Info->dwFileVersionLS >> 16U));
          }

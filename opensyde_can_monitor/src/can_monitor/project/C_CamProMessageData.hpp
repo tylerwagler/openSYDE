@@ -16,7 +16,7 @@
 #include <QString>
 #include "stw_can.hpp"
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -32,13 +32,13 @@ class C_CamProMessageData
 public:
    C_CamProMessageData(void);
 
-   stw::scl::C_SclString c_DataBaseFilePath;
-   stw::scl::C_SclString c_Name;
+   std::string c_DataBaseFilePath;
+   std::string c_Name;
    bool q_ContainsValidHash;
    uint32_t u32_Hash;
    bool q_DoCyclicTrigger;
    uint32_t u32_CyclicTriggerTime;
-   stw::scl::C_SclString c_Key;
+   std::string c_Key;
    uint32_t u32_KeyPressOffset;
    bool q_IsExtended;
    bool q_IsRtr;

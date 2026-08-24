@@ -23,7 +23,7 @@
 
 #include <QThread>
 
-#include "C_SclString.hpp"
+#include <string>
 #include "TglUtils.hpp"
 #include "C_Uti.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -244,7 +244,7 @@ void C_SyvUpSequences::CloseDispatcher(void)
    C_TIMEOUT   could not create target directory
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvUpSequences::SyvUpCreateTemporaryFolder(const C_SclString & orc_TargetPath,
+int32_t C_SyvUpSequences::SyvUpCreateTemporaryFolder(const std::string & orc_TargetPath,
                                                      std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                                                      QString & orc_ErrorPath) const
 {
@@ -254,7 +254,7 @@ int32_t C_SyvUpSequences::SyvUpCreateTemporaryFolder(const C_SclString & orc_Tar
    if ((this->IsInitialized() == true) &&
        (pc_View != NULL))
    {
-      C_SclString c_ErrorPath;
+      std::string c_ErrorPath;
       s32_Return = C_OscSuSequences::h_CreateTemporaryFolder(
          C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().c_Nodes,
          this->mc_ActiveNodes,
@@ -891,14 +891,14 @@ int32_t C_SyvUpSequences::GetUpdateStates(std::vector<C_OscSuSequencesNodeUpdate
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SyvUpSequences::m_ReportProgress(const E_ProgressStep oe_Step, const int32_t os32_Result,
-                                        const uint8_t ou8_Progress, const C_SclString & orc_Information)
+                                        const uint8_t ou8_Progress, const std::string & orc_Information)
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    {
       c_Text =  ("Step: " + this->GetStepName(oe_Step)).toStdString().c_str();
-      c_Text += " Progress: " + C_SclString::IntToStr(ou8_Progress);
-      c_Text += " Result: " + C_SclString::IntToStr(os32_Result);
+      c_Text += " Progress: " + std::to_string(ou8_Progress);
+      c_Text += " Result: " + std::to_string(os32_Result);
       c_Text += " Info: " + orc_Information;
 
       mh_WriteLog(oe_Step, c_Text);
@@ -928,16 +928,16 @@ bool C_SyvUpSequences::m_ReportProgress(const E_ProgressStep oe_Step, const int3
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SyvUpSequences::m_ReportProgress(const E_ProgressStep oe_Step, const int32_t os32_Result,
                                         const uint8_t ou8_Progress, const C_OscProtocolDriverOsyNode & orc_Server,
-                                        const C_SclString & orc_Information)
+                                        const std::string & orc_Information)
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    {
       c_Text =  ("Step: " + this->GetStepName(oe_Step)).toStdString().c_str();
-      c_Text += " Progress: " + C_SclString::IntToStr(ou8_Progress);
-      c_Text += " Result: " + C_SclString::IntToStr(os32_Result);
-      c_Text += " Bus ID: " + C_SclString::IntToStr(orc_Server.u8_BusIdentifier);
-      c_Text += " Node ID: " + C_SclString::IntToStr(orc_Server.u8_NodeIdentifier);
+      c_Text += " Progress: " + std::to_string(ou8_Progress);
+      c_Text += " Result: " + std::to_string(os32_Result);
+      c_Text += " Bus ID: " + std::to_string(orc_Server.u8_BusIdentifier);
+      c_Text += " Node ID: " + std::to_string(orc_Server.u8_NodeIdentifier);
       c_Text += " Info: " + orc_Information;
 
       mh_WriteLog(oe_Step, c_Text);
@@ -1039,7 +1039,7 @@ void C_SyvUpSequences::m_ThreadFunc(void)
 //----------------------------------------------------------------------------------------------------------------------
 
 void C_SyvUpSequences::mh_WriteLog(const C_OscSuSequences::E_ProgressStep oe_Step,
-                                   const stw::scl::C_SclString & orc_Text)
+                                   const std::string & orc_Text)
 {
    // Decide if error or info
    switch (oe_Step) //lint !e788  //not all cases handled explicitly here

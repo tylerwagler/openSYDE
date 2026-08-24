@@ -27,7 +27,8 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "TglUtils.hpp"
-#include "C_SclString.hpp"
+#include <string>
+#include "C_SclStringCompat.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -562,7 +563,7 @@ void C_SyvDcWidget::m_CleanUpScan(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::m_ScanFinished(void)
 {
-   C_SclString c_NotTrimmedDevices = "Not trimmed device types: \n";
+   std::string c_NotTrimmedDevices = "Not trimmed device types: \n";
    bool q_NotTrimmedDevicesFound = false;
 
    //evaluate results
@@ -627,7 +628,7 @@ void C_SyvDcWidget::m_ScanFinished(void)
       const C_OscDcDeviceInformation & rc_Device1 = this->mc_FoundDevices[u32_ItDevice1];
 
       //trim & check
-      if (rc_Device1.c_DeviceName.Trim() != rc_Device1.c_DeviceName)
+      if (TrimCompat(rc_Device1.c_DeviceName) != rc_Device1.c_DeviceName)
       {
          //not trimmed string found
          q_NotTrimmedDevicesFound = true;
@@ -1486,7 +1487,7 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
       else
       {
          osc_write_log_error("Reset to flashloader",
-                             "Preparation for reset failed: " + C_SclString::IntToStr(s32_Return));
+                             "Preparation for reset failed: " + std::to_string(s32_Return));
       }
 
       if (s32_Return == C_NO_ERR)
@@ -1542,13 +1543,13 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
             // Error occurred
             this->mc_Timer.stop();
             osc_write_log_error("Reset to flashloader",
-                                "Reset to flashloader failed: " + C_SclString::IntToStr(s32_Return));
+                                "Reset to flashloader failed: " + std::to_string(s32_Return));
          }
       }
       else
       {
          osc_write_log_error("Reset to flashloader",
-                             "Start of sending flashloader requests failed: " + C_SclString::IntToStr(s32_Return));
+                             "Start of sending flashloader requests failed: " + std::to_string(s32_Return));
       }
    }
 }

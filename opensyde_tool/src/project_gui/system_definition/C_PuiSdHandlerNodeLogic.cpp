@@ -16,6 +16,7 @@
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
+#include "C_SclStringCompat.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 
@@ -98,9 +99,9 @@ void C_PuiSdHandlerNodeLogic::ApplyNameMaxCharLimit(const uint32_t ou32_NameMaxC
    false Already in use
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_PuiSdHandlerNodeLogic::CheckNodeNameAvailable(const C_SclString & orc_Name,
+bool C_PuiSdHandlerNodeLogic::CheckNodeNameAvailable(const std::string & orc_Name,
                                                      const uint32_t * const opu32_NodeIndexToSkip,
-                                                     std::vector<stw::scl::C_SclString> * const opc_ExistingNames) const
+                                                     std::vector<std::string> * const opc_ExistingNames) const
 {
    bool q_Retval = true;
 
@@ -116,9 +117,9 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeNameAvailable(const C_SclString & orc_Nam
       }
       if (q_Skip == false)
       {
-         const stw::scl::C_SclString c_CurName = C_PuiSdUtil::h_GetNodeBaseNameOrName(u32_ItNode).toStdString().c_str();
+         const std::string c_CurName = C_PuiSdUtil::h_GetNodeBaseNameOrName(u32_ItNode).toStdString().c_str();
          //Check conflict
-         if (c_CurName.LowerCase() == orc_Name.LowerCase())
+         if (LowerCaseCompat(c_CurName) == LowerCaseCompat(orc_Name))
          {
             q_Retval = false;
          }
@@ -586,9 +587,9 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeAndSort(C_OscNode & orc_OscNode, const 
 {
    const uint32_t u32_Index = mc_CoreDefinition.c_Nodes.size();
    //Extract device name if the device was already set
-   const C_SclString c_DeviceName = (orc_OscNode.pc_DeviceDefinition !=
+   const std::string c_DeviceName = (orc_OscNode.pc_DeviceDefinition !=
                                      NULL) ? orc_OscNode.pc_DeviceDefinition->GetDisplayName() : "";
-   const C_SclString c_DefaultDeviceName =
+   const std::string c_DefaultDeviceName =
       C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName.c_str()).toStdString().c_str();
 
    orc_OscNode.c_Properties.c_Name = C_OscUtils::h_GetUniqueName(
@@ -633,8 +634,8 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
    const uint32_t u32_NodeIndex = mc_CoreDefinition.c_Nodes.size();
    const uint32_t u32_NodeSquadIndex = mc_CoreDefinition.c_NodeSquads.size();
 
-   std::vector<stw::scl::C_SclString> c_NodeNames;
-   C_SclString c_Name;
+   std::vector<std::string> c_NodeNames;
+   std::string c_Name;
    uint32_t u32_NodeCounter;
 
    c_NodeNames.reserve(orc_NodeNames.size());
@@ -651,9 +652,9 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
       // The device name of the first node is enough. Must be identical on all sub nodes
       C_OscNode & rc_OscNode = orc_OscNodes[0];
       //Extract device name if the device was already set
-      const C_SclString c_DeviceName = (rc_OscNode.pc_DeviceDefinition !=
+      const std::string c_DeviceName = (rc_OscNode.pc_DeviceDefinition !=
                                         NULL) ? rc_OscNode.pc_DeviceDefinition->GetDisplayName() : "";
-      const C_SclString c_DefaultDeviceName =
+      const std::string c_DefaultDeviceName =
          C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName.c_str()).toStdString().c_str();
       c_Name = orc_NameProposal.isEmpty() ? c_DefaultDeviceName : orc_NameProposal.toStdString().c_str();
 
@@ -1011,7 +1012,7 @@ bool C_PuiSdHandlerNodeLogic::NodeSupportsCanFd(const std::vector<uint32_t> & or
             {
                const C_OscNodeComInterfaceSettings & rc_CurInterface =
                   pc_Node->c_Properties.c_ComInterfaces[orc_InterfaceIndexes[u32_NodeCounter]];
-               const stw::scl::C_SclString c_InterfaceNameLower = C_OscSubDeviceDefinition::h_GetInterfaceNameLower(
+               const std::string c_InterfaceNameLower = C_OscSubDeviceDefinition::h_GetInterfaceNameLower(
                   rc_CurInterface.e_InterfaceType, rc_CurInterface.u8_InterfaceNumber);
                for (uint32_t u32_ItFeature = 0UL;
                     u32_ItFeature < pc_Node->pc_DeviceDefinition->c_SupportedCanFeatures.size();
@@ -1177,7 +1178,7 @@ const
          const C_OscNode & rc_CurNode = this->mc_CoreDefinition.c_Nodes[u32_ItNodeRef];
          if (u32_ItNode != u32_ItNodeRef)
          {
-            if (rc_CheckedNode.c_Properties.c_Name.LowerCase() == rc_CurNode.c_Properties.c_Name.LowerCase())
+            if (LowerCaseCompat(rc_CheckedNode.c_Properties.c_Name) == LowerCaseCompat(rc_CurNode.c_Properties.c_Name))
             {
                q_ErrorDetected = true;
                break;
@@ -1205,7 +1206,7 @@ const
             const C_OscNodeDataPool & rc_CurDatapool = rc_CheckedNode.c_DataPools[u32_ItDatapoolRef];
             if (u32_ItDatapool != u32_ItDatapoolRef)
             {
-               if (rc_CheckedDatapool.c_Name.LowerCase() == rc_CurDatapool.c_Name.LowerCase())
+               if (LowerCaseCompat(rc_CheckedDatapool.c_Name) == LowerCaseCompat(rc_CurDatapool.c_Name))
                {
                   q_ErrorDetected = true;
                   break;
@@ -1236,7 +1237,7 @@ const
          const C_OscSystemBus & rc_CurBus = this->mc_CoreDefinition.c_Buses[u32_ItBusRef];
          if (u32_ItBus != u32_ItBusRef)
          {
-            if (rc_CheckedBus.c_Name.LowerCase() == rc_CurBus.c_Name.LowerCase())
+            if (LowerCaseCompat(rc_CheckedBus.c_Name) == LowerCaseCompat(rc_CurBus.c_Name))
             {
                q_ErrorDetected = true;
                break;
@@ -1919,8 +1920,8 @@ int32_t C_PuiSdHandlerNodeLogic::GetDataPool(const uint32_t & oru32_NodeIndex, c
    Unique data pool name based on proposal
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_PuiSdHandlerNodeLogic::GetUniqueDataPoolName(const uint32_t & oru32_NodeIndex,
-                                                           const C_SclString & orc_Proposal) const
+std::string C_PuiSdHandlerNodeLogic::GetUniqueDataPoolName(const uint32_t & oru32_NodeIndex,
+                                                           const std::string & orc_Proposal) const
 {
    return C_OscUtils::h_GetUniqueName(this->m_GetExistingNodeDataPoolNames(
                                          oru32_NodeIndex), orc_Proposal, this->GetNameMaxCharLimit());
@@ -2173,9 +2174,9 @@ int32_t C_PuiSdHandlerNodeLogic::GetDataPoolCount(const uint32_t ou32_NodeIndex,
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_PuiSdHandlerNodeLogic::CheckNodeDataPoolNameAvailable(const uint32_t & oru32_NodeIndex,
-                                                             const C_SclString & orc_Name,
+                                                             const std::string & orc_Name,
                                                              const uint32_t * const opu32_DataPoolIndexToSkip,
-                                                             std::vector<C_SclString> * const opc_ExistingDatapoolNames)
+                                                             std::vector<std::string> * const opc_ExistingDatapoolNames)
 const
 {
    bool q_Retval = true;
@@ -2200,7 +2201,7 @@ const
          if (q_Skip == false)
          {
             const C_OscNodeDataPool & rc_DataPool = rc_Node.c_DataPools[u32_ItDataPool];
-            if (rc_DataPool.c_Name.LowerCase() == orc_Name.LowerCase())
+            if (LowerCaseCompat(rc_DataPool.c_Name) == LowerCaseCompat(orc_Name))
             {
                q_Retval = false;
             }
@@ -2684,8 +2685,8 @@ int32_t C_PuiSdHandlerNodeLogic::MoveApplication(const uint32_t ou32_NodeIndex, 
    Unique application name based on proposal
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_PuiSdHandlerNodeLogic::GetUniqueApplicationName(const uint32_t & oru32_NodeIndex,
-                                                              const C_SclString & orc_Proposal) const
+std::string C_PuiSdHandlerNodeLogic::GetUniqueApplicationName(const uint32_t & oru32_NodeIndex,
+                                                              const std::string & orc_Proposal) const
 {
    return C_OscUtils::h_GetUniqueName(this->m_GetExistingNodeApplicationNames(
                                          oru32_NodeIndex), orc_Proposal, this->GetNameMaxCharLimit());
@@ -2832,7 +2833,7 @@ int32_t C_PuiSdHandlerNodeLogic::GetNextProgrammableApplicationIndex(const uint3
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerNodeLogic::CheckApplicationName(const uint32_t ou32_NodeIndex,
-                                                      const C_SclString & orc_ApplicationName, bool & orq_Valid,
+                                                      const std::string & orc_ApplicationName, bool & orq_Valid,
                                                       const uint32_t * const opu32_SkipApplication) const
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -4274,7 +4275,7 @@ int32_t C_PuiSdHandlerNodeLogic::MoveDataPoolList(const uint32_t & oru32_NodeInd
 //----------------------------------------------------------------------------------------------------------------------
 bool C_PuiSdHandlerNodeLogic::CheckNodeDataPoolListNameAvailable(const uint32_t & oru32_NodeIndex,
                                                                  const uint32_t & oru32_DataPoolIndex,
-                                                                 const C_SclString & orc_Name,
+                                                                 const std::string & orc_Name,
                                                                  const uint32_t * const opu32_DataPoolListIndexToSkip)
 const
 {
@@ -4297,7 +4298,7 @@ const
          if (q_Skip == false)
          {
             const C_OscNodeDataPoolList & rc_List = pc_DataPool->c_Lists[u32_ItList];
-            if (rc_List.c_Name.LowerCase() == orc_Name.LowerCase())
+            if (LowerCaseCompat(rc_List.c_Name) == LowerCaseCompat(orc_Name))
             {
                q_Retval = false;
             }
@@ -4326,7 +4327,7 @@ const
 bool C_PuiSdHandlerNodeLogic::CheckNodeDataPoolListDataSetNameAvailable(const uint32_t & oru32_NodeIndex,
                                                                         const uint32_t & oru32_DataPoolIndex,
                                                                         const uint32_t & oru32_ListIndex,
-                                                                        const C_SclString & orc_Name,
+                                                                        const std::string & orc_Name,
                                                                         const uint32_t * const opu32_DataPoolListDataSetIndexToSkip)
 const
 {
@@ -4350,7 +4351,7 @@ const
          if (q_Skip == false)
          {
             const C_OscNodeDataPoolDataSet & rc_DataSet = pc_DataPoolList->c_DataSets[u32_ItDataSet];
-            if (rc_DataSet.c_Name.LowerCase() == orc_Name.LowerCase())
+            if (LowerCaseCompat(rc_DataSet.c_Name) == LowerCaseCompat(orc_Name))
             {
                q_Retval = false;
             }
@@ -5705,7 +5706,7 @@ int32_t C_PuiSdHandlerNodeLogic::MoveDataPoolListElement(const uint32_t & oru32_
 bool C_PuiSdHandlerNodeLogic::CheckNodeDataPoolListElementNameAvailable(const uint32_t & oru32_NodeIndex,
                                                                         const uint32_t & oru32_DataPoolIndex,
                                                                         const uint32_t & oru32_ListIndex,
-                                                                        const C_SclString & orc_Name,
+                                                                        const std::string & orc_Name,
                                                                         const uint32_t * const opu32_DataPoolListElementIndexToSkip)
 const
 {
@@ -5729,7 +5730,7 @@ const
          if (q_Skip == false)
          {
             const C_OscNodeDataPoolListElement & rc_Element = pc_DataPoolList->c_Elements[u32_ItElement];
-            if (rc_Element.c_Name.LowerCase() == orc_Name.LowerCase())
+            if (LowerCaseCompat(rc_Element.c_Name) == LowerCaseCompat(orc_Name))
             {
                q_Retval = false;
             }
@@ -5771,9 +5772,9 @@ C_PuiSdHandlerNodeLogic::C_PuiSdHandlerNodeLogic(QObject * const opc_Parent) :
    Vector of pointers to all currently registered node names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_SclString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeNames(void) const
+std::map<std::string, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeNames(void) const
 {
-   std::map<C_SclString, bool> c_Retval;
+   std::map<std::string, bool> c_Retval;
    for (uint32_t u32_ItNode = 0; u32_ItNode < this->mc_CoreDefinition.c_Nodes.size(); ++u32_ItNode)
    {
       uint32_t u32_GroupIndex;
@@ -5783,14 +5784,14 @@ std::map<C_SclString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeNames(void
          tgl_assert(u32_GroupIndex < this->mc_CoreDefinition.c_NodeSquads.size());
          if (u32_GroupIndex < this->mc_CoreDefinition.c_NodeSquads.size())
          {
-            const C_SclString & rc_CurrentName = this->mc_CoreDefinition.c_NodeSquads[u32_GroupIndex].c_BaseName;
+            const std::string & rc_CurrentName = this->mc_CoreDefinition.c_NodeSquads[u32_GroupIndex].c_BaseName;
             c_Retval[rc_CurrentName] = true;
          }
       }
       else
       {
          // Normal node
-         const C_SclString & rc_CurrentName = this->mc_CoreDefinition.c_Nodes[u32_ItNode].c_Properties.c_Name;
+         const std::string & rc_CurrentName = this->mc_CoreDefinition.c_Nodes[u32_ItNode].c_Properties.c_Name;
          c_Retval[rc_CurrentName] = true;
       }
    }
@@ -5806,10 +5807,10 @@ std::map<C_SclString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeNames(void
    Vector of pointers to all currently registered node application names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_SclString,
+std::map<std::string,
          bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeApplicationNames(const uint32_t & oru32_NodeIndex) const
 {
-   std::map<C_SclString, bool> c_Retval;
+   std::map<std::string, bool> c_Retval;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(oru32_NodeIndex);
    if (pc_Node != NULL)
    {
@@ -5830,10 +5831,10 @@ std::map<C_SclString,
    Vector of pointers to all currently registered data pool names contained in the specified node
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_SclString,
+std::map<std::string,
          bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolNames(const uint32_t & oru32_NodeIndex) const
 {
-   std::map<C_SclString, bool> c_Retval;
+   std::map<std::string, bool> c_Retval;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(oru32_NodeIndex);
    if (pc_Node != NULL)
    {
@@ -5855,11 +5856,11 @@ std::map<C_SclString,
    Vector of pointers to all currently registered list names contained in the specified node data pool
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_SclString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListNames(
+std::map<std::string, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListNames(
    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex)
 const
 {
-   std::map<C_SclString, bool> c_Retval;
+   std::map<std::string, bool> c_Retval;
    const C_OscNodeDataPool * const pc_NodeDataPool = this->GetOscDataPool(oru32_NodeIndex, oru32_DataPoolIndex);
    if (pc_NodeDataPool != NULL)
    {
@@ -5882,11 +5883,11 @@ const
    Vector of pointers to all currently registered data set names contained in the specified node data pool list
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_SclString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListDataSetNames(
+std::map<std::string, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListDataSetNames(
    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex)
 const
 {
-   std::map<C_SclString, bool> c_Retval;
+   std::map<std::string, bool> c_Retval;
    const C_OscNodeDataPoolList * const pc_NodeDataPoolList = this->GetOscDataPoolList(oru32_NodeIndex,
                                                                                       oru32_DataPoolIndex,
                                                                                       oru32_DataPoolListIndex);
@@ -5912,11 +5913,11 @@ const
    Vector of pointers to all currently registered variable names contained in the specified node data pool list
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_SclString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListVariableNames(
+std::map<std::string, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListVariableNames(
    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex)
 const
 {
-   std::map<C_SclString, bool> c_Retval;
+   std::map<std::string, bool> c_Retval;
    const C_OscNodeDataPoolList * const pc_NodeDataPoolList = this->GetOscDataPoolList(oru32_NodeIndex,
                                                                                       oru32_DataPoolIndex,
                                                                                       oru32_DataPoolListIndex);

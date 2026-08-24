@@ -216,7 +216,7 @@ public:
                                                                                       bool> & orc_Interfaces,
                                          const std::map<uint8_t, bool> & orc_Devices, const std::map<std::pair<uint8_t,
                                                                                                                std::pair<uint8_t,
-                                                                                                                         stw::scl::C_SclString> >,
+                                                                                                                         std::string> >,
                                                                                                      bool> & orc_Device);
    void SetProjSdNodeCanOpenSelectedUseCaseOrInterface(const QString & orc_NodeName,
                                                        const bool & orq_IsUseCaseSelected);

@@ -10,7 +10,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "TglUtils.hpp"
+#include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "TglUtils.hpp"
 #include "constants.hpp"
@@ -23,6 +24,7 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
+using namespace stw::scl;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
@@ -541,7 +543,7 @@ void C_SyvUpNodePropertiesDialog::mh_ExtractOpenSydeDeviceInformation(const C_Gi
       const C_OscProtocolDriverOsy::C_FlashBlockInfo & rc_OsyDeviceInfo =
          c_DeviceInfo.pc_OpenSydeDevice->c_Applications[u32_ItOsyApplication];
       //Search for name match
-      if (orc_FileProjectName.trimmed().compare(rc_OsyDeviceInfo.c_ApplicationName.Trim().c_str()) == 0)
+      if (orc_FileProjectName.trimmed().compare(TrimCompat(rc_OsyDeviceInfo.c_ApplicationName).c_str()) == 0)
       {
          //Signal found
          orq_MissingStatus = false;
@@ -846,14 +848,14 @@ void C_SyvUpNodePropertiesDialog::mh_InitFlashloaderTableForNode(const C_GiSvSub
    {
       C_OscSuSequences::h_OpenSydeFlashloaderInformationToText(*c_DeviceInfo.pc_OpenSydeDevice, c_List);
    }
-   if (c_List.Strings.GetLength() > 1)
+   if (c_List.Strings.size() > 1)
    {
       c_NewContent +=
          static_cast<QString>("Note: Flashloader data is read during \"Enter Update Mode\"");
       c_NewContent += "<p>";
-      for (int32_t s32_ItString = 0; s32_ItString < c_List.Strings.GetLength(); ++s32_ItString)
+      for (uint32_t u32_ItString = 0UL; u32_ItString < c_List.Strings.size(); ++u32_ItString)
       {
-         c_NewContent += static_cast<QString>(c_List.Strings[s32_ItString].c_str()) + "<br/>";
+         c_NewContent += static_cast<QString>(c_List.Strings[u32_ItString].c_str()) + "<br/>";
       }
       c_NewContent += "</p>";
    }

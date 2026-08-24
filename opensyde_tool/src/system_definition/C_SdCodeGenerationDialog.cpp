@@ -12,7 +12,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_Uti.hpp"
 #include "C_SdCodeGenerationDialog.hpp"
 #include "ui_C_SdCodeGenerationDialog.h"

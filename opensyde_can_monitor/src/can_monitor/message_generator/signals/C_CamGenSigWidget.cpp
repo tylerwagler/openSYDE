@@ -168,7 +168,7 @@ void C_CamGenSigWidget::UpdateSelection(const uint32_t ou32_NumSelectedItems, co
          const C_CamProMessageData & rc_Message = C_CamProHandler::h_GetInstance()->GetMessages()[ou32_Row];
          c_Name = C_CamProHandler::h_GetCompleteMessageName(rc_Message);
          //Either DBC or OSY message should return a valid message
-         if (rc_Message.c_DataBaseFilePath.IsEmpty() == false)
+         if (rc_Message.c_DataBaseFilePath.empty() == false)
          {
             if (((C_CamDbHandler::h_GetInstance()->GetOscMessage(rc_Message.c_DataBaseFilePath.c_str(),
                                                                  rc_Message.c_Name.c_str(),

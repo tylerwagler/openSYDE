@@ -12,8 +12,12 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <sstream>
+#include <iomanip>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_SclStringCompat.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_CamProHandlerFiler.hpp"
 #include "can/i_can_backend.h"
@@ -33,6 +37,16 @@ using namespace stw::opensyde_gui_logic;
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+
+/* -- Helper Functions ---------------------------------------------------------------------------------------------- */
+namespace {
+   template <typename T>
+   std::string mh_IntToHex(T val, uint32_t digits) {
+      std::stringstream ss;
+      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
+      return ss.str();
+   }
+}
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
@@ -163,14 +177,14 @@ void C_CamProHandlerFiler::h_SaveMessage(const C_CamProMessageData & orc_Message
      orc_XmlParser.SetAttributeUint32("uds-did", orc_Message.u16_UdsDid);
      if (orc_Message.c_UdsData.size() > 0UL)
      {
-        C_SclString c_Data;
+        std::string c_Data;
         for (uint32_t u32_It = 0U; u32_It < orc_Message.c_UdsData.size(); ++u32_It)
         {
            if (u32_It > 0U)
            {
               c_Data += " ";
            }
-           c_Data += C_SclString::IntToHex(orc_Message.c_UdsData[u32_It], 2);
+           c_Data += mh_IntToHex(orc_Message.c_UdsData[u32_It], 2);
         }
         orc_XmlParser.SetAttributeString("uds-data", c_Data);
      }
@@ -194,7 +208,7 @@ int32_t C_CamProHandlerFiler::h_LoadMessages(std::vector<C_CamProMessageData> & 
                                              C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_CurrentDataPoolNode;
+   std::string c_CurrentDataPoolNode;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -227,8 +241,8 @@ int32_t C_CamProHandlerFiler::h_LoadMessages(std::vector<C_CamProMessageData> & 
    {
       if (u32_ExpectedSize != orc_Messages.size())
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected messages count, expected: %u, got %zu", u32_ExpectedSize,
+         std::string c_Tmp;
+         c_Tmp = PrintFormattedCompat("Unexpected messages count, expected: %u, got %zu", u32_ExpectedSize,
                               orc_Messages.size());
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
@@ -412,26 +426,26 @@ int32_t C_CamProHandlerFiler::h_LoadMessage(C_CamProMessageData & orc_Message, C
     }
     if (orc_XmlParser.AttributeExists("uds-data") == true)
     {
-       const C_SclString c_Data = orc_XmlParser.GetAttributeString("uds-data");
+       const std::string c_Data = orc_XmlParser.GetAttributeString("uds-data");
        orc_Message.c_UdsData.clear();
-       C_SclString c_Remaining = c_Data;
-       while (c_Remaining.Length() > 0)
+       std::string c_Remaining = c_Data;
+       while (c_Remaining.length() > 0)
        {
-          const int32_t s32_Space = c_Remaining.Pos(" ");
-          C_SclString c_Token;
+          const int32_t s32_Space = PosCompat(c_Remaining, " ");
+          std::string c_Token;
           if (s32_Space > 0)
           {
-             c_Token = c_Remaining.SubString(1, s32_Space - 1);
-             c_Remaining = c_Remaining.SubString(s32_Space + 1, c_Remaining.Length() - s32_Space);
+             c_Token = SubStringCompat(c_Remaining, 1, s32_Space - 1);
+             c_Remaining = SubStringCompat(c_Remaining, s32_Space + 1, c_Remaining.length() - s32_Space);
           }
           else
           {
              c_Token = c_Remaining;
              c_Remaining = "";
           }
-          if (c_Token.Length() > 0)
+          if (c_Token.length() > 0)
           {
-             orc_Message.c_UdsData.push_back(static_cast<uint8_t>(c_Token.ToInt()));
+             orc_Message.c_UdsData.push_back(static_cast<uint8_t>(std::stoi(c_Token)));
           }
        }
     }
@@ -532,7 +546,7 @@ int32_t C_CamProHandlerFiler::h_LoadSettings(C_CamProHandler & orc_Handler, C_Os
          stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
       if (orc_XmlParser.AttributeExists("backend") == true)
       {
-         const stw::scl::C_SclString c_Name = orc_XmlParser.GetAttributeString("backend");
+         const std::string c_Name = orc_XmlParser.GetAttributeString("backend");
          if (c_Name == "SocketCAN")      { c_Cfg.e_BackendKind = ::can::BackendKind::SocketCan; }
          else if (c_Name == "PCANBasic") { c_Cfg.e_BackendKind = ::can::BackendKind::PcanBasic; }
          else if (c_Name == "Kvaser")    { c_Cfg.e_BackendKind = ::can::BackendKind::Kvaser; }
@@ -702,7 +716,7 @@ int32_t C_CamProHandlerFiler::h_LoadFilters(std::vector<C_CamProFilterData> & or
                                             C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_CurrentFilter;
+   std::string c_CurrentFilter;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -736,8 +750,8 @@ int32_t C_CamProHandlerFiler::h_LoadFilters(std::vector<C_CamProFilterData> & or
    {
       if (u32_ExpectedSize != orc_Filters.size())
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected filters count, expected: %u, got %zu", u32_ExpectedSize,
+         std::string c_Tmp;
+         c_Tmp = PrintFormattedCompat("Unexpected filters count, expected: %u, got %zu", u32_ExpectedSize,
                               orc_Filters.size());
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
@@ -759,7 +773,7 @@ int32_t C_CamProHandlerFiler::h_LoadFilters(std::vector<C_CamProFilterData> & or
 int32_t C_CamProHandlerFiler::h_LoadFilter(C_CamProFilterData & orc_Filter, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_CurrentFilter;
+   std::string c_CurrentFilter;
    uint32_t u32_ExpectedSize = 0UL;
    bool q_ExpectedSizeHere = false;
 
@@ -832,8 +846,8 @@ int32_t C_CamProHandlerFiler::h_LoadFilter(C_CamProFilterData & orc_Filter, C_Os
    {
       if (u32_ExpectedSize != static_cast<uint32_t>(orc_Filter.c_FilterItems.size()))
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected filter items count, expected: %u, got %i", u32_ExpectedSize,
+         std::string c_Tmp;
+         c_Tmp = PrintFormattedCompat("Unexpected filter items count, expected: %u, got %i", u32_ExpectedSize,
                               static_cast<int32_t>(orc_Filter.c_FilterItems.size()));
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
@@ -965,7 +979,7 @@ int32_t C_CamProHandlerFiler::h_LoadDatabases(std::vector<C_CamProDatabaseData> 
                                               C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_CurrentDatabase;
+   std::string c_CurrentDatabase;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -999,8 +1013,8 @@ int32_t C_CamProHandlerFiler::h_LoadDatabases(std::vector<C_CamProDatabaseData> 
    {
       if (u32_ExpectedSize != orc_Databases.size())
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected databases count, expected: %u, got %zu", u32_ExpectedSize,
+         std::string c_Tmp;
+         c_Tmp = PrintFormattedCompat("Unexpected databases count, expected: %u, got %zu", u32_ExpectedSize,
                               orc_Databases.size());
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }

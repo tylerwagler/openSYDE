@@ -19,7 +19,7 @@
 #include "C_OscUtils.hpp"
 #include "C_OscProjectFiler.hpp"
 #include "C_OscProject.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -45,8 +45,8 @@ class C_XconfigGenExport :
 protected:
    virtual E_ResultCode m_CreateApplicationCode(const C_OscNode & orc_Node,
                                                 const C_OscSystemDefinition & orc_SystemDefinition,
-                                                const C_SclString & orc_OutputPath,
-                                                std::vector<C_SclString> & orc_CreatedFiles);
+                                                const std::string & orc_OutputPath,
+                                                std::vector<std::string> & orc_CreatedFiles);
    virtual void m_PrintBanner(void);
 
 public:
@@ -74,8 +74,8 @@ public:
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_XconfigGenExportBase::E_ResultCode C_XconfigGenExport::m_CreateApplicationCode(const C_OscNode & orc_Node,
-                                                                                 const C_OscSystemDefinition & orc_SystemDefinition, const C_SclString & orc_OutputPath,
-                                                                                 std::vector<C_SclString> & orc_CreatedFiles)
+                                                                                 const C_OscSystemDefinition & orc_SystemDefinition, const std::string & orc_OutputPath,
+                                                                                 std::vector<std::string> & orc_CreatedFiles)
 {
    int32_t s32_Return;
 
@@ -89,8 +89,8 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExport::m_CreateApplicationCode
    {
       C_OscXcoManifest c_Manifest;
       C_SclStringList c_Warnings;
-      C_SclString c_Error;
-      const C_SclString c_Path = TglFileIncludeTrailingDelimiter(orc_OutputPath) + "x_app.syde_xcfg";
+      std::string c_Error;
+      const std::string c_Path = TglFileIncludeTrailingDelimiter(orc_OutputPath) + "x_app.syde_xcfg";
 
       c_Manifest.c_NodeName = orc_Node.c_Properties.c_Name;
       s32_Return =

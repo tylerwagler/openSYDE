@@ -160,7 +160,7 @@ void C_RtfExportWidget::InitStaticNames(void) const
    C_CHECKSUM  file name invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_RtfExportWidget::GetRtfPath(C_SclString & orc_RtfPath) const
+int32_t C_RtfExportWidget::GetRtfPath(std::string & orc_RtfPath) const
 {
    int32_t s32_Return = C_CONFIG;
 
@@ -215,7 +215,7 @@ int32_t C_RtfExportWidget::GetRtfPath(C_SclString & orc_RtfPath) const
    C_NO_ERR    in any case (all signs are allowed)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_RtfExportWidget::GetCompanyName(C_SclString & orc_CompanyName) const
+int32_t C_RtfExportWidget::GetCompanyName(std::string & orc_CompanyName) const
 {
    // get company name of widget Ui
    orc_CompanyName = this->mpc_Ui->pc_EditCompany->text().toStdString().c_str();
@@ -234,7 +234,7 @@ int32_t C_RtfExportWidget::GetCompanyName(C_SclString & orc_CompanyName) const
    C_NOACT     invalid file format (not .jpg or .png)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_RtfExportWidget::GetCompanyLogoPath(C_SclString & orc_CompanyLogoPath) const
+int32_t C_RtfExportWidget::GetCompanyLogoPath(std::string & orc_CompanyLogoPath) const
 {
    int32_t s32_Return = C_CONFIG;
 
@@ -286,7 +286,7 @@ int32_t C_RtfExportWidget::GetCompanyLogoPath(C_SclString & orc_CompanyLogoPath)
    \param[in]     orc_RtfPath    input parameter description
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_RtfExportWidget::SetRtfPath(const C_SclString & orc_RtfPath) const
+void C_RtfExportWidget::SetRtfPath(const std::string & orc_RtfPath) const
 {
    this->mpc_Ui->pc_EditRtfPath->SetPath(orc_RtfPath.c_str(), C_PuiProject::h_GetInstance()->GetFolderPath());
 }
@@ -297,7 +297,7 @@ void C_RtfExportWidget::SetRtfPath(const C_SclString & orc_RtfPath) const
    \param[in]     orc_CompanyName    input parameter description
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_RtfExportWidget::SetCompanyName(const C_SclString & orc_CompanyName) const
+void C_RtfExportWidget::SetCompanyName(const std::string & orc_CompanyName) const
 {
    this->mpc_Ui->pc_EditCompany->setText(orc_CompanyName.c_str());
 }
@@ -308,7 +308,7 @@ void C_RtfExportWidget::SetCompanyName(const C_SclString & orc_CompanyName) cons
    \param[in]     orc_CompanyLogoPath    path to company logo
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_RtfExportWidget::SetCompanyLogoPath(const C_SclString & orc_CompanyLogoPath) const
+void C_RtfExportWidget::SetCompanyLogoPath(const std::string & orc_CompanyLogoPath) const
 {
    this->mpc_Ui->pc_EditLogoPath->SetPath(orc_CompanyLogoPath.c_str(), C_PuiProject::h_GetInstance()->GetFolderPath());
 }
@@ -338,9 +338,9 @@ void C_RtfExportWidget::SetCompanyLogoPath(const C_SclString & orc_CompanyLogoPa
    C_UNKNOWN   Execution of 'DocuCreator' tool not successful (see error message)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_RtfExportWidget::ExportToRtf(const C_SclString & orc_RtfPath, const C_SclString & orc_CompanyName,
-                                       const C_SclString & orc_CompanyLogoPath, C_SdTopologyWidget * const opc_Widget,
-                                       C_SclStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage)
+int32_t C_RtfExportWidget::ExportToRtf(const std::string & orc_RtfPath, const std::string & orc_CompanyName,
+                                       const std::string & orc_CompanyLogoPath, C_SdTopologyWidget * const opc_Widget,
+                                       C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -353,8 +353,8 @@ int32_t C_RtfExportWidget::ExportToRtf(const C_SclString & orc_RtfPath, const C_
    tgl_assert(c_DirDocuCreatorTmp.cdUp() == true);                      // go one directory up
    c_DocuCreatorPath = c_DirDocuCreatorTmp.absolutePath();              // get current path
    c_DocuCreatorPath += "/connectors/DocuCreator/" + C_Uti::h_GetExeBasename("osy_docu_creator");
-   const C_SclString c_SclStringDocuCreatorPath = c_DocuCreatorPath.toStdString().c_str();
-   C_SclString c_SclStringDocuCreatorConfigPath = c_DirDocuCreatorTmp.absolutePath().toStdString().c_str();
+   const std::string c_SclStringDocuCreatorPath = c_DocuCreatorPath.toStdString().c_str();
+   std::string c_SclStringDocuCreatorConfigPath = c_DirDocuCreatorTmp.absolutePath().toStdString().c_str();
    c_SclStringDocuCreatorConfigPath += "/connectors/DocuCreator/config.xml";
 
    QString c_PathNetworkTopologyScreenshot; // to save screenshot of network topology
@@ -409,7 +409,7 @@ int32_t C_RtfExportWidget::ExportToRtf(const C_SclString & orc_RtfPath, const C_
       {
          // could not save 'Network Topology' screenshot to disk
          this->mc_Error = "Could not save Network Topology screenshot to \"" +
-                          static_cast<C_SclString>(c_PathNetworkTopologyScreenshot.toStdString().c_str()) + "\".";
+                          static_cast<std::string>(c_PathNetworkTopologyScreenshot.toStdString().c_str()) + "\".";
          osc_write_log_error("RTF File Export", this->mc_Error);
          s32_Return = C_BUSY;
       }
@@ -431,7 +431,7 @@ int32_t C_RtfExportWidget::ExportToRtf(const C_SclString & orc_RtfPath, const C_
       c_ConfigXml.c_Name = C_PuiProject::h_GetInstance()->GetName().toStdString().c_str();
       c_ConfigXml.c_Version = C_PuiProject::h_GetInstance()->c_Version;
       c_ConfigXml.c_Created =
-         static_cast<C_SclString>(c_CurrentTime.toString("dd.MM.yyyy hh:mm").toStdString().c_str());
+         static_cast<std::string>(c_CurrentTime.toString("dd.MM.yyyy hh:mm").toStdString().c_str());
       c_ConfigXml.c_Author = C_PuiProject::h_GetInstance()->c_Editor;
       c_ConfigXml.c_SysDefPath = c_SysDefPathTmp.toStdString().c_str();
       c_ConfigXml.c_DevicesIniPath = C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString().c_str();
@@ -537,15 +537,15 @@ int32_t C_RtfExportWidget::ExportToRtf(const C_SclString & orc_RtfPath, const C_
    C_NOACT     could not write data to XML file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_RtfExportWidget::m_CreateConfigXml(const C_SclString & orc_Path,
+int32_t C_RtfExportWidget::m_CreateConfigXml(const std::string & orc_Path,
                                              const C_ExportXmlStructure & orc_ExportXmlStructure) const
 {
    int32_t s32_Return;
 
-   const C_SclString c_ROOT_NAME = "config";
-   const C_SclString c_PROJECT = "project";
-   const C_SclString c_OPENSYDE = "opensyde";
-   const C_SclString c_COMPANY = "company";
+   const std::string c_ROOT_NAME = "config";
+   const std::string c_PROJECT = "project";
+   const std::string c_OPENSYDE = "opensyde";
+   const std::string c_COMPANY = "company";
 
    // create empty DocuCreator configuration file
    std::fstream c_File;
@@ -641,7 +641,7 @@ void C_RtfExportWidget::m_CancelClicked(void)
 void C_RtfExportWidget::m_RtfPathClicked(void)
 {
    QString c_Folder; // for default folder
-   const C_SclString c_Tmp =
+   const std::string c_Tmp =
       C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditRtfPath->GetPath()).toStdString().c_str();
 
    const QFileInfo c_TmpInfo(c_Tmp.c_str());
@@ -677,7 +677,7 @@ void C_RtfExportWidget::m_LogoPathClicked(void) const
    const QString c_Filter = "Image file (*.jpg *.png)";
    QString c_Folder; // for default folder
 
-   const C_SclString c_Tmp =
+   const std::string c_Tmp =
       C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditLogoPath->GetPath()).toStdString().c_str();
 
    const QFileInfo c_TmpInfo(c_Tmp.c_str());
@@ -710,9 +710,9 @@ void C_RtfExportWidget::m_LogoPathClicked(void) const
 int32_t C_RtfExportWidget::m_CheckSettings(void) const
 {
    int32_t s32_Return;
-   C_SclString c_RtfPath;
-   C_SclString c_CompanyName;
-   C_SclString c_CompanyLogoPath;
+   std::string c_RtfPath;
+   std::string c_CompanyName;
+   std::string c_CompanyLogoPath;
 
    s32_Return = this->GetRtfPath(c_RtfPath);
    // check if RTF file already exists
@@ -749,8 +749,8 @@ int32_t C_RtfExportWidget::m_CheckSettings(void) const
 
    if ((s32_Return != stw::errors::C_NO_ERR) && (s32_Return != stw::errors::C_WARN))
    {
-      stw::scl::C_SclString c_Description;
-      stw::scl::C_SclString c_Details;
+      std::string c_Description;
+      std::string c_Details;
       if (s32_Return == stw::errors::C_CONFIG)
       {
          c_Description = "Directory of given RTF file path invalid.";
@@ -783,8 +783,8 @@ int32_t C_RtfExportWidget::m_CheckSettings(void) const
       s32_Return = this->GetCompanyLogoPath(c_CompanyLogoPath);
       if (s32_Return != stw::errors::C_NO_ERR)
       {
-         stw::scl::C_SclString c_Description;
-         stw::scl::C_SclString c_Details;
+         std::string c_Description;
+         std::string c_Details;
 
          if (s32_Return == stw::errors::C_CONFIG)
          {

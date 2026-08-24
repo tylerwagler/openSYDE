@@ -12,7 +12,7 @@
 #define C_CIECONVERTE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclStringList.hpp"
 #include "stwtypes.hpp"
 #include "C_OscSystemBus.hpp"
@@ -37,30 +37,30 @@ public:
    class C_CieSystemBus
    {
    public:
-      stw::scl::C_SclString c_Name;    ///< unique name of bus
-      stw::scl::C_SclString c_Comment; ///< user comment
+      std::string c_Name;    ///< unique name of bus
+      std::string c_Comment; ///< user comment
    };
 
    ///information about a node
    class C_CieNodeProperties
    {
    public:
-      stw::scl::C_SclString c_Name;    ///< Unique name
-      stw::scl::C_SclString c_Comment; ///< User comment
+      std::string c_Name;    ///< Unique name
+      std::string c_Comment; ///< User comment
    };
 
    class C_CieDataPoolElement
    {
    public:
-      stw::scl::C_SclString c_Name;                                              ///< Element name
-      stw::scl::C_SclString c_Comment;                                           ///< Element comment
+      std::string c_Name;                                              ///< Element name
+      std::string c_Comment;                                           ///< Element comment
       stw::opensyde_core::C_OscNodeDataPoolContent c_MinValue;                   ///< Minimum value(s) for complete data
                                                                                  // element
       stw::opensyde_core::C_OscNodeDataPoolContent c_MaxValue;                   ///< Maximum value(s) for complete data
                                                                                  // element
       float64_t f64_Factor;                                                      ///< Adaptation factor for display
       float64_t f64_Offset;                                                      ///< Offset factor for display
-      stw::scl::C_SclString c_Unit;                                              ///< Variable unit
+      std::string c_Unit;                                              ///< Variable unit
       std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> c_DataSetValues; ///< Only one element which is initial
                                                                                  // value
    };
@@ -75,7 +75,7 @@ public:
       uint16_t u16_ComBitStart;                                           ///< Communication value bit start
       // position
       C_CieDataPoolElement c_Element;                              ///< Communication data pool element
-      std::map<int64_t, stw::scl::C_SclString> c_ValueDescription; ///< Optional communication value
+      std::map<int64_t, std::string> c_ValueDescription; ///< Optional communication value
       // descriptions
       stw::opensyde_core::C_OscCanSignal::E_MultiplexerType e_MultiplexerType; ///< Signal multiplexer type
       uint16_t u16_MultiplexValue;                                             ///< Only used if eMULTIPLEXED_SIGNAL
@@ -85,8 +85,8 @@ public:
    class C_CieCanMessage
    {
    public:
-      stw::scl::C_SclString c_Name;    ///< Message name
-      stw::scl::C_SclString c_Comment; ///< Message comment
+      std::string c_Name;    ///< Message name
+      std::string c_Comment; ///< Message comment
       uint32_t u32_CanId;              ///< CAN message identifier
       bool q_IsExtended;               ///< Flag if message id is using extended format
       uint16_t u16_Dlc;                ///< CAN message data length code

@@ -27,7 +27,7 @@
 #include "C_PuiProject.hpp"
 #include "C_SyvDaDashboardScreenshot.hpp"
 #include "C_OscUtils.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;

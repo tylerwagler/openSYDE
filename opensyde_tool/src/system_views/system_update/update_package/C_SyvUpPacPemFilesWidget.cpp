@@ -121,7 +121,7 @@ void C_SyvUpPacPemFilesWidget::HandleClearAllPemFiles()
 /*! \brief  Get all loaded PEM file paths
 
    \return
-   std::vector<stw::scl::C_SclString>   returns vector of Pem Files
+   std::vector<std::string>   returns vector of Pem Files
 */
 //----------------------------------------------------------------------------------------------------------------------
 QStringList C_SyvUpPacPemFilesWidget::GetPemFilePaths() const

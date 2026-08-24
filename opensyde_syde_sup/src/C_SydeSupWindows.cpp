@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "stwerrors.hpp"
+#include "C_SclStringCompat.hpp"
 #include "TglFile.hpp"
 #include "C_SydeSupWindows.hpp"
 
@@ -72,7 +73,7 @@ C_SydeSup::E_Result C_SydeSupWindows::m_OpenEthernet(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get name of application as an C_SclString
+/*! \brief   Get name of application as an std::string
 
    Return the version number of the running application
     in the commonly used STW format: "Vx.yyrz".
@@ -85,13 +86,13 @@ C_SydeSup::E_Result C_SydeSupWindows::m_OpenEthernet(void)
    string with version information ("V?.??r?" on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SydeSupWindows::m_GetApplicationVersion(const C_SclString & orc_ApplicationFileName) const
+std::string C_SydeSupWindows::m_GetApplicationVersion(const std::string & orc_ApplicationFileName) const
 {
    VS_FIXEDFILEINFO * pc_Info;
    uint32_t u32_ValSize;
    int32_t s32_InfoSize;
    uint8_t * pu8_Buffer;
-   C_SclString c_Version;
+   std::string c_Version;
 
    c_Version = "V?.\?\?r?";
 
@@ -106,7 +107,7 @@ C_SclString C_SydeSupWindows::m_GetApplicationVersion(const C_SclString & orc_Ap
                             reinterpret_cast<PVOID *>(&pc_Info), //lint !e929 !e9176
                             &u32_ValSize) != FALSE)
          {
-            c_Version.PrintFormatted("V%lu.%02lur%lu", (pc_Info->dwFileVersionMS >> 16U),
+            c_Version = PrintFormattedCompat("V%lu.%02lur%lu", (pc_Info->dwFileVersionMS >> 16U),
                                      pc_Info->dwFileVersionMS & 0x0000FFFFUL,
                                      (pc_Info->dwFileVersionLS >> 16U));
          }
@@ -123,7 +124,7 @@ C_SclString C_SydeSupWindows::m_GetApplicationVersion(const C_SclString & orc_Ap
    Default log location
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SydeSupWindows::m_GetDefaultLogLocation(void) const
+std::string C_SydeSupWindows::m_GetDefaultLogLocation(void) const
 {
    return ".\\Logs";
 }
@@ -135,7 +136,7 @@ C_SclString C_SydeSupWindows::m_GetDefaultLogLocation(void) const
    Example unzip location
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SydeSupWindows::m_GetUnzipLocationDefaultExample(void) const
+std::string C_SydeSupWindows::m_GetUnzipLocationDefaultExample(void) const
 {
    return "%TEMP%";
 }
@@ -147,7 +148,7 @@ C_SclString C_SydeSupWindows::m_GetUnzipLocationDefaultExample(void) const
    usage example
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SydeSupWindows::m_GetCanInterfaceUsageExample(void) const
+std::string C_SydeSupWindows::m_GetCanInterfaceUsageExample(void) const
 {
    return "-i .\\MyCan.dll";
 }

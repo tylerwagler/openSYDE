@@ -15,7 +15,7 @@
 #include <pthread.h>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscIpDispatcherLinuxSock.hpp"
 #include "C_SydeSup.hpp"
 
@@ -37,28 +37,28 @@ public:
    C_SydeSupLinux(void);
    virtual ~C_SydeSupLinux(void);
 
-   E_Result InitParameters(const stw::scl::C_SclString & orc_SupFilePath, const stw::scl::C_SclString & orc_CanInterface,
-                           const stw::scl::C_SclString & orc_LogPath, const stw::scl::C_SclString & orc_UnzipPath);
-   void SetUpdateFilePath(const stw::scl::C_SclString & orc_SupFilePath);
+   E_Result InitParameters(const std::string & orc_SupFilePath, const std::string & orc_CanInterface,
+                           const std::string & orc_LogPath, const std::string & orc_UnzipPath);
+   void SetUpdateFilePath(const std::string & orc_SupFilePath);
    E_Result UpdateTaskStart(void);
    E_Result UpdateTaskCheckResult(uint8_t & oru8_Progress);
-   E_Result GetNextInfoText(stw::scl::C_SclString & orc_Info);
+   E_Result GetNextInfoText(std::string & orc_Info);
 
 private:
    pthread_t mx_UpdateTaskHandle; //lint !e8080 //interfacing with library
    bool mq_UpdateTaskRunning = false;
    E_Result me_UpdateTaskResult;
    uint8_t mu8_UpdateProgress = 0U;
-   std::vector<stw::scl::C_SclString> mac_UpdateInfo;
+   std::vector<std::string> mac_UpdateInfo;
    uint32_t mu32_InfoIndex = 0U;
 
    static void * mh_UpdateTask(void * const opv_Arg);
 
    virtual E_Result m_OpenEthernet(void);
-   virtual stw::scl::C_SclString m_GetApplicationVersion(const stw::scl::C_SclString & orc_ApplicationFileName) const;
-   virtual stw::scl::C_SclString m_GetDefaultLogLocation(void) const;
-   virtual stw::scl::C_SclString m_GetUnzipLocationDefaultExample(void) const;
-   virtual stw::scl::C_SclString m_GetCanInterfaceUsageExample(void) const;
+   virtual std::string m_GetApplicationVersion(const std::string & orc_ApplicationFileName) const;
+   virtual std::string m_GetDefaultLogLocation(void) const;
+   virtual std::string m_GetUnzipLocationDefaultExample(void) const;
+   virtual std::string m_GetCanInterfaceUsageExample(void) const;
 
    stw::opensyde_core::C_OscIpDispatcherLinuxSock mc_EthDispatcher;
 };

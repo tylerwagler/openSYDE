@@ -17,7 +17,7 @@
 #include <QFileInfo>
 
 #include "TglUtils.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscViewFiler.hpp"
@@ -74,7 +74,7 @@ int32_t C_SyvUpPacConfigFiler::h_LoadConfig(const QString & orc_FilePath, C_SyvU
                uint16_t u16_FileVersion = 0U;
                try
                {
-                  u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+                  u16_FileVersion = static_cast<uint16_t>(std::stoi(c_XmlParser.GetNodeContent()));
                }
                catch (...)
                {
@@ -87,7 +87,7 @@ int32_t C_SyvUpPacConfigFiler::h_LoadConfig(const QString & orc_FilePath, C_SyvU
                if (s32_Return == C_NO_ERR)
                {
                   osc_write_log_info("Loading Update Package Configuration", "Value of \"file-version\": " +
-                                     C_SclString::IntToStr(u16_FileVersion));
+                                     std::to_string(u16_FileVersion));
                   //Check file version
                   if (u16_FileVersion != hu16_FILE_VERSION_LATEST)
                   {
@@ -161,7 +161,7 @@ int32_t C_SyvUpPacConfigFiler::h_SaveConfig(const QString & orc_FilePath, const 
 
          if (q_Success == true)
          {
-            c_XmlParser.SetNodeContent(C_SclString::IntToStr(hu16_FILE_VERSION_LATEST));
+            c_XmlParser.SetNodeContent(std::to_string(hu16_FILE_VERSION_LATEST));
             //Return
             tgl_assert(c_XmlParser.SelectNodeParent() == "opensyde-update-package-configuration");
          }

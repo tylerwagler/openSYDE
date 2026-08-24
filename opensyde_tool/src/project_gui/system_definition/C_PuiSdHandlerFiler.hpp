@@ -162,8 +162,8 @@ public:
 
    //File names
    static QString h_GetNodeUiFileName(void);
-   static QString h_GetCommUiFileName(const stw::scl::C_SclString & orc_DatapoolName);
-   static QString h_GetDatapoolUiFileName(const stw::scl::C_SclString & orc_DatapoolName);
+   static QString h_GetCommUiFileName(const std::string & orc_DatapoolName);
+   static QString h_GetDatapoolUiFileName(const std::string & orc_DatapoolName);
    static QString h_GetSystemDefinitionUiFilePath(const QString & orc_SystemDefinitionCoreFilePath);
    static QString h_GetSharedDatapoolUiFilePath(const QString & orc_SystemDefinitionCoreFilePath);
 

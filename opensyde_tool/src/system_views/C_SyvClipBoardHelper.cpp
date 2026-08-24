@@ -113,7 +113,7 @@ void C_SyvClipBoardHelper::mh_StoreDashboardToClipboard(const C_PuiSvDashboard &
                                                                    C_PuiSvDbElementIdCrcGroup> & orc_ElementIdGroups,
                                                         const QString & orc_GenericTagName)
 {
-   stw::scl::C_SclString c_XmlContent;
+   std::string c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild(orc_GenericTagName.toStdString().c_str());
@@ -260,7 +260,7 @@ int32_t C_SyvClipBoardHelper::mh_LoadElementIdGroups(QMap<C_PuiSvDbNodeDataPoolL
 
    if  (s32_Retval == C_NO_ERR)
    {
-      stw::scl::C_SclString c_CurrentGroupNode = orc_XmlParser.SelectNodeChild("element-id-group");
+      std::string c_CurrentGroupNode = orc_XmlParser.SelectNodeChild("element-id-group");
 
       if (c_CurrentGroupNode == "element-id-group")
       {

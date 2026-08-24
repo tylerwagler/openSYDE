@@ -539,7 +539,7 @@ void C_SdNdeDpProperties::m_OkClicked(void)
 
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
 
-   std::vector<C_SclString> c_ExistingDatapoolNames;
+   std::vector<std::string> c_ExistingDatapoolNames;
 
    //Check valid name
    if (C_OscUtils::h_CheckValidCeName(this->mpc_Ui->pc_LineEditDatapoolName->text().toStdString().c_str()) == false)
@@ -562,7 +562,7 @@ void C_SdNdeDpProperties::m_OkClicked(void)
       c_Details += "Used Datapool names:\n";
       for (uint32_t u32_ItExistingName = 0UL; u32_ItExistingName < c_ExistingDatapoolNames.size(); ++u32_ItExistingName)
       {
-         const C_SclString & rc_Name = c_ExistingDatapoolNames[u32_ItExistingName];
+         const std::string & rc_Name = c_ExistingDatapoolNames[u32_ItExistingName];
          c_Details += static_cast<QString>("\"%1\", ").arg(rc_Name.c_str());
       }
       c_Details.chop(2); // remove last ", "
@@ -909,7 +909,7 @@ void C_SdNdeDpProperties::m_UpdateSizePrediction(void) const
 void C_SdNdeDpProperties::m_CheckDatapoolName(void) const
 {
    QString c_Content;
-   const stw::scl::C_SclString c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text().toStdString().c_str();
+   const std::string c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text().toStdString().c_str();
 
    //check
    bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(c_Name);
@@ -950,11 +950,11 @@ void C_SdNdeDpProperties::m_CheckDatapoolName(void) const
    False Name in conflict
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdNdeDpProperties::m_CheckDatapoolNameNotDuplicate(std::vector<C_SclString> * const opc_ExistingDatapoolNames)
+bool C_SdNdeDpProperties::m_CheckDatapoolNameNotDuplicate(std::vector<std::string> * const opc_ExistingDatapoolNames)
 const
 {
    bool q_NameIsValid = true;
-   const stw::scl::C_SclString c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text().toStdString().c_str();
+   const std::string c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text().toStdString().c_str();
 
    if (this->ms32_DataPoolIndex >= 0)
    {

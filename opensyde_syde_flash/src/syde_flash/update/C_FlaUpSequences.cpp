@@ -318,7 +318,7 @@ void C_FlaUpSequences::m_ReportProgressPercentage(const uint8_t ou8_ProgressInPe
    \param[in]  orc_Information   Text information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaUpSequences::m_ReportProgress(const int32_t os32_Result, const stw::scl::C_SclString & orc_Information)
+void C_FlaUpSequences::m_ReportProgress(const int32_t os32_Result, const std::string & orc_Information)
 {
    QString c_Progress;
 
@@ -355,7 +355,7 @@ void C_FlaUpSequences::m_ReportProgress(const int32_t os32_Result, const stw::sc
    \param[in]  orc_Information   Flashloader information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaUpSequences::m_ReportFlashloaderInformationRead(const stw::scl::C_SclString & orc_DeviceName,
+void C_FlaUpSequences::m_ReportFlashloaderInformationRead(const std::string & orc_DeviceName,
                                                           const stw::opensyde_core::C_OscComFlashloaderInformation & orc_Information)
 {
    const C_SclStringList c_MoreInformation = orc_Information.FlashloaderInformationToText();

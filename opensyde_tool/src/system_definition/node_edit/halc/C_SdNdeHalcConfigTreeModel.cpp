@@ -196,7 +196,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
          const C_OscHalcConfigParameter * const pc_ParameterElement = m_GetParameterElement(orc_Index);
          if (pc_ParameterElement != NULL)
          {
-            const std::vector<std::pair<stw::scl::C_SclString, C_OscNodeDataPoolContent> > & rc_EnumItems =
+            const std::vector<std::pair<std::string, C_OscNodeDataPoolContent> > & rc_EnumItems =
                pc_ParameterElement->c_Value.GetEnumItems();
             uint32_t u32_Counter = 0;
 
@@ -215,7 +215,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
                case C_OscHalcDefContent::eCT_ENUM:
                   c_Retval = "unknown";
 
-                  for (std::vector<std::pair<stw::scl::C_SclString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+                  for (std::vector<std::pair<std::string, C_OscNodeDataPoolContent> >::const_iterator c_It =
                           rc_EnumItems.begin(); c_It != rc_EnumItems.end(); ++c_It)
                   {
                      if (c_It->second == pc_ParameterElement->c_Value)
@@ -935,10 +935,10 @@ QStringList C_SdNdeHalcConfigTreeModel::mh_ConvertEnumsToStringList(const C_OscH
 {
    QStringList c_Return;
 
-   const std::vector<std::pair<stw::scl::C_SclString,
+   const std::vector<std::pair<std::string,
                                C_OscNodeDataPoolContent> > & rc_EnumItems = orc_Value.GetEnumItems();
 
-   for (std::vector<std::pair<stw::scl::C_SclString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+   for (std::vector<std::pair<std::string, C_OscNodeDataPoolContent> >::const_iterator c_It =
            rc_EnumItems.begin();
         c_It != rc_EnumItems.end(); ++c_It)
    {
@@ -959,7 +959,7 @@ QStringList C_SdNdeHalcConfigTreeModel::mh_ConvertEnumsToStringList(const C_OscH
 //----------------------------------------------------------------------------------------------------------------------
 QStringList C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToStringList(const C_OscHalcDefContent & orc_Value)
 {
-   std::vector<stw::scl::C_SclString> c_Display;
+   std::vector<std::string> c_Display;
    QStringList c_Retval;
    orc_Value.GetBitmaskStatusValues(&c_Display, NULL);
    c_Retval.reserve(c_Display.size());
@@ -983,7 +983,7 @@ QString C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToString(const C_OscHalcDe
 {
    QString c_Display;
 
-   std::vector<stw::scl::C_SclString> c_Displays;
+   std::vector<std::string> c_Displays;
    std::vector<bool> c_Values;
    orc_Value.GetBitmaskStatusValues(&c_Displays, &c_Values);
    if (c_Displays.size() == c_Values.size())

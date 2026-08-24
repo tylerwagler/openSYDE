@@ -1967,7 +1967,7 @@ QString C_SdUtil::h_GetToolTipContentDpListElement(const C_OscNodeDataPoolListEl
          std::vector<QString> c_HelpVector;
 
          // comment
-         if (pc_DpListElement->c_Comment.IsEmpty() == false)
+         if (pc_DpListElement->c_Comment.empty() == false)
          {
             c_ToolTipContent = pc_DpListElement->c_Comment.c_str();
             c_ToolTipContent.append("\n\n");
@@ -2403,7 +2403,7 @@ QString C_SdUtil::h_GetEdsFileDetails(const C_OscCanOpenObjectDictionary oc_CanO
 
    c_String += "[FileInfo]";
    c_String += "\nFileName=";
-   c_String += c_FileInfoBlock.c_FileName.AsStdString()->c_str();
+   c_String += c_FileInfoBlock.c_FileName.c_str();
    c_String += "\nFileVersion=";
    c_String += QString::number(c_FileInfoBlock.u8_FileVersion);
    c_String += "\nFileRevision=";
@@ -2411,37 +2411,37 @@ QString C_SdUtil::h_GetEdsFileDetails(const C_OscCanOpenObjectDictionary oc_CanO
    if (c_FileInfoBlock.c_EdsVersion != "")
    {
       c_String += "\nEDSVersion=";
-      c_String += c_FileInfoBlock.c_EdsVersion.AsStdString()->c_str();
+      c_String += c_FileInfoBlock.c_EdsVersion.c_str();
    }
    c_String += "\nDescription=";
-   c_String += c_FileInfoBlock.c_Description.AsStdString()->c_str();
+   c_String += c_FileInfoBlock.c_Description.c_str();
    c_String += "\nCreationTime=";
-   c_String += c_FileInfoBlock.c_CreationTime.AsStdString()->c_str();
+   c_String += c_FileInfoBlock.c_CreationTime.c_str();
    c_String += "\nCreationDate=";
-   c_String += c_FileInfoBlock.c_CreationDate.AsStdString()->c_str();
+   c_String += c_FileInfoBlock.c_CreationDate.c_str();
    c_String += "\nCreatedBy=";
-   c_String += c_FileInfoBlock.c_CreatedBy.AsStdString()->c_str();
+   c_String += c_FileInfoBlock.c_CreatedBy.c_str();
    c_String += "\nModificationDate=";
-   c_String += c_FileInfoBlock.c_ModificationDate.AsStdString()->c_str();
+   c_String += c_FileInfoBlock.c_ModificationDate.c_str();
    c_String += "\nModifiedBy=";
-   c_String += c_FileInfoBlock.c_ModifiedBy.AsStdString()->c_str();
+   c_String += c_FileInfoBlock.c_ModifiedBy.c_str();
 
    c_String += "\n\n[DeviceInfo]";
    c_String += "\nVendorName=";
-   c_String += c_DeviceInfoBlock.c_VendorName.AsStdString()->c_str();
+   c_String += c_DeviceInfoBlock.c_VendorName.c_str();
    c_String += "\nVendorNumber=";
-   c_String += c_DeviceInfoBlock.c_VendorNumber.AsStdString()->c_str();
+   c_String += c_DeviceInfoBlock.c_VendorNumber.c_str();
    c_String += "\nProductName=";
-   c_String += c_DeviceInfoBlock.c_ProductName.AsStdString()->c_str();
+   c_String += c_DeviceInfoBlock.c_ProductName.c_str();
    c_String += "\nProductNumber=";
-   c_String += c_DeviceInfoBlock.c_ProductNumber.AsStdString()->c_str();
+   c_String += c_DeviceInfoBlock.c_ProductNumber.c_str();
    if (c_DeviceInfoBlock.c_RevisionNumber != "")
    {
       c_String += "\nRevisionNumber=";
-      c_String += c_DeviceInfoBlock.c_RevisionNumber.AsStdString()->c_str();
+      c_String += c_DeviceInfoBlock.c_RevisionNumber.c_str();
    }
    c_String += "\nOrderCode=";
-   c_String += c_DeviceInfoBlock.c_OrderCode.AsStdString()->c_str();
+   c_String += c_DeviceInfoBlock.c_OrderCode.c_str();
    c_String += "\nBaudRate_10=";
    c_TrueOrFalse = c_DeviceInfoBlock.q_BaudRate10 ? "1" : "0";
    c_String += c_TrueOrFalse;
@@ -2475,7 +2475,7 @@ QString C_SdUtil::h_GetEdsFileDetails(const C_OscCanOpenObjectDictionary oc_CanO
    c_String += "\nGranularity=";
    c_String += QString::number(c_DeviceInfoBlock.u8_Granularity);
    c_String += "\nDynamicChannelsSupported=";
-   c_String += c_DeviceInfoBlock.c_DynamicChannelsSupported.AsStdString()->c_str();
+   c_String += c_DeviceInfoBlock.c_DynamicChannelsSupported.c_str();
    c_String += "\nGroupMessaging=";
    c_TrueOrFalse = c_DeviceInfoBlock.q_GroupMessaging ? "1" : "0";
    c_String += c_TrueOrFalse;
@@ -2738,12 +2738,12 @@ void C_SdUtil::mh_WriteEtherCanLogMessage(const C_OscNodeProperties * const opc_
    if (static_cast<uint32_t> (opc_DevDef->u8_NumEthernetBusses) !=
        static_cast<uint32_t> (opc_NodeProperties->GetEthernetInterfaces().size()))
    {
-      const stw::scl::C_SclString c_Activity = "Device definition deviation";
+      const std::string c_Activity = "Device definition deviation";
 
-      const stw::scl::C_SclString c_Message =
+      const std::string c_Message =
          "Device definition deviation between original number of ethernet interfaces and new stored ethernet interfaces: "
          +
-         stw::scl::C_SclString::IntToStr(opc_DevDef->u8_NumEthernetBusses) + "; " + stw::scl::C_SclString::IntToStr(
+         std::to_string(opc_DevDef->u8_NumEthernetBusses) + "; " + std::to_string(
             opc_NodeProperties->GetEthernetInterfaces().size());
 
       osc_write_log_warning(c_Activity, c_Message);
@@ -2751,11 +2751,11 @@ void C_SdUtil::mh_WriteEtherCanLogMessage(const C_OscNodeProperties * const opc_
    if (static_cast<uint32_t> (opc_DevDef->u8_NumCanBusses) !=
        static_cast<uint32_t> (opc_NodeProperties->GetCanInterfaces().size()))
    {
-      const stw::scl::C_SclString c_Activity = "Device definition deviation";
+      const std::string c_Activity = "Device definition deviation";
 
-      const stw::scl::C_SclString c_Message =
+      const std::string c_Message =
          "Device definition deviation between original number of can interfaces and new stored can interfaces: " +
-         stw::scl::C_SclString::IntToStr(opc_DevDef->u8_NumCanBusses) + "; " + stw::scl::C_SclString::IntToStr(
+         std::to_string(opc_DevDef->u8_NumCanBusses) + "; " + std::to_string(
             opc_NodeProperties->GetCanInterfaces().size());
 
       osc_write_log_warning(c_Activity, c_Message);

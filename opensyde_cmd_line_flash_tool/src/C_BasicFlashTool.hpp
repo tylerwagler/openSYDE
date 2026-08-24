@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_CanDispatcher.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -48,14 +48,14 @@ private:
    uint32_t mu32_FlashloaderResetWaitTime;
    uint32_t mu32_RequestDownloadTimeout;
    uint32_t mu32_TransferDataTimeout;
-   stw::scl::C_SclString mc_HexFilePath;
-   stw::scl::C_SclString mc_CanDriver;
+   std::string mc_HexFilePath;
+   std::string mc_CanDriver;
    bool mq_ExitApplOnError;
    bool mq_StartAppl;
 
    stw::can::C_CanDispatcher * mpc_CanDispatcher;
 
-   static stw::scl::C_SclString mh_GetApplicationVersion(const stw::scl::C_SclString & orc_FileName);
+   static std::string mh_GetApplicationVersion(const std::string & orc_FileName);
    void m_PrintHelp(void);
    void m_Pause(void);
 };

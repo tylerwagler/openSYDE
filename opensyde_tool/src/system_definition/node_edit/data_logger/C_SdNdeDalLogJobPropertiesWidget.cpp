@@ -460,7 +460,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnXappSettingsChanged()
 void C_SdNdeDalLogJobPropertiesWidget::m_CheckDataLoggerName()
 {
    //check
-   const C_SclString c_LogJobName = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
+   const std::string c_LogJobName = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
    const bool q_IsLogJobNameUnique = C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(this->mu32_NodeIndex, c_LogJobName,
                                                                                      &this->mu32_DataLoggerJobIndex,
                                                                                      NULL);
@@ -577,8 +577,8 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
 
    if (hq_InProgress == false)
    {
-      std::vector<stw::scl::C_SclString> c_ExistingLogJobNames;
-      const C_SclString c_LogJobName = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
+      std::vector<std::string> c_ExistingLogJobNames;
+      const std::string c_LogJobName = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
       hq_InProgress = true;
       if (C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(this->mu32_NodeIndex, c_LogJobName,
                                                           &this->mu32_DataLoggerJobIndex,
@@ -595,7 +595,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
          for (uint32_t u32_ItExistingName = 0UL; u32_ItExistingName < c_ExistingLogJobNames.size();
               ++u32_ItExistingName)
          {
-            const C_SclString & rc_Name = c_ExistingLogJobNames[u32_ItExistingName];
+            const std::string & rc_Name = c_ExistingLogJobNames[u32_ItExistingName];
             c_Details.append(static_cast<QString>("\"%1\"\n").arg(rc_Name.c_str()));
          }
          c_Message.SetDetails(c_Details);

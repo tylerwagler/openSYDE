@@ -13,8 +13,10 @@
 #include "precomp_headers.hpp"
 #include "version_config.hpp"
 
+#include <string>
 #include "stwerrors.hpp"
 #include "C_SydeSupLinux.hpp"
+#include "C_SclStringCompat.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -67,10 +69,10 @@ C_SydeSupLinux::~C_SydeSupLinux(void)
    \retval eERR_PARSE_COMMAND_LINE   Update package file not specified or unzip folder invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SydeSup::E_Result C_SydeSupLinux::InitParameters(const stw::scl::C_SclString & orc_SupFilePath,
-                                                   const stw::scl::C_SclString & orc_CanInterface,
-                                                   const stw::scl::C_SclString & orc_LogPath,
-                                                   const stw::scl::C_SclString & orc_UnzipPath)
+C_SydeSup::E_Result C_SydeSupLinux::InitParameters(const std::string & orc_SupFilePath,
+                                                   const std::string & orc_CanInterface,
+                                                   const std::string & orc_LogPath,
+                                                   const std::string & orc_UnzipPath)
 {
    E_Result e_Return;
 
@@ -102,7 +104,7 @@ C_SydeSup::E_Result C_SydeSupLinux::InitParameters(const stw::scl::C_SclString &
    \param[in]   orc_SupFilePath     Path and filename of the update package
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SydeSupLinux::SetUpdateFilePath(const stw::scl::C_SclString & orc_SupFilePath)
+void C_SydeSupLinux::SetUpdateFilePath(const std::string & orc_SupFilePath)
 {
    mc_SupFilePath = orc_SupFilePath;
 }
@@ -133,7 +135,7 @@ C_SydeSup::E_Result C_SydeSupLinux::UpdateTaskStart(void)
 
       // Prepare info text variable
       mu32_InfoIndex = 0U;
-      mac_UpdateInfo.SetLength(0U);
+      mac_UpdateInfo.resize(0U);
 
       s32_Ret = pthread_create(&mx_UpdateTaskHandle, NULL, &mh_UpdateTask, this);
       if (s32_Ret == 0)
@@ -201,10 +203,10 @@ C_SydeSup::E_Result C_SydeSupLinux::UpdateTaskCheckResult(uint8_t & oru8_Progres
    \retval eOK                      One line read
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SydeSup::E_Result C_SydeSupLinux::GetNextInfoText(stw::scl::C_SclString & orc_Info)
+C_SydeSup::E_Result C_SydeSupLinux::GetNextInfoText(std::string & orc_Info)
 {
    E_Result e_Result = eERR_UPDATE_C_NOACT;
-   const uint32_t u32_InfoLen = mac_UpdateInfo.GetLength();
+   const uint32_t u32_InfoLen = mac_UpdateInfo.size();
 
    if (mu32_InfoIndex < u32_InfoLen)
    {
@@ -253,7 +255,7 @@ C_SydeSup::E_Result C_SydeSupLinux::m_OpenEthernet(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get name of application as an C_SclString
+/*! \brief   Get name of application as an std::string
 
    Return the version number of the running application
     in the commonly used STW format: "Vx.yyrz".
@@ -266,13 +268,13 @@ C_SydeSup::E_Result C_SydeSupLinux::m_OpenEthernet(void)
    string with version information
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SydeSupLinux::m_GetApplicationVersion(const C_SclString & orc_ApplicationFileName) const
+std::string C_SydeSupLinux::m_GetApplicationVersion(const std::string & orc_ApplicationFileName) const
 {
-   C_SclString c_Version;
+   std::string c_Version;
 
    (void)orc_ApplicationFileName;
 
-   c_Version.PrintFormatted("V%d.%02dr%d",
+   c_Version = PrintFormattedCompat("V%d.%02dr%d",
                             PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR,
                             PROJECT_VERSION_RELEASE);
 
@@ -286,7 +288,7 @@ C_SclString C_SydeSupLinux::m_GetApplicationVersion(const C_SclString & orc_Appl
    Default log location
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SydeSupLinux::m_GetDefaultLogLocation(void) const
+std::string C_SydeSupLinux::m_GetDefaultLogLocation(void) const
 {
     return "/var/log";
 }
@@ -298,7 +300,7 @@ C_SclString C_SydeSupLinux::m_GetDefaultLogLocation(void) const
    Example unzip location
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SydeSupLinux::m_GetUnzipLocationDefaultExample(void) const
+std::string C_SydeSupLinux::m_GetUnzipLocationDefaultExample(void) const
 {
     return "/tmp";
 }
@@ -310,7 +312,7 @@ C_SclString C_SydeSupLinux::m_GetUnzipLocationDefaultExample(void) const
    usage example
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SydeSupLinux::m_GetCanInterfaceUsageExample(void) const
+std::string C_SydeSupLinux::m_GetCanInterfaceUsageExample(void) const
 {
    return "-i can0";
 }

@@ -37,7 +37,7 @@ public:
    static int32_t h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C_CieCommDefinition & orc_CommDef,
                                QWidget * const opc_Parent, const uint32_t ou32_NumOfNodes,
                                const uint32_t ou32_NumOfMessages, const uint32_t ou32_NumOfSignals);
-   static void h_AdaptName(stw::scl::C_SclString & orc_Name, stw::scl::C_SclString & orc_Comment,
+   static void h_AdaptName(std::string & orc_Name, std::string & orc_Comment,
                            const bool oq_AlwaysAppendNameInComment);
    static void h_AdaptImportMessages(
       std::vector<stw::opensyde_gui::C_CieImportDataAssignment> & orc_ImportDataAssignment,
@@ -57,7 +57,7 @@ public:
    static QString h_GetMessageName(const stw::opensyde_core::C_OscNode & orc_Node, const bool oq_IsTx,
                                    const uint32_t ou32_MessageIndex,
                                    const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
-                                   const stw::scl::C_SclString * const opc_NodeNameReplacement, const bool oq_IsSrdo,
+                                   const std::string * const opc_NodeNameReplacement, const bool oq_IsSrdo,
                                    uint32_t & oru32_SrdoIndex);
    static bool h_GetIsSrdoFromMessageIsSrdoVector(const std::vector<uint8_t> & orc_MessageIsSrdo,
                                                   const uint32_t ou32_MessageIndex);
@@ -88,8 +88,8 @@ private:
                                     std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData, const
                                     std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_UiSignalData, const
                                     std::vector<std::pair<int32_t, int32_t> > & orc_MessageOverrideIndices, const bool oq_UniqueAddRequested);
-   static QString mh_ConstructMessageName(const stw::scl::C_SclString & orc_Nodename,
-                                          const stw::scl::C_SclString & orc_TpdoRpdo, const uint32_t ou32_MessageIndex);
+   static QString mh_ConstructMessageName(const std::string & orc_Nodename,
+                                          const std::string & orc_TpdoRpdo, const uint32_t ou32_MessageIndex);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

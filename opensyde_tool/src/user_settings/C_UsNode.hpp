@@ -44,7 +44,7 @@ public:
    uint32_t GetSelectedCanOpenDeviceUseCaseIndex(void) const;
    std::map<uint8_t, bool> GetExpandedCanOpenManager(void) const;
    std::map<uint8_t, bool> GetExpandedCanOpenDevices(void) const;
-   std::map<std::pair<uint8_t, std::pair<uint8_t, stw::scl::C_SclString> >,
+   std::map<std::pair<uint8_t, std::pair<uint8_t, std::string> >,
             bool> GetExpandedCanOpenDevice(void) const;
    bool GetCanOpenSelectedUseCaseOrInterface(void) const;
    const std::vector<int32_t> & GetHalcOverviewColumnWidth(void) const;
@@ -78,7 +78,7 @@ public:
    void SetExpandedCanOpenManager(const std::map<uint8_t, bool> & orc_Interfaces);
    void SetExpandedCanOpenDevices(const std::map<uint8_t, bool> & orc_Devices);
    void SetExpandedCanOpenDevice(const std::map<std::pair<uint8_t, std::pair<uint8_t,
-                                                                             stw::scl::C_SclString> >,
+                                                                             std::string> >,
                                                 bool> & orc_Device);
    void SetCanOpenSelectedUseCaseOrInterface(const bool orq_IsUseCaseSelected);
    void SetHalcOverviewColumnWidth(const std::vector<int32_t> & orc_Value);
@@ -97,7 +97,7 @@ private:
    uint32_t mu32_CanOpenDeviceUseCaseIndex;
    std::map<uint8_t, bool> mc_CanOpenExpandedManager;
    std::map<uint8_t, bool> mc_CanOpenExpandedDevices;
-   std::map<std::pair<uint8_t, std::pair<uint8_t, stw::scl::C_SclString> >,
+   std::map<std::pair<uint8_t, std::pair<uint8_t, std::string> >,
             bool> mc_CanOpenExpandedDevice;
    bool mq_IsUseCaseIndexSelected;
    std::vector<int32_t> mc_HalcOverviewColumnWidth;

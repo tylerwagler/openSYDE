@@ -31,19 +31,19 @@ public:
 protected:
    virtual bool m_ReportProgress(const E_ProgressStep oe_Step, const int32_t os32_Result,
                                  const uint8_t ou8_Progress,
-                                 const stw::scl::C_SclString & orc_Information);
+                                 const std::string & orc_Information);
    virtual bool m_ReportProgress(const E_ProgressStep oe_Step, const int32_t os32_Result,
                                  const uint8_t ou8_Progress,
                                  const stw::opensyde_core::C_OscProtocolDriverOsyNode & orc_Server,
-                                 const stw::scl::C_SclString & orc_Information);
+                                 const std::string & orc_Information);
    virtual void m_ReportOpenSydeFlashloaderInformationRead(const C_OsyDeviceInformation & orc_Info,
                                                             const uint32_t ou32_NodeIndex);
 
 private:
    bool mq_Quiet;
    bool m_CheckErrorCase(const C_OscSuSequences::E_ProgressStep oe_Step) const;
-   stw::scl::C_SclString m_GetStepName(const E_ProgressStep oe_Step) const;
-   void m_WriteLog(const stw::scl::C_SclString & orc_Text, const bool & orq_IsError = false) const;
+   std::string m_GetStepName(const E_ProgressStep oe_Step) const;
+   void m_WriteLog(const std::string & orc_Text, const bool & orq_IsError = false) const;
 
    std::vector<uint16_t> mc_OsyDeviceInformationIndexes; //absolute index of device as reported by virtual function
    std::vector<C_OsyDeviceInformation> mc_ActiveOsyDeviceInformation;

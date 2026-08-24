@@ -63,6 +63,8 @@ jobs:
           -DOPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING=ON
           -DOPENSYDE_CORE_SKIP_X_CONFIG_GENERATION=ON
           -DOPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION=ON
+          -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON
+          -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
 
       - name: Build
         run: cmake --build build/core -j $(nproc)
@@ -88,6 +90,6 @@ jobs:
             qt6-base-dev qt6-svg-dev qt6-tools-dev \
             libgl1-mesa-dev
 
-      - name: Build openSYDE tool (smoke test)
+      - name: Build all tools (smoke test)
         run: |
-          ./build.sh -b Debug opensyde
+          ./build.sh -b Debug all

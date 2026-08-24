@@ -359,7 +359,7 @@ void C_CamMetClipBoardHelper::mh_AddCanSignals(const int32_t os32_LineWidthIniti
 
             if (rc_Signal.q_DlcError == false)
             {
-               s32_MultiplexerValue = rc_Signal.c_RawValueDec.ToInt();
+               s32_MultiplexerValue = std::stoi(rc_Signal.c_RawValueDec);
             }
 
             if (c_MultiplexerOrder[u32_Order] == s32_MultiplexerValue)

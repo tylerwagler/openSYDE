@@ -154,7 +154,7 @@ private:
                     C_SyvUpPacListNodeItemWidget ** const oppc_App = NULL) const;
    void m_AddSecurityCertificatePackage(void);
    void m_OnCreatePackage(const QString & orc_PublicKeyPath, const QString & orc_Password,
-                          const std::vector<stw::scl::C_SclString> & orc_CertificatesPath,
+                          const std::vector<std::string> & orc_CertificatesPath,
                           const bool oq_OptionAddPemFiles, const bool oq_OptionAddSecureAuthentication);
    void m_OpenSecuritySettings(void);
    void m_ShowSecurityStates(void) const;

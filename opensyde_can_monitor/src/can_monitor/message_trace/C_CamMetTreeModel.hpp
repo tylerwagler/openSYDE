@@ -19,7 +19,7 @@
 #include <QTimer>
 #include <QPixmap>
 
-#include "C_SclString.hpp"
+#include <string>
 #include "C_TblTreSimpleModel.hpp"
 #include "C_CamMetTreeLoggerData.hpp"
 #include "C_CanMonProtocol.hpp"
@@ -112,8 +112,8 @@ private:
    uint32_t mu32_TraceBufferSizeUsed;   // The set and used buffer size
    uint32_t mu32_TraceBufferSizeConfig; // The set buffer size by user. Will be set after restart the
    // communication
-   QMap<stw::scl::C_SclString, C_CamMetTreeLoggerData> mc_UniqueMessages;
-   QMap<stw::scl::C_SclString, stw::scl::C_SclString> mc_UniqueMessagesOrdering;
+   QMap<std::string, C_CamMetTreeLoggerData> mc_UniqueMessages;
+   QMap<std::string, std::string> mc_UniqueMessagesOrdering;
    std::vector<C_CamMetTreeLoggerData> mc_DataBase;
    bool mq_DataUnlocked;
    uint32_t mu32_OldestItemIndex;
@@ -144,10 +144,10 @@ private:
    std::vector<int32_t> m_AddRowsContinuousMode(const std::list<C_CamMetTreeLoggerData> & orc_Data);
    void m_AddRowsUnique(const std::list<C_CamMetTreeLoggerData> & orc_Data);
    void m_HandleNewUniqueMessageForExistingUniqueMessage(const C_CamMetTreeLoggerData & orc_Message,
-                                                         const stw::scl::C_SclString & orc_ExistingMessageKey,
+                                                         const std::string & orc_ExistingMessageKey,
                                                          const int32_t os32_MultiplexerValue);
    void m_HandleNewUniqueMessage(const C_CamMetTreeLoggerData & orc_Message, const int32_t os32_MultiplexerValue);
-   int32_t m_GetPosIndexForUniqueMessage(const stw::scl::C_SclString & orc_AbsoluteTimeStamp) const;
+   int32_t m_GetPosIndexForUniqueMessage(const std::string & orc_AbsoluteTimeStamp) const;
 
    void m_GrayOutTimer(void);
    static int32_t mh_GetTransparencyStep(const uint32_t ou32_DiffTime);

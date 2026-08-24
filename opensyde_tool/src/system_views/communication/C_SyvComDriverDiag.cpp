@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include <QElapsedTimer>
 #include <QThread>
@@ -404,10 +405,10 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
 
             if (e_InterfaceType == C_OscSystemBus::eCAN)
             {
-               C_SclString c_LogText;
+               std::string c_LogText;
                mc_CyclicTransmissionsSupported[u32_ActiveNode] = 0U;
 
-               c_LogText.PrintFormatted("Not requesting cyclic transmissions for node \"%s\" (%d.%d). "
+               c_LogText = PrintFormattedCompat("Not requesting cyclic transmissions for node \"%s\" (%d.%d). "
                                         "It is connected via CAN and encryption is active. This is not supported.",
                                         m_GetActiveNodeName(u32_ActiveNode).c_str(),
                                         static_cast<int16_t>(mc_ServerIds[u32_ActiveNode].u8_BusIdentifier),
@@ -1205,7 +1206,7 @@ const
    }
    else
    {
-      const stw::scl::C_SclString c_Path = orc_Path.toStdString().c_str();
+      const std::string c_Path = orc_Path.toStdString().c_str();
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != NULL)
       {
@@ -1247,7 +1248,7 @@ int32_t C_SyvComDriverDiag::NvmSafeReadFileWithoutCrc(const uint32_t ou32_NodeIn
    }
    else
    {
-      const stw::scl::C_SclString c_Path = orc_Path.toStdString().c_str();
+      const std::string c_Path = orc_Path.toStdString().c_str();
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != NULL)
       {
@@ -1289,7 +1290,7 @@ int32_t C_SyvComDriverDiag::NvmSafeCheckParameterFileContents(const uint32_t ou3
    }
    else
    {
-      const stw::scl::C_SclString c_Path = orc_Path.toStdString().c_str();
+      const std::string c_Path = orc_Path.toStdString().c_str();
       s32_Return = this->mc_DataDealers[u32_ActiveIndex]->NvmSafeCheckParameterFileContents(
          c_Path, orc_DataPoolLists);
    }
@@ -1322,7 +1323,7 @@ int32_t C_SyvComDriverDiag::NvmSafeUpdateCrcForFile(const uint32_t ou32_NodeInde
    }
    else
    {
-      const stw::scl::C_SclString c_Path = orc_Path.toStdString().c_str();
+      const std::string c_Path = orc_Path.toStdString().c_str();
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != NULL)
       {
@@ -2143,8 +2144,8 @@ int32_t C_SyvComDriverDiag::m_GetAllDatapoolMetadata(const uint32_t ou32_ActiveD
                C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
             if (pc_Node != NULL)
             {
-               stw::scl::C_SclString c_Error;
-               c_Error.PrintFormatted("Datapool verify failed between client and node %s. " \
+               std::string c_Error;
+               c_Error = PrintFormattedCompat("Datapool verify failed between client and node %s. " \
                                       "Reason: %s",
                                       pc_Node->c_Properties.c_Name.c_str(),
                                       c_ErrorReason.toStdString().c_str());
@@ -2302,16 +2303,16 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
                            osc_write_log_info("Starting diagnostics",
                                               "No mapping for Datapool \"" + rc_Datapool.c_Name +
                                               "\" necessary"
-                                              " (Datapool index: " + C_SclString::IntToStr(u32_ItDataPool) + ").");
+                                              " (Datapool index: " + std::to_string(u32_ItDataPool) + ").");
                         }
                         else
                         {
                            osc_write_log_info("Starting diagnostics",
                                               "A mapping for Datapool \"" + rc_Datapool.c_Name +
                                               "\" is necessary"
-                                              " (Datapool index on client: " + C_SclString::IntToStr(u32_ItDataPool) +
+                                              " (Datapool index on client: " + std::to_string(u32_ItDataPool) +
                                               " ;Datapool index on server: " +
-                                              C_SclString::IntToStr(u32_ServerDatapoolIndex) + ").");
+                                              std::to_string(u32_ServerDatapoolIndex) + ").");
                         }
                      }
                   }
@@ -2328,8 +2329,8 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
             if (s32_Return != C_NO_ERR)
             {
                // Verify failed
-               stw::scl::C_SclString c_Error;
-               c_Error.PrintFormatted("Datapool verify failed between client and node %s. " \
+               std::string c_Error;
+               c_Error = PrintFormattedCompat("Datapool verify failed between client and node %s. " \
                                       "Reason: %s",
                                       pc_Node->c_Properties.c_Name.c_str(),
                                       c_ErrorReason.toStdString().c_str());
@@ -2342,8 +2343,8 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
             }
             else
             {
-               stw::scl::C_SclString c_Text;
-               c_Text.PrintFormatted("Datapool verified. Node: %s " \
+               std::string c_Text;
+               c_Text = PrintFormattedCompat("Datapool verified. Node: %s " \
                                      "Datapool: %s", pc_Node->c_Properties.c_Name.c_str(), rc_Datapool.c_Name.c_str());
                osc_write_log_info("Starting diagnostics", c_Text);
             }
@@ -2383,7 +2384,7 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComDriverDiag::m_GetReadDatapoolMetadata(const uint32_t ou32_ActiveDiagNodeIndex,
-                                                      const C_SclString & orc_DatapoolName,
+                                                      const std::string & orc_DatapoolName,
                                                       uint32_t & oru32_ServerDatapoolIndex,
                                                       C_OscProtocolDriverOsy::C_DataPoolMetaData & orc_Metadata) const
 {

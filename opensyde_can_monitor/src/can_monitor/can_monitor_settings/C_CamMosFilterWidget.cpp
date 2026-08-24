@@ -442,7 +442,7 @@ void C_CamMosFilterWidget::m_EnableFilters(const bool & orq_Enabled)
 void C_CamMosFilterWidget::m_OnAddClicked()
 {
    // Create unique name
-   std::map<stw::scl::C_SclString, bool> c_Names;
+   std::map<std::string, bool> c_Names;
    std::vector<C_CamProFilterData> c_Filters = C_CamProHandler::h_GetInstance()->GetFilters();
    const QString c_ProposedName = "NewFilter";
    C_CamProFilterData c_FilterData;
@@ -523,7 +523,7 @@ void C_CamMosFilterWidget::m_OnAddFilterFromContextmenu(const QList<int32_t> oc_
                                                         const QList<uint8_t> oc_CanMsgXtd)
 {
    // Create unique name
-   std::map<stw::scl::C_SclString, bool> c_Names;
+   std::map<std::string, bool> c_Names;
    std::vector<C_CamProFilterData> c_Filters = C_CamProHandler::h_GetInstance()->GetFilters();
    const QString c_ProposedName = "NewFilter";
    C_CamProFilterData c_FilterData;

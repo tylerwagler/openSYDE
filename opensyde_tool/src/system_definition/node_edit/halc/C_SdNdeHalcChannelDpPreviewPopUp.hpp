@@ -56,21 +56,21 @@ private:
    static void mh_AddUseCase(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                              const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex, QString & orc_Text);
    static void mh_AddListSection(const std::vector<stw::opensyde_core::C_OscHalcDefStruct> & orc_Definition,
-                                 const std::vector<uint32_t> & orc_Indices, const stw::scl::C_SclString & orc_ListName,
-                                 const stw::scl::C_SclString & orc_DomainSingularName, QString & orc_Text,
+                                 const std::vector<uint32_t> & orc_Indices, const std::string & orc_ListName,
+                                 const std::string & orc_DomainSingularName, QString & orc_Text,
                                  const stw::opensyde_core::C_OscHalcDefDomain & orc_Domain,
                                  const stw::opensyde_core::C_OscHalcConfigDomain & orc_DomainConfig,
                                  const stw::opensyde_core::C_OscHalcMagicianDatapoolListHandler & orc_DpHandler,
                                  const bool oq_AddSpecialVars = false);
    static void mh_AddElementSection(const stw::opensyde_core::C_OscHalcDefElement & orc_HalDefElement,
                                     const std::vector<stw::opensyde_core::C_OscHalcDefStruct> & orc_Definition,
-                                    const uint32_t ou32_Index, const stw::scl::C_SclString & orc_DomainSingularName,
+                                    const uint32_t ou32_Index, const std::string & orc_DomainSingularName,
                                     const uint32_t ou32_ElementIndex,
                                     const std::vector<uint32_t> & orc_RelevantChannels,
-                                    const stw::scl::C_SclString & orc_ListName, bool & orq_AddedList,
+                                    const std::string & orc_ListName, bool & orq_AddedList,
                                     QString & orc_Text);
-   static void mh_AddListEntry(const stw::scl::C_SclString & orc_ListName, bool & orq_ListAdded,
-                               const stw::scl::C_SclString & orc_VarName, const stw::scl::C_SclString & orc_VarComment,
+   static void mh_AddListEntry(const std::string & orc_ListName, bool & orq_ListAdded,
+                               const std::string & orc_VarName, const std::string & orc_VarComment,
                                QString & orc_Text);
 
    //Avoid call

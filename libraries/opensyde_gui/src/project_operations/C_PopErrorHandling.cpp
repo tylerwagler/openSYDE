@@ -57,7 +57,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 void C_PopErrorHandling::h_ProjectLoadErr(const int32_t & ors32_Err, const QString & orc_Path,
                                           QWidget * const opc_Parent, const uint16_t ou16_SystemDefinitionVersion,
-                                          const std::vector<stw::scl::C_SclString> & orc_ErrorDetailsMissingDevices)
+                                          const std::vector<std::string> & orc_ErrorDetailsMissingDevices)
 {
    if (ors32_Err == C_WARN)
    {

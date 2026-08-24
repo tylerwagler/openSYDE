@@ -43,7 +43,7 @@ public:
    static C_CieDataPoolListStructure h_GetStructureFromDcfAndEdsFileImport(
       const stw::opensyde_core::C_OscEdsDcfImportMessageGroup & orc_OscRxMessageData,
       const stw::opensyde_core::C_OscEdsDcfImportMessageGroup & orc_OscTxMessageData,
-      const std::vector<std::vector<stw::scl::C_SclString> > & orc_InfoMessagesPerMessage);
+      const std::vector<std::vector<std::string> > & orc_InfoMessagesPerMessage);
    static void h_AssignNode(const stw::opensyde_core::C_OscCanInterfaceId & orc_Id,
                             std::vector<stw::opensyde_core::C_OscCanMessage> & orc_OscMessageData);
 

@@ -25,7 +25,7 @@
 #include "C_OscZipFile.hpp"
 #include "C_OscProjectFiler.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "stwerrors.hpp"
 #include "C_Uti.hpp"
 #include "C_UsHandler.hpp"
@@ -183,7 +183,7 @@ int32_t C_PuiProject::SaveCurrentProjectForServiceMode(const QString & orc_FileP
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiProject::Load(uint16_t * const opu16_FileVersion,
-                           std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices)
+                           std::vector<std::string> * const opc_ErrorDetailsMissingDevices)
 {
    int32_t s32_Retval;
 
@@ -507,7 +507,7 @@ int32_t C_PuiProject::PrepareLoadInitialProject(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiProject::LoadInitialProject(uint16_t * const opu16_FileVersion, QString & orc_LoadedProject,
-                                         std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices)
+                                         std::vector<std::string> * const opc_ErrorDetailsMissingDevices)
 {
    // Load it
    const int32_t s32_Error = this->Load(opu16_FileVersion, opc_ErrorDetailsMissingDevices);
@@ -692,7 +692,7 @@ int32_t C_PuiProject::m_SaveServiceModeProject(const QString & orc_FilePath, con
    const QString c_ExePath = C_Uti::h_GetExePath();
    const QString c_TemporaryPath = c_ExePath + "/" + mhc_TEMP_FOLDER + "/";
    const QString c_TemporaryProjectPath = c_TemporaryPath + c_TargetFileName + "/" + c_TargetFileName + ".syde";
-   C_SclString c_ErrorString;
+   std::string c_ErrorString;
 
    // Save the entire project to a temporary folder
    this->SetPath(c_TemporaryProjectPath);
@@ -702,11 +702,11 @@ int32_t C_PuiProject::m_SaveServiceModeProject(const QString & orc_FilePath, con
 
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_SclString> c_AllFilesAbsolute;
+      std::vector<std::string> c_AllFilesAbsolute;
 
       C_Uti::h_GetAllFilePathsInFolder(c_TemporaryPath, c_AllFilesAbsolute);
       {
-         std::set<C_SclString> c_AllFilesRelative;
+         std::set<std::string> c_AllFilesRelative;
          C_OscZipFile::h_AppendFilesRelative(c_AllFilesRelative, c_AllFilesAbsolute,
                                              c_TemporaryPath.toStdString().c_str());
 
@@ -715,7 +715,7 @@ int32_t C_PuiProject::m_SaveServiceModeProject(const QString & orc_FilePath, con
                                                                      c_AllFilesRelative,
                                                                      orc_FilePath.toStdString().c_str(),
                                                                      orc_Password.toStdString().c_str(),
-                                                                     &c_ErrorString);
+                                                                     &c_ErrorString).value();
       }
    }
 
@@ -748,7 +748,7 @@ int32_t C_PuiProject::m_SaveServiceModeProject(const QString & orc_FilePath, con
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiProject::m_LoadProject(uint16_t * const opu16_FileVersion,
-                                    std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices)
+                                    std::vector<std::string> * const opc_ErrorDetailsMissingDevices)
 {
    int32_t s32_Retval;
 
@@ -772,11 +772,11 @@ int32_t C_PuiProject::m_LoadProject(uint16_t * const opu16_FileVersion,
             if (c_FileInfoSysDef.exists() == false)
             {
                osc_write_log_info("Loading project",
-                                  static_cast<C_SclString>("Could not find system definition file \"") + c_SystemDefintionPath.toStdString().c_str() +
+                                  static_cast<std::string>("Could not find system definition file \"") + c_SystemDefintionPath.toStdString().c_str() +
                                   "\".");
                mh_AdaptProjectPathToSystemDefinitionV2(this->mc_Path, c_SystemDefintionPath);
                osc_write_log_info("Loading project",
-                                  static_cast<C_SclString>("Trying previous version 2 path \"") + c_SystemDefintionPath.toStdString().c_str() +
+                                  static_cast<std::string>("Trying previous version 2 path \"") + c_SystemDefintionPath.toStdString().c_str() +
                                   "\".");
             }
             //Load system definition
@@ -793,11 +793,11 @@ int32_t C_PuiProject::m_LoadProject(uint16_t * const opu16_FileVersion,
                   if (c_FileInfoSysView.exists() == false)
                   {
                      osc_write_log_info("Loading project",
-                                        static_cast<C_SclString>("Could not find system views file \"") + c_SystemViewsPath.toStdString().c_str() +
+                                        static_cast<std::string>("Could not find system views file \"") + c_SystemViewsPath.toStdString().c_str() +
                                         "\".");
                      mh_AdaptProjectPathToSystemViewsV1(this->mc_Path, c_SystemViewsPath);
                      osc_write_log_info("Loading project",
-                                        static_cast<C_SclString>("Trying previous version 1 path \"") + c_SystemViewsPath.toStdString().c_str() +
+                                        static_cast<std::string>("Trying previous version 1 path \"") + c_SystemViewsPath.toStdString().c_str() +
                                         "\".");
                   }
                   //Load system views
@@ -845,7 +845,7 @@ int32_t C_PuiProject::m_LoadProject(uint16_t * const opu16_FileVersion,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiProject::m_LoadServiceModeProject(const QString & orc_Password, uint16_t * const opu16_FileVersion,
-                                               std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices)
+                                               std::vector<std::string> * const opc_ErrorDetailsMissingDevices)
 {
    int32_t s32_Retval;
    const QString c_OriginalPath = this->GetPath();
@@ -854,12 +854,13 @@ int32_t C_PuiProject::m_LoadServiceModeProject(const QString & orc_Password, uin
    const QString c_ExePath = C_Uti::h_GetExePath();
    const QString c_TemporaryPath = c_ExePath + "/" + mhc_TEMP_FOLDER + "/";
    const QString c_TemporaryProjectPath = c_TemporaryPath + c_ProjectName + "/" + c_ProjectName + ".syde";
-   C_SclString c_ErrorString;
+   std::string c_ErrorString;
 
    // Decrypt the encrypted zip file
    s32_Retval = C_OscSecurityAesFile::h_UnpackEncryptedZipFile(c_OriginalPath.toStdString().c_str(),
                                                                c_TemporaryPath.toStdString().c_str(),
-                                                               orc_Password.toStdString().c_str(), &c_ErrorString);
+                                                               orc_Password.toStdString().c_str(),
+                                                               &c_ErrorString).value();
 
    if (s32_Retval == C_NO_ERR)
    {

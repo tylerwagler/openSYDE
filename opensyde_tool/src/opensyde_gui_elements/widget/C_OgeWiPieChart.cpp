@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OgeWiPieChart.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "ui_C_OgeWiPieChart.h"
 #include "constants.hpp"
 
@@ -88,7 +88,7 @@ void C_OgeWiPieChart::paintEvent(QPaintEvent * const opc_Event)
    QRect c_Rect(50, 50, 200, 200);
    int16_t s16_StartAngle;
    float32_t f32_SpanAngle;
-   stw::scl::C_SclString c_String;
+   std::string c_String;
 
    c_BackgroundBrush.setColor(QColor(2, 155, 136));
    c_ForegroundBrush.setColor(QColor(40, 40, 40));
@@ -119,7 +119,7 @@ void C_OgeWiPieChart::paintEvent(QPaintEvent * const opc_Event)
    //text
    c_Painter.setPen(c_Pen);
    c_Painter.setFont(c_Font);
-   c_String = stw::scl::C_SclString::IntToStr(mu16_ValueInPercent);
+   c_String = std::to_string(mu16_ValueInPercent);
    c_String += "%";
    c_Painter.drawText(c_Rect, static_cast<int32_t>(Qt::AlignCenter), c_String.c_str());
 

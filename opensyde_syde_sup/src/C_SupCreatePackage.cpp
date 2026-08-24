@@ -56,9 +56,9 @@ using namespace stw::opensyde_core;
    \param[in]  orc_TempDir          Temporary directory for creating zip package
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SupCreatePackage::C_SupCreatePackage(const bool oq_Quiet, const C_SclString & orc_SupFilePath,
-                                       const C_SclString & orc_OsyProjectPath, const C_SclString & orc_ViewName,
-                                       const C_SclString & orc_DeviceDefPath, const C_SclString & orc_TempDir) :
+C_SupCreatePackage::C_SupCreatePackage(const bool oq_Quiet, const std::string & orc_SupFilePath,
+                                       const std::string & orc_OsyProjectPath, const std::string & orc_ViewName,
+                                       const std::string & orc_DeviceDefPath, const std::string & orc_TempDir) :
    mq_Quiet(oq_Quiet),
    mc_SupFilePath(orc_SupFilePath),
    mc_OsyProjectPath(orc_OsyProjectPath),
@@ -83,8 +83,8 @@ C_SydeSup::E_Result C_SupCreatePackage::Create()
 {
    C_SydeSup::E_Result e_Result = C_SydeSup::eOK;
    int32_t s32_Return;
-   C_SclString c_SysDefPath;
-   C_SclString c_SysViewPath;
+   std::string c_SysDefPath;
+   std::string c_SysViewPath;
    C_OscSystemDefinition c_SystemDefinition;
    C_OscViewData c_View;
 
@@ -135,7 +135,7 @@ C_SydeSup::E_Result C_SupCreatePackage::Create()
    if (e_Result == C_SydeSup::eOK)
    {
       C_SclStringList c_Warnings;
-      C_SclString c_Error;
+      std::string c_Error;
       std::vector<uint8_t> c_NodeActiveFlags = c_View.GetNodeActiveFlags();
       std::vector<C_OscSuSequences::C_DoFlash> c_ApplicationsToWrite;
       uint32_t u32_HighestUpdatePos = 0;
@@ -297,7 +297,7 @@ void C_SupCreatePackage::m_GetUpdatePackage(const C_OscViewData & orc_View,
          {
             if (rc_NodeUpdateInfo.GetSkipUpdateOfPemFile() == false)
             {
-               const C_SclString c_AbsolutePath =
+               const std::string c_AbsolutePath =
                   TglIsRelativePath(rc_NodeUpdateInfo.GetPemFilePath()) ?
                   TglExpandFileName(rc_NodeUpdateInfo.GetPemFilePath(), TglExtractFilePath(mc_OsyProjectPath)) :
                   rc_NodeUpdateInfo.GetPemFilePath();
@@ -335,13 +335,13 @@ void C_SupCreatePackage::m_GetUpdatePackage(const C_OscViewData & orc_View,
 void C_SupCreatePackage::m_GetDataBlocksToWrite(const C_OscViewNodeUpdate & orc_NodeUpdate, const C_OscNode & orc_Node,
                                                 C_OscSuSequences::C_DoFlash & orc_ApplicationToWrite) const
 {
-   const std::vector<C_SclString> c_Paths = orc_NodeUpdate.GetPaths(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
+   const std::vector<std::string> c_Paths = orc_NodeUpdate.GetPaths(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
    const std::vector<bool> c_SkipUpdate =
       orc_NodeUpdate.GetSkipUpdateOfPathsFlags(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
 
    // use TglExpandFileName to get an absolute path for openSYDE project
    //(else we get issues below with resolving paths from Data Blocks)
-   C_SclString c_OsyProjDir =
+   std::string c_OsyProjDir =
       TglIsRelativePath(mc_OsyProjectPath) ? TglExpandFileName(mc_OsyProjectPath, "./") : mc_OsyProjectPath;
 
    c_OsyProjDir = TglExtractFilePath(c_OsyProjDir);
@@ -359,8 +359,8 @@ void C_SupCreatePackage::m_GetDataBlocksToWrite(const C_OscViewNodeUpdate & orc_
          // HALC PSI Data Block output files are handled in PSI file section
          if (rc_DataBlock.e_Type != C_OscNodeApplication::ePARAMETER_SET_HALC)
          {
-            const C_SclString c_DbProjPath = rc_DataBlock.c_ProjectPath;
-            C_SclString c_RealPath;
+            const std::string c_DbProjPath = rc_DataBlock.c_ProjectPath;
+            std::string c_RealPath;
 
             for (uint32_t u32_DatablockFileCounter = 0; u32_DatablockFileCounter < rc_DataBlock.c_ResultPaths.size();
                  ++u32_DatablockFileCounter)
@@ -419,10 +419,10 @@ void C_SupCreatePackage::m_GetFileBasedFilesToWrite(const C_OscViewNodeUpdate & 
                                                     const C_OscNode & orc_Node,
                                                     C_OscSuSequences::C_DoFlash & orc_ApplicationToWrite) const
 {
-   const std::vector<C_SclString> c_Paths = orc_NodeUpdate.GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
+   const std::vector<std::string> c_Paths = orc_NodeUpdate.GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
    const std::vector<bool> c_SkipUpdate =
       orc_NodeUpdate.GetSkipUpdateOfPathsFlags(C_OscViewNodeUpdate::eFTP_FILE_BASED);
-   const C_SclString c_OsyProjDir = TglExtractFilePath(mc_OsyProjectPath);
+   const std::string c_OsyProjDir = TglExtractFilePath(mc_OsyProjectPath);
 
    tgl_assert(c_Paths.size() == c_SkipUpdate.size());
    if (c_Paths.size() == c_SkipUpdate.size())
@@ -432,7 +432,7 @@ void C_SupCreatePackage::m_GetFileBasedFilesToWrite(const C_OscViewNodeUpdate & 
          if (c_SkipUpdate[u32_FileCounter] == false)
          {
             // Make path absolute (no placeholder in file based case)
-            const C_SclString c_AbsolutePath =
+            const std::string c_AbsolutePath =
                TglIsRelativePath(c_Paths[u32_FileCounter]) ?
                TglExpandFileName(c_Paths[u32_FileCounter], c_OsyProjDir) : c_Paths[u32_FileCounter];
             orc_ApplicationToWrite.c_FilesToFlash.push_back(c_AbsolutePath);
@@ -467,7 +467,7 @@ void C_SupCreatePackage::m_GetParamSetsToWrite(const C_OscViewNodeUpdate & orc_N
       {
          if (c_SkipParamUpdate[u32_ParamInfoCounter] == false)
          {
-            C_SclString c_RealPath = c_ParamInfos[u32_ParamInfoCounter].GetPath();
+            std::string c_RealPath = c_ParamInfos[u32_ParamInfoCounter].GetPath();
             if (c_RealPath == "")
             {
                // Find corresponding Data Block of type HALC Parameter set. Must be unique.

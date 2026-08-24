@@ -561,7 +561,7 @@ void C_SyvUpPacSectionNodeFilesWidget::SetCountSkippedParamSetFiles(const uint32
 void C_SyvUpPacSectionNodeFilesWidget::m_InitSpecificItem(const stw::opensyde_core::C_OscNode & orc_Node,
                                                           const stw::opensyde_core::C_OscViewNodeUpdate & orc_UpdateInfo)
 {
-   const std::vector<C_SclString> c_ViewAppPaths = orc_UpdateInfo.GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
+   const std::vector<std::string> c_ViewAppPaths = orc_UpdateInfo.GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
    const std::vector<C_OscViewNodeUpdateParamInfo> c_ViewParamsetPaths = orc_UpdateInfo.GetParamInfos();
    const QString c_ViewPemPath = orc_UpdateInfo.GetPemFilePath().c_str();
 

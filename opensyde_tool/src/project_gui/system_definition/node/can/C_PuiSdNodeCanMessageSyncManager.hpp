@@ -129,7 +129,7 @@ public:
    void CheckMessageIdBus(const stw::opensyde_core::C_OscCanMessageUniqueId & orc_MessageId, bool & orq_Valid, const stw::opensyde_core::C_OscCanMessageIdentificationIndices * const opc_SkipMessage =
                              NULL, bool * const opq_EcosRangeError = NULL, bool * const opq_EcosEvenError = NULL,
                           bool * const opq_DuplicateDetected = NULL) const;
-   void CheckMessageNameBus(const stw::scl::C_SclString & orc_MessageName, bool & orq_Valid, const stw::opensyde_core::C_OscCanMessageIdentificationIndices * const opc_SkipMessage =
+   void CheckMessageNameBus(const std::string & orc_MessageName, bool & orq_Valid, const stw::opensyde_core::C_OscCanMessageIdentificationIndices * const opc_SkipMessage =
                                NULL, bool * const opq_InvalidName = NULL,
                             bool * const opq_DuplicateName = NULL) const;
    void CheckMessageHasTx(bool & orq_Valid,

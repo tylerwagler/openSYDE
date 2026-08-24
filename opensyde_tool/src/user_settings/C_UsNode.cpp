@@ -210,7 +210,7 @@ std::map<uint8_t, bool> C_UsNode::GetExpandedCanOpenDevices(void) const
    CANopen expanded device
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<std::pair<uint8_t, std::pair<uint8_t, stw::scl::C_SclString> >,
+std::map<std::pair<uint8_t, std::pair<uint8_t, std::string> >,
          bool> C_UsNode::GetExpandedCanOpenDevice(void) const
 {
    return this->mc_CanOpenExpandedDevice;
@@ -593,7 +593,7 @@ void C_UsNode::SetExpandedCanOpenDevices(const std::map<uint8_t, bool> & orc_Dev
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetExpandedCanOpenDevice(const std::map<std::pair<uint8_t, std::pair<uint8_t,
-                                                                                    stw::scl::C_SclString> >,
+                                                                                    std::string> >,
                                                        bool> & orc_Device)
 {
    this->mc_CanOpenExpandedDevice = orc_Device;

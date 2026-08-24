@@ -107,8 +107,8 @@ void C_CieExportReportWidget::InitStaticNames(void) const
    \param[in] orc_Warnings                 warnings of DBC file export
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CieExportReportWidget::SetMessageData(const std::map<C_SclString,
-                                                            C_SclString> & orc_NodeMapping,
+void C_CieExportReportWidget::SetMessageData(const std::map<std::string,
+                                                            std::string> & orc_NodeMapping,
                                              const C_CieExportDbc::C_ExportStatistic & orc_ExportStatistic,
                                              const C_SclStringList & orc_Warnings)
 {
@@ -137,11 +137,11 @@ void C_CieExportReportWidget::m_OkClicked(void)
 void C_CieExportReportWidget::m_BuildReport(void)
 {
    // get nodes
-   C_SclString c_Nodes = "Node(s): ";
+   std::string c_Nodes = "Node(s): ";
    bool q_FirstEntry = true;
 
    // build up node mapping
-   std::map<C_SclString, C_SclString>::const_iterator c_Iter;
+   std::map<std::string, std::string>::const_iterator c_Iter;
    for (c_Iter = this->mc_NodeMapping.begin(); c_Iter != this->mc_NodeMapping.end(); ++c_Iter)
    {
       if (q_FirstEntry == true)
@@ -156,7 +156,7 @@ void C_CieExportReportWidget::m_BuildReport(void)
    }
 
    // build up warning messages
-   C_SclString c_Warnings;
+   std::string c_Warnings;
    const uint32_t u32_NumOfWarnings = this->mc_Warnings.GetCount();
    if (u32_NumOfWarnings > 0)
    {

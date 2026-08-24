@@ -19,7 +19,7 @@
 #include "C_SyvUpPacServiceUpdatePackageDialog.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_SyvUpPacSecureArchiveDialog.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -439,8 +439,8 @@ void C_SyvUpPacWidget::m_ButtonCreatePackage(void)
             // 1 indicates secure archive file for secure update.
             // 0 Indicates normal archive file.
             const std::vector<uint8_t> c_EncryptNodes = {q_SecureFile};
-            const std::vector<C_SclString> c_EncryptNodesPassword = {c_Password.toStdString()};
-            const std::vector<C_SclString> c_PemFilePath = {c_PrivateKeyPath.toStdString()};
+            const std::vector<std::string> c_EncryptNodesPassword = {c_Password.toStdString()};
+            const std::vector<std::string> c_PemFilePath = {c_PrivateKeyPath.toStdString()};
             this->mpc_Ui->pc_ListWidget->CreateServiceUpdatePackage(q_SaveAsFile, q_SecureFile, c_EncryptNodes,
                                                                     c_EncryptNodesPassword, c_EncryptNodes,
                                                                     c_PemFilePath);

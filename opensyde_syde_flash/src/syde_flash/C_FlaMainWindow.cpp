@@ -766,7 +766,7 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
                          stw::opensyde_core::C_OscCanAdapterFactory::h_GetBackendDisplayName(c_Config.e_BackendKind) +
                          ", channel: " + c_ChannelId.toStdString());
 
-      stw::scl::C_SclString c_Error;
+      std::string c_Error;
       this->mpc_CanDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
       if (this->mpc_CanDispatcher == NULL)
       {

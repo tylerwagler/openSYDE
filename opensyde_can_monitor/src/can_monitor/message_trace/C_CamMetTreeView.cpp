@@ -977,7 +977,7 @@ void C_CamMetTreeView::m_HandleMessages(void)
    while (this->m_GetCanMessage(c_Msg) == C_NO_ERR)
    {
       // Ensure grey-out vectors match the actual data length (they default to 8)
-      const uint32_t u32_Dlc = static_cast<uint32_t>(c_Msg.c_CanDlc.ToInt());
+      const uint32_t u32_Dlc = static_cast<uint32_t>(std::stoi(c_Msg.c_CanDlc));
       if (c_Msg.c_GreyOutInformation.c_GrayOutValueDataBytes.size() != u32_Dlc)
       {
          c_Msg.c_GreyOutInformation.c_GrayOutValueDataBytes.resize(u32_Dlc, 0);
@@ -1180,7 +1180,7 @@ void C_CamMetTreeView::m_AddFilter()
          {
             if (this->mc_Model.GetMessageData(s32_Row)->c_CanMsg.u8_XTD == 0)
             {
-               c_SelectedRowListMessagesCanId << this->mc_Model.GetMessageData(s32_Row)->c_CanIdDec.ToInt();
+               c_SelectedRowListMessagesCanId << std::stoi(this->mc_Model.GetMessageData(s32_Row)->c_CanIdDec);
             }
             else
             {

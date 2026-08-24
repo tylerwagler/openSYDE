@@ -14,7 +14,7 @@
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiUtil.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDbWidget.hpp"

@@ -108,7 +108,7 @@ C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
    // load devices so they are known to UI
    {
       const QStringList c_RootPaths = C_UsHandler::h_GetInstance()->GetDeviceRootPaths();
-      std::vector<stw::scl::C_SclString> c_StwPaths;
+      std::vector<std::string> c_StwPaths;
       c_StwPaths.reserve(static_cast<size_t>(c_RootPaths.size()));
       for (const QString & rc_Path : c_RootPaths)
       {

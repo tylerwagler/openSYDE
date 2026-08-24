@@ -98,17 +98,17 @@ bool C_SdBueSortHelper::operator ()(const C_OscCanMessageIdentificationIndices &
    false String 1 greater or equal
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdBueSortHelper::h_CompareString(const stw::scl::C_SclString & orc_String1,
-                                        const stw::scl::C_SclString & orc_String2)
+bool C_SdBueSortHelper::h_CompareString(const std::string & orc_String1,
+                                        const std::string & orc_String2)
 {
    //Default: strings equal
    bool q_Retval = false;
    bool q_Equal = true;
 
    //Compare on character basis
-   for (uint32_t u32_ItChar = 1; (u32_ItChar <= orc_String1.Length()) && (q_Equal == true); ++u32_ItChar)
+   for (uint32_t u32_ItChar = 1; (u32_ItChar <= orc_String1.length()) && (q_Equal == true); ++u32_ItChar)
    {
-      if (u32_ItChar <= orc_String2.Length())
+      if (u32_ItChar <= orc_String2.length())
       {
          const char_t cn_Char1 = orc_String1[u32_ItChar];
          const char_t cn_Char2 = orc_String2[u32_ItChar];
@@ -141,7 +141,7 @@ bool C_SdBueSortHelper::h_CompareString(const stw::scl::C_SclString & orc_String
    }
    if (q_Equal == true)
    {
-      if (orc_String1.Length() < orc_String2.Length())
+      if (orc_String1.length() < orc_String2.length())
       {
          //Message 1 smaller
          q_Retval = true;

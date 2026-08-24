@@ -24,7 +24,8 @@
 #include "stwerrors.hpp"
 #include "C_OscProjectFiler.hpp"
 #include "C_OscProject.hpp"
-#include "C_SclString.hpp"
+#include <string>
+#include "C_SclStringCompat.hpp"
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -32,6 +33,8 @@
 #include "C_XconfigGenExportBase.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscUtilBinaryHash.hpp"
+#include <sstream>
+#include <iomanip>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -43,6 +46,17 @@ using namespace stw::tgl;
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
+
+namespace
+{
+   template <typename T>
+   std::string mh_IntToHex(T val, uint32_t digits)
+   {
+      std::stringstream ss;
+      ss << std::hex << std::uppercase << std::setw(digits) << std::setfill('0') << val;
+      return ss.str();
+   }
+}
 
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
@@ -98,9 +112,9 @@ void C_XconfigGenExportBase::m_PrintCommandLineParameters(void) const
    string with version information ("V?.??r?" on error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_XconfigGenExportBase::h_GetApplicationVersion(const C_SclString & orc_FileName)
+std::string C_XconfigGenExportBase::h_GetApplicationVersion(const std::string & orc_FileName)
 {
-   C_SclString c_Version;
+   std::string c_Version;
 
    c_Version = "V?.\?\?r?";
 
@@ -121,7 +135,7 @@ C_SclString C_XconfigGenExportBase::h_GetApplicationVersion(const C_SclString & 
                             reinterpret_cast<PVOID *>(&pc_Info), //lint !e9176
                             &u32_ValSize) != FALSE)
          {
-            c_Version.PrintFormatted("V%lu.%02lur%lu", (pc_Info->dwFileVersionMS >> 16U),
+            c_Version = PrintFormattedCompat("V%lu.%02lur%lu", (pc_Info->dwFileVersionMS >> 16U),
                                      pc_Info->dwFileVersionMS & 0x0000FFFFUL,
                                      (pc_Info->dwFileVersionLS >> 16U));
          }
@@ -130,7 +144,7 @@ C_SclString C_XconfigGenExportBase::h_GetApplicationVersion(const C_SclString & 
    }
 #else
    (void)orc_FileName;
-   c_Version.PrintFormatted("V%d.%02dr%d", PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR, PROJECT_VERSION_RELEASE);
+   c_Version = PrintFormattedCompat("V%d.%02dr%d", PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR, PROJECT_VERSION_RELEASE);
 #endif
 
    return c_Version;
@@ -227,7 +241,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::ParseCommandLine(co
 {
    E_ResultCode e_Return = eRESULT_OK;
    int32_t s32_Result;
-   C_SclString c_Info = "";
+   std::string c_Info = "";
    bool q_PrintCommandLineParameters = false;
    bool q_ParseError = false;
 
@@ -389,7 +403,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::LoadSystemDefinitio
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::m_CreateNodeCode(const C_OscNode & orc_Node,
-                                                                              const C_SclString & orc_OutputPath)
+                                                                              const std::string & orc_OutputPath)
 {
    const bool q_OneApplicationOnly = (mc_ApplicationName != "");
    E_ResultCode e_Return = eRESULT_OK;
@@ -402,9 +416,9 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::m_CreateNodeCode(co
       {
          const C_OscNodeApplication & rc_Application = orc_Node.c_Applications[u32_Application];
 
-         if (rc_Application.c_Name.UpperCase() == mc_ApplicationName.UpperCase())
+         if (UpperCaseCompat(rc_Application.c_Name) == UpperCaseCompat(mc_ApplicationName))
          {
-            std::vector<C_SclString> c_CreatedFiles;
+            std::vector<std::string> c_CreatedFiles;
             if ((rc_Application.e_Type != C_OscNodeApplication::ePROGRAMMABLE_APPLICATION) &&
                 (rc_Application.e_Type != C_OscNodeApplication::ePARAMETER_SET_HALC))
             {
@@ -445,7 +459,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::m_CreateNodeCode(co
          if ((rc_Application.e_Type == C_OscNodeApplication::ePROGRAMMABLE_APPLICATION) ||
              (rc_Application.e_Type == C_OscNodeApplication::ePARAMETER_SET_HALC))
          {
-            std::vector<C_SclString> c_CreatedFiles;
+            std::vector<std::string> c_CreatedFiles;
             q_AtLeastOne = true;
             if (rc_Application.u16_GenCodeVersion > C_OscNodeApplication::hu16_HIGHEST_KNOWN_CODE_VERSION)
             {
@@ -454,7 +468,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::m_CreateNodeCode(co
             }
             else
             {
-               const C_SclString c_Path =
+               const std::string c_Path =
                   TglFileIncludeTrailingDelimiter(orc_OutputPath) +
                   C_OscUtils::h_NiceifyStringForFileName(rc_Application.c_Name);
                e_Return =
@@ -475,7 +489,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::m_CreateNodeCode(co
       }
       if (q_AtLeastOne == false)
       {
-         const C_SclString c_Info = "Not generating code for device \"" + orc_Node.c_Properties.c_Name +
+         const std::string c_Info = "Not generating code for device \"" + orc_Node.c_Properties.c_Name +
                                     "\" as it has no programmable application defined.";
          std::cout << c_Info.c_str() << &std::endl;
          osc_write_log_info("Code Generation", c_Info);
@@ -484,7 +498,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::m_CreateNodeCode(co
 
    if (e_Return != eRESULT_OK)
    {
-      const C_SclString c_Info = "Error occured on code generation for device \"" + orc_Node.c_Properties.c_Name +
+      const std::string c_Info = "Error occured on code generation for device \"" + orc_Node.c_Properties.c_Name +
                                  "\". Stopped code generation.";
       std::cout << c_Info.c_str() << &std::endl;
       osc_write_log_error("Code Generation", c_Info);
@@ -500,12 +514,12 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::m_CreateNodeCode(co
    \param[in]  orc_Application   Application information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_XconfigGenExportBase::m_PrintCodeFormatUnknownInfo(const C_SclString & orc_NodeName,
+void C_XconfigGenExportBase::m_PrintCodeFormatUnknownInfo(const std::string & orc_NodeName,
                                                           const stw::opensyde_core::C_OscNodeApplication & orc_Application)
 {
-   std::vector<C_SclString> c_CreatedFiles; // not used but necessary for m_PrintCodeCreationInformation
-   const C_SclString c_Info = "Code version 0x" +
-                              C_SclString::IntToHex(orc_Application.u16_GenCodeVersion, 4U) + " is unknown.";
+   std::vector<std::string> c_CreatedFiles; // not used but necessary for m_PrintCodeCreationInformation
+   const std::string c_Info = "Code version 0x" +
+                              mh_IntToHex(orc_Application.u16_GenCodeVersion, 4U) + " is unknown.";
    this->m_PrintCodeCreationInformation(orc_NodeName, orc_Application, false, c_CreatedFiles);
 
    std::cout << c_Info.c_str() << &std::endl;
@@ -521,12 +535,12 @@ void C_XconfigGenExportBase::m_PrintCodeFormatUnknownInfo(const C_SclString & or
    \param[in]  orc_CreatedFiles           List of generated files (only valid if oq_GenerationSuccessful is true)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_XconfigGenExportBase::m_PrintCodeCreationInformation(const C_SclString & orc_NodeName,
+void C_XconfigGenExportBase::m_PrintCodeCreationInformation(const std::string & orc_NodeName,
                                                             const C_OscNodeApplication & orc_Application,
                                                             const bool oq_GenerationSuccessful,
-                                                            std::vector<C_SclString> & orc_CreatedFiles)
+                                                            std::vector<std::string> & orc_CreatedFiles)
 {
-   C_SclString c_Text;
+   std::string c_Text;
 
    if (oq_GenerationSuccessful == true)
    {
@@ -537,7 +551,7 @@ void C_XconfigGenExportBase::m_PrintCodeCreationInformation(const C_SclString & 
       c_Text += "Could not generate code ";
    }
    c_Text += "for device \"" + orc_NodeName + "\" application \"" + orc_Application.c_Name +
-             "\" in code format version 0x" + C_SclString::IntToHex(orc_Application.u16_GenCodeVersion, 4U) + ".";
+             "\" in code format version 0x" + mh_IntToHex(orc_Application.u16_GenCodeVersion, 4U) + ".";
 
    if (oq_GenerationSuccessful == true)
    {
@@ -596,7 +610,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::GenerateSourceCode(
       if (TglDirectoryExists(mc_OutputPath) == true)
       {
          int32_t s32_Return;
-         C_SclString c_Info = "Clearing pre-existing target folder (" + mc_OutputPath + ").";
+         std::string c_Info = "Clearing pre-existing target folder (" + mc_OutputPath + ").";
          std::cout << c_Info.c_str() << &std::endl;
          osc_write_log_info("Code Generation", c_Info);
 
@@ -617,7 +631,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::GenerateSourceCode(
       if (TglDirectoryExists(mc_OutputPath) == false)
       {
          int32_t s32_Return;
-         C_SclString c_Info = "Creating target folder (" + mc_OutputPath + ").";
+         std::string c_Info = "Creating target folder (" + mc_OutputPath + ").";
          std::cout << c_Info.c_str() << &std::endl;
          osc_write_log_info("Code Generation", c_Info);
 
@@ -643,7 +657,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::GenerateSourceCode(
          for (uint32_t u32_Node = 0U; u32_Node < mc_SystemDefinition.c_Nodes.size(); u32_Node++)
          {
             const C_OscNode & rc_Node = mc_SystemDefinition.c_Nodes[u32_Node];
-            if (rc_Node.c_Properties.c_Name.UpperCase() == mc_DeviceName.UpperCase())
+            if (UpperCaseCompat(rc_Node.c_Properties.c_Name) == UpperCaseCompat(mc_DeviceName))
             {
                q_Found = true;
                if ((rc_Node.c_Properties.e_DiagnosticServer != C_OscNodeProperties::eDS_OPEN_SYDE))
@@ -670,7 +684,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::GenerateSourceCode(
             const C_OscNode & rc_Node = mc_SystemDefinition.c_Nodes[u32_Node];
             if ((rc_Node.c_Properties.e_DiagnosticServer == C_OscNodeProperties::eDS_OPEN_SYDE))
             {
-               const C_SclString c_Path = TglFileIncludeTrailingDelimiter(mc_OutputPath) +
+               const std::string c_Path = TglFileIncludeTrailingDelimiter(mc_OutputPath) +
                                           C_OscUtils::h_NiceifyStringForFileName(rc_Node.c_Properties.c_Name);
                e_Return = m_CreateNodeCode(mc_SystemDefinition.c_Nodes[u32_Node], c_Path);
                if (e_Return != eRESULT_OK)
@@ -680,7 +694,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::GenerateSourceCode(
             }
             else
             {
-               const C_SclString c_Info = "Not generating code for device \"" + rc_Node.c_Properties.c_Name +
+               const std::string c_Info = "Not generating code for device \"" + rc_Node.c_Properties.c_Name +
                                           "\" as it is not an openSYDE node.";
                std::cout << c_Info.c_str() << &std::endl;
                osc_write_log_info("Code Generation", c_Info);
@@ -703,8 +717,8 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::GenerateSourceCode(
 C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::Exit(const E_ResultCode oe_ResultCode)
 {
    //print enum as number; so the user can see what he/she would need to check for as ERRORLEVEL
-   C_SclString c_Text = "Tool result code: " +
-                        C_SclString::IntToStr(oe_ResultCode) + " "; //lint !e641  see comment above
+   std::string c_Text = "Tool result code: " +
+                        std::to_string(oe_ResultCode) + " "; //lint !e641  see comment above
    E_ResultCode e_Return = oe_ResultCode;
 
    if (oe_ResultCode == C_XconfigGenExportBase::eRESULT_OK)

@@ -249,7 +249,7 @@ void C_GiLiBus::GenerateHint(void)
    this->SetDefaultToolTipHeading(this->GetName());
 
    //comment
-   if (pc_Bus->c_Comment.IsEmpty() == false)
+   if (pc_Bus->c_Comment.empty() == false)
    {
       c_ToolTip = pc_Bus->c_Comment.c_str();
       c_ToolTip.append("\n\n");

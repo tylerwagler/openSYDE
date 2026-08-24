@@ -27,7 +27,7 @@
 #include "C_SyvDaDashboardTabProperties.hpp"
 #include "C_SyvDaCopyPasteManager.hpp"
 #include "C_OscUtils.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "constants.hpp"
 #include "C_Uti.hpp"
 #include "C_SyvDaDashboardScreenshot.hpp"
@@ -145,7 +145,7 @@ C_SyvDaDashboardScreenshot::~C_SyvDaDashboardScreenshot()
    return c_StrDateTime, the name of the screenshot to be saved as
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_SyvDaDashboardScreenshot::mh_SaveScreenshotAs(const C_SclString & orc_DashboardName)
+QString C_SyvDaDashboardScreenshot::mh_SaveScreenshotAs(const std::string & orc_DashboardName)
 {
    const QDateTime c_DateTime = QDateTime::currentDateTime();
    const QString c_StrDateTime = c_DateTime.toString("yyyy_MM_dd__HH_mm_ss_zzz") + "__" +
@@ -245,7 +245,7 @@ void C_SyvDaDashboardScreenshot::m_ChangeToActionScreenshotIcon()
    \param[in]      orc_DashboardName   Current dashboard name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardScreenshot::m_SaveScreenshot(QPixmap oc_CurrentTabPixmap, const C_SclString & orc_DashboardName)
+void C_SyvDaDashboardScreenshot::m_SaveScreenshot(QPixmap oc_CurrentTabPixmap, const std::string & orc_DashboardName)
 {
    QClipboard * const pc_Clipboard = QApplication::clipboard();
    const QString c_ScreenshotFormat = "png";

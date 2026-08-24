@@ -21,7 +21,7 @@
 using namespace stw::opensyde_gui_logic;
 
 bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t /*ou32_NodeIndex*/,
-                                           const stw::scl::C_SclString & /*orc_Expression*/,
+                                           const std::string & /*orc_Expression*/,
                                            std::string * const /*opc_ErrorDetails*/,
                                            bool * const opq_AreVariablesValid,
                                            bool * const opq_IsSyntaxValid)
@@ -32,7 +32,7 @@ bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t /*ou32_NodeIndex*/,
 }
 
 std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId>
-C_SdNdeDalTriggerCheckHelper::h_ParseDataElements(const stw::scl::C_SclString & /*orc_Condition*/)
+C_SdNdeDalTriggerCheckHelper::h_ParseDataElements(const std::string & /*orc_Condition*/)
 {
    return std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId>();
 }
@@ -85,12 +85,12 @@ const uint32_t C_SdNdeDalTriggerCheckHelper::mhu32_DUMMY_CHANNEL_ID = 0UL;
    \retval   False   Expression not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t ou32_NodeIndex, const C_SclString & orc_Expression,
+bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t ou32_NodeIndex, const std::string & orc_Expression,
                                            std::string * const opc_ErrorDetails, bool * const opq_AreVariablesValid,
                                            bool * const opq_IsSyntaxValid)
 {
    std::vector<Token> c_Tokens;
-   C_SclString c_Expression = orc_Expression;
+   std::string c_Expression = orc_Expression;
    bool q_IsValid;
    if (opq_AreVariablesValid != NULL)
    {
@@ -157,11 +157,11 @@ bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t ou32_NodeIndex, const 
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::vector<C_OscNodeDataPoolListElementOptArrayId> C_SdNdeDalTriggerCheckHelper::h_ParseDataElements(
-   const stw::scl::C_SclString & orc_Condition)
+   const std::string & orc_Condition)
 {
    std::vector<C_OscNodeDataPoolListElementOptArrayId> c_Retval;
    C_OscNodeDataPoolListElementOptArrayId c_ElementId;
-   const std::vector<stw::scl::C_SclString> c_Strings = mh_ParseDataElementStrings(orc_Condition);
+   const std::vector<std::string> c_Strings = mh_ParseDataElementStrings(orc_Condition);
    c_Retval.reserve(c_Strings.size());
    for (uint32_t u32_It = 0UL; u32_It < c_Strings.size(); ++u32_It)
    {
@@ -196,7 +196,7 @@ C_SdNdeDalTriggerCheckHelper::C_SdNdeDalTriggerCheckHelper()
    \retval   False   Expression not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdNdeDalTriggerCheckHelper::mh_ParseTokens(const scl::C_SclString & orc_Expression,
+bool C_SdNdeDalTriggerCheckHelper::mh_ParseTokens(const std::string & orc_Expression,
                                                   std::vector<data::monitor::Token> & orc_Tokens,
                                                   std::string * const opc_ErrorDetails)
 {
@@ -254,9 +254,9 @@ bool C_SdNdeDalTriggerCheckHelper::mh_ReplaceChannelTokens(std::vector<data::mon
          }
          else if (rc_Token.type == data::monitor::Token::Type::ConstantValue)
          {
-            const C_SclString c_Tmp(std::get<std::string>(rc_Token.value.value()));
+            const std::string c_Tmp(std::get<std::string>(rc_Token.value.value()));
             //lint -e{529} Variable is used
-            const float32_t f32_Value = static_cast<float32_t>(c_Tmp.ToDouble());
+            const float32_t f32_Value = static_cast<float32_t>(std::stod(c_Tmp));
             rc_Token.value.emplace(f32_Value);
          }
          else
@@ -640,7 +640,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelHalType(const opensyde_core::C
    \retval   False   Expression not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdNdeDalTriggerCheckHelper::mh_ConvertHalListToType(const scl::C_SclString & orc_ListName,
+bool C_SdNdeDalTriggerCheckHelper::mh_ConvertHalListToType(const std::string & orc_ListName,
                                                            C_OscHalcDefDomain::E_VariableSelector & ore_Type)
 {
    bool q_IsValid = false;
@@ -703,12 +703,12 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelList(const opensyde_core::C_Os
       if (orc_ChannelComponents.size() > 4UL)
       {
          const std::string & rc_ArrayIndex = orc_ChannelComponents[4UL];
-         const C_SclString c_ArrayIndexScl = rc_ArrayIndex;
+         const std::string c_ArrayIndexScl = rc_ArrayIndex;
          q_Continue = false;
          q_UseArrayIndex = true;
          try
          {
-            const int32_t s32_Index = c_ArrayIndexScl.ToInt();
+            const int32_t s32_Index = std::stoi(c_ArrayIndexScl);
             if (s32_Index >= 0)
             {
                u32_ArrayIndex = static_cast<uint32_t>(s32_Index);
@@ -1068,11 +1068,11 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelElementArray(
    Parsed data element strings
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<stw::scl::C_SclString> C_SdNdeDalTriggerCheckHelper::mh_ParseDataElementStrings(
-   const stw::scl::C_SclString & orc_Condition)
+std::vector<std::string> C_SdNdeDalTriggerCheckHelper::mh_ParseDataElementStrings(
+   const std::string & orc_Condition)
 {
-   std::vector<stw::scl::C_SclString> c_Retval;
-   stw::scl::C_SclString c_Copy = orc_Condition;
+   std::vector<std::string> c_Retval;
+   std::string c_Copy = orc_Condition;
    const std::string * pc_NormalString;
    C_OscDataLoggerJobAdditionalTriggerExpertMode::h_ReplaceUiVarNames(c_Copy);
    pc_NormalString = c_Copy.AsStdString();
@@ -1084,7 +1084,7 @@ std::vector<stw::scl::C_SclString> C_SdNdeDalTriggerCheckHelper::mh_ParseDataEle
       for (std::string::const_iterator c_ItChar = pc_NormalString->cbegin(); c_ItChar != pc_NormalString->cend();
            ++c_ItChar)
       {
-         const bool q_IsPartOfVariable = C_OscUtils::h_CheckValidCeName(*c_ItChar, true) || (*c_ItChar == '.');
+         const bool q_IsPartOfVariable = C_OscUtils::h_CheckValidCeName(std::string(1, *c_ItChar), true) || (*c_ItChar == '.');
          if (q_IsPartOfVariable)
          {
             c_CurVariable += *c_ItChar;
@@ -1119,15 +1119,15 @@ std::vector<stw::scl::C_SclString> C_SdNdeDalTriggerCheckHelper::mh_ParseDataEle
    \retval   False   Expression not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdNdeDalTriggerCheckHelper::mh_TranslateDataElementStringToId(const C_SclString & orc_Element,
+bool C_SdNdeDalTriggerCheckHelper::mh_TranslateDataElementStringToId(const std::string & orc_Element,
                                                                      opensyde_core::C_OscNodeDataPoolListElementOptArrayId & orc_ElementId)
 {
    bool q_IsValid = false;
 
    std::vector<std::string> c_ChannelComponents;
-   std::vector<C_SclString> c_Tokens;
+   std::vector<std::string> c_Tokens;
 
-   orc_Element.Tokenize(".", c_Tokens);
+   TokenizeCompat(orc_Element, ".", c_Tokens);
    c_ChannelComponents.reserve(c_Tokens.size());
    for (int32_t s32_It = 0L; s32_It < static_cast<int32_t>(c_Tokens.size()); ++s32_It)
    {

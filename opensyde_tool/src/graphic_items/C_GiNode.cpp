@@ -632,7 +632,7 @@ void C_GiNode::GenerateHint(void)
             this->SetDefaultToolTipHeading(c_Title);
 
             //comment
-            if (pc_Node->c_Properties.c_Comment.IsEmpty() == false)
+            if (pc_Node->c_Properties.c_Comment.empty() == false)
             {
                c_ToolTip = pc_Node->c_Properties.c_Comment.c_str();
                c_ToolTip.append("\n\n");

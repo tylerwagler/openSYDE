@@ -64,8 +64,8 @@ using namespace stw::opensyde_gui_logic;
    C_CHECKSUM  verify of system definition failed. Loaded ui part does not match to loaded core part
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path, uint16_t * const opu16_FileVersion,
-                                         std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices)
+int32_t C_PuiSdHandlerData::LoadFromFile(const std::string & orc_Path, uint16_t * const opu16_FileVersion,
+                                         std::vector<std::string> * const opc_ErrorDetailsMissingDevices)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -92,7 +92,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
             if ((u16_FileVersion == 1U) || (u16_FileVersion == 2U))
             {
                osc_write_log_error("Loading System Definition",
-                                   "Legacy file-version " + stw::scl::C_SclString::IntToStr(u16_FileVersion) +
+                                   "Legacy file-version " + std::to_string(u16_FileVersion) +
                                    " is no longer supported. Re-save the project with a current openSYDE.");
                s32_Return = C_CONFIG;
             }
@@ -117,14 +117,14 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
                   {
                      osc_write_log_error("Loading shared Datapool configuration UI",
                                          "Could not load shared Datapool configuration UI. Error code: " +
-                                         stw::scl::C_SclString::IntToStr(s32_Return));
+                                         std::to_string(s32_Return));
                   }
                }
                else
                {
                   osc_write_log_error("Loading System Definition UI",
                                       "Could not load System Definition UI. Error code: " +
-                                      stw::scl::C_SclString::IntToStr(s32_Return));
+                                      std::to_string(s32_Return));
                }
 
                if (s32_Return == C_NO_ERR)
@@ -137,7 +137,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
          else
          {
             osc_write_log_error("Loading System Definition", "Could not load System Definition. Error code: " +
-                                stw::scl::C_SclString::IntToStr(s32_Return));
+                                std::to_string(s32_Return));
          }
 
          if (s32_Return == C_NO_ERR)
@@ -192,7 +192,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
    C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSdHandlerData::SaveToFile(const stw::scl::C_SclString & orc_Path, const bool oq_UpdateInternalState)
+int32_t C_PuiSdHandlerData::SaveToFile(const std::string & orc_Path, const bool oq_UpdateInternalState)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -421,7 +421,7 @@ QString C_PuiSdHandlerData::h_AutomaticCeStringAdaptation(const QString & orc_In
 
    for (int32_t s32_It = 0; s32_It < orc_Input.length(); ++s32_It)
    {
-      if (C_OscUtils::h_CheckValidCeName(orc_Input.at(s32_It).toLatin1(), true) == false)
+      if (C_OscUtils::h_CheckValidCeName(std::string(1, orc_Input.at(s32_It).toLatin1()), true) == false)
       {
          c_Retval += "_";
       }

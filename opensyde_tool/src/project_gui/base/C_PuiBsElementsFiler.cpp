@@ -153,7 +153,7 @@ int32_t C_PuiBsElementsFiler::h_LoadTextElements(std::vector<C_PuiBsTextElement>
                                                  C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("text-element");
+   std::string c_SelectedNode = orc_XmlParser.SelectNodeChild("text-element");
 
    orc_TextElements.clear();
    if (c_SelectedNode == "text-element")
@@ -209,7 +209,7 @@ int32_t C_PuiBsElementsFiler::h_LoadBoundaries(std::vector<C_PuiBsBoundary> & or
                                                C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("boundary");
+   std::string c_SelectedNode = orc_XmlParser.SelectNodeChild("boundary");
 
    orc_Boundaries.clear();
    if (c_SelectedNode == "boundary")
@@ -265,7 +265,7 @@ void C_PuiBsElementsFiler::h_SaveBoundaries(const std::vector<C_PuiBsBoundary> &
 int32_t C_PuiBsElementsFiler::h_LoadImages(std::vector<C_PuiBsImage> & orc_Images, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("image");
+   std::string c_SelectedNode = orc_XmlParser.SelectNodeChild("image");
 
    orc_Images.clear();
    if (c_SelectedNode == "image")
@@ -322,7 +322,7 @@ int32_t C_PuiBsElementsFiler::h_LoadLineArrows(std::vector<C_PuiBsLineArrow> & o
                                                C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("line-arrow");
+   std::string c_SelectedNode = orc_XmlParser.SelectNodeChild("line-arrow");
 
    orc_LineArrows.clear();
    if (c_SelectedNode == "line-arrow")
@@ -456,7 +456,7 @@ void C_PuiBsElementsFiler::h_SaveBoxBase(const C_PuiBsBox & orc_BoxBase,
 int32_t C_PuiBsElementsFiler::h_LoadLineBase(C_PuiBsLineBase & orc_LineBase, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_Node;
+   std::string c_Node;
 
    if (orc_XmlParser.SelectNodeChild("color") == "color")
    {

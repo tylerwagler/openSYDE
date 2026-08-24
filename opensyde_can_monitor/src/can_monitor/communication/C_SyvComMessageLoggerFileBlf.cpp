@@ -14,11 +14,13 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include "C_SyvComMessageLoggerFileBlf.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
+using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 using namespace Vector;
@@ -42,7 +44,7 @@ using namespace BLF;
    \param[in]  orc_FilePath                 Path for file
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvComMessageLoggerFileBlf::C_SyvComMessageLoggerFileBlf(const stw::scl::C_SclString & orc_FilePath) :
+C_SyvComMessageLoggerFileBlf::C_SyvComMessageLoggerFileBlf(const std::string & orc_FilePath) :
    C_OscComMessageLoggerFileBase(orc_FilePath, "")
 {
 }
@@ -88,7 +90,7 @@ int32_t C_SyvComMessageLoggerFileBlf::OpenFile(void)
       this->mc_File.close();
    }
 
-   if (this->mc_FilePath.SubString(this->mc_FilePath.Length() - 3U, 4U).LowerCase() != ".blf")
+   if (LowerCaseCompat(SubStringCompat(this->mc_FilePath, this->mc_FilePath.length() - 3U, 4U)) != ".blf")
    {
       // Missing file extension
       this->mc_FilePath += ".blf";

@@ -26,7 +26,7 @@
 #include "C_OscUtils.hpp"
 #include "C_OgeWiUtil.hpp"
 
-#include "C_SclString.hpp"
+#include <string>
 #include "C_UsFiler.hpp"
 #include "C_UsHandler.hpp"
 

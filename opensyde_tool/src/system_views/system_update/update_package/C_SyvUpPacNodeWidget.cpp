@@ -1704,11 +1704,11 @@ bool C_SyvUpPacNodeWidget::m_CheckFileAlreadyContained(const QString & orc_File)
        (pc_View != NULL))
    {
       const QString c_AbsoluteFile = C_PuiUtil::h_GetResolvedAbsPathFromProject(orc_File);
-      std::vector<C_SclString> c_Paths;
+      std::vector<std::string> c_Paths;
 
       // compare with existing data block files
       c_Paths = pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex)->GetPaths(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
-      for (std::vector<C_SclString>::const_iterator c_It = c_Paths.begin(); c_It != c_Paths.end(); ++c_It)
+      for (std::vector<std::string>::const_iterator c_It = c_Paths.begin(); c_It != c_Paths.end(); ++c_It)
       {
          if ((c_AbsoluteFile == C_PuiUtil::h_GetResolvedAbsPathFromProject((*c_It).c_str())) ||
              (static_cast<QFileInfo>(c_AbsoluteFile).fileName() ==
@@ -1724,7 +1724,7 @@ bool C_SyvUpPacNodeWidget::m_CheckFileAlreadyContained(const QString & orc_File)
       {
          c_Paths =
             pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex)->GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
-         for (std::vector<C_SclString>::const_iterator c_It = c_Paths.begin(); c_It != c_Paths.end(); ++c_It)
+         for (std::vector<std::string>::const_iterator c_It = c_Paths.begin(); c_It != c_Paths.end(); ++c_It)
          {
             // variables resolve not necessary
             if ((c_AbsoluteFile == C_PuiUtil::h_GetAbsolutePathFromProject((*c_It).c_str())) ||
@@ -1770,10 +1770,10 @@ void C_SyvUpPacNodeWidget::m_CheckForMultipleSecurityCertificatePackages(const Q
       if ((pc_Node != NULL) && (pc_View != NULL))
       {
          // check only file based files as it is very unlikely to have data blocks with security certificate packages
-         const std::vector<C_SclString> c_Paths =
+         const std::vector<std::string> c_Paths =
             pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex)->GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
 
-         for (std::vector<C_SclString>::const_iterator c_It = c_Paths.begin(); c_It != c_Paths.end(); ++c_It)
+         for (std::vector<std::string>::const_iterator c_It = c_Paths.begin(); c_It != c_Paths.end(); ++c_It)
          {
             if (("." + static_cast<QFileInfo>((*c_It).c_str()).suffix().toLower()) ==
                 C_OscXceBase::h_GetPackageExtension().c_str())
@@ -1949,7 +1949,7 @@ void C_SyvUpPacNodeWidget::m_AddSecurityCertificatePackage()
          pc_SecurityCertificatePackageDialog->GetOptionAddSecureAuthentication();
       const QString c_Password = pc_SecurityCertificatePackageDialog->GetPassword();
       const QString c_PublicKeyPath = pc_SecurityCertificatePackageDialog->GetPublicKeyPath();
-      const std::vector<stw::scl::C_SclString> c_PemFiles = pc_SecurityCertificatePackageDialog->GetPemFiles();
+      const std::vector<std::string> c_PemFiles = pc_SecurityCertificatePackageDialog->GetPemFiles();
       this->m_OnCreatePackage(c_PublicKeyPath, c_Password, c_PemFiles, q_OptionAddPemFiles,
                               q_OptionAddSecureAuthentication);
    }
@@ -1971,7 +1971,7 @@ void C_SyvUpPacNodeWidget::m_AddSecurityCertificatePackage()
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacNodeWidget::m_OnCreatePackage(const QString & orc_PublicKeyPath, const QString & orc_Password,
-                                             const std::vector<stw::scl::C_SclString> & orc_CertificatesPath,
+                                             const std::vector<std::string> & orc_CertificatesPath,
                                              const bool oq_OptionAddPemFiles,
                                              const bool oq_OptionAddSecureAuthentication)
 {
@@ -1979,7 +1979,7 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(const QString & orc_PublicKeyPath, 
    QString c_DefaultFilename;
    QString c_SelectedFilterName;
    C_SclStringList c_Warnings;
-   C_SclString c_Error;
+   std::string c_Error;
    QString c_Folder;
    QString c_FullPackagePath;
    const C_PuiSvData * const pc_ViewData = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
@@ -2012,7 +2012,7 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(const QString & orc_PublicKeyPath, 
    {
       int32_t s32_Return;
       std::vector<C_OscXceUpdatePackageParameters> c_UpdatePackageParameters;
-      std::vector<stw::scl::C_SclString> c_UsedCertificatesPath;
+      std::vector<std::string> c_UsedCertificatesPath;
       if (oq_OptionAddPemFiles)
       {
          c_UsedCertificatesPath = orc_CertificatesPath;

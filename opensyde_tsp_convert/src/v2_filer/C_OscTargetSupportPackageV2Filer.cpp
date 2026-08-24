@@ -18,7 +18,8 @@
 #include "TglFile.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscXmlParser.hpp"
-#include "C_SclString.hpp"
+#include <string>
+#include "C_SclStringCompat.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -56,7 +57,7 @@ using namespace stw::scl;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscTargetSupportPackageV2Filer::h_Load(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
-                                                 const stw::scl::C_SclString & orc_Path)
+                                                 const std::string & orc_Path)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -102,8 +103,8 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
                                                   C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_Text;
-   C_SclString c_HalcIncluded;
+   std::string c_Text;
+   std::string c_HalcIncluded;
 
    //"empty" target support package to have a clearly defined status:
    orc_TargetSupportPackage.Clear();
@@ -123,7 +124,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
          uint16_t u16_FileVersion = 0U;
          try
          {
-            u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().ToInt());
+            u16_FileVersion = ToIntCompat(orc_XmlParser.GetNodeContent());
          }
          catch (...)
          {
@@ -136,7 +137,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
          if (s32_Return == C_NO_ERR)
          {
             osc_write_log_info("Loading target support package", "Value of \"file-version\": " +
-                               C_SclString::IntToStr(u16_FileVersion));
+                               IntToStrCompat(u16_FileVersion));
             //Check file version
             if ((u16_FileVersion != 1U) && (u16_FileVersion != 2U))
             {
@@ -160,7 +161,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_Load(C_OscTargetSupportPackageV2 & 
    c_Text = orc_XmlParser.SelectNodeChild("halc-included");
    if (c_Text == "halc-included")
    {
-      c_HalcIncluded = orc_XmlParser.GetNodeContent().LowerCase();
+      c_HalcIncluded = LowerCaseCompat(orc_XmlParser.GetNodeContent());
    }
    // back to parent
    orc_XmlParser.SelectNodeParent();
@@ -370,7 +371,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
                                                               C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_Text;
+   std::string c_Text;
    C_OscTspApplication c_Application;
 
    // is-programmable
@@ -568,7 +569,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    // new file version
    else if ((s32_Return == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("result-paths") == "result-paths"))
    {
-      C_SclString c_CurrNode = orc_XmlParser.SelectNodeChild("output-file");
+      std::string c_CurrNode = orc_XmlParser.SelectNodeChild("output-file");
       if (c_CurrNode != "output-file")
       {
          osc_write_log_error("Loading target support package", "No XML node \"output-file\" found. ");
@@ -624,7 +625,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseHalcSection(C_OscTargetSupport
                                                               C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_Text;
+   std::string c_Text;
 
    c_Text = orc_XmlParser.SelectNodeChild("halc-path");
    if (c_Text != "halc-path")

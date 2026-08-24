@@ -18,10 +18,12 @@
 
 #include "C_SyvComDataDealer.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringCompat.hpp"
 #include "C_PuiSvDbDataElementContent.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
+using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
@@ -376,8 +378,8 @@ void C_SyvComDataDealer::m_OnReadDataPoolEventReceived(const uint8_t ou8_DataPoo
       }
       else
       {
-         stw::scl::C_SclString c_Info;
-         c_Info.PrintFormatted("C_SyvComDataDealer: incoming data with no interested widget " \
+         std::string c_Info;
+         c_Info = PrintFormattedCompat("C_SyvComDataDealer: incoming data with no interested widget " \
                                "(dp: %d List: %d element: %d) !", ou8_DataPoolIndex, ou16_ListIndex,
                                ou16_ElementIndex);
          osc_write_log_info("Asynchronous communication", c_Info);
@@ -470,8 +472,8 @@ void C_SyvComDataDealer::m_OnReadDataPoolNvmEventReceived(const uint8_t ou8_Data
       }
       else
       {
-         stw::scl::C_SclString c_Info;
-         c_Info.PrintFormatted("C_SyvComDataDealer: incoming NVM data with no interested widget " \
+         std::string c_Info;
+         c_Info = PrintFormattedCompat("C_SyvComDataDealer: incoming NVM data with no interested widget " \
                                "(dp: %d List: %d element: %d) !", ou8_DataPoolIndex, ou16_ListIndex,
                                ou16_ElementIndex);
          osc_write_log_info("Asynchronous communication", c_Info);

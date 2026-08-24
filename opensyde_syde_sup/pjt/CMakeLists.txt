@@ -1,5 +1,5 @@
-# minimum 3.16 for precompiled headers
-cmake_minimum_required(VERSION 3.16)
+# minimum 3.24 for FetchContent, FILE_SET, and modern CMake policies
+cmake_minimum_required(VERSION 3.24)
 
 project("console_system_updater_sydesup")
 
@@ -66,7 +66,6 @@ set(SYDESUP_LINUX_LIB_SOURCES
 
 # for Linux shared library only:
 set(SYDESUP_API_HEADERS
-   ${PROJECT_ROOT}/../libraries/opensyde_core/scl/C_SclString.hpp
    ${PROJECT_ROOT}/src/C_SydeSup.hpp
    ${PROJECT_ROOT}/src/C_SydeSupLinux.hpp
 )

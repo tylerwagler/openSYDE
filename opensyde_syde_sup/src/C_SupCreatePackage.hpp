@@ -20,20 +20,20 @@
 class C_SupCreatePackage
 {
 public:
-   C_SupCreatePackage(const bool oq_Quiet, const stw::scl::C_SclString & orc_SupFilePath,
-                      const stw::scl::C_SclString & orc_OsyProjectPath, const stw::scl::C_SclString & orc_ViewName,
-                      const stw::scl::C_SclString & orc_DeviceDefPath, const stw::scl::C_SclString & orc_TempDir);
+   C_SupCreatePackage(const bool oq_Quiet, const std::string & orc_SupFilePath,
+                      const std::string & orc_OsyProjectPath, const std::string & orc_ViewName,
+                      const std::string & orc_DeviceDefPath, const std::string & orc_TempDir);
 
    C_SydeSup::E_Result Create(void);
 
 private:
    bool mq_Quiet;
-   stw::scl::C_SclString mc_SupFilePath;
-   stw::scl::C_SclString mc_OsyProjectPath;
-   stw::scl::C_SclString mc_ViewName;
-   stw::scl::C_SclString mc_DeviceDefPath;
-   stw::scl::C_SclString mc_TempDir;
-   const stw::scl::C_SclString mc_LoggingCategory = "Create Update Package";
+   std::string mc_SupFilePath;
+   std::string mc_OsyProjectPath;
+   std::string mc_ViewName;
+   std::string mc_DeviceDefPath;
+   std::string mc_TempDir;
+   const std::string mc_LoggingCategory = "Create Update Package";
 
    C_SydeSup::E_Result m_FindView(const std::vector<stw::opensyde_core::C_OscViewData> & orc_Views,
                                   stw::opensyde_core::C_OscViewData & orc_View);

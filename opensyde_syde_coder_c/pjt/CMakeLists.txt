@@ -1,5 +1,5 @@
-# minimum 3.16 for precompiled headers
-cmake_minimum_required(VERSION 3.16)
+# minimum 3.24 for FetchContent, FILE_SET, and modern CMake policies
+cmake_minimum_required(VERSION 3.24)
 
 project("osy_syde_coder_c")
 
@@ -72,15 +72,15 @@ if(COMMAND add_pc_lint)
    add_pc_lint(osy_syde_coder_c ${OPENSYDE_SYDE_CODER_C_SOURCES})
 endif(COMMAND add_pc_lint)
 
-# warn a lot
-# Unfortunately forcing C90 by using "-Wc90-c99-compat" or "-std=c89" would (correctly) also prohibit
-#  C++ style comments and there's no switch to explicitly suppress this warning
+# warn a lot — C++17 to match the rest of openSYDE
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS "-Wall -Wextra -Wc99-c11-compat -Wunused -Wuninitialized -Wmaybe-uninitialized \
    -Wdeclaration-after-statement -Wsign-compare -Wstrict-prototypes -Wmissing-prototypes \
    -Wdouble-promotion -Wfloat-equal -Wmissing-include-dirs -Wshadow -Wundef \
    -Wunused-macros -Wcast-align -Wlogical-op -Wno-multichar -Wredundant-decls -Wnested-externs")
 # For C++ do not add "-Wdouble-promotion" as it causes a warning in tinyxml.cpp which we do not want to modify
-set(CMAKE_CXX_FLAGS "-std=c++03 -Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized -Wsign-compare  \
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized -Wsign-compare  \
    -Wmissing-include-dirs -Wshadow -Wlogical-op -Wno-multichar -Wredundant-decls")
 
 # link standard libraries statically (fully static only on Windows)

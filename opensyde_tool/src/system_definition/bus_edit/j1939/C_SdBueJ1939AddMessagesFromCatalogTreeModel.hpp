@@ -65,8 +65,8 @@ private:
    {
    public:
       uint32_t u32_Spn;
-      stw::scl::C_SclString c_Name;
-      stw::scl::C_SclString c_Comment;
+      std::string c_Name;
+      std::string c_Comment;
    };
 
    class C_MsgTableData
@@ -75,8 +75,8 @@ private:
       QVariant c_Icon;
       QVariant c_CanId;
       QVariant c_J1939Pgn;
-      stw::scl::C_SclString c_Name;
-      stw::scl::C_SclString c_Comment;
+      std::string c_Name;
+      std::string c_Comment;
       std::vector< C_SignalTableData> c_Signals;
    };
 

@@ -23,7 +23,7 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
-#include "C_SclString.hpp"
+#include <string>
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
 
@@ -44,19 +44,18 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
-using namespace stw::scl;
 using namespace stw::tgl;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-static const C_SclString mhc_TOOL_NAME = "osy_tsp_convert";
+static const std::string mhc_TOOL_NAME = "osy_tsp_convert";
 // V2 TSPs encode the standard SYDE Coder C as q_IsStandardSydeCoderCe=true with empty c_CodeGeneratorPath.
 // V3 nodes carry an explicit path string (the V2 importer in the GUI resolved it the same way).
 // Mirror C_ImpUtil::h_GetSydeCoderCePath() — Windows uses .exe, every other platform doesn't.
 #ifdef _WIN32
-static const C_SclString mhc_STANDARD_SYDE_CODER_C_PATH = "../connectors/syde_coder_c/osy_syde_coder_c.exe";
+static const std::string mhc_STANDARD_SYDE_CODER_C_PATH = "../connectors/syde_coder_c/osy_syde_coder_c.exe";
 #else
-static const C_SclString mhc_STANDARD_SYDE_CODER_C_PATH = "../connectors/syde_coder_c/osy_syde_coder_c";
+static const std::string mhc_STANDARD_SYDE_CODER_C_PATH = "../connectors/syde_coder_c/osy_syde_coder_c";
 #endif
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
@@ -87,10 +86,10 @@ static void mh_PrintUsage(void)
    (V2 device names like "ESX-4CS-GW" become "ESX_4CS_GW").
 */
 //----------------------------------------------------------------------------------------------------------------------
-static C_SclString mh_Sanitize(const C_SclString & orc_Input)
+static std::string mh_Sanitize(const std::string & orc_Input)
 {
-   C_SclString c_Result;
-   for (uint32_t u32_Index = 1U; u32_Index <= orc_Input.Length(); ++u32_Index)
+   std::string c_Result;
+   for (uint32_t u32_Index = 1U; u32_Index <= orc_Input.length(); ++u32_Index)
    {
       const char_t cn_Char = orc_Input[u32_Index];
       const bool q_Ok = ((cn_Char >= 'A') && (cn_Char <= 'Z')) ||
@@ -99,7 +98,7 @@ static C_SclString mh_Sanitize(const C_SclString & orc_Input)
                         (cn_Char == '_');
       c_Result += q_Ok ? cn_Char : '_';
    }
-   if (c_Result.Length() == 0U)
+   if (c_Result.length() == 0U)
    {
       c_Result = "node";
    }
@@ -226,7 +225,7 @@ static C_OscNode mh_BuildNodeFromV2(const C_OscTargetSupportPackageV2 & orc_V2,
    \return C_NO_ERR on success, C_RD_WR on file write failure.
 */
 //----------------------------------------------------------------------------------------------------------------------
-static int32_t mh_WriteEmptyUiNodeXml(const C_SclString & orc_FilePath)
+static int32_t mh_WriteEmptyUiNodeXml(const std::string & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
 
@@ -264,9 +263,9 @@ static int32_t mh_WriteEmptyUiNodeXml(const C_SclString & orc_FilePath)
    \param[in]  orc_TemplatePath    Optional template archive path (e.g. ./foo.syde_tp). Pass empty to omit.
 */
 //----------------------------------------------------------------------------------------------------------------------
-static int32_t mh_WriteWrapperXml(const C_SclString & orc_OutputTspPath, const C_SclString & orc_DeviceName,
-                                  const C_SclString & orc_Comment, const C_SclString & orc_NodeZipName,
-                                  const C_SclString & orc_TemplatePath)
+static int32_t mh_WriteWrapperXml(const std::string & orc_OutputTspPath, const std::string & orc_DeviceName,
+                                  const std::string & orc_Comment, const std::string & orc_NodeZipName,
+                                  const std::string & orc_TemplatePath)
 {
    C_OscXmlParser c_XmlParser;
 
@@ -276,7 +275,7 @@ static int32_t mh_WriteWrapperXml(const C_SclString & orc_OutputTspPath, const C
    c_XmlParser.CreateNodeChild("tsp-comment", orc_Comment);
    c_XmlParser.CreateNodeChild("node-definition", orc_NodeZipName);
 
-   if (orc_TemplatePath.Length() > 0U)
+   if (orc_TemplatePath.length() > 0U)
    {
       c_XmlParser.CreateAndSelectNodeChild("template-project");
       c_XmlParser.CreateNodeChild("template", orc_TemplatePath);
@@ -289,11 +288,11 @@ static int32_t mh_WriteWrapperXml(const C_SclString & orc_OutputTspPath, const C
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Recursively delete a directory tree. Best-effort, errors are logged but ignored. */
 //----------------------------------------------------------------------------------------------------------------------
-static void mh_RemoveTree(const C_SclString & orc_Path)
+static void mh_RemoveTree(const std::string & orc_Path)
 {
    if (TglDirectoryExists(orc_Path))
    {
-      const C_SclString c_Cmd = "rm -rf '" + orc_Path + "'";
+      const std::string c_Cmd = "rm -rf '" + orc_Path + "'";
       const int x_Rc = std::system(c_Cmd.c_str());
       (void)x_Rc;
    }
@@ -303,21 +302,21 @@ static void mh_RemoveTree(const C_SclString & orc_Path)
 int main(const int argc, char_t * const opacn_Argv[])
 {
    // Parse args: optional `--device-library <dir>` followed by two positional paths.
-   C_SclString c_InputPath;
-   C_SclString c_OutputPath;
-   C_SclString c_DeviceLibPath;
+   std::string c_InputPath;
+   std::string c_OutputPath;
+   std::string c_DeviceLibPath;
    {
       const char_t * const pcn_Home = std::getenv("HOME");
       if (pcn_Home != NULL)
       {
-         c_DeviceLibPath = C_SclString(pcn_Home) + "/.local/opt/openSYDE/devices";
+         c_DeviceLibPath = std::string(pcn_Home) + "/.local/opt/openSYDE/devices";
       }
    }
 
-   std::vector<C_SclString> c_Positional;
+   std::vector<std::string> c_Positional;
    for (int32_t s32_Index = 1; s32_Index < argc; ++s32_Index)
    {
-      const C_SclString c_Arg = opacn_Argv[s32_Index];
+      const std::string c_Arg = opacn_Argv[s32_Index];
       if (c_Arg == "--device-library")
       {
          if ((s32_Index + 1) >= argc)
@@ -372,7 +371,7 @@ int main(const int argc, char_t * const opacn_Argv[])
    uint32_t u32_SubDeviceIndex = 0U;
    if (TglDirectoryExists(c_DeviceLibPath))
    {
-      std::vector<C_SclString> c_Roots;
+      std::vector<std::string> c_Roots;
       c_Roots.push_back(c_DeviceLibPath);
       const int32_t s32_LoadRc = c_DeviceManager.LoadFromPaths(c_Roots);
       if (s32_LoadRc == C_NO_ERR)
@@ -395,11 +394,11 @@ int main(const int argc, char_t * const opacn_Argv[])
 
    // --- 3) Synthesize V3 node from V2 metadata --------------------------------------------------------------------
    const C_OscNode c_Node = mh_BuildNodeFromV2(c_V2, pc_DeviceDef);
-   const C_SclString c_NodeBaseName = mh_Sanitize(c_V2.c_DeviceName);
+   const std::string c_NodeBaseName = mh_Sanitize(c_V2.c_DeviceName);
 
    // --- 3) Stage node_core.xml + node_ui.xml in a temp directory --------------------------------------------------
-   const C_SclString c_OutputDir = TglExtractFilePath(c_OutputPath);
-   const C_SclString c_StageDir = TglFileIncludeTrailingDelimiter(c_OutputDir) +
+   const std::string c_OutputDir = TglExtractFilePath(c_OutputPath);
+   const std::string c_StageDir = TglFileIncludeTrailingDelimiter(c_OutputDir) +
                                   c_NodeBaseName + "_v3_stage";
    mh_RemoveTree(c_StageDir);
    if (TglCreateDirectory(c_StageDir) != 0)
@@ -408,11 +407,11 @@ int main(const int argc, char_t * const opacn_Argv[])
       return 4;
    }
 
-   const C_SclString c_OscNodePath = TglFileIncludeTrailingDelimiter(c_StageDir) + C_OscNodeFiler::h_GetFileName();
-   const C_SclString c_UiNodePath = TglFileIncludeTrailingDelimiter(c_StageDir) + "node_ui.xml";
+   const std::string c_OscNodePath = TglFileIncludeTrailingDelimiter(c_StageDir) + C_OscNodeFiler::h_GetFileName();
+   const std::string c_UiNodePath = TglFileIncludeTrailingDelimiter(c_StageDir) + "node_ui.xml";
 
-   std::vector<C_SclString> c_CreatedFiles;
-   const std::map<uint32_t, C_SclString> c_EmptyNodeMap;
+   std::vector<std::string> c_CreatedFiles;
+   const std::map<uint32_t, std::string> c_EmptyNodeMap;
    s32_Retval = C_OscNodeFiler::h_SaveNodeFile(c_Node, c_OscNodePath, &c_CreatedFiles, c_EmptyNodeMap);
    if (s32_Retval != C_NO_ERR)
    {
@@ -430,13 +429,13 @@ int main(const int argc, char_t * const opacn_Argv[])
    }
 
    // --- 4) Pack stage dir into the node-definition zip ------------------------------------------------------------
-   const C_SclString c_NodeZipName = c_NodeBaseName + ".zip";
-   const C_SclString c_NodeZipPath = TglFileIncludeTrailingDelimiter(c_OutputDir) + c_NodeZipName;
+   const std::string c_NodeZipName = c_NodeBaseName + ".zip";
+   const std::string c_NodeZipPath = TglFileIncludeTrailingDelimiter(c_OutputDir) + c_NodeZipName;
 
    // h_CreateZipFile expects ENTRIES relative to orc_SourcePath (which itself needs a trailing delimiter).
    // c_CreatedFiles from h_SaveNodeFile is relative to the node-core file's directory, which is c_StageDir.
-   const C_SclString c_StageDirWithSep = TglFileIncludeTrailingDelimiter(c_StageDir);
-   std::set<C_SclString> c_FilesToZip;
+   const std::string c_StageDirWithSep = TglFileIncludeTrailingDelimiter(c_StageDir);
+   std::set<std::string> c_FilesToZip;
    c_FilesToZip.insert(C_OscNodeFiler::h_GetFileName());
    c_FilesToZip.insert("node_ui.xml");
    for (uint32_t u32_Index = 0U; u32_Index < c_CreatedFiles.size(); ++u32_Index)
@@ -444,7 +443,7 @@ int main(const int argc, char_t * const opacn_Argv[])
       c_FilesToZip.insert(c_CreatedFiles[u32_Index]);
    }
 
-   C_SclString c_ZipError;
+   std::string c_ZipError;
    s32_Retval = C_OscZipFile::h_CreateZipFile(c_StageDirWithSep, c_FilesToZip, c_NodeZipPath, &c_ZipError);
    if (s32_Retval != C_NO_ERR)
    {
@@ -457,12 +456,12 @@ int main(const int argc, char_t * const opacn_Argv[])
    // --- 5) Copy the optional template archive (.syde_tp) next to the V3 wrapper -----------------------------------
    // The V2 wrapper carries a path like "./foo.syde_tp" relative to the V2 TSP's directory. The GUI's V3
    // importer resolves the same string relative to the V3 wrapper, so the archive has to be co-located.
-   if (c_V2.c_TemplatePath.Length() > 0U)
+   if (c_V2.c_TemplatePath.length() > 0U)
    {
-      const C_SclString c_InputDir = TglFileIncludeTrailingDelimiter(TglExtractFilePath(c_InputPath));
-      const C_SclString c_TemplateSrc = c_InputDir + c_V2.c_TemplatePath;
-      const C_SclString c_TemplateBaseName = TglExtractFileName(c_V2.c_TemplatePath);
-      const C_SclString c_TemplateDst = TglFileIncludeTrailingDelimiter(c_OutputDir) + c_TemplateBaseName;
+      const std::string c_InputDir = TglFileIncludeTrailingDelimiter(TglExtractFilePath(c_InputPath));
+      const std::string c_TemplateSrc = c_InputDir + c_V2.c_TemplatePath;
+      const std::string c_TemplateBaseName = TglExtractFileName(c_V2.c_TemplatePath);
+      const std::string c_TemplateDst = TglFileIncludeTrailingDelimiter(c_OutputDir) + c_TemplateBaseName;
       if (TglFileExists(c_TemplateSrc))
       {
          std::ifstream c_Src(c_TemplateSrc.c_str(), std::ios::binary);
@@ -485,9 +484,9 @@ int main(const int argc, char_t * const opacn_Argv[])
 
    // --- 6) Write the V3 wrapper XML -------------------------------------------------------------------------------
    // Rewrite the template path to a sibling-of-wrapper reference (basename only) so the GUI finds it next to us.
-   const C_SclString c_TemplateForWrapper = (c_V2.c_TemplatePath.Length() > 0U)
-                                            ? C_SclString("./") + TglExtractFileName(c_V2.c_TemplatePath)
-                                            : C_SclString("");
+   const std::string c_TemplateForWrapper = (c_V2.c_TemplatePath.length() > 0U)
+                                            ? std::string("./") + TglExtractFileName(c_V2.c_TemplatePath)
+                                            : std::string("");
    s32_Retval = mh_WriteWrapperXml(c_OutputPath, c_V2.c_DeviceName, c_V2.c_Comment,
                                    c_NodeZipName, c_TemplateForWrapper);
    if (s32_Retval != C_NO_ERR)

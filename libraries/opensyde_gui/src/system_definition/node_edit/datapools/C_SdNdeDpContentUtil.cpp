@@ -2886,7 +2886,7 @@ int32_t C_SdNdeDpContentUtil::h_SetDataVariableFromGenericWithScaling(const QVar
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SdNdeDpContentUtil::h_GetAllContentAsString(const C_OscNodeDataPoolContent & orc_Input)
 {
-   stw::scl::C_SclString c_Retval;
+   std::string c_Retval;
    C_OscXmlParser c_Xml;
    c_Xml.CreateAndSelectNodeChild("opensyde-content");
    C_OscNodeDataPoolFiler::h_SaveDataPoolContentV1(orc_Input, c_Xml);

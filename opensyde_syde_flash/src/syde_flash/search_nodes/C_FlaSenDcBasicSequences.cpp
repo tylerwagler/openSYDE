@@ -17,7 +17,6 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
-using namespace stw::scl;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
 
@@ -103,10 +102,10 @@ C_FlaSenDcBasicSequences::~C_FlaSenDcBasicSequences(void) noexcept
    else        error occurred, see log file for details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_FlaSenDcBasicSequences::InitDcSequences(const C_SclString & orc_CanChannelId, const int32_t os32_CanBitrate)
+int32_t C_FlaSenDcBasicSequences::InitDcSequences(const std::string & orc_CanChannelId, const int32_t os32_CanBitrate)
 {
    int32_t s32_Return;
-   const C_SclString c_LogActivity = "Initialization";
+   const std::string c_LogActivity = "Initialization";
 
    if (this->mpc_CanDispatcher != NULL)
    {
@@ -116,7 +115,7 @@ int32_t C_FlaSenDcBasicSequences::InitDcSequences(const C_SclString & orc_CanCha
    }
 
    C_OscCanAdapterConfig c_Config = C_OscCanAdapterConfig::h_GetPlatformDefault();
-   if (orc_CanChannelId.IsEmpty() == false)
+   if (orc_CanChannelId.empty() == false)
    {
       c_Config.c_ChannelId = orc_CanChannelId.c_str();
    }
@@ -126,7 +125,7 @@ int32_t C_FlaSenDcBasicSequences::InitDcSequences(const C_SclString & orc_CanCha
                       C_OscCanAdapterFactory::h_GetBackendDisplayName(c_Config.e_BackendKind) +
                       ", channel: " + orc_CanChannelId);
 
-   C_SclString c_Error;
+   std::string c_Error;
    this->mpc_CanDispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
    if (this->mpc_CanDispatcher == NULL)
    {
@@ -318,7 +317,7 @@ C_FlaSenDcBasicSequences::E_Sequence C_FlaSenDcBasicSequences::GetCurrentSequenc
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaSenDcBasicSequences::m_ReportProgress(const int32_t os32_Result,
-                                                const stw::scl::C_SclString & orc_Information)
+                                                const std::string & orc_Information)
 {
    QString c_Progress;
 

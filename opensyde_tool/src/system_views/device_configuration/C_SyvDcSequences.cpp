@@ -19,12 +19,13 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include <QElapsedTimer>
 #include <QThread>
 
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "TglUtils.hpp"
 #include "C_Uti.hpp"
 #include "C_SyvDcSequences.hpp"
@@ -611,7 +612,7 @@ int32_t C_SyvDcSequences::SendOsyBroadcastRequestProgramming(bool & orq_NotAccep
       {
          osc_write_log_error("Send openSYDE request programming flag",
                              "Sending openSYDE broadcast request programming flag failed with error: " +
-                             C_SclString::IntToStr(s32_Return));
+                             std::to_string(s32_Return));
       }
    }
    return s32_Return;
@@ -670,7 +671,7 @@ int32_t C_SyvDcSequences::ResetOpenSydeDevices(const bool oq_ToFlashloader) cons
       else
       {
          osc_write_log_error("Reset openSYDE devices",
-                             "openSYDE broadcast ECU reset failed with error: " + C_SclString::IntToStr(s32_Return));
+                             "openSYDE broadcast ECU reset failed with error: " + std::to_string(s32_Return));
       }
    }
    return s32_Return;
@@ -706,7 +707,7 @@ int32_t C_SyvDcSequences::InitCanAndSetCanBitrate(const uint32_t ou32_Bitrate)
       else
       {
          osc_write_log_error("Init CAN and set new bitrate",
-                             "CAN initialization failed: " + C_SclString::IntToStr(s32_Return));
+                             "CAN initialization failed: " + std::to_string(s32_Return));
       }
    }
    return s32_Return;
@@ -1060,7 +1061,7 @@ int32_t C_SyvDcSequences::m_RunScanCanEnterFlashloader(const uint32_t ou32_CanBi
             if (s32_Return != C_NO_ERR)
             {
                osc_write_log_error("Scan CAN enter Flashloader", "openSYDE ECU reset broadcast failed with error: " +
-                                   C_SclString::IntToStr(s32_Return));
+                                   std::to_string(s32_Return));
             }
          }
          else
@@ -1068,7 +1069,7 @@ int32_t C_SyvDcSequences::m_RunScanCanEnterFlashloader(const uint32_t ou32_CanBi
             if (s32_Return != C_NO_ERR)
             {
                osc_write_log_error("Scan CAN enter Flashloader",
-                                   "openSYDE request programming failed with error: " + C_SclString::IntToStr(
+                                   "openSYDE request programming failed with error: " + std::to_string(
                                       s32_Return));
             }
             else
@@ -1084,7 +1085,7 @@ int32_t C_SyvDcSequences::m_RunScanCanEnterFlashloader(const uint32_t ou32_CanBi
       else
       {
          osc_write_log_error("Scan CAN enter Flashloader",
-                             "Setting the bitrate on CAN bus failed with error: " + C_SclString::IntToStr(s32_Return));
+                             "Setting the bitrate on CAN bus failed with error: " + std::to_string(s32_Return));
       }
 
       if (s32_Return == C_NO_ERR)
@@ -1155,7 +1156,7 @@ int32_t C_SyvDcSequences::m_RunScanCanSendFlashloaderRequest(const uint32_t ou32
       {
          osc_write_log_error("Scan CAN enter Flashloader",
                              "openSYDE diagnostic session control broadcast failed with error: " +
-                             C_SclString::IntToStr(s32_Return));
+                             std::to_string(s32_Return));
          break;
       }
 
@@ -1223,10 +1224,10 @@ int32_t C_SyvDcSequences::m_RunScanCanGetInfoFromOpenSydeDevices(void)
          uint32_t u32_UniqueIdIndicesCounter;
 
          osc_write_log_info("Scan CAN get info from openSYDE devices",
-                            "Sequence finished. Standard nodes found: " + C_SclString::IntToStr(c_ReadSnResult.size()));
+                            "Sequence finished. Standard nodes found: " + std::to_string(c_ReadSnResult.size()));
          osc_write_log_info("Scan CAN get info from openSYDE devices",
                             "Sequence finished. Extended nodes found: " +
-                            C_SclString::IntToStr(c_ReadSnResultExt.size()));
+                            std::to_string(c_ReadSnResultExt.size()));
 
          // Fill the result container with the standard results
          for (u32_ResultCounter = 0U; u32_ResultCounter < c_ReadSnResult.size(); ++u32_ResultCounter)
@@ -1274,7 +1275,7 @@ int32_t C_SyvDcSequences::m_RunScanCanGetInfoFromOpenSydeDevices(void)
                      osc_write_log_error("Scan CAN get info from openSYDE devices",
                                          "At least one node has secure authentication or traffic encryption "
                                          "activated and at least one node ID is not unique. Node ID: " +
-                                         C_SclString::IntToStr(this->mc_DeviceInfoResult[u32_ResultCounter].u8_NodeId));
+                                         std::to_string(this->mc_DeviceInfoResult[u32_ResultCounter].u8_NodeId));
                   }
                   break;
                }
@@ -1297,7 +1298,7 @@ int32_t C_SyvDcSequences::m_RunScanCanGetInfoFromOpenSydeDevices(void)
             // Get the correct sender id
             C_OscProtocolDriverOsyNode c_CurSenderId;
             // ** directed "readdatabyID(DeviceName)"
-            C_SclString c_Result;
+            std::string c_Result;
 
             // The first indexes are always the standard SNR results
             if (u32_DeviceInfoIndex < c_ReadSnResult.size())
@@ -1322,7 +1323,7 @@ int32_t C_SyvDcSequences::m_RunScanCanGetInfoFromOpenSydeDevices(void)
       {
          osc_write_log_error("Scan CAN get info from openSYDE devices",
                              "openSYDE serial number broadcast failed with error: " +
-                             C_SclString::IntToStr(s32_Return));
+                             std::to_string(s32_Return));
       }
    }
 
@@ -1378,7 +1379,7 @@ int32_t C_SyvDcSequences::m_RunScanEthGetInfoFromOpenSydeDevices(void)
       {
          osc_write_log_error("Scan ETH get info from openSYDE devices",
                              "openSYDE request programming broadcast failed with error: " +
-                             C_SclString::IntToStr(s32_Return));
+                             std::to_string(s32_Return));
       }
       else if (q_NotAccepted == true)
       {
@@ -1393,7 +1394,7 @@ int32_t C_SyvDcSequences::m_RunScanEthGetInfoFromOpenSydeDevices(void)
          if (s32_Return != C_NO_ERR)
          {
             osc_write_log_error("Scan ETH get info from openSYDE devices",
-                                "openSYDE broadcast ECU reset failed with error: " + C_SclString::IntToStr(s32_Return));
+                                "openSYDE broadcast ECU reset failed with error: " + std::to_string(s32_Return));
          }
       }
 
@@ -1413,16 +1414,16 @@ int32_t C_SyvDcSequences::m_RunScanEthGetInfoFromOpenSydeDevices(void)
          {
             osc_write_log_error("Scan ETH get info from openSYDE devices",
                                 "openSYDE broadcast get device information failed with error: " +
-                                C_SclString::IntToStr(s32_Return));
+                                std::to_string(s32_Return));
          }
          else
          {
             uint32_t u32_ResultCounter;
 
             osc_write_log_info("Scan ETH get info from openSYDE devices", "Number of standard responses detected: " +
-                               C_SclString::IntToStr(c_ReadDeviceInfoResults.size()));
+                               std::to_string(c_ReadDeviceInfoResults.size()));
             osc_write_log_info("Scan ETH get info from openSYDE devices", "Number of extended responses detected: " +
-                               C_SclString::IntToStr(c_ReadDeviceInfoExtendedResults.size()));
+                               std::to_string(c_ReadDeviceInfoExtendedResults.size()));
 
             // Fill the result container
             for (u32_ResultCounter = 0U; u32_ResultCounter < c_ReadDeviceInfoResults.size(); ++u32_ResultCounter)
@@ -1675,13 +1676,13 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithBroadcasts(
             {
                osc_write_log_error("Configure Ethernet openSYDE devices",
                                    "openSYDE broadcast set IP by serial number failed with error: " +
-                                   C_SclString::IntToStr(s32_Return));
+                                   std::to_string(s32_Return));
                break;
             }
             else
             {
-               C_SclString c_Text;
-               c_Text.PrintFormatted("openSYDE broadcast set IP by serial number changed the IP address on"
+               std::string c_Text;
+               c_Text = PrintFormattedCompat("openSYDE broadcast set IP by serial number changed the IP address on"
                                      " node with id %d on bus with id %d.",
                                      c_ServerIdOfCurBus.u8_NodeIdentifier,
                                      c_ServerIdOfCurBus.u8_BusIdentifier);
@@ -1830,8 +1831,8 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                                                                          c_TemporaryProtocol, c_TpIp);
                         if (s32_Return != C_NO_ERR)
                         {
-                           C_SclString c_Text;
-                           c_Text.PrintFormatted(
+                           std::string c_Text;
+                           c_Text = PrintFormattedCompat(
                               "Could not reconnect to node with ID %d on bus with id %d. Error code: %d",
                               c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
                               c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier, s32_Return);
@@ -1848,8 +1849,8 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
 
                            if (s32_Return != C_NO_ERR)
                            {
-                              C_SclString c_Text;
-                              c_Text.PrintFormatted("openSYDE setting preprogramming mode failed on node with ID %d on "
+                              std::string c_Text;
+                              c_Text = PrintFormattedCompat("openSYDE setting preprogramming mode failed on node with ID %d on "
                                                     "bus with ID before setting the new node ID %d"
                                                     " %d with error: %s",
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
@@ -1876,8 +1877,8 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
 
                            if (s32_Return != C_NO_ERR)
                            {
-                              C_SclString c_Text;
-                              c_Text.PrintFormatted("openSYDE setting node ID for communication channel failed on node "
+                              std::string c_Text;
+                              c_Text = PrintFormattedCompat("openSYDE setting node ID for communication channel failed on node "
                                                     "with ID %d on bus with ID when setting the new node ID %d"
                                                     " %d with error: %s",
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
@@ -1908,8 +1909,8 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
 
                            if (s32_Return != C_NO_ERR)
                            {
-                              C_SclString c_Text;
-                              c_Text.PrintFormatted("openSYDE setting IP address for communication channel failed on "
+                              std::string c_Text;
+                              c_Text = PrintFormattedCompat("openSYDE setting IP address for communication channel failed on "
                                                     "node with ID %d on bus with ID after setting the new node ID %d"
                                                     " %d with error: %s",
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
@@ -2007,7 +2008,7 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
       {
          osc_write_log_error("Configure openSYDE devices",
                              "openSYDE broadcast request programming failed with error: " +
-                             C_SclString::IntToStr(s32_Return));
+                             std::to_string(s32_Return));
       }
    }
 
@@ -2031,7 +2032,7 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
       {
          osc_write_log_error("Configure openSYDE devices",
                              "openSYDE broadcast ECU reset failed with error: " +
-                             C_SclString::IntToStr(s32_Return));
+                             std::to_string(s32_Return));
       }
    }
 
@@ -2075,8 +2076,8 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
          s32_Return = this->mpc_ComDriver->ReConnectNode(orc_UsedServerIds[u32_DeviceCounter]);
          if (s32_Return != C_NO_ERR)
          {
-            C_SclString c_Text;
-            c_Text.PrintFormatted("Could not reconnect to node with ID %d on bus with id %d. Error code: %d",
+            std::string c_Text;
+            c_Text = PrintFormattedCompat("Could not reconnect to node with ID %d on bus with id %d. Error code: %d",
                                   orc_UsedServerIds[u32_DeviceCounter].u8_NodeIdentifier,
                                   orc_UsedServerIds[u32_DeviceCounter].u8_BusIdentifier, s32_Return);
             osc_write_log_error("Configure openSYDE devices", c_Text);
@@ -2089,8 +2090,8 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
 
          if (s32_Return != C_NO_ERR)
          {
-            C_SclString c_Text;
-            c_Text.PrintFormatted("openSYDE setting preprogramming mode failed on node with ID %d on bus with ID"
+            std::string c_Text;
+            c_Text = PrintFormattedCompat("openSYDE setting preprogramming mode failed on node with ID %d on bus with ID"
                                   " %d with error: %s", orc_UsedServerIds[u32_DeviceCounter].u8_NodeIdentifier,
                                   orc_UsedServerIds[u32_DeviceCounter].u8_BusIdentifier,
                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
@@ -2443,7 +2444,7 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithBroadcasts(
          {
             osc_write_log_error("Configure CAN openSYDE devices",
                                 "openSYDE broadcast set node ID by serial number failed with error: " +
-                                C_SclString::IntToStr(s32_Return));
+                                std::to_string(s32_Return));
             break;
          }
       }
@@ -2535,8 +2536,8 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
                                                                                        &u8_ErrCode);
                         if (s32_Return != C_NO_ERR)
                         {
-                           C_SclString c_Text;
-                           c_Text.PrintFormatted("openSYDE setting preprogramming mode failed on node with ID %d on "
+                           std::string c_Text;
+                           c_Text = PrintFormattedCompat("openSYDE setting preprogramming mode failed on node with ID %d on "
                                                  "bus with ID before setting the new node ID %d"
                                                  " %d with error: %s",
                                                  c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
@@ -2562,8 +2563,8 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
 
                            if (s32_Return != C_NO_ERR)
                            {
-                              C_SclString c_Text;
-                              c_Text.PrintFormatted("openSYDE setting node ID for communication channel failed on node "
+                              std::string c_Text;
+                              c_Text = PrintFormattedCompat("openSYDE setting node ID for communication channel failed on node "
                                                     "with ID %d on bus with ID when setting the new node ID %d"
                                                     " %d with error: %s",
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
@@ -2866,7 +2867,7 @@ int32_t C_SyvDcSequences::m_SetCanOpenSydeBitrate(const C_OscProtocolDriverOsyNo
                {
                   osc_write_log_error("Configure openSYDE devices",
                                       "openSYDE set CAN bitrate failed with error: " +
-                                      C_SclString::IntToStr(s32_Return));
+                                      std::to_string(s32_Return));
                   break;
                }
             }
@@ -2965,7 +2966,7 @@ int32_t C_SyvDcSequences::m_SetEthOpenSydeIpAddress(const C_OscProtocolDriverOsy
                {
                   osc_write_log_error("Configure CAN openSYDE devices",
                                       "openSYDE set Ethernet IP address failed with error: " +
-                                      C_SclString::IntToStr(s32_Return));
+                                      std::to_string(s32_Return));
                   break;
                }
             }
@@ -3062,7 +3063,7 @@ int32_t C_SyvDcSequences::m_SetOpenSydeNodeIds(const C_OscProtocolDriverOsyNode 
                {
                   osc_write_log_error("Configure openSYDE devices",
                                       "openSYDE set node ID by channel failed with error: " +
-                                      C_SclString::IntToStr(s32_Return));
+                                      std::to_string(s32_Return));
                   break;
                }
             }
@@ -3184,8 +3185,8 @@ int32_t C_SyvDcSequences::m_ReadBackEth(void)
 
          if (s32_Return != C_NO_ERR)
          {
-            C_SclString c_Text;
-            c_Text.PrintFormatted("Could not reconnect to node with ID %d on bus with ID %d. Error code: %d",
+            std::string c_Text;
+            c_Text = PrintFormattedCompat("Could not reconnect to node with ID %d on bus with ID %d. Error code: %d",
                                   rc_OsyServerId.u8_NodeIdentifier,
                                   rc_OsyServerId.u8_BusIdentifier, s32_Return);
             osc_write_log_error("Configure openSYDE devices", c_Text);
@@ -3204,8 +3205,8 @@ int32_t C_SyvDcSequences::m_ReadBackEth(void)
 
             if (s32_Return != C_NO_ERR)
             {
-               C_SclString c_Text;
-               c_Text.PrintFormatted("openSYDE setting preprogramming mode failed on node with ID %d on bus with ID"
+               std::string c_Text;
+               c_Text = PrintFormattedCompat("openSYDE setting preprogramming mode failed on node with ID %d on bus with ID"
                                      " %d with error: %s", rc_OsyServerId.u8_NodeIdentifier,
                                      rc_OsyServerId.u8_BusIdentifier,
                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
@@ -3217,7 +3218,7 @@ int32_t C_SyvDcSequences::m_ReadBackEth(void)
          if (s32_Return != C_NO_ERR)
          {
             osc_write_log_error("Read back ETH devices",
-                                "Read back failed with error: " + C_SclString::IntToStr(
+                                "Read back failed with error: " + std::to_string(
                                    s32_Return));
          }
 
@@ -3307,7 +3308,7 @@ int32_t C_SyvDcSequences::m_ReadBack(void)
             {
                osc_write_log_error("Read back devices",
                                    "openSYDE read serial number failed with error: " +
-                                   C_SclString::IntToStr(s32_Return));
+                                   std::to_string(s32_Return));
             }
          }
          else
@@ -3323,13 +3324,13 @@ int32_t C_SyvDcSequences::m_ReadBack(void)
             {
                osc_write_log_error("Read back devices",
                                    "openSYDE read serial number failed with error: " +
-                                   C_SclString::IntToStr(s32_Return));
+                                   std::to_string(s32_Return));
             }
          }
 
          if (s32_Return == C_NO_ERR)
          {
-            C_SclString c_OsyDeviceName;
+            std::string c_OsyDeviceName;
 
             // ** perform "readdatabyID(DeviceName)"
             s32_Return = this->mpc_ComDriver->SendOsyReadDeviceName(rc_OsyServerId, c_OsyDeviceName);
@@ -3345,7 +3346,7 @@ int32_t C_SyvDcSequences::m_ReadBack(void)
             {
                osc_write_log_error("Read back devices",
                                    "openSYDE read device name failed with error: " +
-                                   C_SclString::IntToStr(s32_Return));
+                                   std::to_string(s32_Return));
             }
          }
 

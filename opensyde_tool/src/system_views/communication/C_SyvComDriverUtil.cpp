@@ -112,7 +112,7 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
                   // bus owns the canonical value.
                   c_Config.u32_BitrateBps = static_cast<uint32_t>(pc_Bus->u64_BitRate);
 
-                  stw::scl::C_SclString c_Error;
+                  std::string c_Error;
                   *oppc_CanDispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
                   if (*oppc_CanDispatcher == NULL)
                   {

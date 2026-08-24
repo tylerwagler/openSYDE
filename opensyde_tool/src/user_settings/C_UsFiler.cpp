@@ -225,7 +225,7 @@ void C_UsFiler::mh_SaveNode(QSettings & orc_Ini, const C_UsNode & orc_Node)
       orc_Ini.setValue("InterfaceNumber", static_cast<int32_t>(c_It->first.first));
       orc_Ini.setValue("DeviceInterfaceNumber", static_cast<int32_t>(c_It->first.second.first));
       orc_Ini.setValue("DeviceNodeName",
-                       QString::fromStdString(c_It->first.second.second.AsStdString()->c_str()));
+                       QString::fromStdString(c_It->first.second.second.c_str()));
       orc_Ini.setValue("Expanded", c_It->second);
    });
 
@@ -854,16 +854,16 @@ void C_UsFiler::mh_LoadNode(QSettings & orc_Ini, const QString & orc_NodeName, C
       }
       orc_Ini.endArray();
    }
-   std::map<std::pair<uint8_t, std::pair<uint8_t, stw::scl::C_SclString> >, bool> c_LoadDevice;
+   std::map<std::pair<uint8_t, std::pair<uint8_t, std::string> >, bool> c_LoadDevice;
    {
       const int32_t s32_Size = orc_Ini.beginReadArray("CANopenDeviceExpanded");
       for (int32_t s32_It = 0; s32_It < s32_Size; ++s32_It)
       {
          orc_Ini.setArrayIndex(s32_It);
-         const std::pair<uint8_t, stw::scl::C_SclString> c_PairInterfaceId(
+         const std::pair<uint8_t, std::string> c_PairInterfaceId(
             static_cast<uint8_t>(orc_Ini.value("DeviceInterfaceNumber", 0).toInt()),
-            stw::scl::C_SclString(orc_Ini.value("DeviceNodeName", "").toString().toStdString().c_str()));
-         const std::pair<uint8_t, std::pair<uint8_t, stw::scl::C_SclString> > c_Pair(
+            std::string(orc_Ini.value("DeviceNodeName", "").toString().toStdString().c_str()));
+         const std::pair<uint8_t, std::pair<uint8_t, std::string> > c_Pair(
             static_cast<uint8_t>(orc_Ini.value("InterfaceNumber", 0).toInt()), c_PairInterfaceId);
          c_LoadDevice[c_Pair] = orc_Ini.value("Expanded", false).toBool();
       }

@@ -246,11 +246,11 @@ int32_t C_PuiSdHandlerDataLoggerLogic::SetDataLoggerEnabled(const uint32_t ou32_
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerDataLoggerLogic::SetDataLoggerProperties(const uint32_t ou32_NodeIndex,
                                                                const uint32_t ou32_DataLoggerJobIndex,
-                                                               const stw::scl::C_SclString & orc_Name,
-                                                               const stw::scl::C_SclString & orc_Comment,
+                                                               const std::string & orc_Name,
+                                                               const std::string & orc_Comment,
                                                                const C_OscDataLoggerJobProperties::E_UseCase oe_UseCase,
                                                                const C_OscDataLoggerJobProperties::E_LogFileFormat oe_LogFileFormat, const uint32_t ou32_MaxLogEntries, const uint32_t ou32_MaxLogDurationSec, const uint32_t ou32_LogIntervalMs, const C_OscDataLoggerJobProperties::E_LocalLogTrigger oe_LocalLogTrigger,
-                                                               const stw::scl::C_SclString & orc_LogDestinationDirectory)
+                                                               const std::string & orc_LogDestinationDirectory)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -378,7 +378,7 @@ int32_t C_PuiSdHandlerDataLoggerLogic::SetDataLoggerAdditionalTriggerExpertModeE
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerDataLoggerLogic::SetDataLoggerAdditionalTriggerExpertModeString(const uint32_t ou32_NodeIndex,
                                                                                       const uint32_t ou32_DataLoggerJobIndex,
-                                                                                      const scl::C_SclString & orc_Data)
+                                                                                      const std::string & orc_Data)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -581,7 +581,7 @@ int32_t C_PuiSdHandlerDataLoggerLogic::SetDataLoggerElementProperties(const uint
                                                                       const uint32_t ou32_DataLoggerJobIndex,
                                                                       const uint32_t ou32_DataLoggerDataElementIndex,
                                                                       const bool oq_UseCustomName,
-                                                                      const stw::scl::C_SclString & orc_CustomName)
+                                                                      const std::string & orc_CustomName)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -738,7 +738,7 @@ void C_PuiSdHandlerDataLoggerLogic::m_FixDataLoggerTriggerIssues(void)
          const C_OscDataLoggerJob & rc_DataLogger = rc_OscNode.c_DataLoggerJobs[u32_ItDataLogger];
          if (((rc_DataLogger.c_Properties.c_AdditionalTriggerProperties.q_Enable &&
                rc_DataLogger.c_Properties.c_AdditionalTriggerProperties.c_ExpertMode.q_Enable) && (
-                 rc_DataLogger.c_Properties.c_AdditionalTriggerProperties.c_ExpertMode.c_TriggerConfiguration.IsEmpty()
+                 rc_DataLogger.c_Properties.c_AdditionalTriggerProperties.c_ExpertMode.c_TriggerConfiguration.empty()
                  ==
                  false)) &&
              (rc_DataLogger.c_Properties.c_AdditionalTriggerProperties.c_ExpertMode.c_TriggerDataElementIds.size() ==
@@ -1841,10 +1841,10 @@ void C_PuiSdHandlerDataLoggerLogic::m_ValidateAllRoutesForOneNode(const uint32_t
    Vector of pointers to all currently registered bus names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<stw::scl::C_SclString, bool> C_PuiSdHandlerDataLoggerLogic::mh_GetExistingDataLoggerNames(
+std::map<std::string, bool> C_PuiSdHandlerDataLoggerLogic::mh_GetExistingDataLoggerNames(
    const C_OscNode & orc_Node)
 {
-   std::map<stw::scl::C_SclString, bool> c_Retval;
+   std::map<std::string, bool> c_Retval;
    for (uint32_t u32_ItLogger = 0; u32_ItLogger < orc_Node.c_DataLoggerJobs.size(); ++u32_ItLogger)
    {
       c_Retval[orc_Node.c_DataLoggerJobs[u32_ItLogger].c_Properties.c_Name] = true;

@@ -15,6 +15,7 @@
 #include <QScrollBar>
 
 #include "C_Uti.hpp"
+#include "C_SclStringCompat.hpp"
 #include "TglUtils.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -36,10 +37,15 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
+using namespace stw::scl;
 using namespace stw::opensyde_gui;
+using namespace stw::scl;
 using namespace stw::opensyde_core;
+using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
+using namespace stw::scl;
 using namespace stw::opensyde_gui_elements;
+using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -235,10 +241,10 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
                               if (pc_DeviceNode != NULL)
                               {
                                  const std::map<std::pair<uint8_t, std::pair<uint8_t,
-                                                                             stw::scl::C_SclString> >,
+                                                                             std::string> >,
                                                 bool> c_Device = c_UsNode.GetExpandedCanOpenDevice();
                                  for (std::map<std::pair<uint8_t,
-                                                         std::pair<uint8_t, stw::scl::C_SclString> >,
+                                                         std::pair<uint8_t, std::string> >,
                                                bool>::const_iterator c_ItDevice = c_Device.begin();
                                       c_ItDevice != c_Device.end();
                                       ++c_ItDevice)
@@ -320,7 +326,7 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
    {
       std::map<uint8_t, bool> c_SaveInterface;
       std::map<uint8_t, bool> c_SaveDevices;
-      std::map<std::pair<uint8_t, std::pair<uint8_t, stw::scl::C_SclString> >, bool> c_SaveDevice;
+      std::map<std::pair<uint8_t, std::pair<uint8_t, std::string> >, bool> c_SaveDevice;
 
       const std::map<uint8_t, C_OscCanOpenManagerInfo> c_CanOpenManagers = pc_Node->c_CanOpenManagers;
 
@@ -346,9 +352,9 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
                   c_ItDevices->first.u32_NodeIndex);
                if (pc_DeviceNode != NULL)
                {
-                  const std::pair<uint8_t, stw::scl::C_SclString> c_PairInterfaceId(
+                  const std::pair<uint8_t, std::string> c_PairInterfaceId(
                      c_ItDevices->first.u8_InterfaceNumber, pc_DeviceNode->c_Properties.c_Name.c_str());
-                  const std::pair<uint8_t, std::pair<uint8_t, stw::scl::C_SclString> > c_Pair(
+                  const std::pair<uint8_t, std::pair<uint8_t, std::string> > c_Pair(
                      c_ItManager->first, c_PairInterfaceId);
                   c_SaveDevice[c_Pair] = true;
                }
@@ -1156,7 +1162,7 @@ void C_SdNdeCoConfigTreeView::m_OnExpanded(const QModelIndex & orc_ExpandedIndex
 void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceInfo & orc_Device)
 {
    const int32_t s32_HB_OFF_VALUE = 0;
-   const QString c_FileName = orc_Device.c_OriginalEdsFileName.UpperCase().c_str();
+   const QString c_FileName = UpperCaseCompat(orc_Device.c_OriginalEdsFileName).c_str();
    const bool q_IsEds = c_FileName.endsWith(".EDS");
    const C_OscCanOpenObjectDictionary & rc_EdsFileContent = orc_Device.GetEdsFileContent();
 
@@ -1178,18 +1184,18 @@ void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceI
          C_OscCanOpenObjectDictionary::hu16_OD_INDEX_HEARTBEAT_PRODUCER);
       if (pc_OscCanOpenObject != NULL)
       {
-         const stw::scl::C_SclString c_Value = C_OscImportEdsDcf::h_GetCoObjectValue(*pc_OscCanOpenObject, q_IsEds);
+         const std::string c_Value = C_OscImportEdsDcf::h_GetCoObjectValue(*pc_OscCanOpenObject, q_IsEds);
          // in case there is an EDS entry
-         if (c_Value.IsEmpty() == false)
+         if (c_Value.empty() == false)
          {
             try
             {
                // get value from EDS file
-               s32_HeartbeatProducerTimeMs = c_Value.ToInt();
+               s32_HeartbeatProducerTimeMs = std::stoi(c_Value);
             }
             catch (...)
             {
-               const stw::scl::C_SclString c_Info = "Could not convert the following number: \"" +
+               const std::string c_Info = "Could not convert the following number: \"" +
                                                     c_Value + "\". Switching heartbeat off.";
                s32_HeartbeatProducerTimeMs = s32_HB_OFF_VALUE;
                osc_write_log_warning("Read CANopen EDS Heartbeat Producer default value", c_Info);
@@ -1242,19 +1248,19 @@ void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceI
                C_OscCanOpenObjectDictionary::hu16_OD_INDEX_HEARTBEAT_CONSUMER, 1);
          if (pc_OscCanOpenObject != NULL)
          {
-            const stw::scl::C_SclString c_Value =
+            const std::string c_Value =
                C_OscImportEdsDcf::h_GetCoObjectValue(*pc_OscCanOpenObject, q_IsEds);
             // in case there is an EDS entry
-            if (c_Value.IsEmpty() == false)
+            if (c_Value.empty() == false)
             {
                try
                {
                   // get value from EDS file
-                  s32_HeartbeatConsumerTimeMs = c_Value.ToInt();
+                  s32_HeartbeatConsumerTimeMs = std::stoi(c_Value);
                }
                catch (...)
                {
-                  const stw::scl::C_SclString c_Info = "Could not convert the following number: \"" +
+                  const std::string c_Info = "Could not convert the following number: \"" +
                                                        c_Value +
                                                        "\". Switching heartbeat off.";
                   s32_HeartbeatConsumerTimeMs = s32_HB_OFF_VALUE;

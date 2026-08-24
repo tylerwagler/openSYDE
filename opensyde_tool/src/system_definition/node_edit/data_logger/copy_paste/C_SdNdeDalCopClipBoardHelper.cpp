@@ -135,7 +135,7 @@ void C_SdNdeDalCopClipBoardHelper::mh_StoreDataloggerToClipboard(const std::vect
                                                                             C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups,
                                                                  const QString & orc_GenericTagName)
 {
-   stw::scl::C_SclString c_XmlContent;
+   std::string c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild(orc_GenericTagName.toStdString().c_str());
@@ -255,7 +255,7 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadElementIdGroups(QMap<C_OscNodeDataP
 
    if  (s32_Retval == C_NO_ERR)
    {
-      stw::scl::C_SclString c_CurrentGroupNode = orc_XmlParser.SelectNodeChild("element-id-group");
+      std::string c_CurrentGroupNode = orc_XmlParser.SelectNodeChild("element-id-group");
 
       if (c_CurrentGroupNode == "element-id-group")
       {

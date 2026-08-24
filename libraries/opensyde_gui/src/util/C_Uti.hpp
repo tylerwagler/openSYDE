@@ -21,7 +21,7 @@
 
 #include "stwtypes.hpp"
 #include "constants.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -72,7 +72,7 @@ public:
    static QFont h_GetFontPixel(const QFont & orc_Font);
    static QString h_ConvertVersionToStwStyle(const QString & orc_Version);
    static QString h_ConcatPathIfNecessary(const QString & orc_BaseDir, const QString & orc_RelativeOrAbsolutePath);
-   static QString h_GetUniqueNameQt(const std::map<stw::scl::C_SclString, bool> & orc_ExistingStrings,
+   static QString h_GetUniqueNameQt(const std::map<std::string, bool> & orc_ExistingStrings,
                                     const QString & orc_ProposedName);
    static std::vector<int32_t> h_CreateAscendingIndexMap(const std::vector<uint32_t> & orc_UnsortedIndices);
    static bool h_CheckSortedAscending(const std::vector<uint32_t> & orc_Indices);
@@ -85,7 +85,7 @@ public:
    static QString h_GetValueAsHex(const uint64_t ou64_Value, const uint8_t ou8_FieldWidth = 0);
    static QString h_GetValueAsHex(const uint32_t ou32_Value, const uint8_t ou8_FieldWidth = 0);
    static void h_GetAllFilePathsInFolder(const QString & orc_FolderPath,
-                                         std::vector<stw::scl::C_SclString> & orc_FilePaths);
+                                         std::vector<std::string> & orc_FilePaths);
 
 private:
    C_Uti(void);

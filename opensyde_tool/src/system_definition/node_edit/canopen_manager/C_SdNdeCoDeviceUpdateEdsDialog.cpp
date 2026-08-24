@@ -1327,7 +1327,7 @@ QString C_SdNdeCoDeviceUpdateEdsDialog::mh_GetSignalNames(const C_OscCanMessage 
    Signal name for display
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_SdNdeCoDeviceUpdateEdsDialog::mh_GetSignalNameForDisplay(const stw::scl::C_SclString & orc_Name)
+QString C_SdNdeCoDeviceUpdateEdsDialog::mh_GetSignalNameForDisplay(const std::string & orc_Name)
 {
    return static_cast<QString>("\"") + orc_Name.c_str() + "\"";
 }

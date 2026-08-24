@@ -31,7 +31,7 @@ public:
    C_SdBueSortHelper(void);
    bool operator ()(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_Message1,
                     const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_Message2) const;
-   static bool h_CompareString(const stw::scl::C_SclString & orc_String1, const stw::scl::C_SclString & orc_String2);
+   static bool h_CompareString(const std::string & orc_String1, const std::string & orc_String2);
 
    static int32_t h_SortOneMessageVector(std::vector<stw::opensyde_core::C_OscCanMessage> & orc_OscMessages,
                                          std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages,

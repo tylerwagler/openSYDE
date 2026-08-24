@@ -17,7 +17,7 @@
 #include <QString>
 #include <QMutex>
 
-#include "C_SclString.hpp"
+#include <string>
 
 #include "C_CanDispatcher.hpp"
 #include "C_OscComSequencesBase.hpp"

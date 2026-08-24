@@ -20,7 +20,8 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
+#include "C_SclStringCompat.hpp"
 #include "C_SydeSup.hpp"
 #include "C_OscSupServiceUpdatePackageLoad.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -102,7 +103,7 @@ C_SydeSup::~C_SydeSup(void)
    eERR_SEQUENCE_CAN_INIT    CAN_Init at the requested bitrate failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SydeSup::E_Result C_SydeSup::m_OpenCan(const stw::scl::C_SclString & orc_CanDriver, const uint64_t ou64_BitrateBps)
+C_SydeSup::E_Result C_SydeSup::m_OpenCan(const std::string & orc_CanDriver, const uint64_t ou64_BitrateBps)
 {
    C_SydeSup::E_Result e_Result = eOK;
 
@@ -114,7 +115,7 @@ C_SydeSup::E_Result C_SydeSup::m_OpenCan(const stw::scl::C_SclString & orc_CanDr
    stw::opensyde_core::C_OscCanAdapterConfig c_Config =
       stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
 #ifndef _WIN32
-   if (orc_CanDriver.IsEmpty() == false)
+   if (orc_CanDriver.empty() == false)
    {
       c_Config.c_ChannelId = orc_CanDriver.c_str();
    }
@@ -123,7 +124,7 @@ C_SydeSup::E_Result C_SydeSup::m_OpenCan(const stw::scl::C_SclString & orc_CanDr
 #endif
    c_Config.u32_BitrateBps = static_cast<uint32_t>(ou64_BitrateBps);
 
-   stw::scl::C_SclString c_Error;
+   std::string c_Error;
    mpc_CanDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
    if (mpc_CanDispatcher == NULL)
    {
@@ -195,8 +196,8 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t 
    bool q_ShowHelp = false;
    bool q_ShowManPage = false;
    bool q_ShowVersionOnly = false;
-   const C_SclString c_Version = m_GetApplicationVersion(TglGetExePath());
-   const C_SclString c_BinaryHash = C_OscUtilBinaryHash::h_CreateBinaryHash();
+   const std::string c_Version = m_GetApplicationVersion(TglGetExePath());
+   const std::string c_BinaryHash = C_OscUtilBinaryHash::h_CreateBinaryHash();
 
    mq_Quiet = false;
 
@@ -371,8 +372,8 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t 
       }
       else
       {
-         const C_SclString c_Date = __DATE__;
-         const C_SclString c_Time = __TIME__;
+         const std::string c_Date = __DATE__;
+         const std::string c_Time = __TIME__;
 
          // Initialize optional parameters and setup logging
          e_Return = this->m_InitOptionalParameters();
@@ -507,7 +508,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
    C_OscSystemDefinition c_SystemDefinition;
    uint32_t u32_ActiveBusIndex = 0;
    C_SclStringList c_WarningMessages;
-   C_SclString c_ErrorMessage;
+   std::string c_ErrorMessage;
    C_SupSuSequences c_Sequence;
    bool q_ResetSystem = false;
 
@@ -544,9 +545,9 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
       //nodes that are encrypted with a password and shall be decrypted
       std::vector<uint8_t> c_DecryptNodes;
       //passwords for the nodes which shall be decrypted
-      std::vector<C_SclString> c_PasswordsForDecryption;
+      std::vector<std::string> c_PasswordsForDecryption;
       //pem files for the nodes which signatures shall be checked
-      std::vector<C_SclString> c_PemFilesForNodes;
+      std::vector<std::string> c_PemFilesForNodes;
 
       //we only support "one pem rules them all" at the moment. Thus only one pem goes into the vector.
       //Later on there might be a "one pem/node" approach.
@@ -848,7 +849,7 @@ C_SydeSup::E_Result C_SydeSup::CreatePackage(void)
    \param[in]  orq_Quiet      Quiet flag
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SydeSup::h_WriteLog(const C_SclString & orc_Activity, const C_SclString & orc_Text, const bool & orq_IsError,
+void C_SydeSup::h_WriteLog(const std::string & orc_Activity, const std::string & orc_Text, const bool & orq_IsError,
                            const bool & orq_Quiet)
 {
    if (orq_IsError == true)
@@ -940,7 +941,7 @@ C_SydeSup::E_Result C_SydeSup::m_InitOptionalParameters(void)
    \param[in]  oq_Detailed       Show details
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SydeSup::m_PrintVersion(const C_SclString & orc_Version, const C_SclString & orc_BinaryHash,
+void C_SydeSup::m_PrintVersion(const std::string & orc_Version, const std::string & orc_BinaryHash,
                                const bool oq_Detailed) const
 {
    std::cout << "SYDEsup Version: " << orc_Version.c_str() << ", " <<
@@ -963,8 +964,8 @@ void C_SydeSup::m_PrintVersion(const C_SclString & orc_Version, const C_SclStrin
 //----------------------------------------------------------------------------------------------------------------------
 void C_SydeSup::m_PrintInformation(const bool oq_Detailed) const
 {
-   const C_SclString c_PathWithTrailingDelimiter = TglFileIncludeTrailingDelimiter("x");
-   const C_SclString c_PathDelimiter = c_PathWithTrailingDelimiter.SubString(2, c_PathWithTrailingDelimiter.Length());
+   const std::string c_PathWithTrailingDelimiter = TglFileIncludeTrailingDelimiter("x");
+   const std::string c_PathDelimiter = SubStringCompat(c_PathWithTrailingDelimiter, 2, c_PathWithTrailingDelimiter.length());
 
    if (oq_Detailed == true)
    {
@@ -992,8 +993,8 @@ void C_SydeSup::m_PrintInformation(const bool oq_Detailed) const
       this->m_GetDefaultLogLocation().c_str() <<
   //for fitting into table layout pad the log path to length 16 (if it is longer than 16 just leave as it is):
       std::string(static_cast<uint32_t>(
-                     (this->m_GetDefaultLogLocation().Length() < 16) ?
-                     (16 - this->m_GetDefaultLogLocation().Length()) : 0), ' ') <<
+                     (this->m_GetDefaultLogLocation().length() < 16) ?
+                     (16 - this->m_GetDefaultLogLocation().length()) : 0), ' ') <<
       "-l ." << c_PathDelimiter.c_str() << "MyLogDir\n"
       "-o     --operationmode     Set mode: \"update\" or \"createpackage\"           update          -o createpackage\n\n"
       "Package Creation\n"
@@ -1076,9 +1077,9 @@ void C_SydeSup::m_InitLogging(void)
    log file name and location.
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SydeSup::m_GetLogFileLocation(void) const
+std::string C_SydeSup::m_GetLogFileLocation(void) const
 {
-   C_SclString c_LogFilePath;
+   std::string c_LogFilePath;
    C_TglDateTime c_DateTime;
 
    TglGetDateTimeNow(c_DateTime);
@@ -1087,13 +1088,13 @@ C_SclString C_SydeSup::m_GetLogFileLocation(void) const
 
    // Convert  2018-08-28 09:47:50.459 to  2018-08-28_09-47-50
    // i.e. replace " " with "_", replace ":" with "-" and cut decimals (number of characters is always the same)
-   c_LogFilePath = c_LogFilePath.Insert("_", 11); // " "
-   c_LogFilePath = c_LogFilePath.Delete(12, 1);
-   c_LogFilePath = c_LogFilePath.Insert("-", 14); // first ":"
-   c_LogFilePath = c_LogFilePath.Delete(15, 1);
-   c_LogFilePath = c_LogFilePath.Insert("-", 17); //second ":"
-   c_LogFilePath = c_LogFilePath.Delete(18, 1);
-   c_LogFilePath = c_LogFilePath.Delete(20, 4); // remove ".123"
+   InsertCompat(c_LogFilePath, "_", 11); // " "
+   DeleteCompat(c_LogFilePath, 12, 1);
+   InsertCompat(c_LogFilePath, "-", 14); // first ":"
+   DeleteCompat(c_LogFilePath, 15, 1);
+   InsertCompat(c_LogFilePath, "-", 17); //second ":"
+   DeleteCompat(c_LogFilePath, 18, 1);
+   DeleteCompat(c_LogFilePath, 20, 4); // remove ".123"
 
    c_LogFilePath = mc_LogPath + c_LogFilePath + ".syde_log";
 
@@ -1108,8 +1109,8 @@ C_SclString C_SydeSup::m_GetLogFileLocation(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SydeSup::m_PrintStringFromError(const E_Result & ore_Result) const
 {
-   C_SclString c_Activity;
-   C_SclString c_Error;
+   std::string c_Activity;
+   std::string c_Error;
 
    switch (ore_Result)
    {
@@ -1348,12 +1349,12 @@ void C_SydeSup::m_PrintStringFromError(const E_Result & ore_Result) const
       if (me_OperationMode == eMODE_CREATEPACKAGE)
       {
          h_WriteLog("Create Update Package", "Could not create Service Update Package! Tool result code: " +
-                    C_SclString::IntToStr(static_cast<int32_t>(ore_Result)), true);
+                    std::to_string(static_cast<int32_t>(ore_Result)), true);
       }
       else
       {
          h_WriteLog("System Update", "Could not update system! Tool result code: " +
-                    C_SclString::IntToStr(static_cast<int32_t>(ore_Result)), true);
+                    std::to_string(static_cast<int32_t>(ore_Result)), true);
       }
       std::cout << "See openSYDE user manual or log file for information: " << mc_LogFile.c_str()  << "\n" <<
          &std::endl;
@@ -1474,13 +1475,13 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
             {
                std::vector<C_OscSuSequences::C_ApplicationProperties> c_ClientSideApplications; // of current node
 
-               std::vector<C_SclString>::iterator c_IterFiles;
+               std::vector<std::string>::iterator c_IterFiles;
                for (c_IterFiles = orc_ApplicationsToWrite[u16_IterDevices].c_FilesToFlash.begin();
                     c_IterFiles != orc_ApplicationsToWrite[u16_IterDevices].c_FilesToFlash.end();
                     ++c_IterFiles)
                {
                   // Path is already relative to the execution folder
-                  const C_SclString c_Path = c_IterFiles->c_str();
+                  const std::string c_Path = c_IterFiles->c_str();
 
                   C_OscHexFile c_HexFile;
 
@@ -1504,7 +1505,7 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
                   }
                   else
                   {
-                     const C_SclString c_Text = "Could not open HEX file \"" +
+                     const std::string c_Text = "Could not open HEX file \"" +
                                                 c_Path + "\" Details: " +
                                                 c_HexFile.ErrorCodeToErrorText(u32_Result);
                      osc_write_log_warning("X-Check feature", c_Text);
@@ -1532,7 +1533,7 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
             if (c_ActiveNodesTypes[u16_IterDevices] == 1)
             {
                std::vector<uint8_t> c_ApplicationsPresentOnServer;
-               std::vector<C_SclString> c_FilesToFlashTemp;
+               std::vector<std::string> c_FilesToFlashTemp;
 
                // check for changed applications
                C_OscSuSequences::h_CheckForChangedApplications(
@@ -1545,19 +1546,19 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
                     c_NodeApplicationsHelperStruct[u16_IterDevices].c_ClientSideApplications.size();
                     ++u16_IterApplications)
                {
-                  const C_SclString c_Temp =
+                  const std::string c_Temp =
                      orc_ApplicationsToWrite[u16_IterDevices].c_FilesToFlash[u16_IterApplications];
                   if (c_ApplicationsPresentOnServer[u16_IterApplications] == 0)
                   {
                      // current application needs to be updated on current device
-                     const C_SclString c_Text = "File \"" + c_Temp + "\" not present on device. Needs updating ...";
+                     const std::string c_Text = "File \"" + c_Temp + "\" not present on device. Needs updating ...";
 
                      c_FilesToFlashTemp.push_back(c_Temp);
                      osc_write_log_info("X-Check feature", c_Text);
                   }
                   else
                   {
-                     const C_SclString c_Text = "File \"" + c_Temp +
+                     const std::string c_Text = "File \"" + c_Temp +
                                                 "\" present on device. No update needed -> skipping ...";
                      osc_write_log_info("X-Check feature", c_Text);
                   }

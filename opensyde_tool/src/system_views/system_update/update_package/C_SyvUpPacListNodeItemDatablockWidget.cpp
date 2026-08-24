@@ -26,14 +26,20 @@
 
 #include "C_PuiSvHandler.hpp"
 #include "C_OscHexFile.hpp"
+#include "C_SclStringCompat.hpp"
 #include "C_SyvUpPacHexFileView.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
+using namespace stw::scl;
 using namespace stw::opensyde_gui;
+using namespace stw::scl;
 using namespace stw::opensyde_gui_elements;
+using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
+using namespace stw::scl;
 using namespace stw::opensyde_core;
+using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -199,7 +205,7 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
 
             if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
             {
-               this->mc_AppDeviceType = c_FileApplicationInfo.GetDeviceID().Trim().UpperCase().c_str();
+               this->mc_AppDeviceType = UpperCaseCompat(TrimCompat(c_FileApplicationInfo.GetDeviceID())).c_str();
                if (s32_Result == C_WARN)
                {
                   // Hex file has multiple application blocks so information is ambiguous
@@ -256,8 +262,7 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                              ++u32_ItName)
                         {
                            const QString c_AllowedDevice =
-                              pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].
-                              c_OtherAcceptedNames[u32_ItName].Trim().UpperCase().c_str();
+                              UpperCaseCompat(TrimCompat(pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].c_OtherAcceptedNames[u32_ItName])).c_str();
                            if (QString::compare(c_AllowedDevice, this->mc_AppDeviceType, Qt::CaseInsensitive) == 0)
                            {
                               q_FileIsOk = true;

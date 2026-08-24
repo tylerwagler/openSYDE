@@ -207,7 +207,7 @@ void C_SdTopologyScene::AddNode(const QString & orc_NodeType, const QPointF & or
 
          for (uint32_t u32_ItSubDevice = 0UL; u32_ItSubDevice < u32_SubDevicesSize; ++u32_ItSubDevice)
          {
-            const stw::scl::C_SclString & rc_Title = pc_MainDevice->c_SubDevices[u32_ItSubDevice].c_SubDeviceName;
+            const std::string & rc_Title = pc_MainDevice->c_SubDevices[u32_ItSubDevice].c_SubDeviceName;
             stw::opensyde_core::C_OscNode c_OscNode;
             //Object
             this->m_InitNodeData(c_OscNode,
@@ -1964,8 +1964,8 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
    if (q_IsMulti)
    {
       QString c_NameProposal;
-      stw::scl::C_SclString c_MainDeviceName;
-      stw::scl::C_SclString c_SubDeviceName;
+      std::string c_MainDeviceName;
+      std::string c_SubDeviceName;
       std::vector<QString> c_SubDevices;
       std::vector<C_OscNode> c_OscNodes;
       std::vector<C_PuiSdNode> c_UiNodes;
@@ -2003,7 +2003,7 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
             }
          }
       }
-      tgl_assert(c_MainDeviceName.IsEmpty() == false);
+      tgl_assert(c_MainDeviceName.empty() == false);
       u32_DataIndex = C_PuiSdHandler::h_GetInstance()->AddNodeSquadAndSort(c_OscNodes, c_UiNodes, c_SubDevices,
                                                                            c_MainDeviceName.c_str(), c_NameProposal);
    }
@@ -3937,7 +3937,7 @@ void C_SdTopologyScene::m_InitNodeComIfSettings(C_OscNode & orc_OscNode, const Q
    \param[in]      oru32_SubNodeIndex   Node Index
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::opensyde_gui::C_SdTopologyScene::m_ActivateTspShortcut(const scl::C_SclString & orc_NodeName,
+bool stw::opensyde_gui::C_SdTopologyScene::m_ActivateTspShortcut(const std::string & orc_NodeName,
                                                                  const uint32_t & oru32_SubNodeIndex)
 {
    const uint32_t u32_FLAG = mu32_FLAG_OPEN_PROPERTIES;
@@ -3963,7 +3963,7 @@ bool stw::opensyde_gui::C_SdTopologyScene::m_ActivateTspShortcut(const scl::C_Sc
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyScene::m_AddTspForAllSubNodes(const uint32_t & oru32_SubDevicesSize,
                                                const uint32_t & oru32_OriginalOscNodeSize,
-                                               const stw::scl::C_SclString & orc_NodeName)
+                                               const std::string & orc_NodeName)
 {
    const uint32_t u32_NodeSubs = oru32_OriginalOscNodeSize + oru32_SubDevicesSize;
 
@@ -4002,12 +4002,12 @@ bool C_SdTopologyScene::m_ShowShortcutTspOption(const QString & orc_NodeName,
    if ((C_UsHandler::h_GetInstance()->GetSkipTspSelection() == "") ||
        (C_UsHandler::h_GetInstance()->GetSkipTspSelection() == "Ask User"))
    {
-      const stw::scl::C_SclString c_TitleString = orc_NodeName.toStdString().c_str();
-      const stw::scl::C_SclString c_MessageBoxTitle = "Import TSP Assistance";
-      const stw::scl::C_SclString c_MessageBoxText =
+      const std::string c_TitleString = orc_NodeName.toStdString().c_str();
+      const std::string c_MessageBoxTitle = "Import TSP Assistance";
+      const std::string c_MessageBoxText =
          "Do you want to import openSYDE Target Support Package file(s) to " +
          c_TitleString  + "?";
-      const stw::scl::C_SclString c_MessageBoxDetails =
+      const std::string c_MessageBoxDetails =
          "With an openSYDE Target Support Package the user is able to bring "
          "an empty node (fresh placed from toolbox) to a defined default state. "
          "\nNode definition import could contain e.g.: Data Blocks configuration, Template programming project, "

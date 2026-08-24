@@ -67,19 +67,19 @@ private:
                                     stw::opensyde_core::C_OscHalcConfigDomain & orc_UpdatedConfig);
    void m_UpdateChannelConfiguration(const stw::opensyde_core::C_OscHalcConfigDomain & orc_CurrentConfig,
                                      stw::opensyde_core::C_OscHalcConfigDomain & orc_UpdatedConfig,
-                                     const stw::scl::C_SclString & orc_PreviousDefChannelName,
+                                     const std::string & orc_PreviousDefChannelName,
                                      const bool oq_IsDomainConfiguration, const uint32_t ou32_CurrentChannelIndex = 0U,
                                      const uint32_t ou32_UpdatedChannelIndex = 0U);
    void m_UpdateSubParameterConfiguration(const stw::opensyde_core::C_OscHalcDefStruct & orc_CurrentParameterDef,
                                           const stw::opensyde_core::C_OscHalcDefStruct & orc_UpdatedParameterDef,
                                           const bool oq_IsDomainConfiguration, const uint32_t ou32_UseCaseIndex,
                                           const stw::opensyde_core::C_OscHalcConfigParameterStruct & orc_CurrentParameterConfig, stw::opensyde_core::C_OscHalcConfigParameterStruct &
-                                          orc_UpdatedParameterConfig, const stw::scl::C_SclString & orc_ChannelName);
+                                          orc_UpdatedParameterConfig, const std::string & orc_ChannelName);
    void m_UpdateParameterElementConfiguration(const stw::opensyde_core::C_OscHalcDefElement & orc_CurrentParameterDef,
                                               const stw::opensyde_core::C_OscHalcDefElement & orc_UpdatedParameterDef,
                                               const bool oq_IsDomainConfiguration, const uint32_t ou32_UseCaseIndex,
                                               const stw::opensyde_core::C_OscHalcConfigParameter & orc_CurrentParameterConfig, stw::opensyde_core::C_OscHalcConfigParameter &
-                                              orc_UpdatedParameterConfig, const stw::scl::C_SclString & orc_ChannelName);
+                                              orc_UpdatedParameterConfig, const std::string & orc_ChannelName);
    static bool mh_CheckParameterDefForUseCase(const stw::opensyde_core::C_OscHalcDefElement & orc_ParameterDef,
                                               const bool oq_IsDomainConfiguration, const uint32_t ou32_UseCaseIndex);
 

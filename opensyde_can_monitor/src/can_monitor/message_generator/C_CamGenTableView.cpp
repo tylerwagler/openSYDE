@@ -423,7 +423,7 @@ bool C_CamGenTableView::CheckAndHandleKey(const QString & orc_Input)
          if (pc_Message != NULL)
          {
             //Only check non empty keys
-            if (pc_Message->c_Key.IsEmpty() == false)
+            if (pc_Message->c_Key.empty() == false)
             {
                //Compare key, case sensitive!
                if (orc_Input.compare(pc_Message->c_Key.c_str()) == 0)

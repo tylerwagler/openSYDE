@@ -235,7 +235,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
       {
          // no error on parsing TSP (see m_OnLoadTSP())
          q_ValidTsp = true;
-         const stw::scl::C_SclString c_DeviceName = this->mc_Tsp.c_DeviceName;
+         const std::string c_DeviceName = this->mc_Tsp.c_DeviceName;
          if (c_DeviceName != pc_Node->c_DeviceType)
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
@@ -296,7 +296,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
 
       if (q_Continue == true)
       {
-         if (!this->mc_Tsp.c_TemplatePath.IsEmpty())
+         if (!this->mc_Tsp.c_TemplatePath.empty())
          {
             if ((c_CreateInFolder.exists() == true) &&
                 (c_CreateInFolder.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries).count() != 0))
@@ -351,7 +351,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
             {
                const QFileInfo c_TspFileInfo(this->GetTspPath()); // file path -> use absoluteDir() to get directory of
                                                                   // file
-               stw::scl::C_SclString c_ErrorText;
+               std::string c_ErrorText;
                QString c_Path;
 
                c_Path = QDir::cleanPath(c_TspFileInfo.absoluteDir().absoluteFilePath(
@@ -503,7 +503,7 @@ void C_SdNdeDbAddNewProject::m_OnLoadTsp(void)
       "Location where the openSYDE Target Support Package content (e.g.: Target project, Flashware, ...) should be extracted at.");
    if (this->ms32_TspReadResult == C_NO_ERR)
    {
-      const bool q_HaveTemplate = !this->mc_Tsp.c_TemplatePath.IsEmpty();
+      const bool q_HaveTemplate = !this->mc_Tsp.c_TemplatePath.empty();
       this->mpc_Ui->pc_LabelCreateIn->setDisabled(!q_HaveTemplate);
       this->mpc_Ui->pc_LineEditCreateIn->setDisabled(!q_HaveTemplate);
       this->mpc_Ui->pc_PushButtonCreateIn->setDisabled(!q_HaveTemplate);
@@ -626,7 +626,7 @@ void C_SdNdeDbAddNewProject::m_Init(const uint32_t ou32_NodeIndex) const
       this->mpc_Ui->pc_LineEditCreateIn->SetPath(c_NodePath, C_PuiProject::h_GetInstance()->GetFolderPath());
 
       //Set Title
-      const stw::scl::C_SclString c_NodeName = pc_Node->c_Properties.c_Name;
+      const std::string c_NodeName = pc_Node->c_Properties.c_Name;
       const QString c_QnodeName = static_cast<QString>(c_NodeName.c_str());
       const QString c_Title = c_QnodeName;
       this->mrc_ParentDialog.SetTitle(c_Title);

@@ -34,7 +34,7 @@
 #include <map>
 #include <list>
 
-#include "C_SclString.hpp"
+#include <string>
 
 #endif
 

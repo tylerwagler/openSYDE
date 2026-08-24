@@ -60,7 +60,7 @@ int32_t C_PuiTargetSupportPackageFiler::h_LoadTspV3(const QString & orc_TspPath,
                                                     stw::opensyde_core::C_OscNode & orc_OscNode,
                                                     C_PuiSdNode & orc_UiNode)
 {
-   stw::scl::C_SclString c_NodePath;
+   std::string c_NodePath;
    int32_t s32_Retval = C_OscTargetSupportPackageFiler::h_Load(orc_Tsp, c_NodePath, orc_TspPath.toStdString().c_str());
    if (s32_Retval == C_NO_ERR)
    {
@@ -112,7 +112,7 @@ C_PuiTargetSupportPackageFiler::C_PuiTargetSupportPackageFiler()
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiTargetSupportPackageFiler::mh_DoUnzip(const QString & orc_ZipFilePath, QString & orc_FolderPath)
 {
-   stw::scl::C_SclString c_ErrorText;
+   std::string c_ErrorText;
    int32_t s32_Retval;
 
    orc_FolderPath = mh_GetZipExtractFolder();

@@ -878,7 +878,7 @@ void C_SdHandlerWidget::m_Export(void)
       if (q_BusConflict == true)
       {
          // display error
-         const stw::scl::C_SclString c_Message = "Bus \"" + pc_Bus->c_Name + "\" has invalid content. "
+         const std::string c_Message = "Bus \"" + pc_Bus->c_Name + "\" has invalid content. "
                                                  "DBC file export cannot be performed.";
          C_OgeWiCustomMessage c_ExportWarnings(this, C_OgeWiCustomMessage::E_Type::eERROR);
          c_ExportWarnings.SetHeading("DBC file export");
@@ -978,9 +978,9 @@ void C_SdHandlerWidget::m_Export(void)
                                                                                        ->q_IsExtended));
                            if (c_IterWithExtended == c_CanMessageIdsWithExtended.end())
                            {
-                              const stw::scl::C_SclString c_Message = "Can't export message \"" +
+                              const std::string c_Message = "Can't export message \"" +
                                                                       c_TxIter->c_Name + "\" in bus \"" +
-                                                                      stw::scl::C_SclString::IntToStr(this->mu32_Index)
+                                                                      std::to_string(this->mu32_Index)
                                                                       +
                                                                       "\" because message ID is not unique.";
                               c_Warnings.Append(c_Message);
@@ -1025,9 +1025,9 @@ void C_SdHandlerWidget::m_Export(void)
                                                                                        ->q_IsExtended));
                            if (c_IterWithExtended == c_CanMessageIdsWithExtended.end())
                            {
-                              const stw::scl::C_SclString c_Message = "Can't export message \"" +
+                              const std::string c_Message = "Can't export message \"" +
                                                                       c_RxIter->c_Name + "\" in bus \"" +
-                                                                      stw::scl::C_SclString::IntToStr(this->mu32_Index)
+                                                                      std::to_string(this->mu32_Index)
                                                                       +
                                                                       "\" because message ID is not unique. Message is ignored.";
                               c_Warnings.Append(c_Message);
@@ -1098,7 +1098,7 @@ void C_SdHandlerWidget::m_TriggerImport(void)
       tgl_assert((pc_Bus != NULL) && (mpc_ActBusEdit != NULL));
       if ((pc_Bus != NULL) && (mpc_ActBusEdit != NULL))
       {
-         const stw::scl::C_SclString c_BusName = pc_Bus->c_Name;
+         const std::string c_BusName = pc_Bus->c_Name;
 
          const QPointer<C_OgePopUpDialog> c_PopUpDialog = m_CreateImportPopupDialog();
          C_SdBueImportCommMessagesWidget * const pc_ImportCommMessagesWidget = new C_SdBueImportCommMessagesWidget(
@@ -1177,11 +1177,11 @@ void C_SdHandlerWidget::m_RtfExport(void)
 
          c_PopUpDialog->SetSize(c_SIZE_IMPORT_REPORT);
 
-         stw::scl::C_SclString c_RtfPath = static_cast<stw::scl::C_SclString>(
+         std::string c_RtfPath = static_cast<std::string>(
             C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfPath().toStdString().c_str());
-         stw::scl::C_SclString c_CompanyName = static_cast<stw::scl::C_SclString>(
+         std::string c_CompanyName = static_cast<std::string>(
             C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfCompanyName().toStdString().c_str());
-         stw::scl::C_SclString c_CompanyLogoPath = static_cast<stw::scl::C_SclString>(
+         std::string c_CompanyLogoPath = static_cast<std::string>(
             C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfCompanyLogoPath().toStdString().c_str());
 
          if (c_RtfPath == "")
@@ -1221,7 +1221,7 @@ void C_SdHandlerWidget::m_RtfExport(void)
 
             // export to RTF file
             stw::scl::C_SclStringList c_Warnings;
-            stw::scl::C_SclString c_Error;
+            std::string c_Error;
             const int32_t s32_Return = pc_DialogExportReport->ExportToRtf(c_RtfPath, c_CompanyName, c_CompanyLogoPath,
                                                                           this->mpc_Topology, c_Warnings, c_Error);
             if (s32_Return == C_NO_ERR)
@@ -1241,7 +1241,7 @@ void C_SdHandlerWidget::m_RtfExport(void)
             }
             else if (s32_Return == C_WARN)
             {
-               const stw::scl::C_SclString c_Details = "Warnings: \r\n" + c_Warnings.GetText();
+               const std::string c_Details = "Warnings: \r\n" + c_Warnings.GetText();
                C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eWARNING);
                c_MessageResult.SetHeading("RTF File Export");
                c_MessageResult.SetDescription("Warnings occurred on RTF File Export.");

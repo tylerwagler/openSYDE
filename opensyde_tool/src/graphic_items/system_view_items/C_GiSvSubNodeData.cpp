@@ -12,7 +12,8 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
+#include "C_SclStringCompat.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -316,7 +317,7 @@ bool C_GiSvSubNodeData::CheckUpdateDisabledState(void) const
                      if (pc_UpdateInfo != NULL)
                      {
                         if (((pc_UpdateInfo->GetParamInfos().size() == 0UL) &&
-                             (pc_UpdateInfo->GetPemFilePath().IsEmpty() == true)) &&
+                             (pc_UpdateInfo->GetPemFilePath().empty() == true)) &&
                             (pc_UpdateInfo->GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED).size() == 0UL))
                         {
                            //No file associated
@@ -392,7 +393,7 @@ bool C_GiSvSubNodeData::CheckAlwaysUpdate(void) const
    {
       const C_OscViewNodeUpdate * const pc_UpdateInformation = pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex);
       if ((((pc_UpdateInformation->GetParamInfos().size() == 0UL) &&
-            (pc_UpdateInformation->GetPemFilePath().IsEmpty() == true)) &&
+            (pc_UpdateInformation->GetPemFilePath().empty() == true)) &&
            (pc_UpdateInformation->GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED).size() == 0UL)) &&
           (pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].q_FlashloaderOpenSydeIsFileBased ==
            false))
@@ -875,7 +876,7 @@ void C_GiSvSubNodeData::m_InitPackageData(const C_OscNode & orc_Node, const C_Os
          uint32_t u32_ItApplication;
          uint32_t u32_ItApplicationPath = 0U;
          std::vector<QString> c_FinalApplicationPaths;
-         const std::vector<C_SclString> & rc_ApplicationPaths = orc_UpdateInformation.GetPaths(
+         const std::vector<std::string> & rc_ApplicationPaths = orc_UpdateInformation.GetPaths(
             C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
          c_FinalApplicationPaths.reserve(rc_ApplicationPaths.size());
 
@@ -925,7 +926,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
    this->mc_HexAppInfoAmbiguous.reserve(orc_FinalFilePaths.size());
    for (uint32_t u32_ItFile = 0; u32_ItFile < orc_FinalFilePaths.size(); ++u32_ItFile)
    {
-      const stw::scl::C_SclString c_Path = orc_FinalFilePaths[u32_ItFile].toStdString().c_str();
+      const std::string c_Path = orc_FinalFilePaths[u32_ItFile].toStdString().c_str();
       // c_Path is already absolute and placeholder variables got resolved!
       C_OscHexFile c_HexFile;
       uint32_t u32_Result;
@@ -944,7 +945,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
       }
       else
       {
-         const stw::scl::C_SclString c_Text = "Could not open HEX file \"" +
+         const std::string c_Text = "Could not open HEX file \"" +
                                               c_Path + "\" Details: " +
                                               c_HexFile.ErrorCodeToErrorText(u32_Result);
          osc_write_log_error("Preparing Flashloader Information", c_Text);
@@ -961,7 +962,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
 void C_GiSvSubNodeData::m_InitPackageDataForOtherFiles(const C_OscViewNodeUpdate & orc_UpdateInformation)
 {
    const std::vector<C_OscViewNodeUpdateParamInfo> & rc_ParamInfo = orc_UpdateInformation.GetParamInfos();
-   const std::vector<C_SclString> & rc_Files =
+   const std::vector<std::string> & rc_Files =
       orc_UpdateInformation.GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
 
    //Handle param files
@@ -1023,10 +1024,10 @@ void C_GiSvSubNodeData::m_InitStatusFromPackage(
                   const C_OscProtocolDriverOsy::C_FlashBlockInfo & rc_OsyDeviceInfo =
                      orc_DeviceApplicationInfos.pc_OpenSydeDevice->c_Applications[u32_ItApplication];
                   //Search for match
-                  if ((rc_OsyDeviceInfo.c_ApplicationName.Trim() == rc_FileInfo.GetProjectName().Trim()) &&
-                      (rc_OsyDeviceInfo.c_ApplicationVersion.Trim() == rc_FileInfo.GetProjectVersion().Trim()) &&
-                      (rc_OsyDeviceInfo.c_BuildDate.Trim() == rc_FileInfo.GetDate().Trim()) &&
-                      (rc_OsyDeviceInfo.c_BuildTime.Trim() == rc_FileInfo.GetTime().Trim()))
+                  if ((TrimCompat(rc_OsyDeviceInfo.c_ApplicationName) == TrimCompat(rc_FileInfo.GetProjectName())) &&
+                      (TrimCompat(rc_OsyDeviceInfo.c_ApplicationVersion) == TrimCompat(rc_FileInfo.GetProjectVersion())) &&
+                      (TrimCompat(rc_OsyDeviceInfo.c_BuildDate) == TrimCompat(rc_FileInfo.GetDate())) &&
+                      (TrimCompat(rc_OsyDeviceInfo.c_BuildTime) == TrimCompat(rc_FileInfo.GetTime())))
 
                   {
                      if (rc_OsyDeviceInfo.u8_SignatureValid == 0U) //0 == valid

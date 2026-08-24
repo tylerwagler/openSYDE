@@ -18,7 +18,7 @@
 #include "stwerrors.hpp"
 #include "C_OscProjectFiler.hpp"
 #include "C_OscProject.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscExportNode.hpp"
@@ -42,8 +42,8 @@ class C_CodeExport :
 {
 protected:
    virtual E_ResultCode m_CreateApplicationCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                                const C_SclString & orc_OutputPath,
-                                                std::vector<C_SclString> & orc_CreatedFiles);
+                                                const std::string & orc_OutputPath,
+                                                std::vector<std::string> & orc_CreatedFiles);
    virtual void m_PrintBanner(void);
 
 public:
@@ -76,10 +76,10 @@ public:
 //----------------------------------------------------------------------------------------------------------------------
 C_OsyCodeExportBase::E_ResultCode C_CodeExport::m_CreateApplicationCode(const C_OscNode & orc_Node,
                                                                         const uint16_t ou16_ApplicationIndex,
-                                                                        const C_SclString & orc_OutputPath,
-                                                                        std::vector<C_SclString> & orc_CreatedFiles)
+                                                                        const std::string & orc_OutputPath,
+                                                                        std::vector<std::string> & orc_CreatedFiles)
 {
-   const C_SclString c_SYDE_CODER_C_VERSION = mc_ExeVersion + ", MD5-Checksum: " +
+   const std::string c_SYDE_CODER_C_VERSION = mc_ExeVersion + ", MD5-Checksum: " +
                                               stw::opensyde_core::C_OscUtilBinaryHash::h_CreateBinaryHash();
    const int32_t s32_Return =
       C_OscExportNode::h_CreateSourceCode(orc_Node, ou16_ApplicationIndex, orc_OutputPath, orc_CreatedFiles,

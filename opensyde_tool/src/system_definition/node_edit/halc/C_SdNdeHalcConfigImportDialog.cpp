@@ -14,7 +14,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_Uti.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -142,9 +142,9 @@ int32_t C_SdNdeHalcConfigImportDialog::PrepareDialog(QString & orc_ErrorDetails)
                ("Imported Hardware configuration version does not match the current "
                                        "used Hardware configuration version of this node.\n"
                                        "Current used version: " +
-                                       C_SclString::IntToStr(pc_Config->u32_ContentVersion) + "\n"
+                                       std::to_string(pc_Config->u32_ContentVersion) + "\n"
                                        "Version of imported Hardware configuration: " +
-                                       C_SclString::IntToStr(this->mc_ImportConfig.u32_DefinitionContentVersion) +
+                                       std::to_string(this->mc_ImportConfig.u32_DefinitionContentVersion) +
                                        "\n").c_str();
          }
          else

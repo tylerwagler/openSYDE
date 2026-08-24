@@ -22,7 +22,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
-using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -77,69 +76,69 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
       c_HexFileInfo.c_Checksum = mh_GetMd5Hex(orc_File);
       c_HexFileInfo.c_NumberOfBytes = QString::number(c_HexFile.ByteCount());
       c_HexFileInfo.c_BitCrc = static_cast<QString>("0x%1").arg(c_HexFile.CalcFileChecksum(u32_Crc), 0, 16);
-      if (c_InfoBlocks.GetLength() > 0)
+      if (c_InfoBlocks.size() > 0)
       {
-         c_HexFileInfo.s32_NumberOfBlocks = c_InfoBlocks.GetLength();
+         c_HexFileInfo.s32_NumberOfBlocks = c_InfoBlocks.size();
       }
       else
       {
          c_HexFileInfo.s32_NumberOfBlocks = 0;
       }
-      if (c_InfoBlocks.GetLength() > 0)
+      if (c_InfoBlocks.size() > 0)
       {
-         c_BlockInfo.resize(c_InfoBlocks.GetLength());
-         for (int32_t s32_ItAppl = 0UL; s32_ItAppl < c_InfoBlocks.GetLength(); ++s32_ItAppl)
+         c_BlockInfo.resize(c_InfoBlocks.size());
+         for (size_t u32_ItAppl = 0UL; u32_ItAppl < c_InfoBlocks.size(); ++u32_ItAppl)
          {
-            const stw::opensyde_core::C_OscApplicationInfoBlock & rc_CurInfo = c_InfoBlocks[s32_ItAppl];
-            c_BlockInfo.at(s32_ItAppl).c_BlockType = rc_CurInfo.GetInfoLevelAsString().c_str();
-            c_BlockInfo.at(s32_ItAppl).c_Version = QString::number(rc_CurInfo.u8_StructVersion);
+            const stw::opensyde_core::C_OscApplicationInfoBlock & rc_CurInfo = c_InfoBlocks[u32_ItAppl];
+            c_BlockInfo.at(u32_ItAppl).c_BlockType = rc_CurInfo.GetInfoLevelAsString().c_str();
+            c_BlockInfo.at(u32_ItAppl).c_Version = QString::number(rc_CurInfo.u8_StructVersion);
             if (rc_CurInfo.ContainsDeviceID() == true)
             {
-               c_BlockInfo.at(s32_ItAppl).c_DeviceId = rc_CurInfo.GetDeviceID().c_str();
+               c_BlockInfo.at(u32_ItAppl).c_DeviceId = rc_CurInfo.GetDeviceID().c_str();
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_DeviceId = "Unknown";
+               c_BlockInfo.at(u32_ItAppl).c_DeviceId = "Unknown";
             }
             if (rc_CurInfo.ContainsDateAndTime() == true)
             {
-               c_BlockInfo.at(s32_ItAppl).c_Date = rc_CurInfo.GetDate().c_str();
+               c_BlockInfo.at(u32_ItAppl).c_Date = rc_CurInfo.GetDate().c_str();
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_Date = "Unknown";
+               c_BlockInfo.at(u32_ItAppl).c_Date = "Unknown";
             }
             if (rc_CurInfo.ContainsDateAndTime() == true)
             {
-               c_BlockInfo.at(s32_ItAppl).c_Time = rc_CurInfo.GetTime().c_str();
+               c_BlockInfo.at(u32_ItAppl).c_Time = rc_CurInfo.GetTime().c_str();
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_Time = "Unknown";
+               c_BlockInfo.at(u32_ItAppl).c_Time = "Unknown";
             }
             if (rc_CurInfo.ContainsProjectName() == true)
             {
-               c_BlockInfo.at(s32_ItAppl).c_ProjectName = rc_CurInfo.GetProjectName().c_str();
+               c_BlockInfo.at(u32_ItAppl).c_ProjectName = rc_CurInfo.GetProjectName().c_str();
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_ProjectName = "Unknown";
+               c_BlockInfo.at(u32_ItAppl).c_ProjectName = "Unknown";
             }
             if (rc_CurInfo.ContainsProjectVersion() == true)
             {
-               c_BlockInfo.at(s32_ItAppl).c_ProjectVersion = rc_CurInfo.GetProjectVersion().c_str();
+               c_BlockInfo.at(u32_ItAppl).c_ProjectVersion = rc_CurInfo.GetProjectVersion().c_str();
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_ProjectVersion = "Unknown";
+               c_BlockInfo.at(u32_ItAppl).c_ProjectVersion = "Unknown";
             }
             if (rc_CurInfo.ContainsAdditionalInfo() == true)
             {
-               c_BlockInfo.at(s32_ItAppl).c_AdditionalInfo = rc_CurInfo.GetAdditionalInfo().c_str();
+               c_BlockInfo.at(u32_ItAppl).c_AdditionalInfo = rc_CurInfo.GetAdditionalInfo().c_str();
             }
             else
             {
-               c_BlockInfo.at(s32_ItAppl).c_AdditionalInfo = "Unknown";
+               c_BlockInfo.at(u32_ItAppl).c_AdditionalInfo = "Unknown";
             }
          }
       }

@@ -459,7 +459,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateDomainConfiguration(const C_OscHalcConf
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcConfigDomain & orc_CurrentConfig,
                                                               C_OscHalcConfigDomain & orc_UpdatedConfig,
-                                                              const C_SclString & orc_PreviousDefChannelName,
+                                                              const std::string & orc_PreviousDefChannelName,
                                                               const bool oq_IsDomainConfiguration,
                                                               const uint32_t ou32_CurrentChannelIndex,
                                                               const uint32_t ou32_UpdatedChannelIndex)
@@ -686,7 +686,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateSubParameterConfiguration(const C_OscHa
                                                                    const bool oq_IsDomainConfiguration,
                                                                    const uint32_t ou32_UseCaseIndex,
                                                                    const C_OscHalcConfigParameterStruct & orc_CurrentParameterConfig, C_OscHalcConfigParameterStruct & orc_UpdatedParameterConfig,
-                                                                   const C_SclString & orc_ChannelName)
+                                                                   const std::string & orc_ChannelName)
 {
    uint32_t u32_UpdatedDefSubParameterCounter;
    uint32_t u32_CurrentDefSubParameterCounter;
@@ -790,7 +790,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateParameterElementConfiguration(
    const C_OscHalcDefElement & orc_CurrentParameterDef, const C_OscHalcDefElement & orc_UpdatedParameterDef,
    const bool oq_IsDomainConfiguration, const uint32_t ou32_UseCaseIndex,
    const C_OscHalcConfigParameter & orc_CurrentParameterConfig, C_OscHalcConfigParameter & orc_UpdatedParameterConfig,
-   const C_SclString & orc_ChannelName)
+   const std::string & orc_ChannelName)
 {
    // Check if compatible
    // Check use case of current parameter

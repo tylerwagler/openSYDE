@@ -176,7 +176,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::SetNodeDataLoggerJob(con
    {
       this->me_ConnectState = eCS_CONNECTED;
       this->mpc_Ui->pc_PbExpertView->SetSvg("://images/ToggleOnMsgTransmission.svg");
-      if ((rc_Expert.c_TriggerConfiguration.IsEmpty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
+      if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
       {
          this->mpc_Ui->pc_LabelConditionExp->setText("Empty condition");
       }
@@ -243,7 +243,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::resizeEvent(QResizeEvent
 
    if (rc_Expert.q_Enable == true)
    {
-      if ((rc_Expert.c_TriggerConfiguration.IsEmpty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
+      if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
       {
          this->mpc_Ui->pc_LabelConditionExp->setText("Empty condition");
       }
@@ -765,7 +765,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_ToggleExpertView()
       bool q_ToggleView = false;
 
       // Empty expert condition. Direct switch to simple view
-      if ((rc_Expert.c_TriggerConfiguration.IsEmpty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
+      if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
       {
          q_ToggleView = true;
       }
@@ -979,7 +979,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_SetExpertTriggerCondit
       c_AdditionalTriggerProperties.c_ExpertMode;
 
    // Empty expert condition
-   if ((rc_Expert.c_TriggerConfiguration.IsEmpty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
+   if ((rc_Expert.c_TriggerConfiguration.empty() == true) || (rc_Expert.c_TriggerConfiguration == " "))
    {
       this->mpc_Ui->pc_LabelConditionExp->setText("Empty condition");
    }

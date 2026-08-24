@@ -17,7 +17,7 @@
 #include <data/monitor/lexer.hpp>
 
 #include "C_OscNode.hpp"
-#include "C_SclString.hpp"
+#include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -31,16 +31,16 @@ namespace opensyde_gui_logic
 class C_SdNdeDalTriggerCheckHelper
 {
 public:
-   static bool h_Check(const uint32_t ou32_NodeIndex, const stw::scl::C_SclString & orc_Expression,
+   static bool h_Check(const uint32_t ou32_NodeIndex, const std::string & orc_Expression,
                        std::string * const opc_ErrorDetails, bool * const opq_AreVariablesValid,
                        bool * const opq_IsSyntaxValid);
    static std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> h_ParseDataElements(
-      const stw::scl::C_SclString & orc_Condition);
+      const std::string & orc_Condition);
 
 private:
    C_SdNdeDalTriggerCheckHelper();
 
-   static bool mh_ParseTokens(const stw::scl::C_SclString & orc_Expression,
+   static bool mh_ParseTokens(const std::string & orc_Expression,
                               std::vector<data::monitor::Token> & orc_Tokens, std::string * const opc_ErrorDetails);
    static bool mh_ReplaceChannelTokens(std::vector<data::monitor::Token> & orc_Tokens,
                                        std::string * const opc_ErrorDetails);
@@ -60,7 +60,7 @@ private:
                                       const std::vector<std::string> & orc_ChannelComponents,
                                       std::string * const opc_ErrorDetails,
                                       stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId * const opc_ElementId);
-   static bool mh_ConvertHalListToType(const stw::scl::C_SclString & orc_ListName,
+   static bool mh_ConvertHalListToType(const std::string & orc_ListName,
                                        stw::opensyde_core::C_OscHalcDefDomain::E_VariableSelector & ore_Type);
    static bool mh_CheckChannelList(const stw::opensyde_core::C_OscNodeDataPool & orc_Datapool,
                                    const std::vector<std::string> & orc_ChannelComponents,
@@ -91,8 +91,8 @@ private:
                                       stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId * const opc_ElementId);
    static bool mh_CheckChannelElementArray(const stw::opensyde_core::C_OscNodeDataPoolListElement & orc_Element,
                                            const uint32_t ou32_ArrayIndex, std::string * const opc_ErrorDetails);
-   static std::vector<stw::scl::C_SclString> mh_ParseDataElementStrings(const stw::scl::C_SclString & orc_Condition);
-   static bool mh_TranslateDataElementStringToId(const stw::scl::C_SclString & orc_Element,
+   static std::vector<std::string> mh_ParseDataElementStrings(const std::string & orc_Condition);
+   static bool mh_TranslateDataElementStringToId(const std::string & orc_Element,
                                                  opensyde_core::C_OscNodeDataPoolListElementOptArrayId & orc_ElementId);
 
    static const uint32_t mhu32_DUMMY_CHANNEL_ID;

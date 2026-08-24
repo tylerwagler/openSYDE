@@ -30,7 +30,6 @@
 #include <map>
 #include <list>
 
-#include "C_SclString.hpp"
 
 #endif
 

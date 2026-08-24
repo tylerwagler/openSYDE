@@ -46,7 +46,7 @@ public:
                                     const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
                                     const std::vector<C_CieImportDataAssignment > & orc_ImportDataAssigned,
                                     const std::vector<C_CieImportDataAssignment> & orc_SkippedImportDataAssigned,
-                                    const stw::scl::C_SclString * const opc_NodeNameReplacement,
+                                    const std::string * const opc_NodeNameReplacement,
                                     const bool oq_IsCanOpen = false, const bool oq_UniqueAddRequested = false);
    ~C_CieImportReportWidget(void) override;
 
@@ -58,7 +58,7 @@ public:
    static int32_t h_GetMessageTableContent(QString & orc_ImportTable, const QString & orc_Suffix,
                                            std::vector<C_CieImportDataAssignment> & orc_ImportDataAssignment,
                                            const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
-                                           const stw::scl::C_SclString * const opc_NodeNameReplacement,
+                                           const std::string * const opc_NodeNameReplacement,
                                            const QString & orc_Heading, const bool oq_ReplaceMessageNames);
 
    static const QString hc_HTML_TABLE_HEADER_START;
@@ -72,7 +72,7 @@ private:
    const stw::opensyde_core::C_OscCanProtocol::E_Type me_ProtocolType;
    std::vector<C_CieImportDataAssignment> mc_ImportedAssignedData;
    std::vector<C_CieImportDataAssignment> mc_SkippedImportedAssignedData;
-   const stw::scl::C_SclString * const mpc_NodeNameReplacement;
+   const std::string * const mpc_NodeNameReplacement;
    const bool mq_UniqueAddRequested;
 
    void m_OkClicked(void);
@@ -91,7 +91,7 @@ private:
                                              uint32_t & oru32_MessageCount, const QString & orc_Suffix,
                                              std::vector<C_CieImportDataAssignment> & orc_ImportDataAssignment,
                                              const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
-                                             const stw::scl::C_SclString * const opc_NodeNameReplacement,
+                                             const std::string * const opc_NodeNameReplacement,
                                              const bool oq_ReplaceMessageNames);
    void m_InsertMessages(void) const;
    static int32_t mh_GetMessageEntries(uint32_t & oru32_EntryCount, uint32_t & oru32_NewEntryCount,
@@ -101,11 +101,11 @@ private:
                                        const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscAllSignalData, const std::vector<uint8_t> & orc_MessageIsSrdo, const
                                        std::vector<QString> & orc_InfoMessagesPerMessage, const
                                        std::vector< std::pair<int32_t, int32_t> > & orc_MessageOverrideIndices, const
-                                       uint32_t ou32_NodeIndex, const bool oq_IsTx, const QString & orc_Suffix, const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType, const stw::scl::C_SclString * const opc_NodeNameReplacement, const bool oq_ReplaceMessageNames, uint32_t & oru32_SrdoIndex);
+                                       uint32_t ou32_NodeIndex, const bool oq_IsTx, const QString & orc_Suffix, const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType, const std::string * const opc_NodeNameReplacement, const bool oq_ReplaceMessageNames, uint32_t & oru32_SrdoIndex);
    static QString mh_GetMessageEntry(const uint32_t ou32_Index,
                                      const stw::opensyde_core::C_OscCanMessage & orc_CurMessage,
                                      const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscAllSignalData, const
-                                     QString & orc_InfoMessages, const uint32_t ou32_NodeIndex, const bool oq_IsTx, const bool oq_IsSrdo, const uint32_t ou32_MessageIndex, const QString & orc_Suffix, const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType, const stw::scl::C_SclString * const opc_NodeNameReplacement, const bool oq_ReplaceMessageNames, uint32_t & oru32_SrdoIndex);
+                                     QString & orc_InfoMessages, const uint32_t ou32_NodeIndex, const bool oq_IsTx, const bool oq_IsSrdo, const uint32_t ou32_MessageIndex, const QString & orc_Suffix, const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType, const std::string * const opc_NodeNameReplacement, const bool oq_ReplaceMessageNames, uint32_t & oru32_SrdoIndex);
    static bool mh_IsEdsOrDcfImport(const QString & orc_Suffix);
 
    //Avoid call

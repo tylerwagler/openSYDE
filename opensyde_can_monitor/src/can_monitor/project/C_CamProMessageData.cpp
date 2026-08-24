@@ -67,8 +67,8 @@ C_CamProMessageData::C_CamProMessageData(void) :
 void C_CamProMessageData::CalcHash(uint32_t & oru32_HashValue) const
 {
    stw::scl::C_SclChecksums::CalcCRC32(this->c_DataBaseFilePath.c_str(),
-                                       this->c_DataBaseFilePath.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
+                                       this->c_DataBaseFilePath.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_ContainsValidHash, sizeof(this->q_ContainsValidHash), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_Hash, sizeof(this->u32_Hash), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsExtended, sizeof(this->q_IsExtended), oru32_HashValue);
@@ -90,7 +90,7 @@ void C_CamProMessageData::CalcHash(uint32_t & oru32_HashValue) const
     }
     stw::scl::C_SclChecksums::CalcCRC32(&this->u32_CyclicTriggerTime, sizeof(this->u32_CyclicTriggerTime),
                                        oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Key.c_str(), this->c_Key.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Key.c_str(), this->c_Key.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_KeyPressOffset, sizeof(this->u32_KeyPressOffset),
                                        oru32_HashValue);
 }

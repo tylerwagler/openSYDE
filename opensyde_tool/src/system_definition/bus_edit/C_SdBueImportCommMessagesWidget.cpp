@@ -46,7 +46,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueImportCommMessagesWidget::C_SdBueImportCommMessagesWidget(C_OgePopUpDialog & orc_Parent,
-                                                                 const C_SclString & orc_Name) :
+                                                                 const std::string & orc_Name) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdImportCommMessagesWidget),
    me_SelectedCommProtocol(C_OscCanProtocol::E_Type::eLAYER2)
@@ -90,7 +90,7 @@ C_SdBueImportCommMessagesWidget::~C_SdBueImportCommMessagesWidget()
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueImportCommMessagesWidget::m_InitStaticNames(const C_SclString & orc_Name) const
+void C_SdBueImportCommMessagesWidget::m_InitStaticNames(const std::string & orc_Name) const
 {
    const QString c_Title(orc_Name.c_str());
 

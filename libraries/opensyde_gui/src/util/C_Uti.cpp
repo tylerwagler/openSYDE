@@ -27,6 +27,7 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_Uti.hpp"
+#include "C_SclStringCompat.hpp"
 #include "TglTime.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -652,7 +653,7 @@ QString C_Uti::h_GetPemDbPath()
 //----------------------------------------------------------------------------------------------------------------------
 QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat)
 {
-   C_SclString c_Version;
+   std::string c_Version;
    c_Version = "V?.\?\?r?";
 
 #ifdef _WIN32
@@ -676,13 +677,13 @@ QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat)
          {
             if (oq_UseStwFormat)
             {
-               c_Version.PrintFormatted("V%lu.%02lur%lu", (pc_Info->dwFileVersionMS >> 16U),
+               c_Version = PrintFormattedCompat("V%lu.%02lur%lu", (pc_Info->dwFileVersionMS >> 16U),
                                         pc_Info->dwFileVersionMS & 0x0000FFFFUL,
                                         (pc_Info->dwFileVersionLS >> 16U));
             }
             else
             {
-               c_Version.PrintFormatted("%lu.%02lu.%lu", (pc_Info->dwFileVersionMS >> 16U),
+               c_Version = PrintFormattedCompat("%lu.%02lu.%lu", (pc_Info->dwFileVersionMS >> 16U),
                                         pc_Info->dwFileVersionMS & 0x0000FFFFUL,
                                         (pc_Info->dwFileVersionLS >> 16U));
             }
@@ -710,11 +711,11 @@ QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat)
          {
             if (oq_UseStwFormat == true)
             {
-               c_Version.PrintFormatted("V%u.%02ur%u", u32_Major, u32_Minor, u32_Release);
+               c_Version = PrintFormattedCompat("V%u.%02ur%u", u32_Major, u32_Minor, u32_Release);
             }
             else
             {
-               c_Version.PrintFormatted("%u.%02u.%u", u32_Major, u32_Minor, u32_Release);
+               c_Version = PrintFormattedCompat("%u.%02u.%u", u32_Major, u32_Minor, u32_Release);
             }
          }
       }
@@ -1057,10 +1058,10 @@ QString C_Uti::h_ConcatPathIfNecessary(const QString & orc_BaseDir, const QStrin
    Unique node name
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_Uti::h_GetUniqueNameQt(const std::map<C_SclString, bool> & orc_ExistingStrings,
+QString C_Uti::h_GetUniqueNameQt(const std::map<std::string, bool> & orc_ExistingStrings,
                                  const QString & orc_ProposedName)
 {
-   const C_SclString c_Result =
+   const std::string c_Result =
       C_OscUtils::h_GetUniqueName(orc_ExistingStrings, orc_ProposedName.toStdString().c_str(), 0UL);
 
    return c_Result.c_str();
@@ -1212,7 +1213,7 @@ bool C_Uti::h_IsPathRelativeToDir(const QString & orc_PathIn, const QString & or
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Casting the MD5-Checksum from C_SclString to QString
+/*! \brief  Casting the MD5-Checksum from std::string to QString
 
    \return  MD5-Checksum
 */
@@ -1262,7 +1263,7 @@ QString C_Uti::h_GetValueAsHex(const uint32_t ou32_Value, const uint8_t ou8_Fiel
    \param[in,out]  orc_FilePaths    Found file paths with absolute paths
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_Uti::h_GetAllFilePathsInFolder(const QString & orc_FolderPath, std::vector<C_SclString> & orc_FilePaths)
+void C_Uti::h_GetAllFilePathsInFolder(const QString & orc_FolderPath, std::vector<std::string> & orc_FilePaths)
 {
    const QDir c_Dir(orc_FolderPath);
    const QStringList c_AllFiles = c_Dir.entryList(QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);

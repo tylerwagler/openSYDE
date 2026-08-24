@@ -11,12 +11,13 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_SclStringCompat.hpp"
 
 #include <QMap>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "constants.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
 #include "C_OscViewFiler.hpp"
@@ -77,7 +78,7 @@ int32_t C_PuiSvHandlerFiler::h_LoadViews(std::vector<C_PuiSvData> & orc_Views,
 
    if (orc_XmlParser.SelectNodeChild("opensyde-system-views") == "opensyde-system-views")
    {
-      C_SclString c_CurrentViewNode;
+      std::string c_CurrentViewNode;
       uint32_t u32_ExpectedSize = 0UL;
       const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -119,8 +120,8 @@ int32_t C_PuiSvHandlerFiler::h_LoadViews(std::vector<C_PuiSvData> & orc_Views,
       {
          if (u32_ExpectedSize != orc_Views.size())
          {
-            C_SclString c_Tmp;
-            c_Tmp.PrintFormatted("Unexpected view count, expected: %u, got %zu", u32_ExpectedSize,
+            std::string c_Tmp;
+            c_Tmp = PrintFormattedCompat("Unexpected view count, expected: %u, got %zu", u32_ExpectedSize,
                                  orc_Views.size());
             osc_write_log_warning("Load file", c_Tmp.c_str());
          }
@@ -197,7 +198,7 @@ int32_t C_PuiSvHandlerFiler::h_LoadReadRails(QMap<C_OscNodeDataPoolListElementId
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   C_SclString c_CurrentRailNode = orc_XmlParser.SelectNodeChild("rail-assignment");
+   std::string c_CurrentRailNode = orc_XmlParser.SelectNodeChild("rail-assignment");
 
    if (c_CurrentRailNode == "rail-assignment")
    {
@@ -325,7 +326,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadDashboards(std::vector<C_PuiSvDashboard> & o
    orc_Dashboards.clear();
    if (orc_XmlParser.SelectNodeChild("dashboards") == "dashboards")
    {
-      C_SclString c_CurrentDashboardNode = orc_XmlParser.SelectNodeChild("dashboard");
+      std::string c_CurrentDashboardNode = orc_XmlParser.SelectNodeChild("dashboard");
       if (c_CurrentDashboardNode == "dashboard")
       {
          do
@@ -377,7 +378,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadViewFile(C_PuiSvData & orc_View, const QStri
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(std::stoi(c_XmlParser.GetNodeContent()));
       }
       catch (...)
       {
@@ -389,7 +390,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadViewFile(C_PuiSvData & orc_View, const QStri
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading view", "Value of \"file-version\": " +
-                            C_SclString::IntToStr(u16_FileVersion));
+                            std::to_string(u16_FileVersion));
          //Check file version
          if ((u16_FileVersion != 1U) && (u16_FileVersion != 2U))
          {
@@ -601,7 +602,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadPc(C_PuiSvPc & orc_PuiPc, C_OscXmlParserBase
       {
          // Backend is stored as a string (matches libcan's canonical name) for forward-compatibility
          // when libcan grows new backend kinds. Unknown strings fall back to the platform default.
-         const stw::scl::C_SclString c_Name = orc_XmlParser.GetAttributeString("backend");
+         const std::string c_Name = orc_XmlParser.GetAttributeString("backend");
          if (c_Name == "SocketCAN")      { c_Config.e_BackendKind = ::can::BackendKind::SocketCan; }
          else if (c_Name == "PCANBasic") { c_Config.e_BackendKind = ::can::BackendKind::PcanBasic; }
          else if (c_Name == "Kvaser")    { c_Config.e_BackendKind = ::can::BackendKind::Kvaser; }

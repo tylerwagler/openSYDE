@@ -2892,7 +2892,7 @@ void C_PuiSvData::InitFromSystemDefinition(void)
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItInfo);
          if (pc_Node != NULL)
          {
-            std::vector<stw::scl::C_SclString> c_ApplPaths;
+            std::vector<std::string> c_ApplPaths;
             std::vector<C_OscViewNodeUpdateParamInfo> c_ParamInfos;
             std::vector<bool> c_ApplSkipFlags;
             C_OscViewNodeUpdate c_Info;
@@ -3227,9 +3227,9 @@ std::vector<const QString *> C_PuiSvData::m_GetExistingDashboardNames(void) cons
    Vector of pointers to all currently registered dashboard names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<stw::scl::C_SclString, bool> C_PuiSvData::m_GetExistingDashboardNamesMap(void) const
+std::map<std::string, bool> C_PuiSvData::m_GetExistingDashboardNamesMap(void) const
 {
-   std::map<stw::scl::C_SclString, bool> c_Retval;
+   std::map<std::string, bool> c_Retval;
    for (uint32_t u32_ItDashboard = 0; u32_ItDashboard < this->mc_Dashboards.size(); ++u32_ItDashboard)
    {
       const C_PuiSvDashboard & rc_Data = this->mc_Dashboards[u32_ItDashboard];

@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <string>
 #include "C_SclStringList.hpp"
 #include "C_CieConverter.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
@@ -31,12 +31,12 @@ namespace opensyde_gui_logic
 class C_CieExportDbc
 {
 public:
-   static int32_t h_ExportNetwork(const stw::scl::C_SclString & orc_File,
+   static int32_t h_ExportNetwork(const std::string & orc_File,
                                   const C_CieConverter::C_CieCommDefinition & orc_Definition,
                                   stw::scl::C_SclStringList & orc_WarningMessages,
-                                  stw::scl::C_SclString & orc_ErrorMessage);
+                                  std::string & orc_ErrorMessage);
 
-   static int32_t h_GetNodeMapping(std::map<stw::scl::C_SclString, stw::scl::C_SclString> & orc_NodeMapping);
+   static int32_t h_GetNodeMapping(std::map<std::string, std::string> & orc_NodeMapping);
 
    class C_ExportStatistic
    {
@@ -49,7 +49,7 @@ public:
 
 private:
    static stw::scl::C_SclStringList mhc_WarningMessages; // global warnings e.g. why some messages could not be exported
-   static stw::scl::C_SclString mhc_ErrorMessage;        // description of error which caused the export to fail
+   static std::string mhc_ErrorMessage;        // description of error which caused the export to fail
 
    static int32_t mh_SetNodes(const std::vector<C_CieConverter::C_CieNode> & orc_CieNodes, std::map<std::string,
                                                                                                     Vector::DBC::Node> & orc_DbcNodes);
@@ -68,13 +68,13 @@ private:
    static void mh_SetAttributeDefaults(std::map<std::string, Vector::DBC::Attribute> & orc_AttributeDefaults);
    static void mh_SetAttributeDefinitions(std::map<std::string,
                                                    Vector::DBC::AttributeDefinition> & orc_AttributeDefinitions);
-   static stw::scl::C_SclString mh_NiceifyStringForDbcSymbol(const stw::scl::C_SclString & orc_String);
-   static stw::scl::C_SclString mh_EscapeCriticalSymbols(const stw::scl::C_SclString & orc_String);
+   static std::string mh_NiceifyStringForDbcSymbol(const std::string & orc_String);
+   static std::string mh_EscapeCriticalSymbols(const std::string & orc_String);
 
    static const std::string mhc_SIG_INITIAL_VALUE;
    static const std::string mhc_MSG_CYCLE_TIME;
    static const std::string mhc_MSG_SEND_TYPE;
-   static std::map<stw::scl::C_SclString, stw::scl::C_SclString> mhc_NodeMapping;
+   static std::map<std::string, std::string> mhc_NodeMapping;
    static bool mhq_ValidDbcExport;
    static C_ExportStatistic mhc_ExportStatistic;
 };
