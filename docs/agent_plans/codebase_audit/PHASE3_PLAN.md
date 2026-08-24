@@ -49,12 +49,12 @@ standard facilities across the entire codebase.
   follow-up.
 - Some migrated files carry mixed CRLF/LF lines where the compat include was
   injected (cosmetic; gcc tolerates it).
-- **CI gap found:** `.github/workflows/build.yml` only builds `opensyde_core`
-  with ~13 subsystems skipped plus the `openSYDE` tool. `canmonitor`, `sydeflash`,
-  `sydesup`, `syde_x_gen`, `syde_coder_c`, `flash_tool`, `tsp_convert` and the
-  skipped core subsystems are not compiled by CI — this is how phase-2 residue
-  (`GetLength()` on `std::vector`) and phase-3 residue stayed hidden. Recommend
-  a CI job that runs `./build.sh -b Debug <every tool>`.
+- **CI gap fixed (2026-08-24):** the core CI job now compiles every subsystem
+  (only the Windows-only drivers/target are skipped) and the GUI job builds all
+  eight tools (`.github/workflows/build.yml`). Previously only
+  `opensyde_core`-with-~13-skips plus the `openSYDE` tool were compiled — that
+  is how phase-2 residue (`GetLength()` on `std::vector`) and phase-3 residue
+  stayed hidden.
 - `CMakePresets.json` is untracked at repo root but there is no root
   `CMakeLists.txt`, so it currently configures nothing. Decide: delete, or keep
   as groundwork for a unified root build.

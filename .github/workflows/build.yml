@@ -38,9 +38,15 @@ jobs:
             cmake ninja-build \
             ${{ matrix.compiler }} \
             qt6-base-dev \
-            libgl1-mesa-dev
+            libgl1-mesa-dev \
+            libssl-dev
 
-      - name: Configure CMake (core library tests)
+      # Compile every subsystem (security, protocol drivers, zipping,
+      # imports, code generation, project handling, param set, system package
+      # handling, x-config/-certificates generation, logging) so untested
+      # code cannot rot unnoticed. Only the Windows-only subsystems are
+      # skipped (they cannot build on the Ubuntu runner).
+      - name: Configure CMake (core library tests, full coverage)
         run: >
           cmake
           -S libraries/opensyde_core
@@ -49,20 +55,6 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
           -DOPENSYDE_CORE_BUILD_TESTS=ON
-          -DOPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_COMMON=ON
-          -DOPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_SYSTEM=ON
-          -DOPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_MONITOR=ON
-          -DOPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_BASIC=ON
-          -DOPENSYDE_CORE_SKIP_PROTOCOL_LOGGING=ON
-          -DOPENSYDE_CORE_SKIP_SECURITY=ON
-          -DOPENSYDE_CORE_SKIP_ZIPPING=ON
-          -DOPENSYDE_CORE_SKIP_IMPORTS=ON
-          -DOPENSYDE_CORE_SKIP_CODE_GENERATION=ON
-          -DOPENSYDE_CORE_SKIP_PROJECT_HANDLING=ON
-          -DOPENSYDE_CORE_SKIP_PARAM_SET=ON
-          -DOPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING=ON
-          -DOPENSYDE_CORE_SKIP_X_CONFIG_GENERATION=ON
-          -DOPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION=ON
           -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON
           -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
 
