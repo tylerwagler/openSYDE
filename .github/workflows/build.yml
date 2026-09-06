@@ -104,6 +104,12 @@ jobs:
       # build.sh requires plain `g++` (it never pins a version), so install the
       # default metapackage rather than a numbered compiler. libssl-dev, flex,
       # bison and libfl-dev are needed for the same reasons as the core job.
+      #
+      # libqcustomplot-dev is required by the openSYDE tool: on Linux it links
+      # the system QCustomPlot (libraries/qcustomplot/ holds only a
+      # QT_NO_KEYWORDS compatibility wrapper around the system header, not a
+      # vendored library). The package ships libQCustomPlotQt6.so, which is the
+      # Qt6 variant the project's find_library() call looks for.
       - name: Install system dependencies
         run: |
           sudo apt-get update -qq
@@ -112,7 +118,8 @@ jobs:
             qt6-base-dev qt6-svg-dev qt6-tools-dev \
             libgl1-mesa-dev \
             libssl-dev \
-            flex bison libfl-dev
+            flex bison libfl-dev \
+            libqcustomplot-dev
 
       - name: Build all tools (smoke test)
         run: ./build.sh -b Debug all
