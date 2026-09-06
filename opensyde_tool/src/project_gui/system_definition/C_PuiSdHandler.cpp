@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include "precomp_headers.hpp"
 
 #include "C_PuiSdHandler.hpp"
@@ -39,10 +40,16 @@ C_PuiSdHandler * C_PuiSdHandler::mhpc_Singleton = nullptr;
 //----------------------------------------------------------------------------------------------------------------------
 C_PuiSdHandler * C_PuiSdHandler::h_GetInstance(void)
 {
-   if (C_PuiSdHandler::mhpc_Singleton == nullptr)
+   //Guard the lazy construction: the previous check-then-new was a data race
+   //if two threads reached it at once. Destruction stays explicit via h_Destroy()
+   //so shutdown ordering is preserved.
+   static std::once_flag hc_OnceFlag;
+
+   std::call_once(hc_OnceFlag, []
    {
       C_PuiSdHandler::mhpc_Singleton = new C_PuiSdHandler();
-   }
+   });
+
    return C_PuiSdHandler::mhpc_Singleton;
 }
 

@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include "precomp_headers.hpp"
 
 #include <iostream>
@@ -3277,10 +3278,16 @@ uint32_t C_PuiSvHandler::GetViewHash(const uint32_t ou32_ViewIndex)
 //----------------------------------------------------------------------------------------------------------------------
 C_PuiSvHandler * C_PuiSvHandler::h_GetInstance(void)
 {
-   if (C_PuiSvHandler::mhpc_Singleton == nullptr)
+   //Guard the lazy construction: the previous check-then-new was a data race
+   //if two threads reached it at once. Destruction stays explicit via h_Destroy()
+   //so shutdown ordering is preserved.
+   static std::once_flag hc_OnceFlag;
+
+   std::call_once(hc_OnceFlag, []
    {
       C_PuiSvHandler::mhpc_Singleton = new C_PuiSvHandler();
-   }
+   });
+
    return C_PuiSvHandler::mhpc_Singleton;
 }
 
