@@ -226,6 +226,18 @@ build_tool() {
         if [[ "$needs_qt" == "yes" ]] && [[ -n "${Qt6_DIR:-}" ]]; then
             cmake_args+=("-DQt6_DIR=$Qt6_DIR")
         fi
+        # Each tool configures opensyde_core with its own OPENSYDE_CORE_SKIP_*
+        # set, so every tool builds core into its own tree — eight times for
+        # `all`. The skip sets differ, so the targets cannot simply be shared,
+        # but the translation units they do have in common are identical, and
+        # ccache collapses those rebuilds into cache hits. Opt-in: used only
+        # when ccache is installed, and suppressed by NO_CCACHE=1.
+        if [[ -z "${NO_CCACHE:-}" ]] && command -v ccache &>/dev/null; then
+            cmake_args+=(
+                "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
+                "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
+            )
+        fi
         if ! cmake "${cmake_args[@]}"; then
             write_error "$tool_name: configuration failed"
             return 1

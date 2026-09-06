@@ -114,12 +114,29 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq \
-            cmake ninja-build g++ \
+            cmake ninja-build g++ ccache \
             qt6-base-dev qt6-svg-dev qt6-tools-dev \
             libgl1-mesa-dev \
             libssl-dev \
             flex bison libfl-dev \
             libqcustomplot-dev
 
+      # build.sh configures each of the eight tools separately, so opensyde_core
+      # is compiled once per tool. build.sh picks up ccache automatically when it
+      # is installed, which turns the repeated core builds into cache hits — the
+      # win lands even on a cold cache, since tools 2-8 hit what tool 1 wrote.
+      # Persisting the cache across runs makes incremental pushes cheaper still.
+      - name: Restore ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-gui-${{ matrix.os }}-${{ github.sha }}
+          restore-keys: |
+            ccache-gui-${{ matrix.os }}-
+
       - name: Build all tools (smoke test)
         run: ./build.sh -b Debug all
+
+      - name: ccache statistics
+        if: always()
+        run: ccache --show-stats
