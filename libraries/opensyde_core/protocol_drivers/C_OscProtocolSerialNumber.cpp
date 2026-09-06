@@ -413,7 +413,7 @@ bool C_OscProtocolSerialNumber::h_SerialNumberFromStringToArray(const std::strin
           std::string c_SubString(1, c_CompleteString[u32_ItChar]);
           c_SubString += std::string(1, c_CompleteString[u32_ItChar + 1]);
          c_SubString = "0x" + c_SubString;
-         orau8_SerialNumber[u32_ItByte] = static_cast<uint8_t>(std::stoi(c_SubString));
+         orau8_SerialNumber[u32_ItByte] = static_cast<uint8_t>(std::stoi(c_SubString, nullptr, 16));
          //Next byte
          ++u32_ItByte;
       }

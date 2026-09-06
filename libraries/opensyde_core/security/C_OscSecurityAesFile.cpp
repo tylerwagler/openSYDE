@@ -78,7 +78,7 @@ static int32_t mh_HexToKey(const std::string & orc_HexKey, uint8_t (&orau8_Key)[
       {
          const std::string c_Text = "0x" + SubStringCompat(orc_HexKey,
                                                            (static_cast<uint32_t>(u8_Index) * 2U) + 1U, 2U);
-         orau8_Key[u8_Index] = static_cast<uint8_t>(std::stoi(c_Text));
+         orau8_Key[u8_Index] = static_cast<uint8_t>(std::stoi(c_Text, nullptr, 16));
       }
    }
    return s32_Return;

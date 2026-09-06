@@ -238,7 +238,7 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
             //Pattern: [<4 hex digits>sub<1 or 2 hex digits>, e.g. [12AB]
             try
             {
-               const uint16_t u16_Index = static_cast<uint16_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 1, 4)));
+               const uint16_t u16_Index = static_cast<uint16_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 1, 4), nullptr, 16));
                //create new map entry or use existing depending on sequence of sections in EDS file
                C_OscCanOpenObject & rc_Object = c_OdObjects[u16_Index];
 
@@ -254,9 +254,9 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
             //Pattern: [<4 hex digits>sub<1 or 2 hex digits>, e.g. [12ABsubCD]
             try
             {
-               const uint16_t u16_Index = static_cast<uint16_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 1, 4)));
+               const uint16_t u16_Index = static_cast<uint16_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 1, 4), nullptr, 16));
                //1 or 2 characters:
-                const uint8_t u8_SubIndex = static_cast<uint8_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 8, 2)));
+                const uint8_t u8_SubIndex = static_cast<uint8_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 8, 2), nullptr, 16));
 
                //create new map entry or use existing
                C_OscCanOpenObject & rc_Object = c_OdObjects[u16_Index];

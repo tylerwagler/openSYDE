@@ -240,18 +240,40 @@ inline uint32_t LastDelimiterCompat(const std::string & orc_Str, const std::stri
    return static_cast<uint32_t>(un_Pos) + 1U;
 }
 
-/// Replacement for str.ToInt().
-inline int32_t ToIntCompat(const std::string & orc_Str)
+/// Base to parse a string in, matching C_SclString::ToInt() semantics: a
+/// "0x"/"0X" prefix (after an optional '-') selects hex, everything else is
+/// decimal. Note base 0 is deliberately NOT used here — it would treat a
+/// leading "0" as octal, which the original explicitly did not do.
+inline int ScanBaseCompat(const std::string & orc_Str)
 {
-   return static_cast<int32_t>(std::strtol(orc_Str.c_str(), nullptr, 10));
+   std::string::size_type un_Pos = 0U;
+
+   if ((orc_Str.size() > 0U) && (orc_Str[0] == '-'))
+   {
+      un_Pos = 1U;
+   }
+
+   int x_Base = 10;
+   if (((orc_Str.size() > (un_Pos + 1U)) && (orc_Str[un_Pos] == '0')) &&
+       ((orc_Str[un_Pos + 1U] == 'x') || (orc_Str[un_Pos + 1U] == 'X')))
+   {
+      x_Base = 16;
+   }
+   return x_Base;
 }
 
-/// Replacement for str.ToIntDef(default).
+/// Replacement for str.ToInt(). Accepts decimal and "0x"-prefixed hex.
+inline int32_t ToIntCompat(const std::string & orc_Str)
+{
+   return static_cast<int32_t>(std::strtol(orc_Str.c_str(), nullptr, ScanBaseCompat(orc_Str)));
+}
+
+/// Replacement for str.ToIntDef(default). Accepts decimal and "0x"-prefixed hex.
 inline int32_t ToIntDefCompat(const std::string & orc_Str, const int32_t os32_Default)
 {
    const char_t * opcn_Str = orc_Str.c_str();
    char_t * opcn_End = nullptr;
-   const int32_t s32_Val = static_cast<int32_t>(std::strtol(opcn_Str, &opcn_End, 10));
+   const int32_t s32_Val = static_cast<int32_t>(std::strtol(opcn_Str, &opcn_End, ScanBaseCompat(orc_Str)));
    if (opcn_End == opcn_Str)
    {
       return os32_Default;
@@ -259,10 +281,10 @@ inline int32_t ToIntDefCompat(const std::string & orc_Str, const int32_t os32_De
    return s32_Val;
 }
 
-/// Replacement for str.ToInt64().
+/// Replacement for str.ToInt64(). Accepts decimal and "0x"-prefixed hex.
 inline int64_t ToInt64Compat(const std::string & orc_Str)
 {
-   return static_cast<int64_t>(std::strtoll(orc_Str.c_str(), nullptr, 10));
+   return static_cast<int64_t>(std::strtoll(orc_Str.c_str(), nullptr, ScanBaseCompat(orc_Str)));
 }
 
 /// Replacement for str.ToDouble().

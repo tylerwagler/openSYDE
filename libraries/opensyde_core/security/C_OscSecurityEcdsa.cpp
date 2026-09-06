@@ -185,7 +185,7 @@ int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::SetFromDerString(const std::str
          try
          {
             au8_BinarySignature[u32_Byte] =
-               static_cast<uint8_t>(std::stoi("0x" + SubStringCompat(orc_Signature, 1U + (u32_Byte * 2U), 2U)));
+               static_cast<uint8_t>(std::stoi("0x" + SubStringCompat(orc_Signature, 1U + (u32_Byte * 2U), 2U), nullptr, 16));
          }
          catch (...)
          {
