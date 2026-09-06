@@ -222,19 +222,26 @@ Cross-cutting follow-ups (dark mode, Linux version string, About dialog) live in
 `docs/TODO.md`; in-code `TODO`/`FIXME` markers are catalogued in
 `docs/code-comment-todos.md`.
 
-## Known Broken
+## Gotchas
 
-- **`./build.sh all` fails for `canmonitor` and `sydeflash`.** Both reference
-  `opensyde_can_monitor/pjt/toolchain_linux.cmake` and
-  `opensyde_syde_flash/pjt/toolchain_linux.cmake`, neither of which exists in the
-  tree. Only `opensyde_tool/pjt/toolchain_linux.cmake` and
-  `opensyde_syde_sup/pjt/toolchain_ubuntu.cmake` are present.
-- **The `opensyde` tool needs QCustomPlot at configure time** and fails with
-  `QCustomPlot not found` unless `libqcustomplot-dev` is installed, despite a vendored
-  copy existing at `libraries/qcustomplot/`.
+**QCustomPlot is a system dependency on Linux, not vendored.** `libraries/qcustomplot/`
+holds only `qcustomplot.h`, a compatibility wrapper that re-defines the Qt keywords
+(`signals`, `slots`, `foreach`) around the *system* header, because the project builds
+with `QT_NO_KEYWORDS` for DBC library compatibility. There is no vendored
+`libqcustomplot.a` on Linux. The tool's CMake tries pkg-config `qcustomplot-qt6` first
+(openSUSE) and falls back to `find_library(NAMES QCustomPlotQt6 QCustomPlot)` (Debian
+/ Ubuntu, where `libqcustomplot-dev` ships the capitalized `libQCustomPlotQt6.so`).
 
-Both were invisible until the GUI CI job was repaired on 2026-09-06 — before that it
-died at dependency installation and never reached a build.
+**Each GUI tool needs its own `pjt/toolchain_linux.cmake` and `pjt/lint_config.cmake`.**
+`build.sh` passes `-DCMAKE_TOOLCHAIN_FILE` per tool, and each tool's `CMakeLists.txt`
+does `include(lint_config.cmake)` from its own `pjt/` directory. When CAN Monitor and
+SYDEflash were split out of `opensyde_tool/` into their own top-level trees, the
+`CMakeLists.txt` files came across but these two siblings did not, so neither tool
+could build on Linux at all. Restored 2026-09-06. If a new tool is split out the same
+way, check for both files.
+
+Both problems were invisible until the GUI CI job was repaired on 2026-09-06 — before
+that it died at dependency installation and never reached a build.
 
 ## Agent Workspace Rules
 
