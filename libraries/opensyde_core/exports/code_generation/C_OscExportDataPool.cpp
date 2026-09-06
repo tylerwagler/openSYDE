@@ -15,8 +15,11 @@
 #include <limits>
 #include <sstream>
 #include <iomanip>
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_SclStringList.hpp"
 #include "C_OscExportDataPool.hpp"
@@ -124,22 +127,25 @@ uint16_t C_OscExportDataPool::h_ConvertOverallCodeVersion(const uint16_t ou16_Ge
    \param[in] orc_ExportToolInfo       information about calling executable (name + version)
 
    \return
-   C_NO_ERR  Operation success
-   C_RD_WR   Operation failure: cannot store files
-   C_NOACT   Application has unknown code structure version or invalid linkage configuration
-   C_CONFIG  Input data not suitable for code generation. Details will be written to OSC Log.
-             Possible reasons:
-             * Datapool list element factor negative or would be generated as zero
-             * A list contains more than 255 Datasets
+   Errc::success  Operation success
+   Errc::rd_wr    Operation failure: cannot store files
+   Errc::noact    Application has unknown code structure version or invalid linkage configuration
+   Errc::config   Input data not suitable for code generation. Details will be written to OSC Log.
+                  Possible reasons:
+                  * Datapool list element factor negative or would be generated as zero
+                  * A list contains more than 255 Datasets
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportDataPool::h_CreateSourceCode(const std::string & orc_Path, const uint16_t ou16_GenCodeVersion,
-                                                const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport,
-                                                const C_OscNodeDataPool & orc_DataPool, const uint8_t ou8_DataPoolIndex,
-                                                const E_Linkage oe_Linkage, const uint8_t ou8_DataPoolIndexRemote,
-                                                const uint8_t ou8_ProcessId, const std::string & orc_ExportToolInfo)
+std::error_code C_OscExportDataPool::h_CreateSourceCode(const std::string & orc_Path,
+                                                        const uint16_t ou16_GenCodeVersion,
+                                                        const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport,
+                                                        const C_OscNodeDataPool & orc_DataPool,
+                                                        const uint8_t ou8_DataPoolIndex, const E_Linkage oe_Linkage,
+                                                        const uint8_t ou8_DataPoolIndexRemote,
+                                                        const uint8_t ou8_ProcessId,
+                                                        const std::string & orc_ExportToolInfo)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    uint32_t u32_HashValue = 0U;
 
    //calculate hash value over the current state of the Datapool definition
@@ -149,16 +155,16 @@ int32_t C_OscExportDataPool::h_CreateSourceCode(const std::string & orc_Path, co
    // make sure version is known
    if (ou16_GenCodeVersion > C_OscNodeApplication::hu16_HIGHEST_KNOWN_CODE_VERSION)
    {
-      s32_Retval = C_NOACT;
+      c_Retval = Errc::noact;
       osc_write_log_error("Creating source code",
                           "Did not generate code for Datapool \"" + orc_DataPool.c_Name +
                           "\" because code format version is unknown.");
    }
 
    // make sure linkage is not eREMOTEPUBLIC if code format does not support this feature
-   if ((s32_Retval == C_NO_ERR) && (ou16_GenCodeVersion < 4U) && (oe_Linkage == eREMOTEPUBLIC))
+   if ((!c_Retval) && (ou16_GenCodeVersion < 4U) && (oe_Linkage == eREMOTEPUBLIC))
    {
-      s32_Retval = C_NOACT;
+      c_Retval = Errc::noact;
       osc_write_log_error("Creating source code",
                           "Did not generate code for Datapool \"" + orc_DataPool.c_Name +
                           "\" because code format version does not support public Datapools.");
@@ -166,13 +172,13 @@ int32_t C_OscExportDataPool::h_CreateSourceCode(const std::string & orc_Path, co
 
    // defensive checks against data that we cannot handle:
    // number of data sets must by <= 255:
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       for (uint32_t u32_ListIndex = 0U; u32_ListIndex < orc_DataPool.c_Lists.size(); u32_ListIndex++)
       {
          if (orc_DataPool.c_Lists[u32_ListIndex].c_DataSets.size() > 255U)
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
             osc_write_log_error("Creating source code",
                                 "Did not generate code for Datapool \"" + orc_DataPool.c_Name +
                                 "\" because list \"" + orc_DataPool.c_Lists[u32_ListIndex].c_Name + "\"" +
@@ -181,21 +187,21 @@ int32_t C_OscExportDataPool::h_CreateSourceCode(const std::string & orc_Path, co
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       // create header file
-      s32_Retval = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, orc_DataPool, ou8_DataPoolIndex, c_ProjectId,
-                                       ou16_GenCodeVersion, oe_Linkage, oe_ScalingSupport);
+      c_Retval = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, orc_DataPool, ou8_DataPoolIndex, c_ProjectId,
+                                     ou16_GenCodeVersion, oe_Linkage, oe_ScalingSupport);
    }
 
    // create implementation file
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_CreateImplementationFile(orc_ExportToolInfo, orc_Path, orc_DataPool, c_ProjectId,
-                                               ou16_GenCodeVersion, ou8_DataPoolIndexRemote, ou8_ProcessId, oe_Linkage);
+      c_Retval = mh_CreateImplementationFile(orc_ExportToolInfo, orc_Path, orc_DataPool, c_ProjectId,
+                                             ou16_GenCodeVersion, ou8_DataPoolIndexRemote, ou8_ProcessId, oe_Linkage);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -211,18 +217,20 @@ int32_t C_OscExportDataPool::h_CreateSourceCode(const std::string & orc_Path, co
    \param[in] oe_ScalingSupport        Flag for data type and existence of factor, offset and scaling macros
 
    \return
-   C_NO_ERR Operation success
-   C_RD_WR  Cannot store file
-   C_CONFIG Datapool list element factor negative or would be generated as zero
+   Errc::success  Operation success
+   Errc::rd_wr    Cannot store file
+   Errc::config   Datapool list element factor negative or would be generated as zero
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportDataPool::mh_CreateHeaderFile(const std::string & orc_ExportToolInfo, const std::string & orc_Path,
-                                                 const C_OscNodeDataPool & orc_DataPool,
-                                                 const uint8_t ou8_DataPoolIndex, const std::string & orc_ProjectId,
-                                                 const uint16_t ou16_GenCodeVersion, const E_Linkage oe_Linkage,
-                                                 const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport)
+std::error_code C_OscExportDataPool::mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
+                                                         const std::string & orc_Path,
+                                                         const C_OscNodeDataPool & orc_DataPool,
+                                                         const uint8_t ou8_DataPoolIndex,
+                                                         const std::string & orc_ProjectId,
+                                                         const uint16_t ou16_GenCodeVersion, const E_Linkage oe_Linkage,
+                                                         const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
    C_SclStringList c_Data;
 
    // add header
@@ -232,10 +240,10 @@ int32_t C_OscExportDataPool::mh_CreateHeaderFile(const std::string & orc_ExportT
    mh_AddIncludes(c_Data, orc_DataPool, mhq_IS_HEADER_FILE);
 
    // add defines
-   s32_Retval = mh_AddDefinesHeader(c_Data, orc_DataPool, ou8_DataPoolIndex, orc_ProjectId, ou16_GenCodeVersion,
-                                    oe_Linkage, oe_ScalingSupport);
+   c_Retval = mh_AddDefinesHeader(c_Data, orc_DataPool, ou8_DataPoolIndex, orc_ProjectId, ou16_GenCodeVersion,
+                                  oe_Linkage, oe_ScalingSupport);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       // add types
       mh_AddTypes(c_Data, orc_DataPool, mhq_IS_HEADER_FILE, oe_Linkage);
@@ -250,10 +258,10 @@ int32_t C_OscExportDataPool::mh_CreateHeaderFile(const std::string & orc_ExportT
       mh_AddImplementation(c_Data, mhq_IS_HEADER_FILE);
 
       // finally save all stuff into the file
-      s32_Retval = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(orc_DataPool), true);
+      c_Retval = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(orc_DataPool), true);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -270,19 +278,20 @@ int32_t C_OscExportDataPool::mh_CreateHeaderFile(const std::string & orc_ExportT
 
 
    \return
-   C_NO_ERR Operation success
-   C_RD_WR  Operation failure: cannot store file
+   Errc::success  Operation success
+   Errc::rd_wr    Operation failure: cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportDataPool::mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
-                                                         const std::string & orc_Path,
-                                                         const C_OscNodeDataPool & orc_DataPool,
-                                                         const std::string & orc_ProjectId,
-                                                         const uint16_t ou16_GenCodeVersion,
-                                                         const uint8_t ou8_DataPoolIndexRemote,
-                                                         const uint8_t ou8_ProcessId, const E_Linkage oe_Linkage)
+std::error_code C_OscExportDataPool::mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
+                                                                 const std::string & orc_Path,
+                                                                 const C_OscNodeDataPool & orc_DataPool,
+                                                                 const std::string & orc_ProjectId,
+                                                                 const uint16_t ou16_GenCodeVersion,
+                                                                 const uint8_t ou8_DataPoolIndexRemote,
+                                                                 const uint8_t ou8_ProcessId,
+                                                                 const E_Linkage oe_Linkage)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
    C_SclStringList c_Data;
 
    // add header
@@ -311,9 +320,9 @@ int32_t C_OscExportDataPool::mh_CreateImplementationFile(const std::string & orc
    mh_AddImplementation(c_Data, mhq_IS_IMPLEMENTATION_FILE);
 
    // finally save all stuff into the file
-   s32_Retval = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(orc_DataPool), false);
+   c_Retval = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(orc_DataPool), false);
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -401,16 +410,18 @@ void C_OscExportDataPool::mh_AddIncludes(C_SclStringList & orc_Data, const C_Osc
    \param[in]  oe_ScalingSupport        Flag for data type and existence of factor, offset and scaling macros
 
    \return
-   C_NO_ERR Operation success
-   C_CONFIG Datapool list element factor negative or would be generated as zero
+   Errc::success  Operation success
+   Errc::config   Datapool list element factor negative or would be generated as zero
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, const C_OscNodeDataPool & orc_DataPool,
-                                                 const uint8_t ou8_DataPoolIndex, const std::string & orc_ProjectId,
-                                                 const uint16_t ou16_GenCodeVersion, const E_Linkage oe_Linkage,
-                                                 const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport)
+std::error_code C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data,
+                                                         const C_OscNodeDataPool & orc_DataPool,
+                                                         const uint8_t ou8_DataPoolIndex,
+                                                         const std::string & orc_ProjectId,
+                                                         const uint16_t ou16_GenCodeVersion, const E_Linkage oe_Linkage,
+                                                         const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    const std::string c_DataPoolName = UpperCaseCompat(orc_DataPool.c_Name);
    const std::string c_MagicName = mh_GetMagicName(orc_ProjectId, orc_DataPool);
@@ -479,8 +490,8 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
       if (oe_ScalingSupport != C_OscNodeCodeExportSettings::eNONE)
       {
          orc_Data.Append("///Scaling values");
-         for (u16_ListIndex = 0U; (u16_ListIndex < orc_DataPool.c_Lists.size()) && (s32_Retval == C_NO_ERR);
-              u16_ListIndex++)
+         for (u16_ListIndex = 0U; (u16_ListIndex < orc_DataPool.c_Lists.size()) && (!c_Retval);
+ u16_ListIndex++)
          {
             const C_OscNodeDataPoolList & rc_List = orc_DataPool.c_Lists[u16_ListIndex];
             const std::string c_ListName = UpperCaseCompat(rc_List.c_Name);
@@ -517,7 +528,7 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
                                       "Did not generate code because factor of element \"" + orc_DataPool.c_Name +
                                       "::" + rc_List.c_Name + "::" + rc_List.c_Elements[u16_ElementIndex].c_Name +
                                       "\" is negative or would be generated as 0.0.");
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
 
                if (q_InfOrNanFactor == true)
@@ -526,7 +537,7 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
                                       "Did not generate code because factor of element \"" + orc_DataPool.c_Name +
                                       "::" + rc_List.c_Name + "::" + rc_List.c_Elements[u16_ElementIndex].c_Name +
                                       "\" would be generated as 'inf' or 'nan'.");
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
 
                if (q_InfOrNanOffset == true)
@@ -535,7 +546,7 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
                                       "Did not generate code because offset of element \"" + orc_DataPool.c_Name +
                                       "::" + rc_List.c_Name + "::" + rc_List.c_Elements[u16_ElementIndex].c_Name +
                                       "\" would be generated as 'inf' or 'nan'.");
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
 
                orc_Data.Append("#define " +
@@ -618,7 +629,7 @@ int32_t C_OscExportDataPool::mh_AddDefinesHeader(C_SclStringList & orc_Data, con
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

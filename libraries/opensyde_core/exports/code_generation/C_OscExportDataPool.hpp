@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <system_error>
 
 #include "stwtypes.hpp"
 
@@ -41,37 +42,39 @@ public:
 
    static std::string h_GetFileName(const C_OscNodeDataPool & orc_DataPool);
    static uint16_t h_ConvertOverallCodeVersion(const uint16_t ou16_GenCodeVersion);
-   static int32_t h_CreateSourceCode(const std::string & orc_Path, const uint16_t ou16_GenCodeVersion,
-                                     const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport,
-                                     const C_OscNodeDataPool & orc_DataPool, const uint8_t ou8_DataPoolIndex,
-                                     const E_Linkage oe_Linkage, const uint8_t ou8_DataPoolIndexRemote,
-                                     const uint8_t ou8_ProcessId,
-                                     const std::string & orc_ExportToolInfo = "");
+   static std::error_code h_CreateSourceCode(const std::string & orc_Path, const uint16_t ou16_GenCodeVersion,
+                                             const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport,
+                                             const C_OscNodeDataPool & orc_DataPool, const uint8_t ou8_DataPoolIndex,
+                                             const E_Linkage oe_Linkage, const uint8_t ou8_DataPoolIndexRemote,
+                                             const uint8_t ou8_ProcessId,
+                                             const std::string & orc_ExportToolInfo = "");
 
 protected:
    static const bool mhq_IS_HEADER_FILE = false;
    static const bool mhq_IS_IMPLEMENTATION_FILE = true;
 
-   static int32_t mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
-                                              const std::string & orc_Path,
-                                              const C_OscNodeDataPool & orc_DataPool,
-                                              const std::string & orc_ProjectId,
-                                              const uint16_t ou16_GenCodeVersion, const uint8_t ou8_DataPoolIndexRemote,
-                                              const uint8_t ou8_ProcessId, const E_Linkage oe_Linkage);
-   static int32_t mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
-                                      const std::string & orc_Path, const C_OscNodeDataPool & orc_DataPool,
-                                      const uint8_t ou8_DataPoolIndex, const std::string & orc_ProjectId,
-                                      const uint16_t ou16_GenCodeVersion, const E_Linkage oe_Linkage,
-                                      const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport);
+   static std::error_code mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
+                                                      const std::string & orc_Path,
+                                                      const C_OscNodeDataPool & orc_DataPool,
+                                                      const std::string & orc_ProjectId,
+                                                      const uint16_t ou16_GenCodeVersion,
+                                                      const uint8_t ou8_DataPoolIndexRemote,
+                                                      const uint8_t ou8_ProcessId, const E_Linkage oe_Linkage);
+   static std::error_code mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
+                                              const std::string & orc_Path, const C_OscNodeDataPool & orc_DataPool,
+                                              const uint8_t ou8_DataPoolIndex, const std::string & orc_ProjectId,
+                                              const uint16_t ou16_GenCodeVersion, const E_Linkage oe_Linkage,
+                                              const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport);
 
    static void mh_AddHeader(const std::string & orc_ExportToolInfo, stw::scl::C_SclStringList & orc_Data,
                             const C_OscNodeDataPool & orc_DataPool, const bool oq_FileType);
    static void mh_AddIncludes(stw::scl::C_SclStringList & orc_Data, const C_OscNodeDataPool & orc_DataPool,
                               const bool oq_FileType);
-   static int32_t mh_AddDefinesHeader(stw::scl::C_SclStringList & orc_Data, const C_OscNodeDataPool & orc_DataPool,
-                                      const uint8_t ou8_DataPoolIndex, const std::string & orc_ProjectId,
-                                      const uint16_t ou16_GenCodeVersion, const E_Linkage oe_Linkage,
-                                      const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport);
+   static std::error_code mh_AddDefinesHeader(stw::scl::C_SclStringList & orc_Data,
+                                              const C_OscNodeDataPool & orc_DataPool, const uint8_t ou8_DataPoolIndex,
+                                              const std::string & orc_ProjectId, const uint16_t ou16_GenCodeVersion,
+                                              const E_Linkage oe_Linkage,
+                                              const C_OscNodeCodeExportSettings::E_Scaling oe_ScalingSupport);
    static void mh_AddDefinesImpl(stw::scl::C_SclStringList & orc_Data, const C_OscNodeDataPool & orc_DataPool,
                                  const std::string & orc_ProjectId, const uint16_t ou16_GenCodeVersion);
    static void mh_AddTypes(stw::scl::C_SclStringList & orc_Data, const C_OscNodeDataPool & orc_DataPool,

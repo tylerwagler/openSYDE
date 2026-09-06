@@ -11,6 +11,8 @@
 #define C_OSCEXPORTCANOPENCONFIG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "C_SclStringList.hpp"
 #include "C_OscNode.hpp"
 
@@ -55,27 +57,28 @@ class C_OscExportCanOpenConfig
 public:
    static std::string h_GetFileName(const uint8_t ou8_InterfaceIndex);
    static uint16_t h_ConvertOverallCodeVersion(const uint16_t ou16_GenCodeVersion);
-   static int32_t h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
-                                     const uint16_t ou16_ApplicationIndex, const uint8_t ou8_InterfaceIndex,
-                                     const uint32_t ou32_DatapoolIndex,
-                                     const std::string & orc_ExportToolInfo);
+   static std::error_code h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
+                                             const uint16_t ou16_ApplicationIndex, const uint8_t ou8_InterfaceIndex,
+                                             const uint32_t ou32_DatapoolIndex,
+                                             const std::string & orc_ExportToolInfo);
 
 protected:
    static const bool mhq_IS_HEADER_FILE = false;
    static const bool mhq_IS_IMPLEMENTATION_FILE = true;
 
-   static int32_t mh_CreateHeaderFile(const std::string & orc_ExportInfoTool,
-                                      const std::string & orc_Path, const C_OscNode & orc_Node,
-                                      const C_OscCanMessageContainer & orc_MsgContainer,
-                                      const C_OscNodeApplication & orc_Application, const uint8_t ou8_InterfaceIndex,
-                                      const std::string & orc_ProjectId);
-
-   static int32_t mh_CreateImplementationFile(const std::string & orc_ExportInfoTool,
-                                              const std::string & orc_Path, const C_OscNode & orc_Node,
+   static std::error_code mh_CreateHeaderFile(const std::string & orc_ExportInfoTool, const std::string & orc_Path,
+                                              const C_OscNode & orc_Node,
                                               const C_OscCanMessageContainer & orc_MsgContainer,
                                               const C_OscNodeApplication & orc_Application,
-                                              const C_OscNodeDataPool & orc_Datapool, const uint8_t ou8_InterfaceIndex,
-                                              const std::string & orc_ProjectId);
+                                              const uint8_t ou8_InterfaceIndex, const std::string & orc_ProjectId);
+
+   static std::error_code mh_CreateImplementationFile(const std::string & orc_ExportInfoTool,
+                                                      const std::string & orc_Path, const C_OscNode & orc_Node,
+                                                      const C_OscCanMessageContainer & orc_MsgContainer,
+                                                      const C_OscNodeApplication & orc_Application,
+                                                      const C_OscNodeDataPool & orc_Datapool,
+                                                      const uint8_t ou8_InterfaceIndex,
+                                                      const std::string & orc_ProjectId);
 
    static void mh_AddHeader(const std::string & orc_ExportToolInfo, stw::scl::C_SclStringList & orc_Data,
                             const uint8_t ou8_InterfaceIndex, const bool oq_FileType);

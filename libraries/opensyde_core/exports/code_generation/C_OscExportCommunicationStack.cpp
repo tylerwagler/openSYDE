@@ -15,9 +15,11 @@
 #include <map>
 #include <sstream>
 #include <iomanip>
+#include <system_error>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_OscUtils.hpp"
 #include "C_SclStringList.hpp"
@@ -148,22 +150,23 @@ uint16_t C_OscExportCommunicationStack::h_ConvertOverallCodeVersion(const uint16
    \param[in]  orc_ExportToolInfo      information about calling executable (name + version)
 
    \return
-   C_NO_ERR    Operation success
-   C_NOACT     Application is not of type ePROGRAMMABLE_APPLICATION or has unknown code structure version
-   C_RD_WR     Operation failure: cannot store files
-   C_CONFIG    Protocol or Datapool not available in node for interface or application index out of range
-               Message definition does not contain at least one message with signals
-   C_RANGE     Application index out of range
+   Errc::success  Operation success
+   Errc::noact    Application is not of type ePROGRAMMABLE_APPLICATION or has unknown code structure version
+   Errc::rd_wr    Operation failure: cannot store files
+   Errc::config   Protocol or Datapool not available in node for interface or application index out of range
+                  Message definition does not contain at least one message with signals
+   Errc::range    Application index out of range
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
-                                                          const uint16_t ou16_ApplicationIndex,
-                                                          const uint8_t ou8_InterfaceIndex,
-                                                          const uint32_t ou32_DatapoolIndex,
-                                                          const C_OscCanProtocol::E_Type & ore_Protocol,
-                                                          const std::string & orc_ExportToolInfo)
+std::error_code C_OscExportCommunicationStack::h_CreateSourceCode(const std::string & orc_Path,
+                                                                  const C_OscNode & orc_Node,
+                                                                  const uint16_t ou16_ApplicationIndex,
+                                                                  const uint8_t ou8_InterfaceIndex,
+                                                                  const uint32_t ou32_DatapoolIndex,
+                                                                  const C_OscCanProtocol::E_Type & ore_Protocol,
+                                                                  const std::string & orc_ExportToolInfo)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    C_OscNodeApplication c_Application;
 
    if (ou16_ApplicationIndex < orc_Node.c_Applications.size())
@@ -174,10 +177,10 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const std::string & or
    {
       osc_write_log_error("Creating source code", "Application index " + std::to_string(ou16_ApplicationIndex) +
                           " out of range.");
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       // make sure application is programmable
       if (c_Application.e_Type != C_OscNodeApplication::ePROGRAMMABLE_APPLICATION)
@@ -185,7 +188,7 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const std::string & or
          osc_write_log_error("Creating source code",
                              "Did not generate code for application \"" + c_Application.c_Name +
                              "\" because application is not programmable.");
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
       }
       else
       {
@@ -196,12 +199,12 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const std::string & or
                                 "Did not generate code for application \"" + c_Application.c_Name +
                                 "\" because code format version \"" +
                                 std::to_string(c_Application.u16_GenCodeVersion) + "\" is unknown.");
-            s32_Retval = C_NOACT;
+            c_Retval = Errc::noact;
          }
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       const C_OscCanProtocol * const pc_ComProtocol = orc_Node.GetCanProtocolConst(ore_Protocol, ou32_DatapoolIndex);
       const C_OscNodeDataPool * const pc_DataPool = orc_Node.GetComDataPoolConst(ore_Protocol, ou32_DatapoolIndex);
@@ -242,14 +245,14 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const std::string & or
             const std::string c_ProjectId = std::to_string(u32_HashValue);
 
             // create header file
-            s32_Retval = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, c_Application, *pc_ComProtocol,
-                                             ou8_InterfaceIndex, c_ProjectId);
+            c_Retval = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, c_Application, *pc_ComProtocol,
+                                           ou8_InterfaceIndex, c_ProjectId);
 
             // create implementation file
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
-               s32_Retval = mh_CreateImplementationFile(orc_ExportToolInfo, orc_Path, c_Application, *pc_ComProtocol,
-                                                        *pc_DataPool, ou8_InterfaceIndex, c_ProjectId);
+               c_Retval = mh_CreateImplementationFile(orc_ExportToolInfo, orc_Path, c_Application, *pc_ComProtocol,
+                                                      *pc_DataPool, ou8_InterfaceIndex, c_ProjectId);
             }
          }
          else
@@ -258,7 +261,7 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const std::string & or
                                 "No messages with signals exist for specified communication protocol " +
                                 mh_GetProtocolNameByType(
                                    ore_Protocol) + " for interface index " + std::to_string(ou8_InterfaceIndex));
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
       else
@@ -266,11 +269,11 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const std::string & or
          osc_write_log_error("Creating source code",
                              "Protocol definition or Datapool does not exist for specified communication protocol " +
                              mh_GetProtocolNameByType(ore_Protocol));
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -284,18 +287,18 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const std::string & or
    \param[in]  orc_ProjectId        project id for consistency check
 
    \return
-   C_NO_ERR Operation success
-   C_RD_WR  Operation failure: cannot store file
+   Errc::success  Operation success
+   Errc::rd_wr    Operation failure: cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCommunicationStack::mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
-                                                           const std::string & orc_Path,
-                                                           const C_OscNodeApplication & orc_Applicaton,
-                                                           const C_OscCanProtocol & orc_ComProtocol,
-                                                           const uint8_t ou8_InterfaceIndex,
-                                                           const std::string & orc_ProjectId)
+std::error_code C_OscExportCommunicationStack::mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
+                                                                   const std::string & orc_Path,
+                                                                   const C_OscNodeApplication & orc_Applicaton,
+                                                                   const C_OscCanProtocol & orc_ComProtocol,
+                                                                   const uint8_t ou8_InterfaceIndex,
+                                                                   const std::string & orc_ProjectId)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
    C_SclStringList c_Data;
 
    c_Data.Clear();
@@ -336,9 +339,9 @@ int32_t C_OscExportCommunicationStack::mh_CreateHeaderFile(const std::string & o
    c_Data.Append("#endif");
 
    // finally save all stuff into the file
-   s32_Retval =
+   c_Retval =
       C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(ou8_InterfaceIndex, orc_ComProtocol.e_Type), true);
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -353,20 +356,20 @@ int32_t C_OscExportCommunicationStack::mh_CreateHeaderFile(const std::string & o
    \param[in]  orc_ProjectId        project id for consistency check
 
    \return
-   C_NO_ERR    Operation success
-   C_RD_WR     Operation failure: cannot store file
-   C_CONFIG    Datapool not available for interface
+   Errc::success  Operation success
+   Errc::rd_wr    Operation failure: cannot store file
+   Errc::config   Datapool not available for interface
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCommunicationStack::mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
-                                                                   const std::string & orc_Path,
-                                                                   const C_OscNodeApplication & orc_Applicaton,
-                                                                   const C_OscCanProtocol & orc_ComProtocol,
-                                                                   const C_OscNodeDataPool & orc_DataPool,
-                                                                   const uint8_t ou8_InterfaceIndex,
-                                                                   const std::string & orc_ProjectId)
+std::error_code C_OscExportCommunicationStack::mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
+                                                                           const std::string & orc_Path,
+                                                                           const C_OscNodeApplication & orc_Applicaton,
+                                                                           const C_OscCanProtocol & orc_ComProtocol,
+                                                                           const C_OscNodeDataPool & orc_DataPool,
+                                                                           const uint8_t ou8_InterfaceIndex,
+                                                                           const std::string & orc_ProjectId)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
    uint32_t u32_TxListIndex;
    uint32_t u32_RxListIndex;
 
@@ -433,8 +436,8 @@ int32_t C_OscExportCommunicationStack::mh_CreateImplementationFile(const std::st
       c_Data.Append("");
 
       // finally save all stuff into the file
-      s32_Retval = C_OscExportUti::h_SaveToFile(c_Data, orc_Path,
-                                                h_GetFileName(ou8_InterfaceIndex, orc_ComProtocol.e_Type), false);
+      c_Retval = C_OscExportUti::h_SaveToFile(c_Data, orc_Path,
+                                              h_GetFileName(ou8_InterfaceIndex, orc_ComProtocol.e_Type), false);
    }
    else
    {
@@ -442,10 +445,10 @@ int32_t C_OscExportCommunicationStack::mh_CreateImplementationFile(const std::st
                           "Datapool does not exist for specified communication protocol" +
                           mh_GetProtocolNameByType(orc_ComProtocol.e_Type) + " with interface index " +
                           std::to_string(ou8_InterfaceIndex));
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

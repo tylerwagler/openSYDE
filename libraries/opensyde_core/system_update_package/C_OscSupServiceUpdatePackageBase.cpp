@@ -19,6 +19,8 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <system_error>
+#include "C_OscErrorCategory.hpp"
 #include "C_OscSupServiceUpdatePackageBase.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemDefinition.hpp"
@@ -94,48 +96,48 @@ std::string C_OscSupServiceUpdatePackageBase::h_GetPackageExtension()
    \param[in]  orc_Function               Function
 
    \return
-   C_NO_ERR    success
-   C_CHECKSUM  size of orc_EncryptNodes does not match system definition
+   Errc::success    success
+   Errc::checksum   size of orc_EncryptNodes does not match system definition
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageBase::mh_CheckCommonSecurityParameters(
+std::error_code C_OscSupServiceUpdatePackageBase::mh_CheckCommonSecurityParameters(
    const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<std::string> & orc_EncryptNodesPassword,
    const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys, const uint32_t ou32_NumNodes,
    const std::string & orc_Mode, const std::string & orc_Function)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return;
 
    if (orc_EncryptNodes.size() != orc_EncryptNodesPassword.size())
    {
       mhc_ErrorMessage = "The container of " + orc_Mode + "ed nodes and " + orc_Mode +
                          "ed passwords have not the same size.";
       osc_write_log_error(orc_Function, mhc_ErrorMessage);
-      s32_Return = C_CHECKSUM;
+      c_Return = Errc::checksum;
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       if (((orc_EncryptNodes.size() != 0UL) && (orc_EncryptNodes.size() != 1UL)) &&
           (orc_EncryptNodes.size() != ou32_NumNodes))
       {
          mhc_ErrorMessage = "The container of " + orc_Mode + "ed nodes and nodes have not the same size.";
          osc_write_log_error(orc_Function, mhc_ErrorMessage);
-         s32_Return = C_CHECKSUM;
+         c_Return = Errc::checksum;
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       if (((orc_NodeSignatureKeys.size() != 0UL) && (orc_NodeSignatureKeys.size() != 1UL)) &&
           (orc_NodeSignatureKeys.size() != ou32_NumNodes))
       {
          mhc_ErrorMessage = "The container of signature keys and nodes have not the same size.";
          osc_write_log_error(orc_Function, mhc_ErrorMessage);
-         s32_Return = C_CHECKSUM;
+         c_Return = Errc::checksum;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -261,36 +263,36 @@ void C_OscSupServiceUpdatePackageBase::mh_AdaptCommonSignatureParameters(
    \param[in]   oq_PathsAreAbsolute    Paths are absolute
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   No err
-   \retval   C_RD_WR    File not found
+   \retval   Errc::success   No err
+   \retval   Errc::rd_wr     File not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const std::string & orc_SourcePath,
-                                                        const std::set<std::string> & orc_SupFiles,
-                                                        uint8_t (&orau8_Digest)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH],
-                                                        const bool oq_PathsAreAbsolute)
+std::error_code C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const std::string & orc_SourcePath,
+                                                                const std::set<std::string> & orc_SupFiles,
+                                                                uint8_t (&orau8_Digest)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH],
+                                                                const bool oq_PathsAreAbsolute)
 {
    C_OscSecurityEcdsa c_Signature;
 
-   int32_t s32_Retval = c_Signature.Sha256Init();
+   std::error_code c_Retval = static_cast<Errc>(c_Signature.Sha256Init());
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       for (std::set<std::string>::const_iterator c_ItFile = orc_SupFiles.begin();
-           (c_ItFile != orc_SupFiles.end()) && (s32_Retval == C_NO_ERR);
+           (c_ItFile != orc_SupFiles.end()) && (!c_Retval);
            ++c_ItFile)
       {
          const std::string c_CompleteFilePath = oq_PathsAreAbsolute ? *c_ItFile : orc_SourcePath + *c_ItFile;
-         s32_Retval = mh_AddFileToDigest(c_CompleteFilePath, c_Signature);
+         c_Retval = mh_AddFileToDigest(c_CompleteFilePath, c_Signature);
       }
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = c_Signature.Sha256GetDigest(orau8_Digest);
+      c_Retval = static_cast<Errc>(c_Signature.Sha256GetDigest(orau8_Digest));
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -300,16 +302,16 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const std::string & orc_
    \param[in,out]  orc_Signature    Signature
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   No err
-   \retval   C_RD_WR    File not found
+   \retval   Errc::success   No err
+   \retval   Errc::rd_wr     File not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(const std::string & orc_FilePath,
-                                                             C_OscSecurityEcdsa & orc_Signature)
+std::error_code C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(const std::string & orc_FilePath,
+                                                                     C_OscSecurityEcdsa & orc_Signature)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval;
    const uint32_t u32_SECTION_SIZE = 256;
 
    std::ifstream c_InputFileStream;
@@ -319,27 +321,27 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(const std::string &
 
    if (c_InputFileStream.is_open() == false)
    {
-      s32_Retval = C_RD_WR;
+      c_Retval = Errc::rd_wr;
    }
    else
    {
       uint32_t u32_RemainingFileCount = u32_InputFileSize;
       while ((u32_RemainingFileCount / u32_SECTION_SIZE) >= 1UL)
       {
-         s32_Retval = mh_AddFileSectionToDigest(c_InputFileStream, orc_Signature, u32_SECTION_SIZE);
+         c_Retval = mh_AddFileSectionToDigest(c_InputFileStream, orc_Signature, u32_SECTION_SIZE);
          u32_RemainingFileCount = u32_RemainingFileCount - u32_SECTION_SIZE;
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          if (u32_RemainingFileCount > 0UL)
          {
-            s32_Retval = mh_AddFileSectionToDigest(c_InputFileStream, orc_Signature, u32_RemainingFileCount);
+            c_Retval = mh_AddFileSectionToDigest(c_InputFileStream, orc_Signature, u32_RemainingFileCount);
          }
       }
       //close file
       c_InputFileStream.close();
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -350,17 +352,17 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(const std::string &
    \param[in]      ou32_SectionLength  Section length
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   Everything read
-   \retval   C_RD_WR    File could not be read
+   \retval   Errc::success   Everything read
+   \retval   Errc::rd_wr     File could not be read
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(ifstream & orc_File,
-                                                                    C_OscSecurityEcdsa & orc_Signature,
-                                                                    const uint32_t ou32_SectionLength)
+std::error_code C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(ifstream & orc_File,
+                                                                            C_OscSecurityEcdsa & orc_Signature,
+                                                                            const uint32_t ou32_SectionLength)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval;
    //read file content
    bool q_HasFailed;
 
@@ -372,13 +374,14 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(ifstream & o
    q_HasFailed = orc_File.fail();
    if (q_HasFailed == true)
    {
-      s32_Retval = C_RD_WR;
+      c_Retval = Errc::rd_wr;
    }
    else
    {
-      s32_Retval = orc_Signature.Sha256Update(&c_InputData[0], static_cast<uint32_t>(c_InputData.size()));
+      c_Retval = static_cast<Errc>(orc_Signature.Sha256Update(&c_InputData[0],
+                                                              static_cast<uint32_t>(c_InputData.size())));
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

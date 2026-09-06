@@ -13,8 +13,10 @@
 #include "precomp_headers.hpp"
 
 #include <string>
+#include <system_error>
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscSupSignatureFiler.hpp"
 
@@ -50,16 +52,16 @@ static const std::string mc_NODE_SIG_VALUE_ATTR = "value";                      
    \param[in]  orc_Signature  Signature
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   File created
-   \retval   C_RD_WR    File not created
+   \retval   Errc::success   File created
+   \retval   Errc::rd_wr     File not created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupSignatureFiler::h_CreateSignatureFile(const std::string & orc_Path,
-                                                      const std::string & orc_Signature)
+std::error_code C_OscSupSignatureFiler::h_CreateSignatureFile(const std::string & orc_Path,
+                                                              const std::string & orc_Signature)
 {
-   int32_t s32_Result;
+   std::error_code c_Result;
 
    // fill update package definition
    C_OscXmlParser c_XmlParser;
@@ -79,12 +81,12 @@ int32_t C_OscSupSignatureFiler::h_CreateSignatureFile(const std::string & orc_Pa
    tgl_assert(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
    // save signature file
-   s32_Result = c_XmlParser.SaveToFile(orc_Path);
-   if (s32_Result != C_NO_ERR)
+   c_Result = static_cast<Errc>(c_XmlParser.SaveToFile(orc_Path));
+   if (c_Result)
    {
-      s32_Result = C_RD_WR;
+      c_Result = Errc::rd_wr;
    }
-   return s32_Result;
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -94,20 +96,20 @@ int32_t C_OscSupSignatureFiler::h_CreateSignatureFile(const std::string & orc_Pa
    \param[in,out]  orc_Signature    Signature
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   File read
-   \retval   C_RD_WR    File not read
+   \retval   Errc::success   File read
+   \retval   Errc::rd_wr     File not read
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupSignatureFiler::h_LoadSignatureFile(const std::string & orc_Path,
-                                                    std::string & orc_Signature)
+std::error_code C_OscSupSignatureFiler::h_LoadSignatureFile(const std::string & orc_Path,
+                                                            std::string & orc_Signature)
 {
-   int32_t s32_Result;
+   std::error_code c_Result;
    C_OscXmlParser c_XmlParser;
 
-   s32_Result = c_XmlParser.LoadFromFile(orc_Path);
-   if (s32_Result == C_NO_ERR)
+   c_Result = static_cast<Errc>(c_XmlParser.LoadFromFile(orc_Path));
+   if (!c_Result)
    {
       tgl_assert(c_XmlParser.SelectRoot() == mc_ROOT_NAME);
 
@@ -128,7 +130,7 @@ int32_t C_OscSupSignatureFiler::h_LoadSignatureFile(const std::string & orc_Path
          tgl_assert(c_XmlParser.SelectRoot() == mc_ROOT_NAME);
       }
    }
-   return s32_Result;
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

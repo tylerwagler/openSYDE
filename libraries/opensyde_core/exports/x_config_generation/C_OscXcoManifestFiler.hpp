@@ -9,6 +9,8 @@
 #define C_OSCXCOMANIFESTFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "C_OscXmlParser.hpp"
 #include "C_OscXcoManifest.hpp"
 
@@ -24,9 +26,9 @@ namespace opensyde_core
 class C_OscXcoManifestFiler
 {
 public:
-   static int32_t h_LoadFile(C_OscXcoManifest & orc_Config, const std::string & orc_Path);
-   static int32_t h_SaveFile(const C_OscXcoManifest & orc_Config, const std::string & orc_Path);
-   static int32_t h_LoadData(C_OscXcoManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser);
+   static std::error_code h_LoadFile(C_OscXcoManifest & orc_Config, const std::string & orc_Path);
+   static std::error_code h_SaveFile(const C_OscXcoManifest & orc_Config, const std::string & orc_Path);
+   static std::error_code h_LoadData(C_OscXcoManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveData(const C_OscXcoManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser);
 
    static const std::string hc_FILE_NAME;

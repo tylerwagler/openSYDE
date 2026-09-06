@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
 #include <iostream>
 
 #include "stwtypes.hpp"
@@ -93,8 +94,10 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExport::m_CreateApplicationCode
       const std::string c_Path = TglFileIncludeTrailingDelimiter(orc_OutputPath) + "x_app.syde_xcfg";
 
       c_Manifest.c_NodeName = orc_Node.c_Properties.c_Name;
+      //h_CreatePackage now reports std::error_code; this local is still shared with
+      //C_OscUtils::h_CreateFolderRecursively above, which has not been migrated yet
       s32_Return =
-         C_OscXcoCreate::h_CreatePackage(c_Path, orc_SystemDefinition, c_Manifest, c_Warnings, c_Error);
+         C_OscXcoCreate::h_CreatePackage(c_Path, orc_SystemDefinition, c_Manifest, c_Warnings, c_Error).value();
       orc_CreatedFiles.push_back("x_app.syde_xcfg");
    }
    return (s32_Return == C_NO_ERR) ? eRESULT_OK : eRESULT_X_CONFIG_GENERATION_ERROR;

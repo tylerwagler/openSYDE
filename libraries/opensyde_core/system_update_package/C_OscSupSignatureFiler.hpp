@@ -9,6 +9,7 @@
 #define C_OSCSUPSIGNATUREFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -22,9 +23,9 @@ namespace opensyde_core
 class C_OscSupSignatureFiler
 {
 public:
-   static int32_t h_CreateSignatureFile(const std::string & orc_Path,
-                                        const std::string & orc_Signature);
-   static int32_t h_LoadSignatureFile(const std::string & orc_Path, std::string & orc_Signature);
+   static std::error_code h_CreateSignatureFile(const std::string & orc_Path,
+                                                const std::string & orc_Signature);
+   static std::error_code h_LoadSignatureFile(const std::string & orc_Path, std::string & orc_Signature);
    static std::string h_GetSignatureFileName(void);
 };
 

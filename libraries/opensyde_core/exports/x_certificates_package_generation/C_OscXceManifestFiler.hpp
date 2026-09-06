@@ -9,6 +9,8 @@
 #define C_OSCXCEMANIFESTFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "C_OscXmlParser.hpp"
 #include "C_OscXceManifest.hpp"
 
@@ -24,9 +26,9 @@ namespace opensyde_core
 class C_OscXceManifestFiler
 {
 public:
-   static int32_t h_LoadFile(C_OscXceManifest & orc_Config, const std::string & orc_Path);
-   static int32_t h_SaveFile(const C_OscXceManifest & orc_Config, const std::string & orc_Path);
-   static int32_t h_LoadData(C_OscXceManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser);
+   static std::error_code h_LoadFile(C_OscXceManifest & orc_Config, const std::string & orc_Path);
+   static std::error_code h_SaveFile(const C_OscXceManifest & orc_Config, const std::string & orc_Path);
+   static std::error_code h_LoadData(C_OscXceManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveData(const C_OscXceManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser);
 
    static const std::string hc_FILE_NAME;
@@ -36,12 +38,12 @@ private:
    static const uint16_t mhu16_PACKAGE_VERSION_1;
 
    C_OscXceManifestFiler();
-   static int32_t mh_LoadUpdatePackageParameters(std::vector<C_OscXceUpdatePackageParameters> & orc_Config,
-                                                 C_OscXmlParserBase & orc_XmlParser);
+   static std::error_code mh_LoadUpdatePackageParameters(std::vector<C_OscXceUpdatePackageParameters> & orc_Config,
+                                                         C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveUpdatePackageParameters(const std::vector<C_OscXceUpdatePackageParameters> & orc_Config,
                                               C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadUpdatePackageParameter(C_OscXceUpdatePackageParameters & orc_Config,
-                                                const C_OscXmlParserBase & orc_XmlParser);
+   static std::error_code mh_LoadUpdatePackageParameter(C_OscXceUpdatePackageParameters & orc_Config,
+                                                        const C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveUpdatePackageParameter(const C_OscXceUpdatePackageParameters & orc_Config,
                                              C_OscXmlParserBase & orc_XmlParser);
 };

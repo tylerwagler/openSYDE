@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglFile.hpp"
 #include "C_OscExportUti.hpp"
 
@@ -173,14 +176,14 @@ void C_OscExportUti::h_AddProjIdFunctionPrototype(C_SclStringList & orc_Data, co
    \param[in]  oq_HeaderFile  Flag if .c or .h file (true: header file)
 
    \return
-   C_NO_ERR Operation success
-   C_RD_WR  Operation failure: cannot store file
+   Errc::success  Operation success
+   Errc::rd_wr    Operation failure: cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportUti::h_SaveToFile(stw::scl::C_SclStringList & orc_Data, const std::string & orc_Path,
-                                     const std::string & orc_FileName, const bool oq_HeaderFile)
+std::error_code C_OscExportUti::h_SaveToFile(stw::scl::C_SclStringList & orc_Data, const std::string & orc_Path,
+                                             const std::string & orc_FileName, const bool oq_HeaderFile)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    std::string c_PathAndFilename;
 
    // get file path: path + filename + extension
@@ -204,10 +207,10 @@ int32_t C_OscExportUti::h_SaveToFile(stw::scl::C_SclStringList & orc_Data, const
    catch (...)
    {
       osc_write_log_error("Creating source code", "Could not write to file \"" + c_PathAndFilename + "\"");
-      s32_Retval = C_RD_WR;
+      c_Retval = Errc::rd_wr;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

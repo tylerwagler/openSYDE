@@ -15,9 +15,11 @@
 #include <algorithm> //for sort
 #include <sstream>
 #include <iomanip>
+#include <system_error>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscExportCanOpenConfig.hpp"
 #include "C_OscExportUti.hpp"
 #include "C_OscExportDataPool.hpp"
@@ -314,21 +316,21 @@ uint16_t C_OscExportCanOpenConfig::h_ConvertOverallCodeVersion(const uint16_t ou
    \param[in]       orc_ExportToolInfo       information about calling executable (name + version)
 
    \return
-   C_NO_ERR    success
-   C_NOACT     application is not of type ePROGRAMMABLE_APPLICATION or has unknown code structure version
-   C_RD_WR     failure: cannot store files
-   C_CONFIG    protocol or Datapool not available in node for interface or application index out of range
-   C_RANGE     application index out of range
+   Errc::success  success
+   Errc::noact    application is not of type ePROGRAMMABLE_APPLICATION or has unknown code structure version
+   Errc::rd_wr    failure: cannot store files
+   Errc::config   protocol or Datapool not available in node for interface or application index out of range
+   Errc::range    application index out of range
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
-                                                     const uint16_t ou16_ApplicationIndex,
-                                                     const uint8_t ou8_InterfaceIndex,
-                                                     const uint32_t ou32_DatapoolIndex,
-                                                     const std::string & orc_ExportToolInfo)
+std::error_code C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
+                                                             const uint16_t ou16_ApplicationIndex,
+                                                             const uint8_t ou8_InterfaceIndex,
+                                                             const uint32_t ou32_DatapoolIndex,
+                                                             const std::string & orc_ExportToolInfo)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    C_OscNodeApplication c_Application;
 
    if (ou16_ApplicationIndex < orc_Node.c_Applications.size())
@@ -339,10 +341,10 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
    {
       osc_write_log_error("Creating source code", "Application index " + std::to_string(
                              ou16_ApplicationIndex) + "out of range.");
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       //make sure application is programmable
       if (c_Application.e_Type != C_OscNodeApplication::ePROGRAMMABLE_APPLICATION)
@@ -350,7 +352,7 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
          osc_write_log_error("Creating source code",
                              "Did not generate code for application \"" + c_Application.c_Name +
                              "\" because application is not programmable.");
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
@@ -361,12 +363,12 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
                                 "Did not generate code for application \"" + c_Application.c_Name +
                                 "\" because code format version \"" +
                                 std::to_string(c_Application.u16_GenCodeVersion) + "\" is unknown.");
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
          }
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       const C_OscCanProtocol * const pc_Protocol = orc_Node.GetCanProtocolConst(C_OscCanProtocol::eCAN_OPEN,
                                                                                 ou32_DatapoolIndex);
@@ -384,26 +386,26 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
          const std::string c_ProjectId = std::to_string(u32_HashValue);
 
          //create header file
-         s32_Return = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, orc_Node, rc_Messages,
-                                          c_Application, ou8_InterfaceIndex, c_ProjectId);
+         c_Return = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, orc_Node, rc_Messages,
+                                        c_Application, ou8_InterfaceIndex, c_ProjectId);
 
-         if (s32_Return == C_NO_ERR)
+         if (!c_Return)
          {
             //create implementation file
-            s32_Return = mh_CreateImplementationFile(orc_ExportToolInfo, orc_Path, orc_Node, rc_Messages,
-                                                     c_Application, *pc_DataPool, ou8_InterfaceIndex,
-                                                     c_ProjectId);
+            c_Return = mh_CreateImplementationFile(orc_ExportToolInfo, orc_Path, orc_Node, rc_Messages,
+                                                   c_Application, *pc_DataPool, ou8_InterfaceIndex,
+                                                   c_ProjectId);
          }
       }
       else
       {
          osc_write_log_error("Creating source code",
                              "Datapool does not exist for specified communication protocol CANopen");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -418,18 +420,18 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
    \param[in]       orc_ProjectId         project id for consistency check
 
    \return
-   C_NO_ERR    success
-   C_RD_WR     cannot store file
+   Errc::success  success
+   Errc::rd_wr    cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenConfig::mh_CreateHeaderFile(const std::string & orc_ExportInfoTool,
-                                                      const std::string & orc_Path, const C_OscNode & orc_Node,
-                                                      const C_OscCanMessageContainer & orc_MsgContainer,
-                                                      const C_OscNodeApplication & orc_Application,
-                                                      const uint8_t ou8_InterfaceIndex,
-                                                      const std::string & orc_ProjectId)
+std::error_code C_OscExportCanOpenConfig::mh_CreateHeaderFile(const std::string & orc_ExportInfoTool,
+                                                              const std::string & orc_Path, const C_OscNode & orc_Node,
+                                                              const C_OscCanMessageContainer & orc_MsgContainer,
+                                                              const C_OscNodeApplication & orc_Application,
+                                                              const uint8_t ou8_InterfaceIndex,
+                                                              const std::string & orc_ProjectId)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_SclStringList c_Data;
 
    c_Data.Clear();
@@ -467,9 +469,9 @@ int32_t C_OscExportCanOpenConfig::mh_CreateHeaderFile(const std::string & orc_Ex
    c_Data.Append("#endif");
 
    //save all this
-   s32_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(ou8_InterfaceIndex), true);
+   c_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(ou8_InterfaceIndex), true);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -485,20 +487,21 @@ int32_t C_OscExportCanOpenConfig::mh_CreateHeaderFile(const std::string & orc_Ex
    \param[in]       orc_ProjectId         project id for consistency check
 
    \return
-   C_NO_ERR    success
-   C_CONFIG    invalid configuration, aborted
-   C_RD_WR     cannot store file
+   Errc::success  success
+   Errc::config   invalid configuration, aborted
+   Errc::rd_wr    cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenConfig::mh_CreateImplementationFile(const std::string & orc_ExportInfoTool,
-                                                              const std::string & orc_Path, const C_OscNode & orc_Node,
-                                                              const C_OscCanMessageContainer & orc_MsgContainer,
-                                                              const C_OscNodeApplication & orc_Application,
-                                                              const C_OscNodeDataPool & orc_Datapool,
-                                                              const uint8_t ou8_InterfaceIndex,
-                                                              const std::string & orc_ProjectId)
+std::error_code C_OscExportCanOpenConfig::mh_CreateImplementationFile(const std::string & orc_ExportInfoTool,
+                                                                      const std::string & orc_Path,
+                                                                      const C_OscNode & orc_Node,
+                                                                      const C_OscCanMessageContainer & orc_MsgContainer,
+                                                                      const C_OscNodeApplication & orc_Application,
+                                                                      const C_OscNodeDataPool & orc_Datapool,
+                                                                      const uint8_t ou8_InterfaceIndex,
+                                                                      const std::string & orc_ProjectId)
 {
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
    C_SclStringList c_Data;
 
@@ -546,14 +549,14 @@ int32_t C_OscExportCanOpenConfig::mh_CreateImplementationFile(const std::string 
       c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Implementation"));
 
       //save all this
-      s32_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(ou8_InterfaceIndex), false);
+      c_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_Path, h_GetFileName(ou8_InterfaceIndex), false);
    }
    else
    {
       osc_write_log_error("Creating source code",
                           "Datapool RX or TX signal list does not exist for specified communication protocol CANopen");
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

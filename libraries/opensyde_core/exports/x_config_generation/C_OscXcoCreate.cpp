@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "TglFile.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscXcoCreate.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -67,27 +70,27 @@ const std::string C_OscXcoCreate::mhc_USE_CASE = "Creating X-Config Package";
                                           is created next to package path.
 
    \return
-   C_NO_ERR    success
-   C_RANGE     target file already exists
-               target directory for package does not exist
-               invalid package name with no package extension ".syde_pkg"
-               temporary folder (orc_PackagePath with mc_PACKAGE_EXT_TMP) already exists
-   C_NOACT     active node index is not in system definition
-   C_RD_WR     could not create temporary folders
-               could not save system definition file
-               could not save device definition file
-   C_BUSY      could not package result to zip archive
-               could not delete temporary result folder
+   Errc::success  success
+   Errc::range    target file already exists
+                  target directory for package does not exist
+                  invalid package name with no package extension ".syde_pkg"
+                  temporary folder (orc_PackagePath with mc_PACKAGE_EXT_TMP) already exists
+   Errc::noact    active node index is not in system definition
+   Errc::rd_wr    could not create temporary folders
+                  could not save system definition file
+                  could not save device definition file
+   Errc::busy     could not package result to zip archive
+                  could not delete temporary result folder
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoCreate::h_CreatePackage(const std::string & orc_PackagePath,
-                                        const C_OscSystemDefinition & orc_SystemDefinition,
-                                        const C_OscXcoManifest & orc_Manifest,
-                                        stw::scl::C_SclStringList & orc_WarningMessages,
-                                        std::string & orc_ErrorMessage,
-                                        const std::string & orc_TemporaryDirectory)
+std::error_code C_OscXcoCreate::h_CreatePackage(const std::string & orc_PackagePath,
+                                                const C_OscSystemDefinition & orc_SystemDefinition,
+                                                const C_OscXcoManifest & orc_Manifest,
+                                                stw::scl::C_SclStringList & orc_WarningMessages,
+                                                std::string & orc_ErrorMessage,
+                                                const std::string & orc_TemporaryDirectory)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    bool q_TemporaryFolderCreated = false; // for cleanup at the end of this function
 
@@ -104,79 +107,78 @@ int32_t C_OscXcoCreate::h_CreatePackage(const std::string & orc_PackagePath,
    c_XcfgFiles.insert(TglFileIncludeTrailingDelimiter(hc_XCFG_SYSDEF_FOLDER) + hc_XCFG_SYSDEF);
    c_XcfgFiles.insert(C_OscXcoManifestFiler::hc_FILE_NAME);
    // precondition checks
-   s32_Return = mh_CheckParamsToCreatePackage(orc_PackagePath, orc_SystemDefinition, orc_Manifest);
+   c_Return = mh_CheckParamsToCreatePackage(orc_PackagePath, orc_SystemDefinition, orc_Manifest);
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       std::vector<std::string> c_AllStaticSubFolders;
       c_AllStaticSubFolders.push_back(hc_XCFG_SYSDEF_FOLDER);
       c_AllStaticSubFolders.push_back(hc_INI_DEV_FOLDER);
-      s32_Return = C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(orc_PackagePath,
-                                                                                     orc_TemporaryDirectory,
-                                                                                     mhc_USE_CASE,
-                                                                                     hc_PACKAGE_EXT,
-                                                                                     hc_PACKAGE_EXT_TMP,
-                                                                                     c_AllStaticSubFolders,
-                                                                                     c_PackagePathTmp,
-                                                                                     mhc_ErrorMessage);
+      //C_OscSpaServicePackageCreateUtil still reports the STW int32_t error convention
+      c_Return = make_error_code_from_stw(
+         C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(
+            orc_PackagePath, orc_TemporaryDirectory, mhc_USE_CASE, hc_PACKAGE_EXT, hc_PACKAGE_EXT_TMP,
+            c_AllStaticSubFolders, c_PackagePathTmp, mhc_ErrorMessage));
 
       q_TemporaryFolderCreated = true; // at least partly
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       const std::string c_ManifestPath = c_PackagePathTmp + C_OscXcoManifestFiler::hc_FILE_NAME;
-      s32_Return = C_OscXcoManifestFiler::h_SaveFile(orc_Manifest, c_ManifestPath);
-      if (s32_Return != C_NO_ERR)
+      c_Return = C_OscXcoManifestFiler::h_SaveFile(orc_Manifest, c_ManifestPath);
+      if (c_Return)
       {
          // very strange! normally the precondition check should
          // guarantee a correct behavior of h_SaveFile
          mhc_ErrorMessage = "Could not create temporary file \"" +
                             c_ManifestPath + "\".";
          osc_write_log_error(mhc_USE_CASE, mhc_ErrorMessage);
-         s32_Return = C_RD_WR; // redefine because we only have a few error codes
+         c_Return = Errc::rd_wr; // redefine because we only have a few error codes
       }
    }
 
    // * system definition file
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       const std::string c_SysDefPath = TglFileIncludeTrailingDelimiter(
          c_PackagePathTmp + hc_XCFG_SYSDEF_FOLDER);
 
-      s32_Return = C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(orc_SystemDefinition,
-                                                                            hc_XCFG_SYSDEF,
-                                                                            mhc_USE_CASE,
-                                                                            c_SysDefPath, TglFileIncludeTrailingDelimiter(
-                                                                               hc_XCFG_SYSDEF_FOLDER), c_XcfgFiles,
-                                                                            mhc_ErrorMessage);
+      c_Return = make_error_code_from_stw(
+         C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(
+            orc_SystemDefinition, hc_XCFG_SYSDEF, mhc_USE_CASE, c_SysDefPath,
+            TglFileIncludeTrailingDelimiter(hc_XCFG_SYSDEF_FOLDER), c_XcfgFiles, mhc_ErrorMessage));
    }
    // device.ini and device definition files
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       const std::string c_DevDefPath = TglFileIncludeTrailingDelimiter(c_PackagePathTmp + hc_INI_DEV_FOLDER);
 
-      s32_Return = C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
-         orc_SystemDefinition, mhc_USE_CASE,
-         c_DevDefPath, TglFileIncludeTrailingDelimiter(hc_INI_DEV_FOLDER), c_XcfgFiles, mhc_ErrorMessage);
+      c_Return = make_error_code_from_stw(
+         C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
+            orc_SystemDefinition, mhc_USE_CASE, c_DevDefPath, TglFileIncludeTrailingDelimiter(hc_INI_DEV_FOLDER),
+            c_XcfgFiles, mhc_ErrorMessage));
    }
    // package temporary result folder to zip file
-   if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN))
+   if ((!c_Return) || (c_Return == Errc::warn))
    {
-      s32_Return = C_OscSpaServicePackageCreateUtil::h_CreateZip(mhc_USE_CASE, c_PackagePathTmp,
-                                                                 c_TargetZipArchive, c_XcfgFiles,
-                                                                 mhc_ErrorMessage);
+      c_Return = make_error_code_from_stw(
+         C_OscSpaServicePackageCreateUtil::h_CreateZip(mhc_USE_CASE, c_PackagePathTmp, c_TargetZipArchive,
+                                                      c_XcfgFiles, mhc_ErrorMessage));
    }
 
    // cleanup: delete temporary result folder
    if (q_TemporaryFolderCreated == true)
    {
+      //h_CleanUpTempFolder reads and updates the STW int32_t error value
+      int32_t s32_CleanUpResult = c_Return.value();
       C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder("Creating Update Package",
-                                                            c_PackagePathTmp, s32_Return, mhc_ErrorMessage);
+                                                            c_PackagePathTmp, s32_CleanUpResult, mhc_ErrorMessage);
+      c_Return = make_error_code_from_stw(s32_CleanUpResult);
    }
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -187,25 +189,24 @@ int32_t C_OscXcoCreate::h_CreatePackage(const std::string & orc_PackagePath,
    \param[in]  orc_Manifest            Manifest
 
    \return
-   C_NO_ERR    success
-   C_RANGE     target package file already exists
-               target directory for package does not exist
-               invalid package name with no package extension ".syde_pkg"
-   C_NOACT     active node index is not in system definition
+   Errc::success  success
+   Errc::range    target package file already exists
+                  target directory for package does not exist
+                  invalid package name with no package extension ".syde_pkg"
+   Errc::noact    active node index is not in system definition
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoCreate::mh_CheckParamsToCreatePackage(const std::string & orc_PackagePath,
-                                                      const C_OscSystemDefinition & orc_SystemDefinition,
-                                                      const C_OscXcoManifest & orc_Manifest)
+std::error_code C_OscXcoCreate::mh_CheckParamsToCreatePackage(const std::string & orc_PackagePath,
+                                                              const C_OscSystemDefinition & orc_SystemDefinition,
+                                                              const C_OscXcoManifest & orc_Manifest)
 {
-   int32_t s32_Return = C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath,
-                                                                                  mhc_USE_CASE,
-                                                                                  hc_PACKAGE_EXT,
-                                                                                  hc_PACKAGE_EXT_TMP,
-                                                                                  mhc_ErrorMessage);
+   //C_OscSpaServicePackageCreateUtil still reports the STW int32_t error convention
+   std::error_code c_Return = make_error_code_from_stw(
+      C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath, mhc_USE_CASE, hc_PACKAGE_EXT,
+                                                               hc_PACKAGE_EXT_TMP, mhc_ErrorMessage));
 
    // active bus index in range?
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       bool q_Contained = false;
       for (uint32_t u32_It = 0UL; (u32_It <= orc_SystemDefinition.c_Nodes.size()) && (q_Contained == false); ++u32_It)
@@ -221,8 +222,8 @@ int32_t C_OscXcoCreate::mh_CheckParamsToCreatePackage(const std::string & orc_Pa
          mhc_ErrorMessage = "Node \"" +
                             orc_Manifest.c_NodeName + "\" is not in System Definition.";
          osc_write_log_error(mhc_USE_CASE, mhc_ErrorMessage);
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
-   return s32_Return;
+   return c_Return;
 }

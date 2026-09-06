@@ -29,12 +29,12 @@ class C_OscConfFileHandler
 public:
    virtual ~C_OscConfFileHandler();
 
-   int32_t LoadSettings(const std::string & orc_Path);
+   std::error_code LoadSettings(const std::string & orc_Path);
 
 protected:
    // Function for loading concrete settings. Must return C_CONFIG in error case
-   virtual int32_t m_LoadSettings(const stw::scl::C_SclStringList & orc_SettingsWithoutComments) = 0;
-   static int32_t mh_ReplaceSettings(const std::string & orc_Path,
+   virtual std::error_code m_LoadSettings(const stw::scl::C_SclStringList & orc_SettingsWithoutComments) = 0;
+   static std::error_code mh_ReplaceSettings(const std::string & orc_Path,
                                       const std::vector<std::pair<std::string,
                                                                   std::string> > & orc_Configs);
 

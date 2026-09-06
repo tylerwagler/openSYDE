@@ -13,8 +13,11 @@
 #include "precomp_headers.hpp"
 
 #include "TglFile.hpp"
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
@@ -47,47 +50,48 @@ const uint16_t C_OscXcoManifestFiler::mhu16_PACKAGE_VERSION_1 = 1;
    \param[in]      orc_Path      Path
 
    \return
-   C_NO_ERR    data read
-   C_RANGE     specified manifest file does not exist
-   C_NOACT     specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG    manifest file content is invalid or incomplete
-               manifest file could not be loaded
+   Errc::success  data read
+   Errc::range    specified manifest file does not exist
+   Errc::noact    specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config   manifest file content is invalid or incomplete
+                  manifest file could not be loaded
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoManifestFiler::h_LoadFile(C_OscXcoManifest & orc_Config, const std::string & orc_Path)
+std::error_code C_OscXcoManifestFiler::h_LoadFile(C_OscXcoManifest & orc_Config, const std::string & orc_Path)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_Path) == true)
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading manifest data");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
-      if (s32_Retval == C_NO_ERR)
+      //the XML parser still reports the STW int32_t error convention
+      c_Retval = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_Path));
+      if (!c_Retval)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-update-package-manifest")
          {
-            s32_Retval = h_LoadData(orc_Config, c_XmlParser);
+            c_Retval = h_LoadData(orc_Config, c_XmlParser);
          }
          else
          {
             osc_write_log_error("Loading manifest data",
                                 "Could not find \"opensyde-update-package-manifest\" node.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
       else
       {
          osc_write_log_error("Loading manifest data", "File \"" + orc_Path + "\" could not be opened.");
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
       }
    }
    else
    {
       osc_write_log_error("Loading manifest data", "File \"" + orc_Path + "\" does not exist.");
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -97,17 +101,17 @@ int32_t C_OscXcoManifestFiler::h_LoadFile(C_OscXcoManifest & orc_Config, const s
    \param[in]  orc_Path    Path
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   data invalid
+   Errc::success  data saved
+   Errc::config   data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoManifestFiler::h_SaveFile(const C_OscXcoManifest & orc_Config, const std::string & orc_Path)
+std::error_code C_OscXcoManifestFiler::h_SaveFile(const C_OscXcoManifest & orc_Config, const std::string & orc_Path)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
-                                                                    "opensyde-update-package-manifest");
+   std::error_code c_Retval = make_error_code_from_stw(
+      C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path, "opensyde-update-package-manifest"));
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       //node
       C_OscXcoManifestFiler::h_SaveData(orc_Config, c_XmlParser);
@@ -115,15 +119,15 @@ int32_t C_OscXcoManifestFiler::h_SaveFile(const C_OscXcoManifest & orc_Config, c
       if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR)
       {
          osc_write_log_error("Saving manifest data", "Could not create file.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
       //More details are in log
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -133,54 +137,57 @@ int32_t C_OscXcoManifestFiler::h_SaveFile(const C_OscXcoManifest & orc_Config, c
    \param[in,out]  orc_XmlParser    XML parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    manifest file content is invalid or incomplete
+   Errc::success  data read
+   Errc::config   manifest file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoManifestFiler::h_LoadData(C_OscXcoManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscXcoManifestFiler::h_LoadData(C_OscXcoManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
    std::string c_Types;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
-                                                             "Loading manifest data");
+   //the XML parser and the filer utilities still report the STW int32_t error convention
+   std::error_code c_Retval = make_error_code_from_stw(
+      C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
+                                           "Loading manifest data"));
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("package");
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("package"));
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.GetAttributeStringError("types", c_Types);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("types", c_Types));
+      if (!c_Retval)
       {
          if (c_Types != "x-app-config")
          {
             orc_XmlParser.ReportErrorForAttributeContentStartingWithXmlContext("types",
                                                                                "expecting content to be \"x-app-config\"");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
          orc_XmlParser.SelectNodeParent();
       }
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("x-app-config");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("x-app-config"));
+      if (!c_Retval)
       {
-         s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_PACKAGE_VERSION_1, "package-version",
-                                                           "Loading manifest data");
+         c_Retval = make_error_code_from_stw(
+            C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_PACKAGE_VERSION_1, "package-version",
+                                                 "Loading manifest data"));
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.SelectNodeChildError("x-app-node");
+         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("x-app-node"));
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeStringError("name", orc_Config.c_NodeName);
+         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("name", orc_Config.c_NodeName));
          orc_XmlParser.SelectNodeParent();
       }
       orc_XmlParser.SelectNodeParent();
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

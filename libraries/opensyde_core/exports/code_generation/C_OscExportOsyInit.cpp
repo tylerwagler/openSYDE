@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
@@ -73,16 +76,16 @@ std::string C_OscExportOsyInit::h_GetFileName(void)
    \param[in] orc_ExportToolInfo       information about calling executable (name + version)
 
    \return
-   C_NO_ERR Operation success
-   C_RD_WR  Operation failure: cannot store files
+   Errc::success  Operation success
+   Errc::rd_wr    Operation failure: cannot store files
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportOsyInit::h_CreateSourceCode(const std::string & orc_FilePath, const C_OscNode & orc_Node,
-                                               const bool oq_RunsDpd, const uint16_t ou16_ApplicationIndex,
-                                               const std::string & orc_ExportToolInfo)
+std::error_code C_OscExportOsyInit::h_CreateSourceCode(const std::string & orc_FilePath, const C_OscNode & orc_Node,
+                                                       const bool oq_RunsDpd, const uint16_t ou16_ApplicationIndex,
+                                                       const std::string & orc_ExportToolInfo)
 {
    C_SclStringList c_Lines;
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_DataPoolsKnownInThisApplication = 0U;
    uint8_t u8_CommDefinitionsKnownInThisApplication = 0U;
    uint8_t u8_NumCanChannels = 0U;
@@ -263,9 +266,9 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const std::string & orc_FilePath,
    c_Lines.Add("#endif");
 
    // finally save all stuff into the file
-   s32_Return = C_OscExportUti::h_SaveToFile(c_Lines, orc_FilePath, h_GetFileName(), true);
+   c_Return = C_OscExportUti::h_SaveToFile(c_Lines, orc_FilePath, h_GetFileName(), true);
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       //now for the c file:
       c_Lines.Clear();
@@ -576,10 +579,10 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const std::string & orc_FilePath,
       }
 
       // finally save all stuff into the file
-      s32_Return = C_OscExportUti::h_SaveToFile(c_Lines, orc_FilePath, h_GetFileName(), false);
+      c_Return = C_OscExportUti::h_SaveToFile(c_Lines, orc_FilePath, h_GetFileName(), false);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

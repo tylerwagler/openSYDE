@@ -13,10 +13,12 @@
 #include "precomp_headers.hpp"
 
 #include <string>
+#include <system_error>
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscSupDefinitionFiler.hpp"
 #include "C_OscSupNodeDefinitionFiler.hpp"
@@ -65,17 +67,17 @@ static const std::string mc_NODE_FILE_ATTR = "file";                      // xml
    \param[in]  oq_UseMinorVersion1  Use minor version 1
 
    \return
-   C_NO_ERR    success
-   C_RD_WR     read/write error (see log file)
+   Errc::success   success
+   Errc::rd_wr     read/write error (see log file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const std::string & orc_Path,
-                                                              const C_OscSupDefinition & orc_SupDefContent,
-                                                              const std::vector<std::string> & orc_Files,
-                                                              const bool oq_UseMinorVersion1)
+std::error_code C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const std::string & orc_Path,
+                                                                      const C_OscSupDefinition & orc_SupDefContent,
+                                                                      const std::vector<std::string> & orc_Files,
+                                                                      const bool oq_UseMinorVersion1)
 {
    const std::string c_FileName = TglFileIncludeTrailingDelimiter(orc_Path) + hc_PACKAGE_UPDATE_DEF;
-   int32_t s32_Result;
+   std::error_code c_Result;
 
    // fill update package definition
    C_OscXmlParser c_XmlParser;
@@ -104,12 +106,12 @@ int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const std::string 
    tgl_assert(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
    // save update package definition file
-   s32_Result = c_XmlParser.SaveToFile(c_FileName);
-   if (s32_Result != C_NO_ERR)
+   c_Result = static_cast<Errc>(c_XmlParser.SaveToFile(c_FileName));
+   if (c_Result)
    {
-      s32_Result = C_RD_WR;
+      c_Result = Errc::rd_wr;
    }
-   return s32_Result;
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -126,36 +128,38 @@ int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const std::string 
    \param[in,out]  orc_PackageFiles       Package files
 
    \return
-   STW error codes
+   std::error_code
 
-   \retval   C_NO_ERR   success
-   \retval   C_RD_WR    read/write error (see log file)
+   \retval   Errc::success   success
+   \retval   Errc::rd_wr     read/write error (see log file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const std::string & orc_TargetUnzipPath,
-                                                            const bool oq_IsZip,
-                                                            const std::string & orc_PackagePath,
-                                                            uint32_t & oru32_FileVersion,
-                                                            std::string &  orc_FilePackagePath,
-                                                            uint32_t & oru32_ActiveBusIndex,
-                                                            std::vector<uint8_t> & orc_ActiveNodes,
-                                                            std::vector<uint32_t> & orc_UpdatePosition,
-                                                            std::vector<std::string> & orc_PackageFiles)
+std::error_code C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const std::string & orc_TargetUnzipPath,
+                                                                    const bool oq_IsZip,
+                                                                    const std::string & orc_PackagePath,
+                                                                    uint32_t & oru32_FileVersion,
+                                                                    std::string &  orc_FilePackagePath,
+                                                                    uint32_t & oru32_ActiveBusIndex,
+                                                                    std::vector<uint8_t> & orc_ActiveNodes,
+                                                                    std::vector<uint32_t> & orc_UpdatePosition,
+                                                                    std::vector<std::string> & orc_PackageFiles)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval;
    C_OscXmlParser c_XmlParser;
 
    if (oq_IsZip)
    {
-      s32_Retval = c_XmlParser.LoadFromFile(orc_TargetUnzipPath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF);
+      c_Retval = static_cast<Errc>(
+         c_XmlParser.LoadFromFile(orc_TargetUnzipPath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF));
    }
    else
    {
       orc_FilePackagePath = TglFileIncludeTrailingDelimiter(orc_PackagePath);
-      s32_Retval = c_XmlParser.LoadFromFile(orc_FilePackagePath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF);
+      c_Retval = static_cast<Errc>(
+         c_XmlParser.LoadFromFile(orc_FilePackagePath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF));
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       tgl_assert(c_XmlParser.SelectRoot() == mc_ROOT_NAME); // we shall have a valid and
       // compatible update package
@@ -181,12 +185,12 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const std::string & 
          mh_LoadNodes(c_XmlParser, orc_ActiveNodes, orc_UpdatePosition, orc_PackageFiles);
       }
    }
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
-      s32_Retval = C_RD_WR;
+      c_Retval = Errc::rd_wr;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

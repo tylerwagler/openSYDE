@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <string>
+#include <system_error>
 #include "C_SclStringList.hpp"
 #include "C_OscNodeDataPool.hpp"
 
@@ -34,8 +35,8 @@ public:
                                  const bool oq_HeaderFile);
    static void h_AddProjIdFunctionPrototype(stw::scl::C_SclStringList & orc_Data,
                                             const std::string & orc_MagicName);
-   static int32_t h_SaveToFile(stw::scl::C_SclStringList & orc_Data, const std::string & orc_Path,
-                               const std::string & orc_FileName, const bool oq_HeaderFile);
+   static std::error_code h_SaveToFile(stw::scl::C_SclStringList & orc_Data, const std::string & orc_Path,
+                                       const std::string & orc_FileName, const bool oq_HeaderFile);
    static void h_CollectFilePaths(std::vector<std::string> & orc_FilePaths,
                                   const std::string & orc_Path, const std::string & orc_FileName,
                                   const bool oq_SourceCode);

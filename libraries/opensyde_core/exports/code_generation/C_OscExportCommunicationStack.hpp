@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <system_error>
 
 #include "stwtypes.hpp"
 
@@ -37,27 +38,28 @@ public:
                                               const C_OscCanProtocol::E_Type & ore_ProtocolType);
    static std::string h_GetConfigurationName(const uint8_t ou8_InterfaceIndex,
                                                        const C_OscCanProtocol::E_Type & ore_ProtocolType);
-   static int32_t h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
-                                     const uint16_t ou16_ApplicationIndex, const uint8_t ou8_InterfaceIndex,
-                                     const uint32_t ou32_DatapoolIndex, const C_OscCanProtocol::E_Type & ore_Protocol,
-                                     const std::string & orc_ExportToolInfo = "");
+   static std::error_code h_CreateSourceCode(const std::string & orc_Path, const C_OscNode & orc_Node,
+                                             const uint16_t ou16_ApplicationIndex, const uint8_t ou8_InterfaceIndex,
+                                             const uint32_t ou32_DatapoolIndex,
+                                             const C_OscCanProtocol::E_Type & ore_Protocol,
+                                             const std::string & orc_ExportToolInfo = "");
    static uint16_t h_ConvertOverallCodeVersion(const uint16_t ou16_GenCodeVersion);
 
 protected:
    static const bool mhq_IS_HEADER_FILE = false;
    static const bool mhq_IS_IMPLEMENTATION_FILE = true;
 
-   static int32_t mh_CreateHeaderFile(const std::string & orc_ExportToolInfo,
-                                      const std::string & orc_Path,
-                                      const C_OscNodeApplication & orc_Applicaton,
-                                      const C_OscCanProtocol & orc_ComProtocol, const uint8_t ou8_InterfaceIndex,
-                                      const std::string & orc_ProjectId);
-   static int32_t mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
-                                              const std::string & orc_Path,
+   static std::error_code mh_CreateHeaderFile(const std::string & orc_ExportToolInfo, const std::string & orc_Path,
                                               const C_OscNodeApplication & orc_Applicaton,
                                               const C_OscCanProtocol & orc_ComProtocol,
-                                              const C_OscNodeDataPool & orc_DataPool, const uint8_t ou8_InterfaceIndex,
-                                              const std::string & orc_ProjectId);
+                                              const uint8_t ou8_InterfaceIndex, const std::string & orc_ProjectId);
+   static std::error_code mh_CreateImplementationFile(const std::string & orc_ExportToolInfo,
+                                                      const std::string & orc_Path,
+                                                      const C_OscNodeApplication & orc_Applicaton,
+                                                      const C_OscCanProtocol & orc_ComProtocol,
+                                                      const C_OscNodeDataPool & orc_DataPool,
+                                                      const uint8_t ou8_InterfaceIndex,
+                                                      const std::string & orc_ProjectId);
 
    static void mh_AddHeader(const std::string & orc_ExportToolInfo, stw::scl::C_SclStringList & orc_Data,
                             const uint8_t ou8_InterfaceIndex, const C_OscCanProtocol::E_Type & ore_Protocol,

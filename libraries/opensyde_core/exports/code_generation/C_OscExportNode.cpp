@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "TglFile.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscExportUti.hpp"
 #include "C_OscExportNode.hpp"
 #include "C_OscExportDataPool.hpp"
@@ -66,37 +69,37 @@ using namespace stw::opensyde_core;
    \param[in]   orc_ExportToolVersion  Version of calling executable
 
    \return
-   C_NO_ERR  Operation success
-   C_RD_WR   Cannot store files
-   C_NOACT   Application is not of file generation type or has unknown/invalid code structure version
-   C_RANGE   Information which application runs the DPD is invalid or refers to an invalid application
-             Datapool does not provide information about owning application or refers to an invalid application
-             ApplicationIndex references invalid application
-   C_CONFIG  Protocol or Datapool not available in node for interface or
-             Input data not suitable for file generation. Details will be written to OSC Log.
+   Errc::success  Operation success
+   Errc::rd_wr    Cannot store files
+   Errc::noact    Application is not of file generation type or has unknown/invalid code structure version
+   Errc::range    Information which application runs the DPD is invalid or refers to an invalid application
+                  Datapool does not provide information about owning application or refers to an invalid application
+                  ApplicationIndex references invalid application
+   Errc::config   Protocol or Datapool not available in node for interface or
+                  Input data not suitable for file generation. Details will be written to OSC Log.
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportNode::h_CreateSourceCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                            const std::string & orc_Path, std::vector<std::string> & orc_Files,
-                                            const std::string & orc_ExportToolName,
-                                            const std::string & orc_ExportToolVersion)
+std::error_code C_OscExportNode::h_CreateSourceCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
+                                                    const std::string & orc_Path, std::vector<std::string> & orc_Files,
+                                                    const std::string & orc_ExportToolName,
+                                                    const std::string & orc_ExportToolVersion)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_Files.clear();
 
    // check node prerequisites
    if (ou16_ApplicationIndex >= orc_Node.c_Applications.size())
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
    else
    {
-      s32_Retval = mh_CheckPrerequisites(orc_Node);
+      c_Retval = mh_CheckPrerequisites(orc_Node);
    }
 
    // check application prerequisites
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       const C_OscNodeApplication & rc_Application = orc_Node.c_Applications[ou16_ApplicationIndex];
 
@@ -105,14 +108,14 @@ int32_t C_OscExportNode::h_CreateSourceCode(const C_OscNode & orc_Node, const ui
           (rc_Application.e_Type != C_OscNodeApplication::ePARAMETER_SET_HALC))
       {
          osc_write_log_error("Creating files", "File generation for \"" + rc_Application.c_Name + "\" is disabled.");
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
       }
       //check if the code structure version is unknown
       else if (rc_Application.u16_GenCodeVersion > C_OscNodeApplication::hu16_HIGHEST_KNOWN_CODE_VERSION)
       {
          osc_write_log_error("Creating source code", "Structure version of application \"" +
                              rc_Application.c_Name + "\" unknown.");
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
       }
       else
       {
@@ -121,13 +124,14 @@ int32_t C_OscExportNode::h_CreateSourceCode(const C_OscNode & orc_Node, const ui
    }
 
    // create target folder
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = C_OscUtils::h_CreateFolderRecursively(orc_Path);
-      if (s32_Retval != C_NO_ERR)
+      //C_OscUtils still reports the STW int32_t error convention
+      const int32_t s32_FolderResult = C_OscUtils::h_CreateFolderRecursively(orc_Path);
+      if (s32_FolderResult != C_NO_ERR)
       {
          osc_write_log_error("Creating source code", "Could not create target directory \"" + orc_Path + "\".");
-         s32_Retval = C_RD_WR;
+         c_Retval = Errc::rd_wr;
       }
    }
 
@@ -136,41 +140,41 @@ int32_t C_OscExportNode::h_CreateSourceCode(const C_OscNode & orc_Node, const ui
       const std::string c_ExportToolInfo = orc_ExportToolName + " " + orc_ExportToolVersion;
 
       // export openSYDE initialization
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = mh_CreateOsyInitCode(orc_Node, ou16_ApplicationIndex, orc_Path, orc_Files, c_ExportToolInfo);
+         c_Retval = mh_CreateOsyInitCode(orc_Node, ou16_ApplicationIndex, orc_Path, orc_Files, c_ExportToolInfo);
       }
 
       // export Datapool
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = mh_CreateDatapoolCode(orc_Node, ou16_ApplicationIndex, orc_Path, orc_Files, c_ExportToolInfo);
+         c_Retval = mh_CreateDatapoolCode(orc_Node, ou16_ApplicationIndex, orc_Path, orc_Files, c_ExportToolInfo);
       }
 
       // export COMM definition
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = mh_CreateCommStackCode(orc_Node, ou16_ApplicationIndex, orc_Path, orc_Files,
-                                             c_ExportToolInfo);
+         c_Retval = mh_CreateCommStackCode(orc_Node, ou16_ApplicationIndex, orc_Path, orc_Files,
+                                           c_ExportToolInfo);
       }
 
       // export HAL configuration
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = mh_CreateHalConfigCode(orc_Node, ou16_ApplicationIndex, orc_Path, orc_Files, c_ExportToolInfo);
+         c_Retval = mh_CreateHalConfigCode(orc_Node, ou16_ApplicationIndex, orc_Path, orc_Files, c_ExportToolInfo);
       }
    }
    else
    {
       // export HAL NVM information as parameter set image
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = mh_CreateHalNvmData(orc_Node, ou16_ApplicationIndex, orc_Path, orc_Files, orc_ExportToolName,
-                                          orc_ExportToolVersion);
+         c_Retval = mh_CreateHalNvmData(orc_Node, ou16_ApplicationIndex, orc_Path, orc_Files, orc_ExportToolName,
+                                        orc_ExportToolVersion);
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -183,15 +187,16 @@ int32_t C_OscExportNode::h_CreateSourceCode(const C_OscNode & orc_Node, const ui
    \param[in]   orc_ExportToolInfo     Information about calling executable (name + version)
 
    \return
-   C_NO_ERR Operation success
-   C_RD_WR  Operation failure: cannot store files
+   Errc::success  Operation success
+   Errc::rd_wr    Operation failure: cannot store files
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportNode::mh_CreateOsyInitCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                              const std::string & orc_Path, std::vector<std::string> & orc_Files,
-                                              const std::string & orc_ExportToolInfo)
+std::error_code C_OscExportNode::mh_CreateOsyInitCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
+                                                      const std::string & orc_Path,
+                                                      std::vector<std::string> & orc_Files,
+                                                      const std::string & orc_ExportToolInfo)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
    bool q_CreateDpdInit;
 
@@ -206,16 +211,16 @@ int32_t C_OscExportNode::mh_CreateOsyInitCode(const C_OscNode & orc_Node, const 
       q_CreateDpdInit = false;
    }
 
-   s32_Retval = C_OscExportOsyInit::h_CreateSourceCode(orc_Path, orc_Node, q_CreateDpdInit,
-                                                       ou16_ApplicationIndex, orc_ExportToolInfo);
+   c_Retval = C_OscExportOsyInit::h_CreateSourceCode(orc_Path, orc_Node, q_CreateDpdInit,
+                                                     ou16_ApplicationIndex, orc_ExportToolInfo);
 
    //Handle file names
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       C_OscExportUti::h_CollectFilePaths(orc_Files, orc_Path, C_OscExportOsyInit::h_GetFileName(), true);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -228,16 +233,17 @@ int32_t C_OscExportNode::mh_CreateOsyInitCode(const C_OscNode & orc_Node, const 
    \param[in]   orc_ExportToolInfo     Information about calling executable (name + version)
 
    \return
-   C_NO_ERR Operation success
-   C_RD_WR  Cannot store files
-   C_CONFIG Input data not suitable for code generation. Details will be written to OSC Log.
+   Errc::success  Operation success
+   Errc::rd_wr    Cannot store files
+   Errc::config   Input data not suitable for code generation. Details will be written to OSC Log.
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportNode::mh_CreateDatapoolCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                               const std::string & orc_Path, std::vector<std::string> & orc_Files,
-                                               const std::string & orc_ExportToolInfo)
+std::error_code C_OscExportNode::mh_CreateDatapoolCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
+                                                       const std::string & orc_Path,
+                                                       std::vector<std::string> & orc_Files,
+                                                       const std::string & orc_ExportToolInfo)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //index of Datapool within this application (as there can be Datapools owned by other applications
    // this value is not identical to the Datapool index within the whole list)
@@ -330,29 +336,29 @@ int32_t C_OscExportNode::mh_CreateDatapoolCode(const C_OscNode & orc_Node, const
          {
             C_OscNodeDataPool c_DataPool;
             //Patch Datapool to include message names
-            s32_Retval = C_OscExportNode::mh_GetAdaptedComDataPool(orc_Node, u32_ItDataPool, c_DataPool);
-            tgl_assert(s32_Retval == C_NO_ERR);
+            c_Retval = C_OscExportNode::mh_GetAdaptedComDataPool(orc_Node, u32_ItDataPool, c_DataPool);
+            tgl_assert(!c_Retval);
 
             //Export
-            s32_Retval = C_OscExportDataPool::h_CreateSourceCode(orc_Path, u16_GenCodeVersion,
-                                                                 orc_Node.c_Properties.c_CodeExportSettings.
-                                                                 e_ScalingSupport, c_DataPool,
-                                                                 u8_DataPoolIndexWithinApplication,
-                                                                 e_Relation, u8_DataPoolIndexRemote,
-                                                                 u8_ProcessId, orc_ExportToolInfo);
+            c_Retval = C_OscExportDataPool::h_CreateSourceCode(orc_Path, u16_GenCodeVersion,
+                                                               orc_Node.c_Properties.c_CodeExportSettings.
+                                                               e_ScalingSupport, c_DataPool,
+                                                               u8_DataPoolIndexWithinApplication,
+                                                               e_Relation, u8_DataPoolIndexRemote,
+                                                               u8_ProcessId, orc_ExportToolInfo);
          }
          else
          {
             //Export
-            s32_Retval = C_OscExportDataPool::h_CreateSourceCode(orc_Path, u16_GenCodeVersion,
-                                                                 orc_Node.c_Properties.c_CodeExportSettings.
-                                                                 e_ScalingSupport, rc_DataPool,
-                                                                 u8_DataPoolIndexWithinApplication,
-                                                                 e_Relation, u8_DataPoolIndexRemote,
-                                                                 u8_ProcessId, orc_ExportToolInfo);
+            c_Retval = C_OscExportDataPool::h_CreateSourceCode(orc_Path, u16_GenCodeVersion,
+                                                               orc_Node.c_Properties.c_CodeExportSettings.
+                                                               e_ScalingSupport, rc_DataPool,
+                                                               u8_DataPoolIndexWithinApplication,
+                                                               e_Relation, u8_DataPoolIndexRemote,
+                                                               u8_ProcessId, orc_ExportToolInfo);
          }
          //Handle file names
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
             C_OscExportUti::h_CollectFilePaths(orc_Files, orc_Path,
                                                C_OscExportDataPool::h_GetFileName(rc_DataPool), true);
@@ -365,7 +371,7 @@ int32_t C_OscExportNode::mh_CreateDatapoolCode(const C_OscNode & orc_Node, const
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -378,18 +384,20 @@ int32_t C_OscExportNode::mh_CreateDatapoolCode(const C_OscNode & orc_Node, const
    \param[in]   orc_ExportToolInfo     Information about calling executable (name + version)
 
    \return
-   C_NO_ERR    Operation success
-   C_NOACT     Application is not of type ePROGRAMMABLE_APPLICATION or has unknown code structure version
-   C_RD_WR     Cannot store files
-   C_CONFIG    Protocol or Datapool not available in node for interface or application index out of range
-   C_RANGE     Application index out of range
+   Errc::success  Operation success
+   Errc::noact    Application is not of type ePROGRAMMABLE_APPLICATION or has unknown code structure version
+   Errc::rd_wr    Cannot store files
+   Errc::config   Protocol or Datapool not available in node for interface or application index out of range
+   Errc::range    Application index out of range
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportNode::mh_CreateCommStackCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                                const std::string & orc_Path, std::vector<std::string> & orc_Files,
-                                                const std::string & orc_ExportToolInfo)
+std::error_code C_OscExportNode::mh_CreateCommStackCode(const C_OscNode & orc_Node,
+                                                        const uint16_t ou16_ApplicationIndex,
+                                                        const std::string & orc_Path,
+                                                        std::vector<std::string> & orc_Files,
+                                                        const std::string & orc_ExportToolInfo)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    for (uint32_t u32_ItProtocol = 0U; u32_ItProtocol < orc_Node.c_ComProtocols.size(); ++u32_ItProtocol)
    {
@@ -409,13 +417,13 @@ int32_t C_OscExportNode::mh_CreateCommStackCode(const C_OscNode & orc_Node, cons
             if ((rc_Protocol.e_Type == C_OscCanProtocol::eCAN_OPEN) &&
                 (orc_Node.c_CanOpenManagers.count(static_cast<uint8_t>(u32_ItInterface)) != 0))
             {
-               s32_Retval = C_OscExportCanOpenConfig::h_CreateSourceCode(orc_Path, orc_Node,
-                                                                         ou16_ApplicationIndex,
-                                                                         static_cast<uint8_t>(u32_ItInterface),
-                                                                         rc_Protocol.u32_DataPoolIndex,
-                                                                         orc_ExportToolInfo);
+               c_Retval = C_OscExportCanOpenConfig::h_CreateSourceCode(orc_Path, orc_Node,
+                                                                       ou16_ApplicationIndex,
+                                                                       static_cast<uint8_t>(u32_ItInterface),
+                                                                       rc_Protocol.u32_DataPoolIndex,
+                                                                       orc_ExportToolInfo);
                //handle file names
-               if (s32_Retval == C_NO_ERR)
+               if (!c_Retval)
                {
                   C_OscExportUti::h_CollectFilePaths(
                      orc_Files, orc_Path,
@@ -433,13 +441,13 @@ int32_t C_OscExportNode::mh_CreateCommStackCode(const C_OscNode & orc_Node, cons
                if ((rc_ComMessageContainer.c_TxMessages.size() > 0) ||
                    (rc_ComMessageContainer.c_RxMessages.size() > 0))
                {
-                  s32_Retval =
+                  c_Retval =
                      C_OscExportCommunicationStack::h_CreateSourceCode(orc_Path, orc_Node, ou16_ApplicationIndex,
                                                                        static_cast<uint8_t>(u32_ItInterface),
                                                                        rc_Protocol.u32_DataPoolIndex,
                                                                        rc_Protocol.e_Type, orc_ExportToolInfo);
                   //Handle file names
-                  if (s32_Retval == C_NO_ERR)
+                  if (!c_Retval)
                   {
                      C_OscExportUti::h_CollectFilePaths(orc_Files, orc_Path,
                                                         C_OscExportCommunicationStack::h_GetFileName(
@@ -448,28 +456,28 @@ int32_t C_OscExportNode::mh_CreateCommStackCode(const C_OscNode & orc_Node, cons
                   }
                }
             }
-            if (s32_Retval != C_NO_ERR)
+            if (c_Retval)
             {
                break;
             }
          }
          if (c_IfWithCanOpenManager.size() > 0)
          {
-            s32_Retval = C_OscExportCanOpenInit::h_CreateSourceCode(orc_Path, orc_Node, c_IfWithCanOpenManager,
-                                                                    orc_ExportToolInfo);
+            c_Retval = C_OscExportCanOpenInit::h_CreateSourceCode(orc_Path, orc_Node, c_IfWithCanOpenManager,
+                                                                  orc_ExportToolInfo);
             //handle file names
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
                C_OscExportUti::h_CollectFilePaths(orc_Files, orc_Path, C_OscExportCanOpenInit::h_GetFileName(), true);
             }
          }
-         if (s32_Retval != C_NO_ERR)
+         if (c_Retval)
          {
             break;
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -482,27 +490,29 @@ int32_t C_OscExportNode::mh_CreateCommStackCode(const C_OscNode & orc_Node, cons
    \param[in]   orc_ExportToolInfo     Information about calling executable (name + version)
 
    \return
-   C_NO_ERR    Operation success
-   C_RD_WR     Problems accessing file system
-   C_NOACT     Datapool is not of type HALC or HALC NVM
-   C_RANGE     Invalid internal parameter or file already exists
-   C_CONFIG    Internal data invalid
+   Errc::success  Operation success
+   Errc::rd_wr    Problems accessing file system
+   Errc::noact    Datapool is not of type HALC or HALC NVM
+   Errc::range    Invalid internal parameter or file already exists
+   Errc::config   Internal data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportNode::mh_CreateHalConfigCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                                const std::string & orc_Path, std::vector<std::string> & orc_Files,
-                                                const std::string & orc_ExportToolInfo)
+std::error_code C_OscExportNode::mh_CreateHalConfigCode(const C_OscNode & orc_Node,
+                                                        const uint16_t ou16_ApplicationIndex,
+                                                        const std::string & orc_Path,
+                                                        std::vector<std::string> & orc_Files,
+                                                        const std::string & orc_ExportToolInfo)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Node.c_HalcConfig.IsClear() == false)
    {
       std::map<bool, int32_t> c_HalDataPools;
 
       // Get HAL Datapool indices for safe and for non-safe Datapool
-      s32_Retval = mh_GetHalDataPoolIndices(orc_Node, c_HalDataPools);
+      c_Retval = mh_GetHalDataPoolIndices(orc_Node, c_HalDataPools);
 
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          std::map<bool, int32_t>::const_iterator c_ItHalDataPools;
 
@@ -516,13 +526,13 @@ int32_t C_OscExportNode::mh_CreateHalConfigCode(const C_OscNode & orc_Node, cons
                //HALC Datapool owned by this application?
                if (rc_HalDataPool.s32_RelatedDataBlockIndex == ou16_ApplicationIndex)
                {
-                  s32_Retval =
+                  c_Retval =
                      C_OscExportHalc::h_CreateSourceCode(
                         orc_Path, orc_Node.c_Applications[ou16_ApplicationIndex].u16_GenCodeVersion,
                         orc_Node.c_HalcConfig, rc_HalDataPool, orc_ExportToolInfo);
 
                   //Handle file names
-                  if (s32_Retval == C_NO_ERR)
+                  if (!c_Retval)
                   {
                      const std::string c_FileName = C_OscExportHalc::h_GetFileName(rc_HalDataPool.q_IsSafety);
 
@@ -538,7 +548,7 @@ int32_t C_OscExportNode::mh_CreateHalConfigCode(const C_OscNode & orc_Node, cons
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -552,30 +562,30 @@ int32_t C_OscExportNode::mh_CreateHalConfigCode(const C_OscNode & orc_Node, cons
    \param[in]   orc_ExportToolVersion  Version of calling executable
 
    \return
-   C_NO_ERR    Success
-   C_NOACT     HALC is not configured at all
-   C_RD_WR     Problems accessing file system
-   C_CONFIG    Internal data invalid (e.g. incorrect number of lists or datasets in HALC NVM Datapool)
+   Errc::success  Success
+   Errc::noact    HALC is not configured at all
+   Errc::rd_wr    Problems accessing file system
+   Errc::config   Internal data invalid (e.g. incorrect number of lists or datasets in HALC NVM Datapool)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportNode::mh_CreateHalNvmData(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
-                                             const std::string & orc_Path, std::vector<std::string> & orc_Files,
-                                             const std::string & orc_ExportToolName,
-                                             const std::string & orc_ExportToolVersion)
+std::error_code C_OscExportNode::mh_CreateHalNvmData(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
+                                                     const std::string & orc_Path, std::vector<std::string> & orc_Files,
+                                                     const std::string & orc_ExportToolName,
+                                                     const std::string & orc_ExportToolVersion)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Node.c_HalcConfig.IsClear() == false)
    {
-      s32_Retval = C_OscExportParamSet::h_CreateParameterSetImage(orc_Path, orc_Node, ou16_ApplicationIndex,
-                                                                  orc_Files, orc_ExportToolName, orc_ExportToolVersion);
+      c_Retval = C_OscExportParamSet::h_CreateParameterSetImage(orc_Path, orc_Node, ou16_ApplicationIndex,
+                                                                orc_Files, orc_ExportToolName, orc_ExportToolVersion);
    }
    else
    {
-      s32_Retval = C_NOACT;
+      c_Retval = Errc::noact;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -591,14 +601,14 @@ int32_t C_OscExportNode::mh_CreateHalNvmData(const C_OscNode & orc_Node, const u
    \param[in]  orc_Node    Node as information source for exported code
 
    \return
-   C_NO_ERR  Node configuration is OK
-   C_RANGE   Information which application runs the DPD is invalid or refers to an invalid application
-             Datapool does not provide information about owning application or refers to an invalid application
+   Errc::success  Node configuration is OK
+   Errc::range    Information which application runs the DPD is invalid or refers to an invalid application
+                  Datapool does not provide information about owning application or refers to an invalid application
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportNode::mh_CheckPrerequisites(const C_OscNode & orc_Node)
+std::error_code C_OscExportNode::mh_CheckPrerequisites(const C_OscNode & orc_Node)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Node.c_HalcConfig.q_NvmBasedConfig == false)
    {
@@ -609,11 +619,11 @@ int32_t C_OscExportNode::mh_CheckPrerequisites(const C_OscNode & orc_Node)
       {
          osc_write_log_error("Creating source code",
                              "Invalid definition of application running the diagnostic protocol driver.");
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       //Valid related application index ?
       for (uint8_t u8_DataPool = 0U; u8_DataPool < orc_Node.c_DataPools.size(); u8_DataPool++)
@@ -629,14 +639,14 @@ int32_t C_OscExportNode::mh_CheckPrerequisites(const C_OscNode & orc_Node)
                osc_write_log_error("Creating source code",
                                    "Invalid definition of owner application for Datapool \"" +
                                    rc_CurDataPool.c_Name + "\".");
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
                break;
             }
          }
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -647,28 +657,28 @@ int32_t C_OscExportNode::mh_CheckPrerequisites(const C_OscNode & orc_Node)
    \param[out]  orc_DataPool        Copy of Datapool with adapted names
 
    \return
-   C_NO_ERR Operation successful
-   C_RANGE  Datapool index or type invalid
-   C_CONFIG Protocol not found
+   Errc::success  Operation successful
+   Errc::range    Datapool index or type invalid
+   Errc::config   Protocol not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportNode::mh_GetAdaptedComDataPool(const C_OscNode & orc_Node, const uint32_t ou32_DataPoolIndex,
-                                                  C_OscNodeDataPool & orc_DataPool)
+std::error_code C_OscExportNode::mh_GetAdaptedComDataPool(const C_OscNode & orc_Node, const uint32_t ou32_DataPoolIndex,
+                                                          C_OscNodeDataPool & orc_DataPool)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DataPoolIndex < orc_Node.c_DataPools.size())
    {
       orc_DataPool = orc_Node.c_DataPools[ou32_DataPoolIndex];
 
-      s32_Retval = C_OscExportNode::mh_AdaptComDataPool(orc_Node, ou32_DataPoolIndex, orc_DataPool);
+      c_Retval = C_OscExportNode::mh_AdaptComDataPool(orc_Node, ou32_DataPoolIndex, orc_DataPool);
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -679,15 +689,15 @@ int32_t C_OscExportNode::mh_GetAdaptedComDataPool(const C_OscNode & orc_Node, co
    \param[in,out] orc_DataPool        Datapool to update with adapted names
 
    \return
-   C_NO_ERR Operation successful
-   C_RANGE  Datapool index or type invalid
-   C_CONFIG Protocol not found
+   Errc::success  Operation successful
+   Errc::range    Datapool index or type invalid
+   Errc::config   Protocol not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportNode::mh_AdaptComDataPool(const C_OscNode & orc_Node, const uint32_t ou32_DataPoolIndex,
-                                             C_OscNodeDataPool & orc_DataPool)
+std::error_code C_OscExportNode::mh_AdaptComDataPool(const C_OscNode & orc_Node, const uint32_t ou32_DataPoolIndex,
+                                                     C_OscNodeDataPool & orc_DataPool)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if ((ou32_DataPoolIndex < orc_Node.c_DataPools.size()) &&
        (orc_DataPool.e_Type == C_OscNodeDataPool::eCOM))
@@ -738,15 +748,15 @@ int32_t C_OscExportNode::mh_AdaptComDataPool(const C_OscNode & orc_Node, const u
       }
       if (q_Found == false)
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -757,14 +767,14 @@ int32_t C_OscExportNode::mh_AdaptComDataPool(const C_OscNode & orc_Node, const u
                                     true = safe; false = non-safe; integer is corresponding Datapool index
 
    \return
-   C_NO_ERR Operation success
-   C_CONFIG Safety mode of HALC and existence of safe/non-safe Datapool do not match
+   Errc::success  Operation success
+   Errc::config   Safety mode of HALC and existence of safe/non-safe Datapool do not match
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportNode::mh_GetHalDataPoolIndices(const C_OscNode & orc_Node, std::
-                                                  map<bool, int32_t> & orc_HalcDataPools)
+std::error_code C_OscExportNode::mh_GetHalDataPoolIndices(const C_OscNode & orc_Node, std::
+                                                          map<bool, int32_t> & orc_HalcDataPools)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    // Reset
    orc_HalcDataPools[true] = -1;
@@ -788,14 +798,14 @@ int32_t C_OscExportNode::mh_GetHalDataPoolIndices(const C_OscNode & orc_Node, st
    {
       if (orc_HalcDataPools[true] >= 0)
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else if (orc_Node.c_HalcConfig.e_SafetyMode == C_OscHalcDefBase::eONE_LEVEL_ALL_SAFE)
    {
       if (orc_HalcDataPools[false] >= 0)
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
@@ -804,16 +814,16 @@ int32_t C_OscExportNode::mh_GetHalDataPoolIndices(const C_OscNode & orc_Node, st
       {
          if ((orc_HalcDataPools[true] < 0) || (orc_HalcDataPools[false] < 0))
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
    }
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       osc_write_log_error("Creating source code",
                           "Safety mode of HALC definition does not match safety settings of HALC Datapools.");
    }
 
-   return s32_Retval;
+   return c_Retval;
 }

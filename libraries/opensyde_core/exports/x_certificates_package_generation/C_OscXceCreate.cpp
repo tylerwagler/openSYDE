@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "TglFile.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscXceCreate.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -70,25 +73,26 @@ const std::string C_OscXceCreate::mhc_USE_CASE = "Creating X-Certificates Packag
                                              is created next to package path.
 
    \return
-   C_NO_ERR    success
-   C_RANGE     target file already exists
-               target directory for package does not exist
-               invalid package name with no package extension ".syde_xcert"
-               temporary folder (orc_PackagePath with mc_PACKAGE_EXT_TMP) already exists
-   C_NOACT     certificates do not exist
-   C_RD_WR     could not create temporary folders
-               could not save manifest file
-               could not save pem file
-   C_BUSY      could not package result to zip archive
-               could not delete temporary result folder
+   Errc::success  success
+   Errc::range    target file already exists
+                  target directory for package does not exist
+                  invalid package name with no package extension ".syde_xcert"
+                  temporary folder (orc_PackagePath with mc_PACKAGE_EXT_TMP) already exists
+   Errc::noact    certificates do not exist
+   Errc::rd_wr    could not create temporary folders
+                  could not save manifest file
+                  could not save pem file
+   Errc::busy     could not package result to zip archive
+                  could not delete temporary result folder
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceCreate::h_CreatePackage(const std::string & orc_PackagePath,
-                                        const std::vector<std::string> & orc_CertificatesPath,
-                                        const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters, stw::scl::C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage,
-                                        const std::string & orc_TemporaryDirectory)
+std::error_code C_OscXceCreate::h_CreatePackage(
+   const std::string & orc_PackagePath, const std::vector<std::string> & orc_CertificatesPath,
+   const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
+   stw::scl::C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage,
+   const std::string & orc_TemporaryDirectory)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    bool q_TemporaryFolderCreated = false; // for cleanup at the end of this function
 
@@ -108,66 +112,66 @@ int32_t C_OscXceCreate::h_CreatePackage(const std::string & orc_PackagePath,
    c_XcertFiles.insert(TglFileIncludeTrailingDelimiter(mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER));
 
    // precondition checks
-   s32_Return = mh_CheckParamsToCreatePackage(orc_PackagePath, orc_CertificatesPath, orc_UpdatePackageParameters);
+   c_Return = mh_CheckParamsToCreatePackage(orc_PackagePath, orc_CertificatesPath, orc_UpdatePackageParameters);
 
    // * create folders with device application files (via h_CreateTemporaryFolder)
    //   h_CreateTemporaryFolder is creating the temporary folder (and deleting in advance if it already exists)
    //   where the other files (devices.ini, system definition etc.) also are placed
    //   and has therefore be the first action for creating service update package
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       std::vector<std::string> c_AllStaticSubFolders;
       c_AllStaticSubFolders.push_back(mhc_CERTIFICATES_FOLDER);
       c_AllStaticSubFolders.push_back(mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER);
-      s32_Return = C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(orc_PackagePath,
-                                                                                     orc_TemporaryDirectory,
-                                                                                     mhc_USE_CASE,
-                                                                                     hc_PACKAGE_EXT,
-                                                                                     hc_PACKAGE_EXT_TMP,
-                                                                                     c_AllStaticSubFolders,
-                                                                                     c_PackagePathTmp,
-                                                                                     mhc_ErrorMessage);
+      //C_OscSpaServicePackageCreateUtil still reports the STW int32_t error convention
+      c_Return = make_error_code_from_stw(
+         C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(
+            orc_PackagePath, orc_TemporaryDirectory, mhc_USE_CASE, hc_PACKAGE_EXT, hc_PACKAGE_EXT_TMP,
+            c_AllStaticSubFolders, c_PackagePathTmp, mhc_ErrorMessage));
 
       q_TemporaryFolderCreated = true; // at least partly
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
-      s32_Return =
+      c_Return =
          mh_PrepareCertFiles(c_PackagePathTmp, orc_CertificatesPath, c_UpdatePackageParameters, c_XcertFiles);
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       const C_OscXceManifest c_Manifest = mh_CreateManifest(c_UpdatePackageParameters);
       const std::string c_ManifestPath = c_PackagePathTmp + C_OscXceManifestFiler::hc_FILE_NAME;
-      s32_Return = C_OscXceManifestFiler::h_SaveFile(c_Manifest, c_ManifestPath);
-      if (s32_Return != C_NO_ERR)
+      c_Return = C_OscXceManifestFiler::h_SaveFile(c_Manifest, c_ManifestPath);
+      if (c_Return)
       {
          // very strange! normally the precondition check should
          // guarantee a correct behavior of h_SaveFile
          mhc_ErrorMessage = "Could not create temporary file \"" +
                             c_ManifestPath + "\".";
          osc_write_log_error(mhc_USE_CASE, mhc_ErrorMessage);
-         s32_Return = C_RD_WR; // redefine because we only have a few error codes
+         c_Return = Errc::rd_wr; // redefine because we only have a few error codes
       }
    }
    // package temporary result folder to zip file
-   if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN))
+   if ((!c_Return) || (c_Return == Errc::warn))
    {
-      s32_Return = C_OscSpaServicePackageCreateUtil::h_CreateZip(mhc_USE_CASE, c_PackagePathTmp,
-                                                                 c_TargetZipArchive, c_XcertFiles,
-                                                                 mhc_ErrorMessage);
+      c_Return = make_error_code_from_stw(
+         C_OscSpaServicePackageCreateUtil::h_CreateZip(mhc_USE_CASE, c_PackagePathTmp, c_TargetZipArchive,
+                                                      c_XcertFiles, mhc_ErrorMessage));
    }
 
    // cleanup: delete temporary result folder
    if (q_TemporaryFolderCreated == true)
    {
+      //h_CleanUpTempFolder reads and updates the STW int32_t error value
+      int32_t s32_CleanUpResult = c_Return.value();
       C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder("Creating Update Package",
-                                                            c_PackagePathTmp, s32_Return, mhc_ErrorMessage);
+                                                            c_PackagePathTmp, s32_CleanUpResult, mhc_ErrorMessage);
+      c_Return = make_error_code_from_stw(s32_CleanUpResult);
    }
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -178,42 +182,41 @@ int32_t C_OscXceCreate::h_CreatePackage(const std::string & orc_PackagePath,
    \param[in]  orc_UpdatePackageParameters   (see function h_CreatePackage)
 
    \return
-   C_NO_ERR    success
-   C_RANGE     target package file already exists
-               target directory for package does not exist
-               invalid package name with no package extension ".syde_pkg"
-   C_NOACT     certificates do not exist
+   Errc::success  success
+   Errc::range    target package file already exists
+                  target directory for package does not exist
+                  invalid package name with no package extension ".syde_pkg"
+   Errc::noact    certificates do not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceCreate::mh_CheckParamsToCreatePackage(const std::string & orc_PackagePath,
-                                                      const std::vector<std::string> & orc_CertificatesPath,
-                                                      const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters)
+std::error_code C_OscXceCreate::mh_CheckParamsToCreatePackage(
+   const std::string & orc_PackagePath, const std::vector<std::string> & orc_CertificatesPath,
+   const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters)
 {
-   int32_t s32_Return = C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath,
-                                                                                  mhc_USE_CASE,
-                                                                                  hc_PACKAGE_EXT,
-                                                                                  hc_PACKAGE_EXT_TMP,
-                                                                                  mhc_ErrorMessage, false);
+   //C_OscSpaServicePackageCreateUtil still reports the STW int32_t error convention
+   std::error_code c_Return = make_error_code_from_stw(
+      C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath, mhc_USE_CASE, hc_PACKAGE_EXT,
+                                                               hc_PACKAGE_EXT_TMP, mhc_ErrorMessage, false));
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
-      for (uint32_t u32_It = 0UL; (u32_It < orc_CertificatesPath.size()) && (s32_Return == C_NO_ERR); ++u32_It)
+      for (uint32_t u32_It = 0UL; (u32_It < orc_CertificatesPath.size()) && (!c_Return); ++u32_It)
       {
-         s32_Return = C_OscXceCreate::mh_CheckFileExists(orc_CertificatesPath[u32_It]);
+         c_Return = C_OscXceCreate::mh_CheckFileExists(orc_CertificatesPath[u32_It]);
       }
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
-      for (uint32_t u32_It = 0UL; (u32_It < orc_UpdatePackageParameters.size()) && (s32_Return == C_NO_ERR); ++u32_It)
+      for (uint32_t u32_It = 0UL; (u32_It < orc_UpdatePackageParameters.size()) && (!c_Return); ++u32_It)
       {
          const C_OscXceUpdatePackageParameters & rc_In = orc_UpdatePackageParameters[u32_It];
          if (rc_In.c_AuthenticationKeyPath.empty() == false)
          {
-            s32_Return = C_OscXceCreate::mh_CheckFileExists(rc_In.c_AuthenticationKeyPath);
+            c_Return = C_OscXceCreate::mh_CheckFileExists(rc_In.c_AuthenticationKeyPath);
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -222,21 +225,21 @@ int32_t C_OscXceCreate::mh_CheckParamsToCreatePackage(const std::string & orc_Pa
    \param[in]  orc_Path    Path
 
    \return
-   C_NO_ERR    success
-   C_NOACT     certificates do not exist
+   Errc::success  success
+   Errc::noact    certificates do not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceCreate::mh_CheckFileExists(const std::string & orc_Path)
+std::error_code C_OscXceCreate::mh_CheckFileExists(const std::string & orc_Path)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (TglFileExists(orc_Path) == false)
    {
       mhc_ErrorMessage = "File \"" + orc_Path + "\" not found.";
       osc_write_log_error(mhc_USE_CASE, mhc_ErrorMessage);
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -278,40 +281,39 @@ C_OscXceManifest C_OscXceCreate::mh_CreateManifest(
    \param[in,out]  orc_XcertFiles               Xcert files
 
    \return
-   C_NO_ERR    success
-   C_NOACT     certificates do not exist
+   Errc::success  success
+   Errc::noact    certificates do not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceCreate::mh_PrepareCertFiles(const std::string & orc_TmpPath,
-                                            const std::vector<std::string> & orc_CertificatesPath,
-                                            std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
-                                            std::set<std::string> & orc_XcertFiles)
+std::error_code C_OscXceCreate::mh_PrepareCertFiles(
+   const std::string & orc_TmpPath, const std::vector<std::string> & orc_CertificatesPath,
+   std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters, std::set<std::string> & orc_XcertFiles)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    std::map<std::string, bool> c_ExistingCertNames;
 
-   for (uint32_t u32_It = 0UL; (u32_It < orc_CertificatesPath.size()) && (s32_Return == C_NO_ERR); ++u32_It)
+   for (uint32_t u32_It = 0UL; (u32_It < orc_CertificatesPath.size()) && (!c_Return); ++u32_It)
    {
-      s32_Return = mh_CopyFile(orc_CertificatesPath[u32_It], orc_TmpPath, mhc_CERTIFICATES_FOLDER, c_ExistingCertNames,
-                               orc_XcertFiles);
+      c_Return = mh_CopyFile(orc_CertificatesPath[u32_It], orc_TmpPath, mhc_CERTIFICATES_FOLDER, c_ExistingCertNames,
+                             orc_XcertFiles);
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       std::map<std::string, bool> c_ExistingPackageNames;
-      for (uint32_t u32_It = 0UL; (u32_It < orc_UpdatePackageParameters.size()) && (s32_Return == C_NO_ERR); ++u32_It)
+      for (uint32_t u32_It = 0UL; (u32_It < orc_UpdatePackageParameters.size()) && (!c_Return); ++u32_It)
       {
          C_OscXceUpdatePackageParameters & rc_In = orc_UpdatePackageParameters[u32_It];
          if (rc_In.c_AuthenticationKeyPath.empty() == false)
          {
-            s32_Return = mh_CopyFile(rc_In.c_AuthenticationKeyPath, orc_TmpPath, mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER,
-                                     c_ExistingPackageNames,
-                                     orc_XcertFiles, &rc_In.c_AuthenticationKeyPath);
+            c_Return = mh_CopyFile(rc_In.c_AuthenticationKeyPath, orc_TmpPath, mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER,
+                                   c_ExistingPackageNames,
+                                   orc_XcertFiles, &rc_In.c_AuthenticationKeyPath);
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -344,18 +346,16 @@ std::string C_OscXceCreate::mh_GenOutFilePathPart(const std::string & orc_InPath
    \param[in,out]  opc_OutFilePath     Out file path
 
    \return
-   C_NO_ERR    success
-   C_NOACT     certificates do not exist
+   Errc::success  success
+   Errc::noact    certificates do not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceCreate::mh_CopyFile(const std::string & orc_InPath,
-                                    const std::string & orc_OutBasePath,
-                                    const std::string & orc_OutFolder, std::map<std::string,
-                                                                                          bool> & orc_ExistingFiles,
-                                    std::set<std::string> & orc_XcertFiles,
-                                    std::string * const opc_OutFilePath)
+std::error_code C_OscXceCreate::mh_CopyFile(const std::string & orc_InPath, const std::string & orc_OutBasePath,
+                                            const std::string & orc_OutFolder,
+                                            std::map<std::string, bool> & orc_ExistingFiles,
+                                            std::set<std::string> & orc_XcertFiles, std::string * const opc_OutFilePath)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    const std::string c_OutFile = C_OscXceCreate::mh_GetUniqueFileName(orc_InPath,
                                                                                 orc_OutFolder, orc_ExistingFiles);
    const std::string c_Target = orc_OutBasePath + c_OutFile;
@@ -363,19 +363,20 @@ int32_t C_OscXceCreate::mh_CopyFile(const std::string & orc_InPath,
    std::string c_Error;
 
    orc_XcertFiles.insert(c_OutFile);
-   s32_Return = C_OscUtils::h_CopyFile(orc_InPath, c_Target, nullptr, &c_Error);
+   //C_OscUtils still reports the STW int32_t error convention
+   c_Return = make_error_code_from_stw(C_OscUtils::h_CopyFile(orc_InPath, c_Target, nullptr, &c_Error));
    //Updated after copy not before to avoid modifications of const parameters
    if (opc_OutFilePath != nullptr)
    {
       *opc_OutFilePath = c_OutFile;
    }
-   if (s32_Return != C_NO_ERR)
+   if (c_Return)
    {
       mhc_ErrorMessage = c_Error;
       osc_write_log_error(mhc_USE_CASE, mhc_ErrorMessage);
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
