@@ -27,12 +27,12 @@ that do not regress existing functionality.
 | 1 — Correctness bugs | ✅ **Complete** | |
 | 2 — Remove `C_SclDynamicArray` | ✅ **Complete** | Zero references remain. |
 | 3 — Retire `C_SclString` | ✅ **Complete** | Class deleted; `C_SclStringCompat.hpp` helpers remain, ~94 files still call them. `C_SclStringList` / `C_SclIniFile` still exist. See `PHASE3_PLAN.md`. |
-| 4 — Replace homegrown AES | ⚠️ **Partial** | `security/aes/` sources removed; `C_OscSecurityAesCbc` now uses OpenSSL EVP. **But it is AES-128-CBC, not the AES-256-GCM this plan specifies** — no authenticated encryption, no KAT/CAVP tests. The remaining gap is the security-relevant half. |
+| 4 — Replace homegrown AES | ✅ **Complete for files; wire protocol out of scope** | File encryption is now AES-256-GCM + PBKDF2, with a versioned header and key wiping. The protocol sub-layer is deliberately unchanged — see below. |
 | 5 — Error handling | 🔶 **Started** | `C_OscErrorCategory` (`Errc` + `STWErrorCategory`) exists; the security API returns `std::error_code`. The bulk of the int32_t call sites are unmigrated. |
 | 6.1 — Singletons | ✅ **Complete, deviating from plan** | Meyer's singleton **rejected** — see below. Race fixed with `std::call_once`; `h_Destroy()` and teardown ordering kept. |
 | 6.2 — Standard mutex | ✅ **Complete** | `C_TglCriticalSection` and all four `TglTasks` files deleted; 52 call sites on `std::mutex`. |
-| 6.3 — Smart pointers | 🚫 **Re-scope required** | Exit criterion is wrong as written — see below. |
-| 7 — Performance | ⬜ **Not started** | |
+| 6.3 — Smart pointers | 🚫 **Closed, no defect found** | Exit criterion is wrong as written, and the hazards it implies do not exist here — see below. |
+| 7 — Performance | 🚫 **Blocked on its own criteria** | Prescribes `std::format` (C++20) in a C++17 codebase, and its exit criteria require benchmarks that do not exist — see below. |
 | 8 — Build system | 🔶 **Partial** | CMake minimum raised to 3.25 across the Vector submodules; CI matrix reworked; ccache added. The unified root build remains open — see below. |
 
 ### Phase 6.1 — why Meyer's singleton was rejected
@@ -65,14 +65,79 @@ shutdown was arguably a latent bug being hidden, not a feature.
 `C_CamDbHandler`, `C_CamProHandler` and `C_HeHandler` were already race-free
 (static instance, no lazy init) and were left alone.
 
-### Phase 6.3 — exit criterion needs re-scoping
+### Phase 4 — what was done, and what is deliberately not
+
+**Done (file encryption).** The path protecting service-mode projects and
+service update packages was AES-128-ECB with a single unsalted MD5 as the KDF
+and no authentication. It is now AES-256-GCM with PBKDF2-HMAC-SHA256 (600000
+iterations), a random per-file salt and nonce, `OPENSSL_cleanse` on all key
+material, and a versioned header the format previously lacked entirely. Eight
+tests cover round-trip, wrong password, tamper detection, header layout,
+rejection of legacy input, ECB's block-repetition property, nonce uniqueness
+across files, and empty input.
+
+**Not done, deliberately: the protocol security sub-layer.**
+`C_OscProtocolSecuritySubLayer` encrypts traffic to the ECU with an
+ECDH-negotiated key, so the device firmware implements the matching half.
+Inspecting the ESX-4CS gateway TSP (`esx_4cs_gw_c_tsp_24_0B`) settles it: across
+all eleven precompiled archives and the 207 KB flashloader image there is no AES
+symbol, no S-box, no inverse S-box and no Rcon table. The device crypto is RSA
+PKCS#1 signature verification via BearSSL (`osy_udc_trg_sec_verify_rsa_signature`,
+`bearssl_rsa.c.obj`) plus an RNG for UDS SecurityAccess seeds — matched on the
+tool side by `C_OscSecurityRsa::h_SignSignature`.
+
+So traffic encryption is not merely risky to change, it is unusable with this
+hardware. The supported device-level security mechanism is RSA-based
+SecurityAccess. Changing the sub-layer would gain nothing and would break
+compatibility with any future STW device whose TSP does implement it.
+
+**Related, found while scoping Phase 4:** the `C_SclString` → `std::string`
+migration replaced hex-aware `ToInt()` with base-10 `std::stoi()`, which zeroed
+the AES key (the password was ignored entirely), ECDSA signature bytes, device
+serial numbers, and every CANopen EDS object index. Fixed with regression tests;
+see the commit "Fix hex string parsing regression that zeroed AES keys and ECDSA
+signatures". Any file encrypted before that fix should be treated as
+unprotected.
+
+### Phase 6.3 — closed: the criterion is wrong and the hazards are absent
 
 "No manual `new`/`delete` in newly-touched files" reads as ~2,972 violations, but
 the overwhelming majority are Qt widgets handed to a parent
 (`new C_OgeLabel(this)`), where Qt owns the lifetime and a `unique_ptr` would
-cause a double free. The sub-phase should be re-scoped to genuine ownership
-cases — the `C_HexFile` `T_HexLine` linked list and the ~23 `FILE*` sites — and
-the blanket criterion dropped.
+cause a double free.
+
+The genuine ownership cases were then checked individually and none is defective:
+
+- **`FILE*` sites.** Nine non-vendored call sites (the four in `tinyxml2` are
+  third party). Every one pairs with an `fclose`; no leak on an early return.
+  The single flagged case in `C_Md5Checksum::GetMD5` returns only when `fopen`
+  itself failed, so there is nothing to close.
+- **`C_HexFile` binary image.** `new uint16_t[]` at `OptimizeLinear` is matched
+  by `delete[]`, and the guard that could strand it (`u32_Error` non-zero on
+  entry) is unreachable — it is initialised to `NO_ERR` immediately above.
+- **`C_HexFile` `T_HexLine` ring buffer.** A hand-rolled doubly-linked list, and
+  the one item with real substance left in this sub-phase. Converting it means
+  restructuring 2,561 lines of firmware-image parsing that has **zero test
+  coverage**, to fix no observed defect. That is a bad trade in that order. If
+  this is ever revisited, characterisation tests for the hex parser come first.
+
+### Phase 7 — blocked on its own terms
+
+Two problems, neither about effort:
+
+1. **The prescribed tool is unavailable.** 7.1 says to replace `std::stringstream`
+   with `std::format`, which is C++20. The toolchain files pin `-std=c++17` and
+   `CMAKE_CXX_STANDARD 17`. Landing 7.1 as written requires either a language
+   standard bump (a real decision with its own blast radius) or a substitute
+   such as `snprintf` or fmtlib.
+2. **The exit criteria are unmeasurable.** "Logging throughput benchmark shows
+   2x+ improvement" and "CRC benchmark shows HW acceleration benefit" both
+   require a benchmark harness. There is none in the tree. Optimising without
+   one is speculation, and the phase cannot be declared done against its own
+   criteria either way.
+
+Prerequisite for Phase 7: add a benchmark harness, then decide on the C++20
+question. Neither is performance work as such.
 
 ### Phase 8 — what is done and what is not
 
