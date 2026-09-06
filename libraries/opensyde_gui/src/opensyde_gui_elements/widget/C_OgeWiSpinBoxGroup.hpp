@@ -35,7 +35,7 @@ class C_OgeWiSpinBoxGroup :
    Q_OBJECT
 
 public:
-   explicit C_OgeWiSpinBoxGroup(QWidget * const opc_Parent = NULL);
+   explicit C_OgeWiSpinBoxGroup(QWidget * const opc_Parent = nullptr);
    ~C_OgeWiSpinBoxGroup(void) override;
 
    QString GetText(void) const;

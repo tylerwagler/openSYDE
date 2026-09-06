@@ -69,7 +69,7 @@ uint32_t C_OscSecurityPemDatabase::GetSizeOfDatabase() const
 const C_OscSecurityPemKeyInfo * C_OscSecurityPemDatabase::GetPemFileBySerialNumber(
    const std::vector<uint8_t> & orc_SerialNumber) const
 {
-   const C_OscSecurityPemKeyInfo * pc_Retval = NULL;
+   const C_OscSecurityPemKeyInfo * pc_Retval = nullptr;
 
    for (uint32_t u32_ItFile = 0UL; u32_ItFile < this->mc_StoredPemFiles.size(); ++u32_ItFile)
    {
@@ -104,7 +104,7 @@ const C_OscSecurityPemKeyInfo * C_OscSecurityPemDatabase::GetPemFileBySerialNumb
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscSecurityPemKeyInfo * C_OscSecurityPemDatabase::GetLevel7PemInformation() const
 {
-   const C_OscSecurityPemKeyInfo * pc_Retval = NULL;
+   const C_OscSecurityPemKeyInfo * pc_Retval = nullptr;
 
    if (this->mq_StoredLevel7PemInformationValid)
    {
@@ -249,7 +249,7 @@ int32_t C_OscSecurityPemDatabase::m_TryAddKey(const C_OscSecurityPemKeyInfo & or
    {
       if (oq_AddToList)
       {
-         if (this->GetPemFileBySerialNumber(orc_NewKey.GetCertificateSerialNumber()) == NULL)
+         if (this->GetPemFileBySerialNumber(orc_NewKey.GetCertificateSerialNumber()) == nullptr)
          {
             this->mc_StoredPemFiles.push_back(orc_NewKey);
          }

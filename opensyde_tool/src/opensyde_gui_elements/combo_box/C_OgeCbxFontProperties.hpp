@@ -29,7 +29,7 @@ class C_OgeCbxFontProperties :
    Q_OBJECT
 
 public:
-   C_OgeCbxFontProperties(QWidget * const opc_Parent = NULL);
+   C_OgeCbxFontProperties(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

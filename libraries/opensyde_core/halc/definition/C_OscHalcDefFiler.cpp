@@ -353,8 +353,8 @@ int32_t C_OscHalcDefFiler::h_SaveData(const C_OscHalcDefBase & orc_IoData, C_Osc
         ++u32_ItDomain)
    {
       const C_OscHalcDefDomain * const pc_Domain = orc_IoData.GetDomainDefDataConst(u32_ItDomain);
-      tgl_assert(pc_Domain != NULL);
-      if (pc_Domain != NULL)
+      tgl_assert(pc_Domain != nullptr);
+      if (pc_Domain != nullptr)
       {
          tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("domain") == "domain");
          s32_Retval = mh_SaveIoDomain(*pc_Domain, orc_XmlParser);

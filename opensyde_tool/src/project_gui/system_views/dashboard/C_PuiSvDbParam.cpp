@@ -129,7 +129,7 @@ int32_t C_PuiSvDbParam::CheckError(const C_OscNodeDataPoolListId & orc_ListId, b
       {
          const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
             orc_ListId.u32_NodeIndex, orc_ListId.u32_DataPoolIndex, orc_ListId.u32_ListIndex);
-         if (pc_List != NULL)
+         if (pc_List != nullptr)
          {
             orq_Error = false;
             for (uint32_t u32_ItConfig = 0;

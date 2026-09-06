@@ -51,8 +51,8 @@ public:
    static void h_RangeCheckFloat(float64_t & orf64_Value);
 
    static int32_t h_CopyFile(const std::string & orc_SourceFile, const std::string & orc_TargetFile,
-                             std::string * const opc_ErrorPath = NULL,
-                             std::string * const opc_ErrorMessage = NULL);
+                             std::string * const opc_ErrorPath = nullptr,
+                             std::string * const opc_ErrorMessage = nullptr);
    static std::string h_GetCommandLineAsString(const int32_t os32_Argc, char_t * const * const oppcn_Argv);
 
    //Utilities for path place holder parsing

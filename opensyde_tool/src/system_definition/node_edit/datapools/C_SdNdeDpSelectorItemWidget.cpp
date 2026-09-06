@@ -52,7 +52,7 @@ using namespace stw::opensyde_core;
 C_SdNdeDpSelectorItemWidget::C_SdNdeDpSelectorItemWidget(const bool oq_UsageViewActive, QWidget * const opc_Parent) :
    C_OgeWiWithToolTip(opc_Parent),
    mpc_Ui(new Ui::C_SdNdeDpSelectorItemWidget),
-   mpc_UsageBar(NULL),
+   mpc_UsageBar(nullptr),
    mc_DatapoolId(C_OscNodeDataPoolId()),
    mq_StateSafety(false),
    mq_StateConflict(false),
@@ -116,10 +116,10 @@ C_SdNdeDpSelectorItemWidget::~C_SdNdeDpSelectorItemWidget()
    delete mpc_Ui;
 
    //Qt element destruction handled by Qt engine; only NULL here
-   mpc_LabelStateImg = NULL;
-   mpc_LabelShareImg = NULL;
-   mpc_LabelShareImgHovered = NULL;
-   mpc_UsageBar = NULL;
+   mpc_LabelStateImg = nullptr;
+   mpc_LabelShareImg = nullptr;
+   mpc_LabelShareImgHovered = nullptr;
+   mpc_UsageBar = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ C_SdNdeDpSelectorItemWidget::~C_SdNdeDpSelectorItemWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpSelectorItemWidget::InitWidget(void)
 {
-   if (this->mpc_UsageBar != NULL)
+   if (this->mpc_UsageBar != nullptr)
    {
       // adapt the size
       this->mpc_UsageBar->setGeometry(3, this->height() - 6, 138, 5);
@@ -147,7 +147,7 @@ void C_SdNdeDpSelectorItemWidget::InitWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpSelectorItemWidget::SetErrorToolTip(const QString & orc_Heading, const QString & orc_Content)
 {
-   if (this->mpc_LabelStateImg != NULL)
+   if (this->mpc_LabelStateImg != nullptr)
    {
       this->mpc_LabelStateImg->SetToolTipInformation(orc_Heading, orc_Content, C_NagToolTip::eERROR);
    }
@@ -196,7 +196,7 @@ void C_SdNdeDpSelectorItemWidget::SetData(const QString & orc_DatapoolName, cons
    this->mpc_Ui->pc_TextEditDpName->setText(orc_DatapoolName);
    this->mpc_Ui->pc_TextEditDpComment->setText(orc_DatapoolComment);
    this->mq_StateSafety = oq_Safety;
-   if (this->mpc_UsageBar != NULL)
+   if (this->mpc_UsageBar != nullptr)
    {
       uint32_t u32_PercentageUsed;
       uint32_t u32_PercentageReserved;
@@ -234,8 +234,8 @@ void C_SdNdeDpSelectorItemWidget::UpdateData(void)
    const C_OscNodeDataPool * const pc_OscDataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
       this->mc_DatapoolId.u32_NodeIndex, this->mc_DatapoolId.u32_DataPoolIndex);
 
-   tgl_assert(pc_OscDataPool != NULL);
-   if (pc_OscDataPool != NULL)
+   tgl_assert(pc_OscDataPool != nullptr);
+   if (pc_OscDataPool != nullptr)
    {
       QString c_ToolTipText;
       const C_PuiSdSharedDatapools & rc_SharedDatapools = C_PuiSdHandler::h_GetInstance()->GetSharedDatapoolsConst();
@@ -297,8 +297,8 @@ void C_SdNdeDpSelectorItemWidget::UpdateData(void)
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
             this->mc_DatapoolId.u32_NodeIndex);
 
-         tgl_assert(pc_Node != NULL);
-         if (pc_Node != NULL)
+         tgl_assert(pc_Node != nullptr);
+         if (pc_Node != nullptr)
          {
             tgl_assert(static_cast<uint32_t>(pc_OscDataPool->s32_RelatedDataBlockIndex) <
                        pc_Node->c_Applications.size());
@@ -332,7 +332,7 @@ void C_SdNdeDpSelectorItemWidget::UpdateData(void)
          c_ToolTipText += "\n";
       }
 
-      if (this->mpc_UsageBar != NULL)
+      if (this->mpc_UsageBar != nullptr)
       {
          uint32_t u32_PercentageUsed;
          uint32_t u32_PercentageReserved;
@@ -626,8 +626,8 @@ bool C_SdNdeDpSelectorItemWidget::event(QEvent * const opc_Event)
    if (opc_Event->type() == QEvent::Leave)
    {
       if ((this->mq_Selected == false) &&
-          (this->mpc_LabelShareImg != NULL) &&
-          (this->mpc_LabelShareImgHovered != NULL))
+          (this->mpc_LabelShareImg != nullptr) &&
+          (this->mpc_LabelShareImgHovered != nullptr))
       {
          this->mpc_LabelShareImg->setVisible(this->mq_Shared);
          this->mpc_LabelShareImgHovered->setVisible(false);
@@ -637,8 +637,8 @@ bool C_SdNdeDpSelectorItemWidget::event(QEvent * const opc_Event)
    else if (opc_Event->type() == QEvent::Enter)
    {
       if ((this->mq_Selected == false) &&
-          (this->mpc_LabelShareImg != NULL) &&
-          (this->mpc_LabelShareImgHovered != NULL))
+          (this->mpc_LabelShareImg != nullptr) &&
+          (this->mpc_LabelShareImgHovered != nullptr))
       {
          this->mpc_LabelShareImgHovered->setVisible(this->mq_Shared);
          this->mpc_LabelShareImg->setVisible(false);
@@ -669,7 +669,7 @@ void C_SdNdeDpSelectorItemWidget::m_UpdateLabel(void)
    }
 
    // adapt the icon
-   if (this->mpc_LabelStateImg != NULL)
+   if (this->mpc_LabelStateImg != nullptr)
    {
       if (this->mq_StateConflict == true)
       {
@@ -695,7 +695,7 @@ void C_SdNdeDpSelectorItemWidget::m_UpdateLabel(void)
    }
 
    // adapt the shared icon
-   if (this->mpc_LabelShareImg != NULL)
+   if (this->mpc_LabelShareImg != nullptr)
    {
       this->mpc_LabelShareImg->setVisible(this->mq_Shared);
    }

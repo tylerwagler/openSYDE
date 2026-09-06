@@ -438,7 +438,7 @@ void C_CamComDriverBase::m_ProcessCyclicTpRequests(void)
 void C_CamComDriverBase::mh_SendTpFrame(const stw::can::T_STWCAN_Msg_TX & orc_Msg, void * const opv_Context)
 {
    C_CamComDriverBase * const pc_This = static_cast<C_CamComDriverBase *>(opv_Context);
-   if (pc_This != NULL)
+   if (pc_This != nullptr)
    {
       // Queue the TP frame for sending via the normal path.
       // These frames are always ≤8 bytes, so they won't recurse.

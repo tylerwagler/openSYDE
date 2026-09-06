@@ -282,7 +282,7 @@ bool C_SdNdeLeIpAddressWidget::eventFilter(QObject * opc_Obj, QEvent * opc_Event
    if (opc_Event->type() == QEvent::KeyPress)
    {
       QKeyEvent * const pc_KeyEvent = dynamic_cast<QKeyEvent *>(opc_Event);
-      if (pc_KeyEvent != NULL)
+      if (pc_KeyEvent != nullptr)
       {
          for (uint32_t u32_Pos = 0; u32_Pos < mhs32_IPV4SIZE; ++u32_Pos)
          {

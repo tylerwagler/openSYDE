@@ -39,7 +39,7 @@ class C_SyvDaItDashboardProgressBarWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaItDashboardProgressBarWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvDaItDashboardProgressBarWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaItDashboardProgressBarWidget(void) override;
 
    void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style,

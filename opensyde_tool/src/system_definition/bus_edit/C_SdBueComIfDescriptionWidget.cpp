@@ -73,7 +73,7 @@ C_SdBueComIfDescriptionWidget::C_SdBueComIfDescriptionWidget(QWidget * const opc
    mu32_CoManagerNodeIndexOfCoDevice(0U),
    mu8_CoManagerNodeIndexIntfNumber(0U),
    mq_IndexValid(false),
-   mc_UndoManager(NULL),
+   mc_UndoManager(nullptr),
    mq_SkipLoadUserSettings(false),
    mq_InitialLoadUserSettings(true)
 {
@@ -285,8 +285,8 @@ void C_SdBueComIfDescriptionWidget::SetNodeId(const uint32_t ou32_NodeIndex, con
    // adapt the ui
    this->mpc_Ui->pc_NodeSelectorWidget->setVisible(false);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       uint32_t u32_ItInterface;
       uint32_t u32_CanCounter = 0U;
@@ -324,7 +324,7 @@ void C_SdBueComIfDescriptionWidget::SetNodeId(const uint32_t ou32_NodeIndex, con
                   rc_ComInterface.u32_BusIndex);
 
                // Get bus name for the link and the interface combo box
-               if (pc_Bus != NULL)
+               if (pc_Bus != nullptr)
                {
                   c_BusName = pc_Bus->c_Name.c_str();
                }
@@ -432,7 +432,7 @@ void C_SdBueComIfDescriptionWidget::SetProtocolByDataPool(const uint32_t ou32_Da
    if (this->mq_ModeSingleNode == true)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-      if ((pc_Node != NULL) &&
+      if ((pc_Node != nullptr) &&
           (ou32_DataPoolIndexw < pc_Node->c_DataPools.size()) &&
           (pc_Node->c_DataPools[ou32_DataPoolIndexw].e_Type == C_OscNodeDataPool::eCOM))
       {
@@ -582,7 +582,7 @@ void C_SdBueComIfDescriptionWidget::SelectSignalSearch(const uint32_t ou32_NodeI
    const std::vector<C_OscCanMessage> * const pc_Messages = m_PrepareMessageId(ou32_NodeIndex, ou32_DataPoolIndex,
                                                                                ou32_ListIndex, c_MessageId);
 
-   if (pc_Messages != NULL)
+   if (pc_Messages != nullptr)
    {
       uint32_t u32_Counter;
 
@@ -978,7 +978,7 @@ void C_SdBueComIfDescriptionWidget::m_Reload(void)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-         if ((pc_Node != NULL) &&
+         if ((pc_Node != nullptr) &&
              (this->mu32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
          {
             const C_OscNodeComInterfaceSettings & rc_ComInterface =
@@ -1071,7 +1071,7 @@ void C_SdBueComIfDescriptionWidget::m_FillNodeDatapoolIndexes(const C_OscNode * 
 {
    this->mc_DatapoolIndexes.clear();
 
-   if (opc_Node != NULL)
+   if (opc_Node != nullptr)
    {
       uint32_t u32_ItProtocol;
 
@@ -1172,7 +1172,7 @@ void C_SdBueComIfDescriptionWidget::TriggerSaveOfSplitterUserSettings(void) cons
       if (this->mq_ModeSingleNode == false)
       {
          const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_BusIndex);
-         if ((pc_Bus != NULL) && (pc_Bus->e_Type == C_OscSystemBus::eCAN))
+         if ((pc_Bus != nullptr) && (pc_Bus->e_Type == C_OscSystemBus::eCAN))
          {
             q_Continue = true;
          }
@@ -1242,7 +1242,7 @@ void C_SdBueComIfDescriptionWidget::SaveUserSettings(void) const
       if (this->mq_ModeSingleNode == false)
       {
          const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_BusIndex);
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             C_UsHandler::h_GetInstance()->SetProjSdBusCommSignalOverviewColumnWidth(
                pc_Bus->c_Name.c_str(), c_SignalValues);
@@ -1261,7 +1261,7 @@ void C_SdBueComIfDescriptionWidget::SaveUserSettings(void) const
          // identifier.
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             //Set
             C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedProtocol(pc_Node->c_Properties.c_Name.c_str(),
@@ -1276,7 +1276,7 @@ void C_SdBueComIfDescriptionWidget::SaveUserSettings(void) const
                const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscCanDataPoolList(
                   this->mu32_NodeIndex, e_SelectedProtocol, this->mu32_InterfaceIndex, this->mc_DatapoolIndexes[0],
                   true);
-               if ((pc_DataPool != NULL) && (pc_List != NULL))
+               if ((pc_DataPool != nullptr) && (pc_List != nullptr))
                {
                   //Set
                   C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolListSelectedMessage(
@@ -1313,7 +1313,7 @@ void C_SdBueComIfDescriptionWidget::LoadUserSettings(void)
    if (this->mq_ModeSingleNode == false)
    {
       const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_BusIndex);
-      if (pc_Bus != NULL)
+      if (pc_Bus != nullptr)
       {
          const C_UsCommunication c_UserSettingsBus = C_UsHandler::h_GetInstance()->GetProjSdBus(pc_Bus->c_Name.c_str());
          if (!mq_SkipLoadUserSettings)
@@ -1338,7 +1338,7 @@ void C_SdBueComIfDescriptionWidget::LoadUserSettings(void)
       // identifier.
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          const C_UsNode c_UserSettingsNode = C_UsHandler::h_GetInstance()->GetProjSdNode(
             pc_Node->c_Properties.c_Name.c_str());
@@ -1365,7 +1365,7 @@ void C_SdBueComIfDescriptionWidget::LoadUserSettings(void)
                this->mu32_NodeIndex, e_SelectedProtocol, this->mc_DatapoolIndexes[0]);
             const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscCanDataPoolList(
                this->mu32_NodeIndex, e_SelectedProtocol, this->mu32_InterfaceIndex, this->mc_DatapoolIndexes[0], true);
-            if ((pc_DataPool != NULL) && (pc_List != NULL))
+            if ((pc_DataPool != nullptr) && (pc_List != nullptr))
             {
                //Do not allow change of protocol as this may be different from the expected value in the default case
                C_OscCanProtocol::E_Type e_Tmp;
@@ -1408,7 +1408,7 @@ void C_SdBueComIfDescriptionWidget::LoadUserSettings(void)
          if (q_SignalSelected == true)
          {
             const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(c_MessageId);
-            if (pc_Message != NULL)
+            if (pc_Message != nullptr)
             {
                uint32_t u32_FoundIndex = 0UL;
                bool q_Found = false;
@@ -1416,7 +1416,7 @@ void C_SdBueComIfDescriptionWidget::LoadUserSettings(void)
                {
                   const C_OscNodeDataPoolListElement * const pc_OscData =
                      C_PuiSdHandler::h_GetInstance()->GetOscCanDataPoolListElement(c_MessageId, u32_ItSignal);
-                  if (pc_OscData != NULL)
+                  if (pc_OscData != nullptr)
                   {
                      if (pc_OscData->c_Name == c_SelectedSignalName.toStdString().c_str())
                      {
@@ -1727,12 +1727,12 @@ const std::vector<C_OscCanMessage> * C_SdBueComIfDescriptionWidget::m_PrepareMes
                                                                                        stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId)
 const
 {
-   const std::vector<C_OscCanMessage> * pc_Messages = NULL;
+   const std::vector<C_OscCanMessage> * pc_Messages = nullptr;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
-      const C_OscCanMessageContainer * pc_MessageContainer = NULL;
+      const C_OscCanMessageContainer * pc_MessageContainer = nullptr;
       uint32_t u32_Counter;
 
       orc_MessageId.u32_InterfaceIndex = ou32_ListIndex / 2;
@@ -1754,13 +1754,13 @@ const
          }
       }
 
-      if (pc_MessageContainer != NULL)
+      if (pc_MessageContainer != nullptr)
       {
          const C_OscNodeDataPoolList * const pc_OscList = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
             ou32_NodeIndex,
             ou32_DataPoolIndex,
             ou32_ListIndex);
-         if (pc_OscList != NULL)
+         if (pc_OscList != nullptr)
          {
             orc_MessageId.u32_NodeIndex = ou32_NodeIndex;
             orc_MessageId.u32_DatapoolIndex = ou32_DataPoolIndex;
@@ -1793,7 +1793,7 @@ void C_SdBueComIfDescriptionWidget::m_OnLinkSwitchToBus(const QString & orc_Link
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if ((pc_Node != NULL) &&
+   if ((pc_Node != nullptr) &&
        (this->mu32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
    {
       const C_OscNodeComInterfaceSettings & rc_ComInterface =
@@ -2037,7 +2037,7 @@ void C_SdBueComIfDescriptionWidget::m_GetNodeMessageAndSignalCount(const C_OscCa
        (this->mq_IsCoDevice == false))
    {
       // Standard case: Use the current node information
-      if (C_SdUtil::h_GetMessageCountOfNode(this->mu32_NodeIndex, ou32_InterfaceIndex, oe_Protocol, NULL,
+      if (C_SdUtil::h_GetMessageCountOfNode(this->mu32_NodeIndex, ou32_InterfaceIndex, oe_Protocol, nullptr,
                                             u32_RxMessageCount,
                                             u32_TxMessageCount, &oru32_SignalCount) != C_NO_ERR)
       {
@@ -2050,12 +2050,12 @@ void C_SdBueComIfDescriptionWidget::m_GetNodeMessageAndSignalCount(const C_OscCa
       const C_OscNode * const pc_Node  = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
          this->mu32_CoManagerNodeIndexOfCoDevice);
 
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          uint32_t u32_UsedInterfaceIndex = 0U;
          uint32_t u32_IntfCounter;
-         const C_OscCanInterfaceId * pc_CoDeviceInterfaceId = NULL;
+         const C_OscCanInterfaceId * pc_CoDeviceInterfaceId = nullptr;
 
          // Getting the correct interface index of the CANopen Manager
          for (u32_IntfCounter = 0U; u32_IntfCounter < pc_Node->c_Properties.c_ComInterfaces.size(); ++u32_IntfCounter)

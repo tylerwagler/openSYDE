@@ -273,7 +273,7 @@ void C_SupCreatePackage::m_GetUpdatePackage(const C_OscViewData & orc_View,
          const C_OscNode & rc_Node = orc_SystemDefinition.c_Nodes[u32_NodeCounter];
 
          // Fill other known device names
-         if (rc_Node.pc_DeviceDefinition != NULL)
+         if (rc_Node.pc_DeviceDefinition != nullptr)
          {
             if (rc_Node.u32_SubDeviceIndex < rc_Node.pc_DeviceDefinition->c_SubDevices.size())
             {

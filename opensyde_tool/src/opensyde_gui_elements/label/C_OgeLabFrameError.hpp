@@ -31,7 +31,7 @@ class C_OgeLabFrameError :
    Q_OBJECT
 
 public:
-   C_OgeLabFrameError(QWidget * const opc_Parent = NULL);
+   C_OgeLabFrameError(QWidget * const opc_Parent = nullptr);
 
    void SetForegroundColor(const int32_t os32_Value);
    void SetCompleteText(const QString & orc_Text, const QString & orc_Tooltip,
@@ -46,7 +46,7 @@ protected:
 private:
    QString mc_Text;
 
-   void m_OnSizeChange(const QSize * const opc_SizeToUse = NULL);
+   void m_OnSizeChange(const QSize * const opc_SizeToUse = nullptr);
    static QFontMetrics mh_GetFontMetrics(void);
 };
 

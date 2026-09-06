@@ -108,7 +108,7 @@ int32_t C_GiSvDaSpinBoxBase::type(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSpinBoxBase::ReInitializeSize(void)
 {
-   if (this->mpc_SpinBoxWidget != NULL)
+   if (this->mpc_SpinBoxWidget != nullptr)
    {
       this->mpc_SpinBoxWidget->AdjustFontToSize();
    }
@@ -122,11 +122,11 @@ void C_GiSvDaSpinBoxBase::LoadData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbSpinBox * const pc_Box = pc_Dashboard->GetSpinBox(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          //Load twice to fix initial size font issue
          C_PuiSvDbSpinBox c_Copy = *pc_Box;
@@ -135,7 +135,7 @@ void C_GiSvDaSpinBoxBase::LoadData(void)
          c_Copy.f64_Width = pc_Box->f64_Width;
          this->LoadSvBasicData(c_Copy);
          this->m_UpdateStaticValues();
-         if (this->mpc_SpinBoxWidget != NULL)
+         if (this->mpc_SpinBoxWidget != nullptr)
          {
             this->mpc_SpinBoxWidget->SetDesignType(pc_Box->e_Type);
          }
@@ -151,15 +151,15 @@ void C_GiSvDaSpinBoxBase::UpdateData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbSpinBox * const pc_Box = pc_Dashboard->GetSpinBox(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          C_PuiSvDbSpinBox c_Box = *pc_Box;
          this->UpdateSvBasicData(c_Box);
-         if (this->mpc_SpinBoxWidget != NULL)
+         if (this->mpc_SpinBoxWidget != nullptr)
          {
             const QVariant c_VariantValue = this->mpc_SpinBoxWidget->GetValue();
             tgl_assert(C_SdNdeDpContentUtil::h_SimpleConvertFromVariant(c_VariantValue, c_Box.c_Value) == C_NO_ERR);
@@ -194,14 +194,14 @@ void C_GiSvDaSpinBoxBase::DeleteData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSpinBoxBase::UpdateShowValue(void)
 {
-   if (this->mpc_SpinBoxWidget != NULL)
+   if (this->mpc_SpinBoxWidget != nullptr)
    {
       // Poll only when something is expected
       if (this->mq_ManualReadStarted == true)
       {
          QString c_Value;
          float64_t f64_ScaledValue;
-         if (this->m_GetLastValue(0UL, c_Value, NULL, &f64_ScaledValue) == C_NO_ERR)
+         if (this->m_GetLastValue(0UL, c_Value, nullptr, &f64_ScaledValue) == C_NO_ERR)
          {
             this->mpc_SpinBoxWidget->SetValue(f64_ScaledValue);
             this->mq_ManualReadStarted = false;
@@ -224,10 +224,10 @@ void C_GiSvDaSpinBoxBase::ConnectionActiveChanged(const bool oq_Active, const QM
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbSpinBox * const pc_Box = pc_Dashboard->GetSpinBox(static_cast<uint32_t>(this->ms32_Index));
-      if (pc_Box != NULL)
+      if (pc_Box != nullptr)
       {
          if ((oq_Active == true) &&
              (this->GetWidgetDataPoolElementCount() > 0U) &&
@@ -280,7 +280,7 @@ void C_GiSvDaSpinBoxBase::EditModeActiveChanged(const bool oq_Active)
 {
    C_GiSvDaRectBaseGroup::EditModeActiveChanged(oq_Active);
 
-   if (this->mpc_SpinBoxWidget != NULL)
+   if (this->mpc_SpinBoxWidget != nullptr)
    {
       this->mpc_SpinBoxWidget->setEnabled(!oq_Active);
    }
@@ -292,7 +292,7 @@ void C_GiSvDaSpinBoxBase::EditModeActiveChanged(const bool oq_Active)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSpinBoxBase::SendCurrentValue(void)
 {
-   if (this->mpc_SpinBoxWidget != NULL)
+   if (this->mpc_SpinBoxWidget != nullptr)
    {
       // Prepare the value
       const QVariant c_Value = this->mpc_SpinBoxWidget->GetValue();
@@ -319,11 +319,11 @@ bool C_GiSvDaSpinBoxBase::CallProperties(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbSpinBox * const pc_Box = pc_Dashboard->GetSpinBox(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          C_PuiSvDbNodeDataPoolListElementId c_ElementId;
          C_PuiSvDbDataElementScaling c_Scaling;
@@ -390,7 +390,7 @@ bool C_GiSvDaSpinBoxBase::CallProperties(void)
             this->me_WriteInitialValueMode = c_Box.e_InitialValueMode;
             this->mq_AutoWriteOnConnect = c_Box.q_AutoWriteOnConnect;
             this->SetDisplayStyle(c_Box.e_DisplayStyle);
-            if (this->mpc_SpinBoxWidget != NULL)
+            if (this->mpc_SpinBoxWidget != nullptr)
             {
                this->mpc_SpinBoxWidget->SetDesignType(c_Box.e_Type);
                this->mpc_SpinBoxWidget->SetShowUnit(c_Box.q_ShowUnit);
@@ -411,7 +411,7 @@ bool C_GiSvDaSpinBoxBase::CallProperties(void)
             this->m_UpdateStaticValues();
          }
          Q_EMIT this->SigTriggerUpdateTransmissionConfiguration();
-         if (c_New != NULL)
+         if (c_New != nullptr)
          {
             c_New->HideOverlay();
             c_New->deleteLater();
@@ -432,7 +432,7 @@ bool C_GiSvDaSpinBoxBase::CallProperties(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSpinBoxBase::UpdateTypePe(const C_PuiSvDbSpinBox::E_Type oe_Type, const bool oq_ShowUnit)
 {
-   if (this->mpc_SpinBoxWidget != NULL)
+   if (this->mpc_SpinBoxWidget != nullptr)
    {
       this->mpc_SpinBoxWidget->SetDesignType(oe_Type);
       this->mpc_SpinBoxWidget->SetShowUnit(oq_ShowUnit);
@@ -449,7 +449,7 @@ void C_GiSvDaSpinBoxBase::UpdateTypePe(const C_PuiSvDbSpinBox::E_Type oe_Type, c
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSpinBoxBase::SetValuePe(const int32_t os32_Value)
 {
-   if (this->mpc_SpinBoxWidget != NULL)
+   if (this->mpc_SpinBoxWidget != nullptr)
    {
       C_OscNodeDataPoolContent c_Min;
       C_OscNodeDataPoolContent c_Max;
@@ -478,7 +478,7 @@ void C_GiSvDaSpinBoxBase::SetValuePe(const int32_t os32_Value)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSpinBoxBase::SetUnitPe(const QString & orc_Value)
 {
-   if (this->mpc_SpinBoxWidget != NULL)
+   if (this->mpc_SpinBoxWidget != nullptr)
    {
       this->mpc_SpinBoxWidget->SetUnit(orc_Value);
    }
@@ -487,19 +487,19 @@ void C_GiSvDaSpinBoxBase::SetUnitPe(const QString & orc_Value)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaSpinBoxBase::m_UpdateStaticValues(void)
 {
-   if (this->mpc_SpinBoxWidget != NULL)
+   if (this->mpc_SpinBoxWidget != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
       C_PuiSvDbNodeDataPoolListElementId c_Id;
 
-      if ((this->GetDataPoolElementIndex(0, c_Id) == C_NO_ERR) && (pc_Dashboard != NULL))
+      if ((this->GetDataPoolElementIndex(0, c_Id) == C_NO_ERR) && (pc_Dashboard != nullptr))
       {
          const C_PuiSvDbSpinBox * const pc_Box = pc_Dashboard->GetSpinBox(static_cast<uint32_t>(this->ms32_Index));
-         tgl_assert(pc_Box != NULL);
+         tgl_assert(pc_Box != nullptr);
          const C_OscNodeDataPoolListElement * const pc_Element =
             C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id.u32_NodeIndex, c_Id.u32_DataPoolIndex,
                                                                        c_Id.u32_ListIndex, c_Id.u32_ElementIndex);
-         if ((pc_Element != NULL) && (pc_Box != NULL))
+         if ((pc_Element != nullptr) && (pc_Box != nullptr))
          {
             QVariant c_VariantValue;
             C_PuiSvDbDataElementScaling c_Scaling;

@@ -31,7 +31,7 @@ class C_GiPort :
    public QGraphicsItem
 {
 public:
-   C_GiPort(QGraphicsItem * const opc_Parent = NULL);
+   C_GiPort(QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiPort(void) override;
 
    QRectF boundingRect() const override;

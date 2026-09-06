@@ -52,7 +52,7 @@ public:
 
    virtual ~C_OsyCodeExportBase(void);
 
-   E_ResultCode Init(const int32_t os32_Argc = 0, char_t * const * const oppcn_Argv = NULL);
+   E_ResultCode Init(const int32_t os32_Argc = 0, char_t * const * const oppcn_Argv = nullptr);
    E_ResultCode ParseCommandLine(const int32_t os32_Argc, char_t * const opacn_Argv[]);
    E_ResultCode LoadSystemDefinition(void);
    E_ResultCode GenerateSourceCode(void);

@@ -49,7 +49,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeDpViewUsageWidget::C_SdNdeDpViewUsageWidget(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
-   mpc_ToolTip(NULL),
+   mpc_ToolTip(nullptr),
    mu32_TotalUsed(0U),
    mu32_TotalPercentage(0U),
    mu32_Size(0U),
@@ -71,7 +71,7 @@ C_SdNdeDpViewUsageWidget::C_SdNdeDpViewUsageWidget(QWidget * const opc_Parent) :
 C_SdNdeDpViewUsageWidget::~C_SdNdeDpViewUsageWidget(void)
 {
    delete mpc_ToolTip;
-   mpc_ToolTip = NULL;
+   mpc_ToolTip = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -124,8 +124,8 @@ void C_SdNdeDpViewUsageWidget::SetUsage(const uint32_t ou32_NodeIndex, const uin
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          uint32_t u32_CorrectDatapoolAreas = 0U;
          // more than one color necessary
@@ -474,7 +474,7 @@ bool C_SdNdeDpViewUsageWidget::event(QEvent * const opc_Event)
    if (opc_Event->type() == QEvent::ToolTip)
    {
       //show tooltip
-      if (mpc_ToolTip == NULL)
+      if (mpc_ToolTip == nullptr)
       {
          mpc_ToolTip = new C_NagToolTip();
       }
@@ -483,7 +483,7 @@ bool C_SdNdeDpViewUsageWidget::event(QEvent * const opc_Event)
       {
          QHelpEvent * const pc_HelpEvent = dynamic_cast<QHelpEvent * const>(opc_Event);
 
-         if (pc_HelpEvent != NULL)
+         if (pc_HelpEvent != nullptr)
          {
             this->setMouseTracking(true);
             this->m_UpdateTooltip(pc_HelpEvent->pos().x());
@@ -498,7 +498,7 @@ bool C_SdNdeDpViewUsageWidget::event(QEvent * const opc_Event)
    else if (opc_Event->type() == QEvent::Leave)
    {
       //hide on leave
-      if (this->mpc_ToolTip != NULL)
+      if (this->mpc_ToolTip != nullptr)
       {
          this->mpc_ToolTip->hide();
       }
@@ -529,7 +529,7 @@ void C_SdNdeDpViewUsageWidget::mouseMoveEvent(QMouseEvent * const opc_Event)
 
    const int32_t s32_PosHorizontal = this->mapFromGlobal(QCursor::pos()).x();
 
-   if ((this->mpc_ToolTip != NULL) &&
+   if ((this->mpc_ToolTip != nullptr) &&
        (this->mpc_ToolTip->isVisible() == true))
    {
       this->m_UpdateTooltip(s32_PosHorizontal);
@@ -624,7 +624,7 @@ bool C_SdNdeDpViewUsageWidget::m_CheckForContainingDataPool(const uint32_t ou32_
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpViewUsageWidget::m_UpdateTooltip(const int32_t os32_MouseHorizontal)
 {
-   if (this->mpc_ToolTip != NULL)
+   if (this->mpc_ToolTip != nullptr)
    {
       QString c_Description;
       QString c_MemoryState;

@@ -70,7 +70,7 @@ C_SclDateTime C_SclDateTime::Now(void)
    std::time_t s32_Time;
    C_SclDateTime t_DateTime;
    struct std::tm * pt_Time;
-   s32_Time = std::time(NULL);
+   s32_Time = std::time(nullptr);
 
    pt_Time = std::localtime(&s32_Time);
    t_DateTime.mu16_Year   = static_cast<uint16_t>(pt_Time->tm_year + 1900);

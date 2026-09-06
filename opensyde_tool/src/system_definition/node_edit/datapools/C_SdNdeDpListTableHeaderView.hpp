@@ -29,7 +29,7 @@ class C_SdNdeDpListTableHeaderView :
    public QHeaderView
 {
 public:
-   C_SdNdeDpListTableHeaderView(const Qt::Orientation & ore_Orientation, QWidget * const opc_Parent = NULL);
+   C_SdNdeDpListTableHeaderView(const Qt::Orientation & ore_Orientation, QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpListTableHeaderView(void) override;
 
 protected:

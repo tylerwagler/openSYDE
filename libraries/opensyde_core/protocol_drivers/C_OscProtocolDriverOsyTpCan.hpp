@@ -116,7 +116,7 @@ private:
 
    int32_t m_HandleBroadcastSetNodeIdBySerialNumberResponse(const uint8_t ou8_RoutineIdMsb,
                                                             const uint8_t ou8_RoutineIdLsb,
-                                                            uint8_t * const opu8_NrCode = NULL) const;
+                                                            uint8_t * const opu8_NrCode = nullptr) const;
 
 protected:
    void m_LogWarningWithHeader(const std::string & orc_Information, const char_t * const opcn_Function) const;
@@ -163,11 +163,11 @@ public:
    int32_t BroadcastRequestProgramming(std::vector<C_BroadcastRequestProgrammingResults> & orc_Results) const;
    int32_t BroadcastSetNodeIdBySerialNumber(const C_OscProtocolSerialNumber & orc_SerialNumber,
                                             const C_OscProtocolDriverOsyNode & orc_NewNodeId,
-                                            uint8_t * const opu8_NrCode = NULL) const;
+                                            uint8_t * const opu8_NrCode = nullptr) const;
    int32_t BroadcastSetNodeIdBySerialNumberExtended(const C_OscProtocolSerialNumber & orc_SerialNumber,
                                                     const uint8_t ou8_SubNodeId,
                                                     const C_OscProtocolDriverOsyNode & orc_NewNodeId,
-                                                    uint8_t * const opu8_NrCode = NULL) const;
+                                                    uint8_t * const opu8_NrCode = nullptr) const;
    int32_t BroadcastEcuReset(const uint8_t ou8_ResetType) const;
    int32_t BroadcastSendEnterPreProgrammingSession(void) const;
    int32_t BroadcastSendEnterDefaultSession(void) const;

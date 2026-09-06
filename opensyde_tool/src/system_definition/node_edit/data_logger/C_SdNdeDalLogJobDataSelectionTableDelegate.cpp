@@ -63,12 +63,12 @@ QWidget * C_SdNdeDalLogJobDataSelectionTableDelegate::createEditor(QWidget * con
                                                                    const QStyleOptionViewItem & orc_Option,
                                                                    const QModelIndex & orc_Index) const
 {
-   QWidget * pc_Retval = NULL;
-   C_OgeLeContextMenuBase * pc_LineEdit = NULL;
+   QWidget * pc_Retval = nullptr;
+   C_OgeLeContextMenuBase * pc_LineEdit = nullptr;
 
    Q_UNUSED(orc_Option)
 
-   if ((opc_Parent != NULL) && (orc_Index.isValid() == true))
+   if ((opc_Parent != nullptr) && (orc_Index.isValid() == true))
    {
       // Widget created based on the currently selected column
       const C_SdNdeDalLogJobDataSelectionTableModel::E_Columns e_Col =
@@ -100,7 +100,7 @@ QWidget * C_SdNdeDalLogJobDataSelectionTableDelegate::createEditor(QWidget * con
 void C_SdNdeDalLogJobDataSelectionTableDelegate::setEditorData(QWidget * const opc_Editor,
                                                                const QModelIndex & orc_Index) const
 {
-   if (((opc_Editor != NULL) && (orc_Index.isValid() == true)))
+   if (((opc_Editor != nullptr) && (orc_Index.isValid() == true)))
    {
       //  Widget created based on the currently selected column
       const C_SdNdeDalLogJobDataSelectionTableModel::E_Columns e_Col =
@@ -111,7 +111,7 @@ void C_SdNdeDalLogJobDataSelectionTableDelegate::setEditorData(QWidget * const o
       if (e_Col == C_SdNdeDalLogJobDataSelectionTableModel::eLOGGING_NAME)
       {
          QLineEdit * const pc_LineEdit = dynamic_cast<QLineEdit * const>(opc_Editor);
-         if (pc_LineEdit != NULL)
+         if (pc_LineEdit != nullptr)
          {
             pc_LineEdit->setText(orc_Index.data(static_cast<int32_t>(Qt::EditRole)).toString());
          }
@@ -133,7 +133,7 @@ void C_SdNdeDalLogJobDataSelectionTableDelegate::setModelData(QWidget * const op
                                                               QAbstractItemModel * const opc_Model,
                                                               const QModelIndex & orc_Index) const
 {
-   if (((opc_Editor != NULL) && (opc_Model != NULL)) && (orc_Index.isValid() == true))
+   if (((opc_Editor != nullptr) && (opc_Model != nullptr)) && (orc_Index.isValid() == true))
    {
       // Widget created based on the currently selected column
       const C_SdNdeDalLogJobDataSelectionTableModel::E_Columns e_Col =
@@ -145,7 +145,7 @@ void C_SdNdeDalLogJobDataSelectionTableDelegate::setModelData(QWidget * const op
       {
          const QLineEdit * const pc_LineEdit = dynamic_cast<const QLineEdit * const>(opc_Editor);
 
-         if (pc_LineEdit != NULL)
+         if (pc_LineEdit != nullptr)
          {
             // if no name is entered e.g. user erases entire text, default text is "[Namespace]"
             QString c_Value = pc_LineEdit->text();

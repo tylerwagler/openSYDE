@@ -30,7 +30,7 @@ class C_TblEditLineEditBase :
    public stw::opensyde_gui_elements::C_OgeLeToolTipBase
 {
 public:
-   C_TblEditLineEditBase(QWidget * const opc_Parent = NULL);
+   C_TblEditLineEditBase(QWidget * const opc_Parent = nullptr);
 
    void SetFromVariant(const QVariant & orc_DisplayValue, const QVariant & orc_EditValue);
    void SetMinFromVariant(const QVariant & orc_Value);

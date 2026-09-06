@@ -37,7 +37,7 @@ class C_SdNdeDpViewWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpViewWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDpViewWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpViewWidget() override;
 
    void InitStaticNames(void) const;

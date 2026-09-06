@@ -139,7 +139,7 @@ void C_NagTopTreeModel::SetContent(const std::vector<QString> & orc_Content,
 
    // fill with data
    this->beginResetModel();
-   if (this->mpc_InvisibleRootItem == NULL)
+   if (this->mpc_InvisibleRootItem == nullptr)
    {
       this->mpc_InvisibleRootItem = new C_TblTreItem();
    }
@@ -196,7 +196,7 @@ void C_NagTopTreeModel::SetContent(const std::vector<QString> & orc_Content,
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagTopTreeModel::SetError(const std::vector<bool> & orc_Error)
 {
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       std::vector<C_TblTreSimpleItem *>::const_iterator c_ItParents;
       for (c_ItParents = this->mpc_InvisibleRootItem->c_Children.begin();
@@ -204,7 +204,7 @@ void C_NagTopTreeModel::SetError(const std::vector<bool> & orc_Error)
       {
          C_TblTreItem * const pc_ParentItem = dynamic_cast<C_TblTreItem *>(*c_ItParents);
 
-         if (pc_ParentItem != NULL)
+         if (pc_ParentItem != nullptr)
          {
             if (pc_ParentItem->c_Children.empty() == true)
             {
@@ -224,7 +224,7 @@ void C_NagTopTreeModel::SetError(const std::vector<bool> & orc_Error)
                {
                   C_TblTreItem * const pc_ChildItem = dynamic_cast<C_TblTreItem *>(*c_ItChildren);
 
-                  if (pc_ChildItem != NULL)
+                  if (pc_ChildItem != nullptr)
                   {
                      if (pc_ChildItem->u32_Index < orc_Error.size())
                      {
@@ -260,7 +260,7 @@ void C_NagTopTreeModel::SetError(const std::vector<bool> & orc_Error)
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagTopTreeModel::UpdateItem(const uint32_t ou32_Index, const QString & orc_Content)
 {
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       std::vector<C_TblTreSimpleItem *>::const_iterator c_ItParents;
       for (c_ItParents = this->mpc_InvisibleRootItem->c_Children.begin();
@@ -268,7 +268,7 @@ void C_NagTopTreeModel::UpdateItem(const uint32_t ou32_Index, const QString & or
       {
          C_TblTreItem * const pc_ParentItem = dynamic_cast<C_TblTreItem *>(*c_ItParents);
 
-         if (pc_ParentItem != NULL)
+         if (pc_ParentItem != nullptr)
          {
             if (pc_ParentItem->c_Children.empty() == true)
             {
@@ -288,7 +288,7 @@ void C_NagTopTreeModel::UpdateItem(const uint32_t ou32_Index, const QString & or
                {
                   C_TblTreItem * const pc_ChildItem = dynamic_cast<C_TblTreItem *>(*c_ItChildren);
 
-                  if (pc_ChildItem != NULL)
+                  if (pc_ChildItem != nullptr)
                   {
                      if (pc_ChildItem->u32_Index == ou32_Index)
                      {
@@ -311,7 +311,7 @@ void C_NagTopTreeModel::UpdateItem(const uint32_t ou32_Index, const QString & or
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagTopTreeModel::Clear(void)
 {
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       std::vector<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
 
@@ -321,7 +321,7 @@ void C_NagTopTreeModel::Clear(void)
       for (c_ItChildren = this->mpc_InvisibleRootItem->c_Children.begin();
            c_ItChildren != this->mpc_InvisibleRootItem->c_Children.end(); ++c_ItChildren)
       {
-         if (*c_ItChildren != NULL)
+         if (*c_ItChildren != nullptr)
          {
             (*c_ItChildren)->ClearChildren();
          }
@@ -360,7 +360,7 @@ uint32_t C_NagTopTreeModel::h_GetFlatIndexFromModelIndex(const QModelIndex & orc
    //lint -e{9079}  Result of Qt interface restrictions, set by index function
    const C_TblTreItem * const pc_TreeItem = static_cast<const C_TblTreItem *>(orc_ModelIndex.internalPointer());
 
-   if (pc_TreeItem != NULL)
+   if (pc_TreeItem != nullptr)
    {
       u32_Return = pc_TreeItem->u32_Index;
    }
@@ -390,7 +390,7 @@ QModelIndex C_NagTopTreeModel::GetModelIndexFromFlatIndex(const uint32_t ou32_Fl
       C_TblTreItem * const pc_ParentItem =
          dynamic_cast<C_TblTreItem *>(this->mpc_InvisibleRootItem->c_Children[u32_ItParents]);
 
-      if (pc_ParentItem != NULL)
+      if (pc_ParentItem != nullptr)
       {
          if (pc_ParentItem->c_Children.empty() == true)
          {
@@ -406,7 +406,7 @@ QModelIndex C_NagTopTreeModel::GetModelIndexFromFlatIndex(const uint32_t ou32_Fl
             {
                C_TblTreItem * const pc_ChildItem =
                   dynamic_cast<C_TblTreItem *>(pc_ParentItem->c_Children[u32_ItChildren]);
-               if ((pc_ChildItem != NULL) && (pc_ChildItem->u32_Index == ou32_FlatIndex))
+               if ((pc_ChildItem != nullptr) && (pc_ChildItem->u32_Index == ou32_FlatIndex))
                {
                   c_ModelIndex = this->index(u32_ItChildren, 0, this->index(u32_ItParents, 0));
                   q_Found = true;

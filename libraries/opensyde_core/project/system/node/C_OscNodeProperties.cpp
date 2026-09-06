@@ -108,9 +108,9 @@ void C_OscNodeProperties::CalcHash(uint32_t & oru32_HashValue) const
 const C_OscNodeComInterfaceSettings * C_OscNodeProperties::GetComInterface(
    const C_OscSystemBus::E_Type oe_InterfaceType, const uint8_t ou8_InterfaceNumber) const
 {
-   const C_OscNodeComInterfaceSettings * pc_Retval = NULL;
+   const C_OscNodeComInterfaceSettings * pc_Retval = nullptr;
 
-   for (uint32_t u32_Index = 0; (u32_Index < this->c_ComInterfaces.size()) && (pc_Retval == NULL); ++u32_Index)
+   for (uint32_t u32_Index = 0; (u32_Index < this->c_ComInterfaces.size()) && (pc_Retval == nullptr); ++u32_Index)
    {
       const C_OscNodeComInterfaceSettings & rc_CurComInterface = this->c_ComInterfaces[u32_Index];
       //Check if match
@@ -155,7 +155,7 @@ void C_OscNodeProperties::DisconnectComInterface(const C_OscSystemBus::E_Type oe
 {
    const C_OscNodeComInterfaceSettings * const pc_Interface = GetComInterface(oe_InterfaceType, ou8_InterfaceNumber);
 
-   if (pc_Interface != NULL)
+   if (pc_Interface != nullptr)
    {
       C_OscNodeComInterfaceSettings c_Tmp = *pc_Interface;
       c_Tmp.RemoveConnection();

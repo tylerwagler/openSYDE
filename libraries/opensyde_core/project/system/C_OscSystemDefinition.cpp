@@ -226,7 +226,7 @@ int32_t C_OscSystemDefinition::AddConnection(const uint32_t ou32_NodeIndex, cons
       C_OscSystemBus & rc_Bus = this->c_Buses[ou32_BusIndex];
       const C_OscNodeComInterfaceSettings * const pc_Interface = rc_Node.c_Properties.GetComInterface(rc_Bus.e_Type,
                                                                                                       ou8_Interface);
-      if (pc_Interface != NULL)
+      if (pc_Interface != nullptr)
       {
          C_OscNodeComInterfaceSettings c_Tmp = *pc_Interface;
          c_Tmp.AddConnection(ou32_BusIndex);
@@ -394,7 +394,7 @@ bool C_OscSystemDefinition::CheckBusIdAvailable(const uint8_t ou8_BusId,
    for (uint32_t u32_ItBus = 0; u32_ItBus < this->c_Buses.size(); ++u32_ItBus)
    {
       bool q_Skip = false;
-      if (opu32_BusIndexToSkip != NULL)
+      if (opu32_BusIndexToSkip != nullptr)
       {
          if (*opu32_BusIndexToSkip == u32_ItBus)
          {
@@ -494,7 +494,7 @@ const
    if (ou32_NodeIndex < this->c_Nodes.size())
    {
       const C_OscNode & rc_CheckedNode = this->c_Nodes[ou32_NodeIndex];
-      if (opq_NameConflict != NULL)
+      if (opq_NameConflict != nullptr)
       {
          //check for node name used more than once (independent of character case)
          *opq_NameConflict = false;
@@ -526,7 +526,7 @@ const
             }
          }
       }
-      if (opq_NameInvalid != NULL)
+      if (opq_NameInvalid != nullptr)
       {
          uint32_t u32_GroupIndex;
 
@@ -545,7 +545,7 @@ const
             *opq_NameInvalid = !C_OscUtils::h_CheckValidCeName(rc_CheckedNode.c_Properties.c_Name);
          }
       }
-      if (opq_NodeIdInvalid != NULL)
+      if (opq_NodeIdInvalid != nullptr)
       {
          //check for valid node ID
          *opq_NodeIdInvalid = false;
@@ -562,7 +562,7 @@ const
             if (q_ComIdValid == false)
             {
                *opq_NodeIdInvalid = true;
-               if (opc_InvalidInterfaceIndices == NULL)
+               if (opc_InvalidInterfaceIndices == nullptr)
                {
                   //not interested in details, we are finished here as we know there was at least one conflict
                   break;
@@ -574,7 +574,7 @@ const
             }
          }
       }
-      if (opq_IpInvalid != NULL)
+      if (opq_IpInvalid != nullptr)
       {
          *opq_IpInvalid = false;
 
@@ -602,7 +602,7 @@ const
                if (q_ComIpValid == false)
                {
                   *opq_IpInvalid = true;
-                  if (opc_InvalidInterfaceIndices == NULL)
+                  if (opc_InvalidInterfaceIndices == nullptr)
                   {
                      //not interested in details, we are finished here as we know there was at least one conflics
                      break;
@@ -616,7 +616,7 @@ const
          }
       }
 
-      if (opq_DataPoolsInvalid != NULL)
+      if (opq_DataPoolsInvalid != nullptr)
       {
          // check all datapools for errors
          uint32_t u32_Counter;
@@ -631,7 +631,7 @@ const
 
          for (u32_Counter = 0U;
               (u32_Counter < rc_CheckedNode.c_DataPools.size()) &&
-              ((q_ResultError == false) || (opc_InvalidDataPoolIndices != NULL));
+              ((q_ResultError == false) || (opc_InvalidDataPoolIndices != nullptr));
               ++u32_Counter)
          {
             const uint32_t u32_Hash = this->m_GetDataPoolHash(ou32_NodeIndex, u32_Counter);
@@ -661,7 +661,7 @@ const
                   {
                      q_ResultError = true;
                      q_AlreadyAdded = true;
-                     if (opc_InvalidDataPoolIndices != NULL)
+                     if (opc_InvalidDataPoolIndices != nullptr)
                      {
                         opc_InvalidDataPoolIndices->push_back(u32_Counter);
                      }
@@ -674,12 +674,12 @@ const
                      bool q_CurRes = false;
                      const C_OscCanProtocol * const pc_Protocol =
                         rc_CheckedNode.GetRelatedCanProtocolConst(u32_Counter);
-                     if (pc_Protocol != NULL)
+                     if (pc_Protocol != nullptr)
                      {
                         //Matching data pool to protocol
                         for (uint32_t u32_ItInterface = 0;
                              (u32_ItInterface < pc_Protocol->c_ComMessages.size()) &&
-                             ((q_ResultError == false) || (opc_InvalidDataPoolIndices != NULL));
+                             ((q_ResultError == false) || (opc_InvalidDataPoolIndices != nullptr));
                              ++u32_ItInterface)
                         {
                            const C_OscCanMessageContainer & rc_MessageContainer =
@@ -692,7 +692,7 @@ const
                                  rc_DataPool, u32_ItInterface, true);
                               const C_OscNodeDataPoolList * const pc_RxList = C_OscCanProtocol::h_GetComListConst(
                                  rc_DataPool, u32_ItInterface, false);
-                              if ((pc_TxList != NULL) && (pc_RxList != NULL))
+                              if ((pc_TxList != nullptr) && (pc_RxList != nullptr))
                               {
                                  // Parameter oq_CanOpenPdoSyncValid is true due to node mode and no CANopen protocol
                                  // is possible here and must not be checked
@@ -710,7 +710,7 @@ const
                                     q_ResultError = true;
                                     q_CurRes = true;
                                     q_AlreadyAdded = true;
-                                    if (opc_InvalidDataPoolIndices != NULL)
+                                    if (opc_InvalidDataPoolIndices != nullptr)
                                     {
                                        opc_InvalidDataPoolIndices->push_back(u32_Counter);
                                     }
@@ -726,7 +726,7 @@ const
                   {
                      //Do not reset error
                      q_ResultError = q_ResultError || c_It->second;
-                     if ((opc_InvalidDataPoolIndices != NULL) && (c_It->second))
+                     if ((opc_InvalidDataPoolIndices != nullptr) && (c_It->second))
                      {
                         opc_InvalidDataPoolIndices->push_back(u32_Counter);
                      }
@@ -744,14 +744,14 @@ const
                {
                   rc_CheckedNode.CheckErrorDataPool(u32_Counter, &q_DataPoolNameConflict, &q_DataPoolNameInvalid,
                                                     &q_DataPoolListError, &q_DataPoolTooFewListsOrElementsError,
-                                                    &q_DataPoolTooManyListsOrElementsError, NULL);
+                                                    &q_DataPoolTooManyListsOrElementsError, nullptr);
 
                   if (((q_DataPoolNameConflict == true) || (q_DataPoolNameInvalid == true)) ||
                       (q_DataPoolListError == true) || (q_DataPoolTooFewListsOrElementsError == true) ||
                       (q_DataPoolTooManyListsOrElementsError == true))
                   {
                      q_ResultError = true;
-                     if (opc_InvalidDataPoolIndices != NULL)
+                     if (opc_InvalidDataPoolIndices != nullptr)
                      {
                         opc_InvalidDataPoolIndices->push_back(u32_Counter);
                      }
@@ -769,7 +769,7 @@ const
                else
                {
                   //ALWAYS do datapool name conflict check
-                  rc_CheckedNode.CheckErrorDataPool(u32_Counter, &q_DataPoolNameConflict, NULL, NULL, NULL, NULL, NULL);
+                  rc_CheckedNode.CheckErrorDataPool(u32_Counter, &q_DataPoolNameConflict, nullptr, nullptr, nullptr, nullptr, nullptr);
 
                   if (q_DataPoolNameConflict == true)
                   {
@@ -780,7 +780,7 @@ const
                   {
                      //Do not reset error
                      q_ResultError = q_ResultError || c_It->second;
-                     if ((opc_InvalidDataPoolIndices != NULL) && (c_It->second))
+                     if ((opc_InvalidDataPoolIndices != nullptr) && (c_It->second))
                      {
                         opc_InvalidDataPoolIndices->push_back(u32_Counter);
                      }
@@ -790,7 +790,7 @@ const
          }
          *opq_DataPoolsInvalid = q_ResultError;
       }
-      if (opq_ApplicationsInvalid != NULL)
+      if (opq_ApplicationsInvalid != nullptr)
       {
          *opq_ApplicationsInvalid = false;
          for (uint32_t u32_ItApp = 0; u32_ItApp < rc_CheckedNode.c_Applications.size(); ++u32_ItApp)
@@ -801,7 +801,7 @@ const
                if (q_Valid == false)
                {
                   *opq_ApplicationsInvalid = true;
-                  if (opc_InvalidApplicationIndices != NULL)
+                  if (opc_InvalidApplicationIndices != nullptr)
                   {
                      opc_InvalidApplicationIndices->push_back(u32_ItApp);
                   }
@@ -809,14 +809,14 @@ const
             }
          }
       }
-      if (opq_DomainsInvalid != NULL)
+      if (opq_DomainsInvalid != nullptr)
       {
          rc_CheckedNode.CheckHalcConfigValid(opq_DomainsInvalid, opc_InvalidDomainIndices);
       }
 
       // COMM protocol check
-      if ((opq_CommMinSignalCountInvalid != NULL) || (opq_CommMaxSignalCountInvalid != NULL) ||
-          (opq_CoPdoCountInvalid != NULL))
+      if ((opq_CommMinSignalCountInvalid != nullptr) || (opq_CommMaxSignalCountInvalid != nullptr) ||
+          (opq_CoPdoCountInvalid != nullptr))
       {
          bool q_TempCommRxSignalCountInvalid = false;
          bool q_TempCommTxSignalCountInvalid = false;
@@ -825,15 +825,15 @@ const
          bool q_TempMinSignalCountInvalid = false;
          uint32_t u32_ProtCounter;
 
-         if (opq_CommMinSignalCountInvalid != NULL)
+         if (opq_CommMinSignalCountInvalid != nullptr)
          {
             *opq_CommMinSignalCountInvalid = false;
          }
-         if (opq_CommMaxSignalCountInvalid != NULL)
+         if (opq_CommMaxSignalCountInvalid != nullptr)
          {
             *opq_CommMaxSignalCountInvalid = false;
          }
-         if (opq_CoPdoCountInvalid != NULL)
+         if (opq_CoPdoCountInvalid != nullptr)
          {
             *opq_CoPdoCountInvalid = false;
          }
@@ -849,29 +849,29 @@ const
                                                  q_TempCoRxPdoCountInvalid,
                                                  q_TempCoTxPdoCountInvalid, q_TempMinSignalCountInvalid);
 
-            if (((opq_CommMinSignalCountInvalid != NULL) || (opq_CommMaxSignalCountInvalid != NULL)) &&
+            if (((opq_CommMinSignalCountInvalid != nullptr) || (opq_CommMaxSignalCountInvalid != nullptr)) &&
                 ((q_TempCommRxSignalCountInvalid == true) ||
                  (q_TempCommTxSignalCountInvalid == true) ||
                  (q_TempMinSignalCountInvalid == true)))
             {
                // Merge TX and RX error
-               if ((opq_CommMinSignalCountInvalid != NULL) && (q_TempMinSignalCountInvalid == true))
+               if ((opq_CommMinSignalCountInvalid != nullptr) && (q_TempMinSignalCountInvalid == true))
                {
                   *opq_CommMinSignalCountInvalid = true;
                }
 
-               if ((opq_CommMaxSignalCountInvalid != NULL) && ((q_TempCommRxSignalCountInvalid == true) ||
+               if ((opq_CommMaxSignalCountInvalid != nullptr) && ((q_TempCommRxSignalCountInvalid == true) ||
                                                                (q_TempCommTxSignalCountInvalid == true)))
                {
                   *opq_CommMaxSignalCountInvalid = true;
                }
 
-               if (opc_InvalidProtocolTypes != NULL)
+               if (opc_InvalidProtocolTypes != nullptr)
                {
                   opc_InvalidProtocolTypes->push_back(C_OscCanProtocol::hc_ALL_PROTOCOLS[u32_ProtCounter]);
                }
             }
-            if ((opq_CoPdoCountInvalid != NULL) &&
+            if ((opq_CoPdoCountInvalid != nullptr) &&
                 ((q_TempCoRxPdoCountInvalid == true) ||
                  (q_TempCoTxPdoCountInvalid == true)))
             {
@@ -882,21 +882,21 @@ const
       }
 
       // CANopen specific check
-      if ((opq_CoNodeIdInvalid != NULL) || (opq_CoHearbeatTimeInvalid != NULL))
+      if ((opq_CoNodeIdInvalid != nullptr) || (opq_CoHearbeatTimeInvalid != nullptr))
       {
          std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager;
          bool q_TempCoNodeIdConflict;
-         bool * pq_TempCoNodeIdConflict = NULL;
+         bool * pq_TempCoNodeIdConflict = nullptr;
          bool q_TempCoManagerNodeIdInvalid;
-         bool * pq_TempCoManagerNodeIdInvalid = NULL;
+         bool * pq_TempCoManagerNodeIdInvalid = nullptr;
          bool q_TempCoDevicesNodeIdInvalid;
-         bool * pq_TempCoDevicesNodeIdInvalid = NULL;
+         bool * pq_TempCoDevicesNodeIdInvalid = nullptr;
          bool q_TempCoHeartbeatInvalid;
-         bool * pq_TempCoHeartbeatInvalid = NULL;
+         bool * pq_TempCoHeartbeatInvalid = nullptr;
 
          // Temporary pointers needed for avoid overwriting previous results in the loop
          // and avoid running error checks of not wanted checks
-         if (opq_CoNodeIdInvalid != NULL)
+         if (opq_CoNodeIdInvalid != nullptr)
          {
             *opq_CoNodeIdInvalid = false;
             pq_TempCoNodeIdConflict = &q_TempCoNodeIdConflict;
@@ -906,7 +906,7 @@ const
             pq_TempCoDevicesNodeIdInvalid = &q_TempCoDevicesNodeIdInvalid;
          }
 
-         if (opq_CoHearbeatTimeInvalid != NULL)
+         if (opq_CoHearbeatTimeInvalid != nullptr)
          {
             *opq_CoHearbeatTimeInvalid = false;
             pq_TempCoHeartbeatInvalid = &q_TempCoHeartbeatInvalid;
@@ -919,7 +919,7 @@ const
                                                   pq_TempCoDevicesNodeIdInvalid,
                                                   pq_TempCoHeartbeatInvalid, true);
 
-            if ((opq_CoNodeIdInvalid != NULL) &&
+            if ((opq_CoNodeIdInvalid != nullptr) &&
                 ((q_TempCoNodeIdConflict == true) ||
                  (q_TempCoManagerNodeIdInvalid == true) ||
                  (q_TempCoDevicesNodeIdInvalid == true)))
@@ -929,7 +929,7 @@ const
                *opq_CoNodeIdInvalid = true;
             }
 
-            if ((opq_CoHearbeatTimeInvalid != NULL) &&
+            if ((opq_CoHearbeatTimeInvalid != nullptr) &&
                 (q_TempCoHeartbeatInvalid == true))
             {
                // Error for CANopen Node ID detected
@@ -966,7 +966,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (opq_NameConflict != NULL)
+   if (opq_NameConflict != nullptr)
    {
       *opq_NameConflict = false;
       if (ou32_BusIndex < this->c_Buses.size())
@@ -985,7 +985,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
          }
       }
    }
-   if (opq_NameInvalid != NULL)
+   if (opq_NameInvalid != nullptr)
    {
       *opq_NameInvalid = false;
       if (ou32_BusIndex < this->c_Buses.size())
@@ -994,7 +994,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
          *opq_NameInvalid = !C_OscUtils::h_CheckValidCeName(rc_CheckedBus.c_Name);
       }
    }
-   if (opq_IdInvalid != NULL)
+   if (opq_IdInvalid != nullptr)
    {
       if (ou32_BusIndex < this->c_Buses.size())
       {
@@ -1029,7 +1029,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
          s32_Retval = C_RANGE;
       }
    }
-   if ((opq_DataPoolsInvalid != NULL) && (s32_Retval == C_NO_ERR))
+   if ((opq_DataPoolsInvalid != nullptr) && (s32_Retval == C_NO_ERR))
    {
       std::vector<uint32_t> c_NodeIndexes;
       std::vector<uint32_t> c_InterfaceIndexes;
@@ -1080,7 +1080,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
                                        rc_DataPool,
                                        c_InterfaceIndexes[u32_ItNode],
                                        false);
-                                 if ((pc_TxList != NULL) && (pc_RxList != NULL))
+                                 if ((pc_TxList != nullptr) && (pc_RxList != nullptr))
                                  {
                                     // Parameter oq_CanOpenPdoSyncValid is true in case of no CANopen protocol
                                     // to avoid a check for this scenario
@@ -1227,7 +1227,7 @@ const
                const C_OscNode & rc_Node = this->c_Nodes[c_NodeIndices[u32_ItNode]];
                bool q_Valid;
                //Check if skip possible
-               if ((opc_SkipMessage != NULL) && (opc_SkipMessage->u32_NodeIndex == c_NodeIndices[u32_ItNode]))
+               if ((opc_SkipMessage != nullptr) && (opc_SkipMessage->u32_NodeIndex == c_NodeIndices[u32_ItNode]))
                {
                   rc_Node.CheckMessageId(c_InterfaceIndices[u32_ItNode], orc_MessageId, q_Valid,
                                          &opc_SkipMessage->e_ComProtocol,
@@ -1299,7 +1299,7 @@ const
                const C_OscNode & rc_Node = this->c_Nodes[c_NodeIndices[u32_ItNode]];
                bool q_Valid;
                //Check if skip possible
-               if ((opc_SkipMessage != NULL) && (opc_SkipMessage->u32_NodeIndex == c_NodeIndices[u32_ItNode]))
+               if ((opc_SkipMessage != nullptr) && (opc_SkipMessage->u32_NodeIndex == c_NodeIndices[u32_ItNode]))
                {
                   rc_Node.CheckMessageName(c_InterfaceIndices[u32_ItNode], orc_MessageName, q_Valid,
                                            &opc_SkipMessage->e_ComProtocol,
@@ -1376,8 +1376,8 @@ int32_t C_OscSystemDefinition::CheckMessageMatch(const C_OscCanMessageIdentifica
             const C_OscCanProtocol * const pc_Protocol2 =
                rc_Node2.GetCanProtocolConst(orc_MessageId2.e_ComProtocol, orc_MessageId2.u32_DatapoolIndex);
 
-            if (((pc_DataPool1 != NULL) && (pc_DataPool2 != NULL)) &&
-                ((pc_Protocol1 != NULL) && (pc_Protocol2 != NULL)))
+            if (((pc_DataPool1 != nullptr) && (pc_DataPool2 != nullptr)) &&
+                ((pc_Protocol1 != nullptr) && (pc_Protocol2 != nullptr)))
             {
                const C_OscNodeDataPoolList * const pc_List1 =
                   C_OscCanProtocol::h_GetComListConst(*pc_DataPool1, orc_MessageId1.u32_InterfaceIndex,
@@ -1388,7 +1388,7 @@ int32_t C_OscSystemDefinition::CheckMessageMatch(const C_OscCanMessageIdentifica
 
                if (((orc_MessageId1.u32_InterfaceIndex < pc_Protocol1->c_ComMessages.size()) &&
                     (orc_MessageId2.u32_InterfaceIndex < pc_Protocol2->c_ComMessages.size())) &&
-                   ((pc_List1 != NULL) && (pc_List2 != NULL)))
+                   ((pc_List1 != nullptr) && (pc_List2 != nullptr)))
                {
                   const C_OscCanMessageContainer & rc_MessageContainer1 =
                      pc_Protocol1->c_ComMessages[orc_MessageId1.u32_InterfaceIndex];
@@ -1462,7 +1462,7 @@ int32_t C_OscSystemDefinition::CheckMessageMatch(const C_OscCanMessageIdentifica
                                  *pc_DataPool2,
                                  orc_MessageId2.u32_InterfaceIndex,
                                  orc_MessageId2.q_MessageIsTx, orc_MessageId2.u32_MessageIndex, u32_ItSignal);
-                           if ((pc_SignalData1 != NULL) && (pc_SignalData2 != NULL))
+                           if ((pc_SignalData1 != nullptr) && (pc_SignalData2 != nullptr))
                            {
                               if (pc_SignalData1->c_Name != pc_SignalData2->c_Name)
                               {
@@ -1580,7 +1580,7 @@ void C_OscSystemDefinition::GetNameMaxCharLimitAffectedItems(const uint32_t ou32
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinition::ApplyNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit)
 {
-   this->m_HandleNameMaxCharLimit(ou32_NameMaxCharLimit, NULL);
+   this->m_HandleNameMaxCharLimit(ou32_NameMaxCharLimit, nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1594,7 +1594,7 @@ void C_OscSystemDefinition::ApplyNameMaxCharLimit(const uint32_t ou32_NameMaxCha
 void C_OscSystemDefinition::GetNodeIndexesOfBus(const uint32_t ou32_BusIndex, std::vector<uint32_t> & orc_NodeIndexes,
                                                 std::vector<uint32_t> & orc_InterfaceIndexes) const
 {
-   m_GetNodeAndComDpIndexesOfBus(ou32_BusIndex, NULL, orc_NodeIndexes, orc_InterfaceIndexes, NULL);
+   m_GetNodeAndComDpIndexesOfBus(ou32_BusIndex, nullptr, orc_NodeIndexes, orc_InterfaceIndexes, nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1612,7 +1612,7 @@ void C_OscSystemDefinition::GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusI
                                                         std::vector<uint32_t> & orc_InterfaceIndexes,
                                                         std::vector<uint32_t> & orc_DatapoolIndexes) const
 {
-   m_GetNodeAndComDpIndexesOfBus(ou32_BusIndex, NULL, orc_NodeIndexes, orc_InterfaceIndexes,
+   m_GetNodeAndComDpIndexesOfBus(ou32_BusIndex, nullptr, orc_NodeIndexes, orc_InterfaceIndexes,
                                  &orc_DatapoolIndexes);
 }
 
@@ -1660,7 +1660,7 @@ void C_OscSystemDefinition::AddNode(C_OscNode & orc_Node, const std::string & or
    orc_Node.pc_DeviceDefinition = C_OscSystemDefinition::hc_Devices.LookForDevice(c_SubDeviceName,
                                                                                   orc_MainDeviceName,
                                                                                   orc_Node.u32_SubDeviceIndex);
-   tgl_assert(orc_Node.pc_DeviceDefinition != NULL);
+   tgl_assert(orc_Node.pc_DeviceDefinition != nullptr);
    this->c_Nodes.push_back(orc_Node);
 }
 
@@ -1896,7 +1896,7 @@ uint32_t C_OscSystemDefinition::m_GetRelatedProtocolHash(const uint32_t ou32_Nod
    {
       const C_OscNode & rc_Node = this->c_Nodes[ou32_NodeIndex];
       const C_OscCanProtocol * const pc_ProToCol = rc_Node.GetRelatedCanProtocolConst(ou32_DataPoolIndex);
-      if (pc_ProToCol != NULL)
+      if (pc_ProToCol != nullptr)
       {
          pc_ProToCol->CalcHash(u32_Retval);
       }
@@ -1944,7 +1944,7 @@ void C_OscSystemDefinition::m_GetNodeAndComDpIndexesOfBus(const uint32_t ou32_Bu
             if (rc_CurComInterface.u32_BusIndex == ou32_BusIndex)
             {
                // node is connected to the bus
-               if (opc_DatapoolIndexes == NULL)
+               if (opc_DatapoolIndexes == nullptr)
                {
                   // Only nodes and interfaces are relevant
                   orc_NodeIndexes.push_back(u32_NodeIndex);
@@ -1961,7 +1961,7 @@ void C_OscSystemDefinition::m_GetNodeAndComDpIndexesOfBus(const uint32_t ou32_Bu
                      const C_OscCanProtocol & rc_Prot = rc_Node.c_ComProtocols[u32_ProtocolCounter];
 
                      // If the protocol is relevant, check for it
-                     if ((ope_ComProtocol == NULL) ||
+                     if ((ope_ComProtocol == nullptr) ||
                          (rc_Prot.e_Type == (*ope_ComProtocol)))
                      {
                         orc_NodeIndexes.push_back(u32_NodeIndex);
@@ -2025,7 +2025,7 @@ void C_OscSystemDefinition::m_HandleNameMaxCharLimitNodeName(const uint32_t ou32
                                                                                 "multi-node-name",
                                                                                 rc_Squad.c_BaseName,
                                                                                 opc_ChangedItems);
-      if (opc_ChangedItems == NULL)
+      if (opc_ChangedItems == nullptr)
       {
          if (c_OldName != rc_Squad.c_BaseName)
          {

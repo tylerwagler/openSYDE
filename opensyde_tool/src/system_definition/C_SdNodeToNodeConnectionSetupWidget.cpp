@@ -186,8 +186,8 @@ C_OscSystemBus::E_Type C_SdNodeToNodeConnectionSetupWidget::GetBusType(void) con
    else
    {
       const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->GetBusIndex());
-      tgl_assert(pc_Bus != NULL);
-      if (pc_Bus != NULL)
+      tgl_assert(pc_Bus != nullptr);
+      if (pc_Bus != nullptr)
       {
          e_Retval = pc_Bus->e_Type;
       }
@@ -287,7 +287,7 @@ void C_SdNodeToNodeConnectionSetupWidget::m_InitFromData(void)
    const C_OscNode * const pc_Node1 = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_Node1Index);
    const C_OscNode * const pc_Node2 = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_Node2Index);
 
-   if ((pc_Node1 != NULL) && (pc_Node2 != NULL))
+   if ((pc_Node1 != nullptr) && (pc_Node2 != nullptr))
    {
       bool q_NewBusPossible;
       bool q_ExistingBusExists;
@@ -374,7 +374,7 @@ void C_SdNodeToNodeConnectionSetupWidget::m_InitFromData(void)
             for (uint32_t u32_ItBus = 0; u32_ItBus < u32_BusCount; ++u32_ItBus)
             {
                uint32_t u32_InterfaceCounter;
-               const C_OscSystemBus * pc_Bus = NULL;
+               const C_OscSystemBus * pc_Bus = nullptr;
 
                // Check if this bus is already connected to the target
                for (u32_InterfaceCounter = 0U; u32_InterfaceCounter < pc_Node2->c_Properties.c_ComInterfaces.size();
@@ -390,7 +390,7 @@ void C_SdNodeToNodeConnectionSetupWidget::m_InitFromData(void)
                   }
                }
 
-               if (pc_Bus != NULL)
+               if (pc_Bus != nullptr)
                {
                   QString c_Text = pc_Bus->c_Name.c_str();
 
@@ -425,7 +425,7 @@ void C_SdNodeToNodeConnectionSetupWidget::m_HandleTypeChange(void) const
    const C_OscNode * const pc_Node1 = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_Node1Index);
    const C_OscNode * const pc_Node2 = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_Node2Index);
 
-   if ((pc_Node1 != NULL) && (pc_Node2 != NULL))
+   if ((pc_Node1 != nullptr) && (pc_Node2 != nullptr))
    {
       const C_OscSystemBus::E_Type e_Type = this->GetBusType();
 
@@ -552,7 +552,7 @@ void C_SdNodeToNodeConnectionSetupWidget::m_CheckTypeRestrictions(bool & orq_New
    orq_ExistingBusExists = false;
    orq_ExistingBusRestricted = false;
 
-   if ((pc_Node1 != NULL) && (pc_Node2 != NULL))
+   if ((pc_Node1 != nullptr) && (pc_Node2 != nullptr))
    {
       // Flags for the source node only
       const bool q_SourceCanWorks = C_SdUtil::h_CheckNodeInterfaceAvailable(pc_Node1->c_Properties.c_ComInterfaces,

@@ -60,13 +60,13 @@ public:
 
     //Logging call
     static void h_WriteLogInfo(const std::string & orc_Activity, const std::string & orc_Message,
-                               const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                               const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
     static void h_WriteLogWarning(const std::string & orc_Activity, const std::string & orc_Message,
-                                  const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                                  const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
     static void h_WriteLogError(const std::string & orc_Activity, const std::string & orc_Message,
-                                const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                                const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
     static void h_WriteLogPerformance(const uint16_t ou16_TimerId, const std::string & orc_Message,
-                                      const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                                      const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
 
 
    static uint16_t h_StartPerformanceTimer(void);
@@ -92,8 +92,8 @@ private:
    static std::ofstream mhc_File;
 
     static void mh_WriteLog(const std::string & orc_Type, const std::string & orc_Activity,
-                            const std::string & orc_Message, const char_t * const opcn_Class = NULL,
-                            const char_t * const opcn_Function = NULL);
+                            const std::string & orc_Message, const char_t * const opcn_Class = nullptr,
+                            const char_t * const opcn_Function = nullptr);
 
    static void mh_OpenFile(void);
    //Avoid calling

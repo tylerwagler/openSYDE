@@ -36,7 +36,7 @@ class C_SdNdeDpListsWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpListsWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDpListsWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpListsWidget(void) override;
 
    void InitText(void) const;

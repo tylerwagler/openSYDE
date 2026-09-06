@@ -123,12 +123,12 @@ void C_GiLiBusConnector::DeleteConnection(void)
 {
    C_GiPort * const pc_Port = dynamic_cast<C_GiPort *>(this->mpc_GenericPositionItem);
 
-   if (pc_Port != NULL)
+   if (pc_Port != nullptr)
    {
       pc_Port->RemoveConnectorFromRegistry();
-      this->mpc_GenericPositionItem = NULL;
+      this->mpc_GenericPositionItem = nullptr;
    }
-   this->mpc_GenericSignalItem = NULL;
+   this->mpc_GenericSignalItem = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -150,11 +150,11 @@ void C_GiLiBusConnector::SetPoints(const std::vector<QPointF> & orc_ScenePos)
    C_GiLiBusConnectorBase::SetPoints(orc_ScenePos);
    this->m_UpdateExternal();
    //Port visibility
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       pc_Node->ReevaluatePortState();
    }
-   if ((pc_LastNode != NULL) && (pc_LastNode != pc_Node))
+   if ((pc_LastNode != nullptr) && (pc_LastNode != pc_Node))
    {
       pc_LastNode->ReevaluatePortState();
    }
@@ -190,14 +190,14 @@ C_GiNode * C_GiLiBusConnector::GetNodeItem(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiBusConnector::UpdateData(C_PuiSdNodeConnection * const opc_UiConnection) const
 {
-   if (opc_UiConnection != NULL)
+   if (opc_UiConnection != nullptr)
    {
       const C_GiNode * const pc_Node = dynamic_cast<const C_GiNode *>(this->mpc_GenericSignalItem);
       //ID
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          const C_PuiSdNodeConnectionId * const pc_ID = pc_Node->GetNodeConnectionId(this);
-         if (pc_ID != NULL)
+         if (pc_ID != nullptr)
          {
             opc_UiConnection->c_ConnectionId = *pc_ID;
          }
@@ -222,16 +222,16 @@ void C_GiLiBusConnector::GenerateHint(void)
 {
    const C_GiNode * const pc_Node = dynamic_cast<const C_GiNode *>(this->mpc_GenericSignalItem);
 
-   if ((pc_Node != NULL) && (this->GetBusItem() != NULL))
+   if ((pc_Node != nullptr) && (this->GetBusItem() != nullptr))
    {
       const C_PuiSdNodeConnectionId * const pc_NodeConnection = this->GetConnectionData();
       const C_OscNode * pc_NodeData;
       pc_Node->GetOscNodeConst(pc_NodeData);
-      if ((pc_NodeConnection != NULL) && (pc_NodeData != NULL))
+      if ((pc_NodeConnection != nullptr) && (pc_NodeData != nullptr))
       {
          const C_OscNodeComInterfaceSettings * const pc_ComInterfaceData = pc_NodeData->c_Properties.GetComInterface(
             pc_NodeConnection->e_InterfaceType, pc_NodeConnection->u8_InterfaceNumber);
-         if (pc_ComInterfaceData != NULL)
+         if (pc_ComInterfaceData != nullptr)
          {
             QString c_Hint;
             // In case of Ethernet an empty string comes back
@@ -271,10 +271,10 @@ void C_GiLiBusConnector::GenerateHint(void)
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSdNodeConnectionId * C_GiLiBusConnector::GetConnectionData(void) const
 {
-   const C_PuiSdNodeConnectionId * pc_Retval = NULL;
+   const C_PuiSdNodeConnectionId * pc_Retval = nullptr;
    const C_GiNode * const pc_Node = dynamic_cast<const C_GiNode *>(this->mpc_GenericSignalItem);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       pc_Retval = pc_Node->GetNodeConnectionId(this);
    }
@@ -293,7 +293,7 @@ void C_GiLiBusConnector::ChangeInterface(const uint8_t & oru8_NewInterface,
 {
    C_GiNode * const pc_Node = dynamic_cast<C_GiNode *>(this->mpc_GenericSignalItem);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       pc_Node->ChangeInterface(oru8_NewInterface, this, orc_Properties);
    }
@@ -332,9 +332,9 @@ void C_GiLiBusConnector::Reconnect(stw::opensyde_gui::C_GiNode * const opc_Start
                                    const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
    this->mpc_GenericSignalItem = opc_LastNode;
-   if (opc_LastNode != NULL)
+   if (opc_LastNode != nullptr)
    {
-      if (this->GetBusItem() != NULL)
+      if (this->GetBusItem() != nullptr)
       {
          //Update data
          C_PuiSdNodeConnectionId c_NodeConn;
@@ -342,7 +342,7 @@ void C_GiLiBusConnector::Reconnect(stw::opensyde_gui::C_GiNode * const opc_Start
          c_NodeConn.u8_InterfaceNumber = static_cast<uint8_t>(ors32_Interface);
          //Node
 
-         if (opc_StartingNode != NULL)
+         if (opc_StartingNode != nullptr)
          {
             //Delete connection for last node
             opc_StartingNode->RemoveConnector(this);
@@ -375,7 +375,7 @@ void C_GiLiBusConnector::Reconnect(const stw::opensyde_gui::C_GiLiBus * const op
 {
    Q_UNUSED(opc_StartingBus)
    this->m_SetBus(opc_LastBus);
-   if (this->GetBusItem() != NULL)
+   if (this->GetBusItem() != nullptr)
    {
       C_GiNode * const pc_Node = dynamic_cast<C_GiNode *>(this->mpc_GenericSignalItem);
       //Update data
@@ -383,7 +383,7 @@ void C_GiLiBusConnector::Reconnect(const stw::opensyde_gui::C_GiLiBus * const op
       c_NodeConn.e_InterfaceType = this->GetBusItem()->GetType();
       c_NodeConn.u8_InterfaceNumber = static_cast<uint8_t>(ors32_Interface);
       //Bus
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          pc_Node->UpdateConnection(this, c_NodeConn, orc_Properties,
                                    static_cast<uint32_t>(this->GetBusItem()->GetIndex()));
@@ -429,23 +429,23 @@ void C_GiLiBusConnector::m_OnInteractionPointMove(void)
                //Node
                m_UpdateGenericItem(dynamic_cast<C_GiNode *>(this->mpc_LastKnownGenericSignalItem));
                //Port
-               if (this->mpc_GenericPositionItem != NULL)
+               if (this->mpc_GenericPositionItem != nullptr)
                {
                   //If changed port unregister of starting point
                   if (this->mpc_GenericPositionItem != this->mpc_LastKnownGenericPositionItem)
                   {
                      C_GiPort * const pc_Port = dynamic_cast<C_GiPort *>(this->mpc_GenericPositionItem);
-                     if (pc_Port != NULL)
+                     if (pc_Port != nullptr)
                      {
                         pc_Port->RemoveConnectorFromRegistry();
                      }
                   }
                }
                this->mpc_GenericPositionItem = this->mpc_LastKnownGenericPositionItem;
-               if (this->mpc_GenericPositionItem != NULL)
+               if (this->mpc_GenericPositionItem != nullptr)
                {
                   C_GiPort * const pc_Port = dynamic_cast<C_GiPort *>(this->mpc_GenericPositionItem);
-                  if (pc_Port != NULL)
+                  if (pc_Port != nullptr)
                   {
                      //Restore visibility
                      pc_Port->AbortTemporaryUnregister();
@@ -455,12 +455,12 @@ void C_GiLiBusConnector::m_OnInteractionPointMove(void)
             else
             {
                //Handle last known port if new port found
-               if (this->mpc_LastKnownGenericPositionItem != NULL)
+               if (this->mpc_LastKnownGenericPositionItem != nullptr)
                {
                   if (this->mpc_GenericPositionItem != this->mpc_LastKnownGenericPositionItem)
                   {
                      C_GiPort * const pc_Port = dynamic_cast<C_GiPort *>(this->mpc_LastKnownGenericPositionItem);
-                     if (pc_Port != NULL)
+                     if (pc_Port != nullptr)
                      {
                         //Different port
                         pc_Port->TemporaryUnregister();
@@ -469,7 +469,7 @@ void C_GiLiBusConnector::m_OnInteractionPointMove(void)
                   else
                   {
                      C_GiPort * const pc_Port = dynamic_cast<C_GiPort *>(this->mpc_LastKnownGenericPositionItem);
-                     if (pc_Port != NULL)
+                     if (pc_Port != nullptr)
                      {
                         //Same port
                         pc_Port->AbortTemporaryUnregister();
@@ -500,11 +500,11 @@ void C_GiLiBusConnector::m_OnIterationGenericInteractionPointMove(QGraphicsItem 
 {
    C_GiNode * const pc_Node = dynamic_cast<C_GiNode *>(opc_HighestParentItem);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if (pc_Node->isUnderMouse() == true)
       {
-         if (this->GetBusItem() != NULL)
+         if (this->GetBusItem() != nullptr)
          {
             this->mc_Points[this->ms32_ActiveItemIndex]->setCursor(pc_Node->cursor());
             orq_RestoreMouseCursor = false;
@@ -536,7 +536,7 @@ void C_GiLiBusConnector::m_OnIterationGenericInteractionPointMove(QGraphicsItem 
       if (opc_HighestParentItem != this)
       {
          const C_GiBiCustomMouseItem * const pc_Other = dynamic_cast<C_GiBiCustomMouseItem *>(opc_HighestParentItem);
-         if (((pc_Other != NULL) && (orq_RestoreMouseCursor == true)) &&
+         if (((pc_Other != nullptr) && (orq_RestoreMouseCursor == true)) &&
              (opc_HighestParentItem->isUnderMouse() == true))
          {
             this->mc_Points[this->ms32_ActiveItemIndex]->setCursor(opc_HighestParentItem->cursor());
@@ -561,7 +561,7 @@ bool C_GiLiBusConnector::m_OnGenericInteractionPointMouseRelease(const QPointF &
    bool q_Retval = true;
    C_GiNode * const pc_Node = dynamic_cast<C_GiNode *>(this->mpc_GenericSignalItem);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if (this->mpc_GenericSignalItem != this->mpc_LastKnownGenericSignalItem)
       {
@@ -590,7 +590,7 @@ void C_GiLiBusConnector::m_OnBusChange(const QPointF & orc_ScenePos)
    int32_t s32_Interface = -1;
    const C_PuiSdNodeConnectionId * const pc_Id = this->GetConnectionData();
 
-   if (pc_Id != NULL)
+   if (pc_Id != nullptr)
    {
       s32_Interface = static_cast<int32_t>(pc_Id->u8_InterfaceNumber);
    }
@@ -631,7 +631,7 @@ void C_GiLiBusConnector::m_UpdatePort(const QPointF & orc_Pos)
    C_GiPort * const pc_LastPort = dynamic_cast<C_GiPort *>(this->mpc_GenericPositionItem);
    C_GiNode * const pc_Node = dynamic_cast<C_GiNode *>(this->mpc_GenericSignalItem);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       C_GiPort * pc_NewPort;
       pc_Node->FindClosestPort(orc_Pos, pc_NewPort);
@@ -639,23 +639,23 @@ void C_GiLiBusConnector::m_UpdatePort(const QPointF & orc_Pos)
    }
    if (pc_LastPort != this->mpc_GenericPositionItem)
    {
-      if ((pc_LastPort != NULL) && (pc_LastPort != this->mpc_LastKnownGenericPositionItem))
+      if ((pc_LastPort != nullptr) && (pc_LastPort != this->mpc_LastKnownGenericPositionItem))
       {
          //Exception as last mpc_LastKnownPortItem should stay visible
          pc_LastPort->RemoveConnectorFromRegistry();
       }
-      if ((this->mpc_GenericPositionItem != NULL) &&
+      if ((this->mpc_GenericPositionItem != nullptr) &&
           (this->mpc_GenericPositionItem != this->mpc_LastKnownGenericPositionItem))
       {
          C_GiPort * const pc_NewPort = dynamic_cast<C_GiPort *>(this->mpc_GenericPositionItem);
-         if (pc_NewPort != NULL)
+         if (pc_NewPort != nullptr)
          {
             //Exception as last mpc_LastKnownPortItem should stay visible
             pc_NewPort->AddConnectorToRegistry();
          }
       }
    }
-   if (this->mpc_GenericPositionItem != NULL)
+   if (this->mpc_GenericPositionItem != nullptr)
    {
       m_CalcInitialLocalPos(orc_Pos);
    }

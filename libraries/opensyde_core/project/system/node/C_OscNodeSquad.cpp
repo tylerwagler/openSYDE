@@ -116,7 +116,7 @@ int32_t C_OscNodeSquad::SetBaseName(std::vector<C_OscNode> & orc_Nodes, const st
          {
             C_OscNode & rc_Node = orc_Nodes[u32_NodeIndex];
 
-            if ((rc_Node.pc_DeviceDefinition != NULL) &&
+            if ((rc_Node.pc_DeviceDefinition != nullptr) &&
                 (rc_Node.u32_SubDeviceIndex < rc_Node.pc_DeviceDefinition->c_SubDevices.size()))
             {
                // Setting the new name for the sub node
@@ -155,7 +155,7 @@ bool C_OscNodeSquad::h_CheckIsMultiDevice(const uint32_t ou32_NodeIndex,
 {
    bool q_Retval = false;
 
-   if (opu32_GroupIndex != NULL)
+   if (opu32_GroupIndex != nullptr)
    {
       *opu32_GroupIndex = 0UL;
    }
@@ -169,7 +169,7 @@ bool C_OscNodeSquad::h_CheckIsMultiDevice(const uint32_t ou32_NodeIndex,
          if (ou32_NodeIndex == rc_Group.c_SubNodeIndexes[u32_ItSubDevice])
          {
             q_Retval = true;
-            if (opu32_GroupIndex != NULL)
+            if (opu32_GroupIndex != nullptr)
             {
                *opu32_GroupIndex = u32_ItGroup;
             }

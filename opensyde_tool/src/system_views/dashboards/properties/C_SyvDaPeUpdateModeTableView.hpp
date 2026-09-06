@@ -32,8 +32,8 @@ class C_SyvDaPeUpdateModeTableView :
    Q_OBJECT
 
 public:
-   C_SyvDaPeUpdateModeTableView(const uint32_t ou32_ViewIndex = 0, QTreeWidget * const opc_TreeWidget = NULL,
-                                QTreeWidgetItem * const opc_TreeWidgetItem = NULL);
+   C_SyvDaPeUpdateModeTableView(const uint32_t ou32_ViewIndex = 0, QTreeWidget * const opc_TreeWidget = nullptr,
+                                QTreeWidgetItem * const opc_TreeWidgetItem = nullptr);
    ~C_SyvDaPeUpdateModeTableView(void) override;
    void InitColumns(void);
    void AdjustToItems(const bool & orq_Initial = false, const bool oq_Last = false);

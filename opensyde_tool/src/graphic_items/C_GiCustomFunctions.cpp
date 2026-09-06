@@ -54,7 +54,7 @@ QVariant C_GiCustomFunctions::h_ItemChange(const QGraphicsItem::GraphicsItemChan
 {
    QVariant c_Return = orc_Value;
 
-   if (opq_Changed != NULL)
+   if (opq_Changed != nullptr)
    {
       *opq_Changed = false;
    }
@@ -73,7 +73,7 @@ QVariant C_GiCustomFunctions::h_ItemChange(const QGraphicsItem::GraphicsItemChan
       {
          //Adapt current x by offset of top left corner to minimum position
          c_NewPos.setX(c_NewPos.x() + (f64_MinHorizontal - c_SceneTopLeftNew.x()));
-         if (opq_Changed != NULL)
+         if (opq_Changed != nullptr)
          {
             *opq_Changed = true;
          }
@@ -82,7 +82,7 @@ QVariant C_GiCustomFunctions::h_ItemChange(const QGraphicsItem::GraphicsItemChan
       {
          //Adapt current y by offset of top left corner to minimum position
          c_NewPos.setY(c_NewPos.y() + (f64_MinVertical - c_SceneTopLeftNew.y()));
-         if (opq_Changed != NULL)
+         if (opq_Changed != nullptr)
          {
             *opq_Changed = true;
          }
@@ -107,7 +107,7 @@ void C_GiCustomFunctions::h_AdaptMouseRangePos(QPointF & orc_Pos, const QPointF 
    const float64_t f64_MinHorizontal = orc_Offset.x() + C_GiCustomFunctions::hf64_SCENE_MIN_BORDER_SIZE;
    const float64_t f64_MinVertical = orc_Offset.y() + C_GiCustomFunctions::hf64_SCENE_MIN_BORDER_SIZE;
 
-   if (opq_Changed != NULL)
+   if (opq_Changed != nullptr)
    {
       *opq_Changed = false;
    }
@@ -115,7 +115,7 @@ void C_GiCustomFunctions::h_AdaptMouseRangePos(QPointF & orc_Pos, const QPointF 
    if (orc_Pos.x() < f64_MinHorizontal)
    {
       orc_Pos.setX(f64_MinHorizontal);
-      if (opq_Changed != NULL)
+      if (opq_Changed != nullptr)
       {
          *opq_Changed = true;
       }
@@ -123,7 +123,7 @@ void C_GiCustomFunctions::h_AdaptMouseRangePos(QPointF & orc_Pos, const QPointF 
    if (orc_Pos.y() < f64_MinVertical)
    {
       orc_Pos.setY(f64_MinVertical);
-      if (opq_Changed != NULL)
+      if (opq_Changed != nullptr)
       {
          *opq_Changed = true;
       }

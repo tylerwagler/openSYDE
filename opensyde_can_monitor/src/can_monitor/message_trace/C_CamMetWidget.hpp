@@ -43,7 +43,7 @@ class C_CamMetWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamMetWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamMetWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamMetWidget(void) override;
 
    void LoadUserSettings(void);

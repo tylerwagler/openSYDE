@@ -36,7 +36,7 @@ class C_SdBueBusEditPropertiesWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdBueBusEditPropertiesWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueBusEditPropertiesWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdBueBusEditPropertiesWidget(void) override;
 
    void InitStaticNames(void) const;

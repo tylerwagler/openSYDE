@@ -173,16 +173,16 @@ void C_ImpUtil::h_ExportCode(const std::vector<uint32_t> & orc_NodeIndices,
       {
          const C_OscNode * const pc_Node =
             C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(orc_NodeIndices[u32_ItNode]);
-         tgl_assert(pc_Node != NULL);
-         if (pc_Node != NULL)
+         tgl_assert(pc_Node != nullptr);
+         if (pc_Node != nullptr)
          {
             for (uint32_t u32_ItApp = 0; u32_ItApp < orc_AppIndicesPerNode[u32_ItNode].size(); ++u32_ItApp)
             {
                const C_OscNodeApplication * const pc_Application =
                   C_PuiSdHandler::h_GetInstance()->GetApplication(orc_NodeIndices[u32_ItNode],
                                                                   orc_AppIndicesPerNode[u32_ItNode][u32_ItApp]);
-               tgl_assert(pc_Application != NULL);
-               if (pc_Application != NULL)
+               tgl_assert(pc_Application != nullptr);
+               if (pc_Application != nullptr)
                {
                   // message for generating
                   //Translation: 1 = Node name, 2 = Application name
@@ -281,7 +281,7 @@ void C_ImpUtil::h_ExportCode(const std::vector<uint32_t> & orc_NodeIndices,
 
          // display message report
          c_PopUpDialogReportDialog->exec();
-         if (c_PopUpDialogReportDialog != NULL)
+         if (c_PopUpDialogReportDialog != nullptr)
          {
             c_PopUpDialogReportDialog->HideOverlay();
             c_PopUpDialogReportDialog->deleteLater();
@@ -329,8 +329,8 @@ void C_ImpUtil::h_ExportCodeNodes(const std::vector<uint32_t> & orc_NodeIndices,
    {
       c_ProgAppsNodeIndices.clear();
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(orc_NodeIndices[u32_ItInNode]);
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          c_ProgAppsNodeIndices = C_PuiSdHandler::h_GetInstance()->GetFileGenAppIndices(
             orc_NodeIndices[u32_ItInNode]);
@@ -402,8 +402,8 @@ int32_t C_ImpUtil::mh_ExportCodeNode(const uint32_t ou32_NodeIndex, const std::v
          {
             const C_OscNodeApplication * const pc_Application =
                C_PuiSdHandler::h_GetInstance()->GetApplication(ou32_NodeIndex, orc_AppIndices[u32_Pos]);
-            tgl_assert(pc_Application != NULL);
-            if (pc_Application != NULL)
+            tgl_assert(pc_Application != nullptr);
+            if (pc_Application != nullptr)
             {
                const QString c_CompleteExportFolderName =
                   h_GetAbsoluteGeneratedDir(*pc_Application, c_Node.c_Properties.c_Name);
@@ -978,7 +978,7 @@ void C_ImpUtil::mh_CheckNodeDatapoolsAssignmentForExportCode(const uint32_t ou32
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       //Skip X-App nodes
       if (pc_Node->c_Properties.q_XappSupport == false)
@@ -1044,7 +1044,7 @@ void C_ImpUtil::mh_GetExistingApplicationHandle(const std::wstring & orc_ExeName
       // https://stackoverflow.com/questions/221730/bat-file-to-run-a-exe-at-the-command-prompt
       C_ImpUtil::C_HandleData c_Data;
       c_Data.u32_ProcessId = u32_ProcessId;
-      c_Data.pc_WindowHandle = NULL;
+      c_Data.pc_WindowHandle = nullptr;
       //lint -e{9091} required by EnumWindows
       EnumWindows(&C_ImpUtil::mh_EnumWindowsCallback, reinterpret_cast<LPARAM>(&c_Data));
       orc_Windows.push_back(c_Data.pc_WindowHandle);
@@ -1075,7 +1075,7 @@ WINBOOL CALLBACK C_ImpUtil::mh_EnumWindowsCallback(HWND opc_Handle, const LPARAM
    GetWindowThreadProcessId(opc_Handle, &x_ProcessId);
 
    //lint -e{9010} //interface defined by Windows API
-   if (GetWindow(opc_Handle, GW_OWNER) == reinterpret_cast<HWND>(NULL))
+   if (GetWindow(opc_Handle, GW_OWNER) == reinterpret_cast<HWND>(nullptr))
    {
       if (IsWindowVisible(opc_Handle) == true)
       {

@@ -31,7 +31,7 @@ class C_OgeCbxTextLineEdit :
    Q_OBJECT
 
 public:
-   C_OgeCbxTextLineEdit(QWidget * const opc_Parent = NULL);
+   C_OgeCbxTextLineEdit(QWidget * const opc_Parent = nullptr);
 };
 
 class C_OgeCbxText :
@@ -40,7 +40,7 @@ class C_OgeCbxText :
    Q_OBJECT
 
 public:
-   C_OgeCbxText(QWidget * const opc_Parent = NULL);
+   C_OgeCbxText(QWidget * const opc_Parent = nullptr);
 
    void SetTemporaryText(const QString & orc_Text, const bool oq_Error);
 

@@ -180,8 +180,8 @@ void C_SdNdeDbAddNewProject::ApplyV3Content()
    const C_OscNode * const pc_Core = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
    const C_PuiSdNode * const pc_Ui = C_PuiSdHandler::h_GetInstance()->GetUiNode(this->mu32_NodeIndex);
 
-   tgl_assert((pc_Core != NULL) && (pc_Ui != NULL));
-   if ((pc_Core != NULL) && (pc_Ui != NULL))
+   tgl_assert((pc_Core != nullptr) && (pc_Ui != nullptr));
+   if ((pc_Core != nullptr) && (pc_Ui != nullptr))
    {
       C_SdNdeDbAddNewProject::mh_KeepTspProperties(*pc_Core, this->mc_OscNode, *pc_Ui, this->mc_UiNode);
       m_ApplyV2PathAdaptationToV3();
@@ -201,7 +201,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
    QDir c_CreateInFolder(
       C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditCreateIn->GetPath()));
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       bool q_Continue = false;
       bool q_ValidTsp = false;
@@ -619,7 +619,7 @@ void C_SdNdeDbAddNewProject::m_Init(const uint32_t ou32_NodeIndex) const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       //Use default
       const QString c_NodePath = C_OscUtils::h_NiceifyStringForFileName(pc_Node->c_Properties.c_Name).c_str();

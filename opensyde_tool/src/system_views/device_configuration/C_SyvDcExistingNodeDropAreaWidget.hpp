@@ -37,7 +37,7 @@ class C_SyvDcExistingNodeDropAreaWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvDcExistingNodeDropAreaWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvDcExistingNodeDropAreaWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvDcExistingNodeDropAreaWidget(void) noexcept override;
 
    void InitStaticNames(void) const;

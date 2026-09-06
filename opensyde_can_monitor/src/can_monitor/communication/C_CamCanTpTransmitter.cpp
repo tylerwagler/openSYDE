@@ -56,8 +56,8 @@ C_CamCanTpTransmitter::C_CamCanTpTransmitter() :
    mu8_SeparationTime(0U),
    mu32_LastSendTimeMs(0U),
    mu32_StartTimeMs(0U),
-   mpf_SendFrame(NULL),
-   mpv_SendContext(NULL)
+   mpf_SendFrame(nullptr),
+   mpv_SendContext(nullptr)
 {
 }
 
@@ -134,7 +134,7 @@ int32_t C_CamCanTpTransmitter::StartTransmit(const uint32_t ou32_CanId, const bo
       c_SfMsg.au8_Data[0] = mhu8_CAN_TP_PCI_SF | static_cast<uint8_t>(orc_Payload.size());
       (void)std::memcpy(&c_SfMsg.au8_Data[1], &orc_Payload[0], orc_Payload.size());
 
-      if (this->mpf_SendFrame != NULL)
+      if (this->mpf_SendFrame != nullptr)
       {
          this->mpf_SendFrame(c_SfMsg, this->mpv_SendContext);
       }
@@ -181,7 +181,7 @@ void C_CamCanTpTransmitter::m_SendFirstFrame(void)
    this->mu16_SentBytes = u16_PayloadBytes;
    this->mu32_LastSendTimeMs = TglGetTickCount();
 
-   if (this->mpf_SendFrame != NULL)
+   if (this->mpf_SendFrame != nullptr)
    {
       this->mpf_SendFrame(c_FfMsg, this->mpv_SendContext);
    }
@@ -221,7 +221,7 @@ void C_CamCanTpTransmitter::m_SendConsecutiveFrame(void)
    this->mu8_SequenceNumber = (this->mu8_SequenceNumber == 15U) ? 1U : (this->mu8_SequenceNumber + 1U);
    this->mu8_BlocksSent++;
 
-   if (this->mpf_SendFrame != NULL)
+   if (this->mpf_SendFrame != nullptr)
    {
       this->mpf_SendFrame(c_CfMsg, this->mpv_SendContext);
    }
@@ -354,8 +354,8 @@ void C_CamCanTpTransmitter::Reset(void)
    this->mu8_SeparationTime = 0U;
    this->mu32_LastSendTimeMs = 0U;
    this->mu32_StartTimeMs = 0U;
-   this->mpf_SendFrame = NULL;
-   this->mpv_SendContext = NULL;
+   this->mpf_SendFrame = nullptr;
+   this->mpv_SendContext = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

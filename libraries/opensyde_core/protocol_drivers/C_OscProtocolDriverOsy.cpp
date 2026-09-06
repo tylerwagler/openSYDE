@@ -82,14 +82,14 @@ C_OscProtocolDriverOsy::C_ListOfFeatures::C_ListOfFeatures(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProtocolDriverOsy::C_OscProtocolDriverOsy(void) :
-   mpr_OnOsyTunnelCanMessageReceived(NULL),
-   mpv_OnAsyncTunnelCanMessageInstance(NULL),
-   mpr_OnOsyWaitTime(NULL),
-   mpv_OnOsyWaitTimeInstance(NULL),
-   mpc_TransportProtocol(NULL),
+   mpr_OnOsyTunnelCanMessageReceived(nullptr),
+   mpv_OnAsyncTunnelCanMessageInstance(nullptr),
+   mpr_OnOsyWaitTime(nullptr),
+   mpv_OnOsyWaitTimeInstance(nullptr),
+   mpc_TransportProtocol(nullptr),
    mu32_TimeoutPollingMs(hu32_DEFAULT_TIMEOUT),
    mu16_MaxServiceSize(C_OscProtocolDriverOsyTpBase::hu16_OSY_MAXIMUM_SERVICE_SIZE),
-   pc_SecuritySubLayer(NULL)
+   pc_SecuritySubLayer(nullptr)
 {
 }
 
@@ -99,12 +99,12 @@ C_OscProtocolDriverOsy::C_OscProtocolDriverOsy(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProtocolDriverOsy::~C_OscProtocolDriverOsy(void)
 {
-   mpc_TransportProtocol = NULL;
-   mpr_OnOsyTunnelCanMessageReceived = NULL;
-   mpv_OnAsyncTunnelCanMessageInstance = NULL;
-   mpr_OnOsyWaitTime = NULL;
-   mpv_OnOsyWaitTimeInstance = NULL;
-   pc_SecuritySubLayer = NULL;
+   mpc_TransportProtocol = nullptr;
+   mpr_OnOsyTunnelCanMessageReceived = nullptr;
+   mpv_OnAsyncTunnelCanMessageInstance = nullptr;
+   mpr_OnOsyWaitTime = nullptr;
+   mpv_OnOsyWaitTimeInstance = nullptr;
+   pc_SecuritySubLayer = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -188,7 +188,7 @@ int32_t C_OscProtocolDriverOsy::IsConnected(void)
 {
    int32_t s32_Return;
 
-   if (this->mpc_TransportProtocol == NULL)
+   if (this->mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -215,7 +215,7 @@ int32_t C_OscProtocolDriverOsy::ReConnect(void)
 {
    int32_t s32_Return;
 
-   if (this->mpc_TransportProtocol == NULL)
+   if (this->mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -241,7 +241,7 @@ int32_t C_OscProtocolDriverOsy::Disconnect(void)
 {
    int32_t s32_Return;
 
-   if (this->mpc_TransportProtocol == NULL)
+   if (this->mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -307,7 +307,7 @@ int32_t C_OscProtocolDriverOsy::m_Cycle(const bool oq_CheckForSpecificServiceId,
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -336,7 +336,7 @@ int32_t C_OscProtocolDriverOsy::m_Cycle(const bool oq_CheckForSpecificServiceId,
                   {
                      //yes. report to caller
                      q_ExpectedServiceReceived = true;
-                     if (opc_ReceivedService != NULL)
+                     if (opc_ReceivedService != nullptr)
                      {
                         (*opc_ReceivedService) = c_Service;
                      }
@@ -354,7 +354,7 @@ int32_t C_OscProtocolDriverOsy::m_Cycle(const bool oq_CheckForSpecificServiceId,
                       (c_Service.c_Data[0] == (ou8_ExpectedServiceId | 0x40U)))
                   {
                      q_ExpectedServiceReceived = true;
-                     if (opc_ReceivedService != NULL)
+                     if (opc_ReceivedService != nullptr)
                      {
                         (*opc_ReceivedService) = c_Service;
                      }
@@ -457,7 +457,7 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
                bool q_Match = true;
 
                // Check only if it is a negative response with additional bytes
-               if ((opc_ExpectedErrData != NULL) && (u16_RxSize > 3U))
+               if ((opc_ExpectedErrData != nullptr) && (u16_RxSize > 3U))
                {
                   // Extended not UDS conform error response expected
                   const uint32_t u32_NumberOfBytes = static_cast<uint32_t>(opc_ExpectedErrData->size());
@@ -567,7 +567,7 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
       else
       {
          // Handle long waiting time by registered function
-         if (this->mpr_OnOsyWaitTime != NULL)
+         if (this->mpr_OnOsyWaitTime != nullptr)
          {
             const uint32_t u32_CurrentTime = stw::tgl::TglGetTickCount();
             if ((u32_CurrentTime - hu32_DEFAULT_HANDLE_WAIT_TIME) > u32_LastWaitTimeHandled)
@@ -628,7 +628,7 @@ int32_t C_OscProtocolDriverOsy::OsyDiagnosticSessionControl(const uint8_t ou8_Se
    C_OscProtocolDriverOsyService c_Service;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -651,7 +651,7 @@ int32_t C_OscProtocolDriverOsy::OsyDiagnosticSessionControl(const uint8_t ou8_Se
          {
             s32_Return = C_RD_WR;
          }
-         else if ((s32_Return == C_WARN) && (opu8_NrCode != NULL))
+         else if ((s32_Return == C_WARN) && (opu8_NrCode != nullptr))
          {
             (*opu8_NrCode) = u8_NrErrorCode;
          }
@@ -699,7 +699,7 @@ int32_t C_OscProtocolDriverOsy::m_ReadDataByIdentifier(const uint16_t ou16_Ident
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -823,7 +823,7 @@ int32_t C_OscProtocolDriverOsy::m_WriteDataByIdentifier(const uint16_t ou16_Iden
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -900,7 +900,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadEcuSerialNumber(C_OscProtocolSerialNumber
       (void)std::memcpy(&au8_SerialNumber[0], &c_Snr[0], 6);
       orc_SerialNumber.SetPosSerialNumber(au8_SerialNumber);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -944,7 +944,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadHardwareNumber(uint32_t & oru32_HardwareN
                              ((static_cast<uint32_t>(c_Data[2])) << 8U) +
                              (static_cast<uint32_t>(c_Data[3]));
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -982,7 +982,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadHardwareVersionNumber(std::string & orc_H
 
    s32_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_SYS_SUPPLIER_ECU_HW_VERSION, orc_HardwareVersionNumber,
                                            u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1034,7 +1034,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadListOfFeatures(C_ListOfFeatures & orc_Lis
       orc_ListOfFeatures.q_SupportsSecurityTrafficEncryption = ((c_Data[6] & 0x01U) == 0x01U) ? true : false;
       //we don't know anything about the meaning of the rest of the bits as we have no crystal ball
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1080,7 +1080,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadMaxNumberOfBlockLength(uint16_t & oru16_M
    {
       //extract information:
       oru16_MaxNumberOfBlockLength = (static_cast<uint16_t>((static_cast<uint16_t>(c_Data[0])) << 8U)) + (c_Data[1]);
-      tgl_assert(this->pc_SecuritySubLayer != NULL);
+      tgl_assert(this->pc_SecuritySubLayer != nullptr);
       if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
       {
          //if traffic encryption is active we need to consider that the service size that can effectively
@@ -1097,7 +1097,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadMaxNumberOfBlockLength(uint16_t & oru16_M
          }
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1133,7 +1133,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDeviceName(std::string & orc_DeviceName, 
    uint8_t u8_NrErrorCode = 0U;
 
    s32_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_DEVICE_NAME, orc_DeviceName, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1169,7 +1169,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadApplicationName(std::string & orc_Applica
    uint8_t u8_NrErrorCode = 0U;
 
    s32_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_APPLICATION_NAME, orc_ApplicationName, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1206,7 +1206,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadApplicationVersion(std::string & orc_Appl
    uint8_t u8_NrErrorCode = 0U;
 
    s32_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_APPLICATION_VERSION, orc_ApplicationVersion, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1263,7 +1263,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadBootSoftwareIdentification(uint8_t (&orau
          (void)std::memcpy(&orau8_Version[0], &c_Data[1], 3U);
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1305,7 +1305,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadActiveDiagnosticSession(uint8_t & oru8_Se
    {
       oru8_SessionId = c_Data[0];
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1359,7 +1359,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadApplicationSoftwareFingerprint(uint8_t (&
       (void)std::memcpy(&c_Text[0], &c_Data[7], c_Data.size() - 7U);
       orc_Username = &c_Text[0];
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1395,7 +1395,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadFileBasedTransferExitResult(std::string &
 
    s32_Return = m_ReadStringDataIdentifier(mhu16_OSY_DI_FILE_BASED_TRANSFER_EXIT_RESULT, orc_TransferExitResult,
                                            u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1435,7 +1435,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadEcuSerialNumberExt(C_OscProtocolSerialNum
    std::vector<uint8_t> c_Data;
 
    s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_ECU_SERIAL_NUMBER_EXT, 3, false, c_Data, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1508,7 +1508,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadSubNodeId(uint8_t & oru8_SubNodeId, uint8
       //extract information:
       oru8_SubNodeId = c_Data[0];
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1563,7 +1563,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteApplicationSoftwareFingerprint(const uin
    (void)std::memcpy(&c_Data[7], c_UserName.c_str(), c_UserName.length());
 
    s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_APPLICATION_SOFTWARE_FINGERPRINT, c_Data, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1608,7 +1608,7 @@ int32_t C_OscProtocolDriverOsy::OsyFactoryMode(const uint8_t ou8_Operation, uint
 
    s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_FACTORY_MODE, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
                                  c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1682,7 +1682,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNumber(std
          }
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1738,7 +1738,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadAuthenticationCertificateSerialNumberL7(s
          s32_Return = C_RANGE;
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1803,7 +1803,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityAuthenticationKey(const std::vec
                    orc_CertificateSerialNumber.size());
 
       s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_SECURITY_AUTHENTICATION_KEY, c_Data, u8_NrErrorCode);
-      if (opu8_NrCode != NULL)
+      if (opu8_NrCode != nullptr)
       {
          (*opu8_NrCode) = u8_NrErrorCode;
       }
@@ -1850,7 +1850,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadSecurityAuthenticationActivation(bool & o
       oru8_SecurityAlgorithm = c_Data[1];
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1894,7 +1894,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityAuthenticationActivation(const b
    c_Data[1] = ou8_SecurityAlgorithm;
 
    s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_SECURITY_AUTHENTICATION_ACTIVATION, c_Data, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1941,7 +1941,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadSecurityTrafficEncryptionActivation(bool 
       oru8_SecurityAlgorithm = c_Data[1];
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -1985,7 +1985,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityTrafficEncryptionActivation(cons
    c_Data[1] = ou8_SecurityAlgorithm;
 
    s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_SECURITY_TRAFFIC_ENCRYPTION_ACTIVATION, c_Data, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -2028,7 +2028,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDebuggerEnabled(bool & orq_DebuggerEnable
       orq_DebuggerEnabled = ((c_Data[0] & 0x01U) == 0x01U) ? true : false;
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -2072,7 +2072,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDebuggerEnabled(const bool oq_DebuggerEn
    c_Data[0] = (oq_DebuggerEnabled == true) ? 0x01U : 0x00U;
 
    s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_DEBUGGER_ACTIVATION, c_Data, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -2114,7 +2114,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadMaxNumOfEventDrivenTransmissions(uint16_t
    {
       oru16_MaxNum = (static_cast<uint16_t>((static_cast<uint16_t>(c_Data[0])) << 8U)) + (c_Data[1]);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -2157,7 +2157,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadProtocolVersion(uint8_t (&orau8_Version)[
    {
       (void)std::memcpy(&orau8_Version[0], &c_Data[0], 3U);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -2201,7 +2201,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadFlashloaderProtocolVersion(uint8_t (&orau
    {
       (void)std::memcpy(&orau8_Version[0], &c_Data[0], 3U);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -2244,7 +2244,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadFlashCount(uint32_t & oru32_FlashCount, u
                          ((static_cast<uint32_t>(c_Data[2])) << 8U) +
                          (static_cast<uint32_t>(c_Data[3]));
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -2289,7 +2289,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadProtocolDriverImplementationVersion(uint8
    {
       (void)std::memcpy(&orau8_Version[0], &c_Data[0], 3U);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -2393,7 +2393,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolData(const uint8_t ou8_DataPoolIn
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -2439,7 +2439,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolData(const uint8_t ou8_DataPoolIn
                }
                break;
             case C_WARN:
-               if (opu8_NrCode != NULL)
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
@@ -2494,7 +2494,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolData(const uint8_t ou8_DataPoolI
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -2541,7 +2541,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolData(const uint8_t ou8_DataPoolI
                }
                break;
             case C_WARN:
-               if (opu8_NrCode != NULL)
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
@@ -2617,7 +2617,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolEventDataRate(const uint8_t ou8_
 
       s32_Return = m_WriteDataByIdentifier(u16_DataIdentifier, c_Data, u8_NrErrorCode);
 
-      if (opu8_NrCode != NULL)
+      if (opu8_NrCode != nullptr)
       {
          (*opu8_NrCode) = u8_NrErrorCode;
       }
@@ -2661,7 +2661,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataCyclic(const uint8_t ou8_Data
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -2713,7 +2713,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataCyclic(const uint8_t ou8_Data
             }
             else if (s32_Return == C_WARN)
             {
-               if (opu8_NrCode != NULL)
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
@@ -2772,7 +2772,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataChangeDriven(const uint8_t ou
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -2830,7 +2830,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataChangeDriven(const uint8_t ou
             }
             else if (s32_Return == C_WARN)
             {
-               if (opu8_NrCode != NULL)
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
@@ -2878,7 +2878,7 @@ int32_t C_OscProtocolDriverOsy::OsyStopDataPoolEvents(uint8_t * const opu8_NrCod
    int32_t s32_Return;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -2903,7 +2903,7 @@ int32_t C_OscProtocolDriverOsy::OsyStopDataPoolEvents(uint8_t * const opu8_NrCod
 
          if (s32_Return == C_WARN)
          {
-            if (opu8_NrCode != NULL)
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
@@ -3013,7 +3013,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolMetaData(const uint8_t ou8_DataPo
          s32_Return = C_RD_WR;
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -3074,7 +3074,7 @@ int32_t C_OscProtocolDriverOsy::OsyVerifyDataPool(const uint8_t ou8_DataPoolInde
          s32_Return = C_RD_WR;
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -3145,7 +3145,7 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteDiagnosisCommunication(const uint8_t 
                                     mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
                                     c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -3196,7 +3196,7 @@ int32_t C_OscProtocolDriverOsy::OsyStopRouteDiagnosisCommunication(uint8_t * con
    s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_ROUTE_DIAGNOSIS_COMMUNICATION,
                                  mhu8_OSY_RC_SUB_FUNCTION_STOP_ROUTINE,
                                  c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -3266,7 +3266,7 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteIp2IpCommunication(const uint8_t ou8_
                                     mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
                                     c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -3332,7 +3332,7 @@ int32_t C_OscProtocolDriverOsy::OsyCheckRouteIp2IpCommunication(uint8_t & oru8_S
       oru8_Status = c_ReceiveData[0];
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -3410,7 +3410,7 @@ int32_t C_OscProtocolDriverOsy::OsySendCanMessage(const uint8_t ou8_ChannelIndex
       s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_SEND_CAN_MESSAGE, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
                                     c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode, true);
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -3474,7 +3474,7 @@ int32_t C_OscProtocolDriverOsy::OsySetTunnelCanMessages(const uint8_t ou8_CanCha
    s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_TUNNEL_CAN_MESSAGE,
                                  mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
                                  c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -3521,7 +3521,7 @@ int32_t C_OscProtocolDriverOsy::OsyStopTunnelCanMessages(uint8_t * const opu8_Nr
    s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_TUNNEL_CAN_MESSAGE,
                                  mhu8_OSY_RC_SUB_FUNCTION_STOP_ROUTINE,
                                  c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -3583,7 +3583,7 @@ int32_t C_OscProtocolDriverOsy::SetTransportProtocol(C_OscProtocolDriverOsyTpBas
    int32_t s32_Return = C_NO_ERR;
 
    mpc_TransportProtocol = opc_TransportProtocol;
-   if (mpc_TransportProtocol != NULL)
+   if (mpc_TransportProtocol != nullptr)
    {
       s32_Return = mpc_TransportProtocol->SetNodeIdentifiers(mc_ClientId, mc_ServerId);
       if (s32_Return != C_NO_ERR)
@@ -3619,13 +3619,13 @@ int32_t C_OscProtocolDriverOsy::SetNodeIdentifiers(const C_OscProtocolDriverOsyN
 
    //set up instance of SSL helper
    this->pc_SecuritySubLayer = C_OscProtocolSecuritySubLayer::h_GetConfigByNodeId(orc_ServerId);
-   if (this->pc_SecuritySubLayer == NULL)
+   if (this->pc_SecuritySubLayer == nullptr)
    {
       s32_Return = C_CONFIG;
    }
 
    //propagate to installed transport protocol:
-   if (mpc_TransportProtocol != NULL)
+   if (mpc_TransportProtocol != nullptr)
    {
       s32_Return = mpc_TransportProtocol->SetNodeIdentifiers(mc_ClientId, mc_ServerId);
       if (s32_Return != C_NO_ERR)
@@ -3831,7 +3831,7 @@ int32_t C_OscProtocolDriverOsy::OsyCheckFlashMemoryAvailable(const uint32_t ou32
    s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_CHECK_FLASH_MEMORY_AVAILABILITY,
                                  mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE, c_SendData,  0U, true, c_ReceiveData,
                                  u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -3883,7 +3883,7 @@ int32_t C_OscProtocolDriverOsy::m_RoutineControl(const uint16_t ou16_RoutineIden
    C_OscProtocolDriverOsyService c_Response;
    const uint32_t u32_SendPayloadSize = static_cast<uint32_t>(orc_SendData.size());
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -4110,7 +4110,7 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessRequestSeed(const uint8_t ou8_S
       }
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -4165,7 +4165,7 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_Secur
    c_ReceiveData.resize(0);
 
    s32_Return = m_SecurityAccess(ou8_SecurityLevel + 1U, c_SendData, 4U, 0U, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -4282,7 +4282,7 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(const uint8_t ou8_Secur
                                     u16_ExpectedSizeToSend, u16_ExpectedSizeToReceive,
                                     orc_TrafficEncryptionPublicServerKey,
                                     u8_NrErrorCode);
-      if (opu8_NrCode != NULL)
+      if (opu8_NrCode != nullptr)
       {
          (*opu8_NrCode) = u8_NrErrorCode;
       }
@@ -4334,7 +4334,7 @@ int32_t C_OscProtocolDriverOsy::m_SecurityAccess(const uint8_t ou8_SubFunction,
    C_OscProtocolDriverOsyService c_Request;
    C_OscProtocolDriverOsyService c_Response;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -4624,7 +4624,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyTunnelCanMessagesEvent(
          (void)std::memcpy(&c_CanMessage.au8_Data[0], &orc_ReceivedService.c_Data[6], 8U);
          c_CanMessage.u64_TimeStamp = stw::tgl::TglGetTickCountUs();
 
-         if (this->mpr_OnOsyTunnelCanMessageReceived != NULL)
+         if (this->mpr_OnOsyTunnelCanMessageReceived != nullptr)
          {
             this->mpr_OnOsyTunnelCanMessageReceived(this->mpv_OnAsyncTunnelCanMessageInstance,
                                                     orc_ReceivedService.c_Data[14], c_CanMessage);
@@ -4776,7 +4776,7 @@ int32_t C_OscProtocolDriverOsy::m_SendRequest(const C_OscProtocolDriverOsyServic
    const C_OscProtocolDriverOsyService * pc_Request = &orc_Service;
    C_OscProtocolDriverOsyService c_EncryptedRequest;
 
-   tgl_assert(this->pc_SecuritySubLayer != NULL);
+   tgl_assert(this->pc_SecuritySubLayer != nullptr);
    if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
    {
       bool q_NeedsEncryption = true; //preset: most services need encryption
@@ -4859,7 +4859,7 @@ int32_t C_OscProtocolDriverOsy::m_ReadResponse(C_OscProtocolDriverOsyService & o
 {
    int32_t s32_Return = mpc_TransportProtocol->ReadResponse(orc_Service);
 
-   tgl_assert(this->pc_SecuritySubLayer != NULL);
+   tgl_assert(this->pc_SecuritySubLayer != nullptr);
 
    if ((s32_Return == C_NO_ERR) && (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true))
    {
@@ -4936,7 +4936,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_StartAddr
 
    oru32_MaxBlockLength = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -4986,7 +4986,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_StartAddr
                      (static_cast<uint32_t>(c_Response.c_Data[2U + static_cast<size_t>(u8_Index)]) <<
                       (((u8_LengthFormat - 1U) - u8_Index) * 8U));
                }
-               tgl_assert(pc_SecuritySubLayer != NULL);
+               tgl_assert(pc_SecuritySubLayer != nullptr);
                if (pc_SecuritySubLayer->GetEncryptionIsActive() == true)
                {
                   //if traffic encryption is active we need to consider that the service size that can effectively
@@ -5005,7 +5005,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestDownload(const uint32_t ou32_StartAddr
             }
             break;
          case C_WARN:
-            if (opu8_NrCode != NULL)
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
@@ -5067,7 +5067,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string & orc_F
 
    oru32_MaxBlockLength = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -5124,7 +5124,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string & orc_F
                      (static_cast<uint32_t>(c_Response.c_Data[3U + static_cast<size_t>(u8_Index)]) <<
                       (((u8_LengthFormat - 1U) - u8_Index) * 8U));
                }
-               tgl_assert(pc_SecuritySubLayer != NULL);
+               tgl_assert(pc_SecuritySubLayer != nullptr);
                if (pc_SecuritySubLayer->GetEncryptionIsActive() == true)
                {
                   //if traffic encryption is active we need to consider that the service size that can effectively
@@ -5143,7 +5143,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(const std::string & orc_F
             }
             break;
          case C_WARN:
-            if (opu8_NrCode != NULL)
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
@@ -5195,7 +5195,7 @@ int32_t C_OscProtocolDriverOsy::OsyTransferData(const uint8_t ou8_BlockSequenceC
    int32_t s32_Return;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -5227,7 +5227,7 @@ int32_t C_OscProtocolDriverOsy::OsyTransferData(const uint8_t ou8_BlockSequenceC
             }
             break;
          case C_WARN:
-            if (opu8_NrCode != NULL)
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
@@ -5282,7 +5282,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitAddressBased(const bool oq
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -5319,7 +5319,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitAddressBased(const bool oq
             // nothing to do here
             break;
          case C_WARN:
-            if (opu8_NrCode != NULL)
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
@@ -5369,7 +5369,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitFileBased(const uint8_t (&
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -5400,7 +5400,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitFileBased(const uint8_t (&
             // nothing to do here
             break;
          case C_WARN:
-            if (opu8_NrCode != NULL)
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = u8_NrErrorCode;
             }
@@ -5451,7 +5451,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(const uint32_t ou32_Memor
    int32_t s32_Return = C_RANGE;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -5467,7 +5467,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(const uint32_t ou32_Memor
       //if traffic encryption is active we need to consider that the service size that can effectively
       // be transferred is reduced by the protocol overhead needed for encryption
       //4bytes header + padding to multiples of 16 bytes
-      tgl_assert(this->pc_SecuritySubLayer != NULL);
+      tgl_assert(this->pc_SecuritySubLayer != nullptr);
       if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
       {
          const uint16_t u16_EncryptionOverhead = static_cast<uint16_t>(4U + ((u32_BlockSize) % 16U));
@@ -5526,7 +5526,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(const uint32_t ou32_Memor
                (void)std::memcpy(&orc_DataRecord[u32_ReadIndex], &c_Response.c_Data[1], c_Response.c_Data.size() - 1U);
                break;
             case C_WARN:
-               if (opu8_NrCode != NULL)
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
@@ -5584,7 +5584,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t ou32_Memo
    int32_t s32_Return = C_RANGE;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -5600,7 +5600,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t ou32_Memo
       //if traffic encryption is active we need to consider that the service size that can effectively
       // be transferred is reduced by the protocol overhead needed for encryption
       //4bytes header + padding to multiples of 16 bytes
-      tgl_assert(this->pc_SecuritySubLayer != NULL);
+      tgl_assert(this->pc_SecuritySubLayer != nullptr);
       if (this->pc_SecuritySubLayer->GetEncryptionIsActive() == true)
       {
          const uint16_t u16_EncryptionOverhead = static_cast<uint16_t>(4U + ((u32_BlockSize) % 16U));
@@ -5672,7 +5672,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(const uint32_t ou32_Memo
                }
                break;
             case C_WARN:
-               if (opu8_NrCode != NULL)
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
@@ -5742,7 +5742,7 @@ int32_t C_OscProtocolDriverOsy::OsyNotifyNvmDataChanges(const uint8_t ou8_DataPo
          s32_Return = C_RD_WR;
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -5788,7 +5788,7 @@ int32_t C_OscProtocolDriverOsy::OsyTesterPresent(const uint8_t ou8_SuppressRespo
    C_OscProtocolDriverOsyService c_Response;
    uint8_t u8_NrErrorCode = 0U;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -5821,7 +5821,7 @@ int32_t C_OscProtocolDriverOsy::OsyTesterPresent(const uint8_t ou8_SuppressRespo
                }
                break;
             case C_WARN:
-               if (opu8_NrCode != NULL)
+               if (opu8_NrCode != nullptr)
                {
                   (*opu8_NrCode) = u8_NrErrorCode;
                }
@@ -5834,7 +5834,7 @@ int32_t C_OscProtocolDriverOsy::OsyTesterPresent(const uint8_t ou8_SuppressRespo
          else
          {
             s32_Return = mpc_TransportProtocol->Cycle();
-            if (opu8_NrCode != NULL)
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = 0U;
             }
@@ -5876,7 +5876,7 @@ int32_t C_OscProtocolDriverOsy::OsyEcuReset(const uint8_t ou8_ResetType)
    int32_t s32_Return;
    C_OscProtocolDriverOsyService c_Request;
 
-   if (mpc_TransportProtocol == NULL)
+   if (mpc_TransportProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -5955,7 +5955,7 @@ int32_t C_OscProtocolDriverOsy::OsySetNodeIdForChannel(const uint8_t ou8_Channel
                                     c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
    }
 
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -6016,7 +6016,7 @@ int32_t C_OscProtocolDriverOsy::OsySetBitrate(const uint8_t ou8_ChannelType, con
 
    s32_Return = m_RoutineControl(mhu16_OSY_RC_RC_SID_SET_BITRATE, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
                                  c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -6156,7 +6156,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlo
          orc_BlockInfo.c_AdditionalInformation = &c_Text[0];
       }
    }
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -6200,7 +6200,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestProgramming(uint8_t * const opu8_NrCod
 
    s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_REQUEST_PROGRAMMING, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
                                  c_SendData, 0U, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -6255,7 +6255,7 @@ int32_t C_OscProtocolDriverOsy::OsyConfigureFlashloaderCommunicationChannel(cons
    s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_CONFIGURE_FLASHLOADER_COMMUNICATION_CHANNEL,
                                  mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE, c_SendData, 0, true, c_ReceiveData,
                                  u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -6320,7 +6320,7 @@ int32_t C_OscProtocolDriverOsy::OsySetIpAddressForChannel(const uint8_t ou8_Chan
    c_SendData[13] = orau8_DefaultGateway[3];
    s32_Return = m_RoutineControl(mhu16_OSY_RC_SID_SET_IP_ADDRESS_FOR_CHANNEL, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
                                  c_SendData, 0, true, c_ReceiveData, u8_NrErrorCode);
-   if (opu8_NrCode != NULL)
+   if (opu8_NrCode != nullptr)
    {
       (*opu8_NrCode) = u8_NrErrorCode;
    }
@@ -6410,7 +6410,7 @@ std::string C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(const int32
 {
    std::string c_Text;
 
-   if (opq_IsHardError != NULL)
+   if (opq_IsHardError != nullptr)
    {
       (*opq_IsHardError) = true;
    }
@@ -6433,7 +6433,7 @@ std::string C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(const int32
       c_Text = "Misconfigured protocol stack.";
       break;
    case C_WARN:
-      if (opq_IsHardError != NULL)
+      if (opq_IsHardError != nullptr)
       {
          (*opq_IsHardError) = false;
       }

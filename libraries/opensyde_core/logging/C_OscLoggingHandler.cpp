@@ -314,7 +314,7 @@ void C_OscLoggingHandler::mh_WriteLog(const std::string & orc_Type, const std::s
     std::string c_Function;
     std::string c_CombinedClassAndFunction;
 
-   if (opcn_Class != NULL)
+   if (opcn_Class != nullptr)
    {
       c_Class = TglChangeFileExtension(TglExtractFileName(opcn_Class), "");
    }
@@ -322,7 +322,7 @@ void C_OscLoggingHandler::mh_WriteLog(const std::string & orc_Type, const std::s
    {
       c_Class = "UNKNOWN_CLASS";
    }
-   if (opcn_Function != NULL)
+   if (opcn_Function != nullptr)
    {
       c_Function = opcn_Function;
    }

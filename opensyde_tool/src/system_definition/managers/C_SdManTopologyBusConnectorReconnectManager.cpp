@@ -37,11 +37,11 @@ using namespace stw::opensyde_gui;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManTopologyBusConnectorReconnectManager::C_SdManTopologyBusConnectorReconnectManager() :
    QObject(),
-   mpc_BusConnector(NULL),
-   mpc_StartingNode(NULL),
-   mpc_StartingBus(NULL),
-   mpc_LastNode(NULL),
-   mpc_LastBus(NULL),
+   mpc_BusConnector(nullptr),
+   mpc_StartingNode(nullptr),
+   mpc_StartingBus(nullptr),
+   mpc_LastNode(nullptr),
+   mpc_LastBus(nullptr),
    me_ConnectState(C_GiLiBusConnector::eTO_BUS),
    ms32_NewInterface(-1),
    mc_Properties(),
@@ -61,7 +61,7 @@ void C_SdManTopologyBusConnectorReconnectManager::StartReconnectMode(C_GiLiBusCo
 {
    this->mpc_BusConnector = opc_BusConnector;
    this->me_ConnectState = ore_ConnectState;
-   if (this->mpc_BusConnector != NULL)
+   if (this->mpc_BusConnector != nullptr)
    {
       this->mpc_StartingNode = this->mpc_BusConnector->GetNodeItem();
       this->mpc_StartingBus = this->mpc_BusConnector->GetBusItem();
@@ -121,11 +121,11 @@ void C_SdManTopologyBusConnectorReconnectManager::DeactivateReconnection(void)
    if (this->mq_ContextMenuActive == false)
    {
       //Reset all
-      this->mpc_BusConnector = NULL;
-      this->mpc_StartingNode = NULL;
-      this->mpc_StartingBus = NULL;
-      this->mpc_LastNode = NULL;
-      this->mpc_LastBus = NULL;
+      this->mpc_BusConnector = nullptr;
+      this->mpc_StartingNode = nullptr;
+      this->mpc_StartingBus = nullptr;
+      this->mpc_LastNode = nullptr;
+      this->mpc_LastBus = nullptr;
       this->ms32_NewInterface = -1;
    }
 }
@@ -192,7 +192,7 @@ void C_SdManTopologyBusConnectorReconnectManager::m_FinishReconnect(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManTopologyBusConnectorReconnectManager::m_InitLastKnownInteractionPointPosition(void)
 {
-   if (this->mpc_BusConnector != NULL)
+   if (this->mpc_BusConnector != nullptr)
    {
       if (this->me_ConnectState == C_GiLiBusConnector::E_ConnectState::eTO_BUS)
       {

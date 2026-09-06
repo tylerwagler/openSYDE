@@ -953,7 +953,7 @@ void C_CamMosFilterPopup::m_OnAddFromDatabase(void)
                c_MessagePath, c_MessageName, false, 0UL);
 
             // Update message of given CAN ID
-            if (pc_Message != NULL)
+            if (pc_Message != nullptr)
             {
                this->m_SetMessageDataFromDatabase(pc_Message->u32_CanId, pc_Message->q_IsExtended);
             }
@@ -969,7 +969,7 @@ void C_CamMosFilterPopup::m_OnAddFromDatabase(void)
                   c_MessagePath, c_MessageName, false, 0UL);
 
                // Update message of given CAN ID
-               if (pc_Message != NULL)
+               if (pc_Message != nullptr)
                {
                   this->m_SetMessageDataFromDatabase(pc_Message->u32_CanId, pc_Message->q_IsExtended);
                }
@@ -982,7 +982,7 @@ void C_CamMosFilterPopup::m_OnAddFromDatabase(void)
       }
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       pc_Dialog->SaveUserSettings();
       c_New->HideOverlay();

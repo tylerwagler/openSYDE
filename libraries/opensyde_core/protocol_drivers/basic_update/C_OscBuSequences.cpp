@@ -46,7 +46,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscBuSequences::C_OscBuSequences(void) :
-   mpc_CanDispatcher(NULL),
+   mpc_CanDispatcher(nullptr),
    ms32_CanBitrate(125)
 {
 }
@@ -57,7 +57,7 @@ C_OscBuSequences::C_OscBuSequences(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscBuSequences::~C_OscBuSequences()
 {
-   this->mpc_CanDispatcher = NULL; //do not delete ! not owned by us
+   this->mpc_CanDispatcher = nullptr; //do not delete ! not owned by us
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ int32_t C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatch
 
    this->mpc_CanDispatcher = opc_CanDispatcher;
 
-   if (this->mpc_CanDispatcher == NULL)
+   if (this->mpc_CanDispatcher == nullptr)
    {
       s32_Return = C_COM;
       osc_write_log_error(c_LogActivity, "Could not used CAN! CAN Dispatcher is invalid.");
@@ -218,7 +218,7 @@ int32_t C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_FlashloaderRes
    }
    while (TglGetTickCount() < (u32_WaitTime + u32_StartTime));
 
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       //Previous broadcasts might have caused responses placed in the receive queues of the device
       // specific driver instances. Dump them.
@@ -423,7 +423,7 @@ int32_t C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath, const 
    uint8_t u8_NumberCode;
    C_OscHexFile c_HexFile;
    uint32_t u32_SignatureBlockAddress = 0;
-   const stw::hex_file::C_HexDataDump * pc_HexDump = NULL;
+   const stw::hex_file::C_HexDataDump * pc_HexDump = nullptr;
 
    m_ReportProgress(s32_Return, "Starting node update...");
 
@@ -526,7 +526,7 @@ int32_t C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath, const 
       }
    }
 
-   if ((s32_Return == C_NO_ERR) && (pc_HexDump != NULL))
+   if ((s32_Return == C_NO_ERR) && (pc_HexDump != nullptr))
    {
       c_LogActivity = "Check Flash Memory";
       osc_write_log_info(c_LogActivity, "Session and security access set up.");
@@ -586,7 +586,7 @@ int32_t C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath, const 
       }
    }
 
-   if ((s32_Return == C_NO_ERR) && (pc_HexDump != NULL))
+   if ((s32_Return == C_NO_ERR) && (pc_HexDump != nullptr))
    {
       bool q_ErrorOccurred = false;
       c_LogActivity = "Flash";
@@ -841,7 +841,7 @@ int32_t C_OscBuSequences::h_ReadHexFile(const std::string & orc_HexFilePath, C_O
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscBuSequences::PrepareForDestruction(void)
 {
-   mc_TpCan.SetDispatcher(NULL); //we are about to destroy the dispatcher; make sure TP disconnects from it
+   mc_TpCan.SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -950,7 +950,7 @@ uint64_t C_OscBuSequences::h_GetAllHexFilesSize(const std::vector<std::string> &
          uint32_t u32_Return;
          const stw::hex_file::C_HexDataDump * const pc_HexDump = c_HexFile.GetDataDump(u32_Return);
 
-         if (pc_HexDump != NULL)
+         if (pc_HexDump != nullptr)
          {
             for (uint16_t u16_Area = 0U; u16_Area < pc_HexDump->at_Blocks.size(); u16_Area++)
             {

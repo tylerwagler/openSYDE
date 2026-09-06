@@ -78,7 +78,7 @@ C_SdNdeDpListPopUp::C_SdNdeDpListPopUp(C_OgePopUpDialog & orc_Parent, const uint
    this->mpc_Ui->pc_GroupBoxHeader->setTitle("");
 
    //undo
-   if (this->mpc_UndoManager != NULL)
+   if (this->mpc_UndoManager != nullptr)
    {
       this->ms32_UndoStartCount = static_cast<int32_t>(this->mpc_UndoManager->index());
    }
@@ -160,8 +160,8 @@ void C_SdNdeDpListPopUp::InitText(void) const
       this->mu32_NodeIndex,
       this->mu32_DataPoolIndex);
 
-   tgl_assert(pc_DataPool != NULL);
-   if (pc_DataPool != NULL)
+   tgl_assert(pc_DataPool != nullptr);
+   if (pc_DataPool != nullptr)
    {
       //Generic tooltips are used.
       //const QString c_Type = C_PuiSdHandler::h_GetElementTypeName(pc_DataPool->e_Type);
@@ -249,7 +249,7 @@ void C_SdNdeDpListPopUp::paintEvent(QPaintEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListPopUp::keyPressEvent(QKeyEvent * const opc_Event)
 {
-   if (this->mpc_UndoManager != NULL)
+   if (this->mpc_UndoManager != nullptr)
    {
       //Debug commands
       if (((opc_Event->modifiers().testFlag(Qt::ShiftModifier) == true) &&
@@ -369,8 +369,8 @@ void C_SdNdeDpListPopUp::m_HandleSelection(const uint32_t & oru32_ListIndex, con
       this->mu32_DataPoolIndex);
 
    tgl_assert(oru32_ListIndex == this->mu32_ListIndex);
-   tgl_assert(pc_DataPool != NULL);
-   if (pc_DataPool != NULL)
+   tgl_assert(pc_DataPool != nullptr);
+   if (pc_DataPool != nullptr)
    {
       bool q_Visible = true;
       const QString c_Type = C_PuiSdHandler::h_GetElementTypeName(pc_DataPool->e_Type);
@@ -438,7 +438,7 @@ void C_SdNdeDpListPopUp::m_OpenColorPicker(void)
       pc_ColorWidget->ChooseSelectedColor();
    }
 
-   if (c_Popup != NULL)
+   if (c_Popup != nullptr)
    {
       c_Popup->HideOverlay();
       c_Popup->deleteLater();

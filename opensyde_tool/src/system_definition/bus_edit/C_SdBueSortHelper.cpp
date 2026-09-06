@@ -76,8 +76,8 @@ bool C_SdBueSortHelper::operator ()(const C_OscCanMessageIdentificationIndices &
       const C_OscCanMessage * const pc_Message2 = C_PuiSdHandler::h_GetInstance()->GetCanMessage(orc_Message2);
 
       //String comparison
-      tgl_assert((pc_Message1 != NULL) && (pc_Message2 != NULL));
-      if ((pc_Message1 != NULL) && (pc_Message2 != NULL))
+      tgl_assert((pc_Message1 != nullptr) && (pc_Message2 != nullptr));
+      if ((pc_Message1 != nullptr) && (pc_Message2 != nullptr))
       {
          q_Retval = h_CompareString(pc_Message1->c_Name, pc_Message2->c_Name);
       }
@@ -188,7 +188,7 @@ bool C_SdBueSortHelperSignal::operator ()(const uint32_t & oru32_Signal1, const 
    const C_OscCanSignal * const pc_Signal2 =
       C_PuiSdHandler::h_GetInstance()->GetCanSignal(this->mc_Message, oru32_Signal2);
 
-   if ((pc_Signal1 != NULL) && (pc_Signal2 != NULL))
+   if ((pc_Signal1 != nullptr) && (pc_Signal2 != nullptr))
    {
       q_Retval = pc_Signal1->u16_ComBitStart < pc_Signal2->u16_ComBitStart;
       //q_Retval = C_SdBueSortHelper::h_CompareString(pc_Signal1->c_Name, pc_Signal2->c_Name);

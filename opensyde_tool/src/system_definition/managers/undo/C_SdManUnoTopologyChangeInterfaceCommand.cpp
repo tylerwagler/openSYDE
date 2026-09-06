@@ -104,7 +104,7 @@ const
    for (vector<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       C_GiLiBusConnector * const pc_CurConn = dynamic_cast<C_GiLiBusConnector *>(*c_ItItem);
-      if (pc_CurConn != NULL)
+      if (pc_CurConn != nullptr)
       {
          pc_CurConn->ChangeInterface(oru8_NewInterface, orc_Properties);
       }

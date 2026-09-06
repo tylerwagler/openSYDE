@@ -80,7 +80,7 @@ void C_GiSvNodeData::Init(const uint32_t ou32_ViewIndex, const uint32_t ou32_Nod
       // part of a node squad
       const stw::opensyde_core::C_OscNodeSquad * const pc_NodeSquad =
          C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(u32_NodeSquadIndex);
-      if (pc_NodeSquad != NULL)
+      if (pc_NodeSquad != nullptr)
       {
          std::vector<uint8_t> c_NodeActiveFlags;
          // In case of node squads we need to know about deactivated sub nodes
@@ -188,7 +188,7 @@ void C_GiSvNodeData::SetNodeUpdateInProgress(const bool oq_Active, const bool oq
          {
             const C_OscNode * const pc_Node =
                C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndices[u32_ItSubNodes]);
-            if ((pc_Node != NULL) && (pc_Node->u32_SubDeviceIndex < this->mc_SubNodes.size()))
+            if ((pc_Node != nullptr) && (pc_Node->u32_SubDeviceIndex < this->mc_SubNodes.size()))
             {
                if (ou32_UpdatedNodeIndex == c_NodeIndices[u32_ItSubNodes])
                {
@@ -791,7 +791,7 @@ bool C_GiSvNodeData::IsSubNodeFlashable(const uint32_t ou32_NodeIndex) const
 //----------------------------------------------------------------------------------------------------------------------
 const C_GiSvSubNodeData * C_GiSvNodeData::GetSubNodeByNodeIndex(const uint32_t ou32_NodeIndex) const
 {
-   const C_GiSvSubNodeData * pc_Retval = NULL;
+   const C_GiSvSubNodeData * pc_Retval = nullptr;
    const uint32_t u32_SubDeviceIndex = this->m_GetCorrespondingSubNodeIndex(ou32_NodeIndex);
 
    if (u32_SubDeviceIndex < this->mc_SubNodes.size())
@@ -812,7 +812,7 @@ const C_GiSvSubNodeData * C_GiSvNodeData::GetSubNodeByNodeIndex(const uint32_t o
 //----------------------------------------------------------------------------------------------------------------------
 const C_GiSvSubNodeData * C_GiSvNodeData::GetSubNodeBySubNodeIndex(const uint32_t ou32_SubNodeIndex) const
 {
-   const C_GiSvSubNodeData * pc_Retval = NULL;
+   const C_GiSvSubNodeData * pc_Retval = nullptr;
 
    if (ou32_SubNodeIndex < this->mc_SubNodes.size())
    {
@@ -879,7 +879,7 @@ uint32_t C_GiSvNodeData::m_GetCorrespondingSubNodeIndex(const uint32_t ou32_Node
    if (this->mc_SubNodes.size() > 1)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
-      if ((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL))
+      if ((pc_Node != nullptr) && (pc_Node->pc_DeviceDefinition != nullptr))
       {
          if (pc_Node->u32_SubDeviceIndex < this->mc_SubNodes.size())
          {

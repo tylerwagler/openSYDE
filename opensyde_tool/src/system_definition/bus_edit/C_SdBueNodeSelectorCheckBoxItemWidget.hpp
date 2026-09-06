@@ -43,7 +43,7 @@ class C_SdBueNodeSelectorCheckBoxItemWidget :
 
 public:
    explicit C_SdBueNodeSelectorCheckBoxItemWidget(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
-                                                  const QString & orc_Name, QWidget * const opc_Parent = NULL);
+                                                  const QString & orc_Name, QWidget * const opc_Parent = nullptr);
    ~C_SdBueNodeSelectorCheckBoxItemWidget() override;
 
    void GetIndexes(uint32_t & oru32_Index, uint32_t & oru32_SubIndex) const;

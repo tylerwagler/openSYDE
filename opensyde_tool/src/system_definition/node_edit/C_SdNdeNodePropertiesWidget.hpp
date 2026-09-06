@@ -34,7 +34,7 @@ class C_SdNdeNodePropertiesWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeNodePropertiesWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeNodePropertiesWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeNodePropertiesWidget(void) override;
 
    void InitStaticNames(void) const;

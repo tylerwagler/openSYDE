@@ -119,7 +119,7 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
    //Button icon
    this->mpc_Ui->pc_PushButtonClearDataElement->setIcon(QIcon("://images/system_views/IconClearAllEnabled.svg"));
    this->mpc_Ui->pc_PushButtonClearDataElement->setIconSize(QSize(20, 20));
-   this->mpc_Ui->pc_PushButtonClearDataElement->setMenu(NULL); // remove menu
+   this->mpc_Ui->pc_PushButtonClearDataElement->setMenu(nullptr); // remove menu
 
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LineEditDataElement, "NoRightBorder", true);
 
@@ -152,7 +152,7 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
    }
 
    // create scene for graphics view
-   this->mpc_Scene = new C_SyvDaDashboardScene(0, 0, false, NULL);
+   this->mpc_Scene = new C_SyvDaDashboardScene(0, 0, false, nullptr);
 
    // configure background drawing
    this->mpc_Scene->setSceneRect(0.0, 0.0,
@@ -336,7 +336,7 @@ void C_SyvDaPeBase::InitStaticNames(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeBase::SetWidget(QWidget * const opc_Widget)
 {
-   if (opc_Widget != NULL)
+   if (opc_Widget != nullptr)
    {
       opc_Widget->setParent(this);
       this->mpc_Ui->pc_VerticalLayoutDesign->insertWidget(1, opc_Widget, 1);
@@ -447,7 +447,7 @@ void C_SyvDaPeBase::h_GetIdealItemRect(QPointF & orc_ItemPos, QSizeF & orc_ItemS
 {
    const C_GiSvDaRectBaseGroup * const pc_GiItem = dynamic_cast<const C_GiSvDaRectBaseGroup * const>(opc_Item);
 
-   if (pc_GiItem != NULL)
+   if (pc_GiItem != nullptr)
    {
       const QSize c_ViewSize = C_SyvDaPeBase::h_GetSceneViewSize();
       //To be really centered we also have to include the borders into the size
@@ -774,7 +774,7 @@ C_OscNodeDataPoolContent C_SyvDaPeBase::GetDashboardConnectInitialValue(void) co
                                                                  this->mc_DataElement.u32_ListIndex,
                                                                  this->mc_DataElement.u32_ElementIndex);
 
-   if (pc_Element != NULL)
+   if (pc_Element != nullptr)
    {
       const C_PuiSvDbDataElementScaling c_Scaling = this->GetScalingInformation();
 
@@ -848,8 +848,8 @@ void C_SyvDaPeBase::m_OkClicked(void)
                                                                     this->mc_DataElement.u32_ListIndex,
                                                                     this->mc_DataElement.u32_ElementIndex);
 
-      tgl_assert(pc_Element != NULL);
-      if (pc_Element != NULL)
+      tgl_assert(pc_Element != nullptr);
+      if (pc_Element != nullptr)
       {
          if (c_FormatterConfig.IsFormatterCompatible(
                 C_PuiSvDbDataElementDisplayFormatter::h_GetTypeCategory(pc_Element->c_MinValue,
@@ -935,7 +935,7 @@ void C_SyvDaPeBase::m_Browse(void)
                                                                           this->mc_DataElement.u32_DataPoolIndex,
                                                                           this->mc_DataElement.u32_ListIndex,
                                                                           this->mc_DataElement.u32_ElementIndex);
-            if (pc_Element != NULL)
+            if (pc_Element != nullptr)
             {
                if (pc_Element->GetArray() == false)
                {
@@ -981,7 +981,7 @@ void C_SyvDaPeBase::m_Browse(void)
       }
    }
    //Hide overlay after dialog is not relevant anymore
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       pc_Dialog->SaveUserSettings();
       pc_Dialog->PrepareCleanUp();
@@ -1025,8 +1025,8 @@ void C_SyvDaPeBase::m_ClearDataElement()
             const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
             //Save initial configuration
             this->mc_OriginalConfigId = this->mc_DataElement;
-            tgl_assert(pc_View != NULL);
-            if (pc_View != NULL)
+            tgl_assert(pc_View != nullptr);
+            if (pc_View != nullptr)
             {
                const QMap<C_OscNodeDataPoolListElementId,
                           C_PuiSvReadDataConfiguration>::const_iterator c_ItResult =
@@ -1081,10 +1081,10 @@ void C_SyvDaPeBase::m_Configuration(void) const
                                                               &c_Label, e_TYPE) == C_NO_ERR)
       {
          const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-            if (pc_Dashboard != NULL)
+            if (pc_Dashboard != nullptr)
             {
                tgl_assert(pc_Dashboard->GetLabels().size() > 0UL);
                u32_LabelIndex = static_cast<uint32_t>(pc_Dashboard->GetLabels().size()) - 1UL;
@@ -1125,7 +1125,7 @@ void C_SyvDaPeBase::m_Configuration(void) const
    }
 
    //Hide overlay after dialog is not relevant anymore
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -1155,9 +1155,9 @@ QString C_SyvDaPeBase::m_GetDefaultDisplayName(const C_PuiSvDbNodeDataPoolListEl
       const C_OscNodeDataPool * const pc_Datapool =
          C_PuiSdHandler::h_GetInstance()->GetOscDataPool(orc_Id.u32_NodeIndex,
                                                          orc_Id.u32_DataPoolIndex);
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
-         if (pc_Datapool != NULL)
+         if (pc_Datapool != nullptr)
          {
             if ((pc_Datapool->e_Type == C_OscNodeDataPool::eHALC) ||
                 (pc_Datapool->e_Type == C_OscNodeDataPool::eHALC_NVM))
@@ -1201,7 +1201,7 @@ void C_SyvDaPeBase::m_OnUseDefaultScalingChange(void) const
                                                                        this->mc_DataElement.u32_DataPoolIndex,
                                                                        this->mc_DataElement.u32_ListIndex,
                                                                        this->mc_DataElement.u32_ElementIndex);
-         if (pc_Element != NULL)
+         if (pc_Element != nullptr)
          {
             this->mpc_Ui->pc_DoubleSpinBoxOffset->setValue(pc_Element->f64_Offset);
             this->mpc_Ui->pc_DoubleSpinBoxFactor->setValue(pc_Element->f64_Factor);
@@ -1276,11 +1276,11 @@ void C_SyvDaPeBase::m_CheckFormatterString(void) const
                                                                     this->mc_DataElement.u32_ListIndex,
                                                                     this->mc_DataElement.u32_ElementIndex);
 
-      tgl_assert(pc_Element != NULL);
+      tgl_assert(pc_Element != nullptr);
 
       // Check if the format is valid and compatible. If not, font color is changed to red and a tool tip is
       // displayed to indicate the error
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          const bool q_FormatterCompatible = c_FormatterConfig.IsFormatterCompatible(
             C_PuiSvDbDataElementDisplayFormatter::h_GetTypeCategory(pc_Element->c_MinValue,
@@ -1373,7 +1373,7 @@ void C_SyvDaPeBase::m_UpdateSpinboxMetaData(void) const
                                                                  this->mc_DataElement.u32_ListIndex,
                                                                  this->mc_DataElement.u32_ElementIndex);
 
-   if (pc_Element != NULL)
+   if (pc_Element != nullptr)
    {
       const C_OscNodeDataPoolContent c_CurValue = GetDashboardConnectInitialValue();
       const C_PuiSvDbDataElementScaling c_Scaling = this->GetScalingInformation();

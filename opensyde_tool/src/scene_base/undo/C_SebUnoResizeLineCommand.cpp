@@ -97,12 +97,12 @@ void C_SebUnoTopResizeLineCommand::redo(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoTopResizeLineCommand::m_UndoSingle(QGraphicsItem * const opc_Item) const
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       C_GiLiLineGroup * pc_LineGroup;
 
       pc_LineGroup = dynamic_cast<C_GiLiLineGroup *>(opc_Item);
-      if (pc_LineGroup != NULL)
+      if (pc_LineGroup != nullptr)
       {
          QPointF c_OldPos;
 
@@ -120,12 +120,12 @@ void C_SebUnoTopResizeLineCommand::m_UndoSingle(QGraphicsItem * const opc_Item) 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoTopResizeLineCommand::m_RedoSingle(QGraphicsItem * const opc_Item) const
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       C_GiLiLineGroup * pc_LineGroup;
 
       pc_LineGroup = dynamic_cast<C_GiLiLineGroup *>(opc_Item);
-      if (pc_LineGroup != NULL)
+      if (pc_LineGroup != nullptr)
       {
          QPointF c_OldPos;
 

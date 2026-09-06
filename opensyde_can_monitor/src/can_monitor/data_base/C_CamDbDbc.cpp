@@ -339,7 +339,7 @@ const std::vector<QString> C_CamDbDbc::GetFoundMessages(void) const
 const C_CieConverter::C_CieCanMessage * C_CamDbDbc::GetDbcMessage(const QString & orc_Message, const bool oq_UseHash,
                                                                   const uint32_t ou32_Hash) const
 {
-   const C_CieConverter::C_CieCanMessage * pc_Retval = NULL;
+   const C_CieConverter::C_CieCanMessage * pc_Retval = nullptr;
 
    //Don't allow access to inactive file
    if (this->mq_Active)

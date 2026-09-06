@@ -77,7 +77,7 @@ void C_GiSvNodeSyvSetup::SetViewConnected(const bool oq_Connected)
 {
    C_GiSvNodeSyvBase::SetViewConnected(oq_Connected);
 
-   if (this->mpc_CheckBox != NULL)
+   if (this->mpc_CheckBox != nullptr)
    {
       this->mpc_CheckBox->SetChecked(oq_Connected);
    }
@@ -106,7 +106,7 @@ void C_GiSvNodeSyvSetup::SetEditMode(const bool oq_Active)
 {
    this->mq_EditMode = oq_Active;
 
-   if (this->mpc_CheckBox != NULL)
+   if (this->mpc_CheckBox != nullptr)
    {
       this->mpc_CheckBox->setVisible(oq_Active);
    }
@@ -136,7 +136,7 @@ void C_GiSvNodeSyvSetup::mousePressEvent(QGraphicsSceneMouseEvent * const opc_Ev
       const QPointF c_Pos = opc_Event->scenePos();
       bool q_ClickRecognized = false;
 
-      if ((this->mpc_CheckBox != NULL) &&
+      if ((this->mpc_CheckBox != nullptr) &&
           (this->mq_EditMode == true))
       {
          const QRectF c_RectCheckBox = this->mpc_CheckBox->sceneBoundingRect();
@@ -155,7 +155,7 @@ void C_GiSvNodeSyvSetup::mousePressEvent(QGraphicsSceneMouseEvent * const opc_Ev
       }
       else
       {
-         if ((this->mpc_CheckBox != NULL) && (this->mq_EditMode == true))
+         if ((this->mpc_CheckBox != nullptr) && (this->mq_EditMode == true))
          {
             //New default
             this->SetViewConnected(!this->mpc_CheckBox->IsChecked());

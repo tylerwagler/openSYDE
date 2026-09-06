@@ -87,7 +87,7 @@ int32_t C_OscHalcDefContent::AddEnumItem(const std::string & orc_DisplayName,
    int32_t s32_Retval = C_NO_ERR;
    const C_OscNodeDataPoolContent * const pc_Content = this->FindEnumItem(orc_DisplayName);
 
-   if (pc_Content != NULL)
+   if (pc_Content != nullptr)
    {
       s32_Retval = C_RANGE;
    }
@@ -122,7 +122,7 @@ int32_t C_OscHalcDefContent::SetEnumValue(const std::string & orc_DisplayName)
    int32_t s32_Retval = C_NO_ERR;
    const C_OscNodeDataPoolContent * const pc_NewContent = this->FindEnumItem(orc_DisplayName);
 
-   if (pc_NewContent != NULL)
+   if (pc_NewContent != nullptr)
    {
       if ((this->GetArray() == pc_NewContent->GetArray()) && (this->GetType() == pc_NewContent->GetType()))
       {
@@ -254,7 +254,7 @@ int32_t C_OscHalcDefContent::GetEnumValue(std::string & orc_DisplayName)
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolContent * C_OscHalcDefContent::FindEnumItem(const std::string & orc_DisplayName) const
 {
-   const C_OscNodeDataPoolContent * pc_Retval = NULL;
+   const C_OscNodeDataPoolContent * pc_Retval = nullptr;
 
    for (std::vector<std::pair<std::string, C_OscNodeDataPoolContent> >::const_iterator c_It =
            this->mc_EnumItems.begin();
@@ -315,12 +315,12 @@ const std::vector<C_OscHalcDefContentBitmaskItem> & C_OscHalcDefContent::GetBitm
 void C_OscHalcDefContent::GetBitmaskStatusValues(std::vector<std::string> * const opc_Displays,
                                                  std::vector<bool> * const opc_Values) const
 {
-   if (opc_Displays != NULL)
+   if (opc_Displays != nullptr)
    {
       opc_Displays->clear();
       opc_Displays->reserve(this->mc_BitmaskItems.size());
    }
-   if (opc_Values != NULL)
+   if (opc_Values != nullptr)
    {
       opc_Values->clear();
       opc_Values->reserve(this->mc_BitmaskItems.size());
@@ -328,11 +328,11 @@ void C_OscHalcDefContent::GetBitmaskStatusValues(std::vector<std::string> * cons
    for (std::vector<C_OscHalcDefContentBitmaskItem>::const_iterator c_ItBitmask = this->mc_BitmaskItems.begin();
         c_ItBitmask != this->mc_BitmaskItems.end(); ++c_ItBitmask)
    {
-      if (opc_Displays != NULL)
+      if (opc_Displays != nullptr)
       {
          opc_Displays->push_back(c_ItBitmask->c_Display);
       }
-      if (opc_Values != NULL)
+      if (opc_Values != nullptr)
       {
          opc_Values->push_back(c_ItBitmask->q_ApplyValueSetting);
       }

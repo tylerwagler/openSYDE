@@ -102,7 +102,7 @@ bool stw::tgl::TglGetSystemUserName(std::string & orc_UserName)
    bool q_Return = false;
 
    pc_PassWord = getpwuid(geteuid());
-   if (pc_PassWord != NULL)
+   if (pc_PassWord != nullptr)
    {
       orc_UserName = pc_PassWord->pw_name;
       q_Return    = true;

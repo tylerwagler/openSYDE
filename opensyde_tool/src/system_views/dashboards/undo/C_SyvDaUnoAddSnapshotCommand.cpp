@@ -89,7 +89,7 @@ void C_SyvDaUnoAddSnapshotCommand::m_AddNew(void)
 {
    C_SyvDaDashboardScene * const pc_Scene = dynamic_cast<C_SyvDaDashboardScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       QMap<C_PuiBsTemporaryDataId, uint64_t> c_IdMap;
       const C_PuiSvDashboard c_InitialData = this->m_GetDataBackup();
@@ -210,10 +210,10 @@ void C_SyvDaUnoAddSnapshotCommand::m_InitialReadRailHandling(void)
 {
    C_SyvDaDashboardScene * const pc_Scene = dynamic_cast<C_SyvDaDashboardScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(pc_Scene->GetViewIndex());
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
          const C_PuiSvDashboard c_InitialData = this->m_GetDataBackup();
@@ -221,7 +221,7 @@ void C_SyvDaUnoAddSnapshotCommand::m_InitialReadRailHandling(void)
          for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
          {
             const C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
-            if ((pc_Widget != NULL) && (pc_Widget->IsReadElement() == true))
+            if ((pc_Widget != nullptr) && (pc_Widget->IsReadElement() == true))
             {
                for (uint32_t u32_ItItem = 0; u32_ItItem < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItItem)
                {
@@ -234,8 +234,8 @@ void C_SyvDaUnoAddSnapshotCommand::m_InitialReadRailHandling(void)
                            rc_Config.c_ElementId.u32_NodeIndex,
                            rc_Config.c_ElementId.u32_DataPoolIndex, rc_Config.c_ElementId.u32_ListIndex,
                            rc_Config.c_ElementId.u32_ElementIndex);
-                     tgl_assert(pc_Element != NULL);
-                     if (pc_Element != NULL)
+                     tgl_assert(pc_Element != nullptr);
+                     if (pc_Element != nullptr)
                      {
                         if (pc_View->CheckReadUsage(rc_Config.c_ElementId) == false)
                         {

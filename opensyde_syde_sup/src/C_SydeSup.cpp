@@ -58,8 +58,8 @@ using namespace stw::can;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SydeSup::C_SydeSup(void) :
-   mpc_CanDispatcher(NULL),
-   mpc_EthDispatcher(NULL),
+   mpc_CanDispatcher(nullptr),
+   mpc_EthDispatcher(nullptr),
    mq_Quiet(false),
    mq_OnlyNecessaryFiles(false),
    me_OperationMode(eMODE_UPDATE),
@@ -84,7 +84,7 @@ C_SydeSup::C_SydeSup(void) :
 C_SydeSup::~C_SydeSup(void)
 {
    this->m_CloseCan();
-   mpc_EthDispatcher = NULL;
+   mpc_EthDispatcher = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -107,7 +107,7 @@ C_SydeSup::E_Result C_SydeSup::m_OpenCan(const std::string & orc_CanDriver, cons
 {
    C_SydeSup::E_Result e_Result = eOK;
 
-   if (mpc_CanDispatcher != NULL)
+   if (mpc_CanDispatcher != nullptr)
    {
       this->m_CloseCan();
    }
@@ -126,7 +126,7 @@ C_SydeSup::E_Result C_SydeSup::m_OpenCan(const std::string & orc_CanDriver, cons
 
    std::string c_Error;
    mpc_CanDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
-   if (mpc_CanDispatcher == NULL)
+   if (mpc_CanDispatcher == nullptr)
    {
       h_WriteLog("OpenCan", "Could not create CAN adapter: " + c_Error, true);
       e_Result = eERR_CAN_IF_LOAD_FAILED;
@@ -137,7 +137,7 @@ C_SydeSup::E_Result C_SydeSup::m_OpenCan(const std::string & orc_CanDriver, cons
       if (s32_Return != C_NO_ERR)
       {
          delete mpc_CanDispatcher;
-         mpc_CanDispatcher = NULL;
+         mpc_CanDispatcher = nullptr;
          e_Result = eERR_SEQUENCE_CAN_INIT;
       }
    }
@@ -148,11 +148,11 @@ C_SydeSup::E_Result C_SydeSup::m_OpenCan(const std::string & orc_CanDriver, cons
 //----------------------------------------------------------------------------------------------------------------------
 void C_SydeSup::m_CloseCan(void)
 {
-   if (mpc_CanDispatcher != NULL)
+   if (mpc_CanDispatcher != nullptr)
    {
       (void)mpc_CanDispatcher->CAN_Exit();
       delete mpc_CanDispatcher;
-      mpc_CanDispatcher = NULL;
+      mpc_CanDispatcher = nullptr;
    }
 }
 
@@ -205,55 +205,55 @@ C_SydeSup::E_Result C_SydeSup::ParseCommandLine(const int32_t os32_Argc, char_t 
    {
       /* name, has_arg, flag, val */
       {
-         "help",              no_argument,         NULL,    'h'
+         "help",              no_argument,         nullptr,    'h'
       },
       {
-         "man",               no_argument,         NULL,    'm'
+         "man",               no_argument,         nullptr,    'm'
       },
       {
-         "version",           no_argument,         NULL,    'v'
+         "version",           no_argument,         nullptr,    'v'
       },
       {
-         "quiet",             no_argument,         NULL,    'q'
+         "quiet",             no_argument,         nullptr,    'q'
       },
       {
-         "necessaryfiles",    no_argument,         NULL,    'n'
+         "necessaryfiles",    no_argument,         nullptr,    'n'
       },
       {
-         "operationmode",     required_argument,   NULL,    'o'
+         "operationmode",     required_argument,   nullptr,    'o'
       },
       {
-         "packagefile",       required_argument,   NULL,    'p'
+         "packagefile",       required_argument,   nullptr,    'p'
       },
       {
-         "caninterface",      required_argument,   NULL,    'i'
+         "caninterface",      required_argument,   nullptr,    'i'
       },
       {
-         "unzipdir",          required_argument,   NULL,    'z'
+         "unzipdir",          required_argument,   nullptr,    'z'
       },
       {
-         "logdir",            required_argument,   NULL,    'l'
+         "logdir",            required_argument,   nullptr,    'l'
       },
       {
-         "certificatesdir",   required_argument,   NULL,    'c'
+         "certificatesdir",   required_argument,   nullptr,    'c'
       },
       {
-         "opensydeproject",   required_argument,   NULL,    's'
+         "opensydeproject",   required_argument,   nullptr,    's'
       },
       {
-         "devicedefinition",  required_argument,   NULL,    'd'
+         "devicedefinition",  required_argument,   nullptr,    'd'
       },
       {
-         "systemview",        required_argument,   NULL,    'w'
+         "systemview",        required_argument,   nullptr,    'w'
       },
       {
-         "pemfile",           required_argument,   NULL,    'k'
+         "pemfile",           required_argument,   nullptr,    'k'
       },
       {
-         "password",          required_argument,   NULL,    'x'
+         "password",          required_argument,   nullptr,    'x'
       },
       {
-         NULL,                0,                   NULL,    0
+         nullptr,                0,                   nullptr,    0
       }
    };
 
@@ -632,7 +632,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
             if (e_Result == eOK)
             {
                h_WriteLog("Open CAN", "CAN driver initialized.");
-               tgl_assert(mpc_CanDispatcher != NULL);
+               tgl_assert(mpc_CanDispatcher != nullptr);
             }
          }
          else if (c_SystemDefinition.c_Buses[u32_ActiveBusIndex].e_Type == C_OscSystemBus::eETHERNET)
@@ -641,7 +641,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
             if (e_Result == eOK)
             {
                h_WriteLog("Open Ethernet", "Ethernet driver initialized.");
-               tgl_assert(mpc_EthDispatcher != NULL);
+               tgl_assert(mpc_EthDispatcher != nullptr);
             }
          }
          else
@@ -1629,8 +1629,8 @@ std::vector<uint8_t> C_SydeSup::m_GetActiveNodeTypes(const C_OscSystemDefinition
          const C_OscDeviceDefinition * const pc_DeviceDefinition =
             orc_SystemDefinition.c_Nodes[u16_Node].pc_DeviceDefinition;
 
-         tgl_assert(pc_DeviceDefinition != NULL);
-         if (pc_DeviceDefinition != NULL)
+         tgl_assert(pc_DeviceDefinition != nullptr);
+         if (pc_DeviceDefinition != nullptr)
          {
             const uint32_t u32_SubDeviceIndex = orc_SystemDefinition.c_Nodes[u16_Node].u32_SubDeviceIndex;
             //Do we have one of the Flashloader types that support version checking ?

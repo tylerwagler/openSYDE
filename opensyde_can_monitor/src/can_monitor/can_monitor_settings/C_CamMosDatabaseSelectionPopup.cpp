@@ -45,7 +45,7 @@ C_CamMosDatabaseSelectionPopup::C_CamMosDatabaseSelectionPopup(
    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent, const bool oq_AllowMultiSelect) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_CamMosDatabaseSelectionPopup),
-   mpc_ContextMenu(NULL)
+   mpc_ContextMenu(nullptr)
 {
    this->mpc_Ui->setupUi(this);
 

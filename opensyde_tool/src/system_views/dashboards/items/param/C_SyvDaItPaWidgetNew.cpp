@@ -72,7 +72,7 @@ C_SyvDaItPaWidgetNew::C_SyvDaItPaWidgetNew(const uint32_t & oru32_ViewIndex,
    mpc_Ui(new Ui::C_SyvDaItPaWidgetNew),
    mu32_ViewIndex(oru32_ViewIndex),
    mpc_DataWidget(opc_DataWidget),
-   mpc_ComDriver(NULL),
+   mpc_ComDriver(nullptr),
    mq_IsConnected(false),
    mq_ReadActive(false),
    mq_WriteActive(false),
@@ -210,9 +210,9 @@ bool C_SyvDaItPaWidgetNew::HandleManualOperationFinished(const int32_t os32_Resu
    if (q_Return == true)
    {
       const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
-      if (pc_ParamWidget != NULL)
+      if (pc_ParamWidget != nullptr)
       {
-         if (this->mpc_ComDriver != NULL)
+         if (this->mpc_ComDriver != nullptr)
          {
             if (s32_Result == C_CHECKSUM)
             {
@@ -278,7 +278,7 @@ bool C_SyvDaItPaWidgetNew::HandleManualOperationFinished(const int32_t os32_Resu
                         const C_OscNodeDataPoolList * const pc_List =
                            C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
                               rc_CurId.u32_NodeIndex, rc_CurId.u32_DataPoolIndex, rc_CurId.u32_ListIndex);
-                        if (((pc_Node != NULL) && (pc_DataPool != NULL)) && (pc_List != NULL))
+                        if (((pc_Node != nullptr) && (pc_DataPool != nullptr)) && (pc_List != nullptr))
                         {
                            c_ListsString += static_cast<QString>("- %1::%2::%3\n").
                                             arg(pc_Node->c_Properties.c_Name.c_str()).
@@ -345,7 +345,7 @@ bool C_SyvDaItPaWidgetNew::HandleManualOperationFinished(const int32_t os32_Resu
                      this->mc_ListIds[static_cast<uint32_t>(this->mu32_ListCounter - 1U)];
                   const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                      rc_CurEntryId.u32_NodeIndex);
-                  if (pc_Node != NULL)
+                  if (pc_Node != nullptr)
                   {
                      c_Node = static_cast<QString>("Node %1").arg(
                         pc_Node->c_Properties.c_Name.c_str());
@@ -407,7 +407,7 @@ void C_SyvDaItPaWidgetNew::ButtonAddClicked(void)
 {
    C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(
          pc_ParamWidget->GetPopUpParent(), pc_ParamWidget->GetPopUpParent());
@@ -429,7 +429,7 @@ void C_SyvDaItPaWidgetNew::ButtonAddClicked(void)
          {
             //Get CURRENT param item
             const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-            if (pc_Param != NULL)
+            if (pc_Param != nullptr)
             {
                bool q_Found = false;
                const C_PuiSvDbNodeDataPoolListElementId & rc_NewId = c_DataElements[u32_ItNewElement];
@@ -445,7 +445,7 @@ void C_SyvDaItPaWidgetNew::ButtonAddClicked(void)
                }
                if (q_Found == false)
                {
-                  tgl_assert(pc_ParamWidget->AddParamItemDataElement(rc_NewId, NULL) == C_NO_ERR);
+                  tgl_assert(pc_ParamWidget->AddParamItemDataElement(rc_NewId, nullptr) == C_NO_ERR);
                }
             }
          }
@@ -454,7 +454,7 @@ void C_SyvDaItPaWidgetNew::ButtonAddClicked(void)
          m_UpdateButtons();
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          pc_Dialog->SaveUserSettings();
          pc_Dialog->PrepareCleanUp();
@@ -657,7 +657,7 @@ void C_SyvDaItPaWidgetNew::m_ReadElements(void)
 {
    int32_t s32_Result = C_NO_ERR;
 
-   if (this->mpc_ComDriver != NULL)
+   if (this->mpc_ComDriver != nullptr)
    {
       //Check all list IDs valid -> node active in view
       std::vector<uint8_t> c_NodeActiveFlags;
@@ -726,7 +726,7 @@ void C_SyvDaItPaWidgetNew::m_ReadElements(void)
    }
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       if (s32_Result == C_RANGE)
       {
@@ -812,7 +812,7 @@ void C_SyvDaItPaWidgetNew::m_WriteElements(const std::vector<C_OscNodeDataPoolLi
    }
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       if ((c_InterestingChangedElements.size() > 0) || (c_InterestingInvalidLists.size() > 0))
       {
@@ -823,8 +823,8 @@ void C_SyvDaItPaWidgetNew::m_WriteElements(const std::vector<C_OscNodeDataPoolLi
             this->mpc_Ui->pc_TreeView->PrepareChangedValues(c_InterestingChangedElements);
 
             //Should only be possible if online
-            tgl_assert(this->mpc_ComDriver != NULL);
-            if (this->mpc_ComDriver != NULL)
+            tgl_assert(this->mpc_ComDriver != nullptr);
+            if (this->mpc_ComDriver != nullptr)
             {
                //Step 4: Write process dialog
                const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(
@@ -840,7 +840,7 @@ void C_SyvDaItPaWidgetNew::m_WriteElements(const std::vector<C_OscNodeDataPoolLi
 
                if (c_New->exec() != static_cast<int32_t>(QDialog::Accepted))
                {
-                  if (c_New != NULL)
+                  if (c_New != nullptr)
                   {
                      if (pc_Dialog->GetStep() != C_SyvDaItPaWriteWidget::eBEFOREWRITE)
                      {
@@ -883,7 +883,7 @@ void C_SyvDaItPaWidgetNew::m_WriteElements(const std::vector<C_OscNodeDataPoolLi
                   }
                }
 
-               if (c_New != NULL)
+               if (c_New != nullptr)
                {
                   c_New->HideOverlay();
                   c_New->deleteLater();
@@ -931,10 +931,10 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
-      if (pc_ParamWidget != NULL)
+      if (pc_ParamWidget != nullptr)
       {
          QString c_Folder;
          QString c_File;
@@ -993,7 +993,7 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
                   {
                      //prepare data copy
                      const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-                     if (pc_ParamData != NULL)
+                     if (pc_ParamData != nullptr)
                      {
                         C_PuiSvDbParam c_Copy = *pc_ParamData;
                         //For each output entry
@@ -1025,7 +1025,7 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
                   }
                }
 
-               if (c_New != NULL)
+               if (c_New != nullptr)
                {
                   c_New->HideOverlay();
                   c_New->deleteLater();
@@ -1091,13 +1091,13 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
          const C_OscNodeDataPoolListElementId & rc_CurElementId = orc_ListIds[u32_ListCounter];
          const C_OscNode * const pc_SdNode =
             C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(rc_CurElementId.u32_NodeIndex);
-         if ((pc_SdNode != NULL) &&
+         if ((pc_SdNode != nullptr) &&
              (rc_CurElementId.u32_DataPoolIndex < pc_SdNode->c_DataPools.size()) &&
              (rc_CurElementId.u32_ListIndex < pc_SdNode->c_DataPools[rc_CurElementId.u32_DataPoolIndex].c_Lists.size()))
          {
             const C_OscNodeDataPool & rc_SdDataPool = pc_SdNode->c_DataPools[rc_CurElementId.u32_DataPoolIndex];
             const C_OscNodeDataPoolList & rc_SdList = rc_SdDataPool.c_Lists[rc_CurElementId.u32_ListIndex];
-            C_OscParamSetInterpretedNode * pc_CurIntNode = NULL;
+            C_OscParamSetInterpretedNode * pc_CurIntNode = nullptr;
             C_OscParamSetInterpretedList c_NewIntList;
             uint32_t u32_CurIntNodeIndex;
             bool q_NodeFound = false;
@@ -1128,12 +1128,12 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                pc_CurIntNode->c_Name = pc_SdNode->c_Properties.c_Name;
             }
 
-            tgl_assert(pc_CurIntNode != NULL);
-            if (pc_CurIntNode != NULL)
+            tgl_assert(pc_CurIntNode != nullptr);
+            if (pc_CurIntNode != nullptr)
             {
                uint32_t u32_CurIntDataPoolIndex;
                bool q_DataPoolFound = false;
-               C_OscParamSetInterpretedDataPool * pc_CurIntDataPool = NULL;
+               C_OscParamSetInterpretedDataPool * pc_CurIntDataPool = nullptr;
                // Was the datapool already added
                tgl_assert(c_UsedDataPoolIndices.size() == c_IntNodes.size());
                for (u32_CurIntDataPoolIndex = 0U;
@@ -1189,8 +1189,8 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                   }
 
                   // Add the list
-                  tgl_assert(pc_CurIntDataPool != NULL);
-                  if (pc_CurIntDataPool != NULL)
+                  tgl_assert(pc_CurIntDataPool != nullptr);
+                  if (pc_CurIntDataPool != nullptr)
                   {
                      pc_CurIntDataPool->c_Lists.push_back(c_NewIntList);
                   }
@@ -1209,7 +1209,7 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
       }
 
       const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
-      if (pc_ParamWidget != NULL)
+      if (pc_ParamWidget != nullptr)
       {
          if (s32_Result == C_NO_ERR)
          {
@@ -1229,7 +1229,7 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
             if (s32_Result == C_NO_ERR)
             {
                const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-               if (pc_View != NULL)
+               if (pc_View != nullptr)
                {
                   // Save the file
                   QString c_Folder;
@@ -1350,13 +1350,13 @@ void C_SyvDaItPaWidgetNew::m_RecordElements(const std::vector<C_OscNodeDataPoolL
 {
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
       //Should only be possible if online
-      tgl_assert(this->mpc_ComDriver != NULL);
-      if ((pc_View != NULL) && (this->mpc_ComDriver != NULL))
+      tgl_assert(this->mpc_ComDriver != nullptr);
+      if ((pc_View != nullptr) && (this->mpc_ComDriver != nullptr))
       {
          const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(
             pc_ParamWidget->GetPopUpParent(), pc_ParamWidget->GetPopUpParent());
@@ -1373,7 +1373,7 @@ void C_SyvDaItPaWidgetNew::m_RecordElements(const std::vector<C_OscNodeDataPoolL
             // Error or abortion of user
          }
 
-         if (c_New != NULL)
+         if (c_New != nullptr)
          {
             pc_Dialog->SaveUserSettings();
             c_New->HideOverlay();
@@ -1500,7 +1500,7 @@ void C_SyvDaItPaWidgetNew::m_HandleRemoveTrigger(const std::vector<C_OscNodeData
    C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       C_OgeWiCustomMessage c_MessageBox(pc_ParamWidget->GetPopUpParent(), C_OgeWiCustomMessage::E_Type::eQUESTION);
       c_MessageBox.SetHeading("Parametrization Widget delete lists");
@@ -1555,7 +1555,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetDefaultFileName(const uint32_t ou32_ViewInde
    QString c_Retval;
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const QString c_ViewPart1 = static_cast<QString>("View_%1_").arg(ou32_ViewIndex + 1);
       const QString c_ViewPart1File = C_OscUtils::h_NiceifyStringForFileName(c_ViewPart1.toStdString().c_str()).c_str();
@@ -1606,7 +1606,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          pc_Element = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(
             orc_Id.u32_NodeIndex, orc_Id.u32_DataPoolIndex, orc_Id.u32_ListIndex,
             orc_Id.u32_ElementIndex);
-         if (pc_Element != NULL)
+         if (pc_Element != nullptr)
          {
             c_Retval =
                static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(
@@ -1616,7 +1616,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
       case 3UL:
          pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
             orc_Id.u32_NodeIndex, orc_Id.u32_DataPoolIndex, orc_Id.u32_ListIndex);
-         if (pc_List != NULL)
+         if (pc_List != nullptr)
          {
             c_Retval =
                static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(
@@ -1626,7 +1626,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
       case 2UL:
          pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(orc_Id.u32_NodeIndex,
                                                                        orc_Id.u32_DataPoolIndex);
-         if (pc_DataPool != NULL)
+         if (pc_DataPool != nullptr)
          {
             c_Retval =
                static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(
@@ -1635,7 +1635,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          break;
       case 1UL:
          pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(orc_Id.u32_NodeIndex);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             c_Retval =
                static_cast<QString>("%1").arg(C_OscUtils::h_NiceifyStringForFileName(
@@ -1677,7 +1677,7 @@ void C_SyvDaItPaWidgetNew::m_InformUserFloatRangeCheck(
       if (orc_InvalidValueIds.size() > 0UL)
       {
          const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
-         if (pc_ParamWidget != NULL)
+         if (pc_ParamWidget != nullptr)
          {
             QString c_Content;
             C_OgeWiCustomMessage c_Message(pc_ParamWidget->GetPopUpParent(), C_OgeWiCustomMessage::eWARNING);

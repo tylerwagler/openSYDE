@@ -29,7 +29,7 @@ class C_OgePubIconOnly :
    Q_OBJECT
 
 public:
-   explicit C_OgePubIconOnly(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubIconOnly(QWidget * const opc_Parent = nullptr);
    void SetCustomIcons(const QString & orc_IconPathNormal, const QString & orc_IconPathHovered,
                        const QString & orc_IconPathClicked, const QString & orc_IconPathDisabled);
 

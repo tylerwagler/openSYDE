@@ -47,7 +47,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeTableWidgetComIf::C_OgeTableWidgetComIf(QWidget * const opc_Parent) :
    QTableWidget(opc_Parent),
-   mpc_ToolTip(NULL)
+   mpc_ToolTip(nullptr)
 {
    //UI Settings
    this->setCornerButtonEnabled(false);
@@ -88,7 +88,7 @@ C_OgeTableWidgetComIf::C_OgeTableWidgetComIf(QWidget * const opc_Parent) :
 C_OgeTableWidgetComIf::~C_OgeTableWidgetComIf(void)
 {
    delete mpc_ToolTip;
-   mpc_ToolTip = NULL;
+   mpc_ToolTip = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -178,7 +178,7 @@ bool C_OgeTableWidgetComIf::event(QEvent * const opc_Event)
    if (opc_Event->type() == QEvent::ToolTip)
    {
       //show tool-tip
-      if (mpc_ToolTip == NULL)
+      if (mpc_ToolTip == nullptr)
       {
          mpc_ToolTip = new stw::opensyde_gui::C_NagToolTip();
       }
@@ -187,7 +187,7 @@ bool C_OgeTableWidgetComIf::event(QEvent * const opc_Event)
       {
          QHelpEvent * const pc_HelpEvent = dynamic_cast<QHelpEvent * const>(opc_Event);
 
-         if (pc_HelpEvent != NULL)
+         if (pc_HelpEvent != nullptr)
          {
             //Check first header
             if ((this->verticalHeader()->isVisible() == true) &&
@@ -293,7 +293,7 @@ bool C_OgeTableWidgetComIf::event(QEvent * const opc_Event)
       QHoverEvent * const pc_HoverEvent = dynamic_cast<QHoverEvent * const>(opc_Event);
       bool q_IpAddressHovered = false;  // for pointing-hand-cursor on link to IP address settings
       bool q_BusBitrateHovered = false; // for pointing-hand-cursor on link to bus property screen
-      if (pc_HoverEvent != NULL)
+      if (pc_HoverEvent != nullptr)
       {
          m_HandleMouseMoveToolTip(this->mapToGlobal(pc_HoverEvent->pos()));
 
@@ -303,11 +303,11 @@ bool C_OgeTableWidgetComIf::event(QEvent * const opc_Event)
          if (c_Index.isValid())
          {
             QLabel * const pc_Label = dynamic_cast<QLabel * const>(this->cellWidget(c_Index.row(), c_Index.column()));
-            if ((pc_Label != NULL) && ((pc_Label->text().split(".")).size() == 4))
+            if ((pc_Label != nullptr) && ((pc_Label->text().split(".")).size() == 4))
             {
                q_IpAddressHovered = true;
             }
-            else if ((pc_Label != NULL) &&
+            else if ((pc_Label != nullptr) &&
                      ((pc_Label->text().contains("kbit/s")) || (pc_Label->text().contains("ETH"))))
             {
                q_BusBitrateHovered = true;
@@ -365,7 +365,7 @@ bool C_OgeTableWidgetComIf::C_ItemId::operator <(const C_OgeTableWidgetComIf::C_
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeTableWidgetComIf::m_HideToolTip(void)
 {
-   if (this->mpc_ToolTip != NULL)
+   if (this->mpc_ToolTip != nullptr)
    {
       this->mpc_ToolTip->hide();
    }

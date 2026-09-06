@@ -57,7 +57,7 @@ bool C_SebUnoZetOrderSortHelper::operator ()(const QGraphicsItem * const opc_Ite
    //Default: messages equal
    bool q_Retval = false;
 
-   if ((opc_Item1 != NULL) && (opc_Item2 != NULL))
+   if ((opc_Item1 != nullptr) && (opc_Item2 != nullptr))
    {
       //Use z values as first order priority
       if (opc_Item1->zValue() < opc_Item2->zValue())

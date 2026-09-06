@@ -68,14 +68,14 @@ QString h_Sanitize(const std::string & orc_Value)
 //----------------------------------------------------------------------------------------------------------------------
 C_AdapterBrowser::C_AdapterBrowser(QWidget * const opc_Parent) :
    C_OgeWiOnlyBackground(opc_Parent),
-   mpc_Header(NULL),
-   mpc_Content(NULL),
-   mpc_BackendCombo(NULL),
-   mpc_AdapterCombo(NULL),
-   mpc_BitrateCombo(NULL),
-   mpc_RefreshBtn(NULL),
-   mpc_DetailsContainer(NULL),
-   mpc_DetailsGrid(NULL)
+   mpc_Header(nullptr),
+   mpc_Content(nullptr),
+   mpc_BackendCombo(nullptr),
+   mpc_AdapterCombo(nullptr),
+   mpc_BitrateCombo(nullptr),
+   mpc_RefreshBtn(nullptr),
+   mpc_DetailsContainer(nullptr),
+   mpc_DetailsGrid(nullptr)
 {
    this->SetBackgroundColor(5);
    this->m_BuildUi();
@@ -238,7 +238,7 @@ void C_AdapterBrowser::m_RefreshAdapters(void)
 
    const ::can::BackendKind e_Kind = static_cast<::can::BackendKind>(s32_KindInt);
    const std::unique_ptr< ::can::ICanBackend> c_Backend = ::can::ICanBackend::create(e_Kind);
-   if (c_Backend == NULL)
+   if (c_Backend == nullptr)
    {
       mpc_AdapterCombo->blockSignals(false);
       return;
@@ -276,7 +276,7 @@ void C_AdapterBrowser::m_DisplaySelected(void)
    while (mpc_DetailsGrid->count() > 0)
    {
       QLayoutItem * const pc_Item = mpc_DetailsGrid->takeAt(0);
-      if ((pc_Item != NULL) && (pc_Item->widget() != NULL))
+      if ((pc_Item != nullptr) && (pc_Item->widget() != nullptr))
       {
          pc_Item->widget()->deleteLater();
       }

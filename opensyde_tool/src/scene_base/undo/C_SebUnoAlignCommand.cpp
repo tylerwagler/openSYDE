@@ -95,7 +95,7 @@ void C_SebUnoAlignCommand::m_Align(const uint64_t & oru64_GuidelineItemId, const
    QGraphicsItem * const pc_GuidelineItem = this->m_GetSceneItem(oru64_GuidelineItemId);
 
    //Is there a guideline object
-   if (pc_GuidelineItem != NULL)
+   if (pc_GuidelineItem != nullptr)
    {
       vector<QGraphicsItem *> c_SelectedItems = this->m_GetSceneItems();
       //Are there more than one objects to align
@@ -112,7 +112,7 @@ void C_SebUnoAlignCommand::m_Align(const uint64_t & oru64_GuidelineItemId, const
          for (uint32_t u32_ItItem = 0; u32_ItItem < c_SelectedItems.size(); ++u32_ItItem)
          {
             pc_CurItem = C_SebUtil::h_GetHighestParent(c_SelectedItems[u32_ItItem]);
-            if (((pc_CurItem != pc_GuidelineItem) && (pc_Scene != NULL)) && (pc_CurItem != NULL))
+            if (((pc_CurItem != pc_GuidelineItem) && (pc_Scene != nullptr)) && (pc_CurItem != nullptr))
             {
                if (pc_Scene->IsAlignmentUsable(pc_CurItem) == true)
                {
@@ -155,7 +155,7 @@ void C_SebUnoAlignCommand::m_Align(const uint64_t & oru64_GuidelineItemId, const
                   }
 
                   pc_UniqueItem = dynamic_cast<C_GiUnique *>(pc_CurItem);
-                  if (pc_UniqueItem != NULL)
+                  if (pc_UniqueItem != nullptr)
                   {
                      const std::vector<uint64_t> c_Vec(1, pc_UniqueItem->GetId());
                      new C_SebUnoMoveCommand(this->mpc_Scene, c_Vec, c_Difference, this);

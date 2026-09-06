@@ -138,7 +138,7 @@ void C_SyvDaPeUpdateModeTableView::InitColumns(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeUpdateModeTableView::AdjustToItems(const bool & orq_Initial, const bool oq_Last)
 {
-   if (((this->mpc_TreeWidgetItem != NULL) && (this->mpc_TreeWidget != NULL)) && (this->model() != NULL))
+   if (((this->mpc_TreeWidgetItem != nullptr) && (this->mpc_TreeWidget != nullptr)) && (this->model() != nullptr))
    {
       //Configure
       const int32_t s32_CONST_OFFSET = 50;

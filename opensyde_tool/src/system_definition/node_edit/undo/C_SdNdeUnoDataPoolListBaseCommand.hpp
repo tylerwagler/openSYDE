@@ -32,7 +32,7 @@ class C_SdNdeUnoDataPoolListBaseCommand :
 public:
    C_SdNdeUnoDataPoolListBaseCommand(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                      stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                                     const QString & orc_Text = "", QUndoCommand * const opc_Parent = NULL);
+                                     const QString & orc_Text = "", QUndoCommand * const opc_Parent = nullptr);
 
 protected:
    const uint32_t mu32_NodeIndex;

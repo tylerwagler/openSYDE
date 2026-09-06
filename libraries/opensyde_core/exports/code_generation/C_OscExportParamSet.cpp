@@ -207,7 +207,7 @@ int32_t C_OscExportParamSet::mh_FillPsiStructure(const C_OscNode & orc_Node, con
 
    const C_OscNodeDataPool * const pc_FirstDataPool = orc_Node.GetHalDataPoolConst(oq_IsSafe);
 
-   if (pc_FirstDataPool != NULL)
+   if (pc_FirstDataPool != nullptr)
    {
       // get raw data (data from only dataset of list "configuration" of first Datapool)
       std::vector<uint8_t> c_ConfigRawBytes;

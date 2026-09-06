@@ -38,7 +38,7 @@ public:
       eSELECTINDEX
    };
 
-   C_SdNdeDalLogJobsListView(QWidget * const opc_Parent = NULL);
+   C_SdNdeDalLogJobsListView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDalLogJobsListView(void) override;
 
    bool IsEmpty(void) const;

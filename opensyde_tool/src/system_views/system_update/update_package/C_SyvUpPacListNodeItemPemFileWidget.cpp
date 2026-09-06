@@ -98,7 +98,7 @@ void C_SyvUpPacListNodeItemPemFileWidget::ViewFileInfo(void)
          //No confirmation
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();

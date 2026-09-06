@@ -86,7 +86,7 @@ void C_SdNdeCoConfigTreeModel::SetNodeId(const uint32_t ou32_NodeIndex)
    this->beginResetModel();
    this->m_CleanUpLastModel();
    this->mc_LookupTreeIndex.clear();
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       this->mu32_NodeIndex = ou32_NodeIndex;
       this->mpc_InvisibleRootItem = new C_TblTreeModelCheckableItem();
@@ -175,7 +175,7 @@ bool C_SdNdeCoConfigTreeModel::setData(const QModelIndex & orc_Index, const QVar
          C_TblTreeModelCheckableItem * const pc_TreeItem =
             static_cast<C_TblTreeModelCheckableItem *>(orc_Index.internalPointer());
 
-         if (pc_TreeItem != NULL)
+         if (pc_TreeItem != nullptr)
          {
             uint32_t u32_ValidLayers = 0UL;
             const QModelIndex c_StartIndex = orc_Index;
@@ -251,7 +251,7 @@ int32_t C_SdNdeCoConfigTreeModel::GetInterfaceIdForModelIndex(const QModelIndex 
          //Select interface
          //lint -e{9079} Result of Qt interface restrictions, set by index function
          C_TblTreItem * const pc_InterfaceItem = static_cast<C_TblTreItem *>(c_Tmp.internalPointer());
-         if (pc_InterfaceItem != NULL)
+         if (pc_InterfaceItem != nullptr)
          {
             oru8_InterfaceNumber = static_cast<uint8_t>(pc_InterfaceItem->u32_Index);
          }
@@ -303,7 +303,7 @@ int32_t C_SdNdeCoConfigTreeModel::GetDeviceIndexForModelIndex(const QModelIndex 
             //Select device
             //lint -e{9079} Result of Qt interface restrictions, set by index function
             C_TblTreItem * const pc_DeviceItem = static_cast<C_TblTreItem *>(c_Tmp.internalPointer());
-            if (pc_DeviceItem != NULL)
+            if (pc_DeviceItem != nullptr)
             {
                s32_Retval = this->m_RetrieveInterfaceFromLookupTree(oru8_InterfaceNumber, pc_DeviceItem->u32_Index,
                                                                     orc_DeviceInterfaceId);
@@ -353,7 +353,7 @@ int32_t C_SdNdeCoConfigTreeModel::GetDeviceAndUseCaseIndexForModelIndex(const QM
       {
          //lint -e{9079} Result of Qt interface restrictions, set by index function
          C_TblTreItem * const pc_DeviceUseCaseItem = static_cast<C_TblTreItem *>(orc_Index.internalPointer());
-         if (pc_DeviceUseCaseItem != NULL)
+         if (pc_DeviceUseCaseItem != nullptr)
          {
             oru32_UseCaseIndex = pc_DeviceUseCaseItem->u32_Index;
          }
@@ -396,7 +396,7 @@ void C_SdNdeCoConfigTreeModel::AddDevice(const uint32_t ou32_SelectedNodeIndex,
                                                                        ou8_OriginalNodeInterfaceNumber, c_DeviceId,
                                                                        orc_Config) == C_NO_ERR);
    //Handle tree
-   if (pc_AllDevices != NULL)
+   if (pc_AllDevices != nullptr)
    {
       uint32_t u32_ExpectedPos;
       C_TblTreeModelCheckableItem * const pc_NewDevice = new C_TblTreeModelCheckableItem();
@@ -433,7 +433,7 @@ void C_SdNdeCoConfigTreeModel::RemoveDevice(const uint8_t ou8_OriginalNodeInterf
                                                                           ou8_OriginalNodeInterfaceNumber,
                                                                           orc_DeviceId) == C_NO_ERR);
    //Handle tree
-   if (pc_AllDevices != NULL)
+   if (pc_AllDevices != nullptr)
    {
       pc_AllDevices->c_Children.erase(pc_AllDevices->c_Children.begin() + c_DeviceIndex.row());
    }
@@ -460,7 +460,7 @@ QModelIndex C_SdNdeCoConfigTreeModel::GetInterfaceModelIndex(const uint8_t ou8_I
 {
    QModelIndex c_Index;
 
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       for (uint32_t u32_ItChild = 0UL; u32_ItChild < this->mpc_InvisibleRootItem->c_Children.size(); ++u32_ItChild)
       {
@@ -497,13 +497,13 @@ QModelIndex C_SdNdeCoConfigTreeModel::GetDeviceUseCaseModelIndex(const uint8_t o
    C_TblTreeModelCheckableItem * const pc_ParentNode = this->m_GetDeviceModelNode(ou8_InterfaceNumber, orc_DeviceId);
    QModelIndex c_Index;
 
-   if (pc_ParentNode != NULL)
+   if (pc_ParentNode != nullptr)
    {
       for (uint32_t u32_ItChild = 0UL; u32_ItChild < pc_ParentNode->c_Children.size(); ++u32_ItChild)
       {
          C_TblTreeModelCheckableItem * const pc_ChildNode =
             dynamic_cast<C_TblTreeModelCheckableItem * const>(pc_ParentNode->c_Children[u32_ItChild]);
-         if (pc_ChildNode != NULL)
+         if (pc_ChildNode != nullptr)
          {
             if (pc_ChildNode->u32_Index == ou32_UseCaseIndex)
             {
@@ -552,7 +552,7 @@ QModelIndex C_SdNdeCoConfigTreeModel::GetDeviceModelIndex(const uint8_t ou8_Inte
    C_TblTreeModelCheckableItem * const pc_ParentNode = this->m_GetDevicesModelNode(ou8_InterfaceNumber);
    QModelIndex c_Index;
 
-   if (pc_ParentNode != NULL)
+   if (pc_ParentNode != nullptr)
    {
       const QMap<uint8_t,
                  QMap<stw::opensyde_core::C_OscCanInterfaceId,
@@ -568,7 +568,7 @@ QModelIndex C_SdNdeCoConfigTreeModel::GetDeviceModelIndex(const uint8_t ou8_Inte
             {
                C_TblTreeModelCheckableItem * const pc_ChildNode =
                   dynamic_cast<C_TblTreeModelCheckableItem * const>(pc_ParentNode->c_Children[u32_ItChild]);
-               if (pc_ChildNode != NULL)
+               if (pc_ChildNode != nullptr)
                {
                   if (pc_ChildNode->u32_Index == c_ItDevice.value())
                   {
@@ -654,7 +654,7 @@ void C_SdNdeCoConfigTreeModel::m_InitInterfaceNodeContent(const C_OscNodeComInte
       QString c_BusName;
 
       //get bus name
-      if (pc_Bus != NULL)
+      if (pc_Bus != nullptr)
       {
          c_BusName = pc_Bus->c_Name.c_str();
          c_DisplayName = "%1 (linked to " + c_BusName + ") - CANopen Manager";
@@ -773,7 +773,7 @@ void C_SdNdeCoConfigTreeModel::m_InitDeviceNodeContent(const uint8_t ou8_Interfa
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
       orc_DeviceInterfaceId.u32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       orc_DeviceEntry.c_Name = pc_Node->c_Properties.c_Name.c_str();
    }
@@ -1193,9 +1193,9 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 C_TblTreeModelCheckableItem * C_SdNdeCoConfigTreeModel::m_GetInterfaceModelNode(const uint8_t ou8_InterfaceNumber) const
 {
-   C_TblTreeModelCheckableItem * pc_Retval = NULL;
+   C_TblTreeModelCheckableItem * pc_Retval = nullptr;
 
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       for (uint32_t u32_ItChild = 0UL; u32_ItChild < this->mpc_InvisibleRootItem->c_Children.size(); ++u32_ItChild)
       {
@@ -1223,10 +1223,10 @@ C_TblTreeModelCheckableItem * C_SdNdeCoConfigTreeModel::m_GetInterfaceModelNode(
 //----------------------------------------------------------------------------------------------------------------------
 C_TblTreeModelCheckableItem * C_SdNdeCoConfigTreeModel::m_GetDevicesModelNode(const uint8_t ou8_InterfaceNumber) const
 {
-   C_TblTreeModelCheckableItem * pc_Retval = NULL;
+   C_TblTreeModelCheckableItem * pc_Retval = nullptr;
    C_TblTreeModelCheckableItem * const pc_ParentNode = this->m_GetInterfaceModelNode(ou8_InterfaceNumber);
 
-   if (pc_ParentNode != NULL)
+   if (pc_ParentNode != nullptr)
    {
       if (pc_ParentNode->c_Children.size() > 0UL)
       {
@@ -1250,10 +1250,10 @@ C_TblTreeModelCheckableItem * C_SdNdeCoConfigTreeModel::m_GetDevicesModelNode(co
 C_TblTreeModelCheckableItem * C_SdNdeCoConfigTreeModel::m_GetDeviceModelNode(const uint8_t ou8_InterfaceNumber,
                                                                              const C_OscCanInterfaceId & orc_DeviceId)
 {
-   C_TblTreeModelCheckableItem * pc_Retval = NULL;
+   C_TblTreeModelCheckableItem * pc_Retval = nullptr;
    C_TblTreeModelCheckableItem * const pc_ParentNode = this->m_GetDevicesModelNode(ou8_InterfaceNumber);
 
-   if (pc_ParentNode != NULL)
+   if (pc_ParentNode != nullptr)
    {
       const QMap<uint8_t,
                  QMap<stw::opensyde_core::C_OscCanInterfaceId,
@@ -1270,7 +1270,7 @@ C_TblTreeModelCheckableItem * C_SdNdeCoConfigTreeModel::m_GetDeviceModelNode(con
             {
                C_TblTreeModelCheckableItem * const pc_ChildNode =
                   dynamic_cast<C_TblTreeModelCheckableItem * const>(pc_ParentNode->c_Children[u32_ItChild]);
-               if (pc_ChildNode != NULL)
+               if (pc_ChildNode != nullptr)
                {
                   if (pc_ChildNode->u32_Index == c_ItDevice.value())
                   {
@@ -1296,11 +1296,11 @@ void C_SdNdeCoConfigTreeModel::m_TriggerUpdateDeviceCount(const uint8_t ou8_Inte
 {
    C_TblTreeModelCheckableItem * const pc_AllDevices = this->m_GetDevicesModelNode(ou8_InterfaceNumber);
 
-   if (pc_AllDevices != NULL)
+   if (pc_AllDevices != nullptr)
    {
       const C_OscCanOpenManagerInfo * const pc_ManagerInfo = C_PuiSdHandler::h_GetInstance()->GetCanOpenManager(
          this->mu32_NodeIndex, ou8_InterfaceNumber);
-      if (pc_ManagerInfo != NULL)
+      if (pc_ManagerInfo != nullptr)
       {
          const QModelIndex c_Index = this->GetDevicesModelIndex(ou8_InterfaceNumber);
          m_InitDevicesNodeContent(*pc_ManagerInfo, *pc_AllDevices);
@@ -1335,8 +1335,8 @@ void C_SdNdeCoConfigTreeModel::m_CheckError(C_TblTreeModelCheckableItem * const 
 void C_SdNdeCoConfigTreeModel::m_CheckError(const QModelIndex & orc_InterfaceIndex,
                                             C_TblTreeModelCheckableItem * const opc_InterfaceEntry)
 {
-   tgl_assert(opc_InterfaceEntry != NULL);
-   if (opc_InterfaceEntry != NULL)
+   tgl_assert(opc_InterfaceEntry != nullptr);
+   if (opc_InterfaceEntry != nullptr)
    {
       const uint8_t u8_InterfaceNumber = static_cast<uint8_t>(opc_InterfaceEntry->u32_Index);
       const C_OscCanOpenManagerInfo * const pc_Manager = C_PuiSdHandler::h_GetInstance()->GetCanOpenManager(
@@ -1348,12 +1348,12 @@ void C_SdNdeCoConfigTreeModel::m_CheckError(const QModelIndex & orc_InterfaceInd
 
       // Null pointer is in this case not an error. This is the scenario if an interface is unchecked. So the icon
       // of the interface element must be updated too
-      if (pc_Manager != NULL)
+      if (pc_Manager != nullptr)
       {
          // Manager layer
          // Check only for the manager relevant error checks. All errors related to devices will be checked
          // in the next step to assign possible errors exactly to the relevant devices
-         pc_Manager->CheckErrorManager(NULL, &q_ManagerErrorDetected, NULL, NULL, false);
+         pc_Manager->CheckErrorManager(nullptr, &q_ManagerErrorDetected, nullptr, nullptr, false);
 
          // Devices layer
          if (opc_InterfaceEntry->c_Children.size() == 1)
@@ -1367,8 +1367,8 @@ void C_SdNdeCoConfigTreeModel::m_CheckError(const QModelIndex & orc_InterfaceInd
                C_TblTreeModelCheckableItem * const pc_DeviceItem = dynamic_cast<C_TblTreeModelCheckableItem *>(
                   opc_InterfaceEntry->c_Children[0]->c_Children[u32_DeviceCounter]);
 
-               tgl_assert(pc_DeviceItem != NULL);
-               if (pc_DeviceItem != NULL)
+               tgl_assert(pc_DeviceItem != nullptr);
+               if (pc_DeviceItem != nullptr)
                {
                   C_OscCanInterfaceId c_DeviceId;
                   bool q_DeviceErrorDetected = false;
@@ -1409,8 +1409,8 @@ void C_SdNdeCoConfigTreeModel::m_CheckError(const QModelIndex & orc_InterfaceInd
                               C_TblTreeModelCheckableItem * const pc_SubItem = dynamic_cast<
                                  C_TblTreeModelCheckableItem *>(pc_DeviceItem->c_Children[u32_ChildCounter]);
 
-                              tgl_assert(pc_SubItem != NULL);
-                              if ((pc_SubItem != NULL) &&
+                              tgl_assert(pc_SubItem != nullptr);
+                              if ((pc_SubItem != nullptr) &&
                                   (pc_SubItem->u32_Index == hu32_INDEX_DEVICE_USE_CASE_CONFIGURATION))
                               {
                                  if (q_DeviceErrorDetected == true)
@@ -1520,7 +1520,7 @@ bool C_SdNdeCoConfigTreeModel::m_CheckIfCoManagerCanBeActivated(const uint32_t o
          C_PuiSdHandler::h_GetInstance()->GetCanOpenManagerNodeOnBus(c_ComInterface.u32_BusIndex);
 
       // scenario 1 and 2
-      if (pc_ManagerNodeToCheck != NULL)
+      if (pc_ManagerNodeToCheck != nullptr)
       {
          q_CoManagerCanBeActivated = false;
 

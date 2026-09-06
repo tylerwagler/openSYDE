@@ -47,7 +47,7 @@ class C_SyvUpUpdateWidget :
 
 public:
    explicit C_SyvUpUpdateWidget(const uint32_t ou32_ViewIndex, QWidget * const opc_ProgressLogParent,
-                                QWidget * const opc_Parent = NULL);
+                                QWidget * const opc_Parent = nullptr);
    ~C_SyvUpUpdateWidget() override;
 
    void InitText(void) const;

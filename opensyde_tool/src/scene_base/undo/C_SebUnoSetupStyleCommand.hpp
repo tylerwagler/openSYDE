@@ -30,7 +30,7 @@ class C_SebUnoSetupStyleCommand :
 {
 public:
    C_SebUnoSetupStyleCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                             QUndoCommand * const opc_Parent = NULL);
+                             QUndoCommand * const opc_Parent = nullptr);
    ~C_SebUnoSetupStyleCommand(void) override;
    void InitPrevious(void);
    void InitNext(void);

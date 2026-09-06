@@ -820,7 +820,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
 
          c_Text = "";
 
-         if (pc_OscNode != NULL)
+         if (pc_OscNode != nullptr)
          {
             uint32_t u32_ListCounter;
             uint32_t u32_CurDataPoolIndex = 0xFFFFFFFFU;
@@ -870,7 +870,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
                   pc_OscDataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(u32_CurNodeIndex,
                                                                                    u32_CurDataPoolIndex);
 
-                  if (pc_OscDataPool != NULL)
+                  if (pc_OscDataPool != nullptr)
                   {
                      if (oq_IsConfirm == true)
                      {
@@ -885,7 +885,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
                   }
                }
 
-               if (pc_OscList != NULL)
+               if (pc_OscList != nullptr)
                {
                   // Listname
                   if (oq_IsConfirm == true)
@@ -1278,7 +1278,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetPathForNode(const uint32_t ou32_NodeI
    if (this->mc_AllNodeIndexes.size() > 1UL)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNode(ou32_NodeIndex);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          const QFileInfo c_FileInfo(orc_Path);
          const QDir c_Dir(c_FileInfo.absoluteDir());

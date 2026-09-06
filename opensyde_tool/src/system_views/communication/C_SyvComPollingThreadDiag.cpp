@@ -201,12 +201,12 @@ void C_SyvComPollingThreadDiag::run(void)
 C_SyvComPollingThreadDiag::C_SyvComPollingThreadDiag(void) :
    QThread(),
    me_Service(eDPREAD),
-   mpc_Dealer(NULL),
+   mpc_Dealer(nullptr),
    mu8_DataPoolIndex(0U),
    mu16_ListIndex(0U),
    mu16_ElementIndex(0U),
-   mpc_DashboardWidget(NULL),
-   mpc_ParamNodeValues(NULL),
+   mpc_DashboardWidget(nullptr),
+   mpc_ParamNodeValues(nullptr),
    mq_ApplicationAcknowledge(false),
    ms32_Result(C_UNKNOWN_ERR),
    mu8_Nrc(0),
@@ -223,7 +223,7 @@ C_SyvComPollingThreadDiag::C_SyvComPollingThreadDiag(void) :
 //lint -e{1540}  no memory leak because of we never took ownership
 C_SyvComPollingThreadDiag::~C_SyvComPollingThreadDiag(void)
 {
-   mpc_Dealer = NULL;
+   mpc_Dealer = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -492,7 +492,7 @@ const
    if (this->isRunning() == true)
    {
       s32_Return = C_BUSY;
-      orpc_ParamNodeValues = NULL;
+      orpc_ParamNodeValues = nullptr;
    }
    else
    {

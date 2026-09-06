@@ -46,9 +46,9 @@ using namespace stw::scl;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscDataDealer::C_OscDataDealer(void) :
-   mpc_Node(NULL),
+   mpc_Node(nullptr),
    mu32_NodeIndex(0U),
-   mpc_DiagProtocol(NULL)
+   mpc_DiagProtocol(nullptr)
 {
 }
 
@@ -77,8 +77,8 @@ C_OscDataDealer::C_OscDataDealer(C_OscNode * const opc_Node, const uint32_t ou32
 //----------------------------------------------------------------------------------------------------------------------
 C_OscDataDealer::~C_OscDataDealer(void)
 {
-   mpc_Node = NULL;
-   mpc_DiagProtocol = NULL;
+   mpc_Node = nullptr;
+   mpc_DiagProtocol = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ int32_t C_OscDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, const uin
 {
    int32_t s32_Return;
 
-   if ((mpc_Node == NULL) || (mpc_DiagProtocol == NULL))
+   if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
       s32_Return = C_CONFIG;
    }
@@ -151,7 +151,7 @@ int32_t C_OscDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, const uin
                                                                                                ou16_ListIndex,
                                                                                                ou16_ElementIndex);
       //does the specified element exist ?
-      if (pc_Element == NULL)
+      if (pc_Element == nullptr)
       {
          s32_Return = C_RANGE;
       }
@@ -230,7 +230,7 @@ int32_t C_OscDataDealer::DataPoolWrite(const uint8_t ou8_DataPoolIndex, const ui
 {
    int32_t s32_Return;
 
-   if ((mpc_Node == NULL) || (mpc_DiagProtocol == NULL))
+   if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
       s32_Return = C_CONFIG;
    }
@@ -240,7 +240,7 @@ int32_t C_OscDataDealer::DataPoolWrite(const uint8_t ou8_DataPoolIndex, const ui
       const C_OscNodeDataPoolListElement * const pc_Element =
          this->mpc_Node->GetDataPoolListElement(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex);
       //does the specified element exist ?
-      if (pc_Element == NULL)
+      if (pc_Element == nullptr)
       {
          s32_Return = C_RANGE;
       }
@@ -316,7 +316,7 @@ int32_t C_OscDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t
 {
    int32_t s32_Return;
 
-   if ((mpc_Node == NULL) || (mpc_DiagProtocol == NULL))
+   if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
       s32_Return = C_CONFIG;
    }
@@ -327,7 +327,7 @@ int32_t C_OscDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t
                                                                                                ou16_ListIndex,
                                                                                                ou16_ElementIndex);
       //does the specified element exist ?
-      if (pc_Element == NULL)
+      if (pc_Element == nullptr)
       {
          s32_Return = C_RANGE;
       }
@@ -396,7 +396,7 @@ int32_t C_OscDataDealer::NvmWrite(const uint8_t ou8_DataPoolIndex, const uint16_
 {
    int32_t s32_Return;
 
-   if ((mpc_Node == NULL) || (mpc_DiagProtocol == NULL))
+   if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
       s32_Return = C_CONFIG;
    }
@@ -406,7 +406,7 @@ int32_t C_OscDataDealer::NvmWrite(const uint8_t ou8_DataPoolIndex, const uint16_
       const C_OscNodeDataPoolListElement * const pc_Element =
          this->mpc_Node->GetDataPoolListElement(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex);
       //does the specified element exist ?
-      if (pc_Element == NULL)
+      if (pc_Element == nullptr)
       {
          s32_Return = C_RANGE;
       }
@@ -515,7 +515,7 @@ void C_OscDataDealer::m_OnReadDataPoolNvmEventReceived(const uint8_t ou8_DataPoo
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDataDealer::m_Init(void)
 {
-   if (this->mpc_DiagProtocol != NULL)
+   if (this->mpc_DiagProtocol != nullptr)
    {
       this->mpc_DiagProtocol->Initialize(&C_OscDataDealer::mh_ReadDataPoolDataEventReceived,
                                          &C_OscDataDealer::mh_ReadDataPoolDataEventErrorReceived, this);
@@ -547,8 +547,8 @@ void C_OscDataDealer::mh_ReadDataPoolDataEventReceived(void * const opv_Instance
    //lint -e{9079}  This class is the only one which registers itself at the caller of this function. It must match.
    C_OscDataDealer * const pc_Dealer = reinterpret_cast<C_OscDataDealer *>(opv_Instance);
 
-   tgl_assert(pc_Dealer != NULL);
-   if (pc_Dealer != NULL)
+   tgl_assert(pc_Dealer != nullptr);
+   if (pc_Dealer != nullptr)
    {
       pc_Dealer->m_ReadDataPoolDataEventReceived(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, orc_Value);
    }
@@ -576,7 +576,7 @@ void C_OscDataDealer::m_ReadDataPoolDataEventReceived(const uint8_t ou8_DataPool
                                                       const std::vector<uint8_t> & orc_Value)
 {
    //check for weird misconfiguration:
-   if ((this->mpc_Node == NULL) || (this->mpc_DiagProtocol == NULL))
+   if ((this->mpc_Node == nullptr) || (this->mpc_DiagProtocol == nullptr))
    {
       osc_write_log_warning("Asynchronous communication",
                             "C_OscDataDealer: ReadDataPool event received but no node or diagnostic protocol known!");
@@ -586,7 +586,7 @@ void C_OscDataDealer::m_ReadDataPoolDataEventReceived(const uint8_t ou8_DataPool
       C_OscNodeDataPoolListElement * const pc_Element = this->mpc_Node->GetDataPoolListElement(ou8_DataPoolIndex,
                                                                                                ou16_ListIndex,
                                                                                                ou16_ElementIndex);
-      if (pc_Element == NULL)
+      if (pc_Element == nullptr)
       {
          std::string c_Error;
          c_Error = PrintFormattedCompat("C_OscDataDealer: ReadDataPool event received but referenced Datapool element (" \
@@ -656,8 +656,8 @@ void C_OscDataDealer::mh_ReadDataPoolDataEventErrorReceived(void * const opv_Ins
    //lint -e{9079}  This class is the only one which registers itself at the caller of this function. It must match.
    C_OscDataDealer * const pc_Dealer = reinterpret_cast<C_OscDataDealer *>(opv_Instance);
 
-   tgl_assert(pc_Dealer != NULL);
-   if (pc_Dealer != NULL)
+   tgl_assert(pc_Dealer != nullptr);
+   if (pc_Dealer != nullptr)
    {
       pc_Dealer->m_ReadDataPoolDataEventErrorReceived(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, ou8_NrCode);
    }
@@ -680,7 +680,7 @@ void C_OscDataDealer::m_ReadDataPoolDataEventErrorReceived(const uint8_t ou8_Dat
                                                            const uint16_t ou16_ElementIndex, const uint8_t ou8_NrCode)
 {
    //check for weird misconfiguration:
-   if ((this->mpc_Node == NULL) || (this->mpc_DiagProtocol == NULL))
+   if ((this->mpc_Node == nullptr) || (this->mpc_DiagProtocol == nullptr))
    {
       osc_write_log_warning("Asynchronous communication",
                             "C_OscDataDealer: ReadDataPool error event received but no node or diagnostic protocol known!");
@@ -690,7 +690,7 @@ void C_OscDataDealer::m_ReadDataPoolDataEventErrorReceived(const uint8_t ou8_Dat
       const C_OscNodeDataPoolListElement * const pc_Element = this->mpc_Node->GetDataPoolListElement(ou8_DataPoolIndex,
                                                                                                      ou16_ListIndex,
                                                                                                      ou16_ElementIndex);
-      if (pc_Element == NULL)
+      if (pc_Element == nullptr)
       {
          std::string c_Error;
          c_Error = PrintFormattedCompat("C_OscDataDealer: ReadDataPool error event received but referenced Datapool element " \

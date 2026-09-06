@@ -29,7 +29,7 @@ class C_SyvUpPacPemFilesListWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvUpPacPemFilesListWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvUpPacPemFilesListWidget(QWidget * const opc_Parent = nullptr);
    void AddFileAction(void);
    void SaveUserSettings(void);
    void DeleteAllItems(void);

@@ -116,7 +116,7 @@ void C_SebUnoTopBaseManager::RegisterMoveSubLine(const QList<QGraphicsItem *> & 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoTopBaseManager::SaveBusConnectorInitialPoints(const C_GiLiBusConnectorBase * const opc_BusConnector)
 {
-   if (opc_BusConnector != NULL)
+   if (opc_BusConnector != nullptr)
    {
       this->mc_BusConnectorInitialPoints = opc_BusConnector->GetPointsScenePos();
    }
@@ -159,7 +159,7 @@ bool C_SebUnoTopBaseManager::m_CheckBusConnectorChange(const QList<QGraphicsItem
    {
       const C_GiLiBusConnectorBase * const pc_BusConnector =
          dynamic_cast<const C_GiLiBusConnectorBase * const>(orc_Items[0]);
-      if (pc_BusConnector != NULL)
+      if (pc_BusConnector != nullptr)
       {
          vector<uint64_t> c_Ids;
          uint64_t u64_Id;

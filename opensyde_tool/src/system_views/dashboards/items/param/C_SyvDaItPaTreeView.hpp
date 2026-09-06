@@ -34,7 +34,7 @@ class C_SyvDaItPaTreeView :
    Q_OBJECT
 
 public:
-   C_SyvDaItPaTreeView(QWidget * const opc_Parent = NULL);
+   C_SyvDaItPaTreeView(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaItPaTreeView(void) override;
 
    bool IsEmpty(void) const;

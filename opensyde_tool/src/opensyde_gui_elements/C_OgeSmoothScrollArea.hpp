@@ -30,7 +30,7 @@ class C_OgeSmoothScrollArea :
    Q_OBJECT
 
 public:
-   C_OgeSmoothScrollArea(QWidget * const opc_Parent = NULL);
+   C_OgeSmoothScrollArea(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

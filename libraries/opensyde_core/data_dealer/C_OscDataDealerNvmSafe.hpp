@@ -44,8 +44,8 @@ public:
 
    int32_t NvmSafeCheckCrcs(const C_OscNode & orc_Node) const;
    int32_t NvmSafeWriteChangedValues(std::vector<C_OscNodeDataPoolListElementId> & orc_ChangedElements, const std::vector<C_OscNodeDataPoolListId> * const opc_AdditionalListsToUpdate =
-                                        NULL,
-                                     uint8_t * const opu8_NrCode = NULL);
+                                        nullptr,
+                                     uint8_t * const opu8_NrCode = nullptr);
    int32_t NvmSafeReadValues(const C_OscNode * (&orpc_NodeCopy), uint8_t * const opu8_NrCode);
    int32_t NvmSafeWriteCrcs(uint8_t * const opu8_NrCode);
 

@@ -30,7 +30,7 @@ class C_OgeSpiVerticalNavi :
    Q_OBJECT
 
 public:
-   C_OgeSpiVerticalNavi(QWidget * const opc_Parent = NULL);
+   C_OgeSpiVerticalNavi(QWidget * const opc_Parent = nullptr);
 
    void LoadUserSettings(void);
    void StoreUserSettings(void) const;

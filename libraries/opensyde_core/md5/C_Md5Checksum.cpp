@@ -317,7 +317,7 @@ std::string C_Md5Checksum::GetMD5(const std::string & orc_FilePath)
    std::string c_Return;
 
    pc_File = std::fopen(orc_FilePath.c_str(), "rb");
-   if (pc_File == NULL)
+   if (pc_File == nullptr)
    {
       return "";
    }
@@ -345,7 +345,7 @@ std::string C_Md5Checksum::GetMD5(std::FILE * const opc_File)
    C_HashState c_Hash;
    uint8_t au8_Result[16];
 
-   if (opc_File == NULL)
+   if (opc_File == nullptr)
    {
       return "";
    }

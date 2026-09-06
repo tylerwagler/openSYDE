@@ -29,7 +29,7 @@ class C_OgeRabProperties :
    Q_OBJECT
 
 public:
-   C_OgeRabProperties(QWidget * const opc_Parent = NULL);
+   C_OgeRabProperties(QWidget * const opc_Parent = nullptr);
 
    void SetStyleVariantReceivers(void);
 };

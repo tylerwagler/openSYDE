@@ -57,8 +57,8 @@ C_GiBiArrow::C_GiBiArrow(const uint64_t & oru64_Id, const std::vector<QPointF> *
    me_StartArrowHeadType(C_PuiBsLineArrow::E_ArrowHeadType::eNONE),
    me_EndArrowHeadType(C_PuiBsLineArrow::E_ArrowHeadType::eNONE),
    me_LineType(C_PuiBsLineArrow::E_LineType::eSOLID),
-   mpc_ArrowHeadStart(NULL),
-   mpc_ArrowHeadEnd(NULL),
+   mpc_ArrowHeadStart(nullptr),
+   mpc_ArrowHeadEnd(nullptr),
    //lint -e{1938}  static const is guaranteed preinitialized before main
    mf64_ArrowLength(mhf64_SHAPE_OFFSET_FACTOR),
    //lint -e{1938}  static const is guaranteed preinitialized before main
@@ -82,7 +82,7 @@ C_GiBiArrow::C_GiBiArrow(const uint64_t & oru64_Id, const std::vector<QPointF> *
    this->C_GiBiArrow::SetWidth(1);
    this->SetColor(Qt::black);
    //Z value
-   if (opc_Points != NULL)
+   if (opc_Points != nullptr)
    {
       this->setZValue(mf64_ZORDER_INIT_LINE_ARROW);
    }
@@ -189,7 +189,7 @@ bool C_GiBiArrow::OpenStyleDialog(void)
    {
       q_Retval = false;
    }
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -209,7 +209,7 @@ void C_GiBiArrow::CopyStyle(const QGraphicsItem * const opc_GuidelineItem)
 {
    const C_GiBiArrow * const pc_Item = dynamic_cast<const C_GiBiArrow * const>(opc_GuidelineItem);
 
-   if (pc_Item != NULL)
+   if (pc_Item != nullptr)
    {
       this->ApplyStyle(pc_Item->GetColor(), pc_Item->GetWidth(), pc_Item->GetLineType(),
                        pc_Item->GetStartArrowHeadType(), pc_Item->GetEndArrowHeadType());
@@ -410,7 +410,7 @@ void C_GiBiArrow::m_GenerateArrow(QGraphicsPathItem * const opc_ArrowItem,
                                   const C_PuiBsLineArrow::E_ArrowHeadType & ore_ArrowHeadType,
                                   const C_GiLiLineConnection * const opc_Conn, const bool & orq_Start)
 {
-   if (opc_ArrowItem != NULL)
+   if (opc_ArrowItem != nullptr)
    {
       const QColor c_Color = this->GetColor();
       QPainterPath c_Path;

@@ -40,7 +40,7 @@ public:
       eCOMMENT
    };
 
-   explicit C_SdNdeDalLogJobDataSelectionTableModel(QObject * const opc_Parent = NULL);
+   explicit C_SdNdeDalLogJobDataSelectionTableModel(QObject * const opc_Parent = nullptr);
    void UpdateData(const std::vector<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
                    const uint32_t ou32_NodeIndex);
    void DoRemoveRows(const std::vector<uint32_t> & orc_SelectedIndices);

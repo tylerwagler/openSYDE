@@ -34,7 +34,7 @@ class C_GiInfo :
    Q_OBJECT
 
 public:
-   C_GiInfo(const QRectF & orc_Rect, QGraphicsItem * const opc_Parent = NULL);
+   C_GiInfo(const QRectF & orc_Rect, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiInfo(void) override;
 
    void SetTextFont(const QFont & orc_Value);

@@ -30,7 +30,7 @@ class C_SdNdeCoPdoTableView :
    Q_OBJECT
 
 public:
-   C_SdNdeCoPdoTableView(QWidget * const opc_Parent = NULL);
+   C_SdNdeCoPdoTableView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeCoPdoTableView(void) override;
 
    void LoadUserSettings(void);

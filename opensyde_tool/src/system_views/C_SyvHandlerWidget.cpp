@@ -59,9 +59,9 @@ const uint32_t C_SyvHandlerWidget::mhu32_USER_INPUT_FUNC_DEVICECONFIG = 2U;
 C_SyvHandlerWidget::C_SyvHandlerWidget(QWidget * const opc_Parent) :
    C_NagUseCaseWidget(opc_Parent),
    mpc_Ui(new Ui::C_SyvHandlerWidget),
-   mpc_SetupWidget(NULL),
-   mpc_UpdateWidget(NULL),
-   mpc_DashboardsWidget(NULL),
+   mpc_SetupWidget(nullptr),
+   mpc_UpdateWidget(nullptr),
+   mpc_DashboardsWidget(nullptr),
    ms32_SubMode(-1),
    mu32_Index(0U),
    mq_DataChanged(false)
@@ -126,7 +126,7 @@ void C_SyvHandlerWidget::UserInputFunc(const uint32_t ou32_FuncNumber)
    {
    case mhu32_USER_INPUT_FUNC_APPLY:
       //BEFORE save
-      if ((this->mpc_DashboardsWidget != NULL) &&
+      if ((this->mpc_DashboardsWidget != nullptr) &&
           (this->mpc_DashboardsWidget->GetConnectActive() == true))
       {
          Q_EMIT this->SigEnableUserInputFunc(mhu32_USER_INPUT_FUNC_SETTINGS, false);
@@ -135,13 +135,13 @@ void C_SyvHandlerWidget::UserInputFunc(const uint32_t ou32_FuncNumber)
       this->Save();
       break;
    case mhu32_USER_INPUT_FUNC_SETTINGS:
-      if (this->mpc_DashboardsWidget != NULL)
+      if (this->mpc_DashboardsWidget != nullptr)
       {
          this->mpc_DashboardsWidget->OpenSettings();
       }
       break;
    case mhu32_USER_INPUT_FUNC_DEVICECONFIG:
-      if (this->mpc_SetupWidget != NULL)
+      if (this->mpc_SetupWidget != nullptr)
       {
          this->mpc_SetupWidget->StartDeviceConfiguration();
       }
@@ -191,7 +191,7 @@ void C_SyvHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t o
       Q_EMIT (this->SigShowUserInputFunc(mhu32_USER_INPUT_FUNC_DEVICECONFIG, false));
 
       // delete or remove from the layout the other widgets if necessary
-      if (this->mpc_SetupWidget != NULL)
+      if (this->mpc_SetupWidget != nullptr)
       {
          disconnect(this->mpc_SetupWidget, &C_SyvSeSetupWidget::SigChanged, this, &C_SyvHandlerWidget::m_DataChanged);
          disconnect(this->mpc_SetupWidget, &C_SyvSeSetupWidget::SigCheckViewError, this,
@@ -200,18 +200,18 @@ void C_SyvHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t o
                     this, &C_SyvHandlerWidget::m_EnableConfiguration);
          this->mpc_Ui->pc_VerticalLayout->removeWidget(this->mpc_SetupWidget);
          delete this->mpc_SetupWidget;
-         this->mpc_SetupWidget = NULL;
+         this->mpc_SetupWidget = nullptr;
       }
-      if (this->mpc_UpdateWidget != NULL)
+      if (this->mpc_UpdateWidget != nullptr)
       {
          disconnect(this->mpc_UpdateWidget, &C_SyvUpUpdateWidget::SigChanged, this, &C_SyvHandlerWidget::m_DataChanged);
          disconnect(this->mpc_UpdateWidget, &C_SyvUpUpdateWidget::SigBlockDragAndDrop, this,
                     &C_SyvHandlerWidget::SigBlockDragAndDrop);
          this->mpc_Ui->pc_VerticalLayout->removeWidget(this->mpc_UpdateWidget);
          delete this->mpc_UpdateWidget;
-         this->mpc_UpdateWidget = NULL;
+         this->mpc_UpdateWidget = nullptr;
       }
-      if (this->mpc_DashboardsWidget != NULL)
+      if (this->mpc_DashboardsWidget != nullptr)
       {
          //Necessary for submode switch
          if (this->mc_Interaction.isNull() == false)
@@ -230,7 +230,7 @@ void C_SyvHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t o
                     this, &C_SyvHandlerWidget::SigBlockDragAndDrop);
          this->mpc_Ui->pc_VerticalLayout->removeWidget(this->mpc_DashboardsWidget);
          delete this->mpc_DashboardsWidget;
-         this->mpc_DashboardsWidget = NULL;
+         this->mpc_DashboardsWidget = nullptr;
 
          // Clear the model of the element selector dialog. The model must refreshed in case of an other
          // or changed view
@@ -341,11 +341,11 @@ void C_SyvHandlerWidget::Save(void)
    QApplication::setOverrideCursor(Qt::WaitCursor);
 
    // save all changes of the active edit widgets to the core
-   if (this->mpc_SetupWidget != NULL)
+   if (this->mpc_SetupWidget != nullptr)
    {
       this->mpc_SetupWidget->Save();
    }
-   if (this->mpc_DashboardsWidget != NULL)
+   if (this->mpc_DashboardsWidget != nullptr)
    {
       this->mpc_DashboardsWidget->Save();
    }
@@ -383,21 +383,21 @@ bool C_SyvHandlerWidget::PrepareToClose(void)
 {
    bool q_Return = true;
 
-   if (this->mpc_SetupWidget != NULL)
+   if (this->mpc_SetupWidget != nullptr)
    {
       //Save necessary for user settings
       this->mpc_SetupWidget->Save();
       this->mpc_SetupWidget->PrepareToClose();
    }
 
-   if (this->mpc_DashboardsWidget != NULL)
+   if (this->mpc_DashboardsWidget != nullptr)
    {
       //Save necessary for user settings
       this->mpc_DashboardsWidget->Save();
       q_Return = this->mpc_DashboardsWidget->PrepareToClose();
    }
 
-   if (this->mpc_UpdateWidget != NULL)
+   if (this->mpc_UpdateWidget != nullptr)
    {
       q_Return = this->mpc_UpdateWidget->PrepareToClose();
    }
@@ -421,7 +421,7 @@ bool C_SyvHandlerWidget::GlobalUserKeyPress(QKeyEvent * const opc_Event)
 
    if (opc_Event->key() == static_cast<int32_t>(Qt::Key_Escape))
    {
-      if (this->mpc_SetupWidget != NULL)
+      if (this->mpc_SetupWidget != nullptr)
       {
          if (this->mpc_SetupWidget->GetEditMode() == true)
          {
@@ -431,7 +431,7 @@ bool C_SyvHandlerWidget::GlobalUserKeyPress(QKeyEvent * const opc_Event)
             q_Retval = true;
          }
       }
-      if (this->mpc_DashboardsWidget != NULL)
+      if (this->mpc_DashboardsWidget != nullptr)
       {
          if (this->mpc_DashboardsWidget->GetEditMode() == true)
          {
@@ -522,7 +522,7 @@ void C_SyvHandlerWidget::m_SetConnectPushButtonIcon(const QString & orc_IconPath
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvHandlerWidget::m_OnPushButtonConnectPress(void)
 {
-   if (this->mpc_DashboardsWidget != NULL)
+   if (this->mpc_DashboardsWidget != nullptr)
    {
       this->mpc_DashboardsWidget->OnPushButtonConnectPress();
    }

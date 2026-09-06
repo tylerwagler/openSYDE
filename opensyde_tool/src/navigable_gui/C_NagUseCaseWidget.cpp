@@ -222,7 +222,7 @@ void C_NagUseCaseWidget::SaveAs(void)
       Q_EMIT this->SigNewUserSettings();
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       pc_Dialog->SaveUserSettings();
       c_New->HideOverlay();
@@ -248,7 +248,7 @@ void C_NagUseCaseWidget::OpenColorPicker(void)
       pc_ColorWidget->ChooseSelectedColor();
    }
 
-   if (c_Popup != NULL)
+   if (c_Popup != nullptr)
    {
       c_Popup->HideOverlay();
    }

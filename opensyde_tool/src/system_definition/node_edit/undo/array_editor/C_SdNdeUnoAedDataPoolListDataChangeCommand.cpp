@@ -108,7 +108,7 @@ void C_SdNdeUnoAedDataPoolListDataChangeCommand::m_Change(QVariant & orc_Previou
       this->mu32_ListIndex,
       this->mu32_ElementIndex);
 
-   if (pc_OscData != NULL)
+   if (pc_OscData != nullptr)
    {
       bool q_ApplyMinToDataSet = false;
       bool q_ApplyMaxToDataSet = false;
@@ -184,7 +184,7 @@ void C_SdNdeUnoAedDataPoolListDataChangeCommand::m_Change(QVariant & orc_Previou
                                                                           this->mu32_DataPoolIndex,
                                                                           this->mu32_ListIndex,
                                                                           this->mu32_ElementIndex);
-            if (pc_Element != NULL)
+            if (pc_Element != nullptr)
             {
                const QVariant c_NewData = C_SdNdeDpContentUtil::h_ConvertScaledContentToGeneric(
                   pc_Element->c_MinValue,
@@ -218,7 +218,7 @@ void C_SdNdeUnoAedDataPoolListDataChangeCommand::m_Change(QVariant & orc_Previou
                                                                           this->mu32_DataPoolIndex,
                                                                           this->mu32_ListIndex,
                                                                           this->mu32_ElementIndex);
-            if (pc_Element != NULL)
+            if (pc_Element != nullptr)
             {
                const QVariant c_NewData = C_SdNdeDpContentUtil::h_ConvertScaledContentToGeneric(
                   pc_Element->c_MaxValue,
@@ -246,7 +246,7 @@ void C_SdNdeUnoAedDataPoolListDataChangeCommand::m_Change(QVariant & orc_Previou
       this->mq_Initial = false;
 
       //Signal data change
-      if (this->mpc_DataPoolListModelViewManager != NULL)
+      if (this->mpc_DataPoolListModelViewManager != nullptr)
       {
          this->mpc_DataPoolListModelViewManager->GetArrayEditModel(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                                    this->mu32_ListIndex, this->mu32_ElementIndex,

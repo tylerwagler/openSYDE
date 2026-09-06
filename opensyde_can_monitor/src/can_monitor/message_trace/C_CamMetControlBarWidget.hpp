@@ -39,7 +39,7 @@ class C_CamMetControlBarWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamMetControlBarWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamMetControlBarWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamMetControlBarWidget(void) override;
 
    void InitStaticNames(void) const;

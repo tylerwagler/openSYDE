@@ -139,7 +139,7 @@ bool C_PuiSvDbNodeDataPoolListElementId::operator <(const C_OscNodeDataPoolId & 
       dynamic_cast<const C_PuiSvDbNodeDataPoolListElementId *>(&orc_Cmp);
 
    //Not current class, assume base comparison is correct
-   if (pc_NonBase != NULL)
+   if (pc_NonBase != nullptr)
    {
       //Check type
       if (this->me_Type > pc_NonBase->GetType())
@@ -183,7 +183,7 @@ bool C_PuiSvDbNodeDataPoolListElementId::operator ==(const C_OscNodeDataPoolId &
          dynamic_cast<const C_PuiSvDbNodeDataPoolListElementId *>(&orc_Cmp);
 
       //Not current class, assume base comparison is correct
-      if (pc_NonBase != NULL)
+      if (pc_NonBase != nullptr)
       {
          if (this->me_Type == pc_NonBase->GetType())
          {

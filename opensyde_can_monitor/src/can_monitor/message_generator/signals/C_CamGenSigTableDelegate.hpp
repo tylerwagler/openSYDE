@@ -29,7 +29,7 @@ class C_CamGenSigTableDelegate :
    Q_OBJECT
 
 public:
-   C_CamGenSigTableDelegate(QObject * const opc_Parent = NULL);
+   C_CamGenSigTableDelegate(QObject * const opc_Parent = nullptr);
 
    void setEditorData(QWidget * const opc_Editor, const QModelIndex & orc_Index) const override;
 

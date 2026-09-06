@@ -38,7 +38,7 @@ using namespace stw::opensyde_gui;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpPacListDelegate::C_SyvUpPacListDelegate(QObject * const opc_Parent) :
    QStyledItemDelegate(opc_Parent),
-   mpc_ActualWidget(NULL),
+   mpc_ActualWidget(nullptr),
    ms32_IndexPaint(-1)
 {
 }
@@ -60,7 +60,7 @@ void C_SyvUpPacListDelegate::paint(QPainter * const opc_Painter, const QStyleOpt
    if ((ms32_IndexPaint == orc_Index.row()) &&
        (orc_Option.rect.x() == 0) &&
        (orc_Option.rect.y() == 0) &&
-       (this->mpc_ActualWidget != NULL))
+       (this->mpc_ActualWidget != nullptr))
    {
       if ((orc_Index.isValid() == true) && (orc_Index.parent().isValid() == false))
       {
@@ -72,7 +72,7 @@ void C_SyvUpPacListDelegate::paint(QPainter * const opc_Painter, const QStyleOpt
                                            this->mpc_ActualWidget->GetPositionNumber(),
                                            this->mpc_ActualWidget->GetNodeIndex(),
                                            this->mpc_ActualWidget->GetNodeName(),
-                                           NULL);
+                                           nullptr);
          c_ItemWidget.CollapseAll();
          c_ItemWidget.UpdateSectionsVisibility();
          c_ItemWidget.setGeometry(0, 0, this->mpc_ActualWidget->width(), this->mpc_ActualWidget->height());
@@ -116,5 +116,5 @@ void C_SyvUpPacListDelegate::StartPaint(const int32_t os32_Index, C_SyvUpPacNode
 void C_SyvUpPacListDelegate::StopPaint(void)
 {
    this->ms32_IndexPaint = -1;
-   this->mpc_ActualWidget = NULL;
+   this->mpc_ActualWidget = nullptr;
 }

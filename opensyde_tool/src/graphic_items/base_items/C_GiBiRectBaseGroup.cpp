@@ -82,7 +82,7 @@ C_GiBiRectBaseGroup::C_GiBiRectBaseGroup(const uint64_t & oru64_Id, const float6
    QGraphicsItemGroup(opc_Parent),
    mq_ResizingActive(false),
    ms32_ActiveResizeMode(ms32_INDEX_ELEMENT_MAX),
-   mpc_BiggestSubItem(NULL),
+   mpc_BiggestSubItem(nullptr),
    mc_LastKnownPosition(),
    mc_LastKnownSize(),
    mq_BlockMoveAndResize(false),
@@ -253,9 +253,9 @@ QRectF C_GiBiRectBaseGroup::m_GetBiggestSubItemBoundingRect(void) const
 {
    QRectF c_Rect;
 
-   tgl_assert(this->mpc_BiggestSubItem != NULL);
+   tgl_assert(this->mpc_BiggestSubItem != nullptr);
 
-   if (this->mpc_BiggestSubItem != NULL)
+   if (this->mpc_BiggestSubItem != nullptr)
    {
       c_Rect = this->mpc_BiggestSubItem->GetSizeRect();
    }
@@ -463,9 +463,9 @@ QSizeF C_GiBiRectBaseGroup::GetSize(void) const
 {
    QSizeF c_Size(0.0, 0.0);
 
-   tgl_assert(this->mpc_BiggestSubItem != NULL);
+   tgl_assert(this->mpc_BiggestSubItem != nullptr);
 
-   if (this->mpc_BiggestSubItem != NULL)
+   if (this->mpc_BiggestSubItem != nullptr)
    {
       c_Size = this->mpc_BiggestSubItem->GetSizeRect().size();
    }
@@ -494,9 +494,9 @@ void C_GiBiRectBaseGroup::LoadBasicData(const stw::opensyde_gui_logic::C_PuiBsBo
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiBiRectBaseGroup::UpdateBasicData(stw::opensyde_gui_logic::C_PuiBsBox & orc_Data) const
 {
-   tgl_assert(this->mpc_BiggestSubItem != NULL);
+   tgl_assert(this->mpc_BiggestSubItem != nullptr);
 
-   if (this->mpc_BiggestSubItem != NULL)
+   if (this->mpc_BiggestSubItem != nullptr)
    {
       orc_Data.f64_Width = this->mpc_BiggestSubItem->f64_Width;
       orc_Data.f64_Height = this->mpc_BiggestSubItem->f64_Height;
@@ -571,8 +571,8 @@ void C_GiBiRectBaseGroup::ApplySizeChange(const QPointF & orc_NewPos, const QSiz
    f64_DiffWidth = c_Size.width() - this->m_GetBiggestSubItemBoundingRect().width();
    f64_DiffHeight = c_Size.height() - this->m_GetBiggestSubItemBoundingRect().height();
 
-   tgl_assert(this->mpc_BiggestSubItem != NULL);
-   if (this->mpc_BiggestSubItem != NULL)
+   tgl_assert(this->mpc_BiggestSubItem != nullptr);
+   if (this->mpc_BiggestSubItem != nullptr)
    {
       this->mpc_BiggestSubItem->f64_Width = c_Size.width();
       this->mpc_BiggestSubItem->f64_Height = c_Size.height();
@@ -618,7 +618,7 @@ void C_GiBiRectBaseGroup::UpdateTransform(const QTransform & orc_Transform)
         pc_ItActionPoint != this->mc_ActionPoints.end(); ++pc_ItActionPoint)
    {
       C_GiPointInteraction * const pc_ActionPoint = *pc_ItActionPoint;
-      if (pc_ActionPoint != NULL)
+      if (pc_ActionPoint != nullptr)
       {
          pc_ActionPoint->UpdateTransform(orc_Transform);
       }
@@ -720,7 +720,7 @@ QVariant C_GiBiRectBaseGroup::itemChange(const GraphicsItemChange oe_Change, con
 
    //Don't pass bounding rect offset -> currently does worse on border handling
    //Not passing the offset probably just allows a buffer so this function does not adapt the change "the wrong way"
-   c_Return = C_GiCustomFunctions::h_ItemChange(oe_Change, orc_Value, this, NULL);
+   c_Return = C_GiCustomFunctions::h_ItemChange(oe_Change, orc_Value, this, nullptr);
 
    c_Return = QGraphicsItemGroup::itemChange(oe_Change, c_Return);
 
@@ -736,7 +736,7 @@ QVariant C_GiBiRectBaseGroup::itemChange(const GraphicsItemChange oe_Change, con
       Q_EMIT (this->SigSelectionChange(this->isSelected()));
       break;
    case ItemSceneHasChanged:
-      if (this->scene() != NULL)
+      if (this->scene() != nullptr)
       {
          // item was added to scene
          QVector<C_GiPointInteraction *>::iterator pc_ItPoint;

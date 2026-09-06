@@ -34,7 +34,7 @@ class C_OgeTreeViewCheckable :
    Q_OBJECT
 
 public:
-   C_OgeTreeViewCheckable(QWidget * const opc_Parent = NULL);
+   C_OgeTreeViewCheckable(QWidget * const opc_Parent = nullptr);
    ~C_OgeTreeViewCheckable(void) override;
 };
 

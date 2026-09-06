@@ -29,7 +29,7 @@ class C_CamTblDelegate :
    Q_OBJECT
 
 public:
-   C_CamTblDelegate(QObject * const opc_Parent = NULL);
+   C_CamTblDelegate(QObject * const opc_Parent = nullptr);
 
 protected:
    stw::opensyde_gui_elements::C_OgeCbxTableBase * m_CreateComboBox(QWidget * const opc_Parent) const override;

@@ -33,7 +33,7 @@ class C_CamMosDatabaseSelectionView :
    Q_OBJECT
 
 public:
-   C_CamMosDatabaseSelectionView(QWidget * const opc_Parent = NULL);
+   C_CamMosDatabaseSelectionView(QWidget * const opc_Parent = nullptr);
    ~C_CamMosDatabaseSelectionView(void) override;
 
    void Init(void);

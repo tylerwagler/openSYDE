@@ -47,7 +47,7 @@ C_SyvDaItPaArView::C_SyvDaItPaArView(QWidget * const opc_Parent) :
    C_TblViewScroll(opc_Parent),
    mc_Model(),
    mc_Delegate(),
-   mpc_LabelCorner(NULL)
+   mpc_LabelCorner(nullptr)
 {
    //UI Settings
    this->setSortingEnabled(false);
@@ -105,7 +105,7 @@ C_SyvDaItPaArView::C_SyvDaItPaArView(QWidget * const opc_Parent) :
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaItPaArView::~C_SyvDaItPaArView(void)
 {
-   mpc_LabelCorner = NULL;
+   mpc_LabelCorner = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -162,8 +162,8 @@ std::vector<uint32_t> C_SyvDaItPaArView::m_GetSelectedIndices(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaArView::m_UpdateCornerButton(void)
 {
-   tgl_assert(this->mpc_LabelCorner != NULL);
-   if (this->mpc_LabelCorner != NULL)
+   tgl_assert(this->mpc_LabelCorner != nullptr);
+   if (this->mpc_LabelCorner != nullptr)
    {
       this->mpc_LabelCorner->setGeometry(0, 0, this->verticalHeader()->width(), this->horizontalHeader()->height());
    }

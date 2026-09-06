@@ -32,7 +32,7 @@ class C_GiLiEthernetBus :
 public:
    C_GiLiEthernetBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                      C_GiTextElementBus * const opc_TextElementName, const bool oq_DoErrorCheck,
-                     const std::vector<QPointF> * const opc_Points = NULL, QGraphicsItem * const opc_Parent = NULL);
+                     const std::vector<QPointF> * const opc_Points = nullptr, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiLiEthernetBus() override;
 
    int32_t type() const override;

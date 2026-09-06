@@ -36,7 +36,7 @@ class C_GiLiLineConnection :
    Q_OBJECT
 
 public:
-   C_GiLiLineConnection(const int32_t & ors32_LineIndex = 0, QGraphicsItem * const opc_Parent = NULL);
+   C_GiLiLineConnection(const int32_t & ors32_LineIndex = 0, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiLiLineConnection() override;
    void AdaptLine(const QLineF & orc_Line);
    void SetLineIndex(const int32_t & ors32_LineIndex);
@@ -47,7 +47,7 @@ public:
    void SetDefaultCursor(const QCursor & orc_Value) override;
 
    void paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-              QWidget * const opc_Widget = NULL) override;
+              QWidget * const opc_Widget = nullptr) override;
 
    QPainterPath shape(void) const override;
    void FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Closest) const override;

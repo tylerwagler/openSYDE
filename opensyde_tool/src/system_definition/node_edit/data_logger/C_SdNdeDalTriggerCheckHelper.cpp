@@ -26,8 +26,8 @@ bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t /*ou32_NodeIndex*/,
                                            bool * const opq_AreVariablesValid,
                                            bool * const opq_IsSyntaxValid)
 {
-   if (opq_AreVariablesValid != NULL) { *opq_AreVariablesValid = true; }
-   if (opq_IsSyntaxValid != NULL)     { *opq_IsSyntaxValid = true; }
+   if (opq_AreVariablesValid != nullptr) { *opq_AreVariablesValid = true; }
+   if (opq_IsSyntaxValid != nullptr)     { *opq_IsSyntaxValid = true; }
    return true;
 }
 
@@ -92,11 +92,11 @@ bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t ou32_NodeIndex, const 
    std::vector<Token> c_Tokens;
    std::string c_Expression = orc_Expression;
    bool q_IsValid;
-   if (opq_AreVariablesValid != NULL)
+   if (opq_AreVariablesValid != nullptr)
    {
       *opq_AreVariablesValid = true;
    }
-   if (opq_IsSyntaxValid != NULL)
+   if (opq_IsSyntaxValid != nullptr)
    {
       *opq_IsSyntaxValid = true;
    }
@@ -110,7 +110,7 @@ bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t ou32_NodeIndex, const 
    }
    else
    {
-      if (opq_IsSyntaxValid != NULL)
+      if (opq_IsSyntaxValid != nullptr)
       {
          *opq_IsSyntaxValid = false;
       }
@@ -121,7 +121,7 @@ bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t ou32_NodeIndex, const 
    }
    else
    {
-      if (opq_AreVariablesValid != NULL)
+      if (opq_AreVariablesValid != nullptr)
       {
          *opq_AreVariablesValid = false;
       }
@@ -132,14 +132,14 @@ bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t ou32_NodeIndex, const 
    }
    else
    {
-      if (opq_IsSyntaxValid != NULL)
+      if (opq_IsSyntaxValid != nullptr)
       {
          *opq_IsSyntaxValid = false;
       }
    }
    if (!q_IsValid)
    {
-      if (opq_IsSyntaxValid != NULL)
+      if (opq_IsSyntaxValid != nullptr)
       {
          *opq_IsSyntaxValid = false;
       }
@@ -209,7 +209,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_ParseTokens(const std::string & orc_Expres
    catch (const std::runtime_error & rc_Error)
    {
       q_IsValid = false;
-      if (opc_ErrorDetails != NULL)
+      if (opc_ErrorDetails != nullptr)
       {
          *opc_ErrorDetails = rc_Error.what();
       }
@@ -217,7 +217,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_ParseTokens(const std::string & orc_Expres
    catch (...)
    {
       q_IsValid = false;
-      if (opc_ErrorDetails != NULL)
+      if (opc_ErrorDetails != nullptr)
       {
          *opc_ErrorDetails = "Parsing expression: Unknown error";
       }
@@ -268,7 +268,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_ReplaceChannelTokens(std::vector<data::mon
    catch (const std::runtime_error & rc_Error)
    {
       q_IsValid = false;
-      if (opc_ErrorDetails != NULL)
+      if (opc_ErrorDetails != nullptr)
       {
          *opc_ErrorDetails = rc_Error.what();
       }
@@ -276,7 +276,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_ReplaceChannelTokens(std::vector<data::mon
    catch (...)
    {
       q_IsValid = false;
-      if (opc_ErrorDetails != NULL)
+      if (opc_ErrorDetails != nullptr)
       {
          *opc_ErrorDetails = "Converting constant: Unknown error";
       }
@@ -327,7 +327,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckSyntax(const std::vector<Token> & orc
    catch (const std::runtime_error & rc_Error)
    {
       q_IsValid = false;
-      if (opc_ErrorDetails != NULL)
+      if (opc_ErrorDetails != nullptr)
       {
          *opc_ErrorDetails = rc_Error.what();
       }
@@ -335,7 +335,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckSyntax(const std::vector<Token> & orc
    catch (...)
    {
       q_IsValid = false;
-      if (opc_ErrorDetails != NULL)
+      if (opc_ErrorDetails != nullptr)
       {
          *opc_ErrorDetails = "Checking syntax: Unknown error";
       }
@@ -363,7 +363,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckTokens(const uint32_t ou32_NodeIndex,
 {
    bool q_IsValid = true;
 
-   if (opc_ErrorDetails != NULL)
+   if (opc_ErrorDetails != nullptr)
    {
       *opc_ErrorDetails = "";
    }
@@ -403,7 +403,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannel(const uint32_t ou32_NodeIndex
 
    if (orc_ChannelComponents.size() > 5UL)
    {
-      if (opc_ErrorDetails != NULL)
+      if (opc_ErrorDetails != nullptr)
       {
          *opc_ErrorDetails = "Variable invalid: too many components";
       }
@@ -415,18 +415,18 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannel(const uint32_t ou32_NodeIndex
            ++u32_ItNode)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItNode);
-         tgl_assert(pc_Node != NULL);
-         if (pc_Node != NULL)
+         tgl_assert(pc_Node != nullptr);
+         if (pc_Node != nullptr)
          {
             if (pc_Node->c_Properties.c_Name == rc_UserNodeName)
             {
                if (C_PuiSdUtil::h_CheckXappNodeReachable(ou32_NodeIndex, u32_ItNode))
                {
-                  q_IsValid = mh_CheckChannelDatapool(*pc_Node, orc_ChannelComponents, opc_ErrorDetails, NULL);
+                  q_IsValid = mh_CheckChannelDatapool(*pc_Node, orc_ChannelComponents, opc_ErrorDetails, nullptr);
                }
                else
                {
-                  if (opc_ErrorDetails != NULL)
+                  if (opc_ErrorDetails != nullptr)
                   {
                      *opc_ErrorDetails = "Variable invalid: node not reachable";
                   }
@@ -434,7 +434,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannel(const uint32_t ou32_NodeIndex
             }
          }
       }
-      if (opc_ErrorDetails != NULL)
+      if (opc_ErrorDetails != nullptr)
       {
          if ((q_IsValid == false) && (*opc_ErrorDetails == ""))
          {
@@ -444,7 +444,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannel(const uint32_t ou32_NodeIndex
    }
    else
    {
-      if (opc_ErrorDetails != NULL)
+      if (opc_ErrorDetails != nullptr)
       {
          *opc_ErrorDetails = "Variable invalid: too few components";
       }
@@ -483,7 +483,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelDatapool(const opensyde_core::
          const C_OscNodeDataPool & rc_Datapool = orc_Node.c_DataPools[u32_ItDatapool];
          if (rc_Datapool.c_Name == rc_UserDatapoolName)
          {
-            if (opc_ElementId != NULL)
+            if (opc_ElementId != nullptr)
             {
                opc_ElementId->u32_DataPoolIndex = u32_ItDatapool;
             }
@@ -496,14 +496,14 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelDatapool(const opensyde_core::
             else if (rc_Datapool.e_Type == C_OscNodeDataPool::eCOM)
             {
                const C_OscCanProtocol * const pc_Protocol = orc_Node.GetRelatedCanProtocolConst(u32_ItDatapool);
-               if (pc_Protocol != NULL)
+               if (pc_Protocol != nullptr)
                {
                   q_IsValid = mh_CheckChannelComm(rc_Datapool, *pc_Protocol, orc_ChannelComponents,
                                                   opc_ErrorDetails, opc_ElementId);
                }
                else
                {
-                  if (opc_ErrorDetails != NULL)
+                  if (opc_ErrorDetails != nullptr)
                   {
                      *opc_ErrorDetails = "Variable invalid: No matching communication protocol structure found";
                   }
@@ -561,7 +561,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelHalType(const opensyde_core::C
          {
             const C_OscHalcConfigDomain * const pc_Domain =
                orc_Node.c_HalcConfig.GetDomainConfigDataConst(u32_ItDomain);
-            if (pc_Domain != NULL)
+            if (pc_Domain != nullptr)
             {
                if (pc_Domain->c_ChannelConfigs.size() > 0UL)
                {
@@ -595,7 +595,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelHalType(const opensyde_core::C
                   const std::string c_CompleteVarName = C_OscHalcMagicianUtil::h_CombineVariableName(
                      pc_Domain->c_SingularName,
                      rc_VarName).c_str();
-                  if (opc_ElementId != NULL)
+                  if (opc_ElementId != nullptr)
                   {
                      *opc_ElementId = C_OscNodeDataPoolListElementOptArrayId(*opc_ElementId, q_UseArrayIndex,
                                                                              u32_ArrayIndex);
@@ -610,7 +610,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelHalType(const opensyde_core::C
       }
       else
       {
-         if (opc_ErrorDetails != NULL)
+         if (opc_ErrorDetails != nullptr)
          {
             *opc_ErrorDetails = "Variable invalid: HAL unknown list type";
          }
@@ -618,7 +618,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelHalType(const opensyde_core::C
    }
    else
    {
-      if (opc_ErrorDetails != NULL)
+      if (opc_ErrorDetails != nullptr)
       {
          *opc_ErrorDetails = "Variable invalid: too few components for HAL";
       }
@@ -716,7 +716,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelList(const opensyde_core::C_Os
             }
             else
             {
-               if (opc_ErrorDetails != NULL)
+               if (opc_ErrorDetails != nullptr)
                {
                   *opc_ErrorDetails = "Variable index invalid: int negative";
                }
@@ -724,7 +724,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelList(const opensyde_core::C_Os
          }
          catch (...)
          {
-            if (opc_ErrorDetails != NULL)
+            if (opc_ErrorDetails != nullptr)
             {
                *opc_ErrorDetails = "Variable index invalid: could not parse int";
             }
@@ -734,7 +734,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelList(const opensyde_core::C_Os
       {
          const std::string & rc_UserListName = orc_ChannelComponents[2UL];
          const std::string & rc_UserElementName = orc_ChannelComponents[3UL];
-         if (opc_ElementId != NULL)
+         if (opc_ElementId != nullptr)
          {
             *opc_ElementId = C_OscNodeDataPoolListElementOptArrayId(*opc_ElementId, q_UseArrayIndex,
                                                                     u32_ArrayIndex);
@@ -776,7 +776,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelComm(const C_OscNodeDataPool &
    {
       if (orc_ChannelComponents.size() > 4UL)
       {
-         if (opc_ErrorDetails != NULL)
+         if (opc_ErrorDetails != nullptr)
          {
             *opc_ErrorDetails = "Variable invalid: No array types supported for communication";
          }
@@ -848,7 +848,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelMessages(const C_OscNodeDataPo
             const C_OscCanSignal & rc_Signal = rc_Message.c_Signals[u32_ItSignal];
             q_IsValid = mh_CheckChannelSignal(orc_Datapool, rc_Signal, orc_SignalName, oq_IsTx, opc_ElementId);
          }
-         if (opc_ErrorDetails != NULL)
+         if (opc_ErrorDetails != nullptr)
          {
             if (q_IsValid == false)
             {
@@ -897,7 +897,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelSignal(const opensyde_core::C_
             if (rc_Element.c_Name == orc_SignalName)
             {
                q_IsValid = true;
-               if (opc_ElementId != NULL)
+               if (opc_ElementId != nullptr)
                {
                   opc_ElementId->u32_ListIndex = u32_ItList;
                   opc_ElementId->u32_ElementIndex = orc_Signal.u32_ComDataElementIndex;
@@ -941,7 +941,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelList(const opensyde_core::C_Os
       const C_OscNodeDataPoolList & rc_List = orc_Datapool.c_Lists[u32_ItList];
       if (rc_List.c_Name == orc_ListName)
       {
-         if (opc_ElementId != NULL)
+         if (opc_ElementId != nullptr)
          {
             opc_ElementId->u32_ListIndex = u32_ItList;
          }
@@ -983,7 +983,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelElement(const opensyde_core::C
       const C_OscNodeDataPoolListElement & rc_Element  = orc_List.c_Elements[u32_ItElement];
       if (rc_Element.c_Name == orc_ElementName)
       {
-         if (opc_ElementId != NULL)
+         if (opc_ElementId != nullptr)
          {
             opc_ElementId->u32_ElementIndex = u32_ItElement;
          }
@@ -991,7 +991,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelElement(const opensyde_core::C
          {
             if ((rc_Element.GetArray()) && (rc_Element.q_InterpretAsString == false))
             {
-               if (opc_ErrorDetails != NULL)
+               if (opc_ErrorDetails != nullptr)
                {
                   *opc_ErrorDetails =
                      "Variable index invalid: invalid array type usage";
@@ -1040,7 +1040,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelElementArray(
       }
       else
       {
-         if (opc_ErrorDetails != NULL)
+         if (opc_ErrorDetails != nullptr)
          {
             *opc_ErrorDetails =
                "Variable index invalid: index out of bounds";
@@ -1049,7 +1049,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelElementArray(
    }
    else
    {
-      if (opc_ErrorDetails != NULL)
+      if (opc_ErrorDetails != nullptr)
       {
          *opc_ErrorDetails =
             "Variable index invalid: variable is not of type array";
@@ -1077,8 +1077,8 @@ std::vector<std::string> C_SdNdeDalTriggerCheckHelper::mh_ParseDataElementString
    C_OscDataLoggerJobAdditionalTriggerExpertMode::h_ReplaceUiVarNames(c_Copy);
    pc_NormalString = c_Copy.AsStdString();
 
-   tgl_assert(pc_NormalString != NULL);
-   if (pc_NormalString != NULL)
+   tgl_assert(pc_NormalString != nullptr);
+   if (pc_NormalString != nullptr)
    {
       std::string c_CurVariable;
       for (std::string::const_iterator c_ItChar = pc_NormalString->cbegin(); c_ItChar != pc_NormalString->cend();
@@ -1145,13 +1145,13 @@ bool C_SdNdeDalTriggerCheckHelper::mh_TranslateDataElementStringToId(const std::
            ++u32_ItNode)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItNode);
-         tgl_assert(pc_Node != NULL);
-         if (pc_Node != NULL)
+         tgl_assert(pc_Node != nullptr);
+         if (pc_Node != nullptr)
          {
             if (pc_Node->c_Properties.c_Name == rc_UserNodeName)
             {
                orc_ElementId.u32_NodeIndex = u32_ItNode;
-               q_IsValid = mh_CheckChannelDatapool(*pc_Node, c_ChannelComponents, NULL, &orc_ElementId);
+               q_IsValid = mh_CheckChannelDatapool(*pc_Node, c_ChannelComponents, nullptr, &orc_ElementId);
             }
          }
       }

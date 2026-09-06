@@ -26,7 +26,7 @@ class C_OgeLabGenericWithContextMenu :
    Q_OBJECT
 
 public:
-   explicit C_OgeLabGenericWithContextMenu(QWidget * const opc_Parent = NULL);
+   explicit C_OgeLabGenericWithContextMenu(QWidget * const opc_Parent = nullptr);
    void SetBackgroundColor(const int32_t os32_Value);
    void SetForegroundColor(const int32_t os32_Value);
    void SetMarginsPadding(const int32_t os32_Value);

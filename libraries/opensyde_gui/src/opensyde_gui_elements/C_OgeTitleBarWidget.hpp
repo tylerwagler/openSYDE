@@ -32,7 +32,7 @@ class C_OgeTitleBarWidget :
    Q_OBJECT
 
 public:
-   explicit C_OgeTitleBarWidget(QWidget * const opc_Parent = NULL);
+   explicit C_OgeTitleBarWidget(QWidget * const opc_Parent = nullptr);
 
 protected:
    /// Subclasses identify themselves so the shared About slot can populate the dialog.

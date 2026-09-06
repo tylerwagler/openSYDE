@@ -33,7 +33,7 @@ public:
                                             const uint8_t & oru8_PreviousInterface, const uint8_t & oru8_NewInterface,
                                             const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_PreviousProperties,
                                             const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_NewProperties,
-                                            QUndoCommand * const opc_Parent = NULL);
+                                            QUndoCommand * const opc_Parent = nullptr);
    ~C_SdManUnoTopologyChangeInterfaceCommand(void) override;
    void undo(void) override;
    void redo(void) override;

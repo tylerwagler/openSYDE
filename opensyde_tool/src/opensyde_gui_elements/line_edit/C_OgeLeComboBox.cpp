@@ -59,7 +59,7 @@ void C_OgeLeComboBox::mousePressEvent(QMouseEvent * const opc_Event)
    C_OgeLeContextMenuBase::mousePressEvent(opc_Event);
 
    //Trigger combo box pop up
-   if (pc_Parent != NULL)
+   if (pc_Parent != nullptr)
    {
       pc_Parent->SuppressHide(); // suppress call to hidePopup (called because of "outside of combo box")
       pc_Parent->showPopup();

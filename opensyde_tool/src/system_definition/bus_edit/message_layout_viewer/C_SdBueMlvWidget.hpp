@@ -40,7 +40,7 @@ class C_SdBueMlvWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdBueMlvWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueMlvWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdBueMlvWidget(void) override;
 
    void InitStaticNames(void) const;

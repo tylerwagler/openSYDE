@@ -31,7 +31,7 @@ class C_SdNdeUnoDataPoolListDataChangeCommand :
 public:
    C_SdNdeUnoDataPoolListDataChangeCommand(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                            stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget, const uint32_t & oru32_DataPoolListIndex, const QVariant & orc_NewData, const C_SdNdeDpUtil::E_ListDataChangeType & ore_DataChangeType,
-                                           QUndoCommand * const opc_Parent = NULL);
+                                           QUndoCommand * const opc_Parent = nullptr);
    void redo(void) override;
    void undo(void) override;
 

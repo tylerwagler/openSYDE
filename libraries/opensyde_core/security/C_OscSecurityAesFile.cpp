@@ -104,14 +104,14 @@ static int32_t mh_EncryptEcb(const uint8_t (&orau8_Key)[16], const std::vector<u
    int32_t s32_Return = C_NO_ERR;
 
    EVP_CIPHER_CTX * const pc_Ctx = EVP_CIPHER_CTX_new();
-   if (pc_Ctx == NULL)
+   if (pc_Ctx == nullptr)
    {
       s32_Return = C_CONFIG;
    }
    else
    {
       // Set up AES-128-ECB encryption (no IV needed for ECB)
-      const int x_Result = EVP_EncryptInit_ex(pc_Ctx, EVP_aes_128_ecb(), NULL, orau8_Key, NULL);
+      const int x_Result = EVP_EncryptInit_ex(pc_Ctx, EVP_aes_128_ecb(), nullptr, orau8_Key, nullptr);
       if (x_Result != 1)
       {
          s32_Return = C_CONFIG;
@@ -171,14 +171,14 @@ static int32_t mh_DecryptEcb(const uint8_t (&orau8_Key)[16], const std::vector<u
    int32_t s32_Return = C_NO_ERR;
 
    EVP_CIPHER_CTX * const pc_Ctx = EVP_CIPHER_CTX_new();
-   if (pc_Ctx == NULL)
+   if (pc_Ctx == nullptr)
    {
       s32_Return = C_CONFIG;
    }
    else
    {
       // Set up AES-128-ECB decryption
-      const int x_Result = EVP_DecryptInit_ex(pc_Ctx, EVP_aes_128_ecb(), NULL, orau8_Key, NULL);
+      const int x_Result = EVP_DecryptInit_ex(pc_Ctx, EVP_aes_128_ecb(), nullptr, orau8_Key, nullptr);
       if (x_Result != 1)
       {
          s32_Return = C_CONFIG;
@@ -487,7 +487,7 @@ std::error_code C_OscSecurityAesFile::h_CreateEncryptedZipFile(const std::string
                           C_OscLoggingHandler::h_StwError(s32_ZipResult) +
                           " and error text: " + c_ErrorText.c_str());
 
-      if (opc_ErrorMessage != NULL)
+      if (opc_ErrorMessage != nullptr)
       {
          *opc_ErrorMessage = c_ErrorText;
       }
@@ -504,7 +504,7 @@ std::error_code C_OscSecurityAesFile::h_CreateEncryptedZipFile(const std::string
       // No key, just copy the original zip file as result
       osc_write_log_info("Creating Encrypted Zip File", "No key defined. Encryption not necessary.");
 
-      const int32_t s32_CopyResult = C_OscUtils::h_CopyFile(c_ZipFileTmp, orc_PathForZipFile, NULL, &c_ErrorText);
+      const int32_t s32_CopyResult = C_OscUtils::h_CopyFile(c_ZipFileTmp, orc_PathForZipFile, nullptr, &c_ErrorText);
       if (s32_CopyResult != C_NO_ERR)
       {
          c_Return = std::error_code(s32_CopyResult, STWErrorCategory::Instance());
@@ -605,7 +605,7 @@ std::error_code C_OscSecurityAesFile::h_UnpackEncryptedZipFile(const std::string
                              C_OscLoggingHandler::h_StwError(static_cast<int32_t>(c_Return.value())) +
                              " and error text: " + c_ErrorText.c_str());
 
-         if (opc_ErrorMessage != NULL)
+         if (opc_ErrorMessage != nullptr)
          {
             *opc_ErrorMessage = c_ErrorText;
          }

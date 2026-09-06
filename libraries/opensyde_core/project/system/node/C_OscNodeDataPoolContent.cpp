@@ -3098,7 +3098,7 @@ void C_OscNodeDataPoolContent::GetAnyValueAsFloat64(float64_t & orf64_Output, co
 const std::vector<uint8_t> * stw::opensyde_core::C_OscNodeDataPoolContent::GetDataAccessConst(
    stw::tgl::C_TglCriticalSection ** const oppc_CriticalSection) const
 {
-   if (oppc_CriticalSection != NULL)
+   if (oppc_CriticalSection != nullptr)
    {
       *oppc_CriticalSection = &this->mc_CriticalSection;
    }
@@ -3120,7 +3120,7 @@ const std::vector<uint8_t> * stw::opensyde_core::C_OscNodeDataPoolContent::GetDa
 std::vector<uint8_t> * stw::opensyde_core::C_OscNodeDataPoolContent::GetDataAccess(
    stw::tgl::C_TglCriticalSection ** const oppc_CriticalSection)
 {
-   if (oppc_CriticalSection != NULL)
+   if (oppc_CriticalSection != nullptr)
    {
       *oppc_CriticalSection = &this->mc_CriticalSection;
    }

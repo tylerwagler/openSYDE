@@ -140,7 +140,7 @@ bool C_OgeSpxAllBase::m_HandleEvent(QEvent * const opc_Event)
          {
             QHelpEvent * const pc_HelpEvent = dynamic_cast<QHelpEvent * const>(opc_Event);
 
-            if (pc_HelpEvent != NULL)
+            if (pc_HelpEvent != nullptr)
             {
                if ((this->mq_ShowToolTipWhenDisabled == true) ||
                    (this->m_IsEnabled() == true))
@@ -188,7 +188,7 @@ bool C_OgeSpxAllBase::m_HandleEvent(QEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeSpxAllBase::m_ApplyToolTipInfo(void)
 {
-   if (this->m_GetToolTip() != NULL)
+   if (this->m_GetToolTip() != nullptr)
    {
       this->m_GetToolTip()->SetHeading(this->mc_ToolTipHeading);
       if (this->mc_ToolTipAdditionalContent.compare("") == 0)

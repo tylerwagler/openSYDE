@@ -60,7 +60,7 @@ void C_OgeWiUtil::h_DrawBackground(QWidget * const opc_Widget, QPainter * const 
 
    c_StyleOption.initFrom(opc_Widget);
    //Draw background with stylesheet settings
-   if (opc_Painter != NULL)
+   if (opc_Painter != nullptr)
    {
       opc_Widget->style()->drawPrimitive(QStyle::PE_Widget, &c_StyleOption, opc_Painter, opc_Widget);
    }
@@ -110,7 +110,7 @@ void C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(QWidget * cons
    for (int32_t s32_ItChild = 0; s32_ItChild < opc_Widget->children().size(); ++s32_ItChild)
    {
       QWidget * const pc_Wid = dynamic_cast<QWidget * const>(opc_Widget->children()[s32_ItChild]);
-      if (pc_Wid != NULL)
+      if (pc_Wid != nullptr)
       {
          h_ApplyStylesheetPropertyToItselfAndAllChildren(pc_Wid, opcn_Name, orc_Value);
       }
@@ -125,7 +125,7 @@ void C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(QWidget * cons
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeWiUtil::h_SetWindowIcon(QWidget * const opc_Widget)
 {
-   if (opc_Widget != NULL)
+   if (opc_Widget != nullptr)
    {
       opc_Widget->setWindowIcon(QIcon("://images/openSYDE_logo.ico"));
    }
@@ -149,7 +149,7 @@ void C_OgeWiUtil::h_CheckAndFixDialogPositionAndSize(QPoint & orc_GlobalPosition
    const QScreen * const pc_Screen = (static_cast<int32_t>(ou32_ScreenIndex) < QGuiApplication::screens().size()) ?
                                      QGuiApplication::screens().at(ou32_ScreenIndex) : QGuiApplication::primaryScreen();
 
-   tgl_assert(pc_Screen != NULL);
+   tgl_assert(pc_Screen != nullptr);
 
    // Desktop size gets increase by one on each side
    //  because the check seems to exclude the bottom right corner if exact match
@@ -197,12 +197,12 @@ int32_t C_OgeWiUtil::h_UpdateFontSize(QWidget * const opc_Widget, const QString 
 {
    int32_t s32_Retval = -1;
 
-   if ((orc_Text.compare("") != 0) && (opc_Widget != NULL))
+   if ((orc_Text.compare("") != 0) && (opc_Widget != nullptr))
    {
       QFont c_Font = opc_Widget->font();
       QSize c_EffectiveSize;
       int32_t s32_NewPointSize;
-      if (opc_ImprovedSize != NULL)
+      if (opc_ImprovedSize != nullptr)
       {
          c_EffectiveSize = *opc_ImprovedSize;
       }
@@ -325,11 +325,11 @@ int32_t C_OgeWiUtil::h_GetNextOptimalPointSize(const QFont & orc_Font, const QSi
 //----------------------------------------------------------------------------------------------------------------------
 QWidget * C_OgeWiUtil::h_GetWidgetUnderNextPopUp(QWidget * const opc_Input)
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
-   if (opc_Input != NULL)
+   if (opc_Input != nullptr)
    {
-      if (opc_Input->parentWidget() == NULL)
+      if (opc_Input->parentWidget() == nullptr)
       {
          pc_Retval = opc_Input;
       }
@@ -341,7 +341,7 @@ QWidget * C_OgeWiUtil::h_GetWidgetUnderNextPopUp(QWidget * const opc_Input)
          {
             const stw::opensyde_gui_elements::C_OgePopUpDialog * const pc_PopUp =
                dynamic_cast<const stw::opensyde_gui_elements::C_OgePopUpDialog * const>(pc_Parent);
-            if (pc_PopUp == NULL)
+            if (pc_PopUp == nullptr)
             {
                //Current candidate for return
                pc_Retval = pc_Parent;
@@ -356,7 +356,7 @@ QWidget * C_OgeWiUtil::h_GetWidgetUnderNextPopUp(QWidget * const opc_Input)
                break;
             }
          }
-         while (pc_Parent != NULL);
+         while (pc_Parent != nullptr);
       }
    }
    return pc_Retval;
@@ -575,7 +575,7 @@ QString C_OgeWiUtil::mh_GetFileName(QWidget * const opc_Parent, const QString & 
             if (C_OscUtils::h_CheckValidFilePath(c_FullFilePath.toStdString().c_str()) == true)
             {
                c_Retval = c_FullFilePath;
-               if (opc_SelectedFilter != NULL)
+               if (opc_SelectedFilter != nullptr)
                {
                   *opc_SelectedFilter = c_FileDialog.selectedNameFilter();
                }

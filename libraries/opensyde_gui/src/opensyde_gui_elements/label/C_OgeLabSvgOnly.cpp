@@ -40,7 +40,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeLabSvgOnly::C_OgeLabSvgOnly(QWidget * const opc_Parent) :
    C_OgeLabToolTipBase(opc_Parent),
-   mpc_Renderer(NULL)
+   mpc_Renderer(nullptr)
 {
 }
 
@@ -63,13 +63,13 @@ C_OgeLabSvgOnly::~C_OgeLabSvgOnly(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeLabSvgOnly::SetSvg(const QString & orc_SvgPath)
 {
-   if (this->mpc_Renderer != NULL)
+   if (this->mpc_Renderer != nullptr)
    {
       delete (this->mpc_Renderer);
    }
    if (orc_SvgPath.compare("") == 0)
    {
-      this->mpc_Renderer = NULL;
+      this->mpc_Renderer = nullptr;
    }
    else
    {
@@ -89,7 +89,7 @@ void C_OgeLabSvgOnly::SetSvg(const QString & orc_SvgPath)
 void C_OgeLabSvgOnly::paintEvent(QPaintEvent * const opc_Event)
 {
    Q_UNUSED(opc_Event)
-   if (this->mpc_Renderer != NULL)
+   if (this->mpc_Renderer != nullptr)
    {
       QPainter c_Painter(this);
       this->mpc_Renderer->render(&c_Painter, this->rect());

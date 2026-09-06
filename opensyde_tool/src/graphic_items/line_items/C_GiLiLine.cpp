@@ -88,7 +88,7 @@ C_GiLiLine::C_GiLiLine(const std::vector<QPointF> * const opc_Points, const bool
       this->setPen(c_Pen);
    }
 
-   if (opc_Points != NULL)
+   if (opc_Points != nullptr)
    {
       Init(*opc_Points);
    }
@@ -339,7 +339,7 @@ void C_GiLiLine::SetInteractionWidth(const float64_t & orf64_Value)
         ++pc_ItLine)
    {
       C_GiLiLineConnection * const pc_Line = *pc_ItLine;
-      if (pc_Line != NULL)
+      if (pc_Line != nullptr)
       {
          pc_Line->SetInteractionWidth(orf64_Value);
       }
@@ -795,7 +795,7 @@ void C_GiLiLine::FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_
       for (int32_t s32_ItPoint = 1; s32_ItPoint < mc_Points.size(); ++s32_ItPoint)
       {
          c_CurP2 = mc_Points[s32_ItPoint];
-         C_GiBiConnectableItem::h_DistToLine(c_CurP1, c_CurP2, orc_ScenePoint, &f64_CurDist, &c_CurProj, NULL);
+         C_GiBiConnectableItem::h_DistToLine(c_CurP1, c_CurP2, orc_ScenePoint, &f64_CurDist, &c_CurProj, nullptr);
          c_CurP1 = c_CurP2;
          if (f64_CurDist < f64_Best)
          {

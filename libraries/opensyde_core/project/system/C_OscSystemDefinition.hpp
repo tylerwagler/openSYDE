@@ -49,7 +49,7 @@ public:
                                   const uint8_t ou8_ComNodeId) const;
    bool CheckIpAddressIsValid(const uint32_t ou32_NodeIndex, const uint32_t ou32_ComIndex,
                               const std::vector<int32_t> & orc_Ip) const;
-   bool CheckBusIdAvailable(const uint8_t ou8_BusId, const uint32_t * const opu32_BusIndexToSkip = NULL) const;
+   bool CheckBusIdAvailable(const uint8_t ou8_BusId, const uint32_t * const opu32_BusIndexToSkip = nullptr) const;
    int32_t GetNextFreeBusId(uint8_t & oru8_BusId) const;
    int32_t CheckErrorNode(const uint32_t ou32_NodeIndex, bool * const opq_NameConflict, bool * const opq_NameInvalid,
                           bool * const opq_NodeIdInvalid, bool * const opq_IpInvalid, bool * const opq_DataPoolsInvalid,
@@ -66,10 +66,10 @@ public:
                          bool * const opq_IdInvalid, bool * const opq_DataPoolsInvalid) const;
    int32_t CheckMessageIdBus(const uint32_t ou32_BusIndex, const C_OscCanMessageUniqueId & orc_MessageId,
                              bool & orq_Valid,
-                             const C_OscCanMessageIdentificationIndices * const opc_SkipMessage = NULL) const;
+                             const C_OscCanMessageIdentificationIndices * const opc_SkipMessage = nullptr) const;
    int32_t CheckMessageNameBus(const uint32_t ou32_BusIndex, const std::string & orc_MessageName,
                                bool & orq_Valid, const C_OscCanMessageIdentificationIndices * const opc_SkipMessage =
-                                  NULL) const;
+                                  nullptr) const;
    int32_t CheckMessageMatch(const C_OscCanMessageIdentificationIndices & orc_MessageId1,
                              const C_OscCanMessageIdentificationIndices & orc_MessageId2, bool & orq_IsMatch,
                              const bool oq_IgnoreMessageDirection = false) const;

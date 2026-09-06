@@ -46,7 +46,7 @@ public:
       eEVENTTIME
    };
 
-   C_SdNdeCoPdoTableModel(QObject * const opc_Parent = NULL);
+   C_SdNdeCoPdoTableModel(QObject * const opc_Parent = nullptr);
 
    void UpdateData(void);
    uint32_t GetDeviceNodeIndex(void) const;

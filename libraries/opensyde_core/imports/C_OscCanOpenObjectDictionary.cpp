@@ -577,7 +577,7 @@ int32_t C_OscCanOpenObjectDictionary::m_IsSectionRo(const uint16_t ou16_PdoIndex
       C_OscCanOpenObjectDictionary::h_GetCanOpenObjectDictionaryIndexForPdo(ou16_PdoIndex, oq_MessageIsTx);
    const C_OscCanOpenObjectData * const pc_Object = this->GetCanOpenSubIndexObject(u16_ObjectIndex, ou8_OdSubIndex);
 
-   if (pc_Object != NULL)
+   if (pc_Object != nullptr)
    {
       orq_IsRo = pc_Object->IsWriteable() == false;
    }
@@ -610,7 +610,7 @@ bool C_OscCanOpenObjectDictionary::m_DoesSectionExist(const uint16_t ou16_PdoInd
       C_OscCanOpenObjectDictionary::h_GetCanOpenObjectDictionaryIndexForPdo(ou16_PdoIndex, oq_MessageIsTx);
    const C_OscCanOpenObjectData * const pc_Object = this->GetCanOpenSubIndexObject(u16_ObjectIndex, ou8_OdSubIndex);
 
-   if (pc_Object != NULL)
+   if (pc_Object != nullptr)
    {
       q_Retval = true;
    }
@@ -670,22 +670,22 @@ void C_OscCanOpenObjectData::DataTypeToTextAndSize(std::string * const opc_Text,
 {
    if ((u8_DataType < mu8_NUM_DATA_TYPES) && (u8_DataType > hu8_DATA_TYPE_INVALID))
    {
-      if (opc_Text != NULL)
+      if (opc_Text != nullptr)
       {
          *opc_Text = mac_TextAndSizeTable[u8_DataType].c_Text;
       }
-      if (opu8_Size != NULL)
+      if (opu8_Size != nullptr)
       {
          *opu8_Size = mac_TextAndSizeTable[u8_DataType].u8_Size;
       }
    }
    else
    {
-      if (opc_Text != NULL)
+      if (opc_Text != nullptr)
       {
          *opc_Text  = "?\?\?";
       }
-      if (opu8_Size != NULL)
+      if (opu8_Size != nullptr)
       {
          *opu8_Size = 0;
       }
@@ -904,7 +904,7 @@ uint8_t C_OscCanOpenObjectDictionary::GetNumHeartbeatConsumers() const
    uint8_t u8_Retval = 0;
    const C_OscCanOpenObjectData * const pc_Object = this->GetCanOpenObject(hu16_OD_INDEX_HEARTBEAT_CONSUMER);
 
-   if (pc_Object != NULL)
+   if (pc_Object != nullptr)
    {
       u8_Retval = pc_Object->u8_NumSubs;
       if (u8_Retval > 0U)
@@ -936,7 +936,7 @@ int32_t C_OscCanOpenObjectDictionary::IsHeartbeatConsumerRo(bool & orq_IsRo) con
    const C_OscCanOpenObjectData * const pc_Object =
       this->GetCanOpenSubIndexObject(hu16_OD_INDEX_HEARTBEAT_CONSUMER, 1U);
 
-   if (pc_Object != NULL)
+   if (pc_Object != nullptr)
    {
       orq_IsRo = pc_Object->IsWriteable() == false;
    }
@@ -979,7 +979,7 @@ int32_t C_OscCanOpenObjectDictionary::IsHeartbeatProducerRo(bool & orq_IsRo) con
    int32_t s32_Retval = C_NO_ERR;
    const C_OscCanOpenObjectData * const pc_Object = this->GetCanOpenObject(hu16_OD_INDEX_HEARTBEAT_PRODUCER);
 
-   if (pc_Object != NULL)
+   if (pc_Object != nullptr)
    {
       orq_IsRo = pc_Object->IsWriteable() == false;
    }
@@ -1245,7 +1245,7 @@ int32_t C_OscCanOpenObjectDictionary::IsPdoMappingRo(const uint16_t ou16_PdoInde
       C_OscCanOpenObjectDictionary::hu16_OD_PDO_MAPPING_OFFSET;
    const C_OscCanOpenObjectData * const pc_Object = this->GetCanOpenSubIndexObject(u16_ObjectIndex, 0U);
 
-   if (pc_Object != NULL)
+   if (pc_Object != nullptr)
    {
       orq_IsRo = pc_Object->IsWriteable() == false;
    }
@@ -1271,7 +1271,7 @@ int32_t C_OscCanOpenObjectDictionary::IsPdoMappingRo(const uint16_t ou16_PdoInde
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscCanOpenObjectData * C_OscCanOpenObjectDictionary::GetCanOpenObject(const uint16_t ou16_OdIndex) const
 {
-   const C_OscCanOpenObjectData * pc_Retval = NULL;
+   const C_OscCanOpenObjectData * pc_Retval = nullptr;
 
    const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = c_OdObjects.find(ou16_OdIndex);
 
@@ -1298,7 +1298,7 @@ const C_OscCanOpenObjectData * C_OscCanOpenObjectDictionary::GetCanOpenSubIndexO
                                                                                       const uint8_t ou8_OdSubIndex)
 const
 {
-   const C_OscCanOpenObjectData * pc_SubObject = NULL;
+   const C_OscCanOpenObjectData * pc_SubObject = nullptr;
 
    const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = this->c_OdObjects.find(ou16_OdIndex);
 

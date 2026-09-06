@@ -37,7 +37,7 @@ public:
    int32_t SetBaseName(std::vector<C_OscNode> & orc_Nodes, const std::string & orc_NodeBaseName);
    static bool h_CheckIsMultiDevice(const uint32_t ou32_NodeIndex,
                                     const std::vector<stw::opensyde_core::C_OscNodeSquad> & orc_AvailableGroups,
-                                    uint32_t * const opu32_GroupIndex = NULL);
+                                    uint32_t * const opu32_GroupIndex = nullptr);
 
    static const std::string hc_SEPARATOR; ///< Default separator for GUI and device type checks
    std::string c_BaseName;                ///< Base name for all sub nodes

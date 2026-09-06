@@ -31,7 +31,7 @@ class C_SdNdeHalcOvTableView :
    Q_OBJECT
 
 public:
-   C_SdNdeHalcOvTableView(QWidget * const opc_Parent = NULL);
+   C_SdNdeHalcOvTableView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeHalcOvTableView(void) override;
 
    void LoadUserSettings(void);

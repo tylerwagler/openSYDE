@@ -563,12 +563,12 @@ void C_SyvDaChaWidget::m_LoadChartData(void)
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   tgl_assert(pc_View != NULL);
-   if (pc_View != NULL)
+   tgl_assert(pc_View != nullptr);
+   if (pc_View != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-      tgl_assert(pc_Dashboard != NULL);
-      if (pc_Dashboard != NULL)
+      tgl_assert(pc_Dashboard != nullptr);
+      if (pc_Dashboard != nullptr)
       {
          uint32_t u32_ElementConfigCounter;
          const C_PuiSvDbTabChart & rc_Box = pc_Dashboard->GetTabChart();
@@ -705,7 +705,7 @@ void C_SyvDaChaWidget::m_AddNewDataElement(void)
                         c_DataElements[u32_Counter].u32_DataPoolIndex,
                         c_DataElements[u32_Counter].u32_ListIndex,
                         c_DataElements[u32_Counter].u32_ElementIndex);
-                  if (pc_Element != NULL)
+                  if (pc_Element != nullptr)
                   {
                      // Get the original scaling configuration as initialization
                      c_Scaling.f64_Factor = pc_Element->f64_Factor;
@@ -745,7 +745,7 @@ void C_SyvDaChaWidget::m_AddNewDataElement(void)
       // Apply bright style to any newly added gui elements
       C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this, "Style", "OPENSYDE_BRIGHT");
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          pc_Dialog->SaveUserSettings();
          pc_Dialog->PrepareCleanUp();
@@ -779,7 +779,7 @@ void C_SyvDaChaWidget::m_RemoveDataElement(void)
          //Remove read rail assignments as necessary
          pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-         if ((pc_View != NULL) &&
+         if ((pc_View != nullptr) &&
              (c_ElementId.GetIsValid() == true) &&
              (c_ElementId.GetType() == C_PuiSvDbNodeDataPoolListElementId::eDATAPOOL_ELEMENT) &&
              (pc_View->CheckReadUsage(c_ElementId) == false))
@@ -815,7 +815,7 @@ void C_SyvDaChaWidget::m_RemoveAllDataElements(void)
          C_PuiSvDbNodeDataPoolListElementId c_ElementId;
          this->mpc_Ui->pc_ChartWidget->RemoveSpecificGraph(0U, c_ElementId);
 
-         if ((pc_View != NULL) &&
+         if ((pc_View != nullptr) &&
              (c_ElementId.GetIsValid() == true) &&
              (pc_View->CheckReadUsage(c_ElementId) == false))
          {
@@ -856,7 +856,7 @@ void C_SyvDaChaWidget::m_RegisterDataElementRail(
                                                                     orc_DataPoolElementId.u32_ListIndex,
                                                                     orc_DataPoolElementId.u32_ElementIndex);
 
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          C_PuiSvReadDataConfiguration c_Config;
          c_Config.u8_RailIndex = 1;
@@ -938,9 +938,9 @@ void C_SyvDaChaWidget::m_CallProperties(void)
                   C_PuiSdHandler::h_GetInstance()->GetOscDataPool(c_ElementId.u32_NodeIndex,
                                                                   c_ElementId.u32_DataPoolIndex);
 
-               if (pc_OscElement != NULL)
+               if (pc_OscElement != nullptr)
                {
-                  if (pc_Datapool != NULL)
+                  if (pc_Datapool != nullptr)
                   {
                      if ((pc_Datapool->e_Type == C_OscNodeDataPool::eHALC) ||
                          (pc_Datapool->e_Type == C_OscNodeDataPool::eHALC_NVM))
@@ -969,7 +969,7 @@ void C_SyvDaChaWidget::m_CallProperties(void)
                                                                            this->me_Type) == C_NO_ERR);
          }
          Q_EMIT (this->SigTriggerUpdateTransmissionConfiguration());
-         if (c_New != NULL)
+         if (c_New != nullptr)
          {
             c_New->HideOverlay();
             c_New->deleteLater();
@@ -1109,7 +1109,7 @@ void C_SyvDaChaWidget::m_ManualRead(void)
                //-1 because we already prepared for the next element!
                if (this->m_CheckElementAlreadyRead(this->mu32_ManualOperationActionIndex - 1UL, c_ElementId) == false)
                {
-                  Q_EMIT (this->SigDataPoolRead(c_ElementId, NULL));
+                  Q_EMIT (this->SigDataPoolRead(c_ElementId, nullptr));
                }
                else
                {

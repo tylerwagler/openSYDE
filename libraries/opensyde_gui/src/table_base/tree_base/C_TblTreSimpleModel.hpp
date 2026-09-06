@@ -25,7 +25,7 @@ class C_TblTreSimpleModel :
    public QAbstractItemModel
 {
 public:
-   C_TblTreSimpleModel(QObject * const opc_Parent = NULL);
+   C_TblTreSimpleModel(QObject * const opc_Parent = nullptr);
 
    QModelIndex index(const int32_t os32_Row, const int32_t os32_Column,
                      const QModelIndex & orc_Parent = QModelIndex()) const override;

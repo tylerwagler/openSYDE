@@ -48,7 +48,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeDpListDataSetDelegate::C_SdNdeDpListDataSetDelegate(QObject * const opc_Parent) :
    QStyledItemDelegate(opc_Parent),
-   mpc_Model(NULL),
+   mpc_Model(nullptr),
    ms32_HoveredCol(-1)
 {
    connect(this, &C_SdNdeDpListDataSetDelegate::SigStore, this, &C_SdNdeDpListDataSetDelegate::m_Store);
@@ -71,7 +71,7 @@ QWidget * C_SdNdeDpListDataSetDelegate::createEditor(QWidget * const opc_Parent,
                                                      const QStyleOptionViewItem & orc_Option,
                                                      const QModelIndex & orc_Index) const
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
    Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
@@ -113,7 +113,7 @@ QWidget * C_SdNdeDpListDataSetDelegate::createEditor(QWidget * const opc_Parent,
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListDataSetDelegate::setEditorData(QWidget * const opc_Editor, const QModelIndex & orc_Index) const
 {
-   if ((opc_Editor != NULL) && (orc_Index.isValid() == true))
+   if ((opc_Editor != nullptr) && (orc_Index.isValid() == true))
    {
       QLineEdit * const pc_LineEdit = dynamic_cast<QLineEdit * const>(opc_Editor);
 
@@ -123,13 +123,13 @@ void C_SdNdeDpListDataSetDelegate::setEditorData(QWidget * const opc_Editor, con
       switch (e_Row)
       {
       case C_SdNdeDpListDataSetModel::E_Rows::eNAME:
-         if (pc_LineEdit != NULL)
+         if (pc_LineEdit != nullptr)
          {
             pc_LineEdit->setText(orc_Index.data().toString());
          }
          break;
       case C_SdNdeDpListDataSetModel::E_Rows::eCOMMENT:
-         if (pc_TextEdit != NULL)
+         if (pc_TextEdit != nullptr)
          {
             pc_TextEdit->setText(orc_Index.data().toString());
          }
@@ -153,7 +153,7 @@ void C_SdNdeDpListDataSetDelegate::setEditorData(QWidget * const opc_Editor, con
 void C_SdNdeDpListDataSetDelegate::setModelData(QWidget * const opc_Editor, QAbstractItemModel * const opc_Model,
                                                 const QModelIndex & orc_Index) const
 {
-   if (((opc_Editor != NULL) && (opc_Model != NULL)) && (orc_Index.isValid() == true))
+   if (((opc_Editor != nullptr) && (opc_Model != nullptr)) && (orc_Index.isValid() == true))
    {
       const QLineEdit * const pc_LineEdit = dynamic_cast<const QLineEdit * const>(opc_Editor);
 
@@ -163,13 +163,13 @@ void C_SdNdeDpListDataSetDelegate::setModelData(QWidget * const opc_Editor, QAbs
       switch (e_Row)
       {
       case C_SdNdeDpListDataSetModel::E_Rows::eNAME:
-         if (pc_LineEdit != NULL)
+         if (pc_LineEdit != nullptr)
          {
             opc_Model->setData(orc_Index, pc_LineEdit->text());
          }
          break;
       case C_SdNdeDpListDataSetModel::E_Rows::eCOMMENT:
-         if (pc_TextEdit != NULL)
+         if (pc_TextEdit != nullptr)
          {
             opc_Model->setData(orc_Index, pc_TextEdit->toPlainText());
          }
@@ -238,7 +238,7 @@ void C_SdNdeDpListDataSetDelegate::m_OnNameChange(const QString & orc_Text) cons
 {
    QWidget * const pc_Widget = dynamic_cast<QWidget * const>(this->sender());
 
-   if ((pc_Widget != NULL) && (this->mpc_Model != NULL))
+   if ((pc_Widget != nullptr) && (this->mpc_Model != nullptr))
    {
       //Check name
       const bool q_Valid = this->mpc_Model->CheckName(this->mc_Edit.column(), orc_Text);

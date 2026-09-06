@@ -35,7 +35,7 @@ class C_TblDelegate :
    Q_OBJECT
 
 public:
-   C_TblDelegate(QObject * const opc_Parent = NULL);
+   C_TblDelegate(QObject * const opc_Parent = nullptr);
 
    QWidget * createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem & orc_Option,
                           const QModelIndex & orc_Index) const override;

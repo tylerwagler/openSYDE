@@ -374,7 +374,7 @@ int32_t C_OscExportCanOpenConfig::h_CreateSourceCode(const std::string & orc_Pat
                                                                                  ou32_DatapoolIndex);
 
       //even if we have no signals there should be an "empty" DP
-      if (pc_DataPool != NULL)
+      if (pc_DataPool != nullptr)
       {
          const C_OscCanMessageContainer & rc_Messages = pc_Protocol->c_ComMessages[ou8_InterfaceIndex];
          uint32_t u32_HashValue = 0U;
@@ -1261,7 +1261,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
    pc_OdObject = rc_Od.GetCanOpenObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_SYNC);
 
    //write if the objects exists and is writable:
-   if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+   if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
    {
       const uint32_t u32_VALUE = 0x80U;
       c_Entry.SetConciseEntry(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_SYNC, 0x00U, u32_VALUE, "SYNC Message");
@@ -1272,7 +1272,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
    pc_OdObject = rc_Od.GetCanOpenObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_CYCLE_PERIOD);
 
    //write if the objects exists and is writable:
-   if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+   if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
    {
       c_Entry.SetConciseEntry(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_CYCLE_PERIOD, 0x00U, ou32_CyclePeriod,
                               "Communication Cycle Period in us");
@@ -1283,7 +1283,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
    pc_OdObject = rc_Od.GetCanOpenObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_SYNC_WINDOW_LENGTH);
 
    //write if the objects exists and is writable:
-   if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+   if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
    {
       c_Entry.SetConciseEntry(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_SYNC_WINDOW_LENGTH, 0x00U, ou32_WindowLength,
                               "Sync Window Length in us");
@@ -1294,7 +1294,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
    pc_OdObject = rc_Od.GetCanOpenObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_EMCY);
 
    //write if the objects exists and is writable:
-   if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+   if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
    {
       c_Entry.SetConciseEntry(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_EMCY, 0x00U,
                               static_cast<uint32_t>(orc_DeviceInfo.u8_NodeIdValue) + 0x80U,
@@ -1310,7 +1310,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
       {
          pc_OdObject = rc_Od.GetCanOpenSubIndexObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_HEARTBEAT_CONSUMER,
                                                       u8_It);
-         if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+         if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
          {
             uint32_t u32_Value;
 
@@ -1338,7 +1338,7 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
    if (rc_Od.IsHeartbeatProducerSupported() == true)
    {
       pc_OdObject = rc_Od.GetCanOpenObject(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_HEARTBEAT_PRODUCER);
-      if ((pc_OdObject != NULL) && (pc_OdObject->IsWriteable() == true))
+      if ((pc_OdObject != nullptr) && (pc_OdObject->IsWriteable() == true))
       {
          uint16_t u16_Value;
 

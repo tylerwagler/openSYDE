@@ -40,7 +40,7 @@ class C_NagUseCaseWidget :
    Q_OBJECT
 
 public:
-   explicit C_NagUseCaseWidget(QWidget * const opc_Parent = NULL);
+   explicit C_NagUseCaseWidget(QWidget * const opc_Parent = nullptr);
    ~C_NagUseCaseWidget(void) override;
 
    virtual void SetParentHook(QWidget * const opc_Parent);

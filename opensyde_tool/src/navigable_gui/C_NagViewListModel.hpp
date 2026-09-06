@@ -28,7 +28,7 @@ class C_NagViewListModel :
    public QAbstractListModel
 {
 public:
-   C_NagViewListModel(QObject * const opc_Parent = NULL);
+   C_NagViewListModel(QObject * const opc_Parent = nullptr);
 
    void SetNumRows(const int32_t os32_Rows);
 

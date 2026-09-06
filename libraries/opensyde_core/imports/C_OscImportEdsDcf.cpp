@@ -258,7 +258,7 @@ int32_t C_OscImportEdsDcf::h_ParseSignalContent(const std::map<uint16_t,
    orc_CurSignal.e_ComByteOrder = C_OscCanSignal::eBYTE_ORDER_INTEL;
    //Handle start bit
    orc_CurSignal.u16_ComBitStart = static_cast<uint16_t>(ou32_StartBitCounter);
-   if (pc_CoSignalObject != NULL)
+   if (pc_CoSignalObject != nullptr)
    {
       //Name
       orc_CurDataPoolSignal.c_Name = C_OscImportEdsDcf::h_GetObjectName(*pc_CoSignalObject);
@@ -485,7 +485,7 @@ const C_OscCanOpenObjectData * C_OscImportEdsDcf::mh_GetCoObject(const std::map<
                                                                                 C_OscCanOpenObject> & orc_CoObjects,
                                                                  const uint32_t ou32_Id, const int32_t os32_SubIndex)
 {
-   const C_OscCanOpenObjectData * pc_Retval = NULL;
+   const C_OscCanOpenObjectData * pc_Retval = nullptr;
 
    //use "find" as "at" is not available in C++98
    const std::map<uint16_t,
@@ -562,7 +562,7 @@ int32_t C_OscImportEdsDcf::mh_ParseMessages(const uint32_t ou32_StartingId, cons
          const uint32_t u32_ItMessage = rc_CoMessageMainObject.u16_Index - ou32_StartingId;
          //COB-ID section
          //--------------
-         const C_OscCanOpenObjectData * pc_SubObject = NULL;
+         const C_OscCanOpenObjectData * pc_SubObject = nullptr;
 
          const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = orc_CoObjects.find(
             static_cast<uint16_t>(ou32_StartingId + u32_ItMessage));
@@ -577,7 +577,7 @@ int32_t C_OscImportEdsDcf::mh_ParseMessages(const uint32_t ou32_StartingId, cons
             }
          }
 
-         if (pc_SubObject != NULL)
+         if (pc_SubObject != nullptr)
          {
             bool q_CobIdIncludesNodeId;
             uint32_t u32_CobId;
@@ -699,11 +699,11 @@ int32_t C_OscImportEdsDcf::mh_DoesInformationDirectionMatchToParsedMessages(cons
    const C_OscCanOpenObjectData * const pc_CoMessageInfoDirObject =
       mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_MessageIndex,
                      C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_INFORMATION_DIRECTION);
-   if (pc_CoMessageInfoDirObject != NULL)
+   if (pc_CoMessageInfoDirObject != nullptr)
    {
       uint32_t u32_InfoDir;
       if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageInfoDirObject, oq_IsEds), ou8_NodeId,
-                             u32_InfoDir, NULL) == C_NO_ERR)
+                             u32_InfoDir, nullptr) == C_NO_ERR)
       {
          if (((u32_InfoDir == 1UL) && (oq_IsTx == true)) ||
              ((u32_InfoDir == 2UL) && (oq_IsTx == false)))
@@ -936,7 +936,7 @@ int32_t C_OscImportEdsDcf::mh_LoadMessageTransmissionType(const uint32_t ou32_St
    const C_OscCanOpenObjectData * const pc_CoMessageTransTypeObject =
       mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage, u8_ActualSubIndex);
 
-   if (pc_CoMessageTransTypeObject != NULL)
+   if (pc_CoMessageTransTypeObject != nullptr)
    {
       uint32_t u32_TransmissionType;
       if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageTransTypeObject, oq_IsEds), ou8_NodeId,
@@ -1005,7 +1005,7 @@ void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(const uint32_t ou3
       mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
                      C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE);
 
-   if (pc_CoMessageTransTypeObject != NULL)
+   if (pc_CoMessageTransTypeObject != nullptr)
    {
       uint32_t u32_TransmissionType;
       if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageTransTypeObject, oq_IsEds), ou8_NodeId,
@@ -1101,7 +1101,7 @@ void C_OscImportEdsDcf::mh_LoadEventTimerSection(const uint32_t ou32_StartingId,
       const C_OscCanOpenObjectData * const pc_CoMessageEventTimerObject =
          mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
                         C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER);
-      if (pc_CoMessageEventTimerObject != NULL)
+      if (pc_CoMessageEventTimerObject != nullptr)
       {
          uint32_t u32_EventTimer;
          if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageEventTimerObject, oq_IsEds),
@@ -1181,7 +1181,7 @@ void C_OscImportEdsDcf::mh_LoadSrdoCyclicSection(const uint32_t ou32_StartingId,
       mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
                      C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_CYCLE_TIME);
 
-   if (pc_CoMessageCycleTimeObject != NULL)
+   if (pc_CoMessageCycleTimeObject != nullptr)
    {
       uint32_t u32_CycleTime;
       if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageCycleTimeObject, oq_IsEds),
@@ -1259,7 +1259,7 @@ void C_OscImportEdsDcf::mh_LoadEventTimerSectionCanOpen(const uint32_t ou32_Star
       mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
                      C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER);
 
-   if (pc_CoMessageEventTimerObject != NULL)
+   if (pc_CoMessageEventTimerObject != nullptr)
    {
       uint32_t u32_EventTimer;
       if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageEventTimerObject, oq_IsEds),
@@ -1318,7 +1318,7 @@ void C_OscImportEdsDcf::mh_LoadInhibitTimeSectionCanOpen(const uint32_t ou32_Sta
       mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
                      C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_INHIBIT_TIME);
 
-   if (pc_CoMessageInhibitTimeObject != NULL)
+   if (pc_CoMessageInhibitTimeObject != nullptr)
    {
       uint32_t u32_InhibitTime;
       if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageInhibitTimeObject, oq_IsEds),
@@ -1392,7 +1392,7 @@ int32_t C_OscImportEdsDcf::mh_ParseSignals(const uint32_t ou32_CoMessageId, cons
    // Adapt the DLC automatically
    orc_OscMessageData.u16_Dlc = 0U;
 
-   if (pc_CoMessageMappingObject != NULL)
+   if (pc_CoMessageMappingObject != nullptr)
    {
       //Skip first section because this is just the number of sub segments
       uint32_t u32_MappingCount;
@@ -1415,7 +1415,7 @@ int32_t C_OscImportEdsDcf::mh_ParseSignals(const uint32_t ou32_CoMessageId, cons
                      mh_GetCoObject(orc_CoObjects, ou32_CoMessageId + ou16_MappingOffset,
                                     static_cast<int32_t>(u32_ItSignal + 1UL));
 
-                  if (pc_CoMessageMappingSubObject != NULL)
+                  if (pc_CoMessageMappingSubObject != nullptr)
                   {
                      uint32_t u32_MappingSubIndexValue;
                      if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageMappingSubObject, oq_IsEds), ou8_NodeId,
@@ -1554,7 +1554,7 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const std::string & orc_CoValue, c
 
    oru32_Value = 0UL;
 
-   if (opq_IncludesNodeId != NULL)
+   if (opq_IncludesNodeId != nullptr)
    {
       *opq_IncludesNodeId = false;
    }
@@ -1606,7 +1606,7 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const std::string & orc_CoValue, c
                   //Node ID
                   oru32_Value += static_cast<uint32_t>(ou8_NodeId);
 
-                  if (opq_IncludesNodeId != NULL)
+                  if (opq_IncludesNodeId != nullptr)
                   {
                      *opq_IncludesNodeId = true;
                   }
@@ -1709,10 +1709,10 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValueSimple(const std::string & orc_CoVa
 
    if (orc_CoValue.length() > 0)
    {
-      char_t * pcn_Ptr = NULL;
+      char_t * pcn_Ptr = nullptr;
 
       oru32_Value = static_cast<uint32_t>(strtoul(orc_CoValue.c_str(), &pcn_Ptr, 0));
-      if (pcn_Ptr != NULL)
+      if (pcn_Ptr != nullptr)
       {
          if (*pcn_Ptr == '\0')
          {
@@ -1782,7 +1782,7 @@ void C_OscImportEdsDcf::mh_AddUserMessage(const uint32_t ou32_CoObjectId, const 
    }
    else
    {
-      if (opc_ImportMessages != NULL)
+      if (opc_ImportMessages != nullptr)
       {
          opc_ImportMessages->push_back(c_Message);
       }

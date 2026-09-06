@@ -38,7 +38,7 @@ class C_GiSvNodeSyvUpdate :
 public:
    C_GiSvNodeSyvUpdate(const uint32_t ou32_ViewIndex, const int32_t & ors32_NodeIndex, const uint64_t & oru64_Id,
                        const float64_t & orf64_Width, const float64_t & orf64_Height,
-                       QGraphicsItem * const opc_Parent = NULL);
+                       QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiSvNodeSyvUpdate() override;
 
    void SetViewConnected(const bool oq_Connected) override;
@@ -79,9 +79,9 @@ private:
    void m_SetSvgForTopLeftIcon(void);
    QString m_GetSvgForTopLeftIcon(void);
    void m_GetCurrentNodeSecurityState(bool & orq_AuthenticationNecessary, bool & orq_TrafficEncryptionNecessary,
-                                      bool & orq_DebuggerEnabled, bool * const opq_AuthenticationSupported = NULL,
-                                      bool * const opq_TrafficEncryptionSupported = NULL,
-                                      bool * const opq_DebuggerChangeSupported = NULL) const;
+                                      bool & orq_DebuggerEnabled, bool * const opq_AuthenticationSupported = nullptr,
+                                      bool * const opq_TrafficEncryptionSupported = nullptr,
+                                      bool * const opq_DebuggerChangeSupported = nullptr) const;
    QString m_GetSvgDependingOnState(const bool oq_AuthenticationNecessary, const bool oq_TrafficEncryptionNecessary,
                                     const bool oq_DebuggerEnabled);
    void m_AppendSecurityToolTipIfNecessary(QString & orc_Text);

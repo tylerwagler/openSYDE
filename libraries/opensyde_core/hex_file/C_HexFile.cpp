@@ -140,7 +140,7 @@ uint32_t C_HexFile::LoadFromFile(const char_t * const opcn_FileName)
    this->Clear();
    pc_File = std::fopen(opcn_FileName, "rt");
 
-   if (pc_File == NULL)
+   if (pc_File == nullptr)
    {
       u32_Error = ERR_CANT_OPEN_FILE;
    }
@@ -227,7 +227,7 @@ uint32_t C_HexFile::m_LoadIntelHex(std::FILE * const opt_File)
 
    mu8_MaxRecordLength = 0U;
 
-   while ((fgets(acn_HexBuffer, ms32_INTELHEX_MAX, opt_File)) != NULL)
+   while ((fgets(acn_HexBuffer, ms32_INTELHEX_MAX, opt_File)) != nullptr)
    {
       mu32_LineCount++;
 
@@ -348,7 +348,7 @@ uint32_t C_HexFile::m_LoadSRecord(std::FILE * const opt_File)
 
    mu8_MaxRecordLength = 0U;
 
-   while ((fgets(acn_HexBuffer, ms32_SRECORD_MAX, opt_File)) != NULL)
+   while ((fgets(acn_HexBuffer, ms32_SRECORD_MAX, opt_File)) != nullptr)
    {
       mu32_LineCount++;
 
@@ -500,7 +500,7 @@ uint32_t C_HexFile::OptimizeLinear(const uint32_t ou32_RecSize, const int32_t os
 {
    uint32_t u32_Error = NO_ERR;
 
-   if (LineInit() != NULL) // HEX Data loaded?
+   if (LineInit() != nullptr) // HEX Data loaded?
    {
       uint32_t u32_Offset = mu32_MinAdr;
       uint32_t u32_Size = (mu32_MaxAdr - mu32_MinAdr) + 1U;
@@ -572,7 +572,7 @@ uint32_t C_HexFile::Optimize(const uint32_t ou32_RecSize)
    uint32_t u32_Error = ERR_NO_DATA;
    const C_HexDataDump * pc_Dump;
 
-   if (this->LineInit() != NULL) // HEX Data loaded?
+   if (this->LineInit() != nullptr) // HEX Data loaded?
    {
       pc_Dump = this->GetDataDump(u32_Error);
       if (u32_Error == NO_ERR)
@@ -604,20 +604,20 @@ uint32_t C_HexFile::SaveToFile(const char_t * const opcn_FileName)
 
    std::FILE * pc_File;
 
-   if (LineInit() != NULL) // HEX Data loaded?
+   if (LineInit() != nullptr) // HEX Data loaded?
    {
       // write binary file to avoid OS-specific handling of newlines
       pc_File = std::fopen(opcn_FileName, "wb"); // yes, now open acFileName
 
 
-      if (pc_File == NULL)
+      if (pc_File == nullptr)
       {
          u32_Error = ERR_CANT_OPEN_FILE; // something is wrong with acFileName!
       }
       else
       {
          // are there any lines left?
-         while ((pu8_HexLine = NextLine()) != NULL)
+         while ((pu8_HexLine = NextLine()) != nullptr)
          {
             fputs(mh_HexLineString(pu8_HexLine), pc_File); // write string into file
             // we always create CR/LF to avoid different hex-file data on different OS
@@ -646,10 +646,10 @@ uint32_t C_HexFile::SaveToFile(const char_t * const opcn_FileName)
 //************************************************************************
 const char_t * C_HexFile::NextLineString(void)
 {
-   const char_t * pcn_String = NULL;
+   const char_t * pcn_String = nullptr;
    const uint8_t * pu8_HexLine = NextLine();
 
-   if (pu8_HexLine != NULL)
+   if (pu8_HexLine != nullptr)
    {
       pcn_String = mh_HexLineString(pu8_HexLine);
    }
@@ -681,7 +681,7 @@ const uint8_t * C_HexFile::NextBinData(uint32_t & oru32_Address, uint8_t & oru8_
    oru32_Address = 0; // clear return values
    oru8_Size = 0;
 
-   while ((pu8_Line = NextLine()) != NULL) // search for next data line
+   while ((pu8_Line = NextLine()) != nullptr) // search for next data line
    {
       if (pu8_Line[mu8_INTEL_CMD] == mu8_CMD_DATA)
       {
@@ -718,9 +718,9 @@ void C_HexFile::m_InitHexFile(void)
    mu8_MaxRecordLength = 0U;
    mu32_NumRawBytes = 0U;
    mu32_LastOverlayErrorAddress = 0U;
-   mpt_DataEntry = NULL;
-   mpt_HexData = NULL;
-   mpt_Prev = NULL;
+   mpt_DataEntry = nullptr;
+   mpt_HexData = nullptr;
+   mpt_Prev = nullptr;
    mq_DumpIsDirty = true;
 }
 
@@ -743,7 +743,7 @@ void C_HexFile::Clear(void)
 
    mu32_NumRawBytes = 0U;
 
-   if (mpt_DataEntry != NULL)
+   if (mpt_DataEntry != nullptr)
    {
       pt_HexLine = mpt_DataEntry;
 
@@ -751,7 +751,7 @@ void C_HexFile::Clear(void)
       {
          pt_NextLine = pt_HexLine->pt_Next;
 
-         if (pt_HexLine->pu8_HexLine != NULL)
+         if (pt_HexLine->pu8_HexLine != nullptr)
          {
             delete[] pt_HexLine->pu8_HexLine;
          }
@@ -788,9 +788,9 @@ uint32_t C_HexFile::m_CopyHex2Mem(uint16_t * const opu16_BinImage, const uint32_
    uint32_t u32_AdrOffset = 0U;
    const uint8_t * pu8_HexLine;
 
-   if (LineInit() != NULL) // HEX Data loaded?
+   if (LineInit() != nullptr) // HEX Data loaded?
    {
-      while ((pu8_HexLine = NextLine()) != NULL)
+      while ((pu8_HexLine = NextLine()) != nullptr)
       {
          uint8_t u8_Command = pu8_HexLine[mu8_INTEL_CMD];
 
@@ -1430,7 +1430,7 @@ void C_HexFile::m_SetDataPtr(const uint32_t ou32_Adr)
 {
    T_HexLine * pt_Next;
 
-   if (mpt_Prev == NULL)
+   if (mpt_Prev == nullptr)
    {
       return;
    }
@@ -1472,7 +1472,7 @@ uint32_t C_HexFile::m_SetXAdrPtr(const uint32_t ou32_Adr)
    uint32_t u32_Offs;
    T_HexLine * pt_Next;
 
-   if (mpt_Prev == NULL)
+   if (mpt_Prev == nullptr)
    {
       return false;
    }
@@ -1562,9 +1562,9 @@ uint32_t C_HexFile::m_AddHexLine(const char_t * const opcn_String)
       try // be aware of the bad bad_alloc exception...
       {
          pt_New = new T_HexLine();   // create new element
-         pt_New->pu8_HexLine = NULL; // sorry, no data!
+         pt_New->pu8_HexLine = nullptr; // sorry, no data!
 
-         if (mpt_Prev == NULL) // first entry?
+         if (mpt_Prev == nullptr) // first entry?
          {
             pt_New->pt_Prev = pt_New; // 1st element points to himself
             pt_New->pt_Next = pt_New; // 1st element points to himself
@@ -1698,7 +1698,7 @@ void C_HexFile::m_RemoveFirst(void)
    T_HexLine * pt_Next;
    T_HexLine * pt_Last;
 
-   if (mpt_DataEntry != NULL)
+   if (mpt_DataEntry != nullptr)
    {
       pt_Next = mpt_DataEntry->pt_Next; // pointer to next element
       pt_Last = mpt_DataEntry->pt_Prev; // pointer to last element
@@ -1715,7 +1715,7 @@ void C_HexFile::m_RemoveFirst(void)
          mpt_HexData = pt_Next;
       }
       // remove data buffer
-      if (mpt_DataEntry->pu8_HexLine != NULL)
+      if (mpt_DataEntry->pu8_HexLine != nullptr)
       {
          delete[] mpt_DataEntry->pu8_HexLine;
       }
@@ -2134,7 +2134,7 @@ uint32_t C_HexFile::GetXAdrActLine(uint32_t & oru32_XAdr) const
 {
    uint32_t u32_Return = ERR_NO_DATA;
 
-   if (mpt_HexData != NULL)
+   if (mpt_HexData != nullptr)
    {
       oru32_XAdr = mpt_HexData->u32_XAdr;
       u32_Return = NO_ERR;
@@ -2167,10 +2167,10 @@ uint32_t C_HexFile::MaxAdr(void) const
 
 const uint8_t * C_HexFile::LineInit(void)
 {
-   uint8_t * pu8_Start = NULL;
+   uint8_t * pu8_Start = nullptr;
 
    mpt_HexData = mpt_DataEntry;
-   if (mpt_HexData != NULL)
+   if (mpt_HexData != nullptr)
    {
       pu8_Start = mpt_HexData->pu8_HexLine;
    }
@@ -2181,9 +2181,9 @@ const uint8_t * C_HexFile::LineInit(void)
 
 const uint8_t * C_HexFile::NextLine(void)
 {
-   uint8_t * pu8_Line = NULL;
+   uint8_t * pu8_Line = nullptr;
 
-   if (mpt_HexData != NULL)
+   if (mpt_HexData != nullptr)
    {
       pu8_Line = mpt_HexData->pu8_HexLine;
       if (mpt_HexData->pt_Next != mpt_DataEntry)
@@ -2192,7 +2192,7 @@ const uint8_t * C_HexFile::NextLine(void)
       }
       else
       {
-         mpt_HexData = NULL;
+         mpt_HexData = nullptr;
       }
    }
    return (pu8_Line);
@@ -2422,25 +2422,25 @@ const C_HexDataDump * C_HexFile::GetDataDump(uint32_t & oru32_ErrorResult)
    //This will improve speed as we do not need to resize the DynamicArray, potentially
    // already containing a lot of data, all the time.
    pu8_Data = LineInit();
-   if (pu8_Data == NULL)
+   if (pu8_Data == nullptr)
    {
       oru32_ErrorResult = ERR_NO_DATA;
-      return NULL;
+      return nullptr;
    }
 
    s64_LastAddress = -2; //-2 -> make sure that a block is detected at the first line
    u32_NumBlocks = 0U;
-   while (pu8_Data != NULL)
+   while (pu8_Data != nullptr)
    {
       pu8_Data = NextBinData(u32_Address, u8_Size);
-      if (pu8_Data != NULL)
+      if (pu8_Data != nullptr)
       {
          //memory overlap ? (we assume hex file data already sorted by address)
          if (static_cast<int64_t>(u32_Address) < s64_LastAddress)
          {
             oru32_ErrorResult = WRN_RECORD_OVERLAY | ((u32_Address) & ~ERR_MASK);
             mu32_LastOverlayErrorAddress = u32_Address;
-            return NULL;
+            return nullptr;
          }
          else if (static_cast<int64_t>(u32_Address) > s64_LastAddress)
          {
@@ -2463,7 +2463,7 @@ const C_HexDataDump * C_HexFile::GetDataDump(uint32_t & oru32_ErrorResult)
    catch (...)
    {
       oru32_ErrorResult = ERR_NOT_ENOUGH_MEMORY;
-      return NULL;
+      return nullptr;
    }
 
    pu8_Data = LineInit();
@@ -2473,10 +2473,10 @@ const C_HexDataDump * C_HexFile::GetDataDump(uint32_t & oru32_ErrorResult)
 
    //again: first check how big each block is for performance reasons ...
    q_FirstBlock = true;
-   while (pu8_Data != NULL)
+   while (pu8_Data != nullptr)
    {
       pu8_Data = NextBinData(u32_Address, u8_Size);
-      if (pu8_Data != NULL)
+      if (pu8_Data != nullptr)
       {
          if (q_FirstBlock == true) //start of block
          {
@@ -2495,7 +2495,7 @@ const C_HexDataDump * C_HexFile::GetDataDump(uint32_t & oru32_ErrorResult)
             catch (...)
             {
                oru32_ErrorResult = ERR_NOT_ENOUGH_MEMORY;
-               return NULL;
+               return nullptr;
             }
             s32_BlockIndex++; //new block detected
             u32_BlockSize = 0U;
@@ -2513,7 +2513,7 @@ const C_HexDataDump * C_HexFile::GetDataDump(uint32_t & oru32_ErrorResult)
    catch (...)
    {
       oru32_ErrorResult = ERR_NOT_ENOUGH_MEMORY;
-      return NULL;
+      return nullptr;
    }
 
    //finally: get the data:
@@ -2522,10 +2522,10 @@ const C_HexDataDump * C_HexFile::GetDataDump(uint32_t & oru32_ErrorResult)
    u32_Index = 0U;
 
    pu8_Data = LineInit();
-   while (pu8_Data != NULL)
+   while (pu8_Data != nullptr)
    {
       pu8_Data = NextBinData(u32_Address, u8_Size);
-      if (pu8_Data != NULL)
+      if (pu8_Data != nullptr)
       {
          if ((static_cast<int64_t>(u32_Address) > s64_LastAddress) && (u32_Index > 0U))
          {

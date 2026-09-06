@@ -25,7 +25,7 @@ class C_SyvUpPacSectionNodeFilesWidget :
    public C_SyvUpPacSectionNodeWidget
 {
 public:
-   C_SyvUpPacSectionNodeFilesWidget(QWidget * const opc_Parent = NULL);
+   C_SyvUpPacSectionNodeFilesWidget(QWidget * const opc_Parent = nullptr);
 
    virtual void AddFile(const QString & orc_File);
    void AdaptFile(const QString & orc_File, C_SyvUpPacListNodeItemWidget * const opc_App) override;

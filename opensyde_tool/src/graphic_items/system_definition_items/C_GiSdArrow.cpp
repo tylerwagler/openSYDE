@@ -48,7 +48,7 @@ C_GiSdArrow::C_GiSdArrow(const int32_t & ors32_Index, const uint64_t & oru64_Id,
    C_GiBiArrow(oru64_Id, opc_Points, opc_Parent),
    C_PuiSdDataElement(ors32_Index, C_PuiSdDataElement::eLINE_ARROW)
 {
-   if (opc_Points == NULL)
+   if (opc_Points == nullptr)
    {
       if ((this->ms32_Index >= 0) &&
           (static_cast<uint32_t>(this->ms32_Index) < C_PuiSdHandler::h_GetInstance()->c_Elements.c_LineArrows.size()))

@@ -103,13 +103,13 @@ void C_SdBueMlvSignalManager::LoadSignal(const uint32_t ou32_SignalIndex,
    this->mc_ColorConfiguration = orc_ColorConfiguration;
 
    // get and save the signal
-   if (pc_Signal != NULL)
+   if (pc_Signal != nullptr)
    {
       this->mc_Signal = *pc_Signal;
       this->mc_UiSignal.u8_ColorIndex = orc_ColorConfiguration.u8_Index;
    }
 
-   if (pc_DpListElement != NULL)
+   if (pc_DpListElement != nullptr)
    {
       // get name from datapool list element
       this->mc_Name = pc_DpListElement->c_Name.c_str();
@@ -570,7 +570,7 @@ void C_SdBueMlvSignalManager::ClearItems(void)
    for (pc_ItItem = this->mc_VecSignalItems.begin(); pc_ItItem != this->mc_VecSignalItems.end(); ++pc_ItItem)
    {
       Q_EMIT (this->SigRemoveItem(*pc_ItItem));
-      (*pc_ItItem)->setParentItem(NULL);
+      (*pc_ItItem)->setParentItem(nullptr);
       delete (*pc_ItItem);
    }
 }
@@ -581,7 +581,7 @@ void C_SdBueMlvSignalManager::ClearItems(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMlvSignalManager::SaveSignal(void) const
 {
-   if (this->mpc_MessageSyncManager != NULL)
+   if (this->mpc_MessageSyncManager != nullptr)
    {
       this->mpc_MessageSyncManager->SetCanSignalPosition(this->mc_MessageId, this->mu32_SignalIndex, this->mc_Signal,
                                                          this->mc_UiSignal);

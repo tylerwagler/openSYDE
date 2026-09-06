@@ -27,7 +27,7 @@ class C_OgeTedElided :
    public C_OgeTedContextMenuBase
 {
 public:
-   C_OgeTedElided(QWidget * const opc_Parent = NULL);
+   C_OgeTedElided(QWidget * const opc_Parent = nullptr);
 
 protected:
    void paintEvent(QPaintEvent * const opc_Event) override;

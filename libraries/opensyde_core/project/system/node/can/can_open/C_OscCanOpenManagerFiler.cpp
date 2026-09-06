@@ -890,7 +890,7 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(const C_OscCanO
             rc_EdsFileContent.c_TextFileContent.GetText("\n"), c_CompleteFileName,
             "Saving CANopen manager data");
       }
-      if (opc_CreatedFiles != NULL)
+      if (opc_CreatedFiles != nullptr)
       {
          opc_CreatedFiles->push_back(c_FileNameWithPrefix);
       }

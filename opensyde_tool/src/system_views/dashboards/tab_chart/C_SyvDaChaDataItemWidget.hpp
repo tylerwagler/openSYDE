@@ -44,7 +44,7 @@ public:
       eMEASUREMENT_VAL_SECOND
    };
 
-   explicit C_SyvDaChaDataItemWidget(const uint32_t ou32_ViewIndex, QWidget * const opc_Parent = NULL);
+   explicit C_SyvDaChaDataItemWidget(const uint32_t ou32_ViewIndex, QWidget * const opc_Parent = nullptr);
    ~C_SyvDaChaDataItemWidget() noexcept override;
 
    void InitWidget(const uint32_t ou32_DataPoolElementConfigIndex,

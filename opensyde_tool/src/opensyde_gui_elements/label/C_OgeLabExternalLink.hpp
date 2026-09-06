@@ -30,7 +30,7 @@ class C_OgeLabExternalLink :
    Q_OBJECT
 
 public:
-   explicit C_OgeLabExternalLink(QWidget * const opc_Parent = NULL);
+   explicit C_OgeLabExternalLink(QWidget * const opc_Parent = nullptr);
 
    void SetLink(const QString & orc_DisplayedText, const QString & orc_LinkText);
 

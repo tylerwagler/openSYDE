@@ -50,7 +50,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueUnoManager::C_SdBueUnoManager(QObject * const opc_Parent) :
    C_UtiUndoStack(opc_Parent),
-   mpc_DeleteCommand(NULL)
+   mpc_DeleteCommand(nullptr)
 {
 }
 
@@ -60,7 +60,7 @@ C_SdBueUnoManager::C_SdBueUnoManager(QObject * const opc_Parent) :
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueUnoManager::~C_SdBueUnoManager(void)
 {
-   if (this->mpc_DeleteCommand != NULL)
+   if (this->mpc_DeleteCommand != nullptr)
    {
       delete (mpc_DeleteCommand);
    }
@@ -322,7 +322,7 @@ void C_SdBueUnoManager::DoDeleteMessages(
 {
    QUndoCommand * const pc_Parent = this->m_GetDeleteCommand();
 
-   if (pc_Parent != NULL)
+   if (pc_Parent != nullptr)
    {
       std::vector<C_OscCanMessageIdentificationIndices> c_AllMessages;
       //Consolidate
@@ -499,7 +499,7 @@ void C_SdBueUnoManager::DoDeleteSignals(const std::vector<C_OscCanMessageIdentif
    {
       QUndoCommand * const pc_Parent = this->m_GetDeleteCommand();
 
-      if (pc_Parent != NULL)
+      if (pc_Parent != nullptr)
       {
          C_SdBueMessageSelectorTreeWidget * const pc_MessageTreeWidget =
             dynamic_cast<C_SdBueMessageSelectorTreeWidget * const>(opc_MessageTreeWidget);
@@ -567,10 +567,10 @@ void C_SdBueUnoManager::DoMoveSignal(const std::vector<C_OscCanMessageIdentifica
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueUnoManager::CommitDelete(void)
 {
-   if (this->mpc_DeleteCommand != NULL)
+   if (this->mpc_DeleteCommand != nullptr)
    {
       this->DoPush(this->mpc_DeleteCommand);
-      this->mpc_DeleteCommand = NULL;
+      this->mpc_DeleteCommand = nullptr;
    }
 }
 
@@ -583,7 +583,7 @@ void C_SdBueUnoManager::CommitDelete(void)
 //----------------------------------------------------------------------------------------------------------------------
 QUndoCommand * C_SdBueUnoManager::m_GetDeleteCommand(void)
 {
-   if (this->mpc_DeleteCommand == NULL)
+   if (this->mpc_DeleteCommand == nullptr)
    {
       this->mpc_DeleteCommand = new QUndoCommand("Delete any items");
    }
@@ -600,7 +600,7 @@ QUndoCommand * C_SdBueUnoManager::m_GetDeleteCommand(void)
 void C_SdBueUnoManager::mh_PatchMessageId(const C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
                                           C_OscCanMessage & orc_Message)
 {
-   if (opc_MessageSyncManager != NULL)
+   if (opc_MessageSyncManager != nullptr)
    {
       orc_Message.u32_CanId = opc_MessageSyncManager->GetNextValidMessageId(orc_Message.q_IsExtended);
    }
@@ -641,8 +641,8 @@ void C_SdBueUnoManager::mh_HandleLastOwnersValidation(const C_OscCanMessageIdent
    orc_NewOwnerNodeDatapoolIndex.reserve(orc_LastOwnerNodeDatapoolIndex.size());
    orc_NewOwnerIsTxFlag.reserve(orc_LastOwnerIsTxFlag.size());
 
-   if ((pc_Node != NULL) &&
-       (pc_Container != NULL))
+   if ((pc_Node != nullptr) &&
+       (pc_Container != nullptr))
    {
       if (orc_MessageId.u32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size())
       {
@@ -690,7 +690,7 @@ void C_SdBueUnoManager::mh_HandleLastOwnersValidation(const C_OscCanMessageIdent
                      {
                         const C_OscNode * const pc_ConnectedNode =
                            C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndexes[u32_ItConnectedNode]);
-                        if (pc_ConnectedNode != NULL)
+                        if (pc_ConnectedNode != nullptr)
                         {
                            if (rc_CurName.compare(pc_ConnectedNode->c_Properties.c_Name.c_str()) == 0)
                            {
@@ -724,7 +724,7 @@ void C_SdBueUnoManager::mh_HandleLastOwnersValidation(const C_OscCanMessageIdent
                                     q_ExactMatch = true;
 
                                     // Check if the Datapool does match too
-                                    if ((pc_Protocol != NULL) &&
+                                    if ((pc_Protocol != nullptr) &&
                                         (orc_LastOwnerNodeDatapoolIndex[u32_ItMessage][u32_ItLastOwner] <
                                          pc_Node->c_DataPools.size()))
                                     {
@@ -798,7 +798,7 @@ void C_SdBueUnoManager::mh_HandleLastOwnersValidation(const C_OscCanMessageIdent
                                                                            u32_ItLastOwner]);
 
                      //Match!
-                     if ((pc_Protocol != NULL) &&
+                     if ((pc_Protocol != nullptr) &&
                          (orc_LastOwnerNodeDatapoolIndex[u32_ItMessage][u32_ItLastOwner] < pc_Node->c_DataPools.size()))
                      {
                         //Exact match use same info

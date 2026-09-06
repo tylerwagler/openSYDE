@@ -25,7 +25,7 @@ class C_SdNdeDalLogJobOvDelegate :
    public QStyledItemDelegate
 {
 public:
-   explicit C_SdNdeDalLogJobOvDelegate(QObject * const opc_Parent = NULL);
+   explicit C_SdNdeDalLogJobOvDelegate(QObject * const opc_Parent = nullptr);
    void paint(QPainter * const opc_Painter, const QStyleOptionViewItem & orc_Option,
               const QModelIndex & orc_Index) const override;
    void SetModel(const QAbstractTableModel * const opc_Value);

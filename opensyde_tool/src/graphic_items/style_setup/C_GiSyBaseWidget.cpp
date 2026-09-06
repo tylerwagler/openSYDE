@@ -62,7 +62,7 @@ C_GiSyBaseWidget::C_GiSyBaseWidget(C_OgePopUpDialog & orc_Parent, const QString 
    this->mpc_ParentDialog->SetTitle(orc_Name);
 
    // create scene for graphics view
-   this->mpc_Scene = new C_SdTopologyScene(false, NULL);
+   this->mpc_Scene = new C_SdTopologyScene(false, nullptr);
 
    // configure background drawing
    this->mpc_Scene->setSceneRect(0.0, 0.0,
@@ -117,7 +117,7 @@ void C_GiSyBaseWidget::InitStaticNames(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyBaseWidget::SetWidget(QWidget * const opc_Widget)
 {
-   if (opc_Widget != NULL)
+   if (opc_Widget != nullptr)
    {
       int32_t s32_Index;
       QVBoxLayout * const pc_Layout = new QVBoxLayout(this->mpc_Ui->pc_SettingsShowWidget);
@@ -174,7 +174,7 @@ void C_GiSyBaseWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
            (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
           (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
       {
-         if (this->mpc_ParentDialog != NULL)
+         if (this->mpc_ParentDialog != nullptr)
          {
             this->mpc_ParentDialog->accept();
          }
@@ -196,8 +196,8 @@ void C_GiSyBaseWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyBaseWidget::m_OkClicked(void)
 {
-   tgl_assert(this->mpc_ParentDialog != NULL);
-   if (this->mpc_ParentDialog != NULL)
+   tgl_assert(this->mpc_ParentDialog != nullptr);
+   if (this->mpc_ParentDialog != nullptr)
    {
       this->mpc_ParentDialog->accept();
    }
@@ -209,8 +209,8 @@ void C_GiSyBaseWidget::m_OkClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyBaseWidget::m_CancelClicked(void)
 {
-   tgl_assert(this->mpc_ParentDialog != NULL);
-   if (this->mpc_ParentDialog != NULL)
+   tgl_assert(this->mpc_ParentDialog != nullptr);
+   if (this->mpc_ParentDialog != nullptr)
    {
       this->mpc_ParentDialog->reject();
    }

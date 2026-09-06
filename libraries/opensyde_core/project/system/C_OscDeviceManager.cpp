@@ -78,12 +78,12 @@ const C_OscDeviceDefinition * C_OscDeviceManager::LookForDevice(const std::strin
                                                                 const std::string & orc_MainDeviceName,
                                                                 uint32_t & oru32_SubDeviceIndex) const
 {
-   const C_OscDeviceDefinition * pc_Device = NULL;
+   const C_OscDeviceDefinition * pc_Device = nullptr;
 
    for (uint32_t u32_ItDevice = 0U; u32_ItDevice < this->mc_DeviceGroups.size(); ++u32_ItDevice)
    {
       pc_Device = this->mc_DeviceGroups[u32_ItDevice].LookForDevice(orc_Name, orc_MainDeviceName, oru32_SubDeviceIndex);
-      if (pc_Device != NULL)
+      if (pc_Device != nullptr)
       {
          break;
       }

@@ -103,7 +103,7 @@ C_GiNode::C_GiNode(const int32_t & ors32_Index, const uint64_t & oru64_Id, const
    uint32_t u32_SubNodesCount = 0;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->ms32_Index);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       uint32_t u32_NodeSquadIndex;
       c_Name = C_PuiSdUtil::h_GetNodeBaseNameOrName(this->ms32_Index);
@@ -115,7 +115,7 @@ C_GiNode::C_GiNode(const int32_t & ors32_Index, const uint64_t & oru64_Id, const
          //squad node
          const stw::opensyde_core::C_OscNodeSquad * const pc_NodeSquad =
             C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(u32_NodeSquadIndex);
-         if (pc_NodeSquad != NULL)
+         if (pc_NodeSquad != nullptr)
          {
             u32_SubNodesCount = static_cast<uint32_t>(pc_NodeSquad->c_SubNodeIndexes.size());
          }
@@ -384,17 +384,17 @@ C_GiNode::~C_GiNode()
    for (int32_t s32_ItConn = 0; s32_ItConn < this->mc_Connections.size(); ++s32_ItConn)
    {
       this->mc_Connections[s32_ItConn]->DeleteConnection();
-      if (this->scene() != NULL)
+      if (this->scene() != nullptr)
       {
          this->scene()->removeItem(this->mc_Connections[s32_ItConn]);
          this->scene()->removeEventFilter(this->mc_Connections[s32_ItConn]);
       }
       this->mc_Connections[s32_ItConn]->deleteLater();
-      this->mc_Connections[s32_ItConn] = NULL;
+      this->mc_Connections[s32_ItConn] = nullptr;
    }
    //Deleted via Qt parent mechanism
-   this->mpc_Boundary = NULL;
-   this->mpc_ConflictIcon = NULL;
+   this->mpc_Boundary = nullptr;
+   this->mpc_ConflictIcon = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -475,7 +475,7 @@ bool C_GiNode::HasConnectionType(const C_OscSystemBus::E_Type oe_Type) const
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->ms32_Index);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       q_Return = C_SdUtil::h_HasConnectionType(*pc_Node, oe_Type);
    }
@@ -498,7 +498,7 @@ bool C_GiNode::CheckConnectionAvailable(const C_OscSystemBus::E_Type & ore_Type)
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->ms32_Index);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       q_Retval = C_SdUtil::h_CheckNodeInterfaceAvailable(pc_Node->c_Properties.c_ComInterfaces, ore_Type);
    }
@@ -524,11 +524,11 @@ bool C_GiNode::CheckInterfaceAvailable(const C_OscSystemBus::E_Type & ore_Type, 
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->ms32_Index);
       this->UpdateData();
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          const C_OscNodeComInterfaceSettings * const pc_ComInterface = pc_Node->c_Properties.GetComInterface(ore_Type,
                                                                                                              oru8_Interface);
-         if (pc_ComInterface != NULL)
+         if (pc_ComInterface != nullptr)
          {
             q_Retval = !pc_ComInterface->GetBusConnectedRawValue();
          }
@@ -550,7 +550,7 @@ int32_t C_GiNode::GetIndexOfConnector(const C_GiLiBusConnector * const opc_Conne
 {
    int32_t s32_Retval = -1;
 
-   if (opc_Connection != NULL)
+   if (opc_Connection != nullptr)
    {
       for (int32_t s32_ItConn = 0; s32_ItConn < this->mc_Connections.size(); ++s32_ItConn)
       {
@@ -612,10 +612,10 @@ void C_GiNode::GenerateHint(void)
 
       this->SetDefaultToolTipType(C_NagToolTipWithImage::eDEFAULT);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          const C_OscDeviceDefinition * const pc_Device = pc_Node->pc_DeviceDefinition;
-         if (pc_Device != NULL)
+         if (pc_Device != nullptr)
          {
             bool q_Found;
             QString c_ToolTip;
@@ -660,7 +660,7 @@ void C_GiNode::GenerateHint(void)
                            {
                               const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(
                                  rc_Conn.u32_BusIndex);
-                              if (pc_Bus != NULL)
+                              if (pc_Bus != nullptr)
                               {
                                  c_BusName = "Linked to ";
                                  c_BusName.append(pc_Bus->c_Name.c_str());
@@ -717,7 +717,7 @@ void C_GiNode::GenerateHint(void)
                            {
                               const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(
                                  rc_Conn.u32_BusIndex);
-                              if (pc_Bus != NULL)
+                              if (pc_Bus != nullptr)
                               {
                                  c_BusName = "Linked to ";
                                  c_BusName.append(pc_Bus->c_Name.c_str());
@@ -797,10 +797,10 @@ void C_GiNode::ReevaluatePortState(void)
         ++pc_ItConn)
    {
       pc_CurConn = *pc_ItConn;
-      if (pc_CurConn != NULL)
+      if (pc_CurConn != nullptr)
       {
          pc_CurRefPort = pc_CurConn->GetPortItem();
-         if (pc_CurRefPort != NULL)
+         if (pc_CurRefPort != nullptr)
          {
             for (QVector<C_GiPort *>::iterator pc_ItPort = mc_Ports.begin(); pc_ItPort != mc_Ports.end();
                  ++pc_ItPort)
@@ -866,7 +866,7 @@ void C_GiNode::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_Event)
 
    this->mq_ErrorIconHovered = false;
 
-   if (this->mpc_ConflictIcon != NULL)
+   if (this->mpc_ConflictIcon != nullptr)
    {
       if (this->mpc_ConflictIcon->isVisible() == true)
       {
@@ -926,7 +926,7 @@ bool C_GiNode::m_GetErrorStatus(void) const
 {
    bool q_Retval = true;
 
-   if (this->mpc_ConflictIcon != NULL)
+   if (this->mpc_ConflictIcon != nullptr)
    {
       q_Retval = this->mpc_ConflictIcon->isVisible();
    }
@@ -1093,7 +1093,7 @@ QString C_GiNode::GetText(void) const
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ms32_Index);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       c_Name = C_PuiSdUtil::h_GetNodeBaseNameOrName(this->ms32_Index);
    }
@@ -1114,7 +1114,7 @@ QString C_GiNode::GetFirstSelectableFullName() const
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ms32_Index);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       c_Name = pc_Node->c_Properties.c_Name.c_str();
    }
@@ -1130,7 +1130,7 @@ void C_GiNode::LoadData(void)
 {
    const C_PuiSdNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetUiNode(ms32_Index);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       this->LoadBasicData(*pc_Node);
    }
@@ -1173,7 +1173,7 @@ void C_GiNode::RemoveConnector(const C_GiLiBusConnector * const opc_BusConnector
 
    const C_PuiSdNodeConnectionId * const pc_ConnId = this->GetNodeConnectionId(opc_BusConnectorGraphicsItem);
 
-   if (pc_ConnId != NULL)
+   if (pc_ConnId != nullptr)
    {
       // We need a copy due to multi CPU nodes. RemoveConnection removes the connection and the first
       // sub node remove can cause a change the value pc_ConnId points at. All following deletions of the other sub
@@ -1249,7 +1249,7 @@ void C_GiNode::AddConnectionAndData(C_GiLiBusConnector * const opc_Connection,
                                     const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
                                     const uint32_t & oru32_BusIndex)
 {
-   if (opc_Connection != NULL)
+   if (opc_Connection != nullptr)
    {
       this->AddConnection(opc_Connection);
       C_PuiSdHandler::h_GetInstance()->AddConnection(
@@ -1274,7 +1274,7 @@ void C_GiNode::UpdateConnection(const C_GiLiBusConnector * const opc_Connection,
 {
    const C_PuiSdNodeConnectionId * const pc_PrevConn = this->GetNodeConnectionId(opc_Connection);
 
-   if (pc_PrevConn != NULL)
+   if (pc_PrevConn != nullptr)
    {
       C_PuiSdHandler::h_GetInstance()->ChangeCompleteConnection(static_cast<uint32_t>(this->ms32_Index), *pc_PrevConn,
                                                                 orc_NodeConnection, orc_Properties,
@@ -1293,13 +1293,13 @@ void C_GiNode::UpdateConnection(const C_GiLiBusConnector * const opc_Connection,
 void C_GiNode::ChangeInterface(const uint8_t ou8_Interface, const C_GiLiBusConnector * const opc_Connection,
                                const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties) const
 {
-   if (opc_Connection != NULL)
+   if (opc_Connection != nullptr)
    {
       const C_GiLiBus * const pc_Bus = opc_Connection->GetBusItem();
-      if (pc_Bus != NULL)
+      if (pc_Bus != nullptr)
       {
          const C_PuiSdNodeConnectionId * const pc_ConnectionId = this->GetNodeConnectionId(opc_Connection);
-         if (pc_ConnectionId != NULL)
+         if (pc_ConnectionId != nullptr)
          {
             C_PuiSdHandler::h_GetInstance()->ChangeConnection(static_cast<uint32_t>(this->ms32_Index), *pc_ConnectionId,
                                                               ou8_Interface, orc_Properties);
@@ -1321,13 +1321,13 @@ void C_GiNode::ChangeInterface(const uint8_t ou8_Interface, const C_GiLiBusConne
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSdNodeConnectionId * C_GiNode::GetNodeConnectionId(const C_GiLiBusConnector * const opc_Connection) const
 {
-   const C_PuiSdNodeConnectionId * pc_Retval = NULL;
+   const C_PuiSdNodeConnectionId * pc_Retval = nullptr;
 
-   if (opc_Connection != NULL)
+   if (opc_Connection != nullptr)
    {
       const C_PuiSdNode * const pc_Node =
          C_PuiSdHandler::h_GetInstance()->GetUiNode(static_cast<uint32_t>(this->ms32_Index));
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          const int32_t s32_Index = GetIndexOfConnector(opc_Connection);
          if (s32_Index >= 0)

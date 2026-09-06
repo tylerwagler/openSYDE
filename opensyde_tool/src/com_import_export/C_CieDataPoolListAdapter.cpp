@@ -303,7 +303,7 @@ void C_CieDataPoolListAdapter::mh_FillUpUiStructure(C_CieDataPoolListStructure &
 {
    C_PuiSdNodeDataPoolListElement c_DefaultUiSignal;
    uint32_t u32_SignalCounter = 0U;
-   const uint8_t * pu8_DefaultMinMaxValuesUsed = NULL;
+   const uint8_t * pu8_DefaultMinMaxValuesUsed = nullptr;
 
    //Set import default values (different from default values)
    if (oq_ActivateAutoMinMaxForSignals == true)
@@ -356,7 +356,7 @@ void C_CieDataPoolListAdapter::mh_FillUpUiStructure(C_CieDataPoolListStructure &
          }
       }
 
-      if (opc_RxSignalDefaultMinMaxValuesUsed != NULL)
+      if (opc_RxSignalDefaultMinMaxValuesUsed != nullptr)
       {
          pu8_DefaultMinMaxValuesUsed = &(*opc_RxSignalDefaultMinMaxValuesUsed)[u32_SignalCounter];
       }
@@ -368,7 +368,7 @@ void C_CieDataPoolListAdapter::mh_FillUpUiStructure(C_CieDataPoolListStructure &
    }
    // Tx messages
    u32_SignalCounter = 0U;
-   pu8_DefaultMinMaxValuesUsed = NULL;
+   pu8_DefaultMinMaxValuesUsed = nullptr;
    orc_DataPoolListStructure.c_Ui.c_UiTxMessageData.reserve(orc_DataPoolListStructure.c_Core.c_OscTxMessageData.size());
    for (c_MessageIter = orc_DataPoolListStructure.c_Core.c_OscTxMessageData.begin();
         c_MessageIter != orc_DataPoolListStructure.c_Core.c_OscTxMessageData.end();
@@ -394,7 +394,7 @@ void C_CieDataPoolListAdapter::mh_FillUpUiStructure(C_CieDataPoolListStructure &
          }
       }
 
-      if (opc_TxSignalDefaultMinMaxValuesUsed != NULL)
+      if (opc_TxSignalDefaultMinMaxValuesUsed != nullptr)
       {
          pu8_DefaultMinMaxValuesUsed = &(*opc_TxSignalDefaultMinMaxValuesUsed)[u32_SignalCounter];
       }
@@ -440,7 +440,7 @@ void C_CieDataPoolListAdapter::mh_FillUpUiStructureForSignals(const C_OscCanMess
       {
          c_AdaptedUiSignal.q_AutoMinMaxActive = true;
       }
-      else if (opu8_SignalDefaultMinMaxValuesUsed != NULL)
+      else if (opu8_SignalDefaultMinMaxValuesUsed != nullptr)
       {
          c_AdaptedUiSignal.q_AutoMinMaxActive =
             (opu8_SignalDefaultMinMaxValuesUsed[u32_SignalCounter] == 1U) ? true : false;
@@ -517,7 +517,7 @@ int32_t C_CieDataPoolListAdapter::h_ConvertToDbcImportMessage(const uint32_t ou3
          const C_OscNodeDataPoolListElement * const pc_OscElement = C_PuiSdHandler::h_GetInstance()->
                                                                     GetOscCanDataPoolListElement(c_MessageId,
                                                                                                  u32_PosSignal);
-         if (pc_OscElement != NULL)
+         if (pc_OscElement != nullptr)
          {
             C_CieConverter::C_CieDataPoolElement & rc_CieElement = c_CurrentCieSignal.c_Element;
             rc_CieElement.c_Comment = pc_OscElement->c_Comment;

@@ -37,7 +37,7 @@ class C_SyvUpInformationWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvUpInformationWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvUpInformationWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvUpInformationWidget(void) override;
 
    void SetViewIndex(const uint32_t ou32_ViewIndex);
@@ -60,7 +60,7 @@ public:
 
    int32_t GetUpdatePackage(std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                             std::vector<uint32_t> & orc_NodesOrder, std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> * const opc_AllApplications =
-                               NULL) const;
+                               nullptr) const;
 
    void ResetSummary(void);
    void SetHeading(const QString & orc_Icon, const QString & orc_Text, const bool oq_Failure = false,

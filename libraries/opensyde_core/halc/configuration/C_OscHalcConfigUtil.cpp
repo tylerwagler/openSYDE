@@ -58,7 +58,7 @@ void C_OscHalcConfigUtil::h_GetConfigStandalone(const C_OscHalcConfig & orc_Conf
    {
       const C_OscHalcConfigDomain * const pc_Domain = orc_Config.GetDomainConfigDataConst(u32_DomainCounter);
 
-      if (pc_Domain != NULL)
+      if (pc_Domain != nullptr)
       {
          uint32_t u32_Channels;
          std::vector<C_OscHalcConfigStandaloneChannel> c_ChannelIds;
@@ -114,7 +114,7 @@ int32_t C_OscHalcConfigUtil::h_GetConfigStandaloneChannel(const C_OscHalcConfig 
    {
       const C_OscHalcConfigDomain * const pc_Domain = orc_Config.GetDomainConfigDataConst(ou32_DomainIndex);
 
-      if (pc_Domain != NULL)
+      if (pc_Domain != nullptr)
       {
          if (((oq_DomainOnly == true) ||
               ((ou32_ChannelIndex < pc_Domain->c_Channels.size()) &&

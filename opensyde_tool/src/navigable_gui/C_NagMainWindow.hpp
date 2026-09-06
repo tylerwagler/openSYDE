@@ -87,7 +87,7 @@ private:
                           const QString & orc_SubSubModeName = "", const uint32_t ou32_Flag = 0U);
    void m_SaveScreenProperties(void) const;
    void m_SaveUserSettings(void);
-   static bool mh_CheckMime(const QMimeData * const opc_Mime, QString * const opc_FilePath = NULL);
+   static bool mh_CheckMime(const QMimeData * const opc_Mime, QString * const opc_FilePath = nullptr);
    void m_BlockDragAndDrop(const bool oq_Block);
 
    bool m_CheckProjectForChanges(void) const;

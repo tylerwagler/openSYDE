@@ -33,7 +33,7 @@ class C_SdNdeCoOverviewWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeCoOverviewWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeCoOverviewWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeCoOverviewWidget(void) override;
 
    void LoadUserSettings(void) const;

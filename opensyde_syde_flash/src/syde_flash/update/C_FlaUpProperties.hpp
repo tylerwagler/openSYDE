@@ -35,7 +35,7 @@ class C_FlaUpProperties :
    Q_OBJECT
 
 public:
-   explicit C_FlaUpProperties(QWidget * const opc_Parent = NULL);
+   explicit C_FlaUpProperties(QWidget * const opc_Parent = nullptr);
    ~C_FlaUpProperties(void) override;
 
    void SaveUserSettings(void) const;

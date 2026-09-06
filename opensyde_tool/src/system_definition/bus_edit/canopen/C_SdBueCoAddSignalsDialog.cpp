@@ -46,7 +46,7 @@ C_SdBueCoAddSignalsDialog::C_SdBueCoAddSignalsDialog(stw::opensyde_gui_elements:
                                                      const C_OscCanMessageIdentificationIndices & orc_MessageId) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdBueCoAddSignalsDialog),
-   mpc_ContextMenu(NULL)
+   mpc_ContextMenu(nullptr)
 {
    this->mpc_Ui->setupUi(this);
 

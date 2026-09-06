@@ -26,7 +26,7 @@ class C_FlaOgePubPathVariables :
    Q_OBJECT
 
 public:
-   explicit C_FlaOgePubPathVariables(QWidget * const opc_Parent = NULL);
+   explicit C_FlaOgePubPathVariables(QWidget * const opc_Parent = nullptr);
 
 private:
    //Avoid call

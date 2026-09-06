@@ -45,8 +45,8 @@ class C_SyvDaDashboardScreenshot :
    Q_OBJECT
 
 public:
-   C_SyvDaDashboardScreenshot(QWidget * const opc_Parent = NULL,
-                              stw::opensyde_gui_elements::C_OgePubIconEvents * const opc_ScreenshotPushButton = NULL);
+   C_SyvDaDashboardScreenshot(QWidget * const opc_Parent = nullptr,
+                              stw::opensyde_gui_elements::C_OgePubIconEvents * const opc_ScreenshotPushButton = nullptr);
    ~C_SyvDaDashboardScreenshot(void) override;
 
    void RepositionScreenshotIcon(const int32_t os32_Xpos, const int32_t os32_Ypos);

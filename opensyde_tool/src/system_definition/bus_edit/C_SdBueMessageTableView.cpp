@@ -51,7 +51,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueMessageTableView::C_SdBueMessageTableView(QWidget * const opc_Parent) :
    C_TblViewScroll(opc_Parent),
-   mpc_SyncManager(NULL)
+   mpc_SyncManager(nullptr)
 {
    QItemSelectionModel * const pc_LastSelectionModel = this->selectionModel();
 
@@ -322,7 +322,7 @@ std::map<C_SdBueMessageTableModel::E_Columns, uint32_t> C_SdBueMessageTableView:
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageTableView::m_HandleColumnVisibility(void)
 {
-   if (this->mpc_SyncManager != NULL)
+   if (this->mpc_SyncManager != nullptr)
    {
       bool q_ShowEnabled;
       bool q_ShowCanOpenIndex;

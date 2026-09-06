@@ -42,7 +42,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaItPaArDelegate::C_SyvDaItPaArDelegate(QObject * const opc_Parent) :
    QStyledItemDelegate(opc_Parent),
-   mpc_Model(NULL)
+   mpc_Model(nullptr)
 {
 }
 
@@ -62,7 +62,7 @@ C_SyvDaItPaArDelegate::C_SyvDaItPaArDelegate(QObject * const opc_Parent) :
 QWidget * C_SyvDaItPaArDelegate::createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem & orc_Option,
                                               const QModelIndex & orc_Index) const
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
    Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
@@ -83,7 +83,7 @@ QWidget * C_SyvDaItPaArDelegate::createEditor(QWidget * const opc_Parent, const 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaArDelegate::setEditorData(QWidget * const opc_Editor, const QModelIndex & orc_Index) const
 {
-   if ((opc_Editor != NULL) && (orc_Index.isValid() == true))
+   if ((opc_Editor != nullptr) && (orc_Index.isValid() == true))
    {
       C_SdNdeDpUtil::h_SetGenericEditorDataVariable(opc_Editor, orc_Index);
    }
@@ -102,7 +102,7 @@ void C_SyvDaItPaArDelegate::setEditorData(QWidget * const opc_Editor, const QMod
 void C_SyvDaItPaArDelegate::setModelData(QWidget * const opc_Editor, QAbstractItemModel * const opc_Model,
                                          const QModelIndex & orc_Index) const
 {
-   if (((opc_Editor != NULL) && (opc_Model != NULL)) && (orc_Index.isValid() == true))
+   if (((opc_Editor != nullptr) && (opc_Model != nullptr)) && (orc_Index.isValid() == true))
    {
       C_SdNdeDpUtil::h_SetModelGenericDataVariable(opc_Editor, opc_Model, orc_Index);
    }
@@ -132,15 +132,15 @@ void C_SyvDaItPaArDelegate::SetModel(const C_SyvDaItPaArModel * const opc_Value)
 //----------------------------------------------------------------------------------------------------------------------
 QWidget * C_SyvDaItPaArDelegate::m_CreateEditor(QWidget * const opc_Parent, const QModelIndex & orc_Index) const
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
    if (orc_Index.isValid() == true)
    {
-      if (this->mpc_Model != NULL)
+      if (this->mpc_Model != nullptr)
       {
          //Core data
          const C_OscNodeDataPoolListElement * const pc_Element = this->mpc_Model->GetOscElement();
-         if (pc_Element != NULL)
+         if (pc_Element != nullptr)
          {
             pc_Retval = C_SdNdeDpUtil::h_CreateGenericEditor(opc_Parent, orc_Index, pc_Element->c_MinValue,
                                                              pc_Element->c_MaxValue, pc_Element->f64_Factor,

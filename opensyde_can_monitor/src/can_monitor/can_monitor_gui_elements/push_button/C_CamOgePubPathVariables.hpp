@@ -26,7 +26,7 @@ class C_CamOgePubPathVariables :
    Q_OBJECT
 
 public:
-   explicit C_CamOgePubPathVariables(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgePubPathVariables(QWidget * const opc_Parent = nullptr);
 
 private:
    //Avoid call

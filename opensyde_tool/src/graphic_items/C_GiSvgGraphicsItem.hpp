@@ -32,7 +32,7 @@ class C_GiSvgGraphicsItem :
 {
 public:
    C_GiSvgGraphicsItem(const QString & orc_ImagePath, const float64_t of64_Width, const float64_t of64_Height,
-                       QGraphicsItem * const opc_Parent = NULL);
+                       QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiSvgGraphicsItem(void) override;
 
    void SetSvg(const QString & orc_ImagePath);
@@ -40,7 +40,7 @@ public:
    void Redraw(void) override;
 
    void paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-              QWidget * const opc_Widget = NULL) override;
+              QWidget * const opc_Widget = nullptr) override;
 
 private:
    QString mc_ImagePath;

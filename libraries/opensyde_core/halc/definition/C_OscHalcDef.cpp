@@ -62,7 +62,7 @@ uint32_t C_OscHalcDef::GetDomainSize(void) const
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscHalcDefDomain * C_OscHalcDef::GetDomainDefDataConst(const uint32_t ou32_Index) const
 {
-   const C_OscHalcDefDomain * pc_Retval = NULL;
+   const C_OscHalcDefDomain * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_Domains.size())
    {

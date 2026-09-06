@@ -87,7 +87,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_Restore(void)
 {
    C_SyvDaDashboardScene * const pc_Scene = dynamic_cast<C_SyvDaDashboardScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       //First: Restore data rail(s) if any (not replaced if already existing due to other not registered element
       // changes)
@@ -108,7 +108,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_RestoreReadRailsOnly(void)
    {
       C_SyvDaDashboardScene * const pc_Scene = dynamic_cast<C_SyvDaDashboardScene * const>(mpc_Scene);
 
-      if (pc_Scene != NULL)
+      if (pc_Scene != nullptr)
       {
          for (QMap<C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration>::const_iterator c_It =
                  this->mc_SavedRailAssignments.begin();
@@ -119,7 +119,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_RestoreReadRailsOnly(void)
             {
                //Special param widget handling
                const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(pc_Scene->GetViewIndex());
-               if (pc_View != NULL)
+               if (pc_View != nullptr)
                {
                   if (pc_View->CheckNonParamReadUsage(c_It.key()) == false)
                   {
@@ -266,13 +266,13 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
 {
    C_SyvDaDashboardScene * const pc_Scene = dynamic_cast<C_SyvDaDashboardScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(pc_Scene->GetViewIndex());
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(pc_Scene->GetDashboardIndex());
-         if (pc_Dashboard != NULL)
+         if (pc_Dashboard != nullptr)
          {
             const std::vector<QGraphicsItem *> c_RelatedItems = this->m_GetSceneItems();
             C_PuiSvDbDataElement * pc_Data;
@@ -288,11 +288,11 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
                  c_ItRelatedItem != c_RelatedItems.end(); ++c_ItRelatedItem)
             {
                pc_Unique = dynamic_cast<C_GiUnique *>(*c_ItRelatedItem);
-               if (pc_Unique != NULL)
+               if (pc_Unique != nullptr)
                {
                   const uint64_t u64_CurUniqueId = pc_Unique->GetId();
                   pc_Data = dynamic_cast<C_PuiSvDbDataElement *>(*c_ItRelatedItem);
-                  if (pc_Data != NULL)
+                  if (pc_Data != nullptr)
                   {
                      const C_PuiSvDbWidgetBase * const pc_Widget = C_SyvDaUnoAddDeleteBaseCommand::mh_GetGenericWidget(
                         pc_Scene->GetViewIndex(), pc_Scene->GetDashboardIndex(), pc_Data);
@@ -307,7 +307,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
                         //Widgets
 
                         pc_RectBase = dynamic_cast<C_GiSvDaRectBaseGroup *>(*c_ItRelatedItem);
-                        if (pc_RectBase != NULL)
+                        if (pc_RectBase != nullptr)
                         {
                            const C_GiSvDaLabelBase * const pc_Label  =
                               dynamic_cast<const C_GiSvDaLabelBase * const>(*c_ItRelatedItem);
@@ -332,10 +332,10 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
 
                            const C_GiSvDaTableBase * const pc_Table  =
                               dynamic_cast<const C_GiSvDaTableBase * const>(*c_ItRelatedItem);
-                           if (pc_Label != NULL)
+                           if (pc_Label != nullptr)
                            {
                               const C_PuiSvDbLabel * const pc_LabelData = pc_Dashboard->GetLabel(u32_Index);
-                              if (pc_LabelData != NULL)
+                              if (pc_LabelData != nullptr)
                               {
                                  tgl_assert(this->mc_DataBackup.AddWidget(pc_LabelData,
                                                                           C_PuiSvDbDataElement::eLABEL) == C_NO_ERR);
@@ -346,10 +346,10 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
                                     u64_CurUniqueId);
                               }
                            }
-                           if (pc_ParamWidget != NULL)
+                           if (pc_ParamWidget != nullptr)
                            {
                               const C_PuiSvDbParam * const pc_ParamData = pc_Dashboard->GetParam(u32_Index);
-                              if (pc_ParamData != NULL)
+                              if (pc_ParamData != nullptr)
                               {
                                  tgl_assert(this->mc_DataBackup.AddWidget(pc_ParamData,
                                                                           C_PuiSvDbDataElement::ePARAM) == C_NO_ERR);
@@ -360,10 +360,10 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
                                     u64_CurUniqueId);
                               }
                            }
-                           if (pc_SpinBox != NULL)
+                           if (pc_SpinBox != nullptr)
                            {
                               const C_PuiSvDbSpinBox * const pc_SpinBoxData = pc_Dashboard->GetSpinBox(u32_Index);
-                              if (pc_SpinBoxData != NULL)
+                              if (pc_SpinBoxData != nullptr)
                               {
                                  tgl_assert(this->mc_DataBackup.AddWidget(pc_SpinBoxData,
                                                                           C_PuiSvDbDataElement::eSPIN_BOX) ==
@@ -375,10 +375,10 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
                                     u64_CurUniqueId);
                               }
                            }
-                           if (pc_Slider != NULL)
+                           if (pc_Slider != nullptr)
                            {
                               const C_PuiSvDbSlider * const pc_SliderData = pc_Dashboard->GetSlider(u32_Index);
-                              if (pc_SliderData != NULL)
+                              if (pc_SliderData != nullptr)
                               {
                                  tgl_assert(this->mc_DataBackup.AddWidget(pc_SliderData,
                                                                           C_PuiSvDbDataElement::eSLIDER) ==
@@ -390,11 +390,11 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
                                     u64_CurUniqueId);
                               }
                            }
-                           if (pc_ProgressBar != NULL)
+                           if (pc_ProgressBar != nullptr)
                            {
                               const C_PuiSvDbProgressBar * const pc_ProgressBarData =
                                  pc_Dashboard->GetProgressBar(u32_Index);
-                              if (pc_ProgressBarData != NULL)
+                              if (pc_ProgressBarData != nullptr)
                               {
                                  tgl_assert(
                                     this->mc_DataBackup.AddWidget(pc_ProgressBarData,
@@ -406,10 +406,10 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
                                     u64_CurUniqueId);
                               }
                            }
-                           if (pc_Toggle != NULL)
+                           if (pc_Toggle != nullptr)
                            {
                               const C_PuiSvDbToggle * const pc_ToggleData = pc_Dashboard->GetToggle(u32_Index);
-                              if (pc_ToggleData != NULL)
+                              if (pc_ToggleData != nullptr)
                               {
                                  tgl_assert(this->mc_DataBackup.AddWidget(pc_ToggleData, C_PuiSvDbDataElement::
                                                                           eTOGGLE) == C_NO_ERR);
@@ -420,10 +420,10 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
                                     u64_CurUniqueId);
                               }
                            }
-                           if (pc_PieChart != NULL)
+                           if (pc_PieChart != nullptr)
                            {
                               const C_PuiSvDbPieChart * const pc_PieChartData = pc_Dashboard->GetPieChart(u32_Index);
-                              if (pc_PieChartData != NULL)
+                              if (pc_PieChartData != nullptr)
                               {
                                  tgl_assert(this->mc_DataBackup.AddWidget(pc_PieChartData, C_PuiSvDbDataElement::
                                                                           ePIE_CHART) == C_NO_ERR);
@@ -434,10 +434,10 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
                                     u64_CurUniqueId);
                               }
                            }
-                           if (pc_Table != NULL)
+                           if (pc_Table != nullptr)
                            {
                               const C_PuiSvDbTable * const pc_TableData = pc_Dashboard->GetTable(u32_Index);
-                              if (pc_TableData != NULL)
+                              if (pc_TableData != nullptr)
                               {
                                  tgl_assert(this->mc_DataBackup.AddWidget(pc_TableData, C_PuiSvDbDataElement::
                                                                           eTABLE) == C_NO_ERR);
@@ -451,7 +451,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
                         }
                      }
                      //Check if data element(s) in rail, if yes then store
-                     if (pc_Widget != NULL)
+                     if (pc_Widget != nullptr)
                      {
                         for (uint32_t u32_ItRegisteredDataElement = 0;
                              u32_ItRegisteredDataElement < pc_Widget->c_DataPoolElementsConfig.size();
@@ -498,7 +498,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_Delete(void)
 {
    C_SyvDaDashboardScene * const pc_Scene = dynamic_cast<C_SyvDaDashboardScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(pc_Scene->GetViewIndex());
       const std::vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
@@ -508,7 +508,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_Delete(void)
          pc_Scene->DeleteItem(*c_ItItem);
       }
       //Delete data rail(s) if not in use (anymore) else clear stored element
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          for (QMap<C_OscNodeDataPoolListElementId,
                    C_PuiSvReadDataConfiguration>::iterator c_ItReadRailAssignment =
@@ -572,16 +572,16 @@ const C_PuiSvDbWidgetBase * C_SyvDaUnoAddDeleteBaseCommand::mh_GetGenericWidget(
                                                                                 const uint32_t ou32_DashboardIndex,
                                                                                 const C_PuiSvDbDataElement * const opc_DataElement)
 {
-   const C_PuiSvDbWidgetBase * pc_Retval = NULL;
+   const C_PuiSvDbWidgetBase * pc_Retval = nullptr;
 
-   if ((opc_DataElement != NULL) && (opc_DataElement->GetIndex() >= 0))
+   if ((opc_DataElement != nullptr) && (opc_DataElement->GetIndex() >= 0))
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(ou32_DashboardIndex);
-         if (pc_Dashboard != NULL)
+         if (pc_Dashboard != nullptr)
          {
             const uint32_t u32_Index = static_cast<uint32_t>(opc_DataElement->GetIndex());
             const C_GiSvDaLabelBase * const pc_Label  =
@@ -600,35 +600,35 @@ const C_PuiSvDbWidgetBase * C_SyvDaUnoAddDeleteBaseCommand::mh_GetGenericWidget(
                dynamic_cast<const C_GiSvDaPieChartBase * const>(opc_DataElement);
             const C_GiSvDaTableBase * const pc_Table  =
                dynamic_cast<const C_GiSvDaTableBase * const>(opc_DataElement);
-            if (pc_Label != NULL)
+            if (pc_Label != nullptr)
             {
                pc_Retval = pc_Dashboard->GetLabel(u32_Index);
             }
-            if (pc_ParamWidget != NULL)
+            if (pc_ParamWidget != nullptr)
             {
                pc_Retval = pc_Dashboard->GetParam(u32_Index);
             }
-            if (pc_SpinBox != NULL)
+            if (pc_SpinBox != nullptr)
             {
                pc_Retval = pc_Dashboard->GetSpinBox(u32_Index);
             }
-            if (pc_Slider != NULL)
+            if (pc_Slider != nullptr)
             {
                pc_Retval = pc_Dashboard->GetSlider(u32_Index);
             }
-            if (pc_ProgressBar != NULL)
+            if (pc_ProgressBar != nullptr)
             {
                pc_Retval = pc_Dashboard->GetProgressBar(u32_Index);
             }
-            if (pc_Toggle != NULL)
+            if (pc_Toggle != nullptr)
             {
                pc_Retval = pc_Dashboard->GetToggle(u32_Index);
             }
-            if (pc_PieChart != NULL)
+            if (pc_PieChart != nullptr)
             {
                pc_Retval = pc_Dashboard->GetPieChart(u32_Index);
             }
-            if (pc_Table != NULL)
+            if (pc_Table != nullptr)
             {
                pc_Retval = pc_Dashboard->GetTable(u32_Index);
             }

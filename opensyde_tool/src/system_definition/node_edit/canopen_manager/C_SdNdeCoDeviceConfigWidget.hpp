@@ -34,7 +34,7 @@ class C_SdNdeCoDeviceConfigWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeCoDeviceConfigWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeCoDeviceConfigWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeCoDeviceConfigWidget(void) override;
 
    void InitStaticNames(void) const;

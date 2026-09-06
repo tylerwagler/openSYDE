@@ -60,7 +60,7 @@ void C_SdNdeHalcChannelCopyPaste::h_Copy(const uint32_t ou32_NodeIndex, const QM
                                                            q_ChannelCase);
 
    pc_Config = C_PuiSdHandler::h_GetInstance()->GetHalcConfig(ou32_NodeIndex);
-   if (pc_Config != NULL)
+   if (pc_Config != nullptr)
    {
       C_OscHalcConfigStandalone c_CopyData;
       tgl_assert(C_OscHalcConfigUtil::h_GetConfigStandaloneChannel(*pc_Config, u32_DomainIndex, u32_ChannelIndex,
@@ -180,8 +180,8 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckDataFromClipboard(const uint32_t ou32_
       stw::opensyde_gui_logic::C_PuiSdHandler::h_GetInstance()->GetHalcConfig(ou32_NodeIndex);
 
    // device type match?
-   tgl_assert(pc_Config != NULL);
-   if (pc_Config != NULL)
+   tgl_assert(pc_Config != nullptr);
+   if (pc_Config != nullptr)
    {
       if (orc_HalcConfig.c_DeviceType != pc_Config->c_DeviceName)
       {
@@ -368,8 +368,8 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedChannel(const uint32_t ou32_No
    const C_OscHalcConfigDomain * const pc_Domain =
       C_PuiSdHandler::h_GetInstance()->GetHalcDomainConfigDataConst(ou32_NodeIndex, u32_DomainIndex);
 
-   tgl_assert((pc_Channel != NULL) && (pc_Domain != NULL));
-   if ((pc_Channel != NULL) && (pc_Domain != NULL))
+   tgl_assert((pc_Channel != nullptr) && (pc_Domain != nullptr));
+   if ((pc_Channel != nullptr) && (pc_Domain != nullptr))
    {
       QString c_ProblemDescription;
 
@@ -499,8 +499,8 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedDomain(const uint32_t ou32_Nod
    const C_OscHalcConfigDomain * const pc_Domain =
       C_PuiSdHandler::h_GetInstance()->GetHalcDomainConfigDataConst(ou32_NodeIndex, u32_DomainIndex);
 
-   tgl_assert(pc_Domain != NULL);
-   if ((pc_Domain != NULL))
+   tgl_assert(pc_Domain != nullptr);
+   if ((pc_Domain != nullptr))
    {
       QString c_ProblemDescription;
 
@@ -595,7 +595,7 @@ void C_SdNdeHalcChannelCopyPaste::mh_PasteToSelectedChannels(const uint32_t ou32
             C_PuiSdHandler::h_GetInstance()->GetHalcDomainChannelConfigData(ou32_NodeIndex, u32_DomainIndex,
                                                                             u32_ChannelIndex, q_ChannelCase);
 
-         if (pc_CurrentChannel != NULL)
+         if (pc_CurrentChannel != nullptr)
          {
             // keep name and comment
             c_CopiedChannel.c_Name = pc_CurrentChannel->c_Name;
@@ -616,7 +616,7 @@ void C_SdNdeHalcChannelCopyPaste::mh_PasteToSelectedChannels(const uint32_t ou32
          }
 
          // update linked channels
-         if (pc_CurrentChannel != NULL)
+         if (pc_CurrentChannel != nullptr)
          {
             tgl_assert(C_PuiSdHandler::h_GetInstance()->SetHalcDomainChannelConfigOfLinkedChannels
                           (ou32_NodeIndex, u32_DomainIndex, u32_ChannelIndex, q_ChannelCase,
@@ -662,8 +662,8 @@ void C_SdNdeHalcChannelCopyPaste::mh_PasteToSelectedDomain(const uint32_t ou32_N
          const C_OscHalcConfigDomain * const pc_CurrentDomain =
             C_PuiSdHandler::h_GetInstance()->GetHalcDomainConfigDataConst(ou32_NodeIndex, u32_DomainIndex);
 
-         tgl_assert(pc_CurrentDomain != NULL);
-         if (pc_CurrentDomain != NULL)
+         tgl_assert(pc_CurrentDomain != nullptr);
+         if (pc_CurrentDomain != nullptr)
          {
             // Copy original domain
             C_OscHalcConfigDomain c_CurrentDomain = *pc_CurrentDomain;

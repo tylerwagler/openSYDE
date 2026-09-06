@@ -30,7 +30,7 @@ class C_OgeWiOnlyBackground :
    Q_OBJECT
 
 public:
-   C_OgeWiOnlyBackground(QWidget * const opc_Parent = NULL);
+   C_OgeWiOnlyBackground(QWidget * const opc_Parent = nullptr);
    void SetBackgroundColor(const int32_t os32_Value);
 
 protected:

@@ -28,7 +28,7 @@ class C_SyvDaUnoDeleteCommand :
 {
 public:
    C_SyvDaUnoDeleteCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                           QUndoCommand * const opc_Parent = NULL);
+                           QUndoCommand * const opc_Parent = nullptr);
    ~C_SyvDaUnoDeleteCommand(void) override;
    void undo(void) override;
    void redo(void) override;

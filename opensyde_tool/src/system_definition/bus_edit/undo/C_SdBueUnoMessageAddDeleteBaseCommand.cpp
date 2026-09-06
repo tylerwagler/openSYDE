@@ -72,7 +72,7 @@ C_SdBueUnoMessageAddDeleteBaseCommand::C_SdBueUnoMessageAddDeleteBaseCommand(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueUnoMessageAddDeleteBaseCommand::m_Add(void)
 {
-   if (this->mpc_MessageSyncManager != NULL)
+   if (this->mpc_MessageSyncManager != nullptr)
    {
       for (uint32_t u32_ItStep = 0UL; u32_ItStep < this->mc_UniqueId.size(); ++u32_ItStep)
       {
@@ -80,7 +80,7 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Add(void)
          C_SdUtil::h_AdaptMessageToProtocolType(this->mc_Message[u32_ItStep], this->mc_UiMessage[u32_ItStep],
                                                 this->mc_OscSignalCommons[u32_ItStep],
                                                 this->mc_UiSignalCommons[u32_ItStep],
-                                                this->mc_LastMessageId[u32_ItStep].e_ComProtocol, NULL, false);
+                                                this->mc_LastMessageId[u32_ItStep].e_ComProtocol, nullptr, false);
          C_SdBueUnoMessageAddDeleteBaseCommand::mh_UpdateSignalsToProtocol(this->mc_Message[u32_ItStep],
                                                                            this->mc_OscSignalCommons[u32_ItStep],
                                                                            this->mc_UiSignalCommons[u32_ItStep],
@@ -126,7 +126,7 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Add(void)
                         rc_CurMessageId.u32_InterfaceIndex,
                         rc_CurMessageId.u32_DatapoolIndex);
 
-                  if ((pc_Container != NULL) && (pc_Container->c_RxMessages.size() > 0UL))
+                  if ((pc_Container != nullptr) && (pc_Container->c_RxMessages.size() > 0UL))
                   {
                      //Should be the newest Rx message
                      const C_OscCanMessageIdentificationIndices c_Tmp(rc_CurMessageId.u32_NodeIndex,
@@ -144,13 +144,13 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Add(void)
          //Update unique ID
          this->mc_UniqueId[u32_ItStep] = this->mpc_MessageSyncManager->GetUniqueId(this->mc_LastMessageId[u32_ItStep]);
          //UI
-         if (this->mpc_MessageTreeWidget != NULL)
+         if (this->mpc_MessageTreeWidget != nullptr)
          {
             this->mpc_MessageTreeWidget->InternalAddMessage(this->mc_LastMessageId[u32_ItStep]);
          }
       }
       //UI
-      if (this->mpc_MessageTreeWidget != NULL)
+      if (this->mpc_MessageTreeWidget != nullptr)
       {
          this->mpc_MessageTreeWidget->InternalAddMessageCommit();
       }
@@ -173,7 +173,7 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Delete(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueUnoMessageAddDeleteBaseCommand::m_Store(void)
 {
-   if (this->mpc_MessageSyncManager != NULL)
+   if (this->mpc_MessageSyncManager != nullptr)
    {
       for (uint32_t u32_ItStep = 0UL; u32_ItStep < this->mc_UniqueId.size(); ++u32_ItStep)
       {
@@ -227,11 +227,11 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Store(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueUnoMessageAddDeleteBaseCommand::m_Remove(void)
 {
-   if (this->mpc_MessageSyncManager != NULL)
+   if (this->mpc_MessageSyncManager != nullptr)
    {
       uint32_t u32_InternalMessageIndex = 0UL;
       //Avoid selection change triggers during uncertain tree state
-      if (this->mpc_MessageTreeWidget != NULL)
+      if (this->mpc_MessageTreeWidget != nullptr)
       {
          this->mpc_MessageTreeWidget->DisconnectSelectionHandling();
       }
@@ -243,7 +243,7 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Remove(void)
                                                                                               ::size_type>(u32_ItStep -
                                                                                                            1UL)])) ==
                     C_NO_ERR);
-         if (this->mpc_MessageTreeWidget != NULL)
+         if (this->mpc_MessageTreeWidget != nullptr)
          {
             //At this point we can't get the message ID by unique ID because it was already deleted
             // but this should be no problem as we do always remember the message ID anyways
@@ -253,7 +253,7 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Remove(void)
                                                                                             u32_ItStep - 1UL)]);
          }
       }
-      if (this->mpc_MessageTreeWidget != NULL)
+      if (this->mpc_MessageTreeWidget != nullptr)
       {
          //Reactivate selection handling
          this->mpc_MessageTreeWidget->ReconnectSelectionHandling();
@@ -286,7 +286,7 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::mh_UpdateSignalsToProtocol(
       {
          C_SdUtil::h_AdaptSignalToProtocolType(orc_Message.c_Signals[u32_ItSig], orc_OscSignals[u32_ItSig],
                                                orc_UiSignals[u32_ItSig],
-                                               oe_ProtocolType, NULL);
+                                               oe_ProtocolType, nullptr);
       }
    }
 }

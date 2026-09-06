@@ -100,7 +100,7 @@ bool C_OscComDriverBaseCanMessage::operator ==(const C_OscComDriverBaseCanMessag
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscComDriverBase::C_OscComDriverBase(void) :
-   mpc_CanDispatcher(NULL),
+   mpc_CanDispatcher(nullptr),
    mu16_DispatcherClientHandle(0U),
    mq_Started(false),
    mq_Paused(false),
@@ -120,7 +120,7 @@ C_OscComDriverBase::C_OscComDriverBase(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscComDriverBase::~C_OscComDriverBase(void)
 {
-   this->mpc_CanDispatcher = NULL; //do not delete ! not owned by us
+   this->mpc_CanDispatcher = nullptr; //do not delete ! not owned by us
    delete this->mpc_AutoSupportProtocol;
 }
 
@@ -140,7 +140,7 @@ int32_t C_OscComDriverBase::InitBase(C_CanDispatcher * const opc_CanDispatcher)
 
    this->mpc_CanDispatcher = opc_CanDispatcher;
 
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       s32_Return = this->mpc_CanDispatcher->RegisterClient(this->mu16_DispatcherClientHandle);
 
@@ -182,7 +182,7 @@ int32_t C_OscComDriverBase::StartLogging(const int32_t os32_Bitrate)
 {
    int32_t s32_Return = C_CONFIG;
 
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       uint32_t u32_Counter;
       s32_Return = C_NO_ERR;
@@ -288,7 +288,7 @@ void C_OscComDriverBase::UpdateBitrate(const int32_t os32_Bitrate)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComDriverBase::ClearRxMessages()
 {
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       this->mpc_CanDispatcher->ClearQueue(this->mu16_DispatcherClientHandle);
    }
@@ -308,7 +308,7 @@ void C_OscComDriverBase::ClearRxMessages()
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComDriverBase::DistributeMessages(void)
 {
-   if ((this->mpc_CanDispatcher != NULL) &&
+   if ((this->mpc_CanDispatcher != nullptr) &&
        (this->mq_Started == true))
    {
       int32_t s32_Return;
@@ -423,7 +423,7 @@ int32_t C_OscComDriverBase::SendCanMessageDirect(T_STWCAN_Msg_TX & orc_Msg)
 
    int32_t s32_Return = C_CONFIG;
 
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       s32_Return = this->mpc_CanDispatcher->CAN_Send_Msg(orc_Msg);
 
@@ -604,7 +604,7 @@ void C_OscComDriverBase::RemoveAllCyclicCanMessages(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComDriverBase::PrepareForDestruction(void)
 {
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       this->mpc_CanDispatcher->RemoveClient(this->mu16_DispatcherClientHandle);
    }

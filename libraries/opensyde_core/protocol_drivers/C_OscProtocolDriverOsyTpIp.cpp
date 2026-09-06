@@ -193,7 +193,7 @@ int32_t C_OscProtocolDriverOsyTpIp::IsConnected(void)
 {
    int32_t s32_Return;
 
-   if (this->mpc_Dispatcher == NULL)
+   if (this->mpc_Dispatcher == nullptr)
    {
       tgl_assert(false); //misuse ...
       s32_Return = C_NOACT;
@@ -220,7 +220,7 @@ int32_t C_OscProtocolDriverOsyTpIp::ReConnect(void)
 {
    int32_t s32_Return;
 
-   if (this->mpc_Dispatcher == NULL)
+   if (this->mpc_Dispatcher == nullptr)
    {
       tgl_assert(false); //misuse ...
       s32_Return = C_NOACT;
@@ -251,7 +251,7 @@ int32_t C_OscProtocolDriverOsyTpIp::Disconnect(void)
 {
    int32_t s32_Return;
 
-   if (this->mpc_Dispatcher == NULL)
+   if (this->mpc_Dispatcher == nullptr)
    {
       tgl_assert(false); //misuse ...
       s32_Return = C_NOACT;
@@ -300,7 +300,7 @@ const
 
    orc_DeviceInfos.clear();
    orc_DeviceExtendedInfos.clear();
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -457,7 +457,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
    int32_t s32_Return = C_TIMEOUT;
 
    std::vector<uint8_t> c_Request;
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -531,7 +531,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
                               m_LogWarningWithHeaderAndIp(
                                  "SetIpAddress: could not perform action. Node has security feature activated.",
                                  TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                              if (opu8_ErrorResult != NULL)
+                              if (opu8_ErrorResult != nullptr)
                               {
                                  (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U];
                               }
@@ -539,7 +539,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
                            else
                            {
                               s32_Return = C_WARN;
-                              if (opu8_ErrorResult != NULL)
+                              if (opu8_ErrorResult != nullptr)
                               {
                                  (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 8U];
                               }
@@ -617,7 +617,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
    int32_t s32_Return = C_TIMEOUT;
 
    std::vector<uint8_t> c_Request;
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -728,7 +728,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
                               m_LogWarningWithHeaderAndIp(
                                  "SetIpAddress: could not perform action. Node has security feature activated.",
                                  TGL_UTIL_FUNC_ID, orau8_ResponseIp);
-                              if (opu8_ErrorResult != NULL)
+                              if (opu8_ErrorResult != nullptr)
                               {
                                  (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U];
                               }
@@ -736,7 +736,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
                            else
                            {
                               s32_Return = C_WARN;
-                              if (opu8_ErrorResult != NULL)
+                              if (opu8_ErrorResult != nullptr)
                               {
                                  (*opu8_ErrorResult) = c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2U];
                               }
@@ -800,7 +800,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
    C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_REQUEST_PROGRAMMING_REQ, 0U);
 
    orc_Results.clear();
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -911,11 +911,11 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastNetReset(const uint8_t ou8_ResetTyp
 
    std::vector<uint8_t> c_Request;
 
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
       s32_Return = C_CONFIG;
    }
-   else if ((oq_SpecificSerialNumberOnly == true) && (opau8_SerialNumber == NULL))
+   else if ((oq_SpecificSerialNumberOnly == true) && (opau8_SerialNumber == nullptr))
    {
       s32_Return = C_RANGE;
    }
@@ -954,7 +954,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastNetReset(const uint8_t ou8_ResetTyp
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProtocolDriverOsyTpIp::C_OscProtocolDriverOsyTpIp(const uint16_t ou16_MaxServiceQueueSize) :
    C_OscProtocolDriverOsyTpBase(ou16_MaxServiceQueueSize),
-   mpc_Dispatcher(NULL),
+   mpc_Dispatcher(nullptr),
    mu32_DispatcherHandle(0U)
 {
 }
@@ -967,7 +967,7 @@ C_OscProtocolDriverOsyTpIp::C_OscProtocolDriverOsyTpIp(const uint16_t ou16_MaxSe
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProtocolDriverOsyTpIp::~C_OscProtocolDriverOsyTpIp(void)
 {
-   mpc_Dispatcher = NULL;
+   mpc_Dispatcher = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1042,7 +1042,7 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void)
    int32_t s32_ReturnFunc = C_NO_ERR;
    C_OscProtocolDriverOsyService c_Service;
 
-   if (mpc_Dispatcher == NULL)
+   if (mpc_Dispatcher == nullptr)
    {
       s32_ReturnFunc = C_CONFIG;
    }

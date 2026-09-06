@@ -663,7 +663,7 @@ QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat)
    uint32_t u32_ValSize;
    int32_t s32_InfoSize;
 
-   s32_InfoSize = GetFileVersionInfoSizeA(c_FileName.toStdString().c_str(), NULL);
+   s32_InfoSize = GetFileVersionInfoSizeA(c_FileName.toStdString().c_str(), nullptr);
    if (s32_InfoSize != 0)
    {
       uint8_t * pu8_Buffer;

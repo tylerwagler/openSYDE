@@ -31,7 +31,7 @@ class C_SyvDaItPaTreeDelegate :
    Q_OBJECT
 
 public:
-   C_SyvDaItPaTreeDelegate(QObject * const opc_Parent = NULL);
+   C_SyvDaItPaTreeDelegate(QObject * const opc_Parent = nullptr);
 
    QWidget * GetEditor(void);
 

@@ -59,7 +59,7 @@ C_SdNdeDalLogJobsWidget::C_SdNdeDalLogJobsWidget(QWidget * const opc_Parent) :
    mpc_Ui(new Ui::C_SdNdeDalLogJobsWidget),
    mu32_NodeIndex(0),
    mu32_CurrentLogJobIndex(0),
-   mpc_ContextMenu(NULL),
+   mpc_ContextMenu(nullptr),
    mq_IsOverviewVisible(false)
 {
    this->mpc_Ui->setupUi(this);
@@ -122,7 +122,7 @@ void C_SdNdeDalLogJobsWidget::LoadUserSettings()
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const C_UsNode c_UsNode = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());
 
@@ -154,7 +154,7 @@ void C_SdNdeDalLogJobsWidget::SaveUserSettings() const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if (!this->mpc_Ui->pc_PbLogJobsOverview->isChecked())
       {
@@ -194,7 +194,7 @@ void C_SdNdeDalLogJobsWidget::LoadLogJobs(void)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const uint32_t u32_LogJobCount = static_cast<uint32_t>(pc_Node->c_DataLoggerJobs.size());
 
@@ -260,7 +260,7 @@ void C_SdNdeDalLogJobsWidget::m_OnLogJobStateChanged(const QModelIndex & orc_Ind
    const C_OscDataLoggerJob * const pc_Retval = C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(
       this->mu32_NodeIndex, static_cast<uint32_t>(orc_Index.row()));
 
-   if (pc_Retval != NULL)
+   if (pc_Retval != nullptr)
    {
       C_PuiSdHandler::h_GetInstance()->SetDataLoggerEnabled(mu32_NodeIndex, orc_Index.row(), oq_IsEnabled);
    }
@@ -275,7 +275,7 @@ void C_SdNdeDalLogJobsWidget::m_OnAddLogJob()
 {
    const C_OscDataLoggerJob c_LogJob;
 
-   tgl_assert(C_PuiSdHandler::h_GetInstance()->AddDataLogger(mu32_NodeIndex, c_LogJob, NULL) == C_NO_ERR);
+   tgl_assert(C_PuiSdHandler::h_GetInstance()->AddDataLogger(mu32_NodeIndex, c_LogJob, nullptr) == C_NO_ERR);
 
    this->LoadLogJobs();
 
@@ -302,7 +302,7 @@ void C_SdNdeDalLogJobsWidget::m_OnCopyLogJob()
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const QModelIndexList c_SelectedIndexes = this->mpc_Ui->pc_JobsListView->selectionModel()->selectedIndexes();
       if (c_SelectedIndexes.size() > 0L)
@@ -343,7 +343,7 @@ void C_SdNdeDalLogJobsWidget::m_OnPasteLogJob()
          for (uint32_t u32_ItNew = 0UL; u32_ItNew < c_Data.size(); ++u32_ItNew)
          {
             tgl_assert(C_PuiSdHandler::h_GetInstance()->AddDataLogger(mu32_NodeIndex, c_Data[u32_ItNew],
-                                                                      NULL) == C_NO_ERR);
+                                                                      nullptr) == C_NO_ERR);
          }
 
          this->LoadLogJobs();

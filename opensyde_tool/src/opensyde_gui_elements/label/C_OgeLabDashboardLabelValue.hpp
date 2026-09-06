@@ -29,7 +29,7 @@ class C_OgeLabDashboardLabelValue :
    Q_OBJECT
 
 public:
-   C_OgeLabDashboardLabelValue(QWidget * const opc_Parent = NULL);
+   C_OgeLabDashboardLabelValue(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

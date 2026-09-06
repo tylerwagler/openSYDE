@@ -60,7 +60,7 @@ C_OscNode::C_OscNode(void)
 //----------------------------------------------------------------------------------------------------------------------
 C_OscNode::~C_OscNode(void)
 {
-   pc_DeviceDefinition = NULL;
+   pc_DeviceDefinition = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ C_OscNode::~C_OscNode(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNode::Initialize(void)
 {
-   pc_DeviceDefinition = NULL;
+   pc_DeviceDefinition = nullptr;
    u32_SubDeviceIndex = 0UL;
    c_DeviceType = "Custom";
    c_Properties.Initialize();
@@ -181,14 +181,14 @@ int32_t C_OscNode::MoveDataPool(const uint32_t ou32_Start, const uint32_t ou32_T
       }
       else
       {
-         pc_Protocol = NULL;
+         pc_Protocol = nullptr;
       }
       //Erase
       this->DeleteDataPool(ou32_Start);
       //Insert
       this->InsertDataPool(ou32_Target, c_Data);
       //Can protocol handling
-      if (pc_Protocol != NULL)
+      if (pc_Protocol != nullptr)
       {
          pc_Protocol->u32_DataPoolIndex = ou32_Target;
       }
@@ -224,11 +224,11 @@ int32_t C_OscNode::InsertMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, 
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
    C_OscNodeDataPool * const pc_DataPool = this->GetComDataPool(oe_ComProtocol, ou32_DatapoolIndex);
 
-   if ((pc_Protocol != NULL) && (pc_DataPool != NULL))
+   if ((pc_Protocol != nullptr) && (pc_DataPool != nullptr))
    {
       C_OscNodeDataPoolList * const pc_ListData = C_OscCanProtocol::h_GetComList(*pc_DataPool, ou32_InterfaceIndex,
                                                                                  oq_MessageIsTx);
-      if ((pc_ListData != NULL) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
+      if ((pc_ListData != nullptr) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
       {
          C_OscCanMessageContainer & rc_MessageContainer = pc_Protocol->c_ComMessages[ou32_InterfaceIndex];
          std::vector<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(oq_MessageIsTx);
@@ -311,7 +311,7 @@ int32_t C_OscNode::SetMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, con
 
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
 
-   if (pc_Protocol != NULL)
+   if (pc_Protocol != nullptr)
    {
       if (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size())
       {
@@ -325,11 +325,11 @@ int32_t C_OscNode::SetMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, con
                C_OscNodeDataPool * const pc_DataPool = this->GetComDataPool(oe_ComProtocol, ou32_DatapoolIndex);
                rc_Messages[ou32_MessageIndex] = orc_Message;
                //Handle data pool
-               if (pc_DataPool != NULL)
+               if (pc_DataPool != nullptr)
                {
                   C_OscNodeDataPoolList * const pc_List =
                      C_OscCanProtocol::h_GetComList(*pc_DataPool, ou32_InterfaceIndex, oq_MessageIsTx);
-                  if (pc_List != NULL)
+                  if (pc_List != nullptr)
                   {
                      const uint32_t u32_DataPoolListElementIndex = rc_MessageContainer.GetMessageSignalDataStartIndex(
                         oq_MessageIsTx, ou32_MessageIndex);
@@ -399,11 +399,11 @@ int32_t C_OscNode::DeleteMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, 
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
    C_OscNodeDataPool * const pc_DataPool = this->GetComDataPool(oe_ComProtocol, ou32_DatapoolIndex);
 
-   if ((pc_Protocol != NULL) && (pc_DataPool != NULL))
+   if ((pc_Protocol != nullptr) && (pc_DataPool != nullptr))
    {
       C_OscNodeDataPoolList * const pc_ListData =
          C_OscCanProtocol::h_GetComList(*pc_DataPool, ou32_InterfaceIndex, oq_MessageIsTx);
-      if ((pc_ListData != NULL) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
+      if ((pc_ListData != nullptr) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
       {
          C_OscCanMessageContainer & rc_MessageContainer = pc_Protocol->c_ComMessages[ou32_InterfaceIndex];
          std::vector<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(oq_MessageIsTx);
@@ -479,11 +479,11 @@ int32_t C_OscNode::InsertSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, c
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
    C_OscNodeDataPool * const pc_DataPool = this->GetComDataPool(oe_ComProtocol, ou32_DatapoolIndex);
 
-   if ((pc_Protocol != NULL) && (pc_DataPool != NULL))
+   if ((pc_Protocol != nullptr) && (pc_DataPool != nullptr))
    {
       C_OscNodeDataPoolList * const pc_ListData =
          C_OscCanProtocol::h_GetComList(*pc_DataPool, ou32_InterfaceIndex, oq_MessageIsTx);
-      if ((pc_ListData != NULL) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
+      if ((pc_ListData != nullptr) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
       {
          C_OscCanMessageContainer & rc_MessageContainer = pc_Protocol->c_ComMessages[ou32_InterfaceIndex];
          std::vector<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(oq_MessageIsTx);
@@ -569,11 +569,11 @@ int32_t C_OscNode::SetSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, cons
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
    C_OscNodeDataPool * const pc_DataPool = this->GetComDataPool(oe_ComProtocol, ou32_DatapoolIndex);
 
-   if ((pc_Protocol != NULL) && (pc_DataPool != NULL))
+   if ((pc_Protocol != nullptr) && (pc_DataPool != nullptr))
    {
       C_OscNodeDataPoolList * const pc_ListData =
          C_OscCanProtocol::h_GetComList(*pc_DataPool, ou32_InterfaceIndex, oq_MessageIsTx);
-      if ((pc_ListData != NULL) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
+      if ((pc_ListData != nullptr) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
       {
          C_OscCanMessageContainer & rc_MessageContainer = pc_Protocol->c_ComMessages[ou32_InterfaceIndex];
          std::vector<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(oq_MessageIsTx);
@@ -641,7 +641,7 @@ int32_t C_OscNode::SetSignalPosition(const C_OscCanProtocol::E_Type oe_ComProtoc
    int32_t s32_Retval = C_NO_ERR;
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
 
-   if (pc_Protocol != NULL)
+   if (pc_Protocol != nullptr)
    {
       if (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size())
       {
@@ -707,7 +707,7 @@ int32_t C_OscNode::SetSignalMuxValue(const C_OscCanProtocol::E_Type oe_ComProtoc
    int32_t s32_Retval = C_NO_ERR;
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
 
-   if (pc_Protocol != NULL)
+   if (pc_Protocol != nullptr)
    {
       if (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size())
       {
@@ -769,11 +769,11 @@ int32_t C_OscNode::DeleteSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, c
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
    C_OscNodeDataPool * const pc_DataPool = this->GetComDataPool(oe_ComProtocol, ou32_DatapoolIndex);
 
-   if ((pc_Protocol != NULL) && (pc_DataPool != NULL))
+   if ((pc_Protocol != nullptr) && (pc_DataPool != nullptr))
    {
       C_OscNodeDataPoolList * const pc_ListData = C_OscCanProtocol::h_GetComList(*pc_DataPool, ou32_InterfaceIndex,
                                                                                  oq_MessageIsTx);
-      if ((pc_ListData != NULL) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
+      if ((pc_ListData != nullptr) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
       {
          C_OscCanMessageContainer & rc_MessageContainer = pc_Protocol->c_ComMessages[ou32_InterfaceIndex];
          std::vector<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(oq_MessageIsTx);
@@ -1171,7 +1171,7 @@ uint32_t C_OscNode::GetElementAbsoluteAddress(const uint32_t ou32_DataPoolIndex,
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPool * C_OscNode::GetHalDataPoolConst(const bool oq_SafeDatapool) const
 {
-   const C_OscNodeDataPool * pc_Retval = NULL;
+   const C_OscNodeDataPool * pc_Retval = nullptr;
 
    for (uint32_t u32_ItDatapools = 0; u32_ItDatapools < this->c_DataPools.size(); ++u32_ItDatapools)
    {
@@ -1201,9 +1201,9 @@ const C_OscNodeDataPool * C_OscNode::GetHalDataPoolConst(const bool oq_SafeDatap
 const C_OscNodeDataPool * C_OscNode::GetComDataPoolConst(const C_OscCanProtocol::E_Type oe_ComProtocol,
                                                          const uint32_t ou32_DataPoolIndex) const
 {
-   const C_OscNodeDataPool * pc_Retval = NULL;
+   const C_OscNodeDataPool * pc_Retval = nullptr;
 
-   for (uint32_t u32_ItCanProtocol = 0; (u32_ItCanProtocol < this->c_ComProtocols.size()) && (pc_Retval == NULL);
+   for (uint32_t u32_ItCanProtocol = 0; (u32_ItCanProtocol < this->c_ComProtocols.size()) && (pc_Retval == nullptr);
         ++u32_ItCanProtocol)
    {
       const C_OscCanProtocol & rc_CanProtocol = this->c_ComProtocols[u32_ItCanProtocol];
@@ -1234,9 +1234,9 @@ const C_OscNodeDataPool * C_OscNode::GetComDataPoolConst(const C_OscCanProtocol:
 C_OscNodeDataPool * C_OscNode::GetComDataPool(const C_OscCanProtocol::E_Type oe_ComProtocol,
                                               const uint32_t ou32_DataPoolIndex)
 {
-   C_OscNodeDataPool * pc_Retval = NULL;
+   C_OscNodeDataPool * pc_Retval = nullptr;
 
-   for (uint32_t u32_ItCanProtocol = 0; (u32_ItCanProtocol < this->c_ComProtocols.size()) && (pc_Retval == NULL);
+   for (uint32_t u32_ItCanProtocol = 0; (u32_ItCanProtocol < this->c_ComProtocols.size()) && (pc_Retval == nullptr);
         ++u32_ItCanProtocol)
    {
       const C_OscCanProtocol & rc_CanProtocol = this->c_ComProtocols[u32_ItCanProtocol];
@@ -1329,11 +1329,11 @@ const
 {
    const C_OscCanProtocol * pc_Retval = this->GetRelatedCanProtocolConst(ou32_DataPoolIndex);
 
-   if ((pc_Retval != NULL) &&
+   if ((pc_Retval != nullptr) &&
        (pc_Retval->e_Type != oe_ComProtocol))
    {
       // Protocol does not match
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
 
    return pc_Retval;
@@ -1355,11 +1355,11 @@ C_OscCanProtocol * C_OscNode::GetCanProtocol(const C_OscCanProtocol::E_Type oe_C
 {
    C_OscCanProtocol * pc_Retval =  this->GetRelatedCanProtocol(ou32_DataPoolIndex);
 
-   if ((pc_Retval != NULL) &&
+   if ((pc_Retval != nullptr) &&
        (pc_Retval->e_Type != oe_ComProtocol))
    {
       // Protocol does not match
-      pc_Retval = NULL;
+      pc_Retval = nullptr;
    }
 
    return pc_Retval;
@@ -1430,7 +1430,7 @@ std::vector<C_OscCanProtocol *> C_OscNode::GetCanProtocols(const C_OscCanProtoco
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscCanProtocol * C_OscNode::GetRelatedCanProtocolConst(const uint32_t ou32_DataPoolIndex) const
 {
-   const C_OscCanProtocol * pc_Retval = NULL;
+   const C_OscCanProtocol * pc_Retval = nullptr;
 
    for (uint32_t u32_ItCanProtocol = 0; u32_ItCanProtocol < this->c_ComProtocols.size(); ++u32_ItCanProtocol)
    {
@@ -1457,7 +1457,7 @@ const C_OscCanProtocol * C_OscNode::GetRelatedCanProtocolConst(const uint32_t ou
 //----------------------------------------------------------------------------------------------------------------------
 C_OscCanProtocol * C_OscNode::GetRelatedCanProtocol(const uint32_t ou32_DataPoolIndex)
 {
-   C_OscCanProtocol * pc_Retval = NULL;
+   C_OscCanProtocol * pc_Retval = nullptr;
 
    for (uint32_t u32_ItCanProtocol = 0; u32_ItCanProtocol < this->c_ComProtocols.size(); ++u32_ItCanProtocol)
    {
@@ -1590,7 +1590,7 @@ void C_OscNode::CheckErrorCanProtocol(const uint32_t ou32_InterfaceIndex, const 
    {
       // Check all instances of the matching protocol instances
       const C_OscCanProtocol * const pc_Prot = c_Protocols[u32_Counter];
-      if ((pc_Prot != NULL) &&
+      if ((pc_Prot != nullptr) &&
           (pc_Prot->e_Type == oe_ComProtocol) &&
           (ou32_InterfaceIndex < pc_Prot->c_ComMessages.size()) &&
           (oq_ComProtocolUsedByInterface == pc_Prot->c_ComMessages[ou32_InterfaceIndex].q_IsComProtocolUsedByInterface))
@@ -1689,7 +1689,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
       const C_OscNodeDataPool & rc_CheckedDataPool = this->c_DataPools[ou32_DataPoolIndex];
 
       //Is the data pool name valid ?
-      if (opq_NameInvalid != NULL)
+      if (opq_NameInvalid != nullptr)
       {
          if (C_OscUtils::h_CheckValidCeName(rc_CheckedDataPool.c_Name) == false)
          {
@@ -1701,7 +1701,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
          }
       }
       //Is the data pool name used more than once ?
-      if (opq_NameConflict != NULL)
+      if (opq_NameConflict != nullptr)
       {
          *opq_NameConflict = false;
          for (uint32_t u32_ItElement = 0; u32_ItElement < this->c_DataPools.size(); ++u32_ItElement)
@@ -1718,22 +1718,22 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
          }
       }
       //Lists
-      if (opq_IsErrorInListOrMessage != NULL)
+      if (opq_IsErrorInListOrMessage != nullptr)
       {
          //Init
          *opq_IsErrorInListOrMessage = false;
 
          //Are number of lists and elements within range ?
-         if ((opq_TooManyListsOrElements != NULL) || (opq_TooFewListsOrElements != NULL))
+         if ((opq_TooManyListsOrElements != nullptr) || (opq_TooFewListsOrElements != nullptr))
          {
             bool q_TooFew;
             bool q_TooMany;
             CheckErrorDataPoolNumListsAndElements(ou32_DataPoolIndex, q_TooFew, q_TooMany);
-            if (opq_TooFewListsOrElements != NULL)
+            if (opq_TooFewListsOrElements != nullptr)
             {
                *opq_TooFewListsOrElements = q_TooFew;
             }
-            if (opq_TooManyListsOrElements != NULL)
+            if (opq_TooManyListsOrElements != nullptr)
             {
                *opq_TooManyListsOrElements = q_TooMany;
             }
@@ -1742,7 +1742,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
          if (rc_CheckedDataPool.e_Type == C_OscNodeDataPool::eCOM)
          {
             const C_OscCanProtocol * const pc_Protocol = this->GetRelatedCanProtocolConst(ou32_DataPoolIndex);
-            if (pc_Protocol != NULL)
+            if (pc_Protocol != nullptr)
             {
                static std::map<std::vector<uint32_t>, bool> hc_PreviousResults;
                for (uint32_t u32_ItContainer = 0; u32_ItContainer < pc_Protocol->c_ComMessages.size();
@@ -1817,7 +1817,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
                            if (q_Error == true)
                            {
                               *opq_IsErrorInListOrMessage = true;
-                              if (opc_InvalidListIndices != NULL)
+                              if (opc_InvalidListIndices != nullptr)
                               {
                                  opc_InvalidListIndices->push_back(u32_ItContainer);
                               }
@@ -1833,7 +1833,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
                         else
                         {
                            *opq_IsErrorInListOrMessage = true;
-                           if (opc_InvalidListIndices != NULL)
+                           if (opc_InvalidListIndices != nullptr)
                            {
                               opc_InvalidListIndices->push_back(u32_ItContainer);
                            }
@@ -1845,7 +1845,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
                      {
                         //Do not reset error
                         *opq_IsErrorInListOrMessage = (*opq_IsErrorInListOrMessage) || (c_It->second);
-                        if ((opc_InvalidListIndices != NULL) && (c_It->second))
+                        if ((opc_InvalidListIndices != nullptr) && (c_It->second))
                         {
                            opc_InvalidListIndices->push_back(u32_ItContainer);
                         }
@@ -1881,7 +1881,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
 
             for (uint32_t u32_ItList = 0;
                  (u32_ItList < rc_CheckedDataPool.c_Lists.size()) &&
-                 ((*opq_IsErrorInListOrMessage == false) || (opc_InvalidListIndices != NULL));
+                 ((*opq_IsErrorInListOrMessage == false) || (opc_InvalidListIndices != nullptr));
                  ++u32_ItList)
             {
                //Overarching checks
@@ -1891,7 +1891,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
                if (c_ItList != c_PreviousNames.end())
                {
                   *opq_IsErrorInListOrMessage = true;
-                  if (opc_InvalidListIndices != NULL)
+                  if (opc_InvalidListIndices != nullptr)
                   {
                      bool q_Added = false;
                      //Only add element once!
@@ -1928,9 +1928,9 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
                      q_OutOfDataPool = false;
                      q_DataSetsInvalid = false;
                      q_ElementsInvalid = false;
-                     rc_CheckedDataPool.CheckErrorList(u32_ItList, NULL, &q_NameInvalid, &q_UsageInvalid,
-                                                       &q_OutOfDataPool, &q_DataSetsInvalid, &q_ElementsInvalid, NULL,
-                                                       NULL);
+                     rc_CheckedDataPool.CheckErrorList(u32_ItList, nullptr, &q_NameInvalid, &q_UsageInvalid,
+                                                       &q_OutOfDataPool, &q_DataSetsInvalid, &q_ElementsInvalid, nullptr,
+                                                       nullptr);
                      if (q_CheckSize == false)
                      {
                         q_UsageInvalid = false;
@@ -1940,7 +1940,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
                            (q_ElementsInvalid == true)) || (q_OutOfDataPool == true)) || (q_DataSetsInvalid == true))
                      {
                         *opq_IsErrorInListOrMessage = true;
-                        if (opc_InvalidListIndices != NULL)
+                        if (opc_InvalidListIndices != nullptr)
                         {
                            opc_InvalidListIndices->push_back(u32_ItList);
                         }
@@ -1957,7 +1957,7 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
                   {
                      //Do not reset error
                      *opq_IsErrorInListOrMessage = (*opq_IsErrorInListOrMessage) || (c_ItErr->second);
-                     if ((opc_InvalidListIndices != NULL) && (c_ItErr->second))
+                     if ((opc_InvalidListIndices != nullptr) && (c_ItErr->second))
                      {
                         opc_InvalidListIndices->push_back(u32_ItList);
                      }
@@ -2002,7 +2002,7 @@ void C_OscNode::CheckMessageId(const uint32_t ou32_InterfaceIndex, const C_OscCa
    for (uint32_t u32_ItMessage = 0; u32_ItMessage < c_Messages.size(); ++u32_ItMessage)
    {
       const C_OscCanMessage * const pc_CurMessage = c_Messages[u32_ItMessage];
-      if (pc_CurMessage != NULL)
+      if (pc_CurMessage != nullptr)
       {
          //No skip necessary as they should be already filtered
          if ((pc_CurMessage->u32_CanId == orc_MessageId.u32_CanId) &&
@@ -2050,7 +2050,7 @@ void C_OscNode::CheckMessageName(const uint32_t ou32_InterfaceIndex, const std::
       for (uint32_t u32_ItMessage = 0; u32_ItMessage < c_Messages.size(); ++u32_ItMessage)
       {
          const C_OscCanMessage * const pc_CurMessage = c_Messages[u32_ItMessage];
-         if (pc_CurMessage != NULL)
+         if (pc_CurMessage != nullptr)
          {
             //No skip necessary as they should be already filtered
             if (pc_CurMessage->c_Name == orc_MessageName)
@@ -2168,7 +2168,7 @@ bool C_OscNode::IsAnyUpdateAvailable(void) const
 {
    bool q_Retval = false;
 
-   if (this->pc_DeviceDefinition != NULL)
+   if (this->pc_DeviceDefinition != nullptr)
    {
       for (uint32_t u32_ItInterface = 0;
            (u32_ItInterface < this->c_Properties.c_ComInterfaces.size()) && (q_Retval == false); ++u32_ItInterface)
@@ -2202,7 +2202,7 @@ bool C_OscNode::IsRoutingAvailable(const C_OscSystemBus::E_Type oe_Type) const
 {
    bool q_Return = false;
 
-   if ((this->pc_DeviceDefinition != NULL) &&
+   if ((this->pc_DeviceDefinition != nullptr) &&
        (this->c_Properties.e_DiagnosticServer == C_OscNodeProperties::eDS_OPEN_SYDE))
    {
       tgl_assert(this->u32_SubDeviceIndex < this->pc_DeviceDefinition->c_SubDevices.size());
@@ -2228,7 +2228,7 @@ bool C_OscNode::IsDiagnosisAvailable(const C_OscSystemBus::E_Type oe_Type) const
 {
    bool q_Return = false;
 
-   if ((this->pc_DeviceDefinition != NULL) &&
+   if ((this->pc_DeviceDefinition != nullptr) &&
        (this->c_Properties.e_DiagnosticServer == C_OscNodeProperties::eDS_OPEN_SYDE))
    {
       tgl_assert(this->u32_SubDeviceIndex < this->pc_DeviceDefinition->c_SubDevices.size());
@@ -2339,7 +2339,7 @@ C_OscNodeDataPoolListElement * C_OscNode::GetDataPoolListElement(const uint32_t 
                                                                  const uint32_t ou32_ListIndex,
                                                                  const uint32_t ou32_ElementIndex)
 {
-   C_OscNodeDataPoolListElement * pc_Element = NULL;
+   C_OscNodeDataPoolListElement * pc_Element = nullptr;
 
    if ((ou32_DataPoolIndex < this->c_DataPools.size()) &&
        (ou32_ListIndex < this->c_DataPools[ou32_DataPoolIndex].c_Lists.size()) &&
@@ -2447,8 +2447,8 @@ void C_OscNode::m_AppendAllProtocolMessages(const uint32_t ou32_InterfaceIndex,
                {
                   //Check if skip necessary
                   bool q_Skip = false;
-                  if ((((ope_SkipComProtocol != NULL) && (opu32_SkipInterfaceIndex != NULL)) &&
-                       (opq_SkipMessageIsTxFlag != NULL)) && (opu32_SkipMessageIndex != NULL))
+                  if ((((ope_SkipComProtocol != nullptr) && (opu32_SkipInterfaceIndex != nullptr)) &&
+                       (opq_SkipMessageIsTxFlag != nullptr)) && (opu32_SkipMessageIndex != nullptr))
                   {
                      //Match
                      if ((((*ope_SkipComProtocol == oe_ComProtocol) && (*opu32_SkipMessageIndex == u32_ItMessage)) &&
@@ -2511,7 +2511,7 @@ uint32_t C_OscNode::m_GetContainerHash(const uint32_t ou32_DataPoolIndex, const 
    uint32_t u32_Retval = 0xFFFFFFFFUL;
    const C_OscCanProtocol * const pc_Protocol = this->GetRelatedCanProtocolConst(ou32_DataPoolIndex);
 
-   if (pc_Protocol != NULL)
+   if (pc_Protocol != nullptr)
    {
       if (ou32_ContainerIndex < pc_Protocol->c_ComMessages.size())
       {
@@ -2600,7 +2600,7 @@ bool C_OscNode::m_CheckErrorTooFewElements(const uint32_t ou32_DataPoolIndex) co
    {
       const C_OscNodeDataPool & rc_CheckedDataPool = this->c_DataPools[ou32_DataPoolIndex];
       const C_OscCanProtocol * const pc_Protocol = this->GetRelatedCanProtocolConst(ou32_DataPoolIndex);
-      if (pc_Protocol != NULL)
+      if (pc_Protocol != nullptr)
       {
          //number of lists ok ?
          if (rc_CheckedDataPool.c_Lists.size() == 0UL)

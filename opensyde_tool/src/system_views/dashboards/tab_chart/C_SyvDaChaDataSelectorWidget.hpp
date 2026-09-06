@@ -42,7 +42,7 @@ class C_SyvDaChaDataSelectorWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaChaDataSelectorWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvDaChaDataSelectorWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaChaDataSelectorWidget(void) override;
 
    void SetView(const uint32_t ou32_ViewIndex);

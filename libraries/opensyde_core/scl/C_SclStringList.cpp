@@ -216,7 +216,7 @@ void C_SclStringList::LoadFromFile(const std::string & orc_FileName)
 
    Strings.clear();
    pc_File = std::fopen(orc_FileName.c_str(), "rb");
-   if (pc_File == NULL)
+   if (pc_File == nullptr)
    {
       throw ("C_SclStringList::LoadFromFile: file not found");
    }
@@ -330,7 +330,7 @@ void C_SclStringList::SaveToFile(const std::string & orc_FileName)
    uint32_t u32_NumWritten;
 
    std::FILE * const pc_File = std::fopen(orc_FileName.c_str(), "wb");
-   if (pc_File == NULL)
+   if (pc_File == nullptr)
    {
       throw ("C_SclStringList::SaveToFile: could not create file");
    }

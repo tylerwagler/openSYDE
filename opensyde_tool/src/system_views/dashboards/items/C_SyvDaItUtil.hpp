@@ -29,8 +29,8 @@ class C_SyvDaItUtil
 public:
    static void h_CopyFontSize(const QLabel * const opc_SourceLabel, QLabel * const opc_TargetLabel,
                               const float32_t of32_Factor = 1.0F);
-   static void h_SyncFontSize(QLabel * const opc_Label1, QLabel * const opc_Label2, QLabel * const opc_Label3 = NULL,
-                              QLabel * const opc_Label4 = NULL);
+   static void h_SyncFontSize(QLabel * const opc_Label1, QLabel * const opc_Label2, QLabel * const opc_Label3 = nullptr,
+                              QLabel * const opc_Label4 = nullptr);
    static QString h_GetHtmlIndentStyle(const uint32_t ou32_NumberOfTimes);
 
 private:

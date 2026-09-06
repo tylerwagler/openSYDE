@@ -252,7 +252,7 @@ void C_CamGenSigTableView::keyPressEvent(QKeyEvent * const opc_Event)
       dynamic_cast<const C_OgeWiSpinBoxGroup * const>(this->focusWidget());
    const QLineEdit * const pc_LineEdit = dynamic_cast<const QLineEdit * const>(this->focusWidget());
    const QComboBox * const pc_ComboBox = dynamic_cast<const QComboBox * const>(this->focusWidget());
-   if ((((pc_SpinBox == NULL) && (pc_LineEdit == NULL)) && (pc_ComboBox == NULL)) && (pc_SpinBoxGroup == NULL))
+   if ((((pc_SpinBox == nullptr) && (pc_LineEdit == nullptr)) && (pc_ComboBox == nullptr)) && (pc_SpinBoxGroup == nullptr))
    {
       //For some reason the tab key needs to be accepted to allow proper tab navigation
       if (opc_Event->key() != static_cast<int32_t>(Qt::Key_Tab))

@@ -54,10 +54,10 @@ using namespace stw::tgl;
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoBaseManager::C_SebUnoBaseManager(QGraphicsScene * const opc_Scene, QObject * const opc_Parent) :
    C_UtiUndoStack(opc_Parent),
-   mpc_StyleCommand(NULL),
+   mpc_StyleCommand(nullptr),
    mpc_Scene(opc_Scene),
-   mpc_MoveCommandGroup(NULL),
-   mpc_LastMoveCommand(NULL)
+   mpc_MoveCommandGroup(nullptr),
+   mpc_LastMoveCommand(nullptr)
 {
 }
 
@@ -80,12 +80,12 @@ C_SebUnoBaseManager::~C_SebUnoBaseManager(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoBaseManager::RegisterMove(void)
 {
-   if (this->mpc_MoveCommandGroup != NULL)
+   if (this->mpc_MoveCommandGroup != nullptr)
    {
       this->mpc_MoveCommandGroup->undo();
       this->DoPush(this->mpc_MoveCommandGroup);
-      this->mpc_MoveCommandGroup = NULL;
-      this->mpc_LastMoveCommand = NULL;
+      this->mpc_MoveCommandGroup = nullptr;
+      this->mpc_LastMoveCommand = nullptr;
    }
 }
 
@@ -100,13 +100,13 @@ void C_SebUnoBaseManager::DoMove(const QList<QGraphicsItem *> & orc_Items, const
 {
    vector<uint64_t> c_Ids;
 
-   if (this->mpc_MoveCommandGroup == NULL)
+   if (this->mpc_MoveCommandGroup == nullptr)
    {
       this->mpc_MoveCommandGroup = new C_SebUnoMoveCommandGroup();
    }
 
    mh_MapItemToId(orc_Items, c_Ids);
-   if (this->mpc_LastMoveCommand == NULL)
+   if (this->mpc_LastMoveCommand == nullptr)
    {
       this->mpc_LastMoveCommand = new C_SebUnoMoveCommand(this->mpc_Scene, c_Ids, orc_PositionDifference,
                                                           this->mpc_MoveCommandGroup);
@@ -312,10 +312,10 @@ void C_SebUnoBaseManager::AdaptZetOrder(const QList<QGraphicsItem *> & orc_Selec
 void C_SebUnoBaseManager::SaveStyleInformation(const QList<QGraphicsItem *> & orc_Items)
 {
    vector<uint64_t> c_Ids;
-   if (this->mpc_StyleCommand != NULL)
+   if (this->mpc_StyleCommand != nullptr)
    {
       delete (this->mpc_StyleCommand);
-      this->mpc_StyleCommand = NULL;
+      this->mpc_StyleCommand = nullptr;
    }
 
    mh_MapItemToId(orc_Items, c_Ids); //new C_SdManUnoTopologySetupStyleCommand(this->mpc_Scene, c_Ids);
@@ -329,12 +329,12 @@ void C_SebUnoBaseManager::SaveStyleInformation(const QList<QGraphicsItem *> & or
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoBaseManager::RegisterStyleChange(void)
 {
-   if (this->mpc_StyleCommand != NULL)
+   if (this->mpc_StyleCommand != nullptr)
    {
       this->mpc_StyleCommand->InitNext();
       this->mpc_StyleCommand->undo();
       this->DoPush(this->mpc_StyleCommand);
-      this->mpc_StyleCommand = NULL;
+      this->mpc_StyleCommand = nullptr;
    }
 }
 
@@ -389,7 +389,7 @@ void C_SebUnoBaseManager::mh_MapItemToId(const QGraphicsItem * const opc_Item, u
    const C_GiUnique * const pc_UniqueItem =
       dynamic_cast<const C_GiUnique *>(C_SebUtil::h_GetHighestParent(opc_Item));
 
-   if (pc_UniqueItem != NULL)
+   if (pc_UniqueItem != nullptr)
    {
       oru64_Id = pc_UniqueItem->GetId();
    }

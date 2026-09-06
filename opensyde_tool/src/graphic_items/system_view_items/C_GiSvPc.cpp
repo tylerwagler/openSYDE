@@ -252,12 +252,12 @@ bool C_GiSvPc::OpenDialog(void) const
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
       bool q_OpenDialog = false;
 
-      if ((pc_View != NULL) && (pc_View->GetOscPcData().GetConnected() == true))
+      if ((pc_View != nullptr) && (pc_View->GetOscPcData().GetConnected() == true))
       {
          const C_OscSystemBus * const pc_Bus =
             C_PuiSdHandler::h_GetInstance()->GetOscBus(pc_View->GetOscPcData().GetBusIndex());
 
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
             {
@@ -267,14 +267,14 @@ bool C_GiSvPc::OpenDialog(void) const
          }
       }
 
-      if ((q_OpenDialog == true) && (pc_View != NULL))
+      if ((q_OpenDialog == true) && (pc_View != nullptr))
       {
          const uint32_t u32_BusIndex = pc_View->GetOscPcData().GetBusIndex();
 
          //Find connected interface of target node to found bus index
          const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_BusIndex);
 
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
             {
@@ -326,7 +326,7 @@ void C_GiSvPc::LoadData(void)
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       C_PuiSvPc c_PcData = pc_View->GetPuiPcData();
       C_GiCustomFunctions::h_AdaptMouseRangePos(c_PcData.c_UiPosition);
@@ -390,7 +390,7 @@ void C_GiSvPc::GenerateHint()
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       QString c_ToolTipContent;
       const C_PuiSvPc c_PcData = pc_View->GetPuiPcData();
@@ -467,7 +467,7 @@ bool C_GiSvPc::m_OpenCanAdapterDialog(void) const
    bool q_Retval = false;
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_OscViewPc & rc_OscPcData = pc_View->GetOscPcData();
       const C_PuiSvPc & rc_PcData = pc_View->GetPuiPcData();
@@ -483,7 +483,7 @@ bool C_GiSvPc::m_OpenCanAdapterDialog(void) const
       {
          const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(rc_OscPcData.GetBusIndex());
 
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             pc_DllWidget->SetBitrate(pc_Bus->u64_BitRate);
          }
@@ -496,7 +496,7 @@ bool C_GiSvPc::m_OpenCanAdapterDialog(void) const
          q_Retval = true;
       }
 
-      if (c_DllDialog != NULL)
+      if (c_DllDialog != nullptr)
       {
          c_DllDialog->HideOverlay();
          c_DllDialog->deleteLater();

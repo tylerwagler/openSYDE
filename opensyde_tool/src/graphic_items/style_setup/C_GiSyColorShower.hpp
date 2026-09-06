@@ -26,7 +26,7 @@ class C_GiSyColorShower :
    Q_OBJECT
 
 public:
-   C_GiSyColorShower(QWidget * const opc_Parent = NULL);
+   C_GiSyColorShower(QWidget * const opc_Parent = nullptr);
    ~C_GiSyColorShower(void) override;
 
    // things that don't emit signals

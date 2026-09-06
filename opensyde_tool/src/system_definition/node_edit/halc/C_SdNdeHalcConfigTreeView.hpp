@@ -30,7 +30,7 @@ class C_SdNdeHalcConfigTreeView :
    Q_OBJECT
 
 public:
-   C_SdNdeHalcConfigTreeView(QWidget * const opc_Parent = NULL);
+   C_SdNdeHalcConfigTreeView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeHalcConfigTreeView(void) override;
 
    void SetNode(const uint32_t ou32_NodeIndex);

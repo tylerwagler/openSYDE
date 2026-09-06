@@ -51,7 +51,7 @@ using namespace stw::opensyde_gui_logic;
 const C_OscDataLoggerJob * C_PuiSdHandlerDataLoggerLogic::GetDataLoggerJob(const uint32_t ou32_NodeIndex,
                                                                            const uint32_t ou32_DataLoggerJobIndex) const
 {
-   const C_OscDataLoggerJob * pc_Retval = NULL;
+   const C_OscDataLoggerJob * pc_Retval = nullptr;
 
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
@@ -79,7 +79,7 @@ const C_OscDataLoggerDataElementReference * C_PuiSdHandlerDataLoggerLogic::GetDa
    const uint32_t ou32_NodeIndex, const uint32_t ou32_DataLoggerJobIndex,
    const uint32_t ou32_DataLoggerDataElementIndex) const
 {
-   const C_OscDataLoggerDataElementReference * pc_Retval = NULL;
+   const C_OscDataLoggerDataElementReference * pc_Retval = nullptr;
 
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
@@ -120,7 +120,7 @@ int32_t C_PuiSdHandlerDataLoggerLogic::AddDataLogger(const uint32_t ou32_NodeInd
       C_OscDataLoggerJob c_NewJob = orc_Data;
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
 
-      if (opc_Name != NULL)
+      if (opc_Name != nullptr)
       {
          c_NewJob.c_Properties.c_Name = opc_Name->toStdString().c_str();
       }

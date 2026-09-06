@@ -29,7 +29,7 @@ class C_OgeWiEditBackground :
    Q_OBJECT
 
 public:
-   C_OgeWiEditBackground(QWidget * const opc_Parent = NULL);
+   C_OgeWiEditBackground(QWidget * const opc_Parent = nullptr);
 
    void SetEditBackground(const bool oq_Active);
 

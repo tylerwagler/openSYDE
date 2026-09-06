@@ -82,8 +82,8 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const std::string & orc_Path, uint16_t 
          s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
             mc_CoreDefinition, c_XmlParser,
             C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString().c_str(),
-            orc_Path, true, &u16_FileVersion, NULL, false, NULL, opc_ErrorDetailsMissingDevices);
-         if (opu16_FileVersion != NULL)
+            orc_Path, true, &u16_FileVersion, nullptr, false, nullptr, opc_ErrorDetailsMissingDevices);
+         if (opu16_FileVersion != nullptr)
          {
             *opu16_FileVersion = u16_FileVersion;
          }

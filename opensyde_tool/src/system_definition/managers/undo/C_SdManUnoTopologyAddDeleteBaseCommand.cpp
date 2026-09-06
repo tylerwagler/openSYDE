@@ -99,7 +99,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::h_GetAllRelevantObjects(const QList
       QGraphicsItem * const pc_CurrentItem = C_SebUtil::h_GetHighestParent(*c_ItSelectedItem);
 
       const C_GiUnique * const pc_UniqueElement = dynamic_cast<C_GiUnique *>(pc_CurrentItem);
-      if (pc_UniqueElement != NULL)
+      if (pc_UniqueElement != nullptr)
       {
          C_GiNode * const pc_Node = dynamic_cast<C_GiNode *>(pc_CurrentItem);
 
@@ -107,12 +107,12 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::h_GetAllRelevantObjects(const QList
          //Item is unique
          orc_AllRelevantItems.push_back(pc_CurrentItem);
          //Add all bus connectors if necessary
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             mh_SearchAndAddAllAffectedBusConnectorsToTheFront(orc_AllItems, -1, pc_Node->GetIndex(),
                                                               orc_AllRelevantItems);
          }
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             mh_SearchAndAddAllAffectedBusConnectorsToTheFront(orc_AllItems, pc_Bus->GetIndex(), -1,
                                                               orc_AllRelevantItems);
@@ -155,7 +155,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_Restore(void)
 {
    C_SdTopologyScene * const pc_Scene = dynamic_cast<C_SdTopologyScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       pc_Scene->CopyFromSnapshotToScene(this->mc_DataBackup, &(this->mc_MapTypeAndIndexToId));
       Q_EMIT (this->SigErrorChange());
@@ -252,12 +252,12 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::mh_SearchAndAddAllAffectedBusConnec
       QGraphicsItem * const pc_CurrentItem = C_SebUtil::h_GetHighestParent(*c_ItItem);
 
       C_GiLiBusConnector * const pc_BusConnector = dynamic_cast<C_GiLiBusConnector *>(pc_CurrentItem);
-      if (pc_BusConnector != NULL)
+      if (pc_BusConnector != nullptr)
       {
          C_GiNode * const pc_Node = pc_BusConnector->GetNodeItem();
          const C_GiLiBus * const pc_Bus = pc_BusConnector->GetBusItem();
          //Node match
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             if (ors32_NodeIndex == pc_Node->GetIndex())
             {
@@ -265,7 +265,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::mh_SearchAndAddAllAffectedBusConnec
             }
          }
          //Bus match
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             if (ors32_BusIndex == pc_Bus->GetIndex())
             {
@@ -296,7 +296,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::mh_SearchAndAddAllAffectedBusTextEl
       QGraphicsItem * const pc_CurrentItem = C_SebUtil::h_GetHighestParent(*c_ItItem);
 
       C_GiTextElementBus * const pc_TextElementBus = dynamic_cast<C_GiTextElementBus *>(pc_CurrentItem);
-      if (pc_TextElementBus != NULL)
+      if (pc_TextElementBus != nullptr)
       {
          if (pc_TextElementBus->GetBusIndex() == ou32_BusIndex)
          {
@@ -332,13 +332,13 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToData(void)
         c_ItRelatedItem != c_RelatedItems.end(); ++c_ItRelatedItem)
    {
       pc_Unique = dynamic_cast<C_GiUnique *>(*c_ItRelatedItem);
-      if (pc_Unique != NULL)
+      if (pc_Unique != nullptr)
       {
          const uint64_t u64_CurUniqueId = pc_Unique->GetId();
          //lint -e{740}  no problem because of common base class
 
          pc_Data = dynamic_cast<C_PuiSdDataElement *>(*c_ItRelatedItem);
-         if (pc_Data != NULL)
+         if (pc_Data != nullptr)
          {
             const int32_t s32_Index = pc_Data->GetIndex();
             if (s32_Index >= 0)
@@ -354,17 +354,17 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToData(void)
                //Bus
 
                pc_Bus = dynamic_cast<C_GiLiBus *>(*c_ItRelatedItem);
-               if (pc_Bus != NULL)
+               if (pc_Bus != nullptr)
                {
                   const C_OscSystemBus * const pc_OscBus = C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_Index);
                   const C_PuiSdBus * const pc_UiBus = C_PuiSdHandler::h_GetInstance()->GetUiBus(u32_Index);
                   c_MapOldIndexToNewIndex.insert(u32_Index,
                                                  static_cast<uint32_t>(this->mc_DataBackup.c_OscBuses.size()));
-                  if (pc_OscBus != NULL)
+                  if (pc_OscBus != nullptr)
                   {
                      this->mc_DataBackup.c_OscBuses.push_back(*pc_OscBus);
                   }
-                  if (pc_UiBus != NULL)
+                  if (pc_UiBus != nullptr)
                   {
                      this->mc_DataBackup.c_UiBuses.push_back(*pc_UiBus);
                   }
@@ -380,7 +380,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToData(void)
                // Bus text element
 
                pc_TextElementBus = dynamic_cast<C_GiTextElementBus *>(*c_ItRelatedItem);
-               if (pc_TextElementBus != NULL)
+               if (pc_TextElementBus != nullptr)
                {
                   if (u32_Index < C_PuiSdHandler::h_GetInstance()->c_BusTextElements.size())
                   {
@@ -399,7 +399,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToData(void)
             //Bus connector
 
             pc_BusConnector = dynamic_cast<C_GiLiBusConnector *>(*c_ItRelatedItem);
-            if (pc_BusConnector != NULL)
+            if (pc_BusConnector != nullptr)
             {
                const C_GiLiBus * pc_BusConst;
                const uint32_t u32_BackupBusConnectionIndex =
@@ -413,7 +413,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToData(void)
                                             u32_BackupBusConnectionIndex), u64_CurUniqueId);
                   //Node data
                   pc_Node = pc_BusConnector->GetNodeItem();
-                  if (pc_Node != NULL)
+                  if (pc_Node != nullptr)
                   {
                      const int32_t s32_NodeIndex = pc_Node->GetIndex();
 
@@ -434,12 +434,12 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToData(void)
                            //Core
                            const C_PuiSdNodeConnectionId * const pc_CurConnId = pc_Node->GetNodeConnectionId(
                               pc_BusConnector);
-                           if (pc_CurConnId != NULL)
+                           if (pc_CurConnId != nullptr)
                            {
                               rc_CurBusConnectionBackupData.c_ConnectionId = *pc_CurConnId;
                            }
                            //UI
-                           if (pc_UiNode != NULL)
+                           if (pc_UiNode != nullptr)
                            {
                               if (u32_BusConnectionDataIndex < pc_UiNode->c_UiBusConnections.size())
                               {
@@ -452,7 +452,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToData(void)
                   }
                   //Bus data
                   pc_BusConst = pc_BusConnector->GetBusItem();
-                  if (pc_BusConst != NULL)
+                  if (pc_BusConst != nullptr)
                   {
                      rc_CurBusConnectionBackupData.u64_BusId = pc_BusConst->GetId();
                   }
@@ -500,7 +500,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToDataNode(const C_GiNode * c
                                                               const uint64_t ou64_UniqueId,
                                                               uint32_t & oru32_NodeCounter)
 {
-   if (opc_UiNodeItem != NULL)
+   if (opc_UiNodeItem != nullptr)
    {
       const bool q_IsMulti = C_OscNodeSquad::h_CheckIsMultiDevice(
          ou32_NodeIndex, C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().c_NodeSquads);
@@ -514,11 +514,11 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToDataNode(const C_GiNode * c
             C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
          const C_PuiSdNode * const pc_UiNode =
             C_PuiSdHandler::h_GetInstance()->GetUiNode(ou32_NodeIndex);
-         if (pc_OscNode != NULL)
+         if (pc_OscNode != nullptr)
          {
             this->mc_DataBackup.c_OscNodes.push_back(*pc_OscNode);
          }
-         if (pc_UiNode != NULL)
+         if (pc_UiNode != nullptr)
          {
             this->mc_DataBackup.c_UiNodes.push_back(*pc_UiNode);
          }
@@ -548,7 +548,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToDataMultiNode(const uint32_
    {
       const C_OscNodeSquad * const pc_Group = C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(
          u32_GroupIndex);
-      if (pc_Group != NULL)
+      if (pc_Group != nullptr)
       {
          const std::vector<uint32_t> c_Indices = C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
             ou32_NodeIndex);
@@ -562,11 +562,11 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToDataMultiNode(const uint32_
             const C_PuiSdNode * const pc_UiNode =
                C_PuiSdHandler::h_GetInstance()->GetUiNode(c_Indices[u32_ItNode]);
             c_Group.c_SubNodeIndexes.push_back(static_cast<uint32_t>(this->mc_DataBackup.c_OscNodes.size()));
-            if (pc_OscNode != NULL)
+            if (pc_OscNode != nullptr)
             {
                this->mc_DataBackup.c_OscNodes.push_back(*pc_OscNode);
             }
-            if (pc_UiNode != NULL)
+            if (pc_UiNode != nullptr)
             {
                this->mc_DataBackup.c_UiNodes.push_back(*pc_UiNode);
             }
@@ -594,7 +594,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_Delete(void)
 {
    C_SdTopologyScene * const pc_Scene = dynamic_cast<C_SdTopologyScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       const vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
       for (vector<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
@@ -621,12 +621,12 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenBeforeDelete() const
         c_ItRelatedItem != c_RelatedItems.end(); ++c_ItRelatedItem)
    {
       const C_GiUnique * const pc_Unique = dynamic_cast<C_GiUnique *>(*c_ItRelatedItem);
-      if (pc_Unique != NULL)
+      if (pc_Unique != nullptr)
       {
          //lint -e{740}  no problem because of common base class
 
          pc_Data = dynamic_cast<C_PuiSdDataElement *>(*c_ItRelatedItem);
-         if (pc_Data != NULL)
+         if (pc_Data != nullptr)
          {
             const int32_t s32_Index = pc_Data->GetIndex();
             if (s32_Index >= 0)
@@ -637,14 +637,14 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenBeforeDelete() const
 
                //Backup scene data internally
                //Node
-               if (dynamic_cast<C_GiNode *>(*c_ItRelatedItem) != NULL)
+               if (dynamic_cast<C_GiNode *>(*c_ItRelatedItem) != nullptr)
                {
                   m_HandleCanOpenNodeBeforeDelete(u32_Index);
                }
                //Bus
 
                pc_Bus = dynamic_cast<C_GiLiBus *>(*c_ItRelatedItem);
-               if (pc_Bus != NULL)
+               if (pc_Bus != nullptr)
                {
                   m_HandleCanOpenBusBeforeDelete(u32_Index);
                }
@@ -655,11 +655,11 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenBeforeDelete() const
             //Bus connector
 
             pc_BusConnector = dynamic_cast<C_GiLiBusConnector *>(*c_ItRelatedItem);
-            if (pc_BusConnector != NULL)
+            if (pc_BusConnector != nullptr)
             {
                //Node data
                pc_Node = pc_BusConnector->GetNodeItem();
-               if (pc_Node != NULL)
+               if (pc_Node != nullptr)
                {
                   const int32_t s32_NodeIndex = pc_Node->GetIndex();
 
@@ -675,7 +675,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenBeforeDelete() const
                         //Core
                         const C_PuiSdNodeConnectionId * const pc_CurConnId = pc_Node->GetNodeConnectionId(
                            pc_BusConnector);
-                        if (pc_CurConnId != NULL)
+                        if (pc_CurConnId != nullptr)
                         {
                            m_HandleCanOpenNodeBusConnectorBeforeDelete(u32_NodeIndex, *pc_CurConnId);
                         }
@@ -710,7 +710,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenManagerBeforeDelete(
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_Index);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       std::vector<uint8_t> c_Tmp;
       c_Tmp.reserve(pc_Node->c_CanOpenManagers.size());
@@ -741,7 +741,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenDeviceBeforeDelete(c
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < C_PuiSdHandler::h_GetInstance()->GetOscNodesSize(); ++u32_ItNode)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItNode);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
                  pc_Node->c_CanOpenManagers.begin();
@@ -777,7 +777,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenBusBeforeDelete(cons
 {
    const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(ou32_Index);
 
-   if (pc_Bus != NULL)
+   if (pc_Bus != nullptr)
    {
       if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
       {
@@ -852,7 +852,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenDeviceNodeBusConnect
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < C_PuiSdHandler::h_GetInstance()->GetOscNodesSize(); ++u32_ItNode)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItNode);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
                  pc_Node->c_CanOpenManagers.begin();

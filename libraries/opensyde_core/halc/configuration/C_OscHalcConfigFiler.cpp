@@ -492,7 +492,7 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoDataBase(const C_OscHalcDefBase & orc_IoD
       }
       else
       {
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_IoDataFileName);
          }
@@ -528,7 +528,7 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoDomains(const C_OscHalcConfig & orc_IoDat
         ++u32_ItDomain)
    {
       const C_OscHalcConfigDomain * const pc_Domain = orc_IoData.GetDomainConfigDataConst(u32_ItDomain);
-      if (pc_Domain != NULL)
+      if (pc_Domain != nullptr)
       {
          s32_Retval = C_OscHalcConfigFiler::h_SaveIoDomain(*pc_Domain, orc_XmlParser);
 
@@ -901,7 +901,7 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoDomains(C_OscHalcConfig & orc_IoData, C_O
             do
             {
                const C_OscHalcConfigDomain * const pc_Domain = orc_IoData.GetDomainConfigDataConst(u32_ActualCount);
-               if (pc_Domain != NULL)
+               if (pc_Domain != nullptr)
                {
                   C_OscHalcConfigDomain c_DomainCopy = *pc_Domain;
                   s32_Retval = h_LoadIoDomain(c_DomainCopy, orc_XmlParser);

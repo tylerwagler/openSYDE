@@ -201,7 +201,7 @@ int32_t C_SyvUtil::h_GetIndicesFromBusId(const uint8_t ou8_BusIdentifier, const 
    for (uint32_t u32_ItBus = 0; u32_ItBus < C_PuiSdHandler::h_GetInstance()->GetOscBusesSize(); ++u32_ItBus)
    {
       const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_ItBus);
-      if ((pc_Bus != NULL) && (pc_Bus->u8_BusId == ou8_BusIdentifier))
+      if ((pc_Bus != nullptr) && (pc_Bus->u8_BusId == ou8_BusIdentifier))
       {
          std::vector<uint32_t> c_NodeIndexes;
          std::vector<uint32_t> c_InterfaceIndexes;
@@ -216,7 +216,7 @@ int32_t C_SyvUtil::h_GetIndicesFromBusId(const uint8_t ou8_BusIdentifier, const 
             {
                const C_OscNode * const pc_Node =
                   C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndexes[u32_ItNode]);
-               if ((pc_Node != NULL) && (c_InterfaceIndexes[u32_ItNode] < pc_Node->c_Properties.c_ComInterfaces.size()))
+               if ((pc_Node != nullptr) && (c_InterfaceIndexes[u32_ItNode] < pc_Node->c_Properties.c_ComInterfaces.size()))
                {
                   const C_OscNodeComInterfaceSettings & rc_ComInterface =
                      pc_Node->c_Properties.c_ComInterfaces[c_InterfaceIndexes[u32_ItNode]];
@@ -258,7 +258,7 @@ QString C_SyvUtil::h_GetUpdateModeDescription(const uint32_t ou32_ViewIndex,
       {
          const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             const QMap<C_OscNodeDataPoolListElementId,
                        C_PuiSvReadDataConfiguration>::const_iterator c_Result = pc_View->GetReadRailAssignments().find(
@@ -366,7 +366,7 @@ QString C_SyvUtil::h_GetUpdateModeDescription(const uint32_t ou32_ViewIndex,
          {
             //Step 2 Get message info and format it
             const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(c_MessageId);
-            if (pc_Message != NULL)
+            if (pc_Message != nullptr)
             {
                switch (pc_Message->e_TxMethod)
                {
@@ -476,7 +476,7 @@ void C_SyvUtil::h_GetViewDisplayName(const uint32_t ou32_ViewIndex, const int32_
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       switch (os32_SubMode)
       {

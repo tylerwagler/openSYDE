@@ -41,7 +41,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeHalcOvDelegate::C_SdNdeHalcOvDelegate(QObject * const opc_Parent) :
    QStyledItemDelegate(opc_Parent),
-   mpc_Model(NULL),
+   mpc_Model(nullptr),
    mc_CheckMark("://images/CheckBoxActiveWithoutBackground.svg"),
    ms32_HoveredRow(-1)
 {
@@ -86,7 +86,7 @@ void C_SdNdeHalcOvDelegate::paint(QPainter * const opc_Painter, const QStyleOpti
             opc_Painter->drawLine(c_TopLeft, c_BottomLeft);
          }
          //Right
-         if (this->mpc_Model != NULL)
+         if (this->mpc_Model != nullptr)
          {
             if (orc_Index.column() == (this->mpc_Model->columnCount() - 1))
             {

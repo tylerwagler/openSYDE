@@ -36,7 +36,7 @@ class C_SebTopologyBaseScene :
    Q_OBJECT
 
 public:
-   C_SebTopologyBaseScene(QObject * const opc_Parent = NULL);
+   C_SebTopologyBaseScene(QObject * const opc_Parent = nullptr);
    ~C_SebTopologyBaseScene() override;
 
    virtual void Load(void);
@@ -61,8 +61,8 @@ protected:
                                 uint64_t> * const opc_IdMap);
    uint64_t m_GetNewUniqueBusConnectorId(const QMap<
                                             stw::opensyde_gui_logic::C_PuiBsTemporaryDataId,
-                                            uint64_t> * const opc_IdMap = NULL, const uint32_t & oru32_Index = 0, const std::vector<stw::opensyde_gui_logic::C_PuiSdCompleteBusConnectionData> * const opc_AdditionalConnectionData =
-                                            NULL);
+                                            uint64_t> * const opc_IdMap = nullptr, const uint32_t & oru32_Index = 0, const std::vector<stw::opensyde_gui_logic::C_PuiSdCompleteBusConnectionData> * const opc_AdditionalConnectionData =
+                                            nullptr);
 
    virtual C_GiNode * m_CreateNode(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                                    const float64_t & orf64_Width, const float64_t & orf64_Height,

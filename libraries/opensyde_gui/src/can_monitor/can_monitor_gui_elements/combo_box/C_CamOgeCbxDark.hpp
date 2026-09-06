@@ -29,7 +29,7 @@ class C_CamOgeCbxDark :
    Q_OBJECT
 
 public:
-   explicit C_CamOgeCbxDark(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgeCbxDark(QWidget * const opc_Parent = nullptr);
    ~C_CamOgeCbxDark(void) override;
 
 private:

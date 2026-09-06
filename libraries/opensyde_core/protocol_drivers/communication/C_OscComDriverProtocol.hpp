@@ -49,10 +49,10 @@ public:
                         const std::vector<uint8_t> & orc_ActiveNodes,
                         stw::can::C_CanDispatcher * const opc_CanDispatcher, C_OscIpDispatcher * const opc_IpDispatcher,
                         C_OscSecurityPemDatabase * const opc_SecurityPemDb);
-   int32_t SendTesterPresent(const std::set<uint32_t> * const opc_SkipNodes = NULL);
+   int32_t SendTesterPresent(const std::set<uint32_t> * const opc_SkipNodes = nullptr);
    int32_t SendTesterPresent(const std::vector<uint32_t> & orc_ActiveNodes) const;
    int32_t SendTesterPresent(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
-   int32_t StartRouting(const uint32_t ou32_NodeIndex, uint32_t * const opu32_ErrorNodeIndex = NULL);
+   int32_t StartRouting(const uint32_t ou32_NodeIndex, uint32_t * const opu32_ErrorNodeIndex = nullptr);
    int32_t StopRouting(const uint32_t ou32_NodeIndex);
    int32_t IsRoutingNecessary(const uint32_t ou32_NodeIndex);
    bool IsEthToEthRoutingNecessary(const uint32_t ou32_RouterNodeIndex) const;
@@ -109,7 +109,7 @@ protected:
    uint32_t mu32_ActiveBusIndex; //index of bus within mpc_SysDef that we are connecting from
 
    uint32_t m_GetActiveNodeCount(void) const;
-   uint32_t m_GetActiveIndex(const uint32_t ou32_NodeIndex, bool * const opq_Found = NULL) const;
+   uint32_t m_GetActiveIndex(const uint32_t ou32_NodeIndex, bool * const opq_Found = nullptr) const;
    uint32_t m_GetActiveIndex(const C_OscProtocolDriverOsyNode & orc_ServerId, bool & orq_Found) const;
    stw::can::C_CanDispatcher * m_GetCanDispatcher(void);
    C_OscIpDispatcher * m_GetIpDispatcher(void);
@@ -129,11 +129,11 @@ protected:
    int32_t m_SetNodeSessionIdWithExpectation(const uint32_t ou32_ActiveNode,
                                              const uint8_t ou8_ExpectedNeededSession) const;
    int32_t m_SetNodeSecurityAccess(const uint32_t ou32_ActiveNode, const uint8_t ou8_SecurityLevel,
-                                   uint8_t * const opu8_NrCode, bool * const opq_SecureAuthenticationActive = NULL,
-                                   bool * const opq_TrafficEncryptionActive = NULL) const;
+                                   uint8_t * const opu8_NrCode, bool * const opq_SecureAuthenticationActive = nullptr,
+                                   bool * const opq_TrafficEncryptionActive = nullptr) const;
    int32_t m_SetNodeSecurityAccess(C_OscProtocolDriverOsy * const opc_ExistingProtocol, const uint8_t ou8_SecurityLevel,
-                                   uint8_t * const opu8_NrCode, bool * const opq_SecureAuthenticationActive = NULL,
-                                   bool * const opq_TrafficEncryptionActive = NULL) const;
+                                   uint8_t * const opu8_NrCode, bool * const opq_SecureAuthenticationActive = nullptr,
+                                   bool * const opq_TrafficEncryptionActive = nullptr) const;
    int32_t m_SetNodesSecurityAccess(const uint8_t ou8_SecurityLevel, std::set<uint32_t> & orc_ErrorActiveNodes) const;
    int32_t m_SetNodesSecurityAccess(const std::vector<uint32_t> & orc_ActiveNodes, const uint8_t ou8_SecurityLevel,
                                     std::set<uint32_t> & orc_ErrorActiveNodes) const;

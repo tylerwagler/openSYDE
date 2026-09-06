@@ -51,7 +51,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueSignalTableModel::C_SdBueSignalTableModel(QObject * const opc_Parent) :
    QAbstractTableModel(opc_Parent),
-   mpc_SyncManager(NULL)
+   mpc_SyncManager(nullptr)
 {
 }
 
@@ -72,7 +72,7 @@ void C_SdBueSignalTableModel::SetMessageSyncManager(C_PuiSdNodeCanMessageSyncMan
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueSignalTableModel::UpdateData(void)
 {
-   if (this->mpc_SyncManager != NULL)
+   if (this->mpc_SyncManager != nullptr)
    {
       beginResetModel();
       this->m_FillSigInfo();
@@ -551,7 +551,7 @@ QString C_SdBueSignalTableModel::m_GetMultiplexingValue(const C_OscCanMessageIde
    const C_OscCanSignal * const pc_OscSignal =
       C_PuiSdHandler::h_GetInstance()->GetCanSignal(orc_MessageId, ou32_Signal);
 
-   if (pc_OscSignal != NULL)
+   if (pc_OscSignal != nullptr)
    {
       const C_OscCanMessage * pc_Message;
       QString c_MultiplexerName = "<no multiplexer defined yet>";
@@ -567,7 +567,7 @@ QString C_SdBueSignalTableModel::m_GetMultiplexingValue(const C_OscCanMessageIde
       case C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL:
          // find out name of multiplexer
          pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(orc_MessageId);
-         if (pc_Message != NULL)
+         if (pc_Message != nullptr)
          {
             if (pc_Message->IsMultiplexed(&u32_Multiplexer) == true)
             {
@@ -575,7 +575,7 @@ QString C_SdBueSignalTableModel::m_GetMultiplexingValue(const C_OscCanMessageIde
                const C_OscNodeDataPoolListElement * const pc_OscSignalCommon =
                   C_PuiSdHandler::h_GetInstance()->GetOscCanDataPoolListElement(orc_MessageId,
                                                                                 u32_Multiplexer);
-               if (pc_OscSignalCommon != NULL)
+               if (pc_OscSignalCommon != nullptr)
                {
                   c_MultiplexerName = static_cast<QString>(pc_OscSignalCommon->c_Name.c_str());
                }
@@ -743,7 +743,7 @@ void C_SdBueSignalTableModel::m_FillSigInfo(void)
    {
       const C_OscCanMessage * const pc_Message =
          C_PuiSdHandler::h_GetInstance()->GetCanMessage(c_MessageIds[u32_MessageCounter]);
-      if (pc_Message != NULL)
+      if (pc_Message != nullptr)
       {
          uint32_t u32_SignalCounter;
          C_SigTableConfig c_SigConfig;
@@ -769,10 +769,10 @@ void C_SdBueSignalTableModel::m_FillSigInfo(void)
                   rc_MsgId.u32_DatapoolIndex,
                   rc_MsgId.q_MessageIsTx);
 
-            if ((pc_OscSignal != NULL) &&
-                (pc_OscSignalCommon != NULL) &&
-                (pc_UiSignalCommon != NULL) &&
-                (pc_List != NULL))
+            if ((pc_OscSignal != nullptr) &&
+                (pc_OscSignalCommon != nullptr) &&
+                (pc_UiSignalCommon != nullptr) &&
+                (pc_List != nullptr))
             {
                C_SigTableData c_SigData;
                const bool q_SignalValid = !pc_Message->CheckErrorSignal(

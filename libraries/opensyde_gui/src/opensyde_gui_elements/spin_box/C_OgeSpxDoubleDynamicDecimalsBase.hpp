@@ -30,7 +30,7 @@ class C_OgeSpxDoubleDynamicDecimalsBase :
    Q_OBJECT
 
 public:
-   C_OgeSpxDoubleDynamicDecimalsBase(QWidget * const opc_Parent = NULL);
+   C_OgeSpxDoubleDynamicDecimalsBase(QWidget * const opc_Parent = nullptr);
 
    QString textFromValue(const float64_t of64_Value) const override;
 };

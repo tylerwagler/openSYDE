@@ -38,8 +38,8 @@ public:
    int32_t CreateCleanFileWithoutCrc(const std::string & orc_FilePath,
                                      const bool oq_InterpretedDataOnly = false) const;
    int32_t ReadFile(const std::string & orc_FilePath, const bool oq_IgnoreCrc,
-                    const bool oq_InterpretedDataOnly = false, uint16_t * const opu16_FileCrc = NULL,
-                    bool * const opq_MissingOptionalContent = NULL);
+                    const bool oq_InterpretedDataOnly = false, uint16_t * const opu16_FileCrc = nullptr,
+                    bool * const opq_MissingOptionalContent = nullptr);
    static int32_t h_UpdateCrcForFile(const std::string & orc_FilePath);
 
    //Data

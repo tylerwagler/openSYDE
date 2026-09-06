@@ -31,15 +31,15 @@ public:
                                                  const uint32_t ou32_ParameterStructIndex,
                                                  const uint32_t ou32_ParameterStructElementIndex,
                                                  C_OscNodeDataPoolList & orc_List, const uint32_t ou32_CurChannel,
-                                                 bool * const opq_IsArray = NULL,
-                                                 uint32_t * const opu32_ArrayIndex = NULL) const;
+                                                 bool * const opq_IsArray = nullptr,
+                                                 uint32_t * const opu32_ArrayIndex = nullptr) const;
    const C_OscNodeDataPoolListElement * GetListElementConst(const uint32_t ou32_DomainIndex,
                                                             const uint32_t ou32_ParameterStructIndex,
                                                             const uint32_t ou32_ParameterStructElementIndex,
                                                             const C_OscNodeDataPoolList & orc_List,
                                                             const uint32_t ou32_CurChannel,
-                                                            bool * const opq_IsArray = NULL,
-                                                            uint32_t * const opu32_ArrayIndex = NULL)
+                                                            bool * const opq_IsArray = nullptr,
+                                                            uint32_t * const opu32_ArrayIndex = nullptr)
    const;
    C_OscNodeDataPoolListElement * GetUseCaseListElement(const uint32_t ou32_DomainIndex,
                                                         C_OscNodeDataPoolList & orc_List) const;

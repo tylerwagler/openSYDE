@@ -24,7 +24,7 @@ class C_SdNdeHalcConfigTreeDelegate :
    public stw::opensyde_gui::C_TblDelegate
 {
 public:
-   C_SdNdeHalcConfigTreeDelegate(QObject * const opc_Parent = NULL);
+   C_SdNdeHalcConfigTreeDelegate(QObject * const opc_Parent = nullptr);
 
 protected:
    stw::opensyde_gui_elements::C_OgeCbxTableBase * m_CreateComboBox(QWidget * const opc_Parent) const override;

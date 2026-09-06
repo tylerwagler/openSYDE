@@ -63,13 +63,13 @@ std::error_code C_OscSecurityAesCbc::h_Encrypt(const uint8_t (&orau8_Key)[hu32_K
 {
    // Allocate cipher context
    EVP_CIPHER_CTX * const pc_Ctx = EVP_CIPHER_CTX_new();
-   if (pc_Ctx == NULL)
+   if (pc_Ctx == nullptr)
    {
       return Errc::config;
    }
 
    // Set up AES-128-CBC encryption
-   const int x_Result = EVP_EncryptInit_ex(pc_Ctx, EVP_aes_128_cbc(), NULL, orau8_Key, orau8_InitVector);
+   const int x_Result = EVP_EncryptInit_ex(pc_Ctx, EVP_aes_128_cbc(), nullptr, orau8_Key, orau8_InitVector);
    if (x_Result != 1)
    {
       EVP_CIPHER_CTX_free(pc_Ctx);
@@ -145,13 +145,13 @@ std::error_code C_OscSecurityAesCbc::h_Decrypt(const uint8_t (&orau8_Key)[hu32_K
 
    // Allocate cipher context
    EVP_CIPHER_CTX * const pc_Ctx = EVP_CIPHER_CTX_new();
-   if (pc_Ctx == NULL)
+   if (pc_Ctx == nullptr)
    {
       return Errc::config;
    }
 
    // Set up AES-128-CBC decryption
-   const int x_Result = EVP_DecryptInit_ex(pc_Ctx, EVP_aes_128_cbc(), NULL, orau8_Key, orau8_InitVector);
+   const int x_Result = EVP_DecryptInit_ex(pc_Ctx, EVP_aes_128_cbc(), nullptr, orau8_Key, orau8_InitVector);
    if (x_Result != 1)
    {
       EVP_CIPHER_CTX_free(pc_Ctx);

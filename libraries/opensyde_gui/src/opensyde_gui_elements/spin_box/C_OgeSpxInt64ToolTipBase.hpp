@@ -30,7 +30,7 @@ class C_OgeSpxInt64ToolTipBase :
    public C_OgeSpxAllBase
 {
 public:
-   C_OgeSpxInt64ToolTipBase(QWidget * const opc_Parent = NULL, const bool & orq_IsUnsigned = false);
+   C_OgeSpxInt64ToolTipBase(QWidget * const opc_Parent = nullptr, const bool & orq_IsUnsigned = false);
 
    bool event(QEvent * const opc_Event) override;
 

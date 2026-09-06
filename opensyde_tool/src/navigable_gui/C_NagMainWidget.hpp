@@ -38,7 +38,7 @@ class C_NagMainWidget :
    Q_OBJECT
 
 public:
-   explicit C_NagMainWidget(QWidget * const opc_Parent = NULL);
+   explicit C_NagMainWidget(QWidget * const opc_Parent = nullptr);
    ~C_NagMainWidget() override;
 
    void InitText(void) const;

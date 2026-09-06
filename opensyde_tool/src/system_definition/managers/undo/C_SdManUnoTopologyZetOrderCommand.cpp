@@ -81,7 +81,7 @@ void C_SdManUnoTopologyZetOrderCommand::h_CheckZetOrderPriority(const QList<QGra
          {
             pc_BusConnectorItem = dynamic_cast<C_GiLiBusConnector *>(*c_ItItem);
 
-            if (pc_BusConnectorItem != NULL)
+            if (pc_BusConnectorItem != nullptr)
             {
                if (((*c_ItSelectedItem)->type() == ms32_GRAPHICS_ITEM_NODE) &&
                    (pc_BusConnectorItem->GetNodeItem() == (*c_ItSelectedItem)))
@@ -118,7 +118,7 @@ void C_SdManUnoTopologyZetOrderCommand::mh_CheckZetOrderOfBusConnectors(C_GiLiBu
                                                                         QMap<QGraphicsItem *,
                                                                              float64_t> & orc_NewZetValues)
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       // Check the z order value against the node. It has to be smaller
       if (opc_Item->zValue() >= opc_Item->GetNodeItem()->zValue())

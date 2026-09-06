@@ -58,8 +58,8 @@ C_GiImageGroupWithoutData::C_GiImageGroupWithoutData(const uint64_t & oru64_Id, 
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiBiRectBaseGroup(oru64_Id, mhf64_MIN_WIDTH_IMAGE,
                        mhf64_MIN_HEIGHT_IMAGE, mhf64_ACTION_POINT_OFFSET_IMAGE, true, opc_Parent),
-   mpc_Image(NULL),
-   mpc_SvgGraphicsItem(NULL),
+   mpc_Image(nullptr),
+   mpc_SvgGraphicsItem(nullptr),
    mq_IsSvgFlag(oq_RequestLateImageInit)
 {
    if (oq_RequestLateImageInit == false)
@@ -87,7 +87,7 @@ C_GiImageGroupWithoutData::C_GiImageGroupWithoutData(const uint64_t & oru64_Id, 
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiBiRectBaseGroup(oru64_Id, mhf64_MIN_WIDTH_IMAGE,
                        mhf64_MIN_HEIGHT_IMAGE, mhf64_ACTION_POINT_OFFSET_IMAGE, true, opc_Parent),
-   mpc_SvgGraphicsItem(NULL),
+   mpc_SvgGraphicsItem(nullptr),
    mq_IsSvgFlag(false)
 {
    // image
@@ -106,7 +106,7 @@ C_GiImageGroupWithoutData::C_GiImageGroupWithoutData(const uint64_t & oru64_Id, 
 C_GiImageGroupWithoutData::~C_GiImageGroupWithoutData()
 {
    //Deleted via Qt parent mechanism
-   this->mpc_Image = NULL;
+   this->mpc_Image = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -119,7 +119,7 @@ QPixmap C_GiImageGroupWithoutData::GetImage(void) const
 {
    QPixmap c_Retval;
 
-   if (this->mpc_Image != NULL)
+   if (this->mpc_Image != nullptr)
    {
       c_Retval = this->mpc_Image->GetImage();
    }
@@ -136,7 +136,7 @@ QByteArray C_GiImageGroupWithoutData::GetImageFormat(void) const
 {
    QByteArray c_Retval;
 
-   if (this->mpc_Image != NULL)
+   if (this->mpc_Image != nullptr)
    {
       c_Retval = this->mpc_Image->GetImageFormat();
    }
@@ -182,7 +182,7 @@ void C_GiImageGroupWithoutData::m_ResizeUpdateItems(const float64_t of64_DiffWid
    Q_UNUSED(of64_DiffHeight)
    if (this->mq_IsSvgFlag == true)
    {
-      if (this->mpc_SvgGraphicsItem != NULL)
+      if (this->mpc_SvgGraphicsItem != nullptr)
       {
          this->mpc_SvgGraphicsItem->setRect(this->mpc_SvgGraphicsItem->rect().x(),
                                             this->mpc_SvgGraphicsItem->rect().y(),
@@ -193,7 +193,7 @@ void C_GiImageGroupWithoutData::m_ResizeUpdateItems(const float64_t of64_DiffWid
    }
    else
    {
-      if (this->mpc_Image != NULL)
+      if (this->mpc_Image != nullptr)
       {
          this->mpc_Image->update();
       }
@@ -203,7 +203,7 @@ void C_GiImageGroupWithoutData::m_ResizeUpdateItems(const float64_t of64_DiffWid
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiImageGroupWithoutData::m_Init(void)
 {
-   if (this->mpc_Image != NULL)
+   if (this->mpc_Image != nullptr)
    {
       // Notify the base class about the image as biggest item as orientation. Very important!
       this->m_SetBiggestItem(*this->mpc_Image);
@@ -218,7 +218,7 @@ void C_GiImageGroupWithoutData::m_Init(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiImageGroupWithoutData::m_InitSvg(void)
 {
-   if (this->mpc_SvgGraphicsItem != NULL)
+   if (this->mpc_SvgGraphicsItem != nullptr)
    {
       // Notify the base class about the image as biggest item as orientation. Very important!
       this->m_SetBiggestItem(*this->mpc_SvgGraphicsItem);

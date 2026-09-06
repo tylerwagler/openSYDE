@@ -31,7 +31,7 @@ class C_OgeSliDashboard :
    Q_OBJECT
 
 public:
-   C_OgeSliDashboard(QWidget * const opc_Parent = NULL);
+   C_OgeSliDashboard(QWidget * const opc_Parent = nullptr);
    ~C_OgeSliDashboard(void) override;
 
    void SetCurrentStyle(const stw::opensyde_gui_logic::C_PuiSvDbSlider::E_Style oe_Style);

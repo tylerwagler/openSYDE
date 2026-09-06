@@ -62,8 +62,8 @@ C_SdNdeDpListArrayEditView::C_SdNdeDpListArrayEditView(QWidget * const opc_Paren
    mu32_DataSetIndex(0),
    mc_UndoManager(),
    mc_Delegate(),
-   mpc_ModelViewManager(NULL),
-   mpc_LabelCorner(NULL)
+   mpc_ModelViewManager(nullptr),
+   mpc_LabelCorner(nullptr)
 {
    //UI Settings
    this->setSortingEnabled(false);
@@ -124,7 +124,7 @@ C_SdNdeDpListArrayEditView::C_SdNdeDpListArrayEditView(QWidget * const opc_Paren
 //lint -e{1540}  no memory leak because of the parent and the Qt memory management or never took ownership
 C_SdNdeDpListArrayEditView::~C_SdNdeDpListArrayEditView(void)
 {
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       this->mpc_ModelViewManager->UnRegisterArrayEditView(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                           this->mu32_ListIndex, this->mu32_ElementIndex,
@@ -149,7 +149,7 @@ void C_SdNdeDpListArrayEditView::SetElement(const uint32_t & oru32_NodeIndex, co
                                             const C_SdNdeDpUtil::E_ArrayEditType & ore_ArrayEditType,
                                             const uint32_t & oru32_DataSetIndex)
 {
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       this->mpc_ModelViewManager->UnRegisterArrayEditView(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                           this->mu32_ListIndex, this->mu32_ElementIndex,
@@ -280,18 +280,18 @@ std::vector<uint32_t> C_SdNdeDpListArrayEditView::m_GetSelectedIndices(void) con
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListArrayEditView::m_UpdateModelView(void)
 {
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       C_SdNdeDpListArrayEditModel * const pc_Model = this->mpc_ModelViewManager->GetArrayEditModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex, this->mu32_ElementIndex,
          this->me_ArrayEditType, this->mu32_DataSetIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          this->setModel(pc_Model);
          this->mc_Delegate.SetModel(pc_Model);
       }
    }
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       this->mpc_ModelViewManager->RegisterArrayEditView(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                         this->mu32_ListIndex, this->mu32_ElementIndex,
@@ -305,8 +305,8 @@ void C_SdNdeDpListArrayEditView::m_UpdateModelView(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListArrayEditView::m_UpdateCornerButton(void)
 {
-   tgl_assert(this->mpc_LabelCorner != NULL);
-   if (this->mpc_LabelCorner != NULL)
+   tgl_assert(this->mpc_LabelCorner != nullptr);
+   if (this->mpc_LabelCorner != nullptr)
    {
       this->mpc_LabelCorner->setGeometry(0, 0, this->verticalHeader()->width(), this->horizontalHeader()->height());
    }

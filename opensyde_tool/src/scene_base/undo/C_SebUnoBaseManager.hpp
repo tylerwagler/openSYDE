@@ -41,7 +41,7 @@ class C_SebUnoBaseManager :
    Q_OBJECT
 
 public:
-   C_SebUnoBaseManager(QGraphicsScene * const opc_Scene, QObject * const opc_Parent = NULL);
+   C_SebUnoBaseManager(QGraphicsScene * const opc_Scene, QObject * const opc_Parent = nullptr);
    ~C_SebUnoBaseManager(void) override;
 
    void RegisterMove(void);

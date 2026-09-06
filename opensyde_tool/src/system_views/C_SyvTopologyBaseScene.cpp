@@ -84,22 +84,22 @@ void C_SyvTopologyBaseScene::Load(void)
    connect(pc_PC, &C_GiSvPc::SigHideToolTip, this, &C_SyvTopologyBaseScene::m_HandleHideToolTip);
 
    m_AddAnyItemToScene(pc_PC);
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       if (pc_View->GetOscPcData().GetConnected() == true)
       {
          const uint32_t u32_BusIndex = pc_View->GetOscPcData().GetBusIndex();
          QList<QGraphicsItem *> c_Items = this->items();
-         C_GiLiBus * pc_Bus = NULL;
+         C_GiLiBus * pc_Bus = nullptr;
 
          //Search for matching bus
          for (QList<QGraphicsItem *>::iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
          {
             QGraphicsItem * const pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-            if (pc_CurItemParent != NULL)
+            if (pc_CurItemParent != nullptr)
             {
                C_GiLiBus * const pc_CurBus = dynamic_cast<C_GiLiBus *>(pc_CurItemParent);
-               if (pc_CurBus != NULL)
+               if (pc_CurBus != nullptr)
                {
                   if (static_cast<uint32_t>(pc_CurBus->GetIndex()) == u32_BusIndex)
                   {
@@ -109,7 +109,7 @@ void C_SyvTopologyBaseScene::Load(void)
                }
             }
          }
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             m_AddPcBusConnector(pc_Bus, pc_PC, pc_View->GetPuiPcData().GetConnectionData());
          }
@@ -233,7 +233,7 @@ bool C_SyvTopologyBaseScene::IsSceneRubberBandAvailable(void) const
 //----------------------------------------------------------------------------------------------------------------------
 stw::opensyde_gui_logic::C_SebBaseCopyPasteManager * C_SyvTopologyBaseScene::m_GetCopyPasteManager(void)
 {
-   return NULL;
+   return nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -247,7 +247,7 @@ stw::opensyde_gui_logic::C_SebBaseCopyPasteManager * C_SyvTopologyBaseScene::m_G
 const stw::opensyde_gui_logic::C_SebBaseCopyPasteManager * C_SyvTopologyBaseScene::m_GetCopyPasteManagerConst(void)
 const
 {
-   return NULL;
+   return nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -334,7 +334,7 @@ void C_SyvTopologyBaseScene::m_AddBusToScene(C_GiLiBus * const opc_BusGraphicsIt
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvTopologyBaseScene::m_AddBusConnectorToScene(C_GiLiBusConnector * const opc_BusConnectorGraphicsItem)
 {
-   if (opc_BusConnectorGraphicsItem != NULL)
+   if (opc_BusConnectorGraphicsItem != nullptr)
    {
       C_SebTopologyBaseScene::m_AddBusConnectorToScene(opc_BusConnectorGraphicsItem);
 
@@ -492,14 +492,14 @@ void C_SyvTopologyBaseScene::m_Cut(void)
 //----------------------------------------------------------------------------------------------------------------------
 C_GiLiBus * C_SyvTopologyBaseScene::m_CheckBusState(void) const
 {
-   C_GiLiBus * pc_Retval = NULL;
+   C_GiLiBus * pc_Retval = nullptr;
    const QList<QGraphicsItem *> & rc_Items = this->items();
 
    QList<QGraphicsItem *>::const_iterator c_ItItem;
    for (c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
    {
       C_GiLiBus * const pc_Item = dynamic_cast<C_GiLiBus *>(*c_ItItem);
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          const bool q_Disabled = C_PuiSvHandler::h_GetInstance()->CheckBusDisabled(this->mu32_ViewIndex,
                                                                                    pc_Item->GetIndex());
@@ -516,12 +516,12 @@ C_GiLiBus * C_SyvTopologyBaseScene::m_CheckBusState(void) const
       else
       {
          C_GiLiBusConnector * const pc_BusConnector = dynamic_cast<C_GiLiBusConnector *>(*c_ItItem);
-         if (pc_BusConnector != NULL)
+         if (pc_BusConnector != nullptr)
          {
             const C_GiNode * const pc_Node = pc_BusConnector->GetNodeItem();
             const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-            tgl_assert((pc_Node != NULL) && (pc_View != NULL));
-            if ((pc_Node != NULL) && (pc_View != NULL))
+            tgl_assert((pc_Node != nullptr) && (pc_View != nullptr));
+            if ((pc_Node != nullptr) && (pc_View != nullptr))
             {
                const std::vector<uint8_t> & rc_NodeActiveFlages = pc_View->GetNodeActiveFlags();
                const int32_t s32_NodeIndex = pc_Node->GetIndex();
@@ -561,7 +561,7 @@ void C_SyvTopologyBaseScene::m_AddPcBusConnector(const C_GiLiBus * const opc_Bus
    {
       c_UiInteractionPoints = orc_LineData.c_UiInteractionPoints;
    }
-   if ((opc_Bus != NULL) && (opc_Pc != NULL))
+   if ((opc_Bus != nullptr) && (opc_Pc != nullptr))
    {
       //Create and add bus connection
       C_GiSvPcBusConnector * const pc_PcBusConnection = new C_GiSvPcBusConnector(
@@ -588,7 +588,7 @@ QPointF C_SyvTopologyBaseScene::mh_GetInitialConnectionPoint(const QGraphicsItem
 {
    QPointF c_Retval(0.0, 0.0);
 
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       c_Retval = QPointF(opc_Item->sceneBoundingRect().center().x(), opc_Item->sceneBoundingRect().bottom());
    }
@@ -615,7 +615,7 @@ bool C_SyvTopologyBaseScene::m_HandlePcReconnectIfNecessary(QString & orc_BusNam
    pc_ValidBus = m_CheckBusState();
    orc_BusName = "";
 
-   if (pc_ValidBus == NULL)
+   if (pc_ValidBus == nullptr)
    {
       const QList<QGraphicsItem *> & rc_Items = this->items();
       std::vector<QGraphicsItem *> c_ItemsToBeDeleted;
@@ -624,7 +624,7 @@ bool C_SyvTopologyBaseScene::m_HandlePcReconnectIfNecessary(QString & orc_BusNam
       for (c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
       {
          C_GiSvPcBusConnector * const pc_Item = dynamic_cast<C_GiSvPcBusConnector *>(*c_ItItem);
-         if (pc_Item != NULL)
+         if (pc_Item != nullptr)
          {
             c_ItemsToBeDeleted.push_back(pc_Item);
          }
@@ -645,17 +645,17 @@ bool C_SyvTopologyBaseScene::m_HandlePcReconnectIfNecessary(QString & orc_BusNam
    {
       const C_PuiSvData * const pc_PcData = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
       bool q_Found = false;
-      C_GiLiBus * pc_LastBus = NULL;
+      C_GiLiBus * pc_LastBus = nullptr;
       const QList<QGraphicsItem *> & rc_Items = this->items();
 
       QList<QGraphicsItem *>::const_iterator c_ItItem;
       //Search for LAST connected bus index
-      if (pc_PcData != NULL)
+      if (pc_PcData != nullptr)
       {
          for (c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
          {
             C_GiLiBus * const pc_Item = dynamic_cast<C_GiLiBus *>(*c_ItItem);
-            if (pc_Item != NULL)
+            if (pc_Item != nullptr)
             {
                if (static_cast<uint32_t>(pc_Item->GetIndex()) == pc_PcData->GetOscPcData().GetBusIndex())
                {
@@ -676,11 +676,11 @@ bool C_SyvTopologyBaseScene::m_HandlePcReconnectIfNecessary(QString & orc_BusNam
       for (c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
       {
          C_GiSvPcBusConnector * const pc_PcConnector = dynamic_cast<C_GiSvPcBusConnector *>(*c_ItItem);
-         if (pc_PcConnector != NULL)
+         if (pc_PcConnector != nullptr)
          {
             const C_GiLiBus * const pc_CurBus = pc_PcConnector->GetBusItem();
-            tgl_assert(pc_CurBus != NULL);
-            if (pc_CurBus != NULL)
+            tgl_assert(pc_CurBus != nullptr);
+            if (pc_CurBus != nullptr)
             {
                const bool q_Disabled = C_PuiSvHandler::h_GetInstance()->CheckBusDisabled(this->mu32_ViewIndex,
                                                                                          pc_CurBus->GetIndex());
@@ -690,15 +690,15 @@ bool C_SyvTopologyBaseScene::m_HandlePcReconnectIfNecessary(QString & orc_BusNam
                   const C_GiBiConnectableItem * const pc_PC = pc_PcConnector->GetGenericPositionItem();
 
                   const QGraphicsItem * const pc_GraphicsItem = dynamic_cast<const QGraphicsItem * const>(pc_PC);
-                  if (pc_LastBus != NULL)
+                  if (pc_LastBus != nullptr)
                   {
-                     pc_PcConnector->RevertBus(pc_LastBus, NULL,
+                     pc_PcConnector->RevertBus(pc_LastBus, nullptr,
                                                C_SyvTopologyBaseScene::mh_GetInitialConnectionPoint(pc_GraphicsItem));
                      orc_BusName = pc_LastBus->GetName();
                   }
                   else
                   {
-                     pc_PcConnector->RevertBus(pc_ValidBus, NULL,
+                     pc_PcConnector->RevertBus(pc_ValidBus, nullptr,
                                                C_SyvTopologyBaseScene::mh_GetInitialConnectionPoint(pc_GraphicsItem));
                      orc_BusName = pc_ValidBus->GetName();
                   }
@@ -717,18 +717,18 @@ bool C_SyvTopologyBaseScene::m_HandlePcReconnectIfNecessary(QString & orc_BusNam
       //Bus connector creation necessary
       if (q_Found == false)
       {
-         C_GiSvPc * pc_PcItem = NULL;
+         C_GiSvPc * pc_PcItem = nullptr;
 
          //Search pc item
          for (c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
          {
             C_GiSvPc * const pc_Item = dynamic_cast<C_GiSvPc *>(*c_ItItem);
-            if (pc_Item != NULL)
+            if (pc_Item != nullptr)
             {
                pc_PcItem = pc_Item;
             }
          }
-         if (pc_LastBus != NULL)
+         if (pc_LastBus != nullptr)
          {
             m_AddPcBusConnector(pc_LastBus, pc_PcItem);
             orc_BusName = pc_LastBus->GetName();

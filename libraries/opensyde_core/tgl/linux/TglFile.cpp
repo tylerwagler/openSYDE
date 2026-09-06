@@ -71,7 +71,7 @@ bool stw::tgl::TglFileAgeString(const std::string & orc_FileName, std::string & 
    {
       struct std::tm c_Time;
       struct std::tm * const pc_Time = localtime_r(&c_Stat.st_mtime, &c_Time);
-      if (pc_Time != NULL)
+      if (pc_Time != nullptr)
       {
          q_Return = true;
          c_DateTime.mu16_Day    = static_cast<uint16_t>(c_Time.tm_mday);
@@ -109,7 +109,7 @@ int32_t stw::tgl::TglFileSize(const std::string & orc_FileName)
    int32_t s32_Size = -1;
 
    std::FILE * const pc_File = std::fopen(orc_FileName.c_str(), "rb");
-   if (pc_File != NULL)
+   if (pc_File != nullptr)
    {
       long x_Size; //lint !e8080  type defined by API we use
       (void)std::fseek(pc_File, 0, SEEK_END);
@@ -200,9 +200,9 @@ int32_t stw::tgl::TglFileFind(const std::string & orc_SearchPattern,
    orc_FoundFiles.clear();
 
    pc_Dir = opendir(c_Path.c_str());
-   if (pc_Dir != NULL)
+   if (pc_Dir != nullptr)
    {
-      while ((pc_Entry = readdir(pc_Dir)) != NULL)
+      while ((pc_Entry = readdir(pc_Dir)) != nullptr)
       {
          if (pc_Entry->d_type == DT_REG)
          {
@@ -443,7 +443,7 @@ std::string stw::tgl::TglExpandFileName(const std::string & orc_RelativePath, co
     const std::string c_RelPath = orc_BasePath + "/" + orc_RelativePath;
     const char_t * const pcn_Path = realpath(c_RelPath.c_str(), &acn_Buffer[0]);
 
-    if (pcn_Path != NULL)
+    if (pcn_Path != nullptr)
     {
        c_FullPath = pcn_Path;
     }

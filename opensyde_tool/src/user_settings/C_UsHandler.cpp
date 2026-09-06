@@ -36,7 +36,7 @@ const int32_t C_UsHandler::mhs32_DEFAULT_ZOOM_LEVEL = 100;
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-C_UsHandler * C_UsHandler::mhpc_Singleton = NULL;
+C_UsHandler * C_UsHandler::mhpc_Singleton = nullptr;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -51,7 +51,7 @@ C_UsHandler * C_UsHandler::mhpc_Singleton = NULL;
 //----------------------------------------------------------------------------------------------------------------------
 C_UsHandler * C_UsHandler::h_GetInstance(void)
 {
-   if (C_UsHandler::mhpc_Singleton == NULL)
+   if (C_UsHandler::mhpc_Singleton == nullptr)
    {
       C_UsHandler::mhpc_Singleton = new C_UsHandler();
    }
@@ -64,10 +64,10 @@ C_UsHandler * C_UsHandler::h_GetInstance(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::h_Destroy(void)
 {
-   if (C_UsHandler::mhpc_Singleton != NULL)
+   if (C_UsHandler::mhpc_Singleton != nullptr)
    {
       delete (C_UsHandler::mhpc_Singleton);
-      C_UsHandler::mhpc_Singleton = NULL;
+      C_UsHandler::mhpc_Singleton = nullptr;
    }
 }
 

@@ -144,7 +144,7 @@ void C_SyvUpPacListNodeItemDatablockWidget::ViewFileInfo(void)
          //No confirmation
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();
@@ -251,7 +251,7 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                      bool q_FileIsOk = false;
                      const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                         this->mu32_NodeIndex);
-                     if ((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL) &&
+                     if ((pc_Node != nullptr) && (pc_Node->pc_DeviceDefinition != nullptr) &&
                          (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()))
                      {
                         for (uint32_t u32_ItName = 0UL;

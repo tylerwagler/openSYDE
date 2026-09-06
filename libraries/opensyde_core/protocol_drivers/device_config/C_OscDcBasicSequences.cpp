@@ -43,7 +43,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscDcBasicSequences::C_OscDcBasicSequences(void) :
-   mpc_CanDispatcher(NULL)
+   mpc_CanDispatcher(nullptr)
 {
 }
 
@@ -53,7 +53,7 @@ C_OscDcBasicSequences::C_OscDcBasicSequences(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscDcBasicSequences::~C_OscDcBasicSequences()
 {
-   this->mpc_CanDispatcher = NULL; //do not delete ! not owned by us
+   this->mpc_CanDispatcher = nullptr; //do not delete ! not owned by us
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -76,7 +76,7 @@ int32_t C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const opc_CanDis
 
    this->mpc_CanDispatcher = opc_CanDispatcher;
 
-   if (this->mpc_CanDispatcher == NULL)
+   if (this->mpc_CanDispatcher == nullptr)
    {
       s32_Return = C_COM;
       osc_write_log_error(c_LogActivity, "Could not used CAN! CAN Dispatcher is invalid.");
@@ -227,7 +227,7 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
    }
    while (TglGetTickCount() < (u32_WaitTime + u32_StartTime));
 
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       //Previous broadcasts might have caused responses placed in the receive queues of the device
       // specific driver instances. Dump them.
@@ -632,7 +632,7 @@ std::string C_OscDcBasicSequences::h_DevicesInfoToString(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDcBasicSequences::PrepareForDestruction(void)
 {
-   mc_TpCan.SetDispatcher(NULL); //we are about to destroy the dispatcher; make sure TP disconnects from it
+   mc_TpCan.SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
 }
 
 //----------------------------------------------------------------------------------------------------------------------

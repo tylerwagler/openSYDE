@@ -28,7 +28,7 @@ class C_OgeTabBar :
    public QTabBar
 {
 public:
-   C_OgeTabBar(QWidget * const opc_Parent = NULL);
+   C_OgeTabBar(QWidget * const opc_Parent = nullptr);
 
 protected:
    QSize tabSizeHint(const int32_t os32_Index) const override;

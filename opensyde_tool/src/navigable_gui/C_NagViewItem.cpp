@@ -167,7 +167,7 @@ void C_NagViewItem::LoadUserSettings(void)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          if ((!C_PuiSvHandler::h_GetInstance()->GetServiceModeActive()) || (pc_View->GetServiceModeActive()))
          {
@@ -198,7 +198,7 @@ void C_NagViewItem::SaveUserSettings(void) const
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       C_UsHandler::h_GetInstance()->SetProjSvNavigationExpandedStatus(pc_View->GetName().c_str(), this->m_IsExpanded());
    }
@@ -212,7 +212,7 @@ void C_NagViewItem::UpdateName(void) const
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const QString c_ServiceModeInfo =
          ((!C_PuiSvHandler::h_GetInstance()->GetServiceModeActive()) ||
@@ -405,7 +405,7 @@ void C_NagViewItem::HandleServiceMode(void)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      if ((pc_View != NULL) && (pc_View->GetServiceModeActive()))
+      if ((pc_View != nullptr) && (pc_View->GetServiceModeActive()))
       {
          this->mpc_Ui->pc_WidgetTopButton->setEnabled(true);
          this->mpc_Ui->pc_WidgetSetup->setEnabled(pc_View->GetServiceModeSetupActive());
@@ -545,7 +545,7 @@ void C_NagViewItem::m_OnNameEditFinished(void)
       if (u32_ItView != this->mu32_ViewIndex)
       {
          const C_PuiSvData * const pc_ViewData = C_PuiSvHandler::h_GetInstance()->GetView(u32_ItView);
-         if (pc_ViewData != NULL)
+         if (pc_ViewData != nullptr)
          {
             if (pc_ViewData->GetName().compare(this->mpc_Ui->pc_LineEditHeading->text().toStdString().c_str()) == 0)
             {
@@ -641,7 +641,7 @@ void C_NagViewItem::m_HandleSubItemNames()
    QString c_UpdateAdd = "";
    QString c_DashboardAdd = "";
 
-   if (((pc_View != NULL) && (C_PuiSvHandler::h_GetInstance()->GetServiceModeActive())) &&
+   if (((pc_View != nullptr) && (C_PuiSvHandler::h_GetInstance()->GetServiceModeActive())) &&
        (pc_View->GetServiceModeActive()))
    {
       const QString c_AccessWarning = " (no access)";
@@ -685,7 +685,7 @@ void C_NagViewItem::m_OnExpand(void)
       if (C_PuiSvHandler::h_GetInstance()->GetServiceModeActive())
       {
          const C_PuiSvData * const pc_ViewData = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-         if (pc_ViewData != NULL)
+         if (pc_ViewData != nullptr)
          {
             if (pc_ViewData->GetServiceModeSetupActive())
             {
@@ -751,7 +751,7 @@ void C_NagViewItem::m_OnEditButton(void) const
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       this->mpc_Ui->pc_LabelHeading->setVisible(false);
       this->mpc_Ui->pc_LineEditHeading->setVisible(true);
@@ -810,7 +810,7 @@ void C_NagViewItem::m_HandleServiceModeColors()
    if (C_PuiSvHandler::h_GetInstance()->GetServiceModeActive())
    {
       const C_PuiSvData * const pc_ViewData = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-      if ((pc_ViewData != NULL) && (!pc_ViewData->GetServiceModeActive()))
+      if ((pc_ViewData != nullptr) && (!pc_ViewData->GetServiceModeActive()))
       {
          this->mpc_Ui->pc_LabelHeading->SetForegroundColor(8);
       }

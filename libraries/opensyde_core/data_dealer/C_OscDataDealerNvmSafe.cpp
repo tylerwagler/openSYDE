@@ -110,7 +110,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckCrcs(const C_OscNode & orc_Node) con
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (this->mpc_DiagProtocol == NULL)
+   if (this->mpc_DiagProtocol == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -204,14 +204,14 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
    // Reset the container for changed lists. Will be used by NvmSafeReadValues.
    this->mc_ChangedLists.clear();
 
-   if ((this->mpc_Node == NULL) || (this->mpc_DiagProtocol == NULL))
+   if ((this->mpc_Node == nullptr) || (this->mpc_DiagProtocol == nullptr))
    {
       s32_Return = C_CONFIG;
    }
    else
    {
       //Check the additional parameter first to not write anything if this one does contain invalid indices
-      if ((opc_AdditionalListsToUpdate != NULL) && (opc_AdditionalListsToUpdate->size() > 0UL))
+      if ((opc_AdditionalListsToUpdate != nullptr) && (opc_AdditionalListsToUpdate->size() > 0UL))
       {
          s32_Return = C_NO_ERR;
          for (uint32_t u32_ItAdditionalIndex = 0;
@@ -422,7 +422,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadValues(const C_OscNode * (&orpc_NodeC
 {
    int32_t s32_Return;
 
-   if ((this->mpc_Node == NULL) || (this->mpc_DiagProtocol == NULL))
+   if ((this->mpc_Node == nullptr) || (this->mpc_DiagProtocol == nullptr))
    {
       s32_Return = C_CONFIG;
    }
@@ -491,7 +491,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadValues(const C_OscNode * (&orpc_NodeC
    }
    else
    {
-      orpc_NodeCopy = NULL;
+      orpc_NodeCopy = nullptr;
    }
 
    return s32_Return;
@@ -529,7 +529,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return;
 
-   if ((this->mpc_Node == NULL) || (this->mpc_DiagProtocol == NULL))
+   if ((this->mpc_Node == nullptr) || (this->mpc_DiagProtocol == nullptr))
    {
       s32_Return = C_CONFIG;
    }
@@ -733,7 +733,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
    {
       if (orc_ListIds.size() > 0)
       {
-         if ((this->mpc_Node != NULL) && (this->mpc_DiagProtocol != NULL))
+         if ((this->mpc_Node != nullptr) && (this->mpc_DiagProtocol != nullptr))
          {
             C_OscParamSetRawNode c_RawNode;
             c_RawNode.c_Entries.reserve(orc_ListIds.size() * 2);
@@ -1062,11 +1062,11 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(const std::str
    {
       if (C_OscDataDealerNvmSafe::mc_ParameterSetFilePath == orc_Path)
       {
-         if (this->mpc_Node != NULL)
+         if (this->mpc_Node != nullptr)
          {
             const C_OscParamSetRawNode * const pc_Node = this->mc_ImageFileHandler.GetRawDataForNode(
                this->mpc_Node->c_Properties.c_Name);
-            if (pc_Node != NULL)
+            if (pc_Node != nullptr)
             {
                if (m_CheckParameterFileContent(*pc_Node) == C_NO_ERR)
                {
@@ -1316,9 +1316,9 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const std::string &
    int32_t s32_Retval = C_NO_ERR;
 
    ors32_ResultDetail = -1;
-   if (this->mpc_Node != NULL)
+   if (this->mpc_Node != nullptr)
    {
-      if (this->mpc_DiagProtocol != NULL)
+      if (this->mpc_DiagProtocol != nullptr)
       {
          if (C_OscDataDealerNvmSafe::me_ParameterSetFileState == C_OscDataDealerNvmSafe::ePSFS_FILE_READ_WITH_CRC)
          {
@@ -1327,14 +1327,14 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const std::string &
                //when we get here we can be sure there was data for exactly one node contained in the file
                // as this is checked by NvmSafeReadFileWithCRC
                const C_OscParamSetRawNode * const pc_Node = this->mc_ImageFileHandler.GetRawDataForNode(0U);
-               tgl_assert(pc_Node != NULL);
-               if (pc_Node != NULL)
+               tgl_assert(pc_Node != nullptr);
+               if (pc_Node != nullptr)
                {
                   //write the actual values:
                   for (uint32_t u32_ItEntry = 0; u32_ItEntry < pc_Node->c_Entries.size(); u32_ItEntry++)
                   {
                      const C_OscParamSetRawEntry & rc_Entry = pc_Node->c_Entries[u32_ItEntry];
-                     s32_Retval = this->mpc_DiagProtocol->NvmWrite(rc_Entry.u32_StartAddress, rc_Entry.c_Bytes, NULL);
+                     s32_Retval = this->mpc_DiagProtocol->NvmWrite(rc_Entry.u32_StartAddress, rc_Entry.c_Bytes, nullptr);
                      //Map error codes
                      switch (s32_Retval)
                      {
@@ -1436,7 +1436,7 @@ int32_t C_OscDataDealerNvmSafe::m_CheckParameterFileContent(const C_OscParamSetR
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (this->mpc_Node != NULL)
+   if (this->mpc_Node != nullptr)
    {
       if ((this->mpc_Node->c_Properties.c_Name == orc_Node.c_Name) && (orc_Node.c_DataPools.size() > 0))
       {

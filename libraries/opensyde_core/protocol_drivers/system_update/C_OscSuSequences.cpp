@@ -497,9 +497,9 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(const std::vector<std::string> 
          {
             const stw::hex_file::C_HexDataDump * const pc_HexDump = c_Files[u32_File]->GetDataDump(u32_Return);
             //we would not have gotten here if we could not get a decent dump ...
-            tgl_assert(pc_HexDump != NULL);
+            tgl_assert(pc_HexDump != nullptr);
 
-            if (pc_HexDump != NULL)
+            if (pc_HexDump != nullptr)
             {
                // Save file index
                this->mu32_CurrentFile = u32_File;
@@ -904,7 +904,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(const std::string & orc_Fil
    (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_START, C_NO_ERR, 0U, mc_CurrentNode,
                           "Transferring file ...");
    pc_File = std::fopen(orc_FileToFlash.c_str(), "rb");
-   if (pc_File == NULL)
+   if (pc_File == nullptr)
    {
       s32_Return = C_RD_WR;
    }
@@ -916,7 +916,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(const std::string & orc_Fil
       {
          s32_Return = C_RD_WR;
          (void)std::fclose(pc_File);
-         pc_File = NULL;
+         pc_File = nullptr;
       }
       else
       {
@@ -925,7 +925,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(const std::string & orc_Fil
          {
             s32_Return = C_RD_WR;
             (void)std::fclose(pc_File);
-            pc_File = NULL;
+            pc_File = nullptr;
          }
          else
          {
@@ -978,10 +978,10 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(const std::string & orc_Fil
          }
       }
 
-      if ((s32_Return != C_NO_ERR) && (pc_File != NULL))
+      if ((s32_Return != C_NO_ERR) && (pc_File != nullptr))
       {
          (void)std::fclose(pc_File);
-         pc_File = NULL;
+         pc_File = nullptr;
       }
    }
    else
@@ -1083,10 +1083,10 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(const std::string & orc_Fil
       orc_StateOtherFile.e_AllTransferDataSent = (s32_Return == C_NO_ERR) ? eSUSEQ_STATE_NO_ERR : eSUSEQ_STATE_ERROR;
 
       // File is not necessary anymore. Close it.
-      if (pc_File != NULL)
+      if (pc_File != nullptr)
       {
          (void)std::fclose(pc_File);
-         pc_File = NULL;
+         pc_File = nullptr;
       }
    }
 
@@ -1230,8 +1230,8 @@ int32_t C_OscSuSequences::m_WriteNvmOpenSyde(const std::vector<std::string> & or
    //Get pointer to OSY protocol driver provided by comm driver:
    C_OscProtocolDriverOsyTpBase * const pc_TransportProtocol = mpc_ComDriver->GetOsyTransportProtocol(mu32_CurrentNode);
 
-   tgl_assert(pc_TransportProtocol != NULL);
-   if (pc_TransportProtocol != NULL)
+   tgl_assert(pc_TransportProtocol != nullptr);
+   if (pc_TransportProtocol != nullptr)
    {
       uint16_t u16_MaxBlockLength = 0U;
       C_OscProtocolDriverOsyNode c_Client;
@@ -2104,7 +2104,7 @@ int32_t C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_OscNode> &
    {
       s32_Return = C_RANGE;
 
-      if (opc_ErrorPath != NULL)
+      if (opc_ErrorPath != nullptr)
       {
          *opc_ErrorPath = orc_TargetPath;
       }
@@ -2121,7 +2121,7 @@ int32_t C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_OscNode> &
       //consistent configuration ?
       for (uint16_t u16_Node = 0U; u16_Node < orc_Nodes.size(); u16_Node++)
       {
-         tgl_assert(orc_Nodes[u16_Node].pc_DeviceDefinition != NULL);
+         tgl_assert(orc_Nodes[u16_Node].pc_DeviceDefinition != nullptr);
 
          //node inactive but files defined ?
          if ((orc_ActiveNodes[u16_Node] == 0U) &&
@@ -2146,7 +2146,7 @@ int32_t C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_OscNode> &
                   if (TglFileExists(c_File) == false)
                   {
                      s32_Return = C_RANGE;
-                     if (opc_ErrorPath != NULL)
+                     if (opc_ErrorPath != nullptr)
                      {
                         *opc_ErrorPath = c_File;
                      }
@@ -2161,7 +2161,7 @@ int32_t C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_OscNode> &
                   if (TglFileExists(c_File) == false)
                   {
                      s32_Return = C_RANGE;
-                     if (opc_ErrorPath != NULL)
+                     if (opc_ErrorPath != nullptr)
                      {
                         *opc_ErrorPath = c_File;
                      }
@@ -2175,7 +2175,7 @@ int32_t C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_OscNode> &
                   if (TglFileExists(c_File) == false)
                   {
                      s32_Return = C_RANGE;
-                     if (opc_ErrorPath != NULL)
+                     if (opc_ErrorPath != nullptr)
                      {
                         *opc_ErrorPath = c_File;
                      }
@@ -2228,7 +2228,7 @@ int32_t C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_OscNode> &
          if (s32_Return != 0)
          {
             s32_Return = C_BUSY;
-            if (opc_ErrorPath != NULL)
+            if (opc_ErrorPath != nullptr)
             {
                *opc_ErrorPath = orc_TargetPath;
             }
@@ -2242,7 +2242,7 @@ int32_t C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_OscNode> &
       s32_Return = C_OscUtils::h_CreateFolderRecursively(orc_TargetPath);
       if (s32_Return != C_NO_ERR)
       {
-         if (opc_ErrorPath != NULL)
+         if (opc_ErrorPath != nullptr)
          {
             *opc_ErrorPath = orc_TargetPath;
          }
@@ -2265,7 +2265,7 @@ int32_t C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_OscNode> &
                s32_Return = TglCreateDirectory(c_NodeTargetPaths[u16_Node]);
                if (s32_Return != 0)
                {
-                  if (opc_ErrorPath != NULL)
+                  if (opc_ErrorPath != nullptr)
                   {
                      *opc_ErrorPath = c_NodeTargetPaths[u16_Node];
                   }
@@ -2474,7 +2474,7 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
    const uint32_t u32_SCAN_TIME_MS = 5000U;
    const uint32_t u32_INTERVAL_TESTER_PRESENT = 1000U;
 
-   if (this->mpc_SystemDefinition == NULL)
+   if (this->mpc_SystemDefinition == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -3069,7 +3069,7 @@ int32_t C_OscSuSequences::ReadDeviceInformation(const bool oq_FailOnFirstError)
    bool q_AtLeastOneError = false;
    bool q_AtLeastOneAuthenticationError = false;
 
-   if (this->mpc_SystemDefinition == NULL)
+   if (this->mpc_SystemDefinition == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -3258,7 +3258,7 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
    this->mu32_CurrentNode = 0U;
    this->mu32_CurrentFile = 0U;
 
-   if (this->mpc_SystemDefinition == NULL)
+   if (this->mpc_SystemDefinition == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -3287,8 +3287,8 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
             const uint32_t u32_SubDeviceIndex =
                this->mpc_SystemDefinition->c_Nodes[u16_Node].u32_SubDeviceIndex;
 
-            tgl_assert(pc_DeviceDefinition != NULL);
-            if (pc_DeviceDefinition != NULL)
+            tgl_assert(pc_DeviceDefinition != nullptr);
+            if (pc_DeviceDefinition != nullptr)
             {
                if (pc_DeviceDefinition->c_SubDevices[u32_SubDeviceIndex].q_FlashloaderOpenSydeIsFileBased == false)
                {
@@ -3338,7 +3338,7 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
                        u32_File++)
                   {
                      // Getting the correct state variable
-                     C_OscSuSequencesNodeFileStates * pc_FileState = NULL;
+                     C_OscSuSequencesNodeFileStates * pc_FileState = nullptr;
                      if (rc_State.c_StateHexFiles.size() > 0)
                      {
                         pc_FileState = &rc_State.c_StateHexFiles[u32_File];
@@ -3352,7 +3352,7 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
                         tgl_assert(false);
                      }
 
-                     if (pc_FileState != NULL)
+                     if (pc_FileState != nullptr)
                      {
                         // Save the file name
                         pc_FileState->c_FileName =
@@ -3363,7 +3363,7 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
                      {
                         osc_write_log_error("System Update", "Could not find file \"" +
                                             orc_ApplicationsToWrite[u16_Node].c_FilesToFlash[u32_File] + "\" !");
-                        if (pc_FileState != NULL)
+                        if (pc_FileState != nullptr)
                         {
                            pc_FileState->e_FileExists = eSUSEQ_STATE_ERROR;
                         }
@@ -3372,7 +3372,7 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
                      }
                      else
                      {
-                        if (pc_FileState != NULL)
+                        if (pc_FileState != nullptr)
                         {
                            pc_FileState->e_FileExists = eSUSEQ_STATE_NO_ERR;
                         }
@@ -3542,8 +3542,8 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
                         this->mpc_SystemDefinition->c_Nodes[u32_NodeIndex].u32_SubDeviceIndex;
                      (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_START, C_NO_ERR, 10U, mc_CurrentNode,
                                             "Starting device update ...");
-                     tgl_assert(pc_DeviceDefinition != NULL);
-                     if (pc_DeviceDefinition != NULL)
+                     tgl_assert(pc_DeviceDefinition != nullptr);
+                     if (pc_DeviceDefinition != nullptr)
                      {
                         C_OscProtocolDriverOsy::C_ListOfFeatures c_AvailableFeatures;
                         bool q_SetProgrammingMode = true;
@@ -3712,7 +3712,7 @@ int32_t C_OscSuSequences::ResetSystem(void)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (this->mpc_SystemDefinition == NULL)
+   if (this->mpc_SystemDefinition == nullptr)
    {
       s32_Return = C_CONFIG;
    }

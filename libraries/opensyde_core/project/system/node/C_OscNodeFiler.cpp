@@ -449,7 +449,7 @@ int32_t C_OscNodeFiler::h_SaveNodeComProtocols(const std::vector<C_OscCanProtoco
             //Set file reference
             orc_XmlParser.SetNodeContent(c_FileName);
             //Store if necessary
-            if (opc_CreatedFiles != NULL)
+            if (opc_CreatedFiles != nullptr)
             {
                opc_CreatedFiles->push_back(c_FileName);
             }
@@ -1317,7 +1317,7 @@ int32_t C_OscNodeFiler::mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & 
          //Set file reference
          orc_XmlParser.SetNodeContent(c_FileName);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_FileName);
          }
@@ -1413,7 +1413,7 @@ int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXml
          //Set file reference
          orc_XmlParser.SetNodeContent(c_FileName);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_FileName);
          }
@@ -1516,7 +1516,7 @@ int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(const std::map<uint8_t, C_OscCanO
          //Set file reference
          orc_XmlParser.SetNodeContent(c_FileName);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_FileName);
          }
@@ -1611,7 +1611,7 @@ int32_t C_OscNodeFiler::mh_SaveDataLoggers(const std::vector<C_OscDataLoggerJob>
          //Set file reference
          orc_XmlParser.SetNodeContent(c_FileName);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_FileName);
          }
@@ -1832,7 +1832,7 @@ int32_t C_OscNodeFiler::mh_SaveXappProperties(const C_OscNode & orc_Config, C_Os
          //Set file reference
          orc_XmlParser.SetNodeContent(c_FileName);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_FileName);
          }

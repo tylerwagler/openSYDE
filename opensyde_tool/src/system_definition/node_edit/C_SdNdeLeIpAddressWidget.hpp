@@ -34,7 +34,7 @@ class C_SdNdeLeIpAddressWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeLeIpAddressWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeLeIpAddressWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeLeIpAddressWidget(void) override;
 
    void SetIpAddress(const uint8_t * const opu8_IpAddress);

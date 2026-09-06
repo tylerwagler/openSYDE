@@ -51,7 +51,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueSignalTableView::C_SdBueSignalTableView(QWidget * const opc_Parent) :
    C_TblViewScroll(opc_Parent),
-   mpc_SyncManager(NULL)
+   mpc_SyncManager(nullptr)
 {
    QItemSelectionModel * const pc_LastSelectionModel = this->selectionModel();
 
@@ -318,7 +318,7 @@ std::map<C_SdBueSignalTableModel::E_Columns, uint32_t> C_SdBueSignalTableView::m
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueSignalTableView::m_HandleColumnVisibility()
 {
-   if (this->mpc_SyncManager != NULL)
+   if (this->mpc_SyncManager != nullptr)
    {
       bool q_ShowCanOpen;
       bool q_ShowJ1939;

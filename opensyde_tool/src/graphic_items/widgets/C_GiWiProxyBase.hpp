@@ -30,7 +30,7 @@ class C_GiWiProxyBase :
 {
 public:
    C_GiWiProxyBase(const float64_t of64_InitWidth, const float64_t of64_InitHeight,
-                   QGraphicsItem * const opc_Parent = NULL);
+                   QGraphicsItem * const opc_Parent = nullptr);
 
    void Redraw(void) override;
    void TriggerMousePressEvent(QGraphicsSceneMouseEvent * const opc_Event);

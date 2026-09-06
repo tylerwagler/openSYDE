@@ -243,14 +243,14 @@ inline uint32_t LastDelimiterCompat(const std::string & orc_Str, const std::stri
 /// Replacement for str.ToInt().
 inline int32_t ToIntCompat(const std::string & orc_Str)
 {
-   return static_cast<int32_t>(std::strtol(orc_Str.c_str(), NULL, 10));
+   return static_cast<int32_t>(std::strtol(orc_Str.c_str(), nullptr, 10));
 }
 
 /// Replacement for str.ToIntDef(default).
 inline int32_t ToIntDefCompat(const std::string & orc_Str, const int32_t os32_Default)
 {
    const char_t * opcn_Str = orc_Str.c_str();
-   char_t * opcn_End = NULL;
+   char_t * opcn_End = nullptr;
    const int32_t s32_Val = static_cast<int32_t>(std::strtol(opcn_Str, &opcn_End, 10));
    if (opcn_End == opcn_Str)
    {
@@ -262,13 +262,13 @@ inline int32_t ToIntDefCompat(const std::string & orc_Str, const int32_t os32_De
 /// Replacement for str.ToInt64().
 inline int64_t ToInt64Compat(const std::string & orc_Str)
 {
-   return static_cast<int64_t>(std::strtoll(orc_Str.c_str(), NULL, 10));
+   return static_cast<int64_t>(std::strtoll(orc_Str.c_str(), nullptr, 10));
 }
 
 /// Replacement for str.ToDouble().
 inline double ToDoubleCompat(const std::string & orc_Str)
 {
-   return std::strtod(orc_Str.c_str(), NULL);
+   return std::strtod(orc_Str.c_str(), nullptr);
 }
 
 /// Replacement for str.Printf(format, ...) — uses vsnprintf internally.
@@ -276,7 +276,7 @@ inline std::string PrintFormattedCompat(const char_t * const opcn_Format, ...)
 {
    va_list c_Args;
    va_start(c_Args, opcn_Format);
-   const int s32_Len = std::vsnprintf(NULL, 0, opcn_Format, c_Args);
+   const int s32_Len = std::vsnprintf(nullptr, 0, opcn_Format, c_Args);
    va_end(c_Args);
    if (s32_Len < 0)
    {

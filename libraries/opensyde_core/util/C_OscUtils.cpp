@@ -556,7 +556,7 @@ std::string C_OscUtils::h_PosSerialNumberToString(const uint8_t * const opu8_Ser
 {
    std::string c_Result;
 
-   if (opu8_SerialNumber != NULL)
+   if (opu8_SerialNumber != nullptr)
    {
       std::ostringstream c_Stream;
       if (opu8_SerialNumber[0] < static_cast<uint8_t>(0x20))
@@ -705,7 +705,7 @@ int32_t C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const std::st
       c_ErrorMessage = "Could not read \"" + orc_SourceFile + "\".";
       osc_write_log_error("Copying file", c_ErrorMessage);
       s32_Return = C_RD_WR;
-      if (opc_ErrorPath != NULL)
+      if (opc_ErrorPath != nullptr)
       {
          *opc_ErrorPath = orc_SourceFile;
       }
@@ -723,7 +723,7 @@ int32_t C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const std::st
          c_ErrorMessage = "Could not write \"" + orc_TargetFile + "\".";
          osc_write_log_error("Copying file", c_ErrorMessage);
          s32_Return = C_RD_WR;
-         if (opc_ErrorPath != NULL)
+         if (opc_ErrorPath != nullptr)
          {
             *opc_ErrorPath = orc_TargetFile;
          }
@@ -740,7 +740,7 @@ int32_t C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const std::st
             c_ErrorMessage = "Could not write stream of \"" + orc_TargetFile + "\".";
             osc_write_log_error("Copying file", c_ErrorMessage);
             s32_Return = C_RD_WR;
-            if (opc_ErrorPath != NULL)
+            if (opc_ErrorPath != nullptr)
             {
                *opc_ErrorPath = orc_TargetFile;
             }
@@ -749,7 +749,7 @@ int32_t C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const std::st
    }
 
    if ((s32_Return != C_NO_ERR) &&
-       (opc_ErrorMessage != NULL))
+       (opc_ErrorMessage != nullptr))
    {
       *opc_ErrorMessage = c_ErrorMessage;
    }

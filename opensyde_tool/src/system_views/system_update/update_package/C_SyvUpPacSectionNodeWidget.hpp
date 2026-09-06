@@ -41,7 +41,7 @@ class C_SyvUpPacSectionNodeWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvUpPacSectionNodeWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvUpPacSectionNodeWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvUpPacSectionNodeWidget() override;
 
    void InitWidget(const uint32_t ou32_ViewIndex, const uint32_t ou32_PositionNumber, const uint32_t ou32_NodeIndex,
@@ -69,7 +69,7 @@ public:
    int32_t CheckAllFiles(uint32_t & oru32_CountFiles, QStringList * const opc_MissingFiles,
                          QStringList * const opc_MissingParamSetFiles, QStringList * const opc_FlashwareWarningsApps);
    C_SyvUpPacListNodeItemWidget * GetAndSelectApplication(const QPoint & orc_Pos) const;
-   C_SyvUpPacListNodeItemWidget * GetApplication(const QPoint & orc_Pos, uint32_t * const opu32_Number = NULL) const;
+   C_SyvUpPacListNodeItemWidget * GetApplication(const QPoint & orc_Pos, uint32_t * const opu32_Number = nullptr) const;
    void SetApplicationSelect(const uint32_t ou32_Application, const bool oq_Select) const;
    uint32_t GetFileCount(void) const;
    uint32_t GetPrimaryFileCount(void) const;
@@ -132,7 +132,7 @@ private:
 
    void m_InitItems(void);
 
-   uint32_t m_GetApplicationState(const uint32_t ou32_Application, uint32_t * const opu32_Type = NULL) const;
+   uint32_t m_GetApplicationState(const uint32_t ou32_Application, uint32_t * const opu32_Type = nullptr) const;
    void m_SetApplicationConnected(const uint32_t ou32_Application, const bool oq_Connected) const;
    uint32_t m_GetFirstNotFinishedApplication(void) const;
 

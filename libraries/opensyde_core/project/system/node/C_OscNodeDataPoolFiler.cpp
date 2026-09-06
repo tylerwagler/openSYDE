@@ -1651,7 +1651,7 @@ int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(const C_OscNodeD
    }
    if (s32_Retval != C_NO_ERR)
    {
-      if (opc_CheckDataTypeErrorDetails != NULL)
+      if (opc_CheckDataTypeErrorDetails != nullptr)
       {
          const std::string c_Val = orc_XmlParser.GetAttributeString("value");
          const std::string c_DataType =

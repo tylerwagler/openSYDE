@@ -29,7 +29,7 @@ class C_SyvDaItTaDelegate :
    public QStyledItemDelegate
 {
 public:
-   C_SyvDaItTaDelegate(QObject * const opc_Parent = NULL);
+   C_SyvDaItTaDelegate(QObject * const opc_Parent = nullptr);
 
    void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style);
 

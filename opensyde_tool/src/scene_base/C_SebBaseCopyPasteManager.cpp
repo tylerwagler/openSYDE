@@ -91,7 +91,7 @@ void C_SebBaseCopyPasteManager::IncrementPasteCounter(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebBaseCopyPasteManager::m_CalcOriginalPosition(const C_PuiBsElements * const opc_Data)
 {
-   if (opc_Data != NULL)
+   if (opc_Data != nullptr)
    {
       uint32_t u32_ItElem;
 

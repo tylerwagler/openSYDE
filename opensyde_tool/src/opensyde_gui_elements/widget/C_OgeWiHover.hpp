@@ -39,7 +39,7 @@ class C_OgeWiHover :
 
 public:
    explicit C_OgeWiHover(QWidget & orc_Widget, const QString & orc_Title, const QString & orc_Icon,
-                         const bool oq_Search, QWidget * const opc_ContainerWidget, QWidget * const opc_Parent = NULL);
+                         const bool oq_Search, QWidget * const opc_ContainerWidget, QWidget * const opc_Parent = nullptr);
 
    ~C_OgeWiHover() override;
    void InitStaticNames(void) const;

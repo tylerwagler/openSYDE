@@ -98,7 +98,7 @@ int32_t C_PuiSvHandlerFiler::h_LoadViews(std::vector<C_PuiSvData> & orc_Views,
          do
          {
             C_PuiSvData c_View;
-            if (opc_BasePath != NULL)
+            if (opc_BasePath != nullptr)
             {
                const QString c_File = opc_BasePath->absoluteFilePath(orc_XmlParser.GetNodeContent().c_str());
                s32_Retval = mh_LoadViewFile(c_View, c_File, orc_OscNodes);
@@ -160,7 +160,7 @@ int32_t C_PuiSvHandlerFiler::h_SaveViews(const std::vector<C_PuiSvData> & orc_Vi
    for (uint32_t u32_ItView = 0; (u32_ItView < orc_Views.size()) && (s32_Retval == C_NO_ERR); ++u32_ItView)
    {
       orc_XmlParser.CreateAndSelectNodeChild("opensyde-system-view");
-      if (opc_BasePath != NULL)
+      if (opc_BasePath != nullptr)
       {
          const C_PuiSvData & rc_View = orc_Views[u32_ItView];
          const QString c_FilePath = C_PuiSvHandlerFiler::h_GetViewFileName(rc_View.GetName().c_str());

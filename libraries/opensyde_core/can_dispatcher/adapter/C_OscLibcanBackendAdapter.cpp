@@ -69,7 +69,7 @@ int32_t C_OscLibcanBackendAdapter::CAN_Init(void)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if ((mpc_Backend == NULL) || (mpc_Backend->open(mc_Config) == false))
+   if ((mpc_Backend == nullptr) || (mpc_Backend->open(mc_Config) == false))
    {
       s32_Return = C_CONFIG;
    }
@@ -116,7 +116,7 @@ int32_t C_OscLibcanBackendAdapter::CAN_Exit(void)
 
    if (mq_Open == true)
    {
-      if (mpc_Backend != NULL)
+      if (mpc_Backend != nullptr)
       {
          mpc_Backend->close();
       }
@@ -142,7 +142,7 @@ int32_t C_OscLibcanBackendAdapter::CAN_Send_Msg(const T_STWCAN_Msg_TX & orc_Mess
 {
    int32_t s32_Return;
 
-   if ((mq_Open == false) || (mpc_Backend == NULL))
+   if ((mq_Open == false) || (mpc_Backend == nullptr))
    {
       s32_Return = C_CONFIG;
    }
@@ -169,7 +169,7 @@ int32_t C_OscLibcanBackendAdapter::m_CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
 {
    int32_t s32_Return;
 
-   if ((mq_Open == false) || (mpc_Backend == NULL))
+   if ((mq_Open == false) || (mpc_Backend == nullptr))
    {
       s32_Return = C_CONFIG;
    }

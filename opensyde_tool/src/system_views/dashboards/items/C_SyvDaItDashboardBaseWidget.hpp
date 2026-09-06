@@ -33,7 +33,7 @@ class C_SyvDaItDashboardBaseWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaItDashboardBaseWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvDaItDashboardBaseWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaItDashboardBaseWidget(void) override;
 
    void SetWidget(QWidget * const opc_Content);

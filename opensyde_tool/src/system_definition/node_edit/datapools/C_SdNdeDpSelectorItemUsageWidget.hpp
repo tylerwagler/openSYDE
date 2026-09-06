@@ -36,7 +36,7 @@ class C_SdNdeDpSelectorItemUsageWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpSelectorItemUsageWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDpSelectorItemUsageWidget(QWidget * const opc_Parent = nullptr);
 
    void SetData(const uint32_t ou32_Size, const uint32_t ou32_Used, const uint32_t ou32_Reserved,
                 uint32_t & oru32_PercentageUsed, uint32_t & oru32_PercentageReserved);

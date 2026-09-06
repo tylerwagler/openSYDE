@@ -82,7 +82,7 @@ int32_t C_PopServiceProjSettingsModel::Init(const std::vector<uint32_t> & orc_El
    {
       C_TblTreeModelCheckableItem * const pc_TreeNode = new C_TblTreeModelCheckableItem();
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(u32_ViewCnt);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          pc_TreeNode->c_Name = "VIEW #" + QString::number(u32_ViewCnt + 1) + " - " + pc_View->GetName().c_str();
          pc_TreeNode->q_Enabled = true;
@@ -150,7 +150,7 @@ const
    {
       const C_TblTreeModelCheckableItem * const pc_VisibleRootItem =
          dynamic_cast<C_TblTreeModelCheckableItem *>(c_InvisibleRootChildren.at(u32_ItInvisibleRootChild));
-      if (pc_VisibleRootItem != NULL)
+      if (pc_VisibleRootItem != nullptr)
       {
          const std::vector<C_TblTreSimpleItem *> c_VisibleRootChildren = pc_VisibleRootItem->c_Children;
          for (uint32_t u32_ItVisibleRootChild = 0;
@@ -158,7 +158,7 @@ const
          {
             const C_TblTreeModelCheckableItem * const pc_ViewItem =
                dynamic_cast<C_TblTreeModelCheckableItem *>(c_VisibleRootChildren.at(u32_ItVisibleRootChild));
-            if (pc_ViewItem != NULL)
+            if (pc_ViewItem != nullptr)
             {
                const std::vector<C_TblTreSimpleItem *> c_ViewChildren = pc_ViewItem->c_Children;
                std::vector<uint32_t> c_ChildIndices;
@@ -166,7 +166,7 @@ const
                {
                   const C_TblTreeModelCheckableItem * const pc_ChildItem =
                      dynamic_cast<C_TblTreeModelCheckableItem *>(c_ViewChildren.at(u32_ItNodeChild));
-                  if ((pc_ChildItem != NULL) && (pc_ChildItem->e_CheckState == Qt::Checked))
+                  if ((pc_ChildItem != nullptr) && (pc_ChildItem->e_CheckState == Qt::Checked))
                   {
                      // we need to distinguish checked items from unchecked (so 1 = checked, 0 = not checked)
                      c_ChildIndices.push_back(1);
@@ -236,7 +236,7 @@ void C_PopServiceProjSettingsModel::m_CheckInitItems(C_TblTreeModelCheckableItem
    {
       C_TblTreeModelCheckableItem * const pc_ViewItem =
          dynamic_cast<C_TblTreeModelCheckableItem *>(orc_VisibleRootItem.c_Children.at(u32_ItRootChildren));
-      if (pc_ViewItem != NULL)
+      if (pc_ViewItem != nullptr)
       {
          // load user setting for this view
          std::array<bool, 3> c_ViewConfig;
@@ -264,7 +264,7 @@ void C_PopServiceProjSettingsModel::m_CheckInitItems(C_TblTreeModelCheckableItem
                {
                   C_TblTreeModelCheckableItem * const pc_ChildItem =
                      dynamic_cast<C_TblTreeModelCheckableItem *>(pc_ViewItem->c_Children.at(u32_ItNodeChildren));
-                  if (pc_ChildItem != NULL)
+                  if (pc_ChildItem != nullptr)
                   {
                      if (c_ViewConfig[u32_ItNodeChildren] == true)
                      {

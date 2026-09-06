@@ -111,7 +111,7 @@ bool C_GiLiCanBus::OpenStyleDialog(void)
    {
       q_Retval = false;
    }
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();

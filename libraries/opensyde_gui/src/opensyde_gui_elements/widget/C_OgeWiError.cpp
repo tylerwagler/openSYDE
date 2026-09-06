@@ -43,7 +43,7 @@ using namespace stw::opensyde_gui_elements;
 C_OgeWiError::C_OgeWiError(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_OgeWiError),
-   mpc_ParentDialog(NULL)
+   mpc_ParentDialog(nullptr)
 {
    mpc_Ui->setupUi(this);
 
@@ -101,7 +101,7 @@ void C_OgeWiError::SaveParentDialog(QDialog * const opc_ParentDialog)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeWiError::m_OkClicked(void)
 {
-   if (mpc_ParentDialog != NULL)
+   if (mpc_ParentDialog != nullptr)
    {
       mpc_ParentDialog->accept();
    }

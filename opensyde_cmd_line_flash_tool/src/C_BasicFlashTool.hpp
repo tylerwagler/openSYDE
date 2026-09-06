@@ -38,7 +38,7 @@ public:
    C_BasicFlashTool(void);
    virtual ~C_BasicFlashTool(void);
 
-   void Init(const int32_t os32_Argc = 0, char_t * const * const oppcn_Argv = NULL);
+   void Init(const int32_t os32_Argc = 0, char_t * const * const oppcn_Argv = nullptr);
    E_Result ParseCommandLine(const int32_t os32_Argc, char_t * const * const oppcn_Argv);
    E_Result Flash(void);
 

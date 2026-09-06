@@ -58,8 +58,8 @@ const int32_t C_SdTopologyWidget::mhs32_TOOLBOX_INIT_POS_Y = 150;
 C_SdTopologyWidget::C_SdTopologyWidget(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SdTopologyWidget),
-   mpc_Toolbox(NULL),
-   mpc_FixMinimizedToolbox(NULL)
+   mpc_Toolbox(nullptr),
+   mpc_FixMinimizedToolbox(nullptr)
 {
    int32_t s32_ViewZoomValue;
 
@@ -132,7 +132,7 @@ C_SdTopologyWidget::~C_SdTopologyWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyWidget::SetParentHook(QWidget * const opc_Parent)
 {
-   if (opc_Parent != NULL)
+   if (opc_Parent != nullptr)
    {
       // create toolbox
       C_SdTopologyToolbox * pc_TopologyToolboxWidget;
@@ -281,7 +281,7 @@ void C_SdTopologyWidget::resizeEvent(QResizeEvent * const opc_Event)
 
    QWidget * pc_Widget = this->parentWidget();
 
-   if (pc_Widget == NULL)
+   if (pc_Widget == nullptr)
    {
       // if no parent exist use this widget
       pc_Widget = this;

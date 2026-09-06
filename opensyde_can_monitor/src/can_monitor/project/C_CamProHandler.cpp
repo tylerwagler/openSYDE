@@ -73,7 +73,7 @@ const std::vector<C_CamProMessageData> & C_CamProHandler::GetMessages(void) cons
 //----------------------------------------------------------------------------------------------------------------------
 const C_CamProMessageData * C_CamProHandler::GetMessageConst(const uint32_t ou32_Index) const
 {
-   const C_CamProMessageData * pc_Retval = NULL;
+   const C_CamProMessageData * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_Messages.size())
    {
@@ -790,12 +790,12 @@ void C_CamProHandler::GetAllMessagesFromDatabase(const QString & orc_File, QStri
       {
          //Match
          //Add
-         if (opc_CompleteMessageNames != NULL)
+         if (opc_CompleteMessageNames != nullptr)
          {
             const QString c_CompleteName = C_CamProHandler::h_GetCompleteMessageName(rc_Message);
             opc_CompleteMessageNames->append(c_CompleteName);
          }
-         if (opc_MessageIndices != NULL)
+         if (opc_MessageIndices != nullptr)
          {
             opc_MessageIndices->push_back(u32_ItMessage);
          }

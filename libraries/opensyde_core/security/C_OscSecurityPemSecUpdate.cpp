@@ -116,18 +116,18 @@ int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<uint8_t> &
    //read pem file content into a BIO (= openSSL I/O stream)
    BIO * const pc_PrivKeyFile = BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
 
-   if (pc_PrivKeyFile != NULL)
+   if (pc_PrivKeyFile != nullptr)
    {
       //read the private key portion from the BIO
-      EVP_PKEY * const pc_PrivKey = PEM_read_bio_PrivateKey(pc_PrivKeyFile, NULL, NULL, NULL);
+      EVP_PKEY * const pc_PrivKey = PEM_read_bio_PrivateKey(pc_PrivKeyFile, nullptr, nullptr, nullptr);
 
       BIO_free(pc_PrivKeyFile);
-      if ((pc_PrivKey != NULL) && (EVP_PKEY_is_a(pc_PrivKey, "EC") == 1))
+      if ((pc_PrivKey != nullptr) && (EVP_PKEY_is_a(pc_PrivKey, "EC") == 1))
       {
          //extract the private key using OpenSSL 3.0 EVP API
          //EVP_PKEY_get_raw_private_key does not support EC keys (only X25519, Ed25519, etc.)
          //so we use the generic EVP_PKEY_get_bn_param instead.
-         BIGNUM * pc_PrivBigNum = NULL;
+         BIGNUM * pc_PrivBigNum = nullptr;
          if (EVP_PKEY_get_bn_param(pc_PrivKey, OSSL_PKEY_PARAM_PRIV_KEY, &pc_PrivBigNum) == 1)
          {
             const int x_Size = BN_num_bytes(pc_PrivBigNum); //lint !e970 !e8080 //use type expected by API

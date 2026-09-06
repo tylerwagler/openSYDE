@@ -54,7 +54,7 @@ private:
                               const std::string & orc_OutFolder, std::map<std::string,
                                                                                     bool> & orc_ExistingFiles,
                               std::set<std::string> & orc_XcertFiles,
-                              std::string * const opc_OutFilePath = NULL);
+                              std::string * const opc_OutFilePath = nullptr);
    static std::string mh_GetUniqueFileName(const std::string & orc_InPath,
                                                      const std::string & orc_OutFolder,
                                                      std::map<std::string,

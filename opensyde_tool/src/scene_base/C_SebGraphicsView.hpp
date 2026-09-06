@@ -40,7 +40,7 @@ class C_SebGraphicsView :
    Q_OBJECT
 
 public:
-   C_SebGraphicsView(QWidget * const opc_Parent = NULL);
+   C_SebGraphicsView(QWidget * const opc_Parent = nullptr);
    ~C_SebGraphicsView() override;
 
    // zoom functions

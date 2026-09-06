@@ -100,7 +100,7 @@ bool C_SebUnoMoveCommand::mergeWith(const QUndoCommand * const opc_Command)
    const C_SebUnoMoveCommand * const pc_MoveCommand =
       dynamic_cast<const C_SebUnoMoveCommand * const>(opc_Command);
 
-   if (pc_MoveCommand != NULL)
+   if (pc_MoveCommand != nullptr)
    {
       //Check item IDs
       if (m_MergePossible(pc_MoveCommand) == true)
@@ -120,7 +120,7 @@ bool C_SebUnoMoveCommand::mergeWith(const QUndoCommand * const opc_Command)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoMoveCommand::m_UndoSingle(QGraphicsItem * const opc_Item) const
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       opc_Item->setPos(opc_Item->pos() - this->mc_PositionDifference);
    }
@@ -134,7 +134,7 @@ void C_SebUnoMoveCommand::m_UndoSingle(QGraphicsItem * const opc_Item) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoMoveCommand::m_RedoSingle(QGraphicsItem * const opc_Item) const
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       opc_Item->setPos(opc_Item->pos() + this->mc_PositionDifference);
    }

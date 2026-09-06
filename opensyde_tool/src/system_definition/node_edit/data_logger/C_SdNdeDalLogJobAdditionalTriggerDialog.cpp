@@ -208,7 +208,7 @@ void C_SdNdeDalLogJobAdditionalTriggerDialog::m_AddDataElementClicked()
 
    // Single element selection only
    C_SyvDaPeDataElementBrowse * const pc_Dialog = new C_SyvDaPeDataElementBrowse(*c_New, 0U, false, false, false, true,
-                                                                                 true, true, NULL, false,
+                                                                                 true, true, nullptr, false,
                                                                                  this->mu32_NodeIndex, true);
 
    //Resize
@@ -242,7 +242,7 @@ void C_SdNdeDalLogJobAdditionalTriggerDialog::m_AddDataElementClicked()
 
             // Fetch the existing trigger condition
             QString c_TriggerCondition = this->mpc_Ui->pc_TextEditTriggerCondition->toPlainText();
-            if (pc_Element != NULL)
+            if (pc_Element != nullptr)
             {
                // Add the selected data element to the condition
                const QString c_ElementName = C_PuiSdUtil::h_GetNamespaceDatapoolElement(rc_ConfiguredElementOptArrayId);
@@ -267,7 +267,7 @@ void C_SdNdeDalLogJobAdditionalTriggerDialog::m_AddDataElementClicked()
       QApplication::restoreOverrideCursor();
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       pc_Dialog->SaveUserSettings();
       pc_Dialog->PrepareCleanUp();

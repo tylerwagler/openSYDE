@@ -45,7 +45,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_NagUnUsedProjectFilesTableView::C_NagUnUsedProjectFilesTableView(QWidget * const opc_Parent) :
    C_TblViewScroll(opc_Parent),
-   mpc_ContextMenu(NULL)
+   mpc_ContextMenu(nullptr)
 {
    this->mc_SortProxyModel.setSourceModel(&mc_Model);
    this->mc_SortProxyModel.setSortRole(static_cast<int32_t>(Qt::DisplayRole));

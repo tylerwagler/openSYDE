@@ -41,7 +41,7 @@ public:
       eDATABLOCK_ASSIGNMENT
    };
 
-   C_SdNdeHalcOvTableModel(QObject * const opc_Parent = NULL);
+   C_SdNdeHalcOvTableModel(QObject * const opc_Parent = nullptr);
 
    void UpdateData(void);
    uint32_t GetNodeIndex(void) const;

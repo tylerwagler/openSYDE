@@ -45,7 +45,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_OscComSequencesBase::C_OscComSequencesBase(const bool oq_RoutingActive, const bool oq_UpdateRoutingMode) :
    mpc_ComDriver(new C_OscComDriverFlash(oq_RoutingActive, oq_UpdateRoutingMode)),
-   mpc_SystemDefinition(NULL),
+   mpc_SystemDefinition(nullptr),
    mu32_ActiveBusIndex(0U),
    mq_OpenSydeDevicesActive(false)
 {
@@ -60,7 +60,7 @@ C_OscComSequencesBase::C_OscComSequencesBase(const bool oq_RoutingActive, const 
 C_OscComSequencesBase::~C_OscComSequencesBase(void)
 {
    delete this->mpc_ComDriver;
-   mpc_SystemDefinition = NULL;
+   mpc_SystemDefinition = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -287,7 +287,7 @@ bool C_OscComSequencesBase::m_IsAtLeastOneOpenSydeNodeActive(void) const
 {
    bool q_Return = false;
 
-   if (this->mpc_SystemDefinition != NULL)
+   if (this->mpc_SystemDefinition != nullptr)
    {
       for (uint32_t u32_Counter = 0U; u32_Counter < this->mc_ActiveNodes.size(); ++u32_Counter)
       {

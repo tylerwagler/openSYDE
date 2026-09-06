@@ -40,7 +40,7 @@ class C_CamMosWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamMosWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamMosWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamMosWidget(void) override;
 
    void LoadUserSettings(void);

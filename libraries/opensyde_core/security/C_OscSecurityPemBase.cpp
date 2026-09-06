@@ -177,11 +177,11 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(const std::vector<uint8_t> & orc_F
    const int x_ContentSize = static_cast<int>(orc_FileContent.size()); //lint !e970 !e8080 //use type expected by API
    BIO * const pc_PubKeyFile = BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
 
-   if (pc_PubKeyFile != NULL)
+   if (pc_PubKeyFile != nullptr)
    {
       //Public key
-      X509 * const pc_RsaPub = PEM_read_bio_X509(pc_PubKeyFile, NULL, NULL, NULL);
-      if (pc_RsaPub != NULL)
+      X509 * const pc_RsaPub = PEM_read_bio_X509(pc_PubKeyFile, nullptr, nullptr, nullptr);
+      if (pc_RsaPub != nullptr)
       {
          std::vector<uint8_t> c_PubKeyTextDecoded;
          c_PubKeyTextDecoded.resize(C_OscSecurityPemBase::mhu32_DEFAULT_BUFFER_SIZE);
@@ -283,7 +283,7 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(const std::vector<uint8_t> & orc_F
                {
                   //Get serial number
                   ASN1_INTEGER * const pc_SerialNumberOpenssl = X509_get_serialNumber(pc_RsaPub);
-                  if (pc_SerialNumberOpenssl != NULL)
+                  if (pc_SerialNumberOpenssl != nullptr)
                   {
                      std::vector<uint8_t> c_PubKeySerialNumber;
                      c_PubKeySerialNumber.resize(C_OscSecurityPemBase::mhu32_DEFAULT_BUFFER_SIZE);
@@ -389,21 +389,21 @@ int32_t C_OscSecurityPemBase::m_ReadMetaInfos(const std::vector<uint8_t> & orc_F
    const int x_ContentSize = static_cast<int>(orc_FileContent.size()); //lint !e970 !e8080 //use type expected by API
    BIO * const pc_PubKeyFile = BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
 
-   if (pc_PubKeyFile != NULL)
+   if (pc_PubKeyFile != nullptr)
    {
       //Public key
-      X509 * const pc_RsaPub = PEM_read_bio_X509(pc_PubKeyFile, NULL, NULL, NULL);
-      if (pc_RsaPub != NULL)
+      X509 * const pc_RsaPub = PEM_read_bio_X509(pc_PubKeyFile, nullptr, nullptr, nullptr);
+      if (pc_RsaPub != nullptr)
       {
          BIO * const pc_PrintBuffer = BIO_new(BIO_s_mem());
-         if (pc_PrintBuffer != NULL)
+         if (pc_PrintBuffer != nullptr)
          {
             if (X509_print(pc_PrintBuffer, pc_RsaPub) == 1)
             {
                BUF_MEM * pc_MemPtr;
                //lint -e{1924,9176} OpenSSL interface
                BIO_get_mem_ptr(pc_PrintBuffer, &pc_MemPtr); //lint !e970 OpenSSL interface
-               if (pc_MemPtr != NULL)
+               if (pc_MemPtr != nullptr)
                {
                   this->mc_MetaInfo = "";
                   for (uint32_t u32_It = 0UL; u32_It < pc_MemPtr->length; ++u32_It)

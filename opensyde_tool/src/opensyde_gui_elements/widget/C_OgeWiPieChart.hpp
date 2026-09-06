@@ -36,7 +36,7 @@ class C_OgeWiPieChart :
    Q_OBJECT
 
 public:
-   explicit C_OgeWiPieChart(QWidget * const opc_Parent = NULL);
+   explicit C_OgeWiPieChart(QWidget * const opc_Parent = nullptr);
    ~C_OgeWiPieChart() override;
 
 protected:

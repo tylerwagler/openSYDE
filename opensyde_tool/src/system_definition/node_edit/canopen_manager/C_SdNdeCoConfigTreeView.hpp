@@ -31,7 +31,7 @@ class C_SdNdeCoConfigTreeDelegate :
    Q_OBJECT
 
 public:
-   C_SdNdeCoConfigTreeDelegate(QObject * const opc_Parent = NULL);
+   C_SdNdeCoConfigTreeDelegate(QObject * const opc_Parent = nullptr);
 
    void paint(QPainter * const opc_Painter, const QStyleOptionViewItem & orc_Option,
               const QModelIndex & orc_Index) const override;
@@ -48,7 +48,7 @@ class C_SdNdeCoConfigTreeView :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeCoConfigTreeView(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeCoConfigTreeView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeCoConfigTreeView(void) override;
 
    void SetNodeId(const uint32_t ou32_NodeIndex);

@@ -30,7 +30,7 @@ class C_OgeGbxMouseMove :
    Q_OBJECT
 
 public:
-   C_OgeGbxMouseMove(QWidget * const opc_Parent = NULL);
+   C_OgeGbxMouseMove(QWidget * const opc_Parent = nullptr);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

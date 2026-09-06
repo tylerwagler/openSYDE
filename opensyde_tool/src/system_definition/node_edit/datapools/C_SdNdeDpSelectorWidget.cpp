@@ -606,7 +606,7 @@ void C_SdNdeDpSelectorWidget::m_UpdateErrorToolTip(void)
    const stw::opensyde_core::C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
       this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       QString c_Heading;
       QString c_Content;
@@ -629,7 +629,7 @@ void C_SdNdeDpSelectorWidget::m_UpdateErrorToolTip(void)
             bool q_TooManyListsOrElementsError;
             pc_Node->CheckErrorDataPool(static_cast<uint32_t>(s32_Index), &q_NameConflict, &q_NameInvalid,
                                         &q_IsErrorInListOrMessage, &q_TooFewListsOrElementsError,
-                                        &q_TooManyListsOrElementsError, NULL);
+                                        &q_TooManyListsOrElementsError, nullptr);
             if (((q_NameConflict == true) || (q_NameInvalid == true)) || (q_IsErrorInListOrMessage == true) ||
                 (q_TooFewListsOrElementsError == true) || (q_TooManyListsOrElementsError == true))
             {

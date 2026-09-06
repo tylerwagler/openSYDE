@@ -29,7 +29,7 @@ class C_GiRect :
    public C_GiBiSizeableItem
 {
 public:
-   C_GiRect(const QRectF & orc_Rect, QGraphicsItem * const opc_Parent = NULL);
+   C_GiRect(const QRectF & orc_Rect, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiRect(void) override;
 
    void Redraw(void) override;

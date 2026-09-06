@@ -50,7 +50,7 @@ C_GiNodeBoundary::C_GiNodeBoundary(const QString & orc_Text, const float64_t of6
    QGraphicsItem(opc_Parent),
    C_GiBiSizeableItem(of64_Width, of64_Height),
    mc_Text(orc_Text),
-   mpc_Shadow(NULL),
+   mpc_Shadow(nullptr),
    mq_DrawBoder(false),
    mq_DrawWhiteFilter(false),
    mu32_SubNodesCount(ou32_SubNodesCount)
@@ -71,7 +71,7 @@ C_GiNodeBoundary::C_GiNodeBoundary(const QString & orc_Text, const float64_t of6
 //----------------------------------------------------------------------------------------------------------------------
 C_GiNodeBoundary::~C_GiNodeBoundary()
 {
-   this->mpc_Shadow = NULL;
+   this->mpc_Shadow = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -199,7 +199,7 @@ void C_GiNodeBoundary::SetDrawWhiteFilter(const bool oq_Active)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiNodeBoundary::m_DrawBackground(QPainter * const opc_Painter) const
 {
-   if (opc_Painter != NULL)
+   if (opc_Painter != nullptr)
    {
       QLinearGradient c_Gradient;
       const QRectF c_Rect = boundingRect();

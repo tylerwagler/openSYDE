@@ -48,7 +48,7 @@ const QString C_PuiProject::mhc_SERVICE_PROJECT_EXTENSION = "syde_sp";
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-C_PuiProject * C_PuiProject::mhpc_Singleton = NULL;
+C_PuiProject * C_PuiProject::mhpc_Singleton = nullptr;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -351,7 +351,7 @@ bool C_PuiProject::GetSwitchUseCaseFlag() const
 //----------------------------------------------------------------------------------------------------------------------
 C_PuiProject * C_PuiProject::h_GetInstance(void)
 {
-   if (C_PuiProject::mhpc_Singleton == NULL)
+   if (C_PuiProject::mhpc_Singleton == nullptr)
    {
       C_PuiProject::mhpc_Singleton = new C_PuiProject();
    }
@@ -364,10 +364,10 @@ C_PuiProject * C_PuiProject::h_GetInstance(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiProject::h_Destroy(void)
 {
-   if (C_PuiProject::mhpc_Singleton != NULL)
+   if (C_PuiProject::mhpc_Singleton != nullptr)
    {
       delete (C_PuiProject::mhpc_Singleton);
-      C_PuiProject::mhpc_Singleton = NULL;
+      C_PuiProject::mhpc_Singleton = nullptr;
    }
 }
 
@@ -575,7 +575,7 @@ void C_PuiProject::h_HandlePendingEvents(void)
 {
    const QPointer<QWidget> c_PreviousFocusWidget = QApplication::focusWidget();
 
-   if (c_PreviousFocusWidget != NULL)
+   if (c_PreviousFocusWidget != nullptr)
    {
       //Force focus change so any on focus change events (e.g. edit finished) will be processed before the CRC check
       c_PreviousFocusWidget->clearFocus();
@@ -584,7 +584,7 @@ void C_PuiProject::h_HandlePendingEvents(void)
       QApplication::processEvents();
 
       //Restore original focus (if possible)
-      if (c_PreviousFocusWidget != NULL)
+      if (c_PreviousFocusWidget != nullptr)
       {
          c_PreviousFocusWidget->setFocus();
       }

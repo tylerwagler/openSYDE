@@ -25,7 +25,7 @@ class C_NagTopTreeModel :
    public C_TblTreModel
 {
 public:
-   C_NagTopTreeModel(QObject * const opc_Parent = NULL);
+   C_NagTopTreeModel(QObject * const opc_Parent = nullptr);
    ~C_NagTopTreeModel(void) override;
 
    int32_t columnCount(const QModelIndex & orc_Parent = QModelIndex()) const override;

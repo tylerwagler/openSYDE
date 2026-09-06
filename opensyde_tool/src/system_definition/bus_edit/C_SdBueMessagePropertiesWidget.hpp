@@ -38,7 +38,7 @@ class C_SdBueMessagePropertiesWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdBueMessagePropertiesWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueMessagePropertiesWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdBueMessagePropertiesWidget(void) override;
 
    void InitStaticNames(void) const;

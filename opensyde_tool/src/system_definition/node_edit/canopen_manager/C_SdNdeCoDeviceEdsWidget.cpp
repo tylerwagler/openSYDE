@@ -134,8 +134,8 @@ void C_SdNdeCoDeviceEdsWidget::m_OnUpdateClicked(void)
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
             this->mc_DeviceInterfaceId.u32_NodeIndex);
 
-         tgl_assert(pc_Node != NULL);
-         if (pc_Node != NULL)
+         tgl_assert(pc_Node != nullptr);
+         if (pc_Node != nullptr)
          {
             tgl_assert(u32_DeviceInterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size());
             if (u32_DeviceInterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size())
@@ -180,7 +180,7 @@ void C_SdNdeCoDeviceEdsWidget::m_OnUpdateClicked(void)
                         this->m_SetDetails();
                      }
 
-                     if (c_PopUp != NULL)
+                     if (c_PopUp != nullptr)
                      {
                         c_PopUp->HideOverlay();
                         c_PopUp->deleteLater();
@@ -229,7 +229,7 @@ void C_SdNdeCoDeviceEdsWidget::m_SetDetails(void)
                                                                this->mu8_ManagerInterfaceId,
                                                                this->mc_DeviceInterfaceId);
 
-   if (pc_CanOpenDeviceInfo != NULL)
+   if (pc_CanOpenDeviceInfo != nullptr)
    {
       const C_OscCanOpenObjectDictionary c_CanOpenObjDictionary = pc_CanOpenDeviceInfo->GetEdsFileContent();
 

@@ -263,7 +263,7 @@ void C_SdNdeCoDeviceUpdateEdsDialog::mh_AddToReport(const QString & orc_Heading,
    std::vector<C_CieImportDataAssignment> c_DataVector = {orc_Data};
    if (C_CieImportReportWidget::h_GetMessageTableContent(c_TableContent, orc_FileInfo.
                                                          completeSuffix(), c_DataVector,
-                                                         C_OscCanProtocol::eCAN_OPEN, NULL, orc_Heading,
+                                                         C_OscCanProtocol::eCAN_OPEN, nullptr, orc_Heading,
                                                          false) == C_NO_ERR)
    {
       orc_Report += c_TableContent;
@@ -397,8 +397,8 @@ int32_t C_SdNdeCoDeviceUpdateEdsDialog::m_PrepareCompareData(C_CieImportedMessag
             s32_DataPoolIndex),
          false);
       tgl_assert(s32_DataPoolIndex >= 0);
-      if ((pc_OscContainer != NULL) && (pc_UiContainer != NULL) && (pc_OscRxList != NULL) && (pc_OscTxList != NULL) &&
-          (pc_UiTxList != NULL) && (pc_UiRxList != NULL) &&
+      if ((pc_OscContainer != nullptr) && (pc_UiContainer != nullptr) && (pc_OscRxList != nullptr) && (pc_OscTxList != nullptr) &&
+          (pc_UiTxList != nullptr) && (pc_UiRxList != nullptr) &&
           (u32_ManagerInterfaceIndex < pc_UiContainer->c_ComMessages.size()))
       {
          const C_PuiSdNodeCanMessageContainer & rc_UiContainer =
@@ -744,7 +744,7 @@ void C_SdNdeCoDeviceUpdateEdsDialog::m_HandleSignalChangesForAdaptedMessageVecto
             const C_OscCanOpenManagerMappableSignal * const pc_OrgSignal = this->m_GetOrgSignal(
                rc_AdaptedSignal.u16_CanOpenManagerObjectDictionaryIndex,
                rc_AdaptedSignal.u8_CanOpenManagerObjectDictionarySubIndex);
-            if (pc_OrgSignal != NULL)
+            if (pc_OrgSignal != nullptr)
             {
                //Cmp
                this->m_AdaptSignalProperties(rc_AdaptedSignal, rc_OscSignalData,
@@ -968,8 +968,8 @@ C_OscCanOpenManagerDeviceInfo C_SdNdeCoDeviceUpdateEdsDialog::m_AdaptConfig(
                                                                this->mc_DeviceNodeId);
    const C_OscCanOpenObjectDictionary & rc_EdsFileContent = orc_NewConfig.GetEdsFileContent();
 
-   tgl_assert(pc_ExistingConfig != NULL);
-   if (pc_ExistingConfig != NULL)
+   tgl_assert(pc_ExistingConfig != nullptr);
+   if (pc_ExistingConfig != nullptr)
    {
       const std::set<uint8_t> c_Map = rc_EdsFileContent.GetAllAvailableFactorySettingsSubIndices();
       const std::set<uint8_t>::const_iterator c_ItResult = c_Map.find(
@@ -1248,7 +1248,7 @@ int32_t C_SdNdeCoDeviceUpdateEdsDialog::m_GetDataPoolIndex(void) const
    int32_t s32_DataPoolIndex = -1;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_ManagerNodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_ItProt = 0UL; u32_ItProt < pc_Node->c_ComProtocols.size(); ++u32_ItProt)
       {
@@ -1345,7 +1345,7 @@ QString C_SdNdeCoDeviceUpdateEdsDialog::mh_GetSignalNameForDisplay(const std::st
 const C_OscCanOpenManagerMappableSignal * C_SdNdeCoDeviceUpdateEdsDialog::m_GetOrgSignal(
    const uint16_t ou16_ObjectIndex, const uint8_t ou8_SubIndex) const
 {
-   const C_OscCanOpenManagerMappableSignal * pc_Retval = NULL;
+   const C_OscCanOpenManagerMappableSignal * pc_Retval = nullptr;
 
    for (uint32_t u32_ItSignal = 0UL; u32_ItSignal < this->mc_NewConfig.c_EdsFileMappableSignals.size(); ++u32_ItSignal)
    {
@@ -1372,7 +1372,7 @@ void C_SdNdeCoDeviceUpdateEdsDialog::m_InitMessageNames(C_CieImportDataAssignmen
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
       this->mc_DeviceNodeId.u32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       uint32_t u32_SrdoIndex = 0UL;
       C_SdNdeCoDeviceUpdateEdsDialog::mh_InitMessageVectorNames(orc_Messages.c_ImportData.c_Core.c_OscRxMessageData,
@@ -1406,7 +1406,7 @@ void C_SdNdeCoDeviceUpdateEdsDialog::mh_InitMessageVectorNames(std::vector<C_Osc
       const bool q_IsSrdo =
          ((u32_ItMessage < orc_MessageIsSrdo.size()) && (orc_MessageIsSrdo[u32_ItMessage] == 1U)) ? true : false;
       rc_Message.c_Name = C_CieUtil::h_GetMessageName(orc_Node, !oq_MessageIsTxInEds, u32_ItMessage,
-                                                      C_OscCanProtocol::eCAN_OPEN, NULL, q_IsSrdo,
+                                                      C_OscCanProtocol::eCAN_OPEN, nullptr, q_IsSrdo,
                                                       oru32_SrdoIndex).toStdString();
    }
 }

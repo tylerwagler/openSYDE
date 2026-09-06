@@ -37,7 +37,7 @@ class C_SdNdeDbViewWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDbViewWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDbViewWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDbViewWidget() override;
 
    void InitStaticNames(void) const;

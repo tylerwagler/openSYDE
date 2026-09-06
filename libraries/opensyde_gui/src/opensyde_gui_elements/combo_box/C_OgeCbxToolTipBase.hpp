@@ -30,7 +30,7 @@ class C_OgeCbxToolTipBase :
    public C_OgeToolTipBase
 {
 public:
-   C_OgeCbxToolTipBase(QWidget * const opc_Parent = NULL);
+   C_OgeCbxToolTipBase(QWidget * const opc_Parent = nullptr);
 
    bool event(QEvent * const opc_Event) override;
 

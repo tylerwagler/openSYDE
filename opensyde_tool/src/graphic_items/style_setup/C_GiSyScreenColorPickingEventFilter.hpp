@@ -28,7 +28,7 @@ class C_GiSyScreenColorPickingEventFilter :
 
 public:
    explicit C_GiSyScreenColorPickingEventFilter(C_GiSyColorSelectWidget * const opc_ColorSelectWidget,
-                                                QObject * const opc_Parent = NULL);
+                                                QObject * const opc_Parent = nullptr);
    ~C_GiSyScreenColorPickingEventFilter(void) override;
    bool eventFilter(QObject * const opc_Object, QEvent * const opc_Event) override;
 

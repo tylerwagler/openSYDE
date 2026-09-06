@@ -46,7 +46,7 @@ using namespace stw::opensyde_gui;
 //----------------------------------------------------------------------------------------------------------------------
 C_TblViewToolTipBase::C_TblViewToolTipBase(QWidget * const opc_Parent) :
    QTableView(opc_Parent),
-   mpc_ToolTip(NULL),
+   mpc_ToolTip(nullptr),
    ms32_HoveredRow(-1),
    ms32_HoveredCol(-1),
    ms32_HoveredVertHeader(-1),
@@ -62,7 +62,7 @@ C_TblViewToolTipBase::C_TblViewToolTipBase(QWidget * const opc_Parent) :
 C_TblViewToolTipBase::~C_TblViewToolTipBase(void)
 {
    delete mpc_ToolTip;
-   mpc_ToolTip = NULL;
+   mpc_ToolTip = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -99,12 +99,12 @@ bool C_TblViewToolTipBase::event(QEvent * const opc_Event)
    {
       QHelpEvent * const pc_HelpEvent = dynamic_cast<QHelpEvent * const>(opc_Event);
 
-      if (pc_HelpEvent != NULL)
+      if (pc_HelpEvent != nullptr)
       {
          //Never use global pos directly as this seems to ignore transformations
          const QPoint c_GlobalPos = this->mapToGlobal(pc_HelpEvent->pos());
          //show tooltip
-         if (mpc_ToolTip == NULL)
+         if (mpc_ToolTip == nullptr)
          {
             mpc_ToolTip = new C_NagToolTip();
          }
@@ -223,7 +223,7 @@ bool C_TblViewToolTipBase::event(QEvent * const opc_Event)
    {
       QHoverEvent * const pc_HoverEvent = dynamic_cast<QHoverEvent * const>(opc_Event);
 
-      if (pc_HoverEvent != NULL)
+      if (pc_HoverEvent != nullptr)
       {
          m_HandleMouseMoveToolTip(this->mapToGlobal(pc_HoverEvent->pos()));
       }
@@ -243,7 +243,7 @@ bool C_TblViewToolTipBase::event(QEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblViewToolTipBase::m_HideToolTip(void)
 {
-   if (this->mpc_ToolTip != NULL)
+   if (this->mpc_ToolTip != nullptr)
    {
       this->mpc_ToolTip->hide();
    }

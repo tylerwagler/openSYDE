@@ -54,7 +54,7 @@ using namespace stw::errors;
 C_SdNdeDalLogJobDataSelectionWidget::C_SdNdeDalLogJobDataSelectionWidget(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SdNdeDalLogJobDataSelectionWidget),
-   mpc_ContextMenu(NULL),
+   mpc_ContextMenu(nullptr),
    mu32_NodeIndex(0),
    mu32_DataLoggerJobIndex(0)
 
@@ -183,7 +183,7 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_AddClicked()
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
 
    C_SyvDaPeDataElementBrowse * const pc_Dialog = new C_SyvDaPeDataElementBrowse(*c_New, 0U, true, false, true, true,
-                                                                                 true, true, NULL, false,
+                                                                                 true, true, nullptr, false,
                                                                                  this->mu32_NodeIndex);
 
    //Resize
@@ -238,7 +238,7 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_AddClicked()
       c_SelectedDataElements.clear();
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       pc_Dialog->SaveUserSettings();
       pc_Dialog->PrepareCleanUp();
@@ -260,7 +260,7 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_LoadDataElements()
       C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(
          this->mu32_NodeIndex, this->mu32_DataLoggerJobIndex);
 
-   if (pc_DataLoggerJob != NULL)
+   if (pc_DataLoggerJob != nullptr)
    {
       this->mc_DataElements.clear();
       this->mc_DataElements.reserve(pc_DataLoggerJob->c_ConfiguredDataElements.size());

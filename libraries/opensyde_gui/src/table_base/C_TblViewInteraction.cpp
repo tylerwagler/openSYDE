@@ -90,7 +90,7 @@ bool C_TblViewInteraction::event(QEvent * const opc_Event)
    else if (opc_Event->type() == QEvent::HoverMove)
    {
       QHoverEvent * const pc_HoverEvent = dynamic_cast<QHoverEvent * const>(opc_Event);
-      if (pc_HoverEvent != NULL)
+      if (pc_HoverEvent != nullptr)
       {
          m_HandleGlobalMousePos(this->mapToGlobal(pc_HoverEvent->pos()));
       }
@@ -117,7 +117,7 @@ bool C_TblViewInteraction::event(QEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 bool C_TblViewInteraction::eventFilter(QObject * const opc_Object, QEvent * const opc_Event)
 {
-   if ((opc_Object != this) && (opc_Object != NULL))
+   if ((opc_Object != this) && (opc_Object != nullptr))
    {
       if (opc_Event->type() == QEvent::HoverMove)
       {

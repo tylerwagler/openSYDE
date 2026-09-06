@@ -26,7 +26,7 @@ class C_OgeSpxDoubleAutoFixCustomTrigger :
    Q_OBJECT
 
 public:
-   C_OgeSpxDoubleAutoFixCustomTrigger(QWidget * const opc_Parent = NULL);
+   C_OgeSpxDoubleAutoFixCustomTrigger(QWidget * const opc_Parent = nullptr);
 
    void SetSuffix(const QString & orc_Suffix);
    void stepBy(const int32_t os32_Steps) override;

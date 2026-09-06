@@ -46,7 +46,7 @@ public:
                                             C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadDataPoolElementValue(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
                                              C_OscXmlParserBase & orc_XmlParser, const bool oq_CheckDataType,
-                                             std::string * const opc_CheckDataTypeErrorDetails = NULL);
+                                             std::string * const opc_CheckDataTypeErrorDetails = nullptr);
    static int32_t h_LoadDataPoolContentV1(C_OscNodeDataPoolContent & orc_NodeDataPoolContent,
                                           C_OscXmlParserBase & orc_XmlParser);
 
@@ -86,7 +86,7 @@ public:
    static std::string h_GetFileName(const std::string & orc_DatapoolName);
    static int32_t h_CheckDataPoolElementValueType(const C_OscNodeDataPoolContent::E_Type oe_ContentType,
                                                   const C_OscXmlParserBase & orc_XmlParser,
-                                                  std::string * const opc_CheckDataTypeErrorDetails = NULL);
+                                                  std::string * const opc_CheckDataTypeErrorDetails = nullptr);
 
 private:
    static std::string mh_NodeDataPoolContentToString(

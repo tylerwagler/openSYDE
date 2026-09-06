@@ -104,7 +104,7 @@ const
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (this->mpc_Node != NULL)
+   if (this->mpc_Node != nullptr)
    {
       orc_Datapools.clear();
       {
@@ -186,8 +186,8 @@ const
          {
             const C_OscHalcConfigDomain * const pc_Config =
                this->mpc_Node->c_HalcConfig.GetDomainConfigDataConst(u32_It);
-            tgl_assert(pc_Config != NULL);
-            if (pc_Config != NULL)
+            tgl_assert(pc_Config != nullptr);
+            if (pc_Config != nullptr)
             {
                if (q_NonSafeDpNecessary)
                {
@@ -254,7 +254,7 @@ int32_t C_OscHalcMagicianGenerator::m_FillHalcDatapools(std::vector<C_OscNodeDat
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (this->mpc_Node != NULL)
+   if (this->mpc_Node != nullptr)
    {
       if (this->m_CheckTwoDp())
       {
@@ -276,8 +276,8 @@ int32_t C_OscHalcMagicianGenerator::m_FillHalcDatapools(std::vector<C_OscNodeDat
                {
                   const C_OscHalcConfigDomain * const pc_Config =
                      this->mpc_Node->c_HalcConfig.GetDomainConfigDataConst(u32_ItDomain);
-                  tgl_assert(pc_Config != NULL);
-                  if (pc_Config != NULL)
+                  tgl_assert(pc_Config != nullptr);
+                  if (pc_Config != nullptr)
                   {
                      C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsDomain(rc_ListNonSafe, *pc_Config, c_Handler,
                                                                             u32_ItDomain);
@@ -315,8 +315,8 @@ int32_t C_OscHalcMagicianGenerator::m_FillHalcDatapools(std::vector<C_OscNodeDat
                {
                   const C_OscHalcConfigDomain * const pc_Config =
                      this->mpc_Node->c_HalcConfig.GetDomainConfigDataConst(u32_ItDomain);
-                  tgl_assert(pc_Config != NULL);
-                  if (pc_Config != NULL)
+                  tgl_assert(pc_Config != nullptr);
+                  if (pc_Config != nullptr)
                   {
                      C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsDomain(rc_List, *pc_Config, c_Handler,
                                                                             u32_ItDomain);
@@ -371,8 +371,8 @@ int32_t C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsDomain(C_OscNodeDataPool
          //Fill domain values
          if (orc_Handler.CheckChanPresent(orc_Domain.c_DomainConfig))
          {
-            if (orc_Domain.GetRelevantIndicesForSelectedUseCase(0UL, false, &c_RelevantParameters, NULL,
-                                                                NULL, NULL) == C_NO_ERR)
+            if (orc_Domain.GetRelevantIndicesForSelectedUseCase(0UL, false, &c_RelevantParameters, nullptr,
+                                                                nullptr, nullptr) == C_NO_ERR)
             {
                s32_Retval = C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsChannel(
                   orc_List, orc_Domain.c_DomainConfig, orc_Handler,
@@ -449,8 +449,8 @@ int32_t C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsDomain(C_OscNodeDataPool
 
             if (s32_Retval == C_NO_ERR)
             {
-               if (orc_Domain.GetRelevantIndicesForSelectedUseCase(u32_ItChannel, true, &c_RelevantParameters, NULL,
-                                                                   NULL, NULL) == C_NO_ERR)
+               if (orc_Domain.GetRelevantIndicesForSelectedUseCase(u32_ItChannel, true, &c_RelevantParameters, nullptr,
+                                                                   nullptr, nullptr) == C_NO_ERR)
                {
                   s32_Retval = C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsChannel(
                      orc_List, rc_Channel, orc_Handler, ou32_ItDomain,
@@ -494,7 +494,7 @@ int32_t C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsChanNum(C_OscNodeDataPoo
       ou32_ItDomain,
       orc_List);
 
-   if (pc_ChanNumElement != NULL)
+   if (pc_ChanNumElement != nullptr)
    {
       if (pc_ChanNumElement->c_DataSetValues.size() > 0UL)
       {
@@ -547,7 +547,7 @@ int32_t C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsSafetyFlag(C_OscNodeData
       ou32_ItDomain,
       orc_List);
 
-   if (pc_ChanNumElement != NULL)
+   if (pc_ChanNumElement != nullptr)
    {
       if (pc_ChanNumElement->c_DataSetValues.size() > 0UL)
       {
@@ -599,7 +599,7 @@ int32_t C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsUseCase(C_OscNodeDataPoo
    int32_t s32_Retval = C_NO_ERR;
    C_OscNodeDataPoolListElement * const pc_UseCaseElement = orc_Handler.GetUseCaseListElement(ou32_ItDomain, orc_List);
 
-   if (pc_UseCaseElement != NULL)
+   if (pc_UseCaseElement != nullptr)
    {
       if (pc_UseCaseElement->c_DataSetValues.size() > 0UL)
       {
@@ -750,7 +750,7 @@ int32_t C_OscHalcMagicianGenerator::mh_FillHalcElement(C_OscNodeDataPoolListElem
 {
    int32_t s32_Retval;
 
-   if (opc_Element != NULL)
+   if (opc_Element != nullptr)
    {
       if (opc_Element->c_DataSetValues.size() >= 1UL)
       {
@@ -1385,9 +1385,9 @@ void C_OscHalcMagicianGenerator::mh_CleanUpHalcDatapools(std::vector<C_OscNodeDa
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcMagicianGenerator::m_FillEmptySpaceHalcDatapools(std::vector<C_OscNodeDataPool> & orc_Datapools) const
 {
-   tgl_assert(this->mpc_Node != NULL);
+   tgl_assert(this->mpc_Node != nullptr);
 
-   if ((this->mpc_Node != NULL) && (this->mpc_Node->c_HalcConfig.q_NvmBasedConfig))
+   if ((this->mpc_Node != nullptr) && (this->mpc_Node->c_HalcConfig.q_NvmBasedConfig))
    {
       for (std::vector<C_OscNodeDataPool>::iterator c_ItDp = orc_Datapools.begin(); c_ItDp != orc_Datapools.end();
            ++c_ItDp)
@@ -1477,7 +1477,7 @@ int32_t C_OscHalcMagicianGenerator::m_HandleCopies(std::vector<C_OscNodeDataPool
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if ((this->mpc_Node != NULL) && (this->mpc_Node->c_HalcConfig.u8_NumConfigCopies >= 1U))
+   if ((this->mpc_Node != nullptr) && (this->mpc_Node->c_HalcConfig.u8_NumConfigCopies >= 1U))
    {
       const std::vector<C_OscNodeDataPool> c_Initial = orc_Datapools;
       for (uint8_t u8_ItCopy = 0U; u8_ItCopy < (this->mpc_Node->c_HalcConfig.u8_NumConfigCopies - 1U); ++u8_ItCopy)
@@ -1527,7 +1527,7 @@ int32_t C_OscHalcMagicianGenerator::m_HandleNvm(std::vector<C_OscNodeDataPool> &
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (this->mpc_Node != NULL)
+   if (this->mpc_Node != nullptr)
    {
       if (this->mpc_Node->c_HalcConfig.q_NvmBasedConfig)
       {
@@ -1620,7 +1620,7 @@ int32_t C_OscHalcMagicianGenerator::m_HandleNvmDpOffset(std::vector<C_OscNodeDat
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (this->mpc_Node != NULL)
+   if (this->mpc_Node != nullptr)
    {
       uint32_t u32_ItOffset = 0UL;
       for (uint32_t u32_ItDp = 0UL; (u32_ItDp < orc_Datapools.size()) && (s32_Retval == C_NO_ERR); ++u32_ItDp)
@@ -1663,7 +1663,7 @@ int32_t C_OscHalcMagicianGenerator::m_HandleNvmDpOffset(std::vector<C_OscNodeDat
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcMagicianGenerator::m_HandleVersion(C_OscNodeDataPool & orc_Datapool) const
 {
-   if (this->mpc_Node != NULL)
+   if (this->mpc_Node != nullptr)
    {
       orc_Datapool.au8_Version[0] =
          static_cast<uint8_t>((this->mpc_Node->c_HalcConfig.u32_ContentVersion & 0xF000UL) >> 12UL);

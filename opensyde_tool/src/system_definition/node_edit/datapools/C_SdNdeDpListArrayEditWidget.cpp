@@ -102,7 +102,7 @@ void C_SdNdeDpListArrayEditWidget::InitStaticNames(void) const
       this->mu32_DataSetIndex);
 
    //Build title
-   if ((pc_DataPool != NULL) && (pc_Element != NULL))
+   if ((pc_DataPool != nullptr) && (pc_Element != nullptr))
    {
       const QString c_Type = C_PuiSdHandler::h_GetElementTypeName(pc_DataPool->e_Type);
       QString c_EditType;
@@ -115,7 +115,7 @@ void C_SdNdeDpListArrayEditWidget::InitStaticNames(void) const
          c_EditType = "Maximum";
          break;
       case C_SdNdeDpUtil::eARRAY_EDIT_DATA_SET:
-         if (pc_DataSet != NULL)
+         if (pc_DataSet != nullptr)
          {
             //Translation: 1: data set name
             c_EditType = static_cast<QString>("Dataset Value");

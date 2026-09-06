@@ -223,7 +223,7 @@ void C_SdNdeDbWidget::CheckProcessIdError(void) const
       this->mu32_NodeIndex, this->mu32_ApplicationIndex);
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       tgl_assert(pc_Node->CheckApplicationProcessIdValid(this->mu32_ApplicationIndex, q_Valid) == C_NO_ERR);
       c_Info =
@@ -267,7 +267,7 @@ void C_SdNdeDbWidget::m_LoadData(void)
    const C_OscNodeApplication * const pc_Application = C_PuiSdHandler::h_GetInstance()->GetApplication(
       this->mu32_NodeIndex, this->mu32_ApplicationIndex);
 
-   if ((pc_Application != NULL) && (pc_Node != NULL))
+   if ((pc_Application != nullptr) && (pc_Node != nullptr))
    {
       this->mpc_Ui->pc_LabName->setText(static_cast<QString>("#%1 - %2").
                                         arg(this->mu32_ApplicationIndex + 1).
@@ -354,7 +354,7 @@ void C_SdNdeDbWidget::m_OnEdit(void)
       this->mu32_NodeIndex, this->mu32_ApplicationIndex);
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Application != NULL)
+   if (pc_Application != nullptr)
    {
       const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
       const C_SdNdeDbProperties * const pc_Dialog = new C_SdNdeDbProperties(this->mu32_NodeIndex,
@@ -394,7 +394,7 @@ void C_SdNdeDbWidget::m_OnEdit(void)
          Q_EMIT (this->SigOwnedDataPoolsChanged());
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();
@@ -471,7 +471,7 @@ void C_SdNdeDbWidget::m_OnOpenIdeClicked(void)
    const C_OscNodeApplication * const pc_Application = C_PuiSdHandler::h_GetInstance()->GetApplication(
       this->mu32_NodeIndex, this->mu32_ApplicationIndex);
 
-   if (pc_Application != NULL)
+   if (pc_Application != nullptr)
    {
       const QString c_IdeCall =
          static_cast<QString>(C_PuiUtil::h_ResolvePlaceholderVariables(
@@ -524,7 +524,7 @@ void C_SdNdeDbWidget::m_UnassignAllAssociatedDataPools(void) const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_ItDataPool = 0; u32_ItDataPool < pc_Node->c_DataPools.size(); ++u32_ItDataPool)
       {
@@ -552,7 +552,7 @@ C_OscNodeApplication::E_Type C_SdNdeDbWidget::m_GetType(void) const
    const C_OscNodeApplication * const pc_Application = C_PuiSdHandler::h_GetInstance()->GetApplication(
       this->mu32_NodeIndex, this->mu32_ApplicationIndex);
 
-   if (pc_Application != NULL)
+   if (pc_Application != nullptr)
    {
       e_Retval = pc_Application->e_Type;
    }
@@ -572,7 +572,7 @@ uint32_t C_SdNdeDbWidget::m_CountAllAssociatedDataPools(void) const
    uint32_t u32_Retval = 0;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_ItDataPool = 0; u32_ItDataPool < pc_Node->c_DataPools.size(); ++u32_ItDataPool)
       {
@@ -600,7 +600,7 @@ QString C_SdNdeDbWidget::m_GetAllAssociatedDataPoolNames(void) const
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_ItDataPool = 0; u32_ItDataPool < pc_Node->c_DataPools.size(); ++u32_ItDataPool)
       {
@@ -640,7 +640,7 @@ QString C_SdNdeDbWidget::m_GetAllOutputFiles(void) const
    const C_OscNodeApplication * const pc_Application =
       C_PuiSdHandler::h_GetInstance()->GetApplication(this->mu32_NodeIndex, this->mu32_ApplicationIndex);
 
-   if (pc_Application != NULL)
+   if (pc_Application != nullptr)
    {
       for (uint32_t u32_ItOutputFiles = 0; u32_ItOutputFiles < pc_Application->c_ResultPaths.size();
            u32_ItOutputFiles++)

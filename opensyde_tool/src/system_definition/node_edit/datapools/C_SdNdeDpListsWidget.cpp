@@ -242,7 +242,7 @@ void C_SdNdeDpListsWidget::m_UpdateDpLabel(const uint32_t ou32_NodeIndex, const 
    const C_OscNodeDataPool * const pc_Dp = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(ou32_NodeIndex,
                                                                                            ou32_DataPoolIndex);
 
-   if (pc_Dp != NULL)
+   if (pc_Dp != nullptr)
    {
       const int32_t s32_TypeSpecificNum = C_PuiSdHandler::h_GetInstance()->GetDataPoolTypeIndex(ou32_NodeIndex,
                                                                                                 ou32_DataPoolIndex);

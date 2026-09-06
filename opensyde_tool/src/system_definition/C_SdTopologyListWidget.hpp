@@ -28,7 +28,7 @@ class C_SdTopologyListWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdTopologyListWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdTopologyListWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdTopologyListWidget() override;
 
    void SetMaximumHeightAdaption(const bool oq_Active);

@@ -28,7 +28,7 @@ class C_OgePubGenericTextWithBackground :
    Q_OBJECT
 
 public:
-   explicit C_OgePubGenericTextWithBackground(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubGenericTextWithBackground(QWidget * const opc_Parent = nullptr);
 
    void SetForegroundColor(const int32_t os32_Value);
    void SetBackgroundColor(const int32_t os32_Value);

@@ -265,7 +265,7 @@ std::string C_CanMonProtocolBase::mh_SerialNumberToString(const uint8_t * const 
 {
    std::string c_Result;
 
-   if (opu8_SerialNumber != NULL)
+   if (opu8_SerialNumber != nullptr)
    {
       if (opu8_SerialNumber[0] < static_cast<uint8_t>(0x20))
       {

@@ -208,9 +208,9 @@ int32_t C_OscIpDispatcherLinuxSock::m_GetAllInstalledInterfaceIps(void)
    if (x_Ret == 0)
    {
       // Walk through linked list, maintaining head pointer so we can free list later
-      for (pc_IfAddr = pc_IfAddrFirst; pc_IfAddr != NULL; pc_IfAddr = pc_IfAddr->ifa_next)
+      for (pc_IfAddr = pc_IfAddrFirst; pc_IfAddr != nullptr; pc_IfAddr = pc_IfAddr->ifa_next)
       {
-         if (pc_IfAddr->ifa_addr != NULL)
+         if (pc_IfAddr->ifa_addr != nullptr)
          {
             // Only report IPv4 interfaces
             if (pc_IfAddr->ifa_addr->sa_family == AF_INET)
@@ -337,7 +337,7 @@ int32_t C_OscIpDispatcherLinuxSock::m_ConnectTcp(C_TcpConnection & orc_Connectio
          FD_SET(orc_Connection.s32_Socket, &c_SocketErrorSet);
          c_TimeOut.tv_sec = mu32_ConnectionTimeoutSeconds;
          c_TimeOut.tv_usec = 0;
-         x_Return = select(orc_Connection.s32_Socket + 1, NULL, &c_SocketWriteSet, &c_SocketErrorSet, &c_TimeOut);
+         x_Return = select(orc_Connection.s32_Socket + 1, nullptr, &c_SocketWriteSet, &c_SocketErrorSet, &c_TimeOut);
          switch (x_Return)
          {
          case -1:

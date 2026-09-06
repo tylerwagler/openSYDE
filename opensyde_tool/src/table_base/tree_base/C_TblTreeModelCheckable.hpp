@@ -42,7 +42,7 @@ class C_TblTreeModelCheckable :
    Q_OBJECT
 
 public:
-   explicit C_TblTreeModelCheckable(QObject * const opc_Parent = NULL);
+   explicit C_TblTreeModelCheckable(QObject * const opc_Parent = nullptr);
    ~C_TblTreeModelCheckable() override;
 
    virtual int32_t Init(const std::vector<uint32_t> & orc_ElementIndices) = 0;

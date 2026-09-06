@@ -59,7 +59,7 @@ C_SdBueJ1939AddMessagesFromCatalogDialog::C_SdBueJ1939AddMessagesFromCatalogDial
    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdBueJ1939AddMessagesFromCatalogDialog),
-   mpc_ContextMenu(NULL),
+   mpc_ContextMenu(nullptr),
    ms32_ImportCatalogReturn(0UL),
    me_Mode(E_MessageMode::eALL_MESSAGES)
 

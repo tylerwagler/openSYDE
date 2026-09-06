@@ -404,7 +404,7 @@ std::string C_OscExportUti::h_FloatToStrGe(const float32_t of32_Value, bool * co
 
    q_InfOrNan = h_CheckInfOrNan(c_Return);
 
-   if (opq_InfOrNan != NULL)
+   if (opq_InfOrNan != nullptr)
    {
       *opq_InfOrNan = q_InfOrNan;
    }
@@ -454,7 +454,7 @@ std::string C_OscExportUti::h_FloatToStrGe(const float64_t of64_Value, bool * co
 
    q_InfOrNan = h_CheckInfOrNan(c_Return);
 
-   if (opq_InfOrNan != NULL)
+   if (opq_InfOrNan != nullptr)
    {
       *opq_InfOrNan = q_InfOrNan;
    }

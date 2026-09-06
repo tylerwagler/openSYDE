@@ -131,11 +131,11 @@ QStringList C_SyvUpPacPemFilesListWidget::GetPemFilePaths() const
    for (int32_t s32_It = 0; s32_It < this->count(); ++s32_It)
    {
       QListWidgetItem * const pc_CurrentItem = this->item(s32_It);
-      if (pc_CurrentItem != NULL)
+      if (pc_CurrentItem != nullptr)
       {
          C_SyvUpPacPemFileEntry * const pc_ItemWidget =
             dynamic_cast<C_SyvUpPacPemFileEntry *>(this->itemWidget(pc_CurrentItem));
-         if ((pc_ItemWidget != NULL) && (!pc_ItemWidget->c_FilePath.isEmpty()))
+         if ((pc_ItemWidget != nullptr) && (!pc_ItemWidget->c_FilePath.isEmpty()))
          {
             c_PemFilePaths.append(pc_ItemWidget->c_FilePath);
          }
@@ -308,11 +308,11 @@ void C_SyvUpPacPemFilesListWidget::m_AddFile(const QString & orc_File, const int
    for (int32_t s32_It = 0; s32_It < this->count(); ++s32_It)
    {
       QListWidgetItem * const pc_CurrentItem = this->item(s32_It);
-      if (pc_CurrentItem != NULL)
+      if (pc_CurrentItem != nullptr)
       {
          const C_SyvUpPacPemFileEntry * const pc_ItemWidget =
             dynamic_cast<C_SyvUpPacPemFileEntry *>(this->itemWidget(pc_CurrentItem));
-         if ((pc_ItemWidget != NULL) && (pc_ItemWidget->c_FilePath.isEmpty() == false))
+         if ((pc_ItemWidget != nullptr) && (pc_ItemWidget->c_FilePath.isEmpty() == false))
          {
             const QFileInfo c_ExistingFileInfo(pc_ItemWidget->c_FilePath);
             const QString c_AbsoluteExistingFilePath = c_ExistingFileInfo.absoluteFilePath();
@@ -379,11 +379,11 @@ void C_SyvUpPacPemFilesListWidget::m_DeleteItem(const int32_t os32_CurrentPemFil
 {
    QListWidgetItem * const pc_CurrentItem = this->item(os32_CurrentPemFileIndex);
 
-   if (pc_CurrentItem != NULL)
+   if (pc_CurrentItem != nullptr)
    {
       C_SyvUpPacPemFileEntry * pc_ItemWidget =
          dynamic_cast<C_SyvUpPacPemFileEntry *>(this->itemWidget(pc_CurrentItem));
-      if (pc_ItemWidget != NULL)
+      if (pc_ItemWidget != nullptr)
       {
          if (oq_NeedToUpdateListIndex)
          {
@@ -419,11 +419,11 @@ void C_SyvUpPacPemFilesListWidget::m_UpdatePemFileWidgetIndex(const int32_t os32
    for (int32_t s32_It = os32_CurrentPemFileIndex; s32_It < this->count(); ++s32_It)
    {
       QListWidgetItem * const pc_CurrentItem = this->item(s32_It);
-      if (pc_CurrentItem != NULL)
+      if (pc_CurrentItem != nullptr)
       {
          C_SyvUpPacPemFileEntry * const pc_ItemWidget =
             dynamic_cast<C_SyvUpPacPemFileEntry *>(this->itemWidget(pc_CurrentItem));
-         if (pc_ItemWidget != NULL)
+         if (pc_ItemWidget != nullptr)
          {
             if (pc_ItemWidget->s32_CurrentPemFileIndex <= 0)
             {

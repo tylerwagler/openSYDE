@@ -28,7 +28,7 @@ class C_OgePubSvgIconOnly :
    public C_OgePubToolTipBase
 {
 public:
-   C_OgePubSvgIconOnly(QWidget * const opc_Parent = NULL);
+   C_OgePubSvgIconOnly(QWidget * const opc_Parent = nullptr);
    ~C_OgePubSvgIconOnly(void) override;
 
    void SetSvg(const QString & orc_PathEnabled, const QString & orc_PathDisabled = "",

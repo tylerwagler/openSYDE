@@ -31,7 +31,7 @@ class C_CamMosFilterTableView :
    Q_OBJECT
 
 public:
-   C_CamMosFilterTableView(QWidget * const opc_Parent = NULL);
+   C_CamMosFilterTableView(QWidget * const opc_Parent = nullptr);
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
 

@@ -27,7 +27,7 @@ class C_OgeLeComboBox :
    public C_OgeLeContextMenuBase
 {
 public:
-   C_OgeLeComboBox(QWidget * const opc_Parent = NULL);
+   C_OgeLeComboBox(QWidget * const opc_Parent = nullptr);
 
 protected:
    void mousePressEvent(QMouseEvent * const opc_Event) override;

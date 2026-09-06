@@ -81,7 +81,7 @@ bool C_OgeTreeToolTipBase::m_CallForEvent(QEvent * const opc_Event)
          //Trigger tooltip update
          m_LastMinuteToolTipUpdate();
 
-         if (pc_HelpEvent != NULL)
+         if (pc_HelpEvent != nullptr)
          {
             //Never use global pos directly as this seems to ignore transformations
             const QPoint c_GlobalPos = this->m_MapToGlobal(pc_HelpEvent->pos());
@@ -164,7 +164,7 @@ bool C_OgeTreeToolTipBase::m_CallForEvent(QEvent * const opc_Event)
    {
       QHoverEvent * const pc_HoverEvent = dynamic_cast<QHoverEvent * const>(opc_Event);
 
-      if (pc_HoverEvent != NULL)
+      if (pc_HoverEvent != nullptr)
       {
          m_HandleMouseMoveToolTip(this->m_MapToGlobal(pc_HoverEvent->pos()));
       }
@@ -190,7 +190,7 @@ void C_OgeTreeToolTipBase::m_CallBeforeEventFilter(const QEvent * const opc_Even
    {
       const QHoverEvent * const pc_HoverEvent = dynamic_cast<const QHoverEvent * const>(opc_Event);
 
-      if (pc_HoverEvent != NULL)
+      if (pc_HoverEvent != nullptr)
       {
          m_HandleMouseMoveToolTip(this->m_MapToGlobal(pc_HoverEvent->pos()));
       }

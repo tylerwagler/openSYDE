@@ -36,7 +36,7 @@ class C_NagViewItem :
    Q_OBJECT
 
 public:
-   explicit C_NagViewItem(QWidget * const opc_Parent = NULL);
+   explicit C_NagViewItem(QWidget * const opc_Parent = nullptr);
    ~C_NagViewItem(void) override;
 
    void LoadUserSettings(void);

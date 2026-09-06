@@ -65,11 +65,11 @@ C_GiLiBus::C_GiLiBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
    //Allow hover events for tool tip hide
    this->setAcceptHoverEvents(true);
 
-   if (opc_Points == NULL)
+   if (opc_Points == nullptr)
    {
       const stw::opensyde_gui_logic::C_PuiSdBus * const pc_UiBus =
          C_PuiSdHandler::h_GetInstance()->GetUiBus(ms32_Index);
-      if (pc_UiBus != NULL)
+      if (pc_UiBus != nullptr)
       {
          stw::opensyde_gui_logic::C_PuiSdBus c_UiBus = *pc_UiBus;
          //Safety first
@@ -85,7 +85,7 @@ C_GiLiBus::C_GiLiBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
    }
 
    this->m_UpdateTextElementName();
-   if (this->mpc_TextElementName != NULL)
+   if (this->mpc_TextElementName != nullptr)
    {
       // initial values?
       if ((C_OscUtils::h_IsFloat64NearlyEqual(this->mpc_TextElementName->pos().x(), 0.0) == true) &&
@@ -118,7 +118,7 @@ C_GiLiBus::C_GiLiBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
 C_GiLiBus::~C_GiLiBus() //lint !e1540  no memory leak because of the parent of mpc_TextElementName and the Qt memory
                         // management
 {
-   if (this->mpc_TextElementName != NULL)
+   if (this->mpc_TextElementName != nullptr)
    {
       disconnect(this->mpc_TextElementName, &C_GiTextElementBus::destroyed, this, &C_GiLiBus::m_UnregisterTextElement);
    }
@@ -149,7 +149,7 @@ QString C_GiLiBus::GetName(void) const
 
    const stw::opensyde_core::C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(ms32_Index);
 
-   if (pc_Bus != NULL)
+   if (pc_Bus != nullptr)
    {
       c_Name = pc_Bus->c_Name.c_str();
    }
@@ -171,7 +171,7 @@ QString C_GiLiBus::GetBitrate(const bool oq_WithComma) const
    QString c_Bitrate = "";
    const stw::opensyde_core::C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(ms32_Index);
 
-   if ((pc_Bus != NULL) &&
+   if ((pc_Bus != nullptr) &&
        (pc_Bus->e_Type == C_OscSystemBus::eCAN))
    {
       if (oq_WithComma == true)
@@ -193,13 +193,13 @@ void C_GiLiBus::LoadData(void)
    const C_OscSystemBus * const pc_OscBus = C_PuiSdHandler::h_GetInstance()->GetOscBus(ms32_Index);
    const stw::opensyde_gui_logic::C_PuiSdBus * const pc_UiBus = C_PuiSdHandler::h_GetInstance()->GetUiBus(ms32_Index);
 
-   if (pc_UiBus != NULL)
+   if (pc_UiBus != nullptr)
    {
       this->m_LoadBasicData(*pc_UiBus);
       this->SetMiddleLineColor(pc_UiBus->c_UiColorMiddleLine);
    }
    //Object name for test
-   if (pc_OscBus != NULL)
+   if (pc_OscBus != nullptr)
    {
       this->setObjectName(static_cast<QString>("Bus: %1").arg(pc_OscBus->c_Name.c_str()));
    }
@@ -213,7 +213,7 @@ void C_GiLiBus::UpdateData(void)
 {
    const stw::opensyde_gui_logic::C_PuiSdBus * const pc_UiBus = C_PuiSdHandler::h_GetInstance()->GetUiBus(ms32_Index);
 
-   if (pc_UiBus != NULL)
+   if (pc_UiBus != nullptr)
    {
       stw::opensyde_gui_logic::C_PuiSdBus c_UiBus = *pc_UiBus;
       this->m_UpdateBasicData(c_UiBus);
@@ -255,7 +255,7 @@ void C_GiLiBus::GenerateHint(void)
       c_ToolTip.append("\n\n");
    }
 
-   if (pc_Bus != NULL)
+   if (pc_Bus != nullptr)
    {
       c_ToolTip.append(static_cast<QString>("Bus ID: %1").arg(QString::number(pc_Bus->u8_BusId)));
 
@@ -272,7 +272,7 @@ void C_GiLiBus::GenerateHint(void)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItNode);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          for (uint32_t u32_ItComInterface = 0; u32_ItComInterface < pc_Node->c_Properties.c_ComInterfaces.size();
               ++u32_ItComInterface)
@@ -325,7 +325,7 @@ void C_GiLiBus::CopyStyle(const QGraphicsItem * const opc_GuidelineItem)
 {
    const C_GiLiBus * const pc_Item = dynamic_cast<const C_GiLiBus * const>(opc_GuidelineItem);
 
-   if (pc_Item != NULL)
+   if (pc_Item != nullptr)
    {
       this->ApplyStyle(pc_Item->GetColor(), pc_Item->GetWidth());
    }
@@ -356,7 +356,7 @@ void C_GiLiBus::SetDisabledLook(const bool oq_Disabled)
 {
    C_GiLiLineGroup::SetDisabledLook(oq_Disabled);
 
-   if (this->mpc_TextElementName != NULL)
+   if (this->mpc_TextElementName != nullptr)
    {
       this->mpc_TextElementName->SetDisabledLook(oq_Disabled);
    }
@@ -382,7 +382,7 @@ void C_GiLiBus::ApplyStyle(const QColor & orc_LineColor, const int32_t os32_Widt
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiBus::CheckBusForChanges(void)
 {
-   if (this->mpc_TextElementName != NULL)
+   if (this->mpc_TextElementName != nullptr)
    {
       this->mpc_TextElementName->SetErrorState(C_PuiSdHandler::h_GetInstance()->CheckBusConflict(this->ms32_Index));
 
@@ -406,7 +406,7 @@ void C_GiLiBus::SetResizing(const bool & orq_ResizeActive)
 {
    C_GiLiLineGroup::SetResizing(orq_ResizeActive);
 
-   if (this->mpc_TextElementName != NULL)
+   if (this->mpc_TextElementName != nullptr)
    {
       if (this->me_ActiveResizeMode == eALL)
       {
@@ -470,7 +470,7 @@ void C_GiLiBus::hoverLeaveEvent(QGraphicsSceneHoverEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiBus::m_BusWasMoved(const int32_t & ors32_LineIndex, const QPointF & orc_PositionDifference)
 {
-   if ((this->mpc_TextElementName != NULL) &&
+   if ((this->mpc_TextElementName != nullptr) &&
        (ors32_LineIndex == 0) &&
        (this->mpc_TextElementName->isSelected() == false))
    {
@@ -483,7 +483,7 @@ void C_GiLiBus::m_BusWasMoved(const int32_t & ors32_LineIndex, const QPointF & o
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiBus::m_UpdateTextElementName(void)
 {
-   if (this->mpc_TextElementName != NULL)
+   if (this->mpc_TextElementName != nullptr)
    {
       this->mpc_TextElementName->SetText(this->GetName());
       this->mpc_TextElementName->SetBusIndex(this->ms32_Index);
@@ -496,5 +496,5 @@ void C_GiLiBus::m_UpdateTextElementName(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiBus::m_UnregisterTextElement(void)
 {
-   this->mpc_TextElementName = NULL;
+   this->mpc_TextElementName = nullptr;
 }

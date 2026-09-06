@@ -34,7 +34,7 @@ class C_SyvUpOverviewWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvUpOverviewWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvUpOverviewWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvUpOverviewWidget() override;
 
 private:

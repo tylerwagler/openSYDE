@@ -78,7 +78,7 @@ void C_OgeTedPropertiesComment::focusOutEvent(QFocusEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeTedPropertiesComment::keyPressEvent(QKeyEvent * const opc_KeyEvent)
 {
-   if (opc_KeyEvent != NULL)
+   if (opc_KeyEvent != nullptr)
    {
       C_OgeTedContextMenuBase::keyPressEvent(opc_KeyEvent);
       if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Tab)) ||

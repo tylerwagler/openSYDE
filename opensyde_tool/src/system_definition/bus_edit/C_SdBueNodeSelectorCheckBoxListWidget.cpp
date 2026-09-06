@@ -96,7 +96,7 @@ void C_SdBueNodeSelectorCheckBoxListWidget::AddNodes(const std::vector<QString> 
          dynamic_cast<C_SdBueNodeSelectorCheckBoxItemWidget *>(pc_Item->widget());
       this->mpc_Ui->pc_CbxVerticalLayout->removeItem(pc_Item);
 
-      if (pc_SelectorItem != NULL)
+      if (pc_SelectorItem != nullptr)
       {
          // delete the widget
          disconnect(pc_SelectorItem, &C_SdBueNodeSelectorCheckBoxItemWidget::SigNodeToggled,
@@ -150,7 +150,7 @@ void C_SdBueNodeSelectorCheckBoxListWidget::CheckNodes(const std::vector<uint32_
          C_SdBueNodeSelectorCheckBoxItemWidget * const pc_SelectorItem =
             dynamic_cast<C_SdBueNodeSelectorCheckBoxItemWidget *>(pc_Item->widget());
 
-         if (pc_SelectorItem != NULL)
+         if (pc_SelectorItem != nullptr)
          {
             bool q_Checked = false;
 
@@ -185,8 +185,8 @@ void C_SdBueNodeSelectorCheckBoxListWidget::CheckSpecificNode(const uint32_t ou3
 {
    C_SdBueNodeSelectorCheckBoxItemWidget * const pc_SelectorItem = this->m_GetItemWidget(ou32_Index, ou32_SubIndex);
 
-   tgl_assert(pc_SelectorItem != NULL);
-   if ((pc_SelectorItem != NULL) &&
+   tgl_assert(pc_SelectorItem != nullptr);
+   if ((pc_SelectorItem != nullptr) &&
        (pc_SelectorItem->IsChecked() != oq_Checked))
    {
       pc_SelectorItem->SetChecked(oq_Checked);
@@ -207,7 +207,7 @@ void C_SdBueNodeSelectorCheckBoxListWidget::SetSpecificNodeAsManager(const uint3
 {
    C_SdBueNodeSelectorCheckBoxItemWidget * const pc_SelectorItem = this->m_GetItemWidget(ou32_Index, ou32_SubIndex);
 
-   if (pc_SelectorItem != NULL)
+   if (pc_SelectorItem != nullptr)
    {
       pc_SelectorItem->SetNodeAsManager(oq_Manager);
    }
@@ -233,7 +233,7 @@ const
 {
    C_SdBueNodeSelectorCheckBoxItemWidget * const pc_SelectorItem = this->m_GetItemWidget(ou32_Index, ou32_SubIndex);
 
-   if (pc_SelectorItem != NULL)
+   if (pc_SelectorItem != nullptr)
    {
       pc_SelectorItem->SetNodeAsDevice(oq_Device, opc_DeviceId, ou32_ManagerNodeIndex, ou32_ManagerIntfIndex);
    }
@@ -251,11 +251,11 @@ const
    for (int32_t s32_ItItem = 0; s32_ItItem < this->mpc_Ui->pc_CbxVerticalLayout->count(); ++s32_ItItem)
    {
       QLayoutItem * const pc_Layout = this->mpc_Ui->pc_CbxVerticalLayout->itemAt(s32_ItItem);
-      if (pc_Layout != NULL)
+      if (pc_Layout != nullptr)
       {
          C_SdBueNodeSelectorCheckBoxItemWidget * const pc_SelectorItem =
             dynamic_cast<C_SdBueNodeSelectorCheckBoxItemWidget * const>(pc_Layout->widget());
-         if (pc_SelectorItem != NULL)
+         if (pc_SelectorItem != nullptr)
          {
             pc_SelectorItem->SetProtocol(oe_Protocol);
          }
@@ -272,11 +272,11 @@ void C_SdBueNodeSelectorCheckBoxListWidget::Refresh(void) const
    for (int32_t s32_ItItem = 0; s32_ItItem < this->mpc_Ui->pc_CbxVerticalLayout->count(); ++s32_ItItem)
    {
       QLayoutItem * const pc_Layout = this->mpc_Ui->pc_CbxVerticalLayout->itemAt(s32_ItItem);
-      if (pc_Layout != NULL)
+      if (pc_Layout != nullptr)
       {
          C_SdBueNodeSelectorCheckBoxItemWidget * const pc_SelectorItem =
             dynamic_cast<C_SdBueNodeSelectorCheckBoxItemWidget * const>(pc_Layout->widget());
-         if (pc_SelectorItem != NULL)
+         if (pc_SelectorItem != nullptr)
          {
             pc_SelectorItem->UpdateToolTip();
          }
@@ -337,7 +337,7 @@ C_SdBueNodeSelectorCheckBoxItemWidget * C_SdBueNodeSelectorCheckBoxListWidget::m
 const
 {
    int32_t s32_Counter;
-   C_SdBueNodeSelectorCheckBoxItemWidget * pc_Return = NULL;
+   C_SdBueNodeSelectorCheckBoxItemWidget * pc_Return = nullptr;
 
    // check all checkboxes which have these indexes and uncheck all other checkboxes
    for (s32_Counter = 0; s32_Counter < this->mpc_Ui->pc_CbxVerticalLayout->count(); ++s32_Counter)
@@ -347,7 +347,7 @@ const
       C_SdBueNodeSelectorCheckBoxItemWidget * const pc_SelectorItem =
          dynamic_cast<C_SdBueNodeSelectorCheckBoxItemWidget *>(pc_Item->widget());
 
-      if (pc_SelectorItem != NULL)
+      if (pc_SelectorItem != nullptr)
       {
          uint32_t u32_Index;
          uint32_t u32_SubIndex;

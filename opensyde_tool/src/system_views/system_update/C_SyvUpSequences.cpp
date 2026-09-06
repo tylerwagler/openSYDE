@@ -57,8 +57,8 @@ using namespace stw::opensyde_core;
 C_SyvUpSequences::C_SyvUpSequences(void) :
    QObject(),
    C_OscSuSequences(),
-   mpc_CanDispatcher(NULL),
-   mpc_EthernetDispatcher(NULL),
+   mpc_CanDispatcher(nullptr),
+   mpc_EthernetDispatcher(nullptr),
    mq_AbortFlag(false),
    mu32_ViewIndex(0U),
    me_Sequence(eNOT_ACTIVE),
@@ -73,7 +73,7 @@ C_SyvUpSequences::C_SyvUpSequences(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpSequences::~C_SyvUpSequences(void)
 {
-   if (this->mpc_Thread != NULL)
+   if (this->mpc_Thread != nullptr)
    {
       if (this->mpc_Thread->isRunning() == true)
       {
@@ -89,15 +89,15 @@ C_SyvUpSequences::~C_SyvUpSequences(void)
          }
       }
       delete mpc_Thread;
-      mpc_Thread = NULL;
+      mpc_Thread = nullptr;
    }
 
-   if (this->mpc_ComDriver != NULL)
+   if (this->mpc_ComDriver != nullptr)
    {
       this->mpc_ComDriver->PrepareForDestructionFlash();
    }
 
-    if (this->mpc_CanDispatcher != NULL)
+    if (this->mpc_CanDispatcher != nullptr)
     {
        this->mpc_CanDispatcher->CAN_Exit();
        delete mpc_CanDispatcher;
@@ -135,7 +135,7 @@ int32_t C_SyvUpSequences::InitUpSequences(const uint32_t ou32_ViewIndex)
    s32_Return = C_SyvComDriverUtil::h_GetOscComDriverParamFromView(ou32_ViewIndex, u32_ActiveBusIndex,
                                                                    c_ActiveNodes,
                                                                    &this->mpc_CanDispatcher,
-                                                                   &this->mpc_EthernetDispatcher, true, false, NULL);
+                                                                   &this->mpc_EthernetDispatcher, true, false, nullptr);
 
    if (s32_Return == C_NO_ERR)
    {
@@ -171,16 +171,16 @@ int32_t C_SyvUpSequences::ReinitDispatcher(void)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_OscSystemBus * const pc_Bus =
             C_PuiSdHandler::h_GetInstance()->GetOscBus(pc_View->GetOscPcData().GetBusIndex());
 
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
             {
-               if (this->mpc_CanDispatcher != NULL)
+               if (this->mpc_CanDispatcher != nullptr)
                {
                   s32_Return = this->mpc_CanDispatcher->CAN_Init(
                      static_cast<int32_t>(pc_Bus->u64_BitRate / 1000ULL));
@@ -216,7 +216,7 @@ int32_t C_SyvUpSequences::ReinitDispatcher(void)
 void C_SyvUpSequences::CloseDispatcher(void)
 {
    if ((this->IsInitialized() == true) &&
-       (this->mpc_CanDispatcher != NULL))
+       (this->mpc_CanDispatcher != nullptr))
    {
       this->mpc_CanDispatcher->CAN_Exit();
    }
@@ -252,7 +252,7 @@ int32_t C_SyvUpSequences::SyvUpCreateTemporaryFolder(const std::string & orc_Tar
    int32_t s32_Return = C_CONFIG;
 
    if ((this->IsInitialized() == true) &&
-       (pc_View != NULL))
+       (pc_View != nullptr))
    {
       std::string c_ErrorPath;
       s32_Return = C_OscSuSequences::h_CreateTemporaryFolder(
@@ -980,8 +980,8 @@ void C_SyvUpSequences::mh_ThreadFunc(void * const opv_Instance)
    //lint -e{9079}  This class is the only one which registers itself at the caller of this function. It must match.
    C_SyvUpSequences * const pc_Sequences = reinterpret_cast<C_SyvUpSequences *>(opv_Instance);
 
-   tgl_assert(pc_Sequences != NULL);
-   if (pc_Sequences != NULL)
+   tgl_assert(pc_Sequences != nullptr);
+   if (pc_Sequences != nullptr)
    {
       pc_Sequences->m_ThreadFunc();
    }
@@ -995,7 +995,7 @@ void C_SyvUpSequences::mh_ThreadFunc(void * const opv_Instance)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpSequences::m_ThreadFunc(void)
 {
-   if (this->mpc_ComDriver != NULL)
+   if (this->mpc_ComDriver != nullptr)
    {
       switch (this->me_Sequence)
       {

@@ -30,7 +30,7 @@ class C_SdNdeDalLogJobsOvTableView :
    Q_OBJECT
 
 public:
-   C_SdNdeDalLogJobsOvTableView(QWidget * const opc_Parent = NULL);
+   C_SdNdeDalLogJobsOvTableView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDalLogJobsOvTableView(void) override;
    void UpdateData(const std::vector<std::tuple<uint32_t, uint32_t,
                                                 uint32_t> > & orc_AllLoggerJobElementsLocationCount);

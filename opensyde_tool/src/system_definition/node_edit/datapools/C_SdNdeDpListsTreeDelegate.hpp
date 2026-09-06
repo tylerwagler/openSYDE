@@ -29,7 +29,7 @@ class C_SdNdeDpListsTreeDelegate :
    public QStyledItemDelegate
 {
 public:
-   C_SdNdeDpListsTreeDelegate(QObject * const opc_Parent = NULL);
+   C_SdNdeDpListsTreeDelegate(QObject * const opc_Parent = nullptr);
 
    void SetDataPool(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex);
 

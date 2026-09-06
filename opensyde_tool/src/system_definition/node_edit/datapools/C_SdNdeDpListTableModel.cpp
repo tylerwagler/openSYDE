@@ -183,7 +183,7 @@ QVariant C_SdNdeDpListTableModel::headerData(const int32_t os32_Section, const Q
             {
                const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
                   this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-               if (pc_List != NULL)
+               if (pc_List != nullptr)
                {
                   if (static_cast<uint32_t>(s32_DataSetIndex) < pc_List->c_DataSets.size())
                   {
@@ -409,7 +409,7 @@ int32_t C_SdNdeDpListTableModel::columnCount(const QModelIndex & orc_Parent) con
    {
       const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-      if (pc_List != NULL)
+      if (pc_List != nullptr)
       {
          //For table parent should always be invalid
          s32_Retval = 17 + static_cast<int32_t>(pc_List->c_DataSets.size());
@@ -1347,7 +1347,7 @@ C_SdNdeDpListTableModel::E_Columns C_SdNdeDpListTableModel::ColumnToEnum(const i
 const
 {
    C_SdNdeDpListTableModel::E_Columns e_Retval;
-   if (ops32_DataSetIndex != NULL)
+   if (ops32_DataSetIndex != nullptr)
    {
       *ops32_DataSetIndex = -1;
    }
@@ -1412,7 +1412,7 @@ const
       else
       {
          e_Retval = eDATA_SET;
-         if (ops32_DataSetIndex != NULL)
+         if (ops32_DataSetIndex != nullptr)
          {
             *ops32_DataSetIndex = ors32_Column - 13;
          }
@@ -1534,7 +1534,7 @@ QStringList C_SdNdeDpListTableModel::mimeTypes(void) const
 //----------------------------------------------------------------------------------------------------------------------
 QMimeData * C_SdNdeDpListTableModel::mimeData(const QModelIndexList & orc_Indices) const
 {
-   QMimeData * pc_Retval = NULL;
+   QMimeData * pc_Retval = nullptr;
 
    if (orc_Indices.size() > 0)
    {
@@ -1546,7 +1546,7 @@ QMimeData * C_SdNdeDpListTableModel::mimeData(const QModelIndexList & orc_Indice
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
          const C_OscNodeDataPool * const pc_OscDatapool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex);
-         if (((pc_UiList != NULL) && (pc_OscList != NULL)) && (pc_OscDatapool != NULL))
+         if (((pc_UiList != nullptr) && (pc_OscList != nullptr)) && (pc_OscDatapool != nullptr))
          {
             std::vector<uint32_t> c_Rows = C_SdNdeDpUtil::h_ConvertVector(orc_Indices, true);
             QString c_String;
@@ -1834,7 +1834,7 @@ void C_SdNdeDpListTableModel::m_FillDpListInfo(void)
    const C_OscNodeDataPool * const pc_Datapool =
       C_PuiSdHandler::h_GetInstance()->GetOscDataPool(this->mu32_NodeIndex, this->mu32_DataPoolIndex);
 
-   if ((pc_Datapool != NULL) &&
+   if ((pc_Datapool != nullptr) &&
        (this->mu32_ListIndex < pc_Datapool->c_Lists.size()))
    {
       uint32_t u32_ElementCounter;
@@ -1870,7 +1870,7 @@ void C_SdNdeDpListTableModel::m_FillDpListElementInfo(const uint32_t ou32_Elemen
    const C_OscNodeDataPool * const pc_Datapool =
       C_PuiSdHandler::h_GetInstance()->GetOscDataPool(this->mu32_NodeIndex, this->mu32_DataPoolIndex);
 
-   if ((pc_Datapool != NULL) && (pc_OscElement != NULL) && (pc_UiElement != NULL) &&
+   if ((pc_Datapool != nullptr) && (pc_OscElement != nullptr) && (pc_UiElement != nullptr) &&
        (this->mu32_ListIndex < pc_Datapool->c_Lists.size()))
    {
       C_DpListTableData & rc_Data = this->mc_DpListInfoAll[ou32_ElementIndex];
@@ -2110,7 +2110,7 @@ void C_SdNdeDpListTableModel::m_FillDpListElementInfo(const uint32_t ou32_Elemen
 
          // Foreground for dataset
          rc_List.CheckErrorDataSetValue(ou32_ElementIndex, u32_DataSetCounter,
-                                        &q_ValueBelowMin, &q_ValueOverMax, NULL);
+                                        &q_ValueBelowMin, &q_ValueOverMax, nullptr);
 
          if ((q_ValueOverMax == true) ||
              (q_ValueBelowMin == true))
@@ -2234,7 +2234,7 @@ void C_SdNdeDpListTableModel::m_FillDpListElementInfo(const uint32_t ou32_Elemen
                                                                                 this->mu32_ListIndex,
                                                                                 c_InvalidDataSetIndices[
                                                                                    u32_ItAppl]);
-                  if (pc_DataSet != NULL)
+                  if (pc_DataSet != nullptr)
                   {
                      c_Content += static_cast<QString>("%1\n").arg(pc_DataSet->c_Name.c_str());
                   }
@@ -2326,7 +2326,7 @@ bool C_SdNdeDpListTableModel::m_CheckLink(const C_OscNodeDataPoolListElement * c
 {
    bool q_Retval = false;
 
-   if (opc_OscElement != NULL)
+   if (opc_OscElement != nullptr)
    {
       if ((opc_OscElement->q_InterpretAsString == false) && (opc_OscElement->GetArray() == true))
       {
