@@ -1,7 +1,17 @@
 # openSYDE CI — Build & Test
 #
-# Builds the opensyde_core library and runs unit tests on Ubuntu with Qt6.
-# Triggered on pushes and pull requests to main branches.
+# Builds the opensyde_core library, runs its unit tests, and smoke-builds all
+# eight tools on Ubuntu with Qt6.
+#
+# Runner targets: noble (24.04 LTS) and resolute (26.04 LTS).
+#
+# Jammy (22.04) is deliberately NOT targeted. It has no g++-13, and it names the
+# Qt6 SVG development package libqt6svg6-dev rather than qt6-svg-dev, so
+# supporting it would require both a matrix exclusion and per-release package
+# selection.
+#
+# ubuntu-26.04 is still a preview runner image, so resolute jobs are marked
+# continue-on-error — they surface breakage without gating the build.
 
 name: Build & Test
 
@@ -17,13 +27,17 @@ env:
 
 jobs:
   core-library:
-    name: Core Library (Ubuntu ${{ matrix.os }})
+    name: Core Library (${{ matrix.os }}, ${{ matrix.compiler }})
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental || false }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
+        os: [ubuntu-24.04, ubuntu-26.04]
         compiler: [g++-12, g++-13]
+        include:
+          - os: ubuntu-26.04
+            experimental: true
 
     steps:
       - name: Checkout repository
@@ -31,6 +45,10 @@ jobs:
         with:
           submodules: recursive
 
+      # flex and bison generate the Vector_DBC scanner/parser, and opensyde_core
+      # links CanLibraries::dbc, so they are required for configure to succeed.
+      # FlexLexer.h ships in libfl-dev, NOT in flex itself — without libfl-dev
+      # CMake leaves FLEX_INCLUDE_DIR unset and Vector_DBC fails to generate.
       - name: Install system dependencies
         run: |
           sudo apt-get update -qq
@@ -39,7 +57,8 @@ jobs:
             ${{ matrix.compiler }} \
             qt6-base-dev \
             libgl1-mesa-dev \
-            libssl-dev
+            libssl-dev \
+            flex bison libfl-dev
 
       # Compile every subsystem (security, protocol drivers, zipping,
       # imports, code generation, project handling, param set, system package
@@ -65,8 +84,16 @@ jobs:
         run: ctest --test-dir build/core --output-on-failure -j $(nproc)
 
   gui-tools:
-    name: GUI Tools (Ubuntu 22.04)
-    runs-on: ubuntu-22.04
+    name: GUI Tools (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental || false }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-26.04]
+        include:
+          - os: ubuntu-26.04
+            experimental: true
 
     steps:
       - name: Checkout repository
@@ -74,14 +101,18 @@ jobs:
         with:
           submodules: recursive
 
+      # build.sh requires plain `g++` (it never pins a version), so install the
+      # default metapackage rather than a numbered compiler. libssl-dev, flex,
+      # bison and libfl-dev are needed for the same reasons as the core job.
       - name: Install system dependencies
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq \
-            cmake ninja-build g++-12 \
+            cmake ninja-build g++ \
             qt6-base-dev qt6-svg-dev qt6-tools-dev \
-            libgl1-mesa-dev
+            libgl1-mesa-dev \
+            libssl-dev \
+            flex bison libfl-dev
 
       - name: Build all tools (smoke test)
-        run: |
-          ./build.sh -b Debug all
+        run: ./build.sh -b Debug all
