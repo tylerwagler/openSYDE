@@ -176,6 +176,8 @@ that need the legacy integer use `.value()`.
 
 ### File header
 
+New files carry **both** copyright lines — STW and Elytron Defense:
+
 ```cpp
 //----------------------------------------------------------------------------------------------------------------------
 /*!
@@ -183,6 +185,7 @@ that need the legacy integer use `.value()`.
    \brief       Brief description
 
    \copyright   Copyright [YEAR] Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright [YEAR] Elytron Defense. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -191,6 +194,11 @@ that need the legacy integer use `.value()`.
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 ```
+
+Files inherited from upstream STW keep their original single-line copyright. Some
+net-new files added during phases 0–3 (e.g. `stwerrors/C_OscErrorCategory.hpp`,
+`scl/C_SclStringCompat.hpp`) carry only the STW line — that is an oversight in those
+files, not a convention to copy.
 
 ## Current Work
 
