@@ -3,15 +3,25 @@
 # Builds the opensyde_core library, runs its unit tests, and smoke-builds all
 # eight tools on Ubuntu with Qt6.
 #
-# Runner targets: noble (24.04 LTS) and resolute (26.04 LTS).
+# Runner target: resolute (26.04 LTS), the distro this fork develops against.
 #
-# Jammy (22.04) is deliberately NOT targeted. It has no g++-13, and it names the
-# Qt6 SVG development package libqt6svg6-dev rather than qt6-svg-dev, so
-# supporting it would require both a matrix exclusion and per-release package
-# selection.
+# Older releases are deliberately NOT targeted. Package names diverge across
+# them — jammy (22.04) calls the Qt6 SVG development package libqt6svg6-dev,
+# whereas noble (24.04) onward call it qt6-svg-dev — so supporting a range
+# would mean per-release package selection for no benefit to a fork that only
+# ships against one distro.
 #
-# ubuntu-26.04 is still a preview runner image, so resolute jobs are marked
-# continue-on-error — they surface breakage without gating the build.
+# Both jobs build with resolute's default g++ (GCC 15). Nothing is pinned: the
+# core job previously pinned g++-12 and g++-13, inherited from a Phase 0 matrix
+# that targeted jammy and noble, so it was compiling core with two versions
+# nobody ships while build.sh built the tools with the default. Core and the
+# GUI tools now agree on one compiler, and it is the one resolute users get.
+#
+# ubuntu-26.04 is still a preview runner image. It is NOT marked
+# continue-on-error: as the only target it has to gate, or CI stops meaning
+# anything. The tradeoff is that preview-image flakiness will show up as a red
+# build; if that becomes noisy, add a second GA runner back rather than
+# reinstating continue-on-error.
 
 name: Build & Test
 
@@ -27,17 +37,12 @@ env:
 
 jobs:
   core-library:
-    name: Core Library (${{ matrix.os }}, ${{ matrix.compiler }})
+    name: Core Library (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.experimental || false }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, ubuntu-26.04]
-        compiler: [g++-12, g++-13]
-        include:
-          - os: ubuntu-26.04
-            experimental: true
+        os: [ubuntu-26.04]
 
     steps:
       - name: Checkout repository
@@ -53,8 +58,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq \
-            cmake ninja-build \
-            ${{ matrix.compiler }} \
+            cmake ninja-build g++ \
             qt6-base-dev \
             libgl1-mesa-dev \
             libssl-dev \
@@ -72,7 +76,6 @@ jobs:
           -B build/core
           -G Ninja
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
-          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
           -DOPENSYDE_CORE_BUILD_TESTS=ON
           -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON
           -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
@@ -86,14 +89,10 @@ jobs:
   gui-tools:
     name: GUI Tools (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.experimental || false }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, ubuntu-26.04]
-        include:
-          - os: ubuntu-26.04
-            experimental: true
+        os: [ubuntu-26.04]
 
     steps:
       - name: Checkout repository
