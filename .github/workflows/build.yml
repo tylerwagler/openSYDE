@@ -121,10 +121,14 @@ jobs:
             libqcustomplot-dev
 
       # build.sh configures each of the eight tools separately, so opensyde_core
-      # is compiled once per tool. build.sh picks up ccache automatically when it
-      # is installed, which turns the repeated core builds into cache hits — the
-      # win lands even on a cold cache, since tools 2-8 hit what tool 1 wrote.
-      # Persisting the cache across runs makes incremental pushes cheaper still.
+      # is compiled once per tool. ccache is meant to collapse those repeats.
+      #
+      # Two settings are required or it does almost nothing. The first run
+      # measured 2240 of 2445 calls (91.6%) as UNCACHEABLE with a 0.49% hit
+      # rate, because every tool uses target_precompile_headers and ccache
+      # refuses PCH builds unless sloppiness allows them. CCACHE_BASEDIR
+      # rewrites absolute paths relative to the workspace so an object built
+      # under one tool's build directory can match another's.
       - name: Restore ccache
         uses: actions/cache@v4
         with:
@@ -134,6 +138,9 @@ jobs:
             ccache-gui-${{ matrix.os }}-
 
       - name: Build all tools (smoke test)
+        env:
+          CCACHE_SLOPPINESS: pch_defines,time_macros,include_file_mtime,include_file_ctime
+          CCACHE_BASEDIR: ${{ github.workspace }}
         run: ./build.sh -b Debug all
 
       - name: ccache statistics
