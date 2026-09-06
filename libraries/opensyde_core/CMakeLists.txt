@@ -814,11 +814,9 @@ else()
 
    set (OPENSYDE_CORE_WINDOWS_TARGET_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglFile.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTasks.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTime.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglUtils.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglFile.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTasks.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglTime.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/windows/TglUtils.hpp
    )
@@ -852,11 +850,9 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
    set(OPENSYDE_CORE_LINUX_TARGET_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglFile.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTasks.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTime.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglUtils.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglFile.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTasks.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglTime.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/tgl/linux/TglUtils.hpp
    )

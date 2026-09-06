@@ -14,13 +14,13 @@
 #define C_OSCIPDISPATCHERLINUXSOCK_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include <vector>
 #include <map>
 #include <list>
 #include "stwtypes.hpp"
 #include "C_OscIpDispatcher.hpp"
 #include <string>
-#include "TglTasks.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -70,7 +70,7 @@ private:
    std::vector<uint32_t> mc_LocalInterfaceIps; ///< IPs of local interfaces
 
    static std::map<C_BufferIdentifier, std::list<std::vector<uint8_t> > > mhc_TcpBuffer; ///< dispatcher buffer
-   static stw::tgl::C_TglCriticalSection mhc_LockBuffer;
+   static std::mutex mhc_LockBuffer;
 
    int32_t m_GetAllInstalledInterfaceIps(void);
    int32_t m_ConnectTcp(C_TcpConnection & orc_Connection) const;

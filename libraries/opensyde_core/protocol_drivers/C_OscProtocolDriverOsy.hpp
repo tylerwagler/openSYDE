@@ -21,6 +21,7 @@
 #define C_OSCPROTOCOLDRIVEROSY_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include <vector>
 #include <map>
 
@@ -46,7 +47,7 @@ private:
                                                    const stw::can::T_STWCAN_Msg_RX & orc_CanMessage);
    typedef void (* PR_OsyHandleWaitTime)(void * const opv_Instance);
 
-   stw::tgl::C_TglCriticalSection mc_LockReception; ///< for locking reception handling
+   std::mutex mc_LockReception; ///< for locking reception handling
 
    PR_OsyTunnelCanMessageReceived mpr_OnOsyTunnelCanMessageReceived;
    void * mpv_OnAsyncTunnelCanMessageInstance;

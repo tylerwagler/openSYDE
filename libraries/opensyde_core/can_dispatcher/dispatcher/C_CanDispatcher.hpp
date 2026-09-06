@@ -15,11 +15,11 @@
 #define CCANDISPATCHERHPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include <deque>
 #include <vector>
 #include "stwtypes.hpp"
 #include "C_CanBase.hpp"
-#include "TglTasks.hpp"
 #include "stw_can.hpp"
 
 namespace stw
@@ -97,7 +97,7 @@ private:
 
    void m_ResyncShortcutPointers(void);
 
-   stw::tgl::C_TglCriticalSection mc_CriticalSection;
+   std::mutex mc_CriticalSection;
 
 protected:
    //-----------------------------------------------------------------------------

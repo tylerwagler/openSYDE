@@ -58,7 +58,6 @@ set(SYDESUP_LINUX_SOURCES
 
 set(SYDESUP_LINUX_LIB_SOURCES
    ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglFile.cpp
-   ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglTasks.cpp
    ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglTime.cpp
    ${PROJECT_ROOT}/../libraries/opensyde_core/tgl/linux/TglUtils.cpp
    ${PROJECT_ROOT}/../libraries/opensyde_core/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.cpp

@@ -12,12 +12,12 @@
 #define C_OSCLOGGINGHANDLER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include <fstream>
 #include <map>
 #include <string>
 #include "TglUtils.hpp"
 #include "TglTime.hpp"
-#include "TglTasks.hpp"
 
 //PC-Lint suppressions: function-like macro is the only way to get file,func,line information into the text
 //lint -save -e9026
@@ -87,8 +87,8 @@ private:
    static std::map<uint16_t, uint32_t> mhc_StartTimes; ///< first: Timer ID, second: start time
     static std::string mhc_FileName;
 
-   static stw::tgl::C_TglCriticalSection mhc_ConsoleCriticalSection;
-   static stw::tgl::C_TglCriticalSection mhc_FileCriticalSection;
+   static std::mutex mhc_ConsoleCriticalSection;
+   static std::mutex mhc_FileCriticalSection;
    static std::ofstream mhc_File;
 
     static void mh_WriteLog(const std::string & orc_Type, const std::string & orc_Activity,

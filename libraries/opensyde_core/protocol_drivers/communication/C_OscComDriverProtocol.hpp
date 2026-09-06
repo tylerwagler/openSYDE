@@ -26,7 +26,6 @@
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscComDriverBase.hpp"
 #include "C_OscSecurityPemDatabase.hpp"
-#include "TglTasks.hpp"
 #include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

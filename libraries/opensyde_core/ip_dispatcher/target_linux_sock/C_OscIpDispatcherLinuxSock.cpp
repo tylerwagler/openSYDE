@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -58,7 +59,7 @@ using namespace stw::tgl;
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 std::map<C_OscIpDispatcherLinuxSock::C_BufferIdentifier,
          std::list<std::vector<uint8_t> > > C_OscIpDispatcherLinuxSock::mhc_TcpBuffer;
-C_TglCriticalSection C_OscIpDispatcherLinuxSock::mhc_LockBuffer;
+std::mutex C_OscIpDispatcherLinuxSock::mhc_LockBuffer;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -966,7 +967,7 @@ int32_t C_OscIpDispatcherLinuxSock::ReadTcp(const uint32_t ou32_Handle, const ui
             std::map<C_BufferIdentifier, std::list<std::vector<uint8_t> > >::iterator c_ItBuffer;
             const C_BufferIdentifier c_Id(u8_TargetbusId, u8_TargetNodeId, u8_SourceBusId, u8_SourceNodeId);
 
-            mhc_LockBuffer.Acquire();
+            mhc_LockBuffer.lock();
 
             // Search for already existing data of this identifier
             c_ItBuffer = mhc_TcpBuffer.find(c_Id);
@@ -983,7 +984,7 @@ int32_t C_OscIpDispatcherLinuxSock::ReadTcp(const uint32_t ou32_Handle, const ui
                   std::pair<C_BufferIdentifier, std::list<std::vector<uint8_t> > >(c_Id, c_List));
             }
 
-            mhc_LockBuffer.Release();
+            mhc_LockBuffer.unlock();
 
             s32_Return = C_WARN;
          }
@@ -1034,7 +1035,7 @@ int32_t C_OscIpDispatcherLinuxSock::ReadTcpBuffer(const uint8_t ou8_ClientBusIde
    const C_BufferIdentifier c_Id(ou8_ClientBusIdentifier, ou8_ClientNodeIdentifier, ou8_ServerBusIdentifier,
                                  ou8_ServerNodeIdentifier);
 
-   mhc_LockBuffer.Acquire();
+   mhc_LockBuffer.lock();
 
    // Search for saved data in the buffer
    c_ItBuffer = mhc_TcpBuffer.find(c_Id);
@@ -1053,7 +1054,7 @@ int32_t C_OscIpDispatcherLinuxSock::ReadTcpBuffer(const uint8_t ou8_ClientBusIde
          s32_Return = C_NO_ERR;
       }
    }
-   mhc_LockBuffer.Release();
+   mhc_LockBuffer.unlock();
 
    return s32_Return;
 }

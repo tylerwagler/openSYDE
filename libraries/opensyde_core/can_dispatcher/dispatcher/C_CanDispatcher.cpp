@@ -325,7 +325,7 @@ int32_t C_CanDispatcher::DispatchIncoming(void)
       // Need to lock the read of the message too, because of the order of pushing the messages in the queue
       // by at least two threads is not guaranteed if only the push is locked.
       // An older message could be pushed into the queue after a newer message.
-      mc_CriticalSection.Acquire();
+      mc_CriticalSection.lock();
       s32_Return = m_CAN_Read_Msg(t_Msg);
       if (s32_Return == C_NO_ERR)
       {
@@ -338,7 +338,7 @@ int32_t C_CanDispatcher::DispatchIncoming(void)
             }
          }
       }
-      mc_CriticalSection.Release();
+      mc_CriticalSection.unlock();
    }
 
    return s32_NumMessages;
@@ -520,9 +520,9 @@ int32_t C_CanDispatcher::ReadFromQueue(const uint16_t ou16_Handle, T_STWCAN_Msg_
       return C_RANGE;
    }
 
-   mc_CriticalSection.Acquire();
+   mc_CriticalSection.lock();
    s32_Return = mc_ClientsByHandle[ou16_Handle]->c_RXQueue.Pop(orc_Message);
-   mc_CriticalSection.Release();
+   mc_CriticalSection.unlock();
    return s32_Return;
 }
 
@@ -546,9 +546,9 @@ int32_t C_CanDispatcher::ClearQueue(const uint16_t ou16_Handle)
        (mc_ClientsByHandle[ou16_Handle] != nullptr))
    {
       s32_Return = C_NO_ERR;
-      mc_CriticalSection.Acquire();
+      mc_CriticalSection.lock();
       mc_ClientsByHandle[ou16_Handle]->c_RXQueue.Clear();
-      mc_CriticalSection.Release();
+      mc_CriticalSection.unlock();
    }
    return s32_Return;
 }
@@ -599,9 +599,9 @@ int32_t C_CanDispatcher::CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
       {
          if (mc_InstalledClients[s32_Loop].c_RXFilter.DoesMessagePass(orc_Message) == true)
          {
-            mc_CriticalSection.Acquire();
+            mc_CriticalSection.lock();
             (void)mc_InstalledClients[s32_Loop].c_RXQueue.Push(orc_Message);
-            mc_CriticalSection.Release();
+            mc_CriticalSection.unlock();
          }
       }
    }

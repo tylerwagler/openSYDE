@@ -165,7 +165,7 @@ int32_t C_OscProtocolDriverOsyTpBase::m_AddToTxQueue(const C_OscProtocolDriverOs
    }
    else
    {
-      mc_CsTxQueue.Acquire();
+      mc_CsTxQueue.lock();
       if (mc_TxQueue.size() >= mu16_MaxServiceQueueSize)
       {
          s32_Return = C_OVERFLOW;
@@ -181,7 +181,7 @@ int32_t C_OscProtocolDriverOsyTpBase::m_AddToTxQueue(const C_OscProtocolDriverOs
             s32_Return = C_NOACT; //probably out of memory
          }
       }
-      mc_CsTxQueue.Release();
+      mc_CsTxQueue.unlock();
    }
    return s32_Return;
 }
@@ -211,7 +211,7 @@ int32_t C_OscProtocolDriverOsyTpBase::m_AddToRxQueue(const C_OscProtocolDriverOs
    }
    else
    {
-      mc_CsRxQueue.Acquire();
+      mc_CsRxQueue.lock();
       if (mc_RxQueue.size() >= mu16_MaxServiceQueueSize)
       {
          s32_Return = C_OVERFLOW;
@@ -227,7 +227,7 @@ int32_t C_OscProtocolDriverOsyTpBase::m_AddToRxQueue(const C_OscProtocolDriverOs
             s32_Return = C_NOACT; //probably out of memory
          }
       }
-      mc_CsRxQueue.Release();
+      mc_CsRxQueue.unlock();
    }
    return s32_Return;
 }
@@ -249,7 +249,7 @@ int32_t C_OscProtocolDriverOsyTpBase::m_GetFromTxQueue(C_OscProtocolDriverOsySer
 {
    int32_t s32_Return = C_NO_ERR;
 
-   mc_CsTxQueue.Acquire();
+   mc_CsTxQueue.lock();
    if (mc_TxQueue.size() < 1U)
    {
       s32_Return = C_NOACT;
@@ -259,7 +259,7 @@ int32_t C_OscProtocolDriverOsyTpBase::m_GetFromTxQueue(C_OscProtocolDriverOsySer
       orc_Service = mc_TxQueue.front(); //get element from queue
       mc_TxQueue.pop_front();           //delete element from queue
    }
-   mc_CsTxQueue.Release();
+   mc_CsTxQueue.unlock();
    return s32_Return;
 }
 
@@ -280,7 +280,7 @@ int32_t C_OscProtocolDriverOsyTpBase::m_GetFromRxQueue(C_OscProtocolDriverOsySer
 {
    int32_t s32_Return = C_NO_ERR;
 
-   mc_CsRxQueue.Acquire();
+   mc_CsRxQueue.lock();
    if (mc_RxQueue.size() < 1U)
    {
       s32_Return = C_NOACT;
@@ -290,7 +290,7 @@ int32_t C_OscProtocolDriverOsyTpBase::m_GetFromRxQueue(C_OscProtocolDriverOsySer
       orc_Service = mc_RxQueue.front(); //get element from queue
       mc_RxQueue.pop_front();           //delete element from queue
    }
-   mc_CsRxQueue.Release();
+   mc_CsRxQueue.unlock();
    return s32_Return;
 }
 
@@ -303,12 +303,12 @@ int32_t C_OscProtocolDriverOsyTpBase::m_GetFromRxQueue(C_OscProtocolDriverOsySer
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsyTpBase::ClearServiceQueues(void)
 {
-   mc_CsRxQueue.Acquire();
+   mc_CsRxQueue.lock();
    mc_RxQueue.clear();
-   mc_CsRxQueue.Release();
-   mc_CsTxQueue.Acquire();
+   mc_CsRxQueue.unlock();
+   mc_CsTxQueue.lock();
    mc_TxQueue.clear();
-   mc_CsTxQueue.Release();
+   mc_CsTxQueue.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

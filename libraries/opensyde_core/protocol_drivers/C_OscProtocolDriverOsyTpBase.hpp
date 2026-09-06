@@ -17,10 +17,10 @@
 #define C_OSCPROTOCOLDRIVEROSYTPBASEHPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include <vector>
 #include <deque>
 #include "stwtypes.hpp"
-#include "TglTasks.hpp"
 #include <string>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -79,8 +79,8 @@ private:
    uint16_t mu16_MaxServiceQueueSize;
    std::deque<C_OscProtocolDriverOsyService> mc_TxQueue;
    std::deque<C_OscProtocolDriverOsyService> mc_RxQueue;
-   stw::tgl::C_TglCriticalSection mc_CsTxQueue; ///critical section protecting Tx Queue
-   stw::tgl::C_TglCriticalSection mc_CsRxQueue; ///critical section protecting Rx Queue
+   std::mutex mc_CsTxQueue; ///critical section protecting Tx Queue
+   std::mutex mc_CsRxQueue; ///critical section protecting Rx Queue
 
 protected:
    C_OscProtocolDriverOsyNode mc_ClientId; ///< our own client ID

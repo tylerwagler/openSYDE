@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <mutex>
 #include "precomp_headers.hpp"
 
 #include <cstdlib>
@@ -42,8 +43,8 @@ bool C_OscLoggingHandler::mhq_MeasureTime = false;
 bool C_OscLoggingHandler::mhq_LogInitErrorsToConsole = false;
 std::map<uint16_t, uint32_t> C_OscLoggingHandler::mhc_StartTimes = std::map<uint16_t, uint32_t> ();
 std::string C_OscLoggingHandler::mhc_FileName = "";
-C_TglCriticalSection C_OscLoggingHandler::mhc_ConsoleCriticalSection;
-C_TglCriticalSection C_OscLoggingHandler::mhc_FileCriticalSection;
+std::mutex C_OscLoggingHandler::mhc_ConsoleCriticalSection;
+std::mutex C_OscLoggingHandler::mhc_FileCriticalSection;
 std::ofstream C_OscLoggingHandler::mhc_File;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
@@ -245,20 +246,20 @@ void C_OscLoggingHandler::h_Flush(void)
    if (C_OscLoggingHandler::mhq_WriteToConsole == true)
    {
       //Critical section
-      C_OscLoggingHandler::mhc_ConsoleCriticalSection.Acquire();
+      C_OscLoggingHandler::mhc_ConsoleCriticalSection.lock();
       std::cout << &std::flush;
       //Critical section
-      C_OscLoggingHandler::mhc_ConsoleCriticalSection.Release();
+      C_OscLoggingHandler::mhc_ConsoleCriticalSection.unlock();
    }
 
    //File
    if ((C_OscLoggingHandler::mhq_WriteToFile == true) && (C_OscLoggingHandler::mhc_File.is_open() == true))
    {
       //Critical section
-      C_OscLoggingHandler::mhc_FileCriticalSection.Acquire();
+      C_OscLoggingHandler::mhc_FileCriticalSection.lock();
       C_OscLoggingHandler::mhc_File.flush();
       //Critical section
-      C_OscLoggingHandler::mhc_FileCriticalSection.Release();
+      C_OscLoggingHandler::mhc_FileCriticalSection.unlock();
    }
 }
 
@@ -365,10 +366,10 @@ void C_OscLoggingHandler::mh_WriteLog(const std::string & orc_Type, const std::s
    if (C_OscLoggingHandler::mhq_WriteToConsole == true)
    {
       //Critical section
-      C_OscLoggingHandler::mhc_ConsoleCriticalSection.Acquire();
+      C_OscLoggingHandler::mhc_ConsoleCriticalSection.lock();
       std::cout << c_LogEntryStream.str();
       //Critical section
-      C_OscLoggingHandler::mhc_ConsoleCriticalSection.Release();
+      C_OscLoggingHandler::mhc_ConsoleCriticalSection.unlock();
    }
 
    //File
@@ -376,7 +377,7 @@ void C_OscLoggingHandler::mh_WriteLog(const std::string & orc_Type, const std::s
    {
       const std::string c_Message = c_LogEntryStream.str();
       //Critical section
-      C_OscLoggingHandler::mhc_FileCriticalSection.Acquire();
+      C_OscLoggingHandler::mhc_FileCriticalSection.lock();
 
       //TGL critical section -> file
       C_OscLoggingHandler::mhc_File.write(c_Message.c_str(), c_Message.size());
@@ -388,7 +389,7 @@ void C_OscLoggingHandler::mh_WriteLog(const std::string & orc_Type, const std::s
       }
 
       //Critical section
-      C_OscLoggingHandler::mhc_FileCriticalSection.Release();
+      C_OscLoggingHandler::mhc_FileCriticalSection.unlock();
    }
 }
 

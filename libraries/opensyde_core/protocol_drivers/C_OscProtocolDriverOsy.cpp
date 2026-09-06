@@ -437,7 +437,7 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
    //lock access to "polling"
    //If another thread checking for async responses kicks in (calling ::Cycle) is could otherwise
    // snatch away the response we want to get.
-   mc_LockReception.Acquire();
+   mc_LockReception.lock();
 
    while ((stw::tgl::TglGetTickCount() < (u32_StartTime + mu32_TimeoutPollingMs)) && (q_Finished == false))
    {
@@ -583,7 +583,7 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const uint8_t o
          stw::tgl::TglSleepPolling(); //rescind CPU time to other threads ...
       }
    }
-   mc_LockReception.Release();
+   mc_LockReception.unlock();
 
    if (s32_Return == C_COM)
    {
@@ -3720,7 +3720,7 @@ int32_t C_OscProtocolDriverOsy::Cycle(void)
    int32_t s32_Return = C_NO_ERR;
 
    //while we are checking for async responses, prevent other threads starting to poll
-   const bool q_LockClaimed = mc_LockReception.TryAcquire();
+   const bool q_LockClaimed = mc_LockReception.try_lock();
 
    if (q_LockClaimed == true)
    {
@@ -3730,7 +3730,7 @@ int32_t C_OscProtocolDriverOsy::Cycle(void)
          // Only C_CONFIG is relevant for an extern call
          s32_Return = C_NO_ERR;
       }
-      mc_LockReception.Release();
+      mc_LockReception.unlock();
    }
 
    return s32_Return;
