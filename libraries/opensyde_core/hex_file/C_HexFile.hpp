@@ -13,7 +13,10 @@
 
 #include <cstdio> //for "FILE"
 #include <vector>
+#include <system_error>
+
 #include "stwtypes.hpp"
+#include "C_HexFileErrorCategory.hpp"
 
 namespace stw
 {
@@ -80,14 +83,15 @@ public:
    virtual ~C_HexFile(void);
 
    void Clear(void);
-   uint32_t LoadFromFile(const char_t * const opcn_FileName);
-   uint32_t SaveToFile(const char_t * const opcn_FileName);
+   std::error_code LoadFromFile(const char_t * const opcn_FileName);
+   std::error_code SaveToFile(const char_t * const opcn_FileName);
 
    //Reformat hex file (uses a memory dump internally); only use if you know there are no bigger gaps in the hex file
    //                   data)
-   uint32_t OptimizeLinear(const uint32_t ou32_RecSize, const int32_t os32_FillFlag, const uint8_t ou8_FillPattern);
+   std::error_code OptimizeLinear(const uint32_t ou32_RecSize, const int32_t os32_FillFlag,
+                                  const uint8_t ou8_FillPattern);
    //Reformat hex files (using C_HexDataDump internally; so no RAM penalty for gaps within hex file)
-   uint32_t Optimize(const uint32_t ou32_RecSize);
+   std::error_code Optimize(const uint32_t ou32_RecSize);
 
    //Set data pointer to first element (T_HexLine)
    //      and return pointer to data of current hex line.
@@ -117,25 +121,36 @@ public:
    uint32_t ByteCount(void) const;
 
    //check for overlapping memory
-   uint32_t Validate(void);
+   std::error_code Validate(void);
 
-   uint32_t GetXAdrActLine(uint32_t & oru32_XAdr) const;
+   std::error_code GetXAdrActLine(uint32_t & oru32_XAdr) const;
 
    //create hex file data from linear binary image
-   uint32_t CreateHexFile(const uint16_t * const opu16_BinImage, const uint32_t ou32_Offset, const uint32_t ou32_Size,
-                          const uint32_t ou32_RecSize);
+   std::error_code CreateHexFile(const uint16_t * const opu16_BinImage, const uint32_t ou32_Offset,
+                                 const uint32_t ou32_Size, const uint32_t ou32_RecSize);
    //create hex file data from image that only contains used data
-   uint32_t CreateHexFile(const C_HexDataDump & orc_Dump, const uint32_t ou32_RecSize);
+   std::error_code CreateHexFile(const C_HexDataDump & orc_Dump, const uint32_t ou32_RecSize);
 
-   const C_HexDataDump * GetDataDump(uint32_t & oru32_ErrorResult);
+   const C_HexDataDump * GetDataDump(std::error_code & orc_ErrorResult);
 
    int32_t GetDataByAddress(const uint32_t ou32_Address, uint16_t & oru16_NumBytes, uint8_t * const opu8_Data);
    int32_t FindPattern(uint32_t & oru32_Address, const uint8_t ou8_PatternLength, const uint8_t * const opu8_Pattern);
 
-   //call on WRN_RECORD_OVERLAY to find out offending address:
+   //call on HexFileErrc::record_overlay to find out offending address:
    uint32_t GetLastOverlayErrorAddress(void) const;
 
+   //call on the hex line errors (syntax / checksum / command) for the offending
+   //line number. std::error_code carries identity only, so the location that was
+   //packed into the low 28 bits of the old return value lives here instead.
+   uint32_t GetLastErrorLineNumber(void) const;
+
 protected:
+   //Convert an internal packed status into an error_code, recording any line
+   //number it carried so callers can retrieve it via GetLastErrorLineNumber().
+   std::error_code m_MakeError(const uint32_t ou32_LegacyCode) const;
+
+   //mutable: purely diagnostic state, recorded even from const accessors
+   mutable uint32_t mu32_LastErrorLineNumber; // line number from the most recent hex line error
    uint32_t mu32_MinAdr; // Lowest occupied address in hex file
    uint32_t mu32_MaxAdr; // Highest occupied address in hex file
    uint32_t mu32_AdrOffs;

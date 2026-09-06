@@ -14,6 +14,8 @@
 #include "C_SclStringCompat.hpp"
 
 #include <set>
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscSuSequences.hpp"
@@ -271,7 +273,7 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(const std::vector<std::string> 
                                                  std::vector<C_OscSuSequencesNodeHexFileStates> & orc_StateHexFiles)
 {
    int32_t s32_Return = C_NO_ERR;
-   uint32_t u32_Return;
+   std::error_code c_Return;
 
    std::vector<uint32_t> c_SignatureAddresses(orc_FilesToFlash.size()); ///< addresses of signatures within hex files
 
@@ -288,10 +290,10 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(const std::vector<std::string> 
    {
       (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_HEX_OPEN_START, C_NO_ERR, 0U, mc_CurrentNode,
                              "Opening HEX file " + orc_FilesToFlash[u32_File] + ".");
-      u32_Return = c_Files[u32_File]->LoadFromFile(orc_FilesToFlash[u32_File].c_str());
-      if (u32_Return != stw::hex_file::NO_ERR)
+      c_Return = c_Files[u32_File]->LoadFromFile(orc_FilesToFlash[u32_File].c_str());
+      if (c_Return)
       {
-         const std::string c_ErrorText = c_Files[u32_File]->ErrorCodeToErrorText(u32_Return);
+         const std::string c_ErrorText = c_Files[u32_File]->ErrorCodeToErrorText(c_Return);
          (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_HEX_OPEN_ERROR, C_RD_WR, 0U, mc_CurrentNode,
                                 "Opening HEX file. Reason: " + c_ErrorText + ".");
 
@@ -436,12 +438,12 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(const std::vector<std::string> 
          for (uint32_t u32_File = 0U; u32_File < orc_FilesToFlash.size(); u32_File++)
          {
             //do we have enough space for the hex file data ?
-            const stw::hex_file::C_HexDataDump * const pc_HexDump = c_Files[u32_File]->GetDataDump(u32_Return);
-            if (u32_Return != stw::hex_file::NO_ERR)
+            const stw::hex_file::C_HexDataDump * const pc_HexDump = c_Files[u32_File]->GetDataDump(c_Return);
+            if (c_Return)
             {
                std::string c_ErrorText;
                c_ErrorText = "Could not split up HEX file data of file " + orc_FilesToFlash[u32_File] +
-                             " into handy chunks. Reason: " + c_Files[u32_File]->ErrorCodeToErrorText(u32_Return);
+                             " into handy chunks. Reason: " + c_Files[u32_File]->ErrorCodeToErrorText(c_Return);
                (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_CHECK_MEMORY_FILE_ERROR, C_RD_WR, 20U, mc_CurrentNode,
                                       c_ErrorText);
                orc_StateHexFiles[u32_File].e_DataDumpFromFileRead = eSUSEQ_STATE_ERROR;
@@ -495,7 +497,7 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(const std::vector<std::string> 
          //now do the real flashing ...
          for (uint32_t u32_File = 0U; u32_File < orc_FilesToFlash.size(); u32_File++)
          {
-            const stw::hex_file::C_HexDataDump * const pc_HexDump = c_Files[u32_File]->GetDataDump(u32_Return);
+            const stw::hex_file::C_HexDataDump * const pc_HexDump = c_Files[u32_File]->GetDataDump(c_Return);
             //we would not have gotten here if we could not get a decent dump ...
             tgl_assert(pc_HexDump != nullptr);
 

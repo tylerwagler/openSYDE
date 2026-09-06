@@ -69,7 +69,7 @@ TEST(HexFile, LoadsMinimalValidFile)
    const std::string c_Path = mh_WriteHex("hf_simple.hex", mpcn_SIMPLE);
    C_HexFile c_File;
 
-   EXPECT_EQ(0U, c_File.LoadFromFile(c_Path.c_str()));
+   EXPECT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
    EXPECT_EQ(0x0000U, c_File.MinAdr());
    EXPECT_EQ(0x0003U, c_File.MaxAdr());
    EXPECT_EQ(4U, c_File.ByteCount());
@@ -82,7 +82,7 @@ TEST(HexFile, ReportsAddressRangeAcrossRecords)
    const std::string c_Path = mh_WriteHex("hf_two.hex", mpcn_TWO_RECORDS);
    C_HexFile c_File;
 
-   EXPECT_EQ(0U, c_File.LoadFromFile(c_Path.c_str()));
+   EXPECT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
    EXPECT_EQ(0x0000U, c_File.MinAdr());
    EXPECT_EQ(0x0013U, c_File.MaxAdr());
    EXPECT_EQ(8U, c_File.ByteCount());
@@ -94,7 +94,7 @@ TEST(HexFile, MissingFileIsAnError)
 {
    C_HexFile c_File;
 
-   EXPECT_NE(0U, c_File.LoadFromFile("hf_does_not_exist.hex"));
+   EXPECT_TRUE(static_cast<bool>(c_File.LoadFromFile("hf_does_not_exist.hex")));
 }
 
 /// A record whose checksum byte is wrong must be rejected rather than silently
@@ -106,7 +106,7 @@ TEST(HexFile, BadChecksumIsRejected)
                                           ":00000001FF\n");
    C_HexFile c_File;
 
-   EXPECT_NE(0U, c_File.LoadFromFile(c_Path.c_str()));
+   EXPECT_TRUE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
    (void)std::remove(c_Path.c_str());
 }
@@ -116,7 +116,7 @@ TEST(HexFile, GarbageIsRejected)
    const std::string c_Path = mh_WriteHex("hf_garbage.hex", "this is not a hex file at all\n");
    C_HexFile c_File;
 
-   EXPECT_NE(0U, c_File.LoadFromFile(c_Path.c_str()));
+   EXPECT_TRUE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
    (void)std::remove(c_Path.c_str());
 }
@@ -126,7 +126,7 @@ TEST(HexFile, EmptyFileIsRejected)
    const std::string c_Path = mh_WriteHex("hf_empty.hex", "");
    C_HexFile c_File;
 
-   EXPECT_NE(0U, c_File.LoadFromFile(c_Path.c_str()));
+   EXPECT_TRUE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
    (void)std::remove(c_Path.c_str());
 }
@@ -138,14 +138,14 @@ TEST(HexFile, ClearResetsAndAllowsReload)
    const std::string c_Path = mh_WriteHex("hf_clear.hex", mpcn_SIMPLE);
    C_HexFile c_File;
 
-   EXPECT_EQ(0U, c_File.LoadFromFile(c_Path.c_str()));
+   EXPECT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
    EXPECT_EQ(4U, c_File.ByteCount());
 
    c_File.Clear();
    EXPECT_EQ(0U, c_File.ByteCount());
 
    // reload into the same object
-   EXPECT_EQ(0U, c_File.LoadFromFile(c_Path.c_str()));
+   EXPECT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
    EXPECT_EQ(4U, c_File.ByteCount());
 
    (void)std::remove(c_Path.c_str());
@@ -157,10 +157,10 @@ TEST(HexFile, ReloadWithoutClearIsSafe)
    const std::string c_Path = mh_WriteHex("hf_reload.hex", mpcn_SIMPLE);
    C_HexFile c_File;
 
-   EXPECT_EQ(0U, c_File.LoadFromFile(c_Path.c_str()));
+   EXPECT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
    const uint32_t u32_First = c_File.ByteCount();
 
-   EXPECT_EQ(0U, c_File.LoadFromFile(c_Path.c_str()));
+   EXPECT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
    EXPECT_EQ(u32_First, c_File.ByteCount());
 
    (void)std::remove(c_Path.c_str());
@@ -178,7 +178,7 @@ TEST(HexFile, LineWalkVisitsEveryRecordAndTerminates)
    const std::string c_Path = mh_WriteHex("hf_walk.hex", mpcn_TWO_RECORDS);
    C_HexFile c_File;
 
-   ASSERT_EQ(0U, c_File.LoadFromFile(c_Path.c_str()));
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
    //position only; do not count this as a visit
    ASSERT_NE(nullptr, c_File.LineInit());
@@ -206,7 +206,7 @@ TEST(HexFile, LineWalkIsRestartableAfterExhaustion)
    const std::string c_Path = mh_WriteHex("hf_restart.hex", mpcn_TWO_RECORDS);
    C_HexFile c_File;
 
-   ASSERT_EQ(0U, c_File.LoadFromFile(c_Path.c_str()));
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
    uint32_t u32_FirstPass = 0U;
    (void)c_File.LineInit();
@@ -235,7 +235,7 @@ TEST(HexFile, NextBinDataYieldsLoadedBytes)
    const std::string c_Path = mh_WriteHex("hf_bin.hex", mpcn_SIMPLE);
    C_HexFile c_File;
 
-   ASSERT_EQ(0U, c_File.LoadFromFile(c_Path.c_str()));
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
    ASSERT_NE(nullptr, c_File.LineInit());
 
    uint32_t u32_Address = 0U;
@@ -261,11 +261,11 @@ TEST(HexFile, SaveReloadPreservesRangeAndCount)
    const std::string c_Out = "hf_rt_out.hex";
    C_HexFile c_First;
 
-   ASSERT_EQ(0U, c_First.LoadFromFile(c_In.c_str()));
-   ASSERT_EQ(0U, c_First.SaveToFile(c_Out.c_str()));
+   ASSERT_FALSE(static_cast<bool>(c_First.LoadFromFile(c_In.c_str())));
+   ASSERT_FALSE(static_cast<bool>(c_First.SaveToFile(c_Out.c_str())));
 
    C_HexFile c_Second;
-   ASSERT_EQ(0U, c_Second.LoadFromFile(c_Out.c_str()));
+   ASSERT_FALSE(static_cast<bool>(c_Second.LoadFromFile(c_Out.c_str())));
 
    EXPECT_EQ(c_First.MinAdr(), c_Second.MinAdr());
    EXPECT_EQ(c_First.MaxAdr(), c_Second.MaxAdr());
@@ -280,13 +280,13 @@ TEST(HexFile, GetDataDumpMatchesLoadedContent)
    const std::string c_Path = mh_WriteHex("hf_dump.hex", mpcn_SIMPLE);
    C_HexFile c_File;
 
-   ASSERT_EQ(0U, c_File.LoadFromFile(c_Path.c_str()));
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
 
-   uint32_t u32_Error = 0xFFFFFFFFU;
-   const C_HexDataDump * const pc_Dump = c_File.GetDataDump(u32_Error);
+   std::error_code c_Error;
+   const C_HexDataDump * const pc_Dump = c_File.GetDataDump(c_Error);
 
    ASSERT_NE(nullptr, pc_Dump);
-   EXPECT_EQ(0U, u32_Error);
+   EXPECT_FALSE(static_cast<bool>(c_Error));
    ASSERT_EQ(1U, pc_Dump->at_Blocks.size());
    EXPECT_EQ(0x0000U, pc_Dump->at_Blocks[0].u32_AddressOffset);
    EXPECT_EQ(4U, pc_Dump->at_Blocks[0].au8_Data.size());
@@ -300,8 +300,76 @@ TEST(HexFile, ValidateAcceptsWellFormedFile)
    const std::string c_Path = mh_WriteHex("hf_val.hex", mpcn_TWO_RECORDS);
    C_HexFile c_File;
 
-   ASSERT_EQ(0U, c_File.LoadFromFile(c_Path.c_str()));
-   EXPECT_EQ(0U, c_File.Validate());
+   ASSERT_FALSE(static_cast<bool>(c_File.LoadFromFile(c_Path.c_str())));
+   EXPECT_FALSE(static_cast<bool>(c_File.Validate()));
 
    (void)std::remove(c_Path.c_str());
+}
+
+/* -- error_code migration ------------------------------------------------------------------------------------------ */
+
+/// Errors now compare against a named enumerator instead of being masked with
+/// ERR_MASK. That is the whole point of the migration.
+TEST(HexFileError, MissingFileMapsToCantOpenFile)
+{
+   C_HexFile c_File;
+   const std::error_code c_Error = c_File.LoadFromFile("hf_no_such_file.hex");
+
+   EXPECT_TRUE(static_cast<bool>(c_Error));
+   EXPECT_EQ(HexFileErrc::cant_open_file, c_Error);
+   EXPECT_STREQ("stw.hex_file", c_Error.category().name());
+}
+
+TEST(HexFileError, BadChecksumMapsToChecksumErrorAndReportsLine)
+{
+   const std::string c_Path = mh_WriteHex("hfe_badcrc.hex",
+                                          ":0400000001020304F2\n"
+                                          ":0400100005060708FF\n"
+                                          ":00000001FF\n");
+   C_HexFile c_File;
+   const std::error_code c_Error = c_File.LoadFromFile(c_Path.c_str());
+
+   EXPECT_TRUE(static_cast<bool>(c_Error));
+   EXPECT_EQ(HexFileErrc::hexline_checksum, c_Error);
+
+   //the line number that used to be packed into the low 28 bits
+   EXPECT_EQ(2U, c_File.GetLastErrorLineNumber());
+
+   (void)std::remove(c_Path.c_str());
+}
+
+TEST(HexFileError, SuccessIsFalsyAndCarriesNoLine)
+{
+   const std::string c_Path = mh_WriteHex("hfe_ok.hex", mpcn_SIMPLE);
+   C_HexFile c_File;
+   const std::error_code c_Error = c_File.LoadFromFile(c_Path.c_str());
+
+   EXPECT_FALSE(static_cast<bool>(c_Error));
+   EXPECT_EQ(0U, c_File.GetLastErrorLineNumber());
+
+   (void)std::remove(c_Path.c_str());
+}
+
+/// The legacy packed representation is still used internally, so the split into
+/// identity and context is pinned directly.
+TEST(HexFileError, LegacySplitSeparatesIdentityFromContext)
+{
+   //ERR_HEXLINE_SYNTAX with line 42 packed into the low nibbles
+   const uint32_t u32_Packed = 0x80000000UL | 42UL;
+
+   EXPECT_EQ(HexFileErrc::hexline_syntax, h_HexFileErrorFromLegacy(u32_Packed));
+   EXPECT_EQ(42U, h_HexFileLineFromLegacy(u32_Packed));
+
+   //codes that carry no context must report none
+   EXPECT_EQ(HexFileErrc::not_enough_memory, h_HexFileErrorFromLegacy(0xE0000000UL));
+   EXPECT_EQ(0U, h_HexFileLineFromLegacy(0xE0000000UL));
+
+   EXPECT_EQ(HexFileErrc::success, h_HexFileErrorFromLegacy(0UL));
+}
+
+TEST(HexFileError, MessagesAreDescriptive)
+{
+   EXPECT_EQ("File not found", make_error_code(HexFileErrc::cant_open_file).message());
+   EXPECT_EQ("Wrong checksum in hex line", make_error_code(HexFileErrc::hexline_checksum).message());
+   EXPECT_EQ("Out of memory", make_error_code(HexFileErrc::not_enough_memory).message());
 }

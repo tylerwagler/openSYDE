@@ -540,6 +540,7 @@ else()
    set(OPENSYDE_CORE_PROTOCOL_DRIVERS_COMMON_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpCan.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/hex_file/C_HexFile.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/hex_file/C_HexFileErrorCategory.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/adapter/C_OscCanAdapterConfig.cpp
@@ -563,6 +564,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/stw_can.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/protocol_drivers/C_OscProtocolDriverOsyTpCan.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/hex_file/C_HexFile.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/hex_file/C_HexFileErrorCategory.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/dispatcher/C_OscIpDispatcher.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanBase.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/dispatcher/C_CanDispatcher.hpp

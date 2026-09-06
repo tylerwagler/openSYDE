@@ -11,6 +11,8 @@
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include <cstring>
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscHexFile.hpp"
@@ -34,37 +36,27 @@ using namespace stw::tgl;
    Textual representation of error.
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::string C_OscHexFile::ErrorCodeToErrorText(const uint32_t ou32_ErrorCode) const
+std::string C_OscHexFile::ErrorCodeToErrorText(const std::error_code & orc_Error) const
 {
    std::string c_Text;
 
-   switch (ou32_ErrorCode & ERR_MASK)
+   //The category supplies the description; the context that used to be packed
+   //into the error value is read back from the instance that produced it.
+   if (orc_Error == stw::hex_file::HexFileErrc::record_overlay)
    {
-   case WRN_NO_EOF_RECORD:
-      c_Text = "Error reading hex file: No EOF record";
-      break;
-   case WRN_RECORD_OVERLAY:
-      //ou32_ErrorCode only contains lowest 7 nibbles!
-      c_Text = PrintFormattedCompat("Error in Hexfile: Address 0x%08x used twice !", this->GetLastOverlayErrorAddress());
-      break;
-   case ERR_HEXLINE_SYNTAX:
-      c_Text = PrintFormattedCompat("Error reading hex file: Wrong syntax in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
-      break;
-   case ERR_HEXLINE_CHECKSUM:
-      c_Text = PrintFormattedCompat("Error reading hex file: Wrong checksum in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
-      break;
-   case ERR_HEXLINE_COMMAND:
-      c_Text = PrintFormattedCompat("Error reading hex file: Wrong command in line %d", ou32_ErrorCode & 0x0FFFFFFFUL);
-      break;
-   case ERR_NOT_ENOUGH_MEMORY:
-      c_Text = "Error reading hex file: Out of memory";
-      break;
-   case ERR_CANT_OPEN_FILE:
-      c_Text = "Error reading hex file: File not found";
-      break;
-   default:
-      c_Text = "Error reading hex file: Undefined error";
-      break;
+      c_Text = PrintFormattedCompat("Error in Hexfile: Address 0x%08x used twice !",
+                                    this->GetLastOverlayErrorAddress());
+   }
+   else if ((orc_Error == stw::hex_file::HexFileErrc::hexline_syntax) ||
+            (orc_Error == stw::hex_file::HexFileErrc::hexline_checksum) ||
+            (orc_Error == stw::hex_file::HexFileErrc::hexline_command))
+   {
+      c_Text = "Error reading hex file: " + orc_Error.message() + " " +
+               PrintFormattedCompat("in line %d", this->GetLastErrorLineNumber());
+   }
+   else
+   {
+      c_Text = "Error reading hex file: " + orc_Error.message();
    }
    return c_Text;
 }
@@ -222,11 +214,11 @@ int32_t C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscApplicati
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHexFile::CalcFileChecksum(uint32_t & oru32_Checksum)
 {
-   uint32_t u32_Return;
+   std::error_code c_Return;
    const C_HexDataDump * pc_Dump;
 
-   pc_Dump = this->GetDataDump(u32_Return);
-   if (u32_Return != NO_ERR)
+   pc_Dump = this->GetDataDump(c_Return);
+   if (c_Return)
    {
       return C_CONFIG;
    }

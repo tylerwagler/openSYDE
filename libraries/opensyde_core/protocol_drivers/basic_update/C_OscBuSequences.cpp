@@ -15,6 +15,8 @@
 
 #include <cstring>
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.h"
 #include "TglTime.hpp"
@@ -431,10 +433,10 @@ int32_t C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath, const 
 
    if (s32_Return == C_NO_ERR)
    {
-      uint32_t u32_Return;
+      std::error_code c_Return;
       c_LogActivity = "Read HEX File";
-      pc_HexDump = c_HexFile.GetDataDump(u32_Return);
-      if (u32_Return != stw::hex_file::NO_ERR)
+      pc_HexDump = c_HexFile.GetDataDump(c_Return);
+      if (c_Return)
       {
          s32_Return = C_RD_WR;
          osc_write_log_error(c_LogActivity, "Could not get the HEX file split into handy chunks!");
@@ -783,15 +785,15 @@ int32_t C_OscBuSequences::h_ReadHexFile(const std::string & orc_HexFilePath, C_O
                                         uint32_t & oru32_SignatureBlockAddress)
 {
    int32_t s32_Return = C_NO_ERR;
-   uint32_t u32_Return;
+   std::error_code c_Return;
    const std::string c_LogActivity = "Read HEX File";
 
-   u32_Return = orc_HexFile.LoadFromFile(orc_HexFilePath.c_str());
-   if (u32_Return != stw::hex_file::NO_ERR)
+   c_Return = orc_HexFile.LoadFromFile(orc_HexFilePath.c_str());
+   if (c_Return)
    {
       s32_Return = C_RD_WR;
       osc_write_log_error(c_LogActivity, "Could not open the HEX file \"" + orc_HexFilePath + "\"! Details: " +
-                          orc_HexFile.ErrorCodeToErrorText(u32_Return));
+                          orc_HexFile.ErrorCodeToErrorText(c_Return));
    }
    else
    {
@@ -947,8 +949,8 @@ uint64_t C_OscBuSequences::h_GetAllHexFilesSize(const std::vector<std::string> &
 
       if (s32_Return == C_NO_ERR)
       {
-         uint32_t u32_Return;
-         const stw::hex_file::C_HexDataDump * const pc_HexDump = c_HexFile.GetDataDump(u32_Return);
+         std::error_code c_Return;
+         const stw::hex_file::C_HexDataDump * const pc_HexDump = c_HexFile.GetDataDump(c_Return);
 
          if (pc_HexDump != nullptr)
          {

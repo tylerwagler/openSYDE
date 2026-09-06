@@ -11,6 +11,8 @@
 #ifndef C_OSCHEXFILE_HPP
 #define C_OSCHEXFILE_HPP
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "C_HexFile.hpp"
 #include "C_OscApplicationInfoBlock.hpp"
@@ -29,7 +31,7 @@ class C_OscHexFile :
    public stw::hex_file::C_HexFile
 {
 public:
-   std::string ErrorCodeToErrorText(const uint32_t ou32_ErrorCode) const;
+   std::string ErrorCodeToErrorText(const std::error_code & orc_Error) const;
 
    //STW specific: find application information block(s) and return all information contained there:
    int32_t GetApplicationInformationBlocks(std::vector<C_OscApplicationInfoBlock> & orc_InfoBlocks,
