@@ -19,6 +19,87 @@ that do not regress existing functionality.
 
 ---
 
+## Status Summary (as of 2026-09-06)
+
+| Phase | Status | Notes |
+|---|---|---|
+| 0 — Tests & CI | ✅ **Complete** | GTest + CTest under `libraries/opensyde_core/tests/`, GitHub Actions workflow. CI was red from introduction until 2026-09-06; see the CI note below. |
+| 1 — Correctness bugs | ✅ **Complete** | |
+| 2 — Remove `C_SclDynamicArray` | ✅ **Complete** | Zero references remain. |
+| 3 — Retire `C_SclString` | ✅ **Complete** | Class deleted; `C_SclStringCompat.hpp` helpers remain, ~94 files still call them. `C_SclStringList` / `C_SclIniFile` still exist. See `PHASE3_PLAN.md`. |
+| 4 — Replace homegrown AES | ⚠️ **Partial** | `security/aes/` sources removed; `C_OscSecurityAesCbc` now uses OpenSSL EVP. **But it is AES-128-CBC, not the AES-256-GCM this plan specifies** — no authenticated encryption, no KAT/CAVP tests. The remaining gap is the security-relevant half. |
+| 5 — Error handling | 🔶 **Started** | `C_OscErrorCategory` (`Errc` + `STWErrorCategory`) exists; the security API returns `std::error_code`. The bulk of the int32_t call sites are unmigrated. |
+| 6.1 — Singletons | ✅ **Complete, deviating from plan** | Meyer's singleton **rejected** — see below. Race fixed with `std::call_once`; `h_Destroy()` and teardown ordering kept. |
+| 6.2 — Standard mutex | ✅ **Complete** | `C_TglCriticalSection` and all four `TglTasks` files deleted; 52 call sites on `std::mutex`. |
+| 6.3 — Smart pointers | 🚫 **Re-scope required** | Exit criterion is wrong as written — see below. |
+| 7 — Performance | ⬜ **Not started** | |
+| 8 — Build system | 🔶 **Partial** | CMake minimum raised to 3.25 across the Vector submodules; CI matrix reworked; ccache added. The unified root build remains open — see below. |
+
+### Phase 6.1 — why Meyer's singleton was rejected
+
+The plan says "convert to Meyer's singleton, remove `h_Destroy()`". Applying that
+literally would introduce two defects:
+
+1. **User settings would be lost on exit.** `C_UsHandler::~C_UsHandler()` calls
+   `Save()`, and `h_Destroy()` is invoked from the main-window destructor of all
+   three apps — a controlled shutdown while `QApplication` is still alive. A
+   function-local static destructs after `main()` returns, once Qt is gone.
+2. **An explicit teardown ordering would be discarded.** `~C_PuiProject()`
+   destroys `C_PuiSvHandler` *then* `C_PuiSdHandler`. Both are `QObject`s.
+   Meyer's singletons destruct in reverse *construction* order, which depends on
+   runtime call order and is not guaranteed to preserve that.
+
+The real defect in these singletons was different from what the plan describes:
+`h_GetInstance()` did an unguarded check-then-`new`, a data race if ever reached
+from two threads. That is now guarded with `std::call_once` while `h_Destroy()`
+and the ordering stay exactly as they were.
+
+Known consequence: a `std::once_flag` cannot be reset, so calling
+`h_GetInstance()` *after* `h_Destroy()` now returns `nullptr` instead of silently
+constructing a fresh instance. The known shutdown paths were checked and none do
+this — the widget tree is deleted before the `h_Destroy()` calls,
+`C_TblTreDataElementModel::h_CleanUp()` touches only its own statics, and
+`C_UsHandler::Save()` reaches no other singleton. Silent resurrection during
+shutdown was arguably a latent bug being hidden, not a feature.
+
+`C_CamDbHandler`, `C_CamProHandler` and `C_HeHandler` were already race-free
+(static instance, no lazy init) and were left alone.
+
+### Phase 6.3 — exit criterion needs re-scoping
+
+"No manual `new`/`delete` in newly-touched files" reads as ~2,972 violations, but
+the overwhelming majority are Qt widgets handed to a parent
+(`new C_OgeLabel(this)`), where Qt owns the lifetime and a `unique_ptr` would
+cause a double free. The sub-phase should be re-scoped to genuine ownership
+cases — the `C_HexFile` `T_HexLine` linked list and the ~23 `FILE*` sites — and
+the blanket criterion dropped.
+
+### Phase 8 — what is done and what is not
+
+Done: CMake minimum raised 3.9 → 3.25 across `Vector_DBC` / `Vector_BLF` /
+`Vector_ASC` (clearing the "compatibility with CMake < 3.10" deprecation); CI
+reduced to resolute with the distro default compiler; ccache wired into
+`build.sh` and CI.
+
+Not done: `build.sh` still configures each of the eight tools as its own CMake
+project, so `opensyde_core` is compiled once per tool — eight times for `all`.
+The tools cannot trivially share one core target because each sets a different
+`OPENSYDE_CORE_SKIP_*` set. ccache masks the cost rather than removing it. A
+root `CMakeLists.txt` building core once against the union of those options is
+the real fix; `CMakePresets.json` already sits at the repo root with nothing to
+drive it.
+
+### CI note
+
+The workflow was red from the moment it was added until 2026-09-06 — every job,
+every run. Four independent environment defects (a Qt6 SVG package that does not
+exist on the targeted release, a compiler absent from a matrix entry, missing
+`flex`/`bison`/`libfl-dev`, missing `libssl-dev`). That is how phase-2 and
+phase-3 residue survived, and how two `pjt/` cmake files silently missing from
+CAN Monitor and SYDEflash went unnoticed. A job that never runs is not a gate.
+
+---
+
 ## Phase 0 — Foundation: Tests & Infrastructure
 
 **Goal:** Establish the testing harness and CI so subsequent phases can verify
