@@ -12,6 +12,7 @@
 #include "C_OgeCbxUnified.hpp"
 #include "C_OgeCbxIconDelegate.hpp"
 #include "C_OgeWiUtil.hpp"
+#include "C_OscNodeDataPoolContent.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_elements;
@@ -35,10 +36,10 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeCbxUnified::C_OgeCbxUnified(QWidget * const opc_Parent, const E_ComboBoxType e_Type) :
-   C_OgeCbxToolTipBase(opc_Parent),
-   me_Type(e_Type),
-   mq_DarkMode(false),
-   ms16_IconPaddingLeft(0)
+    C_OgeCbxToolTipBase(opc_Parent),
+    me_Type(e_Type),
+    mq_DarkMode(false),
+    ms16_IconPaddingLeft(0)
 {
    // Apply type-specific configuration
    switch (me_Type)
@@ -289,3 +290,4 @@ void C_OgeCbxUnified::m_UpdateVariant(void)
    this->style()->unpolish(this);
    this->style()->polish(this);
 }
+#include "C_OgeCbxUnified.moc"

@@ -131,9 +131,9 @@ void C_SyvDaItDashboardLabelWidget::SetUnit(const QString & orc_Text)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItDashboardLabelWidget::AdjustFontToSize(void) const
 {
-   const QSize c_ExpectedSize(this->width(), (this->height() * 10) / 17);
+   const uint32_t u32_ExpectedWidth = static_cast<uint32_t>(this->width());
 
-   this->mpc_Ui->pc_LabelValue->AdjustFontToSpecificSize(c_ExpectedSize);
+   this->mpc_Ui->pc_LabelValue->AdjustFontToSpecificSize(u32_ExpectedWidth);
    this->m_UpdateCaptionFont();
 }
 

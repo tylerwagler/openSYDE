@@ -66,11 +66,11 @@ private:
       const QMap<C_PuiSvDbNodeDataPoolListElementId, C_PuiSvDbElementIdCrcGroup>
           &orc_ElementIdGroups,
       const QString &orc_GenericTagName,
-      stw::opensyde_core::C_OscXmlParserBase &orc_XmlParser);
+      stw::opensyde_core::C_OscXmlParser &orc_XmlParser);
   static void mh_StoreElementIdGroup(
       const C_PuiSvDbNodeDataPoolListElementId &orc_ElementId,
       const C_PuiSvDbElementIdCrcGroup &orc_ElementIdGroup,
-      stw::opensyde_core::C_OscXmlParserBase &orc_XmlParser);
+      stw::opensyde_core::C_OscXmlParser &orc_XmlParser);
   static int32_t mh_LoadDashboardFromClipboard(
       C_PuiSvDashboard &orc_Data,
       QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
@@ -82,11 +82,11 @@ private:
       QMap<C_PuiSvDbNodeDataPoolListElementId, C_PuiSvDbElementIdCrcGroup>
           &orc_ElementIdGroups,
       const QString &orc_GenericTagName,
-      stw::opensyde_core::C_OscXmlParserBase &orc_XmlParser);
+      stw::opensyde_core::C_OscXmlParser &orc_XmlParser);
   static int32_t
   mh_LoadElementIdGroup(C_PuiSvDbNodeDataPoolListElementId &orc_ElementId,
                         C_PuiSvDbElementIdCrcGroup &orc_ElementIdGroup,
-                        stw::opensyde_core::C_OscXmlParserBase &orc_XmlParser);
+                        stw::opensyde_core::C_OscXmlParser &orc_XmlParser);
   static QMap<C_PuiSvDbNodeDataPoolListElementId, C_PuiSvDbElementIdCrcGroup>
   mh_FillElementIdGroups(
       const C_PuiSvDashboard &orc_Data,

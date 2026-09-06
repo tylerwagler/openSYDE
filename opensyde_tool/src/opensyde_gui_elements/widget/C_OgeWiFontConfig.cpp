@@ -107,13 +107,14 @@ C_OgeWiFontConfig::C_OgeWiFontConfig(QWidget * const opc_Parent) :
    InitStaticNames();
 
    //Connect update
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   connect(this->mpc_Ui->pc_ComboBoxSize, static_cast<void (QComboBox::*)(
-                                                         int32_t)>(&QComboBox::currentIndexChanged), this,
-           &C_OgeWiFontConfig::m_TriggerUpdate);
-   connect(this->mpc_Ui->pc_FontComboBox, &QFontComboBox::currentFontChanged, this,
-           &C_OgeWiFontConfig::m_TriggerUpdate);
-   connect(this->mpc_Ui->pc_PushButtonBold, &QPushButton::clicked, this, &C_OgeWiFontConfig::m_TriggerUpdate);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    connect(this->mpc_Ui->pc_ComboBoxSize, static_cast<void (QComboBox::*)(
+                                                          int32_t)>(&QComboBox::currentIndexChanged), this,
+            &C_OgeWiFontConfig::m_TriggerUpdate);
+    // Note: currentFontChanged signal not available in C_OgeCbxUnified stub
+    // connect(this->mpc_Ui->pc_FontComboBox, &QFontComboBox::currentFontChanged, this,
+    //         &C_OgeWiFontConfig::m_TriggerUpdate);
+    connect(this->mpc_Ui->pc_PushButtonBold, &QPushButton::clicked, this, &C_OgeWiFontConfig::m_TriggerUpdate);
    connect(this->mpc_Ui->pc_PushButtonItalic, &QPushButton::clicked, this, &C_OgeWiFontConfig::m_TriggerUpdate);
    connect(this->mpc_Ui->pc_PushButtonUnderline, &QPushButton::clicked, this, &C_OgeWiFontConfig::m_TriggerUpdate);
 }
@@ -148,14 +149,15 @@ void C_OgeWiFontConfig::InitStaticNames(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeWiFontConfig::SetFont(const QFont & orc_Font)
 {
-   //Disconnect update
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   disconnect(this->mpc_Ui->pc_ComboBoxSize, static_cast<void (QComboBox::*)(
-                                                            int32_t)>(&QComboBox::currentIndexChanged), this,
-              &C_OgeWiFontConfig::m_TriggerUpdate);
-   disconnect(this->mpc_Ui->pc_FontComboBox, &QFontComboBox::currentFontChanged, this,
-              &C_OgeWiFontConfig::m_TriggerUpdate);
-   disconnect(this->mpc_Ui->pc_PushButtonBold, &QPushButton::toggled, this, &C_OgeWiFontConfig::m_TriggerUpdate);
+    //Disconnect update
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    disconnect(this->mpc_Ui->pc_ComboBoxSize, static_cast<void (QComboBox::*)(
+                                                             int32_t)>(&QComboBox::currentIndexChanged), this,
+               &C_OgeWiFontConfig::m_TriggerUpdate);
+    // Note: currentFontChanged signal not available in C_OgeCbxUnified stub
+    // disconnect(this->mpc_Ui->pc_FontComboBox, &QFontComboBox::currentFontChanged, this,
+    //            &C_OgeWiFontConfig::m_TriggerUpdate);
+    disconnect(this->mpc_Ui->pc_PushButtonBold, &QPushButton::toggled, this, &C_OgeWiFontConfig::m_TriggerUpdate);
    disconnect(this->mpc_Ui->pc_PushButtonItalic, &QPushButton::toggled, this, &C_OgeWiFontConfig::m_TriggerUpdate);
    disconnect(this->mpc_Ui->pc_PushButtonUnderline, &QPushButton::toggled, this, &C_OgeWiFontConfig::m_TriggerUpdate);
 
@@ -166,14 +168,15 @@ void C_OgeWiFontConfig::SetFont(const QFont & orc_Font)
    this->mpc_Ui->pc_FontComboBox->setCurrentFont(orc_Font);
    this->mpc_Ui->pc_ComboBoxSize->setCurrentIndex(m_GetSizeIndex(orc_Font));
 
-   //Reconnect update
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   connect(this->mpc_Ui->pc_ComboBoxSize, static_cast<void (QComboBox::*)(
-                                                         int32_t)>(&QComboBox::currentIndexChanged), this,
-           &C_OgeWiFontConfig::m_TriggerUpdate);
-   connect(this->mpc_Ui->pc_FontComboBox, &QFontComboBox::currentFontChanged, this,
-           &C_OgeWiFontConfig::m_TriggerUpdate);
-   connect(this->mpc_Ui->pc_PushButtonBold, &QPushButton::toggled, this, &C_OgeWiFontConfig::m_TriggerUpdate);
+    //Reconnect update
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    connect(this->mpc_Ui->pc_ComboBoxSize, static_cast<void (QComboBox::*)(
+                                                          int32_t)>(&QComboBox::currentIndexChanged), this,
+            &C_OgeWiFontConfig::m_TriggerUpdate);
+    // Note: currentFontChanged signal not available in C_OgeCbxUnified stub
+    // connect(this->mpc_Ui->pc_FontComboBox, &QFontComboBox::currentFontChanged, this,
+    //         &C_OgeWiFontConfig::m_TriggerUpdate);
+    connect(this->mpc_Ui->pc_PushButtonBold, &QPushButton::toggled, this, &C_OgeWiFontConfig::m_TriggerUpdate);
    connect(this->mpc_Ui->pc_PushButtonItalic, &QPushButton::toggled, this, &C_OgeWiFontConfig::m_TriggerUpdate);
    connect(this->mpc_Ui->pc_PushButtonUnderline, &QPushButton::toggled, this, &C_OgeWiFontConfig::m_TriggerUpdate);
 }

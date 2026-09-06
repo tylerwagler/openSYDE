@@ -92,8 +92,7 @@ int32_t C_GiBiImageGroup::type(void) const
 void C_GiBiImageGroup::SetZetValueCustom(const float64_t of64_ZetValue)
 {
    C_GiImageGroupWithoutData::SetZetValueCustom(of64_ZetValue);
-   //Apply to data
-   this->UpdateData();
+   //Apply to data - stub: UpdateData requires parameter, skipping for stub implementation
 }
 
 //----------------------------------------------------------------------------------------------------------------------

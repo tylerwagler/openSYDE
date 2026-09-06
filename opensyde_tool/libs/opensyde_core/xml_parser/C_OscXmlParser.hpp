@@ -163,6 +163,10 @@ public:
 
   // get all attributes
   QList<C_OscXmlAttribute> GetAttributes(void) const;
+
+  // QDom accessors (for interop with QDom-based filer APIs)
+  QDomDocument & GetDocument(void);
+  QDomElement & GetCurrentElement(void);
 };
 
 //----------------------------------------------------------------------------------------------------------------------

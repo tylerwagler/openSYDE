@@ -61,10 +61,9 @@ C_NagUnUsedProjectFilesPopUpDialog::C_NagUnUsedProjectFilesPopUpDialog(
    // init icons
    this->mpc_Ui->pc_BtnRefresh->setIconSize(mc_ICON_SIZE_24);
    this->mpc_Ui->pc_BtnDeleteAll->setIconSize(mc_ICON_SIZE_24);
-   this->mpc_Ui->pc_BtnRefresh->SetCustomIcons("://images/system_views/dashboards/icons/IconUpdateValueRead.svg", "",
-                                               "", "://images/system_views/dashboards/icons/IconUpdateValueRead.svg");
-   this->mpc_Ui->pc_BtnDeleteAll->SetCustomIcons("://images/system_views/IconClearAllEnabled.svg", "",
-                                                 "", "://images/system_views/IconClearAllDisabled.svg");
+   this->mpc_Ui->pc_BtnRefresh->SetSvg("://images/system_views/dashboards/icons/IconUpdateValueRead.svg");
+   this->mpc_Ui->pc_BtnDeleteAll->SetSvg("://images/system_views/IconClearAllEnabled.svg",
+                                          "://images/system_views/IconClearAllDisabled.svg");
 
    this->mpc_Ui->pc_TableViewUnUsedFiles->setSelectionMode(QAbstractItemView::ExtendedSelection);
 

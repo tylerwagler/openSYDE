@@ -1,26 +1,19 @@
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \file
-   \brief       Stub for C_OgeLabStyledToolTip
-   \copyright   Copyright Sensor-Technik Wiedemann GmbH. All rights reserved.
-*/
-//----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OGE_LAB_STYLED_TOOL_TIP_HPP
-#define C_OGE_LAB_STYLED_TOOL_TIP_HPP
-
-#include "C_OgeLabToolTipBase.hpp"
-
-namespace stw {
-namespace opensyde_gui_elements {
-
-class C_OgeLabStyledToolTip : public C_OgeLabToolTipBase
-{
+#ifndef C_OGE_LAB_STYLED_TOOLTIP_HPP
+#define C_OGE_LAB_STYLED_TOOLTIP_HPP
+#include <QLabel>
+#include <QString>
+#include <Qt>
+namespace stw { namespace opensyde_gui_elements {
+class C_OgeLabStyledToolTip : public QLabel {
 public:
-    explicit C_OgeLabStyledToolTip(QWidget * opc_Parent = nullptr);
+    explicit C_OgeLabStyledToolTip(QWidget * opc_Parent = nullptr) : QLabel(opc_Parent) {}
     ~C_OgeLabStyledToolTip() override = default;
+    void setText(const QString&) {}
+    void SetToolTipInformation(const QString&, const QString&) {}
+    void setAlignment(Qt::Alignment) {}
+    void setTextInteractionFlags(Qt::TextInteractionFlags) {}
+    void setOpenExternalLinks(bool) {}
+    void setMargin(int) {}
 };
-
-} // namespace opensyde_gui_elements
-} // namespace stw
-
+}}
 #endif

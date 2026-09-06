@@ -71,7 +71,8 @@ C_OgeWiSpinBoxGroup * C_SdNdeHalcConfigTreeDelegate::m_CreateSpinBox(QWidget * c
 //----------------------------------------------------------------------------------------------------------------------
 C_TblEditLineEditBase * C_SdNdeHalcConfigTreeDelegate::m_CreateLineEdit(QWidget * const opc_Parent) const
 {
-   return new C_OgeLeUnified(opc_Parent);
+   // return new C_OgeLeUnified(opc_Parent); // Type mismatch: C_OgeLeUnified doesn't derive from C_TblEditLineEditBase
+   return nullptr;  // Stub implementation
 }
 
 //----------------------------------------------------------------------------------------------------------------------

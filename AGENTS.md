@@ -131,9 +131,21 @@
 - Qt 6.10.1 with MinGW 64-bit is required at `C:\Qt\6.10.1\mingw_64\`
 - Build outputs are located in `opensyde_tool/result/`
 - Each executable folder is self-contained after deployment (Qt DLLs copied)
-- The migration from legacy C_SclString to Qt-native types (Phase 1) is complete.
-- Current priority is migrating STL containers (std::vector, std::map, std::set) to Qt-native equivalents (QList, QHash, QSet) as outlined in plans/02_FUTURE/Qt_Native_Coding_Standards.md
-- Always check `plans/02_FUTURE/Qt_Native_Coding_Standards.md` for complete Qt migration guidelines
+- Qt Native Serialization Framework Migration: COMPLETE (2026-03-12)
+  - 30+ core data classes with Qt-native serialization
+  - 30+ multi-format filers (Binary, JSON, XML)
+  - 27+ external call sites migrated
+- Legacy Filer Removal: COMPLETE (2026-03-20)
+  - 38 legacy filer files removed
+  - Legacy filers preserved only for XML parsing dependencies
+- FileLoadersV2 Elimination: Phase 2 - CORE COMPLETE (2026-04-05)
+  - C_OscNodeDataPoolFilerV2 absorbed into C_OscNodeDataPoolFiler
+  - QDom-based element-level methods implemented
+  - V2 files deleted (NO backward compatibility)
+  - Type conversion utilities migrated
+  - REMAINING: Caller migration from C_OscXmlParser to QDom (incremental work)
+- Always check `plans/02_FUTURE/Qt_Native_Coding_Standards.md` for Qt-native coding guidelines
+- Always check `plans/00_ACTIVE/Current_State_Summary.md` for latest project status
 - Do not create new files with legacy patterns - all new code must use Qt-native equivalents
 - When in doubt about code style, follow existing code patterns in the same component
 - Use `clang-format` to auto-format code before committing changes

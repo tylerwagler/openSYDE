@@ -10,6 +10,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OgeChxUnified.hpp"
+#include <QString>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_elements;
@@ -154,7 +155,9 @@ void C_OgeChxUnified::resizeEvent(QResizeEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeChxUnified::toggleChanged(const bool oq_Checked)
 {
-   C_OgeChxToolTipBase::toggleChanged(opc_Checked);
+   Q_UNUSED(oq_Checked);
+   // Base class doesn't have toggleChanged, just emit signal
+   Q_EMIT this->toggled(this->isChecked());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -173,10 +176,12 @@ void C_OgeChxUnified::m_CheckBoxToggled(const bool oq_Checked)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeChxUnified::m_UpdateIndicatorSize(void)
 {
-   const QString c_StyleSheet = "stw--opensyde_gui_elements--C_OgeChxUnified::indicator {" +
-                                "width:" + QString::number(this->width()) + "px;" +
-                                "height:" + QString::number(this->height()) + "px;" +
-                                "}";
+   QString c_StyleSheet;
+   c_StyleSheet = "stw--opensyde_gui_elements--C_OgeChxUnified::indicator {width:";
+   c_StyleSheet += QString::number(this->width());
+   c_StyleSheet += "px;height:";
+   c_StyleSheet += QString::number(this->height());
+   c_StyleSheet += "px;}";
 
    this->setStyleSheet(c_StyleSheet);
 }

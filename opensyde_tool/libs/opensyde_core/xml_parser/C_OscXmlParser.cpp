@@ -649,6 +649,30 @@ QList<C_OscXmlAttribute> C_OscXmlParserBase::GetAttributes(void) const {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get reference to internal QDomDocument
+
+   \return
+   Reference to internal QDomDocument
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomDocument & C_OscXmlParserBase::GetDocument(void)
+{
+   return mc_Document;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get reference to current QDomElement
+
+   \return
+   Reference to currently selected QDomElement
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement & C_OscXmlParserBase::GetCurrentElement(void)
+{
+   return mc_CurrentElement;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Create a node under the currently selected node.
  */
 //----------------------------------------------------------------------------------------------------------------------

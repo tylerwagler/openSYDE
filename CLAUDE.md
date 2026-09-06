@@ -226,29 +226,27 @@ From `stwerrors.hpp` in `stw::errors` namespace:
 
 ## Current Migration Work
 
-### Phase 1: QString & Qt Container Migration (In Progress)
+### Filer Pattern (JSON-only rewrite)
 
-Active migration replacing legacy STL/C_SclString with Qt-native equivalents:
+The entire filer (serialization) subsystem is being rewritten to use one
+uniform pattern. **Before touching anything in `**/*Filer*.{cpp,hpp}`, read the
+canonical plan at `plans/00_ACTIVE/JSON_Filer_Rewrite_Plan.md`.**
 
-**String Migration:**
-- `C_SclString` → `QString`
-- `C_SclDynamicArray` → `QList`
-- `c_str() / Length()` → `toUtf8().constData() / length()`
-- `C_SclString::IntToStr()` → `QString::number()`
+The rules in short:
 
-**Container Migration:**
-- `std::vector<T>` → `QList<T>`
-- `std::vector<QString>` → `QStringList`
-- `std::map<QString, T>` → `QHash<QString, T>`
-- `std::set<T>` → `QSet<T>`
+- **Format:** JSON only. No XML. No binary. No multi-format dispatch.
+- **Library:** `QJsonDocument` / `QJsonObject` / `QJsonArray` / `QJsonValue` from QtCore. No `Qt6::Xml`. No `QDomDocument`. No `QXmlStreamReader`. No third-party XML.
+- **Filer shape:** every filer class has exactly **two static methods** — `static QJsonObject save(const T &)` and `static int32_t load(const QJsonObject &, T &)`. Nothing else. No `LoadFromFile` / `LoadFromString` / `LoadBinary` / `LoadJson` / `LoadXml` family.
+- **File I/O:** lives **only** in the top-level filers (project, system definition, view, CAN Monitor project). Lower filers never touch `QFile`. Top-level filers expose `loadFile(QString) / saveFile(QString)`.
+- **No backward compatibility.** No format-version branching. No V1/V2/V3 code paths. There is one current format and a `format_version` integer in the root document for future use only.
+- **Conventions:** `snake_case` JSON keys. Enums serialized as strings via `C_OscJsonUtil::T_EnumEntry`. `uint64_t` serialized as decimal strings (JSON-number-as-double precision loss). Stable insertion order on save (for minimal git diffs).
+- **Helper:** `serialization/C_OscJsonUtil.hpp` provides type-safe getters that return `C_CONFIG` on missing/wrong-type fields. Use it. Do not invent a parallel helper.
+- **No new abstractions.** No filer base classes. No CRTP. No visitors. No reflection helpers. The only abstraction is `C_OscJsonUtil`. If a future change wants more, it argues for it in a separate plan.
+- **HALC vendor XML** is converted to JSON by a separate offline tool. The main openSYDE binary never reads XML.
 
-**File I/O Migration:**
-- `std::ifstream/ofstream` → `QFile + QTextStream`
-- `std::filesystem::path` → `QString + QFileInfo`
+### Other ongoing migrations
 
-📖 **Qt-Native Standards**: See `plans/02_FUTURE/Qt_Native_Coding_Standards.md` for complete guidelines.
-
-📋 **Implementation Plans**: See `plans/02_FUTURE/Phase_*_Implementation_Plan.md` for detailed task breakdowns.
+`C_SclString` → `QString`, STL → Qt containers, STL file I/O → `QFile + QFileInfo`. Mostly complete; residual sites are fixed opportunistically as filers are rewritten.
 
 ## AI Agent Workspace Rules
 

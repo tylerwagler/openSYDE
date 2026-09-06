@@ -1,27 +1,22 @@
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \file
-   \brief       Stub for C_OgeLabStyledContextMenu
-   \copyright   Copyright Sensor-Technik Wiedemann GmbH. All rights reserved.
-*/
-//----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGE_LAB_STYLED_CONTEXT_MENU_HPP
 #define C_OGE_LAB_STYLED_CONTEXT_MENU_HPP
-
-#include "C_OgeLabBase.hpp"
 #include <QLabel>
-
-namespace stw {
-namespace opensyde_gui_elements {
-
-class C_OgeLabStyledContextMenu : public C_OgeLabBase
-{
+#include <QFont>
+#include <QString>
+#include <QSize>
+namespace stw { namespace opensyde_gui_elements {
+class C_OgeLabStyledContextMenu : public QLabel {
 public:
-    explicit C_OgeLabStyledContextMenu(QWidget * opc_Parent = nullptr);
+    explicit C_OgeLabStyledContextMenu(QWidget * opc_Parent = nullptr) : QLabel(opc_Parent) {}
     ~C_OgeLabStyledContextMenu() override = default;
+    void setMinimumSize(int, int) {}
+    void setMinimumSize(const QSize&) {}
+    void setMaximumSize(int, int) {}
+    void setMaximumSize(const QSize&) {}
+    void setFont(const QFont&) {}
+    void setText(const QString&) {}
+    QString text() const { return QLabel::text(); }
+    void SetToolTipInformation(const QString&, const QString&) {}
 };
-
-} // namespace opensyde_gui_elements
-} // namespace stw
-
+}}
 #endif

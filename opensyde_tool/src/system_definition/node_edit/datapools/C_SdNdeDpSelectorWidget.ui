@@ -284,7 +284,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="stw::opensyde_gui_elements::C_OgePubIconOnly" name="pc_PushButtonAdd">
+          <widget class="stw::opensyde_gui_elements::C_OgePubSvgIconOnly" name="pc_PushButtonAdd">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -366,7 +366,7 @@
         <number>6</number>
        </property>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgePubIconOnly" name="pc_PushButtonScrollLeft">
+        <widget class="stw::opensyde_gui_elements::C_OgePubSvgIconOnly" name="pc_PushButtonScrollLeft">
          <property name="minimumSize">
           <size>
            <width>16</width>
@@ -432,7 +432,7 @@
         </widget>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgePubIconOnly" name="pc_PushButtonScrollRight">
+        <widget class="stw::opensyde_gui_elements::C_OgePubSvgIconOnly" name="pc_PushButtonScrollRight">
          <property name="minimumSize">
           <size>
            <width>16</width>
@@ -533,9 +533,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubIconOnly</class>
+   <class>stw::opensyde_gui_elements::C_OgePubSvgIconOnly</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubIconOnly.hpp</header>
+   <header>C_OgePubSvgIconOnly.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabSvgOnly</class>

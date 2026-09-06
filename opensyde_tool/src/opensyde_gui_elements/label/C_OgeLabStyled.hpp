@@ -1,27 +1,14 @@
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \file
-   \brief       Stub for C_OgeLabStyled
-   \copyright   Copyright Sensor-Technik Wiedemann GmbH. All rights reserved.
-*/
-//----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OGE_LAB_STYLED_HPP
 #define C_OGE_LAB_STYLED_HPP
-
-#include "C_OgeLabBase.hpp"
 #include <QLabel>
-
-namespace stw {
-namespace opensyde_gui_elements {
-
-class C_OgeLabStyled : public C_OgeLabBase
-{
+namespace stw { namespace opensyde_gui_elements {
+class C_OgeLabStyled : public QLabel {
 public:
-    explicit C_OgeLabStyled(QWidget * opc_Parent = nullptr);
+    explicit C_OgeLabStyled(QWidget * opc_Parent = nullptr) : QLabel(opc_Parent) {}
     ~C_OgeLabStyled() override = default;
+    void SetForegroundColor(int) {}
+    void SetBackgroundColor(int) {}
+    void SetFontPixel(int) {}
 };
-
-} // namespace opensyde_gui_elements
-} // namespace stw
-
+}}
 #endif

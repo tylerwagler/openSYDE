@@ -200,7 +200,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgePubIconOnly" name="pc_BtnNameMaxCharLengthSettings">
+            <widget class="stw::opensyde_gui_elements::C_OgePubSvgIconOnly" name="pc_BtnNameMaxCharLengthSettings">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -348,7 +348,7 @@
                  <widget class="stw::opensyde_gui_elements::C_OgeLeUnified" name="pc_LineEditVersion"/>
                 </item>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgePubIconOnly" name="pc_BtnEdit">
+                 <widget class="stw::opensyde_gui_elements::C_OgePubSvgIconOnly" name="pc_BtnEdit">
                   <property name="minimumSize">
                    <size>
                     <width>24</width>
@@ -560,7 +560,7 @@
             </widget>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgePubIconOnly" name="pc_BtnClear">
+            <widget class="stw::opensyde_gui_elements::C_OgePubSvgIconOnly" name="pc_BtnClear">
              <property name="minimumSize">
               <size>
                <width>24</width>
@@ -747,9 +747,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubIconOnly</class>
+   <class>stw::opensyde_gui_elements::C_OgePubSvgIconOnly</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubIconOnly.hpp</header>
+   <header>C_OgePubSvgIconOnly.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>

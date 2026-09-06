@@ -133,11 +133,11 @@ void C_SyvClipBoardHelper::mh_StoreDashboardToClipboard(
   c_StringXml.CreateAndSelectNodeChild(
       orc_GenericTagName);
   c_StringXml.CreateAndSelectNodeChild("rail-assignments");
-  C_PuiSvHandlerFiler::h_SaveReadRails(orc_Rails, c_StringXml);
+  C_PuiSvHandlerFiler::h_SaveReadRails(orc_Rails, c_StringXml.GetCurrentElement());
   c_StringXml.SelectNodeParent();
   // System definition compatibility
   c_StringXml.CreateAndSelectNodeChild("gui-only");
-  C_PuiSvDashboardFiler::h_SaveDashboard(orc_Data, c_StringXml);
+  C_PuiSvDashboardFiler::h_SaveDashboard(orc_Data, c_StringXml.GetDocument());
   c_StringXml.SelectNodeParent();
   C_SyvClipBoardHelper::mh_StoreElementIdGroups(
       orc_ElementIdGroups, orc_GenericTagName, c_StringXml);
@@ -157,7 +157,7 @@ void C_SyvClipBoardHelper::mh_StoreDashboardToClipboard(
 void C_SyvClipBoardHelper::mh_StoreElementIdGroups(
     const QMap<C_PuiSvDbNodeDataPoolListElementId, C_PuiSvDbElementIdCrcGroup>
         &orc_ElementIdGroups,
-    const QString &orc_GenericTagName, C_OscXmlParserBase &orc_XmlParser) {
+    const QString &orc_GenericTagName, C_OscXmlParser &orc_XmlParser) {
   orc_XmlParser.CreateAndSelectNodeChild("element-id-groups");
   for (QMap<C_PuiSvDbNodeDataPoolListElementId,
             C_PuiSvDbElementIdCrcGroup>::ConstIterator c_It =
@@ -181,11 +181,11 @@ void C_SyvClipBoardHelper::mh_StoreElementIdGroups(
 void C_SyvClipBoardHelper::mh_StoreElementIdGroup(
     const C_PuiSvDbNodeDataPoolListElementId &orc_ElementId,
     const C_PuiSvDbElementIdCrcGroup &orc_ElementIdGroup,
-    C_OscXmlParserBase &orc_XmlParser) {
+    C_OscXmlParser &orc_XmlParser) {
   Q_ASSERT(orc_ElementId == orc_ElementIdGroup.GetElementId());
   orc_XmlParser.CreateAndSelectNodeChild("element-id-group");
   orc_XmlParser.CreateAndSelectNodeChild("index");
-  C_PuiSvDashboardFiler::h_SaveUiIndex(orc_ElementId, orc_XmlParser);
+  C_PuiSvDashboardFiler::h_SaveUiIndex(orc_ElementId, orc_XmlParser.GetDocument());
   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "element-id-group");
   orc_XmlParser.SetAttributeUint32("crc", orc_ElementIdGroup.GetCrc());
   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "element-id-groups");
@@ -216,10 +216,10 @@ int32_t C_SyvClipBoardHelper::mh_LoadDashboardFromClipboard(
 
   c_StringXml.LoadFromString(mh_GetClipBoard());
 
-  if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString()) {
+  if (c_StringXml.SelectRoot() == orc_GenericTagName) {
     if (c_StringXml.SelectNodeChild("gui-only") == "gui-only") {
       s32_Retval =
-          C_PuiSvDashboardFiler::h_LoadDashboard(orc_Data, c_StringXml, true);
+          C_PuiSvDashboardFiler::h_LoadDashboard(orc_Data, c_StringXml.GetCurrentElement(), true);
       Q_ASSERT(c_StringXml.SelectNodeParent() ==
                orc_GenericTagName);
     } else {
@@ -228,7 +228,7 @@ int32_t C_SyvClipBoardHelper::mh_LoadDashboardFromClipboard(
     if ((s32_Retval == C_NO_ERR) &&
         (c_StringXml.SelectNodeChild("rail-assignments") ==
          "rail-assignments")) {
-      s32_Retval = C_PuiSvHandlerFiler::h_LoadReadRails(orc_Rails, c_StringXml);
+      s32_Retval = C_PuiSvHandlerFiler::h_LoadReadRails(orc_Rails, c_StringXml.GetCurrentElement());
       Q_ASSERT(c_StringXml.SelectNodeParent() ==
                orc_GenericTagName);
     } else {
@@ -264,7 +264,7 @@ int32_t C_SyvClipBoardHelper::mh_LoadDashboardFromClipboard(
 int32_t C_SyvClipBoardHelper::mh_LoadElementIdGroups(
     QMap<C_PuiSvDbNodeDataPoolListElementId, C_PuiSvDbElementIdCrcGroup>
         &orc_ElementIdGroups,
-    const QString &orc_GenericTagName, C_OscXmlParserBase &orc_XmlParser) {
+    const QString &orc_GenericTagName, C_OscXmlParser &orc_XmlParser) {
   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("element-id-groups");
 
   if (s32_Retval == C_NO_ERR) {
@@ -310,7 +310,7 @@ int32_t C_SyvClipBoardHelper::mh_LoadElementIdGroups(
 int32_t C_SyvClipBoardHelper::mh_LoadElementIdGroup(
     C_PuiSvDbNodeDataPoolListElementId &orc_ElementId,
     C_PuiSvDbElementIdCrcGroup &orc_ElementIdGroup,
-    C_OscXmlParserBase &orc_XmlParser) {
+    C_OscXmlParser &orc_XmlParser) {
   uint32_t u32_Crc;
   int32_t s32_Retval = orc_XmlParser.GetAttributeUint32Error("crc", u32_Crc);
 
@@ -318,7 +318,7 @@ int32_t C_SyvClipBoardHelper::mh_LoadElementIdGroup(
   if (s32_Retval == C_NO_ERR) {
     s32_Retval = orc_XmlParser.SelectNodeChildError("index");
     if (s32_Retval == C_NO_ERR) {
-      C_PuiSvDashboardFiler::h_LoadUiIndex(orc_ElementId, orc_XmlParser);
+      C_PuiSvDashboardFiler::h_LoadUiIndex(orc_ElementId, orc_XmlParser.GetCurrentElement());
 
       orc_ElementIdGroup.SetElementId(orc_ElementId);
       // Return
