@@ -18,6 +18,8 @@
 #include <cstring>
 
 #include <openssl/evp.h>
+#include <openssl/rand.h>
+#include <openssl/crypto.h>
 
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
@@ -26,7 +28,6 @@
 #include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscSecurityAesFile.hpp"
-#include "C_Md5Checksum.hpp"
 #include "C_OscZipFile.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_SclStringCompat.hpp"
@@ -52,168 +53,190 @@ using namespace std;
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Convert hex string to binary key
+/*! \brief   Derive an AES-256 key from a password
 
-   Helper to convert a 32-character hex string (MD5 digest) to a 16-byte binary key.
+   PBKDF2-HMAC-SHA256 over the supplied password and a random per-file salt.
 
-   \param[in]  orc_HexKey    Hex string (32 characters)
-   \param[out] orau8_Key     Binary key (16 bytes)
+   The previous scheme was a single unsalted MD5 of the password. MD5 is fast and
+   unsalted, so identical passwords produced identical keys across every file and
+   the whole keyspace was precomputable. PBKDF2 with a per-file salt removes both
+   properties, and the iteration count makes guessing cost real time.
+
+   \param[in]   orc_Password     Password to derive from
+   \param[in]   orau8_Salt       Per-file random salt
+   \param[in]   ou32_Iterations  PBKDF2 iteration count
+   \param[out]  orau8_Key        Derived 256bit key
 
    \return
-   C_NO_ERR    conversion successful
-   C_RANGE     invalid hex string
+   C_NO_ERR    key derived
+   C_CONFIG    derivation failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-static int32_t mh_HexToKey(const std::string & orc_HexKey, uint8_t (&orau8_Key)[16])
+static int32_t mh_DeriveKey(const std::string & orc_Password,
+                            const uint8_t (&orau8_Salt)[C_OscSecurityAesFile::hu32_SALT_LENGTH],
+                            const uint32_t ou32_Iterations,
+                            uint8_t (&orau8_Key)[C_OscSecurityAesFile::hu32_KEY_LENGTH])
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (orc_HexKey.length() < 32)
+   const int x_Result = PKCS5_PBKDF2_HMAC(orc_Password.c_str(), static_cast<int>(orc_Password.length()),
+                                          &orau8_Salt[0], static_cast<int>(C_OscSecurityAesFile::hu32_SALT_LENGTH),
+                                          static_cast<int>(ou32_Iterations), EVP_sha256(),
+                                          static_cast<int>(C_OscSecurityAesFile::hu32_KEY_LENGTH), &orau8_Key[0]);
+
+   if (x_Result != 1)
    {
-      s32_Return = C_RANGE;
-   }
-   else
-   {
-      for (uint8_t u8_Index = 0U; u8_Index < 16U; u8_Index++)
-      {
-         const std::string c_Text = "0x" + SubStringCompat(orc_HexKey,
-                                                           (static_cast<uint32_t>(u8_Index) * 2U) + 1U, 2U);
-         orau8_Key[u8_Index] = static_cast<uint8_t>(std::stoi(c_Text, nullptr, 16));
-      }
+      s32_Return = C_CONFIG;
    }
    return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   AES-128-ECB encrypt data in memory
+/*! \brief   AES-256-GCM encrypt data in memory
 
-   Uses OpenSSL EVP for AES-128-ECB encryption with PKCS#7 padding.
+   GCM is an authenticated mode: it produces a tag that detects any modification
+   of the ciphertext. The previous mode was ECB, which encrypts each block
+   independently — identical plaintext blocks produced identical ciphertext, the
+   structure of the plaintext leaked, and nothing detected tampering.
 
-   \param[in]   orau8_Key        128bit key
-   \param[in]   orc_Input        Plaintext input
-   \param[out]  orc_Output       Ciphertext output
+   \param[in]   orau8_Key    256bit key
+   \param[in]   orau8_Nonce  96bit nonce, must never repeat for a given key
+   \param[in]   orc_Input    Plaintext input
+   \param[out]  orc_Output   Ciphertext output
+   \param[out]  orau8_Tag    Authentication tag
 
    \return
    C_NO_ERR    success
    C_CONFIG    encryption failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-static int32_t mh_EncryptEcb(const uint8_t (&orau8_Key)[16], const std::vector<uint8_t> & orc_Input,
-                             std::vector<uint8_t> & orc_Output)
+static int32_t mh_EncryptGcm(const uint8_t (&orau8_Key)[C_OscSecurityAesFile::hu32_KEY_LENGTH],
+                             const uint8_t (&orau8_Nonce)[C_OscSecurityAesFile::hu32_NONCE_LENGTH],
+                             const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output,
+                             uint8_t (&orau8_Tag)[C_OscSecurityAesFile::hu32_TAG_LENGTH])
 {
    int32_t s32_Return = C_NO_ERR;
 
    EVP_CIPHER_CTX * const pc_Ctx = EVP_CIPHER_CTX_new();
+
    if (pc_Ctx == nullptr)
    {
       s32_Return = C_CONFIG;
    }
    else
    {
-      // Set up AES-128-ECB encryption (no IV needed for ECB)
-      const int x_Result = EVP_EncryptInit_ex(pc_Ctx, EVP_aes_128_ecb(), nullptr, orau8_Key, nullptr);
-      if (x_Result != 1)
+      // GCM produces ciphertext the same length as the plaintext; no padding.
+      orc_Output.resize(orc_Input.size());
+
+      int x_OutLen = 0;
+      int x_FinalLen = 0;
+
+      if ((EVP_EncryptInit_ex(pc_Ctx, EVP_aes_256_gcm(), nullptr, nullptr, nullptr) != 1) ||
+          (EVP_CIPHER_CTX_ctrl(pc_Ctx, EVP_CTRL_GCM_SET_IVLEN,
+                               static_cast<int>(C_OscSecurityAesFile::hu32_NONCE_LENGTH), nullptr) != 1) ||
+          (EVP_EncryptInit_ex(pc_Ctx, nullptr, nullptr, &orau8_Key[0], &orau8_Nonce[0]) != 1))
+      {
+         s32_Return = C_CONFIG;
+      }
+      else if ((orc_Input.size() > 0U) &&
+               (EVP_EncryptUpdate(pc_Ctx, orc_Output.data(), &x_OutLen, orc_Input.data(),
+                                  static_cast<int>(orc_Input.size())) != 1))
+      {
+         s32_Return = C_CONFIG;
+      }
+      // GCM adds no padding, so x_OutLen equals the input size and the finalise
+      // pointer is one-past-the-end. data()+n is valid there; &vec[n] is not.
+      else if (EVP_EncryptFinal_ex(pc_Ctx, orc_Output.data() + static_cast<size_t>(x_OutLen), &x_FinalLen) != 1)
+      {
+         s32_Return = C_CONFIG;
+      }
+      else if (EVP_CIPHER_CTX_ctrl(pc_Ctx, EVP_CTRL_GCM_GET_TAG,
+                                   static_cast<int>(C_OscSecurityAesFile::hu32_TAG_LENGTH), &orau8_Tag[0]) != 1)
       {
          s32_Return = C_CONFIG;
       }
       else
       {
-         const size_t u32_InputSize = orc_Input.size();
-         const size_t u32_MaxOutputSize = u32_InputSize + 16U;
-         std::vector<uint8_t> c_TempOutput(u32_MaxOutputSize);
-         int x_OutLen = 0;
-         int x_FinalLen = 0;
-
-         if (EVP_EncryptUpdate(pc_Ctx, &c_TempOutput[0], &x_OutLen,
-                               &orc_Input[0], static_cast<int>(u32_InputSize)) != 1)
-         {
-            s32_Return = C_CONFIG;
-         }
-         else
-         {
-            if (EVP_EncryptFinal_ex(pc_Ctx, &c_TempOutput[static_cast<size_t>(x_OutLen)], &x_FinalLen) != 1)
-            {
-               s32_Return = C_CONFIG;
-            }
-            else
-            {
-               orc_Output.assign(c_TempOutput.begin(),
-                                 c_TempOutput.begin() + static_cast<size_t>(x_OutLen) +
-                                    static_cast<size_t>(x_FinalLen));
-            }
-         }
+         orc_Output.resize(static_cast<size_t>(x_OutLen) + static_cast<size_t>(x_FinalLen));
       }
 
       EVP_CIPHER_CTX_free(pc_Ctx);
    }
-
    return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   AES-128-ECB decrypt data in memory
+/*! \brief   AES-256-GCM decrypt data in memory
 
-   Uses OpenSSL EVP for AES-128-ECB decryption with PKCS#7 padding.
+   Verifies the authentication tag. A wrong password, a truncated file or any
+   modification of the ciphertext fails here rather than yielding garbage.
 
-   \param[in]   orau8_Key        128bit key
-   \param[in]   orc_Input        Ciphertext input
-   \param[out]  orc_Output       Plaintext output
+   \param[in]   orau8_Key    256bit key
+   \param[in]   orau8_Nonce  96bit nonce
+   \param[in]   orau8_Tag    Expected authentication tag
+   \param[in]   orc_Input    Ciphertext input
+   \param[out]  orc_Output   Plaintext output
 
    \return
    C_NO_ERR    success
+   C_CHECKSUM  authentication failed (wrong password or tampered data)
    C_CONFIG    decryption failed
-   C_CHECKSUM  invalid padding (likely wrong key or corrupted data)
 */
 //----------------------------------------------------------------------------------------------------------------------
-static int32_t mh_DecryptEcb(const uint8_t (&orau8_Key)[16], const std::vector<uint8_t> & orc_Input,
-                             std::vector<uint8_t> & orc_Output)
+static int32_t mh_DecryptGcm(const uint8_t (&orau8_Key)[C_OscSecurityAesFile::hu32_KEY_LENGTH],
+                             const uint8_t (&orau8_Nonce)[C_OscSecurityAesFile::hu32_NONCE_LENGTH],
+                             const uint8_t (&orau8_Tag)[C_OscSecurityAesFile::hu32_TAG_LENGTH],
+                             const std::vector<uint8_t> & orc_Input, std::vector<uint8_t> & orc_Output)
 {
    int32_t s32_Return = C_NO_ERR;
 
    EVP_CIPHER_CTX * const pc_Ctx = EVP_CIPHER_CTX_new();
+
    if (pc_Ctx == nullptr)
    {
       s32_Return = C_CONFIG;
    }
    else
    {
-      // Set up AES-128-ECB decryption
-      const int x_Result = EVP_DecryptInit_ex(pc_Ctx, EVP_aes_128_ecb(), nullptr, orau8_Key, nullptr);
-      if (x_Result != 1)
+      orc_Output.resize(orc_Input.size());
+
+      int x_OutLen = 0;
+      int x_FinalLen = 0;
+      // EVP_CIPHER_CTX_ctrl takes a non-const tag pointer even though it only reads it here.
+      uint8_t au8_TagCopy[C_OscSecurityAesFile::hu32_TAG_LENGTH];
+      (void)std::memcpy(&au8_TagCopy[0], &orau8_Tag[0], C_OscSecurityAesFile::hu32_TAG_LENGTH);
+
+      if ((EVP_DecryptInit_ex(pc_Ctx, EVP_aes_256_gcm(), nullptr, nullptr, nullptr) != 1) ||
+          (EVP_CIPHER_CTX_ctrl(pc_Ctx, EVP_CTRL_GCM_SET_IVLEN,
+                               static_cast<int>(C_OscSecurityAesFile::hu32_NONCE_LENGTH), nullptr) != 1) ||
+          (EVP_DecryptInit_ex(pc_Ctx, nullptr, nullptr, &orau8_Key[0], &orau8_Nonce[0]) != 1))
       {
          s32_Return = C_CONFIG;
       }
+      else if ((orc_Input.size() > 0U) &&
+               (EVP_DecryptUpdate(pc_Ctx, orc_Output.data(), &x_OutLen, orc_Input.data(),
+                                  static_cast<int>(orc_Input.size())) != 1))
+      {
+         s32_Return = C_CONFIG;
+      }
+      else if (EVP_CIPHER_CTX_ctrl(pc_Ctx, EVP_CTRL_GCM_SET_TAG,
+                                   static_cast<int>(C_OscSecurityAesFile::hu32_TAG_LENGTH), &au8_TagCopy[0]) != 1)
+      {
+         s32_Return = C_CONFIG;
+      }
+      // A non-positive result here means the tag did not verify.
+      else if (EVP_DecryptFinal_ex(pc_Ctx, orc_Output.data() + static_cast<size_t>(x_OutLen), &x_FinalLen) <= 0)
+      {
+         orc_Output.clear();
+         s32_Return = C_CHECKSUM;
+      }
       else
       {
-         const size_t u32_InputSize = orc_Input.size();
-         std::vector<uint8_t> c_TempOutput(u32_InputSize);
-         int x_OutLen = 0;
-         int x_FinalLen = 0;
-
-         if (EVP_DecryptUpdate(pc_Ctx, &c_TempOutput[0], &x_OutLen,
-                               &orc_Input[0], static_cast<int>(u32_InputSize)) != 1)
-         {
-            s32_Return = C_CONFIG;
-         }
-         else
-         {
-            // Finalize: verify PKCS#7 padding
-            if (EVP_DecryptFinal_ex(pc_Ctx, &c_TempOutput[static_cast<size_t>(x_OutLen)], &x_FinalLen) != 1)
-            {
-               s32_Return = C_CHECKSUM;
-            }
-            else
-            {
-               orc_Output.assign(c_TempOutput.begin(),
-                                 c_TempOutput.begin() + static_cast<size_t>(x_OutLen) +
-                                    static_cast<size_t>(x_FinalLen));
-            }
-         }
+         orc_Output.resize(static_cast<size_t>(x_OutLen) + static_cast<size_t>(x_FinalLen));
       }
 
       EVP_CIPHER_CTX_free(pc_Ctx);
    }
-
    return s32_Return;
 }
 
@@ -246,12 +269,6 @@ std::error_code C_OscSecurityAesFile::h_EncryptFile(const std::string & orc_Key,
                                                     const std::string & orc_OutFilePath)
 
 {
-   //lint -e{9176} //no problems as long as char has the same size as uint8; if not we'd be in deep !"=?& anyway
-   const std::string c_AesKey = stw::md5::C_Md5Checksum::GetMD5(
-      reinterpret_cast<const uint8_t *>(orc_Key.c_str()), orc_Key.length());
-
-   tgl_assert(c_AesKey.length() == 32); //really should be 16 bytes, resp. 32 hex characters
-
    //check whether input file exists:
    if (TglFileExists(orc_InFilePath) == false)
    {
@@ -275,7 +292,7 @@ std::error_code C_OscSecurityAesFile::h_EncryptFile(const std::string & orc_Key,
    //read file content
    bool q_HasFailed;
    //lint -e{9176} //no problems as long as char has the same size as uint8; if not we'd be in deep !"=?& anyway
-   c_InputFileStream.read(reinterpret_cast<char_t *>(&c_InputData[0]), u32_InputFileSize);
+   c_InputFileStream.read(reinterpret_cast<char_t *>(c_InputData.data()), u32_InputFileSize);
    //check for error
    q_HasFailed = c_InputFileStream.fail();
    //close file
@@ -287,22 +304,46 @@ std::error_code C_OscSecurityAesFile::h_EncryptFile(const std::string & orc_Key,
    }
 
    //do the encryption:
-   uint8_t au8_Key[16];
+   uint8_t au8_Key[hu32_KEY_LENGTH];
+   uint8_t au8_Salt[hu32_SALT_LENGTH];
+   uint8_t au8_Nonce[hu32_NONCE_LENGTH];
+   uint8_t au8_Tag[hu32_TAG_LENGTH];
    vector<uint8_t> c_EncryptedData;
    std::ofstream c_OutputFileStream;
 
-   //convert key from string to array:
-   const int32_t s32_HexResult = mh_HexToKey(c_AesKey, au8_Key);
-   if (s32_HexResult != C_NO_ERR)
+   //fresh salt and nonce per file; a repeated nonce under one key breaks GCM
+   if ((RAND_bytes(&au8_Salt[0], static_cast<int>(hu32_SALT_LENGTH)) != 1) ||
+       (RAND_bytes(&au8_Nonce[0], static_cast<int>(hu32_NONCE_LENGTH)) != 1))
    {
-      return Errc::range;
+      return Errc::config;
    }
 
-   const int32_t s32_EncResult = mh_EncryptEcb(au8_Key, c_InputData, c_EncryptedData);
+   if (mh_DeriveKey(orc_Key, au8_Salt, hu32_PBKDF2_ITERATIONS, au8_Key) != C_NO_ERR)
+   {
+      OPENSSL_cleanse(&au8_Key[0], hu32_KEY_LENGTH);
+      return Errc::config;
+   }
+
+   const int32_t s32_EncResult = mh_EncryptGcm(au8_Key, au8_Nonce, c_InputData, c_EncryptedData, au8_Tag);
+   OPENSSL_cleanse(&au8_Key[0], hu32_KEY_LENGTH); //do not leave key material on the stack
    if (s32_EncResult != C_NO_ERR)
    {
       return Errc::config;
    }
+
+   //prepend the header
+   vector<uint8_t> c_Header(hu32_HEADER_LENGTH, 0U);
+   (void)std::memcpy(&c_Header[0], "OSYENC", 6U);
+   c_Header[6] = hu8_FORMAT_VERSION;
+   c_Header[7] = hu8_ALGO_AES256_GCM;
+   c_Header[8] = static_cast<uint8_t>(hu32_PBKDF2_ITERATIONS & 0xFFU);
+   c_Header[9] = static_cast<uint8_t>((hu32_PBKDF2_ITERATIONS >> 8U) & 0xFFU);
+   c_Header[10] = static_cast<uint8_t>((hu32_PBKDF2_ITERATIONS >> 16U) & 0xFFU);
+   c_Header[11] = static_cast<uint8_t>((hu32_PBKDF2_ITERATIONS >> 24U) & 0xFFU);
+   (void)std::memcpy(&c_Header[12], &au8_Salt[0], hu32_SALT_LENGTH);
+   (void)std::memcpy(&c_Header[28], &au8_Nonce[0], hu32_NONCE_LENGTH);
+   (void)std::memcpy(&c_Header[40], &au8_Tag[0], hu32_TAG_LENGTH);
+   c_EncryptedData.insert(c_EncryptedData.begin(), c_Header.begin(), c_Header.end());
 
    //save to output file:
    c_OutputFileStream.open(orc_OutFilePath.c_str(), std::ofstream::binary | std::ofstream::trunc);
@@ -310,7 +351,7 @@ std::error_code C_OscSecurityAesFile::h_EncryptFile(const std::string & orc_Key,
    {
       //lint -e{9176} //no problems as long as char has the same size as uint8; if not we'd be in deep
       // !"=?& anyway
-      c_OutputFileStream.write(reinterpret_cast<const char_t *>(&c_EncryptedData[0]),
+      c_OutputFileStream.write(reinterpret_cast<const char_t *>(c_EncryptedData.data()),
                                static_cast<streamsize>(c_EncryptedData.size()));
       q_HasFailed = c_OutputFileStream.fail();
       c_OutputFileStream.close();
@@ -359,12 +400,6 @@ std::error_code C_OscSecurityAesFile::h_DecryptFile(const std::string & orc_Key,
                                                     const std::string & orc_OutFilePath)
 
 {
-   //lint -e{9176} //no problems as long as char has the same size as uint8; if not we'd be in deep !"=?& anyway
-   const std::string c_AesKey = stw::md5::C_Md5Checksum::GetMD5(
-      reinterpret_cast<const uint8_t *>(orc_Key.c_str()), orc_Key.length());
-
-   tgl_assert(c_AesKey.length() == 32); //really should be 16 bytes, resp. 32 hex characters
-
    //check whether input file exists:
    if (TglFileExists(orc_InFilePath) == false)
    {
@@ -376,8 +411,8 @@ std::error_code C_OscSecurityAesFile::h_DecryptFile(const std::string & orc_Key,
    std::ifstream c_InputFileStream;
    const uint32_t u32_InputFileSize = TglFileSize(orc_InFilePath);
 
-   //is the file correctly padded ?
-   if ((u32_InputFileSize % 16U) != 0U)
+   //must at least carry a full header
+   if (u32_InputFileSize < hu32_HEADER_LENGTH)
    {
       return Errc::config;
    }
@@ -395,7 +430,7 @@ std::error_code C_OscSecurityAesFile::h_DecryptFile(const std::string & orc_Key,
    bool q_HasFailed;
    //lint -e{9176} //no problems as long as char has the same size as uint8; if not we'd be in deep !"=?&
    // anyway
-   c_InputFileStream.read(reinterpret_cast<char_t *>(&c_InputData[0]), c_InputData.size());
+   c_InputFileStream.read(reinterpret_cast<char_t *>(c_InputData.data()), c_InputData.size());
    //check for error
    q_HasFailed = c_InputFileStream.fail();
    //close file
@@ -407,20 +442,51 @@ std::error_code C_OscSecurityAesFile::h_DecryptFile(const std::string & orc_Key,
    }
 
    //do the decryption:
-   uint8_t au8_Key[16];
+   uint8_t au8_Key[hu32_KEY_LENGTH];
+   uint8_t au8_Salt[hu32_SALT_LENGTH];
+   uint8_t au8_Nonce[hu32_NONCE_LENGTH];
+   uint8_t au8_Tag[hu32_TAG_LENGTH];
    vector<uint8_t> c_DecryptedData;
    std::ofstream c_OutputFileStream;
 
-   //convert key from string to array:
-   const int32_t s32_HexResult = mh_HexToKey(c_AesKey, au8_Key);
-   if (s32_HexResult != C_NO_ERR)
+   //parse and validate the header. Files written by the previous format carry no
+   //header at all and are rejected here rather than silently mis-decrypted.
+   if (std::memcmp(c_InputData.data(), "OSYENC", 6U) != 0)
    {
-      return Errc::range;
+      return Errc::config;
+   }
+   if ((c_InputData[6] != hu8_FORMAT_VERSION) || (c_InputData[7] != hu8_ALGO_AES256_GCM))
+   {
+      return Errc::config;
    }
 
-   const int32_t s32_DecResult = mh_DecryptEcb(au8_Key, c_InputData, c_DecryptedData);
+   const uint32_t u32_Iterations = static_cast<uint32_t>(c_InputData[8]) |
+                                   (static_cast<uint32_t>(c_InputData[9]) << 8U) |
+                                   (static_cast<uint32_t>(c_InputData[10]) << 16U) |
+                                   (static_cast<uint32_t>(c_InputData[11]) << 24U);
+   if (u32_Iterations == 0U)
+   {
+      return Errc::config;
+   }
+
+   (void)std::memcpy(&au8_Salt[0], &c_InputData[12], hu32_SALT_LENGTH);
+   (void)std::memcpy(&au8_Nonce[0], &c_InputData[28], hu32_NONCE_LENGTH);
+   (void)std::memcpy(&au8_Tag[0], &c_InputData[40], hu32_TAG_LENGTH);
+
+   const vector<uint8_t> c_CipherText(c_InputData.begin() + static_cast<int32_t>(hu32_HEADER_LENGTH),
+                                      c_InputData.end());
+
+   if (mh_DeriveKey(orc_Key, au8_Salt, u32_Iterations, au8_Key) != C_NO_ERR)
+   {
+      OPENSSL_cleanse(&au8_Key[0], hu32_KEY_LENGTH);
+      return Errc::config;
+   }
+
+   const int32_t s32_DecResult = mh_DecryptGcm(au8_Key, au8_Nonce, au8_Tag, c_CipherText, c_DecryptedData);
+   OPENSSL_cleanse(&au8_Key[0], hu32_KEY_LENGTH);
    if (s32_DecResult == C_CHECKSUM)
    {
+      //wrong password, truncation or tampering: all indistinguishable, all rejected
       return Errc::checksum;
    }
    if (s32_DecResult != C_NO_ERR)
@@ -434,7 +500,7 @@ std::error_code C_OscSecurityAesFile::h_DecryptFile(const std::string & orc_Key,
    {
       //lint -e{9176} //no problems as long as char has the same size as uint8; if not we'd be in deep
       // !"=?& anyway
-      c_OutputFileStream.write(reinterpret_cast<const char_t *>(&c_DecryptedData[0]),
+      c_OutputFileStream.write(reinterpret_cast<const char_t *>(c_DecryptedData.data()),
                                static_cast<streamsize>(c_DecryptedData.size()));
       q_HasFailed = c_OutputFileStream.fail();
       c_OutputFileStream.close();
