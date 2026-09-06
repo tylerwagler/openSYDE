@@ -70,7 +70,7 @@ void C_SdNdeDalLogJobDataSelectionTableModel::AddData(
             rc_ConfiguredElementOptArrayId.u32_ListIndex,
             rc_ConfiguredElementOptArrayId.u32_ElementIndex);
 
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          rc_JobData.c_Comment = pc_Element->c_Comment;
          rc_JobData.c_DataElementName = pc_Element->c_Name;

@@ -248,7 +248,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const C_SclString & o
                const C_SclString c_SysDefPath = c_TargetUnzipPath + mhc_SUP_SYSDEF;
 
                s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(orc_SystemDefinition, c_SysDefPath,
-                                                                                   c_TargetUnzipPath, true, NULL,
+                                                                                   c_TargetUnzipPath, true, nullptr,
                                                                                    &orc_ActiveNodes,
                                                                                    true); // skip content
                if (s32_Return == C_NO_ERR)
@@ -284,7 +284,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const C_SclString & o
       for (uint8_t u8_Node = 0U; u8_Node < orc_SystemDefinition.c_Nodes.size(); u8_Node++)
       {
          if ((orc_ActiveNodes[u8_Node] == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) &&
-             (orc_SystemDefinition.c_Nodes[u8_Node].pc_DeviceDefinition != NULL))
+             (orc_SystemDefinition.c_Nodes[u8_Node].pc_DeviceDefinition != nullptr))
          {
             const C_OscNode & rc_CurNode = orc_SystemDefinition.c_Nodes[u8_Node];
             tgl_assert(rc_CurNode.u32_SubDeviceIndex < rc_CurNode.pc_DeviceDefinition->c_SubDevices.size());

@@ -31,7 +31,7 @@ class C_SebUnoAlignCommand :
 public:
    C_SebUnoAlignCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
                         const uint64_t & oru64_GuidelineItemId, const E_Alignment & ore_Alignment,
-                        QUndoCommand * const opc_Parent = NULL);
+                        QUndoCommand * const opc_Parent = nullptr);
    ~C_SebUnoAlignCommand(void) override;
    void undo(void) override;
    void redo(void) override;

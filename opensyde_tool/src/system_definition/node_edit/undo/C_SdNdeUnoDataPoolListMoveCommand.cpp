@@ -140,8 +140,8 @@ void C_SdNdeUnoDataPoolListMoveCommand::m_DoMoveRows(const std::vector<uint32_t>
    for (uint32_t u32_Index = 0; u32_Index < orc_TargetIndices.size(); ++u32_Index)
    {
       QTreeWidgetItem * const pc_Item = this->mpc_DataPoolListsTreeWidget->topLevelItem(orc_TargetIndices[u32_Index]);
-      tgl_assert(pc_Item != NULL);
-      if (pc_Item != NULL)
+      tgl_assert(pc_Item != nullptr);
+      if (pc_Item != nullptr)
       {
          pc_Item->setSelected(true);
       }

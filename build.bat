@@ -3,7 +3,7 @@ rem openSYDE Unified Build Script (Windows)
 rem
 rem Usage: build.bat [/t tool] [/b Release|Debug] [/c] [/j N]
 rem
-rem Tools: opensyde, canmonitor, sydeflash, sydesup, syde_x_gen, syde_coder_c, flash_tool, all
+rem Tools: opensyde, canmonitor, sydeflash, sydesup, syde_x_gen, syde_coder_c, flash_tool, tsp_convert, all
 rem Default: build all tools in Release mode
 rem
 rem Options:
@@ -95,6 +95,7 @@ for /L %%i in (1,1,%TOOL_COUNT%) do (
         call :build_tool syde_x_gen
         call :build_tool syde_coder_c
         call :build_tool flash_tool
+        call :build_tool tsp_convert
     ) else (
         call :build_tool !TOOL!
     )
@@ -122,27 +123,27 @@ set "BUILD_SUBDIR=%TOOL_NAME%"
 
 if /i "%TOOL_NAME%"=="opensyde" (
     set PJT_DIR=opensyde_tool\pjt\openSYDE
-    set TOOLCHAIN=opensyde_tool\pjt\toolchain_windows.cmake
+    set TOOLCHAIN=pjt\toolchains\windows_x64.cmake
     set BUILD_SUBDIR=openSYDE
 )
 if /i "%TOOL_NAME%"=="canmonitor" (
     set PJT_DIR=opensyde_can_monitor\pjt
-    set TOOLCHAIN=opensyde_can_monitor\pjt\toolchain_windows.cmake
+    set TOOLCHAIN=pjt\toolchains\windows_x64.cmake
     set BUILD_SUBDIR=openSYDE_CAN_Monitor
 )
 if /i "%TOOL_NAME%"=="sydeflash" (
     set PJT_DIR=opensyde_syde_flash\pjt
-    set TOOLCHAIN=opensyde_syde_flash\pjt\toolchain_windows.cmake
+    set TOOLCHAIN=pjt\toolchains\windows_x64.cmake
     set BUILD_SUBDIR=SYDEflash
 )
 if /i "%TOOL_NAME%"=="sydesup" (
     set PJT_DIR=opensyde_syde_sup\pjt
-    set TOOLCHAIN=opensyde_syde_sup\pjt\toolchain_windows.cmake
+    set TOOLCHAIN=pjt\toolchains\windows_x64.cmake
     set BUILD_SUBDIR=SYDEsup
 )
 if /i "%TOOL_NAME%"=="syde_x_gen" (
     set PJT_DIR=opensyde_syde_x_gen\pjt
-    set TOOLCHAIN=opensyde_syde_x_gen\pjt\toolchain_windows.cmake
+    set TOOLCHAIN=pjt\toolchains\windows_x64.cmake
     set BUILD_SUBDIR=syde_x_gen
 )
 if /i "%TOOL_NAME%"=="syde_coder_c" (
@@ -153,10 +154,14 @@ if /i "%TOOL_NAME%"=="flash_tool" (
     set PJT_DIR=opensyde_cmd_line_flash_tool\pjt
     set BUILD_SUBDIR=cmd_line_flash_tool
 )
+if /i "%TOOL_NAME%"=="tsp_convert" (
+    set PJT_DIR=opensyde_tsp_convert\pjt
+    set BUILD_SUBDIR=tsp_convert
+)
 
 if "%PJT_DIR%"=="" (
     echo [ERROR] Unknown tool: %TOOL_NAME%
-    echo         Available: opensyde, canmonitor, sydeflash, sydesup, syde_x_gen, syde_coder_c, flash_tool
+    echo         Available: opensyde, canmonitor, sydeflash, sydesup, syde_x_gen, syde_coder_c, flash_tool, tsp_convert
     set FAILED=1
     exit /B 1
 )
@@ -219,7 +224,7 @@ exit /B 0
 :usage
 echo Usage: build.bat [/t tool] [/b Release^|Debug] [/c] [/j N]
 echo.
-echo Tools: opensyde, canmonitor, sydeflash, sydesup, syde_x_gen, syde_coder_c, flash_tool, all
+echo Tools: opensyde, canmonitor, sydeflash, sydesup, syde_x_gen, syde_coder_c, flash_tool, tsp_convert, all
 echo.
 echo Options:
 echo   /t tool    Tool to build (repeat for multiple, or "all")

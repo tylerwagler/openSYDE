@@ -31,7 +31,7 @@ class C_FlaPropWidget :
    Q_OBJECT
 
 public:
-   explicit C_FlaPropWidget(QWidget * const opc_Parent = NULL);
+   explicit C_FlaPropWidget(QWidget * const opc_Parent = nullptr);
    ~C_FlaPropWidget(void) override;
 
    uint8_t GetNodeId(void) const;

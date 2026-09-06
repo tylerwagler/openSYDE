@@ -223,7 +223,7 @@ public:
                                           const std::vector<uint8_t> & orc_ActiveNodes,
                                           const stw::scl::C_SclString & orc_TargetPath,
                                           std::vector<C_DoFlash> & orc_ApplicationsToWrite,
-                                          stw::scl::C_SclString * const opc_ErrorPath = NULL);
+                                          stw::scl::C_SclString * const opc_ErrorPath = nullptr);
    static void h_CheckForChangedApplications(const std::vector<C_ApplicationProperties> & orc_ClientSideApplications,
                                              const std::vector<C_ApplicationProperties> & orc_ServerSideApplications,
                                              std::vector<uint8_t> & orc_ApplicationsPresentOnServer);

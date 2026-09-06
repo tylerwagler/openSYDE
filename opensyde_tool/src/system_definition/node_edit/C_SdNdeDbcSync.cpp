@@ -87,7 +87,7 @@ std::pair<int32_t, int32_t> mh_FindOverrideTarget(const C_OscNode & orc_Node, co
         (c_It != c_Protocols.end()) && (c_Result.first < 0); ++c_It)
    {
       const C_OscCanProtocol * const pc_Protocol = *c_It;
-      if ((pc_Protocol != NULL) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
+      if ((pc_Protocol != nullptr) && (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()))
       {
          const C_OscCanMessageContainer & rc_Container = pc_Protocol->c_ComMessages[ou32_InterfaceIndex];
          const std::vector<C_OscCanMessage> & rc_Messages = rc_Container.GetMessagesConst(oq_Tx);
@@ -133,7 +133,7 @@ QString C_SdNdeDbcSync::h_GetExpectedDbcPath(const uint32_t ou32_NodeIndex, cons
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-   if ((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL) &&
+   if ((pc_Node != nullptr) && (pc_Node->pc_DeviceDefinition != nullptr) &&
        (ou32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
    {
       const C_OscNodeComInterfaceSettings & rc_Interface =
@@ -174,7 +174,7 @@ QString C_SdNdeDbcSync::h_ComputeProjectMessagesHash(const uint32_t ou32_NodeInd
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-   if ((pc_Node != NULL) && (ou32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
+   if ((pc_Node != nullptr) && (ou32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
    {
       const C_OscCanProtocol::E_Type e_Protocol =
          pc_Node->c_Properties.c_ComInterfaces[ou32_InterfaceIndex].e_DbcProtocol;
@@ -195,7 +195,7 @@ QString C_SdNdeDbcSync::h_ComputeProjectMessagesHash(const uint32_t ou32_NodeInd
             C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainer(
                ou32_NodeIndex, e_Protocol, ou32_InterfaceIndex,
                static_cast<uint32_t>(s32_DatapoolIndex));
-         if (pc_Container != NULL)
+         if (pc_Container != nullptr)
          {
             uint32_t u32_Hash = 0U;
             pc_Container->CalcHash(u32_Hash);
@@ -226,7 +226,7 @@ C_SdNdeDbcSync::E_SyncState C_SdNdeDbcSync::h_GetSyncState(const uint32_t ou32_N
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-   if ((pc_Node != NULL) && (ou32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
+   if ((pc_Node != nullptr) && (ou32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
    {
       const C_OscNodeComInterfaceSettings & rc_Interface =
          pc_Node->c_Properties.c_ComInterfaces[ou32_InterfaceIndex];
@@ -396,13 +396,13 @@ int32_t C_SdNdeDbcSync::h_PullInterface(const uint32_t ou32_NodeIndex, const uin
 
    C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNode(ou32_NodeIndex);
 
-   if (pc_Node == NULL)
+   if (pc_Node == nullptr)
    {
       orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText("Node index %1 out of range.")).arg(
          ou32_NodeIndex);
       s32_Retval = C_RANGE;
    }
-   else if (pc_Node->pc_DeviceDefinition == NULL)
+   else if (pc_Node->pc_DeviceDefinition == nullptr)
    {
       orc_ErrorMessage = C_GtGetText::h_GetText("Node has no associated device definition.");
       s32_Retval = C_CONFIG;
@@ -619,13 +619,13 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
 
    C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNode(ou32_NodeIndex);
 
-   if (pc_Node == NULL)
+   if (pc_Node == nullptr)
    {
       orc_ErrorMessage = static_cast<QString>(C_GtGetText::h_GetText("Node index %1 out of range.")).arg(
          ou32_NodeIndex);
       s32_Retval = C_RANGE;
    }
-   else if (pc_Node->pc_DeviceDefinition == NULL)
+   else if (pc_Node->pc_DeviceDefinition == nullptr)
    {
       orc_ErrorMessage = C_GtGetText::h_GetText("Node has no associated device definition.");
       s32_Retval = C_CONFIG;
@@ -688,7 +688,7 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
                      ou32_NodeIndex, e_Protocol, ou32_InterfaceIndex,
                      static_cast<uint32_t>(s32_DatapoolIndex));
 
-               if (pc_Container == NULL)
+               if (pc_Container == nullptr)
                {
                   orc_ErrorMessage = C_GtGetText::h_GetText(
                      "Could not access the per-interface message container.");
@@ -700,7 +700,7 @@ int32_t C_SdNdeDbcSync::h_PushInterface(const uint32_t ou32_NodeIndex, const uin
                   C_CieConverter::C_CieCommDefinition c_CommDef;
                   const C_OscSystemBus * const pc_Bus =
                      C_PuiSdHandler::h_GetInstance()->GetOscBus(rc_Interface.u32_BusIndex);
-                  if (pc_Bus != NULL)
+                  if (pc_Bus != nullptr)
                   {
                      c_CommDef.c_Bus.c_Name = pc_Bus->c_Name;
                      c_CommDef.c_Bus.c_Comment = pc_Bus->c_Comment;

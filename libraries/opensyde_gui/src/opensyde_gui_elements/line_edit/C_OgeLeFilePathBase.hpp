@@ -29,7 +29,7 @@ class C_OgeLeFilePathBase :
    Q_OBJECT
 
 public:
-   explicit C_OgeLeFilePathBase(QWidget * const opc_Parent = NULL);
+   explicit C_OgeLeFilePathBase(QWidget * const opc_Parent = nullptr);
 
    void SetPath(const QString & orc_New, const QString & orc_RelativeTo = "");
    void SetDragAndDropActiveForFolder(const bool oq_Active);

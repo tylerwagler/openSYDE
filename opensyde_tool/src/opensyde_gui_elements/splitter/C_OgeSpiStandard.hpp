@@ -32,7 +32,7 @@ class C_OgeSpiStandard :
    Q_OBJECT
 
 public:
-   C_OgeSpiStandard(QWidget * const opc_Parent = NULL);
+   C_OgeSpiStandard(QWidget * const opc_Parent = nullptr);
 
    void SetColor(const QColor & orc_Color) const;
    void SetMargins(const int32_t os32_MarginTop, const int32_t os32_MarginBottom) const;

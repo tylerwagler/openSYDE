@@ -243,7 +243,7 @@ void C_CamMosFilterItemWidget::m_OnEdit()
          this->m_SetFilterNameElided();
       }
    }
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
    }
@@ -351,7 +351,7 @@ void C_CamMosFilterItemWidget::m_OnAddToExistingFilter(const QList<int32_t> oc_C
          this->m_SetFilterNameElided();
       }
    }
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
    }

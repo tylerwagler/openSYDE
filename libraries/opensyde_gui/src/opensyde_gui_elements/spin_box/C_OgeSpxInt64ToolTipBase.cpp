@@ -46,7 +46,7 @@ using namespace stw::opensyde_gui_elements;
 C_OgeSpxInt64ToolTipBase::C_OgeSpxInt64ToolTipBase(QWidget * const opc_Parent, const bool & orq_IsUnsigned) :
    C_OgeSpxInt64(opc_Parent, orq_IsUnsigned),
    C_OgeSpxAllBase(),
-   mpc_ContextMenu(NULL)
+   mpc_ContextMenu(nullptr)
 {
    //This function does indeed call virtual functions so do not call this one in the base class
    ActivateDefaultToolTip();

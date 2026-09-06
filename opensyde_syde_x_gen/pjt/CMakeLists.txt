@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project("syde_x_gen")
 
 #include script to generate PC-lint configuration files
-include(lint_config.cmake)
+include(../../pjt/lint_config.cmake)
 
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 

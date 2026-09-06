@@ -90,7 +90,7 @@ C_SdNdeDbProperties::C_SdNdeDbProperties(const uint32_t ou32_NodeIndex, const in
    this->mpc_Ui->pc_ScrollAreaWidgetContents->SetBackgroundColor(-1);
    this->mpc_Ui->pc_ScrollAreaDataPools->DeactivateScrollbarResize();
    this->mpc_Ui->pc_PushButtonRevertToDefault->setIcon(QIcon("://images/IconRevert.svg"));
-   this->mpc_Ui->pc_PushButtonRevertToDefault->setMenu(NULL); // remove menu (we only need the style of button class)
+   this->mpc_Ui->pc_PushButtonRevertToDefault->setMenu(nullptr); // remove menu (we only need the style of button class)
    // Provide data block project as placeholder variable for output, source code directory, file generator and IDE call
    this->mpc_Ui->pc_PubMenuOutputFile->AddDatablockSection();
    this->mpc_Ui->pc_PubMenuCodeGenerate->AddDatablockSection();
@@ -489,7 +489,7 @@ void C_SdNdeDbProperties::HandleDataPools(const uint32_t ou32_ApplicationIndex) 
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_ItDataPool = 0UL; u32_ItDataPool < pc_Node->c_DataPools.size(); ++u32_ItDataPool)
       {
@@ -634,7 +634,7 @@ QString C_SdNdeDbProperties::m_CheckName() const
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       //Check Name
       bool q_DuplicateNameError = false;
@@ -687,7 +687,7 @@ QString C_SdNdeDbProperties::m_CheckId(void) const
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       //Check ID
       bool q_ProcessIdError = false;
@@ -761,7 +761,7 @@ QString C_SdNdeDbProperties::m_CheckPaths(void) const
    // Source Code Generation Directory
    c_Return += this->m_CheckPath(this->mpc_Ui->pc_LineEditCodeGenerate->GetPath());
    // empty path not allowed for X-App config generation
-   if ((this->me_Type == C_OscNodeApplication::ePROGRAMMABLE_APPLICATION) && (pc_Node != NULL) &&
+   if ((this->me_Type == C_OscNodeApplication::ePROGRAMMABLE_APPLICATION) && (pc_Node != nullptr) &&
        (pc_Node->c_Properties.q_XappSupport == true) &&
        (this->mpc_Ui->pc_LineEditCodeGenerate->GetPath().isEmpty() == true))
    {
@@ -919,7 +919,7 @@ void C_SdNdeDbProperties::m_LoadData(void)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       //Add existing selected datapools
       this->mc_SelectedDataPools.clear();
@@ -935,7 +935,7 @@ void C_SdNdeDbProperties::m_LoadData(void)
       }
 
       //Handle file generation checkbox
-      if ((pc_Node->pc_DeviceDefinition != NULL) &&
+      if ((pc_Node->pc_DeviceDefinition != nullptr) &&
           (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()))
       {
          bool q_FileGenEnabled = true;
@@ -1038,7 +1038,7 @@ void C_SdNdeDbProperties::m_LoadDataBlock(void)
       c_Default.u8_ProcessId = C_PuiSdHandler::h_GetInstance()->GetUniqueApplicationProcessId(this->mu32_NodeIndex, 0);
       c_Default.q_Active = true;
    }
-   const C_OscNodeApplication & rc_Application = (pc_Appl != NULL) ? *pc_Appl : c_Default;
+   const C_OscNodeApplication & rc_Application = (pc_Appl != nullptr) ? *pc_Appl : c_Default;
 
    //Section Name and Comment
    this->mpc_Ui->pc_LineEditName->setText(rc_Application.c_Name.c_str());
@@ -1118,7 +1118,7 @@ void C_SdNdeDbProperties::m_LoadOutputFilePaths(const C_OscNodeApplication & orc
    {
    case C_OscNodeApplication::eBINARY:
    case C_OscNodeApplication::ePROGRAMMABLE_APPLICATION:
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          if (pc_Node->c_Properties.q_XappSupport == true)
          {
@@ -1146,7 +1146,7 @@ void C_SdNdeDbProperties::m_LoadOutputFilePaths(const C_OscNodeApplication & orc
       }
       break;
    case C_OscNodeApplication::ePARAMETER_SET_HALC:
-      if (pc_Halc != NULL)
+      if (pc_Halc != nullptr)
       {
          QString c_SafeFile = "";
          QString c_NonSafeFile = "";
@@ -1200,7 +1200,7 @@ void C_SdNdeDbProperties::m_SetVisibilityOfContentWidgets(const C_OscNodeApplica
    switch (ore_Type)
    {
    case C_OscNodeApplication::ePROGRAMMABLE_APPLICATION:
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          if (pc_Node->c_Properties.q_XappSupport)
          {
@@ -1299,10 +1299,10 @@ void C_SdNdeDbProperties::m_OnFileGenerationChanged(const int32_t os32_State)
 
    if (static_cast<Qt::CheckState>(os32_State) == Qt::Checked)
    {
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          // file generation depends on programmable flag and loaded hardware configuration
-         if ((pc_Node->pc_DeviceDefinition != NULL) &&
+         if ((pc_Node->pc_DeviceDefinition != nullptr) &&
              (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()))
          {
             bool q_FileGenerationType = false;
@@ -1374,7 +1374,7 @@ void C_SdNdeDbProperties::m_OnFileGenerationChanged(const int32_t os32_State)
       }
    }
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if (pc_Node->c_Properties.q_XappSupport)
       {
@@ -1510,7 +1510,7 @@ void C_SdNdeDbProperties::m_OnClickGenerator(void)
 
    // File path check is done by h_AskUserToSaveRelativePath(), so no need to use C_OgeWiUtil::h_GetOpenFileName()
    const QString c_FilePath = QFileDialog::getOpenFileName(this, C_GtGetText::h_GetText("Select Generator"),
-                                                           c_FolderName, c_FilterName, NULL);
+                                                           c_FolderName, c_FilterName, nullptr);
 
    this->m_AskUserToSaveRelativePath(c_FilePath, C_Uti::h_GetExePath(), this->mpc_Ui->pc_LineEditCodeGenerator);
 }
@@ -1552,7 +1552,7 @@ void C_SdNdeDbProperties::m_OnUpdateOutputFilePath()
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if (pc_Node->c_Properties.q_XappSupport == true)
       {
@@ -1656,7 +1656,7 @@ void C_SdNdeDbProperties::m_OnClickIde(void)
    c_FolderName = this->m_GetDialogPath(c_IdeCall);
    // File path check is done by h_AskUserToSaveRelativePath(), so no need to use C_OgeWiUtil::h_GetOpenFileName()
    c_Path = QFileDialog::getOpenFileName(this, C_GtGetText::h_GetText("Select IDE Executable"), c_FolderName,
-                                         c_FilterName, NULL);
+                                         c_FilterName, nullptr);
 
    if (c_Path != "")
    {
@@ -1726,7 +1726,7 @@ void C_SdNdeDbProperties::m_CleanUpDataPoolWidgets(void)
         c_It != this->mc_DataPoolWidgets.end(); ++c_It)
    {
       C_SdNdeDbDataPoolEntry * const pc_Entry = *c_It;
-      if (pc_Entry != NULL)
+      if (pc_Entry != nullptr)
       {
          this->mpc_Ui->pc_VerticalLayoutDataPools->removeWidget(pc_Entry);
          pc_Entry->hide();
@@ -1864,7 +1864,7 @@ void C_SdNdeDbProperties::m_HandleAddDataPools(void)
       m_InitDataPoolsSection();
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -1879,7 +1879,7 @@ void C_SdNdeDbProperties::m_HandleRevertCodeGenerator(void) const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if (pc_Node->c_Properties.q_XappSupport)
       {
@@ -1901,7 +1901,7 @@ void C_SdNdeDbProperties::m_HandleRevertCodeGenerator(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbProperties::m_HandleDeleteDataPool(C_SdNdeDbDataPoolEntry * const opc_Source, const uint32_t ou32_Index)
 {
-   if (opc_Source != NULL)
+   if (opc_Source != nullptr)
    {
       for (std::set<uint32_t>::iterator c_It = this->mc_SelectedDataPools.begin();
            c_It != this->mc_SelectedDataPools.end(); ++c_It)
@@ -1953,8 +1953,8 @@ void C_SdNdeDbProperties::m_AskUserToSaveRelativePath(const QString & orc_Path,
 
       if (c_AdaptedPath != "")
       {
-         tgl_assert(opc_PathLineEdit != NULL);
-         if (opc_PathLineEdit != NULL)
+         tgl_assert(opc_PathLineEdit != nullptr);
+         if (opc_PathLineEdit != nullptr)
          {
             opc_PathLineEdit->SetPath(c_AdaptedPath, orc_AbsoluteReferenceDir);
          }

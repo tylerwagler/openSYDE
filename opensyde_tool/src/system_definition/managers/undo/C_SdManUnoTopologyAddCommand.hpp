@@ -43,14 +43,14 @@ public:
 
    C_SdManUnoTopologyAddCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
                                 const E_ElementType & ore_Type, const QPointF & orc_NewPos,
-                                const QString & orc_AdditionalInformation = "", QUndoCommand * const opc_Parent = NULL,
+                                const QString & orc_AdditionalInformation = "", QUndoCommand * const opc_Parent = nullptr,
                                 const bool & orq_ForceUseAdditionalInformation = false);
    C_SdManUnoTopologyAddCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
                                 const E_ElementType & ore_Type, const QPointF & orc_NewPos,
                                 const uint64_t ou64_BusConnectorNodeId = 0, const uint64_t ou64_BusConnectorBusId = 0,
                                 const uint8_t ou8_InterfaceNumber = 0,
                                 const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties = std::vector<C_PuiSdNodeInterfaceAutomaticProperties>(),
-                                QUndoCommand * const opc_Parent = NULL);
+                                QUndoCommand * const opc_Parent = nullptr);
    ~C_SdManUnoTopologyAddCommand(void) override;
 
 protected:

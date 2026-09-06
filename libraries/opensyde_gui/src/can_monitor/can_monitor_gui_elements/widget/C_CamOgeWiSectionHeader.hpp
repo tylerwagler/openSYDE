@@ -41,7 +41,7 @@ public:
       eLEFTRIGHT
    };
 
-   explicit C_CamOgeWiSectionHeader(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgeWiSectionHeader(QWidget * const opc_Parent = nullptr);
    ~C_CamOgeWiSectionHeader(void) override;
    void SetIconType(const E_ButtonType & ore_ButtonType);
    void SetOpen(const bool & orq_IsOpen) const;

@@ -39,7 +39,7 @@ class C_SyvUpSummaryWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvUpSummaryWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvUpSummaryWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvUpSummaryWidget() override;
 
    void SetHeading(const QString & orc_Icon, const QString & orc_Text, const bool oq_Failure = false,

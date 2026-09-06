@@ -43,7 +43,7 @@ static bool m_FileAgeDosTime(const C_SclString & orc_FileName, uint16_t * const 
 static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
                           C_SclDynamicArray<C_TglFileSearchRecord> & orc_FoundFiles,
                           const bool oq_IncludeDirectories = false,
-                          C_SclDynamicArray<uint8_t> * const opc_IsDirectory = NULL);
+                          C_SclDynamicArray<uint8_t> * const opc_IsDirectory = nullptr);
 static bool m_CheckUncShare(const C_SclString & orc_Path);
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
@@ -180,7 +180,7 @@ int32_t stw::tgl::TglFileSize(const C_SclString & orc_FileName)
    int32_t s32_Size = -1;
 
    pc_File = std::fopen(orc_FileName.c_str(), "rb");
-   if (pc_File != NULL)
+   if (pc_File != nullptr)
    {
       (void)std::fseek(pc_File, 0, SEEK_END);
       s32_Size = std::ftell(pc_File);
@@ -289,7 +289,7 @@ static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
    {
       orc_FoundFiles.IncLength();
       orc_FoundFiles[orc_FoundFiles.GetHigh()].c_FileName = t_FindFileData.cFileName;
-      if (opc_IsDirectory != NULL)
+      if (opc_IsDirectory != nullptr)
       {
          opc_IsDirectory->IncLength();
          (*opc_IsDirectory)[opc_IsDirectory->GetHigh()] = u8_IsDirectory;
@@ -304,7 +304,7 @@ static int32_t m_FileFind(const C_SclString & orc_SearchPattern,
       {
          orc_FoundFiles.IncLength();
          orc_FoundFiles[orc_FoundFiles.GetHigh()].c_FileName = t_FindFileData.cFileName;
-         if (opc_IsDirectory != NULL)
+         if (opc_IsDirectory != nullptr)
          {
             opc_IsDirectory->IncLength();
             (*opc_IsDirectory)[opc_IsDirectory->GetHigh()] = u8_IsDirectory;
@@ -383,7 +383,7 @@ C_SclString stw::tgl::TglExtractFileExtension(const C_SclString & orc_Path)
    C_SclString c_Extension;
    char_t acn_Ext[_MAX_EXT + 1];
 
-   _splitpath(orc_Path.c_str(), NULL, NULL, NULL, &acn_Ext[0]);
+   _splitpath(orc_Path.c_str(), nullptr, nullptr, nullptr, &acn_Ext[0]);
    c_Extension = static_cast<C_SclString>(acn_Ext);
    return c_Extension;
 }
@@ -429,7 +429,7 @@ C_SclString stw::tgl::TglGetExePath(void)
    char_t acn_Path[MAX_PATH];
    C_SclString c_Path;
 
-   u32_Return = GetModuleFileNameA(NULL, acn_Path, MAX_PATH);
+   u32_Return = GetModuleFileNameA(nullptr, acn_Path, MAX_PATH);
    if (u32_Return != 0)
    {
       //we got a path ...
@@ -456,7 +456,7 @@ C_SclString stw::tgl::TglExtractFilePath(const C_SclString & orc_Path)
    char_t acn_Drive[_MAX_DRIVE + 1];
    char_t acn_Dir[_MAX_DIR + 1];
 
-   _splitpath(orc_Path.c_str(), acn_Drive, acn_Dir, NULL, NULL);
+   _splitpath(orc_Path.c_str(), acn_Drive, acn_Dir, nullptr, nullptr);
    c_Path = static_cast<C_SclString>(acn_Drive) + acn_Dir;
    return c_Path;
 }
@@ -479,7 +479,7 @@ C_SclString stw::tgl::TglExtractFileName(const C_SclString & orc_Path)
    char_t acn_Name[_MAX_FNAME + 1];
    char_t acn_Ext[_MAX_EXT + 1];
 
-   _splitpath(orc_Path.c_str(), NULL, NULL, &acn_Name[0], &acn_Ext[0]);
+   _splitpath(orc_Path.c_str(), nullptr, nullptr, &acn_Name[0], &acn_Ext[0]);
    c_FileName = static_cast<C_SclString>(acn_Name) + acn_Ext;
    return c_FileName;
 }
@@ -512,7 +512,7 @@ C_SclString stw::tgl::TglExpandFileName(const C_SclString & orc_RelativePath, co
       if (u32_Return != 0)
       {
          char_t acn_AbsolutePath[MAX_PATH];
-         u32_Return = GetFullPathNameA(orc_RelativePath.c_str(), MAX_PATH, acn_AbsolutePath, NULL);
+         u32_Return = GetFullPathNameA(orc_RelativePath.c_str(), MAX_PATH, acn_AbsolutePath, nullptr);
          if (u32_Return != 0)
          {
             //we got a path ...
@@ -545,7 +545,7 @@ int32_t stw::tgl::TglCreateDirectory(const C_SclString & orc_Directory)
 
    if (TglDirectoryExists(orc_Directory.c_str()) == false)
    {
-      x_Return = CreateDirectoryA(orc_Directory.c_str(), NULL);
+      x_Return = CreateDirectoryA(orc_Directory.c_str(), nullptr);
       if (x_Return == FALSE)
       {
          s32_Result = -1;

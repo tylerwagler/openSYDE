@@ -113,8 +113,8 @@ C_SdNdeCoConfigTreeView::C_SdNdeCoConfigTreeView(QWidget * const opc_Parent) :
    mu32_NodeIndex(0U),
    mq_Initialized(false),
    mpc_ContextMenu(new C_OgeContextMenu),
-   mpc_AddAction(NULL),
-   mpc_RemoveAction(NULL)
+   mpc_AddAction(nullptr),
+   mpc_RemoveAction(nullptr)
 {
    this->C_SdNdeCoConfigTreeView::setModel(&this->mc_Model);
    this->setItemDelegate(&this->mc_Delegate);
@@ -190,7 +190,7 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
    const uint32_t u32_NodeIndex = this->mc_Model.GetNodeIndex();
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       uint8_t u8_InterfaceNumber;
       const C_UsNode c_UsNode =
@@ -233,7 +233,7 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
                               const C_OscNode * const pc_DeviceNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                                  c_ItDevices->first.u32_NodeIndex);
 
-                              if (pc_DeviceNode != NULL)
+                              if (pc_DeviceNode != nullptr)
                               {
                                  const std::map<std::pair<uint8_t, std::pair<uint8_t,
                                                                              stw::scl::C_SclString> >,
@@ -293,7 +293,7 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
          for (uint32_t u32_Counter = 0; u32_Counter < C_PuiSdHandler::h_GetInstance()->GetOscNodesSize(); u32_Counter++)
          {
             const C_OscNode * const pc_DeviceNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_Counter);
-            if ((pc_DeviceNode != NULL) && (pc_DeviceNode->c_Properties.c_Name.c_str() == c_DeviceNodeName))
+            if ((pc_DeviceNode != nullptr) && (pc_DeviceNode->c_Properties.c_Name.c_str() == c_DeviceNodeName))
             {
                uint32_t u32_UseCaseIndex;
 
@@ -317,7 +317,7 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       std::map<uint8_t, bool> c_SaveInterface;
       std::map<uint8_t, bool> c_SaveDevices;
@@ -345,7 +345,7 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
             {
                const C_OscNode * const pc_DeviceNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                   c_ItDevices->first.u32_NodeIndex);
-               if (pc_DeviceNode != NULL)
+               if (pc_DeviceNode != nullptr)
                {
                   const std::pair<uint8_t, stw::scl::C_SclString> c_PairInterfaceId(
                      c_ItDevices->first.u8_InterfaceNumber, pc_DeviceNode->c_Properties.c_Name.c_str());
@@ -490,14 +490,14 @@ void C_SdNdeCoConfigTreeView::OpenDeviceConfiguration(const uint32_t ou32_Device
 {
    const C_OscNode * const pc_Manager = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   tgl_assert(pc_Manager != NULL);
-   if (pc_Manager != NULL)
+   tgl_assert(pc_Manager != nullptr);
+   if (pc_Manager != nullptr)
    {
       uint8_t u8_InterfaceNumber;
       C_OscCanInterfaceId c_DeviceNodeId;
       int32_t s32_Return;
       s32_Return = C_PuiSdHandler::h_GetInstance()->GetCanOpenManagerOfDeviceAndId(ou32_DeviceNodeIndex,
-                                                                                   NULL,
+                                                                                   nullptr,
                                                                                    &u8_InterfaceNumber,
                                                                                    &c_DeviceNodeId);
 
@@ -547,7 +547,7 @@ void C_SdNdeCoConfigTreeView::CheckError(void)
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
          // Nothing selected, check all
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             uint32_t u32_IntfCounter;
 
@@ -639,7 +639,7 @@ void C_SdNdeCoConfigTreeView::selectionChanged(const QItemSelection & orc_Select
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoConfigTreeView::paintEvent(QPaintEvent * const opc_Event)
 {
-   if (this->viewport() != NULL)
+   if (this->viewport() != nullptr)
    {
       QRect c_Rect;
       QPainter c_Painter(this->viewport());
@@ -736,7 +736,7 @@ void C_SdNdeCoConfigTreeView::m_OnCustomContextMenuRequested(const QPoint & orc_
       this->mc_LastKnownContextMenuPos = orc_Pos;
       if (this->mc_Model.GetInterfaceIdForModelIndex(c_Index, u8_InterfaceNumber) == C_NO_ERR)
       {
-         if (C_PuiSdHandler::h_GetInstance()->GetCanOpenManager(this->mu32_NodeIndex, u8_InterfaceNumber) != NULL)
+         if (C_PuiSdHandler::h_GetInstance()->GetCanOpenManager(this->mu32_NodeIndex, u8_InterfaceNumber) != nullptr)
          {
             this->mpc_AddAction->setEnabled(true);
          }
@@ -749,7 +749,7 @@ void C_SdNdeCoConfigTreeView::m_OnCustomContextMenuRequested(const QPoint & orc_
       if (this->mc_Model.GetDeviceIndexForModelIndex(c_Index, u8_InterfaceNumber, c_NodeId) == C_NO_ERR)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeId.u32_NodeIndex);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             this->mpc_RemoveAction->setVisible(true);
             this->mpc_RemoveAction->setText(static_cast<QString>(C_GtGetText::h_GetText(
@@ -825,7 +825,7 @@ void C_SdNdeCoConfigTreeView::m_OnAddDevice(void)
          }
       }
 
-      if (c_PopUp != NULL)
+      if (c_PopUp != nullptr)
       {
          c_PopUp->HideOverlay();
          c_PopUp->deleteLater();
@@ -849,8 +849,8 @@ void C_SdNdeCoConfigTreeView::m_OnAddDeviceReport(const uint32_t ou32_SelectedNo
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_SelectedNodeIndex);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       tgl_assert(ou32_SelectedNodeInterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size());
       if (ou32_SelectedNodeInterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size())
@@ -892,7 +892,7 @@ void C_SdNdeCoConfigTreeView::m_OnAddDeviceReport(const uint32_t ou32_SelectedNo
                                                  ou8_OriginalNodeInterfaceNumber, orc_EdsPath);
             }
 
-            if (c_New != NULL)
+            if (c_New != nullptr)
             {
                c_New->HideOverlay();
                c_New->deleteLater();
@@ -1180,7 +1180,7 @@ void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceI
       // get heartbeat producer time from EDS
       const C_OscCanOpenObjectData * const pc_OscCanOpenObject = rc_EdsFileContent.GetCanOpenObject(
          C_OscCanOpenObjectDictionary::hu16_OD_INDEX_HEARTBEAT_PRODUCER);
-      if (pc_OscCanOpenObject != NULL)
+      if (pc_OscCanOpenObject != nullptr)
       {
          const stw::scl::C_SclString c_Value = C_OscImportEdsDcf::h_GetCoObjectValue(*pc_OscCanOpenObject, q_IsEds);
          // in case there is an EDS entry
@@ -1244,7 +1244,7 @@ void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceI
          const C_OscCanOpenObjectData * const pc_OscCanOpenObject =
             rc_EdsFileContent.GetCanOpenSubIndexObject(
                C_OscCanOpenObjectDictionary::hu16_OD_INDEX_HEARTBEAT_CONSUMER, 1);
-         if (pc_OscCanOpenObject != NULL)
+         if (pc_OscCanOpenObject != nullptr)
          {
             const stw::scl::C_SclString c_Value =
                C_OscImportEdsDcf::h_GetCoObjectValue(*pc_OscCanOpenObject, q_IsEds);

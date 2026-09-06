@@ -40,7 +40,7 @@ class C_SdBueSignalPropertiesWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdBueSignalPropertiesWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueSignalPropertiesWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdBueSignalPropertiesWidget(void) noexcept override;
 
    void InitStaticNames(void) const;

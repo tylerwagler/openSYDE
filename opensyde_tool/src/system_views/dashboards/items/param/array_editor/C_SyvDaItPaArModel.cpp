@@ -56,7 +56,7 @@ C_SyvDaItPaArModel::C_SyvDaItPaArModel(QObject * const opc_Parent) :
    QAbstractTableModel(opc_Parent),
    mq_EcuValues(false),
    mu32_ElementIndex(0),
-   mpc_DataWidget(NULL)
+   mpc_DataWidget(nullptr)
 {
 }
 
@@ -164,7 +164,7 @@ int32_t C_SyvDaItPaArModel::columnCount(const QModelIndex & orc_Parent) const
    if (!orc_Parent.isValid())
    {
       const C_OscNodeDataPoolContent * const pc_Element = this->GetElementData();
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          //For table parent should always be invalid
          s32_Retval = pc_Element->GetArraySize();
@@ -192,7 +192,7 @@ QVariant C_SyvDaItPaArModel::data(const QModelIndex & orc_Index, const int32_t o
       if ((os32_Role == static_cast<int32_t>(Qt::DisplayRole)) || (os32_Role == static_cast<int32_t>(Qt::EditRole)))
       {
          const C_OscNodeDataPoolListElement * const pc_Element = this->GetOscElement();
-         if (pc_Element != NULL)
+         if (pc_Element != nullptr)
          {
             if (this->mq_EcuValues == true)
             {
@@ -206,7 +206,7 @@ QVariant C_SyvDaItPaArModel::data(const QModelIndex & orc_Index, const int32_t o
             else
             {
                const C_OscNodeDataPoolContent * const pc_Data = this->GetElementData();
-               if (pc_Data != NULL)
+               if (pc_Data != nullptr)
                {
                   c_Retval = C_SdNdeDpContentUtil::h_ConvertScaledContentToGeneric(*pc_Data,
                                                                                    pc_Element->f64_Factor,
@@ -273,14 +273,14 @@ bool C_SyvDaItPaArModel::setData(const QModelIndex & orc_Index, const QVariant &
             const C_GiSvDaParam * const pc_ParamWidget =
                dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-            if (pc_ParamWidget != NULL)
+            if (pc_ParamWidget != nullptr)
             {
                const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-               if (pc_Param != NULL)
+               if (pc_Param != nullptr)
                {
                   const C_OscNodeDataPoolListElement * const pc_OscElement = this->GetOscElement();
                   C_PuiSvDbParam c_Copy = *pc_Param;
-                  if ((this->mu32_ElementIndex < c_Copy.c_ListValues.size()) && (pc_OscElement != NULL))
+                  if ((this->mu32_ElementIndex < c_Copy.c_ListValues.size()) && (pc_OscElement != nullptr))
                   {
                      const uint32_t u32_Index = static_cast<uint32_t>(orc_Index.column());
                      C_OscNodeDataPoolContent & rc_Content = c_Copy.c_ListValues[this->mu32_ElementIndex];
@@ -352,14 +352,14 @@ C_OscNodeDataPoolContent::E_Type C_SyvDaItPaArModel::GetType(void) const
 {
    C_OscNodeDataPoolContent::E_Type e_Retval = C_OscNodeDataPoolContent::eUINT8;
    const C_PuiSvDbNodeDataPoolListElementId * const pc_Id = this->m_GetElementId();
-   if (pc_Id != NULL)
+   if (pc_Id != nullptr)
    {
       const C_OscNodeDataPoolListElement * const pc_OscElement =
          C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(pc_Id->u32_NodeIndex,
                                                                     pc_Id->u32_DataPoolIndex,
                                                                     pc_Id->u32_ListIndex,
                                                                     pc_Id->u32_ElementIndex);
-      if (pc_OscElement != NULL)
+      if (pc_OscElement != nullptr)
       {
          e_Retval = pc_OscElement->GetType();
       }
@@ -377,10 +377,10 @@ C_OscNodeDataPoolContent::E_Type C_SyvDaItPaArModel::GetType(void) const
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolListElement * C_SyvDaItPaArModel::GetOscElement(void) const
 {
-   const C_OscNodeDataPoolListElement * pc_Retval = NULL;
+   const C_OscNodeDataPoolListElement * pc_Retval = nullptr;
    const C_PuiSvDbNodeDataPoolListElementId * const pc_Id = this->m_GetElementId();
 
-   if (pc_Id != NULL)
+   if (pc_Id != nullptr)
    {
       pc_Retval = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(pc_Id->u32_NodeIndex,
                                                                              pc_Id->u32_DataPoolIndex,
@@ -400,15 +400,15 @@ const C_OscNodeDataPoolListElement * C_SyvDaItPaArModel::GetOscElement(void) con
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolContent * C_SyvDaItPaArModel::GetElementData(void) const
 {
-   const C_OscNodeDataPoolContent * pc_Retval = NULL;
+   const C_OscNodeDataPoolContent * pc_Retval = nullptr;
 
    const C_GiSvDaParam * const pc_ParamWidget =
       dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          if (this->mu32_ElementIndex < pc_Param->c_ListValues.size())
          {
@@ -439,15 +439,15 @@ void C_SyvDaItPaArModel::Reset(void)
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDbNodeDataPoolListElementId * C_SyvDaItPaArModel::m_GetElementId(void) const
 {
-   const C_PuiSvDbNodeDataPoolListElementId * pc_Retval = NULL;
+   const C_PuiSvDbNodeDataPoolListElementId * pc_Retval = nullptr;
 
    const C_GiSvDaParam * const pc_ParamWidget =
       dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          if (this->mu32_ElementIndex < pc_Param->c_DataPoolElementsConfig.size())
          {
@@ -475,10 +475,10 @@ int32_t C_SyvDaItPaArModel::m_GetDataSetIndex(void) const
    const C_GiSvDaParam * const pc_ParamWidget =
       dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if ((pc_Param != NULL) && (this->mu32_ElementIndex < pc_Param->c_DataSetSelectionIndices.size()))
+      if ((pc_Param != nullptr) && (this->mu32_ElementIndex < pc_Param->c_DataSetSelectionIndices.size()))
       {
          s32_Retval = pc_Param->c_DataSetSelectionIndices[this->mu32_ElementIndex];
       }
@@ -505,7 +505,7 @@ bool C_SyvDaItPaArModel::m_CheckError(const QModelIndex & orc_Index) const
 
    if (this->mq_EcuValues == false)
    {
-      if ((pc_Element != NULL) && (pc_Data != NULL))
+      if ((pc_Element != nullptr) && (pc_Data != nullptr))
       {
          const uint32_t u32_Index = static_cast<uint32_t>(orc_Index.column());
          //Check error min

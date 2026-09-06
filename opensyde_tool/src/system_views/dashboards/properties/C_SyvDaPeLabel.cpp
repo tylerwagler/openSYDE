@@ -230,7 +230,7 @@ void C_SyvDaPeLabel::SetCaption(const QString & orc_Value) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeLabel::m_UpdatePreview(void)
 {
-   C_GiSvDaLabelBase * const pc_Item = new C_GiSvDaLabelBase(0UL, 0UL, -1L, 0ULL, NULL);
+   C_GiSvDaLabelBase * const pc_Item = new C_GiSvDaLabelBase(0UL, 0UL, -1L, 0ULL, nullptr);
    QSizeF c_ItemSize;
    QPointF c_ItemPos;
 

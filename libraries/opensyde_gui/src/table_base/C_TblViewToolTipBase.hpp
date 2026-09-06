@@ -29,7 +29,7 @@ class C_TblViewToolTipBase :
    public QTableView
 {
 public:
-   C_TblViewToolTipBase(QWidget * const opc_Parent = NULL);
+   C_TblViewToolTipBase(QWidget * const opc_Parent = nullptr);
    ~C_TblViewToolTipBase(void) override;
 
 protected:

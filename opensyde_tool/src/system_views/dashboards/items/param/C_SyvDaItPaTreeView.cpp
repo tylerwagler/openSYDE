@@ -49,7 +49,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaItPaTreeView::C_SyvDaItPaTreeView(QWidget * const opc_Parent) :
    C_OgeTreeViewToolTipBase(opc_Parent),
-   mpc_DataWidget(NULL),
+   mpc_DataWidget(nullptr),
    mq_IgnoreChanges(false)
 {
    //Header
@@ -312,15 +312,15 @@ void C_SyvDaItPaTreeView::Init(stw::opensyde_gui_logic::C_PuiSvDbDataElementHand
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
    this->mpc_DataWidget = opc_DataWidget;
-   if (opc_DataWidget != NULL)
+   if (opc_DataWidget != nullptr)
    {
       this->mc_Model.Init(opc_DataWidget);
    }
    //Initially set column widths to last stored value
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-      if (pc_ParamData != NULL)
+      if (pc_ParamData != nullptr)
       {
          this->SetAllExpandedTreeItems(pc_ParamData->c_ExpandedItems);
          if (pc_ParamData->c_ColWidth.size() > 0UL)
@@ -637,7 +637,7 @@ void C_SyvDaItPaTreeView::keyPressEvent(QKeyEvent * const opc_Event)
    if (opc_Event->key() == static_cast<int32_t>(Qt::Key_Escape))
    {
       QWidget * const pc_Editor = this->mc_Delegate.GetEditor();
-      if (pc_Editor != NULL)
+      if (pc_Editor != nullptr)
       {
          this->closeEditor(pc_Editor, QAbstractItemDelegate::NoHint);
          opc_Event->accept();
@@ -670,7 +670,7 @@ bool C_SyvDaItPaTreeView::event(QEvent * const opc_Event)
 
       QHoverEvent * const pc_HoverEvent = dynamic_cast<QHoverEvent * const>(opc_Event);
       bool q_IpAddressHovered = false;
-      if (pc_HoverEvent != NULL)
+      if (pc_HoverEvent != nullptr)
       {
          QModelIndex c_Index;
          c_Index = this->indexAt(this->viewport()->mapFromGlobal(this->mapToGlobal(pc_HoverEvent->pos())));
@@ -791,7 +791,7 @@ void C_SyvDaItPaTreeView::m_OnVerticalScrollBarChange(const int32_t os32_NewScro
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeView::m_HandleChange(void)
 {
-   if ((this->mpc_DataWidget != NULL) && (this->mq_IgnoreChanges == false))
+   if ((this->mpc_DataWidget != nullptr) && (this->mq_IgnoreChanges == false))
    {
       this->mpc_DataWidget->UpdateData();
    }
@@ -834,14 +834,14 @@ void C_SyvDaItPaTreeView::m_HandleLinkClicked(const QModelIndex & orc_Index)
 {
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_ParamItem = pc_ParamWidget->GetParamItem();
       C_OscNodeDataPoolListElementId c_Id;
       uint32_t u32_ValidLayers;
 
       C_SyvDaItPaTreeModel::h_DecodeIndex(orc_Index, c_Id, u32_ValidLayers);
-      if ((u32_ValidLayers == 4UL) && (pc_ParamItem != NULL))
+      if ((u32_ValidLayers == 4UL) && (pc_ParamItem != nullptr))
       {
          const C_PuiSvDbParam c_Copy = *pc_ParamItem;
          bool q_Ecu;
@@ -870,7 +870,7 @@ void C_SyvDaItPaTreeView::m_HandleLinkClicked(const QModelIndex & orc_Index)
             pc_ParamWidget->SetParamItem(c_Copy);
          }
 
-         if (c_Dialog != NULL)
+         if (c_Dialog != nullptr)
          {
             c_Dialog->HideOverlay();
             c_Dialog->deleteLater();

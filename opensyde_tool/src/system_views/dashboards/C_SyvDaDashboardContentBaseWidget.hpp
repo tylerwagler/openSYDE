@@ -32,7 +32,7 @@ class C_SyvDaDashboardContentBaseWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaDashboardContentBaseWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvDaDashboardContentBaseWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaDashboardContentBaseWidget(void) override;
 
    virtual void SetDashboardIndex(const uint32_t ou32_Value) = 0;

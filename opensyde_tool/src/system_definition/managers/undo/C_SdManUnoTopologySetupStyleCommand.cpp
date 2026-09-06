@@ -77,7 +77,7 @@ void C_SdManUnoTopologySetupStyleCommand::m_Restore(const QMap<uint64_t,
 
    C_SebUnoSetupStyleCommand::m_Restore(orc_MapIdToTypeAndIndex, opc_Snapshot);
 
-   if (pc_Snapshot != NULL)
+   if (pc_Snapshot != nullptr)
    {
       const vector<QGraphicsItem *> c_Items = m_GetSceneItems();
       QMap<uint64_t, C_PuiBsTemporaryDataId>::const_iterator c_Entry;
@@ -87,7 +87,7 @@ void C_SdManUnoTopologySetupStyleCommand::m_Restore(const QMap<uint64_t,
          //Bus
 
          C_GiLiBus * const pc_Bus = dynamic_cast<C_GiLiBus *>(*c_ItItem);
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             c_Entry = orc_MapIdToTypeAndIndex.find(pc_Bus->GetId());
             if (c_Entry != orc_MapIdToTypeAndIndex.end())
@@ -123,7 +123,7 @@ void C_SdManUnoTopologySetupStyleCommand::m_CreateMapAndSaveState(const vector<Q
 
    C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(orc_Items, orc_Map, opc_Snapshot);
 
-   if (pc_Snapshot != NULL)
+   if (pc_Snapshot != nullptr)
    {
       C_GiLiBus * pc_Bus;
       uint32_t u32_Index;
@@ -134,7 +134,7 @@ void C_SdManUnoTopologySetupStyleCommand::m_CreateMapAndSaveState(const vector<Q
          //Bus
 
          pc_Bus = dynamic_cast<C_GiLiBus *>(*c_ItItem);
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             //Map
             u32_Index = static_cast<uint32_t>(pc_Snapshot->c_UiBuses.size());

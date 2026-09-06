@@ -48,7 +48,7 @@ class C_SebScene :
    Q_OBJECT
 
 public:
-   C_SebScene(QObject * const opc_Parent = NULL);
+   C_SebScene(QObject * const opc_Parent = nullptr);
    ~C_SebScene() override;
 
    void FilterChangableZetValues(QList<QGraphicsItem *> & orc_ZetValues) const;
@@ -69,12 +69,12 @@ public:
 
    //Bend line
    int32_t BendLine(QGraphicsItem * const opc_Item, const QPointF & orc_ScenePos,
-                    const int32_t * const ops32_Index = NULL);
+                    const int32_t * const ops32_Index = nullptr);
    int32_t RemoveBendLine(QGraphicsItem * const opc_Item, const QPointF & orc_ScenePos,
-                          const int32_t * const ops32_Index = NULL) const;
+                          const int32_t * const ops32_Index = nullptr) const;
 
    //lint -e{1735} Suppression, because default parameters are identical
-   virtual void CopyFromManagerToScene(const QPointF * const opc_Pos = NULL) = 0;
+   virtual void CopyFromManagerToScene(const QPointF * const opc_Pos = nullptr) = 0;
 
    QGraphicsItem * GetItemById(const uint64_t & oru64_Id) const;
    virtual bool IsAnyItemAddable(void) const = 0;
@@ -160,7 +160,7 @@ protected:
    virtual bool m_IsUndoAvailable(void) const;
    virtual bool m_HandleDeleteUserConfirmation(const QList<QGraphicsItem *> & orc_SelectedItems) const;
    //lint -e{1735} Suppression, because default parameters are identical
-   virtual void m_PasteOfClipBoard(const QPointF * const opc_Pos = NULL);
+   virtual void m_PasteOfClipBoard(const QPointF * const opc_Pos = nullptr);
 
    //Hint and tool tip
    void m_UpdateHints(void) const;
@@ -181,7 +181,7 @@ protected:
    //Unique ID
    uint64_t m_GetNewUniqueId(const QMap<
                                 stw::opensyde_gui_logic::C_PuiBsTemporaryDataId,
-                                uint64_t> * const opc_IdMap = NULL, const int32_t os32_Type = -1,
+                                uint64_t> * const opc_IdMap = nullptr, const int32_t os32_Type = -1,
                              const uint32_t & oru32_Index = 0, const bool oq_CheckExist = false);
 
    bool mq_BlockContextMenu;

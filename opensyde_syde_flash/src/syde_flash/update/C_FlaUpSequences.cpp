@@ -63,7 +63,7 @@ C_FlaUpSequences::C_FlaUpSequences(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_FlaUpSequences::~C_FlaUpSequences(void) noexcept
 {
-   if (this->mpc_Thread != NULL)
+   if (this->mpc_Thread != nullptr)
    {
       if (this->mpc_Thread->isRunning() == true)
       {
@@ -79,7 +79,7 @@ C_FlaUpSequences::~C_FlaUpSequences(void) noexcept
          }
       }
       delete mpc_Thread;
-      mpc_Thread = NULL;
+      mpc_Thread = nullptr;
    }
 }
 
@@ -401,8 +401,8 @@ void C_FlaUpSequences::mh_ThreadFunc(void * const opv_Instance)
    //lint -e{9079}  This class is the only one which registers itself at the caller of this function. It must match.
    C_FlaUpSequences * const pc_Sequences = reinterpret_cast<C_FlaUpSequences *>(opv_Instance);
 
-   tgl_assert(pc_Sequences != NULL);
-   if (pc_Sequences != NULL)
+   tgl_assert(pc_Sequences != nullptr);
+   if (pc_Sequences != nullptr)
    {
       pc_Sequences->m_ThreadFunc();
    }

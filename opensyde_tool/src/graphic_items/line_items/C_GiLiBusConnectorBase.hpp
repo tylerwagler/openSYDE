@@ -43,10 +43,10 @@ public:
 
    C_GiLiBusConnectorBase(const uint64_t & oru64_Id, const QPointF & orc_TriggerPos,
                           const C_GiLiBus * const opc_BusItem, const bool oq_MiddleLine = false,
-                          QGraphicsItem * const opc_Parent = NULL);
+                          QGraphicsItem * const opc_Parent = nullptr);
    C_GiLiBusConnectorBase(const uint64_t & oru64_Id, const std::vector<QPointF> & orc_InteractionPoints,
                           const C_GiLiBus * const opc_BusItem, const bool oq_MiddleLine = false,
-                          QGraphicsItem * const opc_Parent = NULL);
+                          QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiLiBusConnectorBase(void) override;
    QPointF GetPos(void) const override;
    std::vector<QPointF> GetPointsScenePos(void) const;

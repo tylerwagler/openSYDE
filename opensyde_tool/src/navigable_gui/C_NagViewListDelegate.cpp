@@ -41,7 +41,7 @@ using namespace stw::opensyde_gui;
 //----------------------------------------------------------------------------------------------------------------------
 C_NagViewListDelegate::C_NagViewListDelegate(QObject * const opc_Parent) :
    QStyledItemDelegate(opc_Parent),
-   mpc_View(NULL)
+   mpc_View(nullptr)
 {
 }
 
@@ -86,10 +86,10 @@ QSize C_NagViewListDelegate::sizeHint(const QStyleOptionViewItem & orc_Option, c
    {
       const C_NagViewList * const pc_View = dynamic_cast<const C_NagViewList * const>(this->mpc_View);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_NagViewItem * const pc_Item = pc_View->GetItemAt(orc_Index.row());
-         if (pc_Item != NULL)
+         if (pc_Item != nullptr)
          {
             s32_Height += pc_Item->sizeHint().height();
          }

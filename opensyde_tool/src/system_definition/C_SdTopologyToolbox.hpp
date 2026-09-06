@@ -36,7 +36,7 @@ class C_SdTopologyToolbox :
    Q_OBJECT
 
 public:
-   explicit C_SdTopologyToolbox(QWidget * const opc_Parent = NULL);
+   explicit C_SdTopologyToolbox(QWidget * const opc_Parent = nullptr);
    ~C_SdTopologyToolbox() override;
 
    // slot

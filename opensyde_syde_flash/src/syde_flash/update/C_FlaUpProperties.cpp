@@ -133,7 +133,7 @@ C_FlaUpProperties::~C_FlaUpProperties()
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaUpProperties::SaveUserSettings() const
 {
-   if (this->mpc_ListWidget != NULL)
+   if (this->mpc_ListWidget != nullptr)
    {
       this->mpc_ListWidget->SetLastKnownHexFilePaths();
    }
@@ -150,7 +150,7 @@ QStringList C_FlaUpProperties::GetHexFilePaths() const
 {
    QStringList c_HexFilePaths;
 
-   if (this->mpc_ListWidget != NULL)
+   if (this->mpc_ListWidget != nullptr)
    {
       c_HexFilePaths =  this->mpc_ListWidget->GetHexFilePaths();
    }
@@ -168,7 +168,7 @@ QStringList C_FlaUpProperties::GetHexFileDeviceNames() const
 {
    QStringList c_HexFilePaths;
 
-   if (this->mpc_ListWidget != NULL)
+   if (this->mpc_ListWidget != nullptr)
    {
       c_HexFilePaths = this->mpc_ListWidget->GetHexFileDeviceNames();
    }
@@ -186,7 +186,7 @@ bool C_FlaUpProperties::AreAllFilesValid(void) const
 {
    bool q_Result = false;
 
-   if (this->mpc_ListWidget != NULL)
+   if (this->mpc_ListWidget != nullptr)
    {
       q_Result = this->mpc_ListWidget->AreAllFilesValid();
    }
@@ -511,7 +511,7 @@ void C_FlaUpProperties::dropEvent(QDropEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaUpProperties::m_UpdateLabelTitleWithFileCounter(void)
 {
-   if (this->mpc_ListWidget != NULL)
+   if (this->mpc_ListWidget != nullptr)
    {
       this->mpc_Ui->pc_LabelTitle->setText(
          static_cast<QString>(C_GtGetText::h_GetText("<b>Hex-Files (%1)<\b>")).arg(this->mpc_ListWidget->count()));

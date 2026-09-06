@@ -24,7 +24,7 @@ class C_SdNdeDalLogJobDataSelectionTableDelegate :
    public QStyledItemDelegate
 {
 public:
-   C_SdNdeDalLogJobDataSelectionTableDelegate(QObject * const opc_Parent = NULL);
+   C_SdNdeDalLogJobDataSelectionTableDelegate(QObject * const opc_Parent = nullptr);
    void setEditorData(QWidget * const opc_Editor, const QModelIndex & orc_Index) const override;
    void setModelData(QWidget * const opc_Editor, QAbstractItemModel * const opc_Model,
                      const QModelIndex & orc_Index) const override;

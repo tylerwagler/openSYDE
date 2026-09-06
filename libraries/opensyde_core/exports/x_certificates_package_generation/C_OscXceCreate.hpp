@@ -54,7 +54,7 @@ private:
                               const stw::scl::C_SclString & orc_OutFolder, std::map<stw::scl::C_SclString,
                                                                                     bool> & orc_ExistingFiles,
                               std::set<stw::scl::C_SclString> & orc_XcertFiles,
-                              stw::scl::C_SclString * const opc_OutFilePath = NULL);
+                              stw::scl::C_SclString * const opc_OutFilePath = nullptr);
    static stw::scl::C_SclString mh_GetUniqueFileName(const stw::scl::C_SclString & orc_InPath,
                                                      const stw::scl::C_SclString & orc_OutFolder,
                                                      std::map<stw::scl::C_SclString,

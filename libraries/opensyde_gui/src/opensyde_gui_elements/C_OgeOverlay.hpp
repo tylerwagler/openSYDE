@@ -31,7 +31,7 @@ class C_OgeOverlay :
    Q_OBJECT
 
 public:
-   C_OgeOverlay(QWidget * const opc_Parent = NULL, QWidget * const opc_EffectTargetChild = NULL);
+   C_OgeOverlay(QWidget * const opc_Parent = nullptr, QWidget * const opc_EffectTargetChild = nullptr);
    static void h_SetTopWidget(QWidget * const opc_TopWidget);
    static const QWidget * h_GetTopWidget(void);
 

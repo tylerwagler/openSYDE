@@ -27,7 +27,7 @@ class C_CamGenTableDelegate :
    public C_CamTblDelegate
 {
 public:
-   C_CamGenTableDelegate(QObject * const opc_Parent = NULL);
+   C_CamGenTableDelegate(QObject * const opc_Parent = nullptr);
 
    void SetSelectedRows(const QModelIndexList & orc_Selection);
 

@@ -37,7 +37,7 @@ class C_SyvUpProgressLog :
    Q_OBJECT
 
 public:
-   explicit C_SyvUpProgressLog(QWidget * const opc_Parent = NULL);
+   explicit C_SyvUpProgressLog(QWidget * const opc_Parent = nullptr);
    ~C_SyvUpProgressLog(void) override;
 
    void Clear(void);

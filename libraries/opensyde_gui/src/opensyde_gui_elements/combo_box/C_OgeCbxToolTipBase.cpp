@@ -79,7 +79,7 @@ bool C_OgeCbxToolTipBase::event(QEvent * const opc_Event)
          {
             QHelpEvent * const pc_HelpEvent = dynamic_cast<QHelpEvent * const>(opc_Event);
 
-            if (pc_HelpEvent != NULL)
+            if (pc_HelpEvent != nullptr)
             {
                this->setMouseTracking(true);
 
@@ -131,10 +131,10 @@ void C_OgeCbxToolTipBase::SetItemState(const int32_t os32_Index, const bool oq_S
    if (os32_Index < this->count())
    {
       QStandardItemModel * const pc_Model = dynamic_cast<QStandardItemModel * const>(this->model());
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          QStandardItem * const pc_Item = pc_Model->item(os32_Index);
-         if (pc_Item != NULL)
+         if (pc_Item != nullptr)
          {
             Qt::ItemFlags c_Flags;
             c_Flags.setFlag(Qt::ItemIsEnabled, oq_Status);
@@ -160,7 +160,7 @@ void C_OgeCbxToolTipBase::SetItemVisible(const int32_t os32_Index, const bool oq
       QListView * const pc_ListView = dynamic_cast<QListView *>(this->view());
 
       // Hide the Combobox item
-      if (pc_ListView != NULL)
+      if (pc_ListView != nullptr)
       {
          pc_ListView->setRowHidden(os32_Index, !oq_Visible);
       }

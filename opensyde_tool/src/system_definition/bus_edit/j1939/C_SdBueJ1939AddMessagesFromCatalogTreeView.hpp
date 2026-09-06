@@ -28,7 +28,7 @@ class C_SdBueJ1939AddMessagesFromCatalogTreeDelegate :
    Q_OBJECT
 
 public:
-   C_SdBueJ1939AddMessagesFromCatalogTreeDelegate(QObject * const opc_Parent = NULL);
+   C_SdBueJ1939AddMessagesFromCatalogTreeDelegate(QObject * const opc_Parent = nullptr);
 
    void paint(QPainter * const opc_Painter, const QStyleOptionViewItem & orc_Option,
               const QModelIndex & orc_Index) const override;
@@ -40,7 +40,7 @@ class C_SdBueJ1939AddMessagesFromCatalogTreeView :
    Q_OBJECT
 
 public:
-   C_SdBueJ1939AddMessagesFromCatalogTreeView(QWidget * const opc_Parent = NULL);
+   C_SdBueJ1939AddMessagesFromCatalogTreeView(QWidget * const opc_Parent = nullptr);
    bool IsEmpty(void) const;
    void Search(const QString & orc_Text);
    void UpdateData(const std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_MessagesImported);

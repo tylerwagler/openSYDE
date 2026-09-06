@@ -37,7 +37,7 @@ C_OgeToolTipBase::C_OgeToolTipBase() :
    me_ToolTipType(stw::opensyde_gui::C_NagToolTip::eDEFAULT),
    mq_ToolTipActive(false),
    mq_ShowToolTipWhenDisabled(false),
-   mpc_ToolTip(NULL)
+   mpc_ToolTip(nullptr)
 {
 }
 
@@ -50,7 +50,7 @@ C_OgeToolTipBase::C_OgeToolTipBase() :
 C_OgeToolTipBase::~C_OgeToolTipBase()
 {
    delete mpc_ToolTip;
-   mpc_ToolTip = NULL;
+   mpc_ToolTip = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ void C_OgeToolTipBase::SetToolTipInformation(const QString & orc_Heading, const 
    else
    {
       this->mq_ToolTipActive = false;
-      if ((this->mpc_ToolTip != NULL) &&
+      if ((this->mpc_ToolTip != nullptr) &&
           (this->mpc_ToolTip->isVisible() == true))
       {
          this->mpc_ToolTip->hide();
@@ -100,7 +100,7 @@ void C_OgeToolTipBase::ShowToolTipWhenDisabled(const bool oq_ShowToolTip)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeToolTipBase::m_HideToolTip(void)
 {
-   if (this->mpc_ToolTip != NULL)
+   if (this->mpc_ToolTip != nullptr)
    {
       this->mpc_ToolTip->hide();
    }
@@ -125,7 +125,7 @@ stw::opensyde_gui::C_NagToolTip * C_OgeToolTipBase::m_GetToolTip(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeToolTipBase::m_CreateToolTip(void)
 {
-   if (mpc_ToolTip == NULL)
+   if (mpc_ToolTip == nullptr)
    {
       mpc_ToolTip = new stw::opensyde_gui::C_NagToolTip();
    }

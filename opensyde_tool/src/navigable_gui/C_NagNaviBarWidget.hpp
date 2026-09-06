@@ -44,7 +44,7 @@ class C_NagNaviBarWidget :
    Q_OBJECT
 
 public:
-   explicit C_NagNaviBarWidget(QWidget * const opc_Parent = NULL);
+   explicit C_NagNaviBarWidget(QWidget * const opc_Parent = nullptr);
    ~C_NagNaviBarWidget() override;
 
    void InitSysView(void);

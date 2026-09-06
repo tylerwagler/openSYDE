@@ -35,7 +35,7 @@ public:
    C_SdNdeUnoDataPoolListAddDeleteBaseCommand(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                               stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
                                               const std::vector<uint32_t> & orc_Indices, const QString & orc_Text = "",
-                                              QUndoCommand * const opc_Parent = NULL);
+                                              QUndoCommand * const opc_Parent = nullptr);
 
 protected:
    void m_Add(void);

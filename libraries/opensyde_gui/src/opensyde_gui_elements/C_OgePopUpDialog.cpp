@@ -67,7 +67,7 @@ C_OgePopUpDialog::C_OgePopUpDialog(QWidget * const opc_Parent, QWidget * const o
 {
    mpc_Ui->setupUi(this);
    //background not selectable
-   if (opc_EffectTargetChild == NULL)
+   if (opc_EffectTargetChild == nullptr)
    {
       this->setWindowModality(Qt::ApplicationModal);
    }
@@ -142,7 +142,7 @@ C_OgePopUpDialog::~C_OgePopUpDialog()
 
 void C_OgePopUpDialog::SetWidget(QWidget * const opc_Widget)
 {
-   if (opc_Widget != NULL)
+   if (opc_Widget != nullptr)
    {
       int32_t s32_Index;
 
@@ -160,7 +160,7 @@ void C_OgePopUpDialog::SetWidget(QWidget * const opc_Widget)
       // pc_PushButtonOk naming convention. Popups using a different button name
       // should call setDefault(true) themselves in their ctor.
       QPushButton * const pc_OkButton = opc_Widget->findChild<QPushButton *>("pc_PushButtonOk");
-      if (pc_OkButton != NULL)
+      if (pc_OkButton != nullptr)
       {
          pc_OkButton->setDefault(true);
       }
@@ -308,7 +308,7 @@ void C_OgePopUpDialog::ApplyMaximumSize(const QWidget * const opc_Widget)
 {
    const QWidget * pc_UsedWidget;
 
-   if (opc_Widget != NULL)
+   if (opc_Widget != nullptr)
    {
       pc_UsedWidget = opc_Widget;
    }
@@ -317,7 +317,7 @@ void C_OgePopUpDialog::ApplyMaximumSize(const QWidget * const opc_Widget)
       pc_UsedWidget = C_OgeOverlay::h_GetTopWidget();
    }
 
-   if (pc_UsedWidget != NULL)
+   if (pc_UsedWidget != nullptr)
    {
       //does not affect other dialogs. This function is only used once for full screen datapool list widget.
       //popup center was broken since Qt Upgrade. Set top margin is only way to get the widget more towards bottom.
@@ -341,7 +341,7 @@ void C_OgePopUpDialog::HideTitle(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgePopUpDialog::HideOverlay(void) const
 {
-   if (this->mc_Overlay != NULL)
+   if (this->mc_Overlay != nullptr)
    {
       this->mc_Overlay->hide();
    }

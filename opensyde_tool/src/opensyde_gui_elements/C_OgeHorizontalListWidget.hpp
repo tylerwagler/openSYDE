@@ -32,7 +32,7 @@ class C_OgeHorizontalListWidget :
    Q_OBJECT
 
 public:
-   C_OgeHorizontalListWidget(QWidget * const opc_Parent = NULL);
+   C_OgeHorizontalListWidget(QWidget * const opc_Parent = nullptr);
    ~C_OgeHorizontalListWidget() override;
 
    int32_t GetCountLines(void) const;

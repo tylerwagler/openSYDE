@@ -709,7 +709,7 @@ void C_SyvUpPacListNodeItemWidget::m_UpateFilePathLabel(void) const
          s32_Width -= this->mpc_Ui->pc_HorizontalSpacerUserHint->geometry().width();
       }
 
-      if (this->layout() != NULL)
+      if (this->layout() != nullptr)
       {
          s32_Width -= this->layout()->contentsMargins().right();
       }

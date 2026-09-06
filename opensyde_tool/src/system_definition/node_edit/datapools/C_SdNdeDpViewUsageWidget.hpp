@@ -39,7 +39,7 @@ class C_SdNdeDpViewUsageWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpViewUsageWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDpViewUsageWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpViewUsageWidget(void) override;
 
    void SetUsage(const uint32_t ou32_NodeIndex, const uint32_t ou32_MaximumSize,

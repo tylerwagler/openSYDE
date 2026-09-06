@@ -41,9 +41,9 @@ class C_SdNdeDpListHeaderWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpListHeaderWidget(QWidget * const opc_Parent = NULL, QTreeWidget * const opc_ListWidget = NULL,
-                                      stw::opensyde_gui_logic::C_SdNdeUnoDataPoolManager * const opc_UndoManager = NULL,
-                                      stw::opensyde_gui_logic::C_SdNdeDpListModelViewManager * const opc_ModelViewManager = NULL, const uint32_t ou32_NodeIndex = 0, const uint32_t ou32_DataPoolIndex = 0,
+   explicit C_SdNdeDpListHeaderWidget(QWidget * const opc_Parent = nullptr, QTreeWidget * const opc_ListWidget = nullptr,
+                                      stw::opensyde_gui_logic::C_SdNdeUnoDataPoolManager * const opc_UndoManager = nullptr,
+                                      stw::opensyde_gui_logic::C_SdNdeDpListModelViewManager * const opc_ModelViewManager = nullptr, const uint32_t ou32_NodeIndex = 0, const uint32_t ou32_DataPoolIndex = 0,
                                       const uint32_t ou32_ListIndex = 0);
    ~C_SdNdeDpListHeaderWidget(void) override;
 

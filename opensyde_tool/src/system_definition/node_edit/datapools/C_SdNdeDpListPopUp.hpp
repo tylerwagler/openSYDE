@@ -44,7 +44,7 @@ public:
                                stw::opensyde_gui_logic::C_SdNdeDpListModelViewManager * const opc_ModelViewManager,
                                QTreeWidget * const opc_TreeWidget,
                                stw::opensyde_gui_logic::C_SdNdeUnoDataPoolManager * const opc_UndoManager,
-                               QWidget * const opc_Parent = NULL);
+                               QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpListPopUp(void) override;
    void InitText(void) const;
    void Clear(void) const;

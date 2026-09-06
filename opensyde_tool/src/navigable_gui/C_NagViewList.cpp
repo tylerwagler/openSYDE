@@ -79,7 +79,7 @@ void C_NagViewList::Init(void)
    {
       const QModelIndex c_Index = this->mc_Model.index(u32_ItView);
       C_NagViewItem * pc_ViewWidget = dynamic_cast<C_NagViewItem *>(this->indexWidget(c_Index));
-      if (pc_ViewWidget == NULL)
+      if (pc_ViewWidget == nullptr)
       {
          //Add item widget
          pc_ViewWidget = new C_NagViewItem(this);
@@ -108,7 +108,7 @@ void C_NagViewList::LoadUserSettings(void) const
    for (int32_t s32_ItView = 0UL; s32_ItView < this->mc_Model.rowCount(); ++s32_ItView)
    {
       C_NagViewItem * const pc_View = this->GetItemAt(s32_ItView);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          pc_View->LoadUserSettings();
       }
@@ -124,7 +124,7 @@ void C_NagViewList::SaveUserSettings(void) const
    for (int32_t s32_ItView = 0UL; s32_ItView < this->mc_Model.rowCount(); ++s32_ItView)
    {
       const C_NagViewItem * const pc_View = this->GetItemAt(s32_ItView);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          pc_View->SaveUserSettings();
       }
@@ -140,7 +140,7 @@ void C_NagViewList::UpdateNames(void) const
    for (int32_t s32_ItView = 0UL; s32_ItView < this->mc_Model.rowCount(); ++s32_ItView)
    {
       const C_NagViewItem * const pc_View = this->GetItemAt(s32_ItView);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          pc_View->UpdateName();
       }
@@ -159,7 +159,7 @@ void C_NagViewList::UpdateDeco(const bool oq_CheckOnlyThisView, const uint32_t o
    if (oq_CheckOnlyThisView == true)
    {
       const C_NagViewItem * const pc_View = this->GetItemAt(static_cast<int32_t>(ou32_ViewIndex));
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          pc_View->UpdateDeco();
       }
@@ -169,7 +169,7 @@ void C_NagViewList::UpdateDeco(const bool oq_CheckOnlyThisView, const uint32_t o
       for (int32_t s32_ItView = 0UL; s32_ItView < this->mc_Model.rowCount(); ++s32_ItView)
       {
          const C_NagViewItem * const pc_View = this->GetItemAt(s32_ItView);
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             pc_View->UpdateDeco();
          }
@@ -210,7 +210,7 @@ void C_NagViewList::SetActive(const uint32_t ou32_ViewIndex, const int32_t os32_
    for (int32_t s32_ItView = 0UL; s32_ItView < this->mc_Model.rowCount(); ++s32_ItView)
    {
       C_NagViewItem * const pc_View = this->GetItemAt(s32_ItView);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          if (ou32_ViewIndex == static_cast<uint32_t>(s32_ItView))
          {
@@ -261,7 +261,7 @@ void C_NagViewList::dragEnterEvent(QDragEnterEvent * const opc_Event)
    const QMimeData * const pc_MimeData = opc_Event->mimeData();
 
    QListView::dragEnterEvent(opc_Event);
-   if (pc_MimeData != NULL)
+   if (pc_MimeData != nullptr)
    {
       if (pc_MimeData->hasFormat(this->mc_Model.mimeTypes().at(0)) == true)
       {
@@ -283,7 +283,7 @@ void C_NagViewList::dragMoveEvent(QDragMoveEvent * const opc_Event)
    const QMimeData * const pc_MimeData = opc_Event->mimeData();
 
    QListView::dragMoveEvent(opc_Event);
-   if (pc_MimeData != NULL)
+   if (pc_MimeData != nullptr)
    {
       if (pc_MimeData->hasFormat(this->mc_Model.mimeTypes().at(0)) == true)
       {
@@ -305,7 +305,7 @@ void C_NagViewList::dropEvent(QDropEvent * const opc_Event)
    const QMimeData * const pc_MimeData = opc_Event->mimeData();
 
    QListView::dropEvent(opc_Event);
-   if (pc_MimeData != NULL)
+   if (pc_MimeData != nullptr)
    {
       const QString c_MimeType = this->mc_Model.mimeTypes().at(0);
       if (pc_MimeData->hasFormat(c_MimeType) == true)
@@ -371,7 +371,7 @@ void C_NagViewList::m_AfterDrag(void) const
    for (int32_t s32_ItView = 0UL; s32_ItView < this->mc_Model.rowCount(); ++s32_ItView)
    {
       C_NagViewItem * const pc_View = this->GetItemAt(s32_ItView);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          pc_View->SetDragged(false);
       }
@@ -388,7 +388,7 @@ void C_NagViewList::m_StartDrag(const QModelIndex & orc_Index)
 {
    C_NagViewItem * const pc_Item = dynamic_cast<C_NagViewItem *>(this->indexWidget(orc_Index));
 
-   if (pc_Item != NULL)
+   if (pc_Item != nullptr)
    {
       QModelIndexList c_IndexList;
 

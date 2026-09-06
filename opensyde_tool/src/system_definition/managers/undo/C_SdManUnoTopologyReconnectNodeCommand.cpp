@@ -65,10 +65,10 @@ C_SdManUnoTopologyReconnectNodeCommand::C_SdManUnoTopologyReconnectNodeCommand(Q
 {
    C_GiLiBusConnector * const pc_BusConnector = m_GetBusConnector();
 
-   if (pc_BusConnector != NULL)
+   if (pc_BusConnector != nullptr)
    {
       C_GiNode *  const pc_Node = pc_BusConnector->GetNodeItem();
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          const int32_t s32_NodeIndex = pc_Node->GetIndex();
          pc_Node->UpdateData();
@@ -76,10 +76,10 @@ C_SdManUnoTopologyReconnectNodeCommand::C_SdManUnoTopologyReconnectNodeCommand(Q
          {
             const stw::opensyde_core::C_OscNode * const pc_NodeData =
                C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(static_cast<uint32_t>(s32_NodeIndex));
-            if (pc_NodeData != NULL)
+            if (pc_NodeData != nullptr)
             {
                const C_PuiSdNodeConnectionId * const pc_ConnectionId = pc_BusConnector->GetConnectionData();
-               if (pc_ConnectionId != NULL)
+               if (pc_ConnectionId != nullptr)
                {
                   this->mu8_InitialInterface = pc_ConnectionId->u8_InterfaceNumber;
                }
@@ -114,7 +114,7 @@ void C_SdManUnoTopologyReconnectNodeCommand::m_Reconnect(const uint64_t & oru64_
    C_GiNode * const pc_LastNode = dynamic_cast<C_GiNode *>(m_GetSceneItem(oru64_LastId));
    C_GiLiBusConnector * const pc_BusConnector = m_GetBusConnector();
 
-   if (pc_BusConnector != NULL)
+   if (pc_BusConnector != nullptr)
    {
       pc_BusConnector->Reconnect(pc_StartingNode, pc_LastNode, this->mc_ConnectionPos, ors32_Interface, orc_Properties);
    }

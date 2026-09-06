@@ -63,7 +63,7 @@ bool C_SebTopologyBaseContextMenuManager::m_ActivateSpecificActions(void)
    const C_GiLiLineGroup * const pc_LineGroup = dynamic_cast<C_GiLiLineGroup *>(this->mpc_ActiveItem);
    bool q_Return = false;
 
-   if (pc_LineGroup != NULL)
+   if (pc_LineGroup != nullptr)
    {
       // Special case: Points can be removed if there are more than 2 points
       if (pc_LineGroup->GetNumberPoints() > 2)

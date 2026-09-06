@@ -32,7 +32,7 @@ class C_NagViewList :
    Q_OBJECT
 
 public:
-   C_NagViewList(QWidget * const opc_Parent = NULL);
+   C_NagViewList(QWidget * const opc_Parent = nullptr);
    ~C_NagViewList(void) override;
 
    void Init(void);

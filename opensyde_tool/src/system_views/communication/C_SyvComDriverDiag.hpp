@@ -188,7 +188,7 @@ private:
                                      uint32_t & oru32_ServerDatapoolIndex,
                                      stw::opensyde_core::C_OscProtocolDriverOsy::C_DataPoolMetaData & orc_Metadata)
    const;
-   uint32_t m_GetActiveDiagIndex(const uint32_t ou32_NodeIndex, bool * const opq_Found = NULL) const;
+   uint32_t m_GetActiveDiagIndex(const uint32_t ou32_NodeIndex, bool * const opq_Found = nullptr) const;
    static int32_t mh_HandleDatapoolCrcVerification(const opensyde_core::C_OscNodeDataPool & orc_Datapool,
                                                    stw::opensyde_core::C_OscDiagProtocolOsy & orc_Protocol,
                                                    const uint32_t ou32_ServerDatapoolIndex, bool & orq_Match,

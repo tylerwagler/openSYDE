@@ -58,7 +58,7 @@ C_GiTextElementBus::C_GiTextElementBus(const int32_t & ors32_Index, const uint64
    mu32_BusIndex(0U),
    mq_ErrorState(false),
    mq_ErrorResized(false),
-   mpc_SvgRenderer(NULL)
+   mpc_SvgRenderer(nullptr)
 {
    QFont c_Font;
    const QString c_SvgString("://images/Error_iconV2.svg");
@@ -85,7 +85,7 @@ C_GiTextElementBus::C_GiTextElementBus(const int32_t & ors32_Index, const uint64
 C_GiTextElementBus::~C_GiTextElementBus()
 {
    delete mpc_SvgRenderer;
-   mpc_SvgRenderer = NULL;
+   mpc_SvgRenderer = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -256,7 +256,7 @@ void C_GiTextElementBus::paint(QPainter * const opc_Painter, const QStyleOptionG
 {
    C_GiBiTextElement::paint(opc_Painter, opc_Option, opc_Widget);
 
-   if ((this->mq_ErrorState == true) && (this->mpc_SvgRenderer != NULL))
+   if ((this->mq_ErrorState == true) && (this->mpc_SvgRenderer != nullptr))
    {
       //      opc_Painter->drawPixmap(static_cast<int32_t>(this->boundingRect().width()) - 55, -6, this->mc_ErrorIcon);
       this->mpc_SvgRenderer->render(opc_Painter, m_GetErrorIconRect());

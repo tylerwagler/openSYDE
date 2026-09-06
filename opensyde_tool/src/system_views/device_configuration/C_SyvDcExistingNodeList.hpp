@@ -31,7 +31,7 @@ class C_SyvDcExistingNodeList :
    Q_OBJECT
 
 public:
-   C_SyvDcExistingNodeList(QWidget * const opc_Parent = NULL);
+   C_SyvDcExistingNodeList(QWidget * const opc_Parent = nullptr);
 
    int32_t SetView(const uint32_t ou32_Index, const bool oq_ShowAssignment);
    void ConnectSerialNumber(const uint32_t ou32_NodeIndex,

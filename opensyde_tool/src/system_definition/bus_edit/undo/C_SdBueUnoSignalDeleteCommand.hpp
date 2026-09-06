@@ -32,7 +32,7 @@ public:
       const std::vector<uint32_t> & orc_SignalIndex,
       C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
       stw::opensyde_gui::C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget,
-      QUndoCommand * const opc_Parent = NULL);
+      QUndoCommand * const opc_Parent = nullptr);
 
    void redo(void) override;
    void undo(void) override;

@@ -59,8 +59,8 @@ C_SdBueBusEditWidget::C_SdBueBusEditWidget(const uint32_t ou32_BusIndex, const i
    mu32_BusIndex(ou32_BusIndex),
    mq_DataChanged(false),
    mq_SkipLoadUserSettings(true),
-   mpc_BusPropertiesWidget(NULL),
-   mpc_WidgetComIfDescr(NULL)
+   mpc_BusPropertiesWidget(nullptr),
+   mpc_WidgetComIfDescr(nullptr)
 {
    const stw::opensyde_core::C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(
       this->mu32_BusIndex);
@@ -134,8 +134,8 @@ int32_t C_SdBueBusEditWidget::GetTabIndex(void) const
 C_OscCanProtocol::E_Type C_SdBueBusEditWidget::GetActProtocol(void) const
 {
    C_OscCanProtocol::E_Type e_Type = C_OscCanProtocol::eLAYER2;
-   tgl_assert(this->mpc_WidgetComIfDescr != NULL);
-   if (this->mpc_WidgetComIfDescr != NULL)
+   tgl_assert(this->mpc_WidgetComIfDescr != nullptr);
+   if (this->mpc_WidgetComIfDescr != nullptr)
    {
       e_Type = this->mpc_WidgetComIfDescr->GetActProtocol();
    }
@@ -150,8 +150,8 @@ void C_SdBueBusEditWidget::ImportMessages(void)
 {
    // Change to COMM tab
    this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(hs32_TAB_INDEX_COMM);
-   tgl_assert(this->mpc_WidgetComIfDescr != NULL);
-   if (this->mpc_WidgetComIfDescr != NULL)
+   tgl_assert(this->mpc_WidgetComIfDescr != nullptr);
+   if (this->mpc_WidgetComIfDescr != nullptr)
    {
       this->mpc_WidgetComIfDescr->ImportMessages();
    }
@@ -231,8 +231,8 @@ void C_SdBueBusEditWidget::SetFlag(const uint32_t ou32_Flag) const
 
       if (ou32_Flag == mu32_FLAG_EDIT_NAME)
       {
-         tgl_assert(this->mpc_BusPropertiesWidget != NULL);
-         if (this->mpc_BusPropertiesWidget != NULL)
+         tgl_assert(this->mpc_BusPropertiesWidget != nullptr);
+         if (this->mpc_BusPropertiesWidget != nullptr)
          {
             this->mpc_BusPropertiesWidget->SelectName();
          }
@@ -251,8 +251,8 @@ void C_SdBueBusEditWidget::SetFlag(const uint32_t ou32_Flag) const
       const C_OscCanProtocol::E_Type e_ProtocolType =
          static_cast<C_OscCanProtocol::E_Type>(ou32_Flag & (~mu32_FLAG_OPEN_SYSDEF_BUS_COMIFDESCR_PROTOCOL));
       this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(hs32_TAB_INDEX_COMM);
-      tgl_assert(this->mpc_WidgetComIfDescr != NULL);
-      if (this->mpc_WidgetComIfDescr != NULL)
+      tgl_assert(this->mpc_WidgetComIfDescr != nullptr);
+      if (this->mpc_WidgetComIfDescr != nullptr)
       {
          this->mpc_WidgetComIfDescr->SetProtocol(e_ProtocolType);
       }
@@ -285,8 +285,8 @@ void C_SdBueBusEditWidget::OpenDetail(const int32_t os32_NodeIndex, const int32_
    {
       // open the interface description widget
       this->mpc_Ui->pc_TabWidgetPageNavi->setCurrentIndex(hs32_TAB_INDEX_COMM);
-      tgl_assert(this->mpc_WidgetComIfDescr != NULL);
-      if (this->mpc_WidgetComIfDescr != NULL)
+      tgl_assert(this->mpc_WidgetComIfDescr != nullptr);
+      if (this->mpc_WidgetComIfDescr != nullptr)
       {
          if (os32_Flag == 1)
          {
@@ -332,7 +332,7 @@ void C_SdBueBusEditWidget::m_TabChanged(const int32_t os32_Index)
 
    m_CreateTabWidgetsAlways(os32_Index, true);
 
-   if (this->mpc_WidgetComIfDescr != NULL)
+   if (this->mpc_WidgetComIfDescr != nullptr)
    {
       //Save
       this->mpc_WidgetComIfDescr->TriggerSaveOfSplitterUserSettings();
@@ -352,8 +352,8 @@ void C_SdBueBusEditWidget::m_TabChanged(const int32_t os32_Index)
 
    if (os32_Index == hs32_TAB_INDEX_COMM)
    {
-      tgl_assert(this->mpc_WidgetComIfDescr != NULL);
-      if (this->mpc_WidgetComIfDescr != NULL)
+      tgl_assert(this->mpc_WidgetComIfDescr != nullptr);
+      if (this->mpc_WidgetComIfDescr != nullptr)
       {
          this->mpc_WidgetComIfDescr->SetInitialFocus();
       }
@@ -393,7 +393,7 @@ void C_SdBueBusEditWidget::m_CreateTabWidgetsAlways(const int32_t os32_Index, co
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueBusEditWidget::m_CreatePropertiesTab(const bool oq_AdaptCursor)
 {
-   if (this->mpc_BusPropertiesWidget == NULL)
+   if (this->mpc_BusPropertiesWidget == nullptr)
    {
       if (oq_AdaptCursor)
       {
@@ -424,7 +424,7 @@ void C_SdBueBusEditWidget::m_CreatePropertiesTab(const bool oq_AdaptCursor)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueBusEditWidget::m_CreateCommTab(const bool oq_AdaptCursor)
 {
-   if (this->mpc_WidgetComIfDescr == NULL)
+   if (this->mpc_WidgetComIfDescr == nullptr)
    {
       if (oq_AdaptCursor)
       {
@@ -482,7 +482,7 @@ void C_SdBueBusEditWidget::mh_EndWaitingCursor()
 void C_SdBueBusEditWidget::showEvent(QShowEvent * const opc_Event)
 {
    //Necessary to initialize with appropriate size
-   if (this->mpc_WidgetComIfDescr != NULL)
+   if (this->mpc_WidgetComIfDescr != nullptr)
    {
       this->mpc_WidgetComIfDescr->TriggerLoadOfSplitterUserSettings();
    }

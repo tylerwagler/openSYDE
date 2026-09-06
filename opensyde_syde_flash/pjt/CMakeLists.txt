@@ -11,7 +11,7 @@ endif()
 project(SYDEflash LANGUAGES CXX)
 
 #include script to generate PC-lint configuration files
-include(lint_config.cmake)
+include(../../pjt/lint_config.cmake)
 
 # Sets CMAKE_AUTOUIC and CMAKE_AUTOMOC to ON for ui files compiling
 set(CMAKE_AUTOUIC ON)

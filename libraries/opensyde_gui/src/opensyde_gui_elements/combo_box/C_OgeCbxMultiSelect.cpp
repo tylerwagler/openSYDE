@@ -124,7 +124,7 @@ QBitArray C_OgeCbxMultiSelect::GetValuesAsBitArray(void) const
       // get one item from list widget
       const QListWidgetItem * const pc_Item = this->mpc_ListWidget->item(s32_Counter);
 
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          if (pc_Item->checkState() == Qt::Checked)
          {
@@ -286,7 +286,7 @@ void C_OgeCbxMultiSelect::SetItem(const QString & orc_DisplayName)
       // get one item from list widget
       QListWidgetItem * const pc_Item = this->mpc_ListWidget->item(s32_Counter);
 
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          if (pc_Item->text().toStdString().c_str() == orc_DisplayName)
          {
@@ -336,7 +336,7 @@ void C_OgeCbxMultiSelect::Init(const QStringList & orc_Strings, const QBitArray 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeCbxMultiSelect::m_ListWidgetItemClicked(QListWidgetItem * const opc_Item)
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       // Unfortunately we cannot use (opc_Item->checkState() == Qt::Checked) here, because when clicking on the
       // checkbox square, this already had changed. So when using the checkstate, check/uncheck does not work anymore
@@ -377,7 +377,7 @@ void C_OgeCbxMultiSelect::m_UpdateDisplayName(void)
       // get one item from list widget
       QListWidgetItem * const pc_Item = this->mpc_ListWidget->item(s32_Counter);
 
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          if (pc_Item->checkState() == Qt::Checked)
          {

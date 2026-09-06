@@ -36,7 +36,7 @@ class C_CamTitleBarWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamTitleBarWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamTitleBarWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamTitleBarWidget(void) override;
 
    void InitStaticNames(void) const;

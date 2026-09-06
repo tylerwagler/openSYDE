@@ -33,7 +33,7 @@ class C_CamMetTreeGuiBuffer :
    Q_OBJECT
 
 public:
-   C_CamMetTreeGuiBuffer(QObject * const opc_Parent = NULL);
+   C_CamMetTreeGuiBuffer(QObject * const opc_Parent = nullptr);
 
    void HandleData(const C_CamMetTreeLoggerData & orc_NewData);
    void ClearBuffer(void);

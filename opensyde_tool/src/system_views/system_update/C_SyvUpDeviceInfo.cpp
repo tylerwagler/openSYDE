@@ -34,6 +34,6 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpDeviceInfo::C_SyvUpDeviceInfo(void) :
-   pc_OpenSydeDevice(NULL)
+   pc_OpenSydeDevice(nullptr)
 {
 }

@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project("console_system_updater_sydesup")
 
 #include script to generate PC-lint configuration files
-include(lint_config.cmake)
+include(../../pjt/lint_config.cmake)
 
 # Static linking can be configured for Linux targets.
 if (${LNX_LINK_OPENSSL_STATIC})
@@ -164,7 +164,6 @@ endif()
 target_include_directories(SYDEsup PRIVATE ${SYDESUP_COMMON_INCLUDE_DIRECTORIES})
 
 # precompiled headers for core and application
-target_precompile_headers(SYDEsup PRIVATE ${PROJECT_ROOT}/src/precomp_headers.hpp)
 target_precompile_headers(SYDEsup PRIVATE ${PROJECT_ROOT}/src/precomp_headers.hpp)
 
 # create PC-lint configuration files

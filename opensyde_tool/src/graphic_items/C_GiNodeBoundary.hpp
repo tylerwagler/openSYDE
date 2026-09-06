@@ -34,7 +34,7 @@ class C_GiNodeBoundary :
 {
 public:
    C_GiNodeBoundary(const QString & orc_Text, const float64_t of64_Width, const float64_t of64_Height,
-                    const uint32_t ou32_SubNodesCount, QGraphicsItem * const opc_Parent = NULL);
+                    const uint32_t ou32_SubNodesCount, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiNodeBoundary() override;
 
    QRectF boundingRect() const override;

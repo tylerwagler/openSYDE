@@ -31,7 +31,7 @@ class C_PopFileTableView :
    Q_OBJECT
 
 public:
-   C_PopFileTableView(QWidget * const opc_Parent = NULL);
+   C_PopFileTableView(QWidget * const opc_Parent = nullptr);
    void UpdateData(const std::vector<QString> & orc_RecentFilePaths,
                    const std::vector<stw::opensyde_core::C_OscProject> & orc_RecentProjects);
    int32_t ConvertRowToFile(const int32_t & ors32_Row, QString & orc_FilePath) const;

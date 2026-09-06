@@ -29,7 +29,7 @@ class C_CamOgeCbxTable :
    Q_OBJECT
 
 public:
-   C_CamOgeCbxTable(QWidget * const opc_Parent = NULL);
+   C_CamOgeCbxTable(QWidget * const opc_Parent = nullptr);
    ~C_CamOgeCbxTable(void) override;
 
 private:

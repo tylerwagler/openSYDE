@@ -80,7 +80,7 @@ void C_OscHalcConfigChannel::CalcHash(uint32_t & oru32_HashValue) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcConfigChannel::CheckConfigValid(bool * const opq_NameInvalid) const
 {
-   if (opq_NameInvalid != NULL)
+   if (opq_NameInvalid != nullptr)
    {
       if (C_OscUtils::h_CheckValidCeName(this->c_Name) == false)
       {

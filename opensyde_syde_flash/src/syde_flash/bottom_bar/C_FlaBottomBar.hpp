@@ -31,7 +31,7 @@ class C_FlaBottomBar :
    Q_OBJECT
 
 public:
-   explicit C_FlaBottomBar(QWidget * const opc_Parent = NULL);
+   explicit C_FlaBottomBar(QWidget * const opc_Parent = nullptr);
    ~C_FlaBottomBar(void) override;
 
    void SetHeadingText(const QString & orc_Text, const uint8_t & oru8_ProgressState) const;

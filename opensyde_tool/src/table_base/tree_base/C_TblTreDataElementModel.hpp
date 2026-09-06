@@ -43,7 +43,7 @@ public:
       eBUS_SIGNAL
    };
 
-   explicit C_TblTreDataElementModel(QObject * const opc_Parent = NULL);
+   explicit C_TblTreDataElementModel(QObject * const opc_Parent = nullptr);
    ~C_TblTreDataElementModel(void) override;
 
    void InitSd(const uint32_t ou32_NodeIndex, const int32_t os32_SkipApplicationIndex,

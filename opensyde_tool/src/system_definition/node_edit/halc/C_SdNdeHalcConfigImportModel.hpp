@@ -42,7 +42,7 @@ class C_SdNdeHalcConfigImportModel :
    public C_TblTreModel
 {
 public:
-   explicit C_SdNdeHalcConfigImportModel(QObject * const opc_Parent = NULL);
+   explicit C_SdNdeHalcConfigImportModel(QObject * const opc_Parent = nullptr);
    ~C_SdNdeHalcConfigImportModel(void) noexcept override;
 
    int32_t Init(const stw::opensyde_core::C_OscHalcConfig & orc_Config,

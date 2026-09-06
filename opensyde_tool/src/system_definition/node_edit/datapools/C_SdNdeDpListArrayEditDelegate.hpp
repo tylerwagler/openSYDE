@@ -29,7 +29,7 @@ class C_SdNdeDpListArrayEditDelegate :
    public QStyledItemDelegate
 {
 public:
-   C_SdNdeDpListArrayEditDelegate(QObject * const opc_Parent = NULL);
+   C_SdNdeDpListArrayEditDelegate(QObject * const opc_Parent = nullptr);
 
    QWidget * createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem & orc_Option,
                           const QModelIndex & orc_Index) const override;

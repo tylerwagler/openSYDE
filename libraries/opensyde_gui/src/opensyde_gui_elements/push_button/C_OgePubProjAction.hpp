@@ -30,7 +30,7 @@ class C_OgePubProjAction :
    Q_OBJECT
 
 public:
-   explicit C_OgePubProjAction(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubProjAction(QWidget * const opc_Parent = nullptr);
 
    void SetCustomIcon(const QString & orc_IconPathEnabled, const QString & orc_IconPathDisabled);
    void SetIconPaddingLeft(const int32_t os32_Value);

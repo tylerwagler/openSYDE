@@ -129,7 +129,7 @@ void C_SyvUpPacListNodeItemParamSetWidget::ViewFileInfo(void)
          //No confirmation
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();
@@ -247,7 +247,7 @@ void C_SyvUpPacListNodeItemParamSetWidget::m_LoadFileInformation(bool & orq_File
          orq_TriggerRemove = true;
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();

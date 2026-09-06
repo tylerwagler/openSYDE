@@ -31,7 +31,7 @@ class C_SdNdeCoOverviewTableView :
    Q_OBJECT
 
 public:
-   C_SdNdeCoOverviewTableView(QWidget * const opc_Parent = NULL);
+   C_SdNdeCoOverviewTableView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeCoOverviewTableView(void) override;
 
    void LoadUserSettings(void);

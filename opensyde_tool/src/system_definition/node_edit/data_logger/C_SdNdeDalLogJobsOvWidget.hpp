@@ -31,7 +31,7 @@ class C_SdNdeDalLogJobsOvWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDalLogJobsOvWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDalLogJobsOvWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDalLogJobsOvWidget(void) override;
    void UpdateData(const std::vector<std::tuple<uint32_t, uint32_t,
                                                 uint32_t> > & orc_AllLoggerJobElementsLocationCount);

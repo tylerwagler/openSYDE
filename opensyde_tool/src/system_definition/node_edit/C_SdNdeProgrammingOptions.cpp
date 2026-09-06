@@ -202,7 +202,7 @@ void C_SdNdeProgrammingOptions::Save(void) const
    if (this->mpc_Ui->pc_ComboBoxDPD->currentIndex() >= 0)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          int16_t s16_ApplicationIndex = -1;
          int16_t s16_Counter = 0;
@@ -249,7 +249,7 @@ void C_SdNdeProgrammingOptions::m_Load(void)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       int32_t s32_Counter = 0;
       int32_t s32_DataBlockIndex = -1;

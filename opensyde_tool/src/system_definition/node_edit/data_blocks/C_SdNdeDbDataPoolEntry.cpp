@@ -94,7 +94,7 @@ void C_SdNdeDbDataPoolEntry::m_Init(const uint32_t ou32_NodeIndex, const uint32_
                                                                                                  ou32_DataPoolIndex);
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-   if ((pc_Node != NULL) && (pc_Datapool != NULL))
+   if ((pc_Node != nullptr) && (pc_Datapool != nullptr))
    {
       QString c_Text;
 
@@ -112,7 +112,7 @@ void C_SdNdeDbDataPoolEntry::m_Init(const uint32_t ou32_NodeIndex, const uint32_
       this->mpc_Ui->pc_LabelName->setText(c_Text);
       this->SetToolTipInformation(c_Text, pc_Datapool->c_Comment.c_str());
 
-      if ((pc_Node->pc_DeviceDefinition != NULL) &&
+      if ((pc_Node->pc_DeviceDefinition != nullptr) &&
           (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()) &&
           (pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].q_ProgrammingSupport == false))
       {

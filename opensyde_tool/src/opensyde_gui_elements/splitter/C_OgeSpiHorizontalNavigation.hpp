@@ -29,7 +29,7 @@ class C_OgeSpiHorizontalNavigation :
    Q_OBJECT
 
 public:
-   C_OgeSpiHorizontalNavigation(QWidget * const opc_Parent = NULL);
+   C_OgeSpiHorizontalNavigation(QWidget * const opc_Parent = nullptr);
 
 protected:
    QSplitterHandle * createHandle(void) override;

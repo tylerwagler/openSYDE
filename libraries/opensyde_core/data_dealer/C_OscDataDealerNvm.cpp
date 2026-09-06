@@ -84,7 +84,7 @@ uint16_t C_OscDataDealerNvm::NvmCalcCrc(const C_OscNodeDataPoolList & orc_List) 
 {
    uint16_t u16_Crc = 0x1D0FU;
 
-   if (this->mpc_DiagProtocol != NULL)
+   if (this->mpc_DiagProtocol != nullptr)
    {
       uint32_t u32_Counter;
       const uint8_t u8_Endianness = this->mpc_DiagProtocol->GetEndianness();
@@ -140,7 +140,7 @@ int32_t C_OscDataDealerNvm::NvmReadList(const uint32_t ou32_DataPoolIndex, const
 {
    int32_t s32_Return;
 
-   if ((mpc_Node == NULL) || (mpc_DiagProtocol == NULL))
+   if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
       s32_Return = C_CONFIG;
    }
@@ -190,7 +190,7 @@ int32_t C_OscDataDealerNvm::NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, 
 {
    int32_t s32_Return;
 
-   if ((mpc_Node == NULL) || (mpc_DiagProtocol == NULL))
+   if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
       s32_Return = C_CONFIG;
    }

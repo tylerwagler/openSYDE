@@ -154,7 +154,7 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::SetProtocol(const stw::opensyde_core
 
    // In case of a changed protocol, deactivate the manager link in any case as first step
    this->SetNodeAsManager(false);
-   this->SetNodeAsDevice(false, NULL);
+   this->SetNodeAsDevice(false, nullptr);
 
    this->UpdateToolTip();
 }
@@ -202,7 +202,7 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::SetNodeAsDevice(const bool oq_Device
    {
       this->mq_IsDevice = oq_Device;
       if ((this->mq_IsDevice == true) &&
-          (opc_DeviceId != NULL))
+          (opc_DeviceId != nullptr))
       {
          this->mc_DeviceId = *opc_DeviceId;
          this->mu32_ManagerNodeIndex = ou32_ManagerNodeIndex;
@@ -227,15 +227,15 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::UpdateToolTip(void)
    this->mpc_CheckBox->GetIndexes(u32_NodeIndex, u32_InterfaceIndex);
    pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       // Prepare tooltip
       QString c_Content = "";
       uint32_t u32_RxMessageCount = 0U;
       uint32_t u32_TxMessageCount = 0U;
       uint32_t u32_SignalCount = 0U;
-      const stw::opensyde_core::C_OscCanInterfaceId * pc_DeviceId = NULL;
+      const stw::opensyde_core::C_OscCanInterfaceId * pc_DeviceId = nullptr;
 
       // Get the interface name
       c_Content += C_GtGetText::h_GetText("Interface: ");
@@ -349,8 +349,8 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::m_OnLinkSwitchToManager(const QStrin
    this->GetIndexes(u32_ManagerNodeIndex, u32_ManagerIntfIndex);
 
    pc_ManagerNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ManagerNodeIndex);
-   tgl_assert(pc_ManagerNode != NULL);
-   if (pc_ManagerNode != NULL)
+   tgl_assert(pc_ManagerNode != nullptr);
+   if (pc_ManagerNode != nullptr)
    {
       if (u32_ManagerIntfIndex < pc_ManagerNode->c_Properties.c_ComInterfaces.size())
       {

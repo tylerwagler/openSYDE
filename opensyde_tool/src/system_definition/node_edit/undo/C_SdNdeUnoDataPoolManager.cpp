@@ -108,7 +108,7 @@ void C_SdNdeUnoDataPoolManager::DoDeleteList(const uint32_t & oru32_NodeIndex, c
          opc_DataPoolListsTreeWidget,
          orc_Indices);
       //Check if last element(s) -> add replacement, so we never encounter zero list items
-      if (opc_DataPoolListsTreeWidget != NULL)
+      if (opc_DataPoolListsTreeWidget != nullptr)
       {
          if (static_cast<uint32_t>(opc_DataPoolListsTreeWidget->topLevelItemCount()) <= orc_Indices.size())
          {

@@ -79,7 +79,7 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
                                                                         &q_UpdateRoutingInvalid,
                                                                         opq_DashboardRoutingErrors,
                                                                         &q_SysDefInvalid, &q_NoNodesActive,
-                                                                        NULL, NULL);
+                                                                        nullptr, nullptr);
 
    if ((s32_Retval == C_NO_ERR) && (q_NameInvalid == false) && (q_PcNotConnected == false) &&
        (q_RoutingInvalid == false) && (q_SysDefInvalid == false) && (q_NoNodesActive == false) &&
@@ -87,11 +87,11 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_OscSystemBus * const pc_Bus =
             C_PuiSdHandler::h_GetInstance()->GetOscBus(pc_View->GetOscPcData().GetBusIndex());
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             //No check for connected because error check passed
             oru32_ActiveBusIndex = pc_View->GetOscPcData().GetBusIndex();
@@ -104,7 +104,7 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
                if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
                {
                   //No ethernet
-                  *oppc_IpDispatcher = NULL;
+                  *oppc_IpDispatcher = nullptr;
 
                   C_OscCanAdapterConfig c_Config = pc_View->GetPuiPcData().GetAdapterConfig();
                   // Force the adapter bitrate to match the bus declared in the system definition so
@@ -114,7 +114,7 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
 
                   stw::scl::C_SclString c_Error;
                   *oppc_CanDispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
-                  if (*oppc_CanDispatcher == NULL)
+                  if (*oppc_CanDispatcher == nullptr)
                   {
                      osc_write_log_error("CAN adapter init", c_Error);
                      s32_Retval = C_RD_WR;
@@ -126,7 +126,7 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
                      if (s32_Retval != C_NO_ERR)
                      {
                         delete *oppc_CanDispatcher;
-                        *oppc_CanDispatcher = NULL;
+                        *oppc_CanDispatcher = nullptr;
                         s32_Retval = C_COM;
                      }
                   }
@@ -139,7 +139,7 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
                {
                    //No CAN
 
-                   *oppc_CanDispatcher = NULL;
+                   *oppc_CanDispatcher = nullptr;
                    *oppc_IpDispatcher = new C_OscIpDispatcherWinSock();
                }
             }

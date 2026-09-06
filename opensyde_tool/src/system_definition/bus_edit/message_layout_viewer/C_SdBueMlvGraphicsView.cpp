@@ -134,7 +134,7 @@ bool C_SdBueMlvGraphicsView::event(QEvent * const opc_Event)
    if (opc_Event->type() == QEvent::ToolTip)
    {
       QHelpEvent * const pc_Help = dynamic_cast<QHelpEvent *>(opc_Event);
-      if (pc_Help != NULL)
+      if (pc_Help != nullptr)
       {
          Q_EMIT this->SigShowToolTip(this->mapToScene(pc_Help->pos()));
          opc_Event->ignore();

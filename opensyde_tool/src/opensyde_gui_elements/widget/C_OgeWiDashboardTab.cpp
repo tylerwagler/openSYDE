@@ -49,13 +49,13 @@ using namespace stw::opensyde_gui_elements;
 C_OgeWiDashboardTab::C_OgeWiDashboardTab(QWidget * const opc_Parent, const bool oq_ShowUndock) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_OgeWiDashboardTab),
-   mpc_ActionEditProperties(NULL),
-   mpc_ActionCopy(NULL),
-   mpc_ActionActivate(NULL),
-   mpc_ActionCut(NULL),
-   mpc_ActionPaste(NULL),
-   mpc_ActionDelete(NULL),
-   mpc_ActionClose(NULL),
+   mpc_ActionEditProperties(nullptr),
+   mpc_ActionCopy(nullptr),
+   mpc_ActionActivate(nullptr),
+   mpc_ActionCut(nullptr),
+   mpc_ActionPaste(nullptr),
+   mpc_ActionDelete(nullptr),
+   mpc_ActionClose(nullptr),
    mq_Current(false),
    mq_Active(false),
    mq_EditActive(false),
@@ -199,19 +199,19 @@ void C_OgeWiDashboardTab::SetCloseButtonVisibility(const bool oq_Visibility)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeWiDashboardTab::DeactivateAdditionalActions(void)
 {
-   if (this->mpc_ActionCut != NULL)
+   if (this->mpc_ActionCut != nullptr)
    {
       this->mpc_ActionCut->setVisible(false);
    }
-   if (this->mpc_ActionPaste != NULL)
+   if (this->mpc_ActionPaste != nullptr)
    {
       this->mpc_ActionPaste->setVisible(false);
    }
-   if (this->mpc_ActionDelete != NULL)
+   if (this->mpc_ActionDelete != nullptr)
    {
       this->mpc_ActionDelete->setVisible(false);
    }
-   if (this->mpc_ActionClose != NULL)
+   if (this->mpc_ActionClose != nullptr)
    {
       this->mpc_ActionClose->setVisible(false);
    }
@@ -278,7 +278,7 @@ void C_OgeWiDashboardTab::m_HandleMode(void)
    }
    if (this->mq_Active == true)
    {
-      if (this->mpc_ActionActivate != NULL)
+      if (this->mpc_ActionActivate != nullptr)
       {
          this->mpc_ActionActivate->setText(C_GtGetText::h_GetText("Deactivate"));
       }
@@ -286,7 +286,7 @@ void C_OgeWiDashboardTab::m_HandleMode(void)
    }
    else
    {
-      if (this->mpc_ActionActivate != NULL)
+      if (this->mpc_ActionActivate != nullptr)
       {
          this->mpc_ActionActivate->setText(C_GtGetText::h_GetText("Activate"));
       }

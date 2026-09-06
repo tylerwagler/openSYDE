@@ -34,7 +34,7 @@ class C_OgeWiNavigationTab :
    Q_OBJECT
 
 public:
-   explicit C_OgeWiNavigationTab(QWidget * const opc_Parent = NULL);
+   explicit C_OgeWiNavigationTab(QWidget * const opc_Parent = nullptr);
    ~C_OgeWiNavigationTab(void) override;
 
    void SetEnabled(const bool oq_Enabled);

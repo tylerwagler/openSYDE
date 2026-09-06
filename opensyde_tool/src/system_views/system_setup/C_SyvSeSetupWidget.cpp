@@ -57,7 +57,7 @@ using namespace stw::opensyde_gui_logic;
 C_SyvSeSetupWidget::C_SyvSeSetupWidget(const uint32_t ou32_ViewIndex, QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SyvSeSetupWidget),
-   mpc_Scene(NULL),
+   mpc_Scene(nullptr),
    mu32_ViewIndex(ou32_ViewIndex),
    mq_EditModeActive(false),
    mq_IgnoreSelectAllCheckboxChanges(false)
@@ -122,7 +122,7 @@ C_SyvSeSetupWidget::C_SyvSeSetupWidget(const uint32_t ou32_ViewIndex, QWidget * 
    connect(this->mpc_Scene, &C_SyvSeScene::SigConnectionChange, this, &C_SyvSeSetupWidget::m_OnViewConnectionChange);
 
    //Update all items with initial zoom & pos value
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       c_Name = pc_View->GetName().c_str();
    }
@@ -167,14 +167,14 @@ void C_SyvSeSetupWidget::Save(void) const
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
    // store configuration of the view
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       C_UsHandler::h_GetInstance()->SetProjSvSetupViewZoom(pc_View->GetName().c_str(),
                                                            this->mpc_Ui->pc_GraphicsView->GetZoomValue());
       C_UsHandler::h_GetInstance()->SetProjSvSetupViewPos(pc_View->GetName().c_str(),
                                                           this->mpc_Ui->pc_GraphicsView->GetViewPos());
    }
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->Save();
    }
@@ -186,7 +186,7 @@ void C_SyvSeSetupWidget::Save(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeSetupWidget::LoadScene(void)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->Load();
 
@@ -220,7 +220,7 @@ void C_SyvSeSetupWidget::SetEditMode(const bool oq_Active, const bool oq_WithSav
    this->mpc_Ui->pc_PbCancel->setVisible(oq_Active);
    this->mpc_Ui->pc_CheckBoxSelectAll->setVisible(oq_Active);
 
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->SetDrawingBackground(oq_Active);
       this->mpc_Scene->SetEditMode(oq_Active);
@@ -251,7 +251,7 @@ void C_SyvSeSetupWidget::SetEditMode(const bool oq_Active, const bool oq_WithSav
       {
          this->Save();
       }
-      if (this->mpc_Scene != NULL)
+      if (this->mpc_Scene != nullptr)
       {
          this->mpc_Scene->ClearUndoStack();
       }
@@ -286,7 +286,7 @@ void C_SyvSeSetupWidget::StartDeviceConfiguration(void)
       c_NodeActiveFlagsWithDeactivatedSubNodes, false);
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if ((pc_View != NULL) &&
+   if ((pc_View != nullptr) &&
        (s32_Retval == C_NO_ERR))
    {
       const std::vector<uint8_t> & rc_NodeActiveFlags = pc_View->GetNodeActiveFlags();
@@ -339,7 +339,7 @@ void C_SyvSeSetupWidget::StartDeviceConfiguration(void)
 
       c_New->exec();
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          pc_Dialog->CleanUp();
          c_New->HideOverlay();
@@ -354,7 +354,7 @@ void C_SyvSeSetupWidget::StartDeviceConfiguration(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeSetupWidget::PrepareToClose(void)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->PrepareToClose();
    }
@@ -453,7 +453,7 @@ void C_SyvSeSetupWidget::m_OnViewConnectionChange(void)
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       // Get original active flags
       const std::vector<uint8_t> & rc_ActiveFlags = pc_View->GetNodeActiveFlags();
@@ -478,7 +478,7 @@ void C_SyvSeSetupWidget::m_OnViewConnectionChange(void)
 void C_SyvSeSetupWidget::m_SelectAllStateChanged(void)
 {
    //Flag to ignore automated changes triggering this function
-   if ((this->mq_IgnoreSelectAllCheckboxChanges == false) && (this->mpc_Scene != NULL))
+   if ((this->mq_IgnoreSelectAllCheckboxChanges == false) && (this->mpc_Scene != nullptr))
    {
       const uint16_t u16_Timer = osc_write_log_performance_start();
       if (this->mpc_Ui->pc_CheckBoxSelectAll->isChecked())
@@ -505,7 +505,7 @@ void C_SyvSeSetupWidget::m_CancelClicked(void)
 {
    // restore the saved view
    C_PuiSvHandler::h_GetInstance()->SetView(this->mu32_ViewIndex, this->mc_ViewCopy);
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->ReloadViewData();
       this->mpc_Scene->ClearUndoStack();

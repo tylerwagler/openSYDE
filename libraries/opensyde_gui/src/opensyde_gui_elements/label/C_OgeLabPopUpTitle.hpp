@@ -31,7 +31,7 @@ class C_OgeLabPopUpTitle :
    Q_OBJECT
 
 public:
-   C_OgeLabPopUpTitle(QWidget * const opc_Parent = NULL);
+   C_OgeLabPopUpTitle(QWidget * const opc_Parent = nullptr);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

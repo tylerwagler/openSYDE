@@ -27,7 +27,7 @@ class C_GiPointInteraction :
    public QGraphicsEllipseItem
 {
 public:
-   C_GiPointInteraction(QGraphicsItem * const opc_Parent = NULL);
+   C_GiPointInteraction(QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiPointInteraction() override;
 
    int32_t type() const override;

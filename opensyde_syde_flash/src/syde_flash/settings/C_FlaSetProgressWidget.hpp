@@ -31,7 +31,7 @@ class C_FlaSetProgressWidget :
    Q_OBJECT
 
 public:
-   explicit C_FlaSetProgressWidget(QWidget * const opc_Parent = NULL);
+   explicit C_FlaSetProgressWidget(QWidget * const opc_Parent = nullptr);
    ~C_FlaSetProgressWidget(void) override;
 
    void ClearProgress(void);

@@ -105,11 +105,11 @@ void C_GiSvDaPieChartBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe
    if (this->ms32_Index >= 0)
    {
       const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
-      if (pc_Dashboard != NULL)
+      if (pc_Dashboard != nullptr)
       {
          const C_PuiSvDbPieChart * const pc_Box = pc_Dashboard->GetPieChart(static_cast<uint32_t>(this->ms32_Index));
-         tgl_assert(pc_Box != NULL);
-         if (pc_Box != NULL)
+         tgl_assert(pc_Box != nullptr);
+         if (pc_Box != nullptr)
          {
             this->mpc_PieChartWidget->SetDisplayStyle(oe_Style, pc_Box->q_ShowUnit, pc_Box->q_ShowValue);
          }
@@ -134,11 +134,11 @@ void C_GiSvDaPieChartBase::LoadData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbPieChart * const pc_Box = pc_Dashboard->GetPieChart(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          this->LoadSvBasicData(*pc_Box);
          this->mpc_PieChartWidget->SetDisplayStyle(this->me_Style, pc_Box->q_ShowUnit,
@@ -156,11 +156,11 @@ void C_GiSvDaPieChartBase::UpdateData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbPieChart * const pc_Box = pc_Dashboard->GetPieChart(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          C_PuiSvDbPieChart c_Box = *pc_Box;
          this->UpdateSvBasicData(c_Box);
@@ -181,7 +181,7 @@ void C_GiSvDaPieChartBase::UpdateShowValue(void)
    float64_t f64_UnscaledValue;
    QString c_ScaledValue;
 
-   if (this->m_GetLastValue(0UL, c_ScaledValue, &f64_UnscaledValue, NULL) == C_NO_ERR)
+   if (this->m_GetLastValue(0UL, c_ScaledValue, &f64_UnscaledValue, nullptr) == C_NO_ERR)
    {
       const float64_t f64_Progress =
          ((f64_UnscaledValue - this->mf64_UnscaledMin) / (this->mf64_UnscaledMax - this->mf64_UnscaledMin)) *
@@ -203,7 +203,7 @@ void C_GiSvDaPieChartBase::UpdateShowValue(void)
 void C_GiSvDaPieChartBase::UpdateTransparency(const uint32_t ou32_DataElementIndex, const int32_t os32_Value)
 {
    if ((ou32_DataElementIndex == 0) &&
-       (this->mpc_PieChartWidget != NULL))
+       (this->mpc_PieChartWidget != nullptr))
    {
       // Only one item is supported by this item
       this->mpc_PieChartWidget->SetTransparency(os32_Value);
@@ -238,11 +238,11 @@ bool C_GiSvDaPieChartBase::CallProperties(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbPieChart * const pc_Box = pc_Dashboard->GetPieChart(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          int32_t s32_Return = C_NO_ERR;
          C_PuiSvDbNodeDataPoolListElementId c_ElementId;
@@ -315,7 +315,7 @@ bool C_GiSvDaPieChartBase::CallProperties(void)
                this->mq_InitialStyleCall = true;
                //Apply
                this->SetDisplayStyle(this->me_Style);
-               if (this->mpc_PieChartWidget != NULL)
+               if (this->mpc_PieChartWidget != nullptr)
                {
                   this->mpc_PieChartWidget->SetDisplayStyle(this->me_Style, c_Box.q_ShowUnit,
                                                             c_Box.q_ShowValue);
@@ -336,7 +336,7 @@ bool C_GiSvDaPieChartBase::CallProperties(void)
                this->m_UpdateStaticValues();
             }
             Q_EMIT this->SigTriggerUpdateTransmissionConfiguration();
-            if (c_New != NULL)
+            if (c_New != nullptr)
             {
                c_New->HideOverlay();
                c_New->deleteLater();
@@ -359,7 +359,7 @@ bool C_GiSvDaPieChartBase::CallProperties(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaPieChartBase::UpdateTypePe(const bool oq_ShowUnit, const bool oq_ShowValue)
 {
-   if (this->mpc_PieChartWidget != NULL)
+   if (this->mpc_PieChartWidget != nullptr)
    {
       this->mpc_PieChartWidget->SetDisplayStyle(this->me_Style, oq_ShowUnit, oq_ShowValue);
    }
@@ -376,7 +376,7 @@ void C_GiSvDaPieChartBase::UpdateTypePe(const bool oq_ShowUnit, const bool oq_Sh
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaPieChartBase::SetValuePe(const QString & orc_Value, const int32_t os32_Progress2000000)
 {
-   if (this->mpc_PieChartWidget != NULL)
+   if (this->mpc_PieChartWidget != nullptr)
    {
       this->mpc_PieChartWidget->SetValue(orc_Value, os32_Progress2000000);
    }
@@ -392,7 +392,7 @@ void C_GiSvDaPieChartBase::SetValuePe(const QString & orc_Value, const int32_t o
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaPieChartBase::SetUnitPe(const QString & orc_Value)
 {
-   if (this->mpc_PieChartWidget != NULL)
+   if (this->mpc_PieChartWidget != nullptr)
    {
       this->mpc_PieChartWidget->SetUnit(orc_Value);
    }
@@ -410,13 +410,13 @@ void C_GiSvDaPieChartBase::m_UpdateStaticValues(void)
       const C_OscNodeDataPoolListElement * const pc_Element =
          C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id.u32_NodeIndex, c_Id.u32_DataPoolIndex,
                                                                     c_Id.u32_ListIndex, c_Id.u32_ElementIndex);
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          const uint32_t u32_Index = c_Id.GetArrayElementIndexOrZero();
          C_SdNdeDpContentUtil::h_GetValueAsFloat64(pc_Element->c_MinValue, this->mf64_UnscaledMin, u32_Index);
          C_SdNdeDpContentUtil::h_GetValueAsFloat64(pc_Element->c_MaxValue, this->mf64_UnscaledMax, u32_Index);
 
-         if (this->mpc_PieChartWidget != NULL)
+         if (this->mpc_PieChartWidget != nullptr)
          {
             float64_t f64_Progress;
             const QString c_Value = this->GetUnscaledValueInRangeAsScaledString(0.0, 0UL, &f64_Progress);
@@ -429,7 +429,7 @@ void C_GiSvDaPieChartBase::m_UpdateStaticValues(void)
    }
    else
    {
-      if (this->mpc_PieChartWidget != NULL)
+      if (this->mpc_PieChartWidget != nullptr)
       {
          //Update value
          this->mpc_PieChartWidget->SetValue(static_cast<QString>("%1").arg(0.0), 0);

@@ -59,7 +59,7 @@ const int32_t C_NagToolBarWidget::mhs32_SPACER_SIZE = 24;
 C_NagToolBarWidget::C_NagToolBarWidget(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_NagToolBarWidget),
-   mpc_ActUseCaseWidget(NULL),
+   mpc_ActUseCaseWidget(nullptr),
    mq_FocusInSearchResultWidget(false),
    mq_ShowSearch(false)
 {
@@ -158,7 +158,7 @@ void stw::opensyde_gui::C_NagToolBarWidget::ConfigureButtons(C_NagUseCaseWidget 
       QGroupBox * const pc_GroupBox = new QGroupBox(this);
       pc_GroupBox->setProperty("styleRole", "transparent");
       QHBoxLayout * const pc_GroupBoxLayout = new QHBoxLayout();
-      C_OgePubToolBar * const pc_Button = new C_OgePubToolBar(NULL, static_cast<uint32_t>(this->mc_VecButtons.count()));
+      C_OgePubToolBar * const pc_Button = new C_OgePubToolBar(nullptr, static_cast<uint32_t>(this->mc_VecButtons.count()));
 
       // configure the button
       pc_Button->setMinimumSize(77 + static_cast<int32_t>(mh_GetButtonStringWidth((*pc_ItFuncName).c_ButtonText)), 40);
@@ -219,7 +219,7 @@ void C_NagToolBarWidget::ResetButtons(void)
    this->mc_VecGroupBoxVisible.clear();
 
    // remove the pointer of the actual use case widget
-   this->mpc_ActUseCaseWidget = NULL;
+   this->mpc_ActUseCaseWidget = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -332,7 +332,7 @@ bool C_NagToolBarWidget::eventFilter(QObject * const opc_Object, QEvent * const 
          else
          {
             QKeyEvent * const pc_KeyEvent = dynamic_cast<QKeyEvent *>(opc_Event);
-            if (pc_KeyEvent != NULL)
+            if (pc_KeyEvent != nullptr)
             {
                if (pc_KeyEvent->key() != static_cast<int32_t>(Qt::Key_Escape))
                {
@@ -362,7 +362,7 @@ bool C_NagToolBarWidget::eventFilter(QObject * const opc_Object, QEvent * const 
       else if (opc_Event->type() == QEvent::KeyPress)
       {
          QKeyEvent * const pc_KeyEvent = dynamic_cast<QKeyEvent *>(opc_Event);
-         if (pc_KeyEvent != NULL)
+         if (pc_KeyEvent != nullptr)
          {
             if (pc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Escape))
             {
@@ -459,7 +459,7 @@ void C_NagToolBarWidget::paintEvent(QPaintEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagToolBarWidget::m_BtnClicked(const uint32_t ou32_Index)
 {
-   if (this->mpc_ActUseCaseWidget != NULL)
+   if (this->mpc_ActUseCaseWidget != nullptr)
    {
       this->mpc_ActUseCaseWidget->UserInputFunc(ou32_Index);
    }

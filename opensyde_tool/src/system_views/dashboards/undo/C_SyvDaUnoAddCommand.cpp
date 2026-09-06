@@ -82,7 +82,7 @@ void C_SyvDaUnoAddCommand::m_AddNew(void)
 {
    C_SyvDaDashboardScene * const pc_Scene = dynamic_cast<C_SyvDaDashboardScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       const std::vector<uint64_t> c_Ids = this->m_GetIds();
       if (c_Ids.size() > 0)

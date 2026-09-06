@@ -35,7 +35,7 @@ class C_SyvDaPeUpdateModeNodeHeader :
 
 public:
    explicit C_SyvDaPeUpdateModeNodeHeader(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
-                                          QTreeWidgetItem * const opc_Item, QWidget * const opc_Parent = NULL);
+                                          QTreeWidgetItem * const opc_Item, QWidget * const opc_Parent = nullptr);
    ~C_SyvDaPeUpdateModeNodeHeader(void) override;
 
    void InitStaticNames(void) const;

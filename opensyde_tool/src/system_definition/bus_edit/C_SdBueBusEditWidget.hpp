@@ -41,7 +41,7 @@ class C_SdBueBusEditWidget :
 
 public:
    explicit C_SdBueBusEditWidget(const uint32_t ou32_BusIndex, const int32_t os32_TabIndex,
-                                 QWidget * const opc_Parent = NULL);
+                                 QWidget * const opc_Parent = nullptr);
    ~C_SdBueBusEditWidget() override;
 
    void InitStaticNames(void) const;

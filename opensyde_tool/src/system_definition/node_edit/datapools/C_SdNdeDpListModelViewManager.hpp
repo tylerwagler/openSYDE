@@ -43,7 +43,7 @@ class C_SdNdeDpListModelViewManager :
 
 public:
    //Avoid call
-   C_SdNdeDpListModelViewManager(QObject * const opc_Parent = NULL);
+   C_SdNdeDpListModelViewManager(QObject * const opc_Parent = nullptr);
    ~C_SdNdeDpListModelViewManager(void) override;
    void Clear(void);
 

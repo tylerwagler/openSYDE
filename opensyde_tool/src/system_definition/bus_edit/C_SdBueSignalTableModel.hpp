@@ -53,7 +53,7 @@ public:
       eUNIT
    };
 
-   explicit C_SdBueSignalTableModel(QObject * const opc_Parent = NULL);
+   explicit C_SdBueSignalTableModel(QObject * const opc_Parent = nullptr);
    void SetMessageSyncManager(C_PuiSdNodeCanMessageSyncManager * const opc_Value);
    void UpdateData(void);
 

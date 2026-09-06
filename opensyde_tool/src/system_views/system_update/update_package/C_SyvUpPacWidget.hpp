@@ -40,7 +40,7 @@ class C_SyvUpPacWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvUpPacWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvUpPacWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvUpPacWidget() override;
 
    void InitText(void) const;
@@ -62,7 +62,7 @@ public:
 
    int32_t GetUpdatePackage(std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                             std::vector<uint32_t> & orc_NodesOrder, std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> * const opc_AllApplications =
-                               NULL) const;
+                               nullptr) const;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

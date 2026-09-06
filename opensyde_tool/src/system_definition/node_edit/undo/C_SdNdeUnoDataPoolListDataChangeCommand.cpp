@@ -101,7 +101,7 @@ void C_SdNdeUnoDataPoolListDataChangeCommand::m_Change(QVariant & orc_PreviousDa
       this->mu32_NodeIndex, this->mu32_DataPoolIndex,
       this->mu32_DataPoolListIndex);
 
-   if (pc_List != NULL)
+   if (pc_List != nullptr)
    {
       //Save previous
       mh_ConvertListTypeToGeneric(*pc_List, this->me_DataChangeType, orc_PreviousData);
@@ -138,7 +138,7 @@ void C_SdNdeUnoDataPoolListDataChangeCommand::m_Change(QVariant & orc_PreviousDa
          //Unknown
          break;
       }
-      if (this->mpc_DataPoolListsTreeWidget != NULL)
+      if (this->mpc_DataPoolListsTreeWidget != nullptr)
       {
          this->mpc_DataPoolListsTreeWidget->UpdateUi();
       }

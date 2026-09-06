@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project("osy_syde_coder_c")
 
 # include script to generate PC-lint configuration files
-include(lint_config.cmake)
+include(../../pjt/lint_config.cmake)
 
 # Set include directories before dragging in core; the core needs the "precomp_header.h" and files included by it
 include_directories(

@@ -123,15 +123,15 @@ public:
                            bool * const opq_TooFewListsOrElements, bool * const opq_TooManyListsOrElements,
                            std::vector<uint32_t> * const opc_InvalidListIndices) const;
    void CheckMessageId(const uint32_t ou32_InterfaceIndex, const C_OscCanMessageUniqueId & orc_MessageId,
-                       bool & orq_Valid, const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = NULL,
-                       const uint32_t * const opu32_SkipInterfaceIndex = NULL,
-                       const bool * const opq_SkipMessageIsTxFlag = NULL,
-                       const uint32_t * const opu32_SkipMessageIndex = NULL) const;
+                       bool & orq_Valid, const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = nullptr,
+                       const uint32_t * const opu32_SkipInterfaceIndex = nullptr,
+                       const bool * const opq_SkipMessageIsTxFlag = nullptr,
+                       const uint32_t * const opu32_SkipMessageIndex = nullptr) const;
    void CheckMessageName(const uint32_t ou32_InterfaceIndex, const stw::scl::C_SclString & orc_MessageName,
-                         bool & orq_Valid, const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = NULL,
-                         const uint32_t * const opu32_SkipInterfaceIndex = NULL,
-                         const bool * const opq_SkipMessageIsTxFlag = NULL,
-                         const uint32_t * const opu32_SkipMessageIndex = NULL) const;
+                         bool & orq_Valid, const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = nullptr,
+                         const uint32_t * const opu32_SkipInterfaceIndex = nullptr,
+                         const bool * const opq_SkipMessageIsTxFlag = nullptr,
+                         const uint32_t * const opu32_SkipMessageIndex = nullptr) const;
    int32_t CheckApplicationProcessIdValid(const uint32_t ou32_ApplicationIndex, bool & orq_Valid) const;
    void CheckHalcConfigValid(bool * const opq_ConfigInvalid,
                              std::vector<uint32_t> * const opc_InvalidDomainIndices) const;
@@ -181,16 +181,16 @@ public:
 
 private:
    void m_GetAllMessages(const uint32_t ou32_InterfaceIndex, std::vector<const C_OscCanMessage *> & orc_Messages,
-                         const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = NULL,
-                         const uint32_t * const opu32_SkipInterfaceIndex = NULL,
-                         const bool * const opq_SkipMessageIsTxFlag = NULL,
-                         const uint32_t * const opu32_SkipMessageIndex = NULL) const;
+                         const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = nullptr,
+                         const uint32_t * const opu32_SkipInterfaceIndex = nullptr,
+                         const bool * const opq_SkipMessageIsTxFlag = nullptr,
+                         const uint32_t * const opu32_SkipMessageIndex = nullptr) const;
    void m_AppendAllProtocolMessages(const uint32_t ou32_InterfaceIndex, const C_OscCanProtocol::E_Type oe_ComProtocol,
                                     std::vector<const C_OscCanMessage *> & orc_Messages,
-                                    const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = NULL,
-                                    const uint32_t * const opu32_SkipInterfaceIndex = NULL,
-                                    const bool * const opq_SkipMessageIsTxFlag = NULL,
-                                    const uint32_t * const opu32_SkipMessageIndex = NULL) const;
+                                    const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = nullptr,
+                                    const uint32_t * const opu32_SkipInterfaceIndex = nullptr,
+                                    const bool * const opq_SkipMessageIsTxFlag = nullptr,
+                                    const uint32_t * const opu32_SkipMessageIndex = nullptr) const;
    uint32_t m_GetListHash(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex) const;
    uint32_t m_GetContainerHash(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ContainerIndex) const;
    static void mh_CheckErrorCanProtocolDirection(const std::vector<C_OscCanMessage> & orc_Messages,

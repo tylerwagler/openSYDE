@@ -37,7 +37,7 @@ class C_SdBueMessageRxList :
    Q_OBJECT
 
 public:
-   explicit C_SdBueMessageRxList(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueMessageRxList(QWidget * const opc_Parent = nullptr);
    ~C_SdBueMessageRxList(void) override;
 
    void InitStaticNames(void) const;

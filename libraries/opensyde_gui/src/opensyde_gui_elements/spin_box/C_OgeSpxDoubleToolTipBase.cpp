@@ -45,7 +45,7 @@ using namespace stw::opensyde_gui_elements;
 C_OgeSpxDoubleToolTipBase::C_OgeSpxDoubleToolTipBase(QWidget * const opc_Parent) :
    C_OgeSpxDoubleDynamicDecimalsBase(opc_Parent),
    C_OgeSpxAllBase(),
-   mpc_ContextMenu(NULL)
+   mpc_ContextMenu(nullptr)
 {
    //This function does indeed call virtual functions so do not call this one in the base class
    ActivateDefaultToolTip();

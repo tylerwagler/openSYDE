@@ -28,7 +28,7 @@ class C_OgeLabSvgOnly :
    public C_OgeLabToolTipBase
 {
 public:
-   C_OgeLabSvgOnly(QWidget * const opc_Parent = NULL);
+   C_OgeLabSvgOnly(QWidget * const opc_Parent = nullptr);
    ~C_OgeLabSvgOnly(void) override;
 
    void SetSvg(const QString & orc_SvgPath);

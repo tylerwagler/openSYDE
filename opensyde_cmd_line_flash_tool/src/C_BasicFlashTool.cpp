@@ -29,7 +29,7 @@ static int kbhit(void)
    c_Timeout.tv_usec = 0;
    FD_ZERO(&c_ReadFds);
    FD_SET(STDIN_FILENO, &c_ReadFds);
-   return select(STDIN_FILENO + 1, &c_ReadFds, NULL, NULL, &c_Timeout) > 0 ? 1 : 0;
+   return select(STDIN_FILENO + 1, &c_ReadFds, nullptr, nullptr, &c_Timeout) > 0 ? 1 : 0;
 }
 #endif
 
@@ -76,7 +76,7 @@ C_BasicFlashTool::C_BasicFlashTool(void) :
    mc_CanDriver(""),
    mq_ExitApplOnError(true),
    mq_StartAppl(true),
-   mpc_CanDispatcher(NULL)
+   mpc_CanDispatcher(nullptr)
 {
 }
 
@@ -86,11 +86,11 @@ C_BasicFlashTool::C_BasicFlashTool(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_BasicFlashTool::~C_BasicFlashTool()
 {
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       (void)this->mpc_CanDispatcher->CAN_Exit();
       delete this->mpc_CanDispatcher;
-      this->mpc_CanDispatcher = NULL;
+      this->mpc_CanDispatcher = nullptr;
       osc_write_log_info("Teardown", "CAN adapter closed.");
    }
 }
@@ -114,7 +114,7 @@ void C_BasicFlashTool::Init(const int32_t os32_Argc, char_t * const * const oppc
 #ifdef _WIN32
    {
       char_t acn_ApplicationName[MAX_PATH + 1];
-      const uint32_t u32_Return = GetModuleFileNameA(NULL, &acn_ApplicationName[0], MAX_PATH + 1);
+      const uint32_t u32_Return = GetModuleFileNameA(nullptr, &acn_ApplicationName[0], MAX_PATH + 1);
       tgl_assert(u32_Return != 0);
       c_ExeName = acn_ApplicationName;
    }
@@ -179,37 +179,37 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::ParseCommandLine(const int32_t os32
    {
       /* name, has_arg, flag, val */
       {
-         "help",                       no_argument,         NULL,    'h'
+         "help",                       no_argument,         nullptr,    'h'
       },
       {
-         "nodeid",                     required_argument,   NULL,    'n'
+         "nodeid",                     required_argument,   nullptr,    'n'
       },
       {
-         "hexfile",                    required_argument,   NULL,    'f'
+         "hexfile",                    required_argument,   nullptr,    'f'
       },
       {
-         "caninterface",               required_argument,   NULL,    'i'
+         "caninterface",               required_argument,   nullptr,    'i'
       },
       {
-         "bitrate",                    required_argument,   NULL,    'b'
+         "bitrate",                    required_argument,   nullptr,    'b'
       },
       {
-         "dontexitonerror",            no_argument,         NULL,    'e'
+         "dontexitonerror",            no_argument,         nullptr,    'e'
       },
       {
-         "dontstartapplication",       no_argument,         NULL,    'a'
+         "dontstartapplication",       no_argument,         nullptr,    'a'
       },
       {
-         "flashloaderresetwaittime",   no_argument,         NULL,    'w'
+         "flashloaderresetwaittime",   no_argument,         nullptr,    'w'
       },
       {
-         "requestdownloadtimeout",     no_argument,         NULL,    'r'
+         "requestdownloadtimeout",     no_argument,         nullptr,    'r'
       },
       {
-         "transferdatatimeout",        no_argument,         NULL,    't'
+         "transferdatatimeout",        no_argument,         nullptr,    't'
       },
       {
-         NULL,                         0,                   NULL,    0
+         nullptr,                         0,                   nullptr,    0
       }
    };
 
@@ -363,7 +363,7 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
    stw::scl::C_SclString c_Error;
    stw::can::C_CanDispatcher * const pc_LocalDispatcher =
       stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
-   if (pc_LocalDispatcher == NULL)
+   if (pc_LocalDispatcher == nullptr)
    {
       osc_write_log_error("Initialization", "Could not create CAN adapter: " + c_Error);
       e_Result = eERR_INITIALIZATION_FAILED;
@@ -474,7 +474,7 @@ C_SclString C_BasicFlashTool::mh_GetApplicationVersion(const stw::scl::C_SclStri
    int32_t s32_InfoSize;
    uint8_t * pu8_Buffer;
 
-   s32_InfoSize = GetFileVersionInfoSizeA(orc_FileName.c_str(), NULL);
+   s32_InfoSize = GetFileVersionInfoSizeA(orc_FileName.c_str(), nullptr);
    if (s32_InfoSize != 0)
    {
       pu8_Buffer = new uint8_t[static_cast<uint32_t>(s32_InfoSize)];

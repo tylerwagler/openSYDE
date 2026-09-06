@@ -213,7 +213,7 @@ void C_SyvDaPeSlider::m_UpdatePreview(void)
    const QSize c_ViewSize = C_SyvDaPeBase::h_GetSceneViewSize();
    //Also include the fix offset to the right
    const float64_t f64_IconOffset = C_SyvDaPeBase::h_GetFixIconOffset();
-   C_GiSvDaSliderBase * const pc_Item = new C_GiSvDaSliderBase(0UL, 0UL, -1L, 0ULL, NULL);
+   C_GiSvDaSliderBase * const pc_Item = new C_GiSvDaSliderBase(0UL, 0UL, -1L, 0ULL, nullptr);
    //Do not use view center
    const QSizeF c_ItemSize((static_cast<float64_t>(c_ViewSize.width()) / 1.2) + f64_IconOffset,
                            static_cast<float64_t>(c_ViewSize.height()) / 5.0);

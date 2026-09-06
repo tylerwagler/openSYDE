@@ -45,7 +45,7 @@ class C_SdBueMlvGraphicsScene :
    Q_OBJECT
 
 public:
-   C_SdBueMlvGraphicsScene(QObject * const opc_Parent = NULL);
+   C_SdBueMlvGraphicsScene(QObject * const opc_Parent = nullptr);
    ~C_SdBueMlvGraphicsScene(void) override;
 
    void SetMessageSyncManager(stw::opensyde_gui_logic::C_PuiSdNodeCanMessageSyncManager * const opc_Value);

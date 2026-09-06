@@ -77,7 +77,7 @@ void C_SyvSeContextMenuManager::HandleContextMenuEvent(QGraphicsSceneContextMenu
    Q_UNUSED(orq_ShowPaste)
 
    // reset all previous configurations
-   this->mpc_ActiveItem = NULL;
+   this->mpc_ActiveItem = nullptr;
    // set all actions invisible
    this->m_SetActionsInvisible();
 

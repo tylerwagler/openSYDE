@@ -26,7 +26,7 @@ class C_OgeTedDbComment :
    Q_OBJECT
 
 public:
-   explicit C_OgeTedDbComment(QWidget * const opc_Parent = NULL);
+   explicit C_OgeTedDbComment(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

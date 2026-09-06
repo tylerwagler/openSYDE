@@ -178,9 +178,9 @@ void C_SyvDaChaDataItemWidget::InitWidget(const uint32_t ou32_DataPoolElementCon
 
    if (orc_DisplayName.compare("") == 0)
    {
-      if (pc_OscElement != NULL)
+      if (pc_OscElement != nullptr)
       {
-         if (pc_Datapool != NULL)
+         if (pc_Datapool != nullptr)
          {
             if ((pc_Datapool->e_Type == C_OscNodeDataPool::eHALC) ||
                 (pc_Datapool->e_Type == C_OscNodeDataPool::eHALC_NVM))
@@ -205,7 +205,7 @@ void C_SyvDaChaDataItemWidget::InitWidget(const uint32_t ou32_DataPoolElementCon
    if (oq_Warning == false)
    {
       QString c_Value = "0";
-      if (pc_OscElement != NULL)
+      if (pc_OscElement != nullptr)
       {
          // Set default value
          float64_t f64_Value;
@@ -549,7 +549,7 @@ bool C_SyvDaChaDataItemWidget::event(QEvent * const opc_Event)
       else
       {
          //get element name as heading
-         if (C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(this->mc_DataPoolElementId) != NULL)
+         if (C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(this->mc_DataPoolElementId) != nullptr)
          {
             const QString c_Name =
                C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(this->mc_DataPoolElementId)->c_Name.
@@ -643,7 +643,7 @@ void C_SyvDaChaDataItemWidget::m_UpdateIcon(void) const
       const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
          this->mc_DataPoolElementId.u32_NodeIndex, this->mc_DataPoolElementId.u32_DataPoolIndex);
 
-      if (pc_DataPool != NULL)
+      if (pc_DataPool != nullptr)
       {
          e_Type = pc_DataPool->e_Type;
       }

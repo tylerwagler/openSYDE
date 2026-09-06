@@ -41,7 +41,7 @@ class C_SdHandlerWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdHandlerWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdHandlerWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdHandlerWidget() override;
 
    void SetParentHook(QWidget * const opc_Parent) override;

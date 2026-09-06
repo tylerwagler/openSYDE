@@ -29,7 +29,7 @@ class C_OgeGbxHover :
    Q_OBJECT
 
 public:
-   C_OgeGbxHover(QWidget * const opc_Parent = NULL);
+   C_OgeGbxHover(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

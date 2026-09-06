@@ -32,7 +32,7 @@ class C_OgeSpxInt64 :
    Q_OBJECT
 
 public:
-   C_OgeSpxInt64(QWidget * const opc_Parent = NULL, const bool & orq_IsUnsigned = false);
+   C_OgeSpxInt64(QWidget * const opc_Parent = nullptr, const bool & orq_IsUnsigned = false);
    bool GetIsUnsigned(void) const;
    void SetValue(const QVariant & orc_Value, const bool oq_AllowValueUpdate);
    void SetStepWidth(const uint64_t ou64_Step);

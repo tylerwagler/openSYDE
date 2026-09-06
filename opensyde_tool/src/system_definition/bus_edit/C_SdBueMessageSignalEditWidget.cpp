@@ -380,8 +380,8 @@ void C_SdBueMessageSignalEditWidget::RefreshSelection(void)
    C_OscCanMessageIdentificationIndices c_MessageId;
    uint32_t u32_SignalIndex;
 
-   this->GetLastSelection(q_MessageSelected, NULL,
-                          q_SignalSelected, NULL,
+   this->GetLastSelection(q_MessageSelected, nullptr,
+                          q_SignalSelected, nullptr,
                           &c_MessageId, &u32_SignalIndex);
 
    if (q_SignalSelected == true)
@@ -424,15 +424,15 @@ void C_SdBueMessageSignalEditWidget::GetLastSelection(bool & orq_MessageSelected
    if (c_MatchingIds.size() > 0UL)
    {
       const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(c_MatchingIds[0]);
-      if (pc_Message != NULL)
+      if (pc_Message != nullptr)
       {
          orq_MessageSelected = true;
 
-         if (opc_MessageName != NULL)
+         if (opc_MessageName != nullptr)
          {
             *opc_MessageName = pc_Message->c_Name.c_str();
          }
-         if (opc_MessageId != NULL)
+         if (opc_MessageId != nullptr)
          {
             *opc_MessageId = c_MatchingIds[0];
          }
@@ -447,25 +447,25 @@ void C_SdBueMessageSignalEditWidget::GetLastSelection(bool & orq_MessageSelected
       const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(c_Id);
       const C_OscNodeDataPoolListElement * const pc_Signal =
          C_PuiSdHandler::h_GetInstance()->GetOscCanDataPoolListElement(c_Id, u32_SignalIndex);
-      if ((pc_Message != NULL) && (pc_Signal != NULL))
+      if ((pc_Message != nullptr) && (pc_Signal != nullptr))
       {
          orq_MessageSelected = false;
          orq_SignalSelected = true;
 
-         if (opc_MessageName != NULL)
+         if (opc_MessageName != nullptr)
          {
             *opc_MessageName = pc_Message->c_Name.c_str();
          }
-         if (opc_SignalName != NULL)
+         if (opc_SignalName != nullptr)
          {
             *opc_SignalName = pc_Signal->c_Name.c_str();
          }
 
-         if (opc_MessageId != NULL)
+         if (opc_MessageId != nullptr)
          {
             *opc_MessageId = c_Id;
          }
-         if (opu32_SignalIndex != NULL)
+         if (opu32_SignalIndex != nullptr)
          {
             *opu32_SignalIndex = u32_SignalIndex;
          }
@@ -715,8 +715,8 @@ const
       const C_OscCanMessage * const pc_CanMessage =
          C_PuiSdHandler::h_GetInstance()->GetCanMessage(orc_MessageId);
 
-      tgl_assert(pc_CanMessage != NULL);
-      if (pc_CanMessage != NULL)
+      tgl_assert(pc_CanMessage != nullptr);
+      if (pc_CanMessage != nullptr)
       {
          q_ShowDisabledPdoInfo = !pc_CanMessage->q_CanOpenManagerMessageActive;
       }

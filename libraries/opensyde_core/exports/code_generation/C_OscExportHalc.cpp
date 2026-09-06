@@ -354,7 +354,7 @@ void C_OscExportHalc::mh_AddDefines(C_SclStringList & orc_Data, const C_OscHalcC
          {
             const C_OscHalcConfigDomain * const pc_Domain = orc_HalcConfig.GetDomainConfigDataConst(u32_DomainIt);
 
-            if (pc_Domain != NULL)
+            if (pc_Domain != nullptr)
             {
                const C_SclString c_DataPoolName = C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe) + "_";
                uint32_t u32_NumberOfAssignedChannels = 0U;
@@ -451,7 +451,7 @@ void C_OscExportHalc::mh_AddGlobalVariables(C_SclStringList & orc_Data, const C_
             const C_OscHalcConfigDomain * const pc_Domain = orc_HalcConfig.GetDomainConfigDataConst(u32_DomainIt);
             C_SclString c_Tmp;
 
-            if (pc_Domain != NULL)
+            if (pc_Domain != nullptr)
             {
                bool q_IsArray;
                const C_OscHalcDefChannelValues * pc_ChannelValues;

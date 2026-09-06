@@ -65,13 +65,13 @@ void C_GiSvDaBoundary::LoadData(void)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-         if (pc_Dashboard != NULL)
+         if (pc_Dashboard != nullptr)
          {
             const C_PuiBsBoundary * const pc_Item = pc_Dashboard->GetBoundary(static_cast<uint32_t>(this->ms32_Index));
-            if (pc_Item != NULL)
+            if (pc_Item != nullptr)
             {
                m_LoadFromData(*pc_Item);
             }
@@ -90,13 +90,13 @@ void C_GiSvDaBoundary::UpdateData(void)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-         if (pc_Dashboard != NULL)
+         if (pc_Dashboard != nullptr)
          {
             const C_PuiBsBoundary * const pc_Item = pc_Dashboard->GetBoundary(static_cast<uint32_t>(this->ms32_Index));
-            if (pc_Item != NULL)
+            if (pc_Item != nullptr)
             {
                C_PuiBsBoundary c_Item = *pc_Item;
                m_UpdateData(c_Item);

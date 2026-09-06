@@ -41,7 +41,7 @@ public:
                                        const stw::opensyde_core::C_OscDcDeviceInformation & orc_Info,
                                        const std::map<uint8_t,
                                                       stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds,
-                                       QWidget * const opc_Parent = NULL);
+                                       QWidget * const opc_Parent = nullptr);
    ~C_SyvDcConnectedNodeWidget(void) noexcept override;
 
    QString GetPlainSerialNumberString(void) const;

@@ -27,7 +27,7 @@ class C_OgePubSvgIconWithText :
    public C_OgePubSvgIconWithTextBase
 {
 public:
-   C_OgePubSvgIconWithText(QWidget * const opc_Parent = NULL);
+   C_OgePubSvgIconWithText(QWidget * const opc_Parent = nullptr);
 
    void HideToolTip(void);
 };

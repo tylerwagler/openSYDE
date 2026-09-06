@@ -33,7 +33,7 @@ class C_SdNdeDbListWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDbListWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDbListWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDbListWidget() override;
 
    void SetIndex(const uint32_t ou32_NodeIndex);

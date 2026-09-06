@@ -153,7 +153,7 @@ public:
                                  const uint8_t(&orau8_DefaultGateway)[4],
                                  const C_OscProtocolDriverOsyNode &orc_NewNodeId,
                                  uint8_t(&orau8_ResponseIp)[4],
-                                 uint8_t * const opu8_ErrorResult = NULL) const;
+                                 uint8_t * const opu8_ErrorResult = nullptr) const;
    int32_t BroadcastSetIpAddressExtended(
       const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
       const uint8_t(&orau8_NewIpAddress)[4],
@@ -162,10 +162,10 @@ public:
       const C_OscProtocolDriverOsyNode &orc_NewNodeId,
       const uint8_t ou8_SubNodeId,
       uint8_t(&orau8_ResponseIp)[4],
-      uint8_t * const opu8_ErrorResult = NULL) const;
+      uint8_t * const opu8_ErrorResult = nullptr) const;
    int32_t BroadcastRequestProgramming(std::vector<C_BroadcastRequestProgrammingResults> & orc_Results) const;
    int32_t BroadcastNetReset(const uint8_t ou8_ResetType, const bool oq_SpecificSerialNumberOnly = false,
-                             const uint8_t (*const opau8_SerialNumber)[6] = NULL) const;
+                             const uint8_t (*const opau8_SerialNumber)[6] = nullptr) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

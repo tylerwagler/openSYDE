@@ -38,7 +38,7 @@ public:
       eCDCS_UNINITIALIZED
    };
 
-   C_SyvComDriverDiagConnect(QObject * const opc_Parent = NULL);
+   C_SyvComDriverDiagConnect(QObject * const opc_Parent = nullptr);
 
    E_ConnectState GetStep(void) const;
    void SetWaitingStepParameters(const qint64 os64_RemainingWaitMs);

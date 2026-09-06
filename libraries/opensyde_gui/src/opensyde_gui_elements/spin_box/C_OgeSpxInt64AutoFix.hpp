@@ -29,7 +29,7 @@ class C_OgeSpxInt64AutoFix :
    public C_OgeSpxAutoFixBase
 {
 public:
-   C_OgeSpxInt64AutoFix(QWidget * const opc_Parent = NULL);
+   C_OgeSpxInt64AutoFix(QWidget * const opc_Parent = nullptr);
 
    int32_t GetLineEditWidth(void) const;
 

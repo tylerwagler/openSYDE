@@ -60,7 +60,7 @@ C_FlaConNodeConfigPopup::C_FlaConNodeConfigPopup(stw::opensyde_gui_elements::C_O
                                                  const QString & orc_CanChannelId) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_FlaConNodeConfigPopup),
-   mpc_DcSequences(NULL),
+   mpc_DcSequences(nullptr),
    ms32_SequenceResult(C_NO_ERR),
    mu8_CurrentNodeId(ou8_NodeId),
    mu32_CurrentBitrate(ou32_Bitrate),
@@ -247,7 +247,7 @@ int32_t C_FlaConNodeConfigPopup::m_InitDcSequence(void)
 {
    int32_t s32_Return;
 
-   if (this->mpc_DcSequences == NULL)
+   if (this->mpc_DcSequences == nullptr)
    {
       this->mpc_DcSequences = new C_FlaSenDcBasicSequences();
 
@@ -283,7 +283,7 @@ int32_t C_FlaConNodeConfigPopup::m_InitDcSequence(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaConNodeConfigPopup::m_CleanUpDcSequence(void)
 {
-   if (this->mpc_DcSequences != NULL)
+   if (this->mpc_DcSequences != nullptr)
    {
       disconnect(mpc_DcSequences, &C_FlaSenDcBasicSequences::SigReportProgress, this,
                  &C_FlaConNodeConfigPopup::SigReportProgress);
@@ -292,7 +292,7 @@ void C_FlaConNodeConfigPopup::m_CleanUpDcSequence(void)
    }
 
    delete this->mpc_DcSequences;
-   this->mpc_DcSequences = NULL;
+   this->mpc_DcSequences = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -346,7 +346,7 @@ void C_FlaConNodeConfigPopup::m_MonitorSequence()
    int32_t s32_ThreadResult = C_CONFIG;
    int32_t s32_SequenceResult = C_UNKNOWN_ERR;
 
-   if (this->mpc_DcSequences != NULL)
+   if (this->mpc_DcSequences != nullptr)
    {
       s32_ThreadResult = this->mpc_DcSequences->GetResults(s32_SequenceResult);
    }

@@ -27,7 +27,7 @@ class C_OgeSpxInt64Factor :
    public C_OgeSpxInt64ToolTipBase
 {
 public:
-   C_OgeSpxInt64Factor(QWidget * const opc_Parent = NULL, const bool & orq_IsUnsigned = false);
+   C_OgeSpxInt64Factor(QWidget * const opc_Parent = nullptr, const bool & orq_IsUnsigned = false);
 
    void InterpretValue(void);
 

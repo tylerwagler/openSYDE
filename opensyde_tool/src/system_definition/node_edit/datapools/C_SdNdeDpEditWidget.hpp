@@ -39,7 +39,7 @@ class C_SdNdeDpEditWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpEditWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDpEditWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpEditWidget() override;
    void SetNode(const uint32_t & oru32_NodeIndex);
    void OpenDetail(const int32_t os32_DataPoolIndex, const int32_t os32_ListIndex,

@@ -28,7 +28,7 @@ class C_GiRectPixmap :
    public QGraphicsRectItem
 {
 public:
-   C_GiRectPixmap(const QRectF & orc_Rect, QGraphicsItem * const opc_Parent = NULL);
+   C_GiRectPixmap(const QRectF & orc_Rect, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiRectPixmap() override;
 
    void SetBackgroundColor(const QColor & orc_Color);

@@ -75,11 +75,11 @@ void C_SebUnoAddDeleteBaseCommand::m_StoreCommon(C_PuiBsElements & orc_Storage, 
         c_ItRelatedItem != c_RelatedItems.end(); ++c_ItRelatedItem)
    {
       pc_Unique = dynamic_cast<C_GiUnique *>(*c_ItRelatedItem);
-      if (pc_Unique != NULL)
+      if (pc_Unique != nullptr)
       {
          const uint64_t u64_CurUniqueId = pc_Unique->GetId();
          pc_Data = dynamic_cast<C_PuiBsDataElement *>(*c_ItRelatedItem);
-         if (pc_Data != NULL)
+         if (pc_Data != nullptr)
          {
             const int32_t s32_Index = pc_Data->GetIndex();
             if (s32_Index >= 0)
@@ -91,7 +91,7 @@ void C_SebUnoAddDeleteBaseCommand::m_StoreCommon(C_PuiBsElements & orc_Storage, 
                //Backup scene data internally
                //Line arrow
                pc_LineArrow = dynamic_cast<C_GiBiArrow *>(*c_ItRelatedItem);
-               if (pc_LineArrow != NULL)
+               if (pc_LineArrow != nullptr)
                {
                   if (u32_Index < orc_AllElements.c_LineArrows.size())
                   {
@@ -105,7 +105,7 @@ void C_SebUnoAddDeleteBaseCommand::m_StoreCommon(C_PuiBsElements & orc_Storage, 
                }
                //Boundary
                pc_Boundary = dynamic_cast<C_GiBiBoundary *>(*c_ItRelatedItem);
-               if (pc_Boundary != NULL)
+               if (pc_Boundary != nullptr)
                {
                   if (u32_Index < orc_AllElements.c_Boundaries.size())
                   {
@@ -119,7 +119,7 @@ void C_SebUnoAddDeleteBaseCommand::m_StoreCommon(C_PuiBsElements & orc_Storage, 
                }
                //Image
                pc_Image = dynamic_cast<C_GiBiImageGroup *>(*c_ItRelatedItem);
-               if (pc_Image != NULL)
+               if (pc_Image != nullptr)
                {
                   if (u32_Index < orc_AllElements.c_Images.size())
                   {
@@ -132,7 +132,7 @@ void C_SebUnoAddDeleteBaseCommand::m_StoreCommon(C_PuiBsElements & orc_Storage, 
                }
                //Text element
                pc_TextElement = dynamic_cast<C_GiBiTextElement *>(*c_ItRelatedItem);
-               if (pc_TextElement != NULL)
+               if (pc_TextElement != nullptr)
                {
                   if (u32_Index < orc_AllElements.c_TextElements.size())
                   {

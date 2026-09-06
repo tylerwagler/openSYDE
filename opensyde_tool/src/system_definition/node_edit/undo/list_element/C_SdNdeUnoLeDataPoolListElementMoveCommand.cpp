@@ -72,11 +72,11 @@ C_SdNdeUnoLeDataPoolListElementMoveCommand::C_SdNdeUnoLeDataPoolListElementMoveC
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoLeDataPoolListElementMoveCommand::redo(void)
 {
-   if (this->mpc_DataPoolListModelViewManager != NULL)
+   if (this->mpc_DataPoolListModelViewManager != nullptr)
    {
       C_SdNdeDpListTableModel * const pc_Model = this->mpc_DataPoolListModelViewManager->GetElementModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          const uint16_t u16_TimerId = osc_write_log_performance_start();
 
@@ -100,11 +100,11 @@ void C_SdNdeUnoLeDataPoolListElementMoveCommand::redo(void)
 void C_SdNdeUnoLeDataPoolListElementMoveCommand::undo(void)
 {
    C_SdNdeUnoLeDataPoolListElementBaseCommand::undo();
-   if (this->mpc_DataPoolListModelViewManager != NULL)
+   if (this->mpc_DataPoolListModelViewManager != nullptr)
    {
       C_SdNdeDpListTableModel * const pc_Model = this->mpc_DataPoolListModelViewManager->GetElementModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          const uint16_t u16_TimerId = osc_write_log_performance_start();
 

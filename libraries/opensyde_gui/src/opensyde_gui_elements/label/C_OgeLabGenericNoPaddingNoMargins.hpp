@@ -31,7 +31,7 @@ class C_OgeLabGenericNoPaddingNoMargins :
    Q_OBJECT
 
 public:
-   C_OgeLabGenericNoPaddingNoMargins(QWidget * const opc_Parent = NULL);
+   C_OgeLabGenericNoPaddingNoMargins(QWidget * const opc_Parent = nullptr);
 
    void SetForegroundColor(const int32_t os32_Value);
    void SetBackgroundColor(const int32_t os32_Value);

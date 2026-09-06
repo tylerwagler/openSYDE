@@ -124,8 +124,8 @@ void C_SdNdeDbViewWidget::SetNodeIndex(const uint32_t ou32_NodeIndex)
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
    this->mu32_NodeIndex = ou32_NodeIndex;
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       this->mpc_Ui->pc_ListWidget->SetIndex(ou32_NodeIndex);
 
@@ -187,8 +187,8 @@ void C_SdNdeDbViewWidget::AddApp(void)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          if (pc_Node->IsAnyUpdateAvailable() == true)
          {
@@ -263,7 +263,7 @@ void C_SdNdeDbViewWidget::AddFromTsp(const bool oq_IsNewNode)
       c_Message.Execute();
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       C_UsHandler::h_GetInstance()->SetProjSdTopologyLastKnownTspPath(pc_Dialog->GetTspPath());
       c_New->HideOverlay();
@@ -279,7 +279,7 @@ void C_SdNdeDbViewWidget::m_HandleNoDatablocksLabel(void) const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if ((pc_Node != NULL) && (pc_Node->IsAnyUpdateAvailable() == true))
+   if ((pc_Node != nullptr) && (pc_Node->IsAnyUpdateAvailable() == true))
    {
       //are there any data blocks?
       if (pc_Node->c_Applications.empty() == true)
@@ -312,7 +312,7 @@ void C_SdNdeDbViewWidget::m_HandleAddButtonAvailability(void) const
    bool q_Enabled = true;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if (pc_Node->IsAnyUpdateAvailable() == true)
       {
@@ -368,8 +368,8 @@ uint32_t C_SdNdeDbViewWidget::m_AddApplication(C_OscNodeApplication & orc_Applic
    uint32_t u32_Retval = 0UL;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       u32_Retval = static_cast<uint32_t>(pc_Node->c_Applications.size());
       tgl_assert(C_PuiSdHandler::h_GetInstance()->InsertApplication(this->mu32_NodeIndex, u32_Retval,
@@ -440,8 +440,8 @@ void C_SdNdeDbViewWidget::m_UpdateCount(void) const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       this->mpc_Ui->pc_LabelApplicationName->setText(static_cast<QString>("Data Blocks (%1)").arg(pc_Node->
                                                                                                   c_Applications.size()));
@@ -520,7 +520,7 @@ void C_SdNdeDbViewWidget::m_AddManualApplication(void)
       Q_EMIT (this->SigOwnedDataPoolsChanged());
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -535,11 +535,11 @@ void C_SdNdeDbViewWidget::m_HandleCodeGenerationSettingsButtonAvailability(void)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
-      tgl_assert(pc_Node->pc_DeviceDefinition != NULL);
-      if (pc_Node->pc_DeviceDefinition != NULL)
+      tgl_assert(pc_Node->pc_DeviceDefinition != nullptr);
+      if (pc_Node->pc_DeviceDefinition != nullptr)
       {
          tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
          if (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size())

@@ -73,11 +73,11 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_Add(void)
 
    //Sort
    m_SortAscending();
-   if (this->mpc_DataPoolListModelViewManager != NULL)
+   if (this->mpc_DataPoolListModelViewManager != nullptr)
    {
       C_SdNdeDpListTableModel * const pc_Model = this->mpc_DataPoolListModelViewManager->GetElementModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          std::vector<std::vector<uint32_t> > c_Continous;
          //Insert
@@ -100,16 +100,16 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_Delete(void)
    this->mc_OscContent.resize(this->mc_Indices.size());
    this->mc_UiContent.resize(this->mc_Indices.size());
    m_SortAscending();
-   if (this->mpc_DataPoolListModelViewManager != NULL)
+   if (this->mpc_DataPoolListModelViewManager != nullptr)
    {
       C_SdNdeDpListTableView * const pc_View = this->mpc_DataPoolListModelViewManager->GetElementView(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
       C_SdNdeDpListTableModel * const pc_Model = this->mpc_DataPoolListModelViewManager->GetElementModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          //Clear selection
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             pc_View->clearSelection();
          }
@@ -127,7 +127,7 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_Delete(void)
          pc_Model->DoRemoveRows(this->mc_Indices);
 
          //Select one over highest deleted index
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             if (this->mc_Indices.size() > 0)
             {
@@ -181,7 +181,7 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_SetInitialData(
    this->mc_OscContent = orc_OscContent;
    this->mc_UiContent = orc_UiContent;
    //Adapt data set size to requirement
-   if (pc_List != NULL)
+   if (pc_List != nullptr)
    {
       const uint32_t u32_DataSetSize = static_cast<uint32_t>(pc_List->c_DataSets.size());
       for (uint32_t u32_ItOscData = 0; u32_ItOscData < this->mc_OscContent.size(); ++u32_ItOscData)
@@ -213,7 +213,7 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_ReSelect(
    C_SdNdeDpListTableView * const pc_View = this->mpc_DataPoolListModelViewManager->GetElementView(
       this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       pc_View->clearSelection();
       //New selection
@@ -229,7 +229,7 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_ReSelect(
                C_SdNdeDpListTableModel * const pc_Model =
                   this->mpc_DataPoolListModelViewManager->GetElementModel(
                      this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
-               if (pc_Model != NULL)
+               if (pc_Model != nullptr)
                {
                   pc_View->scrollTo(pc_Model->index(rc_Section[rc_Section.size() - 1U], 0));
                }

@@ -69,7 +69,7 @@ void C_OgeTedTable::focusInEvent(QFocusEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeTedTable::keyPressEvent(QKeyEvent * const opc_KeyEvent)
 {
-   if (opc_KeyEvent != NULL)
+   if (opc_KeyEvent != nullptr)
    {
       C_OgeTedContextMenuBase::keyPressEvent(opc_KeyEvent);
       if ((opc_KeyEvent->matches(QKeySequence::InsertLineSeparator) == false) &&

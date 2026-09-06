@@ -30,7 +30,7 @@ class C_GiSvDaSliderBase :
 public:
    C_GiSvDaSliderBase(const uint32_t & oru32_ViewIndex, const uint32_t & oru32_DashboardIndex,
                       const int32_t & ors32_DataIndex, const uint64_t & oru64_Id,
-                      QGraphicsItem * const opc_Parent = NULL);
+                      QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiSvDaSliderBase(void) override;
 
    int32_t type(void) const override;

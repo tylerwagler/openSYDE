@@ -34,7 +34,7 @@ public:
                                         C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
                                         const std::vector<uint32_t> & orc_SourceCol,
                                         const std::vector<uint32_t> & orc_TargetCol, const bool & orq_AdaptIndices,
-                                        QUndoCommand * const opc_Parent = NULL);
+                                        QUndoCommand * const opc_Parent = nullptr);
    void redo(void) override;
    void undo(void) override;
 

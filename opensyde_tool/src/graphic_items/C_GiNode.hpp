@@ -45,7 +45,7 @@ public:
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiNode(const int32_t & ors32_Index, const uint64_t & oru64_Id,
             const float64_t & orf64_Width = mhf64_INITIAL_WIDTH_NODE,
-            const float64_t & orf64_Height = mhf64_INITIAL_HEIGHT_NODE, QGraphicsItem * const opc_Parent = NULL);
+            const float64_t & orf64_Height = mhf64_INITIAL_HEIGHT_NODE, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiNode() override;
    void FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Closest) const override;
    virtual void FindClosestPort(const QPointF &orc_ScenePoint, C_GiPort * (&orpc_Closest)) const;

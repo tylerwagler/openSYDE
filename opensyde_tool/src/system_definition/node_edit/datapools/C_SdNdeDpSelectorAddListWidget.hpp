@@ -29,7 +29,7 @@ class C_SdNdeDpSelectorAddListWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpSelectorAddListWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDpSelectorAddListWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpSelectorAddListWidget(void) override;
 
 private:

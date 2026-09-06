@@ -42,7 +42,7 @@ public:
                                        const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
                                        const bool oq_ShowNvmLists,
                                        const std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements =
-                                          NULL, const bool oq_UseInSysViews = true,
+                                          nullptr, const bool oq_UseInSysViews = true,
                                        const uint32_t ou32_SdDataLoggerUseCaseNodeIndex = 0UL,
                                        const bool oq_ShowStringElements = false);
    ~C_SyvDaPeDataElementBrowse(void) override;

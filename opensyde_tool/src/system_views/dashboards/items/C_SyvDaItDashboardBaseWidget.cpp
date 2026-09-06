@@ -40,7 +40,7 @@ using namespace stw::opensyde_gui;
 C_SyvDaItDashboardBaseWidget::C_SyvDaItDashboardBaseWidget(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SyvDaItDashboardBaseWidget),
-   mpc_Widget(NULL)
+   mpc_Widget(nullptr)
 {
    mpc_Ui->setupUi(this);
 
@@ -67,7 +67,7 @@ C_SyvDaItDashboardBaseWidget::~C_SyvDaItDashboardBaseWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItDashboardBaseWidget::SetWidget(QWidget * const opc_Content)
 {
-   if (opc_Content != NULL)
+   if (opc_Content != nullptr)
    {
       this->mpc_Widget = opc_Content;
       opc_Content->setParent(this);
@@ -86,7 +86,7 @@ void C_SyvDaItDashboardBaseWidget::SetWidget(QWidget * const opc_Content)
 void C_SyvDaItDashboardBaseWidget::resizeEvent(QResizeEvent * const opc_Event)
 {
    QWidget::resizeEvent(opc_Event);
-   if (this->mpc_Widget != NULL)
+   if (this->mpc_Widget != nullptr)
    {
       const QMargins c_Margins1 = this->mpc_Ui->pc_VerticalLayout_2->contentsMargins();
       const QMargins c_Margins2 = this->mpc_Ui->pc_VerticalLayout->contentsMargins();

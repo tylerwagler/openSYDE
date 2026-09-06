@@ -81,7 +81,7 @@ C_SyvComDataDealer::~C_SyvComDataDealer(void) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComDataDealer::RegisterWidget(C_PuiSvDbDataElementHandler * const opc_Widget)
 {
-   if (opc_Widget != NULL)
+   if (opc_Widget != nullptr)
    {
       uint32_t u32_Counter;
 
@@ -161,7 +161,7 @@ int32_t C_SyvComDataDealer::DataPoolReadWithWidget(const uint8_t ou8_DataPoolInd
 
    if (s32_Return == C_NO_ERR)
    {
-      if (opc_DashboardWidget == NULL)
+      if (opc_DashboardWidget == nullptr)
       {
          this->m_OnReadDataPoolEventReceived(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex);
       }
@@ -318,8 +318,8 @@ void C_SyvComDataDealer::m_OnReadDataPoolEventReceivedForWidget(const uint8_t ou
                                                                 const uint16_t ou16_ElementIndex,
                                                                 C_PuiSvDbDataElementHandler * const opc_DashboardWidget)
 {
-   if ((this->mpc_Node != NULL) &&
-       (opc_DashboardWidget != NULL))
+   if ((this->mpc_Node != nullptr) &&
+       (opc_DashboardWidget != nullptr))
    {
       const C_OscNodeDataPoolListElementId c_ElementId(this->mu32_NodeIndex, ou8_DataPoolIndex, ou16_ListIndex,
                                                        ou16_ElementIndex);
@@ -341,7 +341,7 @@ void C_SyvComDataDealer::m_OnReadDataPoolEventReceivedForWidget(const uint8_t ou
 void C_SyvComDataDealer::m_OnReadDataPoolEventReceived(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                        const uint16_t ou16_ElementIndex)
 {
-   if (this->mpc_Node != NULL)
+   if (this->mpc_Node != nullptr)
    {
       QMap<C_OscNodeDataPoolListElementId,
            QList<C_PuiSvDbDataElementHandler *> >::const_iterator c_ItElement;
@@ -401,7 +401,7 @@ void C_SyvComDataDealer::m_OnReadDataPoolEventErrorReceived(const uint8_t ou8_Da
                                                             const uint16_t ou16_ElementIndex,
                                                             const uint8_t ou8_ErrorCode)
 {
-   if (this->mpc_Node != NULL)
+   if (this->mpc_Node != nullptr)
    {
       QMap<C_OscNodeDataPoolListElementId,
            QList<C_PuiSvDbDataElementHandler *> >::const_iterator c_ItElement;
@@ -440,7 +440,7 @@ void C_SyvComDataDealer::m_OnReadDataPoolNvmEventReceived(const uint8_t ou8_Data
                                                           const uint16_t ou16_ListIndex,
                                                           const uint16_t ou16_ElementIndex)
 {
-   if (this->mpc_Node != NULL)
+   if (this->mpc_Node != nullptr)
    {
       QMap<C_OscNodeDataPoolListElementId,
            QList<C_PuiSvDbDataElementHandler *> >::const_iterator c_ItElement;

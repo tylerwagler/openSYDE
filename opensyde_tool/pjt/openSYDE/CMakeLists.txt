@@ -1740,8 +1740,9 @@ set(OPENSYDE_FORMS
    ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesTabContentWidget.ui
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoAddDeviceDialog.ui
    ${PROJECT_ROOT}/src/system_definition/node_edit/canopen_manager/C_SdNdeCoDeviceUpdateEdsDialog.ui
-   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionWidget.ui
-   ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobPropertiesWidget.ui
+    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobDataSelectionWidget.ui
+    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobGeneralSettingsWidget.ui
+    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobPropertiesWidget.ui
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsOvWidget.ui
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalLogJobsWidget.ui
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_logger/C_SdNdeDalTabContentWidget.ui

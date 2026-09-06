@@ -95,7 +95,7 @@ C_SclString C_SydeSupWindows::m_GetApplicationVersion(const C_SclString & orc_Ap
 
    c_Version = "V?.\?\?r?";
 
-   s32_InfoSize = GetFileVersionInfoSizeA(orc_ApplicationFileName.c_str(), NULL);
+   s32_InfoSize = GetFileVersionInfoSizeA(orc_ApplicationFileName.c_str(), nullptr);
    if (s32_InfoSize != 0)
    {
       pu8_Buffer = new uint8_t[static_cast<uint32_t>(s32_InfoSize)];

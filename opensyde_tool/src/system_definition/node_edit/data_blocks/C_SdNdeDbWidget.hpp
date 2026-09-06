@@ -34,7 +34,7 @@ class C_SdNdeDbWidget :
 
 public:
    explicit C_SdNdeDbWidget(const uint32_t ou32_NodeIndex, const uint32_t ou32_ApplicationIndex,
-                            QWidget * const opc_Parent = NULL);
+                            QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDbWidget() override;
 
    void InitStaticNames(void) const;

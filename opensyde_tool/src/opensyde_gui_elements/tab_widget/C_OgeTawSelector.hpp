@@ -30,7 +30,7 @@ class C_OgeTawSelector :
    Q_OBJECT
 
 public:
-   explicit C_OgeTawSelector(QWidget * const opc_Parent = NULL);
+   explicit C_OgeTawSelector(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -264,7 +264,7 @@ C_SclString C_CanMonProtocolBase::mh_SerialNumberToString(const uint8_t * const 
 {
    C_SclString c_Result;
 
-   if (opu8_SerialNumber != NULL)
+   if (opu8_SerialNumber != nullptr)
    {
       if (opu8_SerialNumber[0] < static_cast<uint8_t>(0x20))
       {

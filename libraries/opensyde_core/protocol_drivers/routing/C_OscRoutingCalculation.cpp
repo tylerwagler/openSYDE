@@ -97,7 +97,7 @@ const vector<C_OscRoutingRoute> * C_OscRoutingCalculation::GetRoutes(void) const
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscRoutingRoute * C_OscRoutingCalculation::GetBestRoute(void) const
 {
-   const C_OscRoutingRoute * pc_Result = NULL;
+   const C_OscRoutingRoute * pc_Result = nullptr;
 
    if (this->mc_RoutesToTarget.size() > 0)
    {
@@ -111,7 +111,7 @@ const C_OscRoutingRoute * C_OscRoutingCalculation::GetBestRoute(void) const
          {
             u32_CountHops = static_cast<uint32_t>(this->mc_RoutesToTarget[u32_Counter].c_VecRoutePoints.size());
 
-            if (pc_Result == NULL)
+            if (pc_Result == nullptr)
             {
                // Save as first result
                pc_Result = &this->mc_RoutesToTarget[u32_Counter];
@@ -297,8 +297,8 @@ int32_t C_OscRoutingCalculation::m_CheckTargetNodeConfig(void) const
    bool q_AtLeastOneFunctionActive = false;
    const C_OscNode * const pc_Node = &this->mrc_AllNodes[this->mu32_TargetNodeIndex];
 
-   tgl_assert(pc_Node->pc_DeviceDefinition != NULL);
-   if (pc_Node->pc_DeviceDefinition != NULL)
+   tgl_assert(pc_Node->pc_DeviceDefinition != nullptr);
+   if (pc_Node->pc_DeviceDefinition != nullptr)
    {
       tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
       if (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size())

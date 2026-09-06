@@ -122,7 +122,7 @@ public:
    virtual ~C_CanDispatcher(void);
 
    int32_t DispatchIncoming(void);
-   int32_t RegisterClient(uint16_t & oru16_Handle, const C_CanRxFilter * const opc_RXFilter = NULL,
+   int32_t RegisterClient(uint16_t & oru16_Handle, const C_CanRxFilter * const opc_RXFilter = nullptr,
                           const uint32_t & oru32_BufferSize = mu32_CAN_QUEUE_DEFAULT_MAX_SIZE);
    int32_t RemoveClient(const uint16_t ou16_Handle);
    int32_t SetRXFilter(const uint16_t ou16_Handle, const C_CanRxFilter & orc_RXFilter);

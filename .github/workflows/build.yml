@@ -1,0 +1,103 @@
+name: Build & Lint
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build (openSYDE Tool)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            cmake \
+            ninja-build \
+            g++ \
+            qt6-base-dev \
+            qt6-tools-dev \
+            qt6-svg-dev \
+            libssl-dev \
+            libqcustomplot-qt6-dev
+
+      - name: Build opensyde_tool
+        run: ./build.sh opensyde
+
+  clang-tidy:
+    name: Clang-Tidy Analysis
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            cmake \
+            ninja-build \
+            g++ \
+            clang-tidy \
+            qt6-base-dev \
+            libssl-dev
+
+      - name: Configure & run clang-tidy
+        run: |
+          # Build a minimal subset of opensyde_core with clang-tidy enabled.
+          # We use a wrapper CMakeLists.txt to provide a stub CanLibraries::can
+          # target (bypassing the can-libraries submodule requirement) and to
+          # skip optional modules that pull in heavy external dependencies.
+          mkdir -p build/clang-tidy
+          cat > build/clang-tidy/CMakeLists.txt << CMAKE_EOF
+          cmake_minimum_required(VERSION 3.16)
+          project(opensyde_core_clang_tidy LANGUAGES CXX)
+          set(CMAKE_CXX_STANDARD 17)
+          set(CMAKE_CXX_STANDARD_REQUIRED ON)
+          set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+          # Stub CanLibraries target so the can-libraries submodule is never
+          # pulled in (opensyde_core CMakeLists checks NOT TARGET before
+          # add_subdirectory-ing the submodule).
+          if(NOT TARGET CanLibraries::can)
+            add_library(CanLibraries_stub INTERFACE)
+            add_library(CanLibraries::can ALIAS CanLibraries_stub)
+          endif()
+
+          # Skip modules that have heavy external deps or OpenSSL linkage.
+          # CODE_GENERATION and LINUX_DRIVERS are skipped because they pull in
+          # headers from PROTOCOL_DRIVERS_COMMON (which we also skip).
+          set(OPENSYDE_CORE_SKIP_CODE_GENERATION 1)
+          set(OPENSYDE_CORE_SKIP_SECURITY 1)
+          set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_COMMON 1)
+          set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_SYSTEM 1)
+          set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_BASIC 1)
+          set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_MONITOR 1)
+          set(OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING 1)
+          set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS 1)
+          set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET 1)
+          set(OPENSYDE_CORE_SKIP_LINUX_DRIVERS 1)
+          set(OPENSYDE_CORE_SKIP_X_CONFIG_GENERATION 1)
+          set(OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION 1)
+          set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING 1)
+
+          add_subdirectory(${GITHUB_WORKSPACE}/libraries/opensyde_core opensyde_core_build)
+          CMAKE_EOF
+
+          cmake -S build/clang-tidy \
+                -B build/clang-tidy/out \
+                -G Ninja \
+                -DCMAKE_BUILD_TYPE=Debug \
+                -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-config-file=${GITHUB_WORKSPACE}/.clang-tidy"
+
+          ninja -C build/clang-tidy/out 2>&1 | tee clang-tidy.log || true
+          echo "Clang-tidy completed. See clang-tidy.log for details."

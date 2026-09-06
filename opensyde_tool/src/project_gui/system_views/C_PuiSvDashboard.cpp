@@ -345,7 +345,7 @@ void C_PuiSvDashboard::SetLabels(const std::vector<C_PuiSvDbLabel> & orc_Value)
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDbLabel * C_PuiSvDashboard::GetLabel(const uint32_t ou32_Index) const
 {
-   const C_PuiSvDbLabel * pc_Retval = NULL;
+   const C_PuiSvDbLabel * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_Labels.size())
    {
@@ -389,7 +389,7 @@ void C_PuiSvDashboard::SetParams(const std::vector<C_PuiSvDbParam> & orc_Value)
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDbParam * C_PuiSvDashboard::GetParam(const uint32_t ou32_Index) const
 {
-   const C_PuiSvDbParam * pc_Retval = NULL;
+   const C_PuiSvDbParam * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_ParamWidgets.size())
    {
@@ -433,7 +433,7 @@ void C_PuiSvDashboard::SetPieCharts(const std::vector<C_PuiSvDbPieChart> & orc_V
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDbPieChart * C_PuiSvDashboard::GetPieChart(const uint32_t ou32_Index) const
 {
-   const C_PuiSvDbPieChart * pc_Retval = NULL;
+   const C_PuiSvDbPieChart * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_PieCharts.size())
    {
@@ -477,7 +477,7 @@ void C_PuiSvDashboard::SetSpinBoxes(const std::vector<C_PuiSvDbSpinBox> & orc_Va
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDbSpinBox * C_PuiSvDashboard::GetSpinBox(const uint32_t ou32_Index) const
 {
-   const C_PuiSvDbSpinBox * pc_Retval = NULL;
+   const C_PuiSvDbSpinBox * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_SpinBoxes.size())
    {
@@ -521,7 +521,7 @@ void C_PuiSvDashboard::SetSliders(const std::vector<C_PuiSvDbSlider> & orc_Value
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDbSlider * C_PuiSvDashboard::GetSlider(const uint32_t ou32_Index) const
 {
-   const C_PuiSvDbSlider * pc_Retval = NULL;
+   const C_PuiSvDbSlider * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_Sliders.size())
    {
@@ -565,7 +565,7 @@ void C_PuiSvDashboard::SetProgressBars(const std::vector<C_PuiSvDbProgressBar> &
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDbProgressBar * C_PuiSvDashboard::GetProgressBar(const uint32_t ou32_Index) const
 {
-   const C_PuiSvDbProgressBar * pc_Retval = NULL;
+   const C_PuiSvDbProgressBar * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_ProgressBars.size())
    {
@@ -609,7 +609,7 @@ void C_PuiSvDashboard::SetTables(const std::vector<C_PuiSvDbTable> & orc_Value)
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDbTable * C_PuiSvDashboard::GetTable(const uint32_t ou32_Index) const
 {
-   const C_PuiSvDbTable * pc_Retval = NULL;
+   const C_PuiSvDbTable * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_Tables.size())
    {
@@ -653,7 +653,7 @@ void C_PuiSvDashboard::SetToggles(const std::vector<C_PuiSvDbToggle> & orc_Value
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDbToggle * C_PuiSvDashboard::GetToggle(const uint32_t ou32_Index) const
 {
-   const C_PuiSvDbToggle * pc_Retval = NULL;
+   const C_PuiSvDbToggle * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_Toggles.size())
    {
@@ -676,7 +676,7 @@ const C_PuiSvDbToggle * C_PuiSvDashboard::GetToggle(const uint32_t ou32_Index) c
 const C_PuiSvDbWidgetBase * C_PuiSvDashboard::GetWidgetBase(const C_PuiSvDbDataElement::E_Type oe_Type,
                                                             const uint32_t ou32_Index) const
 {
-   const C_PuiSvDbWidgetBase * pc_Retval = NULL;
+   const C_PuiSvDbWidgetBase * pc_Retval = nullptr;
 
    switch (oe_Type)
    {
@@ -876,7 +876,7 @@ int32_t C_PuiSvDashboard::SetWidget(const uint32_t ou32_Index, const C_PuiSvDbWi
    {
    case C_PuiSvDbDataElement::eTAB_CHART:
       opc_TabChart = dynamic_cast<const C_PuiSvDbTabChart *>(opc_Value);
-      if (opc_TabChart != NULL)
+      if (opc_TabChart != nullptr)
       {
          this->mc_TabChart = *opc_TabChart;
       }
@@ -887,7 +887,7 @@ int32_t C_PuiSvDashboard::SetWidget(const uint32_t ou32_Index, const C_PuiSvDbWi
       break;
    case C_PuiSvDbDataElement::eLABEL:
       opc_Label = dynamic_cast<const C_PuiSvDbLabel *>(opc_Value);
-      if (opc_Label != NULL)
+      if (opc_Label != nullptr)
       {
          if (ou32_Index < this->mc_Labels.size())
          {
@@ -905,7 +905,7 @@ int32_t C_PuiSvDashboard::SetWidget(const uint32_t ou32_Index, const C_PuiSvDbWi
       break;
    case C_PuiSvDbDataElement::ePARAM:
       opc_ParamWidget = dynamic_cast<const C_PuiSvDbParam *>(opc_Value);
-      if (opc_ParamWidget != NULL)
+      if (opc_ParamWidget != nullptr)
       {
          if (ou32_Index < this->mc_ParamWidgets.size())
          {
@@ -923,7 +923,7 @@ int32_t C_PuiSvDashboard::SetWidget(const uint32_t ou32_Index, const C_PuiSvDbWi
       break;
    case C_PuiSvDbDataElement::ePIE_CHART:
       opc_PieChart = dynamic_cast<const C_PuiSvDbPieChart *>(opc_Value);
-      if (opc_PieChart != NULL)
+      if (opc_PieChart != nullptr)
       {
          if (ou32_Index < this->mc_PieCharts.size())
          {
@@ -941,7 +941,7 @@ int32_t C_PuiSvDashboard::SetWidget(const uint32_t ou32_Index, const C_PuiSvDbWi
       break;
    case C_PuiSvDbDataElement::ePROGRESS_BAR:
       opc_ProgressBar = dynamic_cast<const C_PuiSvDbProgressBar *>(opc_Value);
-      if (opc_ProgressBar != NULL)
+      if (opc_ProgressBar != nullptr)
       {
          if (ou32_Index < this->mc_ProgressBars.size())
          {
@@ -959,7 +959,7 @@ int32_t C_PuiSvDashboard::SetWidget(const uint32_t ou32_Index, const C_PuiSvDbWi
       break;
    case C_PuiSvDbDataElement::eSLIDER:
       opc_Slider = dynamic_cast<const C_PuiSvDbSlider *>(opc_Value);
-      if (opc_Slider != NULL)
+      if (opc_Slider != nullptr)
       {
          if (ou32_Index < this->mc_Sliders.size())
          {
@@ -977,7 +977,7 @@ int32_t C_PuiSvDashboard::SetWidget(const uint32_t ou32_Index, const C_PuiSvDbWi
       break;
    case C_PuiSvDbDataElement::eSPIN_BOX:
       opc_SpinBox = dynamic_cast<const C_PuiSvDbSpinBox *>(opc_Value);
-      if (opc_SpinBox != NULL)
+      if (opc_SpinBox != nullptr)
       {
          if (ou32_Index < this->mc_SpinBoxes.size())
          {
@@ -995,7 +995,7 @@ int32_t C_PuiSvDashboard::SetWidget(const uint32_t ou32_Index, const C_PuiSvDbWi
       break;
    case C_PuiSvDbDataElement::eTABLE:
       opc_Table = dynamic_cast<const C_PuiSvDbTable *>(opc_Value);
-      if (opc_Table != NULL)
+      if (opc_Table != nullptr)
       {
          if (ou32_Index < this->mc_Tables.size())
          {
@@ -1013,7 +1013,7 @@ int32_t C_PuiSvDashboard::SetWidget(const uint32_t ou32_Index, const C_PuiSvDbWi
       break;
    case C_PuiSvDbDataElement::eTOGGLE:
       opc_Toggle = dynamic_cast<const C_PuiSvDbToggle *>(opc_Value);
-      if (opc_Toggle != NULL)
+      if (opc_Toggle != nullptr)
       {
          if (ou32_Index < this->mc_Toggles.size())
          {
@@ -1056,7 +1056,7 @@ void C_PuiSvDashboard::OnSyncNodeAdded(const uint32_t ou32_Index)
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
       C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItElement)
          {
@@ -1065,7 +1065,7 @@ void C_PuiSvDashboard::OnSyncNodeAdded(const uint32_t ou32_Index)
             h_OnSyncNodeAdded(rc_DataElementId, ou32_Index);
          }
       }
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Param->c_ExpandedItems.size(); ++u32_ItElement)
          {
@@ -1091,11 +1091,11 @@ void C_PuiSvDashboard::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
       const C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Param == NULL)
+      if (pc_Param == nullptr)
       {
          C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
 
-         if (pc_Widget != NULL)
+         if (pc_Widget != nullptr)
          {
             for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size();
                  ++u32_ItElement)
@@ -1125,7 +1125,7 @@ void C_PuiSvDashboard::OnSyncNodeAboutToBeDeleted(const uint32_t ou32_Index, con
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
       C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItElement)
          {
@@ -1134,7 +1134,7 @@ void C_PuiSvDashboard::OnSyncNodeAboutToBeDeleted(const uint32_t ou32_Index, con
             h_OnSyncNodeAboutToBeDeleted(rc_DataElementId, ou32_Index, oq_OnlyMarkInvalid);
          }
       }
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Param->c_ExpandedItems.size(); ++u32_ItElement)
          {
@@ -1161,7 +1161,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolAdded(const uint32_t ou32_NodeIndex, co
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
       C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItElement)
          {
@@ -1170,7 +1170,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolAdded(const uint32_t ou32_NodeIndex, co
             h_OnSyncNodeDataPoolAdded(rc_DataElementId, ou32_NodeIndex, ou32_DataPoolIndex);
          }
       }
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Param->c_ExpandedItems.size(); ++u32_ItElement)
          {
@@ -1198,7 +1198,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolMoved(const uint32_t ou32_NodeIndex, co
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
       C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItElement)
          {
@@ -1208,7 +1208,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolMoved(const uint32_t ou32_NodeIndex, co
                                       ou32_DataPoolTargetIndex);
          }
       }
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Param->c_ExpandedItems.size(); ++u32_ItElement)
          {
@@ -1236,7 +1236,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolAboutToBeDeleted(const uint32_t ou32_No
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
       C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItElement)
          {
@@ -1245,7 +1245,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolAboutToBeDeleted(const uint32_t ou32_No
             h_OnSyncNodeDataPoolAboutToBeDeleted(rc_DataElementId, ou32_NodeIndex, ou32_DataPoolIndex);
          }
       }
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Param->c_ExpandedItems.size(); ++u32_ItElement)
          {
@@ -1274,7 +1274,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListAdded(const uint32_t ou32_NodeIndex
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
       C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItElement)
          {
@@ -1283,7 +1283,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListAdded(const uint32_t ou32_NodeIndex
             h_OnSyncNodeDataPoolListAdded(rc_DataElementId, ou32_NodeIndex, ou32_DataPoolIndex, ou32_ListIndex);
          }
       }
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Param->c_ExpandedItems.size(); ++u32_ItElement)
          {
@@ -1314,7 +1314,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListMoved(const uint32_t ou32_NodeIndex
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
       C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItElement)
          {
@@ -1324,7 +1324,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListMoved(const uint32_t ou32_NodeIndex
                                           ou32_ListTargetIndex);
          }
       }
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Param->c_ExpandedItems.size(); ++u32_ItElement)
          {
@@ -1354,7 +1354,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListAboutToBeDeleted(const uint32_t ou3
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
       C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItElement)
          {
@@ -1364,7 +1364,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListAboutToBeDeleted(const uint32_t ou3
                                                      ou32_ListIndex);
          }
       }
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Param->c_ExpandedItems.size(); ++u32_ItElement)
          {
@@ -1566,7 +1566,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementAdded(const uint32_t ou32_No
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
       C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItElement)
          {
@@ -1576,7 +1576,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementAdded(const uint32_t ou32_No
                                                  ou32_ElementIndex);
          }
       }
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Param->c_ExpandedItems.size(); ++u32_ItElement)
          {
@@ -1610,7 +1610,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementMoved(const uint32_t ou32_No
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
       C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItElement)
          {
@@ -1620,7 +1620,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementMoved(const uint32_t ou32_No
                                                  ou32_ElementSourceIndex, ou32_ElementTargetIndex);
          }
       }
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          //Param widget
          C_PuiSvDbNodeDataElementConfig c_Config;
@@ -1657,7 +1657,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementMoved(const uint32_t ou32_No
             const C_OscNodeDataPoolListElementId c_Id(ou32_NodeIndex, ou32_DataPoolIndex, ou32_ListIndex,
                                                       ou32_ElementTargetIndex);
             const uint32_t u32_NewIndex = C_PuiSvDashboard::mh_GetBestIndexForNewItem(*pc_Param,
-                                                                                      c_Id, NULL);
+                                                                                      c_Id, nullptr);
             pc_Param->c_DataPoolElementsConfig.insert(
                pc_Param->c_DataPoolElementsConfig.begin() + u32_NewIndex, c_Config);
             pc_Param->c_DataSetSelectionIndices.insert(
@@ -1706,7 +1706,7 @@ bool C_PuiSvDashboard::OnSyncElementTypeOrArrayChanged(const uint32_t ou32_NodeI
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size();
               ++u32_ItElement)
@@ -1778,10 +1778,10 @@ bool C_PuiSvDashboard::OnSyncElementTypeOrArrayChanged(const uint32_t ou32_NodeI
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          C_PuiSvDbParam * const pc_ParamWidgets = dynamic_cast<C_PuiSvDbParam * const>(pc_Widget);
-         if (pc_ParamWidgets != NULL)
+         if (pc_ParamWidgets != nullptr)
          {
             for (uint32_t u32_ItElement = 0; u32_ItElement < pc_ParamWidgets->c_DataPoolElementsConfig.size();
                  ++u32_ItElement)
@@ -1877,7 +1877,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementAccessChanged(const uint32_t
       for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
       {
          C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
-         if (pc_Widget != NULL)
+         if (pc_Widget != nullptr)
          {
             if (pc_Widget->IsReadElement() == false)
             {
@@ -1926,7 +1926,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementAboutToBeDeleted(const uint3
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
       C_PuiSvDbParam * const pc_Param = dynamic_cast<C_PuiSvDbParam * const>(c_Widgets[u32_ItWidget]);
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItElement)
          {
@@ -1936,7 +1936,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementAboutToBeDeleted(const uint3
                                                             ou32_ListIndex, ou32_ElementIndex);
          }
       }
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Param->c_ExpandedItems.size(); ++u32_ItElement)
          {
@@ -2230,7 +2230,7 @@ void C_PuiSvDashboard::SyncScalingInformation(void)
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          for (uint32_t u32_ItData = 0; u32_ItData < pc_Widget->c_DataPoolElementsConfig.size(); ++u32_ItData)
          {
@@ -2243,7 +2243,7 @@ void C_PuiSvDashboard::SyncScalingInformation(void)
                                                                              rc_Config.c_ElementId.u32_ListIndex,
                                                                              rc_Config.c_ElementId.u32_ElementIndex);
                //Check with system definition
-               if (pc_Element != NULL)
+               if (pc_Element != nullptr)
                {
                   rc_Config.c_ElementScaling.c_Unit = pc_Element->c_Unit.c_str();
                   rc_Config.c_ElementScaling.f64_Factor = pc_Element->f64_Factor;
@@ -2342,7 +2342,7 @@ int32_t C_PuiSvDashboard::InsertWidget(const uint32_t ou32_WidgetIndex, const C_
    {
    case C_PuiSvDbDataElement::eLABEL:
       opc_Label = dynamic_cast<const C_PuiSvDbLabel *>(opc_Box);
-      if (opc_Label != NULL)
+      if (opc_Label != nullptr)
       {
          if (ou32_WidgetIndex <= this->mc_Labels.size())
          {
@@ -2360,7 +2360,7 @@ int32_t C_PuiSvDashboard::InsertWidget(const uint32_t ou32_WidgetIndex, const C_
       break;
    case C_PuiSvDbDataElement::ePARAM:
       opc_ParamWidget = dynamic_cast<const C_PuiSvDbParam *>(opc_Box);
-      if (opc_ParamWidget != NULL)
+      if (opc_ParamWidget != nullptr)
       {
          if (ou32_WidgetIndex <= this->mc_ParamWidgets.size())
          {
@@ -2378,7 +2378,7 @@ int32_t C_PuiSvDashboard::InsertWidget(const uint32_t ou32_WidgetIndex, const C_
       break;
    case C_PuiSvDbDataElement::ePIE_CHART:
       opc_PieChart = dynamic_cast<const C_PuiSvDbPieChart *>(opc_Box);
-      if (opc_PieChart != NULL)
+      if (opc_PieChart != nullptr)
       {
          if (ou32_WidgetIndex <= this->mc_PieCharts.size())
          {
@@ -2396,7 +2396,7 @@ int32_t C_PuiSvDashboard::InsertWidget(const uint32_t ou32_WidgetIndex, const C_
       break;
    case C_PuiSvDbDataElement::ePROGRESS_BAR:
       opc_ProgressBar = dynamic_cast<const C_PuiSvDbProgressBar *>(opc_Box);
-      if (opc_ProgressBar != NULL)
+      if (opc_ProgressBar != nullptr)
       {
          if (ou32_WidgetIndex <= this->mc_ProgressBars.size())
          {
@@ -2414,7 +2414,7 @@ int32_t C_PuiSvDashboard::InsertWidget(const uint32_t ou32_WidgetIndex, const C_
       break;
    case C_PuiSvDbDataElement::eSLIDER:
       opc_Slider = dynamic_cast<const C_PuiSvDbSlider *>(opc_Box);
-      if (opc_Slider != NULL)
+      if (opc_Slider != nullptr)
       {
          if (ou32_WidgetIndex <= this->mc_Sliders.size())
          {
@@ -2432,7 +2432,7 @@ int32_t C_PuiSvDashboard::InsertWidget(const uint32_t ou32_WidgetIndex, const C_
       break;
    case C_PuiSvDbDataElement::eSPIN_BOX:
       opc_SpinBox = dynamic_cast<const C_PuiSvDbSpinBox *>(opc_Box);
-      if (opc_SpinBox != NULL)
+      if (opc_SpinBox != nullptr)
       {
          if (ou32_WidgetIndex <= this->mc_SpinBoxes.size())
          {
@@ -2450,7 +2450,7 @@ int32_t C_PuiSvDashboard::InsertWidget(const uint32_t ou32_WidgetIndex, const C_
       break;
    case C_PuiSvDbDataElement::eTABLE:
       opc_Table = dynamic_cast<const C_PuiSvDbTable *>(opc_Box);
-      if (opc_Table != NULL)
+      if (opc_Table != nullptr)
       {
          if (ou32_WidgetIndex <= this->mc_Tables.size())
          {
@@ -2468,7 +2468,7 @@ int32_t C_PuiSvDashboard::InsertWidget(const uint32_t ou32_WidgetIndex, const C_
       break;
    case C_PuiSvDbDataElement::eTOGGLE:
       opc_Toggle = dynamic_cast<const C_PuiSvDbToggle *>(opc_Box);
-      if (opc_Toggle != NULL)
+      if (opc_Toggle != nullptr)
       {
          if (ou32_WidgetIndex <= this->mc_Toggles.size())
          {
@@ -2486,7 +2486,7 @@ int32_t C_PuiSvDashboard::InsertWidget(const uint32_t ou32_WidgetIndex, const C_
       break;
    case C_PuiSvDbDataElement::eTAB_CHART:
       opc_TabChart = dynamic_cast<const C_PuiSvDbTabChart *>(opc_Box);
-      if (opc_TabChart != NULL)
+      if (opc_TabChart != nullptr)
       {
          this->mc_TabChart = *opc_TabChart;
       }
@@ -2562,7 +2562,7 @@ int32_t C_PuiSvDashboard::AddParamNewDataPoolElement(const uint32_t ou32_ParamWi
                                                                     orc_NewId.u32_ListIndex,
                                                                     orc_NewId.u32_ElementIndex);
 
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          C_PuiSvDbParam & rc_ParamWidget = this->mc_ParamWidgets[ou32_ParamWidgetIndex];
          C_PuiSvDbNodeDataElementConfig c_NewConfig;
@@ -2577,7 +2577,7 @@ int32_t C_PuiSvDashboard::AddParamNewDataPoolElement(const uint32_t ou32_ParamWi
             rc_ParamWidget.c_DataPoolElementsConfig.begin() + u32_NewIndex, c_NewConfig);
          rc_ParamWidget.c_DataSetSelectionIndices.insert(
             rc_ParamWidget.c_DataSetSelectionIndices.begin() + u32_NewIndex, s32_SelectedDataset);
-         if ((((opc_Content != NULL) && (opc_Content->GetType() == pc_Element->GetType())) &&
+         if ((((opc_Content != nullptr) && (opc_Content->GetType() == pc_Element->GetType())) &&
               (opc_Content->GetArray() == pc_Element->GetArray())) &&
              (opc_Content->GetArraySize() == pc_Element->GetArraySize()))
          {
@@ -2666,7 +2666,7 @@ void C_PuiSvDashboard::RemoveAllReferencesToElementId(const C_PuiSvDbNodeDataPoo
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_AllWidgets.size(); ++u32_ItWidget)
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_AllWidgets[u32_ItWidget];
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          pc_Widget->RemoveAllReferencesToElementId(orc_DataElementId);
       }
@@ -2792,14 +2792,14 @@ int32_t C_PuiSvDashboard::DeleteWidget(const uint32_t ou32_WidgetIndex, const C_
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboard::CheckError(bool * const opq_InvalidDataElements, bool * const opq_MissingDataElements) const
 {
-   if ((opq_InvalidDataElements != NULL) || (opq_MissingDataElements != NULL))
+   if ((opq_InvalidDataElements != nullptr) || (opq_MissingDataElements != nullptr))
    {
       std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
-      if (opq_MissingDataElements != NULL)
+      if (opq_MissingDataElements != nullptr)
       {
          *opq_MissingDataElements = false;
       }
-      if (opq_InvalidDataElements != NULL)
+      if (opq_InvalidDataElements != nullptr)
       {
          *opq_InvalidDataElements = false;
       }
@@ -2809,7 +2809,7 @@ void C_PuiSvDashboard::CheckError(bool * const opq_InvalidDataElements, bool * c
            c_ItWidget != c_Widgets.end(); ++c_ItWidget)
       {
          const C_PuiSvDbWidgetBase * const pc_Widget = *c_ItWidget;
-         if (pc_Widget != NULL)
+         if (pc_Widget != nullptr)
          {
             //For all data elements
             for (std::vector<C_PuiSvDbNodeDataElementConfig>::const_iterator c_ItConfig =
@@ -2820,13 +2820,13 @@ void C_PuiSvDashboard::CheckError(bool * const opq_InvalidDataElements, bool * c
                //Check ID valid
                if (rc_ElementId.GetIsValid() == false)
                {
-                  if (opq_InvalidDataElements != NULL)
+                  if (opq_InvalidDataElements != nullptr)
                   {
                      *opq_InvalidDataElements = true;
                   }
                }
             }
-            if ((pc_Widget->c_DataPoolElementsConfig.size() == 0) && (opq_MissingDataElements != NULL))
+            if ((pc_Widget->c_DataPoolElementsConfig.size() == 0) && (opq_MissingDataElements != nullptr))
             {
                *opq_MissingDataElements = true;
             }
@@ -2890,7 +2890,7 @@ bool C_PuiSvDashboard::DiscardInvalidIndices(void)
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_AllWidgets.size(); ++u32_ItWidget)
    {
       C_PuiSvDbWidgetBase * const pc_Widget = c_AllWidgets[u32_ItWidget];
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          //Parse all current elements
          for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size();)
@@ -2904,7 +2904,7 @@ bool C_PuiSvDashboard::DiscardInvalidIndices(void)
                                                                               u32_DataPoolIndex,
                                                                               rc_Config.c_ElementId.u32_ListIndex,
                                                                               rc_Config.c_ElementId.
-                                                                              u32_ElementIndex) == NULL)
+                                                                              u32_ElementIndex) == nullptr)
                {
                   q_KickIt = true;
                }
@@ -2968,7 +2968,7 @@ void C_PuiSvDashboard::FixDashboardWriteContentType()
 C_PuiSvDbDataElement::E_Type C_PuiSvDashboard::h_GetWidgetType(const C_PuiSvDbWidgetBase * const opc_Box)
 {
    C_PuiSvDbDataElement::E_Type e_Retval = C_PuiSvDbDataElement::eUNKNOWN;
-   if (opc_Box != NULL)
+   if (opc_Box != nullptr)
    {
       const C_PuiSvDbLabel * const pc_Labels = dynamic_cast<const C_PuiSvDbLabel * const>(opc_Box);
       const C_PuiSvDbParam * const pc_ParamWidgets = dynamic_cast<const C_PuiSvDbParam * const>(opc_Box);
@@ -2980,39 +2980,39 @@ C_PuiSvDbDataElement::E_Type C_PuiSvDashboard::h_GetWidgetType(const C_PuiSvDbWi
       const C_PuiSvDbToggle * const pc_Toggles = dynamic_cast<const C_PuiSvDbToggle * const>(opc_Box);
       const C_PuiSvDbTabChart * const pc_TabChart = dynamic_cast<const C_PuiSvDbTabChart * const>(opc_Box);
 
-      if (pc_Labels != NULL)
+      if (pc_Labels != nullptr)
       {
          e_Retval = C_PuiSvDbDataElement::eLABEL;
       }
-      if (pc_ParamWidgets != NULL)
+      if (pc_ParamWidgets != nullptr)
       {
          e_Retval = C_PuiSvDbDataElement::ePARAM;
       }
-      if (pc_PieCharts != NULL)
+      if (pc_PieCharts != nullptr)
       {
          e_Retval = C_PuiSvDbDataElement::ePIE_CHART;
       }
-      if (pc_ProgressBars != NULL)
+      if (pc_ProgressBars != nullptr)
       {
          e_Retval = C_PuiSvDbDataElement::ePROGRESS_BAR;
       }
-      if (pc_SpinBoxes != NULL)
+      if (pc_SpinBoxes != nullptr)
       {
          e_Retval = C_PuiSvDbDataElement::eSPIN_BOX;
       }
-      if (pc_Sliders != NULL)
+      if (pc_Sliders != nullptr)
       {
          e_Retval = C_PuiSvDbDataElement::eSLIDER;
       }
-      if (pc_Tables != NULL)
+      if (pc_Tables != nullptr)
       {
          e_Retval = C_PuiSvDbDataElement::eTABLE;
       }
-      if (pc_Toggles != NULL)
+      if (pc_Toggles != nullptr)
       {
          e_Retval = C_PuiSvDbDataElement::eTOGGLE;
       }
-      if (pc_TabChart != NULL)
+      if (pc_TabChart != nullptr)
       {
          e_Retval = C_PuiSvDbDataElement::eTAB_CHART;
       }
@@ -3125,7 +3125,7 @@ void C_PuiSvDashboard::mh_MarkInvalid(C_PuiSvDbNodeDataPoolListElementId & orc_D
    const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
       orc_DataElementId.u32_NodeIndex, orc_DataElementId.u32_DataPoolIndex);
 
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
       const QString c_Namespace = C_PuiSvHandler::h_GetNamespace(orc_DataElementId);
       orc_DataElementId.MarkInvalid(pc_DataPool->e_Type, c_Namespace);
@@ -3160,7 +3160,7 @@ uint32_t C_PuiSvDashboard::mh_GetBestIndexForNewItem(const C_PuiSvDbParam & orc_
               (rc_CurId.c_ElementId.u32_DataPoolIndex == orc_NewId.u32_DataPoolIndex)) &&
              (rc_CurId.c_ElementId.u32_ListIndex == orc_NewId.u32_ListIndex))
          {
-            if (ops32_DatasetIndex != NULL)
+            if (ops32_DatasetIndex != nullptr)
             {
                //Use the current selected dataset index
                *ops32_DatasetIndex = orc_ParamWidget.c_DataSetSelectionIndices[u32_ItItem];
@@ -3243,8 +3243,8 @@ void C_PuiSvDashboard::mh_FixDashboardWriteContentType(C_PuiSvDbWriteWidgetBase 
       {
          const C_OscNodeDataPoolListElement * const pc_DpElement =
             C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(rc_CurElement.c_ElementId);
-         tgl_assert(pc_DpElement != NULL);
-         if (pc_DpElement != NULL)
+         tgl_assert(pc_DpElement != nullptr);
+         if (pc_DpElement != nullptr)
          {
             //Only overwrite if mismatch!
             if ((orc_Element.c_InitialValue.GetType() != pc_DpElement->GetType()) ||
@@ -3389,7 +3389,7 @@ void C_PuiSvDashboard::mh_SyncSlidersToElementTypeOrArrayChanged(const uint32_t 
 {
    C_PuiSvDbSlider * const pc_SliderWidgets = dynamic_cast<C_PuiSvDbSlider * const>(opc_Widget);
 
-   if (pc_SliderWidgets != NULL)
+   if (pc_SliderWidgets != nullptr)
    {
       for (uint32_t u32_ItElement = 0; u32_ItElement < pc_SliderWidgets->c_DataPoolElementsConfig.size();
            ++u32_ItElement)

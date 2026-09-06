@@ -42,7 +42,7 @@ class C_OgePopUpDialog :
    Q_OBJECT
 
 public:
-   explicit C_OgePopUpDialog(QWidget * const opc_Parent = NULL, QWidget * const opc_EffectTargetChild = NULL,
+   explicit C_OgePopUpDialog(QWidget * const opc_Parent = nullptr, QWidget * const opc_EffectTargetChild = nullptr,
                              const bool oq_AddShadow = true);
    ~C_OgePopUpDialog() override;
 
@@ -54,7 +54,7 @@ public:
    void HandleMouseReleaseEvent(const QMouseEvent * const opc_Event);
    void HandleMouseMoveEvent(const QMouseEvent * const opc_Event);
    void SetSize(const QSize & orc_Size);
-   void ApplyMaximumSize(const QWidget * const opc_Widget = NULL);
+   void ApplyMaximumSize(const QWidget * const opc_Widget = nullptr);
    void HideTitle(void) const;
    void HideOverlay(void) const;
    void SetNotifyAndBlockClose(const bool oq_NotifyAndBlockClose);

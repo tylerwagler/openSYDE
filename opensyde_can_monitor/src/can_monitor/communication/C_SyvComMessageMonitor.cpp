@@ -62,7 +62,7 @@ C_SyvComMessageMonitor::C_SyvComMessageMonitor(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvComMessageMonitor::~C_SyvComMessageMonitor(void) noexcept
 {
-   if (this->mpc_LoadingThread != NULL)
+   if (this->mpc_LoadingThread != nullptr)
    {
       try
       {
@@ -85,7 +85,7 @@ C_SyvComMessageMonitor::~C_SyvComMessageMonitor(void) noexcept
          //not much we can do here ...
       }
       delete mpc_LoadingThread;
-      mpc_LoadingThread = NULL;
+      mpc_LoadingThread = nullptr;
    }
 }
 
@@ -875,7 +875,7 @@ bool C_SyvComMessageMonitor::m_CheckInterpretation(stw::opensyde_core::C_OscComM
    bool q_Return = false;
    const C_CieConverter::C_CieCanMessage * const pc_DbcMessage = this->m_CheckDbcFile(orc_MessageData.c_CanMsg);
 
-   if (pc_DbcMessage != NULL)
+   if (pc_DbcMessage != nullptr)
    {
       q_Return = this->m_InterpretDbcFile(pc_DbcMessage, orc_MessageData);
    }
@@ -970,7 +970,7 @@ int32_t C_SyvComMessageMonitor::m_AddDbcFile(const C_SclString & orc_PathDbc)
 //----------------------------------------------------------------------------------------------------------------------
 const C_CieConverter::C_CieCanMessage * C_SyvComMessageMonitor::m_CheckDbcFile(const T_STWCAN_Msg_RX & orc_Msg)
 {
-   const C_CieConverter::C_CieCanMessage * pc_DbcMessage = NULL;
+   const C_CieConverter::C_CieCanMessage * pc_DbcMessage = nullptr;
 
    std::map<stw::scl::C_SclString, C_CieConverter::C_CieCommDefinition>::const_iterator c_ItDbc;
 
@@ -1004,7 +1004,7 @@ const C_CieConverter::C_CieCanMessage * C_SyvComMessageMonitor::m_CheckDbcFile(c
                }
             }
 
-            if (pc_DbcMessage == NULL)
+            if (pc_DbcMessage == nullptr)
             {
                // Not found yet, search in Rx messages
                for (u32_MsgCounter = 0U; u32_MsgCounter < rc_Node.c_RxMessages.size(); ++u32_MsgCounter)
@@ -1022,14 +1022,14 @@ const C_CieConverter::C_CieCanMessage * C_SyvComMessageMonitor::m_CheckDbcFile(c
                }
             }
 
-            if (pc_DbcMessage != NULL)
+            if (pc_DbcMessage != nullptr)
             {
                break;
             }
          }
 
          //Unmapped messages
-         if (pc_DbcMessage == NULL)
+         if (pc_DbcMessage == nullptr)
          {
             for (uint32_t u32_ItMessage = 0U; u32_ItMessage < c_ItDbc->second.c_UnmappedMessages.size();
                  ++u32_ItMessage)
@@ -1075,7 +1075,7 @@ bool C_SyvComMessageMonitor::m_InterpretDbcFile(const C_CieConverter::C_CieCanMe
 
    this->mc_CriticalSectionConfig.lock();
 
-   if (opc_DbcMessage != NULL)
+   if (opc_DbcMessage != nullptr)
    {
       uint32_t u32_Counter;
       bool q_MultiplexerFound = false;
@@ -1213,8 +1213,8 @@ void C_SyvComMessageMonitor::mh_ThreadFunc(void * const opv_Instance)
    //lint -e{9079}  This class is the only one which registers itself at the caller of this function. It must match.
    C_SyvComMessageMonitor * const pc_Instance = reinterpret_cast<C_SyvComMessageMonitor *>(opv_Instance);
 
-   tgl_assert(pc_Instance != NULL);
-   if (pc_Instance != NULL)
+   tgl_assert(pc_Instance != nullptr);
+   if (pc_Instance != nullptr)
    {
       pc_Instance->m_ThreadFunc();
    }

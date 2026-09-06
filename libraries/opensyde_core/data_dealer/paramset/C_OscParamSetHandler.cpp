@@ -156,11 +156,11 @@ int32_t C_OscParamSetHandler::ReadFile(const C_SclString & orc_FilePath, const b
                C_OscParamSetRawNodeFiler::h_LoadFileInfo(*pc_Parser, this->mc_Data.c_FileInfo,
                                                          q_MissingOptionalContent);
                s32_Retval = this->m_LoadNodes(*pc_Parser, oq_InterpretedDataOnly, q_MissingOptionalContent);
-               if ((opu16_FileCrc != NULL) && (s32_Retval == C_NO_ERR))
+               if ((opu16_FileCrc != nullptr) && (s32_Retval == C_NO_ERR))
                {
                   *opu16_FileCrc = static_cast<uint16_t>(pc_Parser->GetAttributeUint32("file_crc"));
                }
-               if (opq_MissingOptionalContent != NULL)
+               if (opq_MissingOptionalContent != nullptr)
                {
                   *opq_MissingOptionalContent = q_MissingOptionalContent;
                }
@@ -305,7 +305,7 @@ int32_t C_OscParamSetHandler::AddInterpretedDataForNode(const C_OscParamSetInter
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscParamSetRawNode * C_OscParamSetHandler::GetRawDataForNode(const C_SclString & orc_NodeName) const
 {
-   const C_OscParamSetRawNode * pc_Retval = NULL;
+   const C_OscParamSetRawNode * pc_Retval = nullptr;
 
    for (uint32_t u32_ItRawNode = 0; u32_ItRawNode < this->mc_RawNodes.size(); ++u32_ItRawNode)
    {
@@ -359,7 +359,7 @@ uint32_t C_OscParamSetHandler::GetNumberOfNodes(void) const
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscParamSetRawNode * C_OscParamSetHandler::GetRawDataForNode(const uint32_t ou32_NodeIndex) const
 {
-   const C_OscParamSetRawNode * pc_Result = NULL;
+   const C_OscParamSetRawNode * pc_Result = nullptr;
 
    if (ou32_NodeIndex < this->mc_RawNodes.size())
    {

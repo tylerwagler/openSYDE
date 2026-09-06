@@ -66,7 +66,7 @@ C_SebScene::C_SebScene(QObject * const opc_Parent) :
    QGraphicsScene(opc_Parent),
    mq_BlockContextMenu(false),
    mq_ProxyWidgetInteractionActive(false),
-   mpc_CurrentHoverItem(NULL),
+   mpc_CurrentHoverItem(nullptr),
    mu64_LastUnusedUniqueId(0),
    mq_RubberBandActive(false),
    mq_LeftButtonPressed(false),
@@ -136,7 +136,7 @@ float64_t C_SebScene::GetHighestUsedZetValueList(const QList<QGraphicsItem *> & 
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = orc_Items.begin(); c_ItItem != orc_Items.end(); ++c_ItItem)
    {
       const QGraphicsItem * const pc_Item = *c_ItItem;
-      if ((pc_Item != NULL) && (this->IsZetOrderChangeable(pc_Item) == true))
+      if ((pc_Item != nullptr) && (this->IsZetOrderChangeable(pc_Item) == true))
       {
          // search the highest z value of all items
          if (pc_Item->zValue() > f64_Retval)
@@ -201,7 +201,7 @@ void C_SebScene::DisplayToolTip(const QPointF & orc_ScenePos)
       dynamic_cast<C_GiBiCustomToolTip *>(C_SebUtil::h_GetHighestParent(this->itemAt(orc_ScenePos,
                                                                                      QTransform())));
 
-   if (pc_ToolTip != NULL)
+   if (pc_ToolTip != nullptr)
    {
       //Do not reopen tool tip if there already is an active tool tip
       if (mpc_CurrentHoverItem != pc_ToolTip)
@@ -231,7 +231,7 @@ void C_SebScene::DisplayToolTip(const QPointF & orc_ScenePos)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebScene::DisplaySpecificItemToolTip(const QPointF & orc_ScenePos)
 {
-   if (this->mpc_CurrentHoverItem != NULL)
+   if (this->mpc_CurrentHoverItem != nullptr)
    {
       //Update tool tip
       m_UpdateHints();
@@ -314,12 +314,12 @@ void C_SebScene::UpdateTransform(const QTransform & orc_Transform)
       C_GiBiRectBaseGroup * pc_Rect;
       QGraphicsItem * const pc_Parent = C_SebUtil::h_GetHighestParent(*c_ItItem);
       C_GiLiLineGroup * const pc_Line = dynamic_cast<C_GiLiLineGroup *>(pc_Parent);
-      if (pc_Line != NULL)
+      if (pc_Line != nullptr)
       {
          pc_Line->UpdateTransform(orc_Transform);
       }
       pc_Rect = dynamic_cast<C_GiBiRectBaseGroup *>(pc_Parent);
-      if (pc_Rect != NULL)
+      if (pc_Rect != nullptr)
       {
          pc_Rect->UpdateTransform(orc_Transform);
       }
@@ -344,7 +344,7 @@ int32_t C_SebScene::BendLine(QGraphicsItem * const opc_Item, const QPointF & orc
    int32_t s32_Retval = -1;
    C_GiLiLineGroup * const pc_Line = dynamic_cast<C_GiLiLineGroup *>(opc_Item);
 
-   if (pc_Line != NULL)
+   if (pc_Line != nullptr)
    {
       s32_Retval = pc_Line->BendLine(orc_ScenePos, ops32_Index);
       Q_EMIT this->SigTriggerUpdateTransform();
@@ -370,7 +370,7 @@ int32_t C_SebScene::RemoveBendLine(QGraphicsItem * const opc_Item, const QPointF
    int32_t s32_Retval = -1;
    C_GiLiLineGroup * const pc_Line = dynamic_cast<C_GiLiLineGroup *>(opc_Item);
 
-   if (pc_Line != NULL)
+   if (pc_Line != nullptr)
    {
       s32_Retval = pc_Line->RemoveBend(orc_ScenePos, ops32_Index);
    }
@@ -389,7 +389,7 @@ int32_t C_SebScene::RemoveBendLine(QGraphicsItem * const opc_Item, const QPointF
 //----------------------------------------------------------------------------------------------------------------------
 QGraphicsItem * C_SebScene::GetItemById(const uint64_t & oru64_Id) const
 {
-   QGraphicsItem * pc_Retval = NULL;
+   QGraphicsItem * pc_Retval = nullptr;
    QGraphicsItem * pc_CurItemParent;
    const C_GiUnique * pc_Unique;
 
@@ -398,10 +398,10 @@ QGraphicsItem * C_SebScene::GetItemById(const uint64_t & oru64_Id) const
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       pc_CurItemParent = C_SebUtil::h_GetHighestParent(*c_ItItem);
-      if (pc_CurItemParent != NULL)
+      if (pc_CurItemParent != nullptr)
       {
          pc_Unique = dynamic_cast<const C_GiUnique *>(pc_CurItemParent);
-         if (pc_Unique != NULL)
+         if (pc_Unique != nullptr)
          {
             if (pc_Unique->CheckMatch(oru64_Id) == true)
             {
@@ -463,7 +463,7 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
          if (static_cast<Qt::Key>(opc_KeyEvent->key()) == Qt::Key_O)
          {
             //Undo redo command view
-            if (this->m_GetUndoManager() != NULL)
+            if (this->m_GetUndoManager() != nullptr)
             {
                this->m_GetUndoManager()->ToggleCommandDisplay();
             }
@@ -478,7 +478,7 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
          {
             if (static_cast<Qt::Key>(opc_KeyEvent->key()) == Qt::Key_Backspace)
             {
-               if ((this->m_IsUndoAvailable() == true) && (this->m_GetUndoManager() != NULL))
+               if ((this->m_IsUndoAvailable() == true) && (this->m_GetUndoManager() != nullptr))
                {
                   // redo
                   this->m_GetUndoManager()->DoRedo();
@@ -489,7 +489,7 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
          {
             if (static_cast<Qt::Key>(opc_KeyEvent->key()) == Qt::Key_Backspace)
             {
-               if ((this->m_IsUndoAvailable() == true) && (this->m_GetUndoManager() != NULL))
+               if ((this->m_IsUndoAvailable() == true) && (this->m_GetUndoManager() != nullptr))
                {
                   // undo
                   this->m_GetUndoManager()->DoUndo();
@@ -522,14 +522,14 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
          switch (opc_KeyEvent->key())
          {
          case Qt::Key_Z:
-            if ((this->m_IsUndoAvailable() == true) && (this->m_GetUndoManager() != NULL))
+            if ((this->m_IsUndoAvailable() == true) && (this->m_GetUndoManager() != nullptr))
             {
                // undo
                this->m_GetUndoManager()->DoUndo();
             }
             break;
          case Qt::Key_Y:
-            if ((this->m_IsUndoAvailable() == true) && (this->m_GetUndoManager() != NULL))
+            if ((this->m_IsUndoAvailable() == true) && (this->m_GetUndoManager() != nullptr))
             {
                // redo
                this->m_GetUndoManager()->DoRedo();
@@ -555,7 +555,7 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
          // Moving of items
          case Qt::Key_Left:
             this->m_MoveSelectedItems(QPointF(-1.0, 0.0));
-            if (this->m_GetUndoManager() != NULL)
+            if (this->m_GetUndoManager() != nullptr)
             {
                this->m_GetUndoManager()->RegisterMove();
             }
@@ -563,7 +563,7 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
             break;
          case Qt::Key_Right:
             this->m_MoveSelectedItems(QPointF(1.0, 0.0));
-            if (this->m_GetUndoManager() != NULL)
+            if (this->m_GetUndoManager() != nullptr)
             {
                this->m_GetUndoManager()->RegisterMove();
             }
@@ -571,7 +571,7 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
             break;
          case Qt::Key_Up:
             this->m_MoveSelectedItems(QPointF(0.0, -1.0));
-            if (this->m_GetUndoManager() != NULL)
+            if (this->m_GetUndoManager() != nullptr)
             {
                this->m_GetUndoManager()->RegisterMove();
             }
@@ -579,7 +579,7 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
             break;
          case Qt::Key_Down:
             this->m_MoveSelectedItems(QPointF(0.0, 1.0));
-            if (this->m_GetUndoManager() != NULL)
+            if (this->m_GetUndoManager() != nullptr)
             {
                this->m_GetUndoManager()->RegisterMove();
             }
@@ -602,7 +602,7 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
             if (this->selectedItems().size() > 0)
             {
                this->m_MoveSelectedItems(QPointF(-mhf64_MOVING_RANGE, 0.0));
-               if (this->m_GetUndoManager() != NULL)
+               if (this->m_GetUndoManager() != nullptr)
                {
                   this->m_GetUndoManager()->RegisterMove();
                }
@@ -614,7 +614,7 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
             if (this->selectedItems().size() > 0)
             {
                this->m_MoveSelectedItems(QPointF(mhf64_MOVING_RANGE, 0.0));
-               if (this->m_GetUndoManager() != NULL)
+               if (this->m_GetUndoManager() != nullptr)
                {
                   this->m_GetUndoManager()->RegisterMove();
                }
@@ -626,7 +626,7 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
             if (this->selectedItems().size() > 0)
             {
                this->m_MoveSelectedItems(QPointF(0.0, -mhf64_MOVING_RANGE));
-               if (this->m_GetUndoManager() != NULL)
+               if (this->m_GetUndoManager() != nullptr)
                {
                   this->m_GetUndoManager()->RegisterMove();
                }
@@ -638,7 +638,7 @@ void C_SebScene::keyPressEvent(QKeyEvent * const opc_KeyEvent)
             if (this->selectedItems().size() > 0)
             {
                this->m_MoveSelectedItems(QPointF(0.0, mhf64_MOVING_RANGE));
-               if (this->m_GetUndoManager() != NULL)
+               if (this->m_GetUndoManager() != nullptr)
                {
                   this->m_GetUndoManager()->RegisterMove();
                }
@@ -794,7 +794,7 @@ void C_SebScene::mousePressEvent(QGraphicsSceneMouseEvent * const opc_Event)
                {
                   pc_Item = C_SebUtil::h_GetHighestParent(*c_ItItem);
 
-                  if (pc_Item != NULL)
+                  if (pc_Item != nullptr)
                   {
                      // check element
                      if (pc_Item->isSelected() == false)
@@ -889,7 +889,7 @@ void C_SebScene::contextMenuEvent(QGraphicsSceneContextMenuEvent * const opc_Eve
    {
       C_SebBaseContextMenuManager * const pc_ContextMenuManager = this->m_GetContextMenuManager();
 
-      if (pc_ContextMenuManager != NULL)
+      if (pc_ContextMenuManager != nullptr)
       {
          pc_ContextMenuManager->HandleContextMenuEvent(opc_Event,
                                                        this->selectedItems(),
@@ -998,11 +998,11 @@ void C_SebScene::m_AddAnyItemToScene(QGraphicsItem * const opc_Item)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebScene::m_SetItemSelectionAndMoveAvailability(QGraphicsItem * const opc_Item) const
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       QGraphicsItem * const pc_Parent = C_SebUtil::h_GetHighestParent(opc_Item);
 
-      if (pc_Parent != NULL)
+      if (pc_Parent != nullptr)
       {
          C_GiBiCustomMouseItem * const pc_Special = dynamic_cast<C_GiBiCustomMouseItem *>(pc_Parent);
          bool q_Selectable = false;
@@ -1019,7 +1019,7 @@ void C_SebScene::m_SetItemSelectionAndMoveAvailability(QGraphicsItem * const opc
             c_NewCursor = static_cast<QCursor>(Qt::ArrowCursor);
          }
          pc_Parent->setFlag(QGraphicsItem::ItemIsSelectable, q_Selectable);
-         if (pc_Special != NULL)
+         if (pc_Special != nullptr)
          {
             pc_Special->SetDefaultCursor(c_NewCursor);
          }
@@ -1048,7 +1048,7 @@ void C_SebScene::m_SetItemSelectionAndMoveAvailability(QGraphicsItem * const opc
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebScene::m_HandleRevertableMove(const QPointF & orc_PositionDifference)
 {
-   if (this->m_GetUndoManager() != NULL)
+   if (this->m_GetUndoManager() != nullptr)
    {
       if (this->selectedItems().size() == 1)
       {
@@ -1071,7 +1071,7 @@ void C_SebScene::m_HandleRevertableMove(const QPointF & orc_PositionDifference)
 void C_SebScene::m_HandleRevertableResizeLine(const int32_t & ors32_InteractionPointIndex,
                                               const QPointF & orc_PositionDifference)
 {
-   if (this->m_GetUndoManager() != NULL)
+   if (this->m_GetUndoManager() != nullptr)
    {
       this->m_GetUndoManager()->RegisterResizeLine(this->selectedItems(), ors32_InteractionPointIndex,
                                                    orc_PositionDifference);
@@ -1087,7 +1087,7 @@ void C_SebScene::m_HandleRevertableResizeLine(const int32_t & ors32_InteractionP
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebScene::m_HandleSubLineMove(const int32_t & ors32_SubLineIndex, const QPointF & orc_PositionDifference)
 {
-   if (this->m_GetUndoManager() != NULL)
+   if (this->m_GetUndoManager() != nullptr)
    {
       this->m_GetUndoManager()->RegisterMoveSubLine(this->selectedItems(), orc_PositionDifference, ors32_SubLineIndex);
    }
@@ -1105,7 +1105,7 @@ void C_SebScene::m_HandleSubLineMove(const int32_t & ors32_SubLineIndex, const Q
 void C_SebScene::m_HandleRevertableResizeRectangle(const QPointF & orc_OldPos, const QSizeF & orc_OldSize,
                                                    const QPointF & orc_NewPos, const QSizeF & orc_NewSize)
 {
-   if (this->m_GetUndoManager() != NULL)
+   if (this->m_GetUndoManager() != nullptr)
    {
       this->m_GetUndoManager()->RegisterResizeRectangle(this->selectedItems(), orc_OldPos, orc_OldSize, orc_NewPos,
                                                         orc_NewSize);
@@ -1143,7 +1143,7 @@ void C_SebScene::m_SelectAll(void) const
         ++c_ItItem)
    {
       QGraphicsItem * const pc_Graphics = *c_ItItem;
-      if (pc_Graphics != NULL)
+      if (pc_Graphics != nullptr)
       {
          pc_Graphics->setSelected(true);
       }
@@ -1297,7 +1297,7 @@ void C_SebScene::m_Delete(const bool oq_NoUserConfirm)
             }
          }
 
-         if (this->m_GetUndoManager() != NULL)
+         if (this->m_GetUndoManager() != nullptr)
          {
             this->m_GetUndoManager()->DoDelete(c_SelectedItems);
          }
@@ -1326,7 +1326,7 @@ void C_SebScene::m_Delete(const bool oq_NoUserConfirm)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebScene::m_CopyItemsToCopyPasteManager(const QList<QGraphicsItem *> & orc_SelectedItems)
 {
-   if (this->m_GetCopyPasteManager() != NULL)
+   if (this->m_GetCopyPasteManager() != nullptr)
    {
       //Special handling for Z order
       //Start counting at one to compensate usage of highest used Z value
@@ -1360,7 +1360,7 @@ void C_SebScene::m_CopyItemsToCopyPasteManager(const QList<QGraphicsItem *> & or
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebScene::m_Clear(void)
 {
-   if (this->m_GetUndoManager() != NULL)
+   if (this->m_GetUndoManager() != nullptr)
    {
       this->m_GetUndoManager()->DoDelete(this->items());
    }
@@ -1425,7 +1425,7 @@ bool C_SebScene::m_IsPastePossible(void)
    bool q_Retval = false;
    C_SebBaseCopyPasteManager * const pc_CopyPasteManager = this->m_GetCopyPasteManager();
 
-   if (pc_CopyPasteManager != NULL)
+   if (pc_CopyPasteManager != nullptr)
    {
       q_Retval = pc_CopyPasteManager->CheckValidContentAndPrepareData();
    }
@@ -1491,7 +1491,7 @@ void C_SebScene::m_UpdateHints(void) const
       try
       {
          pc_CustomToolTip = dynamic_cast<C_GiBiCustomToolTip *>(C_SebUtil::h_GetHighestParent(*c_ItItem));
-         if (pc_CustomToolTip != NULL)
+         if (pc_CustomToolTip != nullptr)
          {
             pc_CustomToolTip->GenerateHint();
          }
@@ -1509,7 +1509,7 @@ void C_SebScene::m_UpdateHints(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebScene::m_HandleHideToolTip(void)
 {
-   mpc_CurrentHoverItem = NULL;
+   mpc_CurrentHoverItem = nullptr;
    mc_ToolTipTimer.stop();
    Q_EMIT this->SigHideToolTip();
 }
@@ -1548,7 +1548,7 @@ void C_SebScene::m_BendLine(QGraphicsItem * const opc_Item, const QPointF & orc_
 {
    C_GiLiLineGroup * const pc_Line = dynamic_cast<C_GiLiLineGroup *>(opc_Item);
 
-   if ((pc_Line != NULL) && (this->m_GetUndoManager() != NULL))
+   if ((pc_Line != nullptr) && (this->m_GetUndoManager() != nullptr))
    {
       this->m_GetUndoManager()->DoBendLine(pc_Line, orc_ScenePos);
    }
@@ -1559,7 +1559,7 @@ void C_SebScene::m_RemoveBendLine(QGraphicsItem * const opc_Item, const QPointF 
 {
    C_GiLiLineGroup * const pc_Line = dynamic_cast<C_GiLiLineGroup *>(opc_Item);
 
-   if ((pc_Line != NULL) && (this->m_GetUndoManager() != NULL))
+   if ((pc_Line != nullptr) && (this->m_GetUndoManager() != nullptr))
    {
       this->m_GetUndoManager()->DoRemoveBendLine(pc_Line, orc_ScenePos);
    }
@@ -1580,7 +1580,7 @@ bool C_SebScene::m_CallSetupStyle(QGraphicsItem * const opc_Item) const
    bool q_Retval = false;
    C_GiBiBoundary * const pc_Boundary = dynamic_cast<C_GiBiBoundary *>(opc_Item);
 
-   if (pc_Boundary != NULL)
+   if (pc_Boundary != nullptr)
    {
       q_Retval = pc_Boundary->OpenStyleDialog();
    }
@@ -1588,7 +1588,7 @@ bool C_SebScene::m_CallSetupStyle(QGraphicsItem * const opc_Item) const
    {
       C_GiBiTextElement * const pc_TextElement = dynamic_cast<C_GiBiTextElement *>(opc_Item);
 
-      if (pc_TextElement != NULL)
+      if (pc_TextElement != nullptr)
       {
          q_Retval = pc_TextElement->OpenStyleDialog();
       }
@@ -1596,7 +1596,7 @@ bool C_SebScene::m_CallSetupStyle(QGraphicsItem * const opc_Item) const
       {
          C_GiBiArrow * const pc_Arrow = dynamic_cast<C_GiBiArrow *>(opc_Item);
 
-         if (pc_Arrow != NULL)
+         if (pc_Arrow != nullptr)
          {
             q_Retval = pc_Arrow->OpenStyleDialog();
          }
@@ -1615,20 +1615,20 @@ bool C_SebScene::m_CallSetupStyle(QGraphicsItem * const opc_Item) const
 void C_SebScene::m_ApplySetupStyleMultiple(const QList<QGraphicsItem *> & orc_SelectedItems,
                                            const QGraphicsItem * const opc_GuidelineItem) const
 {
-   if (opc_GuidelineItem != NULL)
+   if (opc_GuidelineItem != nullptr)
    {
       for (QList<QGraphicsItem *>::const_iterator c_ItItem = orc_SelectedItems.begin();
            c_ItItem != orc_SelectedItems.end(); ++c_ItItem)
       {
          C_GiBiRectBaseGroup * const pc_RectItem = dynamic_cast<C_GiBiRectBaseGroup *>(*c_ItItem);
-         if (pc_RectItem != NULL)
+         if (pc_RectItem != nullptr)
          {
             pc_RectItem->CopyStyle(opc_GuidelineItem);
          }
          else
          {
             C_GiLiLineGroup * const pc_LineItem = dynamic_cast<C_GiLiLineGroup *>(*c_ItItem);
-            if (pc_LineItem != NULL)
+            if (pc_LineItem != nullptr)
             {
                pc_LineItem->CopyStyle(opc_GuidelineItem);
             }
@@ -1655,7 +1655,7 @@ uint64_t C_SebScene::m_GetNewUniqueId(const QMap<C_PuiBsTemporaryDataId,
 {
    uint64_t u64_Retval;
 
-   if (opc_IdMap != NULL)
+   if (opc_IdMap != nullptr)
    {
       //Get mapped ID and use last unused unique ID as default value to know if there is no mapped value
       u64_Retval = opc_IdMap->value(C_PuiBsTemporaryDataId(os32_Type, oru32_Index), this->mu64_LastUnusedUniqueId);
@@ -1774,7 +1774,7 @@ void C_SebScene::m_MoveSelectedItems(const QPointF & orc_Delta)
       }
    }
 
-   if ((c_MovingItems.size() > 0) && (this->m_GetUndoManager() != NULL))
+   if ((c_MovingItems.size() > 0) && (this->m_GetUndoManager() != nullptr))
    {
       this->m_GetUndoManager()->DoMove(c_MovingItems, c_AdaptedDelta);
    }
@@ -1786,7 +1786,7 @@ void C_SebScene::m_MoveSelectedItems(const QPointF & orc_Delta)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebScene::m_PasteKey(void)
 {
-   this->m_Paste(NULL);
+   this->m_Paste(nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1812,7 +1812,7 @@ void C_SebScene::m_PasteClick()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebScene::m_Align(const QGraphicsItem * const opc_GuidelineItem, const E_Alignment & ore_Alignment)
 {
-   if (this->m_GetUndoManager() != NULL)
+   if (this->m_GetUndoManager() != nullptr)
    {
       this->m_GetUndoManager()->DoAlign(this->selectedItems(), opc_GuidelineItem, ore_Alignment);
    }
@@ -1821,7 +1821,7 @@ void C_SebScene::m_Align(const QGraphicsItem * const opc_GuidelineItem, const E_
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebScene::m_BringToFront(void)
 {
-   if (this->m_GetUndoManager() != NULL)
+   if (this->m_GetUndoManager() != nullptr)
    {
       this->m_GetUndoManager()->AdaptZetOrder(this->selectedItems(), this->items(), true);
    }
@@ -1830,7 +1830,7 @@ void C_SebScene::m_BringToFront(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebScene::m_SendToBack(void)
 {
-   if (this->m_GetUndoManager() != NULL)
+   if (this->m_GetUndoManager() != nullptr)
    {
       this->m_GetUndoManager()->AdaptZetOrder(this->selectedItems(), this->items(), false);
    }
@@ -1846,7 +1846,7 @@ void C_SebScene::m_SetupStyle(QGraphicsItem * const opc_Item)
 {
    C_SebUnoBaseManager * const pc_UndoManager = this->m_GetUndoManager();
 
-   if (pc_UndoManager != NULL)
+   if (pc_UndoManager != nullptr)
    {
       bool q_Apply;
       //Get and store selected items before changing to the dialog as this clears the selection
@@ -1900,7 +1900,7 @@ void C_SebScene::m_OnSelectionChange(void)
 {
    // Register selection change in move because different items could be affected by move.
    // Move must be registered if selection changed. Last chance.
-   if (this->m_GetUndoManager() != NULL)
+   if (this->m_GetUndoManager() != nullptr)
    {
       this->m_GetUndoManager()->RegisterMove();
    }

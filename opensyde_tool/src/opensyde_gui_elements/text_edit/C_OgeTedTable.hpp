@@ -30,7 +30,7 @@ class C_OgeTedTable :
    Q_OBJECT
 
 public:
-   C_OgeTedTable(QWidget * const opc_Parent = NULL);
+   C_OgeTedTable(QWidget * const opc_Parent = nullptr);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

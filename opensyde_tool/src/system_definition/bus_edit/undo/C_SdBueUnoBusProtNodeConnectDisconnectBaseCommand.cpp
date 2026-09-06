@@ -131,7 +131,7 @@ void C_SdBueUnoBusProtNodeConnectDisconnectBaseCommand::m_DeleteDataPool(void) c
 
    //Delete data pool
    pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       uint32_t u32_ItComDataPool = 0;
       bool q_Found = false;
@@ -167,7 +167,7 @@ void C_SdBueUnoBusProtNodeConnectDisconnectBaseCommand::m_UpdateUi(void)
    C_SdBueComIfDescriptionWidget * const pc_Widget =
       dynamic_cast<C_SdBueComIfDescriptionWidget * const>(this->mpc_Widget);
 
-   if (pc_Widget != NULL)
+   if (pc_Widget != nullptr)
    {
       pc_Widget->PartialReload();
    }

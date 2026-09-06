@@ -362,11 +362,11 @@ void C_SdNdeUnoLeDataPoolListElementDataChangeCommand::m_Change(QVariant & orc_P
       this->mq_Initial = false;
 
       //Signal data change
-      if (this->mpc_DataPoolListModelViewManager != NULL)
+      if (this->mpc_DataPoolListModelViewManager != nullptr)
       {
          C_SdNdeDpListTableModel * const pc_Model = this->mpc_DataPoolListModelViewManager->GetElementModel(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
-         if (pc_Model != NULL)
+         if (pc_Model != nullptr)
          {
             pc_Model->HandleDataChange(this->mu32_DataPoolListElementIndex,
                                        this->me_DataChangeType, this->ms32_DataSetIndex);
@@ -389,7 +389,7 @@ void C_SdNdeUnoLeDataPoolListElementDataChangeCommand::m_Change(QVariant & orc_P
                pc_Model->HandleDataChange(this->mu32_DataPoolListElementIndex,
                                           C_SdNdeDpUtil::eELEMENT_MAX, this->ms32_DataSetIndex);
                //All data sets
-               if (pc_List != NULL)
+               if (pc_List != nullptr)
                {
                   for (uint32_t u32_ItDataSet = 0; u32_ItDataSet < pc_List->c_DataSets.size(); ++u32_ItDataSet)
                   {
@@ -418,7 +418,7 @@ void C_SdNdeUnoLeDataPoolListElementDataChangeCommand::m_Change(QVariant & orc_P
                pc_Model->HandleDataChange(this->mu32_DataPoolListElementIndex,
                                           C_SdNdeDpUtil::eELEMENT_UNIT, this->ms32_DataSetIndex);
                //All data sets
-               if (pc_List != NULL)
+               if (pc_List != nullptr)
                {
                   for (uint32_t u32_ItDataSet = 0; u32_ItDataSet < pc_List->c_DataSets.size(); ++u32_ItDataSet)
                   {
@@ -448,8 +448,8 @@ void C_SdNdeUnoLeDataPoolListElementDataChangeCommand::m_ApplyAutoMin(void)
                                                                  this->mu32_DataPoolListIndex,
                                                                  this->mu32_DataPoolListElementIndex);
 
-   tgl_assert(pc_OscElement != NULL);
-   if (pc_OscElement != NULL)
+   tgl_assert(pc_OscElement != nullptr);
+   if (pc_OscElement != nullptr)
    {
       QVariant c_Data;
       const C_OscNodeDataPoolContent c_TemporaryElement = m_GetCurrentTypeMinGeneric();
@@ -493,8 +493,8 @@ void C_SdNdeUnoLeDataPoolListElementDataChangeCommand::m_ApplyAutoMax(void)
                                                                  this->mu32_DataPoolListIndex,
                                                                  this->mu32_DataPoolListElementIndex);
 
-   tgl_assert(pc_OscElement != NULL);
-   if (pc_OscElement != NULL)
+   tgl_assert(pc_OscElement != nullptr);
+   if (pc_OscElement != nullptr)
    {
       QVariant c_Data;
       const C_OscNodeDataPoolContent c_TemporaryElement = m_GetCurrentTypeMaxGeneric();
@@ -542,7 +542,7 @@ C_OscNodeDataPoolContent C_SdNdeUnoLeDataPoolListElementDataChangeCommand::m_Get
                                                                  this->mu32_DataPoolListIndex,
                                                                  this->mu32_DataPoolListElementIndex);
 
-   if (pc_OscElement != NULL)
+   if (pc_OscElement != nullptr)
    {
       c_Retval.SetType(pc_OscElement->GetType());
       c_Retval.SetArray(false);
@@ -602,7 +602,7 @@ C_OscNodeDataPoolContent C_SdNdeUnoLeDataPoolListElementDataChangeCommand::m_Get
                                                                  this->mu32_DataPoolListIndex,
                                                                  this->mu32_DataPoolListElementIndex);
 
-   if (pc_OscElement != NULL)
+   if (pc_OscElement != nullptr)
    {
       c_Retval.SetType(pc_OscElement->GetType());
       c_Retval.SetArray(false);

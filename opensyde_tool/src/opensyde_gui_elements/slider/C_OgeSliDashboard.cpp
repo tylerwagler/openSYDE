@@ -48,7 +48,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeSliDashboard::C_OgeSliDashboard(QWidget * const opc_Parent) :
    C_OgeSliToolTipBase(opc_Parent),
-   mpc_SvgRenderer(NULL),
+   mpc_SvgRenderer(nullptr),
    me_Style(C_PuiSvDbSlider::eOPENSYDE),
    me_Type(C_PuiSvDbSlider::eTYPE_SMALL_COLOR_1)
 {
@@ -196,7 +196,7 @@ void C_OgeSliDashboard::m_SetSvg(const QString & orc_Path)
    delete this->mpc_SvgRenderer;
    if (orc_Path.compare("") == 0)
    {
-      this->mpc_SvgRenderer = NULL;
+      this->mpc_SvgRenderer = nullptr;
    }
    else
    {
@@ -213,7 +213,7 @@ void C_OgeSliDashboard::m_SetSvg(const QString & orc_Path)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeSliDashboard::m_DrawHandle(const QRect & orc_Rect)
 {
-   if (this->mpc_SvgRenderer != NULL)
+   if (this->mpc_SvgRenderer != nullptr)
    {
       QPainter c_Painter(this);
       c_Painter.setClipRect(orc_Rect);

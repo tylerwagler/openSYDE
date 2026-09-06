@@ -50,8 +50,8 @@ C_GiInfo::C_GiInfo(const QRectF & orc_Rect, QGraphicsItem * const opc_Parent) :
    mc_TextColor(Qt::transparent),
    ms32_IconSize(0),
    ms32_TextAlignment(static_cast<int32_t>(Qt::AlignCenter)),
-   mpc_SvgRenderer(NULL),
-   mpc_Movie(NULL)
+   mpc_SvgRenderer(nullptr),
+   mpc_Movie(nullptr)
 {
 }
 
@@ -64,9 +64,9 @@ C_GiInfo::C_GiInfo(const QRectF & orc_Rect, QGraphicsItem * const opc_Parent) :
 C_GiInfo::~C_GiInfo(void)
 {
    delete mpc_SvgRenderer;
-   mpc_SvgRenderer = NULL;
+   mpc_SvgRenderer = nullptr;
    delete mpc_Movie;
-   mpc_Movie = NULL;
+   mpc_Movie = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ void C_GiInfo::SetText(const QString & orc_Value)
 void C_GiInfo::SetGif(const QString & orc_Value)
 {
    delete (this->mpc_SvgRenderer);
-   this->mpc_SvgRenderer = NULL;
+   this->mpc_SvgRenderer = nullptr;
    delete (this->mpc_Movie);
    if (orc_Value.compare("") != 0)
    {
@@ -112,7 +112,7 @@ void C_GiInfo::SetGif(const QString & orc_Value)
    }
    else
    {
-      this->mpc_Movie = NULL;
+      this->mpc_Movie = nullptr;
    }
 }
 
@@ -125,7 +125,7 @@ void C_GiInfo::SetGif(const QString & orc_Value)
 void C_GiInfo::SetSvg(const QString & orc_Value)
 {
    delete (this->mpc_Movie);
-   this->mpc_Movie = NULL;
+   this->mpc_Movie = nullptr;
    delete (this->mpc_SvgRenderer);
    if (orc_Value.compare("") != 0)
    {
@@ -135,7 +135,7 @@ void C_GiInfo::SetSvg(const QString & orc_Value)
    }
    else
    {
-      this->mpc_SvgRenderer = NULL;
+      this->mpc_SvgRenderer = nullptr;
    }
 }
 
@@ -226,7 +226,7 @@ void C_GiInfo::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsIte
    }
 
    //Icon
-   if (this->mpc_SvgRenderer != NULL)
+   if (this->mpc_SvgRenderer != nullptr)
    {
       s32_TextHorizontal += this->ms32_IconSize + s32_IconOffset;
       s32_TextWidth -= this->ms32_IconSize;
@@ -234,7 +234,7 @@ void C_GiInfo::paint(QPainter * const opc_Painter, const QStyleOptionGraphicsIte
    }
 
    //Gif
-   if (this->mpc_Movie != NULL)
+   if (this->mpc_Movie != nullptr)
    {
       const QRectF c_TransformedRect = this->mc_Transform.mapRect(c_IconRect);
       this->mpc_Movie->setScaledSize(static_cast<QSize>(c_TransformedRect.size().toSize()));
@@ -273,7 +273,7 @@ void C_GiInfo::m_Update(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiInfo::m_RestartGif()
 {
-   if (this->mpc_Movie != NULL)
+   if (this->mpc_Movie != nullptr)
    {
       this->mpc_Movie->start();
    }

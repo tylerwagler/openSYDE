@@ -63,7 +63,7 @@ C_SdNdeUnoDasDataPoolListAddCommand::C_SdNdeUnoDasDataPoolListAddCommand(const u
    c_OscNames.resize(orc_Indices.size());
    c_OscDataSetValues.resize(orc_Indices.size());
    //Init data set values
-   if (pc_List != NULL)
+   if (pc_List != nullptr)
    {
       for (uint32_t u32_ItDataSet = 0; u32_ItDataSet < c_OscDataSetValues.size(); ++u32_ItDataSet)
       {

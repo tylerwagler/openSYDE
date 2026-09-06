@@ -28,7 +28,7 @@ class C_TblViewScroll :
    public C_TblViewToolTipBase
 {
 public:
-   C_TblViewScroll(QWidget * const opc_Parent = NULL);
+   C_TblViewScroll(QWidget * const opc_Parent = nullptr);
 
 private:
    void m_ScrollBarRangeChangedVer(const int32_t os32_Min, const int32_t os32_Max) const;

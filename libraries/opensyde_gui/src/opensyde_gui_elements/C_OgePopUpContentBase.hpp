@@ -31,7 +31,7 @@ class C_OgePopUpContentBase :
    Q_OBJECT
 
 public:
-   explicit C_OgePopUpContentBase(C_OgePopUpDialog & orc_Parent, QWidget * const opc_Parent = NULL);
+   explicit C_OgePopUpContentBase(C_OgePopUpDialog & orc_Parent, QWidget * const opc_Parent = nullptr);
 
 protected:
    //lint -e{1725} Reference member intentionally retained as the parent dialog outlives the content widget.

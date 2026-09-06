@@ -30,7 +30,7 @@ class C_OgeListWidgetToolTipBase :
    public C_OgeToolTipBase
 {
 public:
-   C_OgeListWidgetToolTipBase(QWidget * const opc_Parent = NULL);
+   C_OgeListWidgetToolTipBase(QWidget * const opc_Parent = nullptr);
 
 protected:
    void mouseMoveEvent(QMouseEvent * const opc_Event) override;

@@ -111,7 +111,7 @@ bool C_OscNodeDataPoolListElementOptArrayOptValidId::operator <(const C_OscNodeD
       dynamic_cast<const C_OscNodeDataPoolListElementOptArrayOptValidId *>(&orc_Cmp);
 
    //Not current class, assume base comparison is correct
-   if (pc_NonBase != NULL)
+   if (pc_NonBase != nullptr)
    {
       if ((this->mq_IsValid != pc_NonBase->mq_IsValid) && (this->mq_IsValid == true))
       {
@@ -155,7 +155,7 @@ bool C_OscNodeDataPoolListElementOptArrayOptValidId::operator ==(const C_OscNode
          dynamic_cast<const C_OscNodeDataPoolListElementOptArrayOptValidId *>(&orc_Cmp);
 
       //Not current class, assume base comparison is correct
-      if (pc_NonBase != NULL)
+      if (pc_NonBase != nullptr)
       {
          // In case of a false valid flag, we can not trust the indices
          if ((this->mq_IsValid == pc_NonBase->mq_IsValid) &&

@@ -117,7 +117,7 @@ uint32_t C_CieImportDatapoolSelectWidget::GetSelectedDatapoolIndex(void) const
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       // convert combo box index to datapool index
       int32_t s32_ItProtocolDatapool = 0;
@@ -176,7 +176,7 @@ void C_CieImportDatapoolSelectWidget::m_InitComboBox(void) const
    for (std::vector< const C_OscNodeDataPool *>::const_iterator c_It = rc_Datapools.begin(); c_It != rc_Datapools.end();
         ++c_It)
    {
-      if (*c_It != NULL)
+      if (*c_It != nullptr)
       {
          const C_OscNodeDataPool & rc_Datapool = **c_It;
          this->mpc_Ui->pc_CbxDatapools->addItem(rc_Datapool.c_Name.c_str());

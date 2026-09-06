@@ -106,7 +106,7 @@ QVariant C_TblTreeModelCheckable::data(const QModelIndex & orc_Index, const int3
       C_TblTreeModelCheckableItem * const pc_TreeItem =
          static_cast<C_TblTreeModelCheckableItem *>(orc_Index.internalPointer());
 
-      if ((pc_TreeItem != NULL) && (pc_TreeItem->q_CheckBoxVisible))
+      if ((pc_TreeItem != nullptr) && (pc_TreeItem->q_CheckBoxVisible))
       {
          c_Return = static_cast<int32_t>(pc_TreeItem->e_CheckState);
       }
@@ -144,7 +144,7 @@ bool C_TblTreeModelCheckable::setData(const QModelIndex & orc_Index, const QVari
          C_TblTreeModelCheckableItem * const pc_TreeItem =
             static_cast<C_TblTreeModelCheckableItem *>(orc_Index.internalPointer());
 
-         if (pc_TreeItem != NULL)
+         if (pc_TreeItem != nullptr)
          {
             QModelIndex c_StartIndex = orc_Index;
             QModelIndex c_EndIndex = orc_Index;
@@ -189,7 +189,7 @@ Qt::ItemFlags C_TblTreeModelCheckable::flags(const QModelIndex & orc_Index) cons
       //lint -e{9079}  Result of Qt interface restrictions, set by index function
       const C_TblTreeModelCheckableItem * const pc_TreeItem =
          static_cast<const C_TblTreeModelCheckableItem *>(orc_Index.internalPointer());
-      if (pc_TreeItem != NULL)
+      if (pc_TreeItem != nullptr)
       {
          if (pc_TreeItem->q_CheckBoxVisible == true)
          {
@@ -226,7 +226,7 @@ void C_TblTreeModelCheckable::m_CheckChildren(C_TblTreeModelCheckableItem * cons
          const QModelIndex c_ChildIndex = this->index(u32_ChildCounter, 0, orc_ItemIndex);
 
          // Set all children to the same checked state
-         if (pc_ChildItem != NULL)
+         if (pc_ChildItem != nullptr)
          {
             if (pc_ChildItem->q_Enabled == true)
             {
@@ -251,12 +251,12 @@ void C_TblTreeModelCheckable::m_CheckChildren(C_TblTreeModelCheckableItem * cons
 void C_TblTreeModelCheckable::m_CheckParent(const C_TblTreeModelCheckableItem * const opc_TreeItem,
                                             const QModelIndex & orc_ItemIndex, QModelIndex & orc_StartIndex)
 {
-   if (opc_TreeItem->pc_Parent != NULL)
+   if (opc_TreeItem->pc_Parent != nullptr)
    {
       C_TblTreeModelCheckableItem * const pc_ParentItem =
          dynamic_cast<C_TblTreeModelCheckableItem * const>(opc_TreeItem->pc_Parent);
 
-      if (pc_ParentItem != NULL)
+      if (pc_ParentItem != nullptr)
       {
          bool q_AllAreChecked = true;
          bool q_AtLeastOneIsChecked = false;
@@ -270,7 +270,7 @@ void C_TblTreeModelCheckable::m_CheckParent(const C_TblTreeModelCheckableItem * 
             C_TblTreeModelCheckableItem * const pc_ChildItem =
                dynamic_cast<C_TblTreeModelCheckableItem * const>(pc_ParentItem->c_Children[u32_ChildCounter]);
 
-            if (pc_ChildItem != NULL)
+            if (pc_ChildItem != nullptr)
             {
                if (pc_ChildItem->e_CheckState == Qt::Unchecked)
                {
@@ -310,9 +310,9 @@ void C_TblTreeModelCheckable::m_CheckParent(const C_TblTreeModelCheckableItem * 
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblTreeModelCheckable::m_CleanUpLastModel(void)
 {
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       delete (this->mpc_InvisibleRootItem);
-      this->mpc_InvisibleRootItem = NULL;
+      this->mpc_InvisibleRootItem = nullptr;
    }
 }

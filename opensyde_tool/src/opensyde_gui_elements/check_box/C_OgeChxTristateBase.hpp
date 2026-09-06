@@ -30,7 +30,7 @@ class C_OgeChxTristateBase :
    Q_OBJECT
 
 public:
-   C_OgeChxTristateBase(QWidget * const opc_Parent = NULL);
+   C_OgeChxTristateBase(QWidget * const opc_Parent = nullptr);
 
 protected:
    void resizeEvent(QResizeEvent * const opc_Event) override;

@@ -166,7 +166,7 @@ void C_SdNdeDalLogJobsOvTableView::LoadUserSettings()
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mc_Model.GetNodeIndex());
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const C_UsNode c_Node = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());
       if (this->m_SetColumnWidths(c_Node.GetHalcOverviewColumnWidth()) == false)
@@ -184,7 +184,7 @@ void C_SdNdeDalLogJobsOvTableView::SaveUserSettings() const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mc_Model.GetNodeIndex());
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       C_UsHandler::h_GetInstance()->SetProjSdNodeHalcOverviewColumnWidth(
          pc_Node->c_Properties.c_Name.c_str(), this->m_GetColumnWidths());

@@ -27,7 +27,7 @@ class C_OgeCbxResizingView :
    public QComboBox
 {
 public:
-   C_OgeCbxResizingView(QWidget * const opc_Parent = NULL);
+   C_OgeCbxResizingView(QWidget * const opc_Parent = nullptr);
 
    void ResizeViewToContents(void) const;
 };

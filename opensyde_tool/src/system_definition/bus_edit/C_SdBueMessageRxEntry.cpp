@@ -258,7 +258,7 @@ void C_SdBueMessageRxEntry::SetLastKnownCycleTimeValue(const uint32_t ou32_Value
       {
          C_SdBueMessageRxEntry * const pc_Entry = this->mc_Entries[u32_Counter];
 
-         if (pc_Entry != NULL)
+         if (pc_Entry != nullptr)
          {
             pc_Entry->SetLastKnownCycleTimeValue(ou32_Value);
          }
@@ -302,7 +302,7 @@ void C_SdBueMessageRxEntry::SetRxTimeoutPreconditions(const bool oq_TxMethodOnEv
       {
          C_SdBueMessageRxEntry * const pc_Entry = this->mc_Entries[u32_Counter];
 
-         if (pc_Entry != NULL)
+         if (pc_Entry != nullptr)
          {
             pc_Entry->SetRxTimeoutPreconditions(oq_TxMethodOnEvent, oq_DisableOptionPossible);
          }
@@ -359,7 +359,7 @@ void C_SdBueMessageRxEntry::SetChecked(const bool oq_Checked, const bool oq_AllD
       {
          C_SdBueMessageRxEntry * const pc_Entry = this->mc_Entries[u32_Counter];
 
-         if (pc_Entry != NULL)
+         if (pc_Entry != nullptr)
          {
             if (oq_AllDatapoolIndexes == true)
             {
@@ -601,7 +601,7 @@ void C_SdBueMessageRxEntry::m_ToggleSubItems(const bool oq_Checked)
    {
       C_SdBueMessageRxEntry * const pc_Entry = this->mc_Entries[u32_Counter];
 
-      if (pc_Entry != NULL)
+      if (pc_Entry != nullptr)
       {
          // In case of sub entries the Datapool index is not relevant
          pc_Entry->SetChecked(oq_Checked, false, 0U);
@@ -630,7 +630,7 @@ void C_SdBueMessageRxEntry::m_OnNodeDatapoolToggled(const uint32_t ou32_NodeInde
       {
          uint32_t u32_Counter;
          bool q_SecondCheckedEntryFound = false;
-         C_SdBueMessageRxEntry * pc_LastCheckedEntry = NULL;
+         C_SdBueMessageRxEntry * pc_LastCheckedEntry = nullptr;
 
          // Check if only one checked Datapool is left.
          for (u32_Counter = 0U; u32_Counter < this->mc_Entries.size(); ++u32_Counter)
@@ -639,7 +639,7 @@ void C_SdBueMessageRxEntry::m_OnNodeDatapoolToggled(const uint32_t ou32_NodeInde
 
             if (pc_SubEntry->IsChecked() == true)
             {
-               if (pc_LastCheckedEntry != NULL)
+               if (pc_LastCheckedEntry != nullptr)
                {
                   // When two entries are checked, no sub entry has to be disabled
                   q_SecondCheckedEntryFound = true;
@@ -655,7 +655,7 @@ void C_SdBueMessageRxEntry::m_OnNodeDatapoolToggled(const uint32_t ou32_NodeInde
             pc_SubEntry->SetEnabled(true);
          }
 
-         if ((pc_LastCheckedEntry != NULL) &&
+         if ((pc_LastCheckedEntry != nullptr) &&
              (q_SecondCheckedEntryFound == false))
          {
             // Only one entry is left
@@ -806,7 +806,7 @@ void C_SdBueMessageRxEntry::m_OnTimeoutConfigLinkClicked(void)
       {
          // add node name if and only if Datapool case
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             c_NodeName = pc_Node->c_Properties.c_Name.c_str();
             c_NodeName += ".";
@@ -858,7 +858,7 @@ void C_SdBueMessageRxEntry::m_OnTimeoutConfigLinkClicked(void)
          }
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();

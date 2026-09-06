@@ -32,7 +32,7 @@ class C_OgeWiWithToolTip :
    Q_OBJECT
 
 public:
-   C_OgeWiWithToolTip(QWidget * const opc_Parent = NULL);
+   C_OgeWiWithToolTip(QWidget * const opc_Parent = nullptr);
 
    void HideToolTip(void);
 

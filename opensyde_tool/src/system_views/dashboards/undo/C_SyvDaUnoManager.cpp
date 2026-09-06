@@ -94,7 +94,7 @@ void C_SyvDaUnoManager::DoAddGeneric(const C_PuiSvDbDataElement::E_Type & ore_Ty
    c_Ids.push_back(oru64_UniqueId);
    pc_AddCommand = new C_SyvDaUnoAddCommand(this->mpc_Scene, c_Ids, ore_Type, orc_NewPos, of64_ZetValue,
                                             orc_AdditionalInformation,
-                                            NULL, false);
+                                            nullptr, false);
    this->DoPush(pc_AddCommand);
 }
 

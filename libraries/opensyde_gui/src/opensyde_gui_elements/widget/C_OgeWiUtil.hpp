@@ -32,7 +32,7 @@ namespace opensyde_gui_logic
 class C_OgeWiUtil
 {
 public:
-   static void h_DrawBackground(QWidget * const opc_Widget, QPainter * const opc_Painter = NULL);
+   static void h_DrawBackground(QWidget * const opc_Widget, QPainter * const opc_Painter = nullptr);
    static void h_ApplyStylesheetProperty(QWidget * const opc_Widget, const char_t * const opcn_Name,
                                          const QVariant & orc_Value);
    static void h_ApplyStylesheetPropertyToItselfAndAllChildren(QWidget * const opc_Widget,
@@ -45,7 +45,7 @@ public:
    static int32_t h_UpdateFontSize(QWidget * const opc_Widget, const QString & orc_Text,
                                    const float32_t of32_HeightScaling = 1.0F,
                                    const bool oq_IgnoreContentMargins = false,
-                                   const QSize * const opc_ImprovedSize = NULL);
+                                   const QSize * const opc_ImprovedSize = nullptr);
    static int32_t h_GetNextOptimalPointSize(const QFont & orc_Font, const QSize & orc_Size, const QString & orc_Text,
                                             const float32_t of32_HeightScaling = 1.0F);
    static QWidget * h_GetWidgetUnderNextPopUp(QWidget * const opc_Input);
@@ -57,7 +57,7 @@ public:
    static QString h_GetSaveFileName(QWidget * const opc_Parent, const QString & orc_Heading,
                                     const QString & orc_StartingFolder, const QString & orc_Filter,
                                     const QString & orc_DefaultFileName,
-                                    const QFileDialog::Options & orc_Option = QFileDialog::Options(), QString * const opc_SelectedFilter = NULL);
+                                    const QFileDialog::Options & orc_Option = QFileDialog::Options(), QString * const opc_SelectedFilter = nullptr);
    static void h_ShowPathInvalidError(QWidget * const opc_Parent, const QString & orc_InvalidPaths);
    static int32_t h_AskOverwriteFile(QWidget * const opc_Parent, const QString & orc_FilePath);
 
@@ -66,7 +66,7 @@ private:
                                  const QString & orc_StartingFolder, const QString & orc_Filter,
                                  const QString & orc_DefaultFileName, const QString & orc_DefaultSuffix,
                                  const QFileDialog::AcceptMode & ore_SaveOrOpen,
-                                 const QFileDialog::Options & orc_Option, QString * const opc_SelectedFilter = NULL);
+                                 const QFileDialog::Options & orc_Option, QString * const opc_SelectedFilter = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

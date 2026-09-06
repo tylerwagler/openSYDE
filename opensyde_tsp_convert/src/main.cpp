@@ -171,7 +171,7 @@ static C_OscNode mh_BuildNodeFromV2(const C_OscTargetSupportPackageV2 & orc_V2,
    // Pad c_ComInterfaces to match the device's CAN+ETH count (default IPs/node-IDs).
    // mh_KeepTspProperties asserts size equality before copying bus connections; without this the
    // V3 importer drops every existing bus wiring on import.
-   if (opc_DeviceDef != NULL)
+   if (opc_DeviceDef != nullptr)
    {
       c_Node.c_Properties.CreateComInterfaces(*opc_DeviceDef, 0U);
 
@@ -308,7 +308,7 @@ int main(const int argc, char_t * const opacn_Argv[])
    C_SclString c_DeviceLibPath;
    {
       const char_t * const pcn_Home = std::getenv("HOME");
-      if (pcn_Home != NULL)
+      if (pcn_Home != nullptr)
       {
          c_DeviceLibPath = C_SclString(pcn_Home) + "/.local/opt/openSYDE/devices";
       }
@@ -368,7 +368,7 @@ int main(const int argc, char_t * const opacn_Argv[])
    // --- 2) Look up the device definition (best-effort) ------------------------------------------------------------
    // Without it the synthesized node ships zero com-interfaces, which makes the V3 importer drop bus wiring.
    C_OscDeviceManager c_DeviceManager;
-   const C_OscDeviceDefinition * pc_DeviceDef = NULL;
+   const C_OscDeviceDefinition * pc_DeviceDef = nullptr;
    uint32_t u32_SubDeviceIndex = 0U;
    if (TglDirectoryExists(c_DeviceLibPath))
    {
@@ -379,7 +379,7 @@ int main(const int argc, char_t * const opacn_Argv[])
       {
          pc_DeviceDef = c_DeviceManager.LookForDevice(c_V2.c_DeviceName, "", u32_SubDeviceIndex);
       }
-      if (pc_DeviceDef == NULL)
+      if (pc_DeviceDef == nullptr)
       {
          std::cerr << mhc_TOOL_NAME.c_str() << ": warning: device \"" << c_V2.c_DeviceName.c_str()
                    << "\" not found under " << c_DeviceLibPath.c_str()

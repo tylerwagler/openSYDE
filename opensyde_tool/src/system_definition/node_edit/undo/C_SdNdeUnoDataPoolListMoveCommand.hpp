@@ -33,7 +33,7 @@ public:
                                      stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
                                      const std::vector<uint32_t> & orc_SourceRows,
                                      const std::vector<uint32_t> & orc_TargetRows,
-                                     QUndoCommand * const opc_Parent = NULL);
+                                     QUndoCommand * const opc_Parent = nullptr);
    void redo(void) override;
    void undo(void) override;
 

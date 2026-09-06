@@ -33,7 +33,7 @@ class C_GiLiTemporaryLine :
    Q_OBJECT
 
 public:
-   C_GiLiTemporaryLine(QGraphicsItem * const opc_Parent = NULL);
+   C_GiLiTemporaryLine(QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiLiTemporaryLine() override;
    void UpdateP2(const QPointF & orc_Pos);
 

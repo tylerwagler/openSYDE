@@ -35,7 +35,7 @@ class C_SyvSeScene :
    Q_OBJECT
 
 public:
-   C_SyvSeScene(const uint32_t ou32_ViewIndex = 0, QObject * const opc_Parent = NULL);
+   C_SyvSeScene(const uint32_t ou32_ViewIndex = 0, QObject * const opc_Parent = nullptr);
    ~C_SyvSeScene(void) override;
 
    void PrepareToClose(void);

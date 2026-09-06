@@ -211,7 +211,7 @@ int32_t C_SdNdeDpListArrayEditModel::columnCount(const QModelIndex & orc_Parent)
       const C_OscNodeDataPoolListElement * const pc_Element =
          C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex, this->mu32_ElementIndex);
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          //For table parent should always be invalid
          s32_Retval = pc_Element->GetArraySize();
@@ -243,7 +243,7 @@ QVariant C_SdNdeDpListArrayEditModel::data(const QModelIndex & orc_Index, const 
                                                                        this->mu32_DataPoolIndex,
                                                                        this->mu32_ListIndex,
                                                                        this->mu32_ElementIndex);
-         if (pc_OscElement != NULL)
+         if (pc_OscElement != nullptr)
          {
             switch (this->me_ArrayEditType)
             {
@@ -292,7 +292,7 @@ QVariant C_SdNdeDpListArrayEditModel::data(const QModelIndex & orc_Index, const 
                   C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(this->mu32_NodeIndex,
                                                                       this->mu32_DataPoolIndex,
                                                                       this->mu32_ListIndex);
-               if (pc_OscElement != NULL)
+               if (pc_OscElement != nullptr)
                {
                   const uint32_t u32_ArrayIndex = static_cast<uint32_t>(orc_Index.column());
                   bool q_ValueOverMax = false;
@@ -319,7 +319,7 @@ QVariant C_SdNdeDpListArrayEditModel::data(const QModelIndex & orc_Index, const 
                                                                              this->mu32_DataPoolIndex,
                                                                              this->mu32_ListIndex,
                                                                              this->mu32_ElementIndex);
-               if (pc_OscElement != NULL)
+               if (pc_OscElement != nullptr)
                {
                   const uint32_t u32_ArrayIndex = static_cast<uint32_t>(orc_Index.column());
 
@@ -436,7 +436,7 @@ C_OscNodeDataPoolContent::E_Type C_SdNdeDpListArrayEditModel::GetType(void) cons
                                                                  this->mu32_DataPoolIndex,
                                                                  this->mu32_ListIndex,
                                                                  this->mu32_ElementIndex);
-   if (pc_OscElement != NULL)
+   if (pc_OscElement != nullptr)
    {
       e_Retval = pc_OscElement->GetType();
    }

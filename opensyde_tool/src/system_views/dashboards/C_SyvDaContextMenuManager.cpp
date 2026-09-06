@@ -238,7 +238,7 @@ bool C_SyvDaContextMenuManager::m_ActivateSpecificActions(void)
          this->mpc_ActionSetupStyle->setVisible(true);
       }
 
-      if (pc_LineGroup != NULL)
+      if (pc_LineGroup != nullptr)
       {
          // Special case: Points can be removed if there are more than 2 points
          if (pc_LineGroup->GetNumberPoints() > 2)

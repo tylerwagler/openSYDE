@@ -49,7 +49,7 @@ class C_CamMetTreeView :
    Q_OBJECT
 
 public:
-   C_CamMetTreeView(QWidget * const opc_Parent = NULL);
+   C_CamMetTreeView(QWidget * const opc_Parent = nullptr);
    ~C_CamMetTreeView(void) noexcept override;
 
    void Continue(void) override;

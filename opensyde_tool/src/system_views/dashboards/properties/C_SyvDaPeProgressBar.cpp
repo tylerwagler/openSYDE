@@ -298,7 +298,7 @@ void C_SyvDaPeProgressBar::m_UpdatePreview(void)
    const QSizeF c_SCENE_SIZE(f32_SCENE_WIDTH, f32_SCENE_HEIGHT);
    const int32_t s32_DEFAULT_VALUE = 50;
 
-   C_GiSvDaProgressBarBase * const pc_Item = new C_GiSvDaProgressBarBase(0UL, 0UL, -1L, 0ULL, NULL);
+   C_GiSvDaProgressBarBase * const pc_Item = new C_GiSvDaProgressBarBase(0UL, 0UL, -1L, 0ULL, nullptr);
 
    QSizeF c_ItemSize;
    QPointF c_ItemPosition;

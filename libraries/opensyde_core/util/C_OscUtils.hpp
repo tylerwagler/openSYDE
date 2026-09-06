@@ -50,8 +50,8 @@ public:
    static void h_FileToString(const stw::scl::C_SclString & orc_FilePath, stw::scl::C_SclString & orc_OutputString);
    static void h_RangeCheckFloat(float64_t & orf64_Value);
    static int32_t h_CopyFile(const stw::scl::C_SclString & orc_SourceFile, const stw::scl::C_SclString & orc_TargetFile,
-                             stw::scl::C_SclString * const opc_ErrorPath = NULL,
-                             stw::scl::C_SclString * const opc_ErrorMessage = NULL);
+                             stw::scl::C_SclString * const opc_ErrorPath = nullptr,
+                             stw::scl::C_SclString * const opc_ErrorMessage = nullptr);
    static stw::scl::C_SclString h_GetCommandLineAsString(const int32_t os32_Argc, char_t * const * const oppcn_Argv);
 
    //Utilities for path place holder parsing

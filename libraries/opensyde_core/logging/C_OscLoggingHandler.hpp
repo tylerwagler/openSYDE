@@ -59,13 +59,13 @@ public:
 
    //Logging call
    static void h_WriteLogInfo(const stw::scl::C_SclString & orc_Activity, const stw::scl::C_SclString & orc_Message,
-                              const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                              const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
    static void h_WriteLogWarning(const stw::scl::C_SclString & orc_Activity, const stw::scl::C_SclString & orc_Message,
-                                 const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                                 const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
    static void h_WriteLogError(const stw::scl::C_SclString & orc_Activity, const stw::scl::C_SclString & orc_Message,
-                               const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                               const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
    static void h_WriteLogPerformance(const uint16_t ou16_TimerId, const stw::scl::C_SclString & orc_Message,
-                                     const char_t * const opcn_Class = NULL, const char_t * const opcn_Function = NULL);
+                                     const char_t * const opcn_Class = nullptr, const char_t * const opcn_Function = nullptr);
 
    static uint16_t h_StartPerformanceTimer(void);
    static stw::scl::C_SclString h_StwError(const int32_t os32_Error);
@@ -88,8 +88,8 @@ private:
    static std::ofstream mhc_File;
 
    static void mh_WriteLog(const stw::scl::C_SclString & orc_Type, const stw::scl::C_SclString & orc_Activity,
-                           const stw::scl::C_SclString & orc_Message, const char_t * const opcn_Class = NULL,
-                           const char_t * const opcn_Function = NULL);
+                           const stw::scl::C_SclString & orc_Message, const char_t * const opcn_Class = nullptr,
+                           const char_t * const opcn_Function = nullptr);
    static void mh_OpenFile(void);
    //Avoid calling
    C_OscLoggingHandler(void);

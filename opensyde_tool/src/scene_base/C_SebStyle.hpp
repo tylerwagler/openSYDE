@@ -27,10 +27,10 @@ class C_SebStyle :
    public QProxyStyle
 {
 public:
-   C_SebStyle(QStyle * const opc_Style = NULL);
+   C_SebStyle(QStyle * const opc_Style = nullptr);
 
    void drawControl(const ControlElement oe_Element, const QStyleOption * const opc_Option,
-                    QPainter * const opc_Painter, const QWidget * const opc_Widget = NULL) const override;
+                    QPainter * const opc_Painter, const QWidget * const opc_Widget = nullptr) const override;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

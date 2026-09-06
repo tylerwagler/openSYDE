@@ -67,7 +67,7 @@ C_SdNdeHalcChannelDpPreviewPopUp::C_SdNdeHalcChannelDpPreviewPopUp(
       const C_OscHalcConfigChannel * const pc_Channel =
          C_PuiSdHandler::h_GetInstance()->GetHalcDomainChannelConfigData(ou32_NodeIndex, ou32_DomainIndex,
                                                                          ou32_ChannelIndex, oq_UseChannelIndex);
-      if (pc_Channel != NULL)
+      if (pc_Channel != nullptr)
       {
          this->mrc_ParentDialog.SetTitle(pc_Channel->c_Name.c_str());
       }
@@ -160,11 +160,11 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDpSection(const uint32_t ou32_NodeI
    orc_Text += "<h3>";
    orc_Text += C_GtGetText::h_GetText("Datapool Information");
    orc_Text += "</h3>";
-   if ((pc_Channel != NULL) && (pc_Node != NULL))
+   if ((pc_Channel != nullptr) && (pc_Node != nullptr))
    {
       const C_OscNodeDataPool * const pc_Datapool =
          C_PuiSdHandler::h_GetInstance()->GetHalcDatapool(ou32_NodeIndex, pc_Channel->q_SafetyRelevant);
-      const C_OscNodeApplication * pc_Appl = NULL;
+      const C_OscNodeApplication * pc_Appl = nullptr;
 
       orc_Text += "<table style=\"width:100%;\">";
       orc_Text += "<tr>";
@@ -176,13 +176,13 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDpSection(const uint32_t ou32_NodeI
       orc_Text += "<tr>";
       orc_Text += "<td>" + static_cast<QString>(C_GtGetText::h_GetText("Mapped Data Block: ")) + "</td>";
 
-      if ((pc_Datapool != NULL) && (pc_Datapool->s32_RelatedDataBlockIndex >= 0))
+      if ((pc_Datapool != nullptr) && (pc_Datapool->s32_RelatedDataBlockIndex >= 0))
       {
          pc_Appl =
             C_PuiSdHandler::h_GetInstance()->GetApplication(ou32_NodeIndex,
                                                             static_cast<uint32_t>(pc_Datapool->s32_RelatedDataBlockIndex));
       }
-      if (pc_Appl != NULL)
+      if (pc_Appl != nullptr)
       {
          orc_Text += "<td>" + static_cast<QString>(pc_Appl->c_Name.c_str()) + "</td>";
       }
@@ -246,7 +246,7 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDeSection(const uint32_t ou32_NodeI
    orc_Text += C_GtGetText::h_GetText("Description");
    orc_Text += "</td>";
    orc_Text += "</tr>";
-   if ((pc_Channel != NULL) && (pc_OscNode != NULL))
+   if ((pc_Channel != nullptr) && (pc_OscNode != nullptr))
    {
       const C_OscHalcMagicianDatapoolListHandler c_DpHandlerListParam(pc_OscNode->c_HalcConfig,
                                                                       C_OscHalcDefDomain::eVA_PARAM,
@@ -274,12 +274,12 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDeSection(const uint32_t ou32_NodeI
       {
          const C_OscHalcConfig * const pc_HalcConfig = C_PuiSdHandler::h_GetInstance()->GetHalcConfig(ou32_NodeIndex);
 
-         if (pc_HalcConfig != NULL)
+         if (pc_HalcConfig != nullptr)
          {
             const C_OscHalcDefDomain * const pc_Domain = pc_HalcConfig->GetDomainDefDataConst(ou32_DomainIndex);
             const C_OscHalcConfigDomain * const pc_DomainConfig = pc_HalcConfig->GetDomainConfigDataConst(
                ou32_DomainIndex);
-            if ((pc_Domain != NULL) && (pc_DomainConfig != NULL))
+            if ((pc_Domain != nullptr) && (pc_DomainConfig != nullptr))
             {
                const stw::scl::C_SclString c_ListName1 = C_OscHalcMagicianUtil::h_GetListName(
                   C_OscHalcDefDomain::eVA_PARAM);
@@ -365,7 +365,7 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddUseCase(const uint32_t ou32_NodeInd
                                                                          ou32_ChannelIndex, oq_UseChannelIndex);
       const C_OscHalcConfigDomain * const pc_Domain =
          C_PuiSdHandler::h_GetInstance()->GetHalcDomainConfigDataConst(ou32_NodeIndex, ou32_DomainIndex);
-      if ((pc_Domain != NULL) && (pc_Channel != NULL) &&
+      if ((pc_Domain != nullptr) && (pc_Channel != nullptr) &&
           (pc_Channel->u32_UseCaseIndex < pc_Domain->c_ChannelUseCases.size()))
       {
          const C_OscHalcDefChannelUseCase & rc_UseCase = pc_Domain->c_ChannelUseCases[pc_Channel->u32_UseCaseIndex];

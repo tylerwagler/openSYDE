@@ -34,7 +34,7 @@ class C_OgeWiFontConfig :
    Q_OBJECT
 
 public:
-   explicit C_OgeWiFontConfig(QWidget * const opc_Parent = NULL);
+   explicit C_OgeWiFontConfig(QWidget * const opc_Parent = nullptr);
    ~C_OgeWiFontConfig(void) override;
 
    void InitStaticNames(void) const;

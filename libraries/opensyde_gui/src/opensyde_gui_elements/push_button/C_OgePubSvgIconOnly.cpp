@@ -43,14 +43,14 @@ C_OgePubSvgIconOnly::C_OgePubSvgIconOnly(QWidget * const opc_Parent) :
    C_OgePubToolTipBase(opc_Parent),
    mq_Hovered(false),
    mq_Pressed(false),
-   mpc_SvgRendererEnabled(NULL),
-   mpc_SvgRendererDisabeld(NULL),
-   mpc_SvgRendererHovered(NULL),
-   mpc_SvgRendererPressed(NULL),
-   mpc_SvgRendererCheckedEnabled(NULL),
-   mpc_SvgRendererCheckedDisabeld(NULL),
-   mpc_SvgRendererCheckedHovered(NULL),
-   mpc_SvgRendererCheckedPressed(NULL)
+   mpc_SvgRendererEnabled(nullptr),
+   mpc_SvgRendererDisabeld(nullptr),
+   mpc_SvgRendererHovered(nullptr),
+   mpc_SvgRendererPressed(nullptr),
+   mpc_SvgRendererCheckedEnabled(nullptr),
+   mpc_SvgRendererCheckedDisabeld(nullptr),
+   mpc_SvgRendererCheckedHovered(nullptr),
+   mpc_SvgRendererCheckedPressed(nullptr)
 {
    this->setAttribute(Qt::WA_Hover, true);
 }
@@ -98,7 +98,7 @@ void C_OgePubSvgIconOnly::SetSvg(const QString & orc_PathEnabled, const QString 
    }
    else
    {
-      this->mpc_SvgRendererDisabeld = NULL;
+      this->mpc_SvgRendererDisabeld = nullptr;
    }
    delete (mpc_SvgRendererHovered);
    if (orc_PathHovered.compare("") != 0)
@@ -107,7 +107,7 @@ void C_OgePubSvgIconOnly::SetSvg(const QString & orc_PathEnabled, const QString 
    }
    else
    {
-      this->mpc_SvgRendererHovered = NULL;
+      this->mpc_SvgRendererHovered = nullptr;
    }
    delete (mpc_SvgRendererCheckedEnabled);
    if (orc_PathCheckedEnabled.compare("") != 0)
@@ -116,7 +116,7 @@ void C_OgePubSvgIconOnly::SetSvg(const QString & orc_PathEnabled, const QString 
    }
    else
    {
-      this->mpc_SvgRendererCheckedEnabled = NULL;
+      this->mpc_SvgRendererCheckedEnabled = nullptr;
    }
    delete (mpc_SvgRendererCheckedDisabeld);
    if (orc_PathCheckedDisabled.compare("") != 0)
@@ -125,7 +125,7 @@ void C_OgePubSvgIconOnly::SetSvg(const QString & orc_PathEnabled, const QString 
    }
    else
    {
-      this->mpc_SvgRendererCheckedDisabeld = NULL;
+      this->mpc_SvgRendererCheckedDisabeld = nullptr;
    }
    delete (mpc_SvgRendererCheckedHovered);
    if (orc_PathCheckedHovered.compare("") != 0)
@@ -134,7 +134,7 @@ void C_OgePubSvgIconOnly::SetSvg(const QString & orc_PathEnabled, const QString 
    }
    else
    {
-      this->mpc_SvgRendererCheckedHovered = NULL;
+      this->mpc_SvgRendererCheckedHovered = nullptr;
    }
 
    delete (mpc_SvgRendererPressed);
@@ -144,7 +144,7 @@ void C_OgePubSvgIconOnly::SetSvg(const QString & orc_PathEnabled, const QString 
    }
    else
    {
-      this->mpc_SvgRendererPressed = NULL;
+      this->mpc_SvgRendererPressed = nullptr;
    }
 
    delete (mpc_SvgRendererCheckedPressed);
@@ -154,7 +154,7 @@ void C_OgePubSvgIconOnly::SetSvg(const QString & orc_PathEnabled, const QString 
    }
    else
    {
-      this->mpc_SvgRendererCheckedPressed = NULL;
+      this->mpc_SvgRendererCheckedPressed = nullptr;
    }
 }
 
@@ -169,24 +169,24 @@ void C_OgePubSvgIconOnly::SetSvg(const QString & orc_PathEnabled, const QString 
 void C_OgePubSvgIconOnly::paintEvent(QPaintEvent * const opc_Event)
 {
    Q_UNUSED(opc_Event)
-   if (this->mpc_SvgRendererEnabled != NULL)
+   if (this->mpc_SvgRendererEnabled != nullptr)
    {
       QPainter c_Painter(this);
       if (this->isChecked() == true)
       {
-         if ((this->mpc_SvgRendererCheckedDisabeld != NULL) && (this->isEnabled() == false))
+         if ((this->mpc_SvgRendererCheckedDisabeld != nullptr) && (this->isEnabled() == false))
          {
             this->mpc_SvgRendererCheckedDisabeld->render(&c_Painter, this->rect());
          }
-         else if ((this->mpc_SvgRendererCheckedPressed != NULL) && (this->mq_Pressed == true))
+         else if ((this->mpc_SvgRendererCheckedPressed != nullptr) && (this->mq_Pressed == true))
          {
             this->mpc_SvgRendererCheckedPressed->render(&c_Painter, this->rect());
          }
-         else if ((this->mpc_SvgRendererCheckedHovered != NULL) && (this->mq_Hovered == true))
+         else if ((this->mpc_SvgRendererCheckedHovered != nullptr) && (this->mq_Hovered == true))
          {
             this->mpc_SvgRendererCheckedHovered->render(&c_Painter, this->rect());
          }
-         else if (this->mpc_SvgRendererCheckedEnabled != NULL)
+         else if (this->mpc_SvgRendererCheckedEnabled != nullptr)
          {
             this->mpc_SvgRendererCheckedEnabled->render(&c_Painter, this->rect());
          }
@@ -197,15 +197,15 @@ void C_OgePubSvgIconOnly::paintEvent(QPaintEvent * const opc_Event)
       }
       else
       {
-         if ((this->mpc_SvgRendererDisabeld != NULL) && (this->isEnabled() == false))
+         if ((this->mpc_SvgRendererDisabeld != nullptr) && (this->isEnabled() == false))
          {
             this->mpc_SvgRendererDisabeld->render(&c_Painter, this->rect());
          }
-         else if ((this->mpc_SvgRendererPressed != NULL) && (this->mq_Pressed == true))
+         else if ((this->mpc_SvgRendererPressed != nullptr) && (this->mq_Pressed == true))
          {
             this->mpc_SvgRendererPressed->render(&c_Painter, this->rect());
          }
-         else if ((this->mpc_SvgRendererHovered != NULL) && (this->mq_Hovered == true))
+         else if ((this->mpc_SvgRendererHovered != nullptr) && (this->mq_Hovered == true))
          {
             this->mpc_SvgRendererHovered->render(&c_Painter, this->rect());
          }

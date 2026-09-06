@@ -235,8 +235,8 @@ bool C_OscCanMessage::CheckErrorSignal(const C_OscNodeDataPoolList * const opc_L
                                         &q_GapConflict,
                                         &q_ByteAlignmentLengthConflict, &q_ByteAlignmentStartbitConflict,
                                         &q_NameConflict,
-                                        NULL, NULL,
-                                        NULL, NULL, &q_NoMultiplexerButMultiplexed, &q_MultiplexedValueOutOfRange,
+                                        nullptr, nullptr,
+                                        nullptr, nullptr, &q_NoMultiplexerButMultiplexed, &q_MultiplexedValueOutOfRange,
                                         ou32_CanMessageValidSignalsDlcOffset,
                                         oq_CanMessageSignalGapsValid,
                                         oq_ByteAlignmentRequired);
@@ -302,51 +302,51 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
                                                const bool oq_CanMessageSignalGapsValid,
                                                const bool oq_ByteAlignmentRequired) const
 {
-   if (opq_LayoutConflict != NULL)
+   if (opq_LayoutConflict != nullptr)
    {
       *opq_LayoutConflict = false;
    }
-   if (opq_BorderConflict != NULL)
+   if (opq_BorderConflict != nullptr)
    {
       *opq_BorderConflict = false;
    }
-   if (opq_GapConflict != NULL)
+   if (opq_GapConflict != nullptr)
    {
       *opq_GapConflict = false;
    }
-   if (opq_ByteAlignmentLengthConflict != NULL)
+   if (opq_ByteAlignmentLengthConflict != nullptr)
    {
       *opq_ByteAlignmentLengthConflict = false;
    }
-   if (opq_ByteAlignmentStartbitConflict != NULL)
+   if (opq_ByteAlignmentStartbitConflict != nullptr)
    {
       *opq_ByteAlignmentStartbitConflict = false;
    }
-   if (opq_NameConflict != NULL)
+   if (opq_NameConflict != nullptr)
    {
       *opq_NameConflict = false;
    }
-   if (opq_NameInvalid != NULL)
+   if (opq_NameInvalid != nullptr)
    {
       *opq_NameInvalid = false;
    }
-   if (opq_MinOverMax != NULL)
+   if (opq_MinOverMax != nullptr)
    {
       *opq_MinOverMax = false;
    }
-   if (opq_ValueBelowMin != NULL)
+   if (opq_ValueBelowMin != nullptr)
    {
       *opq_ValueBelowMin = false;
    }
-   if (opq_ValueOverMax != NULL)
+   if (opq_ValueOverMax != nullptr)
    {
       *opq_ValueOverMax = false;
    }
-   if (opq_NoMultiplexerButMultiplexed != NULL)
+   if (opq_NoMultiplexerButMultiplexed != nullptr)
    {
       *opq_NoMultiplexerButMultiplexed = false;
    }
-   if (opq_MultiplexedValueOutOfRange != NULL)
+   if (opq_MultiplexedValueOutOfRange != nullptr)
    {
       *opq_MultiplexedValueOutOfRange = false;
    }
@@ -356,7 +356,7 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
       if (oru32_SignalIndex < this->c_Signals.size())
       {
          const C_OscCanSignal & rc_CheckedSignal = this->c_Signals[oru32_SignalIndex];
-         if (opq_LayoutConflict != NULL)
+         if (opq_LayoutConflict != nullptr)
          {
             std::set<uint16_t> c_CheckedSetPositions;
             rc_CheckedSignal.GetDataBytesBitPositionsOfSignal(c_CheckedSetPositions);
@@ -398,7 +398,7 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
                }
             }
          }
-         if (opq_BorderConflict != NULL)
+         if (opq_BorderConflict != nullptr)
          {
             if (static_cast<uint16_t>(ou32_CanMessageValidSignalsDlcOffset) <= this->u16_Dlc)
             {
@@ -422,7 +422,7 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
                *opq_BorderConflict = true;
             }
          }
-         if ((opq_GapConflict != NULL)  &&
+         if ((opq_GapConflict != nullptr)  &&
              (oq_CanMessageSignalGapsValid == false))
          {
             bool q_NoCheckNecessary = false;
@@ -494,7 +494,7 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
          // Byte alignment specific check
          if (oq_ByteAlignmentRequired == true)
          {
-            if (opq_ByteAlignmentLengthConflict != NULL)
+            if (opq_ByteAlignmentLengthConflict != nullptr)
             {
                // Only standard sizes are supported in case of necessary byte alignment
                if ((rc_CheckedSignal.u16_ComBitLength == 8U) ||
@@ -509,7 +509,7 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
                   *opq_ByteAlignmentLengthConflict = true;
                }
             }
-            if (opq_ByteAlignmentStartbitConflict != NULL)
+            if (opq_ByteAlignmentStartbitConflict != nullptr)
             {
                if (rc_CheckedSignal.e_ComByteOrder == C_OscCanSignal::eBYTE_ORDER_INTEL)
                {
@@ -524,17 +524,17 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
             }
          }
 
-         if (opc_List != NULL)
+         if (opc_List != nullptr)
          {
             //Name & min & max
-            opc_List->CheckErrorElement(rc_CheckedSignal.u32_ComDataElementIndex, NULL, opq_NameInvalid,
-                                        opq_MinOverMax, NULL, NULL);
+            opc_List->CheckErrorElement(rc_CheckedSignal.u32_ComDataElementIndex, nullptr, opq_NameInvalid,
+                                        opq_MinOverMax, nullptr, nullptr);
             //Init
             opc_List->CheckErrorDataSetValue(rc_CheckedSignal.u32_ComDataElementIndex, 0, opq_ValueBelowMin,
-                                             opq_ValueOverMax, NULL);
+                                             opq_ValueOverMax, nullptr);
 
             //Name conflict (only for data elements which are part of the signal
-            if (opq_NameConflict != NULL)
+            if (opq_NameConflict != nullptr)
             {
                if (rc_CheckedSignal.u32_ComDataElementIndex < opc_List->c_Elements.size())
                {
@@ -561,7 +561,7 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
                }
             }
          }
-         if (opq_NoMultiplexerButMultiplexed != NULL)
+         if (opq_NoMultiplexerButMultiplexed != nullptr)
          {
             //Check contains multiplexer
             if (C_OscCanMessage::h_ContainsMultiplexer(this->c_Signals) == false)
@@ -573,7 +573,7 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
                }
             }
          }
-         if (opq_MultiplexedValueOutOfRange != NULL)
+         if (opq_MultiplexedValueOutOfRange != nullptr)
          {
             //Only relevant for multiplexed signals
             if (rc_CheckedSignal.e_MultiplexerType == C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL)
@@ -678,7 +678,7 @@ bool C_OscCanMessage::h_ContainsMultiplexer(const std::vector<C_OscCanSignal> & 
       const C_OscCanSignal & rc_Signal = orc_Signals[u32_SignalCounter];
       if (rc_Signal.e_MultiplexerType == C_OscCanSignal::eMUX_MULTIPLEXER_SIGNAL)
       {
-         if (opu32_MultiplexerIndex != NULL)
+         if (opu32_MultiplexerIndex != nullptr)
          {
             *opu32_MultiplexerIndex = u32_SignalCounter;
          }
@@ -724,7 +724,7 @@ std::vector<uint32_t> C_OscCanMessage::m_GetSignalHashes(const C_OscNodeDataPool
                                                          const uint32_t & oru32_SignalIndex) const
 {
    std::vector<uint32_t> c_Retval;
-   if (opc_List != NULL)
+   if (opc_List != nullptr)
    {
       if (oru32_SignalIndex < this->c_Signals.size())
       {

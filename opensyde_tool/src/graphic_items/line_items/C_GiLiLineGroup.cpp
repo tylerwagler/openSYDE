@@ -54,7 +54,7 @@ C_GiLiLineGroup::C_GiLiLineGroup(const std::vector<QPointF> * const opc_Points, 
    C_GiBiCustomMouseItem(),
    C_GiBiBase(),
    QGraphicsItemGroup(opc_Parent),
-   mpc_LinePath(new C_GiLiLine(NULL, orq_MiddleLine, opc_Parent)),
+   mpc_LinePath(new C_GiLiLine(nullptr, orq_MiddleLine, opc_Parent)),
    //lint -e{1938}  static const is guaranteed preinitialized before main
    me_ActiveResizeMode(eNO_ELEMENT),
    ms32_ActiveItemIndex(0),
@@ -68,7 +68,7 @@ C_GiLiLineGroup::C_GiLiLineGroup(const std::vector<QPointF> * const opc_Points, 
 
    this->addToGroup(this->mpc_LinePath);
 
-   if (opc_Points != NULL)
+   if (opc_Points != nullptr)
    {
       this->m_Init(*opc_Points);
    }
@@ -234,7 +234,7 @@ int32_t C_GiLiLineGroup::BendLine(const QPointF & orc_ScenePos, const int32_t * 
 
    this->prepareGeometryChange();
 
-   if (ops32_Index == NULL)
+   if (ops32_Index == nullptr)
    {
       QVector<C_GiLiLineConnection *>::const_iterator pc_ItLine;
       float64_t f64_ResultDist;
@@ -246,7 +246,7 @@ int32_t C_GiLiLineGroup::BendLine(const QPointF & orc_ScenePos, const int32_t * 
          C_GiBiConnectableItem::h_DistToLine((*pc_ItLine)->line().p1(),
                                              (*pc_ItLine)->line().p2(),
                                              this->mapFromScene(c_AdaptedPos),
-                                             &f64_ResultDist, NULL, NULL);
+                                             &f64_ResultDist, nullptr, nullptr);
 
          if (f64_ResultDist < f64_MinDist)
          {
@@ -303,7 +303,7 @@ int32_t C_GiLiLineGroup::RemoveBend(const QPointF & orc_ScenePos, const int32_t 
 
    this->prepareGeometryChange();
 
-   if (ops32_Index == NULL)
+   if (ops32_Index == nullptr)
    {
       QVector<C_GiLiInteractionPoint *>::const_iterator pc_ItPoint;
       float64_t f64_ResultDist;
@@ -977,7 +977,7 @@ void C_GiLiLineGroup::SetDisabledLook(const bool oq_Disabled)
 void C_GiLiLineGroup::SetAnimated(const bool oq_Active, const bool oq_Inverse, const bool oq_SpeedUp,
                                   const QPolygonF oc_Polygon, const bool oq_ShowOrignalLine)
 {
-   if (this->mpc_LinePath != NULL)
+   if (this->mpc_LinePath != nullptr)
    {
       this->mpc_LinePath->SetAnimated(oq_Active, oq_Inverse, oq_SpeedUp, oc_Polygon, oq_ShowOrignalLine);
    }
@@ -1031,7 +1031,7 @@ void C_GiLiLineGroup::FindClosestPoint(const QPointF & orc_ScenePoint, QPointF &
       for (int32_t s32_ItPoint = 1; s32_ItPoint < mc_Points.size(); ++s32_ItPoint)
       {
          c_CurP2 = mc_Points[s32_ItPoint]->scenePos();
-         C_GiBiConnectableItem::h_DistToLine(c_CurP1, c_CurP2, orc_ScenePoint, &f64_CurDist, &c_CurProj, NULL);
+         C_GiBiConnectableItem::h_DistToLine(c_CurP1, c_CurP2, orc_ScenePoint, &f64_CurDist, &c_CurProj, nullptr);
          c_CurP1 = c_CurP2;
          if (f64_CurDist < f64_Best)
          {
@@ -1051,7 +1051,7 @@ void C_GiLiLineGroup::FindClosestPoint(const QPointF & orc_ScenePoint, QPointF &
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiLineGroup::FindClosestConnection(const QPointF & orc_ScenePoint, int32_t & ors32_Index) const
 {
-   if (this->mpc_LinePath != NULL)
+   if (this->mpc_LinePath != nullptr)
    {
       float64_t f64_Best = std::numeric_limits<float64_t>::max();
       const QVector<C_GiLiLineConnection *> & rc_Lines = this->mpc_LinePath->GetLines();
@@ -1065,7 +1065,7 @@ void C_GiLiLineGroup::FindClosestConnection(const QPointF & orc_ScenePoint, int3
          for (int32_t s32_ItPoint = 1; s32_ItPoint < mc_Points.size(); ++s32_ItPoint)
          {
             c_CurP2 = mc_Points[s32_ItPoint]->scenePos();
-            C_GiBiConnectableItem::h_DistToLine(c_CurP1, c_CurP2, orc_ScenePoint, &f64_CurDist, NULL, NULL);
+            C_GiBiConnectableItem::h_DistToLine(c_CurP1, c_CurP2, orc_ScenePoint, &f64_CurDist, nullptr, nullptr);
             c_CurP1 = c_CurP2;
             if (f64_CurDist < f64_Best)
             {
@@ -1093,7 +1093,7 @@ void C_GiLiLineGroup::FindClosestConnection(const QPointF & orc_ScenePoint, int3
 void C_GiLiLineGroup::UpdatePoint(const int32_t & ors32_Index, const QPointF & orc_Pos,
                                   const bool oq_BlockTriggerOfChangedSignal)
 {
-   if (((ors32_Index >= 0) && (ors32_Index < this->mc_Points.size())) && (this->mpc_LinePath != NULL))
+   if (((ors32_Index >= 0) && (ors32_Index < this->mc_Points.size())) && (this->mpc_LinePath != nullptr))
    {
       QPointF c_RestrictedPos = orc_Pos;
 
@@ -1226,7 +1226,7 @@ QPainterPath C_GiLiLineGroup::shape(void) const
 {
    QPainterPath c_Retval;
 
-   if (this->mpc_LinePath != NULL)
+   if (this->mpc_LinePath != nullptr)
    {
       c_Retval = this->mpc_LinePath->shape();
    }
@@ -1241,7 +1241,7 @@ QPainterPath C_GiLiLineGroup::shape(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiLiLineGroup::UpdateTransform(const QTransform & orc_Transform)
 {
-   if (this->mpc_LinePath != NULL)
+   if (this->mpc_LinePath != nullptr)
    {
       float64_t f64_Width = 0.0;
       C_GiPointInteraction * pc_ActionPoint;
@@ -1251,7 +1251,7 @@ void C_GiLiLineGroup::UpdateTransform(const QTransform & orc_Transform)
            pc_ItActionPoint != this->mc_Points.end(); ++pc_ItActionPoint)
       {
          pc_ActionPoint = *pc_ItActionPoint;
-         if (pc_ActionPoint != NULL)
+         if (pc_ActionPoint != nullptr)
          {
             pc_ActionPoint->UpdateTransform(orc_Transform);
             f64_Width = pc_ActionPoint->sceneBoundingRect().width();

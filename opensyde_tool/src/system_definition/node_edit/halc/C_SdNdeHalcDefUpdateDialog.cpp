@@ -264,8 +264,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateHalcConfiguration(void)
    const C_OscHalcConfig * const pc_CurrentConfig =
       C_PuiSdHandler::h_GetInstance()->GetHalcConfig(this->mu32_NodeIndex);
 
-   tgl_assert(pc_CurrentConfig != NULL);
-   if (pc_CurrentConfig != NULL)
+   tgl_assert(pc_CurrentConfig != nullptr);
+   if (pc_CurrentConfig != nullptr)
    {
       uint32_t u32_UpdatedDomainCounter;
       uint32_t u32_CurrentDomainCounter;
@@ -282,8 +282,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateHalcConfiguration(void)
          const C_OscHalcConfigDomain * const pc_UpdatedDomain = this->mc_UpdatedHalcConfig.GetDomainConfigDataConst(
             u32_UpdatedDomainCounter);
 
-         tgl_assert(pc_UpdatedDomain != NULL);
-         if (pc_UpdatedDomain != NULL)
+         tgl_assert(pc_UpdatedDomain != nullptr);
+         if (pc_UpdatedDomain != nullptr)
          {
             bool q_DomainFound = false;
 
@@ -294,8 +294,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateHalcConfiguration(void)
                const C_OscHalcConfigDomain * const pc_CurrentDomain = pc_CurrentConfig->GetDomainConfigDataConst(
                   u32_CurrentDomainCounter);
 
-               tgl_assert(pc_CurrentDomain != NULL);
-               if ((pc_CurrentDomain != NULL) &&
+               tgl_assert(pc_CurrentDomain != nullptr);
+               if ((pc_CurrentDomain != nullptr) &&
                    (pc_UpdatedDomain->c_Id == pc_CurrentDomain->c_Id))
                {
                   C_OscHalcConfigDomain c_AdatedUpdatedDomain = *pc_UpdatedDomain;
@@ -326,8 +326,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateHalcConfiguration(void)
          const C_OscHalcConfigDomain * const pc_CurrentDomain = pc_CurrentConfig->GetDomainConfigDataConst(
             u32_CurrentDomainCounter);
 
-         tgl_assert(pc_CurrentDomain != NULL);
-         if (pc_CurrentDomain != NULL)
+         tgl_assert(pc_CurrentDomain != nullptr);
+         if (pc_CurrentDomain != nullptr)
          {
             bool q_CurrentDomainFound = false;
 
@@ -338,8 +338,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateHalcConfiguration(void)
                const C_OscHalcConfigDomain * const pc_UpdatedDomain =
                   this->mc_UpdatedHalcConfig.GetDomainConfigDataConst(u32_UpdatedDomainCounter);
 
-               tgl_assert(pc_UpdatedDomain != NULL);
-               if ((pc_UpdatedDomain != NULL) &&
+               tgl_assert(pc_UpdatedDomain != nullptr);
+               if ((pc_UpdatedDomain != nullptr) &&
                    (pc_UpdatedDomain->c_Id == pc_CurrentDomain->c_Id))
                {
                   q_CurrentDomainFound = true;
@@ -474,8 +474,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcCon
    bool q_ResetToDefault = false;
 
    // Parameters to compare
-   std::vector<C_OscHalcDefStruct> * pc_UpdatedParametersToCompare = NULL;
-   const std::vector<C_OscHalcDefStruct> * pc_CurrentParametersToCompare = NULL;
+   std::vector<C_OscHalcDefStruct> * pc_UpdatedParametersToCompare = nullptr;
+   const std::vector<C_OscHalcDefStruct> * pc_CurrentParametersToCompare = nullptr;
 
    // Update all users adaption of configuration in loaded configuration except parameters
    // Check if name was changed by user. If it equals the definition name of the current definition
@@ -555,8 +555,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcCon
    }
 
    if ((q_ResetToDefault == false) &&
-       (pc_UpdatedParametersToCompare != NULL) &&
-       (pc_CurrentParametersToCompare != NULL))
+       (pc_UpdatedParametersToCompare != nullptr) &&
+       (pc_CurrentParametersToCompare != nullptr))
    {
       uint32_t u32_UpdatedDefParameterCounter;
       uint32_t u32_CurrentDefParameterCounter;

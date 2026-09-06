@@ -169,7 +169,7 @@ C_SyvDaChaPlotCursorTag::C_SyvDaChaPlotCursorTag(QCPAxis * const opc_ParentAxis,
    this->mpc_Tracer->position->setTypeX(QCPItemPosition::ptPlotCoords);
    this->mpc_Tracer->position->setTypeY(QCPItemPosition::ptAxisRectRatio);
    this->mpc_Tracer->position->setAxisRect(this->mpc_Axis->axisRect());
-   this->mpc_Tracer->position->setAxes(this->mpc_Axis, NULL);
+   this->mpc_Tracer->position->setAxes(this->mpc_Axis, nullptr);
    this->mpc_Tracer->position->setCoords(0.0, 1.0);
 
    // the arrow end (head) is set to move along with the dummy tracer by setting it as its parent
@@ -217,23 +217,23 @@ C_SyvDaChaPlotCursorTag::C_SyvDaChaPlotCursorTag(QCPAxis * const opc_ParentAxis,
 //lint -e{1540}  no memory leak because of the parent of mpc_Tracer and the Qt memory management
 C_SyvDaChaPlotCursorTag::~C_SyvDaChaPlotCursorTag(void)
 {
-   if (this->mpc_Tracer != NULL)
+   if (this->mpc_Tracer != nullptr)
    {
       this->mpc_Tracer->parentPlot()->removeItem(this->mpc_Tracer);
    }
-   if (this->mpc_Marker != NULL)
+   if (this->mpc_Marker != nullptr)
    {
       this->mpc_Marker->parentPlot()->removeItem(this->mpc_Marker);
    }
-   if (this->mpc_Label != NULL)
+   if (this->mpc_Label != nullptr)
    {
       this->mpc_Label->parentPlot()->removeItem(this->mpc_Label);
    }
-   if (this->mpc_TriangleLeft != NULL)
+   if (this->mpc_TriangleLeft != nullptr)
    {
       this->mpc_TriangleLeft->parentPlot()->removeItem(this->mpc_TriangleLeft);
    }
-   if (this->mpc_TriangleRight != NULL)
+   if (this->mpc_TriangleRight != nullptr)
    {
       this->mpc_TriangleRight->parentPlot()->removeItem(this->mpc_TriangleRight);
    }
@@ -376,7 +376,7 @@ C_SyvDaChaPlotCursorItem::C_SyvDaChaPlotCursorItem(QCustomPlot * const opc_Paren
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaChaPlotCursorItem::~C_SyvDaChaPlotCursorItem(void)
 {
-   this->mpc_CursorTag->setParent(NULL);
+   this->mpc_CursorTag->setParent(nullptr);
    delete this->mpc_CursorTag;
 }
 
@@ -456,7 +456,7 @@ void C_SyvDaChaPlotCursorItem::SetItemsNextToPlotVisible(const bool oq_Visible)
 C_SyvDaChaPlot::C_SyvDaChaPlot(QWidget * const opc_Parent) :
    QCustomPlot(opc_Parent),
    mq_DragMouseCursorAdapted(false),
-   mpc_ClickedCursor(NULL),
+   mpc_ClickedCursor(nullptr),
    mc_LastItemLineEventPos(QPoint())
 {
    QPen c_Pen = this->selectionRect()->pen();
@@ -536,7 +536,7 @@ void C_SyvDaChaPlot::mousePressEvent(QMouseEvent * const opc_Event)
          if (this->mc_RegisteredCursorItems.size() > 0)
          {
             C_SyvDaChaPlotCursorItem * const pc_Line = dynamic_cast<C_SyvDaChaPlotCursorItem *>(pc_ItemClicked);
-            if (pc_Line != NULL)
+            if (pc_Line != nullptr)
             {
                // The concrete cursor item found, no further searching necessary
                this->mpc_ClickedCursor = pc_Line;
@@ -546,7 +546,7 @@ void C_SyvDaChaPlot::mousePressEvent(QMouseEvent * const opc_Event)
             {
                QCPAbstractItem * const pc_AbstractItem = dynamic_cast<QCPAbstractItem *>(pc_ItemClicked);
 
-               if (pc_AbstractItem != NULL)
+               if (pc_AbstractItem != nullptr)
                {
                   // Searching for sub items
                   int32_t s32_Counter;
@@ -579,7 +579,7 @@ void C_SyvDaChaPlot::mousePressEvent(QMouseEvent * const opc_Event)
          {
             QCPAxis * const pc_Axis = dynamic_cast<QCPAxis *>(pc_ItemClicked);
 
-            if (pc_Axis != NULL)
+            if (pc_Axis != nullptr)
             {
                // ... and its orientation
                if (pc_Axis->orientation() == Qt::Horizontal)
@@ -622,7 +622,7 @@ void C_SyvDaChaPlot::mousePressEvent(QMouseEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlot::mouseMoveEvent(QMouseEvent * const opc_Event)
 {
-   if (this->mpc_ClickedCursor != NULL)
+   if (this->mpc_ClickedCursor != nullptr)
    {
       const QPointF c_Delta = opc_Event->pos() - this->mc_LastItemLineEventPos;
       // Get the position in pixel coordinates
@@ -663,10 +663,10 @@ void C_SyvDaChaPlot::mouseMoveEvent(QMouseEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlot::mouseReleaseEvent(QMouseEvent * const opc_Event)
 {
-   if (this->mpc_ClickedCursor != NULL)
+   if (this->mpc_ClickedCursor != nullptr)
    {
       Q_EMIT (this->SigCursorItemReleased(this->mpc_ClickedCursor));
-      this->mpc_ClickedCursor = NULL;
+      this->mpc_ClickedCursor = nullptr;
       QApplication::restoreOverrideCursor();
    }
    else if (this->mq_DragMouseCursorAdapted == true)
@@ -711,7 +711,7 @@ void C_SyvDaChaPlot::wheelEvent(QWheelEvent * const opc_Event)
       pc_AxisRect->setRangeZoomFactor(f64_MODIFIED_FACTOR);
    }
 
-   if (pc_AxisRect != NULL)
+   if (pc_AxisRect != nullptr)
    {
       if (pc_AxisRect->rangeZoom() != c_Orientations)
       {
@@ -726,7 +726,7 @@ void C_SyvDaChaPlot::wheelEvent(QWheelEvent * const opc_Event)
             QCPAxis * const pc_Axis = dynamic_cast<QCPAxis *>(pc_ItemClicked);
 
             // Check for an axis
-            if (pc_Axis != NULL)
+            if (pc_Axis != nullptr)
             {
                // Check if the current configuration contains the needed orientation of the axis
                if (c_Orientations.testFlag(pc_Axis->orientation()) == false)
@@ -752,7 +752,7 @@ void C_SyvDaChaPlot::wheelEvent(QWheelEvent * const opc_Event)
    if (q_ConfigChanged == true)
    {
       // Revert the configuration to the previous state
-      if (pc_AxisRect != NULL)
+      if (pc_AxisRect != nullptr)
       {
          pc_AxisRect->setRangeZoom(c_Orientations);
       }

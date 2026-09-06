@@ -83,8 +83,8 @@ void C_SyvUpPacSectionNodeFilesWidget::AddFile(const QString & orc_File)
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      if ((pc_Node != NULL) &&
-          (pc_View != NULL))
+      if ((pc_Node != nullptr) &&
+          (pc_View != nullptr))
       {
          // Add the file
          C_SyvUpPacListNodeItemFileWidget * const pc_FileWidget =
@@ -200,7 +200,7 @@ void C_SyvUpPacSectionNodeFilesWidget::AdaptFile(const QString & orc_File, C_Syv
    const bool q_NewFileParamSet = mh_IsFileParamSetFile(orc_File);
    const bool q_NewFilePem = mh_IsFilePemFile(orc_File);
 
-   if (opc_App != NULL)
+   if (opc_App != nullptr)
    {
       if (((opc_App->GetType() == mu32_UPDATE_PACKAGE_NODE_SECTION_TYPE_FILE) &&
            (q_NewFileParamSet == false) && (q_NewFilePem == false)) ||
@@ -263,7 +263,7 @@ void C_SyvUpPacSectionNodeFilesWidget::AdaptFile(const QString & orc_File, C_Syv
 void C_SyvUpPacSectionNodeFilesWidget::SetSkipOfUpdateFile(const bool oq_Skip,
                                                            C_SyvUpPacListNodeItemWidget * const opc_App)
 {
-   if (opc_App != NULL)
+   if (opc_App != nullptr)
    {
       C_SyvUpPacSectionNodeWidget::SetSkipOfUpdateFile(oq_Skip, opc_App);
 
@@ -300,7 +300,7 @@ void C_SyvUpPacSectionNodeFilesWidget::SetSkipOfUpdateFile(const bool oq_Skip,
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacSectionNodeFilesWidget::RemoveFile(C_SyvUpPacListNodeItemWidget * const opc_App)
 {
-   if (opc_App != NULL)
+   if (opc_App != nullptr)
    {
       const uint32_t u32_Number = opc_App->GetAppNumber();
       if (opc_App->GetType() == mu32_UPDATE_PACKAGE_NODE_SECTION_TYPE_FILE)
@@ -347,19 +347,19 @@ void C_SyvUpPacSectionNodeFilesWidget::PrepareExportConfig(C_SyvUpPacConfigNode 
       {
          QLayoutItem * const pc_Item = this->mpc_Ui->pc_FileVerticalLayout->itemAt(s32_Counter);
 
-         if (pc_Item != NULL)
+         if (pc_Item != nullptr)
          {
             C_SyvUpPacListNodeItemWidget * const pc_App =
                dynamic_cast<C_SyvUpPacListNodeItemWidget *>(pc_Item->widget());
 
-            if (pc_App != NULL)
+            if (pc_App != nullptr)
             {
                if (pc_App->GetType() == mu32_UPDATE_PACKAGE_NODE_SECTION_TYPE_PEM)
                {
                   const C_SyvUpPacListNodeItemPemFileWidget * const pc_PemApp =
                      dynamic_cast<C_SyvUpPacListNodeItemPemFileWidget *>(pc_App);
 
-                  if (pc_PemApp != NULL)
+                  if (pc_PemApp != nullptr)
                   {
                      orc_NodeConfig.c_PemFilePath = pc_App->GetAppFilePath();
                   }
@@ -464,7 +464,7 @@ bool C_SyvUpPacSectionNodeFilesWidget::CheckMime(QStringList & orc_PathList, con
 
    if (orc_PathList.size() > 0)
    {
-      C_SyvUpPacListNodeItemWidget * pc_App = NULL;
+      C_SyvUpPacListNodeItemWidget * pc_App = nullptr;
 
       q_Retval = C_SyvUpPacSectionNodeWidget::CheckMime(orc_PathList, orc_Pos, opc_RelevantFilePaths,
                                                         opc_RelevantParamSetImagePaths, opc_RelevantPemFilePaths,
@@ -485,7 +485,7 @@ bool C_SyvUpPacSectionNodeFilesWidget::CheckMime(QStringList & orc_PathList, con
 
             if (mh_IsFileParamSetFile(rc_CurrentPath) == true)
             {
-               if (opc_RelevantParamSetImagePaths != NULL)
+               if (opc_RelevantParamSetImagePaths != nullptr)
                {
                   opc_RelevantParamSetImagePaths->push_back(rc_CurrentPath);
                }
@@ -494,7 +494,7 @@ bool C_SyvUpPacSectionNodeFilesWidget::CheckMime(QStringList & orc_PathList, con
             }
             else if (mh_IsFilePemFile(rc_CurrentPath) == true)
             {
-               if (opc_RelevantPemFilePaths != NULL)
+               if (opc_RelevantPemFilePaths != nullptr)
                {
                   opc_RelevantPemFilePaths->push_back(rc_CurrentPath);
                }
@@ -503,7 +503,7 @@ bool C_SyvUpPacSectionNodeFilesWidget::CheckMime(QStringList & orc_PathList, con
             }
             else if (this->mq_FileBased == true)
             {
-               if (opc_RelevantFilePaths != NULL)
+               if (opc_RelevantFilePaths != nullptr)
                {
                   opc_RelevantFilePaths->push_back(rc_CurrentPath);
                }
@@ -519,7 +519,7 @@ bool C_SyvUpPacSectionNodeFilesWidget::CheckMime(QStringList & orc_PathList, con
          while (s32_PathCounter < orc_PathList.size());
 
          if ((q_Retval == true) &&
-             (oppc_App != NULL))
+             (oppc_App != nullptr))
          {
             *oppc_App = pc_App;
          }

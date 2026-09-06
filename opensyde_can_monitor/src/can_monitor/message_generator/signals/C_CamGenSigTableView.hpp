@@ -33,7 +33,7 @@ class C_CamGenSigTableView :
    Q_OBJECT
 
 public:
-   C_CamGenSigTableView(QWidget * const opc_Parent = NULL);
+   C_CamGenSigTableView(QWidget * const opc_Parent = nullptr);
    ~C_CamGenSigTableView(void) override;
 
    void TriggerSignalReload(void);

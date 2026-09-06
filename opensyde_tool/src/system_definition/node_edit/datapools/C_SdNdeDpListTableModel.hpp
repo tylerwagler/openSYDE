@@ -58,7 +58,7 @@ public:
       eUNKNOWN
    };
 
-   explicit C_SdNdeDpListTableModel(QObject * const opc_Parent = NULL);
+   explicit C_SdNdeDpListTableModel(QObject * const opc_Parent = nullptr);
 
    void SetList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                 const uint32_t & oru32_ListIndex);
@@ -91,7 +91,7 @@ public:
    //Move data:
    void DoMoveRows(const std::vector<uint32_t> & orc_SelectedIndices, const std::vector<uint32_t> & orc_TargetIndices);
 
-   E_Columns ColumnToEnum(const int32_t & ors32_Column, int32_t * const ops32_DataSetIndex = NULL) const;
+   E_Columns ColumnToEnum(const int32_t & ors32_Column, int32_t * const ops32_DataSetIndex = nullptr) const;
    int32_t EnumToColumn(const E_Columns & ore_Value) const;
 
    //Drag & drop

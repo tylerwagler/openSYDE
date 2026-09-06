@@ -79,11 +79,11 @@ public:
    const;
    int32_t SendOsyCanBroadcastSetNodeIdBySerialNumber(const C_OscProtocolSerialNumber & orc_SerialNumber,
                                                       const C_OscProtocolDriverOsyNode & orc_NewNodeId,
-                                                      uint8_t * const opu8_NrCode = NULL) const;
+                                                      uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyCanBroadcastSetNodeIdBySerialNumberExtended(const C_OscProtocolSerialNumber & orc_SerialNumber,
                                                               const uint8_t ou8_SubNodeId,
                                                               const C_OscProtocolDriverOsyNode & orc_NewNodeId,
-                                                              uint8_t * const opu8_NrCode = NULL) const;
+                                                              uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyEthBroadcastGetDeviceInformation(
       std::vector<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults> & orc_ReadDeviceInfoResults,
       std::vector<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults> & orc_ReadDeviceInfoExtendedResults)
@@ -94,7 +94,7 @@ public:
                                            const uint8_t(&orau8_DefaultGateway)[4],
                                            const C_OscProtocolDriverOsyNode &orc_NewNodeId,
                                            uint8_t(&orau8_ResponseIp)[4],
-                                           uint8_t * const opu8_ErrorResult = NULL) const;
+                                           uint8_t * const opu8_ErrorResult = nullptr) const;
    int32_t SendOsyEthBroadcastSetIpAddressExtended(const C_OscProtocolSerialNumber &orc_SerialNumber,
                                                    const uint8_t(&orau8_NewIpAddress)[4],
                                                    const uint8_t(&orau8_NetMask)[4],
@@ -102,117 +102,117 @@ public:
                                                    const C_OscProtocolDriverOsyNode &orc_NewNodeId,
                                                    const uint8_t ou8_SubNodeId,
                                                    uint8_t(&orau8_ResponseIp)[4],
-                                                   uint8_t * const opu8_ErrorResult = NULL) const;
+                                                   uint8_t * const opu8_ErrorResult = nullptr) const;
 
    int32_t SendOsyReadDeviceName(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                 stw::scl::C_SclString & orc_DeviceName, uint8_t * const opu8_NrCode = NULL);
+                                 stw::scl::C_SclString & orc_DeviceName, uint8_t * const opu8_NrCode = nullptr);
    int32_t SendOsyReadSerialNumber(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                    C_OscProtocolSerialNumber & orc_SerialNumberExt,
-                                   uint8_t * const opu8_NrCode = NULL) const;
+                                   uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyReadSerialNumberExt(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                       C_OscProtocolSerialNumber & orc_SerialNumberExt,
-                                      uint8_t * const opu8_NrCode = NULL) const;
+                                      uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyReadActiveDiagnosticSession(const C_OscProtocolDriverOsyNode & orc_ServerId, uint8_t & oru8_SessionId,
-                                              uint8_t * const opu8_NrCode = NULL) const;
+                                              uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyReadAllFlashBlockData(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                         std::vector<C_OscProtocolDriverOsy::C_FlashBlockInfo> & orc_BlockInfo,
-                                        uint8_t * const opu8_NrCode = NULL) const;
+                                        uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyReadInformationFromFlashloader(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                  C_OscComFlashloaderInformation & orc_Information,
-                                                 uint8_t * const opu8_NrCode = NULL) const;
+                                                 uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyCheckFlashMemoryAvailable(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                             const uint32_t ou32_StartAddress, const uint32_t ou32_Size,
-                                            uint8_t * const opu8_NrCode = NULL) const;
+                                            uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyWriteApplicationSoftwareFingerprint(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                       const uint8_t (&orau8_Date)[3], const uint8_t (&orau8_Time)[3],
                                                       const stw::scl::C_SclString & orc_Username,
-                                                      uint8_t * const opu8_NrCode = NULL) const;
+                                                      uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyRequestDownload(const C_OscProtocolDriverOsyNode & orc_ServerId, const uint32_t ou32_StartAddress,
                                   const uint32_t ou32_Size, uint32_t & oru32_MaxBlockLength,
-                                  uint8_t * const opu8_NrCode = NULL) const;
+                                  uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyRequestFileTransfer(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                       const stw::scl::C_SclString & orc_FilePath, const uint32_t ou32_FileSize,
-                                      uint32_t & oru32_MaxBlockLength, uint8_t * const opu8_NrCode = NULL) const;
+                                      uint32_t & oru32_MaxBlockLength, uint8_t * const opu8_NrCode = nullptr) const;
 
    int32_t SendOsyTransferData(const C_OscProtocolDriverOsyNode & orc_ServerId, const uint8_t ou8_BlockSequenceCounter,
-                               const std::vector<uint8_t> & orc_Data, uint8_t * const opu8_NrCode = NULL) const;
+                               const std::vector<uint8_t> & orc_Data, uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyRequestTransferExitAddressBased(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                   const bool oq_SendSignatureBlockAddress,
                                                   const uint32_t ou32_SignatureBlockAddress,
-                                                  uint8_t * const opu8_NrCode = NULL) const;
+                                                  uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyRequestTransferExitFileBased(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                const uint32_t ou32_CrcOverData,
-                                               uint8_t * const opu8_NrCode = NULL) const;
+                                               uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyRequestFileBasedTransferExitResult(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                      stw::scl::C_SclString & orc_Result,
-                                                     uint8_t * const opu8_NrCode = NULL) const;
+                                                     uint8_t * const opu8_NrCode = nullptr) const;
 
    int32_t SendOsyRequestProgramming(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
    int32_t SendOsyEcuReset(const C_OscProtocolDriverOsyNode & orc_ServerId, const uint8_t ou8_ResetType) const;
    int32_t SendOsySetPreProgrammingMode(C_OscProtocolDriverOsy & orc_Protocol, const bool oq_SessionOnly,
-                                        uint8_t * const opu8_NrCode = NULL) const;
+                                        uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsySetPreProgrammingMode(const C_OscProtocolDriverOsyNode & orc_ServerId, const bool oq_SessionOnly,
-                                        uint8_t * const opu8_NrCode = NULL,
-                                        bool * const opq_SecureAuthenticationActive = NULL,
-                                        bool * const opq_TrafficEncryptionActive = NULL);
+                                        uint8_t * const opu8_NrCode = nullptr,
+                                        bool * const opq_SecureAuthenticationActive = nullptr,
+                                        bool * const opq_TrafficEncryptionActive = nullptr);
    int32_t SendOsySetProgrammingMode(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                     const uint8_t * const opu8_SecurityLevel = NULL,
-                                     uint8_t * const opu8_NrCode = NULL) const;
+                                     const uint8_t * const opu8_SecurityLevel = nullptr,
+                                     uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsySetSecurityLevel(const C_OscProtocolDriverOsyNode & orc_ServerId, const uint8_t ou8_Level,
-                                   uint8_t * const opu8_NrCode = NULL) const;
+                                   uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsySetBitrate(const C_OscProtocolDriverOsyNode & orc_ServerId, const uint8_t ou8_ChannelIndex,
-                             const uint32_t ou32_Bitrate, uint8_t * const opu8_NrCode = NULL) const;
+                             const uint32_t ou32_Bitrate, uint8_t * const opu8_NrCode = nullptr) const;
    static int32_t h_SendOsySetIpAddressForChannel(C_OscProtocolDriverOsy & orc_Protocol, const uint8_t ou8_ChannelIndex,
                                                   const uint8_t (&orau8_IpAddress)[4],
                                                   const uint8_t (&orau8_NetMask)[4],
                                                   const uint8_t (&orau8_DefaultGateway)[4],
-                                                  uint8_t * const opu8_NrCode = NULL);
+                                                  uint8_t * const opu8_NrCode = nullptr);
    int32_t SendOsySetIpAddressForChannel(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                          const uint8_t ou8_ChannelIndex, const uint8_t (&orau8_IpAddress)[4],
                                          const uint8_t (&orau8_NetMask)[4], const uint8_t (&orau8_DefaultGateway)[4],
-                                         uint8_t * const opu8_NrCode = NULL) const;
+                                         uint8_t * const opu8_NrCode = nullptr) const;
    static int32_t h_SendOsySetNodeIdForChannel(C_OscProtocolDriverOsy & orc_Protocol, const uint8_t ou8_ChannelType,
                                                const uint8_t ou8_ChannelIndex,
                                                const C_OscProtocolDriverOsyNode & orc_NewNodeId,
-                                               uint8_t * const opu8_NrCode = NULL);
+                                               uint8_t * const opu8_NrCode = nullptr);
    int32_t SendOsySetNodeIdForChannel(const C_OscProtocolDriverOsyNode & orc_ServerId, const uint8_t ou8_ChannelType,
                                       const uint8_t ou8_ChannelIndex, const C_OscProtocolDriverOsyNode & orc_NewNodeId,
-                                      uint8_t * const opu8_NrCode = NULL);
+                                      uint8_t * const opu8_NrCode = nullptr);
 
    int32_t SendOsyReadListOfFeatures(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                      C_OscProtocolDriverOsy::C_ListOfFeatures & orc_ListOfFeatures,
-                                     uint8_t * const opu8_NrCode = NULL) const;
+                                     uint8_t * const opu8_NrCode = nullptr) const;
 
    int32_t SendOsyReadAuthenticationCertificateSerialNumber(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                             std::vector<uint8_t> & orc_SerialNumber,
-                                                            uint8_t * const opu8_NrCode = NULL) const;
+                                                            uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyReadAuthenticationCertificateSerialNumberL7(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                               std::vector<uint8_t> & orc_SerialNumber,
-                                                              uint8_t * const opu8_NrCode = NULL) const;
+                                                              uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyWriteSecurityAuthenticationKey(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                  const std::vector<uint8_t> & orc_PublicKeyModulus,
                                                  const std::vector<uint8_t> & orc_PublicKeyExponent,
                                                  const std::vector<uint8_t> & orc_CertificateSerialNumber,
-                                                 uint8_t * const opu8_NrCode = NULL) const;
+                                                 uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyReadSecurityAuthenticationActivation(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                        bool & orq_SecurityOn, uint8_t & oru8_SecurityAlgorithm,
-                                                       uint8_t * const opu8_NrCode = NULL) const;
+                                                       uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyWriteSecurityAuthenticationActivation(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                         const bool oq_SecurityOn, const uint8_t ou8_SecurityAlgorithm,
-                                                        uint8_t * const opu8_NrCode = NULL) const;
+                                                        uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyReadSecurityTrafficEncryptionActivation(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                           bool & orq_SecurityOn, uint8_t & oru8_SecurityAlgorithm,
-                                                          uint8_t * const opu8_NrCode = NULL) const;
+                                                          uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyWriteSecurityTrafficEncryptionActivation(const C_OscProtocolDriverOsyNode & orc_ServerId,
                                                            const bool oq_SecurityOn,
                                                            const uint8_t ou8_SecurityAlgorithm,
-                                                           uint8_t * const opu8_NrCode = NULL) const;
+                                                           uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyReadDebuggerEnabled(const C_OscProtocolDriverOsyNode & orc_ServerId, bool & orq_DebuggerEnabled,
-                                      uint8_t * const opu8_NrCode = NULL) const;
+                                      uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyWriteDebuggerEnabled(const C_OscProtocolDriverOsyNode & orc_ServerId, const bool oq_DebuggerEnabled,
-                                       uint8_t * const opu8_NrCode = NULL) const;
+                                       uint8_t * const opu8_NrCode = nullptr) const;
    int32_t SendOsyFactoryModeMasterReset(const C_OscProtocolDriverOsyNode & orc_ServerId,
-                                         uint8_t * const opu8_NrCode = NULL) const;
+                                         uint8_t * const opu8_NrCode = nullptr) const;
 
    void PrepareForDestructionFlash(void);
 

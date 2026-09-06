@@ -32,7 +32,7 @@ class C_TblTreDataElementView :
    Q_OBJECT
 
 public:
-   C_TblTreDataElementView(QWidget * const opc_Parent = NULL);
+   C_TblTreDataElementView(QWidget * const opc_Parent = nullptr);
    ~C_TblTreDataElementView(void) override;
 
    void SetUseInternalExpandedItems(const bool oq_Use);

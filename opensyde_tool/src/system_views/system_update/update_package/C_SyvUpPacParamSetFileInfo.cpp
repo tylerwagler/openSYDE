@@ -133,7 +133,7 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if ((pc_Node != NULL) && (this->mc_InterpretedFileInfo.c_InterpretedNodes.size() > 0UL))
+   if ((pc_Node != nullptr) && (this->mc_InterpretedFileInfo.c_InterpretedNodes.size() > 0UL))
    {
       const C_OscParamSetInterpretedNode & rc_InterpretedNode = this->mc_InterpretedFileInfo.c_InterpretedNodes[0UL];
       //Node

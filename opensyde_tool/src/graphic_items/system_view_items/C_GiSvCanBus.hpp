@@ -28,8 +28,8 @@ class C_GiSvCanBus :
 {
 public:
    C_GiSvCanBus(const uint32_t ou32_ViewIndex, const int32_t & ors32_Index, const uint64_t & oru64_Id,
-                C_GiTextElementBus * const opc_TextElementName, const std::vector<QPointF> * const opc_Points = NULL,
-                QGraphicsItem * const opc_Parent = NULL);
+                C_GiTextElementBus * const opc_TextElementName, const std::vector<QPointF> * const opc_Points = nullptr,
+                QGraphicsItem * const opc_Parent = nullptr);
    void CheckBusForChanges(void) override;
 
 private:

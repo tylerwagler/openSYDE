@@ -39,7 +39,7 @@ class C_SdBueNodeSelectorWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdBueNodeSelectorWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueNodeSelectorWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdBueNodeSelectorWidget() override;
 
    void SetBusId(const uint32_t ou32_BusIndex);

@@ -418,7 +418,7 @@ const stw::opensyde_core::C_OscCanMessage * C_CamDbOsy::GetOscMessage(const QStr
                                                                       C_OscCanProtocol::E_Type * const ope_ProtocolType)
 const
 {
-   const stw::opensyde_core::C_OscCanMessage * pc_Retval = NULL;
+   const stw::opensyde_core::C_OscCanMessage * pc_Retval = nullptr;
 
    //Don't allow access to inactive file
    if (this->mq_Active)
@@ -436,7 +436,7 @@ const
                const C_OscNode & rc_Node = this->mc_Data.c_OsySysDef.c_Nodes[c_It->c_Id.u32_NodeIndex];
                const C_OscCanProtocol * const pc_Protocol = rc_Node.GetCanProtocolConst(c_It->c_Id.e_ComProtocol,
                                                                                         c_It->c_Id.u32_DatapoolIndex);
-               if (pc_Protocol != NULL)
+               if (pc_Protocol != nullptr)
                {
                   if (c_It->c_Id.u32_InterfaceIndex < pc_Protocol->c_ComMessages.size())
                   {
@@ -447,7 +447,7 @@ const
                      if (c_It->c_Id.u32_MessageIndex < rc_Messages.size())
                      {
                         pc_Retval = &rc_Messages[c_It->c_Id.u32_MessageIndex];
-                        if (ope_ProtocolType != NULL)
+                        if (ope_ProtocolType != nullptr)
                         {
                            *ope_ProtocolType = c_It->c_Id.e_ComProtocol;
                         }
@@ -479,7 +479,7 @@ const stw::opensyde_core::C_OscNodeDataPoolList * C_CamDbOsy::GetOscList(const Q
                                                                          const bool oq_UseHash,
                                                                          const uint32_t ou32_Hash) const
 {
-   const stw::opensyde_core::C_OscNodeDataPoolList * pc_Retval = NULL;
+   const stw::opensyde_core::C_OscNodeDataPoolList * pc_Retval = nullptr;
 
    //Don't allow access to inactive file
    if (this->mq_Active)

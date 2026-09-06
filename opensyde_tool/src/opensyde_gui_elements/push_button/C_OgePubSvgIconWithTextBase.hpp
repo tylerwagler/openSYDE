@@ -25,7 +25,7 @@ class C_OgePubSvgIconWithTextBase :
    public C_OgePubSvgIconOnly
 {
 public:
-   C_OgePubSvgIconWithTextBase(QWidget * const opc_Parent = NULL);
+   C_OgePubSvgIconWithTextBase(QWidget * const opc_Parent = nullptr);
    void SetMargins(const int32_t os32_MarginLeft, const int32_t os32_MarginInBetween);
 
 protected:

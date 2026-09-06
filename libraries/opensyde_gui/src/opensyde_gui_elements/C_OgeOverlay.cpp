@@ -29,7 +29,7 @@ using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
-QWidget * C_OgeOverlay::mhpc_TopWidget = NULL;
+QWidget * C_OgeOverlay::mhpc_TopWidget = nullptr;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -52,7 +52,7 @@ C_OgeOverlay::C_OgeOverlay(QWidget * const opc_Parent, QWidget * const opc_Effec
    setAttribute(Qt::WA_TranslucentBackground);
    if
    //lint -e{1938} Global variable access necessary in this case
-   ((mhpc_TopWidget != NULL) && (opc_EffectTargetChild == NULL)) // no effect target given
+   ((mhpc_TopWidget != nullptr) && (opc_EffectTargetChild == nullptr)) // no effect target given
    {
       //lint -e{1938} Global variable access necessary in this case
       const QPoint c_ParentPos = mhpc_TopWidget->mapToGlobal(mhpc_TopWidget->pos());
@@ -68,7 +68,7 @@ C_OgeOverlay::C_OgeOverlay(QWidget * const opc_Parent, QWidget * const opc_Effec
    {
       //find root
       QWidget * const pc_ParentOfAllParents = C_OgeWiUtil::h_GetWidgetUnderNextPopUp(opc_EffectTargetChild);
-      if (pc_ParentOfAllParents != NULL)
+      if (pc_ParentOfAllParents != nullptr)
       {
          const QPoint c_ParentPos = pc_ParentOfAllParents->mapToGlobal(pc_ParentOfAllParents->pos());
          this->setParent(pc_ParentOfAllParents);

@@ -44,7 +44,7 @@ C_GiRectPixmap::C_GiRectPixmap(const QRectF & orc_Rect, QGraphicsItem * const op
    QGraphicsRectItem(orc_Rect, opc_Parent),
    mq_DrawPixmap(false),
    mq_DrawSvg(false),
-   mpc_SvgRenderer(NULL)
+   mpc_SvgRenderer(nullptr)
 {
    this->setPen(Qt::NoPen);
 }
@@ -56,7 +56,7 @@ C_GiRectPixmap::C_GiRectPixmap(const QRectF & orc_Rect, QGraphicsItem * const op
 C_GiRectPixmap::~C_GiRectPixmap()
 {
    delete mpc_SvgRenderer;
-   mpc_SvgRenderer = NULL;
+   mpc_SvgRenderer = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ void C_GiRectPixmap::SetSvg(const QString & orc_Value)
    }
    else
    {
-      this->mpc_SvgRenderer = NULL;
+      this->mpc_SvgRenderer = nullptr;
    }
 }
 
@@ -147,7 +147,7 @@ void C_GiRectPixmap::paint(QPainter * const opc_Painter, const QStyleOptionGraph
    //Icon
    if (this->mq_DrawSvg == true)
    {
-      if (this->mpc_SvgRenderer != NULL)
+      if (this->mpc_SvgRenderer != nullptr)
       {
          this->mpc_SvgRenderer->render(opc_Painter, this->rect());
       }

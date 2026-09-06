@@ -62,13 +62,13 @@ using namespace stw::opensyde_core;
 C_OscComDriverProtocol::C_OscComDriverProtocol(void) :
    C_OscComDriverBase(),
    mq_Initialized(false),
-   mpc_CanTransportProtocolBroadcast(NULL),
-   mpc_IpTransportProtocolBroadcast(NULL),
-   mpc_SysDef(NULL),
+   mpc_CanTransportProtocolBroadcast(nullptr),
+   mpc_IpTransportProtocolBroadcast(nullptr),
+   mpc_SysDef(nullptr),
    mu32_ActiveBusIndex(0U),
    mu32_ActiveNodeCount(0),
-   mpc_IpDispatcher(NULL),
-   mpc_SecurityPemDb(NULL)
+   mpc_IpDispatcher(nullptr),
+   mpc_SecurityPemDb(nullptr)
 {
    //Check if client and server use same float standard, see #84517 for more details
    tgl_assert(std::numeric_limits<float32_t>::is_iec559);
@@ -87,24 +87,24 @@ C_OscComDriverProtocol::~C_OscComDriverProtocol(void)
    for (u32_Counter = 0; u32_Counter < this->mc_TransportProtocols.size(); ++u32_Counter)
    {
       delete (this->mc_TransportProtocols[u32_Counter]);
-      this->mc_TransportProtocols[u32_Counter] = NULL;
+      this->mc_TransportProtocols[u32_Counter] = nullptr;
    }
 
    for (u32_Counter = 0; u32_Counter < this->mc_LegacyRouterDispatchers.size(); ++u32_Counter)
    {
       // If stop routing was not called correctly
       delete (this->mc_LegacyRouterDispatchers[u32_Counter]);
-      this->mc_LegacyRouterDispatchers[u32_Counter] = NULL;
+      this->mc_LegacyRouterDispatchers[u32_Counter] = nullptr;
    }
 
    delete this->mpc_CanTransportProtocolBroadcast;
    delete this->mpc_IpTransportProtocolBroadcast;
 
-   this->mpc_CanTransportProtocolBroadcast = NULL;
-   this->mpc_IpTransportProtocolBroadcast = NULL;
-   this->mpc_IpDispatcher = NULL;  //do not delete ! not owned by us
-   this->mpc_SecurityPemDb = NULL; //do not delete ! not owned by us
-   this->mpc_SysDef = NULL;        //do not delete ! not owned by us
+   this->mpc_CanTransportProtocolBroadcast = nullptr;
+   this->mpc_IpTransportProtocolBroadcast = nullptr;
+   this->mpc_IpDispatcher = nullptr;  //do not delete ! not owned by us
+   this->mpc_SecurityPemDb = nullptr; //do not delete ! not owned by us
+   this->mpc_SysDef = nullptr;        //do not delete ! not owned by us
 
    C_OscProtocolSecuritySubLayer::h_ClearAll(); //no longer needed
 }
@@ -241,11 +241,11 @@ int32_t C_OscComDriverProtocol::SendTesterPresent(const std::set<uint32_t> * con
       for (u32_Counter = 0U; u32_Counter < this->mc_OsyProtocols.size(); ++u32_Counter)
       {
          // Check the optional set for skipping nodes
-         if ((opc_SkipNodes == NULL) ||
+         if ((opc_SkipNodes == nullptr) ||
              (opc_SkipNodes->find(u32_Counter) == opc_SkipNodes->end()))
          {
             C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_Counter];
-            if (pc_ProtocolOsy != NULL)
+            if (pc_ProtocolOsy != nullptr)
             {
                // Send tester present message without expecting a response
                s32_Return = pc_ProtocolOsy->OsyTesterPresent(1U);
@@ -283,7 +283,7 @@ const
    if (this->mq_Initialized == true)
    {
       C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->m_GetOsyProtocol(orc_ServerId);
-      if (pc_ProtocolOsy != NULL)
+      if (pc_ProtocolOsy != nullptr)
       {
          // Send tester present message without expecting a response
          s32_Return = pc_ProtocolOsy->OsyTesterPresent(1U);
@@ -325,7 +325,7 @@ const
          if (u32_ActiveNode < this->mc_OsyProtocols.size())
          {
             C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNode];
-            if (pc_ProtocolOsy != NULL)
+            if (pc_ProtocolOsy != nullptr)
             {
                // Send tester present message without expecting a response
                s32_Return = pc_ProtocolOsy->OsyTesterPresent(1U);
@@ -396,7 +396,7 @@ int32_t C_OscComDriverProtocol::StartRouting(const uint32_t ou32_NodeIndex, uint
          s32_Return = this->m_StartRouting(u32_ActiveIndex, opu32_ErrorNodeIndex);
       }
 
-      if ((opu32_ErrorNodeIndex != NULL) &&
+      if ((opu32_ErrorNodeIndex != nullptr) &&
           (s32_Return != C_NO_ERR))
       {
          // Convert active node index to node index
@@ -784,7 +784,7 @@ void C_OscComDriverProtocol::ClearDispatcherQueue(void)
    {
       uint32_t u32_Counter;
       // Get all messages for clearing them
-      if (this->mpc_CanDispatcher != NULL)
+      if (this->mpc_CanDispatcher != nullptr)
       {
          (void)mpc_CanDispatcher->DispatchIncoming();
       }
@@ -794,13 +794,13 @@ void C_OscComDriverProtocol::ClearDispatcherQueue(void)
          C_OscProtocolDriverOsyTpCan * const pc_CanTp =
             dynamic_cast<C_OscProtocolDriverOsyTpCan *>(this->mc_TransportProtocols[u32_Counter]);
 
-         if (pc_CanTp != NULL)
+         if (pc_CanTp != nullptr)
          {
             pc_CanTp->ClearDispatcherQueue();
          }
       }
 
-      if (this->mpc_CanTransportProtocolBroadcast != NULL)
+      if (this->mpc_CanTransportProtocolBroadcast != nullptr)
       {
          this->mpc_CanTransportProtocolBroadcast->ClearDispatcherQueue();
       }
@@ -845,7 +845,7 @@ int32_t C_OscComDriverProtocol::ReConnectNode(const stw::opensyde_core::C_OscPro
    if (q_Found == true)
    {
       C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNodeIndex];
-      if (pc_ProtocolOsy != NULL)
+      if (pc_ProtocolOsy != nullptr)
       {
          s32_Return = pc_ProtocolOsy->ReConnect();
       }
@@ -873,7 +873,7 @@ int32_t C_OscComDriverProtocol::DisconnectNode(const C_OscProtocolDriverOsyNode 
    if (q_Found == true)
    {
       C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNodeIndex];
-      if (pc_ProtocolOsy != NULL)
+      if (pc_ProtocolOsy != nullptr)
       {
          s32_Return = pc_ProtocolOsy->Disconnect();
       }
@@ -892,7 +892,7 @@ void C_OscComDriverProtocol::DisconnectNodes(void) const
    for (u32_Counter = 0U; u32_Counter < this->mc_OsyProtocols.size(); ++u32_Counter)
    {
       C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_Counter];
-      if (pc_ProtocolOsy != NULL)
+      if (pc_ProtocolOsy != nullptr)
       {
          pc_ProtocolOsy->Disconnect();
       }
@@ -913,29 +913,29 @@ void C_OscComDriverProtocol::PrepareForDestruction(void)
       C_OscProtocolDriverOsyTpCan * const pc_Tp =
          dynamic_cast<C_OscProtocolDriverOsyTpCan *>(this->mc_TransportProtocols[u32_ItTp]);
       //do we have a CAN TP ?
-      if (pc_Tp != NULL)
+      if (pc_Tp != nullptr)
       {
-         pc_Tp->SetDispatcher(NULL); //we are about to destroy the dispatcher; make sure TP disconnects from it
+         pc_Tp->SetDispatcher(nullptr); //we are about to destroy the dispatcher; make sure TP disconnects from it
       }
       else
       {
          C_OscProtocolDriverOsyTpIp * const pc_TpIp =
             dynamic_cast<C_OscProtocolDriverOsyTpIp *>(this->mc_TransportProtocols[u32_ItTp]);
-         if (pc_TpIp != NULL)
+         if (pc_TpIp != nullptr)
          {
-            pc_TpIp->SetDispatcher(NULL, 0U);
+            pc_TpIp->SetDispatcher(nullptr, 0U);
          }
       }
    }
 
    //also clean up broadcast instances:
-   if (this->mpc_CanTransportProtocolBroadcast != NULL)
+   if (this->mpc_CanTransportProtocolBroadcast != nullptr)
    {
-      this->mpc_CanTransportProtocolBroadcast->SetDispatcher(NULL);
+      this->mpc_CanTransportProtocolBroadcast->SetDispatcher(nullptr);
    }
-   if (this->mpc_IpTransportProtocolBroadcast != NULL)
+   if (this->mpc_IpTransportProtocolBroadcast != nullptr)
    {
-      this->mpc_IpTransportProtocolBroadcast->SetDispatcher(NULL, 0U);
+      this->mpc_IpTransportProtocolBroadcast->SetDispatcher(nullptr, 0U);
    }
 
    C_OscComDriverBase::PrepareForDestruction();
@@ -955,7 +955,7 @@ void C_OscComDriverProtocol::PrepareForDestruction(void)
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProtocolDriverOsyTpBase * C_OscComDriverProtocol::GetOsyTransportProtocol(const uint32_t ou32_NodeIndex)
 {
-   C_OscProtocolDriverOsyTpBase * pc_Tp = NULL;
+   C_OscProtocolDriverOsyTpBase * pc_Tp = nullptr;
 
    for (uint16_t u16_Index = 0U; u16_Index < mc_TransportProtocols.size(); u16_Index++)
    {
@@ -1005,7 +1005,7 @@ uint32_t C_OscComDriverProtocol::m_GetActiveIndex(const uint32_t ou32_NodeIndex,
       }
    }
 
-   if (opq_Found != NULL)
+   if (opq_Found != nullptr)
    {
       *opq_Found = q_Found;
    }
@@ -1084,7 +1084,7 @@ C_OscIpDispatcher * C_OscComDriverProtocol::m_GetIpDispatcher(void)
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProtocolDriverOsy * C_OscComDriverProtocol::m_GetOsyProtocol(const C_OscProtocolDriverOsyNode & orc_ServerId) const
 {
-   C_OscProtocolDriverOsy * pc_Return = NULL;
+   C_OscProtocolDriverOsy * pc_Return = nullptr;
    uint32_t u32_Counter;
 
    for (u32_Counter = 0U; u32_Counter < this->mc_ServerIds.size(); ++u32_Counter)
@@ -1093,7 +1093,7 @@ C_OscProtocolDriverOsy * C_OscComDriverProtocol::m_GetOsyProtocol(const C_OscPro
       {
          // Index found
          if ((u32_Counter < this->mc_OsyProtocols.size()) &&
-             (this->mc_OsyProtocols[u32_Counter] != NULL))
+             (this->mc_OsyProtocols[u32_Counter] != nullptr))
          {
             pc_Return = this->mc_OsyProtocols[u32_Counter];
             break;
@@ -1120,7 +1120,7 @@ C_SclString C_OscComDriverProtocol::m_GetActiveNodeName(const uint32_t ou32_Acti
    if (ou32_ActiveNodeIndex < this->mc_ActiveNodesIndexes.size())
    {
       const uint32_t u32_NodeIndex = this->mc_ActiveNodesIndexes[ou32_ActiveNodeIndex];
-      if ((this->mpc_SysDef != NULL) &&
+      if ((this->mpc_SysDef != nullptr) &&
           (u32_NodeIndex < this->mpc_SysDef->c_Nodes.size()))
       {
          c_Retval = this->mpc_SysDef->c_Nodes[u32_NodeIndex].c_Properties.c_Name;
@@ -1151,7 +1151,7 @@ C_SclString C_OscComDriverProtocol::m_GetActiveNodeName(const uint32_t ou32_Acti
 int32_t C_OscComDriverProtocol::m_SetNodeSessionId(const uint32_t ou32_ActiveNode, const uint8_t ou8_SessionId,
                                                    const bool oq_CheckForSession, uint8_t * const opu8_NrCode) const
 {
-   C_OscProtocolDriverOsy * pc_ProtocolOsy = NULL;
+   C_OscProtocolDriverOsy * pc_ProtocolOsy = nullptr;
    int32_t s32_Return;
 
    if (ou32_ActiveNode < this->mc_OsyProtocols.size())
@@ -1193,7 +1193,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionId(C_OscProtocolDriverOsy * cons
 
    if (this->mq_Initialized == true)
    {
-      if (opc_ExistingProtocol != NULL)
+      if (opc_ExistingProtocol != nullptr)
       {
          bool q_SetNewSession = true;
 
@@ -1329,7 +1329,7 @@ int32_t C_OscComDriverProtocol::m_SetNodesSessionId(const std::vector<uint32_t> 
          if (orc_DefectNodeIndices.find(u32_ActiveNode) == orc_DefectNodeIndices.end())
          {
             const int32_t s32_Return =
-               this->m_SetNodeSessionId(u32_ActiveNode, ou8_SessionId, oq_CheckForSession, NULL);
+               this->m_SetNodeSessionId(u32_ActiveNode, ou8_SessionId, oq_CheckForSession, nullptr);
 
             if ((s32_Return != C_NO_ERR) && (s32_Return != C_NOACT))
             {
@@ -1389,7 +1389,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionIdWithExpectation(const uint32_t
                                                                   const uint8_t ou8_ExpectedNeededSession) const
 {
    // We need a new session
-   int32_t s32_Return = this->m_SetNodeSessionId(ou32_ActiveNode, ou8_ExpectedNeededSession, true, NULL);
+   int32_t s32_Return = this->m_SetNodeSessionId(ou32_ActiveNode, ou8_ExpectedNeededSession, true, nullptr);
 
    if (s32_Return == C_WARN)
    {
@@ -1409,7 +1409,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionIdWithExpectation(const uint32_t
       // Special case: It is possible, that the routing node is not in the
       // server or in the flashloader as expected. It returns an error that it does not support the
       // session. Try the other possibility.
-      s32_Return = this->m_SetNodeSessionId(ou32_ActiveNode, u8_NewExpectedNeededSession, false, NULL);
+      s32_Return = this->m_SetNodeSessionId(ou32_ActiveNode, u8_NewExpectedNeededSession, false, nullptr);
    }
 
    return s32_Return;
@@ -1485,7 +1485,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
 
    if (this->mq_Initialized == true)
    {
-      if (opc_ExistingProtocol != NULL)
+      if (opc_ExistingProtocol != nullptr)
       {
          // Set the security level
          bool q_SecureAuthenticationActive = false;
@@ -1496,7 +1496,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
          uint8_t u8_NrErrorCode = 0U;
 
          //new SecurityAccess requested: Preset "needs encryption" to false:
-         tgl_assert(opc_ExistingProtocol->pc_SecuritySubLayer != NULL);
+         tgl_assert(opc_ExistingProtocol->pc_SecuritySubLayer != nullptr);
          opc_ExistingProtocol->pc_SecuritySubLayer->SetEncryptionIsActive(false);
 
          s32_Return = opc_ExistingProtocol->OsySecurityAccessRequestSeed(ou8_SecurityLevel, q_SecureMode, u64_Seed,
@@ -1505,7 +1505,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                                                                          c_TrafficEncryptionInitVector,
                                                                          &u8_NrErrorCode);
 
-         if (opu8_NrCode != NULL)
+         if (opu8_NrCode != nullptr)
          {
             (*opu8_NrCode) = u8_NrErrorCode;
          }
@@ -1574,9 +1574,9 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                {
                   //we need to calculate the proper key based on the challenge we got:
                   //check pem database on NULL
-                  if (mpc_SecurityPemDb != NULL)
+                  if (mpc_SecurityPemDb != nullptr)
                   {
-                     const C_OscSecurityPemKeyInfo * pc_PemKeyInfo = NULL;
+                     const C_OscSecurityPemKeyInfo * pc_PemKeyInfo = nullptr;
                      if (ou8_SecurityLevel == 7U)
                      {
                         pc_PemKeyInfo = this->mpc_SecurityPemDb->GetLevel7PemInformation();
@@ -1595,7 +1595,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                         }
                      }
 
-                     if (pc_PemKeyInfo != NULL)
+                     if (pc_PemKeyInfo != nullptr)
                      {
                         std::vector<uint8_t> c_RandomValue;
                         std::vector<uint8_t> c_PrivKey;
@@ -1721,11 +1721,11 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
          {
             s32_Return = C_COM;
          }
-         if (opq_SecureAuthenticationActive != NULL)
+         if (opq_SecureAuthenticationActive != nullptr)
          {
             *opq_SecureAuthenticationActive = q_SecureAuthenticationActive;
          }
-         if (opq_TrafficEncryptionActive != NULL)
+         if (opq_TrafficEncryptionActive != nullptr)
          {
             *opq_TrafficEncryptionActive = q_TrafficEncryptionActive;
          }
@@ -1801,7 +1801,7 @@ int32_t C_OscComDriverProtocol::m_SetNodesSecurityAccess(const std::vector<uint3
       for (u32_Counter = 0U; u32_Counter < orc_ActiveNodes.size(); ++u32_Counter)
       {
          const uint32_t u32_ActiveNode = orc_ActiveNodes[u32_Counter];
-         s32_Return = this->m_SetNodeSecurityAccess(u32_ActiveNode, ou8_SecurityLevel, NULL);
+         s32_Return = this->m_SetNodeSecurityAccess(u32_ActiveNode, ou8_SecurityLevel, nullptr);
 
          if ((s32_Return != C_NO_ERR) &&
              (s32_Return != C_NOACT))
@@ -1866,10 +1866,10 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
 
    if (rc_ActRoute.c_VecRoutePoints.size() > 0)
    {
-      if ((this->mpc_SysDef != NULL) &&
+      if ((this->mpc_SysDef != nullptr) &&
           (this->mc_ActiveNodesIndexes[ou32_ActiveNode] < this->mpc_SysDef->c_Nodes.size()))
       {
-         C_OscProtocolDriverOsy * pc_ProtocolOsy = NULL;
+         C_OscProtocolDriverOsy * pc_ProtocolOsy = nullptr;
          uint32_t u32_OsyRoutingTarget;
          bool q_Found;
 
@@ -1897,7 +1897,7 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
                dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[u32_OsyRoutingTarget]);
          }
 
-         if (pc_ProtocolOsy != NULL)
+         if (pc_ProtocolOsy != nullptr)
          {
             // In case of Ethernet save the number of protocols which use the same TCP connection
             const std::map<uint32_t, uint32_t>::const_iterator c_Iter =
@@ -1912,7 +1912,7 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
          }
 
          // Connect only one time if connection was used already for the node itself or an legacy routing target
-         if ((pc_ProtocolOsy != NULL) &&
+         if ((pc_ProtocolOsy != nullptr) &&
              (pc_ProtocolOsy->IsConnected() != C_NO_ERR))
          {
             uint32_t u32_RoutePoint;
@@ -1996,7 +1996,7 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
                   if (s32_Return == C_NO_ERR)
                   {
                      // We need an other security level
-                     s32_Return = this->m_SetNodeSecurityAccess(u32_OsyRoutingTarget, 5, NULL);
+                     s32_Return = this->m_SetNodeSecurityAccess(u32_OsyRoutingTarget, 5, nullptr);
                   }
 
                   if (s32_Return == C_NO_ERR)
@@ -2070,7 +2070,7 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
                      while (TglGetTickCount() < (u32_StartTime + 1000U));
                   }
 
-                  if ((s32_Return != C_NO_ERR) && (opu32_ErrorActiveNodeIndex != NULL))
+                  if ((s32_Return != C_NO_ERR) && (opu32_ErrorActiveNodeIndex != nullptr))
                   {
                      if (q_NextOneError == false)
                      {
@@ -2170,7 +2170,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
       s32_Return = C_CONFIG;
       // Routing is necessary
 
-      if (this->mpc_SysDef != NULL)
+      if (this->mpc_SysDef != nullptr)
       {
          const C_OscNode * const pc_Node = &this->mpc_SysDef->c_Nodes[this->mc_ActiveNodesIndexes[ou32_ActiveNode]];
 
@@ -2178,7 +2178,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
          {
             bool q_OsyRouting = false;
             C_OscRoutingRoute c_ActRoute = this->mc_Routes[ou32_ActiveNode];
-            C_OscCanDispatcherOsyRouter * pc_RoutingDispatcher = NULL;
+            C_OscCanDispatcherOsyRouter * pc_RoutingDispatcher = nullptr;
             const C_OscRoutingRoutePoint c_LastNodeOfRouting =
                c_ActRoute.c_VecRoutePoints[c_ActRoute.c_VecRoutePoints.size() - 1];
             const uint32_t u32_ActiveLastNode = this->m_GetActiveIndex(c_LastNodeOfRouting.u32_NodeIndex);
@@ -2209,12 +2209,12 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
             {
                // No error. No specific protocol necessary. We need only openSYDE protocol.
                s32_Return = C_NO_ERR;
-               pc_ProtocolOsyOfLastNodeOfRouting = NULL;
+               pc_ProtocolOsyOfLastNodeOfRouting = nullptr;
                q_OsyRouting = true;
             }
             else
             {
-               pc_ProtocolOsyOfLastNodeOfRouting = NULL;
+               pc_ProtocolOsyOfLastNodeOfRouting = nullptr;
             }
 
             // Start the routing
@@ -2239,7 +2239,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                      C_OscProtocolDriverOsy * const pc_ProtocolOsyTarget =
                         dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[u32_ActiveOsyTargetNode]);
 
-                     if (pc_ProtocolOsyTarget != NULL)
+                     if (pc_ProtocolOsyTarget != nullptr)
                      {
                         // Clear all queues. In case of CAN tp the change causes that more than one queue receives
                         // service responses
@@ -2266,7 +2266,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                         if (s32_Return == C_NO_ERR)
                         {
                            // We need an other security level
-                           s32_Return = this->m_SetNodeSecurityAccess(u32_ActiveOsyTargetNode, 5, NULL);
+                           s32_Return = this->m_SetNodeSecurityAccess(u32_ActiveOsyTargetNode, 5, nullptr);
                         }
 
                         if (s32_Return == C_NO_ERR)
@@ -2309,7 +2309,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                            }
                         }
 
-                        if ((s32_Return != C_NO_ERR) && (opu32_ErrorActiveNodeIndex != NULL))
+                        if ((s32_Return != C_NO_ERR) && (opu32_ErrorActiveNodeIndex != nullptr))
                         {
                            *opu32_ErrorActiveNodeIndex = u32_ActiveRouterNode;
                         }
@@ -2339,8 +2339,8 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
             }
 
             // Init of the legacy routing
-            if ((pc_RoutingDispatcher != NULL) &&
-                (pc_ProtocolOsyOfLastNodeOfRouting != NULL) &&
+            if ((pc_RoutingDispatcher != nullptr) &&
+                (pc_ProtocolOsyOfLastNodeOfRouting != nullptr) &&
                 (s32_Return == C_NO_ERR))
             {
                // Special case: No openSYDE routing, but legacy routing.
@@ -2351,7 +2351,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                   C_OscProtocolDriverOsy * const pc_ProtocolOsyRouter =
                      dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[u32_ActiveLastNode]);
 
-                  if ((pc_ProtocolOsyRouter != NULL) &&
+                  if ((pc_ProtocolOsyRouter != nullptr) &&
                       (q_EthernetRouter == false))
                   {
                      s32_Return = pc_ProtocolOsyRouter->ReConnect();
@@ -2368,7 +2368,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                   if (s32_Return == C_NO_ERR)
                   {
                      // We need an other security level
-                     s32_Return = this->m_SetNodeSecurityAccess(u32_ActiveLastNode, 5, NULL);
+                     s32_Return = this->m_SetNodeSecurityAccess(u32_ActiveLastNode, 5, nullptr);
                   }
 
                   if (s32_Return == C_NO_ERR)
@@ -2387,7 +2387,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                   }
                }
 
-               if ((s32_Return != C_NO_ERR) && (opu32_ErrorActiveNodeIndex != NULL))
+               if ((s32_Return != C_NO_ERR) && (opu32_ErrorActiveNodeIndex != nullptr))
                {
                   *opu32_ErrorActiveNodeIndex = u32_ActiveLastNode;
                }
@@ -2469,7 +2469,7 @@ void C_OscComDriverProtocol::m_StopRouting(const uint32_t ou32_ActiveNode)
 {
    if ((ou32_ActiveNode < this->mc_Routes.size()) &&
        (this->mc_Routes[ou32_ActiveNode].c_VecRoutePoints.size() > 0) &&
-       (this->mpc_SysDef != NULL))
+       (this->mpc_SysDef != nullptr))
    {
       const C_OscNode * const pc_Node = &this->mpc_SysDef->c_Nodes[this->mc_ActiveNodesIndexes[ou32_ActiveNode]];
       const C_OscRoutingRoute & rc_ActRoute = this->mc_Routes[ou32_ActiveNode];
@@ -2549,7 +2549,7 @@ void C_OscComDriverProtocol::m_StopRouting(const uint32_t ou32_ActiveNode)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComDriverProtocol::m_StopRoutingOfActiveNodes(void)
 {
-   if (this->mpc_SysDef != NULL)
+   if (this->mpc_SysDef != nullptr)
    {
       uint32_t u32_ActiveNode;
       int32_t s32_LastRouteHop = 0U;
@@ -2654,7 +2654,7 @@ int32_t C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32_t ou32_
    C_OscProtocolDriverOsy * const pc_ProtocolOsyTarget =
       dynamic_cast<C_OscProtocolDriverOsy *>(this->mc_OsyProtocols[ou32_ActiveOsyTargetNode]);
 
-   if (pc_ProtocolOsyTarget != NULL)
+   if (pc_ProtocolOsyTarget != nullptr)
    {
       bool q_DoDisconnect = true;
 
@@ -2672,7 +2672,7 @@ int32_t C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32_t ou32_
                                                   this->mc_ServerIds[u32_CurrentNode]);
 
          // We need an other security level
-         s32_Retval = this->m_SetNodeSecurityAccess(ou32_ActiveOsyTargetNode, 5, NULL);
+         s32_Retval = this->m_SetNodeSecurityAccess(ou32_ActiveOsyTargetNode, 5, nullptr);
 
          if (s32_Retval == C_NO_ERR)
          {
@@ -2786,7 +2786,7 @@ void C_OscComDriverProtocol::m_StopRoutingSpecific(const uint32_t ou32_ActiveNod
 {
    // Close the tunneling and clean up the routing dispatcher
    if ((ou32_ActiveNode < this->mc_LegacyRouterDispatchers.size()) &&
-       (this->mc_LegacyRouterDispatchers[ou32_ActiveNode] != NULL))
+       (this->mc_LegacyRouterDispatchers[ou32_ActiveNode] != nullptr))
    {
       if (this->mc_Routes[ou32_ActiveNode].c_VecRoutePoints.size() > 0)
       {
@@ -2797,12 +2797,12 @@ void C_OscComDriverProtocol::m_StopRoutingSpecific(const uint32_t ou32_ActiveNod
                                                                                        c_VecRoutePoints.size() -
                                                                                        1].u32_NodeIndex);
 
-         this->m_SetNodeSecurityAccess(u32_ActiveRouterNode, 5, NULL);
+         this->m_SetNodeSecurityAccess(u32_ActiveRouterNode, 5, nullptr);
       }
 
       this->mc_LegacyRouterDispatchers[ou32_ActiveNode]->CAN_Exit();
       delete (this->mc_LegacyRouterDispatchers[ou32_ActiveNode]);
-      this->mc_LegacyRouterDispatchers[ou32_ActiveNode] = NULL;
+      this->mc_LegacyRouterDispatchers[ou32_ActiveNode] = nullptr;
    }
 }
 
@@ -2822,7 +2822,7 @@ int32_t C_OscComDriverProtocol::m_InitRoutesAndActiveNodes(void)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (this->mpc_SysDef != NULL)
+   if (this->mpc_SysDef != nullptr)
    {
       //Count active nodes
       C_OscRoutingCalculation::E_Mode e_Mode;
@@ -2846,7 +2846,7 @@ int32_t C_OscComDriverProtocol::m_InitRoutesAndActiveNodes(void)
             {
                // Get the best route for this node
                const C_OscRoutingRoute * const pc_Route = c_RouteCalculation.GetBestRoute();
-               if (pc_Route != NULL)
+               if (pc_Route != nullptr)
                {
                   // If no routing shall be used, register only nodes which are connected to the PC bus directly
                   if ((q_RoutingUsed == true) ||
@@ -2898,7 +2898,7 @@ int32_t C_OscComDriverProtocol::m_InitServerIds(void)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if ((this->mpc_SysDef != NULL) &&
+   if ((this->mpc_SysDef != nullptr) &&
        (this->mc_Routes.size() == this->mu32_ActiveNodeCount))
    {
       //Init routes
@@ -2931,7 +2931,7 @@ int32_t C_OscComDriverProtocol::m_InitServerIds(void)
                const C_OscNodeComInterfaceSettings * const pc_Interface =
                   pc_LastHopNode->c_Properties.GetComInterface(rc_LastHop.e_OutInterfaceType,
                                                                rc_LastHop.u8_OutInterfaceNumber);
-               if (pc_Interface != NULL)
+               if (pc_Interface != nullptr)
                {
                   if (pc_Interface->GetBusConnected() == true)
                   {
@@ -3046,11 +3046,11 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
    {
       C_OscProtocolDriverOsyTpCan * pc_TransportProtocol;
 
-      if (this->mpc_CanDispatcher != NULL)
+      if (this->mpc_CanDispatcher != nullptr)
       {
          //Transport protocols
-         this->mc_TransportProtocols.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), NULL);
-         this->mc_LegacyRouterDispatchers.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), NULL);
+         this->mc_TransportProtocols.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
+         this->mc_LegacyRouterDispatchers.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
          for (uint32_t u32_ItActiveNode = 0;
               (u32_ItActiveNode < this->mu32_ActiveNodeCount) && (s32_Retval == C_NO_ERR);
               ++u32_ItActiveNode)
@@ -3160,7 +3160,7 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
       this->mc_ActiveNodeIp2CanDispatcher.clear();
       this->mc_ActiveNodeIp2CanDispatcherNodeCount.resize(this->mu32_ActiveNodeCount, 0U);
 
-      if (this->mpc_IpDispatcher != NULL)
+      if (this->mpc_IpDispatcher != nullptr)
       {
          uint32_t u32_ItActiveNode;
          std::map<uint32_t, uint32_t> c_ActiveNodeIp2IpRouters;
@@ -3291,8 +3291,8 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
             if (s32_Retval == C_NO_ERR)
             {
                //Transport protocols
-               this->mc_TransportProtocols.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), NULL);
-               this->mc_LegacyRouterDispatchers.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), NULL);
+               this->mc_TransportProtocols.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
+               this->mc_LegacyRouterDispatchers.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
 
                for (u32_ItActiveNode = 0;
                     (u32_ItActiveNode < this->mu32_ActiveNodeCount) && (s32_Retval == C_NO_ERR);
@@ -3531,7 +3531,7 @@ int32_t C_OscComDriverProtocol::m_InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t
 {
    int32_t s32_Retval = C_COM;
 
-   if (this->mpc_IpDispatcher != NULL)
+   if (this->mpc_IpDispatcher != nullptr)
    {
       s32_Retval = mpc_IpDispatcher->InitTcp(orau8_Ip, oru32_Handle);
 

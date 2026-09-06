@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project("osy_cmd_line_flash_tool")
 
 #include script to generate PC-lint configuration files
-include(lint_config.cmake)
+include(../../pjt/lint_config.cmake)
 
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 
@@ -17,7 +17,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    find_package(OpenSSL REQUIRED)
    include_directories(${OPENSSL_INCLUDE_DIR})
 else()
-   include_directories(${PROJECT_ROOT}/libs/openssl/openssl/include)
+    include_directories(${PROJECT_ROOT}/../libraries/openssl/openssl/include)
 endif()
 
 # --- COMPILER FLAGS AND LIBRARIES -------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ set(OSY_CMD_LINE_FLASH_TOOL_SOURCES
 
 if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
    link_directories(
-       ../libs/openssl/openssl
+        ../libraries/openssl/openssl
    )
 endif()
 

@@ -136,14 +136,14 @@ int32_t C_SdUtil::h_GetNames(const std::vector<uint32_t> & orc_NodeIndices,
          }
          orc_Names.push_back(c_TmpName);
 
-         if (((opc_DatapoolIndices != NULL) && (opc_DatapoolNames != NULL)) &&
+         if (((opc_DatapoolIndices != nullptr) && (opc_DatapoolNames != nullptr)) &&
              (orc_NodeIndices.size() == opc_DatapoolIndices->size()))
          {
             // Get the matching Datapool name
             const C_OscNodeDataPool * const pc_Dp = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
                orc_NodeIndices[u32_NodeCounter], (*opc_DatapoolIndices)[u32_NodeCounter]);
 
-            if (pc_Dp != NULL)
+            if (pc_Dp != nullptr)
             {
                //lint -e{413} //false positive; opc_DatapoolNames is checked to be != NULL a few lines above
                opc_DatapoolNames->emplace_back(pc_Dp->c_Name.c_str());
@@ -176,7 +176,7 @@ int32_t C_SdUtil::h_GetName(const uint32_t & oru32_NodeIndex, QString & orc_Name
    const C_OscNode * const pc_Node =
       C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(oru32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       orc_Name = pc_Node->c_Properties.c_Name.c_str();
       s32_Retval = C_NO_ERR;
@@ -203,7 +203,7 @@ int32_t C_SdUtil::h_GetName(const uint32_t & oru32_NodeIndex, const uint32_t & o
    const C_OscNode * const pc_Node =
       C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(oru32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       // check which interfaces are connected to the bus
       if (oru32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size())
@@ -376,7 +376,7 @@ void C_SdUtil::h_GetErrorToolTipDataPools(const uint32_t ou32_NodeIndex, const s
       const C_OscNodeDataPool * const pc_Datapool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(ou32_NodeIndex,
                                                                                                     orc_Indices[
                                                                                                        u32_ItDataPool]);
-      if (pc_Datapool != NULL)
+      if (pc_Datapool != nullptr)
       {
          orc_Content += static_cast<QString>("%1\n").arg(pc_Datapool->c_Name.c_str());
       }
@@ -502,7 +502,7 @@ uint8_t C_SdUtil::h_GetNodeIdMaximum(const uint32_t & oru32_NodeIndex)
    uint8_t u8_Retval = mu8_MAX_NODE_ID_OS;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(oru32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const C_OscNodeProperties & rc_NodeProp = pc_Node->c_Properties;
 
@@ -543,7 +543,7 @@ uint32_t C_SdUtil::h_GetActiveNodeInterface(const QComboBox & orc_ComboBox, cons
    uint32_t u32_Retval = 0;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(oru32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       uint32_t u32_InterfaceCounter;
       const QString c_SelectedName = orc_ComboBox.currentText();
@@ -674,7 +674,7 @@ std::vector<uint32_t> C_SdUtil::h_GetUsedNodeIdsForBusUniqueAndSortedAscending(c
 {
    std::vector<uint32_t> c_Retval;
    const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(oru32_BusIndex);
-   if (pc_Bus != NULL)
+   if (pc_Bus != nullptr)
    {
       std::vector<uint32_t> c_NodeIndexes;
       std::vector<uint32_t> c_InterfaceIndexes;
@@ -689,7 +689,7 @@ std::vector<uint32_t> C_SdUtil::h_GetUsedNodeIdsForBusUniqueAndSortedAscending(c
          {
             const C_OscNode * const pc_CurNode =
                C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndexes[u32_ItNode]);
-            if (pc_CurNode != NULL)
+            if (pc_CurNode != nullptr)
             {
                if (c_InterfaceIndexes[u32_ItNode] < pc_CurNode->c_Properties.c_ComInterfaces.size())
                {
@@ -729,7 +729,7 @@ std::vector<uint32_t> C_SdUtil::h_GetUsedProcessIdsForApplicationUniqueAndSorted
 {
    std::vector<uint32_t> c_Retval;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_ItApp = 0; u32_ItApp < pc_Node->c_Applications.size(); ++u32_ItApp)
       {
@@ -763,7 +763,7 @@ std::vector<uint32_t> C_SdUtil::h_GetUsedBusIdsUniqueAndSortedAscending(const in
       if ((os32_SpecialBusIndex < 0) || (u32_ItBus != static_cast<uint32_t>(os32_SpecialBusIndex)))
       {
          const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_ItBus);
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             if (pc_Bus->q_UseableForRouting == true)
             {
@@ -795,7 +795,7 @@ std::vector<uint32_t> C_SdUtil::h_GetUsedIpAddressesForBusUniqueAndSortedAscendi
 
    const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(oru32_BusIndex);
 
-   if (pc_Bus != NULL)
+   if (pc_Bus != nullptr)
    {
       std::vector<uint32_t> c_NodeIndexes;
       std::vector<uint32_t> c_InterfaceIndexes;
@@ -810,7 +810,7 @@ std::vector<uint32_t> C_SdUtil::h_GetUsedIpAddressesForBusUniqueAndSortedAscendi
          {
             const C_OscNode * const pc_CurNode =
                C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndexes[u32_ItNode]);
-            if (pc_CurNode != NULL)
+            if (pc_CurNode != nullptr)
             {
                if (c_InterfaceIndexes[u32_ItNode] < pc_CurNode->c_Properties.c_ComInterfaces.size())
                {
@@ -867,7 +867,7 @@ std::vector<std::vector<uint8_t> > C_SdUtil::h_GetAllUsedIpAddressesForBus(const
 
    const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(oru32_BusIndex);
 
-   if (pc_Bus != NULL)
+   if (pc_Bus != nullptr)
    {
       std::vector<uint32_t> c_NodeIndexes;
       std::vector<uint32_t> c_InterfaceIndexes;
@@ -882,7 +882,7 @@ std::vector<std::vector<uint8_t> > C_SdUtil::h_GetAllUsedIpAddressesForBus(const
          {
             const C_OscNode * const pc_CurNode =
                C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndexes[u32_ItNode]);
-            if (pc_CurNode != NULL)
+            if (pc_CurNode != nullptr)
             {
                if (c_InterfaceIndexes[u32_ItNode] < pc_CurNode->c_Properties.c_ComInterfaces.size())
                {
@@ -1055,7 +1055,7 @@ void C_SdUtil::h_AdaptMessageToProtocolType(C_OscCanMessage & orc_Message, C_Pui
    }
    c_Info.removeDuplicates();
 
-   if (opc_AdaptationInfos != NULL)
+   if (opc_AdaptationInfos != nullptr)
    {
       opc_AdaptationInfos->append(c_Info);
    }
@@ -1193,7 +1193,7 @@ void C_SdUtil::h_AdaptSignalToProtocolType(C_OscCanSignal & orc_Signal,
       }
    }
 
-   if (opc_AdaptationInfos != NULL)
+   if (opc_AdaptationInfos != nullptr)
    {
       opc_AdaptationInfos->append(c_Info);
    }
@@ -1477,7 +1477,7 @@ bool C_SdUtil::h_CheckDatapoolNumber(const uint32_t & oru32_NodeIndex, const boo
    else
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(oru32_NodeIndex);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          // is enough space available
          if (pc_Node->c_DataPools.size() < C_OscNode::hu32_MAX_NUMBER_OF_DATA_POOLS_PER_NODE)
@@ -1585,7 +1585,7 @@ int32_t C_SdUtil::h_GetErrorToolTipNode(const uint32_t & oru32_NodeIndex, QStrin
             {
                const C_OscNode * const pc_Node =
                   C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndices[u32_ItNode]);
-               if (pc_Node != NULL)
+               if (pc_Node != nullptr)
                {
                   orc_Text += pc_Node->c_Properties.c_Name.c_str();
                }
@@ -1641,7 +1641,7 @@ int32_t C_SdUtil::h_GetErrorToolTipNode(const uint32_t & oru32_NodeIndex, QStrin
                {
                   const C_OscNodeApplication * const pc_Appl = C_PuiSdHandler::h_GetInstance()->GetApplication(
                      c_NodeIndices[u32_ItNode], c_InvalidApplicationIndices[u32_ItAppl]);
-                  if (pc_Appl != NULL)
+                  if (pc_Appl != nullptr)
                   {
                      orc_Text += static_cast<QString>("%1\n").arg(pc_Appl->c_Name.c_str());
                   }
@@ -1674,7 +1674,7 @@ int32_t C_SdUtil::h_GetErrorToolTipNode(const uint32_t & oru32_NodeIndex, QStrin
                   const C_OscHalcConfigDomain * const pc_Domain =
                      C_PuiSdHandler::h_GetInstance()->GetHalcDomainConfigDataConst(c_NodeIndices[u32_ItNode],
                                                                                    c_InvalidDomainIndices[u32_ItDomains]);
-                  if (pc_Domain != NULL)
+                  if (pc_Domain != nullptr)
                   {
                      orc_Text += static_cast<QString>("%1\n").arg(pc_Domain->c_Name.c_str());
                   }
@@ -1729,7 +1729,7 @@ int32_t C_SdUtil::h_GetErrorToolTipNode(const uint32_t & oru32_NodeIndex, QStrin
          {
             const C_OscNode * const pc_DriftCheckNode =
                C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndices[u32_ItNode]);
-            if (pc_DriftCheckNode != NULL)
+            if (pc_DriftCheckNode != nullptr)
             {
                bool q_AnyDrift = false;
                QString c_DriftDetails;
@@ -1959,8 +1959,8 @@ QString C_SdUtil::h_GetToolTipContentDpListElement(const C_OscNodeDataPoolListEl
                                                                 orc_NodeDatapoolListElementId.u32_ListIndex,
                                                                 orc_NodeDatapoolListElementId.u32_ElementIndex);
 
-   if ((pc_Node != NULL) && (pc_Datapool != NULL) && (pc_DpList != NULL) && (pc_DpListElement != NULL) &&
-       (pc_UiElement != NULL))
+   if ((pc_Node != nullptr) && (pc_Datapool != nullptr) && (pc_DpList != nullptr) && (pc_DpListElement != nullptr) &&
+       (pc_UiElement != nullptr))
    {
       if (pc_Datapool->e_Type == C_OscNodeDataPool::eCOM)
       {
@@ -2192,7 +2192,7 @@ QString C_SdUtil::h_GetToolTipContentMessage(const C_OscCanMessageIdentification
    const C_OscCanMessage * const pc_Message =
       C_PuiSdHandler::h_GetInstance()->GetCanMessage(orc_MessageId);
 
-   if (pc_Message != NULL)
+   if (pc_Message != nullptr)
    {
       c_ToolTipContent = C_SdTooltipUtil::h_GetToolTipContentMessage(*pc_Message);
    }
@@ -2226,9 +2226,9 @@ QString C_SdUtil::h_GetToolTipContentSignal(const C_OscCanMessageIdentificationI
    const C_PuiSdNodeDataPoolListElement * const pc_DpListElementUi =
       C_PuiSdHandler::h_GetInstance()->GetUiCanDataPoolListElement(orc_MessageId, oru32_SignalIndex);
 
-   if ((pc_Message != NULL) &&
-       (pc_Signal != NULL) &&
-       (pc_DpListElement != NULL))
+   if ((pc_Message != nullptr) &&
+       (pc_Signal != nullptr) &&
+       (pc_DpListElement != nullptr))
    {
       QString c_AutoMinMaxInfo;
       c_AutoMinMaxInfo.append(static_cast<QString>("   ") + C_GtGetText::h_GetText("Auto min/max: "));
@@ -2530,12 +2530,12 @@ int32_t C_SdUtil::h_GetMessageCountOfNode(const uint32_t ou32_NodeIndex, const u
 
    oru32_TxMessageCount = 0U;
    oru32_RxMessageCount = 0U;
-   if (opu32_SignalCount != NULL)
+   if (opu32_SignalCount != nullptr)
    {
       *opu32_SignalCount = 0U;
    }
 
-   if ((pc_Node != NULL) &&
+   if ((pc_Node != nullptr) &&
        (ou32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
    {
       const uint32_t u32_ListIndex = ou32_InterfaceIndex * 2U;
@@ -2547,11 +2547,11 @@ int32_t C_SdUtil::h_GetMessageCountOfNode(const uint32_t ou32_NodeIndex, const u
       {
          const C_OscNodeDataPool * const pc_Datapool = &pc_Node->c_DataPools[u32_DatapoolCounter];
 
-         if ((pc_Datapool != NULL) &&
+         if ((pc_Datapool != nullptr) &&
              (pc_Datapool->e_Type == C_OscNodeDataPool::eCOM))
          {
             const C_OscCanProtocol * const pc_Protocol = pc_Node->GetRelatedCanProtocolConst(u32_DatapoolCounter);
-            if ((pc_Protocol != NULL) &&
+            if ((pc_Protocol != nullptr) &&
                 (ou32_InterfaceIndex < pc_Protocol->c_ComMessages.size()) &&
                 (pc_Protocol->e_Type == oe_Protocol))
             {
@@ -2566,7 +2566,7 @@ int32_t C_SdUtil::h_GetMessageCountOfNode(const uint32_t ou32_NodeIndex, const u
                      u32_DatapoolCounter,
                      u32_ListIndex + 1);
 
-               if ((pc_DataPoolList1 != NULL) && (pc_DataPoolList2 != NULL))
+               if ((pc_DataPoolList1 != nullptr) && (pc_DataPoolList2 != nullptr))
                {
                   const C_OscCanMessageContainer & rc_MessageContainer =
                      pc_Protocol->c_ComMessages[ou32_InterfaceIndex];
@@ -2578,7 +2578,7 @@ int32_t C_SdUtil::h_GetMessageCountOfNode(const uint32_t ou32_NodeIndex, const u
 
                      oru32_RxMessageCount += static_cast<uint32_t>(rc_MessageContainer.c_RxMessages.size());
                      oru32_TxMessageCount += static_cast<uint32_t>(rc_MessageContainer.c_TxMessages.size());
-                     if (opu32_SignalCount != NULL)
+                     if (opu32_SignalCount != nullptr)
                      {
                         *opu32_SignalCount += u32_SignalSize1 + u32_SignalSize2;
                      }
@@ -2595,10 +2595,10 @@ int32_t C_SdUtil::h_GetMessageCountOfNode(const uint32_t ou32_NodeIndex, const u
                         // The message must be active and in case of the device, the device must be the matching
                         // communication partner for this PDO
                         if ((rc_Msg.q_CanOpenManagerMessageActive == true) &&
-                            ((opc_CoDeviceInterfaceId == NULL) || // No CANopen device, or it must match
+                            ((opc_CoDeviceInterfaceId == nullptr) || // No CANopen device, or it must match
                              (rc_Msg.c_CanOpenManagerOwnerNodeIndex == *opc_CoDeviceInterfaceId)))
                         {
-                           if (opc_CoDeviceInterfaceId == NULL)
+                           if (opc_CoDeviceInterfaceId == nullptr)
                            {
                               ++oru32_RxMessageCount;
                            }
@@ -2608,7 +2608,7 @@ int32_t C_SdUtil::h_GetMessageCountOfNode(const uint32_t ou32_NodeIndex, const u
                               ++oru32_TxMessageCount;
                            }
 
-                           if (opu32_SignalCount != NULL)
+                           if (opu32_SignalCount != nullptr)
                            {
                               *opu32_SignalCount += static_cast<uint32_t>(rc_Msg.c_Signals.size());
                            }
@@ -2623,10 +2623,10 @@ int32_t C_SdUtil::h_GetMessageCountOfNode(const uint32_t ou32_NodeIndex, const u
                         // The message must be active and in case of the device, the device must be the matching
                         // communication partner for this PDO
                         if ((rc_Msg.q_CanOpenManagerMessageActive == true) &&
-                            ((opc_CoDeviceInterfaceId == NULL) || // No CANopen device, or it must match
+                            ((opc_CoDeviceInterfaceId == nullptr) || // No CANopen device, or it must match
                              (rc_Msg.c_CanOpenManagerOwnerNodeIndex == *opc_CoDeviceInterfaceId)))
                         {
-                           if (opc_CoDeviceInterfaceId == NULL)
+                           if (opc_CoDeviceInterfaceId == nullptr)
                            {
                               ++oru32_TxMessageCount;
                            }
@@ -2636,7 +2636,7 @@ int32_t C_SdUtil::h_GetMessageCountOfNode(const uint32_t ou32_NodeIndex, const u
                               ++oru32_RxMessageCount;
                            }
 
-                           if (opu32_SignalCount != NULL)
+                           if (opu32_SignalCount != nullptr)
                            {
                               *opu32_SignalCount += static_cast<uint32_t>(rc_Msg.c_Signals.size());
                            }
@@ -2684,14 +2684,14 @@ void C_SdUtil::h_NodeIdToBeChanged(const uint32_t ou32_NodeIndex, const uint32_t
 {
    C_OscNode * const pc_CurrentNode = C_PuiSdHandler::h_GetInstance()->GetOscNode(ou32_NodeIndex);
 
-   tgl_assert(pc_CurrentNode != NULL);
+   tgl_assert(pc_CurrentNode != nullptr);
 
-   if (pc_CurrentNode != NULL)
+   if (pc_CurrentNode != nullptr)
    {
       const C_OscNodeComInterfaceSettings * const pc_ComInterface = pc_CurrentNode->c_Properties.GetComInterface(
          C_OscSystemBus::E_Type::eCAN, static_cast<uint8_t>(ou32_InterfaceIndex));
-      tgl_assert(pc_ComInterface != NULL);
-      if (pc_ComInterface != NULL)
+      tgl_assert(pc_ComInterface != nullptr);
+      if (pc_ComInterface != nullptr)
       {
          if (pc_ComInterface->u8_NodeId == 0)
          {

@@ -45,7 +45,7 @@ using namespace stw::opensyde_gui_elements;
 C_OgeSpxToolTipBase::C_OgeSpxToolTipBase(QWidget * const opc_Parent) :
    QSpinBox(opc_Parent),
    C_OgeSpxAllBase(),
-   mpc_ContextMenu(NULL),
+   mpc_ContextMenu(nullptr),
    mq_ShowSpecialMin(false),
    ms32_SpecialMinValue(0),
    mq_ShowSpecialMax(false),

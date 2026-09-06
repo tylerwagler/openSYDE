@@ -32,7 +32,7 @@ class C_OgeWiFixPosition :
 
 public:
    explicit C_OgeWiFixPosition(const QString oc_Title, const QString oc_IconPath, const QRect & orc_Geometry,
-                               QWidget * const opc_Parent = NULL);
+                               QWidget * const opc_Parent = nullptr);
    ~C_OgeWiFixPosition(void) override;
 
    //The signals keyword is necessary for Qt signal slot functionality

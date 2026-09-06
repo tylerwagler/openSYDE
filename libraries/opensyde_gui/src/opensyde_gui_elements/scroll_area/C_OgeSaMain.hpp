@@ -29,7 +29,7 @@ class C_OgeSaMain :
    Q_OBJECT
 
 public:
-   C_OgeSaMain(QWidget * const opc_Parent = NULL);
+   C_OgeSaMain(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

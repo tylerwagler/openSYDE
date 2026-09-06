@@ -49,8 +49,8 @@ C_SyvComDriverThread::C_SyvComDriverThread(const PR_ThreadFunction opr_ThreadFun
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComDriverThread::run(void)
 {
-   if ((this->mpr_ThreadFunc != NULL) &&
-       (this->mpv_FuncInstance != NULL))
+   if ((this->mpr_ThreadFunc != nullptr) &&
+       (this->mpv_FuncInstance != nullptr))
    {
       while (this->isInterruptionRequested() == false)
       {

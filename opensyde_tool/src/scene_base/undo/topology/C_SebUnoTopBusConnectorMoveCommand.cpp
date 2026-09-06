@@ -88,7 +88,7 @@ void C_SebUnoTopBusConnectorMoveCommand::undo(void)
    for (vector<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       C_GiLiBusConnectorBase * const pc_BusConn = dynamic_cast<C_GiLiBusConnectorBase *>(*c_ItItem);
-      if (pc_BusConn != NULL)
+      if (pc_BusConn != nullptr)
       {
          pc_BusConn->SetPoints(this->mc_Initial);
       }
@@ -107,7 +107,7 @@ void C_SebUnoTopBusConnectorMoveCommand::redo(void)
    for (vector<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       C_GiLiBusConnectorBase * const pc_BusConn = dynamic_cast<C_GiLiBusConnectorBase *>(*c_ItItem);
-      if (pc_BusConn != NULL)
+      if (pc_BusConn != nullptr)
       {
          pc_BusConn->SetPoints(this->mc_Final);
       }

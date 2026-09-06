@@ -77,12 +77,12 @@ C_SyvDaDashboardTabProperties::C_SyvDaDashboardTabProperties(C_OgePopUpDialog & 
 
    // init name and comment
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       if (this->mq_NewDashboard == false)
       {
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-         if (pc_Dashboard != NULL)
+         if (pc_Dashboard != nullptr)
          {
             this->mpc_Ui->pc_LineEditName->setText(pc_Dashboard->GetName());
             this->mpc_Ui->pc_TedComment->setText(pc_Dashboard->GetComment());
@@ -252,10 +252,10 @@ bool C_SyvDaDashboardTabProperties::m_CheckDashboardTabName(void) const
    bool q_ValidName = false;
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const QString c_NewName = this->mpc_Ui->pc_LineEditName->text();
-      const uint32_t * pu32_DashboardIndex = NULL;
+      const uint32_t * pu32_DashboardIndex = nullptr;
 
       if (this->mq_NewDashboard == false)
       {

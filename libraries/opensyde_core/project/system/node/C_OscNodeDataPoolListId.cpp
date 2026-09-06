@@ -85,7 +85,7 @@ bool C_OscNodeDataPoolListId::operator <(const C_OscNodeDataPoolId & orc_Cmp) co
          const C_OscNodeDataPoolListId * const pc_NonBase =
             dynamic_cast<const C_OscNodeDataPoolListId *>(&orc_Cmp);
          //Not current class, assume base comparison is correct
-         if (pc_NonBase != NULL)
+         if (pc_NonBase != nullptr)
          {
             //If this class check members as well
             if (this->u32_ListIndex >= pc_NonBase->u32_ListIndex)
@@ -134,7 +134,7 @@ bool C_OscNodeDataPoolListId::operator ==(const C_OscNodeDataPoolId & orc_Cmp) c
       const C_OscNodeDataPoolListId * const pc_NonBase =
          dynamic_cast<const C_OscNodeDataPoolListId *>(&orc_Cmp);
       //Not current class, assume base comparison is correct
-      if (pc_NonBase != NULL)
+      if (pc_NonBase != nullptr)
       {
          //If this class check members as well
          if (this->u32_ListIndex == pc_NonBase->u32_ListIndex)

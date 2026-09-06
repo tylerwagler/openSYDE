@@ -95,7 +95,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::Save()
       this->mu32_NodeIndex,
       this->mu32_DataLoggerJobIndex);
 
-   if (pc_DataLoggerJob != NULL)
+   if (pc_DataLoggerJob != nullptr)
    {
       C_OscDataLoggerJobAdditionalTriggerProperties c_NewValues =
          pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties;
@@ -215,7 +215,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::Reload()
 
    m_DisconnectChangeTriggers();
 
-   if (pc_DataLoggerJob != NULL)
+   if (pc_DataLoggerJob != nullptr)
    {
       //Set content first
       this->mpc_Ui->pc_ChkBoxAdditionalTrigger->setChecked(
@@ -343,7 +343,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_InitDataElement(
       this->mu32_NodeIndex,
       this->mu32_DataLoggerJobIndex);
 
-   if (pc_DataLoggerJob != NULL)
+   if (pc_DataLoggerJob != nullptr)
    {
       const C_OscNodeDataPoolListElementOptArrayOptValidId & rc_ElementId =
          pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.c_ElementId;
@@ -376,7 +376,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_InitThreshold(
    const C_OscNodeDataPoolListElement * const pc_El =
       C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(orc_Id);
 
-   if (pc_El != NULL)
+   if (pc_El != nullptr)
    {
       if (pc_El->q_InterpretAsString)
       {
@@ -428,7 +428,7 @@ const
    const C_OscNodeDataPoolListElement * const pc_El =
       C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(orc_Id);
 
-   if (pc_El != NULL)
+   if (pc_El != nullptr)
    {
       this->mpc_Ui->pc_WidgetThreshold->SetSuffix(pc_El->c_Unit.c_str());
    }
@@ -501,7 +501,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_DataElementChanged()
       const C_OscNodeDataPoolListElement * const pc_El =
          C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_NewId);
 
-      if (pc_El != NULL)
+      if (pc_El != nullptr)
       {
          C_OscNodeDataPoolContent c_Tmp = pc_El->c_MinValue;
          // set available initial value
@@ -622,7 +622,7 @@ bool C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::mh_CheckDataElementUseab
    const C_OscNodeDataPoolListElement * const pc_El =
       C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(orc_Id);
 
-   if (pc_El != NULL)
+   if (pc_El != nullptr)
    {
       if ((pc_El->GetArray() && (orc_Id.GetUseArrayElementIndex() == false)) == false)
       {
@@ -682,7 +682,7 @@ bool C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_CurrentElementIsString
       const C_OscNodeDataPoolListElement * const pc_El =
          C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_NewId);
 
-      if (pc_El != NULL)
+      if (pc_El != nullptr)
       {
          q_Retval = pc_El->q_InterpretAsString;
       }
@@ -708,7 +708,7 @@ C_OscNodeDataPoolContent C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_Ge
       const C_OscNodeDataPoolListElement * const pc_El =
          C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_NewId);
 
-      if (pc_El != NULL)
+      if (pc_El != nullptr)
       {
          c_Retval = pc_El->c_MinValue;
       }
@@ -827,7 +827,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_OnEditClicked()
       this->mu32_DataLoggerJobIndex);
 
    // Display trigger edit dialog if log job name is valid
-   if (pc_DataLoggerJob != NULL)
+   if (pc_DataLoggerJob != nullptr)
    {
       const QPointer<C_OgePopUpDialog> c_PopUpCatalog = new C_OgePopUpDialog(this, this);
 
@@ -844,7 +844,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_OnEditClicked()
          m_SetExpertTriggerCondition();
       }
 
-      if (c_PopUpCatalog != NULL)
+      if (c_PopUpCatalog != nullptr)
       {
          c_PopUpCatalog->HideOverlay();
          c_PopUpCatalog->deleteLater();
@@ -863,7 +863,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_BrowseDataElement(void
 
    // Single element selection only
    C_SyvDaPeDataElementBrowse * const pc_Dialog = new C_SyvDaPeDataElementBrowse(*c_New, 0U, false, false, false, true,
-                                                                                 true, true, NULL, false,
+                                                                                 true, true, nullptr, false,
                                                                                  this->mu32_NodeIndex, true);
 
    //Resize
@@ -896,7 +896,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_BrowseDataElement(void
                   rc_ConfiguredElementOptArrayId.u32_ElementIndex);
 
             // QString c_TriggerCondition = this->mpc_Ui->pc_TextEditTriggerCondition->toPlainText();
-            if (pc_Element != NULL)
+            if (pc_Element != nullptr)
             {
                const QString c_ElementName =
                   C_PuiSdUtil::h_GetNamespaceDatapoolElement(rc_ConfiguredElementOptArrayId);
@@ -910,7 +910,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_BrowseDataElement(void
       QApplication::restoreOverrideCursor();
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       pc_Dialog->SaveUserSettings();
       pc_Dialog->PrepareCleanUp();

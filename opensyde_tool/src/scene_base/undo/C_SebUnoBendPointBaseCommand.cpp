@@ -69,7 +69,7 @@ void C_SebUnoBendPointBaseCommand::m_DeleteBend(void)
 {
    const C_SebScene * const pc_Scene = dynamic_cast<const C_SebScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
       for (uint32_t u32_ItItem = 0; u32_ItItem < c_Items.size(); ++u32_ItItem)
@@ -94,7 +94,7 @@ void C_SebUnoBendPointBaseCommand::m_AddBend(void)
 {
    C_SebScene * const pc_Scene = dynamic_cast<C_SebScene * const>(mpc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
       for (uint32_t u32_ItItem = 0; u32_ItItem < c_Items.size(); ++u32_ItItem)

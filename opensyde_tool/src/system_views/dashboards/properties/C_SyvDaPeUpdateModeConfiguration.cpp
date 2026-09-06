@@ -161,7 +161,7 @@ void C_SyvDaPeUpdateModeConfiguration::m_ConfigureClicked(void) const
    }
 
    //Hide overlay after dialog is not relevant anymore
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();

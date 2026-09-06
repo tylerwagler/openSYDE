@@ -81,11 +81,11 @@ void C_GiBiConnectableItem::h_DistToLine(const QPointF & orc_LineStart, const QP
    //Check if line has length
    if (C_OscUtils::h_IsFloat64NearlyEqual(f64_LengthSquared, 0.0) == true)
    {
-      if (opf64_Distance != NULL)
+      if (opf64_Distance != nullptr)
       {
          h_DistToPoint(orc_LineStart, orc_EvPoint, *opf64_Distance);
       }
-      if (opc_Projection != NULL)
+      if (opc_Projection != nullptr)
       {
          *opc_Projection = orc_LineStart;
       }
@@ -99,18 +99,18 @@ void C_GiBiConnectableItem::h_DistToLine(const QPointF & orc_LineStart, const QP
       f64_Tmp1 = QPointF::dotProduct(orc_EvPoint - orc_LineStart, c_Diff);
       f64_Tmp1 = f64_Tmp1 / f64_LengthSquared;
       f64_RestrictPosition = std::max(0., std::min(1., f64_Tmp1));
-      if (opf64_RestrictPosition != NULL)
+      if (opf64_RestrictPosition != nullptr)
       {
          *opf64_RestrictPosition = f64_RestrictPosition;
       }
       //Calculate position of relative t value
       c_Projection = orc_LineStart + (f64_RestrictPosition * c_Diff);
-      if (opc_Projection != NULL)
+      if (opc_Projection != nullptr)
       {
          *opc_Projection = c_Projection;
       }
       //Calculate distance to projection
-      if (opf64_Distance != NULL)
+      if (opf64_Distance != nullptr)
       {
          h_DistToPoint(orc_EvPoint, c_Projection, *opf64_Distance);
       }

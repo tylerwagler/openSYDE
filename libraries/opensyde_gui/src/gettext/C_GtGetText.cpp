@@ -76,18 +76,18 @@ int32_t C_GtGetText::h_Initialize(const QString & orc_BasePath, const QString & 
       const QByteArray c_MoFileName = orc_MoFileName.toUtf8();
       const char_t * pcn_Return;
       pcn_Return = bindtextdomain(c_MoFileName.constData(), c_BasePath.constData());
-      if (pcn_Return != NULL)
+      if (pcn_Return != nullptr)
       {
          //set UTF-8 encoding
          pcn_Return = bind_textdomain_codeset(c_MoFileName.constData(), "UTF-8");
       }
 
-      if (pcn_Return != NULL)
+      if (pcn_Return != nullptr)
       {
          //set desired .mo file as active:
          pcn_Return = textdomain(c_MoFileName.constData());
       }
-      if (pcn_Return == NULL)
+      if (pcn_Return == nullptr)
       {
          s32_Return = stw::errors::C_NOACT;
       }

@@ -30,7 +30,7 @@ class C_OgeCbxIconOnly :
    Q_OBJECT
 
 public:
-   C_OgeCbxIconOnly(QWidget * const opc_Parent = NULL);
+   C_OgeCbxIconOnly(QWidget * const opc_Parent = nullptr);
    ~C_OgeCbxIconOnly(void) override;
 
 private:

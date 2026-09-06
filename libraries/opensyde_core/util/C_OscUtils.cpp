@@ -677,9 +677,9 @@ void C_OscUtils::h_RangeCheckFloat(float64_t & orf64_Value)
 
    \param[in]  orc_SourceFile            source file (full path required)
    \param[in]  orc_TargetFile            target file (        -"-       )
-   \param[out] opc_ErrorPath             if != NULL and the function fails:
+   \param[out] opc_ErrorPath             if != nullptr and the function fails:
                                           file path (source or target) that caused the problem
-   \param[out] opc_ErrorMessage          if != NULL and the function fails:
+   \param[out] opc_ErrorMessage          if != nullptr and the function fails:
                                           error message that caused the problem
 
    \return
@@ -699,7 +699,7 @@ int32_t C_OscUtils::h_CopyFile(const C_SclString & orc_SourceFile, const C_SclSt
       c_ErrorMessage = "Could not read \"" + orc_SourceFile + "\".";
       osc_write_log_error("Copying file", c_ErrorMessage);
       s32_Return = C_RD_WR;
-      if (opc_ErrorPath != NULL)
+      if (opc_ErrorPath != nullptr)
       {
          *opc_ErrorPath = orc_SourceFile;
       }
@@ -717,7 +717,7 @@ int32_t C_OscUtils::h_CopyFile(const C_SclString & orc_SourceFile, const C_SclSt
          c_ErrorMessage = "Could not write \"" + orc_TargetFile + "\".";
          osc_write_log_error("Copying file", c_ErrorMessage);
          s32_Return = C_RD_WR;
-         if (opc_ErrorPath != NULL)
+         if (opc_ErrorPath != nullptr)
          {
             *opc_ErrorPath = orc_TargetFile;
          }
@@ -734,7 +734,7 @@ int32_t C_OscUtils::h_CopyFile(const C_SclString & orc_SourceFile, const C_SclSt
             c_ErrorMessage = "Could not write stream of \"" + orc_TargetFile + "\".";
             osc_write_log_error("Copying file", c_ErrorMessage);
             s32_Return = C_RD_WR;
-            if (opc_ErrorPath != NULL)
+            if (opc_ErrorPath != nullptr)
             {
                *opc_ErrorPath = orc_TargetFile;
             }
@@ -743,7 +743,7 @@ int32_t C_OscUtils::h_CopyFile(const C_SclString & orc_SourceFile, const C_SclSt
    }
 
    if ((s32_Return != C_NO_ERR) &&
-       (opc_ErrorMessage != NULL))
+       (opc_ErrorMessage != nullptr))
    {
       *opc_ErrorMessage = c_ErrorMessage;
    }

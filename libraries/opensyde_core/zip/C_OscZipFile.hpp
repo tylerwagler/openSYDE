@@ -35,11 +35,11 @@ public:
    static int32_t h_CreateZipFile(const stw::scl::C_SclString & orc_SourcePath,
                                   const std::set<stw::scl::C_SclString> & orc_SupFiles,
                                   const stw::scl::C_SclString & orc_ZipArchivePath,
-                                  stw::scl::C_SclString * const opc_ErrorText = NULL);
+                                  stw::scl::C_SclString * const opc_ErrorText = nullptr);
 
    static int32_t h_UnpackZipFile(const stw::scl::C_SclString & orc_SourcePath,
                                   const stw::scl::C_SclString & orc_TargetUnzipPath,
-                                  stw::scl::C_SclString * const opc_ErrorText = NULL);
+                                  stw::scl::C_SclString * const opc_ErrorText = nullptr);
 
    static void h_AppendFilesRelative(std::set<stw::scl::C_SclString> & orc_Set,
                                      const std::vector<stw::scl::C_SclString> & orc_Files,
@@ -51,7 +51,7 @@ private:
    static int32_t mh_AddContentToZipFile(const stw::scl::C_SclString & orc_ZipArchivePath,
                                          const stw::scl::C_SclString & orc_ItemName, const char_t * const opcn_Content,
                                          const uint32_t ou32_ContentSize, const stw::scl::C_SclString & orc_ItemType,
-                                         stw::scl::C_SclString * const opc_ErrorText = NULL);
+                                         stw::scl::C_SclString * const opc_ErrorText = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

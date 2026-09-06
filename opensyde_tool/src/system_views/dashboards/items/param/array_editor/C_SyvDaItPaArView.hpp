@@ -33,7 +33,7 @@ class C_SyvDaItPaArView :
    Q_OBJECT
 
 public:
-   C_SyvDaItPaArView(QWidget * const opc_Parent = NULL);
+   C_SyvDaItPaArView(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaItPaArView(void) override;
    void SetElement(const uint32_t ou32_ElementIndex,
                    stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const opc_DataWidget,

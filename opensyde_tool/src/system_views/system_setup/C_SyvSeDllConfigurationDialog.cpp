@@ -255,7 +255,7 @@ void C_SyvSeDllConfigurationDialog::m_TestConnectionClicked(void) const
    c_MessageBox.SetHeading(C_GtGetText::h_GetText("PC CAN Interface configuration"));
    c_MessageBox.SetCustomMinHeight(180, 180);
 
-   if (pc_Dispatcher == NULL)
+   if (pc_Dispatcher == nullptr)
    {
       c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eERROR);
       c_MessageBox.SetDescription(QString(c_Error.c_str()));

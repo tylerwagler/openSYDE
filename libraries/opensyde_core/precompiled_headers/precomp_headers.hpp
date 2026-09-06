@@ -3,13 +3,8 @@
    \file
    \brief       openSYDE Core precompiled header (header)
 
-   To use this precompiled-header in a Qt project add the following to your .pro file:
-
-   CONFIG   += precompile_header
-   PRECOMPILED_HEADER = ../src/precomp_headers.h
-
-   Contains a list of header files to be pre-compiled.
-   see http://doc.qt.io/qt-5/qmake-precompiledheaders.html for details
+   Use target_precompile_headers() in CMake (requires CMake >= 3.16):
+      target_precompile_headers(<target> PRIVATE precomp_headers.hpp)
 
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */

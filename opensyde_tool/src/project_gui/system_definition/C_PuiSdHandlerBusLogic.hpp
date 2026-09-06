@@ -27,21 +27,21 @@ class C_PuiSdHandlerBusLogic :
 public:
    //Bus general
    uint32_t AddBusAndSort(stw::opensyde_core::C_OscSystemBus & orc_OscBus, const C_PuiSdBus & orc_UiBus,
-                          const QString * const opc_Name = NULL, const bool oq_AllowBusIdAdaption = true);
+                          const QString * const opc_Name = nullptr, const bool oq_AllowBusIdAdaption = true);
    std::map<stw::scl::C_SclString, bool> GetExistingBusNames(void) const;
    void SetUiBus(const uint32_t ou32_Index, const C_PuiSdBus & orc_Item);
    void SetOscBus(const uint32_t ou32_Index, const stw::opensyde_core::C_OscSystemBus & orc_Item);
    const C_PuiSdBus * GetUiBus(const uint32_t & oru32_Index) const;
    const stw::opensyde_core::C_OscSystemBus * GetOscBus(const uint32_t & oru32_Index) const;
    bool CheckBusNameAvailable(const stw::scl::C_SclString & orc_Name,
-                              const uint32_t * const opu32_BusIndexToSkip = NULL,
-                              std::vector<stw::scl::C_SclString> * const opc_ExistingNames = NULL) const;
+                              const uint32_t * const opu32_BusIndexToSkip = nullptr,
+                              std::vector<stw::scl::C_SclString> * const opc_ExistingNames = nullptr) const;
    void RemoveBus(const uint32_t ou32_BusIndex);
    bool CheckBusConflict(const uint32_t ou32_BusIndex) const;
-   int32_t CheckBusConflictDetailed(const uint32_t ou32_BusIndex, bool * const opq_NameConflict = NULL,
-                                    bool * const opq_NameEmpty = NULL, bool * const opq_IdInvalid = NULL,
-                                    std::vector<QString> * const opc_InvalidNodesForBitRate = NULL, std::vector<stw::opensyde_core::C_OscCanProtocol::E_Type> * const opc_InvalidProtocols =
-                                       NULL) const;
+   int32_t CheckBusConflictDetailed(const uint32_t ou32_BusIndex, bool * const opq_NameConflict = nullptr,
+                                    bool * const opq_NameEmpty = nullptr, bool * const opq_IdInvalid = nullptr,
+                                    std::vector<QString> * const opc_InvalidNodesForBitRate = nullptr, std::vector<stw::opensyde_core::C_OscCanProtocol::E_Type> * const opc_InvalidProtocols =
+                                       nullptr) const;
    uint32_t GetOscBusesSize(void) const;
    int32_t SetAutomaticBusRoutingSettings(const uint32_t ou32_BusIndex);
    int32_t SetAutomaticNodeInterfaceRoutingSettings(const uint32_t ou32_NodeIndex,
@@ -195,7 +195,7 @@ public:
    int32_t CountLocalMessages(const uint32_t & oru32_NodeIndex, uint32_t & oru32_MessageCount) const;
 
 protected:
-   C_PuiSdHandlerBusLogic(QObject * const opc_Parent = NULL);
+   C_PuiSdHandlerBusLogic(QObject * const opc_Parent = nullptr);
 
    void m_GetExistingMessageNamesProtocol(const uint32_t & oru32_NodeIndex,
                                           const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType,

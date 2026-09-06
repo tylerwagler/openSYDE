@@ -106,13 +106,13 @@ void C_GiSvDaProgressBarBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style
    if (this->ms32_Index >= 0)
    {
       const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
-      if ((pc_Dashboard != NULL) &&
-          (this->mpc_ProgressBarWidget != NULL))
+      if ((pc_Dashboard != nullptr) &&
+          (this->mpc_ProgressBarWidget != nullptr))
       {
          const C_PuiSvDbProgressBar * const pc_Box =
             pc_Dashboard->GetProgressBar(static_cast<uint32_t>(this->ms32_Index));
-         tgl_assert(pc_Box != NULL);
-         if (pc_Box != NULL)
+         tgl_assert(pc_Box != nullptr);
+         if (pc_Box != nullptr)
          {
             this->mpc_ProgressBarWidget->SetDisplayStyle(oe_Style, pc_Box->e_Type, pc_Box->e_Alignment);
          }
@@ -126,7 +126,7 @@ void C_GiSvDaProgressBarBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaProgressBarBase::ReInitializeSize(void)
 {
-   if (this->mpc_ProgressBarWidget != NULL)
+   if (this->mpc_ProgressBarWidget != nullptr)
    {
       this->mpc_ProgressBarWidget->AdjustFontToSize();
    }
@@ -140,14 +140,14 @@ void C_GiSvDaProgressBarBase::LoadData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbProgressBar * const pc_Box = pc_Dashboard->GetProgressBar(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          this->LoadSvBasicData(*pc_Box);
-         if (this->mpc_ProgressBarWidget != NULL)
+         if (this->mpc_ProgressBarWidget != nullptr)
          {
             this->mpc_ProgressBarWidget->SetDisplayStyle(pc_Box->e_DisplayStyle, pc_Box->e_Type, pc_Box->e_Alignment);
             this->mpc_ProgressBarWidget->SetShowMinMax(pc_Box->q_ShowMinMax);
@@ -165,11 +165,11 @@ void C_GiSvDaProgressBarBase::UpdateData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbProgressBar * const pc_Box = pc_Dashboard->GetProgressBar(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          C_PuiSvDbProgressBar c_Box = *pc_Box;
          this->UpdateSvBasicData(c_Box);
@@ -205,8 +205,8 @@ void C_GiSvDaProgressBarBase::UpdateShowValue(void)
    float64_t f64_UnscaledValue;
    QString c_ScaledValue;
 
-   if ((this->mpc_ProgressBarWidget != NULL) &&
-       (this->m_GetLastValue(0, c_ScaledValue, &f64_UnscaledValue, NULL) == C_NO_ERR))
+   if ((this->mpc_ProgressBarWidget != nullptr) &&
+       (this->m_GetLastValue(0, c_ScaledValue, &f64_UnscaledValue, nullptr) == C_NO_ERR))
    {
       const float64_t f64_Progress =
          ((f64_UnscaledValue - this->mf64_UnscaledMin) / (this->mf64_UnscaledMax - this->mf64_UnscaledMin)) * 2000000.0;
@@ -244,11 +244,11 @@ bool C_GiSvDaProgressBarBase::CallProperties(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbProgressBar * const pc_Box = pc_Dashboard->GetProgressBar(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          C_PuiSvDbNodeDataPoolListElementId c_ElementId;
          C_PuiSvDbDataElementScaling c_Scaling;
@@ -329,7 +329,7 @@ bool C_GiSvDaProgressBarBase::CallProperties(void)
             Q_EMIT this->SigDataElementsChanged();
          }
          Q_EMIT this->SigTriggerUpdateTransmissionConfiguration();
-         if (c_New != NULL)
+         if (c_New != nullptr)
          {
             c_New->HideOverlay();
             c_New->deleteLater();
@@ -353,7 +353,7 @@ void C_GiSvDaProgressBarBase::UpdateTypePe(const C_PuiSvDbProgressBar::E_Type oe
                                            const C_PuiSvDbProgressBar::E_Alignment oe_Alignment,
                                            const bool oq_ShowMinMax)
 {
-   if (this->mpc_ProgressBarWidget != NULL)
+   if (this->mpc_ProgressBarWidget != nullptr)
    {
       // helping value to remember the old type
       const C_PuiSvDbProgressBar::E_Type e_TypeOld = mpc_ProgressBarWidget->GetType();
@@ -396,7 +396,7 @@ void C_GiSvDaProgressBarBase::UpdateTypePe(const C_PuiSvDbProgressBar::E_Type oe
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaProgressBarBase::SetValuePe(const int32_t os32_Value)
 {
-   if (this->mpc_ProgressBarWidget != NULL)
+   if (this->mpc_ProgressBarWidget != nullptr)
    {
       this->mpc_ProgressBarWidget->SetValue(os32_Value, QString::number(os32_Value));
    }
@@ -412,7 +412,7 @@ void C_GiSvDaProgressBarBase::SetValuePe(const int32_t os32_Value)
 void C_GiSvDaProgressBarBase::UpdateTransparency(const uint32_t ou32_DataElementIndex, const int32_t os32_Value)
 {
    if ((ou32_DataElementIndex == 0) &&
-       (this->mpc_ProgressBarWidget != NULL))
+       (this->mpc_ProgressBarWidget != nullptr))
    {
       // Only one item is supported by this item
       this->mpc_ProgressBarWidget->SetTransparency(os32_Value);
@@ -422,7 +422,7 @@ void C_GiSvDaProgressBarBase::UpdateTransparency(const uint32_t ou32_DataElement
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaProgressBarBase::m_UpdateStaticValues(void)
 {
-   if (this->mpc_ProgressBarWidget != NULL)
+   if (this->mpc_ProgressBarWidget != nullptr)
    {
       C_PuiSvDbNodeDataPoolListElementId c_Id;
       C_PuiSvDbDataElementScaling c_Scaling;
@@ -434,7 +434,7 @@ void C_GiSvDaProgressBarBase::m_UpdateStaticValues(void)
          const C_OscNodeDataPoolListElement * const pc_Element =
             C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id.u32_NodeIndex, c_Id.u32_DataPoolIndex,
                                                                        c_Id.u32_ListIndex, c_Id.u32_ElementIndex);
-         if (pc_Element != NULL)
+         if (pc_Element != nullptr)
          {
             QString c_Text;
             float64_t f64_Value;

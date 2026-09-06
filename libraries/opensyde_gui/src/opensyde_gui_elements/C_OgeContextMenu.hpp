@@ -32,7 +32,7 @@ class C_OgeContextMenu :
    Q_OBJECT
 
 public:
-   C_OgeContextMenu(QWidget * const opc_Parent = NULL);
+   C_OgeContextMenu(QWidget * const opc_Parent = nullptr);
    ~C_OgeContextMenu() override;
 
 private:

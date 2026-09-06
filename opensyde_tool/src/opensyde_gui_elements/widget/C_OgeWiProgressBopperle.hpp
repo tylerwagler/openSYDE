@@ -30,7 +30,7 @@ class C_OgeWiProgressBopperle :
    Q_OBJECT
 
 public:
-   C_OgeWiProgressBopperle(QWidget * const opc_Parent = NULL);
+   C_OgeWiProgressBopperle(QWidget * const opc_Parent = nullptr);
 
    void SetMainBopperleColor(const QColor & orc_BorderColor, const QColor & orc_InnerColor);
    void HideMainBopperle(void);

@@ -57,8 +57,8 @@ void stw::tgl::TglGetDateTimeNow(C_TglDateTime & orc_DateTime)
    x_UnixTime = c_TimeSpec.tv_sec;
    pc_LocalTime = localtime_r(&x_UnixTime, &c_Time);
 
-   tgl_assert(pc_LocalTime != NULL);
-   if (pc_LocalTime != NULL)
+   tgl_assert(pc_LocalTime != nullptr);
+   if (pc_LocalTime != nullptr)
    {
       //Convert from tm format to TGL format
       orc_DateTime.mu16_Year  = static_cast<uint16_t>(pc_LocalTime->tm_year + 1900);

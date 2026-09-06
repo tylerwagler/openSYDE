@@ -451,7 +451,7 @@ void C_SdNdeDalLogJobsOvTableModel::m_FillLogJobsInfo(const std::vector<std::tup
       C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
    this->mc_LogJobsInfoAll.clear();
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_It = 0UL; u32_It < pc_Node->c_DataLoggerJobs.size(); ++u32_It)
       {

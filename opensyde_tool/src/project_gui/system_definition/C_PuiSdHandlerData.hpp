@@ -65,7 +65,7 @@ protected:
             C_PuiSdLastKnownHalElementId> mc_LastKnownHalcCrcs; ///< HAL data element info
    uint32_t mu32_CalculatedHashSystemDefinition;
 
-   C_PuiSdHandlerData(QObject * const opc_Parent = NULL);
+   C_PuiSdHandlerData(QObject * const opc_Parent = nullptr);
 
    static int32_t mh_SortMessagesByName(stw::opensyde_core::C_OscNode & orc_OscNode, C_PuiSdNode & orc_UiNode);
    uint32_t m_GetHashNode(const uint32_t ou32_NodeIndex) const;

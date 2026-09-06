@@ -31,10 +31,10 @@ class C_GiSvDaTextElement :
 public:
    C_GiSvDaTextElement(const uint32_t & oru32_ViewIndex, const uint32_t & oru32_DashboardIndex,
                        const int32_t & ors32_DataIndex, const uint64_t & oru64_Id, const bool oq_Editable,
-                       QGraphicsItem * const opc_Parent = NULL);
+                       QGraphicsItem * const opc_Parent = nullptr);
    C_GiSvDaTextElement(const uint32_t & oru32_ViewIndex, const uint32_t & oru32_DashboardIndex,
                        const int32_t & ors32_DataIndex, const uint64_t & oru64_Id,
-                       QGraphicsItem * const opc_Parent = NULL);
+                       QGraphicsItem * const opc_Parent = nullptr);
    void LoadData(void) override;
    void UpdateData(void) override;
    void DeleteData(void) override;

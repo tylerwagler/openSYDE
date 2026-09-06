@@ -65,19 +65,19 @@ void C_SdNdeDpListModelViewManager::Clear(void)
    for (uint32_t u32_ItModel = 0; u32_ItModel < this->mc_DataSetModels.size(); ++u32_ItModel)
    {
       delete (this->mc_DataSetModels[u32_ItModel]);
-      this->mc_DataSetModels[u32_ItModel] = NULL;
+      this->mc_DataSetModels[u32_ItModel] = nullptr;
    }
    this->mc_DataSetModels.clear();
    for (uint32_t u32_ItModel = 0; u32_ItModel < this->mc_ArrayEditModels.size(); ++u32_ItModel)
    {
       delete (this->mc_ArrayEditModels[u32_ItModel]);
-      this->mc_ArrayEditModels[u32_ItModel] = NULL;
+      this->mc_ArrayEditModels[u32_ItModel] = nullptr;
    }
    this->mc_ArrayEditModels.clear();
    for (uint32_t u32_ItModel = 0; u32_ItModel < this->mc_ElementModels.size(); ++u32_ItModel)
    {
       delete (this->mc_ElementModels[u32_ItModel]);
-      this->mc_ElementModels[u32_ItModel] = NULL;
+      this->mc_ElementModels[u32_ItModel] = nullptr;
    }
    this->mc_ElementModels.clear();
    this->mc_ArrayEditViews.clear();
@@ -101,12 +101,12 @@ C_SdNdeDpListDataSetView * C_SdNdeDpListModelViewManager::GetDataSetView(const u
                                                                          const uint32_t & oru32_DataPoolIndex,
                                                                          const uint32_t & oru32_ListIndex)
 {
-   C_SdNdeDpListDataSetView * pc_Retval = NULL;
+   C_SdNdeDpListDataSetView * pc_Retval = nullptr;
 
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_DataSetViews.size(); ++u32_ItView)
    {
       C_SdNdeDpListDataSetView * const pc_Tmp = this->mc_DataSetViews[u32_ItView];
-      if (pc_Tmp != NULL)
+      if (pc_Tmp != nullptr)
       {
          if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex))
          {
@@ -132,12 +132,12 @@ C_SdNdeDpListDataSetModel * C_SdNdeDpListModelViewManager::GetDataSetModel(const
                                                                            const uint32_t & oru32_DataPoolIndex,
                                                                            const uint32_t & oru32_ListIndex)
 {
-   C_SdNdeDpListDataSetModel * pc_Retval = NULL;
+   C_SdNdeDpListDataSetModel * pc_Retval = nullptr;
 
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_DataSetModels.size(); ++u32_ItView)
    {
       C_SdNdeDpListDataSetModel * const pc_Tmp = this->mc_DataSetModels[u32_ItView];
-      if (pc_Tmp != NULL)
+      if (pc_Tmp != nullptr)
       {
          if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex))
          {
@@ -146,7 +146,7 @@ C_SdNdeDpListDataSetModel * C_SdNdeDpListModelViewManager::GetDataSetModel(const
       }
    }
    //Create if necessary
-   if (pc_Retval == NULL)
+   if (pc_Retval == nullptr)
    {
       this->mc_DataSetModels.push_back(new C_SdNdeDpListDataSetModel());
       pc_Retval = this->mc_DataSetModels[this->mc_DataSetModels.size() - 1];
@@ -186,12 +186,12 @@ C_SdNdeDpListArrayEditView * C_SdNdeDpListModelViewManager::GetArrayEditView(con
                                                                              const C_SdNdeDpUtil::E_ArrayEditType & ore_ArrayEditType,
                                                                              const uint32_t & oru32_DataSetIndex)
 {
-   C_SdNdeDpListArrayEditView * pc_Retval = NULL;
+   C_SdNdeDpListArrayEditView * pc_Retval = nullptr;
 
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_ArrayEditViews.size(); ++u32_ItView)
    {
       C_SdNdeDpListArrayEditView * const pc_Tmp = this->mc_ArrayEditViews[u32_ItView];
-      if (pc_Tmp != NULL)
+      if (pc_Tmp != nullptr)
       {
          if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex, oru32_ElementIndex,
                             ore_ArrayEditType, oru32_DataSetIndex))
@@ -225,12 +225,12 @@ C_SdNdeDpListArrayEditModel * C_SdNdeDpListModelViewManager::GetArrayEditModel(c
                                                                                const C_SdNdeDpUtil::E_ArrayEditType & ore_ArrayEditType,
                                                                                const uint32_t & oru32_DataSetIndex)
 {
-   C_SdNdeDpListArrayEditModel * pc_Retval = NULL;
+   C_SdNdeDpListArrayEditModel * pc_Retval = nullptr;
 
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_ArrayEditModels.size(); ++u32_ItView)
    {
       C_SdNdeDpListArrayEditModel * const pc_Tmp = this->mc_ArrayEditModels[u32_ItView];
-      if (pc_Tmp != NULL)
+      if (pc_Tmp != nullptr)
       {
          if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex, oru32_ElementIndex,
                             ore_ArrayEditType, oru32_DataSetIndex))
@@ -240,7 +240,7 @@ C_SdNdeDpListArrayEditModel * C_SdNdeDpListModelViewManager::GetArrayEditModel(c
       }
    }
    //Create if necessary
-   if (pc_Retval == NULL)
+   if (pc_Retval == nullptr)
    {
       this->mc_ArrayEditModels.push_back(new C_SdNdeDpListArrayEditModel());
       pc_Retval = this->mc_ArrayEditModels[this->mc_ArrayEditModels.size() - 1];
@@ -272,12 +272,12 @@ C_SdNdeDpListTableView * C_SdNdeDpListModelViewManager::GetElementView(const uin
                                                                        const uint32_t & oru32_DataPoolIndex,
                                                                        const uint32_t & oru32_ListIndex)
 {
-   C_SdNdeDpListTableView * pc_Retval = NULL;
+   C_SdNdeDpListTableView * pc_Retval = nullptr;
 
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_ElementViews.size(); ++u32_ItView)
    {
       C_SdNdeDpListTableView * const pc_Tmp = this->mc_ElementViews[u32_ItView];
-      if (pc_Tmp != NULL)
+      if (pc_Tmp != nullptr)
       {
          if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex))
          {
@@ -303,12 +303,12 @@ C_SdNdeDpListTableModel * C_SdNdeDpListModelViewManager::GetElementModel(const u
                                                                          const uint32_t & oru32_DataPoolIndex,
                                                                          const uint32_t & oru32_ListIndex)
 {
-   C_SdNdeDpListTableModel * pc_Retval = NULL;
+   C_SdNdeDpListTableModel * pc_Retval = nullptr;
 
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_ElementModels.size(); ++u32_ItView)
    {
       C_SdNdeDpListTableModel * const pc_Tmp = this->mc_ElementModels[u32_ItView];
-      if (pc_Tmp != NULL)
+      if (pc_Tmp != nullptr)
       {
          if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex))
          {
@@ -317,7 +317,7 @@ C_SdNdeDpListTableModel * C_SdNdeDpListModelViewManager::GetElementModel(const u
       }
    }
    //Create if necessary
-   if (pc_Retval == NULL)
+   if (pc_Retval == nullptr)
    {
       this->mc_ElementModels.push_back(new C_SdNdeDpListTableModel());
       pc_Retval = this->mc_ElementModels[this->mc_ElementModels.size() - 1];
@@ -348,12 +348,12 @@ void C_SdNdeDpListModelViewManager::RegisterDataSetView(const uint32_t & oru32_N
                                                         const uint32_t & oru32_ListIndex,
                                                         C_SdNdeDpListDataSetView * const opc_View)
 {
-   const C_SdNdeDpListDataSetView * pc_Found = NULL;
+   const C_SdNdeDpListDataSetView * pc_Found = nullptr;
 
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_DataSetViews.size(); ++u32_ItView)
    {
       C_SdNdeDpListDataSetView * const pc_Tmp = this->mc_DataSetViews[u32_ItView];
-      if (pc_Tmp != NULL)
+      if (pc_Tmp != nullptr)
       {
          if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex))
          {
@@ -362,7 +362,7 @@ void C_SdNdeDpListModelViewManager::RegisterDataSetView(const uint32_t & oru32_N
          }
       }
    }
-   if (pc_Found == NULL)
+   if (pc_Found == nullptr)
    {
       this->mc_DataSetViews.push_back(opc_View);
    }
@@ -387,11 +387,11 @@ void C_SdNdeDpListModelViewManager::UnRegisterDataSetView(const uint32_t & oru32
       if (this->mc_DataSetViews[u32_ItView] == opc_View)
       {
          const C_SdNdeDpListDataSetView * const pc_Tmp = this->mc_DataSetViews[u32_ItView];
-         if (pc_Tmp != NULL)
+         if (pc_Tmp != nullptr)
          {
             if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex))
             {
-               this->mc_DataSetViews[u32_ItView] = NULL;
+               this->mc_DataSetViews[u32_ItView] = nullptr;
             }
          }
       }
@@ -419,12 +419,12 @@ void C_SdNdeDpListModelViewManager::RegisterArrayEditView(const uint32_t & oru32
                                                           const uint32_t & oru32_DataSetIndex,
                                                           C_SdNdeDpListArrayEditView * const opc_View)
 {
-   const C_SdNdeDpListArrayEditView * pc_Found = NULL;
+   const C_SdNdeDpListArrayEditView * pc_Found = nullptr;
 
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_ArrayEditViews.size(); ++u32_ItView)
    {
       C_SdNdeDpListArrayEditView * const pc_Tmp = this->mc_ArrayEditViews[u32_ItView];
-      if (pc_Tmp != NULL)
+      if (pc_Tmp != nullptr)
       {
          if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex, oru32_ElementIndex,
                             ore_ArrayEditType, oru32_DataSetIndex))
@@ -434,7 +434,7 @@ void C_SdNdeDpListModelViewManager::RegisterArrayEditView(const uint32_t & oru32
          }
       }
    }
-   if (pc_Found == NULL)
+   if (pc_Found == nullptr)
    {
       this->mc_ArrayEditViews.push_back(opc_View);
    }
@@ -466,12 +466,12 @@ void C_SdNdeDpListModelViewManager::UnRegisterArrayEditView(const uint32_t & oru
       if (this->mc_ArrayEditViews[u32_ItView] == opc_View)
       {
          const C_SdNdeDpListArrayEditView * const pc_Tmp = this->mc_ArrayEditViews[u32_ItView];
-         if (pc_Tmp != NULL)
+         if (pc_Tmp != nullptr)
          {
             if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex, oru32_ElementIndex,
                                ore_ArrayEditType, oru32_DataSetIndex))
             {
-               this->mc_ArrayEditViews[u32_ItView] = NULL;
+               this->mc_ArrayEditViews[u32_ItView] = nullptr;
             }
          }
       }
@@ -492,12 +492,12 @@ void C_SdNdeDpListModelViewManager::RegisterElementView(const uint32_t & oru32_N
                                                         const uint32_t & oru32_ListIndex,
                                                         C_SdNdeDpListTableView * const opc_View)
 {
-   const C_SdNdeDpListTableView  * pc_Found = NULL;
+   const C_SdNdeDpListTableView  * pc_Found = nullptr;
 
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_ElementViews.size(); ++u32_ItView)
    {
       C_SdNdeDpListTableView * const pc_Tmp = this->mc_ElementViews[u32_ItView];
-      if (pc_Tmp != NULL)
+      if (pc_Tmp != nullptr)
       {
          if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex))
          {
@@ -506,7 +506,7 @@ void C_SdNdeDpListModelViewManager::RegisterElementView(const uint32_t & oru32_N
          }
       }
    }
-   if (pc_Found == NULL)
+   if (pc_Found == nullptr)
    {
       this->mc_ElementViews.push_back(opc_View);
    }
@@ -531,11 +531,11 @@ void C_SdNdeDpListModelViewManager::UnRegisterElementView(const uint32_t & oru32
       if (this->mc_ElementViews[u32_ItView] == opc_View)
       {
          const C_SdNdeDpListTableView * const pc_Tmp = this->mc_ElementViews[u32_ItView];
-         if (pc_Tmp != NULL)
+         if (pc_Tmp != nullptr)
          {
             if (pc_Tmp->Equals(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex))
             {
-               this->mc_ElementViews[u32_ItView] = NULL;
+               this->mc_ElementViews[u32_ItView] = nullptr;
             }
          }
       }
@@ -616,7 +616,7 @@ void C_SdNdeDpListModelViewManager::m_OnDataSetDataChange(const uint32_t & oru32
    C_SdNdeDpListDataSetView  * const pc_View = this->GetDataSetView(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                     oru32_DataPoolListIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       pc_View->OnDataChange(oru32_DataPoolListDataSetIndex, orc_NewData, ore_DataChangeType);
    }
@@ -639,7 +639,7 @@ void C_SdNdeDpListModelViewManager::m_OnDataSetColumnCountChange(const uint32_t 
    C_SdNdeDpListDataSetView  * const pc_View = this->GetDataSetView(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                     oru32_DataPoolListIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       pc_View->OnColumnCountChange(ors32_NewColumnCount);
    }
@@ -660,7 +660,7 @@ void C_SdNdeDpListModelViewManager::m_OnElementErrorChangePossible(const uint32_
    C_SdNdeDpListTableView  * const pc_View = this->GetElementView(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                   oru32_DataPoolListIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       pc_View->OnErrorChangePossible();
    }
@@ -681,7 +681,7 @@ void C_SdNdeDpListModelViewManager::m_OnElementSizeChangePossible(const uint32_t
    C_SdNdeDpListTableView  * const pc_View = this->GetElementView(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                   oru32_DataPoolListIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       pc_View->OnSizeChangePossible();
    }
@@ -711,7 +711,7 @@ void C_SdNdeDpListModelViewManager::m_OnElementDataChange(const uint32_t & oru32
    C_SdNdeDpListTableView  * const pc_View = this->GetElementView(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                   oru32_DataPoolListIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       pc_View->OnDataChangeElements(oru32_DataPoolListElementIndex, orc_NewData, ore_DataChangeType, oru32_ArrayIndex,
                                     ors32_DataSetIndex);
@@ -741,7 +741,7 @@ void C_SdNdeDpListModelViewManager::m_OnArrayEditErrorChangePossible(const uint3
                                                                         oru32_ListIndex, oru32_ElementIndex,
                                                                         ore_ArrayEditType, oru32_DataSetIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       pc_View->OnErrorChangePossible();
    }
@@ -774,7 +774,7 @@ void C_SdNdeDpListModelViewManager::m_OnArrayEditDataChange(const uint32_t & oru
                                                                         oru32_ListIndex, oru32_ElementIndex,
                                                                         ore_ArrayEditType, oru32_DataSetIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       pc_View->OnDataChange(oru32_ArrayElementIndex, orc_NewData);
    }

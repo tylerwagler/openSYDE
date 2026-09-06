@@ -161,7 +161,7 @@ void C_SyvDaPeToggle::m_UpdatePreview(void)
    //Also include the fix offset to the right
    const float64_t f64_IconOffset = C_SyvDaPeBase::h_GetFixIconOffset();
    const QSize c_ViewSize = C_SyvDaPeBase::h_GetSceneViewSize();
-   C_GiSvDaToggleBase * const pc_Item = new C_GiSvDaToggleBase(0UL, 0UL, -1L, 0ULL, NULL);
+   C_GiSvDaToggleBase * const pc_Item = new C_GiSvDaToggleBase(0UL, 0UL, -1L, 0ULL, nullptr);
    const QSizeF c_ITEM_SIZE(150.0, 100.0);
    // 20 =  Vertical center adjustment
    const QPointF c_ItemPos(

@@ -158,7 +158,7 @@ void C_TblTreDataElementItem::ConfigureDynamicName(const bool oq_ShowOnlyWriteEl
       }
    }
 
-   if (opc_AlreasyUsedElements != NULL)
+   if (opc_AlreasyUsedElements != nullptr)
    {
       // Check for already used elements is active
       // Check if element is already used

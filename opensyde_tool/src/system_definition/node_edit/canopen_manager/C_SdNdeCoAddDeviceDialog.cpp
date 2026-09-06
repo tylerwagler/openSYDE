@@ -395,7 +395,7 @@ bool C_SdNdeCoAddDeviceDialog::m_CheckIfNodeHasCanOpenManager(const uint32_t ou3
          const C_OscNode * const pc_ManagerNodeToCheck =
             C_PuiSdHandler::h_GetInstance()->GetCanOpenManagerNodeOnBus(
                c_ComInterfacesIter->u32_BusIndex);
-         if (pc_ManagerNodeToCheck != NULL)
+         if (pc_ManagerNodeToCheck != nullptr)
          {
             // Ok, we found a manager on this bus, let's check if the manager has our current device.
             // An additional check if current device is a manager device is not needed here because of

@@ -58,11 +58,11 @@ C_CanDispatcher * C_OscCanAdapterFactory::h_CreateAdapter(const C_OscCanAdapterC
    orc_ErrorDescription = "";
 
    std::unique_ptr< ::can::ICanBackend> c_Backend = ::can::ICanBackend::create(orc_Config.e_BackendKind);
-   if (c_Backend == NULL)
+   if (c_Backend == nullptr)
    {
       orc_ErrorDescription = static_cast<C_SclString>("Backend not compiled in: ") +
                              ::can::backendKindToString(orc_Config.e_BackendKind).c_str();
-      return NULL;
+      return nullptr;
    }
 
    ::can::ChannelConfig c_LibConfig;

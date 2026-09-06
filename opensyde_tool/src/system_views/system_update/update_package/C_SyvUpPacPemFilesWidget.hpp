@@ -31,7 +31,7 @@ class C_SyvUpPacPemFilesWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvUpPacPemFilesWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvUpPacPemFilesWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvUpPacPemFilesWidget(void) override;
    void UpdatePemFileWidget(void);
    int32_t GetFilesCount(void) const;

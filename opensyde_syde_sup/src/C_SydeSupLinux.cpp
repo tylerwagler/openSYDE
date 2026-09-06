@@ -135,7 +135,7 @@ C_SydeSup::E_Result C_SydeSupLinux::UpdateTaskStart(void)
       mu32_InfoIndex = 0U;
       mac_UpdateInfo.SetLength(0U);
 
-      s32_Ret = pthread_create(&mx_UpdateTaskHandle, NULL, &mh_UpdateTask, this);
+      s32_Ret = pthread_create(&mx_UpdateTaskHandle, nullptr, &mh_UpdateTask, this);
       if (s32_Ret == 0)
       {
          e_Result = eOK;
@@ -177,7 +177,7 @@ C_SydeSup::E_Result C_SydeSupLinux::UpdateTaskCheckResult(uint8_t & oru8_Progres
       else
       {
          // Update task has finished
-         (void)pthread_join(mx_UpdateTaskHandle, NULL);
+         (void)pthread_join(mx_UpdateTaskHandle, nullptr);
          mq_UpdateTaskRunning = false;
          e_Result = me_UpdateTaskResult;
       }
@@ -230,7 +230,7 @@ void * C_SydeSupLinux::mh_UpdateTask(void * const opv_Arg)
 
    pc_This->me_UpdateTaskResult = pc_This->Update();
 
-   return NULL;
+   return nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

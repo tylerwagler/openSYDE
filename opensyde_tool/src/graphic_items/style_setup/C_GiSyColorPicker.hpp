@@ -26,7 +26,7 @@ class C_GiSyColorPicker :
    Q_OBJECT
 
 public:
-   C_GiSyColorPicker(QWidget * const opc_Parent = NULL);
+   C_GiSyColorPicker(QWidget * const opc_Parent = nullptr);
    ~C_GiSyColorPicker(void) override;
 
    void SetCircleVisible(const bool oq_Visible);

@@ -245,7 +245,7 @@ void C_SyvUpPacSecureArchiveDialog::m_InitPwdLineEdit(void)
    this->mpc_Ui->pc_LineEditPassword->setEchoMode(QLineEdit::Password);
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LineEditPassword, "NoRightBorder", true);
    this->mpc_Ui->pc_PubTogglePwd->setIcon(QIcon("://images/main_page_and_navi_bar/Icon_password_show.svg"));
-   this->mpc_Ui->pc_PubTogglePwd->setMenu(NULL);
+   this->mpc_Ui->pc_PubTogglePwd->setMenu(nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

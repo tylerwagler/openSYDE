@@ -39,7 +39,7 @@ class C_SdNdeDpListTableView :
    Q_OBJECT
 
 public:
-   C_SdNdeDpListTableView(QWidget * const opc_Parent = NULL);
+   C_SdNdeDpListTableView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpListTableView(void) override;
    void SetList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                 const uint32_t & oru32_ListIndex);

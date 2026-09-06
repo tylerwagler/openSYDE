@@ -102,11 +102,11 @@ void C_GiSvDaLabelBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_St
    if (this->ms32_Index >= 0)
    {
       const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
-      if (pc_Dashboard != NULL)
+      if (pc_Dashboard != nullptr)
       {
          const C_PuiSvDbLabel * const pc_Box = pc_Dashboard->GetLabel(static_cast<uint32_t>(this->ms32_Index));
-         tgl_assert(pc_Box != NULL);
-         if (pc_Box != NULL)
+         tgl_assert(pc_Box != nullptr);
+         if (pc_Box != nullptr)
          {
             this->mpc_LabelWidget->SetDisplayStyle(pc_Box->e_Type, pc_Box->q_ShowCaption, pc_Box->q_ShowUnit);
          }
@@ -122,7 +122,7 @@ void C_GiSvDaLabelBase::SetDisplayStyle(const C_PuiSvDbWidgetBase::E_Style oe_St
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaLabelBase::ReInitializeSize(void)
 {
-   if (this->mpc_LabelWidget != NULL)
+   if (this->mpc_LabelWidget != nullptr)
    {
       this->mpc_LabelWidget->AdjustFontToSize();
    }
@@ -136,14 +136,14 @@ void C_GiSvDaLabelBase::LoadData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbLabel * const pc_Box = pc_Dashboard->GetLabel(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          this->LoadSvBasicData(*pc_Box);
-         if (this->mpc_LabelWidget != NULL)
+         if (this->mpc_LabelWidget != nullptr)
          {
             m_UpdateCaption(*pc_Box);
             this->mpc_LabelWidget->SetDisplayStyle(pc_Box->e_Type, pc_Box->q_ShowCaption, pc_Box->q_ShowUnit);
@@ -161,11 +161,11 @@ void C_GiSvDaLabelBase::UpdateData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbLabel * const pc_Box = pc_Dashboard->GetLabel(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          C_PuiSvDbLabel c_Box = *pc_Box;
          this->UpdateSvBasicData(c_Box);
@@ -198,10 +198,10 @@ void C_GiSvDaLabelBase::DeleteData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaLabelBase::UpdateShowValue(void)
 {
-   if (this->mpc_LabelWidget != NULL)
+   if (this->mpc_LabelWidget != nullptr)
    {
       QString c_Value;
-      if (this->m_GetLastValue(0UL, c_Value, NULL, NULL) == C_NO_ERR)
+      if (this->m_GetLastValue(0UL, c_Value, nullptr, nullptr) == C_NO_ERR)
       {
          this->mpc_LabelWidget->SetValue(c_Value);
       }
@@ -223,7 +223,7 @@ void C_GiSvDaLabelBase::UpdateShowValue(void)
 void C_GiSvDaLabelBase::UpdateTransparency(const uint32_t ou32_DataElementIndex, const int32_t os32_Value)
 {
    C_GiSvDaRectBaseGroup::UpdateTransparency(ou32_DataElementIndex, os32_Value);
-   if (this->mpc_LabelWidget != NULL)
+   if (this->mpc_LabelWidget != nullptr)
    {
       this->mpc_LabelWidget->ResetFont();
    }
@@ -245,7 +245,7 @@ void C_GiSvDaLabelBase::ConnectionActiveChanged(const bool oq_Active, const QMap
 
       if (this->GetDataPoolElementScaling(0, c_Scaling) == C_NO_ERR)
       {
-         if (this->mpc_LabelWidget != NULL)
+         if (this->mpc_LabelWidget != nullptr)
          {
             this->mpc_LabelWidget->SetUnit(c_Scaling.c_Unit);
          }
@@ -265,11 +265,11 @@ bool C_GiSvDaLabelBase::CallProperties(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbLabel * const pc_Box = pc_Dashboard->GetLabel(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          C_PuiSvDbNodeDataPoolListElementId c_ElementId;
          C_PuiSvDbDataElementScaling c_Scaling;
@@ -354,7 +354,7 @@ bool C_GiSvDaLabelBase::CallProperties(void)
             Q_EMIT this->SigDataElementsChanged();
          }
          Q_EMIT this->SigTriggerUpdateTransmissionConfiguration();
-         if (c_New != NULL)
+         if (c_New != nullptr)
          {
             c_New->HideOverlay();
             c_New->deleteLater();
@@ -377,7 +377,7 @@ bool C_GiSvDaLabelBase::CallProperties(void)
 void C_GiSvDaLabelBase::UpdateTypePe(const C_PuiSvDbLabel::E_Type oe_Type, const bool oq_ShowCaption,
                                      const bool oq_ShowUnit)
 {
-   if (this->mpc_LabelWidget != NULL)
+   if (this->mpc_LabelWidget != nullptr)
    {
       this->mpc_LabelWidget->SetDisplayStyle(oe_Type, oq_ShowCaption, oq_ShowUnit);
    }
@@ -393,7 +393,7 @@ void C_GiSvDaLabelBase::UpdateTypePe(const C_PuiSvDbLabel::E_Type oe_Type, const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaLabelBase::SetCaptionPe(const QString & orc_Value) const
 {
-   if (this->mpc_LabelWidget != NULL)
+   if (this->mpc_LabelWidget != nullptr)
    {
       this->mpc_LabelWidget->SetCaption(orc_Value);
    }
@@ -409,7 +409,7 @@ void C_GiSvDaLabelBase::SetCaptionPe(const QString & orc_Value) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaLabelBase::SetValuePe(const QString & orc_Value) const
 {
-   if (this->mpc_LabelWidget != NULL)
+   if (this->mpc_LabelWidget != nullptr)
    {
       this->mpc_LabelWidget->SetValue(orc_Value);
    }
@@ -425,7 +425,7 @@ void C_GiSvDaLabelBase::SetValuePe(const QString & orc_Value) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaLabelBase::SetUnitPe(const QString & orc_Value)
 {
-   if (this->mpc_LabelWidget != NULL)
+   if (this->mpc_LabelWidget != nullptr)
    {
       this->mpc_LabelWidget->SetUnit(orc_Value);
    }
@@ -439,7 +439,7 @@ void C_GiSvDaLabelBase::SetUnitPe(const QString & orc_Value)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaLabelBase::m_UpdateCaption(const C_PuiSvDbLabel & orc_Data) const
 {
-   if (this->mpc_LabelWidget != NULL)
+   if (this->mpc_LabelWidget != nullptr)
    {
       if ((orc_Data.c_DataPoolElementsConfig.size() > 0UL) &&
           ((orc_Data.c_Caption.compare("VALUE-LABEL", Qt::CaseInsensitive) == 0) ||
@@ -457,10 +457,10 @@ void C_GiSvDaLabelBase::m_UpdateCaption(const C_PuiSvDbLabel & orc_Data) const
                C_PuiSdHandler::h_GetInstance()->GetOscDataPool(rc_CurItem.c_ElementId.u32_NodeIndex,
                                                                rc_CurItem.c_ElementId.u32_DataPoolIndex);
 
-            if (pc_Element != NULL)
+            if (pc_Element != nullptr)
             {
                QString c_Caption;
-               if (pc_Datapool != NULL)
+               if (pc_Datapool != nullptr)
                {
                   if ((pc_Datapool->e_Type == C_OscNodeDataPool::eHALC) ||
                       (pc_Datapool->e_Type == C_OscNodeDataPool::eHALC_NVM))
@@ -509,7 +509,7 @@ void C_GiSvDaLabelBase::m_UpdateCaption(const C_PuiSvDbLabel & orc_Data) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaLabelBase::m_UpdateStaticValue(const stw::opensyde_gui_logic::C_PuiSvDbLabel & orc_Label)
 {
-   if (this->mpc_LabelWidget != NULL)
+   if (this->mpc_LabelWidget != nullptr)
    {
       QString c_Text = QString::number(0.0);
 
@@ -523,7 +523,7 @@ void C_GiSvDaLabelBase::m_UpdateStaticValue(const stw::opensyde_gui_logic::C_Pui
                                                                           rc_Config.c_ElementId.u32_DataPoolIndex,
                                                                           rc_Config.c_ElementId.u32_ListIndex,
                                                                           rc_Config.c_ElementId.u32_ElementIndex);
-            if (pc_Element != NULL)
+            if (pc_Element != nullptr)
             {
                float64_t f64_Value;
                uint32_t u32_Index;

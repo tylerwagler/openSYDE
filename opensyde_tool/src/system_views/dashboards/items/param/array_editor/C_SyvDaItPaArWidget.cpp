@@ -83,14 +83,14 @@ C_SyvDaItPaArWidget::~C_SyvDaItPaArWidget(void)
 void C_SyvDaItPaArWidget::InitStaticNames(void)
 {
    int32_t s32_DataSetIndex = -1;
-   const C_PuiSvDbNodeDataPoolListElementId * pc_Id = NULL;
+   const C_PuiSvDbNodeDataPoolListElementId * pc_Id = nullptr;
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          if (this->mu32_ElementIndex < pc_Param->c_DataPoolElementsConfig.size())
          {
@@ -104,7 +104,7 @@ void C_SyvDaItPaArWidget::InitStaticNames(void)
          }
       }
    }
-   if (pc_Id != NULL)
+   if (pc_Id != nullptr)
    {
       const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
          pc_Id->u32_NodeIndex, pc_Id->u32_DataPoolIndex);
@@ -113,7 +113,7 @@ void C_SyvDaItPaArWidget::InitStaticNames(void)
             pc_Id->u32_NodeIndex, pc_Id->u32_DataPoolIndex, pc_Id->u32_ListIndex, pc_Id->u32_ElementIndex);
 
       //Build title
-      if ((pc_DataPool != NULL) && (pc_Element != NULL))
+      if ((pc_DataPool != nullptr) && (pc_Element != nullptr))
       {
          QString c_EditType;
          const QString c_Type = C_PuiSdHandler::h_GetElementTypeName(pc_DataPool->e_Type);

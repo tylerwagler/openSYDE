@@ -31,7 +31,7 @@ class C_OgePubStandard :
    Q_OBJECT
 
 public:
-   explicit C_OgePubStandard(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubStandard(QWidget * const opc_Parent = nullptr);
 
 protected:
    void m_SetPenColorForFont(QPainter * const opc_Painter) const;

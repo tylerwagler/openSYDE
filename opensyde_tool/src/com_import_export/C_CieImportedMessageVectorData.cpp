@@ -58,7 +58,7 @@ C_CieImportedMessageVectorData::C_CieImportedMessageVectorData(
    c_UiMessageData(orc_UiMessageData),
    c_UiSignalData(orc_UiSignalData)
 {
-   if (opc_WarningMessagesPerMessage != NULL)
+   if (opc_WarningMessagesPerMessage != nullptr)
    {
       c_WarningMessagesPerMessage = *opc_WarningMessagesPerMessage;
    }

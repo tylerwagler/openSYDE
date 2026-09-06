@@ -32,7 +32,7 @@ class C_SyvDaDashboardInteraction :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaDashboardInteraction(QWidget * const opc_Parent = NULL);
+   explicit C_SyvDaDashboardInteraction(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaDashboardInteraction(void) override;
 
    void InitStaticNames(void) const;

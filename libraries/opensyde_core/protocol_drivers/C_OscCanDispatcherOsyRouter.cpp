@@ -299,8 +299,8 @@ void C_OscCanDispatcherOsyRouter::mh_OsyTunnelCanMessageReceived(void * const op
    C_OscCanDispatcherOsyRouter * const pc_Dispatcher =
       reinterpret_cast<C_OscCanDispatcherOsyRouter *>(opv_Instance);
 
-   tgl_assert(pc_Dispatcher != NULL);
-   if (pc_Dispatcher != NULL)
+   tgl_assert(pc_Dispatcher != nullptr);
+   if (pc_Dispatcher != nullptr)
    {
       pc_Dispatcher->m_OsyTunnelCanMessageReceived(ou8_Channel, orc_CanMessage);
    }

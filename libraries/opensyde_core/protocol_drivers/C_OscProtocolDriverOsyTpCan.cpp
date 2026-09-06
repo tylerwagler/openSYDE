@@ -65,7 +65,7 @@ C_OscProtocolDriverOsyTpCan::C_ServiceState::C_ServiceState(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscProtocolDriverOsyTpCan::C_OscProtocolDriverOsyTpCan(const uint16_t ou16_MaxServiceQueueSize) :
    C_OscProtocolDriverOsyTpBase(ou16_MaxServiceQueueSize),
-   mpc_CanDispatcher(NULL),
+   mpc_CanDispatcher(nullptr),
    mu16_DispatcherClientHandle(0U)
 {
 }
@@ -79,11 +79,11 @@ C_OscProtocolDriverOsyTpCan::C_OscProtocolDriverOsyTpCan(const uint16_t ou16_Max
 C_OscProtocolDriverOsyTpCan::~C_OscProtocolDriverOsyTpCan(void)
 {
    //remove us from dispatcher queue:
-   if (mpc_CanDispatcher != NULL)
+   if (mpc_CanDispatcher != nullptr)
    {
       //ignore return value; nothing we can do about it
       (void)mpc_CanDispatcher->RemoveClient(mu16_DispatcherClientHandle);
-      mpc_CanDispatcher = NULL;
+      mpc_CanDispatcher = nullptr;
    }
 }
 
@@ -619,7 +619,7 @@ int32_t C_OscProtocolDriverOsyTpCan::m_BroadcastSendDiagnosticSessionControl(con
 {
    int32_t s32_Return;
 
-   if (mpc_CanDispatcher == NULL)
+   if (mpc_CanDispatcher == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -750,7 +750,7 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleBroadcastSetNodeIdBySerialNumberRes
                m_LogWarningWithHeader("Broadcast: Negative response received. Probably a node with an other SN.",
                                       TGL_UTIL_FUNC_ID);
             }
-            if (opu8_NrCode != NULL)
+            if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = c_Response.au8_Data[3];
             }
@@ -808,7 +808,7 @@ int32_t C_OscProtocolDriverOsyTpCan::Cycle(void)
 {
    int32_t s32_ReturnFunc = C_NO_ERR;
 
-   if (mpc_CanDispatcher == NULL)
+   if (mpc_CanDispatcher == nullptr)
    {
       s32_ReturnFunc = C_CONFIG;
    }
@@ -1038,7 +1038,7 @@ int32_t C_OscProtocolDriverOsyTpCan::SetNodeIdentifiers(const C_OscProtocolDrive
    int32_t s32_Return;
 
    s32_Return = C_OscProtocolDriverOsyTpBase::SetNodeIdentifiers(orc_ClientIdentifier, orc_ServerIdentifier);
-   if ((s32_Return == C_NO_ERR) && (mpc_CanDispatcher != NULL))
+   if ((s32_Return == C_NO_ERR) && (mpc_CanDispatcher != nullptr))
    {
       //Clear Rx queue; we are no longer interested in that old stuff:
       mpc_CanDispatcher->ClearQueue(mu16_DispatcherClientHandle);
@@ -1084,7 +1084,7 @@ int32_t C_OscProtocolDriverOsyTpCan::SetNodeIdentifiersForBroadcasts(
    c_ServerId.u8_NodeIdentifier = C_OscProtocolDriverOsyNode::mhu8_NODE_ID_BROADCASTS;
 
    s32_Return = C_OscProtocolDriverOsyTpBase::SetNodeIdentifiers(orc_ClientIdentifier, c_ServerId);
-   if ((s32_Return == C_NO_ERR) && (mpc_CanDispatcher != NULL))
+   if ((s32_Return == C_NO_ERR) && (mpc_CanDispatcher != nullptr))
    {
       //Clear Rx queue; we are no longer interested in that old stuff:
       mpc_CanDispatcher->ClearQueue(mu16_DispatcherClientHandle);
@@ -1236,7 +1236,7 @@ int32_t C_OscProtocolDriverOsyTpCan::SetDispatcher(C_CanDispatcher * const opc_D
    int32_t s32_Return = C_NO_ERR;
 
    //was there a dispatcher installed previously ?
-   if (mpc_CanDispatcher != NULL)
+   if (mpc_CanDispatcher != nullptr)
    {
       //yes -> unregister; ignore return value (nothing much we can do ...)
       (void)mpc_CanDispatcher->RemoveClient(mu16_DispatcherClientHandle);
@@ -1245,7 +1245,7 @@ int32_t C_OscProtocolDriverOsyTpCan::SetDispatcher(C_CanDispatcher * const opc_D
    mpc_CanDispatcher = opc_Dispatcher;
 
    //register with new dispatcher:
-   if (mpc_CanDispatcher != NULL)
+   if (mpc_CanDispatcher != nullptr)
    {
       s32_Return = mpc_CanDispatcher->RegisterClient(mu16_DispatcherClientHandle);
       if (s32_Return != C_NO_ERR)
@@ -1295,7 +1295,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
 
    orc_Responses.clear();
    orc_ExtendedResponses.clear();
-   if (mpc_CanDispatcher == NULL)
+   if (mpc_CanDispatcher == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -1690,7 +1690,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastRequestProgramming(
    int32_t s32_Return;
 
    orc_Results.clear();
-   if (mpc_CanDispatcher == NULL)
+   if (mpc_CanDispatcher == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -1808,7 +1808,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
 {
    int32_t s32_Return;
 
-   if (mpc_CanDispatcher == NULL)
+   if (mpc_CanDispatcher == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -1926,7 +1926,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumberExtended(
 {
    int32_t s32_Return;
 
-   if (mpc_CanDispatcher == NULL)
+   if (mpc_CanDispatcher == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -2050,7 +2050,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastEcuReset(const uint8_t ou8_ResetTy
 {
    int32_t s32_Return;
 
-   if (mpc_CanDispatcher == NULL)
+   if (mpc_CanDispatcher == nullptr)
    {
       s32_Return = C_CONFIG;
    }
@@ -2118,7 +2118,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSendEnterDefaultSession(void) cons
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsyTpCan::ClearDispatcherQueue(void)
 {
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       this->mpc_CanDispatcher->ClearQueue(this->mu16_DispatcherClientHandle);
    }

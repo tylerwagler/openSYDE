@@ -31,7 +31,7 @@ class C_SyvDaPeUpdateModeTreeWidget :
    Q_OBJECT
 
 public:
-   C_SyvDaPeUpdateModeTreeWidget(QWidget * const opc_Parent = NULL);
+   C_SyvDaPeUpdateModeTreeWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaPeUpdateModeTreeWidget(void) override;
 
    void Init(const uint32_t ou32_ViewIndex);

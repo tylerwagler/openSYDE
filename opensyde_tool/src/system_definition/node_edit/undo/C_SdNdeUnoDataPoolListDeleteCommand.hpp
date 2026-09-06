@@ -31,7 +31,7 @@ public:
    C_SdNdeUnoDataPoolListDeleteCommand(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                        stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
                                        const std::vector<uint32_t> & orc_Indices,
-                                       QUndoCommand * const opc_Parent = NULL);
+                                       QUndoCommand * const opc_Parent = nullptr);
    void redo(void) override;
    void undo(void) override;
 };

@@ -41,7 +41,7 @@ C_FlaSenDcBasicSequences::C_FlaSenDcBasicSequences(void) :
    QObject(),
    C_OscDcBasicSequences(),
    me_Sequence(eNOT_ACTIVE),
-   mpc_CanDispatcher(NULL),
+   mpc_CanDispatcher(nullptr),
    mu32_FlashloaderResetWaitTime(1000),
    mu8_CurrentNodeId(0),
    mu8_NewNodeId(0),
@@ -58,7 +58,7 @@ C_FlaSenDcBasicSequences::C_FlaSenDcBasicSequences(void) :
 //----------------------------------------------------------------------------------------------------------------------
 C_FlaSenDcBasicSequences::~C_FlaSenDcBasicSequences(void) noexcept
 {
-   if (this->mpc_Thread != NULL)
+   if (this->mpc_Thread != nullptr)
    {
       if (this->mpc_Thread->isRunning() == true)
       {
@@ -74,17 +74,17 @@ C_FlaSenDcBasicSequences::~C_FlaSenDcBasicSequences(void) noexcept
          }
       }
       delete mpc_Thread;
-      mpc_Thread = NULL;
+      mpc_Thread = nullptr;
    }
 
    this->PrepareForDestruction();
    try
    {
-      if (this->mpc_CanDispatcher != NULL)
+      if (this->mpc_CanDispatcher != nullptr)
       {
          (void)this->mpc_CanDispatcher->CAN_Exit();
          delete this->mpc_CanDispatcher;
-         this->mpc_CanDispatcher = NULL;
+         this->mpc_CanDispatcher = nullptr;
       }
    }
    catch (...)
@@ -108,11 +108,11 @@ int32_t C_FlaSenDcBasicSequences::InitDcSequences(const C_SclString & orc_CanCha
    int32_t s32_Return;
    const C_SclString c_LogActivity = "Initialization";
 
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       (void)this->mpc_CanDispatcher->CAN_Exit();
       delete this->mpc_CanDispatcher;
-      this->mpc_CanDispatcher = NULL;
+      this->mpc_CanDispatcher = nullptr;
    }
 
    C_OscCanAdapterConfig c_Config = C_OscCanAdapterConfig::h_GetPlatformDefault();
@@ -128,7 +128,7 @@ int32_t C_FlaSenDcBasicSequences::InitDcSequences(const C_SclString & orc_CanCha
 
    C_SclString c_Error;
    this->mpc_CanDispatcher = C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
-   if (this->mpc_CanDispatcher == NULL)
+   if (this->mpc_CanDispatcher == nullptr)
    {
       osc_write_log_error(c_LogActivity, "Could not create CAN adapter: " + c_Error);
       s32_Return = C_CONFIG;
@@ -383,8 +383,8 @@ void C_FlaSenDcBasicSequences::mh_ThreadFunc(void * const opv_Instance)
    //lint -e{9079}  This class is the only one which registers itself at the caller of this function. It must match.
    C_FlaSenDcBasicSequences * const pc_Sequences = reinterpret_cast<C_FlaSenDcBasicSequences *>(opv_Instance);
 
-   tgl_assert(pc_Sequences != NULL);
-   if (pc_Sequences != NULL)
+   tgl_assert(pc_Sequences != nullptr);
+   if (pc_Sequences != nullptr)
    {
       pc_Sequences->m_ThreadFunc();
    }

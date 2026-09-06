@@ -36,11 +36,11 @@ class C_GiImageGroupWithoutData :
 {
 public:
    C_GiImageGroupWithoutData(const uint64_t & oru64_Id, const QString & orc_ImagePath,
-                             const bool oq_RequestLateImageInit, QGraphicsItem * const opc_Parent = NULL);
+                             const bool oq_RequestLateImageInit, QGraphicsItem * const opc_Parent = nullptr);
 
    C_GiImageGroupWithoutData(const uint64_t & oru64_Id, const float64_t of64_Width, const float64_t of64_Height,
                              const QPixmap & orc_Image, const QByteArray & orc_Format,
-                             QGraphicsItem * const opc_Parent = NULL);
+                             QGraphicsItem * const opc_Parent = nullptr);
 
    ~C_GiImageGroupWithoutData(void) override;
 

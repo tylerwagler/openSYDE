@@ -99,7 +99,7 @@ bool C_OscNodeDataPoolListElementOptArrayId::operator <(const C_OscNodeDataPoolI
       dynamic_cast<const C_OscNodeDataPoolListElementOptArrayId *>(&orc_Cmp);
 
    //Not current class, assume base comparison is correct
-   if (pc_NonBase != NULL)
+   if (pc_NonBase != nullptr)
    {
       if (this->GetUseArrayElementIndex() == false)
       {
@@ -174,7 +174,7 @@ bool C_OscNodeDataPoolListElementOptArrayId::operator ==(const C_OscNodeDataPool
          dynamic_cast<const C_OscNodeDataPoolListElementOptArrayId *>(&orc_Cmp);
 
       //Not current class, assume base comparison is correct
-      if (pc_NonBase != NULL)
+      if (pc_NonBase != nullptr)
       {
          q_Retval = false;
 

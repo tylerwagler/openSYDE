@@ -28,7 +28,7 @@ class C_NagViewListDelegate :
    public QStyledItemDelegate
 {
 public:
-   C_NagViewListDelegate(QObject * const opc_Parent = NULL);
+   C_NagViewListDelegate(QObject * const opc_Parent = nullptr);
 
    void SetListView(QListView * const opc_View);
    void RegisterExpand(const QModelIndex & orc_Index);

@@ -26,7 +26,7 @@ class C_SyvUpPacSectionNodeDatablockWidget :
    public C_SyvUpPacSectionNodeWidget
 {
 public:
-   C_SyvUpPacSectionNodeDatablockWidget(QWidget * const opc_Parent = NULL);
+   C_SyvUpPacSectionNodeDatablockWidget(QWidget * const opc_Parent = nullptr);
 
    void AdaptFile(const QString & orc_File, C_SyvUpPacListNodeItemWidget * const opc_App) override;
    void SetSkipOfUpdateFile(const bool oq_Skip, C_SyvUpPacListNodeItemWidget * const opc_App) override;

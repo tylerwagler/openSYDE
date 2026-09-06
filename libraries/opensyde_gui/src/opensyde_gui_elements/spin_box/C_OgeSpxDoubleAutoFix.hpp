@@ -31,7 +31,7 @@ class C_OgeSpxDoubleAutoFix :
    Q_OBJECT
 
 public:
-   C_OgeSpxDoubleAutoFix(QWidget * const opc_Parent = NULL);
+   C_OgeSpxDoubleAutoFix(QWidget * const opc_Parent = nullptr);
 
    int32_t GetLineEditWidth(void) const;
 

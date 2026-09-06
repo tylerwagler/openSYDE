@@ -30,7 +30,7 @@ class C_OgePubOpen :
    Q_OBJECT
 
 public:
-   C_OgePubOpen(QWidget * const opc_Parent = NULL);
+   C_OgePubOpen(QWidget * const opc_Parent = nullptr);
 
    void SetBackgroundColor(const int32_t os32_Value);
 };

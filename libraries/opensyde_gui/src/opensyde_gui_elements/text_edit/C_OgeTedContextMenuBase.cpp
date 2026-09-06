@@ -46,7 +46,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeTedContextMenuBase::C_OgeTedContextMenuBase(QWidget * const opc_Parent) :
    QTextEdit(opc_Parent),
-   mpc_ContextMenu(NULL)
+   mpc_ContextMenu(nullptr)
 {
    m_InitContextMenu();
 }

@@ -32,7 +32,7 @@ class C_OgeWiProgressBar :
    Q_OBJECT
 
 public:
-   C_OgeWiProgressBar(QWidget * const opc_Parent = NULL);
+   C_OgeWiProgressBar(QWidget * const opc_Parent = nullptr);
 
    void SetColorFree(const QColor & orc_Color);
    void SetColorReserved(const QColor & orc_Color);

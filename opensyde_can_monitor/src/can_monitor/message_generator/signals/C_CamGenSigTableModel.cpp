@@ -82,7 +82,7 @@ void C_CamGenSigTableModel::SetMessage(const uint32_t ou32_Message)
    this->mu32_MessageIndex = ou32_Message;
    const C_CamProMessageData * const pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(
       this->mu32_MessageIndex);
-   if (pc_Message != NULL)
+   if (pc_Message != nullptr)
    {
       //Find message: should not hurt to search both DBC and OSY as only one should know the file
       C_CamDbHandler::h_GetInstance()->FindDbcMessage(pc_Message->c_DataBaseFilePath.c_str(),
@@ -260,7 +260,7 @@ int32_t C_CamGenSigTableModel::rowCount(const QModelIndex & orc_Parent) const
       {
          const C_OscCanMessage * const pc_OsyMessage = m_GetMessageInterpretedOsy();
          const C_CieConverter::C_CieCanMessage * const pc_DbcMessage = m_GetMessageInterpretedDbc();
-         if ((pc_OsyMessage != NULL) || (pc_DbcMessage != NULL))
+         if ((pc_OsyMessage != nullptr) || (pc_DbcMessage != nullptr))
          {
             const bool q_IsMultiplexed = C_CamGenSigTableModel::mh_IsMultiplexed(pc_OsyMessage, pc_DbcMessage);
             if (q_IsMultiplexed)
@@ -270,7 +270,7 @@ int32_t C_CamGenSigTableModel::rowCount(const QModelIndex & orc_Parent) const
             }
             else
             {
-               if (pc_OsyMessage != NULL)
+               if (pc_OsyMessage != nullptr)
                {
                   C_OscCanProtocol::E_Type e_ProtocolType = C_OscCanProtocol::eCAN_OPEN;
                   m_GetSignalInterpretedOsy(this->mu32_MessageIndex, &e_ProtocolType);
@@ -286,7 +286,7 @@ int32_t C_CamGenSigTableModel::rowCount(const QModelIndex & orc_Parent) const
                      s32_Retval = static_cast<int32_t>(pc_OsyMessage->c_Signals.size());
                   }
                }
-               else if (pc_DbcMessage != NULL)
+               else if (pc_DbcMessage != nullptr)
                {
                   s32_Retval = static_cast<int32_t>(pc_DbcMessage->c_Signals.size());
                }
@@ -307,7 +307,7 @@ int32_t C_CamGenSigTableModel::rowCount(const QModelIndex & orc_Parent) const
       {
          const C_CamProMessageData * const pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(
             this->mu32_MessageIndex);
-         if (pc_Message != NULL)
+         if (pc_Message != nullptr)
          {
             s32_Retval = static_cast<int32_t>(pc_Message->u16_Dlc);
          }
@@ -380,7 +380,7 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
                   case eNAME:
                      pc_OsySignalCommon = m_GetSignalInterpretedOsyCommon(u32_Index);
                      pc_OsySignal = m_GetSignalInterpretedOsy(u32_Index);
-                     if ((pc_OsySignalCommon != NULL) && (pc_OsySignal != NULL))
+                     if ((pc_OsySignalCommon != nullptr) && (pc_OsySignal != nullptr))
                      {
                         QString c_Name = pc_OsySignalCommon->c_Name.c_str();
                         if (pc_OsySignal->e_MultiplexerType == C_OscCanSignal::eMUX_MULTIPLEXER_SIGNAL)
@@ -393,7 +393,7 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
                      {
                         const C_CieConverter::C_CieCanSignal * const pc_DbcSignal =
                            m_GetSignalInterpretedDbc(u32_Index);
-                        if (pc_DbcSignal != NULL)
+                        if (pc_DbcSignal != nullptr)
                         {
                            QString c_Name = pc_DbcSignal->c_Element.c_Name.c_str();
                            if (pc_DbcSignal->e_MultiplexerType == C_OscCanSignal::eMUX_MULTIPLEXER_SIGNAL)
@@ -410,7 +410,7 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
                      break;
                   case eBIT_POS:
                      pc_OsySignal = m_GetSignalInterpretedOsy(u32_Index);
-                     if (pc_OsySignal != NULL)
+                     if (pc_OsySignal != nullptr)
                      {
                         c_Retval = pc_OsySignal->u16_ComBitStart;
                      }
@@ -418,7 +418,7 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
                      {
                         const C_CieConverter::C_CieCanSignal * const pc_DbcSignal =
                            m_GetSignalInterpretedDbc(u32_Index);
-                        if (pc_DbcSignal != NULL)
+                        if (pc_DbcSignal != nullptr)
                         {
                            c_Retval = pc_DbcSignal->u16_ComBitStart;
                         }
@@ -438,7 +438,7 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
                      break;
                   case eUNIT:
                      pc_OsySignalCommon = m_GetSignalInterpretedOsyCommon(u32_Index);
-                     if (pc_OsySignalCommon != NULL)
+                     if (pc_OsySignalCommon != nullptr)
                      {
                         c_Retval = pc_OsySignalCommon->c_Unit.c_str();
                      }
@@ -446,7 +446,7 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
                      {
                         const C_CieConverter::C_CieCanSignal * const pc_DbcSignal =
                            m_GetSignalInterpretedDbc(u32_Index);
-                        if (pc_DbcSignal != NULL)
+                        if (pc_DbcSignal != nullptr)
                         {
                            c_Retval = pc_DbcSignal->c_Element.c_Unit.c_str();
                         }
@@ -487,7 +487,7 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
 
                      //Signal
                      pc_OsySignal = m_GetSignalInterpretedOsy(u32_Index, &e_ProtocolType);
-                     if (pc_OsySignal != NULL)
+                     if (pc_OsySignal != nullptr)
                      {
                         c_OsySignal = *pc_OsySignal;
                      }
@@ -495,7 +495,7 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
                      {
                         const C_CieConverter::C_CieCanSignal * const pc_DbcSignal =
                            m_GetSignalInterpretedDbc(u32_Index);
-                        if (pc_DbcSignal != NULL)
+                        if (pc_DbcSignal != nullptr)
                         {
                            c_OsySignal = C_CamGenSigUtil::h_ConvertDbcToOsy(*pc_DbcSignal);
                         }
@@ -504,7 +504,7 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
                      }
                      //Signal common
                      pc_OsySignalCommon = m_GetSignalInterpretedOsyCommon(u32_Index);
-                     if (pc_OsySignalCommon != NULL)
+                     if (pc_OsySignalCommon != nullptr)
                      {
                         c_OsySignalCommon = *pc_OsySignalCommon;
                      }
@@ -512,21 +512,21 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
                      {
                         const C_CieConverter::C_CieCanSignal * const pc_DbcSignal =
                            m_GetSignalInterpretedDbc(u32_Index);
-                        if (pc_DbcSignal != NULL)
+                        if (pc_DbcSignal != nullptr)
                         {
                            c_OsySignalCommon = C_CamGenSigUtil::h_ConvertDbcToOsy(pc_DbcSignal->c_Element);
                         }
                      }
                      //Message
                      pc_OsyMessage = m_GetMessageInterpretedOsy();
-                     if (pc_OsyMessage != NULL)
+                     if (pc_OsyMessage != nullptr)
                      {
                         c_OsyMessage = *pc_OsyMessage;
                      }
                      else
                      {
                         const C_CieConverter::C_CieCanMessage * const pc_DbcMessage = m_GetMessageInterpretedDbc();
-                        if (pc_DbcMessage != NULL)
+                        if (pc_DbcMessage != nullptr)
                         {
                            c_OsyMessage = C_CamGenSigUtil::h_ConvertDbcToOsy(*pc_DbcMessage);
                         }
@@ -563,7 +563,7 @@ QVariant C_CamGenSigTableModel::data(const QModelIndex & orc_Index, const int32_
                   break;
                case eRAW:
                   pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(this->mu32_MessageIndex);
-                  if ((pc_Message != NULL) && (u32_Index < 8UL))
+                  if ((pc_Message != nullptr) && (u32_Index < 8UL))
                   {
                      if (os32_Role == static_cast<int32_t>(Qt::DisplayRole))
                      {
@@ -700,12 +700,12 @@ bool C_CamGenSigTableModel::setData(const QModelIndex & orc_Index, const QVarian
                //Handle current scaling values
                if (e_Col == C_CamGenSigTableModel::ePHYSICAL)
                {
-                  if (pc_OsySignalCommon != NULL)
+                  if (pc_OsySignalCommon != nullptr)
                   {
                      f64_Factor = pc_OsySignalCommon->f64_Factor;
                      f64_Offset = pc_OsySignalCommon->f64_Offset;
                   }
-                  else if (pc_DbcSignal != NULL)
+                  else if (pc_DbcSignal != nullptr)
                   {
                      //Value table needs raw value
                      if (pc_DbcSignal->c_ValueDescription.size() > 0UL)
@@ -736,14 +736,14 @@ bool C_CamGenSigTableModel::setData(const QModelIndex & orc_Index, const QVarian
             }
 
             //Convert to one format
-            if (pc_DbcSignal != NULL)
+            if (pc_DbcSignal != nullptr)
             {
                c_Signal = C_CamGenSigUtil::h_ConvertDbcToOsy(*pc_DbcSignal);
             }
             else
             {
                const C_OscCanSignal * const pc_OsySignal = m_GetSignalInterpretedOsy(u32_Index);
-               if (pc_OsySignal != NULL)
+               if (pc_OsySignal != nullptr)
                {
                   c_Signal = *pc_OsySignal;
                }
@@ -879,7 +879,7 @@ Qt::ItemFlags C_CamGenSigTableModel::flags(const QModelIndex & orc_Index) const
             const uint32_t u32_Index = this->m_TranslateRowToIndex(orc_Index.row());
             const C_OscNodeDataPoolListElement * const pc_OsySignalCommon = m_GetSignalInterpretedOsyCommon(u32_Index);
             const C_OscCanSignal * const pc_OsySignal = m_GetSignalInterpretedOsy(u32_Index);
-            if ((pc_OsySignal != NULL) && (pc_OsySignalCommon != NULL))
+            if ((pc_OsySignal != nullptr) && (pc_OsySignalCommon != nullptr))
             {
                const C_OscNodeDataPoolContent c_Min = C_CamGenSigTableModel::mh_GetBorderValue(
                   pc_OsySignalCommon->c_MinValue,
@@ -897,7 +897,7 @@ Qt::ItemFlags C_CamGenSigTableModel::flags(const QModelIndex & orc_Index) const
             else
             {
                const C_CieConverter::C_CieCanSignal * const pc_DbcSignal = m_GetSignalInterpretedDbc(u32_Index);
-               if (pc_DbcSignal != NULL)
+               if (pc_DbcSignal != nullptr)
                {
                   const C_OscNodeDataPoolContent c_Min = C_CamGenSigTableModel::mh_GetBorderValue(
                      pc_DbcSignal->c_Element.c_MinValue, pc_DbcSignal->u16_ComBitLength, true);
@@ -1009,7 +1009,7 @@ bool C_CamGenSigTableModel::m_CheckInterpretedMode(void) const
    const C_CamProMessageData * const pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(
       this->mu32_MessageIndex);
 
-   if (pc_Message != NULL)
+   if (pc_Message != nullptr)
    {
       if (pc_Message->c_DataBaseFilePath.IsEmpty() == true)
       {
@@ -1036,11 +1036,11 @@ bool C_CamGenSigTableModel::m_CheckInterpretedMode(void) const
 const stw::opensyde_core::C_OscCanMessage * C_CamGenSigTableModel::m_GetMessageInterpretedOsy(
    C_OscCanProtocol::E_Type * const ope_ProtocolType) const
 {
-   const stw::opensyde_core::C_OscCanMessage * pc_Retval = NULL;
+   const stw::opensyde_core::C_OscCanMessage * pc_Retval = nullptr;
    const C_CamProMessageData * const pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(
       this->mu32_MessageIndex);
 
-   if (pc_Message != NULL)
+   if (pc_Message != nullptr)
    {
       pc_Retval = C_CamDbHandler::h_GetInstance()->GetOscMessage(pc_Message->c_DataBaseFilePath.c_str(),
                                                                  pc_Message->c_Name.c_str(),
@@ -1065,10 +1065,10 @@ const stw::opensyde_core::C_OscCanSignal * C_CamGenSigTableModel::m_GetSignalInt
                                                                                             C_OscCanProtocol::E_Type * const ope_ProtocolType)
 const
 {
-   const C_OscCanSignal * pc_Retval = NULL;
+   const C_OscCanSignal * pc_Retval = nullptr;
    const C_OscCanMessage * const pc_Message = m_GetMessageInterpretedOsy(ope_ProtocolType);
 
-   if ((pc_Message != NULL) && (ou32_Index < pc_Message->c_Signals.size()))
+   if ((pc_Message != nullptr) && (ou32_Index < pc_Message->c_Signals.size()))
    {
       pc_Retval = &pc_Message->c_Signals[ou32_Index];
    }
@@ -1085,11 +1085,11 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 const stw::opensyde_core::C_OscNodeDataPoolList * C_CamGenSigTableModel::m_GetMessageListInterpreted(void) const
 {
-   const stw::opensyde_core::C_OscNodeDataPoolList * pc_Retval = NULL;
+   const stw::opensyde_core::C_OscNodeDataPoolList * pc_Retval = nullptr;
    const C_CamProMessageData * const pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(
       this->mu32_MessageIndex);
 
-   if (pc_Message != NULL)
+   if (pc_Message != nullptr)
    {
       pc_Retval = C_CamDbHandler::h_GetInstance()->GetOscList(pc_Message->c_DataBaseFilePath.c_str(),
                                                               pc_Message->c_Name.c_str(),
@@ -1111,11 +1111,11 @@ const stw::opensyde_core::C_OscNodeDataPoolList * C_CamGenSigTableModel::m_GetMe
 const C_OscNodeDataPoolListElement * C_CamGenSigTableModel::m_GetSignalInterpretedOsyCommon(const uint32_t ou32_Index)
 const
 {
-   const C_OscNodeDataPoolListElement * pc_Retval = NULL;
+   const C_OscNodeDataPoolListElement * pc_Retval = nullptr;
    const stw::opensyde_core::C_OscCanSignal * const pc_Signal = m_GetSignalInterpretedOsy(ou32_Index);
    const stw::opensyde_core::C_OscNodeDataPoolList * const pc_List = m_GetMessageListInterpreted();
 
-   if (((pc_Signal != NULL) && (pc_List != NULL)) && (pc_Signal->u32_ComDataElementIndex < pc_List->c_Elements.size()))
+   if (((pc_Signal != nullptr) && (pc_List != nullptr)) && (pc_Signal->u32_ComDataElementIndex < pc_List->c_Elements.size()))
    {
       pc_Retval = &pc_List->c_Elements[pc_Signal->u32_ComDataElementIndex];
    }
@@ -1132,11 +1132,11 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 const C_CieConverter::C_CieCanMessage * C_CamGenSigTableModel::m_GetMessageInterpretedDbc(void) const
 {
-   const C_CieConverter::C_CieCanMessage * pc_Retval = NULL;
+   const C_CieConverter::C_CieCanMessage * pc_Retval = nullptr;
    const C_CamProMessageData * const pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(
       this->mu32_MessageIndex);
 
-   if (pc_Message != NULL)
+   if (pc_Message != nullptr)
    {
       pc_Retval = C_CamDbHandler::h_GetInstance()->GetDbcMessage(pc_Message->c_DataBaseFilePath.c_str(),
                                                                  pc_Message->c_Name.c_str(),
@@ -1157,10 +1157,10 @@ const C_CieConverter::C_CieCanMessage * C_CamGenSigTableModel::m_GetMessageInter
 //----------------------------------------------------------------------------------------------------------------------
 const C_CieConverter::C_CieCanSignal * C_CamGenSigTableModel::m_GetSignalInterpretedDbc(const uint32_t ou32_Index) const
 {
-   const C_CieConverter::C_CieCanSignal * pc_Retval = NULL;
+   const C_CieConverter::C_CieCanSignal * pc_Retval = nullptr;
    const C_CieConverter::C_CieCanMessage * const pc_Message = m_GetMessageInterpretedDbc();
 
-   if ((pc_Message != NULL) && (ou32_Index < pc_Message->c_Signals.size()))
+   if ((pc_Message != nullptr) && (ou32_Index < pc_Message->c_Signals.size()))
    {
       pc_Retval = &pc_Message->c_Signals[ou32_Index];
    }
@@ -1244,7 +1244,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(const uint32_t ou32_In
    {
       const C_OscNodeDataPoolListElement * const pc_OsySignalCommon = m_GetSignalInterpretedOsyCommon(ou32_Index);
       const C_OscCanSignal * const pc_OsySignal = m_GetSignalInterpretedOsy(ou32_Index);
-      if ((pc_OsySignal != NULL) && (pc_OsySignalCommon != NULL))
+      if ((pc_OsySignal != nullptr) && (pc_OsySignalCommon != nullptr))
       {
          const C_OscNodeDataPoolContent c_Min = C_CamGenSigTableModel::mh_GetBorderValue(pc_OsySignalCommon->c_MinValue,
                                                                                          pc_OsySignal->u16_ComBitLength,
@@ -1261,7 +1261,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(const uint32_t ou32_In
             //Generic
             const C_CamProMessageData * const pc_Message =
                C_CamProHandler::h_GetInstance()->GetMessageConst(this->mu32_MessageIndex);
-            if (pc_Message != NULL)
+            if (pc_Message != nullptr)
             {
                const std::vector<uint8_t> c_RawData = C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
                const C_OscNodeDataPoolContent c_ConvertedContent =
@@ -1282,7 +1282,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(const uint32_t ou32_In
       else
       {
          const C_CieConverter::C_CieCanSignal * const pc_DbcSignal = m_GetSignalInterpretedDbc(ou32_Index);
-         if (pc_DbcSignal != NULL)
+         if (pc_DbcSignal != nullptr)
          {
             const C_OscNodeDataPoolContent c_Min = C_CamGenSigTableModel::mh_GetBorderValue(
                pc_DbcSignal->c_Element.c_MinValue, pc_DbcSignal->u16_ComBitLength, true);
@@ -1297,7 +1297,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(const uint32_t ou32_In
                //Generic
                const C_CamProMessageData * const pc_Message =
                   C_CamProHandler::h_GetInstance()->GetMessageConst(this->mu32_MessageIndex);
-               if (pc_Message != NULL)
+               if (pc_Message != nullptr)
                {
                   const std::vector<uint8_t> c_RawData = C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
                   const C_OscNodeDataPoolContent c_ConvertedContent =
@@ -1324,7 +1324,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(const uint32_t ou32_In
       //Handle checkable flag
       const C_OscNodeDataPoolListElement * const pc_OsySignalCommon = m_GetSignalInterpretedOsyCommon(ou32_Index);
       const C_OscCanSignal * const pc_OsySignal = m_GetSignalInterpretedOsy(ou32_Index);
-      if ((pc_OsySignal != NULL) && (pc_OsySignalCommon != NULL))
+      if ((pc_OsySignal != nullptr) && (pc_OsySignalCommon != nullptr))
       {
          const C_OscNodeDataPoolContent c_Min = C_CamGenSigTableModel::mh_GetBorderValue(pc_OsySignalCommon->c_MinValue,
                                                                                          pc_OsySignal->u16_ComBitLength,
@@ -1339,7 +1339,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(const uint32_t ou32_In
             const C_CamProMessageData * const pc_Message =
                C_CamProHandler::h_GetInstance()->GetMessageConst(
                   this->mu32_MessageIndex);
-            if (pc_Message != NULL)
+            if (pc_Message != nullptr)
             {
                const std::vector<uint8_t> c_Data = C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
                //Get current state
@@ -1357,7 +1357,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(const uint32_t ou32_In
       else
       {
          const C_CieConverter::C_CieCanSignal * const pc_DbcSignal = m_GetSignalInterpretedDbc(ou32_Index);
-         if (pc_DbcSignal != NULL)
+         if (pc_DbcSignal != nullptr)
          {
             const C_OscNodeDataPoolContent c_Min = C_CamGenSigTableModel::mh_GetBorderValue(
                pc_DbcSignal->c_Element.c_MinValue, pc_DbcSignal->u16_ComBitLength, true);
@@ -1370,7 +1370,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(const uint32_t ou32_In
                const C_CamProMessageData * const pc_Message =
                   C_CamProHandler::h_GetInstance()->GetMessageConst(
                      this->mu32_MessageIndex);
-               if (pc_Message != NULL)
+               if (pc_Message != nullptr)
                {
                   const std::vector<uint8_t> c_Data = C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
                   //Get current state
@@ -1395,7 +1395,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(const uint32_t ou32_In
    {
       const C_OscNodeDataPoolListElement * const pc_OsySignalCommon = m_GetSignalInterpretedOsyCommon(ou32_Index);
       const C_OscCanSignal * const pc_OsySignal = m_GetSignalInterpretedOsy(ou32_Index);
-      if ((pc_OsySignal != NULL) && (pc_OsySignalCommon != NULL))
+      if ((pc_OsySignal != nullptr) && (pc_OsySignalCommon != nullptr))
       {
          const C_OscNodeDataPoolContent c_Min = C_CamGenSigTableModel::mh_GetBorderValue(pc_OsySignalCommon->c_MinValue,
                                                                                          pc_OsySignal->u16_ComBitLength,
@@ -1430,7 +1430,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(const uint32_t ou32_In
       else
       {
          const C_CieConverter::C_CieCanSignal * const pc_DbcSignal = m_GetSignalInterpretedDbc(ou32_Index);
-         if (pc_DbcSignal != NULL)
+         if (pc_DbcSignal != nullptr)
          {
             const C_OscNodeDataPoolContent c_Min = C_CamGenSigTableModel::mh_GetBorderValue(
                pc_DbcSignal->c_Element.c_MinValue, pc_DbcSignal->u16_ComBitLength, true);
@@ -1486,15 +1486,15 @@ QVariant C_CamGenSigTableModel::m_HandleColPhysicalInterpreted(const uint32_t ou
    if ((os32_Role == static_cast<int32_t>(Qt::DisplayRole)) || (os32_Role == static_cast<int32_t>(Qt::EditRole)))
    {
       const C_OscCanSignal * const pc_OsySignal = m_GetSignalInterpretedOsy(ou32_Index);
-      if (pc_OsySignal != NULL)
+      if (pc_OsySignal != nullptr)
       {
          //Generic
          const C_OscNodeDataPoolListElement * const pc_OsySignalCommon = m_GetSignalInterpretedOsyCommon(ou32_Index);
-         if (pc_OsySignalCommon != NULL)
+         if (pc_OsySignalCommon != nullptr)
          {
             const C_CamProMessageData * const pc_Message =
                C_CamProHandler::h_GetInstance()->GetMessageConst(this->mu32_MessageIndex);
-            if (pc_Message != NULL)
+            if (pc_Message != nullptr)
             {
                const std::vector<uint8_t> c_RawData =
                   C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
@@ -1523,11 +1523,11 @@ QVariant C_CamGenSigTableModel::m_HandleColPhysicalInterpreted(const uint32_t ou
       {
          //Generic
          const C_CieConverter::C_CieCanSignal * const pc_DbcSignal = m_GetSignalInterpretedDbc(ou32_Index);
-         if (pc_DbcSignal != NULL)
+         if (pc_DbcSignal != nullptr)
          {
             const C_CamProMessageData * const pc_Message =
                C_CamProHandler::h_GetInstance()->GetMessageConst(this->mu32_MessageIndex);
-            if (pc_Message != NULL)
+            if (pc_Message != nullptr)
             {
                const std::vector<uint8_t> c_RawData = C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
                const C_OscNodeDataPoolContent c_ConvertedContent =
@@ -1566,7 +1566,7 @@ QVariant C_CamGenSigTableModel::m_HandleColPhysicalInterpreted(const uint32_t ou
    {
       //Combo box values (DBC only)
       const C_CieConverter::C_CieCanSignal * const pc_DbcSignal = m_GetSignalInterpretedDbc(ou32_Index);
-      if (pc_DbcSignal != NULL)
+      if (pc_DbcSignal != nullptr)
       {
          uint64_t u64_Counter = 0ULL;
          //Use one bit less for signed
@@ -1627,7 +1627,7 @@ QVariant C_CamGenSigTableModel::m_HandleColPhysicalInterpreted(const uint32_t ou
       //Interaction type -> combo box or spin box (no check box for physical value)
       bool q_IsComboBox = false;
       const C_CieConverter::C_CieCanSignal * const pc_DbcSignal = m_GetSignalInterpretedDbc(ou32_Index);
-      if (pc_DbcSignal != NULL)
+      if (pc_DbcSignal != nullptr)
       {
          if (pc_DbcSignal->c_ValueDescription.size() > 0UL)
          {
@@ -1648,7 +1648,7 @@ QVariant C_CamGenSigTableModel::m_HandleColPhysicalInterpreted(const uint32_t ou
       //Handle generic spin box parameters
       const C_OscNodeDataPoolListElement * const pc_OsySignalCommon = m_GetSignalInterpretedOsyCommon(ou32_Index);
       const C_OscCanSignal * const pc_OsySignal = m_GetSignalInterpretedOsy(ou32_Index);
-      if ((pc_OsySignal != NULL) && (pc_OsySignalCommon != NULL))
+      if ((pc_OsySignal != nullptr) && (pc_OsySignalCommon != nullptr))
       {
          const C_OscNodeDataPoolContent c_Min = C_CamGenSigTableModel::mh_GetBorderValue(pc_OsySignalCommon->c_MinValue,
                                                                                          pc_OsySignal->u16_ComBitLength,
@@ -1676,7 +1676,7 @@ QVariant C_CamGenSigTableModel::m_HandleColPhysicalInterpreted(const uint32_t ou
       else
       {
          const C_CieConverter::C_CieCanSignal * const pc_DbcSignal = m_GetSignalInterpretedDbc(ou32_Index);
-         if (pc_DbcSignal != NULL)
+         if (pc_DbcSignal != nullptr)
          {
             const C_OscNodeDataPoolContent c_Min = C_CamGenSigTableModel::mh_GetBorderValue(
                pc_DbcSignal->c_Element.c_MinValue, pc_DbcSignal->u16_ComBitLength, true);
@@ -1728,14 +1728,14 @@ C_OscNodeDataPoolContent C_CamGenSigTableModel::mh_GetInitialValue(
 {
    C_OscNodeDataPoolContent c_Return;
 
-   if (opc_OsySignalCommon != NULL)
+   if (opc_OsySignalCommon != nullptr)
    {
       if (opc_OsySignalCommon->c_DataSetValues.size() > 0UL)
       {
          c_Return = opc_OsySignalCommon->c_DataSetValues[0UL]; // init value
       }
    }
-   else if (opc_DbcSignal != NULL)
+   else if (opc_DbcSignal != nullptr)
    {
       if (opc_DbcSignal->c_Element.c_DataSetValues.size() > 0UL)
       {
@@ -1888,7 +1888,7 @@ int32_t C_CamGenSigTableModel::m_SetSignalFromOsyValue(const C_OscCanSignal & or
    const C_CamProMessageData * const pc_Message =
       C_CamProHandler::h_GetInstance()->GetMessageConst(this->mu32_MessageIndex);
 
-   if (pc_Message != NULL)
+   if (pc_Message != nullptr)
    {
       //Get raw as vector
       std::vector<uint8_t> c_RawData = C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
@@ -2177,11 +2177,11 @@ bool C_CamGenSigTableModel::mh_IsMultiplexed(const C_OscCanMessage * const opc_O
 {
    bool q_IsMultiplexed;
 
-   if (opc_OsyMessage != NULL)
+   if (opc_OsyMessage != nullptr)
    {
       q_IsMultiplexed = opc_OsyMessage->IsMultiplexed();
    }
-   else if (opc_DbcMessage != NULL)
+   else if (opc_DbcMessage != nullptr)
    {
       q_IsMultiplexed = false;
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < opc_DbcMessage->c_Signals.size(); ++u32_ItSig)
@@ -2220,12 +2220,12 @@ const
       C_CamProHandler::h_GetInstance()->GetMessageConst(
          this->mu32_MessageIndex);
 
-   if (pc_Message != NULL)
+   if (pc_Message != nullptr)
    {
       const std::vector<uint8_t> c_RawData =
          C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
 
-      if (opc_OsyMessage != NULL)
+      if (opc_OsyMessage != nullptr)
       {
          for (uint32_t u32_ItSig = 0UL; u32_ItSig < opc_OsyMessage->c_Signals.size(); ++u32_ItSig)
          {
@@ -2234,7 +2234,7 @@ const
             {
                const C_OscNodeDataPoolListElement * const pc_OsySignalCommon =
                   m_GetSignalInterpretedOsyCommon(u32_ItSig);
-               if (pc_OsySignalCommon != NULL)
+               if (pc_OsySignalCommon != nullptr)
                {
                   int64_t s64_Tmp;
                   const C_OscNodeDataPoolContent c_ConvertedContent =
@@ -2247,7 +2247,7 @@ const
             }
          }
       }
-      else if (opc_DbcMessage != NULL)
+      else if (opc_DbcMessage != nullptr)
       {
          for (uint32_t u32_ItSig = 0UL; u32_ItSig < opc_DbcMessage->c_Signals.size(); ++u32_ItSig)
          {
@@ -2288,7 +2288,7 @@ int32_t C_CamGenSigTableModel::mh_GetNumRowsForMuxValue(const C_OscCanMessage * 
 {
    int32_t s32_Retval = 0;
 
-   if (opc_OsyMessage != NULL)
+   if (opc_OsyMessage != nullptr)
    {
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < opc_OsyMessage->c_Signals.size(); ++u32_ItSig)
       {
@@ -2308,7 +2308,7 @@ int32_t C_CamGenSigTableModel::mh_GetNumRowsForMuxValue(const C_OscCanMessage * 
          }
       }
    }
-   else if (opc_DbcMessage != NULL)
+   else if (opc_DbcMessage != nullptr)
    {
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < opc_DbcMessage->c_Signals.size(); ++u32_ItSig)
       {
@@ -2351,7 +2351,7 @@ uint32_t C_CamGenSigTableModel::m_TranslateRowToIndex(const int32_t os32_Row) co
    const C_OscCanMessage * const pc_OsyMessage = m_GetMessageInterpretedOsy();
    const C_CieConverter::C_CieCanMessage * const pc_DbcMessage = m_GetMessageInterpretedDbc();
 
-   if ((pc_OsyMessage != NULL) || (pc_DbcMessage != NULL))
+   if ((pc_OsyMessage != nullptr) || (pc_DbcMessage != nullptr))
    {
       const bool q_IsMultiplexed = C_CamGenSigTableModel::mh_IsMultiplexed(pc_OsyMessage, pc_DbcMessage);
       if (q_IsMultiplexed)
@@ -2363,7 +2363,7 @@ uint32_t C_CamGenSigTableModel::m_TranslateRowToIndex(const int32_t os32_Row) co
          //lint -e{864} Call as expected by interface
          std::sort(c_StartBits.begin(), c_StartBits.end());
          //Get index for start bit
-         if (pc_OsyMessage != NULL)
+         if (pc_OsyMessage != nullptr)
          {
             const uint16_t u16_SearchedStartBit = c_StartBits[static_cast<uint32_t>(os32_Row)];
             for (uint32_t u32_ItSig = 0UL; u32_ItSig < pc_OsyMessage->c_Signals.size(); ++u32_ItSig)
@@ -2381,7 +2381,7 @@ uint32_t C_CamGenSigTableModel::m_TranslateRowToIndex(const int32_t os32_Row) co
                }
             }
          }
-         else if (pc_DbcMessage != NULL)
+         else if (pc_DbcMessage != nullptr)
          {
             const uint16_t u16_SearchedStartBit = c_StartBits[static_cast<uint32_t>(os32_Row)];
             for (uint32_t u32_ItSig = 0UL; u32_ItSig < pc_DbcMessage->c_Signals.size(); ++u32_ItSig)
@@ -2424,7 +2424,7 @@ std::vector<uint16_t> C_CamGenSigTableModel::mh_GetStartBits(const C_OscCanMessa
                                                              const uint16_t ou16_MuxValue)
 {
    std::vector<uint16_t> c_Retval;
-   if (opc_OsyMessage != NULL)
+   if (opc_OsyMessage != nullptr)
    {
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < opc_OsyMessage->c_Signals.size(); ++u32_ItSig)
       {
@@ -2442,7 +2442,7 @@ std::vector<uint16_t> C_CamGenSigTableModel::mh_GetStartBits(const C_OscCanMessa
          }
       }
    }
-   else if (opc_DbcMessage != NULL)
+   else if (opc_DbcMessage != nullptr)
    {
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < opc_DbcMessage->c_Signals.size(); ++u32_ItSig)
       {
@@ -2477,30 +2477,30 @@ void C_CamGenSigTableModel::m_ResetUnusedMultiplexedSignals(void)
 
    const uint16_t u16_MultiplexValue = this->m_GetMultiplexerValue(pc_OsyMessage, pc_DbcMessage);
 
-   if (pc_OsyMessage != NULL)
+   if (pc_OsyMessage != nullptr)
    {
       // first reset all unused signals to zero
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < pc_OsyMessage->c_Signals.size(); ++u32_ItSig)
       {
-         this->m_UpdateMultiplexedSignal(pc_OsyMessage, NULL, u16_MultiplexValue, u32_ItSig, true);
+         this->m_UpdateMultiplexedSignal(pc_OsyMessage, nullptr, u16_MultiplexValue, u32_ItSig, true);
       }
       // then set all used to initial value (might overwrite signal that was recently set to zero)
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < pc_OsyMessage->c_Signals.size(); ++u32_ItSig)
       {
-         this->m_UpdateMultiplexedSignal(pc_OsyMessage, NULL, u16_MultiplexValue, u32_ItSig, false);
+         this->m_UpdateMultiplexedSignal(pc_OsyMessage, nullptr, u16_MultiplexValue, u32_ItSig, false);
       }
    }
-   else if (pc_DbcMessage != NULL)
+   else if (pc_DbcMessage != nullptr)
    {
       // first reset all unused signals to zero
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < pc_DbcMessage->c_Signals.size(); ++u32_ItSig)
       {
-         this->m_UpdateMultiplexedSignal(NULL, pc_DbcMessage, u16_MultiplexValue, u32_ItSig, true);
+         this->m_UpdateMultiplexedSignal(nullptr, pc_DbcMessage, u16_MultiplexValue, u32_ItSig, true);
       }
       // then set all used to initial value (might overwrite signal that was recently set to zero)
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < pc_DbcMessage->c_Signals.size(); ++u32_ItSig)
       {
-         this->m_UpdateMultiplexedSignal(NULL, pc_DbcMessage, u16_MultiplexValue, u32_ItSig, false);
+         this->m_UpdateMultiplexedSignal(nullptr, pc_DbcMessage, u16_MultiplexValue, u32_ItSig, false);
       }
    }
    else
@@ -2526,7 +2526,7 @@ void C_CamGenSigTableModel::m_UpdateMultiplexedSignal(const C_OscCanMessage * co
                                                       const uint16_t ou16_MuxValue, const uint32_t ou32_SignalIndex,
                                                       const bool oq_SetToZero)
 {
-   if (opc_OsyMessage != NULL)
+   if (opc_OsyMessage != nullptr)
    {
       const C_OscCanSignal & rc_Sig = opc_OsyMessage->c_Signals[ou32_SignalIndex];
 
@@ -2534,14 +2534,14 @@ void C_CamGenSigTableModel::m_UpdateMultiplexedSignal(const C_OscCanMessage * co
       {
          const C_OscNodeDataPoolListElement * const pc_OsySignalCommon =
             m_GetSignalInterpretedOsyCommon(ou32_SignalIndex);
-         if (pc_OsySignalCommon != NULL)
+         if (pc_OsySignalCommon != nullptr)
          {
             if (oq_SetToZero == true)
             {
                if (rc_Sig.u16_MultiplexValue != ou16_MuxValue)
                {
                   // set to zero
-                  C_OscNodeDataPoolContent c_InitialValue = mh_GetInitialValue(pc_OsySignalCommon, NULL);
+                  C_OscNodeDataPoolContent c_InitialValue = mh_GetInitialValue(pc_OsySignalCommon, nullptr);
                   C_OscNodeDataPoolContentUtil::h_ZeroContent(c_InitialValue);
                   tgl_assert(this->m_SetSignalFromOsyValue(rc_Sig, c_InitialValue) == C_NO_ERR);
                }
@@ -2551,27 +2551,27 @@ void C_CamGenSigTableModel::m_UpdateMultiplexedSignal(const C_OscCanMessage * co
                if (rc_Sig.u16_MultiplexValue == ou16_MuxValue)
                {
                   // reset to initial value
-                  const C_OscNodeDataPoolContent & rc_InitialValue = mh_GetInitialValue(pc_OsySignalCommon, NULL);
+                  const C_OscNodeDataPoolContent & rc_InitialValue = mh_GetInitialValue(pc_OsySignalCommon, nullptr);
                   tgl_assert(this->m_SetSignalFromOsyValue(rc_Sig, rc_InitialValue) == C_NO_ERR);
                }
             }
          }
       }
    }
-   else if (opc_DbcMessage != NULL)
+   else if (opc_DbcMessage != nullptr)
    {
       const C_CieConverter::C_CieCanSignal & rc_Sig = opc_DbcMessage->c_Signals[ou32_SignalIndex];
       if (rc_Sig.e_MultiplexerType == C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL)
       {
          const C_CieConverter::C_CieCanSignal * const pc_DbcSignal = m_GetSignalInterpretedDbc(ou32_SignalIndex);
-         if (pc_DbcSignal != NULL)
+         if (pc_DbcSignal != nullptr)
          {
             if (oq_SetToZero == true)
             {
                if (rc_Sig.u16_MultiplexValue != ou16_MuxValue)
                {
                   // set to zero
-                  C_OscNodeDataPoolContent c_InitialValue = mh_GetInitialValue(NULL, pc_DbcSignal);
+                  C_OscNodeDataPoolContent c_InitialValue = mh_GetInitialValue(nullptr, pc_DbcSignal);
                   const C_OscCanSignal & rc_OsySig = C_CamGenSigUtil::h_ConvertDbcToOsy(*pc_DbcSignal);
                   C_OscNodeDataPoolContentUtil::h_ZeroContent(c_InitialValue);
                   tgl_assert(this->m_SetSignalFromOsyValue(rc_OsySig, c_InitialValue) == C_NO_ERR);
@@ -2582,7 +2582,7 @@ void C_CamGenSigTableModel::m_UpdateMultiplexedSignal(const C_OscCanMessage * co
                if (rc_Sig.u16_MultiplexValue == ou16_MuxValue)
                {
                   // reset to initial value
-                  const C_OscNodeDataPoolContent & rc_InitialValue = mh_GetInitialValue(NULL, pc_DbcSignal);
+                  const C_OscNodeDataPoolContent & rc_InitialValue = mh_GetInitialValue(nullptr, pc_DbcSignal);
                   const C_OscCanSignal & rc_OsySig = C_CamGenSigUtil::h_ConvertDbcToOsy(*pc_DbcSignal);
                   tgl_assert(this->m_SetSignalFromOsyValue(rc_OsySig, rc_InitialValue) == C_NO_ERR);
                }

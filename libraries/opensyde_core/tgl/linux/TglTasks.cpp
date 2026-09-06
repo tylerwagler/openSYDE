@@ -34,7 +34,7 @@ using namespace stw::tgl;
 
 C_TglCriticalSection::C_TglCriticalSection(void)
 {
-   pthread_mutex_init(&mu_Mutex, NULL);
+   pthread_mutex_init(&mu_Mutex, nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

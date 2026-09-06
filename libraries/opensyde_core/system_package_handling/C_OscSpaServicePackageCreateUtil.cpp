@@ -317,8 +317,8 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
    {
       const C_OscDeviceDefinition * const pc_DeviceDefinition =
          orc_SystemDefinition.c_Nodes[u32_Pos].pc_DeviceDefinition;
-      tgl_assert(pc_DeviceDefinition != NULL);
-      if (pc_DeviceDefinition != NULL)
+      tgl_assert(pc_DeviceDefinition != nullptr);
+      if (pc_DeviceDefinition != nullptr)
       {
          c_DevicesByPath[pc_DeviceDefinition->c_FilePath] = pc_DeviceDefinition->c_DeviceName;
       }
@@ -348,7 +348,7 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
          continue;
       }
 
-      s32_Return = C_OscUtils::h_CopyFile(rc_SrcPath, c_TargetFile, NULL, &orc_ErrorMessage);
+      s32_Return = C_OscUtils::h_CopyFile(rc_SrcPath, c_TargetFile, nullptr, &orc_ErrorMessage);
       if (s32_Return != C_NO_ERR)
       {
          orc_ErrorMessage = "Could not save device manifest for \"" + rc_DeviceName +

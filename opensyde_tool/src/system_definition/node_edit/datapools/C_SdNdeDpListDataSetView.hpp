@@ -39,7 +39,7 @@ class C_SdNdeDpListDataSetView :
    Q_OBJECT
 
 public:
-   C_SdNdeDpListDataSetView(QWidget * const opc_Parent = NULL);
+   C_SdNdeDpListDataSetView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpListDataSetView(void) override;
    void SetList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                 const uint32_t & oru32_ListIndex);

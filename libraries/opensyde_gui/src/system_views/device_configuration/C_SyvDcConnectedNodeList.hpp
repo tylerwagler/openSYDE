@@ -32,7 +32,7 @@ class C_SyvDcConnectedNodeList :
    Q_OBJECT
 
 public:
-   C_SyvDcConnectedNodeList(QWidget * const opc_Parent = NULL);
+   C_SyvDcConnectedNodeList(QWidget * const opc_Parent = nullptr);
 
    void SetData(const std::vector<stw::opensyde_core::C_OscDcDeviceInformation> & orc_Infos);
    void EnableSerialNumber(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber) const;

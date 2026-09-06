@@ -194,7 +194,7 @@ const
    {
       //lint -e{9079}  Result of Qt interface restrictions, set by index function
       const C_TblTreItem * const pc_TreeItem = static_cast<const C_TblTreItem *>(c_CurItem.internalPointer());
-      if (pc_TreeItem != NULL)
+      if (pc_TreeItem != nullptr)
       {
          c_Retval.insert(c_Retval.begin(), pc_TreeItem->u32_Index);
          c_CurItem = c_CurItem.parent();
@@ -248,7 +248,7 @@ void C_CamMosDatabaseSelectionModel::m_Init(void)
             {
                const C_CieConverter::C_CieCanMessage * const pc_Message =
                   C_CamDbHandler::h_GetInstance()->GetDbcMessage(c_ItDbc.key(), *c_ItMessage, false, 0UL);
-               if (pc_Message != NULL)
+               if (pc_Message != nullptr)
                {
                   const C_OscCanMessage c_OscMessage = C_CamGenSigUtil::h_ConvertDbcToOsy(*pc_Message);
 
@@ -285,7 +285,7 @@ void C_CamMosDatabaseSelectionModel::m_Init(void)
             {
                const C_OscCanMessage * const pc_Message = C_CamDbHandler::h_GetInstance()->GetOscMessage(
                   c_ItOsy.key(), c_ItMessage.key(), true, c_ItMessage->u32_Hash);
-               if (pc_Message != NULL)
+               if (pc_Message != nullptr)
                {
                   m_CreateAndFillMessageNode(*pc_Message, pc_DatabaseItem);
                }

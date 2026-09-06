@@ -91,7 +91,7 @@ int32_t C_OscZipFile::h_CreateZipFile(const C_SclString & orc_SourcePath, const 
       const C_SclString c_AbsPath = orc_SourcePath + (*c_Iter);
       if ((TglFileExists(c_AbsPath) == false) && (TglDirectoryExists(c_AbsPath) == false))
       {
-         if (opc_ErrorText != NULL)
+         if (opc_ErrorText != nullptr)
          {
             (*opc_ErrorText) = "Input file/folder \"" + c_AbsPath + "\" does not exist.";
          }
@@ -134,7 +134,7 @@ int32_t C_OscZipFile::h_CreateZipFile(const C_SclString & orc_SourcePath, const 
          }
          else
          {
-            if (opc_ErrorText != NULL)
+            if (opc_ErrorText != nullptr)
             {
                (*opc_ErrorText) = "Could not open file \"" + c_FileName + "\" for zipping into archive.";
             }
@@ -143,7 +143,7 @@ int32_t C_OscZipFile::h_CreateZipFile(const C_SclString & orc_SourcePath, const 
       }
       else
       {
-         s32_Return = C_OscZipFile::mh_AddContentToZipFile(orc_ZipArchivePath, c_FileName, NULL, 0UL,
+         s32_Return = C_OscZipFile::mh_AddContentToZipFile(orc_ZipArchivePath, c_FileName, nullptr, 0UL,
                                                            "folder", opc_ErrorText);
       }
    }
@@ -186,7 +186,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const C_SclString & orc_SourcePath, const 
    x_MzStatus = mz_zip_reader_init_file(&c_ZipArchive, orc_SourcePath.c_str(), 0);
    if (x_MzStatus == MZ_FALSE)
    {
-      if (opc_ErrorText != NULL)
+      if (opc_ErrorText != nullptr)
       {
          (*opc_ErrorText) = "Could not open zip archive \"" + orc_SourcePath + "\". Reason: \"" +
                             mz_zip_get_error_string(c_ZipArchive.m_last_error) + "\".";
@@ -206,7 +206,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const C_SclString & orc_SourcePath, const 
          if (x_MzStatus == MZ_FALSE)
          {
             mz_zip_reader_end(&c_ZipArchive);
-            if (opc_ErrorText != NULL)
+            if (opc_ErrorText != nullptr)
             {
                (*opc_ErrorText) = "Could not get information of zip archive \"" + orc_SourcePath +
                                   "\" for position \"" + C_SclString::IntToStr(x_Pos) + "\".";
@@ -227,7 +227,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const C_SclString & orc_SourcePath, const 
          size_t x_UncompFileSize;
          void * const pv_Data = mz_zip_reader_extract_file_to_heap(&c_ZipArchive, &c_Iter->m_filename[0],
                                                                    &x_UncompFileSize, 0);
-         if (pv_Data != NULL)
+         if (pv_Data != nullptr)
          {
             // get complete file path of current file
             const C_SclString c_CompleteFilePath = TglFileIncludeTrailingDelimiter(orc_TargetUnzipPath) +
@@ -239,7 +239,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const C_SclString & orc_SourcePath, const 
             {
                // create subfolder
                s32_Return = C_OscUtils::h_CreateFolderRecursively(c_Path);
-               if ((s32_Return != C_NO_ERR) && (opc_ErrorText != NULL))
+               if ((s32_Return != C_NO_ERR) && (opc_ErrorText != nullptr))
                {
                   (*opc_ErrorText) = "Could not create subfolder \"" + c_Path + "\".";
                }
@@ -253,7 +253,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const C_SclString & orc_SourcePath, const 
                {
                   std::FILE * const pc_File = std::fopen(c_CompleteFilePath.c_str(), "wb");
                   // write data
-                  if (pc_File != NULL)
+                  if (pc_File != nullptr)
                   {
                      //lint -e{8080} //using type expected by the library for compatibility
                      const size_t x_SIZE_OF_ELEMENT = sizeof(char_t);
@@ -263,7 +263,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const C_SclString & orc_SourcePath, const 
                      if (x_NumOfBytesWritten != x_UncompFileSize)
                      {
                         // data not written completely
-                        if (opc_ErrorText != NULL)
+                        if (opc_ErrorText != nullptr)
                         {
                            (*opc_ErrorText) = "Could not unpack file \"" +
                                               c_CompleteFilePath + "\" of zip archive \"" + orc_SourcePath + "\".";
@@ -274,7 +274,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const C_SclString & orc_SourcePath, const 
                   }
                   else
                   {
-                     if (opc_ErrorText != NULL)
+                     if (opc_ErrorText != nullptr)
                      {
                         (*opc_ErrorText) = "Could not create file \"" +
                                            c_CompleteFilePath + "\" to unpack from zip archive \"" + orc_SourcePath +
@@ -287,7 +287,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const C_SclString & orc_SourcePath, const 
          }
          else
          {
-            if (opc_ErrorText != NULL)
+            if (opc_ErrorText != nullptr)
             {
                (*opc_ErrorText) = static_cast<C_SclString>("Could not read file \"") +
                                   c_Iter->m_filename + "\" from zip archive \"" + orc_SourcePath + "\".";
@@ -425,7 +425,7 @@ int32_t C_OscZipFile::mh_AddContentToZipFile(const C_SclString & orc_ZipArchiveP
 
    if (x_MzStatus == MZ_FALSE)
    {
-      if (opc_ErrorText != NULL)
+      if (opc_ErrorText != nullptr)
       {
          (*opc_ErrorText) = "Could not create zip " + orc_ItemType + " \"" + orc_ItemName + "\".";
       }

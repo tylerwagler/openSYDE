@@ -31,7 +31,7 @@ class C_SdNdeDpListDataSetDelegate :
    Q_OBJECT
 
 public:
-   C_SdNdeDpListDataSetDelegate(QObject * const opc_Parent = NULL);
+   C_SdNdeDpListDataSetDelegate(QObject * const opc_Parent = nullptr);
 
    QWidget * createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem & orc_Option,
                           const QModelIndex & orc_Index) const override;

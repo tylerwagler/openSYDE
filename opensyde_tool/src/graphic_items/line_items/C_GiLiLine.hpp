@@ -37,8 +37,8 @@ class C_GiLiLine :
    public QGraphicsPathItem
 {
 public:
-   C_GiLiLine(const std::vector<QPointF> * const opc_Points = NULL, const bool & orq_MiddleLine = false,
-              QGraphicsItem * const opc_Parent = NULL);
+   C_GiLiLine(const std::vector<QPointF> * const opc_Points = nullptr, const bool & orq_MiddleLine = false,
+              QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiLiLine() override;
    void Init(const std::vector<QPointF> & orc_Points);
 
@@ -67,7 +67,7 @@ public:
                     const QPolygonF oc_Polygon = QPolygonF(), const bool oq_ShowOrignalLine = true);
 
    void paint(QPainter * const opc_Painter, const QStyleOptionGraphicsItem * const opc_Option,
-              QWidget * const opc_Widget = NULL) override;
+              QWidget * const opc_Widget = nullptr) override;
 
    QPainterPath shape(void) const override;
 

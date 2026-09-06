@@ -89,13 +89,13 @@ void C_GiSvDaImageGroup::LoadData(void)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-         if (pc_Dashboard != NULL)
+         if (pc_Dashboard != nullptr)
          {
             const C_PuiBsImage * const pc_Item = pc_Dashboard->GetImage(static_cast<uint32_t>(this->ms32_Index));
-            if (pc_Item != NULL)
+            if (pc_Item != nullptr)
             {
                this->LoadBasicData(*pc_Item);
             }

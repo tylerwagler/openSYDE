@@ -169,7 +169,7 @@ void C_SdBueNodeSelectorWidget::SetProtocol(const C_OscCanProtocol::E_Type oe_Pr
          const C_OscNode * const pc_Node =
             C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndexes[u32_NodeCounter]);
 
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             // get the protocols
             std::vector<const C_OscCanProtocol *> c_Protocols = pc_Node->GetCanProtocolsConst(oe_Protocol);
@@ -208,7 +208,7 @@ void C_SdBueNodeSelectorWidget::SetProtocol(const C_OscCanProtocol::E_Type oe_Pr
          const C_OscNode * const pc_NodeManager =
             C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ManagerNodeIndex);
 
-         if (pc_NodeManager != NULL)
+         if (pc_NodeManager != nullptr)
          {
             uint32_t u32_IntfCounter;
             uint32_t u32_ManagerIntfIndex = 0U;
@@ -247,7 +247,7 @@ void C_SdBueNodeSelectorWidget::SetProtocol(const C_OscCanProtocol::E_Type oe_Pr
                   const C_OscNode * const pc_DeviceNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                      rc_DeviceId.u32_NodeIndex);
 
-                  if (pc_DeviceNode != NULL)
+                  if (pc_DeviceNode != nullptr)
                   {
                      for (u32_IntfCounter = 0U;
                           u32_IntfCounter < pc_DeviceNode->c_Properties.c_ComInterfaces.size();
@@ -304,7 +304,7 @@ void C_SdBueNodeSelectorWidget::m_NodeToggled(const uint32_t ou32_NodeIndex, con
       // protocol will be used by this node on this bus
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          // check if a protocol and therefore a Datapool exist
          const bool q_ProtocolAndDbExists = (pc_Node->GetCanProtocolsConst(this->me_Protocol).size() > 0U);

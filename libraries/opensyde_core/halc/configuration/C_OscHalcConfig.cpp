@@ -67,7 +67,7 @@ uint32_t C_OscHalcConfig::GetDomainSize() const
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscHalcConfigDomain * C_OscHalcConfig::GetDomainConfigDataConst(const uint32_t ou32_Index) const
 {
-   const C_OscHalcConfigDomain * pc_Retval = NULL;
+   const C_OscHalcConfigDomain * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_Domains.size())
    {
@@ -88,7 +88,7 @@ const C_OscHalcConfigDomain * C_OscHalcConfig::GetDomainConfigDataConst(const ui
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscHalcDefDomain * C_OscHalcConfig::GetDomainDefDataConst(const uint32_t ou32_Index) const
 {
-   const C_OscHalcDefDomain * pc_Retval = NULL;
+   const C_OscHalcDefDomain * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_Domains.size())
    {
@@ -1080,7 +1080,7 @@ int32_t C_OscHalcConfig::GetRelevantIndicesForSelectedUseCase(const uint32_t ou3
 void C_OscHalcConfig::CheckConfigValid(bool * const opq_DomainsInvalid,
                                        std::vector<uint32_t> * const opc_InvalidDomainIndices) const
 {
-   if (opq_DomainsInvalid != NULL)
+   if (opq_DomainsInvalid != nullptr)
    {
       *opq_DomainsInvalid = false;
 
@@ -1089,14 +1089,14 @@ void C_OscHalcConfig::CheckConfigValid(bool * const opq_DomainsInvalid,
          bool q_DomainInvalid;
          bool q_ChannelsInvalid;
 
-         this->CheckDomainConfigValid(u32_ItDomain, &q_DomainInvalid, &q_ChannelsInvalid, NULL);
+         this->CheckDomainConfigValid(u32_ItDomain, &q_DomainInvalid, &q_ChannelsInvalid, nullptr);
 
          if ((q_DomainInvalid == true) || (q_ChannelsInvalid == true))
          {
             *opq_DomainsInvalid = true;
 
             // remember index of invalid domain
-            if (opc_InvalidDomainIndices != NULL)
+            if (opc_InvalidDomainIndices != nullptr)
             {
                opc_InvalidDomainIndices->push_back(u32_ItDomain);
             }
@@ -1123,7 +1123,7 @@ void C_OscHalcConfig::CheckDomainConfigValid(const uint32_t ou32_DomainIndex, bo
       const C_OscHalcConfigDomain & rc_CheckedDomain = this->mc_Domains[ou32_DomainIndex];
 
       // check domain configuration itself
-      if (opq_DomainInvalid != NULL)
+      if (opq_DomainInvalid != nullptr)
       {
          *opq_DomainInvalid = false;
 
@@ -1136,7 +1136,7 @@ void C_OscHalcConfig::CheckDomainConfigValid(const uint32_t ou32_DomainIndex, bo
       }
 
       // check all channels
-      if (opq_ChannelsInvalid != NULL)
+      if (opq_ChannelsInvalid != nullptr)
       {
          *opq_ChannelsInvalid = false;
 
@@ -1157,7 +1157,7 @@ void C_OscHalcConfig::CheckDomainConfigValid(const uint32_t ou32_DomainIndex, bo
             if ((q_NameConflict == true) || (q_NameInvalid == true))
             {
                *opq_ChannelsInvalid = true;
-               if (opc_InvalidChannelIndices != NULL)
+               if (opc_InvalidChannelIndices != nullptr)
                {
                   opc_InvalidChannelIndices->push_back(u32_ItChannel);
                }
@@ -1167,11 +1167,11 @@ void C_OscHalcConfig::CheckDomainConfigValid(const uint32_t ou32_DomainIndex, bo
    }
    else
    {
-      if (opq_DomainInvalid != NULL)
+      if (opq_DomainInvalid != nullptr)
       {
          *opq_DomainInvalid = false;
       }
-      if (opq_ChannelsInvalid != NULL)
+      if (opq_ChannelsInvalid != nullptr)
       {
          *opq_ChannelsInvalid = false;
       }

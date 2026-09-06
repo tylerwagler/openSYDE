@@ -70,7 +70,7 @@ C_TblDelegate::C_TblDelegate(QObject * const opc_Parent) :
 QWidget * C_TblDelegate::createEditor(QWidget * const opc_Parent, const QStyleOptionViewItem & orc_Option,
                                       const QModelIndex & orc_Index) const
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
    if (orc_Index.data(ms32_USER_ROLE_INTERACTION_IS_LINK).toBool() == false)
    {
@@ -175,7 +175,7 @@ void C_TblDelegate::setEditorData(QWidget * const opc_Editor, const QModelIndex 
    case eURIEL_LINE_EDIT:
 
       pc_LineEdit = dynamic_cast<C_TblEditLineEditBase *>(opc_Editor);
-      if (pc_LineEdit != NULL)
+      if (pc_LineEdit != nullptr)
       {
          pc_LineEdit->SetFromVariant(orc_Index.data(static_cast<int32_t>(Qt::DisplayRole)),
                                      orc_Index.data(static_cast<int32_t>(Qt::EditRole)));
@@ -196,7 +196,7 @@ void C_TblDelegate::setEditorData(QWidget * const opc_Editor, const QModelIndex 
    case eURIEL_COMBO_BOX:
 
       pc_ComboBox = dynamic_cast<C_OgeCbxTableBase *>(opc_Editor);
-      if (pc_ComboBox != NULL)
+      if (pc_ComboBox != nullptr)
       {
          bool q_Ok;
          const int64_t s64_Val = orc_Index.data(static_cast<int32_t>(Qt::EditRole)).toLongLong(&q_Ok);
@@ -209,7 +209,7 @@ void C_TblDelegate::setEditorData(QWidget * const opc_Editor, const QModelIndex 
    case eURIEL_MULTI_SELECT_COMBO_BOX:
 
       pc_MultiSelectComboBox = dynamic_cast<C_OgeCbxMultiSelect *>(opc_Editor);
-      if (pc_MultiSelectComboBox != NULL)
+      if (pc_MultiSelectComboBox != nullptr)
       {
          const QBitArray c_BitArrayValues = orc_Index.data(static_cast<int32_t>(Qt::EditRole)).toBitArray();
          const QStringList c_StringListStrings =
@@ -251,7 +251,7 @@ void C_TblDelegate::setModelData(QWidget * const opc_Editor, QAbstractItemModel 
    case eURIEL_LINE_EDIT:
 
       pc_LineEdit = dynamic_cast<C_TblEditLineEditBase *>(opc_Editor);
-      if (pc_LineEdit != NULL)
+      if (pc_LineEdit != nullptr)
       {
          QString c_ErrorDescription;
          QVariant c_Value;
@@ -274,7 +274,7 @@ void C_TblDelegate::setModelData(QWidget * const opc_Editor, QAbstractItemModel 
    case eURIEL_COMBO_BOX:
 
       pc_ComboBox = dynamic_cast<C_OgeCbxTableBase *>(opc_Editor);
-      if (pc_ComboBox != NULL)
+      if (pc_ComboBox != nullptr)
       {
          QString c_ErrorDescription;
          int64_t s64_Value;
@@ -296,7 +296,7 @@ void C_TblDelegate::setModelData(QWidget * const opc_Editor, QAbstractItemModel 
    case eURIEL_MULTI_SELECT_COMBO_BOX:
 
       pc_MultiSelectComboBox = dynamic_cast<C_OgeCbxMultiSelect *>(opc_Editor);
-      if (pc_MultiSelectComboBox != NULL)
+      if (pc_MultiSelectComboBox != nullptr)
       {
          const QBitArray c_BitArrayValues = pc_MultiSelectComboBox->GetValuesAsBitArray();
          opc_Model->setData(orc_Index, c_BitArrayValues, static_cast<int32_t>(Qt::EditRole));
@@ -403,7 +403,7 @@ QWidget * C_TblDelegate::m_CreateGenericEditor(QWidget * const opc_Parent, const
                                                const C_OscNodeDataPoolContent & orc_Max, const float64_t of64_Factor,
                                                const float64_t of64_Offset, const uint32_t & oru32_ArrayIndex) const
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
    //Check if the input is consistent
    if (((orc_Index.isValid() == true) && (orc_Min.GetType() == orc_Max.GetType())) &&
@@ -431,7 +431,7 @@ void C_TblDelegate::m_SetGenericEditorDataVariable(QWidget * const opc_Editor, c
 {
    C_OgeWiSpinBoxGroup * const pc_SpinBox = dynamic_cast<C_OgeWiSpinBoxGroup * const>(opc_Editor);
 
-   if (pc_SpinBox != NULL)
+   if (pc_SpinBox != nullptr)
    {
       //Special setter
       pc_SpinBox->SetValue(orc_Index.data(static_cast<int32_t>(Qt::EditRole)));
@@ -471,7 +471,7 @@ void C_TblDelegate::mh_SetModelGenericDataVariable(QWidget * const opc_Editor, Q
 {
    C_OgeWiSpinBoxGroup * const pc_SpinBox = dynamic_cast<C_OgeWiSpinBoxGroup * const>(opc_Editor);
 
-   if (pc_SpinBox != NULL)
+   if (pc_SpinBox != nullptr)
    {
       //First read in the newest value and store as internal value
       pc_SpinBox->InterpretText();

@@ -74,21 +74,21 @@ int32_t C_OscSecurityRsa::h_SignSignature(const std::vector<uint8_t> & orc_Priva
 
       //Get private key information from PKCS#8 dump:
       PKCS8_PRIV_KEY_INFO * const pc_Key = d2i_PKCS8_PRIV_KEY_INFO(
-         NULL, &pu8_Data,
+         nullptr, &pu8_Data,
          static_cast<long>(orc_PrivateKey.size())); //lint !e970 //using type to match library interface
-      if (pc_Key != NULL)
+      if (pc_Key != nullptr)
       {
          //Convert PKCS#8 key to EVP_PKEY:
          EVP_PKEY * const pc_EvpKey = EVP_PKCS82PKEY(pc_Key);
          PKCS8_PRIV_KEY_INFO_free(pc_Key);
 
-         if (pc_EvpKey != NULL)
+         if (pc_EvpKey != nullptr)
          {
             s32_Retval = C_NOACT;
-            EVP_PKEY_CTX * const pc_SignCtx = EVP_PKEY_CTX_new(pc_EvpKey, NULL);
+            EVP_PKEY_CTX * const pc_SignCtx = EVP_PKEY_CTX_new(pc_EvpKey, nullptr);
             EVP_PKEY_free(pc_EvpKey);
 
-            if (pc_SignCtx != NULL)
+            if (pc_SignCtx != nullptr)
             {
                int x_Result; //lint !e970 !e8080 //using type to match library interface
 
@@ -102,7 +102,7 @@ int32_t C_OscSecurityRsa::h_SignSignature(const std::vector<uint8_t> & orc_Priva
                      size_t x_SignatureSize = 0; //lint !e8080  //using type to match library interface
 
                      //first call without output buffer to get size of required buffer:
-                     x_Result = EVP_PKEY_sign(pc_SignCtx, NULL, &x_SignatureSize, &orc_Message[0], orc_Message.size());
+                     x_Result = EVP_PKEY_sign(pc_SignCtx, nullptr, &x_SignatureSize, &orc_Message[0], orc_Message.size());
                      if ((x_Result > 0) && (x_SignatureSize > 0))
                      {
                         //dimension buffer based on result of first call
@@ -178,21 +178,21 @@ int32_t C_OscSecurityRsa::h_VerifySignature(const std::vector<uint8_t> & orc_Pub
 
       //Extract X509 data from binary key data:
       X509 * const pc_X509Data = d2i_X509(
-         NULL, &pu8_Data,
+         nullptr, &pu8_Data,
          static_cast<long>(orc_PublicKey.size())); //lint !e970 //using type to match library interface
-      if (pc_X509Data != NULL)
+      if (pc_X509Data != nullptr)
       {
          //Get key in EVP_PKEY format:
          EVP_PKEY * const pc_EvpKey = X509_get_pubkey(pc_X509Data);
          X509_free(pc_X509Data);
 
-         if (pc_EvpKey != NULL)
+         if (pc_EvpKey != nullptr)
          {
-            EVP_PKEY_CTX * const pc_VerifyCtx = EVP_PKEY_CTX_new(pc_EvpKey, NULL);
+            EVP_PKEY_CTX * const pc_VerifyCtx = EVP_PKEY_CTX_new(pc_EvpKey, nullptr);
             EVP_PKEY_free(pc_EvpKey);
             s32_Retval = C_NOACT;
 
-            if (pc_VerifyCtx != NULL)
+            if (pc_VerifyCtx != nullptr)
             {
                int x_Result; //lint !e970 !e8080 //using type to match library interface
                x_Result = EVP_PKEY_verify_recover_init(pc_VerifyCtx);
@@ -206,7 +206,7 @@ int32_t C_OscSecurityRsa::h_VerifySignature(const std::vector<uint8_t> & orc_Pub
                      size_t x_DecryptedSize = 0; //lint !e8080  //using type to match library interface
 
                      //first call: get buffer size needed for result
-                     x_Result = EVP_PKEY_verify_recover(pc_VerifyCtx, NULL, &x_DecryptedSize, &orc_Signature[0],
+                     x_Result = EVP_PKEY_verify_recover(pc_VerifyCtx, nullptr, &x_DecryptedSize, &orc_Signature[0],
                                                         orc_Signature.size());
                      if (x_Result > 0)
                      {

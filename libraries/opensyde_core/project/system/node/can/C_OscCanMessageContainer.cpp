@@ -214,7 +214,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
       const C_OscCanMessage & rc_Message = rc_Messages[oru32_MessageIndex];
 
       //Check variable name
-      if (opq_NameInvalid != NULL)
+      if (opq_NameInvalid != nullptr)
       {
          if ((rc_Message.q_CanOpenManagerMessageActive == true) &&
              (C_OscUtils::h_CheckValidCeName(rc_Message.c_Name) == false))
@@ -227,7 +227,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
          }
       }
       //Name conflict
-      if (opq_NameConflict != NULL)
+      if (opq_NameConflict != nullptr)
       {
          *opq_NameConflict = false;
 
@@ -285,7 +285,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
 
       //Id
       //Check valid id
-      if (opq_IdInvalid != NULL)
+      if (opq_IdInvalid != nullptr)
       {
          *opq_IdInvalid = false;
 
@@ -308,7 +308,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
          }
       }
       //Name conflict
-      if (opq_IdConflict != NULL)
+      if (opq_IdConflict != nullptr)
       {
          *opq_IdConflict = false;
 
@@ -364,7 +364,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
          }
       }
       //Check
-      if (opq_DelayTimeInvalid != NULL)
+      if (opq_DelayTimeInvalid != nullptr)
       {
          *opq_DelayTimeInvalid = false;
 
@@ -383,7 +383,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
       }
 
       //Signals
-      if (opq_SignalInvalid != NULL)
+      if (opq_SignalInvalid != nullptr)
       {
          *opq_SignalInvalid = false;
 
@@ -403,7 +403,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
       }
 
       //Signal count
-      if (opq_NoSignalsInvalid != NULL)
+      if (opq_NoSignalsInvalid != nullptr)
       {
          *opq_NoSignalsInvalid = false;
 
@@ -417,7 +417,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(const C_OscNodeDataPoolLis
       }
 
       // TX method restrictions
-      if (opq_TxMethodInvalid != NULL)
+      if (opq_TxMethodInvalid != nullptr)
       {
          *opq_TxMethodInvalid = false;
 
@@ -466,7 +466,7 @@ bool C_OscCanMessageContainer::CheckLocalError(const C_OscNodeDataPoolList & orc
    bool q_Error = false;
 
    for (uint32_t u32_ItMessage = 0;
-        (u32_ItMessage < this->c_TxMessages.size()) && ((q_Error == false) || (opc_InvalidTxMessages != NULL));
+        (u32_ItMessage < this->c_TxMessages.size()) && ((q_Error == false) || (opc_InvalidTxMessages != nullptr));
         ++u32_ItMessage)
    {
       bool q_NameConflict = false;
@@ -488,14 +488,14 @@ bool C_OscCanMessageContainer::CheckLocalError(const C_OscNodeDataPoolList & orc
           (q_NoSignalsInvalid == true) || (q_TxMethodInvalid == true))
       {
          q_Error = true;
-         if (opc_InvalidTxMessages != NULL)
+         if (opc_InvalidTxMessages != nullptr)
          {
             opc_InvalidTxMessages->push_back(u32_ItMessage);
          }
       }
    }
    for (uint32_t u32_ItMessage = 0;
-        (u32_ItMessage < this->c_RxMessages.size()) && ((q_Error == false) || (opc_InvalidRxMessages != NULL));
+        (u32_ItMessage < this->c_RxMessages.size()) && ((q_Error == false) || (opc_InvalidRxMessages != nullptr));
         ++u32_ItMessage)
    {
       bool q_NameConflict = false;
@@ -517,7 +517,7 @@ bool C_OscCanMessageContainer::CheckLocalError(const C_OscNodeDataPoolList & orc
           (q_NoSignalsInvalid == true) || (q_TxMethodInvalid == true))
       {
          q_Error = true;
-         if (opc_InvalidRxMessages != NULL)
+         if (opc_InvalidRxMessages != nullptr)
          {
             opc_InvalidRxMessages->push_back(u32_ItMessage);
          }

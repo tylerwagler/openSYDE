@@ -374,7 +374,7 @@ int32_t C_CanDispatcher::RegisterClient(uint16_t & oru16_Handle, const C_CanRxFi
    }
 
    mc_InstalledClients.IncLength(1);
-   if (opc_RXFilter != NULL)
+   if (opc_RXFilter != nullptr)
    {
       mc_InstalledClients[mc_InstalledClients.GetHigh()].c_RXFilter = *opc_RXFilter;
    }
@@ -387,7 +387,7 @@ int32_t C_CanDispatcher::RegisterClient(uint16_t & oru16_Handle, const C_CanRxFi
    //is there a free one ?
    for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.GetLength(); u16_Handle++)
    {
-      if (mc_ClientsByHandle[u16_Handle] == NULL)
+      if (mc_ClientsByHandle[u16_Handle] == nullptr)
       {
          q_Found = true;
          break;
@@ -430,7 +430,7 @@ int32_t C_CanDispatcher::RemoveClient(const uint16_t ou16_Handle)
    {
       return C_NOACT;
    }
-   if (mc_ClientsByHandle[ou16_Handle] == NULL)
+   if (mc_ClientsByHandle[ou16_Handle] == nullptr)
    {
       //nothing installed there ...
       return C_NOACT;
@@ -477,7 +477,7 @@ void C_CanDispatcher::m_ResyncShortcutPointers(void)
    //preset all pointers to zero:
    for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.GetLength(); u16_Handle++)
    {
-      mc_ClientsByHandle[u16_Handle] = NULL;
+      mc_ClientsByHandle[u16_Handle] = nullptr;
    }
 
    for (u16_Index = 0U; u16_Index < mc_InstalledClients.GetLength(); u16_Index++)
@@ -515,7 +515,7 @@ int32_t C_CanDispatcher::ReadFromQueue(const uint16_t ou16_Handle, T_STWCAN_Msg_
    {
       return C_RANGE;
    }
-   if (mc_ClientsByHandle[ou16_Handle] == NULL)
+   if (mc_ClientsByHandle[ou16_Handle] == nullptr)
    {
       return C_RANGE;
    }
@@ -543,7 +543,7 @@ int32_t C_CanDispatcher::ClearQueue(const uint16_t ou16_Handle)
    int32_t s32_Return = C_RANGE;
 
    if ((ou16_Handle < mc_ClientsByHandle.GetLength()) &&
-       (mc_ClientsByHandle[ou16_Handle] != NULL))
+       (mc_ClientsByHandle[ou16_Handle] != nullptr))
    {
       s32_Return = C_NO_ERR;
       mc_CriticalSection.Acquire();
@@ -633,7 +633,7 @@ int32_t C_CanDispatcher::SetRXFilter(const uint16_t ou16_Handle, const C_CanRxFi
    {
       return C_RANGE;
    }
-   if (mc_ClientsByHandle[ou16_Handle] == NULL)
+   if (mc_ClientsByHandle[ou16_Handle] == nullptr)
    {
       return C_RANGE;
    }

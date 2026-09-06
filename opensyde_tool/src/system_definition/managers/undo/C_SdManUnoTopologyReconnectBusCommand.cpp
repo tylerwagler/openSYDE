@@ -64,10 +64,10 @@ C_SdManUnoTopologyReconnectBusCommand::C_SdManUnoTopologyReconnectBusCommand(QGr
 {
    C_GiLiBusConnector * const pc_BusConnector = m_GetBusConnector();
 
-   if (pc_BusConnector != NULL)
+   if (pc_BusConnector != nullptr)
    {
       C_GiNode *  const pc_Node = pc_BusConnector->GetNodeItem();
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          const int32_t s32_NodeIndex = pc_Node->GetIndex();
          pc_Node->UpdateData();
@@ -82,16 +82,16 @@ C_SdManUnoTopologyReconnectBusCommand::C_SdManUnoTopologyReconnectBusCommand(QGr
             {
                const stw::opensyde_core::C_OscNode * const pc_NodeData =
                   C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndices[u32_ItNode]);
-               if (pc_NodeData != NULL)
+               if (pc_NodeData != nullptr)
                {
                   const C_PuiSdNodeConnectionId * const pc_ConnectionId = pc_BusConnector->GetConnectionData();
-                  if (pc_ConnectionId != NULL)
+                  if (pc_ConnectionId != nullptr)
                   {
                      const C_OscNodeComInterfaceSettings * const pc_ComInterface =
                         pc_NodeData->c_Properties.GetComInterface(pc_ConnectionId->e_InterfaceType,
                                                                   pc_ConnectionId->u8_InterfaceNumber);
                      this->mu8_InitialInterface = pc_ConnectionId->u8_InterfaceNumber;
-                     if (pc_ComInterface != NULL)
+                     if (pc_ComInterface != nullptr)
                      {
                         C_PuiSdNodeInterfaceAutomaticProperties c_Property;
                         c_Property.c_Ip.reserve(4);
@@ -136,7 +136,7 @@ void C_SdManUnoTopologyReconnectBusCommand::m_Reconnect(const uint64_t & oru64_S
    C_GiLiBus * const pc_LastBus = dynamic_cast<C_GiLiBus *>(m_GetSceneItem(oru64_LastId));
    C_GiLiBusConnector * const pc_BusConnector = m_GetBusConnector();
 
-   if (pc_BusConnector != NULL)
+   if (pc_BusConnector != nullptr)
    {
       pc_BusConnector->Reconnect(pc_StartingBus, pc_LastBus, this->mc_ConnectionPos, ors32_Interface, orc_Properties);
    }

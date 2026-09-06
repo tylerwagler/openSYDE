@@ -271,7 +271,7 @@ void C_GiSyTextElementWidget::m_FontColorClicked(void)
       }
    }
 
-   if (c_Popup != NULL)
+   if (c_Popup != nullptr)
    {
       c_Popup->HideOverlay();
       c_Popup->deleteLater();

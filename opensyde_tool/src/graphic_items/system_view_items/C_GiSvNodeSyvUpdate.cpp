@@ -65,10 +65,10 @@ C_GiSvNodeSyvUpdate::C_GiSvNodeSyvUpdate(const uint32_t ou32_ViewIndex, const in
                                          const float64_t & orf64_Height, QGraphicsItem * const opc_Parent) :
    //lint -e{1938}  static const is guaranteed preinitialized before main
    C_GiSvNodeSyvBase(ou32_ViewIndex, ors32_NodeIndex, oru64_Id, orf64_Width, orf64_Height, opc_Parent),
-   mpc_IconTopRight(NULL),
-   mpc_IconTopLeft(NULL),
-   mpc_IconBottom(NULL),
-   mpc_InfoDialog(NULL)
+   mpc_IconTopRight(nullptr),
+   mpc_IconTopLeft(nullptr),
+   mpc_IconBottom(nullptr),
+   mpc_InfoDialog(nullptr)
 {
    tgl_assert(this->ms32_Index >= 0);
    if (this->ms32_Index >= 0)
@@ -87,19 +87,19 @@ C_GiSvNodeSyvUpdate::C_GiSvNodeSyvUpdate(const uint32_t ou32_ViewIndex, const in
 //----------------------------------------------------------------------------------------------------------------------
 C_GiSvNodeSyvUpdate::~C_GiSvNodeSyvUpdate()
 {
-   if (this->mpc_IconTopRight != NULL)
+   if (this->mpc_IconTopRight != nullptr)
    {
       delete (this->mpc_IconTopRight);
    }
-   if (this->mpc_IconTopLeft != NULL)
+   if (this->mpc_IconTopLeft != nullptr)
    {
       delete (this->mpc_IconTopLeft);
    }
-   if (this->mpc_IconBottom != NULL)
+   if (this->mpc_IconBottom != nullptr)
    {
       delete (this->mpc_IconBottom);
    }
-   if (this->mpc_InfoDialog != NULL)
+   if (this->mpc_InfoDialog != nullptr)
    {
       delete (mpc_InfoDialog);
    }
@@ -268,7 +268,7 @@ void C_GiSvNodeSyvUpdate::ShowInfo(void)
          {
             const C_OscNode * const pc_Node =
                C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndices[u32_ItNode]);
-            if ((pc_Node != NULL) && (pc_Node->u32_SubDeviceIndex < this->mc_NodeData.GetSubNodeCount()))
+            if ((pc_Node != nullptr) && (pc_Node->u32_SubDeviceIndex < this->mc_NodeData.GetSubNodeCount()))
             {
                if (this->mc_NodeData.IsThereAnyHexFileInformationForDevice(pc_Node->u32_SubDeviceIndex) &&
                    this->mc_NodeData.IsDeviceInfoDiscarded(pc_Node->u32_SubDeviceIndex))
@@ -287,8 +287,8 @@ void C_GiSvNodeSyvUpdate::ShowInfo(void)
       //Trigger icon update if necessary
       UpdateIcons();
 
-      this->mpc_InfoDialog = NULL;
-      if (c_New != NULL)
+      this->mpc_InfoDialog = nullptr;
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();
@@ -385,7 +385,7 @@ bool C_GiSvNodeSyvUpdate::IsActiveInView(void) const
    if (this->ms32_Index >= 0)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          q_Retval = pc_View->GetNodeStatusDisplayedAsActive(static_cast<uint32_t>(this->ms32_Index));
       }
@@ -631,7 +631,7 @@ void C_GiSvNodeSyvUpdate::GenerateHint(void)
       QFileInfo c_FileInfoDevImg;
       const C_OscNode * const pc_Node =
          C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(static_cast<uint32_t>(this->GetIndex()));
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          const C_OscDeviceDefinition * const pc_Device = pc_Node->pc_DeviceDefinition;
          bool q_FileExists;
@@ -666,7 +666,7 @@ void C_GiSvNodeSyvUpdate::GenerateHint(void)
 void C_GiSvNodeSyvUpdate::UpdateTransform(const QTransform & orc_Transform)
 {
    C_GiSvNodeSyvBase::UpdateTransform(orc_Transform);
-   if (this->mpc_IconTopRight != NULL)
+   if (this->mpc_IconTopRight != nullptr)
    {
       this->mpc_IconTopRight->UpdateTransform(orc_Transform);
    }
@@ -839,15 +839,15 @@ void C_GiSvNodeSyvUpdate::m_GetCurrentNodeSecurityState(bool & orq_Authenticatio
    orq_AuthenticationNecessary = false;
    orq_TrafficEncryptionNecessary = false;
    orq_DebuggerEnabled = true;
-   if (opq_AuthenticationSupported != NULL)
+   if (opq_AuthenticationSupported != nullptr)
    {
       *opq_AuthenticationSupported = false;
    }
-   if (opq_TrafficEncryptionSupported != NULL)
+   if (opq_TrafficEncryptionSupported != nullptr)
    {
       *opq_TrafficEncryptionSupported = false;
    }
-   if (opq_DebuggerChangeSupported != NULL)
+   if (opq_DebuggerChangeSupported != nullptr)
    {
       *opq_DebuggerChangeSupported = false;
    }
@@ -859,13 +859,13 @@ void C_GiSvNodeSyvUpdate::m_GetCurrentNodeSecurityState(bool & orq_Authenticatio
       {
          const C_GiSvSubNodeData * const pc_SubDevice =
             this->mc_NodeData.GetSubNodeByNodeIndex(c_NodeIndices[u32_ItDevice]);
-         if (pc_SubDevice != NULL)
+         if (pc_SubDevice != nullptr)
          {
             const C_OscSuSequencesNodeConnectStates & rc_ConnectStates = pc_SubDevice->GetNodeConnectStates();
             if (rc_ConnectStates.c_AvailableFeatures.q_SupportsSecurityAuthentication)
             {
                orq_AuthenticationNecessary = orq_AuthenticationNecessary || rc_ConnectStates.q_AuthenticationNecessary;
-               if (opq_AuthenticationSupported != NULL)
+               if (opq_AuthenticationSupported != nullptr)
                {
                   *opq_AuthenticationSupported = true;
                }
@@ -874,7 +874,7 @@ void C_GiSvNodeSyvUpdate::m_GetCurrentNodeSecurityState(bool & orq_Authenticatio
             {
                orq_TrafficEncryptionNecessary = orq_TrafficEncryptionNecessary ||
                                                 rc_ConnectStates.q_TrafficEncryptionNecessary;
-               if (opq_TrafficEncryptionSupported != NULL)
+               if (opq_TrafficEncryptionSupported != nullptr)
                {
                   *opq_TrafficEncryptionSupported = true;
                }
@@ -883,7 +883,7 @@ void C_GiSvNodeSyvUpdate::m_GetCurrentNodeSecurityState(bool & orq_Authenticatio
                 rc_ConnectStates.c_AvailableFeatures.q_SupportsDebuggerOff)
             {
                orq_DebuggerEnabled = orq_DebuggerEnabled && rc_ConnectStates.q_DebuggerEnabled;
-               if (opq_DebuggerChangeSupported != NULL)
+               if (opq_DebuggerChangeSupported != nullptr)
                {
                   *opq_DebuggerChangeSupported = true;
                }
@@ -990,7 +990,7 @@ void C_GiSvNodeSyvUpdate::m_AppendSecurityToolTipState(QString & orc_Text, const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvNodeSyvUpdate::m_RefreshDialog()
 {
-   if (this->mpc_InfoDialog != NULL)
+   if (this->mpc_InfoDialog != nullptr)
    {
       this->mpc_InfoDialog->SetStatus(this->mc_NodeData);
    }

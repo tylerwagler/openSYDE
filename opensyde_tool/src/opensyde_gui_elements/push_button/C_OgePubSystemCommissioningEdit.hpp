@@ -26,7 +26,7 @@ class C_OgePubSystemCommissioningEdit :
    Q_OBJECT
 
 public:
-   explicit C_OgePubSystemCommissioningEdit(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubSystemCommissioningEdit(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

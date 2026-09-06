@@ -213,7 +213,7 @@ int32_t C_SdNdeDpListDataSetModel::columnCount(const QModelIndex & orc_Parent) c
    {
       const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-      if (pc_List != NULL)
+      if (pc_List != nullptr)
       {
          //For table parent should always be invalid
          s32_Retval = static_cast<int32_t>(pc_List->c_DataSets.size());
@@ -245,7 +245,7 @@ QVariant C_SdNdeDpListDataSetModel::data(const QModelIndex & orc_Index, const in
             C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(this->mu32_NodeIndex,
                                                                 this->mu32_DataPoolIndex,
                                                                 this->mu32_ListIndex);
-         if (pc_OscElement != NULL)
+         if (pc_OscElement != nullptr)
          {
             const uint32_t u32_Index = static_cast<uint32_t>(orc_Index.column());
             if (u32_Index < pc_OscElement->c_DataSets.size())
@@ -345,7 +345,7 @@ QVariant C_SdNdeDpListDataSetModel::data(const QModelIndex & orc_Index, const in
                this->mu32_NodeIndex,
                this->mu32_DataPoolIndex,
                this->mu32_ListIndex);
-            if (pc_OscList != NULL)
+            if (pc_OscList != nullptr)
             {
                bool q_NameInvalid = false;
                bool q_NameConflict = false;
@@ -378,7 +378,7 @@ QVariant C_SdNdeDpListDataSetModel::data(const QModelIndex & orc_Index, const in
                this->mu32_NodeIndex,
                this->mu32_DataPoolIndex,
                this->mu32_ListIndex);
-            if (pc_OscList != NULL)
+            if (pc_OscList != nullptr)
             {
                bool q_NameConflict = false;
                pc_OscList->CheckErrorDataSet(static_cast<uint32_t>(orc_Index.column()), &q_NameConflict,
@@ -728,7 +728,7 @@ QStringList C_SdNdeDpListDataSetModel::mimeTypes(void) const
 //----------------------------------------------------------------------------------------------------------------------
 QMimeData * C_SdNdeDpListDataSetModel::mimeData(const QModelIndexList & orc_Indices) const
 {
-   QMimeData * pc_Retval = NULL;
+   QMimeData * pc_Retval = nullptr;
 
    if (orc_Indices.size() > 0)
    {
@@ -736,7 +736,7 @@ QMimeData * C_SdNdeDpListDataSetModel::mimeData(const QModelIndexList & orc_Indi
       {
          const C_OscNodeDataPoolList * const pc_OscList = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-         if (pc_OscList != NULL)
+         if (pc_OscList != nullptr)
          {
             std::vector<uint32_t> c_Cols = C_SdNdeDpUtil::h_ConvertVector(orc_Indices, false);
             QString c_String;

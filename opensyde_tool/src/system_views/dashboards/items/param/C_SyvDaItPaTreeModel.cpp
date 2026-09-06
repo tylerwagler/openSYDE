@@ -60,7 +60,7 @@ const QString C_SyvDaItPaTreeModel::mhc_ECU_VALUE_INIT_STRING = "N/A";
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaItPaTreeModel::C_SyvDaItPaTreeModel(QObject * const opc_Parent) :
    C_TblTreModel(opc_Parent),
-   mpc_DataWidget(NULL),
+   mpc_DataWidget(nullptr),
    mq_EditMode(false),
    mq_Connected(false),
    mq_SaveLoadActive(true),
@@ -175,7 +175,7 @@ void C_SyvDaItPaTreeModel::DeleteSpecified(const std::vector<C_OscNodeDataPoolLi
 {
    C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       std::vector<C_OscNodeDataPoolListId> c_ListIds;
       for (uint32_t u32_ItList = 0UL; u32_ItList < orc_ListIds.size(); ++u32_ItList)
@@ -244,10 +244,10 @@ void C_SyvDaItPaTreeModel::ApplyEcuValues(const std::vector<C_OscNodeDataPoolLis
 {
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if ((((pc_Param != NULL) && (pc_Param->c_ListValues.size() == this->mc_EcuValues.size())) &&
+      if ((((pc_Param != nullptr) && (pc_Param->c_ListValues.size() == this->mc_EcuValues.size())) &&
            (pc_Param->c_ListValues.size() == this->mc_EcuValuesReadStatus.size())) &&
           (pc_Param->c_ListValues.size() == pc_Param->c_DataPoolElementsConfig.size()))
       {
@@ -329,10 +329,10 @@ const
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItConfig = 0UL; u32_ItConfig < pc_Param->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
          {
@@ -369,14 +369,14 @@ const
                if (q_IsInteresting)
                {
                   const C_OscNodeDataPoolContent * const pc_SetVal = m_GetSetValue(u32_ItConfig);
-                  if (pc_SetVal != NULL)
+                  if (pc_SetVal != nullptr)
                   {
                      const C_OscNodeDataPoolListElement * const pc_OscElement =
                         C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(rc_Config.c_ElementId.u32_NodeIndex,
                                                                                    rc_Config.c_ElementId.u32_DataPoolIndex,
                                                                                    rc_Config.c_ElementId.u32_ListIndex,
                                                                                    rc_Config.c_ElementId.u32_ElementIndex);
-                     if (pc_OscElement != NULL)
+                     if (pc_OscElement != nullptr)
                      {
                         //With arrays the check has to be exactly like this
                         if ((pc_OscElement->c_MinValue <= *pc_SetVal) && (*pc_SetVal <= pc_OscElement->c_MaxValue))
@@ -434,10 +434,10 @@ void C_SyvDaItPaTreeModel::PrepareChangedValues(const std::vector<C_OscNodeDataP
 {
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if ((pc_ParamWidget != NULL) && (orc_ListIds.size() > 0UL))
+   if ((pc_ParamWidget != nullptr) && (orc_ListIds.size() > 0UL))
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (((pc_Param != NULL) && (pc_Param->c_DataPoolElementsConfig.size() == this->mc_EcuValuesReadStatus.size())) &&
+      if (((pc_Param != nullptr) && (pc_Param->c_DataPoolElementsConfig.size() == this->mc_EcuValuesReadStatus.size())) &&
           (this->mc_EcuValuesReadStatus.size() == this->mc_EcuValues.size()))
       {
          for (uint32_t u32_ItConfig = 0UL; u32_ItConfig < pc_Param->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
@@ -460,7 +460,7 @@ void C_SyvDaItPaTreeModel::PrepareChangedValues(const std::vector<C_OscNodeDataP
                if (q_Found == true)
                {
                   const C_OscNodeDataPoolContent * const pc_SetVal = m_GetSetValue(u32_ItConfig);
-                  if ((pc_SetVal != NULL) && (this->mc_EcuValuesReadStatus[u32_ItConfig] == true))
+                  if ((pc_SetVal != nullptr) && (this->mc_EcuValuesReadStatus[u32_ItConfig] == true))
                   {
                      //Only apply values if necessary
                      if (this->mc_EcuValues[u32_ItConfig].CompareContentStrict(*pc_SetVal))
@@ -475,7 +475,7 @@ void C_SyvDaItPaTreeModel::PrepareChangedValues(const std::vector<C_OscNodeDataP
                               rc_Config.c_ElementId.u32_DataPoolIndex,
                               rc_Config.c_ElementId.u32_ListIndex,
                               rc_Config.c_ElementId.u32_ElementIndex);
-                        if (pc_OscElement != NULL)
+                        if (pc_OscElement != nullptr)
                         {
                            tgl_assert(C_PuiSdHandler::h_GetInstance()->SetDataPoolListElementNvmValue(
                                          rc_Config.c_ElementId.u32_NodeIndex,
@@ -504,10 +504,10 @@ const
 {
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if ((pc_ParamWidget != NULL) && (orc_ListIds.size() > 0UL))
+   if ((pc_ParamWidget != nullptr) && (orc_ListIds.size() > 0UL))
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (((pc_Param != NULL) && (pc_Param->c_DataPoolElementsConfig.size() == this->mc_EcuValuesReadStatus.size())) &&
+      if (((pc_Param != nullptr) && (pc_Param->c_DataPoolElementsConfig.size() == this->mc_EcuValuesReadStatus.size())) &&
           (this->mc_EcuValuesReadStatus.size() == this->mc_EcuValues.size()))
       {
          for (uint32_t u32_ItConfig = 0UL; u32_ItConfig < pc_Param->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
@@ -535,7 +535,7 @@ const
                         rc_Config.c_ElementId.u32_DataPoolIndex,
                         rc_Config.c_ElementId.u32_ListIndex,
                         rc_Config.c_ElementId.u32_ElementIndex);
-                  if (pc_OscElement != NULL)
+                  if (pc_OscElement != nullptr)
                   {
                      tgl_assert(C_PuiSdHandler::h_GetInstance()->SetDataPoolListElementNvmValueChanged(
                                    rc_Config.c_ElementId.u32_NodeIndex,
@@ -562,14 +562,14 @@ QModelIndexList C_SyvDaItPaTreeModel::GetAllAvailableIndixesForOneColumn(void) c
 {
    QModelIndexList c_Retval;
 
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItAll = this->mpc_InvisibleRootItem->c_Children.begin();
            c_ItAll != this->mpc_InvisibleRootItem->c_Children.end(); ++c_ItAll)
       {
          //Top level
          const C_TblTreSimpleItem * const pc_AllNode = *c_ItAll;
-         if (pc_AllNode != NULL)
+         if (pc_AllNode != nullptr)
          {
             uint32_t u32_ItNode = 0UL;
             const QModelIndex c_AllBase = this->index(0, 0);
@@ -578,7 +578,7 @@ QModelIndexList C_SyvDaItPaTreeModel::GetAllAvailableIndixesForOneColumn(void) c
             {
                //Node level
                const C_TblTreSimpleItem * const pc_Node = *c_ItNode;
-               if (pc_Node != NULL)
+               if (pc_Node != nullptr)
                {
                   uint32_t u32_ItDp = 0UL;
                   const QModelIndex c_Node = this->index(static_cast<int32_t>(u32_ItNode), 0, c_AllBase);
@@ -587,7 +587,7 @@ QModelIndexList C_SyvDaItPaTreeModel::GetAllAvailableIndixesForOneColumn(void) c
                   {
                      //Data pool level
                      const C_TblTreSimpleItem * const pc_Dp = *c_ItDp;
-                     if (pc_Dp != NULL)
+                     if (pc_Dp != nullptr)
                      {
                         uint32_t u32_ItLi = 0UL;
                         const QModelIndex c_Dp = this->index(static_cast<int32_t>(u32_ItDp), 0, c_Node);
@@ -596,7 +596,7 @@ QModelIndexList C_SyvDaItPaTreeModel::GetAllAvailableIndixesForOneColumn(void) c
                         {
                            //List level
                            const C_TblTreSimpleItem * const pc_Li = *c_ItLi;
-                           if (pc_Li != NULL)
+                           if (pc_Li != nullptr)
                            {
                               const QModelIndex c_Li = this->index(static_cast<int32_t>(u32_ItLi), 0, c_Dp);
                               for (uint32_t u32_ItEl = 0L; u32_ItEl < pc_Li->c_Children.size(); ++u32_ItEl)
@@ -640,7 +640,7 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
 {
    QModelIndex c_Retval;
 
-   if ((oru32_ValidLayers <= 4UL) && (this->mpc_InvisibleRootItem != NULL))
+   if ((oru32_ValidLayers <= 4UL) && (this->mpc_InvisibleRootItem != nullptr))
    {
       uint32_t u32_ItAll = 0UL;
       for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItAll = this->mpc_InvisibleRootItem->c_Children.begin();
@@ -649,7 +649,7 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
          //Top level
 
          const C_TblTreItem * const pc_AllNode = dynamic_cast<const C_TblTreItem * const>(*c_ItAll);
-         if (pc_AllNode != NULL)
+         if (pc_AllNode != nullptr)
          {
             const QModelIndex c_AllNode = this->index(static_cast<int32_t>(u32_ItAll), 0);
             if (oru32_ValidLayers == 0UL)
@@ -665,7 +665,7 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
                   //Node level
 
                   const C_TblTreItem * const pc_Node = dynamic_cast<const C_TblTreItem * const>(*c_ItNode);
-                  if ((pc_Node != NULL) && (pc_Node->u32_Index == orc_Id.u32_NodeIndex))
+                  if ((pc_Node != nullptr) && (pc_Node->u32_Index == orc_Id.u32_NodeIndex))
                   {
                      const QModelIndex c_Node = this->index(static_cast<int32_t>(u32_ItNode), 0, c_AllNode);
                      if (oru32_ValidLayers == 1UL)
@@ -681,7 +681,7 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
                            //Datapool level
 
                            const C_TblTreItem * const pc_Dp = dynamic_cast<const C_TblTreItem * const>(*c_ItDp);
-                           if ((pc_Dp != NULL) && (pc_Dp->u32_Index == orc_Id.u32_DataPoolIndex))
+                           if ((pc_Dp != nullptr) && (pc_Dp->u32_Index == orc_Id.u32_DataPoolIndex))
                            {
                               const QModelIndex c_Dp = this->index(static_cast<int32_t>(u32_ItDp), 0, c_Node);
                               if (oru32_ValidLayers == 2UL)
@@ -699,7 +699,7 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
 
                                     const C_TblTreItem * const pc_Li =
                                        dynamic_cast<const C_TblTreItem * const>(*c_ItLi);
-                                    if ((pc_Li != NULL) && (pc_Li->u32_Index == orc_Id.u32_ListIndex))
+                                    if ((pc_Li != nullptr) && (pc_Li->u32_Index == orc_Id.u32_ListIndex))
                                     {
                                        const QModelIndex c_Li = this->index(static_cast<int32_t>(u32_ItLi), 0, c_Dp);
                                        if (oru32_ValidLayers == 3UL)
@@ -717,7 +717,7 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
 
                                              const C_TblTreItem * const pc_El =
                                                 dynamic_cast<const C_TblTreItem * const>(*c_ItEl);
-                                             if ((pc_El != NULL) && (pc_El->u32_Index == orc_Id.u32_ElementIndex))
+                                             if ((pc_El != nullptr) && (pc_El->u32_Index == orc_Id.u32_ElementIndex))
                                              {
                                                 const QModelIndex c_El = this->index(static_cast<int32_t>(u32_ItEl), 0,
                                                                                      c_Li);
@@ -759,10 +759,10 @@ std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeM
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          c_Retval.reserve(pc_Param->c_DataPoolElementsConfig.size());
          for (uint32_t u32_ItConfig = 0UL; u32_ItConfig < pc_Param->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
@@ -795,10 +795,10 @@ bool C_SyvDaItPaTreeModel::CheckListsRead(const std::vector<C_OscNodeDataPoolLis
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if ((pc_Param != NULL) && (pc_Param->c_DataPoolElementsConfig.size() == this->mc_EcuValuesReadStatus.size()))
+      if ((pc_Param != nullptr) && (pc_Param->c_DataPoolElementsConfig.size() == this->mc_EcuValuesReadStatus.size()))
       {
          for (uint32_t u32_ItConfig = 0UL; u32_ItConfig < pc_Param->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
          {
@@ -840,10 +840,10 @@ const
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          if (((this->mc_EcuValuesReadStatus.size() == this->mc_EcuValues.size()) &&
               (this->mc_EcuValues.size() == pc_Param->c_ListValues.size())) &&
@@ -856,7 +856,7 @@ const
                if (this->mc_EcuValuesReadStatus[u32_ItElement] == true)
                {
                   const C_OscNodeDataPoolContent * const pc_Value = m_GetSetValue(u32_ItElement);
-                  if (pc_Value != NULL)
+                  if (pc_Value != nullptr)
                   {
                      if (this->mc_EcuValues[u32_ItElement].CompareContentStrict(*pc_Value))
                      {
@@ -899,10 +899,10 @@ std::vector<C_OscNodeDataPoolListId> C_SyvDaItPaTreeModel::GetInvalidListIds(voi
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          if (this->mc_EcuValuesReadStatus.size() == pc_Param->c_DataPoolElementsConfig.size())
          {
@@ -954,10 +954,10 @@ void C_SyvDaItPaTreeModel::UpdateEcuValues(void)
 {
    C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-      if (pc_ParamData != NULL)
+      if (pc_ParamData != nullptr)
       {
          for (uint32_t u32_Index = 0UL; u32_Index < pc_ParamData->c_DataPoolElementsConfig.size(); ++u32_Index)
          {
@@ -979,7 +979,7 @@ void C_SyvDaItPaTreeModel::UpdateEcuValues(void)
                      //Confirm read status
                      rc_Ref = true;
                      //Just check
-                     if (pc_OscElement != NULL)
+                     if (pc_OscElement != nullptr)
                      {
                         std::vector<QString> & rc_ValueStrings = this->mc_EcuValuesString[u32_Index];
                         this->mc_EcuValues[u32_Index] = c_Content;
@@ -1046,10 +1046,10 @@ void C_SyvDaItPaTreeModel::GetListSetValues(const C_OscNodeDataPoolListElementId
 {
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItConfig = 0UL; u32_ItConfig < pc_Param->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
          {
@@ -1061,7 +1061,7 @@ void C_SyvDaItPaTreeModel::GetListSetValues(const C_OscNodeDataPoolListElementId
                    (orc_ListId.u32_ListIndex == rc_Config.c_ElementId.u32_ListIndex))
                {
                   const C_OscNodeDataPoolContent * const pc_Value = m_GetSetValue(u32_ItConfig);
-                  if (pc_Value != NULL)
+                  if (pc_Value != nullptr)
                   {
                      //Check if the order is as expected
                      tgl_assert(orc_ListValues.size() == rc_Config.c_ElementId.u32_ElementIndex);
@@ -1094,10 +1094,10 @@ void C_SyvDaItPaTreeModel::Init(C_PuiSvDbDataElementHandler * const opc_DataWidg
    this->mc_EcuValuesReadStatus.clear();
    this->mc_EcuValues.clear();
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          //Create root node
          C_TblTreItem * const pc_AllNode = new C_TblTreItem();
@@ -1121,7 +1121,7 @@ void C_SyvDaItPaTreeModel::Init(C_PuiSvDbDataElementHandler * const opc_DataWidg
                C_TblTreItem * pc_DataPool;
                C_TblTreItem * pc_List;
                C_TblTreItem * pc_Element;
-               if (pc_Node == NULL)
+               if (pc_Node == nullptr)
                {
                   //Create node
                   pc_Node = new C_TblTreItem();
@@ -1130,7 +1130,7 @@ void C_SyvDaItPaTreeModel::Init(C_PuiSvDbDataElementHandler * const opc_DataWidg
                }
                pc_DataPool = pc_Node->GetItem(rc_Config.c_ElementId.u32_DataPoolIndex);
                //Continue
-               if (pc_DataPool == NULL)
+               if (pc_DataPool == nullptr)
                {
                   //Create data pool
                   pc_DataPool = new C_TblTreItem();
@@ -1140,7 +1140,7 @@ void C_SyvDaItPaTreeModel::Init(C_PuiSvDbDataElementHandler * const opc_DataWidg
                }
                pc_List = pc_DataPool->GetItem(rc_Config.c_ElementId.u32_ListIndex);
                //Continue
-               if (pc_List == NULL)
+               if (pc_List == nullptr)
                {
                   //Create list
                   pc_List = new C_TblTreItem();
@@ -1153,7 +1153,7 @@ void C_SyvDaItPaTreeModel::Init(C_PuiSvDbDataElementHandler * const opc_DataWidg
                }
                pc_Element = pc_List->GetItem(rc_Config.c_ElementId.u32_ElementIndex);
                //Continue
-               if (pc_Element == NULL)
+               if (pc_Element == nullptr)
                {
                   //Create element
                   pc_Element = new C_TblTreItem();
@@ -1164,7 +1164,7 @@ void C_SyvDaItPaTreeModel::Init(C_PuiSvDbDataElementHandler * const opc_DataWidg
                   pc_List->AddChild(pc_Element);
                }
                //Handle ECU values
-               if (pc_OscElement != NULL)
+               if (pc_OscElement != nullptr)
                {
                   std::vector<QString> c_Entry;
                   if (pc_OscElement->q_InterpretAsString == true)
@@ -1424,7 +1424,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
             if ((os32_Role == static_cast<int32_t>(Qt::DisplayRole)) && (e_Col == C_SyvDaItPaTreeModel::eCOMMENT))
             {
                const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_Id.u32_NodeIndex);
-               if (pc_Node != NULL)
+               if (pc_Node != nullptr)
                {
                   c_Retval = pc_Node->c_Properties.c_Comment.c_str();
                }
@@ -1436,7 +1436,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
                   c_Id.u32_NodeIndex,
                   c_Id.u32_DataPoolIndex);
-               if (pc_DataPool != NULL)
+               if (pc_DataPool != nullptr)
                {
                   c_Retval = pc_DataPool->c_Comment.c_str();
                }
@@ -1453,7 +1453,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                      C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(c_Id.u32_NodeIndex,
                                                                          c_Id.u32_DataPoolIndex,
                                                                          c_Id.u32_ListIndex);
-                  if (pc_List != NULL)
+                  if (pc_List != nullptr)
                   {
                      c_Retval = pc_List->c_Comment.c_str();
                   }
@@ -1467,14 +1467,14 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                      C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(c_Id.u32_NodeIndex,
                                                                          c_Id.u32_DataPoolIndex,
                                                                          c_Id.u32_ListIndex);
-                  if ((pc_List != NULL) && (pc_List->q_NvmCrcActive == true))
+                  if ((pc_List != nullptr) && (pc_List->q_NvmCrcActive == true))
                   {
-                     if (pc_ParamWidget != NULL)
+                     if (pc_ParamWidget != nullptr)
                      {
                         const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
                         //Just request index of first element
                         c_Id.u32_ElementIndex = 0UL;
-                        if (pc_ParamData != NULL)
+                        if (pc_ParamData != nullptr)
                         {
                            const uint32_t u32_Index = GetParamIndexId(c_Id);
                            if (u32_Index < this->mc_EcuValuesReadStatus.size())
@@ -1511,12 +1511,12 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                }
                break;
             case C_SyvDaItPaTreeModel::eSET:
-               if (pc_ParamWidget != NULL)
+               if (pc_ParamWidget != nullptr)
                {
                   const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
                   //Just request index of first element
                   c_Id.u32_ElementIndex = 0UL;
-                  if (pc_ParamData != NULL)
+                  if (pc_ParamData != nullptr)
                   {
                      const uint32_t u32_Index = GetParamIndexId(c_Id);
                      if (u32_Index < pc_ParamData->c_DataSetSelectionIndices.size())
@@ -1535,7 +1535,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                                  C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(c_Id.u32_NodeIndex,
                                                                                      c_Id.u32_DataPoolIndex,
                                                                                      c_Id.u32_ListIndex);
-                              if ((pc_List != NULL) && (u32_DataSet < pc_List->c_DataSets.size()))
+                              if ((pc_List != nullptr) && (u32_DataSet < pc_List->c_DataSets.size()))
                               {
                                  const C_OscNodeDataPoolDataSet & rc_DataSet = pc_List->c_DataSets[u32_DataSet];
                                  c_Retval = static_cast<QString>(C_GtGetText::h_GetText("Dataset \"%1\"")).arg(
@@ -1571,17 +1571,17 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                                                                                              c_Id.u32_DataPoolIndex,
                                                                                              c_Id.u32_ListIndex,
                                                                                              c_Id.u32_ElementIndex);
-                  if (pc_OscElement != NULL)
+                  if (pc_OscElement != nullptr)
                   {
                      c_Retval = pc_OscElement->c_Comment.c_str();
                   }
                }
                break;
             case C_SyvDaItPaTreeModel::eDEVICE_VALUE:
-               if (pc_ParamWidget != NULL)
+               if (pc_ParamWidget != nullptr)
                {
                   const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-                  if (pc_ParamData != NULL)
+                  if (pc_ParamData != nullptr)
                   {
                      const uint32_t u32_Index = GetParamIndexId(c_Id);
                      if ((u32_Index < this->mc_EcuValuesString.size()) &&
@@ -1598,7 +1598,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                               c_Id.u32_DataPoolIndex,
                               c_Id.u32_ListIndex,
                               c_Id.u32_ElementIndex);
-                           if (pc_OscElement != NULL)
+                           if (pc_OscElement != nullptr)
                            {
                               if ((pc_OscElement->q_InterpretAsString == false) && (pc_OscElement->GetArray() == true))
                               {
@@ -1627,21 +1627,21 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                }
                break;
             case C_SyvDaItPaTreeModel::eSET:
-               if (pc_ParamWidget != NULL)
+               if (pc_ParamWidget != nullptr)
                {
                   const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-                  if (pc_ParamData != NULL)
+                  if (pc_ParamData != nullptr)
                   {
                      const uint32_t u32_Index = GetParamIndexId(c_Id);
                      const C_OscNodeDataPoolContent * const pc_Content = m_GetSetValue(u32_Index);
-                     if (pc_Content != NULL)
+                     if (pc_Content != nullptr)
                      {
                         pc_OscElement = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(
                            c_Id.u32_NodeIndex,
                            c_Id.u32_DataPoolIndex,
                            c_Id.u32_ListIndex,
                            c_Id.u32_ElementIndex);
-                        if (pc_OscElement != NULL)
+                        if (pc_OscElement != nullptr)
                         {
                            if (pc_OscElement->q_InterpretAsString == true)
                            {
@@ -1687,7 +1687,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                                                                                              c_Id.u32_DataPoolIndex,
                                                                                              c_Id.u32_ListIndex,
                                                                                              c_Id.u32_ElementIndex);
-                  if (pc_OscElement != NULL)
+                  if (pc_OscElement != nullptr)
                   {
                      c_Retval = pc_OscElement->c_Unit.c_str();
                   }
@@ -1791,7 +1791,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
             //Special link handling
             c_Font.setUnderline(true);
          }
-         if (pc_ParamWidget != NULL)
+         if (pc_ParamWidget != nullptr)
          {
             const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
             C_OscNodeDataPoolListElementId c_Id;
@@ -1800,13 +1800,13 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
             {
             case C_SyvDaItPaTreeModel::eSET:
                C_SyvDaItPaTreeModel::h_DecodeIndex(orc_Index, c_Id, u32_ValidLayers);
-               if ((pc_ParamData != NULL) && (u32_ValidLayers == 4))
+               if ((pc_ParamData != nullptr) && (u32_ValidLayers == 4))
                {
                   const uint32_t u32_Index = GetParamIndexId(c_Id);
                   const C_OscNodeDataPoolContent * const pc_Value = m_GetSetValue(u32_Index);
                   const C_OscNodeDataPoolListElement * const pc_Element =
                      C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id);
-                  if ((pc_Element != NULL) && (pc_Value != NULL))
+                  if ((pc_Element != nullptr) && (pc_Value != nullptr))
                   {
                      //Check error
                      if ((*pc_Value >= pc_Element->c_MinValue) && (*pc_Value >= pc_Element->c_MinValue))
@@ -1837,7 +1837,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                break;
             case C_SyvDaItPaTreeModel::eDEVICE_VALUE:
                C_SyvDaItPaTreeModel::h_DecodeIndex(orc_Index, c_Id, u32_ValidLayers);
-               if ((pc_ParamData != NULL) && (u32_ValidLayers == 3))
+               if ((pc_ParamData != nullptr) && (u32_ValidLayers == 3))
                {
                   const uint32_t u32_ItemIndex = GetParamIndexId(c_Id);
                   uint32_t u32_ItFinalIndex;
@@ -1915,10 +1915,10 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
          {
             const C_GiSvDaParam * const pc_ParamWidget =
                dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
-            if (pc_ParamWidget != NULL)
+            if (pc_ParamWidget != nullptr)
             {
                const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-               if (pc_ParamData != NULL)
+               if (pc_ParamData != nullptr)
                {
                   const uint32_t u32_Index = GetParamIndexId(c_Id);
                   if (((u32_Index < this->mc_EcuValuesReadStatus.size()) &&
@@ -1930,7 +1930,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                            c_Id.u32_DataPoolIndex,
                            c_Id.u32_ListIndex,
                            c_Id.u32_ElementIndex);
-                     if (((pc_OscElement != NULL) &&
+                     if (((pc_OscElement != nullptr) &&
                           (pc_OscElement->q_InterpretAsString == false)) && (pc_OscElement->GetArray() == true))
                      {
                         c_Retval = this->data(orc_Index, static_cast<int32_t>(Qt::DisplayRole));
@@ -2009,10 +2009,10 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
 
             const C_GiSvDaParam * const pc_ParamWidget =
                dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
-            if (pc_ParamWidget != NULL)
+            if (pc_ParamWidget != nullptr)
             {
                const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-               if (pc_ParamData != NULL)
+               if (pc_ParamData != nullptr)
                {
                   const uint32_t u32_Index = GetParamIndexId(c_Id);
                   if ((u32_Index < pc_ParamData->c_DataSetSelectionIndices.size()) &&
@@ -2021,7 +2021,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                      const C_OscNodeDataPoolListElement * const pc_Element =
                         C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id);
                      //Check error
-                     if ((pc_Element != NULL) && (u32_Index < pc_ParamData->c_ListValues.size()))
+                     if ((pc_Element != nullptr) && (u32_Index < pc_ParamData->c_ListValues.size()))
                      {
                         const C_OscNodeDataPoolContent & rc_Value = pc_ParamData->c_ListValues[u32_Index];
                         if ((rc_Value >= pc_Element->c_MinValue) && (rc_Value <= pc_Element->c_MaxValue))
@@ -2076,10 +2076,10 @@ bool C_SyvDaItPaTreeModel::setData(const QModelIndex & orc_Index, const QVariant
          {
          case 3:
             //data set index
-            if (pc_ParamWidget != NULL)
+            if (pc_ParamWidget != nullptr)
             {
                const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-               if (pc_ParamData != NULL)
+               if (pc_ParamData != nullptr)
                {
                   bool q_Ok;
                   const int32_t s32_NewDataSetValue = static_cast<int32_t>(orc_Value.toInt(&q_Ok)) - 1L;
@@ -2113,10 +2113,10 @@ bool C_SyvDaItPaTreeModel::setData(const QModelIndex & orc_Index, const QVariant
             break;
          case 4:
             //set
-            if (pc_ParamWidget != NULL)
+            if (pc_ParamWidget != nullptr)
             {
                const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-               if (pc_ParamData != NULL)
+               if (pc_ParamData != nullptr)
                {
                   const uint32_t u32_Index = GetParamIndexId(c_Id);
                   if (u32_Index < pc_ParamData->c_DataPoolElementsConfig.size())
@@ -2133,7 +2133,7 @@ bool C_SyvDaItPaTreeModel::setData(const QModelIndex & orc_Index, const QVariant
                               C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(
                                  rc_Config.c_ElementId.u32_NodeIndex, rc_Config.c_ElementId.u32_DataPoolIndex,
                                  rc_Config.c_ElementId.u32_ListIndex, rc_Config.c_ElementId.u32_ElementIndex);
-                           if (pc_Element != NULL)
+                           if (pc_Element != nullptr)
                            {
                               C_SdNdeDpContentUtil::h_SetDataVariableFromGenericWithScaling(orc_Value, rc_Content,
                                                                                             pc_Element->f64_Factor,
@@ -2301,10 +2301,10 @@ Qt::ItemFlags C_SyvDaItPaTreeModel::flags(const QModelIndex & orc_Index) const
       else if (e_Col == C_SyvDaItPaTreeModel::eSET)
       {
          //Only editable if there are more datasets
-         if (pc_ParamWidget != NULL)
+         if (pc_ParamWidget != nullptr)
          {
             const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-            if (pc_ParamData != NULL)
+            if (pc_ParamData != nullptr)
             {
                const uint32_t u32_Index = GetParamIndexId(c_Id);
                if (u32_Index < pc_ParamData->c_DataPoolElementsConfig.size())
@@ -2318,7 +2318,7 @@ Qt::ItemFlags C_SyvDaItPaTreeModel::flags(const QModelIndex & orc_Index) const
                            rc_Config.c_ElementId.u32_DataPoolIndex,
                            rc_Config.c_ElementId.u32_ListIndex,
                            rc_Config.c_ElementId.u32_ElementIndex);
-                     if ((pc_OscElement != NULL) && (pc_OscElement->c_DataSetValues.size() > 0UL))
+                     if ((pc_OscElement != nullptr) && (pc_OscElement->c_DataSetValues.size() > 0UL))
                      {
                         c_Retval = c_Retval | Qt::ItemIsEditable;
                      }
@@ -2337,10 +2337,10 @@ Qt::ItemFlags C_SyvDaItPaTreeModel::flags(const QModelIndex & orc_Index) const
       if ((e_Col == C_SyvDaItPaTreeModel::eSET) || (e_Col == C_SyvDaItPaTreeModel::eDEVICE_VALUE))
       {
          //Only editable if not a datasets or dataset with link
-         if (pc_ParamWidget != NULL)
+         if (pc_ParamWidget != nullptr)
          {
             const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-            if (pc_ParamData != NULL)
+            if (pc_ParamData != nullptr)
             {
                const uint32_t u32_Index = GetParamIndexId(c_Id);
                if (((u32_Index < pc_ParamData->c_DataSetSelectionIndices.size()) &&
@@ -2361,7 +2361,7 @@ Qt::ItemFlags C_SyvDaItPaTreeModel::flags(const QModelIndex & orc_Index) const
                                  rc_Config.c_ElementId.u32_DataPoolIndex,
                                  rc_Config.c_ElementId.u32_ListIndex,
                                  rc_Config.c_ElementId.u32_ElementIndex);
-                           if (pc_OscElement != NULL)
+                           if (pc_OscElement != nullptr)
                            {
                               if ((pc_OscElement->q_InterpretAsString == false) && (pc_OscElement->GetArray() == true))
                               {
@@ -2383,7 +2383,7 @@ Qt::ItemFlags C_SyvDaItPaTreeModel::flags(const QModelIndex & orc_Index) const
                                     rc_Config.c_ElementId.u32_DataPoolIndex,
                                     rc_Config.c_ElementId.u32_ListIndex,
                                     rc_Config.c_ElementId.u32_ElementIndex);
-                              if (pc_OscElement != NULL)
+                              if (pc_OscElement != nullptr)
                               {
                                  if ((pc_OscElement->q_InterpretAsString == false) &&
                                      (pc_OscElement->GetArray() == true))
@@ -2548,26 +2548,26 @@ void C_SyvDaItPaTreeModel::h_DecodeIndex(const QModelIndex & orc_Index, C_OscNod
       //lint -e{9079}  Result of Qt interface restrictions, set by index function
       const C_TblTreItem * const pc_TreeItem =
          static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
-      if (pc_TreeItem != NULL)
+      if (pc_TreeItem != nullptr)
       {
          const C_TblTreItem * const pc_FirstParent = dynamic_cast<const C_TblTreItem * const>(pc_TreeItem->pc_Parent);
-         if ((pc_FirstParent != NULL) && (pc_FirstParent->pc_Parent != NULL))
+         if ((pc_FirstParent != nullptr) && (pc_FirstParent->pc_Parent != nullptr))
          {
             const C_TblTreItem * const pc_SecondParent =
                dynamic_cast<const C_TblTreItem * const>(pc_FirstParent->pc_Parent);
-            if ((pc_SecondParent != NULL) && (pc_SecondParent->pc_Parent != NULL))
+            if ((pc_SecondParent != nullptr) && (pc_SecondParent->pc_Parent != nullptr))
             {
                const C_TblTreItem * const pc_ThirdParent =
                   dynamic_cast<const C_TblTreItem * const>(pc_SecondParent->pc_Parent);
-               if ((pc_ThirdParent != NULL) && (pc_ThirdParent->pc_Parent != NULL))
+               if ((pc_ThirdParent != nullptr) && (pc_ThirdParent->pc_Parent != nullptr))
                {
                   const C_TblTreItem * const pc_FourthParent =
                      dynamic_cast<const C_TblTreItem * const>(pc_ThirdParent->pc_Parent);
-                  if ((pc_FourthParent != NULL) && (pc_FourthParent->pc_Parent != NULL))
+                  if ((pc_FourthParent != nullptr) && (pc_FourthParent->pc_Parent != nullptr))
                   {
                      const C_TblTreItem * const pc_FifthParent =
                         dynamic_cast<const C_TblTreItem * const>(pc_FourthParent->pc_Parent);
-                     if ((pc_FifthParent != NULL) && (pc_FifthParent->pc_Parent != NULL))
+                     if ((pc_FifthParent != nullptr) && (pc_FifthParent->pc_Parent != nullptr))
                      {
                         //Should not happen
                         tgl_assert(false);
@@ -2645,10 +2645,10 @@ uint32_t C_SyvDaItPaTreeModel::GetParamIndexId(const C_OscNodeDataPoolListElemen
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          for (uint32_t u32_ItConfig = 0UL; u32_ItConfig < pc_Param->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
          {
@@ -2760,10 +2760,10 @@ std::vector<C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetListIdsForI
    {
    case 0UL:
       //All
-      if (pc_ParamWidget != NULL)
+      if (pc_ParamWidget != nullptr)
       {
          const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-         if (pc_Param != NULL)
+         if (pc_Param != nullptr)
          {
             for (uint32_t u32_ItConfig = 0UL; u32_ItConfig < pc_Param->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
             {
@@ -2778,10 +2778,10 @@ std::vector<C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetListIdsForI
       break;
    case 1UL:
       //Node
-      if (pc_ParamWidget != NULL)
+      if (pc_ParamWidget != nullptr)
       {
          const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-         if (pc_Param != NULL)
+         if (pc_Param != nullptr)
          {
             for (uint32_t u32_ItConfig = 0UL; u32_ItConfig < pc_Param->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
             {
@@ -2799,10 +2799,10 @@ std::vector<C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetListIdsForI
       break;
    case 2UL:
       //Data pool
-      if (pc_ParamWidget != NULL)
+      if (pc_ParamWidget != nullptr)
       {
          const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-         if (pc_Param != NULL)
+         if (pc_Param != nullptr)
          {
             for (uint32_t u32_ItConfig = 0UL; u32_ItConfig < pc_Param->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
             {
@@ -2858,7 +2858,7 @@ const
       const C_OscNodeDataPoolListElementId & rc_ListId = c_Tmp[u32_ItList];
       const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
          rc_ListId.u32_NodeIndex, rc_ListId.u32_DataPoolIndex, rc_ListId.u32_ListIndex);
-      if (pc_List != NULL)
+      if (pc_List != nullptr)
       {
          C_OscNodeDataPoolListElementId c_Copy = rc_ListId;
          for (uint32_t u32_ItElem = 0UL; u32_ItElem < pc_List->c_Elements.size(); ++u32_ItElem)
@@ -2900,7 +2900,7 @@ void C_SyvDaItPaTreeModel::h_AdaptFloatRangeOfValueAndAppendResults(C_OscNodeDat
    const C_OscNodeDataPoolListElement * const pc_Element =
       C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(orc_DescriptionId);
 
-   if (pc_Element != NULL)
+   if (pc_Element != nullptr)
    {
       bool q_WasChanged = false;
       std::vector<float64_t> c_Values;
@@ -2989,11 +2989,11 @@ void C_SyvDaItPaTreeModel::h_FixInvalidFloatValue(float64_t & orf64_Value)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeModel::mh_InitAllNode(C_TblTreItem * const opc_TreeNode, const uint32_t ou32_ViewIndex)
 {
-   if (opc_TreeNode != NULL)
+   if (opc_TreeNode != nullptr)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
       //Name
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          opc_TreeNode->c_Name =
             static_cast<QString>(C_GtGetText::h_GetText("VIEW #%1 - %2")).arg(ou32_ViewIndex + 1).arg(
@@ -3018,14 +3018,14 @@ void C_SyvDaItPaTreeModel::mh_InitAllNode(C_TblTreItem * const opc_TreeNode, con
 void C_SyvDaItPaTreeModel::mh_InitNode(C_TblTreItem * const opc_TreeNode, const uint32_t ou32_NodeIndex,
                                        const uint32_t ou32_ViewIndex)
 {
-   if (opc_TreeNode != NULL)
+   if (opc_TreeNode != nullptr)
    {
       const C_OscNode * const pc_NodeData = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
       //Index
       opc_TreeNode->u32_Index = ou32_NodeIndex;
-      tgl_assert(pc_NodeData != NULL);
-      if (pc_NodeData != NULL)
+      tgl_assert(pc_NodeData != nullptr);
+      if (pc_NodeData != nullptr)
       {
          std::vector<uint8_t> c_NodeActiveFlags;
          const int32_t s32_Retval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
@@ -3079,7 +3079,7 @@ void C_SyvDaItPaTreeModel::mh_InitNode(C_TblTreItem * const opc_TreeNode, const 
 void C_SyvDaItPaTreeModel::mh_InitDataPool(C_TblTreItem * const opc_TreeNode, const uint32_t ou32_NodeIndex,
                                            const uint32_t ou32_DataPoolIndex, const bool oq_Enabled)
 {
-   if (opc_TreeNode != NULL)
+   if (opc_TreeNode != nullptr)
    {
       const C_OscNodeDataPool * const pc_NodeDataPoolData = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
          ou32_NodeIndex,
@@ -3087,8 +3087,8 @@ void C_SyvDaItPaTreeModel::mh_InitDataPool(C_TblTreItem * const opc_TreeNode, co
 
       //Index
       opc_TreeNode->u32_Index = ou32_DataPoolIndex;
-      tgl_assert(pc_NodeDataPoolData != NULL);
-      if (pc_NodeDataPoolData != NULL)
+      tgl_assert(pc_NodeDataPoolData != nullptr);
+      if (pc_NodeDataPoolData != nullptr)
       {
          //Name
          opc_TreeNode->c_Name = pc_NodeDataPoolData->c_Name.c_str();
@@ -3115,7 +3115,7 @@ void C_SyvDaItPaTreeModel::mh_InitList(C_TblTreItem * const opc_TreeNode, const 
                                        const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex,
                                        const bool oq_Enabled)
 {
-   if (opc_TreeNode != NULL)
+   if (opc_TreeNode != nullptr)
    {
       const C_OscNodeDataPoolList * const pc_ListData = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
          ou32_NodeIndex,
@@ -3124,8 +3124,8 @@ void C_SyvDaItPaTreeModel::mh_InitList(C_TblTreItem * const opc_TreeNode, const 
 
       //Index
       opc_TreeNode->u32_Index = ou32_ListIndex;
-      tgl_assert(pc_ListData != NULL);
-      if (pc_ListData != NULL)
+      tgl_assert(pc_ListData != nullptr);
+      if (pc_ListData != nullptr)
       {
          //Name
          opc_TreeNode->c_Name = static_cast<QString>("%1 (%2)").arg(pc_ListData->c_Name.c_str()).arg(
@@ -3154,7 +3154,7 @@ void C_SyvDaItPaTreeModel::mh_InitElement(C_TblTreItem * const opc_TreeNode, con
                                           const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex,
                                           const uint32_t ou32_ElementIndex, const bool oq_Enabled)
 {
-   if (opc_TreeNode != NULL)
+   if (opc_TreeNode != nullptr)
    {
       const C_OscNodeDataPoolListElement * const pc_ElementData =
          C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(
@@ -3164,8 +3164,8 @@ void C_SyvDaItPaTreeModel::mh_InitElement(C_TblTreItem * const opc_TreeNode, con
 
       //Index
       opc_TreeNode->u32_Index = ou32_ElementIndex;
-      tgl_assert(pc_ElementData != NULL);
-      if (pc_ElementData != NULL)
+      tgl_assert(pc_ElementData != nullptr);
+      if (pc_ElementData != nullptr)
       {
          //Name
          opc_TreeNode->c_Name = static_cast<QString>("%1 - %2").arg(ou32_ElementIndex + 1).arg(
@@ -3191,14 +3191,14 @@ void C_SyvDaItPaTreeModel::mh_InitElement(C_TblTreItem * const opc_TreeNode, con
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscNodeDataPoolContent * C_SyvDaItPaTreeModel::m_GetSetValue(const uint32_t ou32_DataIndex) const
 {
-   const C_OscNodeDataPoolContent * pc_Retval = NULL;
+   const C_OscNodeDataPoolContent * pc_Retval = nullptr;
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if ((((pc_Param != NULL) && (pc_Param->c_DataPoolElementsConfig.size() == pc_Param->c_ListValues.size())) &&
+      if ((((pc_Param != nullptr) && (pc_Param->c_DataPoolElementsConfig.size() == pc_Param->c_ListValues.size())) &&
            (pc_Param->c_DataPoolElementsConfig.size() == pc_Param->c_DataSetSelectionIndices.size())) &&
           (ou32_DataIndex < pc_Param->c_DataPoolElementsConfig.size()))
       {
@@ -3214,7 +3214,7 @@ const C_OscNodeDataPoolContent * C_SyvDaItPaTreeModel::m_GetSetValue(const uint3
                                                                              rc_Config.c_ElementId.u32_DataPoolIndex,
                                                                              rc_Config.c_ElementId.u32_ListIndex,
                                                                              rc_Config.c_ElementId.u32_ElementIndex);
-               if ((pc_Element != NULL) && (u32_DataSetIndex < pc_Element->c_DataSetValues.size()))
+               if ((pc_Element != nullptr) && (u32_DataSetIndex < pc_Element->c_DataSetValues.size()))
                {
                   pc_Retval = &pc_Element->c_DataSetValues[u32_DataSetIndex];
                }
@@ -3245,10 +3245,10 @@ bool C_SyvDaItPaTreeModel::m_IsChanged(const QModelIndex & orc_Index) const
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_ParamData = pc_ParamWidget->GetParamItem();
-      if (pc_ParamData != NULL)
+      if (pc_ParamData != nullptr)
       {
          C_OscNodeDataPoolListElementId c_Id;
          uint32_t u32_ValidLayers;
@@ -3370,10 +3370,10 @@ bool C_SyvDaItPaTreeModel::m_CheckListCrcIsChanged(const C_OscNodeDataPoolListEl
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          if (pc_Param->c_DataPoolElementsConfig.size() == this->mc_EcuValuesReadStatus.size())
          {
@@ -3429,10 +3429,10 @@ bool C_SyvDaItPaTreeModel::m_CheckElementIsChanged(const C_OscNodeDataPoolListEl
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
-   if (pc_ParamWidget != NULL)
+   if (pc_ParamWidget != nullptr)
    {
       const C_PuiSvDbParam * const pc_Param = pc_ParamWidget->GetParamItem();
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          if (((this->mc_EcuValuesReadStatus.size() == this->mc_EcuValues.size()) &&
               (this->mc_EcuValues.size() == pc_Param->c_ListValues.size())) &&
@@ -3448,7 +3448,7 @@ bool C_SyvDaItPaTreeModel::m_CheckElementIsChanged(const C_OscNodeDataPoolListEl
                   if (this->mc_EcuValuesReadStatus[u32_ItElement] == true)
                   {
                      const C_OscNodeDataPoolContent * const pc_Value = m_GetSetValue(u32_ItElement);
-                     if (pc_Value != NULL)
+                     if (pc_Value != nullptr)
                      {
                         if (this->mc_EcuValues[u32_ItElement].CompareContentStrict(*pc_Value))
                         {
@@ -3490,7 +3490,7 @@ bool C_SyvDaItPaTreeModel::m_GetListIndex(const C_OscNodeDataPoolListElementId &
 
    oru32_Index = 0UL;
 
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       //Node
       for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItAll = this->mpc_InvisibleRootItem->c_Children.begin();
@@ -3498,21 +3498,21 @@ bool C_SyvDaItPaTreeModel::m_GetListIndex(const C_OscNodeDataPoolListElementId &
            ++c_ItAll)
       {
          const C_TblTreItem * const pc_AllNode = dynamic_cast<const C_TblTreItem * const>(*c_ItAll);
-         if (pc_AllNode != NULL)
+         if (pc_AllNode != nullptr)
          {
             //Node
             for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItNode = pc_AllNode->c_Children.begin();
                  (c_ItNode != pc_AllNode->c_Children.end()) && (q_Found == false); ++c_ItNode)
             {
                const C_TblTreItem * const pc_Node = dynamic_cast<const C_TblTreItem * const>(*c_ItNode);
-               if (pc_Node != NULL)
+               if (pc_Node != nullptr)
                {
                   //Datapool
                   for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItDp = pc_Node->c_Children.begin();
                        (c_ItDp != pc_Node->c_Children.end()) && (q_Found == false); ++c_ItDp)
                   {
                      const C_TblTreItem * const pc_Dp = dynamic_cast<const C_TblTreItem * const>(*c_ItDp);
-                     if (pc_Dp != NULL)
+                     if (pc_Dp != nullptr)
                      {
                         //List
                         for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItList = pc_Dp->c_Children.begin();
@@ -3520,7 +3520,7 @@ bool C_SyvDaItPaTreeModel::m_GetListIndex(const C_OscNodeDataPoolListElementId &
                              ++c_ItList)
                         {
                            const C_TblTreItem * const pc_List = dynamic_cast<const C_TblTreItem * const>(*c_ItList);
-                           if (pc_List != NULL)
+                           if (pc_List != nullptr)
                            {
                               //Check match
                               if (((pc_Node->u32_Index == orc_Id.u32_NodeIndex) &&

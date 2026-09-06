@@ -220,7 +220,7 @@ bool C_FlaUpListItemWidget::IsFileExistingAndValid() const
 {
    bool q_Return = true;
 
-   if (this->pc_HexFileInfo != NULL)
+   if (this->pc_HexFileInfo != nullptr)
    {
       if ((QFile::exists(this->pc_HexFileInfo->c_HexFileInfo.c_FilePath) == false) ||
           (pc_HexFileInfo->c_BlockInfo.size() == 0))
@@ -320,7 +320,7 @@ void C_FlaUpListItemWidget::m_SetupContextMenu()
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaUpListItemWidget::m_OnCustomContextMenuRequested(const QPoint & orc_Pos)
 {
-   if (this->mpc_ContextMenu != NULL)
+   if (this->mpc_ContextMenu != nullptr)
    {
       this->mpc_ContextMenu->popup(this->mapToGlobal(orc_Pos));
    }
@@ -332,7 +332,7 @@ void C_FlaUpListItemWidget::m_OnCustomContextMenuRequested(const QPoint & orc_Po
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaUpListItemWidget::m_ViewFileInfo()
 {
-   if (this->pc_HexFileInfo != NULL)
+   if (this->pc_HexFileInfo != nullptr)
    {
       const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
 
@@ -346,7 +346,7 @@ void C_FlaUpListItemWidget::m_ViewFileInfo()
          // do nothing
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();
@@ -361,7 +361,7 @@ void C_FlaUpListItemWidget::m_ViewFileInfo()
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaUpListItemWidget::m_ShowInExplorer() const
 {
-   if (this->pc_HexFileInfo != NULL)
+   if (this->pc_HexFileInfo != nullptr)
    {
       C_Uti::h_RevealInFileManager(this->pc_HexFileInfo->c_HexFileInfo.c_FilePath);
    }
@@ -379,7 +379,7 @@ QString C_FlaUpListItemWidget::m_UpdateToolTipContent(const int32_t os32_Index)
 {
    QString c_Content = "";
 
-   if (this->pc_HexFileInfo != NULL)
+   if (this->pc_HexFileInfo != nullptr)
    {
       const uint32_t u32_FileSize =
          static_cast<uint32_t>(this->pc_HexFileInfo->c_HexFileInfo.c_Size.split(' ').at(0).toUInt());
@@ -445,7 +445,7 @@ void C_FlaUpListItemWidget::m_SelectFile()
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaUpListItemWidget::m_FileStatusCheck()
 {
-   if (this->pc_HexFileInfo != NULL)
+   if (this->pc_HexFileInfo != nullptr)
    {
       const QFileInfo c_FileInfo(this->pc_HexFileInfo->c_HexFileInfo.c_FilePath);
 
@@ -504,7 +504,7 @@ void C_FlaUpListItemWidget::resizeEvent(QResizeEvent * const opc_Event)
 {
    int32_t s32_Width = this->width();
 
-   if (this->pc_HexFileInfo != NULL)
+   if (this->pc_HexFileInfo != nullptr)
    {
       if (this->q_IsRelativePathToAdd)
       {
@@ -537,7 +537,7 @@ void C_FlaUpListItemWidget::resizeEvent(QResizeEvent * const opc_Event)
       s32_Width -= (this->mpc_Ui->pc_ProjectVersionLabel->width());
    }
 
-   if (this->pc_HexFileInfo != NULL)
+   if (this->pc_HexFileInfo != nullptr)
    {
       if ((this->pc_HexFileInfo->c_HexFileInfo.s32_NumberOfBlocks > 0) &&
           (this->mpc_Ui->pc_ProjectNameLabel->isVisible() == true))

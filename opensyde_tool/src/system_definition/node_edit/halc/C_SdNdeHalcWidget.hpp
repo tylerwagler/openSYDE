@@ -36,7 +36,7 @@ class C_SdNdeHalcWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeHalcWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeHalcWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeHalcWidget(void) override;
 
    void LoadUserSettings(void) const;

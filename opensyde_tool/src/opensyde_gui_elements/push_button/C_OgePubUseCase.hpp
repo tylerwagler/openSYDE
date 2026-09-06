@@ -32,7 +32,7 @@ class C_OgePubUseCase :
    Q_OBJECT
 
 public:
-   explicit C_OgePubUseCase(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubUseCase(QWidget * const opc_Parent = nullptr);
 
    void SetDisabledIcon(const QString & orc_Path);
 

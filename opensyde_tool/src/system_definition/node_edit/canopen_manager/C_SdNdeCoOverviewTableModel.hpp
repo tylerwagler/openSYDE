@@ -47,7 +47,7 @@ public:
       eDEVICE
    };
 
-   C_SdNdeCoOverviewTableModel(QObject * const opc_Parent = NULL);
+   C_SdNdeCoOverviewTableModel(QObject * const opc_Parent = nullptr);
 
    void UpdateData(void);
    uint32_t GetNodeIndex(void) const;

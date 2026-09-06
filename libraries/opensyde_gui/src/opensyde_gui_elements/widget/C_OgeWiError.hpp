@@ -38,7 +38,7 @@ class C_OgeWiError :
    Q_OBJECT
 
 public:
-   explicit C_OgeWiError(QWidget * const opc_Parent = NULL);
+   explicit C_OgeWiError(QWidget * const opc_Parent = nullptr);
    ~C_OgeWiError() override;
 
    void InitStaticNames(void) const;

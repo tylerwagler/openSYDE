@@ -30,7 +30,7 @@ class C_OgeDarkScrollArea :
    Q_OBJECT
 
 public:
-   C_OgeDarkScrollArea(QWidget * const opc_Parent = NULL);
+   C_OgeDarkScrollArea(QWidget * const opc_Parent = nullptr);
 
 private:
    void m_ScrollBarRangeChangedVer(const int32_t os32_Min, const int32_t os32_Max) const;

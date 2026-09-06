@@ -30,7 +30,7 @@ class C_CamMosSectionPopup :
    Q_OBJECT
 
 public:
-   C_CamMosSectionPopup(QWidget * const opc_Parent = NULL);
+   C_CamMosSectionPopup(QWidget * const opc_Parent = nullptr);
    ~C_CamMosSectionPopup(void) override;
 
    void Show(const QPoint & orc_Pos);

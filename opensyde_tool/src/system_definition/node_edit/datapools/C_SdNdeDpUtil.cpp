@@ -429,7 +429,7 @@ QWidget * C_SdNdeDpUtil::h_CreateGenericEditor(QWidget * const opc_Parent, const
                                                const float64_t of64_Offset, const uint32_t & oru32_ArrayIndex,
                                                const bool oq_UseParamVariant)
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
    if (((orc_Index.isValid() == true) && (orc_Min.GetType() == orc_Max.GetType())) &&
        (orc_Min.GetArray() == orc_Max.GetArray()))
@@ -496,12 +496,12 @@ void C_SdNdeDpUtil::h_SetGenericEditorDataVariable(QWidget * const opc_Editor, c
 
    QLineEdit * const pc_LineEdit = dynamic_cast<QLineEdit * const>(opc_Editor);
 
-   if (pc_SpinBox != NULL)
+   if (pc_SpinBox != nullptr)
    {
       pc_SpinBox->SetValue(orc_Index.data(static_cast<int32_t>(Qt::EditRole)));
       pc_SpinBox->SelectAll();
    }
-   if (pc_LineEdit != NULL)
+   if (pc_LineEdit != nullptr)
    {
       pc_LineEdit->setText(orc_Index.data(static_cast<int32_t>(Qt::EditRole)).toString());
    }
@@ -522,12 +522,12 @@ void C_SdNdeDpUtil::h_SetModelGenericDataVariable(QWidget * const opc_Editor, QA
 
    QLineEdit * const pc_LineEdit = dynamic_cast<QLineEdit * const>(opc_Editor);
 
-   if (pc_SpinBox != NULL)
+   if (pc_SpinBox != nullptr)
    {
       pc_SpinBox->InterpretText();
       opc_Model->setData(orc_Index, pc_SpinBox->GetValue());
    }
-   if (pc_LineEdit != NULL)
+   if (pc_LineEdit != nullptr)
    {
       opc_Model->setData(orc_Index, pc_LineEdit->text());
    }
@@ -704,7 +704,7 @@ int32_t C_SdNdeDpUtil::h_GetTableSize(const uint32_t ou32_NodeIndex, const uint3
                                                                                                      ou32_ListIndex);
    const int32_t s32_HEADER_OFFSET = 40;
 
-   if ((pc_List != NULL) && (pc_Datapool != NULL))
+   if ((pc_List != nullptr) && (pc_Datapool != nullptr))
    {
       const int32_t s32_CONST_OFFSET = 65;
       const int32_t s32_CONST_CHECKSUM_OFFSET = 33;
@@ -810,7 +810,7 @@ int32_t C_SdNdeDpUtil::h_GetSharedDatapoolGroup(const uint32_t ou32_SharedDatapo
          if (rc_DpId != orc_BaseDatapoolId)
          {
             const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(rc_DpId.u32_NodeIndex);
-            if ((pc_Node != NULL) &&
+            if ((pc_Node != nullptr) &&
                 (rc_DpId.u32_DataPoolIndex < pc_Node->c_DataPools.size()))
             {
                QString c_Text = "";

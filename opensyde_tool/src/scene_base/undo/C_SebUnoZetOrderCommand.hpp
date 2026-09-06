@@ -30,7 +30,7 @@ class C_SebUnoZetOrderCommand :
 {
 public:
    C_SebUnoZetOrderCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                           const std::vector<float64_t> & orc_NewZetValues, QUndoCommand * const opc_Parent = NULL);
+                           const std::vector<float64_t> & orc_NewZetValues, QUndoCommand * const opc_Parent = nullptr);
    ~C_SebUnoZetOrderCommand(void) override;
    void undo(void) override;
    void redo(void) override;

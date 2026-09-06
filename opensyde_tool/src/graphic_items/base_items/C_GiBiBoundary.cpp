@@ -102,7 +102,7 @@ C_GiBiBoundary::C_GiBiBoundary(const uint64_t & oru64_Id, const float64_t of64_W
 C_GiBiBoundary::~C_GiBiBoundary()
 {
    //Deleted via Qt parent mechanism
-   this->mpc_Rectangle = NULL;
+   this->mpc_Rectangle = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ bool C_GiBiBoundary::OpenStyleDialog(void)
    {
       q_Retval = false;
    }
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -171,7 +171,7 @@ void C_GiBiBoundary::CopyStyle(const QGraphicsItem * const opc_GuidelineItem)
 {
    const C_GiBiBoundary * const pc_Item = dynamic_cast<const C_GiBiBoundary * const>(opc_GuidelineItem);
 
-   if (pc_Item != NULL)
+   if (pc_Item != nullptr)
    {
       this->SetBorderColor(pc_Item->GetBorderColor());
       this->SetBackgroundColor(pc_Item->GetBackgroundColor());

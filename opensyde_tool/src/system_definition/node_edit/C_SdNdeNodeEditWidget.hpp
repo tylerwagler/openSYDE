@@ -43,7 +43,7 @@ class C_SdNdeNodeEditWidget :
 
 public:
    explicit C_SdNdeNodeEditWidget(const uint32_t ou32_NodeIndex, const int32_t os32_TabIndex,
-                                  QWidget * const opc_Parent = NULL);
+                                  QWidget * const opc_Parent = nullptr);
    ~C_SdNdeNodeEditWidget() override;
 
    void InitStaticNames(void) const;

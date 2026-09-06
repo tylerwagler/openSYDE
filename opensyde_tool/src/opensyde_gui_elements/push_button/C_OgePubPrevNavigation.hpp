@@ -26,7 +26,7 @@ class C_OgePubPrevNavigation :
    Q_OBJECT
 
 public:
-   explicit C_OgePubPrevNavigation(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubPrevNavigation(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

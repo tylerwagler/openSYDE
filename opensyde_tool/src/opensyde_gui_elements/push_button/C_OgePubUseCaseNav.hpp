@@ -32,7 +32,7 @@ class C_OgePubUseCaseNav :
    Q_OBJECT
 
 public:
-   explicit C_OgePubUseCaseNav(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubUseCaseNav(QWidget * const opc_Parent = nullptr);
 
    bool q_LastButton;
 

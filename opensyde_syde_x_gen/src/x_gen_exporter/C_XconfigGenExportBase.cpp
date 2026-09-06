@@ -110,7 +110,7 @@ C_SclString C_XconfigGenExportBase::h_GetApplicationVersion(const C_SclString & 
    int32_t s32_InfoSize;
    uint8_t * pu8_Buffer;
 
-   s32_InfoSize = GetFileVersionInfoSizeA(orc_FileName.c_str(), NULL);
+   s32_InfoSize = GetFileVersionInfoSizeA(orc_FileName.c_str(), nullptr);
    if (s32_InfoSize != 0)
    {
       pu8_Buffer = new uint8_t[static_cast<uint32_t>(s32_InfoSize)];
@@ -162,7 +162,7 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::Init(const int32_t 
    E_ResultCode e_Return = eRESULT_OK;
 #ifdef _WIN32
    char_t acn_ApplicationName[MAX_PATH + 1];
-   uint32_t u32_Return = GetModuleFileNameA(NULL, &acn_ApplicationName[0], MAX_PATH + 1);
+   uint32_t u32_Return = GetModuleFileNameA(nullptr, &acn_ApplicationName[0], MAX_PATH + 1);
    tgl_assert(u32_Return != 0);
 #else
    char_t acn_ApplicationName[PATH_MAX + 1];
@@ -235,28 +235,28 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::ParseCommandLine(co
    {
       // name                         has_arg            flag  val
       {
-         "systemdefinition",          required_argument, NULL, 's'
+         "systemdefinition",          required_argument, nullptr, 's'
       },
       {
-         "devicedefinition",          required_argument, NULL, 'd'
+         "devicedefinition",          required_argument, nullptr, 'd'
       },
       {
-         "outputpath",                required_argument, NULL, 'o'
+         "outputpath",                required_argument, nullptr, 'o'
       },
       {
-         "node",                      required_argument, NULL, 'n'
+         "node",                      required_argument, nullptr, 'n'
       },
       {
-         "application",               required_argument, NULL, 'a'
+         "application",               required_argument, nullptr, 'a'
       },
       {
-         "erasefolder",               no_argument,       NULL, 'e'
+         "erasefolder",               no_argument,       nullptr, 'e'
       },
       {
-         "help",                      no_argument,       NULL, 'h'
+         "help",                      no_argument,       nullptr, 'h'
       },
       {
-         NULL, 0, NULL, 0
+         nullptr, 0, nullptr, 0
       }
    };
 

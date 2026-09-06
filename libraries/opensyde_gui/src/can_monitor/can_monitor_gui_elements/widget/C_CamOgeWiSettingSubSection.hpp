@@ -34,7 +34,7 @@ class C_CamOgeWiSettingSubSection :
    Q_OBJECT
 
 public:
-   explicit C_CamOgeWiSettingSubSection(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgeWiSettingSubSection(QWidget * const opc_Parent = nullptr);
    ~C_CamOgeWiSettingSubSection(void) override;
 
    void SetTitle(const QString & orc_Title) const;

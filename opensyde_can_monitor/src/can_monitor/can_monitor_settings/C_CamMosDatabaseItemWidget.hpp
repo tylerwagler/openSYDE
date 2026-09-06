@@ -52,7 +52,7 @@ public:
    };
 
    explicit C_CamMosDatabaseItemWidget(const stw::opensyde_gui_logic::C_CamProDatabaseData & orc_Database,
-                                       QWidget * const opc_Parent = NULL);
+                                       QWidget * const opc_Parent = nullptr);
    ~C_CamMosDatabaseItemWidget(void) override;
 
    void SetState(const E_LoadingState oe_State);
@@ -63,9 +63,9 @@ public:
    void CheckFile(void);
    stw::opensyde_gui_logic::C_CamProDatabaseData GetDatabaseData(void) const;
 
-   static QString h_BrowseForDatabasePath(QWidget * const opc_Parent = NULL);
+   static QString h_BrowseForDatabasePath(QWidget * const opc_Parent = nullptr);
    static QString h_AdaptPathToSystemDefinitionIfNecessary(const QFileInfo & orc_SydeFile);
-   static bool h_IsDatabaseAlreadyUsed(const QString & orc_AbsolutePath, QWidget * const opc_Parent = NULL);
+   static bool h_IsDatabaseAlreadyUsed(const QString & orc_AbsolutePath, QWidget * const opc_Parent = nullptr);
    static void h_AppendMessageWarningIfNecessary(const QString & orc_File, QString & orc_Description,
                                                  QString & orc_Details);
 

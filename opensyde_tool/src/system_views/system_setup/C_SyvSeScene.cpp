@@ -56,7 +56,7 @@ using namespace stw::opensyde_gui_elements;
 C_SyvSeScene::C_SyvSeScene(const uint32_t ou32_ViewIndex, QObject * const opc_Parent) :
    C_SyvTopologyBaseScene(ou32_ViewIndex, opc_Parent),
    mq_EditMode(false),
-   mpc_SelectedBusConnectorItem(NULL),
+   mpc_SelectedBusConnectorItem(nullptr),
    mc_UndoManager(this)
 {
    // Init base scene. Initializing all parts which can not be initialized in the base constructor
@@ -121,15 +121,15 @@ void C_SyvSeScene::SetEditMode(const bool oq_Active)
       C_GiSvPc * const pc_Pc = dynamic_cast<C_GiSvPc *>(*c_ItItem);
 
       C_GiSvPcBusConnector * const pc_PcConnection = dynamic_cast<C_GiSvPcBusConnector *>(*c_ItItem);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          pc_Node->SetEditMode(oq_Active);
       }
-      if (pc_Pc != NULL)
+      if (pc_Pc != nullptr)
       {
          pc_Pc->SetEditMode(oq_Active);
       }
-      if (pc_PcConnection != NULL)
+      if (pc_PcConnection != nullptr)
       {
          pc_PcConnection->SetEditMode(oq_Active);
       }
@@ -155,15 +155,15 @@ void C_SyvSeScene::Save(void) const
       C_GiSvPc * const pc_Pc = dynamic_cast<C_GiSvPc *>(*c_ItItem);
 
       C_GiSvPcBusConnector * const pc_PcConnection = dynamic_cast<C_GiSvPcBusConnector *>(*c_ItItem);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          pc_Node->UpdateData();
       }
-      if (pc_Pc != NULL)
+      if (pc_Pc != nullptr)
       {
          pc_Pc->UpdateData();
       }
-      if (pc_PcConnection != NULL)
+      if (pc_PcConnection != nullptr)
       {
          pc_PcConnection->UpdateData();
          q_NoConnection = false;
@@ -197,29 +197,29 @@ void C_SyvSeScene::ReloadViewData(void)
 
       C_GiSvPcBusConnector * const pc_PcBusConnection = dynamic_cast<C_GiSvPcBusConnector *>(*c_ItItem);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          pc_Node->LoadData();
       }
-      if (pc_Pc != NULL)
+      if (pc_Pc != nullptr)
       {
          pc_Pc->LoadData();
       }
-      if (pc_PcBusConnection != NULL)
+      if (pc_PcBusConnection != nullptr)
       {
          const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
          q_ConnectionFound = true;
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             if (pc_View->GetOscPcData().GetConnected() == true)
             {
-               C_GiLiBus * pc_FoundBus = NULL;
+               C_GiLiBus * pc_FoundBus = nullptr;
                //Last bus
                for (QList<QGraphicsItem *>::const_iterator c_ItItem2 = rc_Items.begin(); c_ItItem2 != rc_Items.end();
                     ++c_ItItem2)
                {
                   C_GiLiBus * const pc_PcBus = dynamic_cast<C_GiLiBus *>(*c_ItItem2);
-                  if (pc_PcBus != NULL)
+                  if (pc_PcBus != nullptr)
                   {
                      if ((pc_PcBus->GetIndex() >= 0) &&
                          (static_cast<uint32_t>(pc_PcBus->GetIndex()) == pc_View->GetOscPcData().GetBusIndex()))
@@ -229,7 +229,7 @@ void C_SyvSeScene::ReloadViewData(void)
                   }
                }
                //Reset bus (might be different)
-               pc_PcBusConnection->RevertBus(pc_FoundBus, NULL,
+               pc_PcBusConnection->RevertBus(pc_FoundBus, nullptr,
                                              pc_View->GetPuiPcData().GetConnectionData().c_UiInteractionPoints[0]);
                pc_PcBusConnection->SetPoints(pc_View->GetPuiPcData().GetConnectionData().c_UiInteractionPoints);
             }
@@ -243,12 +243,12 @@ void C_SyvSeScene::ReloadViewData(void)
    if (q_ConnectionFound == false)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          if (pc_View->GetOscPcData().GetConnected() == true)
          {
-            C_GiLiBus * pc_FoundBus = NULL;
-            C_GiSvPc * pc_FoundPc = NULL;
+            C_GiLiBus * pc_FoundBus = nullptr;
+            C_GiSvPc * pc_FoundPc = nullptr;
             //Last bus and pc
             for (QList<QGraphicsItem *>::const_iterator c_ItItem2 = rc_Items.begin(); c_ItItem2 != rc_Items.end();
                  ++c_ItItem2)
@@ -256,11 +256,11 @@ void C_SyvSeScene::ReloadViewData(void)
                C_GiLiBus * const pc_PcBus = dynamic_cast<C_GiLiBus *>(*c_ItItem2);
 
                C_GiSvPc * const pc_Pc = dynamic_cast<C_GiSvPc *>(*c_ItItem2);
-               if (pc_Pc != NULL)
+               if (pc_Pc != nullptr)
                {
                   pc_FoundPc = pc_Pc;
                }
-               if (pc_PcBus != NULL)
+               if (pc_PcBus != nullptr)
                {
                   if ((pc_PcBus->GetIndex() >= 0) &&
                       (static_cast<uint32_t>(pc_PcBus->GetIndex()) == pc_View->GetOscPcData().GetBusIndex()))
@@ -269,7 +269,7 @@ void C_SyvSeScene::ReloadViewData(void)
                   }
                }
             }
-            if ((pc_FoundPc != NULL) && (pc_FoundBus != NULL))
+            if ((pc_FoundPc != nullptr) && (pc_FoundBus != nullptr))
             {
                //Create connection
                m_AddPcBusConnector(pc_FoundBus, pc_FoundPc, pc_View->GetPuiPcData().GetConnectionData());
@@ -313,7 +313,7 @@ void C_SyvSeScene::SetAllNodesConnected(const bool oq_Connected)
    {
       C_GiSvNodeSyvSetup * const pc_Node = dynamic_cast<C_GiSvNodeSyvSetup *>(*c_ItItem);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          if (pc_Node->IsViewConnected() != oq_Connected)
          {
@@ -434,7 +434,7 @@ void C_SyvSeScene::m_AddNodeToScene(C_GiNode * const opc_NodeGraphicsItem)
    const C_GiSvNodeSyvSetup * const pc_SystemNode =
       dynamic_cast<const C_GiSvNodeSyvSetup * const>(opc_NodeGraphicsItem);
 
-   if (pc_SystemNode != NULL)
+   if (pc_SystemNode != nullptr)
    {
       connect(pc_SystemNode, &C_GiSvNodeSyvSetup::SigViewConnectionChanged, this, &C_SyvSeScene::m_OnConnectionChanged);
    }
@@ -487,12 +487,12 @@ void C_SyvSeScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * const opc_Ev
 {
    QGraphicsItem * const pc_Item = this->itemAt(opc_Event->scenePos(), QTransform());
 
-   if ((pc_Item != NULL) &&
+   if ((pc_Item != nullptr) &&
        (opc_Event->buttons().testFlag(Qt::LeftButton) == true))
    {
       QGraphicsItem * const pc_Parent = C_SebUtil::h_GetHighestParent(pc_Item);
 
-      if (pc_Parent != NULL)
+      if (pc_Parent != nullptr)
       {
          if (pc_Parent->type() == ms32_GRAPHICS_ITEM_PC)
          {
@@ -516,11 +516,11 @@ void C_SyvSeScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * const opc_Ev
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvSeScene::m_Edit(QGraphicsItem * const opc_GraphicsItem) const
 {
-   if (opc_GraphicsItem != NULL)
+   if (opc_GraphicsItem != nullptr)
    {
       C_GiSvPc * const pc_Pc = dynamic_cast<C_GiSvPc * const>(opc_GraphicsItem);
 
-      if (pc_Pc != NULL)
+      if (pc_Pc != nullptr)
       {
          pc_Pc->OpenDialog();
       }
@@ -534,10 +534,10 @@ void C_SyvSeScene::m_Edit(QGraphicsItem * const opc_GraphicsItem) const
 void C_SyvSeScene::m_SelectionChanged(void)
 {
    //Reset selected bus connector
-   if (this->mpc_SelectedBusConnectorItem != NULL)
+   if (this->mpc_SelectedBusConnectorItem != nullptr)
    {
       this->mpc_SelectedBusConnectorItem->RestoreZetOrder();
-      this->mpc_SelectedBusConnectorItem = NULL;
+      this->mpc_SelectedBusConnectorItem = nullptr;
    }
    if (this->mq_ProxyWidgetInteractionActive == false)
    {
@@ -550,10 +550,10 @@ void C_SyvSeScene::m_SelectionChanged(void)
          C_GiBiRectBaseGroup * const pc_Item = dynamic_cast<C_GiBiRectBaseGroup *>(c_SelectedItems[0]);
 
          // check if the only one selected item is a resizable rectangle based item
-         if (pc_Item != NULL)
+         if (pc_Item != nullptr)
          {
             C_GiSvPc * const pc_Pc = dynamic_cast<C_GiSvPc *>(pc_Item);
-            if (pc_Pc != NULL)
+            if (pc_Pc != nullptr)
             {
                // activate the resizing only if exactly one node is selected
                pc_Item->SetResizing(true);
@@ -565,7 +565,7 @@ void C_SyvSeScene::m_SelectionChanged(void)
             // bring the selected bus connector to the top
 
             this->mpc_SelectedBusConnectorItem = dynamic_cast<C_GiSvPcBusConnector *>(c_SelectedItems[0]);
-            if (this->mpc_SelectedBusConnectorItem != NULL)
+            if (this->mpc_SelectedBusConnectorItem != nullptr)
             {
                this->mpc_SelectedBusConnectorItem->SetZetValueCustom(mf64_ZORDER_MAX);
                this->mpc_SelectedBusConnectorItem->SetResizing(true);
@@ -580,14 +580,14 @@ void C_SyvSeScene::m_SelectionChanged(void)
             // check if the only one selected item is a resizable rectangle based item
 
             C_GiBiRectBaseGroup * const pc_Item = dynamic_cast<C_GiBiRectBaseGroup *>(*c_ItItem);
-            if (pc_Item != NULL)
+            if (pc_Item != nullptr)
             {
                pc_Item->SetResizing(false);
             }
             else
             {
                C_GiLiLineGroup * const pc_LineItem = dynamic_cast<C_GiLiLineGroup *>(*c_ItItem);
-               if (pc_LineItem != NULL)
+               if (pc_LineItem != nullptr)
                {
                   pc_LineItem->SetResizing(false);
                }
@@ -629,9 +629,9 @@ void C_SyvSeScene::m_OnPcBusConnectionStartConnect(const C_GiLiBusConnectorBase:
          for (c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
          {
             C_GiBiCustomMouseItem * const pc_Item = dynamic_cast<C_GiBiCustomMouseItem *>(*c_ItItem);
-            if (pc_Item != NULL)
+            if (pc_Item != nullptr)
             {
-               if (dynamic_cast<C_GiSvPc *>(*c_ItItem) == NULL)
+               if (dynamic_cast<C_GiSvPc *>(*c_ItItem) == nullptr)
                {
                   //Is not pc
                   pc_Item->SetTemporaryCursor(Qt::ForbiddenCursor);
@@ -652,11 +652,11 @@ void C_SyvSeScene::m_OnPcBusConnectionStartConnect(const C_GiLiBusConnectorBase:
          for (c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
          {
             C_GiBiCustomMouseItem * const pc_Item = dynamic_cast<C_GiBiCustomMouseItem *>(*c_ItItem);
-            if (pc_Item != NULL)
+            if (pc_Item != nullptr)
             {
                C_GiLiBus * const pc_Bus = dynamic_cast<C_GiLiBus *>(*c_ItItem);
                //Is bus
-               if (pc_Bus != NULL)
+               if (pc_Bus != nullptr)
                {
                   const bool q_Disabled =
                      C_PuiSvHandler::h_GetInstance()->CheckBusDisabled(this->mu32_ViewIndex,

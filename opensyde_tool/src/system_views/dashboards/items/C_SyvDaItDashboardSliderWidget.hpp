@@ -37,7 +37,7 @@ class C_SyvDaItDashboardSliderWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaItDashboardSliderWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvDaItDashboardSliderWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaItDashboardSliderWidget(void) override;
 
    void SetCurrentStyle(const stw::opensyde_gui_logic::C_PuiSvDbSlider::E_Style oe_Style) const;

@@ -30,7 +30,7 @@ class C_OgeSpxFactor :
    Q_OBJECT
 
 public:
-   C_OgeSpxFactor(QWidget * const opc_Parent = NULL);
+   C_OgeSpxFactor(QWidget * const opc_Parent = nullptr);
    void stepBy(const int32_t os32_Steps) override;
    QValidator::State validate(QString & orc_Text, int32_t & ors32_Pos) const override;
 

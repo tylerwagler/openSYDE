@@ -51,21 +51,21 @@ using namespace stw::opensyde_core;
 C_SdBueMessageSelectorWidget::C_SdBueMessageSelectorWidget(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SdBueMessageSelectorWidget),
-   mpc_ContextMenu(NULL),
-   mpc_MessageSyncManager(NULL),
+   mpc_ContextMenu(nullptr),
+   mpc_MessageSyncManager(nullptr),
    mq_ModeSingleNode(false),
    mu32_NodeIndex(0),
    mu32_InterfaceIndex(0),
    mu32_BusIndex(0),
    mq_MessagesActive(true),
    me_ProtocolType(C_OscCanProtocol::eLAYER2),
-   mpc_AddMessageAction(NULL),
-   mpc_AddSignalAction(NULL),
-   mpc_AddSignalActionWithKey(NULL),
-   mpc_CopyAction(NULL),
-   mpc_CutAction(NULL),
-   mpc_PasteAction(NULL),
-   mpc_DeleteAction(NULL)
+   mpc_AddMessageAction(nullptr),
+   mpc_AddSignalAction(nullptr),
+   mpc_AddSignalActionWithKey(nullptr),
+   mpc_CopyAction(nullptr),
+   mpc_CutAction(nullptr),
+   mpc_PasteAction(nullptr),
+   mpc_DeleteAction(nullptr)
 {
    mpc_Ui->setupUi(this);
 
@@ -232,8 +232,8 @@ void C_SdBueMessageSelectorWidget::UpdateButtonText(void) const
          c_Text = static_cast<QString>(C_GtGetText::h_GetText("Messages (%1)"));
       }
 
-      tgl_assert(this->mpc_MessageSyncManager != NULL);
-      if (this->mpc_MessageSyncManager != NULL)
+      tgl_assert(this->mpc_MessageSyncManager != nullptr);
+      if (this->mpc_MessageSyncManager != nullptr)
       {
          const uint32_t u32_MsgCount = this->mpc_MessageSyncManager->GetUniqueMessageCount(this->me_ProtocolType);
          this->mpc_Ui->pc_PbTreeWidgetRoot->setText(c_Text.arg(u32_MsgCount));
@@ -409,7 +409,7 @@ void C_SdBueMessageSelectorWidget::RecheckProtocolError(void) const
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          pc_Node->CheckErrorCanProtocol(this->mu32_InterfaceIndex, this->me_ProtocolType, false,
                                         q_CommMaxRxSignalCountInvalid, q_CommMaxTxSignalCountInvalid,
@@ -430,9 +430,9 @@ void C_SdBueMessageSelectorWidget::RecheckProtocolError(void) const
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
             c_NodeIndexes[u32_Counter]);
-         tgl_assert(pc_Node != NULL);
+         tgl_assert(pc_Node != nullptr);
 
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             bool q_TempCommMaxRxSignalCountInvalid;
             bool q_TempCommMaxTxSignalCountInvalid;

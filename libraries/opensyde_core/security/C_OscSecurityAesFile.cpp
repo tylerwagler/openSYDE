@@ -364,7 +364,7 @@ int32_t C_OscSecurityAesFile::h_CreateEncryptedZipFile(const C_SclString & orc_F
          // No key, just copy the original zip file as result
          osc_write_log_info("Creating Encrypted Zip File", "No key defined. Encryption not necessary.");
 
-         s32_Return = C_OscUtils::h_CopyFile(c_ZipFileTmp, orc_PathForZipFile, NULL, &c_ErrorText);
+         s32_Return = C_OscUtils::h_CopyFile(c_ZipFileTmp, orc_PathForZipFile, nullptr, &c_ErrorText);
       }
 
       // Remove the non encrypted temporary file
@@ -393,7 +393,7 @@ int32_t C_OscSecurityAesFile::h_CreateEncryptedZipFile(const C_SclString & orc_F
                           C_OscLoggingHandler::h_StwError(s32_Return) +
                           " and error text: " + c_ErrorText.c_str());
 
-      if (opc_ErrorMessage != NULL)
+      if (opc_ErrorMessage != nullptr)
       {
          *opc_ErrorMessage = c_ErrorText;
       }
@@ -470,7 +470,7 @@ int32_t C_OscSecurityAesFile::h_UnpackEncryptedZipFile(const C_SclString & orc_P
                              C_OscLoggingHandler::h_StwError(s32_Return) +
                              " and error text: " + c_ErrorText.c_str());
 
-         if (opc_ErrorMessage != NULL)
+         if (opc_ErrorMessage != nullptr)
          {
             *opc_ErrorMessage = c_ErrorText;
          }

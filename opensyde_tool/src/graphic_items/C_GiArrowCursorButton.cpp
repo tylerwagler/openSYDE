@@ -47,7 +47,7 @@ using namespace stw::opensyde_gui_logic;
 C_GiArrowCursorButton::C_GiArrowCursorButton(QGraphicsItem * const opc_Parent) :
    QGraphicsSvgItem("://images/graphic_items/IconNodeConnect.svg", opc_Parent),
    C_GiBiCustomToolTip(),
-   mpc_ConnectedNode(NULL)
+   mpc_ConnectedNode(nullptr)
 {
    this->setFlag(ItemIsSelectable);
    this->setScale(1.0);
@@ -64,7 +64,7 @@ C_GiArrowCursorButton::C_GiArrowCursorButton(QGraphicsItem * const opc_Parent) :
 //----------------------------------------------------------------------------------------------------------------------
 C_GiArrowCursorButton::~C_GiArrowCursorButton()
 {
-   mpc_ConnectedNode = NULL;
+   mpc_ConnectedNode = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -73,10 +73,10 @@ C_GiArrowCursorButton::~C_GiArrowCursorButton()
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiArrowCursorButton::DetachNode(void)
 {
-   if (mpc_ConnectedNode != NULL)
+   if (mpc_ConnectedNode != nullptr)
    {
       disconnect(mpc_ConnectedNode, &C_GiNode::SigChangedGraphic, this, &C_GiArrowCursorButton::m_OnNodeChange);
-      mpc_ConnectedNode = NULL;
+      mpc_ConnectedNode = nullptr;
    }
    this->setVisible(false);
 }
@@ -91,7 +91,7 @@ void C_GiArrowCursorButton::DetachNode(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiArrowCursorButton::AttachToNode(const C_GiNode * const opc_Node)
 {
-   if (opc_Node != NULL)
+   if (opc_Node != nullptr)
    {
       DetachNode();
       if (opc_Node->GetValid() == true)
@@ -138,7 +138,7 @@ void C_GiArrowCursorButton::GenerateHint(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiArrowCursorButton::mousePressEvent(QGraphicsSceneMouseEvent * const opc_Event)
 {
-   if (mpc_ConnectedNode !=  NULL)
+   if (mpc_ConnectedNode !=  nullptr)
    {
       //Attach to node center
       Q_EMIT (this->SigStartConnector(mpc_ConnectedNode->mapToScene(
@@ -157,7 +157,7 @@ void C_GiArrowCursorButton::mousePressEvent(QGraphicsSceneMouseEvent * const opc
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiArrowCursorButton::m_OnNodeChange(void)
 {
-   if (this->mpc_ConnectedNode != NULL)
+   if (this->mpc_ConnectedNode != nullptr)
    {
       QPointF c_NewPos = this->mpc_ConnectedNode->mapToScene(
          this->mpc_ConnectedNode->GetVisibleBoundingRect().topRight());

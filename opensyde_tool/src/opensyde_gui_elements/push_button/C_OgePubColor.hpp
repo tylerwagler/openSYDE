@@ -32,7 +32,7 @@ class C_OgePubColor :
    Q_OBJECT
 
 public:
-   C_OgePubColor(QWidget * const opc_Parent = NULL);
+   C_OgePubColor(QWidget * const opc_Parent = nullptr);
    void SetColors(const QColor & orc_BackgroundColor, const QColor & orc_TopBorderColor,
                   const QColor & orc_RestBorderColor);
 

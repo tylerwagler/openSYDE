@@ -188,7 +188,7 @@ void C_SdTopologyListWidget::startDrag(const Qt::DropActions oc_SupportedActions
    if (c_SelectedItems.size() > 0)
    {
       QListWidgetItem * const pc_Item = c_SelectedItems.at(0);
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          QPixmap c_Pix;
          QDrag * const pc_Drag = new QDrag(this);
@@ -234,7 +234,7 @@ void C_SdTopologyListWidget::m_OnCustomContextMenuRequested(const QPoint & orc_P
    const QListWidgetItem * const pc_Item = this->itemAt(orc_Pos);
 
    // add action shall be shown only if no item concrete was clicked
-   if (pc_Item != NULL)
+   if (pc_Item != nullptr)
    {
       this->mpc_DeleteAction->setVisible(true);
       this->mpc_ContextMenu->popup(this->mapToGlobal(orc_Pos));

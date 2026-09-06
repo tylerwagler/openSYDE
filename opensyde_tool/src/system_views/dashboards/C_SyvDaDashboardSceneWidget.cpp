@@ -99,11 +99,11 @@ C_SyvDaDashboardSceneWidget::C_SyvDaDashboardSceneWidget(const uint32_t ou32_Vie
    connect(this->mpc_Scene, &C_SyvDaDashboardScene::SigNvmReadList, this, &C_SyvDaDashboardSceneWidget::SigNvmReadList);
 
    //Update all items with initial zoom & pos value
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
       c_ViewName = pc_View->GetName().c_str();
-      if (pc_Dashboard != NULL)
+      if (pc_Dashboard != nullptr)
       {
          c_DashboardName = pc_Dashboard->GetName();
       }
@@ -145,7 +145,7 @@ void C_SyvDaDashboardSceneWidget::SetDashboardIndex(const uint32_t ou32_Value)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSceneWidget::SetEditMode(const bool oq_Active)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->SetDrawingBackground(oq_Active);
       this->mpc_Scene->SetEditMode(oq_Active);
@@ -161,7 +161,7 @@ void C_SyvDaDashboardSceneWidget::SetEditMode(const bool oq_Active)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSceneWidget::SetDrawingActive(const bool oq_Active)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->SetDrawingActive(oq_Active);
    }
@@ -176,10 +176,10 @@ void C_SyvDaDashboardSceneWidget::Save(void)
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
    // store configuration of the view
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-      if (pc_Dashboard != NULL)
+      if (pc_Dashboard != nullptr)
       {
          C_UsHandler::h_GetInstance()->SetProjSvDashboardScenePositionAndZoom(pc_View->GetName().c_str(),
                                                                               pc_Dashboard->GetName(),
@@ -187,7 +187,7 @@ void C_SyvDaDashboardSceneWidget::Save(void)
                                                                               this->mpc_Ui->pc_GraphicsView->GetZoomValue());
       }
    }
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->Save();
    }
@@ -201,7 +201,7 @@ void C_SyvDaDashboardSceneWidget::Save(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSceneWidget::RegisterWidgets(C_SyvComDriverDiag & orc_ComDriver)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->RegisterWidgets(orc_ComDriver);
    }
@@ -217,7 +217,7 @@ void C_SyvDaDashboardSceneWidget::RegisterWidgets(C_SyvComDriverDiag & orc_ComDr
 void C_SyvDaDashboardSceneWidget::ConnectionActiveChanged(const bool oq_Active, const QMap<uint32_t,
                                                                                            bool> & orc_MappingNodeToTrafficEncryptionStatus)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->ConnectionActiveChanged(oq_Active, orc_MappingNodeToTrafficEncryptionStatus);
    }
@@ -229,7 +229,7 @@ void C_SyvDaDashboardSceneWidget::ConnectionActiveChanged(const bool oq_Active, 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSceneWidget::UpdateShowValues(void)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->UpdateShowValues();
       this->mpc_Ui->pc_GraphicsView->repaint();
@@ -242,7 +242,7 @@ void C_SyvDaDashboardSceneWidget::UpdateShowValues(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSceneWidget::UpdateTransmissionConfiguration(void)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->UpdateTransmissionConfiguration();
    }
@@ -257,7 +257,7 @@ void C_SyvDaDashboardSceneWidget::UpdateTransmissionConfiguration(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSceneWidget::HandleManualOperationFinished(const int32_t os32_Result, const uint8_t ou8_Nrc)
 {
-   if (this->mpc_Scene != NULL)
+   if (this->mpc_Scene != nullptr)
    {
       this->mpc_Scene->HandleManualOperationFinished(os32_Result, ou8_Nrc);
    }

@@ -45,8 +45,8 @@ public:
                                                    const C_OscNodeDataPoolContent::E_Type oe_Type,
                                                    const stw::scl::C_SclString & orc_ArrayPos = "0");
 
-   static stw::scl::C_SclString h_FloatToStrGe(const float32_t of32_Value,  bool * const opq_InfOrNan = NULL);
-   static stw::scl::C_SclString h_FloatToStrGe(const float64_t of64_Value, bool * const opq_InfOrNan = NULL);
+   static stw::scl::C_SclString h_FloatToStrGe(const float32_t of32_Value,  bool * const opq_InfOrNan = nullptr);
+   static stw::scl::C_SclString h_FloatToStrGe(const float64_t of64_Value, bool * const opq_InfOrNan = nullptr);
    static bool h_CheckInfOrNan(const stw::scl::C_SclString & orc_String);
    static void h_AddDecimalPointIfNone(stw::scl::C_SclString & orc_FloatString);
 };

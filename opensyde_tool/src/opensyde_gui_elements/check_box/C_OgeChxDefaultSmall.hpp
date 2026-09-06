@@ -30,8 +30,8 @@ class C_OgeChxDefaultSmall :
    Q_OBJECT
 
 public:
-   C_OgeChxDefaultSmall(QWidget * const opc_Parent = NULL);
-   C_OgeChxDefaultSmall(const uint32_t ou32_Index, const uint32_t ou32_SubIndex, QWidget * const opc_Parent = NULL);
+   C_OgeChxDefaultSmall(QWidget * const opc_Parent = nullptr);
+   C_OgeChxDefaultSmall(const uint32_t ou32_Index, const uint32_t ou32_SubIndex, QWidget * const opc_Parent = nullptr);
 
    void GetIndexes(uint32_t & oru32_Index, uint32_t & oru32_SubIndex) const;
 

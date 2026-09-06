@@ -29,7 +29,7 @@ class C_OgeGbxNavigationTab :
    Q_OBJECT
 
 public:
-   explicit C_OgeGbxNavigationTab(QWidget * const opc_Parent = NULL);
+   explicit C_OgeGbxNavigationTab(QWidget * const opc_Parent = nullptr);
 
    void SetIncludeLeftBorder(const bool oq_Include);
 };

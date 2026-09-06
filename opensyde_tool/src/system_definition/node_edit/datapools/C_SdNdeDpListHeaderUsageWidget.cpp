@@ -50,7 +50,7 @@ using namespace stw::opensyde_gui_logic;
 C_SdNdeDpListHeaderUsageWidget::C_SdNdeDpListHeaderUsageWidget(QWidget * const opc_Parent) :
    C_OgeWiProgressBar(opc_Parent),
    mq_ActivateToolTip(true),
-   mpc_ToolTip(NULL),
+   mpc_ToolTip(nullptr),
    mu32_Size(0),
    mu32_Used(0),
    mq_ErrorToolTip(false)
@@ -71,7 +71,7 @@ C_SdNdeDpListHeaderUsageWidget::C_SdNdeDpListHeaderUsageWidget(QWidget * const o
 C_SdNdeDpListHeaderUsageWidget::~C_SdNdeDpListHeaderUsageWidget()
 {
    delete mpc_ToolTip;
-   mpc_ToolTip = NULL;
+   mpc_ToolTip = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -136,7 +136,7 @@ bool C_SdNdeDpListHeaderUsageWidget::event(QEvent * const opc_Event)
    if ((opc_Event->type() == QEvent::ToolTip) && (this->mq_ActivateToolTip == true))
    {
       //show tooltip
-      if (mpc_ToolTip == NULL)
+      if (mpc_ToolTip == nullptr)
       {
          mpc_ToolTip = new C_NagToolTip();
       }
@@ -144,7 +144,7 @@ bool C_SdNdeDpListHeaderUsageWidget::event(QEvent * const opc_Event)
       if (this->mpc_ToolTip->isVisible() == false)
       {
          QHelpEvent * const pc_HelpEvent = dynamic_cast<QHelpEvent * const>(opc_Event);
-         if (pc_HelpEvent != NULL)
+         if (pc_HelpEvent != nullptr)
          {
             const QString c_Text = static_cast<QString>("%1% %2 (%3 / %4)").arg(QString::number(this->GetProgress()),
                                                                                 C_GtGetText::h_GetText("used"),
@@ -175,7 +175,7 @@ bool C_SdNdeDpListHeaderUsageWidget::event(QEvent * const opc_Event)
    else if (opc_Event->type() == QEvent::Leave)
    {
       //hide on leave
-      if (this->mpc_ToolTip != NULL)
+      if (this->mpc_ToolTip != nullptr)
       {
          this->mpc_ToolTip->hide();
       }

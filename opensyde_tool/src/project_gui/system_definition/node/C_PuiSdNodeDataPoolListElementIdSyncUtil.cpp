@@ -614,7 +614,7 @@ bool C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeHalc(
       else
       {
          if (C_PuiSdHandler::h_GetInstance()->GetOscDataPool(orc_DataElementId.u32_NodeIndex,
-                                                             orc_DataElementId.u32_DataPoolIndex) != NULL)
+                                                             orc_DataElementId.u32_DataPoolIndex) != nullptr)
          {
             C_OscNodeDataPool::E_Type e_Type;
             if (C_PuiSdHandler::h_GetInstance()->GetDataPoolType(ou32_Index, orc_DataElementId.u32_DataPoolIndex,
@@ -671,7 +671,7 @@ int32_t C_PuiSdNodeDataPoolListElementIdSyncUtil::h_CheckAndHandleNewElement(
                                                                        orc_NewId.u32_DataPoolIndex,
                                                                        orc_NewId.u32_ListIndex,
                                                                        orc_NewId.u32_ElementIndex);
-         if ((pc_Node != NULL) && ((pc_Element != NULL) && (pc_Dp != NULL)))
+         if ((pc_Node != nullptr) && ((pc_Element != nullptr) && (pc_Dp != nullptr)))
          {
             const std::string c_Tmp = orc_NewId.GetHalChannelName().c_str();
             uint32_t u32_Hash = 0UL;
@@ -716,7 +716,7 @@ void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_GetNewMapOnSyncHalc(const uint3
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_Index);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> c_NewMap;
       for (uint32_t u32_ItDp = 0UL; u32_ItDp < pc_Node->c_DataPools.size(); ++u32_ItDp)

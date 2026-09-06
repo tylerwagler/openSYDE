@@ -97,12 +97,12 @@ void C_SebUnoMoveSubLineCommand::redo(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoMoveSubLineCommand::m_UndoSingle(QGraphicsItem * const opc_Item) const
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       C_GiLiLineGroup * pc_LineGroup;
 
       pc_LineGroup = dynamic_cast<C_GiLiLineGroup *>(opc_Item);
-      if (pc_LineGroup != NULL)
+      if (pc_LineGroup != nullptr)
       {
          const int32_t s32_NumPoints = pc_LineGroup->GetNumberPoints();
          if ((this->ms32_SubLineId >= 0) && ((this->ms32_SubLineId + 1) < s32_NumPoints))
@@ -129,12 +129,12 @@ void C_SebUnoMoveSubLineCommand::m_UndoSingle(QGraphicsItem * const opc_Item) co
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoMoveSubLineCommand::m_RedoSingle(QGraphicsItem * const opc_Item) const
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       C_GiLiLineGroup * pc_LineGroup;
 
       pc_LineGroup = dynamic_cast<C_GiLiLineGroup *>(opc_Item);
-      if (pc_LineGroup != NULL)
+      if (pc_LineGroup != nullptr)
       {
          const int32_t s32_NumPoints = pc_LineGroup->GetNumberPoints();
          if ((this->ms32_SubLineId >= 0) && ((this->ms32_SubLineId + 1) < s32_NumPoints))

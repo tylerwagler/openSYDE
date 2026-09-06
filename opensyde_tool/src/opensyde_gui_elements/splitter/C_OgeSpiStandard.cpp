@@ -70,7 +70,7 @@ void C_OgeSpiStandard::SetColor(const QColor & orc_Color) const
    // Index 0 is always is hidden, take number 1
    C_OgeSpiStandardHandle * const pc_Handle = dynamic_cast<C_OgeSpiStandardHandle *>(this->handle(1));
 
-   if (pc_Handle != NULL)
+   if (pc_Handle != nullptr)
    {
       pc_Handle->SetColor(orc_Color);
    }
@@ -88,7 +88,7 @@ void C_OgeSpiStandard::SetMargins(const int32_t os32_MarginTop, const int32_t os
    // Index 0 is always is hidden, take number 1
    C_OgeSpiStandardHandle * const pc_Handle = dynamic_cast<C_OgeSpiStandardHandle *>(this->handle(1));
 
-   if (pc_Handle != NULL)
+   if (pc_Handle != nullptr)
    {
       pc_Handle->SetMargins(os32_MarginTop, os32_MarginBottom);
    }

@@ -39,7 +39,7 @@ class C_SdBueMessageSelectorTreeWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdBueMessageSelectorTreeWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueMessageSelectorTreeWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdBueMessageSelectorTreeWidget(void) override;
 
    QSize sizeHint(void) const override;

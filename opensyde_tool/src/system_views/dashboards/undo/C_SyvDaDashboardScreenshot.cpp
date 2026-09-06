@@ -111,8 +111,8 @@ C_SyvDaDashboardScreenshot::C_SyvDaDashboardScreenshot(QWidget * const opc_Paren
    }
    else
    {
-      this->mpc_Movie = NULL;
-      this->mpc_GifLabel = NULL;
+      this->mpc_Movie = nullptr;
+      this->mpc_GifLabel = nullptr;
    }
 
    mc_ScreenshotIconChangeTimer.setSingleShot(true);
@@ -131,8 +131,8 @@ C_SyvDaDashboardScreenshot::C_SyvDaDashboardScreenshot(QWidget * const opc_Paren
 
 C_SyvDaDashboardScreenshot::~C_SyvDaDashboardScreenshot()
 {
-   mpc_ScreenshotPushButton = NULL;
-   this->mpc_GifLabel = NULL;
+   mpc_ScreenshotPushButton = nullptr;
+   this->mpc_GifLabel = nullptr;
    delete (this->mpc_Movie);
 }
 
@@ -181,7 +181,7 @@ void C_SyvDaDashboardScreenshot::m_ShootScreenshot()
    mc_ScreenshotIconChangeTimer.start(mhs32_SCREENSHOT_ICON_CHANGE_TIMEOUT);
    C_SyvDaDashboardScreenshot::m_SaveScreenshot(oc_CurrentTabPixmap, this->accessibleName().toStdString().c_str());
 
-   if ((this->mpc_GifLabel != NULL) && (this->mpc_Movie != NULL))
+   if ((this->mpc_GifLabel != nullptr) && (this->mpc_Movie != nullptr))
    {
       mc_GifTimer.start(ms32_ScreenshotSuccessGifTimeout);
    }
@@ -199,7 +199,7 @@ void C_SyvDaDashboardScreenshot::m_ShootScreenshot()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardScreenshot::m_GifTimeout()
 {
-   if ((this->mpc_GifLabel != NULL) && (this->mpc_Movie != NULL))
+   if ((this->mpc_GifLabel != nullptr) && (this->mpc_Movie != nullptr))
    {
       this->mpc_Movie->stop();
       this->mpc_GifLabel->setVisible(false);
@@ -222,7 +222,7 @@ void C_SyvDaDashboardScreenshot::m_ChangeToDefaultScreenshotIcon()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardScreenshot::m_ChangeToActionScreenshotIcon()
 {
-   if ((this->mpc_GifLabel != NULL) && (this->mpc_Movie != NULL))
+   if ((this->mpc_GifLabel != nullptr) && (this->mpc_Movie != nullptr))
    {
       if (this->mpc_Movie->state() == QMovie::Running)
       {
@@ -257,7 +257,7 @@ void C_SyvDaDashboardScreenshot::m_SaveScreenshot(QPixmap oc_CurrentTabPixmap, c
    const int32_t s32_Xpos = (oc_CurrentTabPixmap.width() - c_WatermarkPixmap.width()) - 20;
    const int32_t s32_Ypos = (oc_CurrentTabPixmap.height() - c_WatermarkPixmap.height()) - 20;
 
-   if ((this->mpc_GifLabel != NULL) && (this->mpc_Movie != NULL))
+   if ((this->mpc_GifLabel != nullptr) && (this->mpc_Movie != nullptr))
    {
       this->mpc_GifLabel->setParent(this->parentWidget());
       this->mpc_GifLabel->setVisible(true);
@@ -279,7 +279,7 @@ void C_SyvDaDashboardScreenshot::m_SaveScreenshot(QPixmap oc_CurrentTabPixmap, c
       tgl_assert(oc_CurrentTabPixmap.save(c_ScreenshotFileName, c_ScreenshotFormat.toLatin1().constData()));
    }
 
-   if ((this->mpc_GifLabel != NULL) && (this->mpc_Movie != NULL))
+   if ((this->mpc_GifLabel != nullptr) && (this->mpc_Movie != nullptr))
    {
       if (this->mpc_Movie->state() == QMovie::NotRunning)
       {
@@ -340,7 +340,7 @@ void C_SyvDaDashboardScreenshot::m_OpenScreenshotLocation() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardScreenshot::RepositionScreenshotIcon(const int32_t os32_Xpos, const int32_t os32_Ypos)
 {
-   if (this->mpc_ScreenshotPushButton != NULL)
+   if (this->mpc_ScreenshotPushButton != nullptr)
    {
       this->mpc_ScreenshotPushButton->move(os32_Xpos, os32_Ypos);
    }

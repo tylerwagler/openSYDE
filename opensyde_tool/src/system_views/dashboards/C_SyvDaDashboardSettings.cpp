@@ -180,7 +180,7 @@ void C_SyvDaDashboardSettings::m_Load(void) const
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       this->mpc_Ui->pc_SpinBoxFast->setValue(static_cast<int32_t>(pc_View->GetUpdateRateFast()));
       this->mpc_Ui->pc_SpinBoxMedium->setValue(static_cast<int32_t>(pc_View->GetUpdateRateMedium()));

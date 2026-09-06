@@ -34,7 +34,7 @@ class C_SdNdeDpListArrayEditModel :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpListArrayEditModel(QObject * const opc_Parent = NULL);
+   explicit C_SdNdeDpListArrayEditModel(QObject * const opc_Parent = nullptr);
 
    void SetElement(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                    const uint32_t & oru32_ListIndex, const uint32_t & oru32_ElementIndex,

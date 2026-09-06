@@ -32,7 +32,7 @@ class C_SyvUpPieChart :
    Q_OBJECT
 
 public:
-   explicit C_SyvUpPieChart(QWidget * const opc_Parent = NULL);
+   explicit C_SyvUpPieChart(QWidget * const opc_Parent = nullptr);
    ~C_SyvUpPieChart(void) override;
 
    void SetProgress100(const uint16_t ou16_Progress100, const bool oq_Finished = false);

@@ -32,7 +32,7 @@ class C_GiArrowCursorButton :
    Q_OBJECT
 
 public:
-   C_GiArrowCursorButton(QGraphicsItem * const opc_Parent = NULL);
+   C_GiArrowCursorButton(QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiArrowCursorButton() override;
    void DetachNode(void);
    void AttachToNode(const C_GiNode * const opc_Node);

@@ -43,13 +43,13 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 QGraphicsItem * C_SebUtil::h_GetHighestParent(QGraphicsItem * const opc_Item)
 {
-   QGraphicsItem * pc_ReturnItem = NULL;
+   QGraphicsItem * pc_ReturnItem = nullptr;
 
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       QGraphicsItem * const pc_Parent = opc_Item->parentItem();
 
-      if (pc_Parent == NULL)
+      if (pc_Parent == nullptr)
       {
          // no parent, return the original item
          pc_ReturnItem = opc_Item;
@@ -75,13 +75,13 @@ QGraphicsItem * C_SebUtil::h_GetHighestParent(QGraphicsItem * const opc_Item)
 //----------------------------------------------------------------------------------------------------------------------
 const QGraphicsItem * C_SebUtil::h_GetHighestParent(const QGraphicsItem * const opc_Item)
 {
-   const QGraphicsItem * pc_ReturnItem = NULL;
+   const QGraphicsItem * pc_ReturnItem = nullptr;
 
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       const QGraphicsItem * const pc_Parent = opc_Item->parentItem();
 
-      if (pc_Parent == NULL)
+      if (pc_Parent == nullptr)
       {
          // no parent, return the original item
          pc_ReturnItem = opc_Item;

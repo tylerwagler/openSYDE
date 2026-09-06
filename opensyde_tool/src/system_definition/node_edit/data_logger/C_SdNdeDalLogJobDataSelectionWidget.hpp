@@ -33,7 +33,7 @@ class C_SdNdeDalLogJobDataSelectionWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDalLogJobDataSelectionWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDalLogJobDataSelectionWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDalLogJobDataSelectionWidget(void) override;
 
    void LoadUserSettings(void) const;

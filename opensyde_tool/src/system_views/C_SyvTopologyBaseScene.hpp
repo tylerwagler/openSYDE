@@ -28,13 +28,13 @@ class C_SyvTopologyBaseScene :
    public C_SebTopologyBaseScene
 {
 public:
-   C_SyvTopologyBaseScene(const uint32_t ou32_ViewIndex = 0, QObject * const opc_Parent = NULL);
+   C_SyvTopologyBaseScene(const uint32_t ou32_ViewIndex = 0, QObject * const opc_Parent = nullptr);
    ~C_SyvTopologyBaseScene() override;
 
    void Load(void) override;
 
    //lint -e{1735} Suppression, because default parameters are identical
-   void CopyFromManagerToScene(const QPointF * const opc_Pos = NULL) override;
+   void CopyFromManagerToScene(const QPointF * const opc_Pos = nullptr) override;
 
    bool IsItemDeletable(const QGraphicsItem * const opc_Item) const override;
    bool IsZetOrderChangeable(const QGraphicsItem * const opc_Item) const override;

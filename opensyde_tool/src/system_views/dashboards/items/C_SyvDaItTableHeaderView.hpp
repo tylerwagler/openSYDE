@@ -24,7 +24,7 @@ class C_SyvDaItTableHeaderView :
    public C_SdNdeDpListTableHeaderView
 {
 public:
-   C_SyvDaItTableHeaderView(const Qt::Orientation & ore_Orientation, QWidget * const opc_Parent = NULL);
+   C_SyvDaItTableHeaderView(const Qt::Orientation & ore_Orientation, QWidget * const opc_Parent = nullptr);
    ~C_SyvDaItTableHeaderView(void) override;
 
    void SetCursorHandlingActive(const bool oq_Active);

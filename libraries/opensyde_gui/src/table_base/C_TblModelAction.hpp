@@ -31,7 +31,7 @@ class C_TblModelAction :
    Q_OBJECT
 
 public:
-   C_TblModelAction(QObject * const opc_Parent = NULL);
+   C_TblModelAction(QObject * const opc_Parent = nullptr);
 
    int32_t rowCount(const QModelIndex & orc_Parent = QModelIndex()) const override;
 

@@ -105,7 +105,7 @@ int32_t C_PuiSvDbElementIdCrcGroup::m_CalcCrc(uint32_t & oru32_Result) const
             const C_OscCanSignal * const pc_Signal = C_PuiSdHandler::h_GetInstance()->GetCanSignal(c_MessageId,
                                                                                                    u32_SignalIndex);
 
-            if (pc_Signal != NULL)
+            if (pc_Signal != nullptr)
             {
                pc_Signal->CalcHash(oru32_Result);
             }

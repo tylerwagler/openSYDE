@@ -32,7 +32,7 @@ class C_SdNdeNodePropertiesTabContentWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeNodePropertiesTabContentWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeNodePropertiesTabContentWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeNodePropertiesTabContentWidget(void) override;
 
    void SetNodeIndex(const uint32_t ou32_NodeIndex);

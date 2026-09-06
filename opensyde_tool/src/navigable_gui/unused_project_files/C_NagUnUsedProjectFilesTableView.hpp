@@ -32,7 +32,7 @@ class C_NagUnUsedProjectFilesTableView :
    Q_OBJECT
 
 public:
-   explicit C_NagUnUsedProjectFilesTableView(QWidget * const opc_Parent = NULL);
+   explicit C_NagUnUsedProjectFilesTableView(QWidget * const opc_Parent = nullptr);
    void UpdateData(const QStringList & orc_UnUsedFilesList, const QStringList & orc_EmptyFoldersList);
    bool IsEmpty(void) const;
    void DeleteAllFiles();

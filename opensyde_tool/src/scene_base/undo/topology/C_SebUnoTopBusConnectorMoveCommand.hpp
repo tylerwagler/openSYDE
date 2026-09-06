@@ -31,9 +31,9 @@ public:
    C_SebUnoTopBusConnectorMoveCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
                                       const std::vector<QPointF> & orc_InitialPoints,
                                       const std::vector<QPointF> & orc_FinalPoints,
-                                      QUndoCommand * const opc_Parent = NULL);
-   C_SebUnoTopBusConnectorMoveCommand(const C_SebUnoTopBusConnectorMoveCommand * const opc_Prev = NULL,
-                                      QUndoCommand * const opc_Parent = NULL);
+                                      QUndoCommand * const opc_Parent = nullptr);
+   C_SebUnoTopBusConnectorMoveCommand(const C_SebUnoTopBusConnectorMoveCommand * const opc_Prev = nullptr,
+                                      QUndoCommand * const opc_Parent = nullptr);
    ~C_SebUnoTopBusConnectorMoveCommand(void) override;
    void undo(void) override;
    void redo(void) override;

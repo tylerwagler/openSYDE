@@ -54,7 +54,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueMessageTableModel::C_SdBueMessageTableModel(QObject * const opc_Parent) :
    QAbstractTableModel(opc_Parent),
-   mpc_SyncManager(NULL)
+   mpc_SyncManager(nullptr)
 {
 }
 
@@ -75,7 +75,7 @@ void C_SdBueMessageTableModel::SetMessageSyncManager(C_PuiSdNodeCanMessageSyncMa
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageTableModel::UpdateData(void)
 {
-   if (this->mpc_SyncManager != NULL)
+   if (this->mpc_SyncManager != nullptr)
    {
       beginResetModel();
       this->m_FillMsgInfo();
@@ -727,7 +727,7 @@ const
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(orc_CurMatchingId.u32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       QString c_AdditionalInfo;
 
@@ -785,7 +785,7 @@ QString C_SdBueMessageTableModel::m_GetNotEarlierThanHeaderName() const
 {
    QString c_Retval = C_GtGetText::h_GetText("Not earlier than [ms]");
 
-   if (this->mpc_SyncManager != NULL)
+   if (this->mpc_SyncManager != nullptr)
    {
       if (this->mpc_SyncManager->GetCurrentComProtocol() == C_OscCanProtocol::eCAN_OPEN)
       {
@@ -806,7 +806,7 @@ QString C_SdBueMessageTableModel::m_GetNotLaterThanHeaderName() const
 {
    QString c_Retval = C_GtGetText::h_GetText("But not later than [ms]");
 
-   if (this->mpc_SyncManager != NULL)
+   if (this->mpc_SyncManager != nullptr)
    {
       if (this->mpc_SyncManager->GetCurrentComProtocol() == C_OscCanProtocol::eCAN_OPEN)
       {
@@ -896,7 +896,7 @@ QVariant C_SdBueMessageTableModel::m_GetNotEarlierThanValue(const C_OscCanMessag
    QVariant c_Retval;
 
    if ((orc_Message.e_TxMethod == C_OscCanMessage::eTX_METHOD_ON_CHANGE) ||
-       ((this->mpc_SyncManager != NULL) &&
+       ((this->mpc_SyncManager != nullptr) &&
         (this->mpc_SyncManager->GetCurrentComProtocol() == C_OscCanProtocol::eCAN_OPEN)))
    {
       c_Retval = orc_Message.u16_DelayTimeMs;
@@ -922,7 +922,7 @@ QVariant C_SdBueMessageTableModel::m_GetNotLaterThanValue(const C_OscCanMessage 
    QVariant c_Retval;
 
     if ((orc_Message.e_TxMethod == C_OscCanMessage::eTX_METHOD_ON_CHANGE) ||
-        ((this->mpc_SyncManager != NULL) &&
+        ((this->mpc_SyncManager != nullptr) &&
          (this->mpc_SyncManager->GetCurrentComProtocol() == C_OscCanProtocol::eCAN_OPEN)))
     {
        c_Retval = QVariant::fromValue<quint64>(static_cast<quint64>(orc_Message.u32_CycleTimeMs));
@@ -949,7 +949,7 @@ QString C_SdBueMessageTableModel::m_GetTransmitter(const C_OscCanMessageIdentifi
 {
    QString c_Retval;
 
-   if (this->mpc_SyncManager != NULL)
+   if (this->mpc_SyncManager != nullptr)
    {
       const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingIds =
          this->mpc_SyncManager->GetMatchingMessageVector(orc_Id);
@@ -963,7 +963,7 @@ QString C_SdBueMessageTableModel::m_GetTransmitter(const C_OscCanMessageIdentifi
          {
             const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                rc_CurMatchingId.u32_NodeIndex);
-            if (pc_Node != NULL)
+            if (pc_Node != nullptr)
             {
                q_Found = true;
                c_Retval = m_CreateNodeName(rc_CurMatchingId, c_MatchingIds);
@@ -1000,7 +1000,7 @@ QString C_SdBueMessageTableModel::m_GetReceiver(const C_OscCanMessageIdentificat
 {
    QString c_Retval;
 
-   if (this->mpc_SyncManager != NULL)
+   if (this->mpc_SyncManager != nullptr)
    {
       const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingIds =
          this->mpc_SyncManager->GetMatchingMessageVector(orc_Id);
@@ -1052,7 +1052,7 @@ QString C_SdBueMessageTableModel::m_GetCanOpenNode(const C_OscCanMessage & orc_M
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
       orc_Message.c_CanOpenManagerOwnerNodeIndex.u32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       c_Retval = pc_Node->c_Properties.c_Name.c_str();
    }
@@ -1074,9 +1074,9 @@ QVariant C_SdBueMessageTableModel::m_GetMessageIcon(const C_OscCanMessageIdentif
    const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(
       orc_MessageId);
 
-   if (pc_Message != NULL)
+   if (pc_Message != nullptr)
    {
-      if (this->mpc_SyncManager != NULL)
+      if (this->mpc_SyncManager != nullptr)
       {
          bool q_NameValid;
          bool q_IdValid;
@@ -1099,7 +1099,7 @@ QVariant C_SdBueMessageTableModel::m_GetMessageIcon(const C_OscCanMessageIdentif
                   orc_MessageId.u32_InterfaceIndex,
                   orc_MessageId.u32_DatapoolIndex,
                   orc_MessageId.q_MessageIsTx);
-            if (pc_List != NULL)
+            if (pc_List != nullptr)
             {
                for (uint32_t u32_ItSignal = 0; u32_ItSignal < pc_Message->c_Signals.size(); ++u32_ItSignal)
                {
@@ -1154,7 +1154,7 @@ void C_SdBueMessageTableModel::m_FillMsgInfo(void)
       this->mc_MsgInfoAll[u32_Counter].c_MessageId = rc_Id;
 
       const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(rc_Id);
-      if (pc_Message != NULL)
+      if (pc_Message != nullptr)
       {
          C_MsgTableData & rc_Data = this->mc_MsgInfoAll[u32_Counter].c_MessageData;
          // Get the data for the message
@@ -1249,7 +1249,7 @@ QString C_SdBueMessageTableModel::m_GetCycleTimeHeaderName(void) const
 {
    QString c_Retval = C_GtGetText::h_GetText("Cycle Time [ms]");
 
-   if (this->mpc_SyncManager != NULL)
+   if (this->mpc_SyncManager != nullptr)
    {
       if (this->mpc_SyncManager->GetCurrentComProtocol() == C_OscCanProtocol::eCAN_OPEN_SAFETY)
       {

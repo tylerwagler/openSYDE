@@ -491,7 +491,7 @@ int32_t C_PuiBsElements::DeleteTextElement(const uint32_t & oru32_Index)
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiBsBoundary * C_PuiBsElements::GetBoundary(const uint32_t & oru32_Index) const
 {
-   const C_PuiBsBoundary * pc_Retval = NULL;
+   const C_PuiBsBoundary * pc_Retval = nullptr;
 
    if (oru32_Index < this->c_Boundaries.size())
    {
@@ -538,7 +538,7 @@ int32_t C_PuiBsElements::SetBoundary(const uint32_t & oru32_Index, const C_PuiBs
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiBsImage * C_PuiBsElements::GetImage(const uint32_t & oru32_Index) const
 {
-   const C_PuiBsImage * pc_Retval = NULL;
+   const C_PuiBsImage * pc_Retval = nullptr;
 
    if (oru32_Index < this->c_Images.size())
    {
@@ -585,7 +585,7 @@ int32_t C_PuiBsElements::SetImage(const uint32_t & oru32_Index, const C_PuiBsIma
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiBsLineArrow * C_PuiBsElements::GetLineArrow(const uint32_t & oru32_Index) const
 {
-   const C_PuiBsLineArrow * pc_Retval = NULL;
+   const C_PuiBsLineArrow * pc_Retval = nullptr;
 
    if (oru32_Index < this->c_LineArrows.size())
    {
@@ -632,7 +632,7 @@ int32_t C_PuiBsElements::SetLineArrow(const uint32_t & oru32_Index, const C_PuiB
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiBsTextElement * C_PuiBsElements::GetTextElement(const uint32_t & oru32_Index) const
 {
-   const C_PuiBsTextElement * pc_Retval = NULL;
+   const C_PuiBsTextElement * pc_Retval = nullptr;
 
    if (oru32_Index < this->c_TextElements.size())
    {

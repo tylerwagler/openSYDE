@@ -478,8 +478,8 @@ int32_t C_OscSupNodeDefinitionFiler::mh_LoadPemConfigOption(const stw::scl::C_Sc
       }
       if (s32_Retval == C_NO_ERR)
       {
-         tgl_assert(opc_FileName != NULL);
-         if (opc_FileName != NULL)
+         tgl_assert(opc_FileName != nullptr);
+         if (opc_FileName != nullptr)
          {
             // we have to take care of OS dependent path delimiters for windows '\\'
             const stw::scl::C_SclString c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR);

@@ -149,7 +149,7 @@ int32_t C_SdNdeDalCopElementIdCrcGroupBase::mh_CalcCrcDataPoolElement(uint32_t &
 
    oru32_Result = 0xFFFFFFFFU;
 
-   if ((pc_OscListElement != NULL) && (pc_UiListElement != NULL))
+   if ((pc_OscListElement != nullptr) && (pc_UiListElement != nullptr))
    {
       const uint32_t u32_Val = pc_OscListElement->GetArraySize();
       //Data element core

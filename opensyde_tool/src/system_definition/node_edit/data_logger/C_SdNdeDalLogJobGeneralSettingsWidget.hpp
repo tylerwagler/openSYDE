@@ -33,7 +33,7 @@ class C_SdNdeDalLogJobGeneralSettingsWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDalLogJobGeneralSettingsWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDalLogJobGeneralSettingsWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDalLogJobGeneralSettingsWidget(void) override;
    void SetNode(const uint32_t ou32_NodeIndex);
    void Save(void);

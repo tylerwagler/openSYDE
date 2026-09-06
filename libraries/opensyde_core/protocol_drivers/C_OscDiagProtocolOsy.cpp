@@ -54,7 +54,7 @@ void C_OscDiagProtocolOsy::m_OsyReadDataPoolDataEventReceived(const uint8_t ou8_
                                                               const uint16_t ou16_ElementIndex,
                                                               const std::vector<uint8_t> & orc_Value)
 {
-   if (mpr_OnDataPoolReadEventReceived != NULL)
+   if (mpr_OnDataPoolReadEventReceived != nullptr)
    {
       mpr_OnDataPoolReadEventReceived(mpv_OnAsyncInstance, ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
                                       orc_Value);
@@ -84,7 +84,7 @@ void C_OscDiagProtocolOsy::m_OsyReadDataPoolDataEventErrorReceived(const uint8_t
                                                                    const uint16_t ou16_ElementIndex,
                                                                    const uint8_t ou8_NrCode)
 {
-   if (mpr_OnDataPoolReadEventErrorReceived != NULL)
+   if (mpr_OnDataPoolReadEventErrorReceived != nullptr)
    {
       mpr_OnDataPoolReadEventErrorReceived(mpv_OnAsyncInstance, ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
                                            ou8_NrCode);

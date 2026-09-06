@@ -26,7 +26,7 @@ class C_OgePubIconChart :
    Q_OBJECT
 
 public:
-   explicit C_OgePubIconChart(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubIconChart(QWidget * const opc_Parent = nullptr);
 
 protected:
    void paintEvent(QPaintEvent * const opc_Event) override;

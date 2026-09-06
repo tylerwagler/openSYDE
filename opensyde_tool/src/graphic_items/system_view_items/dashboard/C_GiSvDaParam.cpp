@@ -62,7 +62,7 @@ C_GiSvDaParam::C_GiSvDaParam(const uint32_t & oru32_ViewIndex, const uint32_t & 
                          static_cast<uint32_t>(std::numeric_limits<int32_t>::max()),
                          oru64_Id, 90.0, 50.0, 180.0, 100.0, false, true, opc_Parent),
    mq_Connected(false),
-   mpc_AddDataElement(NULL)
+   mpc_AddDataElement(nullptr)
 {
    this->mpc_ParamWidget = new C_SyvDaItPaWidgetNew(oru32_ViewIndex, this);
    this->mpc_Widget->SetWidget(this->mpc_ParamWidget);
@@ -127,14 +127,14 @@ void C_GiSvDaParam::LoadData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbParam * const pc_Box = pc_Dashboard->GetParam(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          this->LoadSvBasicData(*pc_Box);
-         if (this->mpc_ParamWidget != NULL)
+         if (this->mpc_ParamWidget != nullptr)
          {
             if (pc_Box->c_ColWidth.size() > 0UL)
             {
@@ -161,16 +161,16 @@ void C_GiSvDaParam::UpdateData(void)
 {
    const C_PuiSvDashboard * const pc_Dashboard = this->m_GetSvDashboard();
 
-   if (pc_Dashboard != NULL)
+   if (pc_Dashboard != nullptr)
    {
       const C_PuiSvDbParam * const pc_Box = pc_Dashboard->GetParam(static_cast<uint32_t>(this->ms32_Index));
-      tgl_assert(pc_Box != NULL);
-      if (pc_Box != NULL)
+      tgl_assert(pc_Box != nullptr);
+      if (pc_Box != nullptr)
       {
          C_PuiSvDbParam c_Box = *pc_Box;
          this->UpdateSvBasicData(c_Box);
          c_Box.c_ColWidth.clear();
-         if (this->mpc_ParamWidget != NULL)
+         if (this->mpc_ParamWidget != nullptr)
          {
             c_Box.c_ColWidth.push_back(this->mpc_ParamWidget->GetCurrentColumnWidths());
             c_Box.c_ExpandedItems = this->mpc_ParamWidget->GetAllExpandedTreeItems();
@@ -211,7 +211,7 @@ void C_GiSvDaParam::ConnectionActiveChanged(const bool oq_Active, const QMap<uin
 {
    this->mq_Connected = oq_Active;
    Q_UNUSED(orc_MappingNodeToTrafficEncryptionStatus)
-   if (this->mpc_ParamWidget != NULL)
+   if (this->mpc_ParamWidget != nullptr)
    {
       this->mpc_ParamWidget->ConnectionActiveChanged(oq_Active);
    }
@@ -240,8 +240,8 @@ void C_GiSvDaParam::EditModeActiveChanged(const bool oq_Active)
    // Edit mode and edit content mode: The child must handle its own events
    this->setHandlesChildEvents(oq_Active);
 
-   tgl_assert(this->mpc_ParamWidget != NULL);
-   if (this->mpc_ParamWidget != NULL)
+   tgl_assert(this->mpc_ParamWidget != nullptr);
+   if (this->mpc_ParamWidget != nullptr)
    {
       this->mpc_ParamWidget->SetEditMode(this->mq_EditModeActive, this->mq_EditContentModeEnabled);
    }
@@ -264,8 +264,8 @@ bool C_GiSvDaParam::EnableEditContent(void)
 
    if (q_Return == true)
    {
-      tgl_assert(this->mpc_ParamWidget != NULL);
-      if (this->mpc_ParamWidget != NULL)
+      tgl_assert(this->mpc_ParamWidget != nullptr);
+      if (this->mpc_ParamWidget != nullptr)
       {
          this->mpc_ParamWidget->SetEditMode(this->mq_EditModeActive, true);
       }
@@ -285,8 +285,8 @@ void C_GiSvDaParam::DisableEditContent(void)
    // Edit mode and no edit content mode: The child shall not handle its own events due to moving functionality
    this->setHandlesChildEvents(true);
 
-   tgl_assert(this->mpc_ParamWidget != NULL);
-   if (this->mpc_ParamWidget != NULL)
+   tgl_assert(this->mpc_ParamWidget != nullptr);
+   if (this->mpc_ParamWidget != nullptr)
    {
       this->mpc_ParamWidget->SetEditMode(this->mq_EditModeActive, false);
       // In case of a still visible tool tip, it will no disappear due to the not forwarded events and an own scene
@@ -318,11 +318,11 @@ void C_GiSvDaParam::ConfigureContextMenu(C_SyvDaContextMenuManager * const opc_C
       // In content edit mode only widget specific functions are relevant
       opc_ContextMenuManager->SetSpecificActionsAvailable(false, true);
 
-      tgl_assert(this->mpc_ParamWidget != NULL);
-      if ((oq_Active == true) && (this->mpc_ParamWidget != NULL))
+      tgl_assert(this->mpc_ParamWidget != nullptr);
+      if ((oq_Active == true) && (this->mpc_ParamWidget != nullptr))
       {
          // Initial registration of the context menu
-         if (mpc_AddDataElement == NULL)
+         if (mpc_AddDataElement == nullptr)
          {
             mpc_AddDataElement =
                opc_ContextMenuManager->RegisterActionWithKeyboardShortcut(C_GtGetText::h_GetText(
@@ -334,7 +334,7 @@ void C_GiSvDaParam::ConfigureContextMenu(C_SyvDaContextMenuManager * const opc_C
             connect(mpc_AddDataElement, &QAction::triggered, this->mpc_ParamWidget,
                     &C_SyvDaItPaWidgetNew::ButtonAddClicked);
          }
-         if (mpc_AddDataElement != NULL)
+         if (mpc_AddDataElement != nullptr)
          {
             opc_ContextMenuManager->SetVisibleWithAutoHide(this->mpc_AddDataElement);
          }
@@ -353,7 +353,7 @@ void C_GiSvDaParam::HandleManualOperationFinished(const int32_t os32_Result, con
 {
    bool q_WidgetRelevant = false;
 
-   if (this->mpc_ParamWidget != NULL)
+   if (this->mpc_ParamWidget != nullptr)
    {
       q_WidgetRelevant = this->mpc_ParamWidget->HandleManualOperationFinished(os32_Result, ou8_Nrc);
    }
@@ -372,8 +372,8 @@ void C_GiSvDaParam::HandleManualOperationFinished(const int32_t os32_Result, con
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaParam::SetSyvComDriver(C_SyvComDriverDiag & orc_ComDriver)
 {
-   tgl_assert(this->mpc_ParamWidget != NULL);
-   if (this->mpc_ParamWidget != NULL)
+   tgl_assert(this->mpc_ParamWidget != nullptr);
+   if (this->mpc_ParamWidget != nullptr)
    {
       this->mpc_ParamWidget->SetSyvComDriver(orc_ComDriver);
    }
@@ -429,13 +429,13 @@ uint32_t C_GiSvDaParam::GetViewIndex(void) const
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDbParam * C_GiSvDaParam::GetParamItem(void) const
 {
-   const C_PuiSvDbParam * pc_Retval = NULL;
+   const C_PuiSvDbParam * pc_Retval = nullptr;
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-      if ((pc_Dashboard != NULL) && (this->GetIndex() >= 0))
+      if ((pc_Dashboard != nullptr) && (this->GetIndex() >= 0))
       {
          pc_Retval = pc_Dashboard->GetParam(static_cast<uint32_t>(this->GetIndex()));
       }
@@ -498,7 +498,7 @@ int32_t C_GiSvDaParam::AddParamItemDataElement(const C_OscNodeDataPoolListElemen
                                                                                             orc_Id, opc_Content);
       //Trigger data element reload
       pc_ParamItem = this->GetParamItem();
-      if (pc_ParamItem != NULL)
+      if (pc_ParamItem != nullptr)
       {
          for (uint32_t u32_ItConfig = 0; u32_ItConfig < pc_ParamItem->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
          {
@@ -539,8 +539,8 @@ int32_t C_GiSvDaParam::DeleteLists(const std::vector<stw::opensyde_core::C_OscNo
    {
       std::vector<C_PuiSvDbNodeDataPoolListElementId> c_DeletedIds;
       const C_PuiSvDbParam * const pc_Param = this->GetParamItem();
-      tgl_assert(pc_Param != NULL);
-      if (pc_Param != NULL)
+      tgl_assert(pc_Param != nullptr);
+      if (pc_Param != nullptr)
       {
          tgl_assert(pc_Param->c_DataPoolElementsConfig.size() == pc_Param->c_DataSetSelectionIndices.size());
          if (pc_Param->c_DataPoolElementsConfig.size() == pc_Param->c_DataSetSelectionIndices.size())
@@ -617,7 +617,7 @@ int32_t C_GiSvDaParam::DeleteLists(const std::vector<stw::opensyde_core::C_OscNo
       {
          //Check read rails
          const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             for (uint32_t u32_ItDeletedItem = 0; (u32_ItDeletedItem < c_DeletedIds.size()) && (s32_Retval == C_NO_ERR);
                  ++u32_ItDeletedItem)
@@ -717,7 +717,7 @@ int32_t C_GiSvDaParam::m_MapDataElementIndexToInternalElementIndex(const uint32_
    int32_t s32_Retval = C_RANGE;
    const C_PuiSvDbParam * const pc_Param = this->GetParamItem();
 
-   if (pc_Param != NULL)
+   if (pc_Param != nullptr)
    {
       if (ou32_DataElementIndex < pc_Param->c_DataPoolElementsConfig.size())
       {

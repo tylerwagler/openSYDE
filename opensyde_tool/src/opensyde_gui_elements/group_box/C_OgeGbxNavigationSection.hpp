@@ -29,7 +29,7 @@ class C_OgeGbxNavigationSection :
    Q_OBJECT
 
 public:
-   explicit C_OgeGbxNavigationSection(QWidget * const opc_Parent = NULL);
+   explicit C_OgeGbxNavigationSection(QWidget * const opc_Parent = nullptr);
 
    void SetSpecialBackground(const bool oq_Active);
 };

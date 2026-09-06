@@ -480,7 +480,7 @@ C_SclString C_SclString::StringOfChar(const char_t ocn_Char, const uint32_t ou32
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SclString::mh_GetRequiredPrintfSize(const char_t * const opcn_Format, va_list opv_Args)
 {
-   return std::vsnprintf(NULL, 0U, opcn_Format, opv_Args);
+   return std::vsnprintf(nullptr, 0U, opcn_Format, opv_Args);
 } //lint !e952 //va_list can be const on some targets but not all
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -31,7 +31,7 @@ class C_OgeLeListHeader :
    Q_OBJECT
 
 public:
-   C_OgeLeListHeader(QWidget * const opc_Parent = NULL);
+   C_OgeLeListHeader(QWidget * const opc_Parent = nullptr);
 
    void SetCounter(const uint32_t ou32_Counter);
    void SetName(const QString & orc_Name);

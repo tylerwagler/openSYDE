@@ -33,7 +33,7 @@ class C_PopPasswordDialogWidget :
    Q_OBJECT
 
 public:
-   explicit C_PopPasswordDialogWidget(QWidget * const opc_Parent = NULL);
+   explicit C_PopPasswordDialogWidget(QWidget * const opc_Parent = nullptr);
    ~C_PopPasswordDialogWidget(void) override;
 
    void HandleMousePressEvent(const QMouseEvent * const opc_Event);

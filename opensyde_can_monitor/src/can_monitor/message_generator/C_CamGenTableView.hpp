@@ -34,7 +34,7 @@ class C_CamGenTableView :
    Q_OBJECT
 
 public:
-   C_CamGenTableView(QWidget * const opc_Parent = NULL);
+   C_CamGenTableView(QWidget * const opc_Parent = nullptr);
    ~C_CamGenTableView(void) override;
 
    void AddMessageFromDatabase(void);

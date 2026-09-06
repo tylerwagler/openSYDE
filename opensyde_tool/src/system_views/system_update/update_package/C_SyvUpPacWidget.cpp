@@ -467,7 +467,7 @@ void C_SyvUpPacWidget::m_ButtonCreatePackage(void)
       }
    }
 
-   if (c_PopUpDialog != NULL)
+   if (c_PopUpDialog != nullptr)
    {
       c_PopUpDialog->HideOverlay();
       c_PopUpDialog->deleteLater();
@@ -502,7 +502,7 @@ bool C_SyvUpPacWidget::m_ShowSecureArchiveFileDialog(QString & orc_Password, QSt
       q_Return = true;
    }
 
-   if (c_PopUpDialog != NULL)
+   if (c_PopUpDialog != nullptr)
    {
       c_PopUpDialog->HideOverlay();
       c_PopUpDialog->deleteLater();

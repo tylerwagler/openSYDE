@@ -29,7 +29,7 @@ class C_SdManUnoTopologyDeleteCommand :
 {
 public:
    C_SdManUnoTopologyDeleteCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                                   QUndoCommand * const opc_Parent = NULL);
+                                   QUndoCommand * const opc_Parent = nullptr);
    ~C_SdManUnoTopologyDeleteCommand(void) override;
    void undo(void) override;
    void redo(void) override;

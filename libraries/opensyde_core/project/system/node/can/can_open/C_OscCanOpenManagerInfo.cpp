@@ -108,7 +108,7 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
 {
    std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice;
 
-   if (opq_CoManagerNodeIdInvalid != NULL)
+   if (opq_CoManagerNodeIdInvalid != nullptr)
    {
       // Check for the valid range of the manager itself
       if ((this->u8_NodeIdValue > 0U) &&
@@ -123,20 +123,20 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
    }
 
    // Check the devices related errors
-   if ((opq_CoNodeIdConflict != NULL) || (opq_CoDevicesNodeIdInvalid != NULL))
+   if ((opq_CoNodeIdConflict != nullptr) || (opq_CoDevicesNodeIdInvalid != nullptr))
    {
       bool q_TempCoNodeIdConflict = false;
       bool q_TempCoDevicesNodeIdInvalid = false;
-      bool * pq_TempCoNodeIdConflict = NULL;
-      bool * pq_TempCoDevicesNodeIdInvalid = NULL;
+      bool * pq_TempCoNodeIdConflict = nullptr;
+      bool * pq_TempCoDevicesNodeIdInvalid = nullptr;
 
       // Using temporary pointers to beware the optional character of the output parameters
-      if (opq_CoNodeIdConflict != NULL)
+      if (opq_CoNodeIdConflict != nullptr)
       {
          pq_TempCoNodeIdConflict = &q_TempCoNodeIdConflict;
          *opq_CoNodeIdConflict = false;
       }
-      if (opq_CoDevicesNodeIdInvalid != NULL)
+      if (opq_CoDevicesNodeIdInvalid != nullptr)
       {
          pq_TempCoDevicesNodeIdInvalid = &q_TempCoDevicesNodeIdInvalid;
          *opq_CoDevicesNodeIdInvalid = false;
@@ -150,12 +150,12 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
                                                    oq_CheckDeviceToDeviceErrors) == C_NO_ERR);
 
          // Transfer to the output pointer only true result to not overwrite previous detections
-         if ((opq_CoNodeIdConflict != NULL) &&
+         if ((opq_CoNodeIdConflict != nullptr) &&
              (q_TempCoNodeIdConflict == true))
          {
             *opq_CoNodeIdConflict = q_TempCoNodeIdConflict;
          }
-         if ((opq_CoDevicesNodeIdInvalid != NULL) &&
+         if ((opq_CoDevicesNodeIdInvalid != nullptr) &&
              (q_TempCoDevicesNodeIdInvalid == true))
          {
             *opq_CoDevicesNodeIdInvalid = q_TempCoDevicesNodeIdInvalid;
@@ -163,7 +163,7 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
       }
    }
 
-   if (opq_HearbeatTimeInvalid != NULL)
+   if (opq_HearbeatTimeInvalid != nullptr)
    {
       *opq_HearbeatTimeInvalid = false;
 
@@ -210,7 +210,7 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfac
 
       s32_Return = C_NO_ERR;
 
-      if (opq_CoNodeIdConflict != NULL)
+      if (opq_CoNodeIdConflict != nullptr)
       {
          *opq_CoNodeIdConflict = false;
 
@@ -246,7 +246,7 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfac
          }
       }
 
-      if (opq_CoNodeIdInvalid != NULL)
+      if (opq_CoNodeIdInvalid != nullptr)
       {
          // Check for the valid range
          if ((rc_DevInfo.u8_NodeIdValue > 0U) &&
@@ -283,7 +283,7 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceHeartbeat(const C_OscCanInterfa
       this->c_CanOpenDevices.find(orc_DeviceId);
 
    if ((c_ItDevice != this->c_CanOpenDevices.end()) &&
-       (opq_HearbeatTimeInvalid != NULL))
+       (opq_HearbeatTimeInvalid != nullptr))
    {
       const C_OscCanOpenManagerDeviceInfo & rc_DevInfo = c_ItDevice->second;
 

@@ -79,7 +79,7 @@ void C_OgePubSvgIconWithTextBase::SetMargins(const int32_t os32_MarginLeft, cons
 void C_OgePubSvgIconWithTextBase::paintEvent(QPaintEvent * const opc_Event)
 {
    Q_UNUSED(opc_Event)
-   if (this->mpc_SvgRendererEnabled != NULL)
+   if (this->mpc_SvgRendererEnabled != nullptr)
    {
       QTextOption c_Option;
       QColor c_BackgroundColor;
@@ -158,15 +158,15 @@ void C_OgePubSvgIconWithTextBase::paintEvent(QPaintEvent * const opc_Event)
       //====
       if (this->isChecked() == true)
       {
-         if ((this->mpc_SvgRendererCheckedDisabeld != NULL) && (this->isEnabled() == false))
+         if ((this->mpc_SvgRendererCheckedDisabeld != nullptr) && (this->isEnabled() == false))
          {
             this->mpc_SvgRendererCheckedDisabeld->render(&c_Painter, c_IconRect);
          }
-         else if ((this->mpc_SvgRendererCheckedHovered != NULL) && (this->mq_Hovered == true))
+         else if ((this->mpc_SvgRendererCheckedHovered != nullptr) && (this->mq_Hovered == true))
          {
             this->mpc_SvgRendererCheckedHovered->render(&c_Painter, c_IconRect);
          }
-         else if (this->mpc_SvgRendererCheckedEnabled != NULL)
+         else if (this->mpc_SvgRendererCheckedEnabled != nullptr)
          {
             this->mpc_SvgRendererCheckedEnabled->render(&c_Painter, c_IconRect);
          }
@@ -177,11 +177,11 @@ void C_OgePubSvgIconWithTextBase::paintEvent(QPaintEvent * const opc_Event)
       }
       else
       {
-         if ((this->mpc_SvgRendererDisabeld != NULL) && (this->isEnabled() == false))
+         if ((this->mpc_SvgRendererDisabeld != nullptr) && (this->isEnabled() == false))
          {
             this->mpc_SvgRendererDisabeld->render(&c_Painter, c_IconRect);
          }
-         else if ((this->mpc_SvgRendererHovered != NULL) && (this->mq_Hovered == true))
+         else if ((this->mpc_SvgRendererHovered != nullptr) && (this->mq_Hovered == true))
          {
             this->mpc_SvgRendererHovered->render(&c_Painter, c_IconRect);
          }

@@ -26,7 +26,7 @@ class C_OgeMuSections :
    Q_OBJECT
 
 public:
-   explicit C_OgeMuSections(QWidget * const opc_Parent = NULL);
+   explicit C_OgeMuSections(QWidget * const opc_Parent = nullptr);
 
    void AddCustomSection(const QString & orc_SectionTitle);
 };

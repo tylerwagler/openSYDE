@@ -193,7 +193,7 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const C_SclString & or
       const C_OscCanProtocol * const pc_ComProtocol = orc_Node.GetCanProtocolConst(ore_Protocol, ou32_DatapoolIndex);
       const C_OscNodeDataPool * const pc_DataPool = orc_Node.GetComDataPoolConst(ore_Protocol, ou32_DatapoolIndex);
 
-      if ((pc_ComProtocol != NULL) && (pc_DataPool != NULL))
+      if ((pc_ComProtocol != nullptr) && (pc_DataPool != nullptr))
       {
          //check whether there is at least one message with signals defined; otherwise fail
          bool q_NoSignals = true;

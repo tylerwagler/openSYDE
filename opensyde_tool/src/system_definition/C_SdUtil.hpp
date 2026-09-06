@@ -42,8 +42,8 @@ public:
    static int32_t h_GetNames(const std::vector<uint32_t> & orc_NodeIndices,
                              const std::vector<uint32_t> & orc_InterfaceIndices, std::vector<QString> & orc_Names,
                              const bool oq_NameWithInterfaceAlways,
-                             const std::vector<uint32_t> * const opc_DatapoolIndices = NULL,
-                             std::vector<QString> * const opc_DatapoolNames = NULL);
+                             const std::vector<uint32_t> * const opc_DatapoolIndices = nullptr,
+                             std::vector<QString> * const opc_DatapoolNames = nullptr);
    static int32_t h_GetName(const uint32_t & oru32_NodeIndex, QString & orc_Name);
    static int32_t h_GetName(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_InterfaceIndex,
                             QString & orc_Name);

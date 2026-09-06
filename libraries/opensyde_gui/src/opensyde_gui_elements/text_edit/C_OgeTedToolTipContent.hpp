@@ -29,7 +29,7 @@ class C_OgeTedToolTipContent :
    Q_OBJECT
 
 public:
-   C_OgeTedToolTipContent(QWidget * const opc_Parent = NULL);
+   C_OgeTedToolTipContent(QWidget * const opc_Parent = nullptr);
 
 private:
    void m_AdjustMinimumSize();

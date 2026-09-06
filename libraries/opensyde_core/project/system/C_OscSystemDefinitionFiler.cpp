@@ -252,13 +252,13 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
          C_OscNode c_Item;
          bool q_SkipNode = false;
 
-         if ((opc_NodesToLoad == NULL) || (opc_NodesToLoad->size() == 0) || ((*opc_NodesToLoad)[u8_NodeIndex] == 1U))
+         if ((opc_NodesToLoad == nullptr) || (opc_NodesToLoad->size() == 0) || ((*opc_NodesToLoad)[u8_NodeIndex] == 1U))
          {
             if (oq_UseFileInterface)
             {
                const C_SclString c_FileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
                                                                                    orc_XmlParser.GetNodeContent());
-               if ((opc_ExpectedNodeName != NULL) && ((*opc_ExpectedNodeName) != ""))
+               if ((opc_ExpectedNodeName != nullptr) && ((*opc_ExpectedNodeName) != ""))
                {
                   // get current node and compare with expected node name
                   const uint32_t u32_BasePathLength = TglExtractFilePath(orc_BasePath).Length();
@@ -352,14 +352,14 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
                const C_OscDeviceDefinition * const pc_Device =
                   orc_DeviceDefinitions.LookForDevice(c_SubDeviceName, c_MainDeviceName,
                                                       orc_Nodes[u32_NodeIndex].u32_SubDeviceIndex);
-               if (pc_Device == NULL)
+               if (pc_Device == nullptr)
                {
                   s32_Retval = C_OVERFLOW;
                   osc_write_log_error("Loading System Definition",
                                       "System Definition contains node \"" + orc_Nodes[u32_NodeIndex].c_Properties.c_Name +
                                       "\" of device type \"" +
                                       orc_Nodes[u32_NodeIndex].c_DeviceType + "\" which is not a known device.");
-                  if (opc_ErrorDetailsMissingDevices == NULL)
+                  if (opc_ErrorDetailsMissingDevices == nullptr)
                   {
                      break;
                   }
@@ -495,10 +495,10 @@ int32_t C_OscSystemDefinitionFiler::h_SaveNodes(const std::vector<C_OscNode> & o
          }
          //Save node file
          s32_Retval = C_OscNodeFiler::h_SaveNodeFile(rc_Node, c_CombinedFileName,
-                                                     (opc_CreatedFiles != NULL) ? &c_CreatedFiles : NULL,
+                                                     (opc_CreatedFiles != nullptr) ? &c_CreatedFiles : nullptr,
                                                      c_NodeIndicesToNameMap);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
             opc_CreatedFiles->push_back(c_FileName);
             for (uint32_t u32_ItSubFile = 0UL; u32_ItSubFile < c_CreatedFiles.size(); ++u32_ItSubFile)
@@ -605,7 +605,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
          try
          {
             u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().ToInt());
-            if (opu16_ReadFileVersion != NULL)
+            if (opu16_ReadFileVersion != nullptr)
             {
                *opu16_ReadFileVersion = u16_FileVersion;
             }

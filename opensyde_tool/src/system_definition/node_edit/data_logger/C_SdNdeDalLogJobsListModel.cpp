@@ -84,7 +84,7 @@ void C_SdNdeDalLogJobsListModel::UpdateName(const uint32_t ou32_NodeIndex, const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       if ((ou32_DataLoggerJobIndex < pc_Node->c_DataLoggerJobs.size()) &&
           (ou32_DataLoggerJobIndex < this->mc_LogJobsList.size()))

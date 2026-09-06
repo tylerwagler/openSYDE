@@ -38,7 +38,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_TblTreSimpleItem::C_TblTreSimpleItem() :
-   pc_Parent(NULL)
+   pc_Parent(nullptr)
 {
 }
 
@@ -51,7 +51,7 @@ C_TblTreSimpleItem::C_TblTreSimpleItem() :
 C_TblTreSimpleItem::~C_TblTreSimpleItem()
 {
    this->ClearChildren();
-   pc_Parent = NULL;
+   pc_Parent = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ C_TblTreSimpleItem::~C_TblTreSimpleItem()
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblTreSimpleItem::AddChild(C_TblTreSimpleItem * const opc_Child)
 {
-   if (opc_Child != NULL)
+   if (opc_Child != nullptr)
    {
       opc_Child->pc_Parent = this;
       this->c_Children.push_back(opc_Child);
@@ -78,7 +78,7 @@ void C_TblTreSimpleItem::AddChild(C_TblTreSimpleItem * const opc_Child)
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblTreSimpleItem::InsertChild(const uint32_t ou32_Index, C_TblTreSimpleItem * const opc_Child)
 {
-   if (opc_Child != NULL)
+   if (opc_Child != nullptr)
    {
       opc_Child->pc_Parent = this;
       this->c_Children.insert(this->c_Children.begin() + ou32_Index, opc_Child);
@@ -107,7 +107,7 @@ void C_TblTreSimpleItem::ReserveChildrenSpace(const uint32_t ou32_Space)
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblTreSimpleItem::SetChild(const uint32_t ou32_Index, C_TblTreSimpleItem * const opc_Child)
 {
-   if (opc_Child != NULL)
+   if (opc_Child != nullptr)
    {
       opc_Child->pc_Parent = this;
       delete this->c_Children[ou32_Index];
@@ -126,7 +126,7 @@ int32_t C_TblTreSimpleItem::GetIndexInParentNumber(void) const
 {
    int32_t s32_Retval = -1;
 
-   if (this->pc_Parent != NULL)
+   if (this->pc_Parent != nullptr)
    {
       s32_Retval = C_TblTreSimpleItem::h_GetIndex(this->pc_Parent->c_Children, this);
    }
@@ -164,7 +164,7 @@ int32_t C_TblTreSimpleItem::h_GetIndex(const std::vector<C_TblTreSimpleItem *> &
 {
    int32_t s32_Retval = -1;
 
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       const std::vector<C_TblTreSimpleItem *>::const_iterator c_It = std::find_if(
          orc_Vector.begin(),

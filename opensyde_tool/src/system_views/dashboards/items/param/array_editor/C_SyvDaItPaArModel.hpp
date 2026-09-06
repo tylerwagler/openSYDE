@@ -32,7 +32,7 @@ class C_SyvDaItPaArModel :
    public QAbstractTableModel
 {
 public:
-   explicit C_SyvDaItPaArModel(QObject * const opc_Parent = NULL);
+   explicit C_SyvDaItPaArModel(QObject * const opc_Parent = nullptr);
 
    void SetElement(const uint32_t ou32_ElementIndex,
                    stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const opc_DataWidget,

@@ -53,7 +53,7 @@ const QString C_NagUseCaseViewWidget::mhc_SVG_ICON_PATH = "://images/IconNavigat
 C_NagUseCaseViewWidget::C_NagUseCaseViewWidget(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_NagUseCaseViewWidget),
-   mpc_Widget(NULL),
+   mpc_Widget(nullptr),
    ms32_Mode(ms32_MODE_SYSDEF),
    ms32_Submode(ms32_SUBMODE_SYSDEF_TOPOLOGY),
    mq_CombineItemAndSubSubName(false)
@@ -149,7 +149,7 @@ void C_NagUseCaseViewWidget::InitBackground()
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagUseCaseViewWidget::SetInteractionWidget(QWidget * const opc_Widget)
 {
-   if (opc_Widget != NULL)
+   if (opc_Widget != nullptr)
    {
       opc_Widget->setParent(this);
       this->mpc_Ui->pc_HorizontalLayout->addWidget(opc_Widget);
@@ -203,15 +203,15 @@ void C_NagUseCaseViewWidget::SetUseCaseWidget(C_NagUseCaseWidget * const opc_Wid
                                               const QString & orc_ItemSubSubName,
                                               const bool oq_CombineItemAndSubSubName)
 {
-   if (opc_Widget != NULL)
+   if (opc_Widget != nullptr)
    {
       int32_t s32_Index;
       // remove the old widget
-      if (this->mpc_Widget != NULL)
+      if (this->mpc_Widget != nullptr)
       {
          this->mpc_Ui->pc_VerticalLayout->removeWidget(this->mpc_Widget);
-         this->mpc_Widget->SetParentHook(NULL);
-         this->mpc_Widget = NULL;
+         this->mpc_Widget->SetParentHook(nullptr);
+         this->mpc_Widget = nullptr;
       }
 
       // set the new widget
@@ -242,7 +242,7 @@ void C_NagUseCaseViewWidget::SetUseCaseWidget(C_NagUseCaseWidget * const opc_Wid
 void C_NagUseCaseViewWidget::RemoveUseCaseWidget(void)
 {
    // remove the old widget
-   if (this->mpc_Widget != NULL)
+   if (this->mpc_Widget != nullptr)
    {
       QSpacerItem * pc_Item;
 
@@ -250,13 +250,13 @@ void C_NagUseCaseViewWidget::RemoveUseCaseWidget(void)
       pc_Item = dynamic_cast<QSpacerItem *>(this->mpc_Ui->pc_VerticalLayout->itemAt(3));
 
       // is it a SpacerItem?
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          this->mpc_Ui->pc_VerticalLayout->removeItem(pc_Item);
       }
       disconnect(this->mpc_Widget, &C_NagUseCaseWidget::SigNameChanged, this, &C_NagUseCaseViewWidget::UpdateItemName);
-      this->mpc_Widget->SetParentHook(NULL);
-      this->mpc_Widget = NULL;
+      this->mpc_Widget->SetParentHook(nullptr);
+      this->mpc_Widget = nullptr;
    }
 }
 

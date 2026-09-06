@@ -40,7 +40,7 @@ public:
       eWARNING = 3
    };
 
-   explicit C_OgeWiCustomMessage(QWidget * const opc_Parent = NULL,
+   explicit C_OgeWiCustomMessage(QWidget * const opc_Parent = nullptr,
                                  const E_Type & ore_MessageType = E_Type::eINFORMATION,
                                  const QString & orc_Description = "");
    ~C_OgeWiCustomMessage(void) override;

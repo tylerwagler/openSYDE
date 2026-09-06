@@ -57,7 +57,7 @@ C_SdBueUnoSignalMoveCommand::C_SdBueUnoSignalMoveCommand(
    mc_SourceSignalIndex(orc_SourceSignalIndex),
    mc_TargetSignalIndex(orc_TargetSignalIndex)
 {
-   if (opc_MessageSyncManager != NULL)
+   if (opc_MessageSyncManager != nullptr)
    {
       this->mc_SourceUniqueId.reserve(orc_SourceMessageId.size());
       this->mc_TargetUniqueId.reserve(orc_TargetMessageId.size());

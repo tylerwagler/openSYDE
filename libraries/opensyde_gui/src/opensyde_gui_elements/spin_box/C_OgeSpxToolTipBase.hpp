@@ -31,7 +31,7 @@ class C_OgeSpxToolTipBase :
    public C_OgeSpxAllBase
 {
 public:
-   C_OgeSpxToolTipBase(QWidget * const opc_Parent = NULL);
+   C_OgeSpxToolTipBase(QWidget * const opc_Parent = nullptr);
 
    void SetMinimumCustom(const int32_t os32_Value, const bool oq_ShowSpecial = false,
                          const int32_t os32_SpecialValue = 0);

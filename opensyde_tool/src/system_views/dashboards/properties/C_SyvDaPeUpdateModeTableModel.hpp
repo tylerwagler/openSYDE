@@ -46,7 +46,7 @@ public:
    };
 
    explicit C_SyvDaPeUpdateModeTableModel(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
-                                          QObject * const opc_Parent = NULL);
+                                          QObject * const opc_Parent = nullptr);
 
    void ApplyData(void) const;
 

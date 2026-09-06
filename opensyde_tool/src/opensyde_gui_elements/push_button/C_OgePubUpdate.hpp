@@ -29,7 +29,7 @@ class C_OgePubUpdate :
    Q_OBJECT
 
 public:
-   C_OgePubUpdate(QWidget * const opc_Parent = NULL);
+   C_OgePubUpdate(QWidget * const opc_Parent = nullptr);
    void InitCustomIcon(const QString & orc_IconPathEnabled, const QString & orc_IconPathDisabled);
 
 protected:

@@ -39,7 +39,7 @@ class C_SdManUnoTopologyAddDeleteBaseCommand :
 
 public:
    C_SdManUnoTopologyAddDeleteBaseCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                                          const QString & orc_Text, QUndoCommand * const opc_Parent = NULL, const C_SdTopologyDataSnapshot & orc_InitialSnapshotData =
+                                          const QString & orc_Text, QUndoCommand * const opc_Parent = nullptr, const C_SdTopologyDataSnapshot & orc_InitialSnapshotData =
                                              C_SdTopologyDataSnapshot());
    ~C_SdManUnoTopologyAddDeleteBaseCommand(void) override;
    static void h_GetAllRelevantObjects(const QList<QGraphicsItem *> & orc_AllItems,

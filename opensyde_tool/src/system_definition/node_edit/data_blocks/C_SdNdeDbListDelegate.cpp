@@ -42,7 +42,7 @@ using namespace stw::opensyde_gui;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeDbListDelegate::C_SdNdeDbListDelegate(QObject * const opc_Parent) :
    QStyledItemDelegate(opc_Parent),
-   mpc_ApplicationWidget(NULL),
+   mpc_ApplicationWidget(nullptr),
    ms32_IndexPaint(-1)
 {
 }
@@ -63,7 +63,7 @@ void C_SdNdeDbListDelegate::paint(QPainter * const opc_Painter, const QStyleOpti
    QStyledItemDelegate::paint(opc_Painter, orc_Option, orc_Index);
    if (((ms32_IndexPaint == orc_Index.row()) &&
         (orc_Option.rect.x() == 0) &&
-        (orc_Option.rect.y() == 0)) && (this->mpc_ApplicationWidget != NULL))
+        (orc_Option.rect.y() == 0)) && (this->mpc_ApplicationWidget != nullptr))
    {
       if ((orc_Index.isValid() == true) && (orc_Index.parent().isValid() == false))
       {
@@ -107,5 +107,5 @@ void C_SdNdeDbListDelegate::StartPaint(const int32_t os32_Index, C_SdNdeDbWidget
 void C_SdNdeDbListDelegate::StopPaint(void)
 {
    this->ms32_IndexPaint = -1;
-   this->mpc_ApplicationWidget = NULL;
+   this->mpc_ApplicationWidget = nullptr;
 }

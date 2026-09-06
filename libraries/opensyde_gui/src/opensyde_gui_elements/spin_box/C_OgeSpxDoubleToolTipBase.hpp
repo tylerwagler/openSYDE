@@ -33,7 +33,7 @@ class C_OgeSpxDoubleToolTipBase :
    Q_OBJECT
 
 public:
-   C_OgeSpxDoubleToolTipBase(QWidget * const opc_Parent = NULL);
+   C_OgeSpxDoubleToolTipBase(QWidget * const opc_Parent = nullptr);
 
    bool event(QEvent * const opc_Event) override;
 

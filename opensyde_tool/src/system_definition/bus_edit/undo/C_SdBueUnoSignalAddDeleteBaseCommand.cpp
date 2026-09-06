@@ -116,7 +116,7 @@ C_SdBueUnoSignalAddDeleteBaseCommand::C_SdBueUnoSignalAddDeleteBaseCommand(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueUnoSignalAddDeleteBaseCommand::m_Add(void)
 {
-   if (this->mpc_MessageSyncManager != NULL)
+   if (this->mpc_MessageSyncManager != nullptr)
    {
       for (uint32_t u32_ItStep = 0UL; u32_ItStep < this->mc_UniqueId.size(); ++u32_ItStep)
       {
@@ -127,7 +127,7 @@ void C_SdBueUnoSignalAddDeleteBaseCommand::m_Add(void)
                                                                   this->mc_OscSignalCommon[u32_ItStep],
                                                                   this->mc_UiSignalCommon[u32_ItStep],
                                                                   this->mc_UiSignal[u32_ItStep]) == C_NO_ERR);
-         if (this->mpc_MessageTreeWidget != NULL)
+         if (this->mpc_MessageTreeWidget != nullptr)
          {
             this->mpc_MessageTreeWidget->InternalAddSignal(this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
                                                               this->mc_UniqueId[u32_ItStep]),
@@ -166,8 +166,8 @@ bool C_SdBueUnoSignalAddDeleteBaseCommand::m_CheckSignalsSortedAscending() const
       tgl_assert(this->mc_UniqueId.size() == this->mc_SignalIndex.size());
       if (this->mc_UniqueId.size() == this->mc_SignalIndex.size())
       {
-         tgl_assert(this->mpc_MessageSyncManager != NULL);
-         if (this->mpc_MessageSyncManager != NULL)
+         tgl_assert(this->mpc_MessageSyncManager != nullptr);
+         if (this->mpc_MessageSyncManager != nullptr)
          {
             C_OscCanMessageIdentificationIndices c_PrevId;
             uint32_t u32_PrevSignalIndex = 0UL;
@@ -212,7 +212,7 @@ bool C_SdBueUnoSignalAddDeleteBaseCommand::m_CheckSignalsSortedAscending() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueUnoSignalAddDeleteBaseCommand::m_Store(void)
 {
-   if (this->mpc_MessageSyncManager != NULL)
+   if (this->mpc_MessageSyncManager != nullptr)
    {
       //Reserve
       this->mc_SignalIndex.reserve(this->mc_UniqueId.size());
@@ -238,8 +238,8 @@ void C_SdBueUnoSignalAddDeleteBaseCommand::m_Store(void)
                this->mc_UniqueId[u32_ItStep]),
             this->mc_SignalIndex[u32_ItStep]);
 
-         tgl_assert(pc_Signal != NULL);
-         if (pc_Signal != NULL)
+         tgl_assert(pc_Signal != nullptr);
+         if (pc_Signal != nullptr)
          {
             if (u32_ItStep < this->mc_Signal.size())
             {
@@ -250,8 +250,8 @@ void C_SdBueUnoSignalAddDeleteBaseCommand::m_Store(void)
                this->mc_Signal.push_back(*pc_Signal);
             }
          }
-         tgl_assert(pc_OscSignalCommon != NULL);
-         if (pc_OscSignalCommon != NULL)
+         tgl_assert(pc_OscSignalCommon != nullptr);
+         if (pc_OscSignalCommon != nullptr)
          {
             if (u32_ItStep < this->mc_OscSignalCommon.size())
             {
@@ -262,8 +262,8 @@ void C_SdBueUnoSignalAddDeleteBaseCommand::m_Store(void)
                this->mc_OscSignalCommon.push_back(*pc_OscSignalCommon);
             }
          }
-         tgl_assert(pc_UiSignalCommon != NULL);
-         if (pc_UiSignalCommon != NULL)
+         tgl_assert(pc_UiSignalCommon != nullptr);
+         if (pc_UiSignalCommon != nullptr)
          {
             if (u32_ItStep < this->mc_UiSignalCommon.size())
             {
@@ -274,8 +274,8 @@ void C_SdBueUnoSignalAddDeleteBaseCommand::m_Store(void)
                this->mc_UiSignalCommon.push_back(*pc_UiSignalCommon);
             }
          }
-         tgl_assert(pc_UiSignal != NULL);
-         if (pc_UiSignal != NULL)
+         tgl_assert(pc_UiSignal != nullptr);
+         if (pc_UiSignal != nullptr)
          {
             if (u32_ItStep < this->mc_UiSignal.size())
             {
@@ -297,7 +297,7 @@ void C_SdBueUnoSignalAddDeleteBaseCommand::m_Store(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueUnoSignalAddDeleteBaseCommand::m_Remove(void)
 {
-   if (this->mpc_MessageSyncManager != NULL)
+   if (this->mpc_MessageSyncManager != nullptr)
    {
       for (uint32_t u32_ItStep = this->mc_UniqueId.size(); u32_ItStep > 0UL; --u32_ItStep)
       {
@@ -313,7 +313,7 @@ void C_SdBueUnoSignalAddDeleteBaseCommand::m_Remove(void)
                                                                                                               -
                                                                                                               1UL)]) ==
                     C_NO_ERR);
-         if (this->mpc_MessageTreeWidget != NULL)
+         if (this->mpc_MessageTreeWidget != nullptr)
          {
             this->mpc_MessageTreeWidget->InternalDeleteSignal(this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
                                                                  this->mc_UniqueId[static_cast<std::vector<uint64_t>::

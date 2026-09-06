@@ -46,7 +46,7 @@ using namespace stw::tgl;
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeTreeViewToolTipBaseCheckable::C_OgeTreeViewToolTipBaseCheckable(QWidget * const opc_Parent) :
    C_OgeTreeViewToolTipBase(opc_Parent),
-   mpc_Model(NULL)
+   mpc_Model(nullptr)
 {
    this->setItemDelegate(&this->mc_Delegate);
 
@@ -77,7 +77,7 @@ C_OgeTreeViewToolTipBaseCheckable::~C_OgeTreeViewToolTipBaseCheckable(void)
 void C_OgeTreeViewToolTipBaseCheckable::Init(C_TblTreeModelCheckable * const opc_Model,
                                              const std::vector<uint32_t> & orc_ElementIndices)
 {
-   if (opc_Model != NULL)
+   if (opc_Model != nullptr)
    {
       this->mpc_Model = opc_Model;
       this->setModel(mpc_Model);
@@ -103,7 +103,7 @@ void C_OgeTreeViewToolTipBaseCheckable::GetCheckedItems(const C_TblTreeModelChec
                                                         std::vector<std::vector<uint32_t> > & orc_ChildIndicesPerElement)
 const
 {
-   if (opc_Model != NULL)
+   if (opc_Model != nullptr)
    {
       opc_Model->GetCheckedItems(orc_ElementIndices, orc_ChildIndicesPerElement);
    }
@@ -115,7 +115,7 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeTreeViewToolTipBaseCheckable::m_ChangedData()
 {
-   if (mpc_Model != NULL)
+   if (mpc_Model != nullptr)
    {
       Q_EMIT (this->SigSelectionChanged(mpc_Model->GetCheckedItemCount()));
    }

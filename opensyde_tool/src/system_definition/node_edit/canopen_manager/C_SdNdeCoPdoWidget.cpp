@@ -173,7 +173,7 @@ void C_SdNdeCoPdoWidget::m_UpdateUi()
    // set bus link
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_ManagerNodeIndex);
 
-   if ((pc_Node != NULL) &&
+   if ((pc_Node != nullptr) &&
        (this->mu8_ManagerInterfaceId < pc_Node->c_Properties.c_ComInterfaces.size()))
    {
       const C_OscNodeComInterfaceSettings & rc_ComInterface =
@@ -186,7 +186,7 @@ void C_SdNdeCoPdoWidget::m_UpdateUi()
          QString c_BusName;
 
          // Get bus name for the link and the interface combo box
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             c_BusName = pc_Bus->c_Name.c_str();
          }
@@ -211,7 +211,7 @@ void C_SdNdeCoPdoWidget::m_OnLinkSwitchToBus(const QString & orc_Link) const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_ManagerNodeIndex);
 
-   if ((pc_Node != NULL) &&
+   if ((pc_Node != nullptr) &&
        (this->mu8_ManagerInterfaceId < pc_Node->c_Properties.c_ComInterfaces.size()))
    {
       const C_OscNodeComInterfaceSettings & rc_ComInterface =
@@ -235,7 +235,7 @@ void C_SdNdeCoPdoWidget::m_OnLinkSwitchToBusProtocolMessage(
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_ManagerNodeIndex);
 
-   if ((pc_Node != NULL) &&
+   if ((pc_Node != nullptr) &&
        (this->mu8_ManagerInterfaceId < pc_Node->c_Properties.c_ComInterfaces.size()))
    {
       const C_OscNodeComInterfaceSettings & rc_ComInterface =
@@ -244,8 +244,8 @@ void C_SdNdeCoPdoWidget::m_OnLinkSwitchToBusProtocolMessage(
       if (rc_ComInterface.GetBusConnected() == true)
       {
          const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(rc_ComInterface.u32_BusIndex);
-         tgl_assert(pc_Bus != NULL);
-         if (pc_Bus != NULL)
+         tgl_assert(pc_Bus != nullptr);
+         if (pc_Bus != nullptr)
          {
             Q_EMIT (this->SigSwitchToBusProtocolMessage(rc_ComInterface.u32_BusIndex,
                                                         static_cast<QString>(pc_Bus->c_Name.c_str()), orc_MessageId));

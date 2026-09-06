@@ -40,7 +40,7 @@ class C_SdNdeDpListArrayEditView :
    Q_OBJECT
 
 public:
-   C_SdNdeDpListArrayEditView(QWidget * const opc_Parent = NULL);
+   C_SdNdeDpListArrayEditView(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpListArrayEditView(void) override;
    void SetElement(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                    const uint32_t & oru32_ListIndex, const uint32_t & oru32_ElementIndex,

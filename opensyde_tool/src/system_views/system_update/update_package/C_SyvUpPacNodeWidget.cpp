@@ -90,9 +90,9 @@ C_SyvUpPacNodeWidget::C_SyvUpPacNodeWidget(const uint32_t ou32_ViewIndex, const 
    me_StateSecureAuthentication(C_OscViewNodeUpdate::eST_SEC_NO_CHANGE),
    me_StateDebugger(C_OscViewNodeUpdate::eST_DEB_NO_CHANGE),
    me_StateTrafficEncryption(C_OscViewNodeUpdate::eST_TEN_NO_CHANGE),
-   mpc_FilesWidget(NULL),
-   mpc_FilesWidgetSeparator(NULL),
-   mpc_SecurityMenu(NULL)
+   mpc_FilesWidget(nullptr),
+   mpc_FilesWidgetSeparator(nullptr),
+   mpc_SecurityMenu(nullptr)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -166,14 +166,14 @@ C_SyvUpPacNodeWidget::C_SyvUpPacNodeWidget(const uint32_t ou32_ViewIndex, const 
 
    // restore sections expand/collapse from user settings
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       int32_t s32_ExpectedSections;
       QVector<bool> c_Flags = C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName().c_str()).
                               GetSvNode(orc_NodeName).GetSectionsExpanded();
 
       s32_ExpectedSections = static_cast<int32_t>(this->mc_DatablockWidgets.size());
-      if (this->mpc_FilesWidget != NULL)
+      if (this->mpc_FilesWidget != nullptr)
       {
          ++s32_ExpectedSections;
       }
@@ -188,7 +188,7 @@ C_SyvUpPacNodeWidget::C_SyvUpPacNodeWidget(const uint32_t ou32_ViewIndex, const 
             this->mc_DatablockWidgets[s32_DatablockCounter]->Expand(c_Flags[s32_DatablockCounter]);
          }
 
-         if (this->mpc_FilesWidget != NULL)
+         if (this->mpc_FilesWidget != nullptr)
          {
             this->mpc_FilesWidget->Expand(c_Flags[c_Flags.size() - 1]);
          }
@@ -212,7 +212,7 @@ C_SyvUpPacNodeWidget::~C_SyvUpPacNodeWidget()
    // save user settings
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       QVector<bool> c_Flags;
       int32_t s32_DatablockCounter;
@@ -224,7 +224,7 @@ C_SyvUpPacNodeWidget::~C_SyvUpPacNodeWidget()
          c_Flags[s32_DatablockCounter] = this->mc_DatablockWidgets[s32_DatablockCounter]->IsExpanded();
       }
 
-      if (this->mpc_FilesWidget != NULL)
+      if (this->mpc_FilesWidget != nullptr)
       {
          c_Flags.push_back(this->mpc_FilesWidget->IsExpanded());
       }
@@ -258,7 +258,7 @@ void C_SyvUpPacNodeWidget::SetConnected(void)
       this->mc_DatablockWidgets[s32_DatablockCounter]->SetConnected();
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       this->mpc_FilesWidget->SetConnected();
    }
@@ -279,7 +279,7 @@ void C_SyvUpPacNodeWidget::SetUpdateStarted(void) const
       q_ApplicationUpdateNecessary |= this->mc_DatablockWidgets[s32_DatablockCounter]->IsUpdateNecessary();
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       //lint -e{514}  Using operator with a bool value was intended and is no accident
       q_ApplicationUpdateNecessary |= this->mpc_FilesWidget->IsUpdateNecessary();
@@ -305,8 +305,8 @@ void C_SyvUpPacNodeWidget::SetUpdateApplicationStarted(void) const
 {
    C_SyvUpPacSectionNodeWidget * const pc_List = this->m_GetNextListInUpdateOrder();
 
-   tgl_assert(pc_List != NULL);
-   if (pc_List != NULL)
+   tgl_assert(pc_List != nullptr);
+   if (pc_List != nullptr)
    {
       pc_List->SetUpdateApplicationStarted();
    }
@@ -333,8 +333,8 @@ void C_SyvUpPacNodeWidget::SetUpdateApplicationFinished(void)
       this->mpc_Ui->pc_WidgetTitle->SetProgress(100U);
    }
 
-   tgl_assert(pc_List != NULL);
-   if (pc_List != NULL)
+   tgl_assert(pc_List != nullptr);
+   if (pc_List != nullptr)
    {
       pc_List->SetUpdateApplicationFinished();
    }
@@ -348,8 +348,8 @@ void C_SyvUpPacNodeWidget::SetUpdateApplicationError(void) const
 {
    C_SyvUpPacSectionNodeWidget * const pc_List = this->m_GetNextListInUpdateOrder();
 
-   tgl_assert(pc_List != NULL);
-   if (pc_List != NULL)
+   tgl_assert(pc_List != nullptr);
+   if (pc_List != nullptr)
    {
       pc_List->SetUpdateApplicationError();
    }
@@ -368,7 +368,7 @@ void C_SyvUpPacNodeWidget::SetUpdateFinished(void) const
       this->mc_DatablockWidgets[s32_DatablockCounter]->SetUpdateFinished();
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       this->mpc_FilesWidget->SetUpdateFinished();
    }
@@ -387,7 +387,7 @@ void C_SyvUpPacNodeWidget::DiscardApplicationStatus(void) const
       this->mc_DatablockWidgets[s32_DatablockCounter]->DiscardApplicationStatus();
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       this->mpc_FilesWidget->DiscardApplicationStatus();
    }
@@ -415,7 +415,7 @@ void C_SyvUpPacNodeWidget::SetDisconnected(void)
       this->mc_DatablockWidgets[s32_DatablockCounter]->SetDisconnected();
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       this->mpc_FilesWidget->SetDisconnected();
    }
@@ -436,7 +436,7 @@ void C_SyvUpPacNodeWidget::UpdateDeviceInformation(const C_SyvUpDeviceInfo & orc
       this->mc_DatablockWidgets[s32_DatablockCounter]->UpdateDeviceInformation(orc_DeviceInformation);
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       this->mpc_FilesWidget->UpdateDeviceInformation(orc_DeviceInformation);
    }
@@ -481,7 +481,7 @@ void C_SyvUpPacNodeWidget::UpdatePositionNumber(const uint32_t ou32_PositionNumb
       this->mc_DatablockWidgets[s32_DatablockCounter]->UpdatePositionNumber(this->mu32_PositionNumber);
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       this->mpc_FilesWidget->UpdatePositionNumber(this->mu32_PositionNumber);
    }
@@ -498,7 +498,7 @@ void C_SyvUpPacNodeWidget::UpdatePositionNumber(const uint32_t ou32_PositionNumb
 void C_SyvUpPacNodeWidget::AddNewFile(const QString & orc_File, const bool oq_Paramset, const bool oq_PemFile)
 {
    // compare all data block and file based files
-   if ((this->mpc_FilesWidget != NULL) &&
+   if ((this->mpc_FilesWidget != nullptr) &&
        (true) &&
        ((this->mq_FileBased == true) || (oq_Paramset == true) || (oq_PemFile == true)) &&
        (this->m_CheckFileAlreadyContained(orc_File) == false))
@@ -531,7 +531,7 @@ void C_SyvUpPacNodeWidget::AdaptFile(const QString & orc_File, C_SyvUpPacListNod
 {
    C_SyvUpPacSectionNodeWidget * const pc_Parent = m_GetAppParentList(opc_App);
 
-   if (pc_Parent != NULL)
+   if (pc_Parent != nullptr)
    {
       if (this->mq_FileBased == true)
       {
@@ -560,7 +560,7 @@ void C_SyvUpPacNodeWidget::RevertFile(C_SyvUpPacListNodeItemWidget * const opc_A
 {
    C_SyvUpPacSectionNodeWidget * const pc_Parent = m_GetAppParentList(opc_App);
 
-   if (pc_Parent != NULL)
+   if (pc_Parent != nullptr)
    {
       pc_Parent->RevertFile(opc_App);
    }
@@ -578,7 +578,7 @@ void C_SyvUpPacNodeWidget::RemoveFile(C_SyvUpPacListNodeItemWidget * const opc_A
 {
    C_SyvUpPacSectionNodeWidget * const pc_Parent = m_GetAppParentList(opc_App);
 
-   if (pc_Parent != NULL)
+   if (pc_Parent != nullptr)
    {
       pc_Parent->RemoveFile(opc_App);
 
@@ -600,7 +600,7 @@ void C_SyvUpPacNodeWidget::RemoveAllFiles(void) const
       this->mc_DatablockWidgets[s32_DatablockCounter]->RemoveAllFiles();
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       this->mpc_FilesWidget->RemoveAllFiles();
    }
@@ -640,7 +640,7 @@ void C_SyvUpPacNodeWidget::PrepareExportConfig(C_SyvUpPacConfigNode & orc_NodeCo
       this->mc_DatablockWidgets[s32_DatablockCounter]->PrepareExportConfig(orc_NodeConfig);
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       this->mpc_FilesWidget->PrepareExportConfig(orc_NodeConfig);
    }
@@ -667,7 +667,7 @@ void C_SyvUpPacNodeWidget::LoadImportConfig(const C_SyvUpPacConfig & orc_Config)
       this->mc_DatablockWidgets[s32_DatablockCounter]->LoadImportConfig(orc_Config);
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       this->mpc_FilesWidget->LoadImportConfig(orc_Config);
    }
@@ -726,7 +726,7 @@ int32_t C_SyvUpPacNodeWidget::CheckAllFiles(uint32_t & oru32_CountFiles, QString
                                                                                    opc_FlashwareWarningsApps);
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       s32_Return += this->mpc_FilesWidget->CheckAllFiles(oru32_CountFiles, opc_MissingFiles,
                                                          opc_MissingParamFiles,
@@ -781,7 +781,7 @@ bool C_SyvUpPacNodeWidget::CheckSecuritySettingsChanged() const
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpPacSectionNodeWidget * C_SyvUpPacNodeWidget::GetSectionList(const QPoint & orc_Pos) const
 {
-   C_SyvUpPacSectionNodeWidget * pc_Return = NULL;
+   C_SyvUpPacSectionNodeWidget * pc_Return = nullptr;
    const QPoint c_AdaptedPosScrollArea = this->mpc_Ui->pc_ScrollAreaWidget->mapFrom(this->parentWidget(), orc_Pos);
 
    int32_t s32_DatablockCounter;
@@ -798,8 +798,8 @@ C_SyvUpPacSectionNodeWidget * C_SyvUpPacNodeWidget::GetSectionList(const QPoint 
       }
    }
 
-   if ((pc_Return == NULL) &&
-       (this->mpc_FilesWidget != NULL))
+   if ((pc_Return == nullptr) &&
+       (this->mpc_FilesWidget != nullptr))
    {
       const QPoint c_AdaptedPosList = this->mpc_FilesWidget->mapFrom(this->mpc_Ui->pc_ScrollAreaWidget,
                                                                      c_AdaptedPosScrollArea);
@@ -826,7 +826,7 @@ C_SyvUpPacSectionNodeWidget * C_SyvUpPacNodeWidget::GetSectionList(const QPoint 
 C_SyvUpPacListNodeItemWidget * C_SyvUpPacNodeWidget::GetAndSelectApplication(const QPoint & orc_Pos)
 const
 {
-   C_SyvUpPacListNodeItemWidget * pc_App = NULL;
+   C_SyvUpPacListNodeItemWidget * pc_App = nullptr;
    const QPoint c_AdaptedPos = this->mpc_Ui->pc_ScrollAreaWidget->mapFrom(this->parentWidget(), orc_Pos);
 
    int32_t s32_DatablockCounter;
@@ -836,14 +836,14 @@ const
       const C_SyvUpPacSectionNodeDatablockWidget * const pc_DbWidget = this->mc_DatablockWidgets[s32_DatablockCounter];
       pc_App = pc_DbWidget->GetAndSelectApplication(c_AdaptedPos);
 
-      if (pc_App != NULL)
+      if (pc_App != nullptr)
       {
          break;
       }
    }
 
-   if ((pc_App == NULL) &&
-       (this->mpc_FilesWidget != NULL))
+   if ((pc_App == nullptr) &&
+       (this->mpc_FilesWidget != nullptr))
    {
       pc_App = this->mpc_FilesWidget->GetAndSelectApplication(c_AdaptedPos);
    }
@@ -866,7 +866,7 @@ C_SyvUpPacListNodeItemWidget * C_SyvUpPacNodeWidget::GetApplication(const QPoint
                                                                     uint32_t * const opu32_Number)
 const
 {
-   C_SyvUpPacListNodeItemWidget * pc_App = NULL;
+   C_SyvUpPacListNodeItemWidget * pc_App = nullptr;
    const QPoint c_AdaptedPos = this->mpc_Ui->pc_ScrollAreaWidget->mapFrom(this->parentWidget(), orc_Pos);
 
    int32_t s32_DatablockCounter;
@@ -876,15 +876,15 @@ const
       const C_SyvUpPacSectionNodeDatablockWidget * const pc_DbWidget = this->mc_DatablockWidgets[s32_DatablockCounter];
       pc_App = pc_DbWidget->GetApplication(c_AdaptedPos, opu32_Number);
 
-      if (pc_App != NULL)
+      if (pc_App != nullptr)
       {
          break;
       }
    }
 
-   if (pc_App == NULL)
+   if (pc_App == nullptr)
    {
-      if (this->mpc_FilesWidget != NULL)
+      if (this->mpc_FilesWidget != nullptr)
       {
          pc_App = this->mpc_FilesWidget->GetApplication(c_AdaptedPos, opu32_Number);
       }
@@ -992,7 +992,7 @@ int32_t C_SyvUpPacNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlash & orc
       }
    }
 
-   if (((s32_Return == C_NO_ERR) || (s32_Return == C_NOACT)) && (this->mpc_FilesWidget != NULL))
+   if (((s32_Return == C_NO_ERR) || (s32_Return == C_NOACT)) && (this->mpc_FilesWidget != nullptr))
    {
       s32_Return = this->mpc_FilesWidget->GetUpdatePackage(orc_ApplicationsToWrite, opc_AllApplications,
                                                            this->mu32_FilesUpdated);
@@ -1004,7 +1004,7 @@ int32_t C_SyvUpPacNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlash & orc
                                                          this->me_StateTrafficEncryption,
                                                          this->me_StateDebugger,
                                                          orc_ApplicationsToWrite);
-      if (opc_AllApplications != NULL)
+      if (opc_AllApplications != nullptr)
       {
          C_OscSuSequences::h_FillDoFlashWithSecurityOptions(this->me_StateSecureAuthentication,
                                                             this->me_StateTrafficEncryption, this->me_StateDebugger,
@@ -1042,7 +1042,7 @@ void C_SyvUpPacNodeWidget::CollapseAll(void) const
       pc_DbWidget->Expand(false);
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       this->mpc_FilesWidget->Expand(false);
    }
@@ -1073,12 +1073,12 @@ void C_SyvUpPacNodeWidget::SetEmptyOptionalSectionsVisible(const bool oq_Visible
 void C_SyvUpPacNodeWidget::UpdateSectionsVisibility(void) const
 {
    // files
-   if (this->mpc_FilesWidget != NULL) // never visible for non-file-based node
+   if (this->mpc_FilesWidget != nullptr) // never visible for non-file-based node
    {
       if (this->mpc_FilesWidget->GetFileCount() == 0)
       {
          this->mpc_FilesWidget->setVisible(this->mq_EmptyOptionalSectionsVisible);
-         if (this->mpc_FilesWidgetSeparator != NULL)
+         if (this->mpc_FilesWidgetSeparator != nullptr)
          {
             // Hide the separator. Could be NULL when mpc_FilesWidget is not NULL if no the node has no datablocks
             this->mpc_FilesWidgetSeparator->setVisible(this->mq_EmptyOptionalSectionsVisible);
@@ -1087,7 +1087,7 @@ void C_SyvUpPacNodeWidget::UpdateSectionsVisibility(void) const
       else
       {
          this->mpc_FilesWidget->setVisible(true);
-         if (this->mpc_FilesWidgetSeparator != NULL)
+         if (this->mpc_FilesWidgetSeparator != nullptr)
          {
             this->mpc_FilesWidgetSeparator->setVisible(true);
          }
@@ -1213,7 +1213,7 @@ void C_SyvUpPacNodeWidget::dragLeaveEvent(QDragLeaveEvent * const opc_Event)
       this->m_SetApplicationsUnselected(pc_DbWidget);
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       this->m_SetApplicationsUnselected(this->mpc_FilesWidget);
    }
@@ -1238,7 +1238,7 @@ void C_SyvUpPacNodeWidget::dropEvent(QDropEvent * const opc_Event)
       QStringList c_FilePathsParamsetFiles;
       QStringList c_FilePathsFileBased;
       QStringList c_FilePathsPemFiles;
-      C_SyvUpPacListNodeItemWidget * pc_App = NULL;
+      C_SyvUpPacListNodeItemWidget * pc_App = nullptr;
       const QPoint c_AdaptedPos = this->mpc_Ui->pc_ScrollAreaWidget->mapFrom(this, opc_Event->pos());
 
       if (this->m_CheckMime(pc_MimeData, c_AdaptedPos, &c_FilePathsDatablocks,
@@ -1257,7 +1257,7 @@ void C_SyvUpPacNodeWidget::dropEvent(QDropEvent * const opc_Event)
             C_SyvUpPacListNodeItemWidget * const pc_TimerApp = pc_App;
             const QString c_Folder = C_PuiProject::h_GetInstance()->GetFolderPath();
 
-            if ((pc_App != NULL) &&
+            if ((pc_App != nullptr) &&
                 (c_FilePathsDatablocks.size() == 1))
             {
   // Datablock only
@@ -1271,7 +1271,7 @@ void C_SyvUpPacNodeWidget::dropEvent(QDropEvent * const opc_Event)
                   this->AdaptFile(c_TimerFilePathsDatablocks[0], pc_TimerApp);
                }
 
-               if (pc_TimerApp != NULL)
+               if (pc_TimerApp != nullptr)
                {
                   pc_TimerApp->SetSelected(false);
                }
@@ -1311,7 +1311,7 @@ void C_SyvUpPacNodeWidget::dropEvent(QDropEvent * const opc_Event)
                   c_TimerFilePathsPemFiles = c_PathsParamAndPemAndFile.mid(
                      c_TimerFilePathsParamsetFiles.size() + c_TimerFilePathsFileBased.size());
 
-                  if ((pc_TimerApp != NULL) &&
+                  if ((pc_TimerApp != nullptr) &&
                       (c_TimerFilePathsFileBased.size() == 1) &&
                       (c_TimerFilePathsParamsetFiles.size() == 0) &&
                       (c_TimerFilePathsPemFiles.size() == 0))
@@ -1319,7 +1319,7 @@ void C_SyvUpPacNodeWidget::dropEvent(QDropEvent * const opc_Event)
   // Replace one file based entry
                      this->AdaptFile(c_TimerFilePathsFileBased[0], pc_TimerApp);
                   }
-                  else if ((pc_TimerApp != NULL) &&
+                  else if ((pc_TimerApp != nullptr) &&
                            (c_TimerFilePathsFileBased.size() == 0) &&
                            (c_TimerFilePathsParamsetFiles.size() == 1) &&
                            (c_TimerFilePathsPemFiles.size() == 0))
@@ -1327,7 +1327,7 @@ void C_SyvUpPacNodeWidget::dropEvent(QDropEvent * const opc_Event)
   // Replace one parameter set image entry
                      this->AdaptFile(c_TimerFilePathsParamsetFiles[0], pc_TimerApp);
                   }
-                  else if ((pc_TimerApp != NULL) &&
+                  else if ((pc_TimerApp != nullptr) &&
                            (c_TimerFilePathsFileBased.size() == 0) &&
                            (c_TimerFilePathsParamsetFiles.size() == 0) &&
                            (c_TimerFilePathsPemFiles.size() == 1))
@@ -1366,7 +1366,7 @@ void C_SyvUpPacNodeWidget::dropEvent(QDropEvent * const opc_Event)
                      }
                   }
                }
-               if (pc_App != NULL)
+               if (pc_App != nullptr)
                {
                   pc_App->SetSelected(false);
                }
@@ -1387,14 +1387,14 @@ void C_SyvUpPacNodeWidget::m_Init(void)
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
    QSpacerItem * const pc_Spacer = new QSpacerItem(0, 3, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       uint32_t u32_DatablockParamSetFiles = 0U;
       uint32_t u32_DatablockCounter;
       uint32_t u32_ViewDataBlockPathNumber = 0;
 
-      tgl_assert(pc_Node->pc_DeviceDefinition != NULL);
+      tgl_assert(pc_Node->pc_DeviceDefinition != nullptr);
       tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
       this->mq_FileBased =
          pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].q_FlashloaderOpenSydeIsFileBased;
@@ -1441,7 +1441,7 @@ void C_SyvUpPacNodeWidget::m_Init(void)
       // It is only necessary for file based devices and can get psi files without restrictions
       if (true)
       {
-         tgl_assert(this->mpc_FilesWidget == NULL);
+         tgl_assert(this->mpc_FilesWidget == nullptr);
          this->mpc_FilesWidget = new C_SyvUpPacSectionNodeFilesWidget(this);
          this->mpc_Ui->pc_ScrollAreaLayout->addWidget(this->mpc_FilesWidget);
 
@@ -1456,10 +1456,10 @@ void C_SyvUpPacNodeWidget::m_Init(void)
       this->mq_ShowAddSecurityButton = (pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_OPEN_SYDE);
       this->mpc_Ui->pc_PbAddSecurityPackage->setVisible(this->mq_ShowAddSecurityButton);
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_OscViewNodeUpdate * const pc_UpdateInfo = pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex);
-         if (pc_UpdateInfo != NULL)
+         if (pc_UpdateInfo != nullptr)
          {
             pc_UpdateInfo->GetStates(this->me_StateSecureAuthentication, this->me_StateDebugger,
                                      this->me_StateTrafficEncryption);
@@ -1565,7 +1565,7 @@ uint32_t C_SyvUpPacNodeWidget::m_GetFileCount(void) const
       u32_Count += pc_DbWidget->GetFileCount();
    }
 
-   if (this->mpc_FilesWidget != NULL)
+   if (this->mpc_FilesWidget != nullptr)
    {
       u32_Count += this->mpc_FilesWidget->GetFileCount();
    }
@@ -1584,7 +1584,7 @@ uint32_t C_SyvUpPacNodeWidget::m_GetFileCount(void) const
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpPacSectionNodeWidget * C_SyvUpPacNodeWidget::m_GetNextListInUpdateOrder(void) const
 {
-   C_SyvUpPacSectionNodeWidget * pc_List = NULL;
+   C_SyvUpPacSectionNodeWidget * pc_List = nullptr;
    bool q_ListFound = false;
 
    int32_t s32_DatablockCounter;
@@ -1627,7 +1627,7 @@ C_SyvUpPacSectionNodeWidget * C_SyvUpPacNodeWidget::m_GetNextListInUpdateOrder(v
    // More files updated than datablocks. Check next section.
    if (q_ListFound == false)
    {
-      if (this->mpc_FilesWidget != NULL)
+      if (this->mpc_FilesWidget != nullptr)
       {
          // Do not check for finished state here. If no list was already found, a state configuration error for a PEM
          // file was probably detected, so the error belongs to the "other files", but the finished state does not match
@@ -1642,7 +1642,7 @@ C_SyvUpPacSectionNodeWidget * C_SyvUpPacNodeWidget::m_GetNextListInUpdateOrder(v
       }
    }
 
-   tgl_assert(pc_List != NULL);
+   tgl_assert(pc_List != nullptr);
 
    return pc_List;
 }
@@ -1677,13 +1677,13 @@ const
 C_SyvUpPacSectionNodeWidget * C_SyvUpPacNodeWidget::m_GetAppParentList(C_SyvUpPacListNodeItemWidget * const opc_App)
 const
 {
-   C_SyvUpPacSectionNodeWidget * pc_Parent = NULL;
+   C_SyvUpPacSectionNodeWidget * pc_Parent = nullptr;
 
-   if (opc_App != NULL)
+   if (opc_App != nullptr)
    {
       pc_Parent = dynamic_cast<C_SyvUpPacSectionNodeWidget *>(opc_App->GetListParent());
 
-      tgl_assert(pc_Parent != NULL);
+      tgl_assert(pc_Parent != nullptr);
    }
 
    return pc_Parent;
@@ -1706,8 +1706,8 @@ bool C_SyvUpPacNodeWidget::m_CheckFileAlreadyContained(const QString & orc_File)
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
    bool q_Retval = false;
 
-   if ((pc_Node != NULL) &&
-       (pc_View != NULL))
+   if ((pc_Node != nullptr) &&
+       (pc_View != nullptr))
    {
       const QString c_AbsoluteFile = C_PuiUtil::h_GetResolvedAbsPathFromProject(orc_File);
       std::vector<C_SclString> c_Paths;
@@ -1774,7 +1774,7 @@ void C_SyvUpPacNodeWidget::m_CheckForMultipleSecurityCertificatePackages(const Q
       uint32_t u32_NumberOfSecurityPacks = 0;
       QString c_FoundPaths;
 
-      if ((pc_Node != NULL) && (pc_View != NULL))
+      if ((pc_Node != nullptr) && (pc_View != nullptr))
       {
          // check only file based files as it is very unlikely to have data blocks with security certificate packages
          const std::vector<C_SclString> c_Paths =
@@ -1871,7 +1871,7 @@ bool C_SyvUpPacNodeWidget::m_CheckMime(const QMimeData * const opc_Mime, const Q
    bool q_Retval = false;
 
    // Check the mime parameter
-   if ((opc_Mime != NULL) &&
+   if ((opc_Mime != nullptr) &&
        (opc_Mime->hasUrls() == true))
    {
       QStringList c_PathList;
@@ -1907,7 +1907,7 @@ bool C_SyvUpPacNodeWidget::m_CheckMime(const QMimeData * const opc_Mime, const Q
             q_Retval = this->mc_DatablockWidgets[s32_DatablockCounter]->CheckMime(c_PathList, orc_Pos,
                                                                                   opc_FilePathsDatablocks,
                                                                                   opc_FilePathsParamsets,
-                                                                                  NULL,
+                                                                                  nullptr,
                                                                                   oppc_App);
 
             if (q_Retval == true)
@@ -1919,7 +1919,7 @@ bool C_SyvUpPacNodeWidget::m_CheckMime(const QMimeData * const opc_Mime, const Q
 
          // If a datablock is possible, no other list is possible
          if ((q_Retval == false) &&
-             (this->mpc_FilesWidget != NULL))
+             (this->mpc_FilesWidget != nullptr))
          {
             // Check if no file/parameter set image operation is possible or the caller wants to know all possibilities
             // In this case both checks are necessary
@@ -1961,7 +1961,7 @@ void C_SyvUpPacNodeWidget::m_AddSecurityCertificatePackage()
       this->m_OnCreatePackage(c_PublicKeyPath, c_Password, c_PemFiles, q_OptionAddPemFiles,
                               q_OptionAddSecureAuthentication);
    }
-   if (c_PopUpDialog != NULL)
+   if (c_PopUpDialog != nullptr)
    {
       c_PopUpDialog->HideOverlay();
       c_PopUpDialog->deleteLater();
@@ -1992,9 +1992,9 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(const QString & orc_PublicKeyPath, 
    QString c_FullPackagePath;
    const C_PuiSvData * const pc_ViewData = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   tgl_assert(pc_ViewData != NULL);
+   tgl_assert(pc_ViewData != nullptr);
 
-   if (pc_ViewData != NULL)
+   if (pc_ViewData != nullptr)
    {
       c_DefaultFilename = pc_ViewData->GetName().c_str();
    }
@@ -2089,7 +2089,7 @@ void C_SyvUpPacNodeWidget::m_OpenSecuritySettings(void)
          this->me_StateTrafficEncryption = pc_InfoDialog->GetComboBoxTenState();
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();

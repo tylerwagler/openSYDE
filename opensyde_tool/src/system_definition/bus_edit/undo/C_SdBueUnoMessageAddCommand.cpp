@@ -97,7 +97,7 @@ void C_SdBueUnoMessageAddCommand::SetInitialData(const std::vector<C_OscCanMessa
                     ++u32_ItNode)
                {
                   const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItNode);
-                  if ((pc_Node != NULL) && (pc_Node->c_Properties.c_Name == rc_CurName.toStdString().c_str()))
+                  if ((pc_Node != nullptr) && (pc_Node->c_Properties.c_Name == rc_CurName.toStdString().c_str()))
                   {
                      const C_OscCanMessageContainer * const pc_Container =
                         C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainer(
@@ -108,7 +108,7 @@ void C_SdBueUnoMessageAddCommand::SetInitialData(const std::vector<C_OscCanMessa
 
                      c_CurId.u32_NodeIndex = u32_ItNode;
                      //Check if valid
-                     if (pc_Container != NULL)
+                     if (pc_Container != nullptr)
                      {
                         q_Found = true;
                         //There actually could be better matches in other nodes if this one does not work in any way

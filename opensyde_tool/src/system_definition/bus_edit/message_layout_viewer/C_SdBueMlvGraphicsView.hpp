@@ -31,7 +31,7 @@ class C_SdBueMlvGraphicsView :
    Q_OBJECT
 
 public:
-   C_SdBueMlvGraphicsView(QWidget * const opc_Parent = NULL);
+   C_SdBueMlvGraphicsView(QWidget * const opc_Parent = nullptr);
    ~C_SdBueMlvGraphicsView() override;
 
    // tool tip

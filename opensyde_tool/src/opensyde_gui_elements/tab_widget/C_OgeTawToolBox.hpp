@@ -30,7 +30,7 @@ class C_OgeTawToolBox :
    Q_OBJECT
 
 public:
-   C_OgeTawToolBox(QWidget * const opc_Parent = NULL);
+   C_OgeTawToolBox(QWidget * const opc_Parent = nullptr);
    ~C_OgeTawToolBox(void) override;
 
 private:

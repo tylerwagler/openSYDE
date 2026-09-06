@@ -28,7 +28,7 @@ class C_NagTopTreeView :
    Q_OBJECT
 
 public:
-   C_NagTopTreeView(QWidget * const opc_Parent = NULL);
+   C_NagTopTreeView(QWidget * const opc_Parent = nullptr);
 
    void SetTypeNode(const bool oq_IsNode);
    void SetSelectedIndexAndScroll(const int32_t os32_Selected);

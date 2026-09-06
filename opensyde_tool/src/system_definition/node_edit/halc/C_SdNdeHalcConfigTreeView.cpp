@@ -128,7 +128,7 @@ void C_SdNdeHalcConfigTreeView::LoadUserSettings(void)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mc_Model.GetNodeIndex());
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const C_UsNode c_Node = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());
 
@@ -149,7 +149,7 @@ void C_SdNdeHalcConfigTreeView::SaveUserSettings(void) const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mc_Model.GetNodeIndex());
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       C_UsHandler::h_GetInstance()->SetProjSdNodeHalcConfigColumnWidth(pc_Node->c_Properties.c_Name.c_str(),
                                                                        this->m_GetColumnWidths());

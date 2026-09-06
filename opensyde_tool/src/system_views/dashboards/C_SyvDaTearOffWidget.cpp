@@ -93,7 +93,7 @@ C_SyvDaTearOffWidget::C_SyvDaTearOffWidget(const uint32_t ou32_ViewIndex, const 
    pc_Layout->setContentsMargins(0, 0, 0, 0);
 
    //Replace internal widget
-   if (opc_Widget == NULL)
+   if (opc_Widget == nullptr)
    {
       this->mpc_Dashboard = new C_SyvDaDashboardWidget(ou32_ViewIndex, ou32_DataIndex, orc_Name, true, this);
    }
@@ -117,10 +117,10 @@ C_SyvDaTearOffWidget::C_SyvDaTearOffWidget(const uint32_t ou32_ViewIndex, const 
    this->mpc_Ui->pc_WidgetTab->SetCloseButtonVisibility(false);
    this->mpc_Ui->pc_WidgetTab->SetCurrent(true);
    pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(ou32_DataIndex);
-      if (pc_Dashboard != NULL)
+      if (pc_Dashboard != nullptr)
       {
          this->mpc_Ui->pc_WidgetTab->SetText(pc_Dashboard->GetName());
          this->mpc_Ui->pc_WidgetTab->SetToolTip(pc_Dashboard->GetName(), pc_Dashboard->GetComment());
@@ -313,7 +313,7 @@ void C_SyvDaTearOffWidget::SetEnabled(const bool oq_Enabled) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTearOffWidget::Save(void) const
 {
-   if (this->mpc_Dashboard != NULL)
+   if (this->mpc_Dashboard != nullptr)
    {
       this->mpc_Dashboard->Save();
    }
@@ -328,7 +328,7 @@ void C_SyvDaTearOffWidget::Save(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTearOffWidget::HandleManualOperationFinished(const int32_t os32_Result, const uint8_t ou8_Nrc) const
 {
-   if (this->mpc_Dashboard != NULL)
+   if (this->mpc_Dashboard != nullptr)
    {
       this->mpc_Dashboard->HandleManualOperationFinished(os32_Result, ou8_Nrc);
    }
@@ -342,7 +342,7 @@ void C_SyvDaTearOffWidget::HandleManualOperationFinished(const int32_t os32_Resu
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTearOffWidget::RegisterWidgets(C_SyvComDriverDiag & orc_ComDriver) const
 {
-   if (this->mpc_Dashboard != NULL)
+   if (this->mpc_Dashboard != nullptr)
    {
       this->mpc_Dashboard->RegisterWidgets(orc_ComDriver);
    }
@@ -361,7 +361,7 @@ void C_SyvDaTearOffWidget::ConnectionActiveChanged(const bool oq_Active, const Q
                                                                                     bool> & orc_MappingNodeToTrafficEncryptionStatus,
                                                    const bool oq_WidgetTabOnly) const
 {
-   if ((this->mpc_Dashboard != NULL) && (oq_WidgetTabOnly == false))
+   if ((this->mpc_Dashboard != nullptr) && (oq_WidgetTabOnly == false))
    {
       this->mpc_Dashboard->ConnectionActiveChanged(oq_Active, orc_MappingNodeToTrafficEncryptionStatus);
    }
@@ -374,7 +374,7 @@ void C_SyvDaTearOffWidget::ConnectionActiveChanged(const bool oq_Active, const Q
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTearOffWidget::UpdateShowValues(void) const
 {
-   if (this->mpc_Dashboard != NULL)
+   if (this->mpc_Dashboard != nullptr)
    {
       this->mpc_Dashboard->UpdateShowValues();
    }
@@ -386,7 +386,7 @@ void C_SyvDaTearOffWidget::UpdateShowValues(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTearOffWidget::UpdateTransmissionConfiguration(void) const
 {
-   if (this->mpc_Dashboard != NULL)
+   if (this->mpc_Dashboard != nullptr)
    {
       this->mpc_Dashboard->UpdateTransmissionConfiguration();
    }
@@ -456,12 +456,12 @@ void C_SyvDaTearOffWidget::keyPressEvent(QKeyEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTearOffWidget::m_OnActiveChange(const C_OgeWiDashboardTab * const opc_Source, const bool oq_Active)
 {
-   if (this->mpc_Dashboard != NULL)
+   if (this->mpc_Dashboard != nullptr)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mpc_Dashboard->GetViewIndex());
 
       Q_UNUSED(opc_Source)
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const uint32_t u32_DataIndex = this->mpc_Dashboard->GetDashboardIndex();
          if (C_PuiSvHandler::h_GetInstance()->SetDashboardActive(this->mpc_Dashboard->GetViewIndex(), u32_DataIndex,
@@ -482,17 +482,17 @@ void C_SyvDaTearOffWidget::m_OnActiveChange(const C_OgeWiDashboardTab * const op
 void C_SyvDaTearOffWidget::m_OnCopy(const C_OgeWiDashboardTab * const opc_Source) const
 {
    Q_UNUSED(opc_Source)
-   if (this->mpc_Dashboard != NULL)
+   if (this->mpc_Dashboard != nullptr)
    {
       const C_PuiSvData * pc_View;
 
       this->mpc_Dashboard->Save();
       pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mpc_Dashboard->GetViewIndex());
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mpc_Dashboard->GetDashboardIndex());
-         if (pc_Dashboard != NULL)
+         if (pc_Dashboard != nullptr)
          {
             QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration> c_Rails;
             pc_View->GetRelevantReadRailAssigmentsForDashboard(*pc_Dashboard, c_Rails);
@@ -510,7 +510,7 @@ void C_SyvDaTearOffWidget::m_OnCopy(const C_OgeWiDashboardTab * const opc_Source
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTearOffWidget::m_OnEditProperties(C_OgeWiDashboardTab * const opc_Source)
 {
-   if ((this->mpc_Dashboard != NULL) && (opc_Source != NULL))
+   if ((this->mpc_Dashboard != nullptr) && (opc_Source != nullptr))
    {
       const uint32_t u32_DashboardIndex = this->mpc_Dashboard->GetDashboardIndex();
 
@@ -539,7 +539,7 @@ void C_SyvDaTearOffWidget::m_OnEditProperties(C_OgeWiDashboardTab * const opc_So
          }
       }
 
-      if (c_New != NULL)
+      if (c_New != nullptr)
       {
          c_New->HideOverlay();
          c_New->deleteLater();
@@ -553,7 +553,7 @@ void C_SyvDaTearOffWidget::m_OnEditProperties(C_OgeWiDashboardTab * const opc_So
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTearOffWidget::m_CheckError(void) const
 {
-   if (this->mpc_Dashboard != NULL)
+   if (this->mpc_Dashboard != nullptr)
    {
       QString c_ErrorTextHeading;
       QString c_ErrorText;

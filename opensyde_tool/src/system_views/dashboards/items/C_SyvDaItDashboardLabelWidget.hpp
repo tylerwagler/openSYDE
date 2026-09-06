@@ -34,7 +34,7 @@ class C_SyvDaItDashboardLabelWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvDaItDashboardLabelWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvDaItDashboardLabelWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaItDashboardLabelWidget(void) override;
 
    void ResetFont(void) const;

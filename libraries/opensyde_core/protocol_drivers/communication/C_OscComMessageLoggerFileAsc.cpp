@@ -314,7 +314,7 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
    C_SclString c_Temp;
 
    // Getting weekday
-   const std::time_t x_Time = std::time(NULL);      //lint !e8080 using type expected by the library for compatibility
+   const std::time_t x_Time = std::time(nullptr);      //lint !e8080 using type expected by the library for compatibility
    const std::tm c_Time = *std::localtime(&x_Time); //lint !e613 //documentation of localtime says "not NULL"
    const uint32_t u32_TimeMs = TglGetTickCount();
 

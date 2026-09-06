@@ -100,7 +100,7 @@ public:
                                               uint32_t & oru32_InterfaceIndex) const;
 
 protected:
-   C_PuiSdHandlerCanOpenLogic(QObject * const opc_Parent = NULL);
+   C_PuiSdHandlerCanOpenLogic(QObject * const opc_Parent = nullptr);
 
    //CANOpen
    int32_t m_DeleteAllCanOpenManagerDevices(const uint32_t ou32_NodeIndex, const uint8_t ou8_InterfaceNumber);

@@ -29,7 +29,7 @@ class C_OgeLePlaceholderVar :
    Q_OBJECT
 
 public:
-   explicit C_OgeLePlaceholderVar(QWidget * const opc_Parent = NULL);
+   explicit C_OgeLePlaceholderVar(QWidget * const opc_Parent = nullptr);
 
    void InsertVariable(const QString & orc_Variable);
    void SetDbProjectPath(const QString & orc_DbPath);

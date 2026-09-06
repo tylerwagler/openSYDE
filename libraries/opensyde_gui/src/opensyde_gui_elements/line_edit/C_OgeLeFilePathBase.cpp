@@ -135,7 +135,7 @@ void C_OgeLeFilePathBase::SetDragAndDropActiveForFile(const bool oq_Active,
    this->setDragEnabled(oq_Active);
    if (oq_Active == true)
    {
-      if (opc_FileExtensions != NULL)
+      if (opc_FileExtensions != nullptr)
       {
          this->mc_DragAndDropFileExtensions = *opc_FileExtensions;
       }

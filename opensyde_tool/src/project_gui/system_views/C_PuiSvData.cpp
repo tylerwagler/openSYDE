@@ -291,7 +291,7 @@ const std::vector<C_PuiSvDashboard> & C_PuiSvData::GetDashboards(void) const
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDashboard * C_PuiSvData::GetDashboard(const uint32_t ou32_Index) const
 {
-   const C_PuiSvDashboard * pc_Retval = NULL;
+   const C_PuiSvDashboard * pc_Retval = nullptr;
 
    if (ou32_Index < this->mc_Dashboards.size())
    {
@@ -499,7 +499,7 @@ const std::set<C_OscNodeDataPoolListElementId> C_PuiSvData::GetWriteAssignments(
       {
          const C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_WidgetCounter];
 
-         if ((pc_Widget != NULL) &&
+         if ((pc_Widget != nullptr) &&
              (pc_Widget->IsReadElement() == false))
          {
             uint32_t u32_ElementConfig;
@@ -598,7 +598,7 @@ const
    for (uint32_t u32_ItWidget = 0UL; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
       const C_PuiSvDbWidgetBase * const pc_CurWidget = c_Widgets[u32_ItWidget];
-      if ((pc_CurWidget != NULL) && (pc_CurWidget->IsReadElement() == true))
+      if ((pc_CurWidget != nullptr) && (pc_CurWidget->IsReadElement() == true))
       {
          for (uint32_t u32_ItConfig = 0UL; u32_ItConfig < pc_CurWidget->c_DataPoolElementsConfig.size(); ++u32_ItConfig)
          {
@@ -930,8 +930,8 @@ void C_PuiSvData::OnSyncNodeAdded(const uint32_t ou32_Index)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_Index);
 
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          uint32_t u32_NodeUpdateCounter;
          uint32_t u32_Position = 0U;
@@ -1005,7 +1005,7 @@ void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_Osc
       if (ou32_Index == c_ItReadItem.key().u32_NodeIndex)
       {
          if (C_PuiSdHandler::h_GetInstance()->GetOscDataPool(c_ItReadItem.key().u32_NodeIndex,
-                                                             c_ItReadItem.key().u32_DataPoolIndex) != NULL)
+                                                             c_ItReadItem.key().u32_DataPoolIndex) != nullptr)
          {
             C_OscNodeDataPool::E_Type e_Type;
             if (C_PuiSdHandler::h_GetInstance()->GetDataPoolType(c_ItReadItem.key().u32_NodeIndex,
@@ -1058,7 +1058,7 @@ void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_Osc
          {
             //Clean
             const C_PuiSvDbParam * const pc_Param = rc_Dashboard.GetParam(u32_ItPa);
-            if (pc_Param != NULL)
+            if (pc_Param != nullptr)
             {
                bool q_ParamChanged = false;
                C_PuiSvDbParam c_Tmp = *pc_Param;
@@ -1073,7 +1073,7 @@ void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_Osc
                      const C_OscNodeDataPool * const pc_Dp = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
                         c_ItEl->c_ElementId.u32_NodeIndex,
                         c_ItEl->c_ElementId.u32_DataPoolIndex);
-                     if (pc_Dp != NULL)
+                     if (pc_Dp != nullptr)
                      {
                         if (pc_Dp->e_Type == C_OscNodeDataPool::eHALC_NVM)
                         {
@@ -1112,7 +1112,7 @@ void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_Osc
                         const C_OscNodeDataPool * const pc_Dp = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
                            c_ItTree->c_ExpandedId.u32_NodeIndex,
                            c_ItTree->c_ExpandedId.u32_DataPoolIndex);
-                        if (pc_Dp != NULL)
+                        if (pc_Dp != nullptr)
                         {
                            if (pc_Dp->e_Type == C_OscNodeDataPool::eHALC_NVM)
                            {
@@ -1147,7 +1147,7 @@ void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_Osc
                   c_ItLi->u32_NodeIndex,
                   c_ItLi->u32_DataPoolIndex,
                   c_ItLi->u32_ListIndex);
-               if (pc_Li != NULL)
+               if (pc_Li != nullptr)
                {
                   for (uint32_t u32_ItElement = 0UL; u32_ItElement < pc_Li->c_Elements.size(); ++u32_ItElement)
                   {
@@ -1155,7 +1155,7 @@ void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_Osc
                                                                c_ItLi->u32_DataPoolIndex,
                                                                c_ItLi->u32_ListIndex, u32_ItElement);
                      tgl_assert(this->AddDashboardParamNewDataPoolElement(u32_ItDashboard, u32_ItPa, c_Id,
-                                                                          NULL) == C_NO_ERR);
+                                                                          nullptr) == C_NO_ERR);
                   }
                }
             }
@@ -1176,8 +1176,8 @@ void C_PuiSvData::OnSyncNodeReplace(const uint32_t ou32_Index)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_Index);
 
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          //Handle node applications (could not be synced up to this point) AFTER node update information was added
          for (uint32_t u32_ItApplication = 0UL; u32_ItApplication < pc_Node->c_Applications.size(); ++u32_ItApplication)
@@ -1349,9 +1349,9 @@ void C_PuiSvData::OnSyncNodeApplicationAdded(const uint32_t ou32_NodeIndex, cons
          C_PuiSdHandler::h_GetInstance()->GetApplication(ou32_NodeIndex, ou32_ApplicationIndex);
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-      tgl_assert(pc_App != NULL);
-      tgl_assert(pc_Node != NULL);
-      if ((pc_App != NULL) && (pc_Node != NULL))
+      tgl_assert(pc_App != nullptr);
+      tgl_assert(pc_Node != nullptr);
+      if ((pc_App != nullptr) && (pc_Node != nullptr))
       {
          C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[ou32_NodeIndex];
          rc_Update.OnSyncNodeApplicationAdded(ou32_ApplicationIndex, pc_App->e_Type, pc_App->c_ResultPaths.size(),
@@ -1378,10 +1378,10 @@ void C_PuiSvData::OnSyncNodeApplicationMoved(const uint32_t ou32_NodeIndex, cons
       const stw::opensyde_core::C_OscNodeApplication * const pc_AppTarget =
          C_PuiSdHandler::h_GetInstance()->GetApplication(ou32_NodeIndex, ou32_ApplicationTargetIndex);
 
-      tgl_assert(pc_AppSource != NULL);
-      tgl_assert(pc_AppTarget != NULL);
+      tgl_assert(pc_AppSource != nullptr);
+      tgl_assert(pc_AppTarget != nullptr);
 
-      if ((pc_AppSource != NULL) && (pc_AppTarget != NULL))
+      if ((pc_AppSource != nullptr) && (pc_AppTarget != nullptr))
       {
          C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[ou32_NodeIndex];
          rc_Update.OnSyncNodeApplicationMoved(ou32_ApplicationSourceIndex, ou32_ApplicationTargetIndex,
@@ -1405,8 +1405,8 @@ void C_PuiSvData::OnSyncNodeApplicationAboutToBeDeleted(const uint32_t ou32_Node
       const stw::opensyde_core::C_OscNodeApplication * const pc_App =
          C_PuiSdHandler::h_GetInstance()->GetApplication(ou32_NodeIndex, ou32_ApplicationIndex);
 
-      tgl_assert(pc_App != NULL);
-      if (pc_App != NULL)
+      tgl_assert(pc_App != nullptr);
+      if (pc_App != nullptr)
       {
          C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[ou32_NodeIndex];
          rc_Update.OnSyncNodeApplicationAboutToBeDeleted(ou32_ApplicationIndex, pc_App->e_Type,
@@ -1431,8 +1431,8 @@ void C_PuiSvData::OnSyncNodeApplicationAboutToBeChangedFromParamSetHalc(const ui
          C_PuiSdHandler::h_GetInstance()->GetApplication(ou32_NodeIndex, ou32_ApplicationIndex);
 
       // Application still exists. Deletion will be done after this function
-      tgl_assert(pc_App != NULL);
-      if (pc_App != NULL)
+      tgl_assert(pc_App != nullptr);
+      if (pc_App != nullptr)
       {
          C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[ou32_NodeIndex];
          rc_Update.OnSyncNodeApplicationAboutToBeChangedFromParamSetHalc(ou32_ApplicationIndex, pc_App->e_Type,
@@ -1458,9 +1458,9 @@ void C_PuiSvData::OnSyncNodeApplicationChangedToParamSetHalc(const uint32_t ou32
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
       // Application still exists. Deletion will be done after this function
-      tgl_assert(pc_App != NULL);
-      tgl_assert(pc_Node != NULL);
-      if ((pc_App != NULL) && (pc_Node != NULL))
+      tgl_assert(pc_App != nullptr);
+      tgl_assert(pc_Node != nullptr);
+      if ((pc_App != nullptr) && (pc_Node != nullptr))
       {
          C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[ou32_NodeIndex];
          rc_Update.OnSyncNodeApplicationChangedToParamSetHalc(ou32_ApplicationIndex, pc_App->e_Type,
@@ -1489,8 +1489,8 @@ void C_PuiSvData::OnSyncNodeApplicationResultPathSizeChanged(const uint32_t ou32
          ou32_NodeIndex,
          ou32_ApplicationIndex);
 
-      tgl_assert(pc_App != NULL);
-      if (pc_App != NULL)
+      tgl_assert(pc_App != nullptr);
+      if (pc_App != nullptr)
       {
          C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[ou32_NodeIndex];
          rc_Update.OnSyncNodeApplicationResultPathSizeChanged(pc_App->e_Type, ou32_OldSize, ou32_NewSize);
@@ -1745,7 +1745,7 @@ void C_PuiSvData::OnSyncNodeDataPoolListElementAdded(const uint32_t ou32_NodeInd
                                                                                                    ou32_DataPoolIndex,
                                                                                                    ou32_ListIndex,
                                                                                                    ou32_ElementIndex),
-                                                                    NULL) ==
+                                                                    nullptr) ==
                           C_NO_ERR);
             }
          }
@@ -2050,7 +2050,7 @@ int32_t C_PuiSvData::AddReadRailItem(const C_OscNodeDataPoolListElementId & orc_
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvData::AddDashboard(const C_PuiSvDashboard & orc_Dashboard, const bool oq_AutoAdapt)
 {
-   tgl_assert(InsertDashboard(this->mc_Dashboards.size(), orc_Dashboard, oq_AutoAdapt, NULL) == C_NO_ERR);
+   tgl_assert(InsertDashboard(this->mc_Dashboards.size(), orc_Dashboard, oq_AutoAdapt, nullptr) == C_NO_ERR);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2088,7 +2088,7 @@ int32_t C_PuiSvData::InsertDashboard(const uint32_t ou32_Index, const C_PuiSvDas
       for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
       {
          const C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
-         if (pc_Widget != NULL)
+         if (pc_Widget != nullptr)
          {
             for (uint32_t u32_ItElement = 0; u32_ItElement < pc_Widget->c_DataPoolElementsConfig.size();
                  ++u32_ItElement)
@@ -2102,7 +2102,7 @@ int32_t C_PuiSvData::InsertDashboard(const uint32_t ou32_Index, const C_PuiSvDas
                         rc_Config.c_ElementId);
                   if (c_ItReadItem == this->mc_ReadRailAssignments.end())
                   {
-                     if ((opc_Rails != NULL) && (opc_Rails->contains(rc_Config.c_ElementId)))
+                     if ((opc_Rails != nullptr) && (opc_Rails->contains(rc_Config.c_ElementId)))
                      {
                         const QMap<C_OscNodeDataPoolListElementId,
                                    C_PuiSvReadDataConfiguration>::ConstIterator c_ItMap =
@@ -2118,7 +2118,7 @@ int32_t C_PuiSvData::InsertDashboard(const uint32_t ou32_Index, const C_PuiSvDas
                               rc_Config.c_ElementId.u32_DataPoolIndex,
                               rc_Config.c_ElementId.u32_ListIndex,
                               rc_Config.c_ElementId.u32_ElementIndex);
-                        if (pc_Element != NULL)
+                        if (pc_Element != nullptr)
                         {
                            C_PuiSvReadDataConfiguration c_RailConfig;
                            if ((((pc_Element->GetArray() == true) ||
@@ -2455,7 +2455,7 @@ int32_t C_PuiSvData::ClearDashboardParamDataPoolElements(const uint32_t ou32_Das
    {
       C_PuiSvDashboard & rc_Dashboard = this->mc_Dashboards[ou32_DashboardIndex];
       const C_PuiSvDbParam * const pc_Param = rc_Dashboard.GetParam(ou32_ParamWidgetIndex);
-      if (pc_Param != NULL)
+      if (pc_Param != nullptr)
       {
          const std::vector<C_PuiSvDbNodeDataElementConfig> c_Configs = pc_Param->c_DataPoolElementsConfig;
          s32_Retval = rc_Dashboard.ClearParamDataPoolElements(ou32_ParamWidgetIndex);
@@ -2516,7 +2516,7 @@ int32_t C_PuiSvData::AddDashboardParamNewDataPoolElement(const uint32_t ou32_Das
                                                                     orc_NewId.u32_ListIndex,
                                                                     orc_NewId.u32_ElementIndex);
 
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          C_PuiSvDashboard & rc_Dashboard = this->mc_Dashboards[ou32_DashboardIndex];
          s32_Retval = rc_Dashboard.AddParamNewDataPoolElement(ou32_ParamWidgetIndex, orc_NewId, opc_Content);
@@ -2823,7 +2823,7 @@ void C_PuiSvData::FixInvalidRailConfig(const bool oq_PrintLog)
          for (uint32_t u32_ItWidget = 0; (u32_ItWidget < c_Widgets.size()) && (u32_Count == 0UL); ++u32_ItWidget)
          {
             const C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
-            if ((pc_Widget != NULL) && (pc_Widget->IsReadElement() == true))
+            if ((pc_Widget != nullptr) && (pc_Widget->IsReadElement() == true))
             {
                //For each data element
                for (uint32_t u32_ItDataElement = 0;
@@ -2891,7 +2891,7 @@ void C_PuiSvData::InitFromSystemDefinition(void)
       for (uint32_t u32_ItInfo = 0; u32_ItInfo < C_PuiSdHandler::h_GetInstance()->GetOscNodesSize(); ++u32_ItInfo)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItInfo);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             std::vector<stw::scl::C_SclString> c_ApplPaths;
             std::vector<C_OscViewNodeUpdateParamInfo> c_ParamInfos;
@@ -3023,7 +3023,7 @@ bool C_PuiSvData::CheckReadUsage(const C_OscNodeDataPoolListElementId & orc_Id) 
       for (uint32_t u32_ItWidget = 0; (u32_ItWidget < c_Widgets.size()) && (q_Retval == false); ++u32_ItWidget)
       {
          const C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
-         if ((pc_Widget != NULL) && (pc_Widget->IsReadElement() == true))
+         if ((pc_Widget != nullptr) && (pc_Widget->IsReadElement() == true))
          {
             //For each data element
             for (uint32_t u32_ItDataElement = 0;
@@ -3081,8 +3081,8 @@ bool C_PuiSvData::CheckNonParamReadUsage(const C_OscNodeDataPoolListElementId & 
       for (uint32_t u32_ItWidget = 0; (u32_ItWidget < c_Widgets.size()) && (q_Retval == false); ++u32_ItWidget)
       {
          const C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
-         if (((pc_Widget != NULL) && (pc_Widget->IsReadElement() == true)) &&
-             (dynamic_cast<const C_PuiSvDbParam * const>(pc_Widget) == NULL))
+         if (((pc_Widget != nullptr) && (pc_Widget->IsReadElement() == true)) &&
+             (dynamic_cast<const C_PuiSvDbParam * const>(pc_Widget) == nullptr))
          {
             //For each data element
             for (uint32_t u32_ItDataElement = 0;
@@ -3126,7 +3126,7 @@ uint32_t C_PuiSvData::CountReadUsage(const C_OscNodeDataPoolListElementId & orc_
       for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
       {
          const C_PuiSvDbWidgetBase * const pc_Widget = c_Widgets[u32_ItWidget];
-         if ((pc_Widget != NULL) && (pc_Widget->IsReadElement() == true))
+         if ((pc_Widget != nullptr) && (pc_Widget->IsReadElement() == true))
          {
             //For each data element
             for (uint32_t u32_ItDataElement = 0; u32_ItDataElement < pc_Widget->c_DataPoolElementsConfig.size();

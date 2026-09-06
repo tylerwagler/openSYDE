@@ -120,7 +120,7 @@ void C_GiSvPcBusConnector::UpdateData(void) const
 
    this->m_UpdateBasicData(c_UiData);
    C_PuiSvHandler::h_GetInstance()->SetViewPcConnection(this->mu32_ViewIndex, c_UiData);
-   if (this->GetBusItem() != NULL)
+   if (this->GetBusItem() != nullptr)
    {
       C_PuiSvHandler::h_GetInstance()->SetViewPcConnected(this->mu32_ViewIndex, true, this->GetBusItem()->GetIndex());
    }

@@ -296,8 +296,8 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::m_DecodeIndex(const QModelInde
    {
       //lint -e{9079} Result of Qt interface restrictions, set by index function
       const C_TblTreItem * const pc_TreeItem = static_cast<const C_TblTreItem *>(orc_ModelIndex.internalPointer());
-      tgl_assert(pc_TreeItem != NULL);
-      if (pc_TreeItem != NULL)
+      tgl_assert(pc_TreeItem != nullptr);
+      if (pc_TreeItem != nullptr)
       {
          const QModelIndex c_ParentModelIndex = orc_ModelIndex.parent();
          // if the current index has a valid parent, that means it belongs to a child item (signal)
@@ -306,11 +306,11 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::m_DecodeIndex(const QModelInde
             //lint -e{9079} Result of Qt interface restrictions, set by index function
             const C_TblTreItem * const pc_ParentTreeItem =
                static_cast<const C_TblTreItem *>(c_ParentModelIndex.internalPointer());
-            tgl_assert(pc_ParentTreeItem != NULL);
+            tgl_assert(pc_ParentTreeItem != nullptr);
 
             // the tree item field ("u32_Index") contains the vector index (vector that stores all messages and
             // signals)
-            if (pc_ParentTreeItem != NULL)
+            if (pc_ParentTreeItem != nullptr)
             {
                oru32_MessageIndex = pc_ParentTreeItem->u32_Index;
             }
@@ -507,7 +507,7 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::GetCheckedItems(std::vector<ui
                                                                   orc_ChildIndicesPerElement)
 const
 {
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       std::vector<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
       orc_ElementIndices.clear();
@@ -519,7 +519,7 @@ const
       {
          C_TblTreeModelCheckableItem * const pc_MessageItem =
             dynamic_cast<C_TblTreeModelCheckableItem *>(c_InvisibleRootChildren.at(u32_MessageItem));
-         if ((pc_MessageItem != NULL) && (pc_MessageItem->e_CheckState == Qt::Checked))
+         if ((pc_MessageItem != nullptr) && (pc_MessageItem->e_CheckState == Qt::Checked))
          {
             orc_ElementIndices.push_back(pc_MessageItem->u32_Index);
          }
@@ -553,7 +553,7 @@ uint32_t C_SdBueJ1939AddMessagesFromCatalogTreeModel::GetCheckedItemCount() cons
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939AddMessagesFromCatalogTreeModel::SelectAllParentItems()
 {
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       std::vector<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
       for (uint32_t u32_MessageItem = 0;
@@ -574,7 +574,7 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::SelectAllParentItems()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939AddMessagesFromCatalogTreeModel::UnselectAllParentItems()
 {
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       std::vector<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
       for (uint32_t u32_MessageItem = 0;
@@ -595,7 +595,7 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::UnselectAllParentItems()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939AddMessagesFromCatalogTreeModel::SelectFilteredParentItems(const QModelIndexList & orc_FilteredItems)
 {
-   if (this->mpc_InvisibleRootItem != NULL)
+   if (this->mpc_InvisibleRootItem != nullptr)
    {
       std::vector<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
       for (uint32_t u32_MessageItem = 0;

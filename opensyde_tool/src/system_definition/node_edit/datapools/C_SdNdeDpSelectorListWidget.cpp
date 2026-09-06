@@ -58,21 +58,21 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeDpSelectorListWidget::C_SdNdeDpSelectorListWidget(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
-   mpc_ContextMenu(NULL),
-   mpc_AddAction(NULL),
-   mpc_EditAction(NULL),
-   mpc_EditContentAction(NULL),
-   mpc_EditActionSeparator(NULL),
-   mpc_DeleteAction(NULL),
-   mpc_DeleteActionSeparator(NULL),
-   mpc_CopyAction(NULL),
-   mpc_CutAction(NULL),
-   mpc_PasteAction(NULL),
-   mpc_MoveActionSeparator(NULL),
-   mpc_MoveLeftAction(NULL),
-   mpc_MoveRightAction(NULL),
-   mpc_MoveUpAction(NULL),
-   mpc_MoveDownAction(NULL),
+   mpc_ContextMenu(nullptr),
+   mpc_AddAction(nullptr),
+   mpc_EditAction(nullptr),
+   mpc_EditContentAction(nullptr),
+   mpc_EditActionSeparator(nullptr),
+   mpc_DeleteAction(nullptr),
+   mpc_DeleteActionSeparator(nullptr),
+   mpc_CopyAction(nullptr),
+   mpc_CutAction(nullptr),
+   mpc_PasteAction(nullptr),
+   mpc_MoveActionSeparator(nullptr),
+   mpc_MoveLeftAction(nullptr),
+   mpc_MoveRightAction(nullptr),
+   mpc_MoveUpAction(nullptr),
+   mpc_MoveDownAction(nullptr),
    mq_Selected(false),
    ms32_ItemsPerRow(3),
    ms32_ItemsPerViewPage(-1),
@@ -156,7 +156,7 @@ void C_SdNdeDpSelectorListWidget::SetSelected(const bool oq_Selected)
       for (s32_Counter = 0; s32_Counter < this->mc_DpItems.size(); ++s32_Counter)
       {
          pc_WidgetItem = this->mc_DpItems.at(s32_Counter);
-         if (pc_WidgetItem != NULL)
+         if (pc_WidgetItem != nullptr)
          {
             // ask before to improve performance
             if (pc_WidgetItem->GetSelected() == true)
@@ -179,7 +179,7 @@ void C_SdNdeDpSelectorListWidget::SetSelected(const bool oq_Selected)
       {
          // activate the first item and deactivate all other items
          pc_WidgetItem = this->mc_DpItems.at(s32_Counter);
-         if (pc_WidgetItem != NULL)
+         if (pc_WidgetItem != nullptr)
          {
             if (s32_Counter == s32_CurrentView)
             {
@@ -230,7 +230,7 @@ bool C_SdNdeDpSelectorListWidget::SetActualDataPoolConflict(const int32_t os32_D
    if (os32_DataPoolWidgetIndex < this->mc_DpItems.size())
    {
       pc_WidgetItem = this->mc_DpItems.at(os32_DataPoolWidgetIndex);
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          //Avoid current row because on error change this widget does not necessarily have the focus
          c_ActiveDatapool = pc_WidgetItem->GetDatapoolId();
@@ -245,7 +245,7 @@ bool C_SdNdeDpSelectorListWidget::SetActualDataPoolConflict(const int32_t os32_D
    for (s32_Counter = 0; s32_Counter < this->mc_DpItems.size(); ++s32_Counter)
    {
       pc_WidgetItem = this->mc_DpItems.at(s32_Counter);
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          uint32_t u32_ChangedDpCounter;
 
@@ -307,7 +307,7 @@ void C_SdNdeDpSelectorListWidget::UpdateActualDataPool(void)
 {
    C_SdNdeDpSelectorItemWidget * pc_WidgetItem = this->mc_DpItems.at(this->GetCurrentItemIndex());
 
-   if (pc_WidgetItem != NULL)
+   if (pc_WidgetItem != nullptr)
    {
       const C_PuiSdSharedDatapools & rc_SharedDatapools = C_PuiSdHandler::h_GetInstance()->GetSharedDatapoolsConst();
 
@@ -336,7 +336,7 @@ void C_SdNdeDpSelectorListWidget::UpdateActualDataPool(void)
                for (s32_Counter = 0; s32_Counter < this->mc_DpItems.size(); ++s32_Counter)
                {
                   pc_WidgetItem = this->mc_DpItems.at(s32_Counter);
-                  if (pc_WidgetItem != NULL)
+                  if (pc_WidgetItem != nullptr)
                   {
                      // Update all relevant Datapools
                      if (pc_WidgetItem->GetDatapoolId() == c_SharedDatapoolGroup[u32_DpCounter])
@@ -416,7 +416,7 @@ void C_SdNdeDpSelectorListWidget::m_UpdateDataPoolWidget(const uint32_t ou32_Dat
 
       // update the widget
       pc_WidgetItem = this->mc_DpItems.at(os32_DataPoolWidgetIndex);
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          pc_WidgetItem->SetData(C_OscNodeDataPoolId(this->mu32_NodeIndex, ou32_DataPoolIndex));
       }
@@ -444,8 +444,8 @@ const
          orc_AdaptedDatapool.u32_NodeIndex,
          orc_AdaptedDatapool.u32_DataPoolIndex);
 
-      tgl_assert(pc_AdaptedDatapool != NULL);
-      if (pc_AdaptedDatapool != NULL)
+      tgl_assert(pc_AdaptedDatapool != nullptr);
+      if (pc_AdaptedDatapool != nullptr)
       {
          uint32_t u32_DpIdCounter;
          tgl_assert(rc_SharedDatapools.GetSharedDatapoolGroup(u32_SharedGroup, c_Group) == C_NO_ERR);
@@ -458,8 +458,8 @@ const
                C_OscNode * const pc_SyncNode = C_PuiSdHandler::h_GetInstance()->GetOscNode(
                   c_Group[u32_DpIdCounter].u32_NodeIndex);
 
-               tgl_assert(pc_SyncNode != NULL);
-               if ((pc_SyncNode != NULL) &&
+               tgl_assert(pc_SyncNode != nullptr);
+               if ((pc_SyncNode != nullptr) &&
                    (c_Group[u32_DpIdCounter].u32_DataPoolIndex < pc_SyncNode->c_DataPools.size()))
                {
                   C_OscNodeDataPool & rc_SyncDatapool =
@@ -482,7 +482,7 @@ void C_SdNdeDpSelectorListWidget::AddNewDatapool(void)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if ((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL) &&
+   if ((pc_Node != nullptr) && (pc_Node->pc_DeviceDefinition != nullptr) &&
        (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()))
    {
       // is enough space available
@@ -517,7 +517,7 @@ void C_SdNdeDpSelectorListWidget::AddNewDatapool(void)
              (this->me_DataPoolType == C_OscNodeDataPool::eHALC_NVM) ||
              (q_ContinueFromSelection == true))
          {
-            const C_OscNodeDataPoolId * opc_SharedDatapoolId = NULL;
+            const C_OscNodeDataPoolId * opc_SharedDatapoolId = nullptr;
 
             if (e_SelectionDialogResult == C_SdNdeDpSelectorAddWidget::eSHARED)
             {
@@ -625,7 +625,7 @@ void C_SdNdeDpSelectorListWidget::Paste(void)
       if (c_OscContent.s32_RelatedDataBlockIndex >= 0)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             bool q_ReplaceNecessary = false;
             //Check if current application index is valid
@@ -720,7 +720,7 @@ const
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
    bool q_Return = false;
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       uint32_t u32_DpCounter;
       int32_t s32_TypeCounter = 0;
@@ -736,7 +736,7 @@ const
                C_SdNdeDpSelectorItemWidget * const pc_WidgetItem  = this->mc_DpItems.at(s32_TypeCounter);
 
                // update the widget
-               if (pc_WidgetItem != NULL)
+               if (pc_WidgetItem != nullptr)
                {
                   bool q_NameConflict;
                   bool q_NameInvalid;
@@ -745,7 +745,7 @@ const
                   bool q_TooManyListsOrElementsError;
                   //Check error for one datapool
                   pc_Node->CheckErrorDataPool(u32_DpCounter, &q_NameConflict, &q_NameInvalid, &q_IsErrorInListOrMessage,
-                                              &q_TooFewListsOrElementsError, &q_TooManyListsOrElementsError, NULL);
+                                              &q_TooFewListsOrElementsError, &q_TooManyListsOrElementsError, nullptr);
 
                   if (((q_NameConflict == false) && (q_NameInvalid == false)) && (q_IsErrorInListOrMessage == false) &&
                       (q_TooFewListsOrElementsError == false) && (q_TooManyListsOrElementsError == false))
@@ -760,7 +760,7 @@ const
                      //Mark at least one error
                      q_Return = true;
                      //Add to invalid datapools list
-                     if (opc_InvalidDatapoolIndices != NULL)
+                     if (opc_InvalidDatapoolIndices != nullptr)
                      {
                         opc_InvalidDatapoolIndices->push_back(u32_DpCounter);
                      }
@@ -1184,7 +1184,7 @@ void C_SdNdeDpSelectorListWidget::m_UpdateNumbers(void) const
    for (s32_Counter = 0; s32_Counter < this->mc_DpItems.size(); ++s32_Counter)
    {
       C_SdNdeDpSelectorItemWidget * const pc_WidgetItem = this->mc_DpItems.at(s32_Counter);
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          pc_WidgetItem->SetNumber(static_cast<uint32_t>(s32_Counter + 1));
       }
@@ -1316,7 +1316,7 @@ bool C_SdNdeDpSelectorListWidget::m_OpenDataPoolDialog(C_OscNodeDataPool & orc_O
       q_Return = true;
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -1349,7 +1349,7 @@ void C_SdNdeDpSelectorListWidget::m_AddNewDataPool(const C_OscNodeDataPool & orc
 
       if ((s32_Return == C_NO_ERR) &&
           (oq_SharedDatapoolSelected == true) &&
-          (opc_SharedDatapoolId != NULL))
+          (opc_SharedDatapoolId != nullptr))
       {
          // New datapool is shared. Register it
          C_PuiSdSharedDatapools & rc_SharedDatapools = C_PuiSdHandler::h_GetInstance()->GetSharedDatapools();
@@ -1419,7 +1419,7 @@ void C_SdNdeDpSelectorListWidget::m_AddNewDataPool(const C_OscNodeDataPool & orc
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpSelectorListWidget::m_OnCustomContextMenuRequested(const QPoint & orc_Pos)
 {
-   this->m_OpenCustomContextMenu(orc_Pos, NULL);
+   this->m_OpenCustomContextMenu(orc_Pos, nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1450,7 +1450,7 @@ void C_SdNdeDpSelectorListWidget::m_OpenCustomContextMenu(const QPoint & orc_Pos
    bool q_ShowContextMenu = true;
 
    // add action shall be shown only if no item concrete was clicked
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       bool q_ComCanOpenDatapool;
       this->mpc_AddAction->setVisible(false);
@@ -1632,7 +1632,7 @@ void C_SdNdeDpSelectorListWidget::m_Edit(const bool oq_SelectName)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if ((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL))
+   if ((pc_Node != nullptr) && (pc_Node->pc_DeviceDefinition != nullptr))
    {
       C_OscNodeDataPool c_OscDatapool;
       C_PuiSdNodeDataPool c_UiDataPool;
@@ -1659,7 +1659,7 @@ void C_SdNdeDpSelectorListWidget::m_Edit(const bool oq_SelectName)
                rc_SharedDatapools.IsSharedDatapool(c_EditDatapoolId, &u32_SharedDatapoolGroup);
 
             // open the dialog
-            if (this->m_OpenDataPoolDialog(c_OscDatapool, c_UiDataPool, NULL,
+            if (this->m_OpenDataPoolDialog(c_OscDatapool, c_UiDataPool, nullptr,
                                            pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].
                                            q_ProgrammingSupport, s32_DpIndex,
                                            oq_SelectName) == true)
@@ -1700,7 +1700,7 @@ void C_SdNdeDpSelectorListWidget::m_Edit(const bool oq_SelectName)
                   // update all widgets in this case
                   C_SdNdeDpSelectorItemWidget * const pc_WidgetItem = this->mc_DpItems.at(s32_WidgetCounter);
 
-                  if (pc_WidgetItem != NULL)
+                  if (pc_WidgetItem != nullptr)
                   {
                      pc_WidgetItem->UpdateData();
                   }
@@ -1742,7 +1742,7 @@ void C_SdNdeDpSelectorListWidget::m_Copy(void) const
             this->mu32_NodeIndex, s32_DpIndex);
          const C_PuiSdNodeDataPool * const pc_UiDataPool = C_PuiSdHandler::h_GetInstance()->GetUiDataPool(
             this->mu32_NodeIndex, s32_DpIndex);
-         if ((pc_OscDataPool != NULL) && (pc_UiDataPool != NULL))
+         if ((pc_OscDataPool != nullptr) && (pc_UiDataPool != nullptr))
          {
             C_SdClipBoardHelper::h_StoreDataPool(*pc_OscDataPool, *pc_UiDataPool);
          }
@@ -1984,7 +1984,7 @@ void C_SdNdeDpSelectorListWidget::m_InitFromData(const bool oq_Update)
 
    QApplication::setOverrideCursor(Qt::WaitCursor);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       uint32_t u32_DpCounter;
       int32_t s32_TypeCounter = 0;
@@ -2047,7 +2047,7 @@ void C_SdNdeDpSelectorListWidget::m_Clear(void)
       disconnect(pc_ItemWidget, &C_SdNdeDpSelectorItemWidget::SigHoverStateChanged,
                  this, &C_SdNdeDpSelectorListWidget::SigDataPoolHoverStateChanged);
 
-      pc_ItemWidget->setParent(NULL);
+      pc_ItemWidget->setParent(nullptr);
 
       delete pc_ItemWidget;
    }
@@ -2071,7 +2071,7 @@ void C_SdNdeDpSelectorListWidget::m_SelectionChanged(void)
       {
          // search the item which was clicked and adapt the stylesheet
          C_SdNdeDpSelectorItemWidget * const pc_WidgetItem = this->mc_DpItems.at(s32_Counter);
-         if (pc_WidgetItem != NULL)
+         if (pc_WidgetItem != nullptr)
          {
             if (pc_WidgetItem == pc_SelectedWidgetItem)
             {
@@ -2227,12 +2227,12 @@ void C_SdNdeDpSelectorListWidget::m_UpdateItemErrorToolTip(const uint32_t ou32_I
    if (static_cast<int32_t>(ou32_Index) < this->mc_DpItems.size())
    {
       C_SdNdeDpSelectorItemWidget * const pc_Sender = this->mc_DpItems.at(ou32_Index);
-      if (pc_Sender != NULL)
+      if (pc_Sender != nullptr)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
          const int32_t s32_DpIndex =
             C_PuiSdHandler::h_GetInstance()->GetDataPoolIndex(this->mu32_NodeIndex, this->me_DataPoolType, ou32_Index);
-         if ((s32_DpIndex >= 0) && (pc_Node != NULL))
+         if ((s32_DpIndex >= 0) && (pc_Node != nullptr))
          {
             const uint32_t u32_DataPoolIndex = static_cast<uint32_t>(s32_DpIndex);
             bool q_NameConflict;
@@ -2290,7 +2290,7 @@ void C_SdNdeDpSelectorListWidget::m_UpdateItemErrorToolTip(const uint32_t ou32_I
                            const C_OscNodeDataPoolList * const pc_List =
                               C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
                                  this->mu32_NodeIndex, u32_DataPoolIndex, c_InvalidListIndices[u32_ItList]);
-                           if (pc_List != NULL)
+                           if (pc_List != nullptr)
                            {
                               c_Content += static_cast<QString>("%1\n").arg(pc_List->c_Name.c_str());
                            }
@@ -2349,7 +2349,7 @@ bool C_SdNdeDpSelectorListWidget::m_IsItemComCanOpenDatapool(const C_SdNdeDpSele
    bool q_Return = false;
 
    if ((this->me_DataPoolType == C_OscNodeDataPool::eCOM) &&
-       (opc_Item != NULL))
+       (opc_Item != nullptr))
    {
       C_OscCanProtocol::E_Type e_ProtocolType;
       const C_OscNodeDataPoolId c_DpId = opc_Item->GetDatapoolId();

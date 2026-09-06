@@ -249,11 +249,11 @@ void C_SdSearchTreeWidget::SetSearchResultFocus(void)
    }
    else
    {
-      pc_Item = NULL;
+      pc_Item = nullptr;
    }
 
    this->setFocus();
-   if (pc_Item != NULL)
+   if (pc_Item != nullptr)
    {
       pc_Item->setSelected(true);
       this->setCurrentItem(pc_Item);
@@ -446,7 +446,7 @@ void C_SdSearchTreeWidget::m_SearchCanProtocolContent(const C_OscCanProtocol & o
    const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
       ou32_NodeIndex, orc_CanProtocol.u32_DataPoolIndex);
 
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
       uint32_t u32_MessageContainerCounter;
       // Search CAN messages
@@ -511,7 +511,7 @@ void C_SdSearchTreeWidget::m_SearchHalcConfigurationContent(const stw::opensyde_
    {
       const C_OscHalcDefDomain * const pc_HalcDef = orc_HalcConfig.GetDomainDefDataConst(u32_DomainCounter);
 
-      if (pc_HalcDef != NULL)
+      if (pc_HalcDef != nullptr)
       {
          QString c_DomainName;
          c_DomainName = pc_HalcDef->c_Name.c_str();
@@ -532,7 +532,7 @@ void C_SdSearchTreeWidget::m_SearchHalcConfigurationContent(const stw::opensyde_
             const C_OscHalcConfigDomain * const pc_HalcConf =
                orc_HalcConfig.GetDomainConfigDataConst(u32_DomainCounter);
 
-            if (pc_HalcConf != NULL)
+            if (pc_HalcConf != nullptr)
             {
                uint32_t u32_ChannelCounter;
                tgl_assert(pc_HalcDef->c_Channels.size() == pc_HalcConf->c_ChannelConfigs.size());
@@ -587,7 +587,7 @@ bool C_SdSearchTreeWidget::m_CheckWhereToJumpCan(const QTreeWidgetItem * const o
    const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
       s32_NodeIndex, s32_DataPoolIndex);
 
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
       // the datapool must be a COM datapool ...
       if (pc_DataPool->e_Type == C_OscNodeDataPool::eCOM)
@@ -597,7 +597,7 @@ bool C_SdSearchTreeWidget::m_CheckWhereToJumpCan(const QTreeWidgetItem * const o
          const uint32_t u32_InterfaceIndex =
             static_cast<uint32_t>(opc_Item->data(0, mhs32_DATAROLE_INDEX_3).toInt()) / 2;
 
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             uint32_t u32_Counter;
 
@@ -634,7 +634,7 @@ void C_SdSearchTreeWidget::m_ItemClicked(void)
 {
    QTreeWidgetItem * const pc_Item = this->currentItem();
 
-   if (pc_Item != NULL)
+   if (pc_Item != nullptr)
    {
       if ((pc_Item == this->mpc_TreeItemRootNodes) ||
           (pc_Item == this->mpc_TreeItemRootBusses) ||
@@ -777,7 +777,7 @@ void C_SdSearchTreeWidget::m_ItemClicked(void)
                // Special case: Search result showed as a part of node, but the bus edit will be opened.
                const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_BusIndex);
 
-               if (pc_Bus != NULL)
+               if (pc_Bus != nullptr)
                {
                   c_Text = pc_Bus->c_Name.c_str();
                }

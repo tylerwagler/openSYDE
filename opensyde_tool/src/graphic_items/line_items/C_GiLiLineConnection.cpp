@@ -180,7 +180,7 @@ QPainterPath C_GiLiLineConnection::shape() const
 void C_GiLiLineConnection::FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Closest) const
 {
    C_GiBiConnectableItem::h_DistToLine(this->mapToScene(this->line().p1()), this->mapToScene(this->line().p2()),
-                                       orc_ScenePoint, NULL, &orc_Closest, NULL);
+                                       orc_ScenePoint, nullptr, &orc_Closest, nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -193,7 +193,7 @@ void C_GiLiLineConnection::FindClosestPoint(const QPointF & orc_ScenePoint, QPoi
 void C_GiLiLineConnection::FindClosestPointRelative(const QPointF & orc_ScenePoint, float64_t & orf64_Relative) const
 {
    C_GiBiConnectableItem::h_DistToLine(this->mapToScene(this->line().p1()), this->mapToScene(this->line().p2()),
-                                       orc_ScenePoint, NULL, NULL, &orf64_Relative);
+                                       orc_ScenePoint, nullptr, nullptr, &orf64_Relative);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

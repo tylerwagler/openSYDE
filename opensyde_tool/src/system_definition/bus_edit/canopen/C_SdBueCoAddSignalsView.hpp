@@ -28,7 +28,7 @@ class C_SdBueCoAddSignalsView :
    Q_OBJECT
 
 public:
-   C_SdBueCoAddSignalsView(QWidget * const opc_Parent = NULL);
+   C_SdBueCoAddSignalsView(QWidget * const opc_Parent = nullptr);
    void SetIndex(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId);
    void PrepareCleanUp(void);
    std::vector<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> GetSelectedSignals(void) const;

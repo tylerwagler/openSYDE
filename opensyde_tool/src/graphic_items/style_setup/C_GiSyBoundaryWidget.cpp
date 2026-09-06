@@ -281,7 +281,7 @@ void C_GiSyBoundaryWidget::m_BorderColorClicked(void)
       }
    }
 
-   if (c_Popup != NULL)
+   if (c_Popup != nullptr)
    {
       c_Popup->HideOverlay();
       c_Popup->deleteLater();
@@ -323,7 +323,7 @@ void C_GiSyBoundaryWidget::m_BackgroundColorClicked(void)
       }
    }
 
-   if (c_Popup != NULL)
+   if (c_Popup != nullptr)
    {
       c_Popup->HideOverlay();
       c_Popup->deleteLater();

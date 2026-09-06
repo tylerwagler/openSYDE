@@ -72,7 +72,7 @@ C_GiPort::C_GiPort(QGraphicsItem * const opc_Parent) :
 //----------------------------------------------------------------------------------------------------------------------
 C_GiPort::~C_GiPort(void)
 {
-   this->mpc_Shadow = NULL;
+   this->mpc_Shadow = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -193,7 +193,7 @@ void C_GiPort::FindClosestPoint(const QPointF & orc_ScenePoint, QPointF & orc_Cl
    if (mc_Points.size() == 4)
    {
       C_GiBiConnectableItem::h_DistToLine(this->mapToScene(mc_Points[2] + c_Offset), this->mapToScene(
-                                             mc_Points[3] + c_Offset), orc_ScenePoint, NULL, &orc_Closest, NULL);
+                                             mc_Points[3] + c_Offset), orc_ScenePoint, nullptr, &orc_Closest, nullptr);
    }
 }
 

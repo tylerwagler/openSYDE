@@ -88,7 +88,7 @@ void C_SebTopologyBaseScene::Load(void)
 
    this->m_LoadProject();
 
-   if (pc_UndoManager != NULL)
+   if (pc_UndoManager != nullptr)
    {
       pc_UndoManager->clear();
    }
@@ -107,7 +107,7 @@ void C_SebTopologyBaseScene::CheckAllItemsForChanges(void) const
       if ((*c_ItItem)->type() == ms32_GRAPHICS_ITEM_NODE)
       {
          C_GiNode * const pc_Node = dynamic_cast<C_GiNode * const>(*c_ItItem);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             pc_Node->CheckNodeForChanges();
          }
@@ -118,7 +118,7 @@ void C_SebTopologyBaseScene::CheckAllItemsForChanges(void) const
           ((*c_ItItem)->type() == ms32_GRAPHICS_ITEM_ETHERNETBUS))
       {
          C_GiLiBus * const pc_Bus = dynamic_cast<C_GiLiBus * const>(*c_ItItem);
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             pc_Bus->CheckBusForChanges();
          }
@@ -154,7 +154,7 @@ void C_SebTopologyBaseScene::m_LoadProject(void)
    c_SaveIndices.append(0);
    c_SaveIndices.append(0);
 
-   this->m_LoadSubset(c_SaveNodeIndices, c_SaveBusIndices, c_SaveIndices, false, NULL, NULL);
+   this->m_LoadSubset(c_SaveNodeIndices, c_SaveBusIndices, c_SaveIndices, false, nullptr, nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -197,23 +197,23 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
 
    //Create
    //Buses (first!)
-   c_GraphicsBuses.resize(C_PuiSdHandler::h_GetInstance()->GetOscBusesSize(), NULL);
+   c_GraphicsBuses.resize(C_PuiSdHandler::h_GetInstance()->GetOscBusesSize(), nullptr);
    for (int32_t s32_ItBus = 0; s32_ItBus < orc_BusIndices.size(); ++s32_ItBus)
    {
       const C_OscSystemBus * pc_OscBusData;
       //ID
       u64_CurUniqueId =
          m_GetNewUniqueId(opc_IdMap, static_cast<int32_t>(C_PuiSdDataElement::eBUS),
-                          static_cast<uint32_t>(s32_ItBus), opc_IdMap != NULL);
+                          static_cast<uint32_t>(s32_ItBus), opc_IdMap != nullptr);
       //Index
       u32_CurIndex = orc_BusIndices[s32_ItBus];
       //Data
       pc_OscBusData = C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_CurIndex);
       //Create
-      if (pc_OscBusData != NULL)
+      if (pc_OscBusData != nullptr)
       {
          uint32_t u32_BusTextItem;
-         C_GiTextElementBus * pc_BusTextItem = NULL;
+         C_GiTextElementBus * pc_BusTextItem = nullptr;
 
          // search the matching bus text element
          for (u32_BusTextItem = orc_OtherStartIndices[4];
@@ -228,9 +228,9 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
                                                                      static_cast<int32_t>(C_PuiSdDataElement::
                                                                                           eTEXT_ELEMENT_BUS),
                                                                      u32_BusTextItem - orc_OtherStartIndices[4],
-                                                                     opc_IdMap != NULL);
+                                                                     opc_IdMap != nullptr);
 
-               pc_BusTextItem = this->m_CreateBusTextElement(u32_BusTextItem, u64_BusTextUniqueId, NULL);
+               pc_BusTextItem = this->m_CreateBusTextElement(u32_BusTextItem, u64_BusTextUniqueId, nullptr);
                pc_BusTextItem->LoadData();
 
                this->m_AddBusTextElementToScene(pc_BusTextItem);
@@ -246,12 +246,12 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
          // create the bus
          if (pc_OscBusData->e_Type == C_OscSystemBus::E_Type::eETHERNET)
          {
-            c_GraphicsBuses[u32_CurIndex] = m_CreateEthernetBus(u32_CurIndex, u64_CurUniqueId, pc_BusTextItem, NULL,
-                                                                NULL);
+            c_GraphicsBuses[u32_CurIndex] = m_CreateEthernetBus(u32_CurIndex, u64_CurUniqueId, pc_BusTextItem, nullptr,
+                                                                nullptr);
          }
          else
          {
-            c_GraphicsBuses[u32_CurIndex] = m_CreateCanBus(u32_CurIndex, u64_CurUniqueId, pc_BusTextItem, NULL, NULL);
+            c_GraphicsBuses[u32_CurIndex] = m_CreateCanBus(u32_CurIndex, u64_CurUniqueId, pc_BusTextItem, nullptr, nullptr);
          }
          m_AddBusToScene(c_GraphicsBuses[u32_CurIndex]);
          if (orq_Selection == true)
@@ -275,17 +275,17 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
          const C_PuiSdNode * pc_UiNodeData;
          //ID
          u64_CurUniqueId = m_GetNewUniqueId(opc_IdMap, static_cast<int32_t>(C_PuiSdDataElement::eNODE),
-                                            static_cast<uint32_t>(s32_ItNode), opc_IdMap != NULL);
+                                            static_cast<uint32_t>(s32_ItNode), opc_IdMap != nullptr);
          //Data
          pc_UiNodeData = C_PuiSdHandler::h_GetInstance()->GetUiNode(u32_CurIndex);
          pc_OscNodeData = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_CurIndex);
-         if ((pc_UiNodeData != NULL) && (pc_OscNodeData != NULL))
+         if ((pc_UiNodeData != nullptr) && (pc_OscNodeData != nullptr))
          {
             const std::vector<C_PuiSdNodeConnection> c_UiBusConnections = pc_UiNodeData->c_UiBusConnections;
             //create
             pc_Node = this->m_CreateNode(u32_CurIndex, u64_CurUniqueId, pc_UiNodeData->f64_Width,
                                          pc_UiNodeData->f64_Height,
-                                         NULL);
+                                         nullptr);
             pc_Node->LoadData();
 
             m_AddNodeToScene(pc_Node);
@@ -317,11 +317,11 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
                   }
                }
                //Look for bus graphics item
-               pc_BusReferenced = NULL;
+               pc_BusReferenced = nullptr;
                for (uint32_t u32_ItBus = 0; u32_ItBus < c_GraphicsBuses.size(); ++u32_ItBus)
                {
                   pc_Bus = c_GraphicsBuses[u32_ItBus];
-                  if (pc_Bus != NULL)
+                  if (pc_Bus != nullptr)
                   {
                      if (static_cast<uint32_t>(pc_Bus->GetIndex()) == u32_BusIndex)
                      {
@@ -329,7 +329,7 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
                      }
                   }
                }
-               if ((pc_BusReferenced != NULL) &&
+               if ((pc_BusReferenced != nullptr) &&
                    (pc_UiNodeData->c_UiBusConnections[u32_ItConnector].c_UiNodeConnectionInteractionPoints.size() >
                     0))
                {
@@ -356,7 +356,7 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
    }
 
    //Additional connectors
-   if (opc_AdditionalConnectionData != NULL)
+   if (opc_AdditionalConnectionData != nullptr)
    {
       for (uint32_t u32_ItConnector = 0; u32_ItConnector < opc_AdditionalConnectionData->size();
            ++u32_ItConnector)
@@ -365,11 +365,11 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
             (*opc_AdditionalConnectionData)[u32_ItConnector];
          //ID
          u64_CurUniqueId = m_GetNewUniqueId(opc_IdMap, static_cast<int32_t>(C_PuiSdDataElement::eBUS_CONNECTOR),
-                                            u32_ItConnector, opc_IdMap != NULL);
+                                            u32_ItConnector, opc_IdMap != nullptr);
          //Look for bus graphics item
          pc_BusReferenced = dynamic_cast<C_GiLiBus *>(this->GetItemById(c_CompleteBusConnectionData.u64_BusId));
          pc_Node = dynamic_cast<C_GiNode *>(this->GetItemById(c_CompleteBusConnectionData.u64_NodeId));
-         if ((pc_Node != NULL) && ((pc_BusReferenced != NULL) &&
+         if ((pc_Node != nullptr) && ((pc_BusReferenced != nullptr) &&
                                    (c_CompleteBusConnectionData.c_UiData.c_UiNodeConnectionInteractionPoints.size() >
                                     0)))
          {
@@ -413,7 +413,7 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
 
       //ID
       u64_CurUniqueId = m_GetNewUniqueId(opc_IdMap, static_cast<int32_t>(C_PuiSdDataElement::eBOUNDARY),
-                                         u32_Item - orc_OtherStartIndices[0], opc_IdMap != NULL);
+                                         u32_Item - orc_OtherStartIndices[0], opc_IdMap != nullptr);
 
       pc_Item = new C_GiSdBoundary(u32_Item, u64_CurUniqueId,
                                    pc_UiBoundaryData->f64_Width, pc_UiBoundaryData->f64_Height);
@@ -435,7 +435,7 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
 
       //ID
       u64_CurUniqueId = m_GetNewUniqueId(opc_IdMap, static_cast<int32_t>(C_PuiSdDataElement::eTEXT_ELEMENT),
-                                         u32_Item - orc_OtherStartIndices[1], opc_IdMap != NULL);
+                                         u32_Item - orc_OtherStartIndices[1], opc_IdMap != nullptr);
 
       pc_Item = new C_GiSdTextElement(u32_Item, u64_CurUniqueId);
       pc_Item->LoadData();
@@ -456,7 +456,7 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
 
       //ID
       u64_CurUniqueId = m_GetNewUniqueId(opc_IdMap, static_cast<int32_t>(C_PuiSdDataElement::eLINE_ARROW),
-                                         u32_Item - orc_OtherStartIndices[2], opc_IdMap != NULL);
+                                         u32_Item - orc_OtherStartIndices[2], opc_IdMap != nullptr);
 
       pc_Item = new C_GiSdArrow(u32_Item, u64_CurUniqueId);
       this->m_AddLineArrowToScene(pc_Item);
@@ -476,7 +476,7 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
 
       //ID
       u64_CurUniqueId = m_GetNewUniqueId(opc_IdMap, static_cast<int32_t>(C_PuiSdDataElement::eIMAGE),
-                                         u32_Item - orc_OtherStartIndices[3], opc_IdMap != NULL);
+                                         u32_Item - orc_OtherStartIndices[3], opc_IdMap != nullptr);
 
       pc_Item = new C_GiSdImageGroup(u32_Item,
                                      u64_CurUniqueId, pc_UiImageData->f64_Width, pc_UiImageData->f64_Height,
@@ -516,12 +516,12 @@ uint64_t C_SebTopologyBaseScene::m_GetNewUniqueBusConnectorId(const QMap<C_PuiBs
    uint64_t u64_Retval;
 
    //Check if there is a map
-   if (opc_IdMap != NULL)
+   if (opc_IdMap != nullptr)
    {
       uint32_t u32_Offset;
 
       //Offset for standard content of Bus Connector part of map
-      if (opc_AdditionalConnectionData != NULL)
+      if (opc_AdditionalConnectionData != nullptr)
       {
          u32_Offset = opc_AdditionalConnectionData->size();
       }
@@ -602,7 +602,7 @@ void C_SebTopologyBaseScene::m_AddBusToScene(C_GiLiBus * const opc_BusGraphicsIt
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebTopologyBaseScene::m_AddBusConnectorToScene(C_GiLiBusConnector * const opc_BusConnectorGraphicsItem)
 {
-   if (opc_BusConnectorGraphicsItem != NULL)
+   if (opc_BusConnectorGraphicsItem != nullptr)
    {
       // Connections
       connect(opc_BusConnectorGraphicsItem, &C_GiLiBusConnector::SigHintUpdate, this,
@@ -619,7 +619,7 @@ void C_SebTopologyBaseScene::m_AddBusConnectorToScene(C_GiLiBusConnector * const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebTopologyBaseScene::m_AddBusConnectorBaseToScene(C_GiLiBusConnectorBase * const opc_BusConnectorGraphicsItem)
 {
-   if (opc_BusConnectorGraphicsItem != NULL)
+   if (opc_BusConnectorGraphicsItem != nullptr)
    {
       C_SebUnoTopBaseManager * const pc_UndoManager = dynamic_cast<C_SebUnoTopBaseManager *>(this->m_GetUndoManager());
       // Connections
@@ -628,7 +628,7 @@ void C_SebTopologyBaseScene::m_AddBusConnectorBaseToScene(C_GiLiBusConnectorBase
       connect(opc_BusConnectorGraphicsItem, &C_GiLiBusConnector::SigShowToolTip, this,
               &C_SebTopologyBaseScene::m_StartTimerForToolTip);
 
-      if (pc_UndoManager != NULL)
+      if (pc_UndoManager != nullptr)
       {
          //Undo
          connect(opc_BusConnectorGraphicsItem, &C_GiLiBusConnector::SigPrepareMove, pc_UndoManager,
@@ -649,7 +649,7 @@ void C_SebTopologyBaseScene::m_InitSceneUndoManager(void)
 {
    C_SebUnoTopBaseManager * const pc_UndoManager = dynamic_cast<C_SebUnoTopBaseManager *>(this->m_GetUndoManager());
 
-   if (pc_UndoManager != NULL)
+   if (pc_UndoManager != nullptr)
    {
       // scene changed
       connect(pc_UndoManager, &C_SebUnoBaseManager::SigChanged, this, &C_SebTopologyBaseScene::SigChanged);
@@ -669,7 +669,7 @@ void C_SebTopologyBaseScene::m_RestoreCursors(void) const
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
    {
       C_GiBiCustomMouseItem * const pc_Item = dynamic_cast<C_GiBiCustomMouseItem *>(*c_ItItem);
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          pc_Item->RestoreDefaultCursor();
       }
@@ -690,7 +690,7 @@ void C_SebTopologyBaseScene::mouseMoveEvent(QGraphicsSceneMouseEvent * const opc
    QGraphicsItem * const pc_ItemParent = C_SebUtil::h_GetHighestParent(pc_Item);
    C_GiTextElementBus * const pc_BusText = dynamic_cast<C_GiTextElementBus * const>(pc_ItemParent);
 
-   if (pc_BusText != NULL)
+   if (pc_BusText != nullptr)
    {
       pc_BusText->HandleMouseMoveToolTip(opc_Event->scenePos());
    }

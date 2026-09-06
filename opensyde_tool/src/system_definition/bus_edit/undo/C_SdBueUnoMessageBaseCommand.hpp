@@ -36,7 +36,7 @@ public:
       const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
       C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
       stw::opensyde_gui::C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget,
-      const QString & orc_Text = "", QUndoCommand * const opc_Parent = NULL);
+      const QString & orc_Text = "", QUndoCommand * const opc_Parent = nullptr);
 
 protected:
    std::vector<uint64_t> mc_UniqueId;

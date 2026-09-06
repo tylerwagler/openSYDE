@@ -26,7 +26,7 @@ class C_OgeLeIpAddress :
    Q_OBJECT
 
 public:
-   explicit C_OgeLeIpAddress(QWidget * const opc_Parent = NULL);
+   explicit C_OgeLeIpAddress(QWidget * const opc_Parent = nullptr);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

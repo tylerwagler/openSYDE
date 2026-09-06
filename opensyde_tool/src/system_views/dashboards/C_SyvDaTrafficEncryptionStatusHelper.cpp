@@ -56,8 +56,8 @@ QMap<uint32_t, bool> C_SyvDaTrafficEncryptionStatusHelper::h_GetMappingNodeToTra
    if (oq_ConnectionActiveStatus)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
-      tgl_assert(pc_View != NULL);
-      if (pc_View != NULL)
+      tgl_assert(pc_View != nullptr);
+      if (pc_View != nullptr)
       {
          const std::vector<uint8_t> & rc_ActiveNodes = pc_View->GetNodeActiveFlags();
          tgl_assert(rc_ActiveNodes.size() == C_PuiSdHandler::h_GetInstance()->GetOscNodesSize());
@@ -78,8 +78,8 @@ QMap<uint32_t, bool> C_SyvDaTrafficEncryptionStatusHelper::h_GetMappingNodeToTra
                   if (s32_Retval == C_NO_ERR)
                   {
                      const C_OscRoutingRoute * const pc_Route = c_RouteCalculation.GetBestRoute();
-                     tgl_assert(pc_Route != NULL);
-                     if (pc_Route != NULL)
+                     tgl_assert(pc_Route != nullptr);
+                     if (pc_Route != nullptr)
                      {
                         if (pc_Route->c_VecRoutePoints.size() > 0UL)
                         {
@@ -129,7 +129,7 @@ bool C_SyvDaTrafficEncryptionStatusHelper::h_GetViewNodeEncrypted(
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          C_PuiSvReadDataConfiguration c_RailConfig;
 
@@ -176,7 +176,7 @@ void C_SyvDaTrafficEncryptionStatusHelper::mh_GetTrafficEncryptionStatusForNodeU
    const C_OscNode * const pc_Node =
       C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       for (uint32_t u32_ItInterface = 0UL;
            u32_ItInterface < pc_Node->c_Properties.c_ComInterfaces.size(); ++u32_ItInterface)
@@ -210,14 +210,14 @@ void C_SyvDaTrafficEncryptionStatusHelper::mh_GetTrafficEncryptionStatusForNodeU
 {
    const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(ou32_BusIndex);
 
-   tgl_assert(pc_Bus != NULL);
-   if ((pc_Bus != NULL) && (pc_Bus->e_Type != C_OscSystemBus::eETHERNET))
+   tgl_assert(pc_Bus != nullptr);
+   if ((pc_Bus != nullptr) && (pc_Bus->e_Type != C_OscSystemBus::eETHERNET))
    {
       const C_OscProtocolDriverOsyNode c_NodeId(pc_Bus->u8_BusId, ou8_NodeId);
       const C_OscProtocolSecuritySubLayer * const pc_NodeStatus =
          C_OscProtocolSecuritySubLayer::h_GetConfigByNodeId(c_NodeId);
 
-      if (pc_NodeStatus != NULL)
+      if (pc_NodeStatus != nullptr)
       {
          if (pc_NodeStatus->GetEncryptionIsActive())
          {

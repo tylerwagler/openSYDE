@@ -32,7 +32,7 @@ class C_OgeCbxMultiSelect :
    Q_OBJECT
 
 public:
-   C_OgeCbxMultiSelect(QWidget * const opc_Parent = NULL);
+   C_OgeCbxMultiSelect(QWidget * const opc_Parent = nullptr);
    ~C_OgeCbxMultiSelect() override;
 
    void SetDisplayText(const QString oc_Text);

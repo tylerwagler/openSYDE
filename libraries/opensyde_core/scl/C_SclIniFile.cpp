@@ -127,7 +127,7 @@ void C_SclIniFile::mh_CopyLessTrim(C_SclString & orc_String)
 bool C_SclIniFile::m_Load(const C_SclString & orc_FileName)
 {
    C_SclString c_Comment;
-   C_SclIniSection * pc_CurrentSection = NULL;
+   C_SclIniSection * pc_CurrentSection = nullptr;
    int32_t s32_Index;
    uint16_t u16_NumSections = 0;
    uint16_t u16_NumKeysAdded = 0U;
@@ -176,7 +176,7 @@ bool C_SclIniFile::m_Load(const C_SclString & orc_FileName)
          }
          else // in this case this should be a key, add this key/value pair
          {
-            if (pc_CurrentSection != NULL)
+            if (pc_CurrentSection != nullptr)
             {
                C_SclString c_Key;
                C_SclString c_Value;
@@ -262,7 +262,7 @@ void C_SclIniFile::UpdateFile(void)
 bool C_SclIniFile::m_SetValue(const C_SclString & orc_Section, const C_SclString & orc_Key,
                               const C_SclString & orc_Value, const bool oq_ForceAppend)
 {
-   C_SclIniKey * pc_Key = NULL;
+   C_SclIniKey * pc_Key = nullptr;
    C_SclIniSection * pc_Section;
 
    if ((orc_Section == "") || (orc_Key == ""))
@@ -272,7 +272,7 @@ bool C_SclIniFile::m_SetValue(const C_SclString & orc_Section, const C_SclString
 
    //does the section already exist ?
    pc_Section = m_GetSection(orc_Section);
-   if (pc_Section != NULL)
+   if (pc_Section != nullptr)
    {
       if (oq_ForceAppend == false)
       {
@@ -288,7 +288,7 @@ bool C_SclIniFile::m_SetValue(const C_SclString & orc_Section, const C_SclString
    mq_Dirty = true;
 
    // if the key does not exist in that section, then add the new key.
-   if (pc_Key == NULL)
+   if (pc_Key == nullptr)
    {
       pc_Section->c_Keys.IncLength();
       pc_Section->c_Keys[pc_Section->c_Keys.GetHigh()].c_Key     = orc_Key;
@@ -446,7 +446,7 @@ const C_SclString & C_SclIniFile::m_GetValue(const C_SclString & orc_Key, const 
 
    const C_SclIniKey * const pc_Key = m_GetKey(orc_Key, orc_Section);
 
-   return (pc_Key == NULL) ? hc_Empty : pc_Key->c_Value;
+   return (pc_Key == nullptr) ? hc_Empty : pc_Key->c_Value;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -700,7 +700,7 @@ void C_SclIniFile::DeleteKey(const C_SclString & orc_Section, const C_SclString 
    int32_t s32_Index;
    C_SclIniSection * const pc_Section = m_GetSection(orc_Section);
 
-   if (pc_Section == NULL)
+   if (pc_Section == nullptr)
    {
       return;
    }
@@ -755,7 +755,7 @@ bool C_SclIniFile::SectionExists(const C_SclString & orc_Section)
 {
    const C_SclIniSection * const pt_Section = m_GetSection(orc_Section);
 
-   return (pt_Section != NULL);
+   return (pt_Section != nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -775,7 +775,7 @@ bool C_SclIniFile::ValueExists(const C_SclString & orc_Section, const C_SclStrin
 {
    const C_SclIniKey * const pt_Key = m_GetKey(orc_Key, orc_Section);
 
-   return (pt_Key != NULL);
+   return (pt_Key != nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -785,9 +785,9 @@ C_SclIniKey * C_SclIniFile::m_GetKey(const C_SclString & orc_Key, const C_SclStr
 {
    C_SclIniSection * const pt_Section = m_GetSection(orc_Section);
 
-   if (pt_Section == NULL)
+   if (pt_Section == nullptr)
    {
-      return NULL;
+      return nullptr;
    }
 
    return pt_Section->GetKey(orc_Key);
@@ -822,7 +822,7 @@ C_SclIniKey * C_SclIniSection::GetKey(const C_SclString & orc_Key)
       }
    }
 
-   return NULL;
+   return nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -832,7 +832,7 @@ C_SclString C_SclIniSection::GetValue(const C_SclString & orc_Key)
    C_SclString c_Result;
    C_SclIniKey * const pc_Key = this->GetKey(orc_Key);
 
-   if (pc_Key != NULL)
+   if (pc_Key != nullptr)
    {
       c_Result = pc_Key->c_Value;
    }
@@ -885,7 +885,7 @@ C_SclIniSection * C_SclIniFile::m_GetSection(const C_SclString & orc_Section)
       }
    }
 
-   return NULL;
+   return nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -939,7 +939,7 @@ void C_SclIniFile::ReadSection(const C_SclString & orc_Section, C_SclStringList 
       u32_OldLength = 0U;
    }
 
-   if (pc_Section != NULL)
+   if (pc_Section != nullptr)
    {
       opc_Strings->Strings.SetLength(static_cast<int32_t>(u32_OldLength) + pc_Section->c_Keys.GetLength());
       for (s32_Loop = 0; s32_Loop < pc_Section->c_Keys.GetLength(); s32_Loop++)
@@ -977,7 +977,7 @@ void C_SclIniFile::ReadSectionValues(const C_SclString & orc_Section, C_SclStrin
       u32_OldLength = 0U;
    }
 
-   if (pc_Section != NULL)
+   if (pc_Section != nullptr)
    {
       opc_Strings->Strings.SetLength(static_cast<int32_t>(u32_OldLength) + pc_Section->c_Keys.GetLength());
       for (s32_Loop = 0; s32_Loop < pc_Section->c_Keys.GetLength(); s32_Loop++)

@@ -108,7 +108,7 @@ void C_SebUnoZetOrderCommand::h_AdaptZetOrder(const QGraphicsScene * const opc_S
 {
    const C_SebScene * const pc_Scene = dynamic_cast<const C_SebScene * const>(opc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       QList<QGraphicsItem *> c_SelectedItems = orc_SelectedItems;
       //Step 1: filter all relevant items for z order
@@ -136,7 +136,7 @@ void C_SebUnoZetOrderCommand::m_ApplyZetValues(const std::vector<float64_t> & or
       for (uint32_t u32_ItAffectedItem = 0; u32_ItAffectedItem < c_AffectedItems.size(); ++u32_ItAffectedItem)
       {
          C_GiBiBase * const pc_GiBase = dynamic_cast<C_GiBiBase * const>(c_AffectedItems[u32_ItAffectedItem]);
-         if (pc_GiBase != NULL)
+         if (pc_GiBase != nullptr)
          {
             pc_GiBase->SetZetValueCustom(orc_Values[u32_ItAffectedItem]);
          }
@@ -168,7 +168,7 @@ void C_SebUnoZetOrderCommand::mh_CreateZetValueMap(const QGraphicsScene * const 
    {
       const C_SebScene * const pc_Scene = dynamic_cast<const C_SebScene * const>(opc_Scene);
 
-      if (pc_Scene != NULL)
+      if (pc_Scene != nullptr)
       {
          float64_t f64_Value = pc_Scene->GetHighestUsedZetValueList(orc_Items);
          //Start with first item -> most obscured one
@@ -216,12 +216,12 @@ float64_t C_SebUnoZetOrderCommand::mh_GetLowestUsedZetValueList(const QGraphicsS
    float64_t f64_Retval = std::numeric_limits<float64_t>::max();
    const C_SebScene * const pc_Scene = dynamic_cast<const C_SebScene * const>(opc_Scene);
 
-   if (pc_Scene != NULL)
+   if (pc_Scene != nullptr)
    {
       for (QList<QGraphicsItem *>::const_iterator c_ItItem = orc_Items.begin(); c_ItItem != orc_Items.end(); ++c_ItItem)
       {
          const QGraphicsItem * const pc_Item = *c_ItItem;
-         if ((pc_Item != NULL) && (pc_Scene->IsZetOrderChangeable(pc_Item) == true))
+         if ((pc_Item != nullptr) && (pc_Scene->IsZetOrderChangeable(pc_Item) == true))
          {
             // search the lowest z value of all items
             if (pc_Item->zValue() < f64_Retval)

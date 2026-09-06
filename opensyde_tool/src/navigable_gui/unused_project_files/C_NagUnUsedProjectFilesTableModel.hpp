@@ -31,7 +31,7 @@ class C_NagUnUsedProjectFilesTableModel :
    Q_OBJECT
 
 public:
-   C_NagUnUsedProjectFilesTableModel(QObject * const opc_Parent = NULL);
+   C_NagUnUsedProjectFilesTableModel(QObject * const opc_Parent = nullptr);
    ~C_NagUnUsedProjectFilesTableModel() override;
    enum E_Columns
    {

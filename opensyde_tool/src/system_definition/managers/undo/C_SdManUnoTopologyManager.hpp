@@ -41,7 +41,7 @@ class C_SdManUnoTopologyManager :
    Q_OBJECT
 
 public:
-   C_SdManUnoTopologyManager(QGraphicsScene * const opc_Scene = NULL, QObject * const opc_Parent = NULL);
+   C_SdManUnoTopologyManager(QGraphicsScene * const opc_Scene = nullptr, QObject * const opc_Parent = nullptr);
    ~C_SdManUnoTopologyManager(void) override;
 
    void AdaptZetOrder(const QList<QGraphicsItem *> & orc_SelectedItems, const QList<QGraphicsItem *> & orc_Items,

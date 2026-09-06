@@ -65,7 +65,7 @@ C_SyvDaPeDataElementBrowse::C_SyvDaPeDataElementBrowse(C_OgePopUpDialog & orc_Pa
                                                        const bool oq_ShowStringElements) :
    C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPeDataElementBrowse),
-   mpc_ContextMenu(NULL)
+   mpc_ContextMenu(nullptr)
 {
    bool q_TreeFilled = false;
 

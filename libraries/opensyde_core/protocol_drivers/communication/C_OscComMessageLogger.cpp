@@ -97,8 +97,8 @@ bool C_OscComMessageLoggerFilter::operator ==(const C_OscComMessageLoggerFilter 
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscComMessageLogger::C_OscComMessageLogger(void) :
-   mpc_OsySysDefMessage(NULL),
-   mpc_OsySysDefDataPoolList(NULL),
+   mpc_OsySysDefMessage(nullptr),
+   mpc_OsySysDefDataPoolList(nullptr),
    me_Protocol(stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE),
    mq_Paused(false),
    mu64_FirstTimeStampStart(0U),
@@ -127,11 +127,11 @@ C_OscComMessageLogger::~C_OscComMessageLogger(void)
    catch (...)
    {
    }
-   mpc_OsySysDefMessage = NULL;
-   mpc_OsySysDefDataPoolList = NULL;
+   mpc_OsySysDefMessage = nullptr;
+   mpc_OsySysDefDataPoolList = nullptr;
 
    delete this->mpc_AutoSupportProtocol;
-   this->mpc_AutoSupportProtocol = NULL;
+   this->mpc_AutoSupportProtocol = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -966,8 +966,8 @@ bool C_OscComMessageLogger::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
 
    std::map<stw::scl::C_SclString, C_OscComMessageLoggerOsySysDefConfig>::const_iterator c_ItSysDef;
 
-   this->mpc_OsySysDefMessage = NULL;
-   this->mpc_OsySysDefDataPoolList = NULL;
+   this->mpc_OsySysDefMessage = nullptr;
+   this->mpc_OsySysDefDataPoolList = nullptr;
 
    for (c_ItSysDef = this->mc_OsySysDefs.begin(); c_ItSysDef != this->mc_OsySysDefs.end(); ++c_ItSysDef)
    {
@@ -1033,7 +1033,7 @@ bool C_OscComMessageLogger::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
                               this->mpc_OsySysDefDataPoolList =
                                  C_OscCanProtocol::h_GetComListConst(rc_Node.c_DataPools[rc_CanProt.u32_DataPoolIndex],
                                                                      u32_IntfCounter, true);
-                              tgl_assert(this->mpc_OsySysDefDataPoolList != NULL);
+                              tgl_assert(this->mpc_OsySysDefDataPoolList != nullptr);
 
                               q_Return = true;
                            }
@@ -1072,7 +1072,7 @@ bool C_OscComMessageLogger::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
                                     C_OscCanProtocol::h_GetComListConst(
                                        rc_Node.c_DataPools[rc_CanProt.u32_DataPoolIndex],
                                        u32_IntfCounter, false);
-                                 tgl_assert(this->mpc_OsySysDefDataPoolList != NULL);
+                                 tgl_assert(this->mpc_OsySysDefDataPoolList != nullptr);
 
                                  q_Return = true;
                               }
@@ -1083,20 +1083,20 @@ bool C_OscComMessageLogger::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
                      }
                   }
 
-                  if (this->mpc_OsySysDefMessage != NULL)
+                  if (this->mpc_OsySysDefMessage != nullptr)
                   {
                      break;
                   }
                }
             }
 
-            if (this->mpc_OsySysDefMessage != NULL)
+            if (this->mpc_OsySysDefMessage != nullptr)
             {
                break;
             }
          }
 
-         if (this->mpc_OsySysDefMessage != NULL)
+         if (this->mpc_OsySysDefMessage != nullptr)
          {
             break;
          }
@@ -1120,8 +1120,8 @@ bool C_OscComMessageLogger::m_InterpretSysDef(C_OscComMessageLoggerData & orc_Me
 {
    bool q_Return = false;
 
-   if ((this->mpc_OsySysDefMessage != NULL) &&
-       (this->mpc_OsySysDefDataPoolList != NULL))
+   if ((this->mpc_OsySysDefMessage != nullptr) &&
+       (this->mpc_OsySysDefDataPoolList != nullptr))
    {
       uint32_t u32_Counter;
       bool q_MultiplexerFound = false;
@@ -1210,8 +1210,8 @@ C_SclString C_OscComMessageLogger::m_GetOsySysDefStringHex(void) const
 {
    C_SclString c_Return = "";
 
-   if ((this->mpc_OsySysDefDataPoolList != NULL) &&
-       (this->mpc_OsySysDefMessage != NULL))
+   if ((this->mpc_OsySysDefDataPoolList != nullptr) &&
+       (this->mpc_OsySysDefMessage != nullptr))
    {
       // TODO for logging
       c_Return = this->mpc_OsySysDefMessage->c_Name;
@@ -1235,8 +1235,8 @@ C_SclString C_OscComMessageLogger::m_GetOsySysDefStringDec(void) const
 {
    C_SclString c_Return = "";
 
-   if ((this->mpc_OsySysDefDataPoolList != NULL) &&
-       (this->mpc_OsySysDefMessage != NULL))
+   if ((this->mpc_OsySysDefDataPoolList != nullptr) &&
+       (this->mpc_OsySysDefMessage != nullptr))
    {
       // TODO for logging
       c_Return = this->mpc_OsySysDefMessage->c_Name;
@@ -1512,7 +1512,7 @@ void C_OscComMessageLogger::m_ConvertCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
 void C_OscComMessageLogger::m_InterpretSysDefCanSignal(C_OscComMessageLoggerData & orc_MessageData,
                                                        const C_OscCanSignal & orc_OscSignal) const
 {
-   if ((this->mpc_OsySysDefDataPoolList != NULL) &&
+   if ((this->mpc_OsySysDefDataPoolList != nullptr) &&
        (orc_OscSignal.u32_ComDataElementIndex < this->mpc_OsySysDefDataPoolList->c_Elements.size()))
    {
       C_OscComMessageLoggerDataSignal c_Signal;

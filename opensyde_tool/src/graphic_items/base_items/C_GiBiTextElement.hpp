@@ -35,8 +35,8 @@ class C_GiBiTextElement :
    Q_OBJECT
 
 public:
-   C_GiBiTextElement(const uint64_t & oru64_Id, const bool oq_Editable, QGraphicsItem * const opc_Parent = NULL);
-   C_GiBiTextElement(const uint64_t & oru64_Id = 0, QGraphicsItem * const opc_Parent = NULL);
+   C_GiBiTextElement(const uint64_t & oru64_Id, const bool oq_Editable, QGraphicsItem * const opc_Parent = nullptr);
+   C_GiBiTextElement(const uint64_t & oru64_Id = 0, QGraphicsItem * const opc_Parent = nullptr);
    ~C_GiBiTextElement() override;
 
    int32_t type() const override;

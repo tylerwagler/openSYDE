@@ -51,7 +51,7 @@ public:
    //Get
    const stw::opensyde_core::C_OscCanMessage * GetOscMessage(const QString & orc_File, const QString & orc_Message,
                                                              const bool oq_UseHash, const uint32_t ou32_Hash,
-                                                             stw::opensyde_core::C_OscCanProtocol::E_Type * const ope_ProtocolType = NULL)
+                                                             stw::opensyde_core::C_OscCanProtocol::E_Type * const ope_ProtocolType = nullptr)
    const;
    const stw::opensyde_core::C_OscNodeDataPoolList * GetOscList(const QString & orc_File, const QString & orc_Message,
                                                                 const bool oq_UseHash, const uint32_t ou32_Hash) const;

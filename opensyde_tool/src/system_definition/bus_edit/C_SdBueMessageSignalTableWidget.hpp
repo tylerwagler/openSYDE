@@ -35,7 +35,7 @@ class C_SdBueMessageSignalTableWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdBueMessageSignalTableWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueMessageSignalTableWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdBueMessageSignalTableWidget(void) override;
 
    void SetMessageSyncManager(stw::opensyde_gui_logic::C_PuiSdNodeCanMessageSyncManager * const opc_Value) const;

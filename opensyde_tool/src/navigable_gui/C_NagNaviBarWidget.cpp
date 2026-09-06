@@ -591,7 +591,7 @@ void C_NagNaviBarWidget::m_NodesChanged(void) const
             // node squad
             const stw::opensyde_core::C_OscNodeSquad * const pc_NodeSquad =
                C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(c_NodeListWithSquads[u32_ItNodes]);
-            if (pc_NodeSquad != NULL)
+            if (pc_NodeSquad != nullptr)
             {
                std::vector<QString> c_SubNodeNames;
 
@@ -677,8 +677,8 @@ void C_NagNaviBarWidget::m_BusChanged(const uint32_t ou32_BusIndex) const
 {
    const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(ou32_BusIndex);
 
-   tgl_assert(pc_Bus != NULL);
-   if (pc_Bus != NULL)
+   tgl_assert(pc_Bus != nullptr);
+   if (pc_Bus != nullptr)
    {
       this->mpc_Ui->pc_TreeViewBuses->UpdateItem(ou32_BusIndex, pc_Bus->c_Name.c_str());
    }
@@ -882,7 +882,7 @@ void C_NagNaviBarWidget::m_OnClickBus(const int32_t os32_Index)
    {
       const uint32_t u32_Index = static_cast<uint32_t>(os32_Index);
       const stw::opensyde_core::C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_Index);
-      if (pc_Bus != NULL)
+      if (pc_Bus != nullptr)
       {
          Q_EMIT this->SigChangeMode(ms32_MODE_SYSDEF, ms32_SUBMODE_SYSDEF_BUSEDIT, u32_Index, pc_Bus->c_Name.c_str());
       }
@@ -901,7 +901,7 @@ void C_NagNaviBarWidget::m_OnClickNode(const int32_t os32_Index)
    {
       const uint32_t u32_Index = static_cast<uint32_t>(os32_Index);
       const stw::opensyde_core::C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_Index);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          Q_EMIT this->SigChangeMode(ms32_MODE_SYSDEF, ms32_SUBMODE_SYSDEF_NODEEDIT, u32_Index,
                                     pc_Node->c_Properties.c_Name.c_str());

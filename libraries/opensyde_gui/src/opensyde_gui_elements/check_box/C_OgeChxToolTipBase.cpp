@@ -70,7 +70,7 @@ bool C_OgeChxToolTipBase::event(QEvent * const opc_Event)
          {
             QHelpEvent * const pc_HelpEvent = dynamic_cast<QHelpEvent * const>(opc_Event);
 
-            if (pc_HelpEvent != NULL)
+            if (pc_HelpEvent != nullptr)
             {
                this->setMouseTracking(true);
 

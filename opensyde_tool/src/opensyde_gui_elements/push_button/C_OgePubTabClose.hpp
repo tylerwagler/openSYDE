@@ -29,7 +29,7 @@ class C_OgePubTabClose :
    Q_OBJECT
 
 public:
-   C_OgePubTabClose(QWidget * const opc_Parent = NULL);
+   C_OgePubTabClose(QWidget * const opc_Parent = nullptr);
 
 protected:
    bool event(QEvent * const opc_Event) override;

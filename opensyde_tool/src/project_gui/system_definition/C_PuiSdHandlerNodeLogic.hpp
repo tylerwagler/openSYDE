@@ -36,8 +36,8 @@ public:
 
    //Node general
    bool CheckNodeNameAvailable(const stw::scl::C_SclString & orc_Name,
-                               const uint32_t * const opu32_NodeIndexToSkip = NULL,
-                               std::vector<stw::scl::C_SclString> * const opc_ExistingNames = NULL) const;
+                               const uint32_t * const opu32_NodeIndexToSkip = nullptr,
+                               std::vector<stw::scl::C_SclString> * const opc_ExistingNames = nullptr) const;
    void SetOscNodeEthernetConfiguration(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
                                         const std::vector<int32_t> & orc_Ip, const std::vector<int32_t> & orc_NetMask,
                                         const std::vector<int32_t> & orc_DefaultGateway);
@@ -129,8 +129,8 @@ public:
    int32_t GetDataPoolCount(const uint32_t ou32_NodeIndex,
                             const stw::opensyde_core::C_OscNodeDataPool::E_Type oe_DataPoolType) const;
    bool CheckNodeDataPoolNameAvailable(const uint32_t & oru32_NodeIndex, const stw::scl::C_SclString & orc_Name,
-                                       const uint32_t * const opu32_DataPoolIndexToSkip = NULL, std::vector<stw::scl::C_SclString> * const opc_ExistingDatapoolNames =
-                                          NULL) const;
+                                       const uint32_t * const opu32_DataPoolIndexToSkip = nullptr, std::vector<stw::scl::C_SclString> * const opc_ExistingDatapoolNames =
+                                          nullptr) const;
    C_PuiSdSharedDatapools & GetSharedDatapools(void);
    const C_PuiSdSharedDatapools & GetSharedDatapoolsConst(void) const;
 
@@ -148,8 +148,8 @@ public:
       std::vector<uint32_t> c_DataPoolIndexes;
    };
 
-   bool CheckNodeNvmDataPoolsSizeConflict(const uint32_t ou32_NodeIndex, bool * const opq_SizeConflict = NULL,
-                                          bool * const opq_OverlapConflict = NULL) const;
+   bool CheckNodeNvmDataPoolsSizeConflict(const uint32_t ou32_NodeIndex, bool * const opq_SizeConflict = nullptr,
+                                          bool * const opq_OverlapConflict = nullptr) const;
    int32_t GetNodeNvmDataPoolAreas(const uint32_t ou32_NodeIndex,
                                    std::vector<C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas) const;
 
@@ -170,7 +170,7 @@ public:
    uint8_t GetUniqueApplicationProcessId(const uint32_t ou32_NodeIndex, const uint8_t ou8_Proposal) const;
    int32_t GetNextProgrammableApplicationIndex(const uint32_t ou32_NodeIndex, int32_t & ors32_ApplicationIndex) const;
    int32_t CheckApplicationName(const uint32_t ou32_NodeIndex, const stw::scl::C_SclString & orc_ApplicationName,
-                                bool & orq_Valid, const uint32_t * const opu32_SkipApplication = NULL) const;
+                                bool & orq_Valid, const uint32_t * const opu32_SkipApplication = nullptr) const;
    std::vector<const stw::opensyde_core::C_OscNodeApplication *> GetProgrammableApplications(
       const uint32_t ou32_NodeIndex) const;
    std::vector<uint32_t> GetFileGenAppIndices(const uint32_t ou32_NodeIndex) const;
@@ -243,12 +243,12 @@ public:
                             const bool oq_HandleSharedDatapools = true);
    bool CheckNodeDataPoolListNameAvailable(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                            const stw::scl::C_SclString & orc_Name,
-                                           const uint32_t * const opu32_DataPoolListIndexToSkip = NULL) const;
+                                           const uint32_t * const opu32_DataPoolListIndexToSkip = nullptr) const;
    bool CheckNodeDataPoolListDataSetNameAvailable(const uint32_t & oru32_NodeIndex,
                                                   const uint32_t & oru32_DataPoolIndex,
                                                   const uint32_t & oru32_ListIndex,
                                                   const stw::scl::C_SclString & orc_Name, const uint32_t *
-                                                  const opu32_DataPoolListDataSetIndexToSkip = NULL) const;
+                                                  const opu32_DataPoolListDataSetIndexToSkip = nullptr) const;
 
    //Datapool list element
    int32_t ReserveDataPoolListElements(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
@@ -323,11 +323,11 @@ public:
                                                   const uint32_t & oru32_DataPoolIndex,
                                                   const uint32_t & oru32_ListIndex,
                                                   const stw::scl::C_SclString & orc_Name, const uint32_t * const opu32_DataPoolListElementIndexToSkip =
-                                                     NULL) const;
+                                                     nullptr) const;
    void Clear(const bool oq_TriggerSyncSignals) override;
 
 protected:
-   C_PuiSdHandlerNodeLogic(QObject * const opc_Parent = NULL);
+   C_PuiSdHandlerNodeLogic(QObject * const opc_Parent = nullptr);
 
    std::map<stw::scl::C_SclString, bool> m_GetExistingNodeNames(void) const;
    std::map<stw::scl::C_SclString, bool> m_GetExistingNodeApplicationNames(const uint32_t & oru32_NodeIndex)

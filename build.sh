@@ -87,9 +87,9 @@ fi
 #   deploy_src: path under result/$BUILD_TYPE/ of the built binary
 #   deploy_dst: path under $INSTALL_DIR where it should land
 TOOL_DEFS=(
-    "opensyde|opensyde_tool/pjt/openSYDE|opensyde_tool/pjt/toolchain_linux.cmake|yes|openSYDE/openSYDE|tool/openSYDE"
-    "canmonitor|opensyde_can_monitor/pjt|opensyde_can_monitor/pjt/toolchain_linux.cmake|yes|openSYDE_CAN_Monitor/openSYDE_CAN_Monitor|tool/CAN_Monitor/openSYDE_CAN_Monitor"
-    "sydeflash|opensyde_syde_flash/pjt|opensyde_syde_flash/pjt/toolchain_linux.cmake|yes|SYDEflash/SYDEflash|utilities/SYDEflash/SYDEflash"
+    "opensyde|opensyde_tool/pjt/openSYDE|pjt/toolchains/linux_x64.cmake|yes|openSYDE/openSYDE|tool/openSYDE"
+    "canmonitor|opensyde_can_monitor/pjt|pjt/toolchains/linux_x64.cmake|yes|openSYDE_CAN_Monitor/openSYDE_CAN_Monitor|tool/CAN_Monitor/openSYDE_CAN_Monitor"
+    "sydeflash|opensyde_syde_flash/pjt|pjt/toolchains/linux_x64.cmake|yes|SYDEflash/SYDEflash|utilities/SYDEflash/SYDEflash"
     "sydesup|opensyde_syde_sup/pjt|opensyde_syde_sup/pjt/toolchain_ubuntu.cmake|no|SYDEsup/SYDEsup|utilities/SYDEsup/SYDEsup"
     "syde_x_gen|opensyde_syde_x_gen/pjt||no|syde_x_gen/syde_x_gen|connectors/syde_x_gen/syde_x_gen"
     "syde_coder_c|opensyde_syde_coder_c/pjt||no|syde_coder_c/osy_syde_coder_c|connectors/syde_coder_c/osy_syde_coder_c"

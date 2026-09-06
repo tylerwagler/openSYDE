@@ -43,7 +43,7 @@ class C_SyvDaDashboardSelectorTabWidget :
    Q_OBJECT
 
 public:
-   C_SyvDaDashboardSelectorTabWidget(QWidget * const opc_Parent = NULL);
+   C_SyvDaDashboardSelectorTabWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaDashboardSelectorTabWidget(void) override;
 
    void TearOffWidget(const int32_t os32_Index, const QPoint & orc_Pos);
@@ -100,7 +100,7 @@ private:
    void m_HandleChangeSelection(const int32_t os32_Index);
    int32_t m_MapDataIndexToTabIndex(const uint32_t ou32_DataIndex) const;
    void m_AddSpecificTab(const uint32_t ou32_DataIndex, const int32_t os32_TabIndex = -1,
-                         C_SyvDaDashboardWidget * const opc_Widget = NULL);
+                         C_SyvDaDashboardWidget * const opc_Widget = nullptr);
    void m_SyncDashboardDeleteDataIndex(const uint32_t ou32_DataIndex);
    void m_OnNameChange(stw::opensyde_gui_elements::C_OgeWiDashboardTab * const opc_Source, const QString & orc_NewName);
    void m_OnActiveChange(const stw::opensyde_gui_elements::C_OgeWiDashboardTab * const opc_Source,
@@ -114,7 +114,7 @@ private:
    void m_OnUndock(const stw::opensyde_gui_elements::C_OgeWiDashboardTab * const opc_Source);
    void m_OnEditProperties(stw::opensyde_gui_elements::C_OgeWiDashboardTab * const opc_Source);
    void m_TearOffWidget(const uint32_t ou32_DataIndex, const QPoint & orc_Pos,
-                        C_SyvDaDashboardWidget * const opc_Widget = NULL, const QSize & orc_Size = QSize(1000, 800),
+                        C_SyvDaDashboardWidget * const opc_Widget = nullptr, const QSize & orc_Size = QSize(1000, 800),
                         const bool oq_TornOffWindowMinimized = false, const bool oq_TornOffWindowMaximized = false,
                         const bool oq_Load = false);
    void m_AddTab(const stw::opensyde_gui_logic::C_PuiSvDashboard & orc_Data,

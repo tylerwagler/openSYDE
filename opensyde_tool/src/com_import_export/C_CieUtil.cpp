@@ -260,7 +260,7 @@ int32_t C_CieUtil::h_ExportFile(const stw::opensyde_gui_logic::C_CieConverter::C
                {
                   s32_Return = C_NO_ERR;
                }
-               if (c_PopUpDialogReportDialog != NULL)
+               if (c_PopUpDialogReportDialog != nullptr)
                {
                   c_PopUpDialogReportDialog->HideOverlay();
                   c_PopUpDialogReportDialog->deleteLater();
@@ -424,8 +424,8 @@ int32_t C_CieUtil::h_GetDeviceInfo(const uint32_t ou32_DeviceNodeIndex, const ui
    int32_t s32_Retval = C_RANGE;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_DeviceNodeIndex);
 
-   tgl_assert(pc_Node != NULL);
-   if (pc_Node != NULL)
+   tgl_assert(pc_Node != nullptr);
+   if (pc_Node != nullptr)
    {
       tgl_assert(ou32_DeviceNodeInterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size());
       if (ou32_DeviceNodeInterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size())
@@ -565,7 +565,7 @@ QString C_CieUtil::h_GetMessageName(const C_OscNode & orc_Node, const bool oq_Is
 
    stw::scl::C_SclString c_Nodename;
    stw::scl::C_SclString c_TpdoRpdo = "RPDO";
-   if (opc_NodeNameReplacement != NULL)
+   if (opc_NodeNameReplacement != nullptr)
    {
       c_Nodename = *opc_NodeNameReplacement;
    }
@@ -760,7 +760,7 @@ int32_t C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex, const C_OscCan
             C_CieImportReportWidget * const pc_DialogImportReport =
                new C_CieImportReportWidget(*c_PopUpDialogReportDialog, orc_FullFilePath, ou32_BusIndex,
                                            oe_ProtocolType, c_NodeAssignmentsConverted, c_SkippedImportDataAssigned,
-                                           NULL);
+                                           nullptr);
 
             Q_UNUSED(pc_DialogImportReport)
 
@@ -776,13 +776,13 @@ int32_t C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex, const C_OscCan
                s32_Return = C_NO_ERR;
             }
 
-            if (c_PopUpDialogReportDialog != NULL)
+            if (c_PopUpDialogReportDialog != nullptr)
             {
                c_PopUpDialogReportDialog->HideOverlay();
                c_PopUpDialogReportDialog->deleteLater();
             }
          } //lint !e429  //no memory leak because of the parent of pc_Dialog and the Qt memory management
-         if (c_PopUpDialogNodeAssignment != NULL)
+         if (c_PopUpDialogNodeAssignment != nullptr)
          {
             c_PopUpDialogNodeAssignment->HideOverlay();
             c_PopUpDialogNodeAssignment->deleteLater();
@@ -851,8 +851,8 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
       orc_NodeIndexes.push_back(u32_NodeIndex);
       orc_InterfaceIndexes.push_back(u32_InterfaceIndex);
 
-      tgl_assert(pc_Node != NULL);
-      if (pc_Node != NULL)
+      tgl_assert(pc_Node != nullptr);
+      if (pc_Node != nullptr)
       {
          tgl_assert(u32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size());
          if (u32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size())
@@ -894,7 +894,7 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
                   const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(opc_Parent, opc_Parent);
                   C_CieImportReportWidget * const pc_Dialog =
                      new C_CieImportReportWidget(*c_New, orc_FullFilePath, ou32_BusIndex, oe_ProtocolType,
-                                                 c_NodeAssignmentVector, c_SkippedImportDataAssigned, NULL);
+                                                 c_NodeAssignmentVector, c_SkippedImportDataAssigned, nullptr);
 
                   Q_UNUSED(pc_Dialog)
 
@@ -906,7 +906,7 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
                      s32_Return = C_NO_ERR;
                   }
 
-                  if (c_New != NULL)
+                  if (c_New != nullptr)
                   {
                      c_New->HideOverlay();
                      c_New->deleteLater();
@@ -970,7 +970,7 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
          }
       }
    }
-   if (c_PopUpDialog != NULL)
+   if (c_PopUpDialog != nullptr)
    {
       c_PopUpDialog->HideOverlay();
       c_PopUpDialog->deleteLater();
@@ -1118,9 +1118,9 @@ int32_t C_CieUtil::mh_InsertMessages(const uint32_t ou32_NodeIndex, const C_OscC
        (orc_OscMessageData.size() == orc_UiMessageData.size()))
    {
       //Get relevant lists
-      const C_OscNodeDataPoolList * pc_CurList = NULL;
+      const C_OscNodeDataPoolList * pc_CurList = nullptr;
       const C_OscNode * pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          for (uint32_t u32_ItProtocol = 0; u32_ItProtocol < pc_Node->c_ComProtocols.size(); ++u32_ItProtocol)
          {
@@ -1148,7 +1148,7 @@ int32_t C_CieUtil::mh_InsertMessages(const uint32_t ou32_NodeIndex, const C_OscC
             if (rc_CurSignal.u32_ComDataElementIndex < orc_OscSignalData.size())
             {
                C_OscNodeDataPoolListElement c_Copy = orc_OscSignalData[rc_CurSignal.u32_ComDataElementIndex];
-               if (pc_CurList != NULL)
+               if (pc_CurList != nullptr)
                {
                   C_OscNodeDataPoolContent c_DataSet;
                   //Handle data sets
@@ -1177,7 +1177,7 @@ int32_t C_CieUtil::mh_InsertMessages(const uint32_t ou32_NodeIndex, const C_OscC
          {
             //Get updated node
             pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
-            if (pc_Node != NULL)
+            if (pc_Node != nullptr)
             {
                // Message already exists, adapt message in its datapool
                const uint32_t u32_PresentDatapoolIndex = orc_MessageOverrideIndices[u32_ItMessage].first;
@@ -1186,7 +1186,7 @@ int32_t C_CieUtil::mh_InsertMessages(const uint32_t ou32_NodeIndex, const C_OscC
                   C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainer(ou32_NodeIndex, oe_Type,
                                                                                   ou32_InterfaceIndex,
                                                                                   u32_PresentDatapoolIndex);
-               if ((pc_Container != NULL) && (ou32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
+               if ((pc_Container != nullptr) && (ou32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
                {
                   const C_OscCanMessageIdentificationIndices c_Id(
                      ou32_NodeIndex, oe_Type, ou32_InterfaceIndex, u32_PresentDatapoolIndex, oq_MessagesAreTx,
@@ -1197,7 +1197,7 @@ int32_t C_CieUtil::mh_InsertMessages(const uint32_t ou32_NodeIndex, const C_OscC
                       (pc_Container->q_IsComProtocolUsedByInterface == true))
                   {
                      const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(c_Id);
-                     if (pc_Message != NULL)
+                     if (pc_Message != nullptr)
                      {
                         C_PuiSdNodeCanMessageSyncManager c_SyncManager;
                         c_SyncManager.Init(rc_Interface.u32_BusIndex, oe_Type);

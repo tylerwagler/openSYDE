@@ -54,7 +54,7 @@ public:
       eSETTING_CM_TWO_DIFF_CURSOR
    };
 
-   explicit C_SyvDaChaPlotHandlerWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvDaChaPlotHandlerWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaChaPlotHandlerWidget(void) override;
 
    void InitStaticNames(void) const;

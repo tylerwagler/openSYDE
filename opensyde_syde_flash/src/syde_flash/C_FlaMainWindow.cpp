@@ -59,8 +59,8 @@ const int32_t C_FlaMainWindow::mhs32_SETTINGS_SPLITTER_MAX = 350;
 C_FlaMainWindow::C_FlaMainWindow(QWidget * const opc_Parent) :
    QMainWindow(opc_Parent),
    mpc_Ui(new Ui::C_FlaMainWindow),
-   mpc_UpSequences(NULL),
-   mpc_CanDispatcher(NULL),
+   mpc_UpSequences(nullptr),
+   mpc_CanDispatcher(nullptr),
    ms32_NextHexFile(0),
    mq_ContinueUpdate(false),
    mu32_FlashedFilesCounter(0),
@@ -124,10 +124,10 @@ C_FlaMainWindow::~C_FlaMainWindow()
 {
    delete this->mpc_Ui;
    delete this->mpc_UpSequences;
-   this->mpc_UpSequences = NULL;
+   this->mpc_UpSequences = nullptr;
 
    delete this->mpc_CanDispatcher;
-   this->mpc_CanDispatcher = NULL;
+   this->mpc_CanDispatcher = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -450,7 +450,7 @@ void C_FlaMainWindow::m_OnSearchNode()
 
    disconnect(pc_Dialog, &C_FlaSenSearchNodePopup::SigReportProgress, this, &C_FlaMainWindow::m_ShowProgress);
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
    }
@@ -496,7 +496,7 @@ void C_FlaMainWindow::m_OnConfigureNode()
 
    disconnect(pc_Dialog, &C_FlaConNodeConfigPopup::SigReportProgress, this, &C_FlaMainWindow::m_ShowProgress);
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
    }
@@ -749,7 +749,7 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (this->mpc_CanDispatcher == NULL)
+   if (this->mpc_CanDispatcher == nullptr)
    {
       const QString c_ChannelId = this->mpc_Ui->pc_SettingsWidget->GetCanChannelId();
       const int32_t s32_Bitrate = this->mpc_Ui->pc_GeneralPropertiesWidget->GetBitrate();
@@ -769,7 +769,7 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
 
       stw::scl::C_SclString c_Error;
       this->mpc_CanDispatcher = stw::opensyde_core::C_OscCanAdapterFactory::h_CreateAdapter(c_Config, c_Error);
-      if (this->mpc_CanDispatcher == NULL)
+      if (this->mpc_CanDispatcher == nullptr)
       {
          osc_write_log_error("Initialization", "Could not create CAN adapter: " + c_Error);
          s32_Return = C_CONFIG;
@@ -788,7 +788,7 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
       }
    }
 
-   if (this->mpc_UpSequences == NULL)
+   if (this->mpc_UpSequences == nullptr)
    {
       this->mpc_UpSequences = new C_FlaUpSequences();
 
@@ -840,7 +840,7 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaMainWindow::m_CleanupUpdateSequence(void)
 {
-   if (this->mpc_UpSequences != NULL)
+   if (this->mpc_UpSequences != nullptr)
    {
       disconnect(mpc_UpSequences, &C_FlaUpSequences::SigReportProgress, this, &C_FlaMainWindow::m_ShowProgress);
       disconnect(mpc_UpSequences, &C_FlaUpSequences::SigReportFlashloaderInformationText,
@@ -855,13 +855,13 @@ void C_FlaMainWindow::m_CleanupUpdateSequence(void)
    this->mpc_Ui->pc_SettingsWidget->EnableSettings(true);
 
    delete this->mpc_UpSequences;
-   this->mpc_UpSequences = NULL;
+   this->mpc_UpSequences = nullptr;
 
-   if (this->mpc_CanDispatcher != NULL)
+   if (this->mpc_CanDispatcher != nullptr)
    {
       (void)this->mpc_CanDispatcher->CAN_Exit();
       delete this->mpc_CanDispatcher;
-      this->mpc_CanDispatcher = NULL;
+      this->mpc_CanDispatcher = nullptr;
       osc_write_log_info("Teardown", "CAN adapter closed.");
    }
 }
@@ -875,7 +875,7 @@ void C_FlaMainWindow::m_TimerUpdate(void)
    int32_t s32_ThreadResult = C_CONFIG;
    int32_t s32_SequenceResult = C_UNKNOWN_ERR;
 
-   if (this->mpc_UpSequences != NULL)
+   if (this->mpc_UpSequences != nullptr)
    {
       s32_ThreadResult = this->mpc_UpSequences->GetResults(s32_SequenceResult);
    }

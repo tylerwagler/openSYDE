@@ -43,7 +43,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeDpListArrayEditDelegate::C_SdNdeDpListArrayEditDelegate(QObject * const opc_Parent) :
    QStyledItemDelegate(opc_Parent),
-   mpc_Model(NULL)
+   mpc_Model(nullptr)
 {
 }
 
@@ -64,7 +64,7 @@ QWidget * C_SdNdeDpListArrayEditDelegate::createEditor(QWidget * const opc_Paren
                                                        const QStyleOptionViewItem & orc_Option,
                                                        const QModelIndex & orc_Index) const
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
    Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
@@ -85,7 +85,7 @@ QWidget * C_SdNdeDpListArrayEditDelegate::createEditor(QWidget * const opc_Paren
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListArrayEditDelegate::setEditorData(QWidget * const opc_Editor, const QModelIndex & orc_Index) const
 {
-   if ((opc_Editor != NULL) && (orc_Index.isValid() == true))
+   if ((opc_Editor != nullptr) && (orc_Index.isValid() == true))
    {
       C_SdNdeDpUtil::h_SetGenericEditorDataVariable(opc_Editor, orc_Index);
    }
@@ -104,7 +104,7 @@ void C_SdNdeDpListArrayEditDelegate::setEditorData(QWidget * const opc_Editor, c
 void C_SdNdeDpListArrayEditDelegate::setModelData(QWidget * const opc_Editor, QAbstractItemModel * const opc_Model,
                                                   const QModelIndex & orc_Index) const
 {
-   if (((opc_Editor != NULL) && (opc_Model != NULL)) && (orc_Index.isValid() == true))
+   if (((opc_Editor != nullptr) && (opc_Model != nullptr)) && (orc_Index.isValid() == true))
    {
       C_SdNdeDpUtil::h_SetModelGenericDataVariable(opc_Editor, opc_Model, orc_Index);
    }
@@ -135,15 +135,15 @@ void C_SdNdeDpListArrayEditDelegate::SetModel(const C_SdNdeDpListArrayEditModel 
 QWidget * C_SdNdeDpListArrayEditDelegate::m_CreateEditor(QWidget * const opc_Parent,
                                                          const QModelIndex & orc_Index) const
 {
-   QWidget * pc_Retval = NULL;
+   QWidget * pc_Retval = nullptr;
 
    if (orc_Index.isValid() == true)
    {
-      if (this->mpc_Model != NULL)
+      if (this->mpc_Model != nullptr)
       {
          //Core data
          const C_OscNodeDataPoolListElement * const pc_Element = this->mpc_Model->GetOscElement();
-         if (pc_Element != NULL)
+         if (pc_Element != nullptr)
          {
             if (this->mpc_Model->GetArrayEditType() == C_SdNdeDpUtil::eARRAY_EDIT_MIN)
             {

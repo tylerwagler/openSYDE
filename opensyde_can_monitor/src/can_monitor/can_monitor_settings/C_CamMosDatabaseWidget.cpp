@@ -112,7 +112,7 @@ void C_CamMosDatabaseWidget::OnLoadFinishedDbc(const int32_t os32_Result)
    // check if first database in queue is of type dbc
    if (this->mc_DatabasesToLoad.isEmpty() == false)
    {
-      if (this->mc_DatabasesToLoad[0] != NULL)
+      if (this->mc_DatabasesToLoad[0] != nullptr)
       {
          const C_CamProDatabaseData c_Database = mc_DatabasesToLoad[0]->GetDatabaseData();
          tgl_assert(c_Database.c_Name.endsWith(".dbc", Qt::CaseInsensitive) == true);
@@ -137,7 +137,7 @@ void C_CamMosDatabaseWidget::OnLoadFinishedOsySysDef(const int32_t os32_Result,
    // update database (first database in queue)
    if (this->mc_DatabasesToLoad.isEmpty() == false)
    {
-      if (this->mc_DatabasesToLoad[0] != NULL)
+      if (this->mc_DatabasesToLoad[0] != nullptr)
       {
          tgl_assert(this->mc_DatabasesToLoad[0]->GetDatabaseData().c_Name.endsWith(".syde_sysdef",
                                                                                    Qt::CaseInsensitive) == true);
@@ -178,7 +178,7 @@ void C_CamMosDatabaseWidget::OnLoadFinishedOsySysDef(const int32_t os32_Result,
                   this->m_RemoveDatabase(mc_DatabasesToLoad[0], false);
                }
 
-               if (c_New != NULL)
+               if (c_New != nullptr)
                {
                   c_New->HideOverlay();
                }
@@ -199,13 +199,13 @@ void C_CamMosDatabaseWidget::OnLoadFinishedOsySysDef(const int32_t os32_Result,
 void C_CamMosDatabaseWidget::OnSigOsySysDefBusResult(const QString & orc_PathSystemDefinition,
                                                      const int32_t os32_Result)
 {
-   C_CamMosDatabaseItemWidget * pc_Item = NULL;
+   C_CamMosDatabaseItemWidget * pc_Item = nullptr;
 
    // search for item widget with given path
    for (std::vector<C_CamMosDatabaseItemWidget *>::const_iterator c_It = mc_Entries.begin(); c_It != mc_Entries.end();
         ++c_It)
    {
-      if (*c_It != NULL)
+      if (*c_It != nullptr)
       {
          pc_Item = *c_It;
          if (C_CamUti::h_GetAbsPathFromProj(pc_Item->GetDatabaseData().c_Name) == orc_PathSystemDefinition)
@@ -214,7 +214,7 @@ void C_CamMosDatabaseWidget::OnSigOsySysDefBusResult(const QString & orc_PathSys
          }
          else
          {
-            pc_Item = NULL;
+            pc_Item = nullptr;
          }
       }
    }
@@ -222,7 +222,7 @@ void C_CamMosDatabaseWidget::OnSigOsySysDefBusResult(const QString & orc_PathSys
    // distinguish no error, warning and rest
    if (os32_Result == C_NO_ERR)
    {
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          // update data handling
          C_CamProHandler::h_GetInstance()->SetDatabaseOsySysDefBus(this->m_GetIndexFromWidget(pc_Item),
@@ -232,7 +232,7 @@ void C_CamMosDatabaseWidget::OnSigOsySysDefBusResult(const QString & orc_PathSys
    else if (os32_Result == C_WARN)
    {
       // reset bus index to previous one
-      if (pc_Item != NULL)
+      if (pc_Item != nullptr)
       {
          pc_Item->SetBusIndex(
             C_CamProHandler::h_GetInstance()->GetDatabases()[this->m_GetIndexFromWidget(pc_Item)].s32_BusIndex);
@@ -297,7 +297,7 @@ void C_CamMosDatabaseWidget::PrepareForExpanded(const bool oq_Expand) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosDatabaseWidget::OnSigSavedAsNew(void) const
 {
-   C_CamMosDatabaseItemWidget * pc_Item = NULL;
+   C_CamMosDatabaseItemWidget * pc_Item = nullptr;
    const std::vector<C_CamProDatabaseData> c_Databases = C_CamProHandler::h_GetInstance()->GetDatabases();
 
    // load new database paths
@@ -306,8 +306,8 @@ void C_CamMosDatabaseWidget::OnSigSavedAsNew(void) const
    for (std::vector<C_CamMosDatabaseItemWidget *>::const_iterator c_It = mc_Entries.begin(); c_It != mc_Entries.end();
         ++c_It)
    {
-      tgl_assert((*c_It != NULL) && (u32_It < c_Databases.size()));
-      if ((*c_It != NULL) && (u32_It < c_Databases.size()))
+      tgl_assert((*c_It != nullptr) && (u32_It < c_Databases.size()));
+      if ((*c_It != nullptr) && (u32_It < c_Databases.size()))
       {
          const C_CamProDatabaseData & rc_Database = c_Databases[u32_It];
          pc_Item = *c_It;
@@ -452,7 +452,7 @@ void C_CamMosDatabaseWidget::m_LoadConfig(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosDatabaseWidget::m_RemoveDatabaseWidget(C_CamMosDatabaseItemWidget * const opc_ItemWidget) const
 {
-   if (opc_ItemWidget != NULL)
+   if (opc_ItemWidget != nullptr)
    {
       // disconnect everything
       opc_ItemWidget->disconnect();
@@ -568,7 +568,7 @@ void C_CamMosDatabaseWidget::m_RemoveDatabase(C_CamMosDatabaseItemWidget * const
       }
    }
 
-   if ((q_Continue == true) && (opc_ItemWidget != NULL))
+   if ((q_Continue == true) && (opc_ItemWidget != nullptr))
    {
       int32_t s32_IndexToRemove = 0;
 
@@ -629,7 +629,7 @@ bool C_CamMosDatabaseWidget::m_ActivateDatabase(const C_CamMosDatabaseItemWidget
    const int32_t s32_Index = this->m_GetIndexFromWidget(opc_ItemWidget);
    bool q_Continue = true;
 
-   if ((orq_Enable == false) && (opc_ItemWidget != NULL))
+   if ((orq_Enable == false) && (opc_ItemWidget != nullptr))
    {
       QString c_Details;
       QString c_TmpDescription;
@@ -666,7 +666,7 @@ bool C_CamMosDatabaseWidget::m_ActivateDatabase(const C_CamMosDatabaseItemWidget
 
       // activate database
       // if database is not yet loaded this is a no-op and the signal gets emitted again as soon as load finished
-      if (opc_ItemWidget != NULL)
+      if (opc_ItemWidget != nullptr)
       {
          Q_EMIT (this->SigActivateDatabase(
                     C_CamUti::h_GetAbsPathFromProj(opc_ItemWidget->GetDatabaseData().c_Name),
@@ -741,7 +741,7 @@ int32_t C_CamMosDatabaseWidget::m_GetIndexFromWidget(const C_CamMosDatabaseItemW
 {
    int32_t s32_Return = 0;
 
-   if (opc_ItemWidget != NULL)
+   if (opc_ItemWidget != nullptr)
    {
       // get index from opc_Item
       for (std::vector<C_CamMosDatabaseItemWidget *>::iterator c_It = mc_Entries.begin(); c_It != mc_Entries.end();
@@ -770,7 +770,7 @@ int32_t C_CamMosDatabaseWidget::m_GetIndexFromWidget(const C_CamMosDatabaseItemW
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosDatabaseWidget::m_AddToLoadingQueue(C_CamMosDatabaseItemWidget * const opc_ItemWidget)
 {
-   if (opc_ItemWidget != NULL)
+   if (opc_ItemWidget != nullptr)
    {
       this->mc_DatabasesToLoad.append(opc_ItemWidget);
 
@@ -794,7 +794,7 @@ void C_CamMosDatabaseWidget::m_CheckAndLoadDatabase(void)
 {
    if (this->mc_DatabasesToLoad.isEmpty() == false)
    {
-      if (mc_DatabasesToLoad[0] != NULL)
+      if (mc_DatabasesToLoad[0] != nullptr)
       {
          // load first database from loading queue
          const C_CamProDatabaseData c_Database = mc_DatabasesToLoad[0]->GetDatabaseData();
@@ -847,7 +847,7 @@ void C_CamMosDatabaseWidget::m_LoadFinishedGeneric(const int32_t os32_ErrorCode)
    // there is at least one entry in databases loading queue because we requested load for exactly this database
    if (this->mc_DatabasesToLoad.isEmpty() == false)
    {
-      if (this->mc_DatabasesToLoad[0] != NULL)
+      if (this->mc_DatabasesToLoad[0] != nullptr)
       {
          const C_CamProDatabaseData c_Database = mc_DatabasesToLoad[0]->GetDatabaseData();
 
@@ -890,7 +890,7 @@ void C_CamMosDatabaseWidget::m_OnFileCheckTimeout()
    // check all files
    for (uint32_t u32_Pos = 0; u32_Pos < this->mc_Entries.size(); u32_Pos++)
    {
-      if (this->mc_Entries[u32_Pos] != NULL)
+      if (this->mc_Entries[u32_Pos] != nullptr)
       {
          C_CamMosDatabaseItemWidget & rc_Item = *this->mc_Entries[u32_Pos];
          rc_Item.CheckFile();

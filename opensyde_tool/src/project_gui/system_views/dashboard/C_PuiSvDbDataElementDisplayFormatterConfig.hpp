@@ -32,7 +32,7 @@ public:
    QString GetSingleValueContentFormatted(const C_PuiSvDbDataElementContent & orc_Value, const uint32_t ou32_Index,
                                           const C_PuiSvDbDataElementScaling & orc_Scaling,
                                           float64_t * const opf64_UnscaledValueAsFloat,
-                                          float64_t * const opf64_ScaledValueAsFloat = NULL) const;
+                                          float64_t * const opf64_ScaledValueAsFloat = nullptr) const;
    std::vector<QString> GetValuesContentFormatted(const C_PuiSvDbDataElementContent & orc_Value,
                                                   const C_PuiSvDbDataElementScaling & orc_Scaling,
                                                   std::vector<float64_t> & orc_UnscaledValueAsFloat) const;

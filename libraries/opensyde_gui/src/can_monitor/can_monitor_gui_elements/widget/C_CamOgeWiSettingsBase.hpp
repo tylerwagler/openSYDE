@@ -30,7 +30,7 @@ class C_CamOgeWiSettingsBase :
    Q_OBJECT
 
 public:
-   explicit C_CamOgeWiSettingsBase(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgeWiSettingsBase(QWidget * const opc_Parent = nullptr);
 
 protected:
    void moveEvent(QMoveEvent * const opc_Event) override;

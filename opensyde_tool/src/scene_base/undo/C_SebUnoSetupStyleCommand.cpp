@@ -115,7 +115,7 @@ void C_SebUnoSetupStyleCommand::redo()
 void C_SebUnoSetupStyleCommand::m_Restore(const QMap<uint64_t, C_PuiBsTemporaryDataId> & orc_MapIdToTypeAndIndex,
                                           const C_PuiBsElements * const opc_Snapshot)
 {
-   if (opc_Snapshot != NULL)
+   if (opc_Snapshot != nullptr)
    {
       std::vector<QGraphicsItem *> c_Items = m_GetSceneItems();
       QMap<uint64_t, C_PuiBsTemporaryDataId>::const_iterator c_Entry;
@@ -128,7 +128,7 @@ void C_SebUnoSetupStyleCommand::m_Restore(const QMap<uint64_t, C_PuiBsTemporaryD
          C_GiBiTextElement * pc_TextElement;
          //Line arrow
          pc_Arrow = dynamic_cast<C_GiBiArrow *>(*c_ItItem);
-         if (pc_Arrow != NULL)
+         if (pc_Arrow != nullptr)
          {
             c_Entry = orc_MapIdToTypeAndIndex.find(pc_Arrow->GetId());
             if (c_Entry != orc_MapIdToTypeAndIndex.end())
@@ -148,7 +148,7 @@ void C_SebUnoSetupStyleCommand::m_Restore(const QMap<uint64_t, C_PuiBsTemporaryD
          }
          //Boundary
          pc_Boundary = dynamic_cast<C_GiBiBoundary *>(*c_ItItem);
-         if (pc_Boundary != NULL)
+         if (pc_Boundary != nullptr)
          {
             c_Entry = orc_MapIdToTypeAndIndex.find(pc_Boundary->GetId());
             if (c_Entry != orc_MapIdToTypeAndIndex.end())
@@ -165,7 +165,7 @@ void C_SebUnoSetupStyleCommand::m_Restore(const QMap<uint64_t, C_PuiBsTemporaryD
          }
          //TextElement
          pc_TextElement = dynamic_cast<C_GiBiTextElement *>(*c_ItItem);
-         if (pc_TextElement != NULL)
+         if (pc_TextElement != nullptr)
          {
             c_Entry = orc_MapIdToTypeAndIndex.find(pc_TextElement->GetId());
             if (c_Entry != orc_MapIdToTypeAndIndex.end())
@@ -194,7 +194,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
                                                                                                              C_PuiBsTemporaryDataId> & orc_Map,
                                                         C_PuiBsElements * const opc_Snapshot) const
 {
-   if (opc_Snapshot != NULL)
+   if (opc_Snapshot != nullptr)
    {
       C_GiBiArrow * pc_Arrow;
       C_GiBiBoundary * pc_Boundary;
@@ -206,7 +206,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
       {
          //Line arrow
          pc_Arrow = dynamic_cast<C_GiBiArrow *>(*c_ItItem);
-         if (pc_Arrow != NULL)
+         if (pc_Arrow != nullptr)
          {
             //Map
             u32_Index = static_cast<uint32_t>(opc_Snapshot->c_LineArrows.size());
@@ -226,7 +226,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
          }
          //Boundary
          pc_Boundary = dynamic_cast<C_GiBiBoundary *>(*c_ItItem);
-         if (pc_Boundary != NULL)
+         if (pc_Boundary != nullptr)
          {
             //Map
             u32_Index = static_cast<uint32_t>(opc_Snapshot->c_Boundaries.size());
@@ -244,7 +244,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
          }
          //TextElement
          pc_TextElement = dynamic_cast<C_GiBiTextElement *>(*c_ItItem);
-         if (pc_TextElement != NULL)
+         if (pc_TextElement != nullptr)
          {
             //Map
             u32_Index = static_cast<uint32_t>(opc_Snapshot->c_TextElements.size());

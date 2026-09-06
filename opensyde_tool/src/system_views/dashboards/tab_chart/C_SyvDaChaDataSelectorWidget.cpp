@@ -45,7 +45,7 @@ using namespace stw::opensyde_gui_logic;
 C_SyvDaChaDataSelectorWidget::C_SyvDaChaDataSelectorWidget(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SyvDaChaDataSelectorWidget),
-   mpc_Spacer(NULL),
+   mpc_Spacer(nullptr),
    mu32_ViewIndex(0U),
    mu32_CurrentSelectedIndex(0U),
    me_MeasurementValueState(C_SyvDaChaDataItemWidget::eMEASUREMENT_VAL_DEACTIVATED)
@@ -125,7 +125,7 @@ void C_SyvDaChaDataSelectorWidget::AddDataSerie(const uint32_t ou32_DataPoolElem
            this, &C_SyvDaChaDataSelectorWidget::m_DataItemSelectedSlot);
 
    // Add spacer for automatic resizing and positioning
-   if (this->mpc_Spacer != NULL)
+   if (this->mpc_Spacer != nullptr)
    {
       this->mpc_Ui->pc_VerticalLayout->removeItem(this->mpc_Spacer);
       delete this->mpc_Spacer;

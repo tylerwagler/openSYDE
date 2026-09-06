@@ -12,12 +12,12 @@ Alternatively qcustomplot.cpp could be added to the project sources, but this wi
 
 Building OpenSSL
 ================
-1. Following https://github.com/openssl/openssl/blob/master/NOTES-WINDOWS.md#native-builds-using-mingw 
+1. Follow https://github.com/openssl/openssl/blob/master/NOTES-WINDOWS.md#native-builds-using-mingw 
 2. Install msys2 (necessary, see https://github.com/openssl/openssl/issues/6111 )
-3. Open msys console
-4. cd to openssl, e.g  execute: cd /c/Users/someguy/Documents/Qt_Creator/openssl/src/package_sources/
-5. Execute: PATH=$PATH:/c/Qt/Qt5.15.2/Tools/mingw810_32/bin
-6. Execute: ./Configure mingw no-shared no-sock no-stdio no-asm
+3. Open msys2 console
+4. cd to openssl, e.g.: cd /c/Users/someguy/Documents/Qt_Creator/openssl/src/package_sources/
+5. Execute: PATH=$PATH:/c/Qt/6.x/mingw_64/bin
+6. Execute: ./Configure mingw64 no-shared no-sock no-stdio no-asm
 (see https://stackoverflow.com/questions/50365513/building-a-static-version-of-openssl-library-using-md-switch )
 7. Execute: mingw32-make
 8. Setup result

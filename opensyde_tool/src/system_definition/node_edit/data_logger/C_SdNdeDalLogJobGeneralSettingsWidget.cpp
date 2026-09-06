@@ -111,7 +111,7 @@ void C_SdNdeDalLogJobGeneralSettingsWidget::SetNode(const uint32_t ou32_NodeInde
    this->mu32_NodeIndex = ou32_NodeIndex;
    this->m_GetSupportedClientInterfaces();
    this->m_DisconnectChangeTriggers();
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const C_OscDeviceDefinition * const pc_DevDef = pc_Node->pc_DeviceDefinition;
       this->mc_Properties = pc_Node->c_XappProperties;
@@ -192,7 +192,7 @@ void C_SdNdeDalLogJobGeneralSettingsWidget::m_GetSupportedClientInterfaces() con
       {
          const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(
             rc_Interface.u32_BusIndex);
-         if (pc_Bus != NULL)
+         if (pc_Bus != nullptr)
          {
             this->mpc_Ui->pc_ComboBoxClientInterface->addItem(static_cast<QString>(C_GtGetText::h_GetText(
                                                                                       "%1 (linked to %2)")).arg(
@@ -222,7 +222,7 @@ void C_SdNdeDalLogJobGeneralSettingsWidget::m_OnClientInterfaceChanged(const int
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const C_OscDeviceDefinition * const pc_DevDef = pc_Node->pc_DeviceDefinition;
 

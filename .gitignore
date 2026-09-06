@@ -86,6 +86,7 @@ htmlcov/
 *.coverage
 
 # Testing artifacts
+build_test/
 CTestTestfile.cmake
 Testing/
 Testing/

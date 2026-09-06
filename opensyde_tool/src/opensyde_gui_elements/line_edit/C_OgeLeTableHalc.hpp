@@ -26,7 +26,7 @@ class C_OgeLeTableHalc :
    Q_OBJECT
 
 public:
-   C_OgeLeTableHalc(QWidget * const opc_Parent = NULL);
+   C_OgeLeTableHalc(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

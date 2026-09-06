@@ -36,7 +36,7 @@ public:
       eLENGTH
    };
 
-   C_SdBueCoAddSignalsModel(QObject * const opc_Parent = NULL);
+   C_SdBueCoAddSignalsModel(QObject * const opc_Parent = nullptr);
    ~C_SdBueCoAddSignalsModel(void) override;
    void SetIndex(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId);
    void PrepareCleanUp(void);

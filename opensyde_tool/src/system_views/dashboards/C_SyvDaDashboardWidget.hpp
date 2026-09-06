@@ -40,7 +40,7 @@ class C_SyvDaDashboardWidget :
 
 public:
    explicit C_SyvDaDashboardWidget(const uint32_t ou32_ViewIndex, const uint32_t ou32_DashboardIndex,
-                                   const QString & orc_Name, const bool oq_Window, QWidget * const opc_Parent = NULL);
+                                   const QString & orc_Name, const bool oq_Window, QWidget * const opc_Parent = nullptr);
    ~C_SyvDaDashboardWidget() override;
 
    uint32_t GetViewIndex(void) const;

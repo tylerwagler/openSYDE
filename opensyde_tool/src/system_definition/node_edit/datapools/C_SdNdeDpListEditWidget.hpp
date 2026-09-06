@@ -33,7 +33,7 @@ class C_SdNdeDpListEditWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpListEditWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDpListEditWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpListEditWidget(void) override;
 
    void Clear(void) const;

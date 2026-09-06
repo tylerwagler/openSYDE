@@ -38,14 +38,14 @@ class C_PuiSdNodeCanMessageSyncManager :
    Q_OBJECT
 
 public:
-   C_PuiSdNodeCanMessageSyncManager(QObject * const opc_Parent = NULL);
+   C_PuiSdNodeCanMessageSyncManager(QObject * const opc_Parent = nullptr);
 
    void Init(const uint32_t & oru32_BusIndex, const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComProtocol);
    void Init(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_InterfaceIndex,
              const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComProtocol);
    std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> GetUniqueMessages(void) const;
    uint32_t GetUniqueMessageCount(const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ComProtocol,
-                                  uint32_t * const opu32_SignalCount = NULL) const;
+                                  uint32_t * const opu32_SignalCount = nullptr) const;
    stw::opensyde_core::C_OscCanProtocol::E_Type GetCurrentComProtocol(void) const;
    static void h_GetConnectedAndActiveInterfaces(const uint32_t ou32_BusIndex,
                                                  const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComProtocol,
@@ -127,11 +127,11 @@ public:
                       const uint32_t ou32_CanMessageValidSignalsDlcOffset, const bool oq_CanMessageSignalGapsValid,
                       const bool oq_ByteAlignmentRequired, const bool oq_SignalsRequired) const;
    void CheckMessageIdBus(const stw::opensyde_core::C_OscCanMessageUniqueId & orc_MessageId, bool & orq_Valid, const stw::opensyde_core::C_OscCanMessageIdentificationIndices * const opc_SkipMessage =
-                             NULL, bool * const opq_EcosRangeError = NULL, bool * const opq_EcosEvenError = NULL,
-                          bool * const opq_DuplicateDetected = NULL) const;
+                             nullptr, bool * const opq_EcosRangeError = nullptr, bool * const opq_EcosEvenError = nullptr,
+                          bool * const opq_DuplicateDetected = nullptr) const;
    void CheckMessageNameBus(const stw::scl::C_SclString & orc_MessageName, bool & orq_Valid, const stw::opensyde_core::C_OscCanMessageIdentificationIndices * const opc_SkipMessage =
-                               NULL, bool * const opq_InvalidName = NULL,
-                            bool * const opq_DuplicateName = NULL) const;
+                               nullptr, bool * const opq_InvalidName = nullptr,
+                            bool * const opq_DuplicateName = nullptr) const;
    void CheckMessageHasTx(bool & orq_Valid,
                           const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_Message) const;
    uint32_t GetNextValidMessageId(const bool & orq_Extended) const;

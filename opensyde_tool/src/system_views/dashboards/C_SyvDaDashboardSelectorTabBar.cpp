@@ -67,50 +67,6 @@ C_SyvDaDashboardSelectorTabBar::~C_SyvDaDashboardSelectorTabBar()
 void C_SyvDaDashboardSelectorTabBar::SetScreenshot(const QPixmap & orc_Screenshot)
 {
    this->setCursor(QCursor(orc_Screenshot, 0, 0));
-
-   /*
-   // This code is only for testing to show the screenshot with a normal cursor. It does not work yet.
-   // It can be removed if this feature is not wished.
-
-      QImage c_ImgCompleteCursor(orc_Screenshot.width() + 20, orc_Screenshot.height() + 20, QImage::Format_RGB16);
-      c_ImgCompleteCursor.fill(QColor(255, 255, 255, 0));
-      QImage c_ImgCompleteCursorMask(orc_Screenshot.width() + 20, orc_Screenshot.height() + 20, QImage::Format_Mono);
-      c_ImgCompleteCursorMask.fill(Qt::color0);
-      int32_t s32_CounterX;
-      int32_t s32_CounterY;
-      QPixmap c_PixCompleteCursor(orc_Screenshot.width() + 20, orc_Screenshot.height() + 20);
-      QPainter c_Painter(&c_PixCompleteCursor);
-
-      for(s32_CounterX = 0; s32_CounterX < (orc_Screenshot.width() + 20); ++s32_CounterX)
-      {
-        for(s32_CounterY = 0; s32_CounterY < 20; ++s32_CounterY)
-        {
-            // Wie gesagt, transparent ist der Cursor dann, wenn Maske
-            // und Bild 0 ist. Bei mir ist es eben genau andersrum
-            c_ImgCompleteCursorMask.setPixel(s32_CounterX,s32_CounterY, Qt::color1);
-            c_ImgCompleteCursor.setPixel(s32_CounterX, s32_CounterY, Qt::color1);
-        }
-      }
-
-      for(s32_CounterX = 0; s32_CounterX < 20; ++s32_CounterX)
-      {
-        for(s32_CounterY = 20; s32_CounterY < (orc_Screenshot.height() + 20); ++s32_CounterY)
-        {
-            // Wie gesagt, transparent ist der Cursor dann, wenn Maske
-            // und Bild 0 ist. Bei mir ist es eben genau andersrum
-            c_ImgCompleteCursorMask.setPixel(s32_CounterX,s32_CounterY, Qt::color1);
-            c_ImgCompleteCursor.setPixel(s32_CounterX, s32_CounterY, Qt::color1);
-        }
-      }
-
-      QBitmap c_BmpMask(QPixmap::fromImage(c_ImgCompleteCursorMask));
-      c_PixCompleteCursor = QPixmap::fromImage(c_ImgCompleteCursor);
-      c_Painter.drawPixmap(20, 20, orc_Screenshot);
-      c_PixCompleteCursor.setMask(c_BmpMask);
-
-      QCursor c_Cursor(c_PixCompleteCursor);
-      this->setCursor(c_Cursor);
-      */
 }
 
 //----------------------------------------------------------------------------------------------------------------------

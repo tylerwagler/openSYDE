@@ -47,8 +47,8 @@ using namespace std;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscSecurityEcdhAes::C_OscSecurityEcdhAes() :
-   mpc_TheKey(NULL),
-   mpu8_AesKey(NULL)
+   mpc_TheKey(nullptr),
+   mpu8_AesKey(nullptr)
 {
 }
 
@@ -58,15 +58,15 @@ C_OscSecurityEcdhAes::C_OscSecurityEcdhAes() :
 //----------------------------------------------------------------------------------------------------------------------
 C_OscSecurityEcdhAes::~C_OscSecurityEcdhAes()
 {
-   if (mpc_TheKey != NULL)
+   if (mpc_TheKey != nullptr)
    {
       EVP_PKEY_free(mpc_TheKey);
-      mpc_TheKey = NULL;
+      mpc_TheKey = nullptr;
    }
-   if (mpu8_AesKey != NULL)
+   if (mpu8_AesKey != nullptr)
    {
       OPENSSL_secure_clear_free(mpu8_AesKey, hu32_AES_KEY_LENGTH);
-      mpu8_AesKey = NULL;
+      mpu8_AesKey = nullptr;
    }
 }
 
@@ -86,7 +86,7 @@ int32_t C_OscSecurityEcdhAes::GetAesKey(uint8_t(&orau8_AesKey)[hu32_AES_KEY_LENG
 {
    int32_t s32_Result = C_NOACT;
 
-   if (C_OscSecurityEcdhAes::mpu8_AesKey != NULL)
+   if (C_OscSecurityEcdhAes::mpu8_AesKey != nullptr)
    {
       s32_Result = C_NO_ERR;
       (void)std::memcpy(&orau8_AesKey[0], C_OscSecurityEcdhAes::mpu8_AesKey, hu32_AES_KEY_LENGTH);
@@ -109,7 +109,7 @@ int32_t C_OscSecurityEcdhAes::m_ExtractCompressedPublicKey(uint8_t (&orau8_Publi
 {
    int32_t s32_Result = C_NOACT;
 
-   if (mpc_TheKey != NULL)
+   if (mpc_TheKey != nullptr)
    {
       size_t x_KeyLength; //lint !e8080 //using type to match library interface
       //We did configure compressed format at initialization already. So just grab the data.
@@ -145,19 +145,19 @@ int32_t C_OscSecurityEcdhAes::m_ExtractCompressedPublicKey(uint8_t (&orau8_Publi
 EVP_PKEY * C_OscSecurityEcdhAes::mh_CreateEvpPkeyFromRawPublicKey(
    const uint8_t(&orau8_PublicKey)[hu32_PUBLIC_KEY_LENGTH])
 {
-   EVP_PKEY * pc_Pkey = NULL;
-   EC_KEY * pc_EcKey = NULL;
-   EC_POINT * pc_Point = NULL;
+   EVP_PKEY * pc_Pkey = nullptr;
+   EC_KEY * pc_EcKey = nullptr;
+   EC_POINT * pc_Point = nullptr;
    int x_Result = -1; //lint !e970 !e8080 //using type to match library interface
 
    // Create group for prime256v1
    EC_GROUP * const pc_Group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
 
-   if (pc_Group != NULL)
+   if (pc_Group != nullptr)
    {
       pc_EcKey = EC_KEY_new();
    }
-   if (pc_EcKey != NULL)
+   if (pc_EcKey != nullptr)
    {
       x_Result = EC_KEY_set_group(pc_EcKey, pc_Group);
    }
@@ -166,9 +166,9 @@ EVP_PKEY * C_OscSecurityEcdhAes::mh_CreateEvpPkeyFromRawPublicKey(
       // Create EC_POINT for public key
       pc_Point = EC_POINT_new(pc_Group);
    }
-   if (pc_Point != NULL)
+   if (pc_Point != nullptr)
    {
-      x_Result = EC_POINT_oct2point(pc_Group, pc_Point, orau8_PublicKey, hu32_PUBLIC_KEY_LENGTH, NULL);
+      x_Result = EC_POINT_oct2point(pc_Group, pc_Point, orau8_PublicKey, hu32_PUBLIC_KEY_LENGTH, nullptr);
    }
    if (x_Result == 1)
    {
@@ -179,13 +179,13 @@ EVP_PKEY * C_OscSecurityEcdhAes::mh_CreateEvpPkeyFromRawPublicKey(
       // Create EVP_PKEY and assign EC_KEY
       pc_Pkey = EVP_PKEY_new();
    }
-   if (pc_Pkey != NULL)
+   if (pc_Pkey != nullptr)
    {
       x_Result = EVP_PKEY_set1_EC_KEY(pc_Pkey, pc_EcKey);
       if (x_Result != 1)
       {
          EVP_PKEY_free(pc_Pkey);
-         pc_Pkey = NULL;
+         pc_Pkey = nullptr;
       }
    }
 
@@ -212,19 +212,19 @@ int32_t C_OscSecurityEcdhAes::CreateEcKeys(uint8_t (&orau8_PublicKey)[hu32_PUBLI
 {
    int32_t s32_Result = C_NOACT;
 
-   if (mpc_TheKey != NULL)
+   if (mpc_TheKey != nullptr)
    {
       EVP_PKEY_free(mpc_TheKey);
-      mpc_TheKey = NULL;
+      mpc_TheKey = nullptr;
    }
-   if (mpc_TheKey == NULL)
+   if (mpc_TheKey == nullptr)
    {
-      EVP_PKEY_CTX * const pc_ParamContext = EVP_PKEY_CTX_new_id(EVP_PKEY_EC, NULL);
+      EVP_PKEY_CTX * const pc_ParamContext = EVP_PKEY_CTX_new_id(EVP_PKEY_EC, nullptr);
 
-      if (pc_ParamContext != NULL)
+      if (pc_ParamContext != nullptr)
       {
-         EVP_PKEY_CTX * pc_KeyContext = NULL;
-         EVP_PKEY * pc_KeyParams = NULL;
+         EVP_PKEY_CTX * pc_KeyContext = nullptr;
+         EVP_PKEY * pc_KeyParams = nullptr;
          int x_Result = EVP_PKEY_paramgen_init(pc_ParamContext); //lint !e970 !e8080 //using type to match library
          if (x_Result == 1)
          {
@@ -237,13 +237,13 @@ int32_t C_OscSecurityEcdhAes::CreateEcKeys(uint8_t (&orau8_PublicKey)[hu32_PUBLI
             x_Result = EVP_PKEY_paramgen(pc_ParamContext, &pc_KeyParams);
          }
          EVP_PKEY_CTX_free(pc_ParamContext); //not needed any longer
-         if ((x_Result == 1) && (pc_KeyParams != NULL))
+         if ((x_Result == 1) && (pc_KeyParams != nullptr))
          {
             // create key generation context
-            pc_KeyContext = EVP_PKEY_CTX_new(pc_KeyParams, NULL);
+            pc_KeyContext = EVP_PKEY_CTX_new(pc_KeyParams, nullptr);
             EVP_PKEY_free(pc_KeyParams);
          }
-         if (pc_KeyContext != NULL)
+         if (pc_KeyContext != nullptr)
          {
             x_Result = EVP_PKEY_keygen_init(pc_KeyContext);
             if (x_Result == 1)
@@ -260,7 +260,7 @@ int32_t C_OscSecurityEcdhAes::CreateEcKeys(uint8_t (&orau8_PublicKey)[hu32_PUBLI
                                                          OSSL_PKEY_PARAM_EC_POINT_CONVERSION_FORMAT,
                                                          OSSL_PKEY_EC_POINT_CONVERSION_FORMAT_COMPRESSED);
             }
-            if ((x_Result == 1) && (mpc_TheKey != NULL))
+            if ((x_Result == 1) && (mpc_TheKey != nullptr))
             {
                //extract binary keys and remember:
                s32_Result = m_ExtractCompressedPublicKey(orau8_PublicKey);
@@ -292,10 +292,10 @@ int32_t C_OscSecurityEcdhAes::DeriveAesKey(const uint8_t (&orau8_OthersPublicKey
 {
    int32_t s32_Result = C_NOACT;
 
-   if (mpc_TheKey != NULL)
+   if (mpc_TheKey != nullptr)
    {
-      EVP_PKEY_CTX * const pc_DeriveContext = EVP_PKEY_CTX_new(mpc_TheKey, NULL);
-      if (pc_DeriveContext != NULL)
+      EVP_PKEY_CTX * const pc_DeriveContext = EVP_PKEY_CTX_new(mpc_TheKey, nullptr);
+      if (pc_DeriveContext != nullptr)
       {
          size_t x_SharedSecredSize = 0; //lint !e8080 //using type to match library
          uint8_t au8_SharedSecret[32U];
@@ -305,7 +305,7 @@ int32_t C_OscSecurityEcdhAes::DeriveAesKey(const uint8_t (&orau8_OthersPublicKey
          {
             // set up a key from the binary public key data
             EVP_PKEY * const pc_PeerKey = mh_CreateEvpPkeyFromRawPublicKey(orau8_OthersPublicKey);
-            if (pc_PeerKey != NULL)
+            if (pc_PeerKey != nullptr)
             {
                x_Result = EVP_PKEY_derive_set_peer(pc_DeriveContext, pc_PeerKey);
             }
@@ -329,14 +329,14 @@ int32_t C_OscSecurityEcdhAes::DeriveAesKey(const uint8_t (&orau8_OthersPublicKey
             uint8_t au8_Sha256Digest[SHA256_DIGEST_LENGTH];
             const uint8_t * const pu8_Value = SHA256(&au8_SharedSecret[0], x_SharedSecredSize, &au8_Sha256Digest[0]);
 
-            if (pu8_Value != NULL)
+            if (pu8_Value != nullptr)
             {
-               if (this->mpu8_AesKey == NULL)
+               if (this->mpu8_AesKey == nullptr)
                {
                   //lint -e{9079} //casting is the correct approach to use the API
                   this->mpu8_AesKey = reinterpret_cast<uint8_t *>(OPENSSL_secure_malloc(hu32_AES_KEY_LENGTH));
                }
-               if (this->mpu8_AesKey != NULL)
+               if (this->mpu8_AesKey != nullptr)
                {
                   //use first 16bytes as AES key:
                   (void)std::memcpy(this->mpu8_AesKey, &au8_Sha256Digest[0], hu32_AES_KEY_LENGTH);
@@ -370,7 +370,7 @@ int32_t C_OscSecurityEcdhAes::AesEncrypt(const uint8_t (&orau8_AesInitVector)[C_
                                          const std::vector<uint8_t> & orc_Input,
                                          std::vector<uint8_t> & orc_Output) const
 {
-   tgl_assert(this->mpu8_AesKey != NULL);
+   tgl_assert(this->mpu8_AesKey != nullptr);
    const uint8_t(&orau8_Key)[C_OscSecurityAesCbc::hu32_IV_LENGTH] =
       reinterpret_cast<const uint8_t ( &)[C_OscSecurityAesCbc::hu32_IV_LENGTH]>(this->mpu8_AesKey[0]);
    return C_OscSecurityAesCbc::h_Encrypt(orau8_Key, orau8_AesInitVector, orc_Input, orc_Output);
@@ -393,7 +393,7 @@ int32_t C_OscSecurityEcdhAes::AesDecrypt(const uint8_t (&orau8_AesInitVector)[C_
                                          const std::vector<uint8_t> & orc_Input,
                                          std::vector<uint8_t> & orc_Output) const
 {
-   tgl_assert(this->mpu8_AesKey != NULL);
+   tgl_assert(this->mpu8_AesKey != nullptr);
    const uint8_t(&orau8_Key)[C_OscSecurityAesCbc::hu32_IV_LENGTH] =
       reinterpret_cast<const uint8_t ( &)[C_OscSecurityAesCbc::hu32_IV_LENGTH]>(this->mpu8_AesKey[0]);
    return C_OscSecurityAesCbc::h_Decrypt(orau8_Key, orau8_AesInitVector, orc_Input, orc_Output);

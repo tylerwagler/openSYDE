@@ -372,7 +372,7 @@ void C_SyvDaItPaImportReport::m_PrepareTableContent(QString & orc_TableApplyCont
                                                        rc_ParamId.u32_ElementIndex);
       const C_OscNodeDataPoolListElement * const pc_Element =
          C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_ElementId);
-      if ((((pc_Node != NULL) && (pc_DataPool != NULL)) && (pc_List != NULL)) && (pc_Element != NULL))
+      if ((((pc_Node != nullptr) && (pc_DataPool != nullptr)) && (pc_List != nullptr)) && (pc_Element != nullptr))
       {
          for (uint32_t u32_ItNode = 0UL; u32_ItNode < this->mrc_Data.size(); ++u32_ItNode)
          {
@@ -525,7 +525,7 @@ void C_SyvDaItPaImportReport::m_AppendTableEntry(QString & orc_TableContent, uin
    const C_OscNodeDataPoolListElement * const pc_Element = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(
       orc_Id.u32_NodeIndex, orc_Id.u32_DataPoolIndex, orc_Id.u32_ListIndex, orc_Id.u32_ElementIndex);
 
-   if ((((pc_Node != NULL) && (pc_DataPool != NULL)) && (pc_List != NULL)) && (pc_Element != NULL))
+   if ((((pc_Node != nullptr) && (pc_DataPool != nullptr)) && (pc_List != nullptr)) && (pc_Element != nullptr))
    {
       orc_TableContent += "<tr>";
       orc_TableContent += C_SyvDaItPaImportReport::mhc_HTML_TABLE_DATA_START;
@@ -591,7 +591,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
          pc_Element = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(
             this->mrc_Id.u32_NodeIndex, this->mrc_Id.u32_DataPoolIndex, this->mrc_Id.u32_ListIndex,
             this->mrc_Id.u32_ElementIndex);
-         if (pc_Element != NULL)
+         if (pc_Element != nullptr)
          {
             c_Retval = static_cast<QString>(C_GtGetText::h_GetText(" - Parameter \"%1\"")).arg(
                pc_Element->c_Name.c_str());
@@ -600,7 +600,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
       case 3UL:
          pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
             this->mrc_Id.u32_NodeIndex, this->mrc_Id.u32_DataPoolIndex, this->mrc_Id.u32_ListIndex);
-         if (pc_List != NULL)
+         if (pc_List != nullptr)
          {
             c_Retval = static_cast<QString>(C_GtGetText::h_GetText(" - List \"%1\"")).arg(pc_List->c_Name.c_str());
          }
@@ -608,7 +608,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
       case 2UL:
          pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(this->mrc_Id.u32_NodeIndex,
                                                                        this->mrc_Id.u32_DataPoolIndex);
-         if (pc_DataPool != NULL)
+         if (pc_DataPool != nullptr)
          {
             c_Retval = static_cast<QString>(C_GtGetText::h_GetText(" - Datapool \"%1\"")).arg(
                pc_DataPool->c_Name.c_str());
@@ -616,7 +616,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
          break;
       case 1UL:
          pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mrc_Id.u32_NodeIndex);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             c_Retval = static_cast<QString>(C_GtGetText::h_GetText("Node \"%1\"")).arg(
                pc_Node->c_Properties.c_Name.c_str());

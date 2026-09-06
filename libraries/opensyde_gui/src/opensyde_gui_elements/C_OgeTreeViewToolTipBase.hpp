@@ -32,7 +32,7 @@ class C_OgeTreeViewToolTipBaseDelegate :
 public:
    // This delegate class is optional and must be set in derived classes of C_OgeTreeViewToolTipBase
    // for using. It adapts the checkbox clickable areas in the tree.
-   C_OgeTreeViewToolTipBaseDelegate(QObject * const opc_Parent = NULL);
+   C_OgeTreeViewToolTipBaseDelegate(QObject * const opc_Parent = nullptr);
 
 protected:
    bool editorEvent(QEvent * const opc_Event, QAbstractItemModel * const opc_Model,
@@ -44,7 +44,7 @@ class C_OgeTreeViewToolTipBase :
    public C_OgeTreeToolTipBase
 {
 public:
-   C_OgeTreeViewToolTipBase(QWidget * const opc_Parent = NULL);
+   C_OgeTreeViewToolTipBase(QWidget * const opc_Parent = nullptr);
 
 protected:
    void mouseMoveEvent(QMouseEvent * const opc_Event) override;

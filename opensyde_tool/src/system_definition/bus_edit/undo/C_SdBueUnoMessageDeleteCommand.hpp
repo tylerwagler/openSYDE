@@ -31,7 +31,7 @@ public:
       const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
       C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
       stw::opensyde_gui::C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget,
-      QUndoCommand * const opc_Parent = NULL);
+      QUndoCommand * const opc_Parent = nullptr);
 
    void redo(void) override;
    void undo(void) override;

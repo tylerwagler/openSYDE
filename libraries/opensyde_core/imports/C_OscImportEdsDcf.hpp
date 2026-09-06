@@ -105,14 +105,14 @@ private:
                                   const bool oq_RestrictForCanOpenUsage, const bool oq_ImportSrdoUseCase,
                                   std::vector<stw::scl::C_SclString> & orc_ImportMessages);
    static int32_t mh_GetIntegerValue(const stw::scl::C_SclString & orc_CoValue, const uint8_t ou8_NodeId,
-                                     uint32_t & oru32_Value, bool * const opq_IncludesNodeId = NULL);
+                                     uint32_t & oru32_Value, bool * const opq_IncludesNodeId = nullptr);
    static int32_t mh_GetUnsigned64IntegerValue(const stw::scl::C_SclString & orc_CoValue, int32_t & ors32_Value);
    static int32_t mh_Get64IntegerValue(const stw::scl::C_SclString & orc_CoValue, int64_t & ors64_Value);
    static int32_t mh_GetIntegerValueSimple(const stw::scl::C_SclString & orc_CoValue, uint32_t & oru32_Value);
    static void mh_AddUserMessage(const uint32_t ou32_CoObjectId, const stw::scl::C_SclString & orc_CoSectionName,
                                  const stw::scl::C_SclString & orc_ErrorMessage, const int32_t os32_CoSubSectionId,
                                  const bool oq_IsError,
-                                 std::vector<stw::scl::C_SclString> * const opc_ImportMessages = NULL);
+                                 std::vector<stw::scl::C_SclString> * const opc_ImportMessages = nullptr);
    static stw::scl::C_SclString mh_GetNumberAsHex(const uint32_t ou32_Number);
    static int32_t mh_CalcMinMaxInit(const C_OscCanOpenObjectData * const opc_CoSignalObject,
                                     C_OscNodeDataPoolListElement & orc_Element, const uint16_t ou16_NumberBits,

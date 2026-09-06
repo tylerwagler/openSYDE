@@ -195,7 +195,7 @@ void C_SdBueMessageRxList::SetLastKnownCycleTimeValue(const uint32_t ou32_Value)
    for (uint32_t u32_ItEntry = 0; u32_ItEntry < this->mc_Entries.size(); ++u32_ItEntry)
    {
       C_SdBueMessageRxEntry * const pc_Entry = this->mc_Entries[u32_ItEntry];
-      if (pc_Entry != NULL)
+      if (pc_Entry != nullptr)
       {
          pc_Entry->SetLastKnownCycleTimeValue(ou32_Value);
       }
@@ -216,7 +216,7 @@ void C_SdBueMessageRxList::SetRxTimeoutPreconditions(const bool oq_TxMethodOnEve
    for (uint32_t u32_ItEntry = 0; u32_ItEntry < this->mc_Entries.size(); ++u32_ItEntry)
    {
       C_SdBueMessageRxEntry * const pc_Entry = this->mc_Entries[u32_ItEntry];
-      if (pc_Entry != NULL)
+      if (pc_Entry != nullptr)
       {
          pc_Entry->SetRxTimeoutPreconditions(oq_TxMethodOnEvent, oq_DisableOptionPossible);
       }
@@ -236,7 +236,7 @@ void C_SdBueMessageRxList::SetRxTimeoutConfigurationReadOnly(const bool oq_Timeo
    for (uint32_t u32_ItEntry = 0; u32_ItEntry < this->mc_Entries.size(); ++u32_ItEntry)
    {
       C_SdBueMessageRxEntry * const pc_Entry = this->mc_Entries[u32_ItEntry];
-      if (pc_Entry != NULL)
+      if (pc_Entry != nullptr)
       {
          pc_Entry->SetRxTimeoutConfigurationReadOnly(oq_TimeoutConfigurationReadOnly);
       }
@@ -285,7 +285,7 @@ void C_SdBueMessageRxList::CheckSpecificNode(const uint32_t ou32_NodeIndex, cons
    for (uint32_t u32_ItEntry = 0; u32_ItEntry < this->mc_Entries.size(); ++u32_ItEntry)
    {
       const C_SdBueMessageRxEntry * const pc_Entry = this->mc_Entries[u32_ItEntry];
-      if ((pc_Entry != NULL) && (pc_Entry->DoesMatch(ou32_NodeIndex, ou32_InterfaceIndex) == true))
+      if ((pc_Entry != nullptr) && (pc_Entry->DoesMatch(ou32_NodeIndex, ou32_InterfaceIndex) == true))
       {
          pc_Entry->SetChecked(oq_Checked, false, ou32_DatapoolIndex);
       }

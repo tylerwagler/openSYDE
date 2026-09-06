@@ -30,7 +30,7 @@ class C_OgeWiProgressLog :
    Q_OBJECT
 
 public:
-   explicit C_OgeWiProgressLog(QWidget * const opc_Parent = NULL);
+   explicit C_OgeWiProgressLog(QWidget * const opc_Parent = nullptr);
    ~C_OgeWiProgressLog() override;
 
 private:

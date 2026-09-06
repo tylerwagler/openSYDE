@@ -47,7 +47,7 @@ public:
       eCAN_STATUS,
    };
 
-   C_CamMetTreeModel(QObject * const opc_Parent = NULL);
+   C_CamMetTreeModel(QObject * const opc_Parent = nullptr);
    ~C_CamMetTreeModel(void) override;
 
    void Continue(void);

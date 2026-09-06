@@ -67,7 +67,7 @@ private:
                                          bool & orq_EnabledOption, const bool oq_AddFileOption,
                                          C_OscXmlParserBase & orc_XmlParser,
                                          const stw::scl::C_SclString & orc_NodeFolderAbs,
-                                         stw::scl::C_SclString * const opc_FileName = NULL);
+                                         stw::scl::C_SclString * const opc_FileName = nullptr);
    static void mh_SaveFiles(const std::vector<stw::scl::C_SclString> & orc_Files, C_OscXmlParserBase & orc_XmlParser,
                             const stw::scl::C_SclString & orc_BaseNodeName,
                             const stw::scl::C_SclString & orc_ElementNodeName);

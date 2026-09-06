@@ -29,7 +29,7 @@ class C_SdNdeCoConfigTreeModel :
    Q_OBJECT
 
 public:
-   C_SdNdeCoConfigTreeModel(QWidget * const opc_Parent = NULL);
+   C_SdNdeCoConfigTreeModel(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeCoConfigTreeModel(void) override;
 
    void SetNodeId(const uint32_t ou32_NodeIndex);

@@ -32,7 +32,7 @@ class C_OgeTobToolTipBase :
    Q_OBJECT
 
 public:
-   C_OgeTobToolTipBase(QWidget * const opc_Parent = NULL);
+   C_OgeTobToolTipBase(QWidget * const opc_Parent = nullptr);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

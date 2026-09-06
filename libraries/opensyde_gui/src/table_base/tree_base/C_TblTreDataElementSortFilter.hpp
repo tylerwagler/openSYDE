@@ -28,7 +28,7 @@ class C_TblTreDataElementSortFilter :
    public QSortFilterProxyModel
 {
 public:
-   C_TblTreDataElementSortFilter(QObject * const opc_Parent = NULL);
+   C_TblTreDataElementSortFilter(QObject * const opc_Parent = nullptr);
 
    void SetFilter(const QString & orc_Text);
 

@@ -29,7 +29,7 @@ class C_SyvDaPeUpdateModeTableHeaderView :
    Q_OBJECT
 
 public:
-   C_SyvDaPeUpdateModeTableHeaderView(const Qt::Orientation & ore_Orientation, QWidget * const opc_Parent = NULL);
+   C_SyvDaPeUpdateModeTableHeaderView(const Qt::Orientation & ore_Orientation, QWidget * const opc_Parent = nullptr);
 
    QSize sizeHint(void) const override;
 };

@@ -43,7 +43,7 @@ class C_SyvDaDashboardScene :
 
 public:
    C_SyvDaDashboardScene(const uint32_t ou32_ViewIndex, const uint32_t ou32_DashboardIndex,
-                         const bool oq_LoadDashboard = true, QObject * const opc_Parent = NULL);
+                         const bool oq_LoadDashboard = true, QObject * const opc_Parent = nullptr);
    ~C_SyvDaDashboardScene(void) override;
 
    bool IsMousePosRelevantForProxyWidgetInteraction(const QPointF & orc_ScenePos) override;
@@ -58,13 +58,13 @@ public:
    void CopyFromSnapshotToScene(const stw::opensyde_gui_logic::C_PuiSvDashboard & orc_Snapshot,
                                 const QMap<stw::opensyde_gui_logic::C_PuiBsTemporaryDataId,
                                            uint64_t> * const opc_IdMap =
-                                   NULL);
+                                   nullptr);
    void DeleteItem(QGraphicsItem * const opc_Item);
 
    void UpdateBoundaries(void) const;
 
    //lint -e{1735} Suppression, because default parameters are identical
-   void CopyFromManagerToScene(const QPointF * const opc_Pos = NULL) override;
+   void CopyFromManagerToScene(const QPointF * const opc_Pos = nullptr) override;
    void UpdateTransform(const QTransform & orc_Transform) override;
 
    bool IsAnyItemAddable(void) const override;

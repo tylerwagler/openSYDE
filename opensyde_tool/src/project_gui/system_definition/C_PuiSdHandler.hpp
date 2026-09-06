@@ -32,7 +32,7 @@ public:
 
 protected:
    //Avoid call (protected for test cases)
-   explicit C_PuiSdHandler(QObject * const opc_Parent = NULL);
+   explicit C_PuiSdHandler(QObject * const opc_Parent = nullptr);
    ~C_PuiSdHandler(void) override; //lint !e1768 see comment above
 
 private:

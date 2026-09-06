@@ -274,7 +274,7 @@ void C_CamMosDatabaseBusSelectionPopup::m_OkClicked(void)
 
    C_CamProHandler::h_GetInstance()->GetAllMessagesFromDatabase(C_CamUti::h_GetAbsPathFromProj(
                                                                    this->mc_Database.c_Name),
-                                                                &c_Messages, NULL);
+                                                                &c_Messages, nullptr);
    if ((c_Messages.size() > 0) && (this->mpc_Ui->pc_CbxBus->currentIndex() != this->mc_Database.s32_BusIndex))
    {
       QString c_Details;

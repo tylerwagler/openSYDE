@@ -121,7 +121,7 @@ const
    {
       const C_SyvDcExistingNodeWidget * const pc_Widget =
          dynamic_cast<const C_SyvDcExistingNodeWidget * const>(this->itemWidget(this->item(s32_It)));
-      if ((pc_Widget != NULL) && (pc_Widget->CompareIndex(ou32_NodeIndex) == true))
+      if ((pc_Widget != nullptr) && (pc_Widget->CompareIndex(ou32_NodeIndex) == true))
       {
          pc_Widget->ConnectSerialNumber(orc_SerialNumber, orc_SubNodeIdsToOldNodeIds);
       }
@@ -143,7 +143,7 @@ const
    {
       const C_SyvDcExistingNodeWidget * const pc_Widget =
          dynamic_cast<const C_SyvDcExistingNodeWidget * const>(this->itemWidget(this->item(s32_It)));
-      if ((pc_Widget != NULL) && (pc_Widget->CompareIndex(ou32_NodeIndex) == true))
+      if ((pc_Widget != nullptr) && (pc_Widget->CompareIndex(ou32_NodeIndex) == true))
       {
          pc_Widget->DisconnectSerialNumber(orc_SerialNumber);
       }
@@ -178,7 +178,7 @@ uint32_t C_SyvDcExistingNodeList::GetAssignmentCount(void) const
    {
       const C_SyvDcExistingNodeWidget * const pc_Widget =
          dynamic_cast<const C_SyvDcExistingNodeWidget * const>(this->itemWidget(this->item(s32_It)));
-      if ((pc_Widget != NULL) && (pc_Widget->IsAssigned() == true))
+      if ((pc_Widget != nullptr) && (pc_Widget->IsAssigned() == true))
       {
          ++u32_Retval;
       }
@@ -200,7 +200,7 @@ std::vector<C_SyvDcDeviceConfiguation> C_SyvDcExistingNodeList::GetConfigs(void)
    {
       const C_SyvDcExistingNodeWidget * const pc_Widget =
          dynamic_cast<const C_SyvDcExistingNodeWidget * const>(this->itemWidget(this->item(s32_It)));
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          tgl_assert(pc_Widget->IsAssigned() == true);
          pc_Widget->AppendDeviceConfig(c_Retval);
@@ -222,7 +222,7 @@ void C_SyvDcExistingNodeList::StartDrag(const QString & orc_DeviceName, const bo
    {
       const C_SyvDcExistingNodeWidget * const pc_Widget =
          dynamic_cast<const C_SyvDcExistingNodeWidget * const>(this->itemWidget(this->item(s32_It)));
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          pc_Widget->StartDrag(orc_DeviceName, oq_DeviceNameValid);
       }
@@ -239,7 +239,7 @@ void C_SyvDcExistingNodeList::StopDrag(void) const
    {
       const C_SyvDcExistingNodeWidget * const pc_Widget =
          dynamic_cast<const C_SyvDcExistingNodeWidget * const>(this->itemWidget(this->item(s32_It)));
-      if (pc_Widget != NULL)
+      if (pc_Widget != nullptr)
       {
          pc_Widget->StopDrag();
       }
@@ -264,7 +264,7 @@ int32_t C_SyvDcExistingNodeList::m_Init(void)
    this->mu32_CommunicatingNodeCount = 0U;
 
    //No point if PC not connected
-   if ((pc_View != NULL) && (pc_View->GetOscPcData().GetConnected() == true))
+   if ((pc_View != nullptr) && (pc_View->GetOscPcData().GetConnected() == true))
    {
       const std::vector<uint8_t> & rc_NodeActiveFlags = pc_View->GetNodeActiveFlags();
       for (uint32_t u32_ItNode = 0; u32_ItNode < rc_NodeActiveFlags.size(); ++u32_ItNode)
@@ -273,7 +273,7 @@ int32_t C_SyvDcExistingNodeList::m_Init(void)
          if (rc_NodeActiveFlags[u32_ItNode] == 1)
          {
             uint32_t u32_SquadIndex;
-            const C_OscNodeSquad * pc_Squad = NULL;
+            const C_OscNodeSquad * pc_Squad = nullptr;
             std::vector<uint32_t> c_RelevantNodeIndexes;
             std::set<uint32_t> c_FirstSubNodeConnectedInterfaces;
             uint32_t u32_SubNodeCounter;
@@ -284,8 +284,8 @@ int32_t C_SyvDcExistingNodeList::m_Init(void)
             if (C_PuiSdHandler::h_GetInstance()->GetNodeSquadIndexWithNodeIndex(u32_ItNode, u32_SquadIndex) == C_NO_ERR)
             {
                pc_Squad = C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(u32_SquadIndex);
-               tgl_assert(pc_Squad != NULL);
-               if (pc_Squad != NULL)
+               tgl_assert(pc_Squad != nullptr);
+               if (pc_Squad != nullptr)
                {
                   c_RelevantNodeIndexes = pc_Squad->c_SubNodeIndexes;
                }
@@ -304,9 +304,9 @@ int32_t C_SyvDcExistingNodeList::m_Init(void)
                const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_CurNodeIndex);
                bool q_Connected = false;
 
-               if (pc_Node != NULL)
+               if (pc_Node != nullptr)
                {
-                  tgl_assert(pc_Node->pc_DeviceDefinition != NULL);
+                  tgl_assert(pc_Node->pc_DeviceDefinition != nullptr);
                   tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
                   for (uint32_t u32_ItInterface = 0; u32_ItInterface < pc_Node->c_Properties.c_ComInterfaces.size();
                        ++u32_ItInterface)
@@ -351,7 +351,7 @@ int32_t C_SyvDcExistingNodeList::m_Init(void)
             if (q_AllSubNodesAvailable == true)
             {
                //All checks passed at node
-               const int32_t s32_NodeReturn = m_AppendNode(u32_ItNode, (pc_Squad != NULL));
+               const int32_t s32_NodeReturn = m_AppendNode(u32_ItNode, (pc_Squad != nullptr));
 
                // Save the error case
                if (s32_Return == C_NO_ERR)
@@ -364,7 +364,7 @@ int32_t C_SyvDcExistingNodeList::m_Init(void)
             }
 
             // Skip the other sub nodes in case of a squad. Only the first node index of a squad will be used
-            if (pc_Squad != NULL)
+            if (pc_Squad != nullptr)
             {
                //lint -e{850} Index modified for skipping index step
                u32_ItNode += (static_cast<uint32_t>(c_RelevantNodeIndexes.size()) - 1U);

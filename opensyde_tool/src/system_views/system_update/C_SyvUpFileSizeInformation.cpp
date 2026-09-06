@@ -66,7 +66,7 @@ uint64_t C_SyvUpFileSizeInformation::GetEstimatedTimeSeconds(bool * const opq_Ok
 {
    uint64_t u64_Retval = 0ULL;
 
-   if (opq_Ok != NULL)
+   if (opq_Ok != nullptr)
    {
       *opq_Ok = true;
    }
@@ -85,7 +85,7 @@ uint64_t C_SyvUpFileSizeInformation::GetEstimatedTimeSeconds(bool * const opq_Ok
       else
       {
          //Signal failure to find node
-         if (opq_Ok != NULL)
+         if (opq_Ok != nullptr)
          {
             *opq_Ok = false;
          }
@@ -325,7 +325,7 @@ void C_SyvUpFileSizeInformation::LoadUserSettings(const uint32_t ou32_ViewIndex)
 
    this->mc_BytesPerMsMapPerNode.clear();
    // restore configuration of the view
-   if ((pc_View != NULL) &&
+   if ((pc_View != nullptr) &&
        (s32_Retval == C_NO_ERR))
    {
       const C_UsSystemView c_UserView = C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName().c_str());
@@ -367,7 +367,7 @@ void C_SyvUpFileSizeInformation::SaveUserSettings(const uint32_t ou32_ViewIndex)
       c_NodeActiveFlags);
 
    // restore configuration of the view
-   if ((pc_View != NULL) &&
+   if ((pc_View != nullptr) &&
        (s32_Retval == C_NO_ERR))
    {
       for (uint32_t u32_ItNode = 0UL; u32_ItNode < c_NodeActiveFlags.size(); ++u32_ItNode)

@@ -62,10 +62,10 @@ void C_SdNdeDpListTableErrorManager::Init(const uint32_t & oru32_NodeIndex, cons
    this->mu32_DataPoolIndex = oru32_DataPoolIndex;
    this->mu32_ListIndex = oru32_ListIndex;
    pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(this->mu32_NodeIndex, this->mu32_DataPoolIndex);
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
-      pc_DataPool->CheckErrorList(this->mu32_ListIndex, NULL, NULL, NULL, NULL, NULL, &this->mq_ElementsInvalid, NULL,
-                                  NULL);
+      pc_DataPool->CheckErrorList(this->mu32_ListIndex, nullptr, nullptr, nullptr, nullptr, nullptr, &this->mq_ElementsInvalid, nullptr,
+                                  nullptr);
    }
 }
 
@@ -79,10 +79,10 @@ void C_SdNdeDpListTableErrorManager::OnErrorChange(void)
    const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(this->mu32_NodeIndex,
                                                                                                  this->mu32_DataPoolIndex);
 
-   if (pc_DataPool != NULL)
+   if (pc_DataPool != nullptr)
    {
-      pc_DataPool->CheckErrorList(this->mu32_ListIndex, NULL, NULL, NULL, NULL, NULL, &this->mq_ElementsInvalid, NULL,
-                                  NULL);
+      pc_DataPool->CheckErrorList(this->mu32_ListIndex, nullptr, nullptr, nullptr, nullptr, nullptr, &this->mq_ElementsInvalid, nullptr,
+                                  nullptr);
    }
    if (q_PreviousErrorState != this->mq_ElementsInvalid)
    {

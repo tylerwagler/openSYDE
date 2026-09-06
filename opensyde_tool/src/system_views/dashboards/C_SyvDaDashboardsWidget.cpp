@@ -65,10 +65,10 @@ C_SyvDaDashboardsWidget::C_SyvDaDashboardsWidget(const uint32_t ou32_ViewIndex, 
                                                  QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SyvDaDashboardsWidget),
-   mpc_ComDriver(NULL),
+   mpc_ComDriver(nullptr),
    mpc_ConnectionThread(new C_SyvComDriverDiagConnect(this)),
-   mpc_Toolbox(NULL),
-   mpc_FixMinimizedToolbox(NULL),
+   mpc_Toolbox(nullptr),
+   mpc_FixMinimizedToolbox(nullptr),
    mpc_ToolboxParent(opc_ToolboxParent),
    mu32_ViewIndex(ou32_ViewIndex),
    mq_EditModeActive(false),
@@ -165,12 +165,12 @@ C_SyvDaDashboardsWidget::~C_SyvDaDashboardsWidget(void)
       C_SyvDaDashboardsWidget::mhc_DisconnectTimer.start();
    }
 
-   if (this->mpc_Toolbox != NULL)
+   if (this->mpc_Toolbox != nullptr)
    {
       this->mpc_Toolbox->hide();
    }
 
-   if (this->mpc_FixMinimizedToolbox != NULL)
+   if (this->mpc_FixMinimizedToolbox != nullptr)
    {
       this->mpc_FixMinimizedToolbox->hide();
    }
@@ -220,7 +220,7 @@ void C_SyvDaDashboardsWidget::OpenSettings(void)
       this->CheckError();
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -252,7 +252,7 @@ void C_SyvDaDashboardsWidget::SetEditMode(const bool oq_Active)
       this->m_InitToolBox();
 
       //Show toolbox
-      if ((this->mpc_Toolbox != NULL) &&
+      if ((this->mpc_Toolbox != nullptr) &&
           (C_UsHandler::h_GetInstance()->GetProjSvSetupView(
               C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex)->GetName().c_str())
            .GetDashboardToolboxMaximized() != false))
@@ -275,13 +275,13 @@ void C_SyvDaDashboardsWidget::SetEditMode(const bool oq_Active)
       this->mpc_Ui->pc_PbConfirm->setText(C_GtGetText::h_GetText("Edit"));
 
       //Hide toolbox
-      if (this->mpc_Toolbox != NULL)
+      if (this->mpc_Toolbox != nullptr)
       {
          this->mpc_Toolbox->hide();
       }
 
       // Hide minimized toolbox
-      if (this->mpc_FixMinimizedToolbox != NULL)
+      if (this->mpc_FixMinimizedToolbox != nullptr)
       {
          this->mpc_FixMinimizedToolbox->hide();
       }
@@ -333,7 +333,7 @@ void C_SyvDaDashboardsWidget::SetConnectActive(const bool oq_Value)
    QApplication::setOverrideCursor(Qt::WaitCursor);
 
    if ((this->mq_ConnectActive == true) &&
-       (this->mpc_ComDriver == NULL))
+       (this->mpc_ComDriver == nullptr))
    {
       qint64 s64_RemainingWaitMs = 0;
       if (C_SyvDaDashboardsWidget::mhc_DisconnectTimer.isValid())
@@ -489,7 +489,7 @@ void C_SyvDaDashboardsWidget::hideEvent(QHideEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardsWidget::resizeEvent(QResizeEvent * const opc_Event)
 {
-   if ((this->mpc_Toolbox != NULL) && (this->mpc_FixMinimizedToolbox != NULL))
+   if ((this->mpc_Toolbox != nullptr) && (this->mpc_FixMinimizedToolbox != nullptr))
    {
       QPoint c_Point = this->mpc_Toolbox->pos();
       QSize c_Size = this->mpc_Toolbox->size();
@@ -500,7 +500,7 @@ void C_SyvDaDashboardsWidget::resizeEvent(QResizeEvent * const opc_Event)
 
       Q_UNUSED(opc_Event)
 
-      if (pc_Widget == NULL)
+      if (pc_Widget == nullptr)
       {
          // if no parent exist use this widget
          pc_Widget = this;
@@ -574,18 +574,18 @@ void C_SyvDaDashboardsWidget::m_InitToolBox(void)
    C_UsSystemView c_ViewSettings;
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       c_ViewName = pc_View->GetName().c_str();
    }
    c_ViewSettings = C_UsHandler::h_GetInstance()->GetProjSvSetupView(c_ViewName);
 
-   if (this->mpc_Toolbox != NULL)
+   if (this->mpc_Toolbox != nullptr)
    {
       // check for saved default values for toolbox
       if (c_ViewSettings.GetDashboardToolboxPos().x() < 0)
       {
-         if (this->mpc_ToolboxParent == NULL)
+         if (this->mpc_ToolboxParent == nullptr)
          {
             // default value in this error case
             this->mpc_Toolbox->move(mhs32_WIDGET_BORDER, mhs32_TOOLBOX_INIT_POS_Y);
@@ -617,13 +617,13 @@ void C_SyvDaDashboardsWidget::m_InitToolBox(void)
    }
 
    // Hide toolbox
-   if (this->mpc_Toolbox != NULL)
+   if (this->mpc_Toolbox != nullptr)
    {
       this->mpc_Toolbox->hide();
    }
 
    // Hide minimizied toolbox
-   if (this->mpc_FixMinimizedToolbox != NULL)
+   if (this->mpc_FixMinimizedToolbox != nullptr)
    {
       this->mpc_FixMinimizedToolbox->hide();
    }
@@ -642,10 +642,10 @@ void C_SyvDaDashboardsWidget::m_InitToolBox(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardsWidget::m_CleanUpToolBox(void) const
 {
-   if ((this->mpc_Toolbox != NULL) && (this->ms32_InitToolboxCounter > 0))
+   if ((this->mpc_Toolbox != nullptr) && (this->ms32_InitToolboxCounter > 0))
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          QSize c_Size;
          // save position, size and state of toolbox
@@ -691,7 +691,7 @@ int32_t C_SyvDaDashboardsWidget::m_InitOsyDriver(QString & orc_Message)
    bool q_SysDefInvalid;
    bool q_NoNodesActive;
 
-   if (this->mpc_ComDriver != NULL)
+   if (this->mpc_ComDriver != nullptr)
    {
       s32_Retval = this->mpc_ComDriver->InitDiag();
    }
@@ -707,7 +707,7 @@ int32_t C_SyvDaDashboardsWidget::m_InitOsyDriver(QString & orc_Message)
       // Starting logging starts the CAN signal interpretation too
       // TODO: Bitrate is not necessary for initialization here and the bus load calculation is not used here.
       //       If this is necessary, this bitrate must be adapted for the real value and not this dummy
-      if (this->mpc_ComDriver != NULL)
+      if (this->mpc_ComDriver != nullptr)
       {
          this->mpc_ComDriver->StartLogging(0U);
       }
@@ -732,8 +732,8 @@ int32_t C_SyvDaDashboardsWidget::m_InitOsyDriver(QString & orc_Message)
    case C_BUSY:
       if (C_PuiSvHandler::h_GetInstance()->CheckViewError(this->mu32_ViewIndex, &q_NameInvalid,
                                                           &q_PcNotConnected, &q_RoutingInvalid,
-                                                          NULL, NULL,
-                                                          &q_SysDefInvalid, &q_NoNodesActive, NULL, NULL) == C_NO_ERR)
+                                                          nullptr, nullptr,
+                                                          &q_SysDefInvalid, &q_NoNodesActive, nullptr, nullptr) == C_NO_ERR)
       {
          if ((q_NameInvalid == false) && (q_PcNotConnected == false) && (q_RoutingInvalid == false) &&
              (q_SysDefInvalid == false) && (q_NoNodesActive == false))
@@ -761,13 +761,13 @@ int32_t C_SyvDaDashboardsWidget::m_InitOsyDriver(QString & orc_Message)
          //Check if ethernet
          const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             if (pc_View->GetOscPcData().GetConnected())
             {
                const C_OscSystemBus * const pc_Bus =
                   C_PuiSdHandler::h_GetInstance()->GetOscBus(pc_View->GetOscPcData().GetBusIndex());
-               if (pc_Bus != NULL)
+               if (pc_Bus != nullptr)
                {
                   if (pc_Bus->e_Type == C_OscSystemBus::eETHERNET)
                   {
@@ -813,7 +813,7 @@ int32_t C_SyvDaDashboardsWidget::m_InitOsyDriver(QString & orc_Message)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardsWidget::m_CloseOsyDriver(void)
 {
-   if (this->mpc_ComDriver != NULL)
+   if (this->mpc_ComDriver != nullptr)
    {
       // Stop further cycles
       this->mpc_ComDriver->StopCycling();
@@ -824,7 +824,7 @@ void C_SyvDaDashboardsWidget::m_CloseOsyDriver(void)
       this->mpc_ComDriver->StopDiagnosisServer();
 
       delete this->mpc_ComDriver;
-      this->mpc_ComDriver = NULL;
+      this->mpc_ComDriver = nullptr;
    }
 }
 
@@ -832,7 +832,7 @@ void C_SyvDaDashboardsWidget::m_CloseOsyDriver(void)
 void C_SyvDaDashboardsWidget::m_DataPoolWrite(const uint32_t ou32_NodeIndex, const uint8_t ou8_DataPoolIndex,
                                               const uint16_t ou16_ListIndex, const uint16_t ou16_ElementIndex)
 {
-   if (this->mpc_ComDriver != NULL)
+   if (this->mpc_ComDriver != nullptr)
    {
       const int32_t s32_Return = this->mpc_ComDriver->PollDataPoolWrite(ou32_NodeIndex, ou8_DataPoolIndex,
                                                                         ou16_ListIndex, ou16_ElementIndex);
@@ -859,7 +859,7 @@ void C_SyvDaDashboardsWidget::m_DataPoolWrite(const uint32_t ou32_NodeIndex, con
 void C_SyvDaDashboardsWidget::m_DataPoolRead(const C_OscNodeDataPoolListElementId & orc_Index,
                                              stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const opc_DashboardWidget)
 {
-   if (this->mpc_ComDriver != NULL)
+   if (this->mpc_ComDriver != nullptr)
    {
       const int32_t s32_Return =
          this->mpc_ComDriver->PollDataPoolRead(orc_Index.u32_NodeIndex,
@@ -884,7 +884,7 @@ void C_SyvDaDashboardsWidget::m_DataPoolRead(const C_OscNodeDataPoolListElementI
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardsWidget::m_NvmReadList(const C_OscNodeDataPoolListId & orc_Index)
 {
-   if (this->mpc_ComDriver != NULL)
+   if (this->mpc_ComDriver != nullptr)
    {
       const int32_t s32_Return =
          this->mpc_ComDriver->PollNvmReadList(orc_Index.u32_NodeIndex,
@@ -908,7 +908,7 @@ void C_SyvDaDashboardsWidget::m_NvmReadList(const C_OscNodeDataPoolListId & orc_
 void C_SyvDaDashboardsWidget::m_HandleManualOperationFinished(const int32_t os32_Result, const uint8_t ou8_Nrc)
 {
    this->mpc_Ui->pc_TabWidget->HandleManualOperationFinished(os32_Result, ou8_Nrc);
-   if (this->mpc_ComDriver != NULL)
+   if (this->mpc_ComDriver != nullptr)
    {
       if (this->mc_MissedReadNvmOperations.size() > 0)
       {
@@ -992,7 +992,7 @@ void C_SyvDaDashboardsWidget::m_ConnectStepFinished(void)
       }
    }
    else if ((this->mpc_ConnectionThread->GetStep() == C_SyvComDriverDiagConnect::eCDCS_SET_DIAGNOSTIC_MODE_FINISHED) &&
-            (this->mpc_ComDriver != NULL))
+            (this->mpc_ComDriver != nullptr))
    {
       int32_t s32_Retval;
       QString c_Message;
@@ -1021,7 +1021,7 @@ void C_SyvDaDashboardsWidget::m_ConnectStepFinished(void)
    }
    else if ((this->mpc_ConnectionThread->GetStep() ==
              C_SyvComDriverDiagConnect::eCDCS_SET_UP_CYCLIC_TRANSMISSIONS_FINISHED) &&
-            (this->mpc_ComDriver != NULL))
+            (this->mpc_ComDriver != nullptr))
    {
       int32_t s32_Retval;
       QString c_Message;
@@ -1132,14 +1132,14 @@ void C_SyvDaDashboardsWidget::m_HandleConnectionResult(const int32_t os32_Result
 void C_SyvDaDashboardsWidget::m_WiFixPosMaxBtnClicked(void)
 {
    // Show toolbox and set maximized true
-   if (this->mpc_Toolbox != NULL)
+   if (this->mpc_Toolbox != nullptr)
    {
       this->mpc_Toolbox->setVisible(true);
       this->mpc_Toolbox->SetMaximized(true);
    }
 
    // Don't show minimized toolbox
-   if (this->mpc_FixMinimizedToolbox != NULL)
+   if (this->mpc_FixMinimizedToolbox != nullptr)
    {
       this->mpc_FixMinimizedToolbox->setVisible(false);
    }
@@ -1152,14 +1152,14 @@ void C_SyvDaDashboardsWidget::m_WiFixPosMaxBtnClicked(void)
 void C_SyvDaDashboardsWidget::m_WiHoverMinBtnClicked(void)
 {
    // Don't show toolbox and set maximized false
-   if (this->mpc_Toolbox != NULL)
+   if (this->mpc_Toolbox != nullptr)
    {
       this->mpc_Toolbox->setVisible(false);
       this->mpc_Toolbox->SetMaximized(false);
    }
 
    // Show minimized toolbox
-   if (this->mpc_FixMinimizedToolbox != NULL)
+   if (this->mpc_FixMinimizedToolbox != nullptr)
    {
       this->mpc_FixMinimizedToolbox->setVisible(true);
    }

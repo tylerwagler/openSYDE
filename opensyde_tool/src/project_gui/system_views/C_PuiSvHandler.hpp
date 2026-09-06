@@ -231,7 +231,7 @@ protected:
                               const C_PuiSdLastKnownHalElementId & orc_Crc);
 
    //Avoid call (protected access for test)
-   explicit C_PuiSvHandler(QObject * const opc_Parent = NULL);
+   explicit C_PuiSvHandler(QObject * const opc_Parent = nullptr);
    ~C_PuiSvHandler(void) override; //lint !e1768 see comment above
 
 private:

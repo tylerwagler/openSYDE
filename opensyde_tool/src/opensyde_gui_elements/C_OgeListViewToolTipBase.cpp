@@ -87,7 +87,7 @@ bool C_OgeListViewToolTipBase::event(QEvent * const opc_Event)
       {
          QHelpEvent * const pc_HelpEvent = dynamic_cast<QHelpEvent * const>(opc_Event);
 
-         if (pc_HelpEvent != NULL)
+         if (pc_HelpEvent != nullptr)
          {
             //Check table last!
             const QModelIndex c_Index = this->indexAt(this->viewport()->mapFromGlobal(pc_HelpEvent->globalPos()));

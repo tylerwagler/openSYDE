@@ -27,7 +27,7 @@ class C_TblTreModel :
    public C_TblTreSimpleModel
 {
 public:
-   C_TblTreModel(QObject * const opc_Parent = NULL);
+   C_TblTreModel(QObject * const opc_Parent = nullptr);
 
    QVariant data(const QModelIndex & orc_Index, const int32_t os32_Role =
                     static_cast<int32_t>(Qt::DisplayRole)) const override;

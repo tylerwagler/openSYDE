@@ -115,13 +115,13 @@ int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<uint8_t> &
    //read pem file content into a BIO (= openSSL I/O stream)
    BIO * const pc_PrivKeyFile = BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
 
-   if (pc_PrivKeyFile != NULL)
+   if (pc_PrivKeyFile != nullptr)
    {
       //read the private key portion from the BIO
-      EVP_PKEY * const pc_PrivKey = PEM_read_bio_PrivateKey(pc_PrivKeyFile, NULL, NULL, NULL);
+      EVP_PKEY * const pc_PrivKey = PEM_read_bio_PrivateKey(pc_PrivKeyFile, nullptr, nullptr, nullptr);
 
       BIO_free(pc_PrivKeyFile);
-      if ((pc_PrivKey != NULL) && (EVP_PKEY_is_a(pc_PrivKey, "EC") == 1))
+      if ((pc_PrivKey != nullptr) && (EVP_PKEY_is_a(pc_PrivKey, "EC") == 1))
       {
          //extract the ECDSA key from the private key portion
          //This approach uses deprecated API
@@ -132,12 +132,12 @@ int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<uint8_t> &
          // EVP_PKEY_todata fails with the key extracted from .pem file.
          //So keep with the deprecated but straightforward approach for now.
          EC_KEY * const pc_EcdsaKey = EVP_PKEY_get1_EC_KEY(pc_PrivKey);
-         if (pc_EcdsaKey != NULL)
+         if (pc_EcdsaKey != nullptr)
          {
             //Get the private key as BIGNUM (needed for later conversion)
             const BIGNUM * const pc_PrivBigNum = EC_KEY_get0_private_key(pc_EcdsaKey);
 
-            if (pc_PrivBigNum != NULL)
+            if (pc_PrivBigNum != nullptr)
             {
                const int x_Size = BN_num_bytes(pc_PrivBigNum); //lint !e970 !e8080 //use type expected by API
                std::vector<uint8_t> c_PrivKey(x_Size);
@@ -149,7 +149,7 @@ int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<uint8_t> &
                this->mc_KeyInfo.SetPrivateKey(c_PrivKey);
 
                EVP_PKEY_free(pc_PrivKey);
-               EC_KEY_set_private_key(pc_EcdsaKey, NULL);
+               EC_KEY_set_private_key(pc_EcdsaKey, nullptr);
                EC_KEY_free(pc_EcdsaKey);
             }
          }

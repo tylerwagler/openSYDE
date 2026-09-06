@@ -78,9 +78,9 @@ const uint32_t C_SdHandlerWidget::mhu32_USER_INPUT_FUNC_TSP_IMPORT = 5U;
 C_SdHandlerWidget::C_SdHandlerWidget(QWidget * const opc_Parent) :
    C_NagUseCaseWidget(opc_Parent),
    mpc_Ui(new Ui::C_SdHandlerWidget),
-   mpc_Topology(NULL),
-   mpc_ActNodeEdit(NULL),
-   mpc_ActBusEdit(NULL),
+   mpc_Topology(nullptr),
+   mpc_ActNodeEdit(nullptr),
+   mpc_ActBusEdit(nullptr),
    ms32_NodeEditTabIndex(0),
    ms32_BusEditTabIndex(0),
    ms32_SubMode(-1),
@@ -198,7 +198,7 @@ C_SdHandlerWidget::~C_SdHandlerWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdHandlerWidget::SetParentHook(QWidget * const opc_Parent)
 {
-   if (this->mpc_Topology != NULL)
+   if (this->mpc_Topology != nullptr)
    {
       this->mpc_Topology->SetParentHook(opc_Parent);
    }
@@ -223,7 +223,7 @@ void C_SdHandlerWidget::UserInputFunc(const uint32_t ou32_FuncNumber)
       break;
    case mhu32_USER_INPUT_FUNC_GENERATE_CODE:
       //Trigger CRC update
-      if (this->mpc_Topology != NULL)
+      if (this->mpc_Topology != nullptr)
       {
          this->mpc_Topology->SaveToData();
       }
@@ -237,7 +237,7 @@ void C_SdHandlerWidget::UserInputFunc(const uint32_t ou32_FuncNumber)
       break;
    case mhu32_USER_INPUT_FUNC_RTF_EXPORT:
       //Trigger CRC update
-      if (this->mpc_Topology != NULL)
+      if (this->mpc_Topology != nullptr)
       {
          this->mpc_Topology->SaveToData();
       }
@@ -267,15 +267,15 @@ void C_SdHandlerWidget::Save(void)
    this->m_GenerateHalcDatapools();
 
    // save all changes of the active edit widgets to the core
-   if (this->mpc_ActNodeEdit != NULL)
+   if (this->mpc_ActNodeEdit != nullptr)
    {
       this->mpc_ActNodeEdit->Save();
    }
-   if (this->mpc_ActBusEdit != NULL)
+   if (this->mpc_ActBusEdit != nullptr)
    {
       this->mpc_ActBusEdit->Save();
    }
-   if (this->mpc_Topology != NULL)
+   if (this->mpc_Topology != nullptr)
    {
       this->mpc_Topology->SaveToData();
    }
@@ -318,12 +318,12 @@ void C_SdHandlerWidget::OpenDetail(const int32_t os32_Index, const int32_t os32_
                                    const int32_t os32_Flag)
 {
    if ((this->ms32_SubMode == ms32_SUBMODE_SYSDEF_NODEEDIT) &&
-       (this->mpc_ActNodeEdit != NULL))
+       (this->mpc_ActNodeEdit != nullptr))
    {
       this->mpc_ActNodeEdit->OpenDetail(os32_Index, os32_SubIndex, os32_SubSubIndex, os32_Flag);
    }
    else if ((this->ms32_SubMode == ms32_SUBMODE_SYSDEF_BUSEDIT) &&
-            (this->mpc_ActBusEdit != NULL))
+            (this->mpc_ActBusEdit != nullptr))
    {
       this->mpc_ActBusEdit->OpenDetail(os32_Index, os32_SubIndex, os32_SubSubIndex, os32_SubSubSubIndex, os32_Flag);
    }
@@ -349,19 +349,19 @@ bool C_SdHandlerWidget::PrepareToClose(void)
    this->m_GenerateHalcDatapools();
 
    // save all changes of the active edit widgets to the core
-   if (this->mpc_ActNodeEdit != NULL)
+   if (this->mpc_ActNodeEdit != nullptr)
    {
       // save the tab index
       this->ms32_NodeEditTabIndex = this->mpc_ActNodeEdit->GetTabIndex();
       this->mpc_ActNodeEdit->Save();
    }
-   if (this->mpc_ActBusEdit != NULL)
+   if (this->mpc_ActBusEdit != nullptr)
    {
       // save the tab index
       this->ms32_BusEditTabIndex = this->mpc_ActBusEdit->GetTabIndex();
       this->mpc_ActBusEdit->Save();
    }
-   if (this->mpc_Topology != NULL)
+   if (this->mpc_Topology != nullptr)
    {
       this->mpc_Topology->PrepareToClose();
    }
@@ -404,7 +404,7 @@ void C_SdHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t ou
         (ou32_Index != this->mu32_Index)))
    {
       // delete or remove from the layout the other widgets if necessary
-      if (this->mpc_ActNodeEdit != NULL)
+      if (this->mpc_ActNodeEdit != nullptr)
       {
          this->mpc_Ui->pc_VerticalLayout->removeWidget(this->mpc_ActNodeEdit);
 
@@ -438,9 +438,9 @@ void C_SdHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t ou
          disconnect(this->mpc_ActNodeEdit, &C_SdNdeNodeEditWidget::SigSwitchToBusProperties, this,
                     &C_SdHandlerWidget::m_SwitchToBusProperties);
          delete this->mpc_ActNodeEdit;
-         this->mpc_ActNodeEdit = NULL;
+         this->mpc_ActNodeEdit = nullptr;
       }
-      if (this->mpc_ActBusEdit != NULL)
+      if (this->mpc_ActBusEdit != nullptr)
       {
          const stw::opensyde_core::C_OscSystemBus * const pc_Bus =
             C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_Index);
@@ -473,7 +473,7 @@ void C_SdHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t ou
                     &C_SdHandlerWidget::m_SwitchToCoManager);
 
          delete this->mpc_ActBusEdit;
-         this->mpc_ActBusEdit = NULL;
+         this->mpc_ActBusEdit = nullptr;
       }
 
       //Clean up buttons
@@ -491,7 +491,7 @@ void C_SdHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t ou
 
       if (os32_SubMode == ms32_SUBMODE_SYSDEF_TOPOLOGY)
       {
-         if (this->mpc_Topology != NULL)
+         if (this->mpc_Topology != nullptr)
          {
             this->mpc_Topology->HideAll(false);
          }
@@ -506,7 +506,7 @@ void C_SdHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t ou
       else if (os32_SubMode == ms32_SUBMODE_SYSDEF_NODEEDIT)
       {
          // show the node edit widget
-         if (this->mpc_Topology != NULL)
+         if (this->mpc_Topology != nullptr)
          {
             this->mpc_Topology->HideAll(true);
          }
@@ -540,7 +540,7 @@ void C_SdHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t ou
          // show tsp import button
          Q_EMIT (this->SigShowUserInputFunc(mhu32_USER_INPUT_FUNC_TSP_IMPORT, true));
 
-         if (this->mpc_ActNodeEdit != NULL)
+         if (this->mpc_ActNodeEdit != nullptr)
          {
             this->mpc_Ui->pc_VerticalLayout->addWidget(this->mpc_ActNodeEdit);
             this->mpc_ActNodeEdit->show();
@@ -552,7 +552,7 @@ void C_SdHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t ou
             C_PuiSdHandler::h_GetInstance()->GetOscBus(ou32_Index);
 
          // show the bus edit widget
-         if (this->mpc_Topology != NULL)
+         if (this->mpc_Topology != nullptr)
          {
             this->mpc_Topology->HideAll(true);
          }
@@ -578,7 +578,7 @@ void C_SdHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t ou
             Q_EMIT (this->SigShowUserInputFunc(mhu32_USER_INPUT_FUNC_EXPORT, true));
          }
 
-         if (this->mpc_ActBusEdit != NULL)
+         if (this->mpc_ActBusEdit != nullptr)
          {
             this->mpc_Ui->pc_VerticalLayout->addWidget(this->mpc_ActBusEdit);
             this->mpc_ActBusEdit->show();
@@ -699,7 +699,7 @@ void C_SdHandlerWidget::m_SwitchToBusProtocolMessage(const uint32_t ou32_Index, 
                                mu32_FLAG_OPEN_SYSDEF_BUS_COMIFDESCR));
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(orc_MessageId.u32_NodeIndex);
-   if ((pc_Node != NULL) &&
+   if ((pc_Node != nullptr) &&
        (orc_MessageId.u32_DatapoolIndex < pc_Node->c_DataPools.size()))
    {
       uint32_t u32_ListIndex;
@@ -764,11 +764,11 @@ void C_SdHandlerWidget::m_SetFlag(const uint32_t ou32_Flag) const
 {
    if (ou32_Flag != mu32_FLAG_DEFAULT)
    {
-      if (this->mpc_ActNodeEdit != NULL)
+      if (this->mpc_ActNodeEdit != nullptr)
       {
          this->mpc_ActNodeEdit->SetFlag(ou32_Flag);
       }
-      else if (this->mpc_ActBusEdit != NULL)
+      else if (this->mpc_ActBusEdit != nullptr)
       {
          this->mpc_ActBusEdit->SetFlag(ou32_Flag);
       }
@@ -818,7 +818,7 @@ void C_SdHandlerWidget::m_GenerateCode(void) const
       {
          std::vector<uint32_t> c_Indices;
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_Index);
-         tgl_assert(pc_Node != NULL);
+         tgl_assert(pc_Node != nullptr);
          c_Indices.push_back(this->mu32_Index);
          pc_CodeGenerationDialog->PrepareDialog(c_Indices);
       }
@@ -834,7 +834,7 @@ void C_SdHandlerWidget::m_GenerateCode(void) const
          {
             const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndexes
                                                                                                .at(u32_Counter));
-            tgl_assert(pc_Node != NULL);
+            tgl_assert(pc_Node != nullptr);
             c_Indices.push_back(c_NodeIndexes.at(u32_Counter));
          }
          pc_CodeGenerationDialog->PrepareDialog(c_Indices);
@@ -852,7 +852,7 @@ void C_SdHandlerWidget::m_GenerateCode(void) const
          pc_CodeGenerationDialog->GetCheckedItems(c_NodeIndices, c_AppIndicesPerNode);
          C_ImpUtil::h_ExportCode(c_NodeIndices, c_AppIndicesPerNode, this->parentWidget());
       }
-      if (c_PopUpDialog != NULL)
+      if (c_PopUpDialog != nullptr)
       {
          c_PopUpDialog->HideOverlay();
          c_PopUpDialog->deleteLater();
@@ -869,8 +869,8 @@ void C_SdHandlerWidget::m_Export(void)
    std::set<uint32_t> c_CanMessageIds; // to count CAN messages
    std::set<C_OscCanMessageUniqueId> c_CanMessageIdsWithExtended;
 
-   tgl_assert(this->mpc_ActBusEdit != NULL);
-   if (this->mpc_ActBusEdit != NULL)
+   tgl_assert(this->mpc_ActBusEdit != nullptr);
+   if (this->mpc_ActBusEdit != nullptr)
    {
       // Is it Possible to Use a dbc for Ethernet Configuration?
       // answer: yes (see https://kb.vector.com/entry/798/)
@@ -936,7 +936,7 @@ void C_SdHandlerWidget::m_Export(void)
                      u32_DatapoolIndex);
 
                // only export active devices
-               if ((pc_CanMessageContainer != NULL) && (pc_CanMessageContainer->q_IsComProtocolUsedByInterface == true))
+               if ((pc_CanMessageContainer != nullptr) && (pc_CanMessageContainer->q_IsComProtocolUsedByInterface == true))
                {
                   int32_t s32_Error = C_NO_ERR;
                   stw::scl::C_SclStringList c_Warnings;
@@ -1101,8 +1101,8 @@ void C_SdHandlerWidget::m_TriggerImport(void)
       //Node
       const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(mu32_Index);
 
-      tgl_assert((pc_Bus != NULL) && (mpc_ActBusEdit != NULL));
-      if ((pc_Bus != NULL) && (mpc_ActBusEdit != NULL))
+      tgl_assert((pc_Bus != nullptr) && (mpc_ActBusEdit != nullptr));
+      if ((pc_Bus != nullptr) && (mpc_ActBusEdit != nullptr))
       {
          const stw::scl::C_SclString c_BusName = pc_Bus->c_Name;
 
@@ -1127,7 +1127,7 @@ void C_SdHandlerWidget::m_TriggerImport(void)
             m_ContinueImporting(e_SelectedCommProtocol);
          }
 
-         if (c_PopUpDialog != NULL)
+         if (c_PopUpDialog != nullptr)
          {
             c_PopUpDialog->HideOverlay();
             c_PopUpDialog->deleteLater();
@@ -1267,7 +1267,7 @@ void C_SdHandlerWidget::m_RtfExport(void)
             }
          }
 
-         if (c_PopUpDialog != NULL)
+         if (c_PopUpDialog != nullptr)
          {
             c_PopUpDialog->HideOverlay();
             c_PopUpDialog->deleteLater();
@@ -1311,9 +1311,9 @@ C_OgeWiCustomMessage * C_SdHandlerWidget::m_ShowWarningUnstoredProjectPopupMessa
 void C_SdHandlerWidget::m_SwitchProtocolTab(const C_OscCanProtocol::E_Type & ore_Protocol) const
 {
    // only available on bus edit
-   tgl_assert(this->mpc_ActBusEdit != NULL);
+   tgl_assert(this->mpc_ActBusEdit != nullptr);
 
-   if (this->mpc_ActBusEdit != NULL)
+   if (this->mpc_ActBusEdit != nullptr)
    {
       mpc_ActBusEdit->ChangeProtocolTab(ore_Protocol);
    }
@@ -1326,9 +1326,9 @@ void C_SdHandlerWidget::m_SwitchProtocolTab(const C_OscCanProtocol::E_Type & ore
 void C_SdHandlerWidget::m_Import()
 {
    // only available on bus edit
-   tgl_assert(this->mpc_ActBusEdit != NULL);
+   tgl_assert(this->mpc_ActBusEdit != nullptr);
 
-   if (this->mpc_ActBusEdit != NULL)
+   if (this->mpc_ActBusEdit != nullptr)
    {
       this->mpc_ActBusEdit->ImportMessages();
    }
@@ -1406,11 +1406,11 @@ void C_SdHandlerWidget::m_TspImport(const bool oq_IsNodeNew)
          // open save as dialog
          if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
          {
-            if (mpc_ActNodeEdit != NULL)
+            if (mpc_ActNodeEdit != nullptr)
             {
                mpc_ActNodeEdit->AddFromTsp(oq_IsNodeNew);
             }
-            if (c_New != NULL)
+            if (c_New != nullptr)
             {
                pc_Dialog->SaveUserSettings();
                c_New->HideOverlay();
@@ -1428,7 +1428,7 @@ void C_SdHandlerWidget::m_TspImport(const bool oq_IsNodeNew)
    } //lint !e429  //no memory leak because of the parent of pc_Dialog and the Qt memory management
    else
    {
-      if (mpc_ActNodeEdit != NULL)
+      if (mpc_ActNodeEdit != nullptr)
       {
          mpc_ActNodeEdit->AddFromTsp(oq_IsNodeNew);
       }
@@ -1451,7 +1451,7 @@ void C_SdHandlerWidget::m_TspImportForNewNode()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdHandlerWidget::m_GenerateHalcDatapools(void) const
 {
-   if (this->mpc_ActNodeEdit != NULL)
+   if (this->mpc_ActNodeEdit != nullptr)
    {
       const int32_t s32_Result = C_PuiSdHandler::h_GetInstance()->HalcGenerateDatapools(this->mu32_Index);
 
@@ -1465,7 +1465,7 @@ void C_SdHandlerWidget::m_GenerateHalcDatapools(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdHandlerWidget::CallHelp(void)
 {
-   if (this->mpc_ActNodeEdit != NULL)
+   if (this->mpc_ActNodeEdit != nullptr)
    {
       const int32_t s32_TabIndex = this->mpc_ActNodeEdit->GetTabIndex();
       if (s32_TabIndex == C_SdNdeNodeEditWidget::hs32_TAB_INDEX_DATA_POOL)
@@ -1493,7 +1493,7 @@ void C_SdHandlerWidget::CallHelp(void)
             "stw::opensyde_gui::C_SdNdeNodeEditWidget");
       }
    }
-   else if (this->mpc_ActBusEdit != NULL)
+   else if (this->mpc_ActBusEdit != nullptr)
    {
       //TabIndex == COMM
       if (this->mpc_ActBusEdit->GetTabIndex() == 1)

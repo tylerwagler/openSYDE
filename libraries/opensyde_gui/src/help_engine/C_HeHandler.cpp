@@ -74,8 +74,8 @@ void C_HeHandler::CallSpecificHelpPage(const QString & orc_ClassName)
    }
 
    //Html help
-   tgl_assert(this->mpr_HtmlHelp != NULL);
-   if (this->mpr_HtmlHelp != NULL)
+   tgl_assert(this->mpr_HtmlHelp != nullptr);
+   if (this->mpr_HtmlHelp != nullptr)
    {
       if (c_PageSearchName.compare("") == 0)
       {
@@ -95,10 +95,10 @@ void C_HeHandler::CallSpecificHelpPage(const QString & orc_ClassName)
          //Cast char * to wchar * but still interpreted as char * for some reason ...
          //lint -e{926,1924} Required by API interface
          c_Link.pszKeywords =  (LPCTSTR)pcn_Text;
-         c_Link.pszUrl =       NULL;
-         c_Link.pszMsgText =   NULL;
-         c_Link.pszMsgTitle =  NULL;
-         c_Link.pszWindow =    NULL;
+         c_Link.pszUrl =       nullptr;
+         c_Link.pszMsgText =   nullptr;
+         c_Link.pszMsgTitle =  nullptr;
+         c_Link.pszWindow =    nullptr;
          c_Link.fIndexOnFail = TRUE;
          //this->mpr_HtmlHelp(GetDesktopWindow(), mh_GetHelpLocation().toStdString().c_str(), HH_DISPLAY_TOPIC, 0);
          //lint -e{923,1924,9091} Required by API interface
@@ -162,7 +162,7 @@ C_HeHandler::C_HeHandler() :
 #ifdef _WIN32
    //Load DLL
    this->mpc_InstHtmlHelp = LoadLibraryA("HHCtrl.ocx");
-   if (this->mpc_InstHtmlHelp != NULL)
+   if (this->mpc_InstHtmlHelp != nullptr)
    {
       //Load function
       const FARPROC pc_Temp = GetProcAddress(this->mpc_InstHtmlHelp, "HtmlHelpA");
@@ -170,7 +170,7 @@ C_HeHandler::C_HeHandler() :
    }
    else
    {
-      this->mpr_HtmlHelp = NULL;
+      this->mpr_HtmlHelp = nullptr;
    }
 #endif
 }
@@ -184,7 +184,7 @@ C_HeHandler::~C_HeHandler()
 {
 #ifdef _WIN32
    //Free DLL
-   if (this->mpc_InstHtmlHelp != NULL)
+   if (this->mpc_InstHtmlHelp != nullptr)
    {
       FreeLibrary(this->mpc_InstHtmlHelp);
    }

@@ -105,7 +105,7 @@ void C_SdManUnoTopologyReconnectBaseCommand::redo(void)
 //----------------------------------------------------------------------------------------------------------------------
 C_GiLiBusConnector * C_SdManUnoTopologyReconnectBaseCommand::m_GetBusConnector(void) const
 {
-   C_GiLiBusConnector * pc_Retval = NULL;
+   C_GiLiBusConnector * pc_Retval = nullptr;
 
    const vector<QGraphicsItem *> c_Items = m_GetSceneItems();
 

@@ -116,7 +116,7 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
    //BEFORE load
    InitStaticNames();
 
-   if (this->mpc_OscDataPool != NULL)
+   if (this->mpc_OscDataPool != nullptr)
    {
       const int32_t s32_Major = static_cast<int32_t>(this->mpc_OscDataPool->au8_Version[0]);
       const int32_t s32_Minor = static_cast<int32_t>(this->mpc_OscDataPool->au8_Version[1]);
@@ -163,11 +163,11 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
 
       if (this->mpc_OscDataPool->e_Type == C_OscNodeDataPool::eCOM)
       {
-         if ((this->ms32_DataPoolIndex >= 0) && (this->mpe_ComProtocolType != NULL))
+         if ((this->ms32_DataPoolIndex >= 0) && (this->mpe_ComProtocolType != nullptr))
          {
             // get the actual protocol type of the datapool
             const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-            if (pc_Node != NULL)
+            if (pc_Node != nullptr)
             {
                uint32_t u32_Counter;
 
@@ -197,8 +197,8 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
       {
          // Get the flag for the NVM start address mode
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-         tgl_assert(pc_Node != NULL);
-         if (pc_Node != NULL)
+         tgl_assert(pc_Node != nullptr);
+         if (pc_Node != nullptr)
          {
             this->mq_DatapoolAutoNvmStartAddress = pc_Node->q_DatapoolAutoNvmStartAddress;
          }
@@ -256,7 +256,7 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
                                                  c_DatapoolGroup);
       }
    }
-   else if (opc_SharedDatapoolId != NULL)
+   else if (opc_SharedDatapoolId != nullptr)
    {
       const C_PuiSdSharedDatapools & rc_SharedDatapools = C_PuiSdHandler::h_GetInstance()->GetSharedDatapoolsConst();
       uint32_t u32_SharedDatapoolGroup;
@@ -281,8 +281,8 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
             opc_SharedDatapoolId->u32_NodeIndex);
 
-         tgl_assert(pc_Node != NULL);
-         if ((pc_Node != NULL) &&
+         tgl_assert(pc_Node != nullptr);
+         if ((pc_Node != nullptr) &&
              (opc_SharedDatapoolId->u32_DataPoolIndex < pc_Node->c_DataPools.size()))
          {
             QString c_Text = "";
@@ -607,7 +607,7 @@ void C_SdNdeDpProperties::m_OkClicked(void)
    else
    {
       //Save possible, continue
-      if (this->mpc_OscDataPool != NULL)
+      if (this->mpc_OscDataPool != nullptr)
       {
          QString c_Version = this->mpc_Ui->pc_LineEditVersion_2->text();
          //adapt data
@@ -645,7 +645,7 @@ void C_SdNdeDpProperties::m_OkClicked(void)
 
          if (mpc_OscDataPool->e_Type == C_OscNodeDataPool::eCOM)
          {
-            if (this->mpe_ComProtocolType != NULL)
+            if (this->mpe_ComProtocolType != nullptr)
             {
                const C_OscCanProtocol::E_Type e_Protocol = this->m_GetSelectedProtocol();
 
@@ -684,7 +684,7 @@ void C_SdNdeDpProperties::m_ApplyType(const bool oq_SharedDatapool)
    QString c_Pic;
 
    // Type specific settings
-   if (this->mpc_OscDataPool != NULL)
+   if (this->mpc_OscDataPool != nullptr)
    {
       const QString c_DataPoolTypeString = C_PuiSdUtil::h_ConvertDataPoolTypeToString(this->mpc_OscDataPool->e_Type);
       this->mpc_Ui->pc_LabDatapoolType->setText(c_DataPoolTypeString);
@@ -771,11 +771,11 @@ void C_SdNdeDpProperties::m_LoadCodeGenerationAndApplication(void) const
    this->mpc_Ui->pc_ComboBoxApplication->clear();
    this->mpc_Ui->pc_ComboBoxApplication->addItem(C_GtGetText::h_GetText("<not assigned>"));
 
-   if (this->mpc_OscDataPool != NULL)
+   if (this->mpc_OscDataPool != nullptr)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          int32_t s32_Counter = 1;
          //Add all programmable applications and map data block index to combo box index
@@ -821,12 +821,12 @@ void C_SdNdeDpProperties::m_UpdateSizePrediction(void) const
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
       this->mu32_NodeIndex);
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       const C_OscDeviceDefinition * const pc_DevDef = pc_Node->pc_DeviceDefinition;
       const uint32_t u32_SubDeviceIndex = pc_Node->u32_SubDeviceIndex;
-      tgl_assert(pc_DevDef != NULL);
-      if (pc_DevDef != NULL)
+      tgl_assert(pc_DevDef != nullptr);
+      if (pc_DevDef != nullptr)
       {
          tgl_assert(u32_SubDeviceIndex < pc_DevDef->c_SubDevices.size());
          if (u32_SubDeviceIndex < pc_DevDef->c_SubDevices.size())
@@ -892,7 +892,7 @@ void C_SdNdeDpProperties::m_UpdateSizePrediction(void) const
                                                                static_cast<QString>(" Bytes)"));
 
             // update the label with usage prediction
-            if ((u32_ActSize > 0U) && (this->mpc_OscDataPool != NULL))
+            if ((u32_ActSize > 0U) && (this->mpc_OscDataPool != nullptr))
             {
                u32_PercentageUsage = (this->mpc_OscDataPool->GetNumBytesUsed() * 100U) / u32_ActSize;
             }
@@ -929,7 +929,7 @@ void C_SdNdeDpProperties::m_CheckDatapoolName(void) const
       c_Content += C_GtGetText::h_GetText("- is empty or contains invalid characters\n");
    }
 
-   if (this->m_CheckDatapoolNameNotDuplicate(NULL) == false)
+   if (this->m_CheckDatapoolNameNotDuplicate(nullptr) == false)
    {
       q_NameIsValid = false;
       c_Content += C_GtGetText::h_GetText("- is already in use\n");
@@ -979,7 +979,7 @@ const
    else
    {
       if (C_PuiSdHandler::h_GetInstance()->CheckNodeDataPoolNameAvailable(this->mu32_NodeIndex,
-                                                                          c_Name, NULL,
+                                                                          c_Name, nullptr,
                                                                           opc_ExistingDatapoolNames) == false)
       {
          q_NameIsValid = false;
@@ -991,15 +991,15 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpProperties::m_InitSpinBox(void) const
 {
-   if (this->mpc_OscDataPool != NULL)
+   if (this->mpc_OscDataPool != nullptr)
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-      if (pc_Node != NULL)
+      if (pc_Node != nullptr)
       {
          const C_OscDeviceDefinition * const pc_Device = pc_Node->pc_DeviceDefinition;
          const uint32_t u32_SubDeviceIndex = pc_Node->u32_SubDeviceIndex;
-         tgl_assert(pc_Device != NULL);
-         if (pc_Device != NULL)
+         tgl_assert(pc_Device != nullptr);
+         if (pc_Device != nullptr)
          {
             tgl_assert(u32_SubDeviceIndex < pc_Device->c_SubDevices.size());
             if (u32_SubDeviceIndex < pc_Device->c_SubDevices.size())
@@ -1151,7 +1151,7 @@ void C_SdNdeDpProperties::m_OnSafetyChange(const bool oq_IsSafety) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpProperties::m_HandleDataPoolSafetyAdaptation(void)
 {
-   if ((this->mpc_OscDataPool != NULL) && (this->mpc_OscDataPool->q_IsSafety == true))
+   if ((this->mpc_OscDataPool != nullptr) && (this->mpc_OscDataPool->q_IsSafety == true))
    {
       for (uint32_t u32_ItList = 0; u32_ItList < this->mpc_OscDataPool->c_Lists.size(); ++u32_ItList)
       {
@@ -1235,14 +1235,14 @@ bool C_SdNdeDpProperties::m_IsRelatedAppValid(const int32_t os32_RelatedDataBloc
 {
    bool q_Return = true;
 
-   if (this->mpc_OscDataPool != NULL)
+   if (this->mpc_OscDataPool != nullptr)
    {
       if (this->mpc_OscDataPool->e_Type == C_OscNodeDataPool::eCOM)
       {
          const C_OscCanProtocol::E_Type e_SelectedProtocolType = this->m_GetSelectedProtocol();
 
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             //Search all Datapools for those already owned by application
             for (uint32_t u32_ItDataPool = 0UL; u32_ItDataPool < pc_Node->c_DataPools.size(); ++u32_ItDataPool)
@@ -1289,7 +1289,7 @@ int32_t C_SdNdeDpProperties::m_GetCurrentDataBlockIndex(void) const
       if (this->mpc_Ui->pc_ComboBoxApplication->currentIndex() > 0)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             int32_t s32_Counter = 0;
 

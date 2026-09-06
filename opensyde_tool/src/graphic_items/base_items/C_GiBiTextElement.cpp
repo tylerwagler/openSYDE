@@ -63,7 +63,7 @@ C_GiBiTextElement::C_GiBiTextElement(const uint64_t & oru64_Id, const bool oq_Ed
    C_GiBiRectBaseGroup(oru64_Id, mhf64_MIN_WIDTH_TEXT_ELEMENT, mhf64_MIN_HEIGHT_TEXT_ELEMENT,
                        mf64_ACTION_POINT_OFFSET_BOUNDARY,
                        false, opc_Parent),
-   mpc_TextItem(NULL),
+   mpc_TextItem(nullptr),
    mq_Editable(oq_Editable)
 {
    this->m_Init();
@@ -84,7 +84,7 @@ C_GiBiTextElement::C_GiBiTextElement(const uint64_t & oru64_Id, QGraphicsItem * 
    C_GiBiRectBaseGroup(oru64_Id, mhf64_MIN_WIDTH_TEXT_ELEMENT, mhf64_MIN_HEIGHT_TEXT_ELEMENT,
                        mf64_ACTION_POINT_OFFSET_BOUNDARY,
                        false, opc_Parent),
-   mpc_TextItem(NULL),
+   mpc_TextItem(nullptr),
    mq_Editable(true)
 {
    this->m_Init();
@@ -183,7 +183,7 @@ bool C_GiBiTextElement::OpenStyleDialog(void)
    {
       q_Retval = false;
    }
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -206,7 +206,7 @@ void C_GiBiTextElement::CopyStyle(const QGraphicsItem * const opc_GuidelineItem)
 {
    const C_GiBiTextElement * const pc_Item = dynamic_cast<const C_GiBiTextElement * const>(opc_GuidelineItem);
 
-   if (pc_Item != NULL)
+   if (pc_Item != nullptr)
    {
       this->ApplyStyle(pc_Item->GetFontStyle(), pc_Item->GetFontColor());
    }
@@ -426,7 +426,7 @@ QVariant C_GiBiTextElement::itemChange(const GraphicsItemChange oe_Change, const
    switch (oe_Change) //lint !e788 //All other cases handled by call of parent
    {
    case ItemSceneHasChanged:
-      if (this->scene() != NULL)
+      if (this->scene() != nullptr)
       {
          // item was added to scene
          this->mpc_TextItem->installSceneEventFilter(this);

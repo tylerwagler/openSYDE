@@ -35,7 +35,7 @@ class C_OgeWiDashboardTab :
    Q_OBJECT
 
 public:
-   explicit C_OgeWiDashboardTab(QWidget * const opc_Parent = NULL, const bool oq_ShowUndock = false);
+   explicit C_OgeWiDashboardTab(QWidget * const opc_Parent = nullptr, const bool oq_ShowUndock = false);
    ~C_OgeWiDashboardTab(void) override;
    void SetText(const QString & orc_Text);
    void SetToolTip(const QString & orc_Heading, const QString & orc_Content) const;

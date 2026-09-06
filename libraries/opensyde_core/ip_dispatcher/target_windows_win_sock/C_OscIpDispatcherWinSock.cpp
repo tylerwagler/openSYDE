@@ -234,22 +234,22 @@ int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
 
    // Make an initial call to GetAdaptersAddresses to get
    // the necessary size into the u32_OutBufLen variable
-   GetAdaptersAddresses(AF_INET, 0U, NULL, NULL, &x_AddressesBufLen);
+   GetAdaptersAddresses(AF_INET, 0U, nullptr, nullptr, &x_AddressesBufLen);
    pc_Addresses = new IP_ADAPTER_ADDRESSES[x_AddressesBufLen];
 
-   u32_RetVal = GetAdaptersAddresses(AF_INET, 0U, NULL, pc_Addresses, &x_AddressesBufLen);
+   u32_RetVal = GetAdaptersAddresses(AF_INET, 0U, nullptr, pc_Addresses, &x_AddressesBufLen);
 
    if (u32_RetVal == NO_ERROR) //lint !e620 !e9106 //constant defined by API; no problem
    {
       PIP_ADAPTER_ADDRESSES pc_Adapter = pc_Addresses;
-      while (pc_Adapter != NULL)
+      while (pc_Adapter != nullptr)
       {
          // Only active adapters are relevant
          if (pc_Adapter->OperStatus == IfOperStatusUp)
          {
             IP_ADAPTER_UNICAST_ADDRESS * pc_Address = pc_Adapter->FirstUnicastAddress;
 
-            while (pc_Address != NULL)
+            while (pc_Address != nullptr)
             {
                if ((this->mc_PreferredInterfaceNames.GetCount() == 0) ||
                    (this->mc_PreferredInterfaceNames.IndexOf(pc_Adapter->FriendlyName) != -1))
@@ -374,7 +374,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
          c_TimeOut.tv_sec = mu32_ConnectionTimeoutSeconds;
          c_TimeOut.tv_usec = 0;
 
-         x_Return = select(0, NULL, &c_SocketWriteSet, &c_SocketErrorSet, &c_TimeOut);
+         x_Return = select(0, nullptr, &c_SocketWriteSet, &c_SocketErrorSet, &c_TimeOut);
          switch (x_Return)
          {
          case SOCKET_ERROR:

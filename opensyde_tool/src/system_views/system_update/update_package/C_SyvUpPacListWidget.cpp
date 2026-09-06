@@ -67,19 +67,19 @@ const QString C_SyvUpPacListWidget::mhc_CONFIG_FILE_TYPE = ".syde_up";
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvUpPacListWidget::C_SyvUpPacListWidget(QWidget * const opc_Parent) :
    C_OgeHorizontalListWidget(opc_Parent),
-   mpc_ContextMenu(NULL),
-   mpc_SelectedNode(NULL),
-   mpc_SelectedSection(NULL),
-   mpc_SelectedApp(NULL),
-   mpc_AddFileAction(NULL),
-   mpc_SelectFileAction(NULL),
-   mpc_RevertFileAction(NULL),
-   mpc_RemoveFileAction(NULL),
-   mpc_ShowFileInfoAction(NULL),
-   mpc_RemoveAllNodeFilesAction(NULL),
-   mpc_HideShowOptionalSectionsAction(NULL),
-   mpc_SkipUpdateOfFile(NULL),
-   mpc_ShowInExplorerAction(NULL),
+   mpc_ContextMenu(nullptr),
+   mpc_SelectedNode(nullptr),
+   mpc_SelectedSection(nullptr),
+   mpc_SelectedApp(nullptr),
+   mpc_AddFileAction(nullptr),
+   mpc_SelectFileAction(nullptr),
+   mpc_RevertFileAction(nullptr),
+   mpc_RemoveFileAction(nullptr),
+   mpc_ShowFileInfoAction(nullptr),
+   mpc_RemoveAllNodeFilesAction(nullptr),
+   mpc_HideShowOptionalSectionsAction(nullptr),
+   mpc_SkipUpdateOfFile(nullptr),
+   mpc_ShowInExplorerAction(nullptr),
    mc_LastPath(""),
    mu32_ViewIndex(0U),
    mq_Connected(false),
@@ -103,7 +103,7 @@ C_SyvUpPacListWidget::~C_SyvUpPacListWidget()
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
    // store configuration of the view
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       // save visibility of empty optional widgets
       C_UsHandler::h_GetInstance()->SetProjSvUpdateEmptyOptionalSectionsVisible(pc_View->GetName().c_str(),
@@ -128,7 +128,7 @@ void C_SyvUpPacListWidget::SetViewIndex(const uint32_t ou32_ViewIndex)
 
    this->clear();
 
-   if ((pc_View != NULL) &&
+   if ((pc_View != nullptr) &&
        (s32_Retval == C_NO_ERR))
    {
       const std::vector<C_OscViewNodeUpdate> & rc_NodeUpdate = pc_View->GetAllNodeUpdateInformation();
@@ -154,10 +154,10 @@ void C_SyvUpPacListWidget::SetViewIndex(const uint32_t ou32_ViewIndex)
                   const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                      u32_NodeUpdateCounter);
 
-                  if (pc_Node != NULL)
+                  if (pc_Node != nullptr)
                   {
                      // Add openSYDE devices only due the possibility to add parameter set image files always
-                     tgl_assert(pc_Node->pc_DeviceDefinition != NULL);
+                     tgl_assert(pc_Node->pc_DeviceDefinition != nullptr);
                      tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
                      if (((pc_Node->c_Applications.size() > 0) ||
                           (pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_OPEN_SYDE)) ||
@@ -226,7 +226,7 @@ void C_SyvUpPacListWidget::SetConnected(void)
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          // Adapt size of the widget
          pc_WidgetItem->SetConnected();
@@ -249,7 +249,7 @@ void C_SyvUpPacListWidget::SetUpdateStarted(void) const
 
       const C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<const C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          // Adapt size of the widget
          pc_WidgetItem->SetUpdateStarted();
@@ -274,7 +274,7 @@ void C_SyvUpPacListWidget::SetUpdateApplicationStarted(const uint32_t ou32_NodeI
 
       const C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<const C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          if (pc_WidgetItem->GetNodeIndex() == ou32_NodeIndex)
          {
@@ -304,7 +304,7 @@ void C_SyvUpPacListWidget::SetUpdateApplicationFinished(const uint32_t ou32_Node
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          if (pc_WidgetItem->GetNodeIndex() == ou32_NodeIndex)
          {
@@ -333,7 +333,7 @@ void C_SyvUpPacListWidget::SetUpdateApplicationError(const uint32_t ou32_NodeInd
 
       const C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<const C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          if (pc_WidgetItem->GetNodeIndex() == ou32_NodeIndex)
          {
@@ -362,7 +362,7 @@ void C_SyvUpPacListWidget::DiscardApplicationStatus(const uint32_t ou32_NodeInde
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          if (pc_WidgetItem->GetNodeIndex() == ou32_NodeIndex)
          {
@@ -389,7 +389,7 @@ void C_SyvUpPacListWidget::SetUpdateFinished(void) const
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          // Adapt size of the widget
          pc_WidgetItem->SetUpdateFinished();
@@ -412,7 +412,7 @@ void C_SyvUpPacListWidget::SetDisconnected(void)
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          // Adapt size of the widget
          pc_WidgetItem->SetDisconnected();
@@ -446,7 +446,7 @@ const
 
          C_SyvUpPacNodeWidget * const pc_WidgetItem =
             dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-         if (pc_WidgetItem != NULL)
+         if (pc_WidgetItem != nullptr)
          {
             uint32_t u32_NodeIndexCounter;
 
@@ -482,7 +482,7 @@ void C_SyvUpPacListWidget::SetNodeProgress(const uint32_t ou32_NodeIndex, const 
 
       const C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<const C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          if (pc_WidgetItem->GetNodeIndex() == ou32_NodeIndex)
          {
@@ -506,7 +506,7 @@ void C_SyvUpPacListWidget::RemoveAllFiles(void) const
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          pc_WidgetItem->RemoveAllFiles();
       }
@@ -558,7 +558,7 @@ void C_SyvUpPacListWidget::ExportConfig(void)
 
             C_SyvUpPacNodeWidget * const pc_WidgetItem =
                dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-            if (pc_WidgetItem != NULL)
+            if (pc_WidgetItem != nullptr)
             {
                C_SyvUpPacConfigNode c_Node;
 
@@ -641,7 +641,7 @@ void C_SyvUpPacListWidget::ImportConfig(void)
 
                C_SyvUpPacNodeWidget * const pc_WidgetItem =
                   dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-               if (pc_WidgetItem != NULL)
+               if (pc_WidgetItem != nullptr)
                {
                   pc_WidgetItem->LoadImportConfig(c_Config);
                }
@@ -709,13 +709,13 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
 {
    const C_PuiSvData * const pc_ViewData = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   tgl_assert(pc_ViewData != NULL);
+   tgl_assert(pc_ViewData != nullptr);
 
    QString c_FilterName;
    QString c_DefaultFilename;
    QString c_SelectedFilterName;
 
-   if (pc_ViewData != NULL)
+   if (pc_ViewData != nullptr)
    {
       c_DefaultFilename = pc_ViewData->GetName().c_str();
    }
@@ -920,7 +920,7 @@ int32_t C_SyvUpPacListWidget::CheckAllPaths(uint32_t & oru32_CountFiles, QString
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          uint32_t u32_CountNodeFiles = 0U;
 
@@ -961,7 +961,7 @@ bool C_SyvUpPacListWidget::CheckSecuritySettingsChanged() const
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          // Check the security settings
          q_Retval = pc_WidgetItem->CheckSecuritySettingsChanged();
@@ -1003,7 +1003,7 @@ const
    // The order position of inactive nodes is not used. Initial value is -1 to differentiate to the active nodes
    orc_NodesOrder.reserve(this->count());
 
-   if (opc_AllApplications != NULL)
+   if (opc_AllApplications != nullptr)
    {
       *opc_AllApplications = orc_ApplicationsToWrite;
    }
@@ -1014,18 +1014,18 @@ const
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          const uint32_t u32_NodeIndex = pc_WidgetItem->GetNodeIndex();
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
 
-         tgl_assert(pc_Node != NULL);
-         if (pc_Node != NULL)
+         tgl_assert(pc_Node != nullptr);
+         if (pc_Node != nullptr)
          {
             C_OscSuSequences::C_DoFlash & rc_Flash = orc_ApplicationsToWrite[u32_NodeIndex];
-            C_OscSuSequences::C_DoFlash * pc_AllApplications = NULL;
+            C_OscSuSequences::C_DoFlash * pc_AllApplications = nullptr;
 
-            if (opc_AllApplications != NULL)
+            if (opc_AllApplications != nullptr)
             {
                pc_AllApplications = &((*opc_AllApplications)[u32_NodeIndex]);
             }
@@ -1034,8 +1034,8 @@ const
             s32_Return = pc_WidgetItem->GetUpdatePackage(rc_Flash, pc_AllApplications);
 
             //Append other known device names
-            tgl_assert(pc_Node->pc_DeviceDefinition != NULL);
-            if (pc_Node->pc_DeviceDefinition != NULL)
+            tgl_assert(pc_Node->pc_DeviceDefinition != nullptr);
+            if (pc_Node->pc_DeviceDefinition != nullptr)
             {
                tgl_assert(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
                if (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size())
@@ -1123,7 +1123,7 @@ void C_SyvUpPacListWidget::resizeEvent(QResizeEvent * const opc_Event)
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          // Adapt size of the widget
          pc_WidgetItem->resize(((this->width() - 1) / this->ms32_ItemsPerLine), this->height());
@@ -1184,11 +1184,11 @@ void C_SyvUpPacListWidget::mouseDoubleClickEvent(QMouseEvent * const opc_Event)
 
    QListWidgetItem * const pc_Item = this->itemAt(c_Pos);
 
-   this->mpc_SelectedNode = NULL;
-   this->mpc_SelectedSection = NULL;
-   this->mpc_SelectedApp = NULL;
+   this->mpc_SelectedNode = nullptr;
+   this->mpc_SelectedSection = nullptr;
+   this->mpc_SelectedApp = nullptr;
 
-   if ((pc_Item != NULL) &&
+   if ((pc_Item != nullptr) &&
        (this->mq_Connected == false))
    {
       const QModelIndex c_Current = this->currentIndex();
@@ -1196,13 +1196,13 @@ void C_SyvUpPacListWidget::mouseDoubleClickEvent(QMouseEvent * const opc_Event)
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
 
-      if ((c_Current.isValid() == true) && (c_Current.parent().isValid() == false) && (pc_WidgetItem != NULL))
+      if ((c_Current.isValid() == true) && (c_Current.parent().isValid() == false) && (pc_WidgetItem != nullptr))
       {
          this->mpc_SelectedNode = pc_WidgetItem;
          this->mpc_SelectedSection = pc_WidgetItem->GetSectionList(c_Pos);
          this->mpc_SelectedApp = pc_WidgetItem->GetApplication(c_Pos);
 
-         if (this->mpc_SelectedApp != NULL)
+         if (this->mpc_SelectedApp != nullptr)
          {
             this->m_SelectFile();
          }
@@ -1221,7 +1221,7 @@ void C_SyvUpPacListWidget::m_MoveItem(const int32_t os32_SourceIndex, const int3
 
    // Update all position numbers in the node update information
    // The numbers in the widgets must be updated before
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       std::vector<C_OscViewNodeUpdate> c_NodeUpdate = pc_View->GetAllNodeUpdateInformation();
       int32_t s32_Counter;
@@ -1233,7 +1233,7 @@ void C_SyvUpPacListWidget::m_MoveItem(const int32_t os32_SourceIndex, const int3
 
          C_SyvUpPacNodeWidget * const pc_WidgetItem =
             dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-         if (pc_WidgetItem != NULL)
+         if (pc_WidgetItem != nullptr)
          {
             const uint32_t u32_NodeIndex = pc_WidgetItem->GetNodeIndex();
 
@@ -1264,7 +1264,7 @@ void C_SyvUpPacListWidget::m_UpdateNumbers(void) const
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          pc_WidgetItem->UpdatePositionNumber(static_cast<uint32_t>(s32_Counter));
       }
@@ -1296,7 +1296,7 @@ void C_SyvUpPacListWidget::m_DelegateStopPaint(void)
 void C_SyvUpPacListWidget::m_AddNodeWidget(const uint32_t ou32_NodeIndex, const QString & orc_NodeName)
 {
    QListWidgetItem * const pc_Item =
-      new QListWidgetItem(NULL, static_cast<int32_t>(QListWidgetItem::ItemType::UserType));
+      new QListWidgetItem(nullptr, static_cast<int32_t>(QListWidgetItem::ItemType::UserType));
    C_SyvUpPacNodeWidget * const pc_ItemWidget = new C_SyvUpPacNodeWidget(this->mu32_ViewIndex,
                                                                          this->count(),
                                                                          ou32_NodeIndex,
@@ -1319,11 +1319,11 @@ void C_SyvUpPacListWidget::m_OnCustomContextMenuRequested(const QPoint & orc_Pos
    bool q_ShowContextMenu = false;
    QListWidgetItem * const pc_Item = this->itemAt(orc_Pos);
 
-   this->mpc_SelectedNode = NULL;
-   this->mpc_SelectedSection = NULL;
-   this->mpc_SelectedApp = NULL;
+   this->mpc_SelectedNode = nullptr;
+   this->mpc_SelectedSection = nullptr;
+   this->mpc_SelectedApp = nullptr;
 
-   if ((pc_Item != NULL) &&
+   if ((pc_Item != nullptr) &&
        (this->mq_Connected == false))
    {
       const QModelIndex c_Current = this->currentIndex();
@@ -1332,17 +1332,17 @@ void C_SyvUpPacListWidget::m_OnCustomContextMenuRequested(const QPoint & orc_Pos
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
 
       // add action shall be shown only if no item concrete was clicked
-      if ((c_Current.isValid() == true) && (c_Current.parent().isValid() == false) && (pc_WidgetItem != NULL))
+      if ((c_Current.isValid() == true) && (c_Current.parent().isValid() == false) && (pc_WidgetItem != nullptr))
       {
          this->mpc_SelectedNode = pc_WidgetItem;
          this->mpc_SelectedSection = pc_WidgetItem->GetSectionList(orc_Pos);
          this->mpc_SelectedApp = pc_WidgetItem->GetAndSelectApplication(orc_Pos);
 
          // Section depending actions
-         this->mpc_RemoveAllSectionFilesAction->setVisible(this->mpc_SelectedSection != NULL);
+         this->mpc_RemoveAllSectionFilesAction->setVisible(this->mpc_SelectedSection != nullptr);
 
          // Concrete application depending actions
-         if ((this->mpc_SelectedApp != NULL) && (this->mpc_SelectedSection != NULL))
+         if ((this->mpc_SelectedApp != nullptr) && (this->mpc_SelectedSection != nullptr))
          {
             const QFileInfo c_FileInfo(this->mpc_SelectedApp->GetAppAbsoluteFilePath());
             this->mpc_RevertFileAction->setVisible(
@@ -1396,7 +1396,7 @@ void C_SyvUpPacListWidget::m_OnCustomContextMenuRequested(const QPoint & orc_Pos
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::m_OnCustomContextMenuHide(void)
 {
-   if (this->mpc_SelectedApp != NULL)
+   if (this->mpc_SelectedApp != nullptr)
    {
       this->mpc_SelectedApp->SetSelected(false);
    }
@@ -1463,7 +1463,7 @@ void C_SyvUpPacListWidget::m_SetupContextMenu(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::m_AddFileAction(void)
 {
-   if ((this->mpc_SelectedNode != NULL) &&
+   if ((this->mpc_SelectedNode != nullptr) &&
        (true))
    {
       if (this->mpc_SelectedNode->IsFileBased() == false)
@@ -1496,7 +1496,7 @@ void C_SyvUpPacListWidget::m_AddNewFile(const QString & orc_DialogCaption, const
 {
    Q_EMIT (this->SigStartCheck(false));
 
-   if (this->mpc_SelectedNode != NULL)
+   if (this->mpc_SelectedNode != nullptr)
    {
       const QString c_Folder = this->m_GetDialogPath();
       // File path checks are done by h_AskUserToSaveRelativePath(), so no need to use C_OgeWiUtil::h_GetOpenFileName()
@@ -1554,12 +1554,12 @@ void C_SyvUpPacListWidget::m_SelectFile(void)
 {
    Q_EMIT (this->SigStartCheck(false));
 
-   if (this->mpc_SelectedNode != NULL)
+   if (this->mpc_SelectedNode != nullptr)
    {
       QString c_Filter = "";
       const QString c_Folder = this->m_GetDialogPath();
 
-      if (this->mpc_SelectedApp != NULL)
+      if (this->mpc_SelectedApp != nullptr)
       {
          bool q_HexFile = false;
 
@@ -1617,8 +1617,8 @@ void C_SyvUpPacListWidget::m_SelectFile(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::m_RevertFile(void)
 {
-   if ((this->mpc_SelectedNode != NULL) &&
-       (this->mpc_SelectedApp != NULL))
+   if ((this->mpc_SelectedNode != nullptr) &&
+       (this->mpc_SelectedApp != nullptr))
    {
       this->mpc_SelectedNode->RevertFile(this->mpc_SelectedApp);
    }
@@ -1627,7 +1627,7 @@ void C_SyvUpPacListWidget::m_RevertFile(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::m_RemoveFile(void)
 {
-   if ((this->mpc_SelectedNode != NULL) && (this->mpc_SelectedApp != NULL))
+   if ((this->mpc_SelectedNode != nullptr) && (this->mpc_SelectedApp != nullptr))
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
       c_MessageBox.SetHeading(C_GtGetText::h_GetText("Remove file"));
@@ -1640,7 +1640,7 @@ void C_SyvUpPacListWidget::m_RemoveFile(void)
       if (c_MessageBox.Execute() == C_OgeWiCustomMessage::eYES)
       {
          this->mpc_SelectedNode->RemoveFile(this->mpc_SelectedApp);
-         this->mpc_SelectedApp = NULL;
+         this->mpc_SelectedApp = nullptr;
       }
    }
 }
@@ -1651,7 +1651,7 @@ void C_SyvUpPacListWidget::m_RemoveFile(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::m_ViewFileInfo(void)
 {
-   if (((this->mpc_SelectedApp != NULL) && (this->mpc_SelectedNode != NULL)) &&
+   if (((this->mpc_SelectedApp != nullptr) && (this->mpc_SelectedNode != nullptr)) &&
        (this->mpc_SelectedApp->GetAppFilePath().compare("") != 0))
    {
       mpc_SelectedApp->ViewFileInfo();
@@ -1664,7 +1664,7 @@ void C_SyvUpPacListWidget::m_ViewFileInfo(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::m_RemoveAllSectionFiles(void)
 {
-   if (this->mpc_SelectedSection != NULL)
+   if (this->mpc_SelectedSection != nullptr)
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
       QString c_Section = "";
@@ -1691,7 +1691,7 @@ void C_SyvUpPacListWidget::m_RemoveAllSectionFiles(void)
          this->mpc_SelectedSection->RemoveAllFiles();
 
          // update visibility of optional sections
-         if (this->mpc_SelectedNode != NULL)
+         if (this->mpc_SelectedNode != nullptr)
          {
             this->mpc_SelectedNode->SetEmptyOptionalSectionsVisible(this->mq_EmptyOptionalSectionsVisible);
          }
@@ -1705,7 +1705,7 @@ void C_SyvUpPacListWidget::m_RemoveAllSectionFiles(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::m_RemoveAllNodeFiles(void)
 {
-   if (this->mpc_SelectedNode != NULL)
+   if (this->mpc_SelectedNode != nullptr)
    {
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eQUESTION);
       c_MessageBox.SetHeading(C_GtGetText::h_GetText("Remove files"));
@@ -1753,7 +1753,7 @@ void C_SyvUpPacListWidget::m_HideShowOptionalSections(void)
 
       C_SyvUpPacNodeWidget * const pc_WidgetItem =
          dynamic_cast<C_SyvUpPacNodeWidget *>(this->itemWidget(pc_Item));
-      if (pc_WidgetItem != NULL)
+      if (pc_WidgetItem != nullptr)
       {
          // set visibility of empty optional sections
          pc_WidgetItem->SetEmptyOptionalSectionsVisible(this->mq_EmptyOptionalSectionsVisible);
@@ -1767,8 +1767,8 @@ void C_SyvUpPacListWidget::m_HideShowOptionalSections(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::m_SkipUpdateOfFile(void)
 {
-   if ((this->mpc_SelectedApp != NULL) &&
-       (this->mpc_SelectedSection != NULL))
+   if ((this->mpc_SelectedApp != nullptr) &&
+       (this->mpc_SelectedSection != nullptr))
    {
       this->mpc_SelectedSection->SetSkipOfUpdateFile(!this->mpc_SelectedApp->GetSkipOfUpdateFile(),
                                                      this->mpc_SelectedApp);
@@ -1782,7 +1782,7 @@ void C_SyvUpPacListWidget::m_SkipUpdateOfFile(void)
 void C_SyvUpPacListWidget::m_ShowInExplorer(void) const
 {
    // analogue to Qt Creator functionality "Show in Explorer" but Windows only
-   if (this->mpc_SelectedApp != NULL)
+   if (this->mpc_SelectedApp != nullptr)
    {
       C_Uti::h_RevealInFileManager(this->mpc_SelectedApp->GetAppAbsoluteFilePath());
    }
@@ -1791,8 +1791,8 @@ void C_SyvUpPacListWidget::m_ShowInExplorer(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::m_AdaptFile(const QString & orc_Path)
 {
-   if ((this->mpc_SelectedApp != NULL) &&
-       (this->mpc_SelectedNode != NULL))
+   if ((this->mpc_SelectedApp != nullptr) &&
+       (this->mpc_SelectedNode != nullptr))
    {
       this->mpc_SelectedNode->AdaptFile(orc_Path, this->mpc_SelectedApp);
    }
@@ -1805,7 +1805,7 @@ QString C_SyvUpPacListWidget::m_GetDialogPath(void)
    QFileInfo c_File;
 
    // first favorite: path of selected app
-   if (this->mpc_SelectedApp != NULL)
+   if (this->mpc_SelectedApp != nullptr)
    {
       this->mc_LastPath = QFileInfo(this->mpc_SelectedApp->GetAppAbsoluteFilePath()).path() + "/";
    }

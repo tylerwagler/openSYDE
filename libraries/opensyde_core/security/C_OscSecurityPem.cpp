@@ -111,13 +111,13 @@ int32_t C_OscSecurityPem::h_ExtractModulusAndExponent(const std::vector<uint8_t>
    const long x_DecodedSize = static_cast<long>(orc_PubKeyTextDecoded.size()); //lint !e970 !e8080 //use API type
 
    pc_X509Key = d2i_X509(&pc_X509Key, &pu8_DataPointer, x_DecodedSize);
-   if (pc_X509Key != NULL)
+   if (pc_X509Key != nullptr)
    {
       EVP_PKEY * const pc_PubKey = X509_get0_pubkey(pc_X509Key);
-      if (pc_PubKey != NULL)
+      if (pc_PubKey != nullptr)
       {
-         BIGNUM * pc_Modulus = NULL;
-         BIGNUM * pc_Exponent = NULL;
+         BIGNUM * pc_Modulus = nullptr;
+         BIGNUM * pc_Exponent = nullptr;
 
          const int x_ResultEn = //lint !e970 !e8080 //use API type
                                 EVP_PKEY_get_bn_param(pc_PubKey, OSSL_PKEY_PARAM_RSA_N, &pc_Modulus);
@@ -186,11 +186,11 @@ int32_t C_OscSecurityPem::m_ReadPrivateKey(const std::vector<uint8_t> & orc_File
    const int x_ContentSize = static_cast<int>(orc_FileContent.size()); //lint !e970 !e8080 //use type expected by API
    BIO * const pc_PrivKeyFile = BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
 
-   if (pc_PrivKeyFile != NULL)
+   if (pc_PrivKeyFile != nullptr)
    {
-      PKCS8_PRIV_KEY_INFO * const pc_RsaPriv = PEM_read_bio_PKCS8_PRIV_KEY_INFO(pc_PrivKeyFile, NULL, NULL,
-                                                                                NULL);
-      if (pc_RsaPriv != NULL)
+      PKCS8_PRIV_KEY_INFO * const pc_RsaPriv = PEM_read_bio_PKCS8_PRIV_KEY_INFO(pc_PrivKeyFile, nullptr, nullptr,
+                                                                                nullptr);
+      if (pc_RsaPriv != nullptr)
       {
          std::vector<uint8_t> c_PrivKeyTextDecoded;
          c_PrivKeyTextDecoded.resize(C_OscSecurityPem::mhu32_DEFAULT_BUFFER_SIZE);

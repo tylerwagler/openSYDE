@@ -42,8 +42,8 @@ class C_SdNdeDpListTableWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpListTableWidget(QWidget * const opc_Parent = NULL, QTreeWidget * const opc_TreeWidget = NULL, stw::opensyde_gui_logic::C_SdNdeUnoDataPoolManager * const opc_UndoStack =
-                                        NULL,
+   explicit C_SdNdeDpListTableWidget(QWidget * const opc_Parent = nullptr, QTreeWidget * const opc_TreeWidget = nullptr, stw::opensyde_gui_logic::C_SdNdeUnoDataPoolManager * const opc_UndoStack =
+                                        nullptr,
                                      const bool oq_PopUp = true);
    ~C_SdNdeDpListTableWidget(void) override;
    void InitStaticNames(void) const;

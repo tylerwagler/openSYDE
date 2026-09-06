@@ -359,7 +359,7 @@ void C_NagProjectSettingsPopupDialog::m_ShowUnUsedFiles()
          c_New->SetSize(QSize(1000, 900));
          c_New->exec();
          pc_Dialog->CancelDialog();
-         if (c_New != NULL)
+         if (c_New != nullptr)
          {
             c_New->HideOverlay();
             c_New->deleteLater();

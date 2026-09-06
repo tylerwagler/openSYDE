@@ -51,7 +51,7 @@ class C_AdapterBrowser :
    Q_OBJECT
 
 public:
-   explicit C_AdapterBrowser(QWidget * const opc_Parent = NULL);
+   explicit C_AdapterBrowser(QWidget * const opc_Parent = nullptr);
 
    stw::opensyde_core::C_OscCanAdapterConfig GetAdapterConfig(void) const;
    void SetAdapterConfig(const stw::opensyde_core::C_OscCanAdapterConfig & orc_Config);

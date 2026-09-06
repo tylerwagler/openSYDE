@@ -47,7 +47,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeTebContextMenuBase::C_OgeTebContextMenuBase(QWidget * const opc_Parent) :
    QTextBrowser(opc_Parent),
-   mpc_ContextMenu(NULL),
+   mpc_ContextMenu(nullptr),
    mq_LinkOnly(false)
 {
    m_InitContextMenu();
@@ -174,7 +174,7 @@ void C_OgeTebContextMenuBase::m_CopyHyperLink(void) const
       // copy to clipboard
       QClipboard * const pc_Clipboard = QApplication::clipboard();
 
-      if (pc_Clipboard != NULL)
+      if (pc_Clipboard != nullptr)
       {
          //Copy to clipboard
          pc_Clipboard->clear();

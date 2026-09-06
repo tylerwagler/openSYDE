@@ -38,7 +38,7 @@ class C_CamMosDatabaseWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamMosDatabaseWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamMosDatabaseWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamMosDatabaseWidget(void) override;
 
    void LoadUserSettings(void) const;

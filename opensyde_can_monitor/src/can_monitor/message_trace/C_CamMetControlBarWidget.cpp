@@ -531,7 +531,7 @@ void C_CamMetControlBarWidget::m_OpenTraceSettings(void)
       Q_EMIT (this->SigTraceBufferSize(this->mu32_TraceBufferSize));
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
    }

@@ -98,7 +98,7 @@ void C_PuiSdSharedDatapools::AddSharedDatapool(const C_OscNodeDataPoolId & orc_N
    uint32_t u32_GroupIndex = 0U;
 
    // Check if the new Datapool was not already shared. That should not happen
-   tgl_assert(this->IsSharedDatapool(orc_NewDatapool, NULL) == false);
+   tgl_assert(this->IsSharedDatapool(orc_NewDatapool, nullptr) == false);
 
    // Is the shared Datapool already shared or are both Datapools still stand alone Datapools
    if (this->IsSharedDatapool(orc_ShareDatapool, &u32_GroupIndex) == true)
@@ -255,7 +255,7 @@ bool C_PuiSdSharedDatapools::IsSharedDatapool(const C_OscNodeDataPoolId & orc_Da
       {
          if (orc_Datapool == rc_Group[u32_SharedDatapoolCounter])
          {
-            if (opu32_SharedDatapoolGroup != NULL)
+            if (opu32_SharedDatapoolGroup != nullptr)
             {
                // Return the group index
                *opu32_SharedDatapoolGroup = u32_GroupCounter;

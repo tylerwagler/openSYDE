@@ -141,12 +141,12 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
          case ms32_GRAPHICS_ITEM_ETHERNETBUS:
 
             pc_Bus = dynamic_cast<const C_GiLiBus *>(pc_CurItem);
-            if (pc_Bus != NULL)
+            if (pc_Bus != nullptr)
             {
                u32_Index = static_cast<uint32_t>(pc_Bus->GetIndex());
                const C_OscSystemBus * const pc_OscBus = C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_Index);
                const C_PuiSdBus * const pc_UiBus = C_PuiSdHandler::h_GetInstance()->GetUiBus(u32_Index);
-               if ((pc_OscBus != NULL) && (pc_UiBus != NULL))
+               if ((pc_OscBus != nullptr) && (pc_UiBus != nullptr))
                {
                   c_MapOldIndexToNewIndex.insert(u32_Index, c_Snapshot.c_OscBuses.size());
                   c_Snapshot.c_OscBuses.push_back(*pc_OscBus);
@@ -164,7 +164,7 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
          case ms32_GRAPHICS_ITEM_TEXTELEMENT:
 
             pc_TextElement = dynamic_cast<const C_GiSdTextElement *>(pc_CurItem);
-            if (pc_TextElement != NULL)
+            if (pc_TextElement != nullptr)
             {
                u32_Index = static_cast<uint32_t>(pc_TextElement->GetIndex());
                if (u32_Index < C_PuiSdHandler::h_GetInstance()->c_Elements.c_TextElements.size())
@@ -185,7 +185,7 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
          case ms32_GRAPHICS_ITEM_TEXTELEMENT_BUS:
 
             pc_TextElementBus = dynamic_cast<const C_GiTextElementBus *>(pc_CurItem);
-            if (pc_TextElementBus != NULL)
+            if (pc_TextElementBus != nullptr)
             {
                u32_Index = static_cast<uint32_t>(pc_TextElementBus->GetIndex());
                if (u32_Index < C_PuiSdHandler::h_GetInstance()->c_BusTextElements.size())
@@ -205,7 +205,7 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
          case ms32_GRAPHICS_ITEM_BOUNDARY:
 
             pc_Boundary = dynamic_cast<const C_GiSdBoundary *>(pc_CurItem);
-            if (pc_Boundary != NULL)
+            if (pc_Boundary != nullptr)
             {
                u32_Index = static_cast<uint32_t>(pc_Boundary->GetIndex());
                if (u32_Index < C_PuiSdHandler::h_GetInstance()->c_Elements.c_Boundaries.size())
@@ -224,7 +224,7 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
          case ms32_GRAPHICS_ITEM_IMAGE:
 
             pc_Image = dynamic_cast<const C_GiSdImageGroup *>(pc_CurItem);
-            if (pc_Image != NULL)
+            if (pc_Image != nullptr)
             {
                u32_Index = static_cast<uint32_t>(pc_Image->GetIndex());
                if (u32_Index < C_PuiSdHandler::h_GetInstance()->c_Elements.c_Images.size())
@@ -243,7 +243,7 @@ void C_SdManTopologyCopyPasteManager::CopyFromSceneToManager(const QList<QGraphi
          case ms32_GRAPHICS_ITEM_LINE_ARROW:
 
             pc_LineArrow = dynamic_cast<const C_GiSdArrow *>(pc_CurItem);
-            if (pc_LineArrow != NULL)
+            if (pc_LineArrow != nullptr)
             {
                u32_Index = static_cast<uint32_t>(pc_LineArrow->GetIndex());
                if (u32_Index < C_PuiSdHandler::h_GetInstance()->c_Elements.c_LineArrows.size())
@@ -345,7 +345,7 @@ void C_SdManTopologyCopyPasteManager::m_CalcOriginalPosition(const C_PuiBsElemen
       dynamic_cast<const C_SdTopologyDataSnapshot * const>(opc_Data);
 
    C_SebBaseCopyPasteManager::m_CalcOriginalPosition(opc_Data);
-   if (pc_ExpectedData != NULL)
+   if (pc_ExpectedData != nullptr)
    {
       uint32_t u32_ItElem;
 
@@ -392,7 +392,7 @@ void C_SdManTopologyCopyPasteManager::mh_CopyFromSceneToManagerHandleNode(const 
                                                                                      float64_t> & orc_NormalizedZetValues,
                                                                           const QGraphicsItem * const opc_NodeItemOrigin)
 {
-   if (opc_UiNodeItem != NULL)
+   if (opc_UiNodeItem != nullptr)
    {
       const uint32_t u32_Index = static_cast<uint32_t>(opc_UiNodeItem->GetIndex());
       const bool q_IsMulti = C_OscNodeSquad::h_CheckIsMultiDevice(u32_Index,
@@ -407,7 +407,7 @@ void C_SdManTopologyCopyPasteManager::mh_CopyFromSceneToManagerHandleNode(const 
       {
          const C_OscNode * const pc_OscNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_Index);
          const C_PuiSdNode * const pc_UiNode = C_PuiSdHandler::h_GetInstance()->GetUiNode(u32_Index);
-         if ((pc_OscNode != NULL) && (pc_UiNode != NULL))
+         if ((pc_OscNode != nullptr) && (pc_UiNode != nullptr))
          {
             orc_Snapshot.c_OscNodes.push_back(*pc_OscNode);
             orc_Snapshot.c_UiNodes.push_back(*pc_UiNode);
@@ -452,7 +452,7 @@ void C_SdManTopologyCopyPasteManager::mh_CopyFromSceneToManagerHandleMultiNode(c
          const C_OscNodeSquad * const pc_Group =
             C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(
                u32_GroupIndex);
-         if (pc_Group != NULL)
+         if (pc_Group != nullptr)
          {
             C_OscNodeSquad c_Group = *pc_Group;
             c_Group.c_SubNodeIndexes.clear();
@@ -463,7 +463,7 @@ void C_SdManTopologyCopyPasteManager::mh_CopyFromSceneToManagerHandleMultiNode(c
                   C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_Indices[u32_ItNode]);
                const C_PuiSdNode * const pc_UiNode =
                   C_PuiSdHandler::h_GetInstance()->GetUiNode(c_Indices[u32_ItNode]);
-               if ((pc_OscNode != NULL) && (pc_UiNode != NULL))
+               if ((pc_OscNode != nullptr) && (pc_UiNode != nullptr))
                {
                   c_Group.c_SubNodeIndexes.push_back(orc_Snapshot.c_OscNodes.size());
                   orc_Snapshot.c_OscNodes.push_back(*pc_OscNode);

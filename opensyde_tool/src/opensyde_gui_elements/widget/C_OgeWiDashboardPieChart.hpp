@@ -28,7 +28,7 @@ class C_OgeWiDashboardPieChart :
    public QWidget
 {
 public:
-   explicit C_OgeWiDashboardPieChart(QWidget * const opc_Parent = NULL);
+   explicit C_OgeWiDashboardPieChart(QWidget * const opc_Parent = nullptr);
 
    void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style,
                         const bool oq_ShowUnit, const bool oq_ShowValue);

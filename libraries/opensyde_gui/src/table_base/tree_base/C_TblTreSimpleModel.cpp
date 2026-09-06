@@ -44,7 +44,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_TblTreSimpleModel::C_TblTreSimpleModel(QObject * const opc_Parent) :
    QAbstractItemModel(opc_Parent),
-   mpc_InvisibleRootItem(NULL)
+   mpc_InvisibleRootItem(nullptr)
 {
 }
 
@@ -71,7 +71,7 @@ QModelIndex C_TblTreSimpleModel::index(const int32_t os32_Row, const int32_t os3
          //lint -e{9079}  Result of Qt interface restrictions, set by index function
          const C_TblTreSimpleItem * const pc_TreeItem =
             static_cast<const C_TblTreSimpleItem *>(orc_Parent.internalPointer());
-         if (pc_TreeItem != NULL)
+         if (pc_TreeItem != nullptr)
          {
             c_Retval =
                this->createIndex(os32_Row, os32_Column, pc_TreeItem->c_Children.at(static_cast<uint32_t>(os32_Row)));
@@ -79,7 +79,7 @@ QModelIndex C_TblTreSimpleModel::index(const int32_t os32_Row, const int32_t os3
       }
       else
       {
-         if (this->mpc_InvisibleRootItem != NULL)
+         if (this->mpc_InvisibleRootItem != nullptr)
          {
             //Top level
             c_Retval =
@@ -113,9 +113,9 @@ QModelIndex C_TblTreSimpleModel::parent(const QModelIndex & orc_Index) const
       //lint -e{9079}  Result of Qt interface restrictions, set by index function
       const C_TblTreSimpleItem * const pc_TreeItem =
          static_cast<const C_TblTreSimpleItem *>(orc_Index.internalPointer());
-      if (pc_TreeItem != NULL)
+      if (pc_TreeItem != nullptr)
       {
-         if (pc_TreeItem->pc_Parent != NULL)
+         if (pc_TreeItem->pc_Parent != nullptr)
          {
             const int32_t s32_Index = pc_TreeItem->pc_Parent->GetIndexInParentNumber();
             if (s32_Index >= 0)
@@ -147,14 +147,14 @@ int32_t C_TblTreSimpleModel::rowCount(const QModelIndex & orc_Parent) const
       //lint -e{9079}  Result of Qt interface restrictions, set by index function
       const C_TblTreSimpleItem * const pc_TreeItem =
          static_cast<const C_TblTreSimpleItem *>(orc_Parent.internalPointer());
-      if (pc_TreeItem != NULL)
+      if (pc_TreeItem != nullptr)
       {
          s32_Retval = static_cast<int32_t>(pc_TreeItem->c_Children.size());
       }
    }
    else
    {
-      if (this->mpc_InvisibleRootItem != NULL)
+      if (this->mpc_InvisibleRootItem != nullptr)
       {
          //Top level
          s32_Retval = static_cast<int32_t>(this->mpc_InvisibleRootItem->c_Children.size());
@@ -187,7 +187,7 @@ int32_t C_TblTreSimpleModel::m_CountLayers(const QModelIndex & orc_Index, uint32
       const C_TblTreSimpleItem * const pc_TreeItem =
          static_cast<const C_TblTreSimpleItem *>(orc_Index.internalPointer());
 
-      if (pc_TreeItem != NULL)
+      if (pc_TreeItem != nullptr)
       {
          oru32_ValidLayers = 0UL;
          this->m_CountLayers(orc_Index.parent(), oru32_ValidLayers);

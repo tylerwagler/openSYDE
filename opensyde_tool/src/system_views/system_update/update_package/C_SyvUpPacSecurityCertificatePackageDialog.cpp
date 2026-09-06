@@ -202,7 +202,7 @@ void C_SyvUpPacSecurityCertificatePackageDialog::m_InitStaticNames(void) const
          "- Secure Authentication: if \"Add new authentication PEM files\" is enabled, new authentication PEM files are added.\n"
          "- Secure Update: if \"Apply new Secure Update configuration\" is enabled, new Secure Update config is added.")
       );
-   if (this->mpc_Ui->pc_PEMFilesWidget != NULL)
+   if (this->mpc_Ui->pc_PEMFilesWidget != nullptr)
    {
       this->mpc_Ui->pc_LabelNewAuthenticationPEMFile->setText(
          static_cast<QString>(C_GtGetText::h_GetText("New authentication PEM files (%1)")).arg(QString::number(this
@@ -258,7 +258,7 @@ void C_SyvUpPacSecurityCertificatePackageDialog::m_InitStaticNames(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacSecurityCertificatePackageDialog::m_OkClicked(void)
 {
-   if (this->mpc_Ui->pc_PEMFilesWidget != NULL)
+   if (this->mpc_Ui->pc_PEMFilesWidget != nullptr)
    {
       this->mpc_Ui->pc_PEMFilesWidget->SaveUserSettings();
    }
@@ -303,7 +303,7 @@ void C_SyvUpPacSecurityCertificatePackageDialog::m_ReloadLastSavedData()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacSecurityCertificatePackageDialog::m_UpdatePemFileWidget()
 {
-   if (this->mpc_Ui->pc_PEMFilesWidget != NULL)
+   if (this->mpc_Ui->pc_PEMFilesWidget != nullptr)
    {
       this->mpc_Ui->pc_PEMFilesWidget->UpdatePemFileWidget();
    }
@@ -315,7 +315,7 @@ void C_SyvUpPacSecurityCertificatePackageDialog::m_UpdatePemFileWidget()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacSecurityCertificatePackageDialog::m_HandleAddPemFile()
 {
-   if (this->mpc_Ui->pc_PEMFilesWidget != NULL)
+   if (this->mpc_Ui->pc_PEMFilesWidget != nullptr)
    {
       this->mpc_Ui->pc_PEMFilesWidget->HandleAddPemFile();
    }
@@ -327,7 +327,7 @@ void C_SyvUpPacSecurityCertificatePackageDialog::m_HandleAddPemFile()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacSecurityCertificatePackageDialog::m_HandleClearAllPemFiles()
 {
-   if (this->mpc_Ui->pc_PEMFilesWidget != NULL)
+   if (this->mpc_Ui->pc_PEMFilesWidget != nullptr)
    {
       this->mpc_Ui->pc_PEMFilesWidget->HandleClearAllPemFiles();
    }
@@ -339,7 +339,7 @@ void C_SyvUpPacSecurityCertificatePackageDialog::m_HandleClearAllPemFiles()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacSecurityCertificatePackageDialog::m_UpdateLabelTitleWithFileCounter()
 {
-   if (this->mpc_Ui->pc_PEMFilesWidget != NULL)
+   if (this->mpc_Ui->pc_PEMFilesWidget != nullptr)
    {
       const int32_t s32_FileCount = mpc_Ui->pc_PEMFilesWidget->GetFilesCount();
       this->mpc_Ui->pc_LabelNewAuthenticationPEMFile->setText(
@@ -379,7 +379,7 @@ void C_SyvUpPacSecurityCertificatePackageDialog::m_ReloadLastSavedPassword()
    this->mpc_Ui->pc_LineEditPassword->setEchoMode(QLineEdit::Password);
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LineEditPassword, "NoRightBorder", true);
    this->mpc_Ui->pc_PubTogglePassword->setIcon(QIcon("://images/main_page_and_navi_bar/Icon_password_show.svg"));
-   this->mpc_Ui->pc_PubTogglePassword->setMenu(NULL);
+   this->mpc_Ui->pc_PubTogglePassword->setMenu(nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

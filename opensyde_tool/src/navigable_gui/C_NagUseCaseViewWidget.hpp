@@ -36,7 +36,7 @@ class C_NagUseCaseViewWidget :
    Q_OBJECT
 
 public:
-   explicit C_NagUseCaseViewWidget(QWidget * const opc_Parent = NULL);
+   explicit C_NagUseCaseViewWidget(QWidget * const opc_Parent = nullptr);
    ~C_NagUseCaseViewWidget() override;
 
    void SetUseCaseWidget(C_NagUseCaseWidget * const opc_Widget, const int32_t os32_Mode, const int32_t os32_SubMode,

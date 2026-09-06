@@ -97,7 +97,7 @@ void C_SdNdeUnoDasDataPoolListDataChangeCommand::m_Change(QVariant & orc_Previou
       this->mu32_DataPoolListIndex,
       this->mu32_DataPoolListDataSetIndex);
 
-   if (pc_OscData != NULL)
+   if (pc_OscData != nullptr)
    {
       C_OscNodeDataPoolDataSet c_OscData = *pc_OscData;
       //Copy previous value
@@ -130,7 +130,7 @@ void C_SdNdeUnoDasDataPoolListDataChangeCommand::m_Change(QVariant & orc_Previou
                                                                  c_OscData);
 
       //Signal data change
-      if (this->mpc_DataPoolListModelViewManager != NULL)
+      if (this->mpc_DataPoolListModelViewManager != nullptr)
       {
          this->mpc_DataPoolListModelViewManager->GetDataSetModel(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                                  this->mu32_DataPoolListIndex)->HandleDataChange(

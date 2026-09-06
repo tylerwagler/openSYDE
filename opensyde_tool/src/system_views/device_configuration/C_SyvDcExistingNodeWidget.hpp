@@ -37,7 +37,7 @@ class C_SyvDcExistingNodeWidget :
    Q_OBJECT
 
 public:
-   explicit C_SyvDcExistingNodeWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SyvDcExistingNodeWidget(QWidget * const opc_Parent = nullptr);
    ~C_SyvDcExistingNodeWidget(void) override;
 
    int32_t SetIndex(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex, const bool oq_PartOfSquad,

@@ -67,12 +67,12 @@ C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::C_SdNdeUnoDasDataPoolListAddDelet
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_Add(void)
 {
-   if (this->mpc_DataPoolListModelViewManager != NULL)
+   if (this->mpc_DataPoolListModelViewManager != nullptr)
    {
       C_SdNdeDpListDataSetModel * const pc_DataSetModel = this->mpc_DataPoolListModelViewManager->GetDataSetModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex,
          this->mu32_DataPoolListIndex);
-      if (pc_DataSetModel != NULL)
+      if (pc_DataSetModel != nullptr)
       {
          C_SdNdeDpListTableModel * const pc_ElementModel =
             this->mpc_DataPoolListModelViewManager->GetElementModel(
@@ -87,7 +87,7 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_Add(void)
             this->mu32_DataPoolListIndex);
          m_SortAscending();
          //Clear selection
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             pc_View->clearSelection();
          }
@@ -100,7 +100,7 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_Add(void)
             pc_DataSetModel->DoInsertColumns(c_OscNames, c_OscDataSetValues,
                                              this->mc_Indices[u32_Index]);
             //Select new row
-            if (pc_View != NULL)
+            if (pc_View != nullptr)
             {
                pc_View->selectColumn(this->mc_Indices[u32_Index]);
             }
@@ -110,10 +110,10 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_Add(void)
                this->mpc_DataPoolListModelViewManager->RegisterDataSetCountChange(this->mu32_NodeIndex,
                                                                                   this->mu32_DataPoolIndex,
                                                                                   this->mu32_DataPoolListIndex);
-               if (pc_ElementModel != NULL)
+               if (pc_ElementModel != nullptr)
                {
                   pc_ElementModel->DoInsertDataSet(this->mc_Indices[u32_Index]);
-                  if (pc_ElementView != NULL)
+                  if (pc_ElementView != nullptr)
                   {
                      pc_ElementView->UpdateSelectionForNewDataSetColumn(this->mc_Indices[u32_Index]);
                   }
@@ -132,12 +132,12 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_Add(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_Delete(void)
 {
-   if (this->mpc_DataPoolListModelViewManager != NULL)
+   if (this->mpc_DataPoolListModelViewManager != nullptr)
    {
       C_SdNdeDpListDataSetModel * const pc_DataSetModel = this->mpc_DataPoolListModelViewManager->GetDataSetModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex,
          this->mu32_DataPoolListIndex);
-      if (pc_DataSetModel != NULL)
+      if (pc_DataSetModel != nullptr)
       {
          C_SdNdeDpListTableModel * const pc_ElementModel =
             this->mpc_DataPoolListModelViewManager->GetElementModel(
@@ -150,7 +150,7 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_Delete(void)
          this->mc_OscDataSetValues.resize(this->mc_Indices.size());
          m_SortDescending();
          //Clear selection
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             pc_View->clearSelection();
          }
@@ -168,7 +168,7 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_Delete(void)
                this->mpc_DataPoolListModelViewManager->RegisterDataSetCountChange(this->mu32_NodeIndex,
                                                                                   this->mu32_DataPoolIndex,
                                                                                   this->mu32_DataPoolListIndex);
-               if (pc_ElementModel != NULL)
+               if (pc_ElementModel != nullptr)
                {
                   pc_ElementModel->DoDeleteDataSet(this->mc_Indices[u32_Index]);
                }
@@ -177,7 +177,7 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_Delete(void)
          //Register error change
          pc_DataSetModel->HandleErrorChange();
          //Select one over highest deleted index
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             if (this->mc_Indices.size() > 0)
             {

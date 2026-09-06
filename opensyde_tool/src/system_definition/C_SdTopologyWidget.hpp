@@ -38,7 +38,7 @@ class C_SdTopologyWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdTopologyWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdTopologyWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdTopologyWidget() override;
 
    void SetParentHook(QWidget * const opc_Parent);

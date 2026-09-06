@@ -31,7 +31,7 @@ public:
    C_SyvDaUnoAddCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
                         const C_PuiSvDbDataElement::E_Type & ore_Type, const QPointF & orc_NewPos,
                         const float64_t of64_ZetValue, const QString & orc_AdditionalInformation = "",
-                        QUndoCommand * const opc_Parent = NULL,
+                        QUndoCommand * const opc_Parent = nullptr,
                         const bool & orq_ForceUseAdditionalInformation = false);
    ~C_SyvDaUnoAddCommand(void) override;
 

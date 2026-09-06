@@ -96,18 +96,18 @@ QString C_PuiSvDbDataElementDisplayFormatterConfig::GetSingleValueContentFormatt
    QString c_Return;
    float64_t f64_Temp = 0.0;
 
-   if (((opf64_UnscaledValueAsFloat != NULL) || (opf64_ScaledValueAsFloat != NULL)) &&
+   if (((opf64_UnscaledValueAsFloat != nullptr) || (opf64_ScaledValueAsFloat != nullptr)) &&
        (this->e_TypeCategory != C_PuiSvDbDataElementDisplayFormatter::eSTRING))
    {
       // When needed, get the unscaled float value. this is independent
       C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Value, f64_Temp, ou32_Index);
 
-      if (opf64_UnscaledValueAsFloat != NULL)
+      if (opf64_UnscaledValueAsFloat != nullptr)
       {
          *opf64_UnscaledValueAsFloat = f64_Temp;
       }
 
-      if (opf64_ScaledValueAsFloat != NULL)
+      if (opf64_ScaledValueAsFloat != nullptr)
       {
          *opf64_ScaledValueAsFloat = C_OscUtils::h_GetValueScaled(f64_Temp, orc_Scaling.f64_Factor,
                                                                   orc_Scaling.f64_Offset);
@@ -146,14 +146,14 @@ QString C_PuiSvDbDataElementDisplayFormatterConfig::GetSingleValueContentFormatt
          }
          break;
       case C_PuiSvDbDataElementDisplayFormatter::eFLOAT:
-         if ((opf64_UnscaledValueAsFloat == NULL) && (opf64_ScaledValueAsFloat == NULL))
+         if ((opf64_UnscaledValueAsFloat == nullptr) && (opf64_ScaledValueAsFloat == nullptr))
          {
             // Value was not read as float already
             C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Value, f64_Temp, ou32_Index);
          }
 
          // Scale the value
-         if (opf64_ScaledValueAsFloat == NULL)
+         if (opf64_ScaledValueAsFloat == nullptr)
          {
             f64_Temp = C_OscUtils::h_GetValueScaled(f64_Temp, orc_Scaling.f64_Factor, orc_Scaling.f64_Offset);
          }

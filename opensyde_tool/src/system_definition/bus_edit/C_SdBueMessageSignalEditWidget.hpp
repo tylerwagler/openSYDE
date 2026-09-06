@@ -36,7 +36,7 @@ class C_SdBueMessageSignalEditWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdBueMessageSignalEditWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdBueMessageSignalEditWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdBueMessageSignalEditWidget(void) override;
 
    void SetMessageSyncManager(stw::opensyde_gui_logic::C_PuiSdNodeCanMessageSyncManager * const opc_Value) const;
@@ -59,8 +59,8 @@ public:
    void RefreshSelection(void);
    void GetLastSelection(bool & orq_MessageSelected, QString * const opc_MessageName, bool & orq_SignalSelected,
                          QString * const opc_SignalName,
-                         stw::opensyde_core::C_OscCanMessageIdentificationIndices * const opc_MessageId = NULL,
-                         uint32_t * const opu32_SignalIndex = NULL) const;
+                         stw::opensyde_core::C_OscCanMessageIdentificationIndices * const opc_MessageId = nullptr,
+                         uint32_t * const opu32_SignalIndex = nullptr) const;
    void RefreshColors(void) const;
    void ConnectAllChanges(void) const;
    void DisconnectAllChanges(void) const;

@@ -110,7 +110,7 @@ void C_SdManUnoTopologyManager::DoDelete(const QList<QGraphicsItem *> & orc_Item
       C_SdManUnoTopologyDeleteCommand * pc_DeleteCommand;
       QList<QGraphicsItem *> c_ImprovedItemList;
 
-      if (this->mpc_Scene != NULL)
+      if (this->mpc_Scene != nullptr)
       {
          //Special handling if possible to include all affected items, not only the selected ones
          C_SdManUnoTopologyAddDeleteBaseCommand::h_GetAllRelevantObjects(
@@ -363,7 +363,7 @@ void C_SdManUnoTopologyManager::DoReconnectNode(const C_GiLiBusConnector * const
                                                 const int32_t & ors32_Interface,
                                                 const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
-   if ((opc_StartingNode != NULL) && (opc_LastNode != NULL))
+   if ((opc_StartingNode != nullptr) && (opc_LastNode != nullptr))
    {
       vector<uint64_t> c_Ids;
       uint64_t u64_Id;
@@ -403,7 +403,7 @@ void C_SdManUnoTopologyManager::DoReconnectBus(const C_GiLiBusConnector * const 
                                                const int32_t & ors32_Interface,
                                                const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
-   if ((opc_StartingBus != NULL) && (opc_LastBus != NULL))
+   if ((opc_StartingBus != nullptr) && (opc_LastBus != nullptr))
    {
       vector<uint64_t> c_Ids;
       uint64_t u64_Id;
@@ -442,7 +442,7 @@ void C_SdManUnoTopologyManager::DoChangeInterface(const C_GiLiBusConnector * con
                                                   const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_PreviousProperties,
                                                   const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_NewProperties)
 {
-   if (opc_BusConnector != NULL)
+   if (opc_BusConnector != nullptr)
    {
       vector<uint64_t> c_Ids;
       uint64_t u64_Id;
@@ -489,7 +489,7 @@ void C_SdManUnoTopologyManager::m_MergeWithPrev(QUndoCommand * const opc_Command
    const int32_t s32_LastIndex = static_cast<int32_t>(this->count()) - 1L;
    const QUndoCommand * const opc_LastCommand = this->command(s32_LastIndex);
 
-   if (opc_LastCommand != NULL)
+   if (opc_LastCommand != nullptr)
    {
       if (opc_Command->mergeWith(opc_LastCommand) == true)
       {

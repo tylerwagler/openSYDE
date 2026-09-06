@@ -305,7 +305,7 @@ void C_NagMainWidget::LoadProject(const QString & orc_FilePath)
       }
       else
       {
-         this->m_CancelPasswordDialog(u16_Version, NULL);
+         this->m_CancelPasswordDialog(u16_Version, nullptr);
       }
    }
 
@@ -386,7 +386,7 @@ void C_NagMainWidget::OnSaveProjAs(void)
       UpdateRecentProjects();
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       pc_Dialog->SaveUserSettings();
       c_New->HideOverlay();
@@ -446,7 +446,7 @@ void C_NagMainWidget::OnCreateServiceProj(void)
          c_FinishMessage.Execute();
       }
    }
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -471,7 +471,7 @@ void C_NagMainWidget::OpenColorPicker(void)
       pc_ColorWidget->ChooseSelectedColor();
    }
 
-   if (c_Popup != NULL)
+   if (c_Popup != nullptr)
    {
       c_Popup->HideOverlay();
       c_Popup->deleteLater();
@@ -510,7 +510,7 @@ void C_NagMainWidget::h_GetFirstValidViewForServiceMode(uint32_t & oru32_ViewInd
         ++u32_ItView)
    {
       const C_PuiSvData * const pc_ViewData = C_PuiSvHandler::h_GetInstance()->GetView(u32_ItView);
-      if (pc_ViewData != NULL)
+      if (pc_ViewData != nullptr)
       {
          if (pc_ViewData->GetServiceModeActive())
          {
@@ -731,7 +731,7 @@ void C_NagMainWidget::m_AboutClicked()
 
    c_New->exec();
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -757,7 +757,7 @@ void C_NagMainWidget::m_SettingsClicked()
 
    c_New->exec();
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();
@@ -1071,7 +1071,7 @@ void C_NagMainWidget::m_SetNameStringLength()
          Q_EMIT SigMaxCharLimitAccepted();
       }
    }
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
       c_New->deleteLater();

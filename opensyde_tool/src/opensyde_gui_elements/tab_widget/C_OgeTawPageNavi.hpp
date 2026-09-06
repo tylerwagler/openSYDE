@@ -30,7 +30,7 @@ class C_OgeTawPageNavi :
    Q_OBJECT
 
 public:
-   C_OgeTawPageNavi(QWidget * const opc_Parent = NULL);
+   C_OgeTawPageNavi(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

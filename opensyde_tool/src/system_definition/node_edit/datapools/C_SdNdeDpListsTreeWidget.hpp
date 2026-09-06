@@ -41,7 +41,7 @@ class C_SdNdeDpListsTreeWidget :
    Q_OBJECT
 
 public:
-   C_SdNdeDpListsTreeWidget(QWidget * const opc_Parent = NULL);
+   C_SdNdeDpListsTreeWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpListsTreeWidget(void) override;
    void SetDataPool(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex);
    void AddEntry(void);

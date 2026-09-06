@@ -101,12 +101,12 @@ void C_SebUnoResizeRectangleCommand::redo(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoResizeRectangleCommand::m_UndoSingle(QGraphicsItem * const opc_Item) const
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       C_GiBiRectBaseGroup * pc_RectBase;
 
       pc_RectBase = dynamic_cast<C_GiBiRectBaseGroup *>(opc_Item);
-      if (pc_RectBase != NULL)
+      if (pc_RectBase != nullptr)
       {
          pc_RectBase->ApplySizeChange(this->mc_OldPos, this->mc_OldSize);
       }
@@ -121,12 +121,12 @@ void C_SebUnoResizeRectangleCommand::m_UndoSingle(QGraphicsItem * const opc_Item
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoResizeRectangleCommand::m_RedoSingle(QGraphicsItem * const opc_Item) const
 {
-   if (opc_Item != NULL)
+   if (opc_Item != nullptr)
    {
       C_GiBiRectBaseGroup * pc_RectBase;
 
       pc_RectBase = dynamic_cast<C_GiBiRectBaseGroup *>(opc_Item);
-      if (pc_RectBase != NULL)
+      if (pc_RectBase != nullptr)
       {
          pc_RectBase->ApplySizeChange(this->mc_NewPos, this->mc_NewSize);
       }

@@ -359,9 +359,9 @@ int32_t C_OscXceCreate::mh_CopyFile(const stw::scl::C_SclString & orc_InPath,
    stw::scl::C_SclString c_Error;
 
    orc_XcertFiles.insert(c_OutFile);
-   s32_Return = C_OscUtils::h_CopyFile(orc_InPath, c_Target, NULL, &c_Error);
+   s32_Return = C_OscUtils::h_CopyFile(orc_InPath, c_Target, nullptr, &c_Error);
    //Updated after copy not before to avoid modifications of const parameters
-   if (opc_OutFilePath != NULL)
+   if (opc_OutFilePath != nullptr)
    {
       *opc_OutFilePath = c_OutFile;
    }

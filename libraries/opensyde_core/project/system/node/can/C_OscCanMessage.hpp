@@ -65,9 +65,9 @@ public:
 
    bool IsTransmissionTypeOfCyclicType(void) const;
    static bool h_IsTransmissionTypeOfCyclicType(const E_TxMethodType oe_Type);
-   bool IsMultiplexed(uint32_t * const opu32_MultiplexerIndex = NULL) const;
+   bool IsMultiplexed(uint32_t * const opu32_MultiplexerIndex = nullptr) const;
    static bool h_ContainsMultiplexer(const std::vector<C_OscCanSignal> & orc_Signals,
-                                     uint32_t * const opu32_MultiplexerIndex = NULL);
+                                     uint32_t * const opu32_MultiplexerIndex = nullptr);
    void GetMultiplexerValues(std::set<uint16_t> & orc_Values) const;
 
    stw::scl::C_SclString c_Name;    ///< Message name

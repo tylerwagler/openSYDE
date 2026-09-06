@@ -184,7 +184,7 @@ void C_OscViewData::SetNodeUpdateInformation(const std::vector<C_OscViewNodeUpda
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscViewNodeUpdate * C_OscViewData::GetNodeUpdateInformation(const uint32_t ou32_NodeIndex) const
 {
-   const C_OscViewNodeUpdate * pc_Retval = NULL;
+   const C_OscViewNodeUpdate * pc_Retval = nullptr;
 
    if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
    {

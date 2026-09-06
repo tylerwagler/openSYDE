@@ -26,7 +26,7 @@ class C_SdNdeCoOverviewDelegate :
    public QStyledItemDelegate
 {
 public:
-   C_SdNdeCoOverviewDelegate(QObject * const opc_Parent = NULL);
+   C_SdNdeCoOverviewDelegate(QObject * const opc_Parent = nullptr);
 
    void paint(QPainter * const opc_Painter, const QStyleOptionViewItem & orc_Option,
               const QModelIndex & orc_Index) const override;

@@ -100,7 +100,7 @@ class C_SyvDaChaPlot :
    Q_OBJECT
 
 public:
-   C_SyvDaChaPlot(QWidget * const opc_Parent = NULL);
+   C_SyvDaChaPlot(QWidget * const opc_Parent = nullptr);
    ~C_SyvDaChaPlot(void) override;
 
    void RegisterCursorItem(C_SyvDaChaPlotCursorItem * const opc_CursorItem);

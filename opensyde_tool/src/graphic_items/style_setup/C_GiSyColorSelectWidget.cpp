@@ -64,7 +64,7 @@ C_GiSyColorSelectWidget::C_GiSyColorSelectWidget(stw::opensyde_gui_elements::C_O
    mrc_ParentDialog(orc_Parent),
    mc_PreviousColor(oc_Color),
    mq_ColorPickingActive(false),
-   mpc_ScreenColorPickingEventFilter(NULL),
+   mpc_ScreenColorPickingEventFilter(nullptr),
    ms32_NextRecentButton(C_UsHandler::h_GetInstance()->GetNextRecentColorButtonNumber())
 {
    const QVector<QColor> c_RecentColors = C_UsHandler::h_GetInstance()->GetRecentColors();
@@ -1189,7 +1189,7 @@ void C_GiSyColorSelectWidget::m_NewHsv(const int32_t os32_Hue, const int32_t os3
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyColorSelectWidget::m_PickScreenColor(void)
 {
-   if (mpc_ScreenColorPickingEventFilter == NULL)
+   if (mpc_ScreenColorPickingEventFilter == nullptr)
    {
       mpc_ScreenColorPickingEventFilter = new C_GiSyScreenColorPickingEventFilter(this);
    }

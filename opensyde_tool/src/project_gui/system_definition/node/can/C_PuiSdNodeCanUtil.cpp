@@ -72,7 +72,7 @@ int32_t C_PuiSdNodeCanUtil::h_SetCanSignalPosition(const C_OscCanMessageIdentifi
       const C_PuiSdNodeDataPoolListElement * const pc_UiElement =
          C_PuiSdHandler::h_GetInstance()->GetUiDataPoolListElement(c_Id.u32_NodeIndex, c_Id.u32_DataPoolIndex,
                                                                    c_Id.u32_ListIndex, c_Id.u32_ElementIndex);
-      if ((pc_OscElement != NULL) && (pc_UiElement != NULL))
+      if ((pc_OscElement != nullptr) && (pc_UiElement != nullptr))
       {
          if (pc_UiElement->q_AutoMinMaxActive)
          {

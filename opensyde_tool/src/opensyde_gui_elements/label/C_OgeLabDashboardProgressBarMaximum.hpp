@@ -29,7 +29,7 @@ class C_OgeLabDashboardProgressBarMaximum :
    Q_OBJECT
 
 public:
-   C_OgeLabDashboardProgressBarMaximum(QWidget * const opc_Parent = NULL);
+   C_OgeLabDashboardProgressBarMaximum(QWidget * const opc_Parent = nullptr);
 
    void AdjustFontToSize(void) override;
 };

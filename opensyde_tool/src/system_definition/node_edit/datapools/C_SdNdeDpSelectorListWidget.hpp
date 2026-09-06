@@ -42,7 +42,7 @@ class C_SdNdeDpSelectorListWidget :
    Q_OBJECT
 
 public:
-   explicit C_SdNdeDpSelectorListWidget(QWidget * const opc_Parent = NULL);
+   explicit C_SdNdeDpSelectorListWidget(QWidget * const opc_Parent = nullptr);
    ~C_SdNdeDpSelectorListWidget() override;
 
    bool SetTypeAndNode(const stw::opensyde_core::C_OscNodeDataPool::E_Type oe_Type, const uint32_t ou32_NodeIndex,
@@ -54,7 +54,7 @@ public:
    void UpdateActualDataPool(void);
    void AddNewDatapool(void);
    void Paste(void);
-   bool CheckDataPoolsForConflict(std::vector<uint32_t> * const opc_InvalidDatapoolIndices = NULL) const;
+   bool CheckDataPoolsForConflict(std::vector<uint32_t> * const opc_InvalidDatapoolIndices = nullptr) const;
 
    void UpdateSizeHint(const int32_t os32_MaxHeight);
    QSize sizeHint(void) const override;
@@ -110,7 +110,7 @@ private:
                          const stw::opensyde_gui_logic::C_PuiSdNodeDataPool & orc_UiDataPool,
                          const int32_t os32_DataPoolIndex, const bool oq_AllowNameAdaptation,
                          const bool oq_AllowDataAdaptation, const bool oq_SharedDatapoolSelected = false,
-                         const stw::opensyde_core::C_OscNodeDataPoolId * const opc_SharedDatapoolId = NULL);
+                         const stw::opensyde_core::C_OscNodeDataPoolId * const opc_SharedDatapoolId = nullptr);
    void m_AddDataPoolWidget(const uint32_t ou32_DataPoolIndex);
    void m_UpdateDataPoolWidget(const uint32_t ou32_DataPoolIndex, const int32_t os32_DataPoolWidgetIndex) const;
    void m_SynchronizeDatapoolProperties(const stw::opensyde_core::C_OscNodeDataPoolId & orc_AdaptedDatapool) const;

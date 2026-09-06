@@ -85,7 +85,7 @@ bool C_SdNdeUnoLeDataPoolListElementPasteCommand::InitialSetup(const uint32_t & 
       {
          const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
-         if (pc_List != NULL)
+         if (pc_List != nullptr)
          {
             q_Retval =
                (static_cast<uint32_t>(pc_List->c_Elements.size() + c_OscContent.size()) <=
@@ -113,7 +113,7 @@ bool C_SdNdeUnoLeDataPoolListElementPasteCommand::InitialSetup(const uint32_t & 
                const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
                   this->mu32_NodeIndex,
                   this->mu32_DataPoolIndex);
-               if (pc_DataPool != NULL)
+               if (pc_DataPool != nullptr)
                {
                   c_Text = C_PuiSdHandlerNodeLogic::h_GetElementTypeName(pc_DataPool->e_Type);
                }

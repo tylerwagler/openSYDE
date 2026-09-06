@@ -29,7 +29,7 @@ class C_FlaOgeSpxDark :
    Q_OBJECT
 
 public:
-   explicit C_FlaOgeSpxDark(QWidget * const opc_Parent = NULL);
+   explicit C_FlaOgeSpxDark(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

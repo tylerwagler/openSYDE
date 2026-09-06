@@ -566,7 +566,7 @@ int32_t C_PuiBsElementsFiler::h_LoadTextElement(C_PuiBsTextElement * const opc_T
 {
    int32_t s32_Return;
 
-   if (opc_TextElement != NULL)
+   if (opc_TextElement != nullptr)
    {
       if (orc_XmlParser.SelectNodeChild("box") == "box")
       {
@@ -633,7 +633,7 @@ int32_t C_PuiBsElementsFiler::h_LoadTextElement(C_PuiBsTextElement * const opc_T
 void C_PuiBsElementsFiler::h_SaveTextElement(const C_PuiBsTextElement * const opc_TextElement,
                                              stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser)
 {
-   if (opc_TextElement != NULL)
+   if (opc_TextElement != nullptr)
    {
       orc_XmlParser.CreateAndSelectNodeChild("box");
       h_SaveBoxBase(*opc_TextElement, orc_XmlParser);

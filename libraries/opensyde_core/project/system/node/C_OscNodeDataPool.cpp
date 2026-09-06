@@ -353,7 +353,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
    {
       const C_OscNodeDataPoolList & rc_CheckedList = this->c_Lists[oru32_ListIndex];
       //Check variable name
-      if (opq_NameInvalid != NULL)
+      if (opq_NameInvalid != nullptr)
       {
          if (C_OscUtils::h_CheckValidCeName(rc_CheckedList.c_Name) == false)
          {
@@ -365,7 +365,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
          }
       }
       //Name conflict
-      if (opq_NameConflict != NULL)
+      if (opq_NameConflict != nullptr)
       {
          *opq_NameConflict = false;
          for (uint32_t u32_ItElement = 0; u32_ItElement < this->c_Lists.size(); ++u32_ItElement)
@@ -382,7 +382,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
       }
 
       //Size
-      if (opq_UsageInvalid != NULL)
+      if (opq_UsageInvalid != nullptr)
       {
          //Usage
          if (rc_CheckedList.u32_NvmSize < rc_CheckedList.GetNumBytesUsed())
@@ -394,7 +394,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
             *opq_UsageInvalid = false;
          }
       }
-      if (opq_OutOfDataPool != NULL)
+      if (opq_OutOfDataPool != nullptr)
       {
          uint32_t u32_NvmSizeReserved = 0;
          //Check reserved size
@@ -413,14 +413,14 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
          }
       }
       //Check data sets
-      if (opq_DataSetsInvalid != NULL)
+      if (opq_DataSetsInvalid != nullptr)
       {
          bool q_NameConflict;
          bool q_NameInvalid;
          *opq_DataSetsInvalid = false;
          for (uint32_t u32_ItDataSet = 0;
               (u32_ItDataSet < rc_CheckedList.c_DataSets.size()) &&
-              ((*opq_DataSetsInvalid == false) || (opc_InvalidDataSetIndices != NULL));
+              ((*opq_DataSetsInvalid == false) || (opc_InvalidDataSetIndices != nullptr));
               ++u32_ItDataSet)
          {
             q_NameConflict = false;
@@ -429,7 +429,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
             if ((q_NameConflict == true) || (q_NameInvalid == true))
             {
                *opq_DataSetsInvalid = true;
-               if (opc_InvalidDataSetIndices != NULL)
+               if (opc_InvalidDataSetIndices != nullptr)
                {
                   opc_InvalidDataSetIndices->push_back(u32_ItDataSet);
                }
@@ -437,7 +437,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
          }
       }
       //Check elements
-      if (opq_ElementsInvalid != NULL)
+      if (opq_ElementsInvalid != nullptr)
       {
          std::map<stw::scl::C_SclString, uint32_t> c_PreviousNames;
          static std::map<uint32_t, bool> hc_PreviousResults;
@@ -447,7 +447,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
          *opq_ElementsInvalid = false;
          for (uint32_t u32_ItElement = 0;
               (u32_ItElement < rc_CheckedList.c_Elements.size()) &&
-              ((*opq_ElementsInvalid == false) || (opc_InvalidElementIndices != NULL)); ++u32_ItElement)
+              ((*opq_ElementsInvalid == false) || (opc_InvalidElementIndices != nullptr)); ++u32_ItElement)
          {
             //Overarching checks
             const C_OscNodeDataPoolListElement & rc_Element = rc_CheckedList.c_Elements[u32_ItElement];
@@ -456,7 +456,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
             if (c_ItElement != c_PreviousNames.end())
             {
                *opq_ElementsInvalid = true;
-               if (opc_InvalidElementIndices != NULL)
+               if (opc_InvalidElementIndices != nullptr)
                {
                   bool q_Added = false;
                   //Only add element once!
@@ -491,12 +491,12 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
                   q_NameInvalid = false;
                   q_MinOverMax = false;
                   q_DataSetInvalid = false;
-                  rc_CheckedList.CheckErrorElement(u32_ItElement, NULL, &q_NameInvalid, &q_MinOverMax,
-                                                   &q_DataSetInvalid, NULL);
+                  rc_CheckedList.CheckErrorElement(u32_ItElement, nullptr, &q_NameInvalid, &q_MinOverMax,
+                                                   &q_DataSetInvalid, nullptr);
                   if (((q_NameInvalid == true) || (q_MinOverMax == true)) || (q_DataSetInvalid == true))
                   {
                      *opq_ElementsInvalid = true;
-                     if (opc_InvalidElementIndices != NULL)
+                     if (opc_InvalidElementIndices != nullptr)
                      {
                         opc_InvalidElementIndices->push_back(u32_ItElement);
                      }
@@ -513,7 +513,7 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
                {
                   //Do not reset error
                   *opq_ElementsInvalid = (*opq_ElementsInvalid) || c_ItErr->second;
-                  if ((opc_InvalidElementIndices != NULL) && (c_ItErr->second))
+                  if ((opc_InvalidElementIndices != nullptr) && (c_ItErr->second))
                   {
                      opc_InvalidElementIndices->push_back(u32_ItElement);
                   }
@@ -524,23 +524,23 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
    }
    else
    {
-      if (opq_NameConflict != NULL)
+      if (opq_NameConflict != nullptr)
       {
          *opq_NameConflict = false;
       }
-      if (opq_NameInvalid != NULL)
+      if (opq_NameInvalid != nullptr)
       {
          *opq_NameInvalid = false;
       }
-      if (opq_UsageInvalid != NULL)
+      if (opq_UsageInvalid != nullptr)
       {
          *opq_UsageInvalid = false;
       }
-      if (opq_DataSetsInvalid != NULL)
+      if (opq_DataSetsInvalid != nullptr)
       {
          *opq_DataSetsInvalid = false;
       }
-      if (opq_ElementsInvalid != NULL)
+      if (opq_ElementsInvalid != nullptr)
       {
          *opq_ElementsInvalid = false;
       }

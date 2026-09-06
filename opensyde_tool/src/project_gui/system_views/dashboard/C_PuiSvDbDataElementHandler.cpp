@@ -578,11 +578,11 @@ QString C_PuiSvDbDataElementHandler::GetUnscaledValueAsScaledString(const float6
       const C_OscNodeDataPoolListElement * const pc_Element =
          C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id.u32_NodeIndex, c_Id.u32_DataPoolIndex,
                                                                     c_Id.u32_ListIndex, c_Id.u32_ElementIndex);
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          C_OscNodeDataPoolContent c_Tmp = pc_Element->c_MinValue;
          C_OscNodeDataPoolContentUtil::h_SetValueInContent(of64_Value, c_Tmp, 0UL);
-         c_Retval = c_FormatterConfig.GetSingleValueContentFormatted(c_Tmp, 0UL, c_Scaling, NULL);
+         c_Retval = c_FormatterConfig.GetSingleValueContentFormatted(c_Tmp, 0UL, c_Scaling, nullptr);
       }
    }
    if (c_Retval.compare("") == 0)
@@ -620,7 +620,7 @@ const
       const C_OscNodeDataPoolListElement * const pc_Element =
          C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id.u32_NodeIndex, c_Id.u32_DataPoolIndex,
                                                                     c_Id.u32_ListIndex, c_Id.u32_ElementIndex);
-      if (pc_Element != NULL)
+      if (pc_Element != nullptr)
       {
          //Restrict value to min & max
          C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_Change;
@@ -628,8 +628,8 @@ const
          C_OscNodeDataPoolContentUtil::h_SetValueInContent(of64_Value, c_Tmp, 0UL);
          C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(pc_Element->c_MinValue, pc_Element->c_MaxValue, c_Tmp,
                                                                e_Change);
-         c_Retval = c_FormatterConfig.GetSingleValueContentFormatted(c_Tmp, 0UL, c_Scaling, NULL);
-         if (opf64_Progress != NULL)
+         c_Retval = c_FormatterConfig.GetSingleValueContentFormatted(c_Tmp, 0UL, c_Scaling, nullptr);
+         if (opf64_Progress != nullptr)
          {
             float64_t f64_Min;
             float64_t f64_Max;
@@ -912,7 +912,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetAllValues(const uint32_t ou32_WidgetDa
          // The last value will be returned formatted too
          orc_ScaledFormattedLastValue =
             this->mc_UsedConfig[ou32_WidgetDataPoolElementIndex].GetSingleValueContentFormatted(
-               this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex][s32_LastIndex], u32_ArrayIndex, NULL);
+               this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex][s32_LastIndex], u32_ArrayIndex, nullptr);
 
          // Remove all values for the next call
          this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].clear();
@@ -1111,8 +1111,8 @@ void C_PuiSvDbDataElementHandler::m_UpdateDataPoolElementTimeoutAndValidFlag(
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   tgl_assert(pc_View != NULL);
-   if (pc_View != NULL)
+   tgl_assert(pc_View != nullptr);
+   if (pc_View != nullptr)
    {
       const QMap<C_PuiSvDbNodeDataPoolListElementId,
                  uint32_t>::const_iterator c_ItItem = this->mc_MappingDpElementToDataSerie.constFind(orc_Id);
@@ -1156,8 +1156,8 @@ void C_PuiSvDbDataElementHandler::m_UpdateDataPoolElementTimeoutAndValidFlag(
                      rc_ElementId.u32_ListIndex,
                      rc_ElementId.u32_ElementIndex);
 
-                  tgl_assert(pc_OscContent != NULL);
-                  if (pc_OscContent != NULL)
+                  tgl_assert(pc_OscContent != nullptr);
+                  if (pc_OscContent != nullptr)
                   {
                      // Scaling
                      if (c_Scaling.q_UseDefault == true)
@@ -1199,8 +1199,8 @@ void C_PuiSvDbDataElementHandler::m_UpdateDataPoolElementTimeoutAndValidFlag(
                                                                              rc_ElementId.u32_ListIndex,
                                                                              rc_ElementId.u32_ElementIndex);
 
-               tgl_assert(pc_OscContent != NULL);
-               if (pc_OscContent != NULL)
+               tgl_assert(pc_OscContent != nullptr);
+               if (pc_OscContent != nullptr)
                {
                   std::vector<stw::opensyde_core::C_OscNodeDataPoolContent::E_Type> c_Types;
                   const C_PuiSvDbDataElementScaling & rc_Scaling = this->mc_UsedConfig[c_ItItem.value()].c_Scaling;
@@ -1281,7 +1281,7 @@ bool C_PuiSvDbDataElementHandler::m_CheckManualReadRequired(void) const
             const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
             C_PuiSvReadDataConfiguration c_ReadConfig;
-            if (pc_View != NULL)
+            if (pc_View != nullptr)
             {
                pc_View->GetReadRailAssignment(c_ElementId, c_ReadConfig);
                if (c_ReadConfig.e_TransmissionMode == C_PuiSvReadDataConfiguration::eTM_ON_TRIGGER)
@@ -1385,7 +1385,7 @@ bool C_PuiSvDbDataElementHandler::m_CheckHasAnyRequiredBusesConnected(void) cons
    bool q_AtLeastOneValidElement = false;
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       const QMap<C_PuiSvDbNodeDataPoolListElementId, uint32_t> & rc_Elements = this->m_GetMappingDpElementToDataSerie();
 
@@ -1403,7 +1403,7 @@ bool C_PuiSvDbDataElementHandler::m_CheckHasAnyRequiredBusesConnected(void) cons
             {
                const C_OscNode * const pc_Node =
                   C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_MessageId.u32_NodeIndex);
-               if ((pc_Node != NULL) && (c_MessageId.u32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
+               if ((pc_Node != nullptr) && (c_MessageId.u32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size()))
                {
                   const C_OscNodeComInterfaceSettings & rc_Interface =
                      pc_Node->c_Properties.c_ComInterfaces[c_MessageId.u32_InterfaceIndex];
@@ -1534,7 +1534,7 @@ bool C_PuiSvDbDataElementHandler::m_CheckIsOnTrigger(const C_PuiSvDbNodeDataPool
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      if (pc_View != NULL)
+      if (pc_View != nullptr)
       {
          const QMap<C_OscNodeDataPoolListElementId,
                     C_PuiSvReadDataConfiguration> & rc_RailAssignments = pc_View->GetReadRailAssignments();

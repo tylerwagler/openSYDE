@@ -34,7 +34,7 @@ class C_CamGenMessagesWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamGenMessagesWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamGenMessagesWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamGenMessagesWidget(void) override;
 
    void InitStaticNames(void) const;

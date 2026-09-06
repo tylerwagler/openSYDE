@@ -76,8 +76,8 @@ bool C_OscHalcDefBase::CheckIdsUnique(std::vector<stw::scl::C_SclString> & orc_D
    for (uint32_t u32_ItDomain = 0UL; u32_ItDomain < this->GetDomainSize(); ++u32_ItDomain)
    {
       const C_OscHalcDefDomain * const pc_Domain = this->GetDomainDefDataConst(u32_ItDomain);
-      tgl_assert(pc_Domain != NULL);
-      if (pc_Domain != NULL)
+      tgl_assert(pc_Domain != nullptr);
+      if (pc_Domain != nullptr)
       {
          c_AllIds.push_back(pc_Domain->c_Id);
          for (uint32_t u32_ItChannel = 0UL; u32_ItChannel < pc_Domain->c_ChannelUseCases.size(); ++u32_ItChannel)

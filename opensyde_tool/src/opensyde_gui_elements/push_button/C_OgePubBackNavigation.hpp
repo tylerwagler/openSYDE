@@ -24,7 +24,7 @@ class C_OgePubBackNavigation :
    public C_OgePubSvgIconWithTextBase
 {
 public:
-   C_OgePubBackNavigation(QWidget * const opc_Parent = NULL);
+   C_OgePubBackNavigation(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -151,9 +151,9 @@ C_GiSvDaRectBaseGroup::C_GiSvDaRectBaseGroup(const uint32_t & oru32_ViewIndex, c
 // management
 C_GiSvDaRectBaseGroup::~C_GiSvDaRectBaseGroup(void)
 {
-   this->mpc_ProxyWidget->setWidget(NULL);
+   this->mpc_ProxyWidget->setWidget(nullptr);
    delete mpc_Widget;
-   this->mpc_Widget = NULL;
+   this->mpc_Widget = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -215,7 +215,7 @@ void C_GiSvDaRectBaseGroup::SetDisplayStyle(const stw::opensyde_gui_logic::C_Pui
       this->mq_InitialStyleCall = false;
       this->me_Style = oe_Style;
 
-      if (this->mpc_Widget != NULL)
+      if (this->mpc_Widget != nullptr)
       {
          switch (oe_Style)
          {
@@ -269,7 +269,7 @@ void C_GiSvDaRectBaseGroup::LoadSvBasicData(const C_PuiSvDbWidgetBase & orc_Data
       dynamic_cast<const C_PuiSvDbWriteWidgetBase * const>(&orc_Data);
 
    this->me_Style = orc_Data.e_DisplayStyle;
-   if (pc_WriteData != NULL)
+   if (pc_WriteData != nullptr)
    {
       this->m_LoadSvWriteData(*pc_WriteData);
    }
@@ -300,7 +300,7 @@ void C_GiSvDaRectBaseGroup::UpdateSvBasicData(C_PuiSvDbWidgetBase & orc_Data, co
    C_PuiSvDbWriteWidgetBase * const pc_WriteData = dynamic_cast<C_PuiSvDbWriteWidgetBase * const>(&orc_Data);
 
    orc_Data.e_DisplayStyle = this->me_Style;
-   if (pc_WriteData != NULL)
+   if (pc_WriteData != nullptr)
    {
       this->m_UpdateSvWriteData(*pc_WriteData);
    }
@@ -548,7 +548,7 @@ void C_GiSvDaRectBaseGroup::ConnectionActiveChanged(const bool oq_Active, const 
          this->mpc_ReadIcon->SetSvg(C_GiSvDaRectBaseGroup::mhc_ICON_READ_DISABLED);
       }
       //Always disable error
-      if (this->mpc_ConflictIcon != NULL)
+      if (this->mpc_ConflictIcon != nullptr)
       {
          this->mpc_ConflictIcon->setVisible(false);
          //Clear error
@@ -615,7 +615,7 @@ void C_GiSvDaRectBaseGroup::EditModeActiveChanged(const bool oq_Active)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaRectBaseGroup::SendCurrentValue(void)
 {
-   if ((this->mu32_NextManualActionIndex == 0) && (this->mpc_SendIcon != NULL))
+   if ((this->mu32_NextManualActionIndex == 0) && (this->mpc_SendIcon != nullptr))
    {
       m_ManualOperationStarted(false);
    }
@@ -942,17 +942,17 @@ C_PuiSvDbWidgetBase::E_Style C_GiSvDaRectBaseGroup::GetDisplayStyleType(void) co
 {
    C_PuiSvDbWidgetBase::E_Style e_Retval = C_PuiSvDbWidgetBase::eOPENSYDE;
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-   tgl_assert(pc_View != NULL);
-   if (pc_View != NULL)
+   tgl_assert(pc_View != nullptr);
+   if (pc_View != nullptr)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-      tgl_assert((pc_Dashboard != NULL) && (this->ms32_Index >= 0));
-      if ((pc_Dashboard != NULL) && (this->ms32_Index >= 0))
+      tgl_assert((pc_Dashboard != nullptr) && (this->ms32_Index >= 0));
+      if ((pc_Dashboard != nullptr) && (this->ms32_Index >= 0))
       {
          const C_PuiSvDbWidgetBase * const pc_WidgetBase =
             pc_Dashboard->GetWidgetBase(this->GetWidgetType(), static_cast<uint32_t>(this->ms32_Index));
-         tgl_assert(pc_WidgetBase != NULL);
-         if (pc_WidgetBase != NULL)
+         tgl_assert(pc_WidgetBase != nullptr);
+         if (pc_WidgetBase != nullptr)
          {
             e_Retval = pc_WidgetBase->e_DisplayStyle;
          }
@@ -994,18 +994,18 @@ void C_GiSvDaRectBaseGroup::SetZetValueCustom(const float64_t of64_ZetValue)
 //----------------------------------------------------------------------------------------------------------------------
 const C_PuiSvDashboard * C_GiSvDaRectBaseGroup::m_GetSvDashboard(void) const
 {
-   const C_PuiSvDashboard * pc_Dashboard = NULL;
+   const C_PuiSvDashboard * pc_Dashboard = nullptr;
 
    tgl_assert(this->ms32_Index >= 0);
    if (this->ms32_Index >= 0)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      tgl_assert(pc_View != NULL);
-      if (pc_View != NULL)
+      tgl_assert(pc_View != nullptr);
+      if (pc_View != nullptr)
       {
          pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-         tgl_assert(pc_Dashboard != NULL);
+         tgl_assert(pc_Dashboard != nullptr);
       }
    }
 
@@ -1152,17 +1152,17 @@ void C_GiSvDaRectBaseGroup::m_ResizeUpdateItems(const float64_t of64_DiffWidth, 
       m_ForceWidgetResize(this->mc_CurrentSize);
    }
 
-   if (this->mpc_ConflictIcon != NULL)
+   if (this->mpc_ConflictIcon != nullptr)
    {
       this->mpc_ConflictIcon->moveBy(of64_DiffWidth, 0.0);
       this->mpc_ConflictIcon->update();
    }
-   if (this->mpc_WarningIcon != NULL)
+   if (this->mpc_WarningIcon != nullptr)
    {
       this->mpc_WarningIcon->moveBy(of64_DiffWidth, 0.0);
       this->mpc_WarningIcon->update();
    }
-   if (this->mpc_ButtonGroup != NULL)
+   if (this->mpc_ButtonGroup != nullptr)
    {
       this->mpc_ButtonGroup->moveBy(of64_DiffWidth, 0.0);
       this->mpc_ButtonGroup->update();
@@ -1177,7 +1177,7 @@ void C_GiSvDaRectBaseGroup::m_ResizeUpdateItems(const float64_t of64_DiffWidth, 
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaRectBaseGroup::m_ForceWidgetResize(const QSizeF & orc_NewSize)
 {
-   if (this->mpc_Widget != NULL)
+   if (this->mpc_Widget != nullptr)
    {
       //Map scene size to widget size
       const QRectF c_CurrentRect = this->mpc_ProxyWidget->subWidgetRect(this->mpc_Widget);
@@ -1253,11 +1253,11 @@ void C_GiSvDaRectBaseGroup::mousePressEvent(QGraphicsSceneMouseEvent * const opc
 
    // Special case: Check for generic button
    if ((this->mq_ConnectionActive == true) &&
-       (this->mpc_ButtonGroup != NULL) &&
+       (this->mpc_ButtonGroup != nullptr) &&
        (this->mpc_ButtonGroup->isVisible() == true))
    {
       const QPointF c_Pos = opc_Event->scenePos();
-      if (this->mpc_ReadIcon != NULL)
+      if (this->mpc_ReadIcon != nullptr)
       {
          const QRectF c_RectRead = this->mpc_ReadIcon->sceneBoundingRect();
 
@@ -1269,7 +1269,7 @@ void C_GiSvDaRectBaseGroup::mousePressEvent(QGraphicsSceneMouseEvent * const opc
          }
          else
          {
-            if (this->mpc_SendIcon != NULL)
+            if (this->mpc_SendIcon != nullptr)
             {
                const QRectF c_RectSend = this->mpc_SendIcon->sceneBoundingRect();
 
@@ -1516,7 +1516,7 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
       this->SetDefaultToolTipContent(c_Text);
       this->SetDefaultToolTipType(C_NagToolTipWithImage::eDEFAULT);
    }
-   else if ((this->mpc_SendIcon != NULL) && (this->mpc_SendIcon->isVisible() == true) &&
+   else if ((this->mpc_SendIcon != nullptr) && (this->mpc_SendIcon->isVisible() == true) &&
             (this->mpc_SendIcon->contains(this->mpc_SendIcon->mapFromScene(opc_Event->scenePos())) == true))
    {
       QString c_Text;
@@ -1536,7 +1536,7 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
       this->SetDefaultToolTipContent(c_Text);
       this->SetDefaultToolTipType(C_NagToolTipWithImage::eDEFAULT);
    }
-   else if (((this->mpc_WarningIcon != NULL) && (this->mpc_WarningIcon->isVisible() == true)) &&
+   else if (((this->mpc_WarningIcon != nullptr) && (this->mpc_WarningIcon->isVisible() == true)) &&
             (this->mpc_WarningIcon->contains(this->mpc_WarningIcon->mapFromScene(opc_Event->scenePos())) == true))
    {
       const QString c_Heading = C_GtGetText::h_GetText("Configuration Warning");
@@ -1603,7 +1603,7 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
       this->SetDefaultToolTipContent(c_Content);
       this->SetDefaultToolTipType(C_NagToolTipWithImage::eWARNING);
    }
-   else if (((this->mpc_ConflictIcon != NULL) && (this->mpc_ConflictIcon->isVisible() == true)) &&
+   else if (((this->mpc_ConflictIcon != nullptr) && (this->mpc_ConflictIcon->isVisible() == true)) &&
             (this->mpc_ConflictIcon->contains(this->mpc_ConflictIcon->mapFromScene(opc_Event->scenePos())) == true))
    {
       m_UpdateErrorIconToolTip();
@@ -1624,7 +1624,7 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
       {
          if (this->GetDataPoolElementIndex(0, c_Id) == C_NO_ERR)
          {
-            if (C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id) != NULL)
+            if (C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id) != nullptr)
             {
                const QString c_ElementName =
                   C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id)->c_Name.c_str();
@@ -1703,12 +1703,12 @@ void C_GiSvDaRectBaseGroup::m_DataPoolElementsChanged(void)
       this->mpc_SendIcon->SetSvg(C_GiSvDaRectBaseGroup::mhc_ICON_WRITE_DISABLED);
    }
    this->mpc_ReadIcon->SetSvg(C_GiSvDaRectBaseGroup::mhc_ICON_READ_DISABLED);
-   if (this->mpc_ButtonGroup != NULL)
+   if (this->mpc_ButtonGroup != nullptr)
    {
       this->mpc_ButtonGroup->setVisible(this->mq_ShowButton);
    }
 
-   if ((this->mpc_WarningIcon != NULL) && (m_AllowWarningIcon() == true))
+   if ((this->mpc_WarningIcon != nullptr) && (m_AllowWarningIcon() == true))
    {
       this->mpc_WarningIcon->setVisible(q_InvalidElement);
    }
@@ -1733,7 +1733,7 @@ bool C_GiSvDaRectBaseGroup::m_AllowRefreshButton(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaRectBaseGroup::m_UpdateErrorIcon(void)
 {
-   if ((this->mpc_ConflictIcon != NULL) && (this->mpc_ButtonGroup != NULL))
+   if ((this->mpc_ConflictIcon != nullptr) && (this->mpc_ButtonGroup != nullptr))
    {
       if ((this->mc_CommmunicationErrors.size() > 0) ||
           (this->mc_InvalidDlcSignals.size() > 0))
@@ -1873,7 +1873,7 @@ void C_GiSvDaRectBaseGroup::m_InitButton(void)
    }
    else
    {
-      mpc_SendIcon = NULL;
+      mpc_SendIcon = nullptr;
    }
 
    // create the read icon
@@ -1906,7 +1906,7 @@ void C_GiSvDaRectBaseGroup::m_InitButton(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaRectBaseGroup::m_ManualRead(void)
 {
-   if ((this->mu32_NextManualActionIndex == 0) && (this->mpc_ReadIcon != NULL))
+   if ((this->mu32_NextManualActionIndex == 0) && (this->mpc_ReadIcon != nullptr))
    {
       this->m_ManualOperationStarted(true);
    }
@@ -1933,7 +1933,7 @@ void C_GiSvDaRectBaseGroup::m_ManualRead(void)
                if (this->m_CheckElementAlreadyRead(this->mu32_NextManualActionIndex - 1UL, c_ElementId) == false)
                {
                   this->mq_ManualReadStarted = true;
-                  Q_EMIT (this->SigDataPoolRead(c_ElementId, ((this->mq_ReadItem == false) ? this : NULL)));
+                  Q_EMIT (this->SigDataPoolRead(c_ElementId, ((this->mq_ReadItem == false) ? this : nullptr)));
                }
                else
                {
@@ -2049,14 +2049,14 @@ void C_GiSvDaRectBaseGroup::m_ManualOperationStarted(const bool oq_IsRead)
    {
       if (oq_IsRead)
       {
-         if (this->mpc_ReadIcon != NULL)
+         if (this->mpc_ReadIcon != nullptr)
          {
             this->mpc_ReadIcon->SetSvg(C_GiSvDaRectBaseGroup::mhc_ICON_READ_ABORT);
          }
       }
       else
       {
-         if (this->mpc_SendIcon != NULL)
+         if (this->mpc_SendIcon != nullptr)
          {
             this->mpc_SendIcon->SetSvg(C_GiSvDaRectBaseGroup::mhc_ICON_WRITE_ABORT);
          }
@@ -2075,11 +2075,11 @@ void C_GiSvDaRectBaseGroup::m_ManualOperationFinished()
    this->mu32_NextManualActionIndex = 0;
    if  (this->GetWidgetDataPoolElementCount() > 1)
    {
-      if (this->mpc_ReadIcon != NULL)
+      if (this->mpc_ReadIcon != nullptr)
       {
          this->mpc_ReadIcon->SetSvg(C_GiSvDaRectBaseGroup::mhc_ICON_READ);
       }
-      if (this->mpc_SendIcon != NULL)
+      if (this->mpc_SendIcon != nullptr)
       {
          this->mpc_SendIcon->SetSvg(C_GiSvDaRectBaseGroup::mhc_ICON_WRITE);
       }
@@ -2125,7 +2125,7 @@ QString C_GiSvDaRectBaseGroup::m_GetItemsForButtonToolTip(void) const
    QString c_Retval = "";
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-   if (pc_View != NULL)
+   if (pc_View != nullptr)
    {
       for (uint32_t u32_ItItem = 0; u32_ItItem < this->GetWidgetDataPoolElementCount(); ++u32_ItItem)
       {
@@ -2145,7 +2145,7 @@ QString C_GiSvDaRectBaseGroup::m_GetItemsForButtonToolTip(void) const
             {
                const C_OscNodeDataPoolListElement * const pc_Element =
                   C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id);
-               if (pc_Element != NULL)
+               if (pc_Element != nullptr)
                {
                   //Add name
                   if (c_Id.GetUseArrayElementIndex())
@@ -2172,7 +2172,7 @@ QString C_GiSvDaRectBaseGroup::m_GetItemsForButtonToolTip(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvDaRectBaseGroup::m_HandleWarningIconForTrafficEncryption()
 {
-   if ((this->mpc_WarningIcon != NULL) && (m_AllowWarningIcon() == true))
+   if ((this->mpc_WarningIcon != nullptr) && (m_AllowWarningIcon() == true))
    {
       const bool q_WarningRequired = m_RequireWarningForTrafficEncryption();
       if (q_WarningRequired)

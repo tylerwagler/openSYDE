@@ -46,8 +46,8 @@ public:
    bool CheckLocalError(const C_OscNodeDataPoolList & orc_ListTx, const C_OscNodeDataPoolList & orc_ListRx,
                         const uint32_t ou32_CanMessageValidSignalsDlcOffset, const bool oq_CanMessageSignalGapsValid,
                         const bool oq_ByteAlignmentRequired, const bool oq_SignalsRequired,
-                        const bool oq_CanOpenPdoSyncValid, std::vector<uint32_t> * const opc_InvalidTxMessages = NULL,
-                        std::vector<uint32_t> * const opc_InvalidRxMessages = NULL) const;
+                        const bool oq_CanOpenPdoSyncValid, std::vector<uint32_t> * const opc_InvalidTxMessages = nullptr,
+                        std::vector<uint32_t> * const opc_InvalidRxMessages = nullptr) const;
 
    bool ContainsAtLeastOneMessage(void) const;
    bool ContainsAtLeastOneActiveMessage(void) const;

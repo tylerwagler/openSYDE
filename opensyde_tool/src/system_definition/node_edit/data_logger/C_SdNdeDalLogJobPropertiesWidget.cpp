@@ -120,7 +120,7 @@ void C_SdNdeDalLogJobPropertiesWidget::SetNodeDataLoggerJob(const uint32_t ou32_
    this->mu32_NodeIndex = ou32_NodeIndex;
    this->mu32_DataLoggerJobIndex = ou32_DataLoggerJobIndex;
    this->m_DisconnectChangeTriggers();
-   if (pc_Retval != NULL)
+   if (pc_Retval != nullptr)
    {
       this->mpc_Ui->pc_LineEditName->setText(pc_Retval->c_Properties.c_Name.c_str());
       this->mpc_Ui->pc_TextEditComment->setText(pc_Retval->c_Properties.c_Comment.c_str());
@@ -436,7 +436,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnXappSettingsChanged()
    const C_OscDataLoggerJob * const pc_Retval = C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(mu32_NodeIndex,
                                                                                                   mu32_DataLoggerJobIndex);
 
-   if (pc_Retval != NULL)
+   if (pc_Retval != nullptr)
    {
       this->mc_Properties = pc_Retval->c_Properties;
 
@@ -473,7 +473,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_CheckDataLoggerName()
    const C_SclString c_LogJobName = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
    const bool q_IsLogJobNameUnique = C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(this->mu32_NodeIndex, c_LogJobName,
                                                                                      &this->mu32_DataLoggerJobIndex,
-                                                                                     NULL);
+                                                                                     nullptr);
    const bool q_IsLoggerNameValid = C_OscUtils::h_CheckValidCeName(c_LogJobName);
 
    //set invalid text property
@@ -617,7 +617,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
             const C_OscDataLoggerJob * const pc_Retval = C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(
                this->mu32_NodeIndex,
                this->mu32_DataLoggerJobIndex);
-            if (pc_Retval != NULL)
+            if (pc_Retval != nullptr)
             {
                this->mpc_Ui->pc_LineEditName->setText(pc_Retval->c_Properties.c_Name.c_str());
             }
@@ -639,7 +639,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
             const C_OscDataLoggerJob * const pc_Retval = C_PuiSdHandler::h_GetInstance()->GetDataLoggerJob(
                this->mu32_NodeIndex,
                this->mu32_DataLoggerJobIndex);
-            if (pc_Retval != NULL)
+            if (pc_Retval != nullptr)
             {
                this->mpc_Ui->pc_LineEditName->setText(pc_Retval->c_Properties.c_Name.c_str());
             }

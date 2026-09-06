@@ -636,14 +636,14 @@ void C_SdNdeHalcOvTableModel::m_FillHalcInfo(void)
 
    this->mc_HalcInfoAll.clear();
 
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       uint32_t u32_ItDomain;
       for (u32_ItDomain = 0UL; u32_ItDomain < pc_Node->c_HalcConfig.GetDomainSize(); ++u32_ItDomain)
       {
          const C_OscHalcConfigDomain * const pc_Domain =
             pc_Node->c_HalcConfig.GetDomainConfigDataConst(u32_ItDomain);
-         if (pc_Domain != NULL)
+         if (pc_Domain != nullptr)
          {
             C_HalcTableConfig c_Config;
             c_Config.u32_DomainIndex = u32_ItDomain;
@@ -767,7 +767,7 @@ void C_SdNdeHalcOvTableModel::m_FillHalcInfoIcon(const uint32_t ou32_DomainIndex
 
    C_PuiSdHandler::h_GetInstance()->CheckHalcDomainChannelLinked(this->mu32_NodeIndex,
                                                                  ou32_DomainIndex, ou32_ChannelIndex,
-                                                                 oq_UseChannelIndex, q_IsLinked, NULL);
+                                                                 oq_UseChannelIndex, q_IsLinked, nullptr);
    C_PuiSdHandler::h_GetInstance()->CheckHalcDomainChannelError(this->mu32_NodeIndex,
                                                                 ou32_DomainIndex, ou32_ChannelIndex,
                                                                 oq_UseChannelIndex, q_Error);
@@ -870,7 +870,7 @@ void C_SdNdeHalcOvTableModel::m_FillHalcInfoData(const C_OscHalcConfigDomain & o
                                                  const C_OscHalcConfigChannel & orc_Config,
                                                  C_SdNdeHalcOvTableModel::C_HalcTableData & orc_Data)
 {
-   const C_OscNodeApplication * pc_Application = NULL;
+   const C_OscNodeApplication * pc_Application = nullptr;
    const C_OscNodeDataPool * pc_Datapool;
 
    orc_Data.c_CustomName = static_cast<QString>(orc_Config.c_Name.c_str());
@@ -899,14 +899,14 @@ void C_SdNdeHalcOvTableModel::m_FillHalcInfoData(const C_OscHalcConfigDomain & o
 
    // Datablock assignment
    pc_Datapool = C_PuiSdHandler::h_GetInstance()->GetHalcDatapool(this->mu32_NodeIndex, orc_Config.q_SafetyRelevant);
-   if ((pc_Datapool != NULL) && (pc_Datapool->s32_RelatedDataBlockIndex >= 0))
+   if ((pc_Datapool != nullptr) && (pc_Datapool->s32_RelatedDataBlockIndex >= 0))
    {
       pc_Application =
          C_PuiSdHandler::h_GetInstance()->
          GetApplication(this->mu32_NodeIndex, static_cast<uint32_t>(pc_Datapool->s32_RelatedDataBlockIndex));
    }
 
-   if (pc_Application != NULL)
+   if (pc_Application != nullptr)
    {
       orc_Data.c_DatablockAssignment = static_cast<QString>(pc_Application->c_Name.c_str());
    }

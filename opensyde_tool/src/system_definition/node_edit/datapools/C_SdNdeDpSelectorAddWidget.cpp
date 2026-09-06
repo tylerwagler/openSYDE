@@ -176,7 +176,7 @@ void C_SdNdeDpSelectorAddWidget::m_InitFromData(void)
    C_OscNodeDataPoolId c_DatapoolId;
 
    // Add datapools of current node
-   if (pc_Node != NULL)
+   if (pc_Node != nullptr)
    {
       c_DatapoolId.u32_NodeIndex = this->mu32_NodeIndex;
 
@@ -203,7 +203,7 @@ void C_SdNdeDpSelectorAddWidget::m_InitFromData(void)
       {
          pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeCounter);
 
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             const QString c_NodeName = static_cast<QString>(pc_Node->c_Properties.c_Name.c_str()) + "::";
 

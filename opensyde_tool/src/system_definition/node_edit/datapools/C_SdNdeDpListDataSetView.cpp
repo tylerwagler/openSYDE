@@ -62,8 +62,8 @@ C_SdNdeDpListDataSetView::C_SdNdeDpListDataSetView(QWidget * const opc_Parent) :
    mu32_ListIndex(0),
    mc_UndoManager(),
    mc_Delegate(),
-   mpc_ModelViewManager(NULL),
-   mpc_LabelCorner(NULL),
+   mpc_ModelViewManager(nullptr),
+   mpc_LabelCorner(nullptr),
    mq_AllowMoveLeft(true),
    mq_AllowMoveRight(true)
 {
@@ -131,7 +131,7 @@ C_SdNdeDpListDataSetView::C_SdNdeDpListDataSetView(QWidget * const opc_Parent) :
 //lint -e{1540}  no memory leak because of the parent and the Qt memory management or never took ownership
 C_SdNdeDpListDataSetView::~C_SdNdeDpListDataSetView(void)
 {
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       this->mpc_ModelViewManager->UnRegisterDataSetView(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                         this->mu32_ListIndex, this);
@@ -149,7 +149,7 @@ C_SdNdeDpListDataSetView::~C_SdNdeDpListDataSetView(void)
 void C_SdNdeDpListDataSetView::SetList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                        const uint32_t & oru32_ListIndex)
 {
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       this->mpc_ModelViewManager->UnRegisterDataSetView(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                         this->mu32_ListIndex, this);
@@ -327,7 +327,7 @@ void C_SdNdeDpListDataSetView::DoMoveRight(void)
 {
    if (this->mq_AllowMoveRight == true)
    {
-      if (this->mpc_ModelViewManager != NULL)
+      if (this->mpc_ModelViewManager != nullptr)
       {
          bool q_AllowMove = true;
 
@@ -434,16 +434,16 @@ void C_SdNdeDpListDataSetView::dropEvent(QDropEvent * const opc_Event)
    C_SdNdeDpListDataSetView * const pc_SourceTable =
       dynamic_cast<C_SdNdeDpListDataSetView * const>(opc_Event->source());
 
-   if (pc_SourceTable != NULL)
+   if (pc_SourceTable != nullptr)
    {
       const QMimeData * const pc_MimeData = opc_Event->mimeData();
-      if (pc_MimeData != NULL)
+      if (pc_MimeData != nullptr)
       {
-         if (this->mpc_ModelViewManager != NULL)
+         if (this->mpc_ModelViewManager != nullptr)
          {
             const C_SdNdeDpListDataSetModel * const pc_Model = this->mpc_ModelViewManager->GetDataSetModel(
                this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-            if (pc_Model != NULL)
+            if (pc_Model != nullptr)
             {
                if (pc_Model->mimeTypes().size() > 2)
                {
@@ -661,11 +661,11 @@ void C_SdNdeDpListDataSetView::m_CheckActions(const std::vector<uint32_t> & orc_
 {
    if (orc_SelectedIndices.size() > 0)
    {
-      if (this->mpc_ModelViewManager != NULL)
+      if (this->mpc_ModelViewManager != nullptr)
       {
          const C_SdNdeDpListDataSetModel * const pc_Model = this->mpc_ModelViewManager->GetDataSetModel(
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
-         if (pc_Model != NULL)
+         if (pc_Model != nullptr)
          {
             bool q_AllowMoveLeft;
             bool q_AllowMoveRight;
@@ -708,12 +708,12 @@ void C_SdNdeDpListDataSetView::m_CheckActions(const std::vector<uint32_t> & orc_
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListDataSetView::m_UpdateModelView(void)
 {
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       C_SdNdeDpListDataSetModel * const pc_Model = this->mpc_ModelViewManager->GetDataSetModel(
          this->mu32_NodeIndex, this->mu32_DataPoolIndex,
          this->mu32_ListIndex);
-      if (pc_Model != NULL)
+      if (pc_Model != nullptr)
       {
          this->setModel(pc_Model);
          this->mc_Delegate.SetModel(pc_Model);
@@ -723,7 +723,7 @@ void C_SdNdeDpListDataSetView::m_UpdateModelView(void)
          this->setRowHeight(C_SdNdeDpListDataSetModel::h_EnumToRow(C_SdNdeDpListDataSetModel::eCOMMENT), 110);
       }
    }
-   if (this->mpc_ModelViewManager != NULL)
+   if (this->mpc_ModelViewManager != nullptr)
    {
       this->mpc_ModelViewManager->RegisterDataSetView(this->mu32_NodeIndex, this->mu32_DataPoolIndex,
                                                       this->mu32_ListIndex, this);
@@ -736,8 +736,8 @@ void C_SdNdeDpListDataSetView::m_UpdateModelView(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListDataSetView::m_UpdateCornerButton(void)
 {
-   tgl_assert(this->mpc_LabelCorner != NULL);
-   if (this->mpc_LabelCorner != NULL)
+   tgl_assert(this->mpc_LabelCorner != nullptr);
+   if (this->mpc_LabelCorner != nullptr)
    {
       this->mpc_LabelCorner->setGeometry(0, 0, this->verticalHeader()->width(), this->horizontalHeader()->height());
    }
@@ -766,7 +766,7 @@ uint32_t C_SdNdeDpListDataSetView::m_GetOneAfterHighestSelected(void)
    }
    else
    {
-      if (this->mpc_ModelViewManager != NULL)
+      if (this->mpc_ModelViewManager != nullptr)
       {
          //Add at end
          const int32_t s32_ColCount = this->mpc_ModelViewManager->GetDataSetModel(this->mu32_NodeIndex,
