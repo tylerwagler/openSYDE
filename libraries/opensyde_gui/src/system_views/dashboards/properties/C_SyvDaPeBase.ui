@@ -1173,9 +1173,12 @@
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeSpxFactorProperties" name="pc_DoubleSpinBoxFactor">
-              <property name="minimumSize">
+             <item>
+              <widget class="stw::opensyde_gui_elements::C_OgeSpxFactor" name="pc_DoubleSpinBoxFactor">
+               <property name="styleRole" stdset="0">
+                <string>spinbox-properties</string>
+               </property>
+               <property name="minimumSize">
                <size>
                 <width>100</width>
                 <height>30</height>
@@ -1212,9 +1215,12 @@
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeSpxDoubleProperties" name="pc_DoubleSpinBoxOffset">
-              <property name="minimumSize">
+             <item>
+              <widget class="stw::opensyde_gui_elements::C_OgeSpxDoubleToolTipBase" name="pc_DoubleSpinBoxOffset">
+               <property name="styleRole" stdset="0">
+                <string>spinbox-properties</string>
+               </property>
+               <property name="minimumSize">
                <size>
                 <width>100</width>
                 <height>30</height>
@@ -1900,16 +1906,16 @@
    <extends>QGraphicsView</extends>
    <header>C_SebGraphicsView.hpp</header>
   </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxDoubleProperties</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>C_OgeSpxDoubleProperties.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxFactorProperties</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>C_OgeSpxFactorProperties.hpp</header>
-  </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeSpxDoubleToolTipBase</class>
+    <extends>QDoubleSpinBox</extends>
+    <header>C_OgeSpxDoubleToolTipBase.hpp</header>
+   </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeSpxFactor</class>
+    <extends>QDoubleSpinBox</extends>
+    <header>C_OgeSpxFactor.hpp</header>
+   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeWiSpinBoxGroupProperties</class>
    <extends>QWidget</extends>

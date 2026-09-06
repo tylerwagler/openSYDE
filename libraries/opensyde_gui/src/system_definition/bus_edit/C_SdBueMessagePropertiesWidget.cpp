@@ -177,14 +177,14 @@ C_SdBueMessagePropertiesWidget::C_SdBueMessagePropertiesWidget(QWidget * const o
    connect(this->mpc_Ui->pc_ComboBoxTxMethod, static_cast<void (QComboBox::*)(
                                                              int32_t)>(&C_OgeCbxText::currentIndexChanged), this,
            &C_SdBueMessagePropertiesWidget::m_OnTxMethodChange);
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   connect(this->mpc_Ui->pc_SpinBoxLater, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-           &C_SdBueMessagePropertiesWidget::m_SyncCycleToLater);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    connect(this->mpc_Ui->pc_SpinBoxLater, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+            &C_SdBueMessagePropertiesWidget::m_SyncCycleToLater);
 
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   connect(this->mpc_Ui->pc_SpinBoxCycleTime, static_cast<void (QSpinBox::*)(
-                                                             int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-           &C_SdBueMessagePropertiesWidget::m_SyncLaterToCycle);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    connect(this->mpc_Ui->pc_SpinBoxCycleTime, static_cast<void (QSpinBox::*)(
+                                                              int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+            &C_SdBueMessagePropertiesWidget::m_SyncLaterToCycle);
 
    connect(this->mpc_Ui->pc_PushButtonJ1939OpenDialog, &QPushButton::clicked,
            this, &C_SdBueMessagePropertiesWidget::m_OnEditJ1939PgPropertiesClicked);
@@ -1580,13 +1580,13 @@ void C_SdBueMessagePropertiesWidget::m_ConnectProtocolSpecificFields(void) const
    if (this->me_ComProtocol != C_OscCanProtocol::eCAN_OPEN)
    {
       //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-      connect(this->mpc_Ui->pc_SpinBoxId, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxNumber::valueChanged), this,
+      connect(this->mpc_Ui->pc_SpinBoxId, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
               &C_SdBueMessagePropertiesWidget::m_OnIdChanged);
    }
    else
    {
       //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-      connect(this->mpc_Ui->pc_SpinBoxCobId, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxNumber::valueChanged),
+      connect(this->mpc_Ui->pc_SpinBoxCobId, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxToolTipBase::valueChanged),
               this,
               &C_SdBueMessagePropertiesWidget::m_OnCobIdChanged);
       connect(this->mpc_Ui->pc_CheckBoxCobIdWithNodeId, &C_OgeChxProperties::toggled, this,
@@ -1596,7 +1596,7 @@ void C_SdBueMessagePropertiesWidget::m_ConnectProtocolSpecificFields(void) const
    connect(this->mpc_Ui->pc_CheckBoxExtendedType, &C_OgeChxProperties::toggled, this,
            &C_SdBueMessagePropertiesWidget::m_OnExtendedChanged);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   connect(this->mpc_Ui->pc_SpinBoxDlc, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxNumber::valueChanged), this,
+   connect(this->mpc_Ui->pc_SpinBoxDlc, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
            &C_SdBueMessagePropertiesWidget::m_OnDlcChanged);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_ComboBoxTxMethod, static_cast<void (QComboBox::*)(
@@ -1613,14 +1613,14 @@ void C_SdBueMessagePropertiesWidget::m_DisconnectProtocolSpecificFields(void) co
    if (this->me_ComProtocol != C_OscCanProtocol::eCAN_OPEN)
    {
       //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-      disconnect(this->mpc_Ui->pc_SpinBoxId, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxNumber::valueChanged),
+      disconnect(this->mpc_Ui->pc_SpinBoxId, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxToolTipBase::valueChanged),
                  this,
                  &C_SdBueMessagePropertiesWidget::m_OnIdChanged);
    }
    else
    {
       //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-      disconnect(this->mpc_Ui->pc_SpinBoxCobId, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxNumber::valueChanged),
+      disconnect(this->mpc_Ui->pc_SpinBoxCobId, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxToolTipBase::valueChanged),
                  this,
                  &C_SdBueMessagePropertiesWidget::m_OnCobIdChanged);
       disconnect(this->mpc_Ui->pc_CheckBoxCobIdWithNodeId, &C_OgeChxProperties::toggled, this,
@@ -1630,7 +1630,7 @@ void C_SdBueMessagePropertiesWidget::m_DisconnectProtocolSpecificFields(void) co
    disconnect(this->mpc_Ui->pc_CheckBoxExtendedType, &C_OgeChxProperties::toggled, this,
               &C_SdBueMessagePropertiesWidget::m_OnExtendedChanged);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   disconnect(this->mpc_Ui->pc_SpinBoxDlc, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxNumber::valueChanged),
+   disconnect(this->mpc_Ui->pc_SpinBoxDlc, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxToolTipBase::valueChanged),
               this,
               &C_SdBueMessagePropertiesWidget::m_OnDlcChanged);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
@@ -3045,22 +3045,22 @@ void C_SdBueMessagePropertiesWidget::ConnectAllChanges(void) const
            &C_SdBueMessagePropertiesWidget::m_OnNameChanged);
    connect(this->mpc_Ui->pc_TextEditComment, &QTextEdit::textChanged, this,
            &C_SdBueMessagePropertiesWidget::m_OnPropertiesChanged);
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   connect(this->mpc_Ui->pc_SpinBoxCycleTime, static_cast<void (QSpinBox::*)(
-                                                             int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-           &C_SdBueMessagePropertiesWidget::m_OnCycleTimeChanged);
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   connect(this->mpc_Ui->pc_SpinBoxEarly, static_cast<void (QSpinBox::*)(
-                                                         int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-           &C_SdBueMessagePropertiesWidget::m_OnEarlyOrLaterTimeChanged);
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   connect(this->mpc_Ui->pc_SpinBoxLater, static_cast<void (QSpinBox::*)(
-                                                         int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-           &C_SdBueMessagePropertiesWidget::m_OnEarlyOrLaterTimeChanged);
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   connect(this->mpc_Ui->pc_SpinBoxCoPdoSyncNumber, static_cast<void (QSpinBox::*)(
-                                                                   int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-           &C_SdBueMessagePropertiesWidget::m_OnCoPdoSyncNumberChanged);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    connect(this->mpc_Ui->pc_SpinBoxCycleTime, static_cast<void (QSpinBox::*)(
+                                                              int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+            &C_SdBueMessagePropertiesWidget::m_OnCycleTimeChanged);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    connect(this->mpc_Ui->pc_SpinBoxEarly, static_cast<void (QSpinBox::*)(
+                                                          int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+            &C_SdBueMessagePropertiesWidget::m_OnEarlyOrLaterTimeChanged);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    connect(this->mpc_Ui->pc_SpinBoxLater, static_cast<void (QSpinBox::*)(
+                                                          int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+            &C_SdBueMessagePropertiesWidget::m_OnEarlyOrLaterTimeChanged);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    connect(this->mpc_Ui->pc_SpinBoxCoPdoSyncNumber, static_cast<void (QSpinBox::*)(
+                                                                    int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+            &C_SdBueMessagePropertiesWidget::m_OnCoPdoSyncNumberChanged);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_ComboBoxDirection, static_cast<void (QComboBox::*)(
                                                               int32_t)>(&C_OgeCbxText::currentIndexChanged), this,
@@ -3083,22 +3083,22 @@ void C_SdBueMessagePropertiesWidget::DisconnectAllChanges(void) const
               &C_SdBueMessagePropertiesWidget::m_OnNameChanged);
    disconnect(this->mpc_Ui->pc_TextEditComment, &QTextEdit::textChanged, this,
               &C_SdBueMessagePropertiesWidget::m_OnPropertiesChanged);
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   disconnect(this->mpc_Ui->pc_SpinBoxCycleTime, static_cast<void (QSpinBox::*)(
-                                                                int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-              &C_SdBueMessagePropertiesWidget::m_OnCycleTimeChanged);
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   disconnect(this->mpc_Ui->pc_SpinBoxEarly, static_cast<void (QSpinBox::*)(
-                                                            int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-              &C_SdBueMessagePropertiesWidget::m_OnEarlyOrLaterTimeChanged);
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   disconnect(this->mpc_Ui->pc_SpinBoxLater, static_cast<void (QSpinBox::*)(
-                                                            int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-              &C_SdBueMessagePropertiesWidget::m_OnEarlyOrLaterTimeChanged);
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   disconnect(this->mpc_Ui->pc_SpinBoxCoPdoSyncNumber, static_cast<void (QSpinBox::*)(
-                                                                      int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-              &C_SdBueMessagePropertiesWidget::m_OnCoPdoSyncNumberChanged);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    disconnect(this->mpc_Ui->pc_SpinBoxCycleTime, static_cast<void (QSpinBox::*)(
+                                                                 int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+               &C_SdBueMessagePropertiesWidget::m_OnCycleTimeChanged);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    disconnect(this->mpc_Ui->pc_SpinBoxEarly, static_cast<void (QSpinBox::*)(
+                                                             int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+               &C_SdBueMessagePropertiesWidget::m_OnEarlyOrLaterTimeChanged);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    disconnect(this->mpc_Ui->pc_SpinBoxLater, static_cast<void (QSpinBox::*)(
+                                                             int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+               &C_SdBueMessagePropertiesWidget::m_OnEarlyOrLaterTimeChanged);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    disconnect(this->mpc_Ui->pc_SpinBoxCoPdoSyncNumber, static_cast<void (QSpinBox::*)(
+                                                                       int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+               &C_SdBueMessagePropertiesWidget::m_OnCoPdoSyncNumberChanged);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    disconnect(this->mpc_Ui->pc_ComboBoxDirection, static_cast<void (QComboBox::*)(
                                                                  int32_t)>(&C_OgeCbxText::currentIndexChanged), this,
@@ -3191,8 +3191,8 @@ void C_SdBueMessagePropertiesWidget::m_CheckMessageId(void) const
    {
       const uint32_t u32_Id = static_cast<uint32_t>(this->mpc_Ui->pc_SpinBoxId->value());
       const bool q_Id = this->mpc_Ui->pc_CheckBoxExtendedType->isChecked();
-      C_OgeSpxNumber * const pc_VisibleSpinBox = (this->me_ComProtocol != C_OscCanProtocol::eCAN_OPEN) ?
-                                                 this->mpc_Ui->pc_SpinBoxId : this->mpc_Ui->pc_SpinBoxCobId;
+       C_OgeSpxToolTipBase * const pc_VisibleSpinBox = (this->me_ComProtocol != C_OscCanProtocol::eCAN_OPEN) ?
+                                                  this->mpc_Ui->pc_SpinBoxId : this->mpc_Ui->pc_SpinBoxCobId;
 
       //check
       bool q_NameIsValid = false;

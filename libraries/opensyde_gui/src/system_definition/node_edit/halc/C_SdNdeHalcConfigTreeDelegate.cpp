@@ -14,7 +14,7 @@
 
 #include "C_OgeCbxMultiSelectTableHalc.hpp"
 #include "C_OgeCbxTableHalc.hpp"
-#include "C_OgeSpxTableHalc.hpp"
+#include "C_OgeSpxToolTipBase.hpp"
 #include "C_OgeLeTableHalc.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -57,7 +57,14 @@ C_SdNdeHalcConfigTreeDelegate::C_SdNdeHalcConfigTreeDelegate(QObject * const opc
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeWiSpinBoxGroup * C_SdNdeHalcConfigTreeDelegate::m_CreateSpinBox(QWidget * const opc_Parent) const
 {
-   return new C_OgeSpxTableHalc(opc_Parent);
+   C_OgeWiSpinBoxGroup * pc_SpinBoxGroup = new C_OgeWiSpinBoxGroup(opc_Parent);
+   if (pc_SpinBoxGroup->mpc_Ui && pc_SpinBoxGroup->mpc_Ui->pc_DoubleSpinBox) {
+      pc_SpinBoxGroup->mpc_Ui->pc_DoubleSpinBox->setProperty("styleRole", "spinbox-table-halc");
+   }
+   if (pc_SpinBoxGroup->mpc_Ui && pc_SpinBoxGroup->mpc_Ui->pc_SpinBox64) {
+      pc_SpinBoxGroup->mpc_Ui->pc_SpinBox64->setProperty("styleRole", "spinbox-table-halc");
+   }
+   return pc_SpinBoxGroup;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -150,7 +150,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpnBoxPollingInterval">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpnBoxPollingInterval">
           <property name="minimumSize">
            <size>
             <width>225</width>
@@ -162,6 +162,9 @@
             <width>120</width>
             <height>30</height>
            </size>
+          </property>
+          <property name="styleRole" stdset="0">
+           <string>spinbox-number</string>
           </property>
           <property name="suffix">
            <string> ms</string>
@@ -229,7 +232,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpnBoxRemoteDataRequestInterval">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpnBoxRemoteDataRequestInterval">
           <property name="minimumSize">
            <size>
             <width>225</width>
@@ -241,6 +244,9 @@
             <width>120</width>
             <height>30</height>
            </size>
+          </property>
+          <property name="styleRole" stdset="0">
+           <string>spinbox-number</string>
           </property>
           <property name="suffix">
            <string> ms</string>
@@ -274,11 +280,11 @@
    <extends>QComboBox</extends>
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
-   <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
-  </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
+    <extends>QSpinBox</extends>
+    <header>C_OgeSpxToolTipBase.hpp</header>
+   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>
    <extends>QLabel</extends>

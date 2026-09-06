@@ -84,7 +84,7 @@ C_PopSaveAsDialogWidget::C_PopSaveAsDialogWidget(stw::opensyde_gui_elements::C_O
 
    connect(this->mpc_Ui->pc_PushButtonBrowse, &QPushButton::clicked, this, &C_PopSaveAsDialogWidget::m_OnBrowse);
    connect(this->mpc_Ui->pc_PushButtonSave, &QPushButton::clicked, this, &C_PopSaveAsDialogWidget::m_OnSave);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this, &C_PopSaveAsDialogWidget::m_OnCancel);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubToolTipBase::clicked, this, &C_PopSaveAsDialogWidget::m_OnCancel);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -600,9 +600,12 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="6" column="4">
-          <widget class="stw::opensyde_gui_elements::C_OgeSpxDoubleProperties" name="pc_DoubleSpinBoxOffset">
-           <property name="sizePolicy">
+          <item row="6" column="4">
+           <widget class="stw::opensyde_gui_elements::C_OgeSpxDoubleToolTipBase" name="pc_DoubleSpinBoxOffset">
+            <property name="styleRole" stdset="0">
+             <string>spinbox-properties</string>
+            </property>
+            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
@@ -648,9 +651,12 @@ p, li { white-space: pre-wrap; }
            </property>
           </spacer>
          </item>
-         <item row="13" column="1">
-          <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxLength">
-           <property name="sizePolicy">
+          <item row="13" column="1">
+           <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxLength">
+            <property name="styleRole" stdset="0">
+             <string>spinbox-table</string>
+            </property>
+            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
@@ -702,9 +708,12 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="13" column="4">
-          <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxMuxValue">
-           <property name="sizePolicy">
+          <item row="13" column="4">
+           <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxMuxValue">
+            <property name="styleRole" stdset="0">
+             <string>spinbox-table</string>
+            </property>
+            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
@@ -784,9 +793,12 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
-          <widget class="stw::opensyde_gui_elements::C_OgeSpxFactorProperties" name="pc_DoubleSpinBoxFactor">
-           <property name="sizePolicy">
+          <item row="6" column="1">
+           <widget class="stw::opensyde_gui_elements::C_OgeSpxFactor" name="pc_DoubleSpinBoxFactor">
+            <property name="styleRole" stdset="0">
+             <string>spinbox-properties</string>
+            </property>
+            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
@@ -962,9 +974,12 @@ p, li { white-space: pre-wrap; }
            </item>
           </layout>
          </item>
-         <item row="11" column="4">
-          <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxStartBit">
-           <property name="sizePolicy">
+          <item row="11" column="4">
+           <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxStartBit">
+            <property name="styleRole" stdset="0">
+             <string>spinbox-table</string>
+            </property>
+            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
@@ -1182,9 +1197,12 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxJ1939Spn">
-           <property name="sizePolicy">
+          <item row="1" column="1">
+           <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxJ1939Spn">
+            <property name="styleRole" stdset="0">
+             <string>spinbox-number</string>
+            </property>
+            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
@@ -1263,11 +1281,11 @@ p, li { white-space: pre-wrap; }
    <extends>QComboBox</extends>
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
-   <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
-  </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
+    <extends>QSpinBox</extends>
+    <header>C_OgeSpxToolTipBase.hpp</header>
+   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
@@ -1293,16 +1311,16 @@ p, li { white-space: pre-wrap; }
    <extends>QLineEdit</extends>
    <header>C_OgeLeProperties.hpp</header>
   </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxDoubleProperties</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>C_OgeSpxDoubleProperties.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxFactorProperties</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>C_OgeSpxFactorProperties.hpp</header>
-  </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeSpxDoubleToolTipBase</class>
+    <extends>QDoubleSpinBox</extends>
+    <header>C_OgeSpxDoubleToolTipBase.hpp</header>
+   </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeSpxFactor</class>
+    <extends>QDoubleSpinBox</extends>
+    <header>C_OgeSpxFactor.hpp</header>
+   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeWiSpinBoxGroupProperties</class>
    <extends>QWidget</extends>

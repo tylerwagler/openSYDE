@@ -183,7 +183,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxCanOpenId">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxCanOpenId">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -195,6 +195,9 @@
             <width>120</width>
             <height>30</height>
            </size>
+          </property>
+          <property name="styleRole" stdset="0">
+           <string>spinbox-number</string>
           </property>
          </widget>
         </item>
@@ -416,20 +419,23 @@
                   </spacer>
                  </item>
                  <item row="1" column="1">
-                  <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxSDOTimeout">
-                   <property name="minimumSize">
-                    <size>
-                     <width>120</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>120</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                  </widget>
+                   <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxSDOTimeout">
+                    <property name="minimumSize">
+                     <size>
+                      <width>120</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>120</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleRole" stdset="0">
+                     <string>spinbox-number</string>
+                    </property>
+                   </widget>
                  </item>
                  <item row="1" column="0">
                   <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -707,20 +713,23 @@
                   </spacer>
                  </item>
                  <item row="1" column="1">
-                  <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxSYNCWindowLength">
-                   <property name="minimumSize">
-                    <size>
-                     <width>120</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>120</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                  </widget>
+                   <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxSYNCWindowLength">
+                    <property name="minimumSize">
+                     <size>
+                      <width>120</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>120</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleRole" stdset="0">
+                     <string>spinbox-number</string>
+                    </property>
+                   </widget>
                  </item>
                  <item row="1" column="0">
                   <layout class="QHBoxLayout" name="horizontalLayout_35">
@@ -807,20 +816,23 @@
                   </layout>
                  </item>
                  <item row="0" column="1">
-                  <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxSYNCPeriod">
-                   <property name="minimumSize">
-                    <size>
-                     <width>120</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>120</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                  </widget>
+                   <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxSYNCPeriod">
+                    <property name="minimumSize">
+                     <size>
+                      <width>120</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>120</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleRole" stdset="0">
+                     <string>spinbox-number</string>
+                    </property>
+                   </widget>
                  </item>
                 </layout>
                </item>
@@ -1047,20 +1059,23 @@
                   </spacer>
                  </item>
                  <item>
-                  <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxProducerTime">
-                   <property name="minimumSize">
-                    <size>
-                     <width>120</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                   <property name="maximumSize">
-                    <size>
-                     <width>120</width>
-                     <height>30</height>
-                    </size>
-                   </property>
-                  </widget>
+                   <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxProducerTime">
+                    <property name="minimumSize">
+                     <size>
+                      <width>120</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>120</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                    <property name="styleRole" stdset="0">
+                     <string>spinbox-number</string>
+                    </property>
+                   </widget>
                  </item>
                  <item>
                   <spacer name="horizontalSpacer_10">
@@ -1168,11 +1183,11 @@
    <header>C_OgeGbxTransparent.hpp</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
-   <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
-  </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
+    <extends>QSpinBox</extends>
+    <header>C_OgeSpxToolTipBase.hpp</header>
+   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeChxPropertiesSmall</class>
    <extends>QCheckBox</extends>

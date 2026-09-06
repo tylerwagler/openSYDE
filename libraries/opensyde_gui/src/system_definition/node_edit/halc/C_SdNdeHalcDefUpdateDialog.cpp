@@ -78,8 +78,8 @@ C_SdNdeHalcDefUpdateDialog::C_SdNdeHalcDefUpdateDialog(stw::opensyde_gui_element
    this->mpc_Ui->pc_TextEditFlash->setReadOnly(true);
 
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeHalcDefUpdateDialog::m_OkClicked);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this,
-           &C_SdNdeHalcDefUpdateDialog::m_OnCancel);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubToolTipBase::clicked, this,
+          &C_SdNdeHalcDefUpdateDialog::m_OnCancel);
 
    this->m_UpdateHalcConfiguration();
    this->m_CreateReport(orc_FilePath);

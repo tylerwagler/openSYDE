@@ -19,7 +19,7 @@
 #include "C_OscDeviceDefinition.hpp"
 #include "C_OscNode.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "C_OgeSpxTableComIf.hpp"
+#include "C_OgeSpxToolTipBase.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_SdUtil.hpp"
 
@@ -78,15 +78,16 @@ QWidget * C_SdNdeComIfSettingsTableDelegate::createEditor(QWidget * const opc_Pa
 {
    Q_UNUSED(orc_Option)
    QWidget * pc_Retval = NULL;
-   C_OgeSpxTableComIf * pc_SpinBox = NULL;
+   C_OgeSpxToolTipBase * pc_SpinBox = NULL;
    const uint8_t u8_Maximum = C_SdUtil::h_GetNodeIdMaximum(this->mu32_NodeIndex);
 
    if (orc_Index.isValid() == true)
    {
-      if (static_cast<E_Columns>(orc_Index.column()) == E_Columns::eNODEID)
-      {
-         pc_SpinBox = new C_OgeSpxTableComIf(opc_Parent);
-         pc_SpinBox->SetMaximumCustom(u8_Maximum);
+       if (static_cast<E_Columns>(orc_Index.column()) == E_Columns::eNODEID)
+       {
+          pc_SpinBox = new C_OgeSpxToolTipBase(opc_Parent);
+          pc_SpinBox->setProperty("styleRole", "spinbox-table-comif");
+          pc_SpinBox->SetMaximumCustom(u8_Maximum);
          connect(pc_SpinBox, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged), this,
                  &C_SdNdeComIfSettingsTableDelegate::m_CheckValue);
          pc_Retval = pc_SpinBox;

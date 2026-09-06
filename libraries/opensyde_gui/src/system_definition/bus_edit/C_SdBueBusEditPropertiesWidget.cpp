@@ -215,10 +215,10 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
                  &C_SdBueBusEditPropertiesWidget::m_RegisterNameChange);
       disconnect(this->mpc_Ui->pc_TextEditComment, &QTextEdit::textChanged, this,
                  &C_SdBueBusEditPropertiesWidget::m_RegisterChange);
-      //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-      disconnect(this->mpc_Ui->pc_SpinBoxBusId, static_cast<void (QSpinBox::*)(
-                                                               int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-                 &C_SdBueBusEditPropertiesWidget::m_RegisterIdChange);
+       //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+       disconnect(this->mpc_Ui->pc_SpinBoxBusId, static_cast<void (QSpinBox::*)(
+                                                                  int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+                  &C_SdBueBusEditPropertiesWidget::m_RegisterIdChange);
       disconnect(this->mpc_Ui->pc_CheckBoxUsableForRouting, &QCheckBox::stateChanged, this,
                  &C_SdBueBusEditPropertiesWidget::m_RegisterIdChange);
       //lint -e{929} Cast required to avoid ambiguous signal of qt interface
@@ -431,10 +431,10 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
               &C_SdBueBusEditPropertiesWidget::m_RegisterNameChange);
       connect(this->mpc_Ui->pc_TextEditComment, &QTextEdit::textChanged, this,
               &C_SdBueBusEditPropertiesWidget::m_RegisterChange);
-      //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-      connect(this->mpc_Ui->pc_SpinBoxBusId, static_cast<void (QSpinBox::*)(
-                                                            int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-              &C_SdBueBusEditPropertiesWidget::m_RegisterIdChange);
+       //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+       connect(this->mpc_Ui->pc_SpinBoxBusId, static_cast<void (QSpinBox::*)(
+                                                             int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+               &C_SdBueBusEditPropertiesWidget::m_RegisterIdChange);
       connect(this->mpc_Ui->pc_CheckBoxUsableForRouting, &QCheckBox::stateChanged, this,
               &C_SdBueBusEditPropertiesWidget::m_RegisterIdChange);
       //lint -e{929} Cast required to avoid ambiguous signal of qt interface

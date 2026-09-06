@@ -149,17 +149,16 @@ C_SdNdeDpListHeaderWidget::C_SdNdeDpListHeaderWidget(QWidget * const opc_Parent,
    connect(this->mpc_Ui->pc_PushButtonComment, &C_OgePubSvgIconOnly::clicked, this,
            &C_SdNdeDpListHeaderWidget::m_OnEditCommentClicked);
 
-   //Data changes
-   connect(this->mpc_Ui->pc_SpinBoxSize, &stw::opensyde_gui_elements::C_OgeSpxEditProperties::editingFinished, this,
-           &C_SdNdeDpListHeaderWidget::m_EditSizeFinished);
-   connect(this->mpc_Ui->pc_LineEditName, &stw::opensyde_gui_elements::C_OgeLeListHeader::editingFinished, this,
-           &C_SdNdeDpListHeaderWidget::m_EditNameFinished);
+    //Data changes
+    connect(this->mpc_Ui->pc_SpinBoxSize, &stw::opensyde_gui_elements::C_OgeSpxToolTipBase::editingFinished, this,
+            &C_SdNdeDpListHeaderWidget::m_EditSizeFinished);
+    connect(this->mpc_Ui->pc_LineEditName, &stw::opensyde_gui_elements::C_OgeLeListHeader::editingFinished, this,
+            &C_SdNdeDpListHeaderWidget::m_EditNameFinished);
 
-   //Focus
-   connect(this->mpc_Ui->pc_LineEditName, &stw::opensyde_gui_elements::C_OgeLeListHeader::SigFocus, this,
-           &C_SdNdeDpListHeaderWidget::m_HandleFocus);
-   connect(this->mpc_Ui->pc_SpinBoxSize, &stw::opensyde_gui_elements::C_OgeSpxEditProperties::SigFocus, this,
-           &C_SdNdeDpListHeaderWidget::m_HandleFocus);
+    //Focus
+    connect(this->mpc_Ui->pc_LineEditName, &stw::opensyde_gui_elements::C_OgeLeListHeader::SigFocus, this,
+            &C_SdNdeDpListHeaderWidget::m_HandleFocus);
+    this->mpc_Ui->pc_SpinBoxSize->installEventFilter(this);
    connect(this->mpc_Ui->pc_PushButtonExpand, &stw::opensyde_gui_elements::C_OgePubIconOnly::pressed, this,
            &C_SdNdeDpListHeaderWidget::m_HandleFocus);
    connect(this->mpc_Ui->pc_PushButtonFullScreen, &stw::opensyde_gui_elements::C_OgePubIconOnly::pressed, this,

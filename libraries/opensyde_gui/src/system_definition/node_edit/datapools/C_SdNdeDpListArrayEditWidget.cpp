@@ -70,10 +70,10 @@ C_SdNdeDpListArrayEditWidget::C_SdNdeDpListArrayEditWidget(stw::opensyde_gui_ele
                                           ore_ArrayEditType, oru32_DataSetIndex);
 
    //Connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
-           &C_SdNdeDpListArrayEditWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
-           &C_SdNdeDpListArrayEditWidget::m_CancelClicked);
+   connect(this->mpc_Ui->pc_BushButtonOk, &stw::opensyde_gui_elements::C_OgePubToolTipBase::clicked, this,
+          &C_SdNdeDpListArrayEditWidget::m_OkClicked);
+   connect(this->mpc_Ui->pc_BushButtonCancel, &stw::opensyde_gui_elements::C_OgePubToolTipBase::clicked, this,
+          &C_SdNdeDpListArrayEditWidget::m_CancelClicked);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

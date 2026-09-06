@@ -18,10 +18,10 @@
 #include "C_SdNdeDpListTableDelegate.hpp"
 #include "C_OgeTedTable.hpp"
 #include "C_OgeLeTable.hpp"
-#include "C_OgeSpxTable.hpp"
-#include "C_OgeSpxTableDouble.hpp"
+#include "C_OgeSpxToolTipBase.hpp"
+#include "C_OgeSpxDoubleToolTipBase.hpp"
 #include "C_OgeCbxTable.hpp"
-#include "C_OgeSpxFactorTable.hpp"
+#include "C_OgeSpxFactor.hpp"
 #include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_TblTreDelegateUtil.hpp"
@@ -98,11 +98,11 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
    Q_UNUSED(orc_Option)
    if ((orc_Index.isValid() == true) && (this->mpc_Model != NULL))
    {
-      C_OgeSpxFactorTable * pc_SpinBoxFactor;
-      C_OgeLeTable * pc_LineEdit;
-      C_OgeSpxTableDouble * pc_DoubleSpinBox;
-      C_OgeSpxTable * pc_SpinBox;
-      C_OgeCbxTable * pc_ComboBox;
+       C_OgeSpxFactor * pc_SpinBoxFactor;
+       C_OgeLeTable * pc_LineEdit;
+       C_OgeSpxDoubleToolTipBase * pc_DoubleSpinBox;
+       C_OgeSpxToolTipBase * pc_SpinBox;
+       C_OgeCbxTable * pc_ComboBox;
       const C_SdNdeDpListTableModel::E_Columns e_Col = this->mpc_Model->ColumnToEnum(orc_Index.column());
       switch (e_Col)
       {
@@ -142,9 +142,10 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
                  &C_SdNdeDpListTableDelegate::m_OnValueTypeChange);
          pc_Retval = pc_ComboBox;
          break;
-      case C_SdNdeDpListTableModel::eARRAY_SIZE:
-         pc_SpinBox = new C_OgeSpxTable(opc_Parent);
-         //Special string handling
+       case C_SdNdeDpListTableModel::eARRAY_SIZE:
+          pc_SpinBox = new C_OgeSpxToolTipBase(opc_Parent);
+          pc_SpinBox->setProperty("styleRole", "spinbox-table");
+          //Special string handling
          if (this->mpc_Model->IsString(orc_Index) == true)
          {
             pc_SpinBox->SetMinimumCustom(2);
@@ -170,15 +171,17 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
       case C_SdNdeDpListTableModel::eMAX:
          pc_Retval = m_CreateEditor(opc_Parent, orc_Index, e_Col);
          break;
-      case C_SdNdeDpListTableModel::eFACTOR:
-         pc_SpinBoxFactor = new C_OgeSpxFactorTable(opc_Parent);
-         //Factor needs to be above 0
+       case C_SdNdeDpListTableModel::eFACTOR:
+          pc_SpinBoxFactor = new C_OgeSpxFactor(opc_Parent);
+          pc_SpinBoxFactor->setProperty("styleRole", "spinbox-factor-table");
+          //Factor needs to be above 0
          pc_SpinBoxFactor->SetMinimumCustom(C_OgeSpxFactor::mhf64_FACTOR_MIN);
          pc_Retval = pc_SpinBoxFactor;
          break;
-      case C_SdNdeDpListTableModel::eOFFSET:
-         pc_DoubleSpinBox = new C_OgeSpxTableDouble(opc_Parent);
-         pc_DoubleSpinBox->SetMinimumCustom(static_cast<float64_t>(std::numeric_limits<float64_t>::lowest()));
+       case C_SdNdeDpListTableModel::eOFFSET:
+          pc_DoubleSpinBox = new C_OgeSpxDoubleToolTipBase(opc_Parent);
+          pc_DoubleSpinBox->setProperty("styleRole", "spinbox-table-double");
+          pc_DoubleSpinBox->SetMinimumCustom(static_cast<float64_t>(std::numeric_limits<float64_t>::lowest()));
          pc_DoubleSpinBox->SetMaximumCustom(static_cast<float64_t>(std::numeric_limits<float64_t>::max()));
          pc_Retval = pc_DoubleSpinBox;
          break;

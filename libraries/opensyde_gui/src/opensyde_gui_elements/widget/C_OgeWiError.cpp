@@ -52,7 +52,7 @@ C_OgeWiError::C_OgeWiError(QWidget * const opc_Parent) :
    InitStaticNames();
 
    //Allow exit on click ok
-   connect(this->mpc_Ui->pc_PushButtonOk, &C_OgePubDialog::clicked, this, &C_OgeWiError::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonOk, &C_OgePubToolTipBase::clicked, this, &C_OgeWiError::m_OkClicked);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

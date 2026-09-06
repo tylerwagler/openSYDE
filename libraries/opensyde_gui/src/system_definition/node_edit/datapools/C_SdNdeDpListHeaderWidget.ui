@@ -190,23 +190,26 @@
          </widget>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxEditProperties" name="pc_SpinBoxSize">
-          <property name="minimumSize">
-           <size>
-            <width>120</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>120</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="suffix">
-           <string>Byte</string>
-          </property>
-         </widget>
+          <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxSize">
+           <property name="styleRole" stdset="0">
+            <string>spinbox-edit</string>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>120</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="suffix">
+            <string>Byte</string>
+           </property>
+          </widget>
         </item>
        </layout>
       </widget>
@@ -413,11 +416,11 @@
    <header>C_SdNdeDpListHeaderUsageWidget.hpp</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxEditProperties</class>
-   <extends>QSpinBox</extends>
-   <header>C_OgeSpxEditProperties.hpp</header>
-  </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
+    <extends>QSpinBox</extends>
+    <header>C_OgeSpxToolTipBase.hpp</header>
+   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeListHeader</class>
    <extends>QLineEdit</extends>
