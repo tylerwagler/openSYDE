@@ -55,6 +55,27 @@ Both large waves have to run alone. `protocol_drivers` and `project` overlap
 heavily in callers, and the two-agent parallelism that worked for halc + security
 depended on their caller sets being disjoint — which these are not.
 
+### Phase 5 — sizing the xml_parser wave
+
+`C_OscXmlParserBase` / `C_OscXmlParser` have 13 distinct `int32_t` functions
+(each declared in both the base and the derived class). They split into two
+groups with very different risk:
+
+| Group | Caller files | Note |
+|---|---|---|
+| The `*Error` family — `SelectRootError`, `SelectNodeChildError`, `GetAttribute*Error` | **20** | Contained, and the names are unique to this class. This is the tractable half. |
+| `LoadFromFile`, `SaveToFile`, `LoadFromString` | 60 / 40 / 5 *(inflated)* | **Do not trust those counts.** Those method names are shared with `C_PuiSdHandler`, `C_OscSecurityPem`, `C_CamProHandler` and others, so a name grep matches unrelated classes. The real figure needs type-aware resolution. |
+
+The parser is included by every tree, so this runs alone, never as a rider on
+another wave. Two `tgl_assert(... == C_NO_ERR)` sites in
+`C_OscHalcConfigFiler.cpp` (858, 861) are deliberately waiting on it, and the
+five bridge sites in `C_OscSupNodeDefinitionFiler.cpp` that wrap `*Error` calls
+will simplify once it lands.
+
+Splitting the `*Error` family from the file I/O is viable — they are distinct
+families — but it does leave the class with two conventions for a while, so it is
+a judgement call rather than an obvious win.
+
 ### Phase 5 — two bridging idioms are in the tree, only one is right
 
 Migrated code has to call unmigrated code, so a legacy `int32_t` return has to
