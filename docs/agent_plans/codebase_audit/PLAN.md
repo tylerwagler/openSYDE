@@ -28,7 +28,7 @@ that do not regress existing functionality.
 | 2 — Remove `C_SclDynamicArray` | ✅ **Complete** | Zero references remain. |
 | 3 — Retire `C_SclString` | ✅ **Complete** | Class deleted; `C_SclStringCompat.hpp` helpers remain, ~94 files still call them. `C_SclStringList` / `C_SclIniFile` still exist. See `PHASE3_PLAN.md`. |
 | 4 — Replace homegrown AES | ✅ **Complete for files; wire protocol out of scope** | File encryption is now AES-256-GCM + PBKDF2, with a versioned header and key wiping. The protocol sub-layer is deliberately unchanged — see below. |
-| 5 — Error handling | 🔶 **In progress** | Waves 1–3 done: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc. `data_dealer`, `exports`, `imports`, `halc` and `security` are now clean. Remaining: `protocol_drivers` and `project`. 16 sites bridge with the wrong idiom — see below. |
+| 5 — Error handling | 🔶 **In progress** | Waves 1–4B done: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc, plus protocol_drivers transport (4A) and communication (4B). Clean: `data_dealer`, `exports`, `imports`, `halc`, `security`, `protocol_drivers/communication`. Remaining: protocol_drivers 4C (32, in flight), the CAN dispatcher (33), `xml_parser` (13) and `project` (213). No `static_cast<Errc>` remains anywhere. |
 | 6.1 — Singletons | ✅ **Complete, deviating from plan** | Meyer's singleton **rejected** — see below. Race fixed with `std::call_once`; `h_Destroy()` and teardown ordering kept. |
 | 6.2 — Standard mutex | ✅ **Complete** | `C_TglCriticalSection` and all four `TglTasks` files deleted; 52 call sites on `std::mutex`. |
 | 6.3 — Smart pointers | 🚫 **Closed, no defect found** | Exit criterion is wrong as written, and the hazards it implies do not exist here — see below. |
@@ -54,6 +54,31 @@ includes functions that return a count rather than a status):
 Both large waves have to run alone. `protocol_drivers` and `project` overlap
 heavily in callers, and the two-agent parallelism that worked for halc + security
 depended on their caller sets being disjoint — which these are not.
+
+### Phase 5 — the CAN dispatcher wave, surfaced by wave 4A
+
+Wave 4A stopped on `C_OscCanDispatcherOsyRouter` rather than forcing it, and was
+right to. All 7 of its functions are overrides of pure virtuals in
+`stw::can::C_CanBase` / `C_CanDispatcher`, so their signatures are fixed by a base
+class that has other subclasses. It cannot be migrated as a leaf.
+
+The unit is the abstraction, not the router:
+
+| Class | Decls | Note |
+|---|---|---|
+| `can_dispatcher/dispatcher/C_CanDispatcher` | 12 | derives from `C_CanBase` |
+| `can_dispatcher/dispatcher/C_CanBase` | 7 | the root |
+| `can_dispatcher/adapter/C_OscLibcanBackendAdapter` | 7 | sibling subclass |
+| `protocol_drivers/C_OscCanDispatcherOsyRouter` | 7 | the overrides 4A stopped on |
+
+33 functions, 38 caller files, `C_CanDispatcher` alone accounting for 35.
+
+Two things make this different from the other waves. `C_CanBase` sits on the
+boundary with the vendored `can-libraries` submodule, so check what crosses that
+line before changing anything. And its status values are **not** the STW
+convention — waves 4B and 4C both had to keep `CAN_Send_Msg` and `CAN_Init`
+results in plain `int32_t` locals rather than bridging them. Whatever this wave
+returns, it is not simply `Errc`.
 
 ### Phase 5 — sizing the xml_parser wave
 
