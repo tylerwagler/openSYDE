@@ -24,6 +24,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include <cerrno>
+#include <locale>
 #include <climits>
 #include <stdexcept>
 #include "stwtypes.hpp"
@@ -59,6 +60,7 @@ inline std::string IntToHexCompat(const T orc_Value, const uint32_t ou32_Digits)
 inline std::string FloatToStrCompat(const double of64_Value)
 {
    std::ostringstream c_Stream;
+   c_Stream.imbue(std::locale::classic()); //pin the decimal separator - see ToDoubleCompat
    c_Stream << of64_Value;
    return c_Stream.str();
 }
@@ -67,6 +69,7 @@ inline std::string FloatToStrCompat(const double of64_Value)
 inline std::string FloatToStrCompat(const double of64_Value, const int32_t os32_Digits)
 {
    std::stringstream c_Stream;
+   c_Stream.imbue(std::locale::classic()); //pin the decimal separator - see ToDoubleCompat
    c_Stream.precision(os32_Digits);
    c_Stream << std::fixed << of64_Value;
    return c_Stream.str();
@@ -339,9 +342,55 @@ inline int64_t ToInt64Compat(const std::string & orc_Str)
 }
 
 /// Replacement for str.ToDouble().
+///
+/// C_SclString::ToDouble() did three things that std::strtod() and std::stod()
+/// do not, and the migration lost all three:
+///
+///  1. It parsed in the "C" locale explicitly. strtod() and stod() use the
+///     *current* C locale, and Qt sets that from the environment during
+///     application startup. On a German or French desktop the decimal separator
+///     becomes "," and strtod("1.5") stops at the '.' and returns 1. Every
+///     value in a .syde project, a DBC file or an EDS file is written with a
+///     '.', so this silently truncates real data - and openSYDE's users are
+///     largely in exactly those locales.
+///  2. It accepted a comma as the decimal separator, replacing the first one
+///     with a '.', so a hand-entered "1,5" still parsed.
+///  3. It threw when the string was not a number. ToDoubleCompat wrapped
+///     strtod(), which returns 0.0 instead - a malformed value read as a
+///     legitimate zero.
+///
+/// An imbued stringstream is used rather than strtod() precisely because it
+/// takes its decimal separator from the imbued std::locale rather than from the
+/// global C locale, so it is immune to whatever Qt did to the process.
+///
+/// Trailing characters are tolerated, matching the original: it also extracted
+/// through a stream and stopped at the first character it could not use. This
+/// is deliberately laxer than ToIntCompat, which rejects them - the goal here is
+/// to restore the documented behaviour, not to start rejecting project files
+/// that have always loaded.
+///
+/// \throws std::invalid_argument  string does not begin with a number
 inline double ToDoubleCompat(const std::string & orc_Str)
 {
-   return std::strtod(orc_Str.c_str(), nullptr);
+   std::string c_Work = orc_Str;
+
+   //replace up to one "," by "." - as the original did
+   const std::string::size_type un_Comma = c_Work.find(',');
+   if (un_Comma != std::string::npos)
+   {
+      c_Work[un_Comma] = '.';
+   }
+
+   std::istringstream c_Stream(c_Work);
+   c_Stream.imbue(std::locale::classic()); //"." is the decimal separator, whatever the process locale says
+
+   double f64_Value = 0.0;
+   c_Stream >> f64_Value;
+   if (c_Stream.fail())
+   {
+      throw std::invalid_argument("ToDoubleCompat: string does not contain a double value");
+   }
+   return f64_Value;
 }
 
 /// Replacement for str.Printf(format, ...) — uses vsnprintf internally.

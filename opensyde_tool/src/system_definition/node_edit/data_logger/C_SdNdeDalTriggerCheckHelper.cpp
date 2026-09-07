@@ -42,6 +42,7 @@ C_SdNdeDalTriggerCheckHelper::C_SdNdeDalTriggerCheckHelper() {}
 #else // _WIN32
 
 #include "TglUtils.hpp"
+#include "C_SclStringCompat.hpp"
 #include "C_OscUtils.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -256,7 +257,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_ReplaceChannelTokens(std::vector<data::mon
          {
             const std::string c_Tmp(std::get<std::string>(rc_Token.value.value()));
             //lint -e{529} Variable is used
-            const float32_t f32_Value = static_cast<float32_t>(std::stod(c_Tmp));
+            const float32_t f32_Value = static_cast<float32_t>(ToDoubleCompat(c_Tmp));
             rc_Token.value.emplace(f32_Value);
          }
          else
@@ -265,7 +266,7 @@ bool C_SdNdeDalTriggerCheckHelper::mh_ReplaceChannelTokens(std::vector<data::mon
          }
       }
    }
-   catch (const std::runtime_error & rc_Error)
+   catch (const std::exception & rc_Error)
    {
       q_IsValid = false;
       if (opc_ErrorDetails != nullptr)

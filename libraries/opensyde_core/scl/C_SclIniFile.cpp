@@ -653,7 +653,7 @@ float64_t C_SclIniFile::ReadFloat(const std::string & orc_Section, const std::st
    }
    else
    {
-       f64_Return = std::stod(c_String);
+      f64_Return = ToDoubleCompat(c_String);
    }
    return f64_Return;
 }
