@@ -213,7 +213,8 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadDataloggerFromClipboard(std::vector
 
    if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString().c_str())
    {
-      s32_Retval = C_OscDataLoggerJobFiler::h_LoadData(orc_Data, c_StringXml);
+      //the project filers report std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = C_OscDataLoggerJobFiler::h_LoadData(orc_Data, c_StringXml).value();
       if (s32_Retval == C_NO_ERR)
       {
          s32_Retval =

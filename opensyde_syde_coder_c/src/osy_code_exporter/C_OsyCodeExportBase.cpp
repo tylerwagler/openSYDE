@@ -357,9 +357,10 @@ C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::LoadSystemDefinition(void
       // Load whole system definition (keep pointer to NULL)
    }
 
-   s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(mc_SystemDefinition,
-                                                                       mc_SystemDefinitionFilePath, "",
-                                                                       false, nullptr, nullptr, false, pc_DeviceToLoad);
+   //the filer reports std::error_code now; this class still runs on the STW int32_t convention
+   s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(mc_SystemDefinition, mc_SystemDefinitionFilePath,
+                                                                       "", false, nullptr, nullptr, false,
+                                                                       pc_DeviceToLoad).value();
 
    if (s32_Return == C_NO_ERR)
    {

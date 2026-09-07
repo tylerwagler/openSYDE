@@ -767,7 +767,7 @@ int32_t C_PuiProject::m_LoadProject(uint16_t * const opu16_FileVersion,
    else
    {
       //Load project file
-      s32_Retval = C_OscProjectFiler::h_Load(*this, this->mc_Path.toStdString().c_str());
+      s32_Retval = C_OscProjectFiler::h_Load(*this, this->mc_Path.toStdString().c_str()).value();
       if (s32_Retval == C_NO_ERR)
       {
          QString c_SystemDefintionPath;
@@ -940,10 +940,11 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
    if (c_Directory.mkpath(".") == true)
    {
       C_PuiProject::h_HandlePendingEvents();
+      //the project filers report std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = C_OscProjectFiler::h_Save(*this,
                                              orc_FilePath.toStdString().c_str(),
                                              stw::opensyde_gui_logic::C_Uti::h_GetApplicationVersion(
-                                                false).toStdString().c_str());
+                                                false).toStdString().c_str()).value();
       if (s32_Retval == C_NO_ERR)
       {
          // save system definition only if it has changed

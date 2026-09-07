@@ -317,7 +317,8 @@ void C_NagMainWidget::UpdateRecentProjects(void)
    for (QStringList::const_iterator c_ItList = c_List.begin(); c_ItList != c_List.end(); ++c_ItList)
    {
       C_OscProject c_Tmp;
-      if (C_OscProjectFiler::h_Load(c_Tmp, c_ItList->toStdString().c_str()) == C_NO_ERR)
+      //the project filers report std::error_code now; this class keeps the STW int32_t convention
+      if (C_OscProjectFiler::h_Load(c_Tmp, c_ItList->toStdString().c_str()).value() == C_NO_ERR)
       {
          c_Files.push_back(*c_ItList);
          c_Projects.push_back(c_Tmp);

@@ -739,8 +739,9 @@ int32_t C_SyvUpPacConfigFiler::mh_LoadNodeUpdateInformationPemStates(C_SyvUpPacC
       {
          C_OscViewNodeUpdate::E_StateSecureAuthentication e_StateSecureAuthentication =
             C_OscViewNodeUpdate::eST_SEC_NO_CHANGE;
+         //the project filers report std::error_code now; this class keeps the STW int32_t convention
          s32_Retval = C_OscViewFiler::h_StringToSecurityOptionAuthentication(
-            orc_XmlParser.GetNodeContent().c_str(), e_StateSecureAuthentication);
+            orc_XmlParser.GetNodeContent().c_str(), e_StateSecureAuthentication).value();
          if (s32_Retval == C_NO_ERR)
          {
             orc_NodeConfig.e_StateSecureAuthentication = e_StateSecureAuthentication;
@@ -755,7 +756,7 @@ int32_t C_SyvUpPacConfigFiler::mh_LoadNodeUpdateInformationPemStates(C_SyvUpPacC
          if (s32_Retval == C_NO_ERR)
          {
             s32_Retval = C_OscViewFiler::h_StringToSecurityOptionDebugger(
-               orc_XmlParser.GetNodeContent().c_str(), e_StateDebugger);
+               orc_XmlParser.GetNodeContent().c_str(), e_StateDebugger).value();
             if (s32_Retval == C_NO_ERR)
             {
                orc_NodeConfig.e_StateDebugger = e_StateDebugger;
@@ -771,7 +772,7 @@ int32_t C_SyvUpPacConfigFiler::mh_LoadNodeUpdateInformationPemStates(C_SyvUpPacC
          if (orc_XmlParser.SelectNodeChild("traffic-encryption") == "traffic-encryption")
          {
             s32_Retval = C_OscViewFiler::h_StringToSecurityOptionEncryption(
-               orc_XmlParser.GetNodeContent().c_str(), e_StateTrafficEncryption);
+               orc_XmlParser.GetNodeContent().c_str(), e_StateTrafficEncryption).value();
             if (s32_Retval == C_NO_ERR)
             {
                orc_NodeConfig.e_StateTrafficEncryption = e_StateTrafficEncryption;

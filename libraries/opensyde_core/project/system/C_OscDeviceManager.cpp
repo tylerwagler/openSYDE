@@ -209,7 +209,8 @@ int32_t C_OscDeviceManager::LoadFromPaths(const std::vector<std::string> & orc_R
 
          C_OscDeviceDefinition c_Device;
          const std::string c_ManifestStr(c_ManifestPath.string().c_str());
-         const int32_t s32_LoadResult = C_OscDeviceDefinitionFiler::h_Load(c_Device, c_ManifestStr);
+         //the filer reports std::error_code now; this class still runs on the STW int32_t convention
+         const int32_t s32_LoadResult = C_OscDeviceDefinitionFiler::h_Load(c_Device, c_ManifestStr).value();
          if (s32_LoadResult != C_NO_ERR)
          {
             osc_write_log_error("Loading device definitions",

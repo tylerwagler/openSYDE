@@ -13,8 +13,10 @@
 #include "precomp_headers.hpp"
 
 #include <cstdio>
+#include <system_error>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
@@ -63,60 +65,57 @@ using namespace stw::scl;
                                                    It is highly recommended to use the device definitions.
                                                    Purpose for not using the device definition is when only read
                                                    access to a part of the system definition is necessary.
-   \param[in,out]  opu16_ReadFileVersion           Optional storage for read file version (only use in C_NO_ERR case)
+   \param[in,out]  opu16_ReadFileVersion           Optional storage for read file version (only use on Errc::success)
    \param[in]      opc_NodesToLoad                 (Optional parameter) only load content of nodes which are active in sysdef
    \param[in]      oq_SkipContent                  (Optional parameter) skip content when not needed (datapools, halc etc.)
                                                    (default = false)
    \param[in]      opc_ExpectedNodeName            (Optional parameter) only load node content of given node. Parameter is
                                                    used if no node index is available to fill opc_NodesToLoad parameter.
-   \param[in,out]  opc_ErrorDetailsMissingDevices  (Optional parameter) if C_OVERFLOW contains types of all missing devices
+   \param[in,out]  opc_ErrorDetailsMissingDevices  (Optional) on Errc::overflow, types of all missing devices
 
    \return
-   C_NO_ERR    data read
-   C_RANGE     specified system definition file does not exist
-   C_NOACT     specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG    system definition file content is invalid or incomplete
-               device definition file could not be loaded
-   C_OVERFLOW  node in system definition references a device not part of the device definitions
+   Errc::success     data read
+   Errc::range       specified system definition file does not exist
+   Errc::noact       specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config      system definition file content is invalid or incomplete
+                     device definition file could not be loaded
+   Errc::overflow    node in system definition references a device not part of the device definitions
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(C_OscSystemDefinition & orc_SystemDefinition,
-                                                               const std::string & orc_PathSystemDefinition,
-                                                               const std::string & orc_PathDeviceDefinitions,
-                                                               const bool oq_UseDeviceDefinitions,
-                                                               uint16_t * const opu16_ReadFileVersion,
-                                                               const std::vector<uint8_t> * const opc_NodesToLoad,
-                                                               const bool oq_SkipContent,
-                                                               const std::string * const opc_ExpectedNodeName,
-                                                               std::vector<std::string> * const opc_ErrorDetailsMissingDevices)
+std::error_code C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
+   C_OscSystemDefinition & orc_SystemDefinition, const std::string & orc_PathSystemDefinition,
+   const std::string & orc_PathDeviceDefinitions, const bool oq_UseDeviceDefinitions,
+   uint16_t * const opu16_ReadFileVersion, const std::vector<uint8_t> * const opc_NodesToLoad,
+   const bool oq_SkipContent, const std::string * const opc_ExpectedNodeName,
+   std::vector<std::string> * const opc_ErrorDetailsMissingDevices)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_PathSystemDefinition) == true)
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading System Definition");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_PathSystemDefinition);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_PathSystemDefinition));
+      if (!c_Retval)
       {
-         s32_Retval = h_LoadSystemDefinition(orc_SystemDefinition, c_XmlParser, orc_PathDeviceDefinitions,
-                                             orc_PathSystemDefinition, oq_UseDeviceDefinitions,
-                                             opu16_ReadFileVersion, opc_NodesToLoad, oq_SkipContent,
-                                             opc_ExpectedNodeName, opc_ErrorDetailsMissingDevices);
+         c_Retval = h_LoadSystemDefinition(orc_SystemDefinition, c_XmlParser, orc_PathDeviceDefinitions,
+                                           orc_PathSystemDefinition, oq_UseDeviceDefinitions, opu16_ReadFileVersion,
+                                           opc_NodesToLoad, oq_SkipContent, opc_ExpectedNodeName,
+                                           opc_ErrorDetailsMissingDevices);
       }
       else
       {
          osc_write_log_error("Loading System Definition",
                              "File \"" + orc_PathSystemDefinition + "\" could not be opened.");
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
       }
    }
    else
    {
       osc_write_log_error("Loading System Definition", "File \"" + orc_PathSystemDefinition + "\" does not exist.");
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -131,16 +130,16 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(C_OscSystemDefini
    \param[in,out]  opc_CreatedFiles       Optional storage for history of all created files (and without sysdef)
 
    \return
-   C_NO_ERR   data saved
-   C_RD_WR    could not erase pre-existing file before saving
-   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   Errc::success    data saved
+   Errc::rd_wr      could not erase pre-existing file before saving
+   Errc::rd_wr      could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                               const std::string & orc_Path,
-                                                               std::vector<std::string> * const opc_CreatedFiles)
+std::error_code C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
+   const C_OscSystemDefinition & orc_SystemDefinition, const std::string & orc_Path,
+   std::vector<std::string> * const opc_CreatedFiles)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (TglFileExists(orc_Path) == true)
    {
@@ -150,10 +149,10 @@ int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(const C_OscSystem
       if (x_Return != 0)
       {
          osc_write_log_error("Saving System Definition", "Could not erase pre-existing file \"" + orc_Path + "\".");
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       const std::string c_Folder = TglExtractFilePath(orc_Path);
       if (TglDirectoryExists(c_Folder) == false)
@@ -161,29 +160,29 @@ int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(const C_OscSystem
          if (TglCreateDirectory(c_Folder) != 0)
          {
             osc_write_log_error("Saving System Definition", "Could not create folder \"" + c_Folder + "\".");
-            s32_Return = C_RD_WR;
+            c_Return = Errc::rd_wr;
          }
       }
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       C_OscXmlParser c_XmlParser;
-      s32_Return = h_SaveSystemDefinition(orc_SystemDefinition, c_XmlParser, orc_Path, opc_CreatedFiles);
-      if (s32_Return == C_NO_ERR)
+      c_Return = h_SaveSystemDefinition(orc_SystemDefinition, c_XmlParser, orc_Path, opc_CreatedFiles);
+      if (!c_Return)
       {
-         s32_Return = c_XmlParser.SaveToFile(orc_Path);
-         if (s32_Return != C_NO_ERR)
+         c_Return = make_error_code_from_stw(c_XmlParser.SaveToFile(orc_Path));
+         if (c_Return)
          {
             osc_write_log_error("Saving System Definition", "Could not write to file \"" + orc_Path + "\".");
-            s32_Return = C_RD_WR;
+            c_Return = Errc::rd_wr;
          }
       }
       else
       {
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -209,25 +208,27 @@ int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(const C_OscSystem
                                                    (default = false)
    \param[in]      opc_ExpectedNodeName            (Optional parameter) only load node content of given node. Parameter is
                                                    used if no node index is available to fill opc_NodesToLoad parameter.
-   \param[in,out]  opc_ErrorDetailsMissingDevices  (Optional parameter) if C_OVERFLOW contains types of all missing devices
+   \param[in,out]  opc_ErrorDetailsMissingDevices  (Optional) on Errc::overflow, types of all missing devices
 
    \return
-   C_NO_ERR    no error
-   C_CONFIG    content is invalid or incomplete
-   C_OVERFLOW  node in system definition references a device not part of the device definitions
+   Errc::success     no error
+   Errc::config      content is invalid or incomplete
+   Errc::overflow    node in system definition references a device not part of the device definitions
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
-                                                const C_OscDeviceManager & orc_DeviceDefinitions,
-                                                const std::string & orc_BasePath,
-                                                const bool oq_UseDeviceDefinitions, const bool oq_UseFileInterface,
-                                                const std::vector<uint8_t> * const opc_NodesToLoad,
-                                                const bool oq_SkipContent,
-                                                const std::string * const opc_ExpectedNodeName,
-                                                std::vector<std::string> * const opc_ErrorDetailsMissingDevices)
+std::error_code C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nodes,
+                                                        C_OscXmlParserBase & orc_XmlParser,
+                                                        const C_OscDeviceManager & orc_DeviceDefinitions,
+                                                        const std::string & orc_BasePath,
+                                                        const bool oq_UseDeviceDefinitions,
+                                                        const bool oq_UseFileInterface,
+                                                        const std::vector<uint8_t> * const opc_NodesToLoad,
+                                                        const bool oq_SkipContent,
+                                                        const std::string * const opc_ExpectedNodeName,
+                                                        std::vector<std::string> * const opc_ErrorDetailsMissingDevices)
 
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    std::string c_SelectedNode;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
@@ -289,14 +290,14 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
                }
                if (q_SkipNode == false)
                {
-                  s32_Retval = C_OscNodeFiler::h_LoadNodeFile(c_Item, c_FileName, oq_SkipContent);
+                  c_Retval = C_OscNodeFiler::h_LoadNodeFile(c_Item, c_FileName, oq_SkipContent);
                }
             }
             else
             {
-               s32_Retval = C_OscNodeFiler::h_LoadNode(c_Item, orc_XmlParser, "", oq_SkipContent);
+               c_Retval = C_OscNodeFiler::h_LoadNode(c_Item, orc_XmlParser, "", oq_SkipContent);
             }
-            if (s32_Retval != C_NO_ERR)
+            if (c_Retval)
             {
                break;
             }
@@ -318,14 +319,14 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
          c_SelectedNode = orc_XmlParser.SelectNodeNext("node");
       }
       while (c_SelectedNode == "node");
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          //Return (no check to allow reuse)
          orc_XmlParser.SelectNodeParent();
       }
    }
    //Compare length
-   if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true))
+   if ((!c_Retval) && (q_ExpectedSizeHere == true))
    {
       if (u32_ExpectedSize != orc_Nodes.size())
       {
@@ -337,7 +338,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
    }
 
    if ((oq_UseDeviceDefinitions == true) &&
-       (s32_Retval == C_NO_ERR))
+       (!c_Retval))
    {
       //set pointers to device definitions
       for (uint32_t u32_NodeIndex = 0U; u32_NodeIndex < orc_Nodes.size(); u32_NodeIndex++)
@@ -355,7 +356,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
                                                       orc_Nodes[u32_NodeIndex].u32_SubDeviceIndex);
                if (pc_Device == nullptr)
                {
-                  s32_Retval = C_OVERFLOW;
+                  c_Retval = Errc::overflow;
                   osc_write_log_error("Loading System Definition",
                                       "System Definition contains node \"" + orc_Nodes[u32_NodeIndex].c_Properties.c_Name +
                                       "\" of device type \"" +
@@ -378,7 +379,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -391,14 +392,14 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
    \param[in,out]  orc_XmlParser    XML with "buses" active
 
    \return
-   C_NO_ERR   no error
-   C_CONFIG   content is invalid or incomplete
+   Errc::success    no error
+   Errc::config     content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> & orc_Buses,
-                                                C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> & orc_Buses,
+                                                        C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    std::string c_SelectedNode;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
@@ -418,8 +419,8 @@ int32_t C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> & or
       do
       {
          C_OscSystemBus c_Item;
-         s32_Retval = C_OscSystemBusFiler::h_LoadBus(c_Item, orc_XmlParser);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = C_OscSystemBusFiler::h_LoadBus(c_Item, orc_XmlParser);
+         if (!c_Retval)
          {
             orc_Buses.push_back(c_Item);
          }
@@ -432,7 +433,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> & or
       orc_XmlParser.SelectNodeParent();
    }
    //Compare length
-   if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true))
+   if ((!c_Retval) && (q_ExpectedSizeHere == true))
    {
       if (u32_ExpectedSize != orc_Buses.size())
       {
@@ -443,7 +444,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> & or
          osc_write_log_warning("Load file", c_Tmp.c_str());
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -458,29 +459,29 @@ int32_t C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> & or
    \param[in,out]  opc_CreatedFiles    Optional storage for history of all created files
 
    \return
-   C_NO_ERR   no error
-   C_CONFIG   file could not be created
+   Errc::success    no error
+   Errc::config     file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_SaveNodes(const std::vector<C_OscNode> & orc_Nodes,
-                                                C_OscXmlParserBase & orc_XmlParser,
-                                                const std::string & orc_BasePath,
-                                                std::vector<std::string> * const opc_CreatedFiles)
+std::error_code C_OscSystemDefinitionFiler::h_SaveNodes(const std::vector<C_OscNode> & orc_Nodes,
+                                                        C_OscXmlParserBase & orc_XmlParser,
+                                                        const std::string & orc_BasePath,
+                                                        std::vector<std::string> * const opc_CreatedFiles)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    const std::map<uint32_t,
                   std::string> c_NodeIndicesToNameMap = C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(orc_Nodes);
 
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_Nodes.size()));
-   for (uint32_t u32_Index = 0U; (u32_Index < orc_Nodes.size()) && (s32_Retval == C_NO_ERR); u32_Index++)
+   for (uint32_t u32_Index = 0U; (u32_Index < orc_Nodes.size()) && (!c_Retval); u32_Index++)
    {
       const C_OscNode & rc_Node = orc_Nodes[u32_Index];
       tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("node") == "node");
       if (orc_BasePath.empty())
       {
          //To string
-         s32_Retval = C_OscNodeFiler::h_SaveNode(rc_Node, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
-                                                 c_NodeIndicesToNameMap);
+         c_Retval = C_OscNodeFiler::h_SaveNode(rc_Node, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
+                                               c_NodeIndicesToNameMap);
       }
       else
       {
@@ -496,9 +497,9 @@ int32_t C_OscSystemDefinitionFiler::h_SaveNodes(const std::vector<C_OscNode> & o
                                 "Could not create directory \"" + c_CombinedFolderName + "\"");
          }
          //Save node file
-         s32_Retval = C_OscNodeFiler::h_SaveNodeFile(rc_Node, c_CombinedFileName,
-                                                     (opc_CreatedFiles != nullptr) ? &c_CreatedFiles : nullptr,
-                                                     c_NodeIndicesToNameMap);
+         c_Retval = C_OscNodeFiler::h_SaveNodeFile(rc_Node, c_CombinedFileName,
+                                                   (opc_CreatedFiles != nullptr) ? &c_CreatedFiles : nullptr,
+                                                   c_NodeIndicesToNameMap);
          //Store if necessary
          if (opc_CreatedFiles != nullptr)
          {
@@ -515,7 +516,7 @@ int32_t C_OscSystemDefinitionFiler::h_SaveNodes(const std::vector<C_OscNode> & o
       //Return (don't check to allow reuse)
       orc_XmlParser.SelectNodeParent();
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -554,33 +555,29 @@ void C_OscSystemDefinitionFiler::h_SaveBuses(const std::vector<C_OscSystemBus> &
    \param[in]      orc_PathDeviceDefinitions       Path to device definition description file
    \param[in]      orc_BasePath                    Base path
    \param[in]      oq_UseDeviceDefinitions         Flag for using device definitions
-   \param[in,out]  opu16_ReadFileVersion           Optional storage for read file version (only use in C_NO_ERR case)
+   \param[in,out]  opu16_ReadFileVersion           Optional storage for read file version (only use on Errc::success)
    \param[in]      opc_NodesToLoad                 (Optional parameter) only load content of nodes which are active in sysdef
    \param[in]      oq_SkipContent                  (Optional parameter) skip content when not needed (datapools, halc etc.)
                                                    (default = false)
    \param[in]      opc_ExpectedNodeName            (Optional parameter) only load node content of given node. Parameter is
                                                    used if no node index is available to fill opc_NodesToLoad parameter.
-   \param[in,out]  opc_ErrorDetailsMissingDevices  (Optional parameter) if C_OVERFLOW contains types of all missing devices
+   \param[in,out]  opc_ErrorDetailsMissingDevices  (Optional) on Errc::overflow, types of all missing devices
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    system definition content is invalid or incomplete
-               device definition could not be loaded
-   C_OVERFLOW  node in system definition references a device not part of the device definitions
+   Errc::success     data read
+   Errc::config      system definition content is invalid or incomplete
+                     device definition could not be loaded
+   Errc::overflow    node in system definition references a device not part of the device definitions
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition & orc_SystemDefinition,
-                                                           C_OscXmlParserBase & orc_XmlParser,
-                                                           const std::string & orc_PathDeviceDefinitions,
-                                                           const std::string & orc_BasePath,
-                                                           const bool oq_UseDeviceDefinitions,
-                                                           uint16_t * const opu16_ReadFileVersion,
-                                                           const std::vector<uint8_t> * const opc_NodesToLoad,
-                                                           const bool oq_SkipContent,
-                                                           const std::string * const opc_ExpectedNodeName,
-                                                           std::vector<std::string> * const opc_ErrorDetailsMissingDevices)
+std::error_code C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
+   C_OscSystemDefinition & orc_SystemDefinition, C_OscXmlParserBase & orc_XmlParser,
+   const std::string & orc_PathDeviceDefinitions, const std::string & orc_BasePath, const bool oq_UseDeviceDefinitions,
+   uint16_t * const opu16_ReadFileVersion, const std::vector<uint8_t> * const opc_NodesToLoad,
+   const bool oq_SkipContent, const std::string * const opc_ExpectedNodeName,
+   std::vector<std::string> * const opc_ErrorDetailsMissingDevices)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //do we need to load the device definitions ?
    if ((oq_UseDeviceDefinitions == true) &&
@@ -589,11 +586,11 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
       // orc_PathDeviceDefinitions is interpreted as a device-bundle root directory
       // for the filesystem scanner.
       const std::vector<std::string> c_Roots = {orc_PathDeviceDefinitions};
-      s32_Retval = C_OscSystemDefinition::hc_Devices.LoadFromPaths(c_Roots);
-      if (s32_Retval != C_NO_ERR)
+      c_Retval = make_error_code_from_stw(C_OscSystemDefinition::hc_Devices.LoadFromPaths(c_Roots));
+      if (c_Retval)
       {
          osc_write_log_error("Loading System Definition", "Could not load Device definitions.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
@@ -615,11 +612,11 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
          catch (...)
          {
             osc_write_log_error("Loading System Definition", "\"file-version\" could not be converted to a number.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
 
          //is the file version one we know ?
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
             osc_write_log_info("Loading System Definition", "Value of \"file-version\": " +
                                std::to_string(u16_FileVersion));
@@ -633,13 +630,13 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
                osc_write_log_error("Loading System Definition",
                                    "Legacy file-version " + std::to_string(u16_FileVersion) +
                                    " is no longer supported. Re-save the project with a current openSYDE.");
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
             else
             {
                osc_write_log_error("Loading System Definition",
                                    "Version defined by \"file-version\" is not supported.");
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
          }
 
@@ -649,36 +646,35 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
       else
       {
          osc_write_log_error("Loading System Definition", "Could not find \"file-version\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
       //Only continue if no error so far
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          if (q_UseV3Filer)
          {
             //Completely rely on V3 loader
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
-               s32_Retval = mh_LoadSystemDefinitionProperties(orc_SystemDefinition, orc_XmlParser);
+               c_Retval = mh_LoadSystemDefinitionProperties(orc_SystemDefinition, orc_XmlParser);
             }
             //Groups
             orc_SystemDefinition.c_NodeSquads.clear();
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
-               s32_Retval = C_OscNodeSquadFiler::h_LoadNodeGroups(orc_SystemDefinition.c_NodeSquads, orc_XmlParser);
+               c_Retval = C_OscNodeSquadFiler::h_LoadNodeGroups(orc_SystemDefinition.c_NodeSquads, orc_XmlParser);
             }
 
             //Node
             orc_SystemDefinition.c_Nodes.clear();
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
                if (orc_XmlParser.SelectNodeChild("nodes") == "nodes")
                {
-                  s32_Retval = h_LoadNodes(orc_SystemDefinition.c_Nodes, orc_XmlParser,
-                                           C_OscSystemDefinition::hc_Devices, orc_BasePath, oq_UseDeviceDefinitions,
-                                           true, opc_NodesToLoad, oq_SkipContent, opc_ExpectedNodeName,
-                                           opc_ErrorDetailsMissingDevices);
-                  if (s32_Retval == C_NO_ERR)
+                  c_Retval = h_LoadNodes(orc_SystemDefinition.c_Nodes, orc_XmlParser, C_OscSystemDefinition::hc_Devices,
+                                         orc_BasePath, oq_UseDeviceDefinitions, true, opc_NodesToLoad, oq_SkipContent,
+                                         opc_ExpectedNodeName, opc_ErrorDetailsMissingDevices);
+                  if (!c_Retval)
                   {
                      //Return
                      tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
@@ -687,18 +683,18 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
                else
                {
                   osc_write_log_error("Loading System Definition", "Could not find \"nodes\" node.");
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
             }
 
             //Bus
             orc_SystemDefinition.c_Buses.clear();
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
                if (orc_XmlParser.SelectNodeChild("buses") == "buses")
                {
-                  s32_Retval = h_LoadBuses(orc_SystemDefinition.c_Buses, orc_XmlParser);
-                  if (s32_Retval == C_NO_ERR)
+                  c_Retval = h_LoadBuses(orc_SystemDefinition.c_Buses, orc_XmlParser);
+                  if (!c_Retval)
                   {
                      //Return
                      tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
@@ -707,7 +703,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
                else
                {
                   osc_write_log_error("Loading System Definition", "Could not find \"buses\" node.");
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
             }
          }
@@ -716,9 +712,9 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
    else
    {
       osc_write_log_error("Loading System Definition", "Could not find \"opensyde-system-definition\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -733,16 +729,16 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
    \param[in,out]  opc_CreatedFiles       Optional storage for history of all created files
 
    \return
-   C_NO_ERR   no error
-   C_CONFIG   file could not be created
+   Errc::success    no error
+   Errc::config     file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                           C_OscXmlParserBase & orc_XmlParser,
-                                                           const std::string & orc_BasePath,
-                                                           std::vector<std::string> * const opc_CreatedFiles)
+std::error_code C_OscSystemDefinitionFiler::h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
+                                                                   C_OscXmlParserBase & orc_XmlParser,
+                                                                   const std::string & orc_BasePath,
+                                                                   std::vector<std::string> * const opc_CreatedFiles)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    orc_XmlParser.CreateNodeChild("opensyde-system-definition");
    tgl_assert(orc_XmlParser.SelectRoot() == "opensyde-system-definition");
@@ -755,8 +751,8 @@ int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinition(const C_OscSystemDefi
    C_OscNodeSquadFiler::h_SaveNodeGroups(orc_SystemDefinition.c_NodeSquads, orc_XmlParser);
    //Node
    tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("nodes") == "nodes");
-   s32_Return = h_SaveNodes(orc_SystemDefinition.c_Nodes, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
-   if (s32_Return == C_NO_ERR)
+   c_Return = h_SaveNodes(orc_SystemDefinition.c_Nodes, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
+   if (!c_Return)
    {
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
@@ -767,7 +763,7 @@ int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinition(const C_OscSystemDefi
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -825,20 +821,20 @@ std::map<uint32_t, std::string> C_OscSystemDefinitionFiler::mh_MapNodeIndicesToN
    \param[in,out]  orc_XmlParser          Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    system definition content is invalid or incomplete
-               device definition could not be loaded
+   Errc::success    data read
+   Errc::config     system definition content is invalid or incomplete
+                    device definition could not be loaded
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::mh_LoadSystemDefinitionProperties(C_OscSystemDefinition & orc_SystemDefinition,
-                                                                      C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscSystemDefinitionFiler::mh_LoadSystemDefinitionProperties(
+   C_OscSystemDefinition & orc_SystemDefinition, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("properties") == "properties")
    {
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("name-max-char-limit",
-                                                         orc_SystemDefinition.u32_NameMaxCharLimit);
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error(
+         "name-max-char-limit", orc_SystemDefinition.u32_NameMaxCharLimit));
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
    }
@@ -846,7 +842,7 @@ int32_t C_OscSystemDefinitionFiler::mh_LoadSystemDefinitionProperties(C_OscSyste
    {
       orc_SystemDefinition.u32_NameMaxCharLimit = 31UL;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

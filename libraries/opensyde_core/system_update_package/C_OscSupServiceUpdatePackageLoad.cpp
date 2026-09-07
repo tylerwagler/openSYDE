@@ -250,12 +250,9 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
                // directory is itself the device-bundle root that the scanner walks.
                const std::string c_SysDefPath = c_TargetUnzipPath + mhc_SUP_SYSDEF;
 
-               c_Return = make_error_code_from_stw(C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(orc_SystemDefinition,
-                                                                                                  c_SysDefPath,
-                                                                                                  c_TargetUnzipPath,
-                                                                                                  true, nullptr,
-                                                                                                  &orc_ActiveNodes,
-                                                                                                  true)); // skip
+               c_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(orc_SystemDefinition, c_SysDefPath,
+                                                                                 c_TargetUnzipPath, true, nullptr,
+                                                                                 &orc_ActiveNodes, true); // skip
                                                                                                           // content
                if (!c_Return)
                {

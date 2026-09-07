@@ -219,8 +219,9 @@ int32_t C_PuiSvHandlerFiler::h_LoadReadRails(QMap<C_OscNodeDataPoolListElementId
          }
          if (orc_XmlParser.SelectNodeChild("threshold") == "threshold")
          {
+            //the project filers report std::error_code now; this class keeps the STW int32_t convention
             if (C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(c_DataConfiguration.c_ChangeThreshold,
-                                                                orc_XmlParser) != C_NO_ERR)
+                                                                orc_XmlParser).value() != C_NO_ERR)
             {
                s32_Retval = C_CONFIG;
             }
@@ -368,9 +369,10 @@ int32_t C_PuiSvHandlerFiler::mh_LoadViewFile(C_PuiSvData & orc_View, const QStri
                                              const std::vector<C_OscNode> & orc_OscNodes)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
                                                                          orc_FilePath.toStdString().c_str(),
-                                                                         "opensyde-view-definition");
+                                                                         "opensyde-view-definition").value();
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -447,7 +449,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadView(C_PuiSvData & orc_View, C_OscXmlParserB
    int32_t s32_Retval;
 
    // Fill core data
-   s32_Retval = C_OscViewFiler::h_LoadViewOsc(orc_View, orc_XmlParser, orc_OscNodes);
+   s32_Retval = C_OscViewFiler::h_LoadViewOsc(orc_View, orc_XmlParser, orc_OscNodes).value();
 
    // Load GUI data
    if (orc_XmlParser.AttributeExists("device-config-selected-bit-rate") == true)
@@ -762,8 +764,9 @@ void C_PuiSvHandlerFiler::mh_SaveDashboards(const std::vector<C_PuiSvDashboard> 
 int32_t C_PuiSvHandlerFiler::mh_SaveViewFile(const C_PuiSvData & orc_View, const QString & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
-                                                                    "opensyde-view-definition");
+                                                                    "opensyde-view-definition").value();
 
    if (s32_Retval == C_NO_ERR)
    {

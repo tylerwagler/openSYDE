@@ -11,11 +11,13 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <system_error>
 #include "C_SclStringCompat.hpp"
 
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
@@ -48,30 +50,29 @@ const uint16_t C_OscDataLoggerJobFiler::mhu16_FILE_VERSION_1 = 1;
    \param[in]      orc_Path      Path
 
    \return
-   C_NO_ERR    data read
-   C_RANGE     specified data loggers file does not exist
-   C_NOACT     specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG    data loggers content is invalid or incomplete
-               data loggers could not be loaded
+   Errc::success    data read
+   Errc::range      specified data loggers file does not exist
+   Errc::noact      specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config     data loggers content is invalid or incomplete
+                    data loggers could not be loaded
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::h_LoadFile(std::vector<C_OscDataLoggerJob> & orc_Config,
-                                            const std::string & orc_Path)
+std::error_code C_OscDataLoggerJobFiler::h_LoadFile(std::vector<C_OscDataLoggerJob> & orc_Config,
+                                                    const std::string & orc_Path)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_Path) == true)
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading data loggers data");
-      s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_Path,
-                                                                    "opensyde-data-loggers");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_Path, "opensyde-data-loggers");
+      if (!c_Retval)
       {
-         s32_Retval = h_LoadData(orc_Config, c_XmlParser);
+         c_Retval = h_LoadData(orc_Config, c_XmlParser);
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -81,18 +82,18 @@ int32_t C_OscDataLoggerJobFiler::h_LoadFile(std::vector<C_OscDataLoggerJob> & or
    \param[in]  orc_Path    Path
 
    \return
-   C_NO_ERR   data saved
-   C_CONFIG   data invalid
+   Errc::success    data saved
+   Errc::config     data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::h_SaveFile(const std::vector<C_OscDataLoggerJob> & orc_Config,
-                                            const std::string & orc_Path)
+std::error_code C_OscDataLoggerJobFiler::h_SaveFile(const std::vector<C_OscDataLoggerJob> & orc_Config,
+                                                    const std::string & orc_Path)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
-                                                                    "opensyde-data-loggers");
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
+                                                                          "opensyde-data-loggers");
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       //node
       C_OscDataLoggerJobFiler::h_SaveData(orc_Config, c_XmlParser);
@@ -100,15 +101,15 @@ int32_t C_OscDataLoggerJobFiler::h_SaveFile(const std::vector<C_OscDataLoggerJob
       if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR)
       {
          osc_write_log_error("Saving data loggers data", "Could not create file for node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
       //More details are in log
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -118,26 +119,26 @@ int32_t C_OscDataLoggerJobFiler::h_SaveFile(const std::vector<C_OscDataLoggerJob
    \param[in,out]  orc_XmlParser    XML parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    Data loggers file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     Data loggers file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::h_LoadData(std::vector<C_OscDataLoggerJob> & orc_Config,
-                                            C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscDataLoggerJobFiler::h_LoadData(std::vector<C_OscDataLoggerJob> & orc_Config,
+                                                    C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
-                                                             "Loading data loggers data");
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
+                                                                   "Loading data loggers data");
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("jobs");
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("jobs"));
 
       orc_Config.clear();
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          uint32_t u32_ExpectedSize;
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize));
+         if (!c_Retval)
          {
             std::string c_NodeName = orc_XmlParser.SelectNodeChild("job");
             if (c_NodeName == "job")
@@ -145,15 +146,15 @@ int32_t C_OscDataLoggerJobFiler::h_LoadData(std::vector<C_OscDataLoggerJob> & or
                do
                {
                   C_OscDataLoggerJob c_Job;
-                  s32_Retval = C_OscDataLoggerJobFiler::mh_LoadJobData(c_Job, orc_XmlParser);
-                  if (s32_Retval == C_NO_ERR)
+                  c_Retval = C_OscDataLoggerJobFiler::mh_LoadJobData(c_Job, orc_XmlParser);
+                  if (!c_Retval)
                   {
                      orc_Config.push_back(c_Job);
                   }
 
                   c_NodeName = orc_XmlParser.SelectNodeNext("job");
                }
-               while ((c_NodeName == "job") && (s32_Retval == C_NO_ERR));
+               while ((c_NodeName == "job") && (!c_Retval));
                tgl_assert(orc_XmlParser.SelectNodeParent() == "jobs");
             }
             if (u32_ExpectedSize != orc_Config.size())
@@ -167,7 +168,7 @@ int32_t C_OscDataLoggerJobFiler::h_LoadData(std::vector<C_OscDataLoggerJob> & or
          orc_XmlParser.SelectNodeParent();
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -205,34 +206,36 @@ void C_OscDataLoggerJobFiler::h_SaveData(const std::vector<C_OscDataLoggerJob> &
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    Data loggers file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     Data loggers file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::h_LoadDataElementId(C_OscNodeDataPoolListElementId & orc_Config,
-                                                     C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscDataLoggerJobFiler::h_LoadDataElementId(C_OscNodeDataPoolListElementId & orc_Config,
+                                                             C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("index");
+   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("index"));
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("node", orc_Config.u32_NodeIndex);
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("node", orc_Config.u32_NodeIndex));
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("data-pool", orc_Config.u32_DataPoolIndex);
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("data-pool",
+                                                                                orc_Config.u32_DataPoolIndex));
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("list", orc_Config.u32_ListIndex);
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("list", orc_Config.u32_ListIndex));
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("element", orc_Config.u32_ElementIndex);
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("element",
+                                                                                orc_Config.u32_ElementIndex));
    }
    //Return
    orc_XmlParser.SelectNodeParent();
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -261,38 +264,40 @@ void C_OscDataLoggerJobFiler::h_SaveDataElementId(const C_OscNodeDataPoolListEle
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    Data loggers file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     Data loggers file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(C_OscNodeDataPoolListElementOptArrayId & orc_Config,
-                                                             C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(
+   C_OscNodeDataPoolListElementOptArrayId & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
    bool q_UseArrayElementIndex = false;
    uint32_t u32_ArrayElementIndex = 0UL;
    C_OscNodeDataPoolListElementId c_TmpId;
-   int32_t s32_Retval = orc_XmlParser.GetAttributeBoolError("use-array-element-index", q_UseArrayElementIndex);
+   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("use-array-element-index",
+                                                                                           q_UseArrayElementIndex));
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("array-element-index", u32_ArrayElementIndex);
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("array-element-index",
+                                                                                u32_ArrayElementIndex));
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = C_OscDataLoggerJobFiler::h_LoadDataElementId(c_TmpId, orc_XmlParser);
+      c_Retval = C_OscDataLoggerJobFiler::h_LoadDataElementId(c_TmpId, orc_XmlParser);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       orc_Config = C_OscNodeDataPoolListElementOptArrayId(c_TmpId, q_UseArrayElementIndex, u32_ArrayElementIndex);
-      s32_Retval = orc_XmlParser.SelectNodeChildError("hal-channel-name");
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("hal-channel-name"));
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       orc_Config.SetHalChannelName(orc_XmlParser.GetNodeContent());
       //Return
       orc_XmlParser.SelectNodeParent();
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -318,19 +323,19 @@ void C_OscDataLoggerJobFiler::h_SaveDataElementOptArrayId(const C_OscNodeDataPoo
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    Data loggers file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     Data loggers file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayOptValidId(
+std::error_code C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayOptValidId(
    C_OscNodeDataPoolListElementOptArrayOptValidId & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
    C_OscNodeDataPoolListElementOptArrayId c_TmpConfig;
-   const int32_t s32_Retval = h_LoadDataElementOptArrayId(c_TmpConfig, orc_XmlParser);
+   const std::error_code c_Retval = h_LoadDataElementOptArrayId(c_TmpConfig, orc_XmlParser);
    const bool q_IsValid = orc_XmlParser.GetAttributeBool("is-valid", true);
 
    orc_Config = C_OscNodeDataPoolListElementOptArrayOptValidId(c_TmpConfig, q_IsValid);
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -362,25 +367,27 @@ C_OscDataLoggerJobFiler::C_OscDataLoggerJobFiler()
    \param[in,out]  orc_XmlParser    XML parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    Data loggers file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     Data loggers file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_LoadJobData(C_OscDataLoggerJob & orc_Config, C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscDataLoggerJobFiler::mh_LoadJobData(C_OscDataLoggerJob & orc_Config,
+                                                        C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.GetAttributeBoolError("is-enabled", orc_Config.q_IsEnabled);
+   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("is-enabled",
+                                                                                           orc_Config.q_IsEnabled));
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_LoadJobProperties(orc_Config.c_Properties, orc_XmlParser);
+      c_Retval = mh_LoadJobProperties(orc_Config.c_Properties, orc_XmlParser);
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_LoadConfiguredDataElements(orc_Config.c_ConfiguredDataElements, orc_XmlParser);
+      c_Retval = mh_LoadConfiguredDataElements(orc_Config.c_ConfiguredDataElements, orc_XmlParser);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -404,92 +411,92 @@ void C_OscDataLoggerJobFiler::mh_SaveJobData(const C_OscDataLoggerJob & orc_Conf
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    Data loggers file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     Data loggers file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_LoadJobProperties(C_OscDataLoggerJobProperties & orc_Config,
-                                                      C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscDataLoggerJobFiler::mh_LoadJobProperties(C_OscDataLoggerJobProperties & orc_Config,
+                                                              C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("properties");
+   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("properties"));
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.AttributeExists("max-log-entries"))
       {
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("max-log-entries",
-                                                            orc_Config.u32_MaxLogEntries);
+         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("max-log-entries",
+                                                                                   orc_Config.u32_MaxLogEntries));
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.AttributeExists("max-log-duration-sec"))
       {
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("max-log-duration-sec",
-                                                            orc_Config.u32_MaxLogDurationSec);
+         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("max-log-duration-sec",
+                                                                                   orc_Config.u32_MaxLogDurationSec));
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.AttributeExists("log-interval-ms"))
       {
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("log-interval-ms",
-                                                            orc_Config.u32_LogIntervalMs);
+         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("log-interval-ms",
+                                                                                   orc_Config.u32_LogIntervalMs));
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("name");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("name"));
+      if (!c_Retval)
       {
          orc_Config.c_Name = orc_XmlParser.GetNodeContent();
          tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("comment");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("comment"));
+      if (!c_Retval)
       {
          orc_Config.c_Comment = orc_XmlParser.GetNodeContent();
          tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("log-file-format");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("log-file-format"));
+      if (!c_Retval)
       {
-         s32_Retval = mh_StringToLogFileType(orc_XmlParser.GetNodeContent(), orc_Config.e_LogFileFormat);
+         c_Retval = mh_StringToLogFileType(orc_XmlParser.GetNodeContent(), orc_Config.e_LogFileFormat);
          tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("local-log-trigger");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("local-log-trigger"));
+      if (!c_Retval)
       {
-         s32_Retval = mh_StringToLocalLogTriggerType(orc_XmlParser.GetNodeContent(), orc_Config.e_LocalLogTrigger);
+         c_Retval = mh_StringToLocalLogTriggerType(orc_XmlParser.GetNodeContent(), orc_Config.e_LocalLogTrigger);
          tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("use-case") == "use-case")
       {
-         s32_Retval = mh_StringToUseCaseType(orc_XmlParser.GetNodeContent(), orc_Config.e_UseCase);
+         c_Retval = mh_StringToUseCaseType(orc_XmlParser.GetNodeContent(), orc_Config.e_UseCase);
          tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("log-destination-directory") == "log-destination-directory")
       {
@@ -497,12 +504,12 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadJobProperties(C_OscDataLoggerJobProperti
          tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
       }
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_LoadJobAdditionalTriggerProperties(orc_Config.c_AdditionalTriggerProperties, orc_XmlParser);
+      c_Retval = mh_LoadJobAdditionalTriggerProperties(orc_Config.c_AdditionalTriggerProperties, orc_XmlParser);
    }
    tgl_assert(orc_XmlParser.SelectNodeParent() == "job");
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -536,55 +543,55 @@ void C_OscDataLoggerJobFiler::mh_SaveJobProperties(const C_OscDataLoggerJobPrope
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    Data loggers file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     Data loggers file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerProperties(
+std::error_code C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerProperties(
    C_OscDataLoggerJobAdditionalTriggerProperties & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("additional-trigger-properties") == "additional-trigger-properties")
    {
-      s32_Retval = orc_XmlParser.GetAttributeBoolError("enable", orc_Config.q_Enable);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("enable", orc_Config.q_Enable));
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.SelectNodeChildError("operation");
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("operation"));
+         if (!c_Retval)
          {
             orc_Config.c_Operation = orc_XmlParser.GetNodeContent();
             tgl_assert(orc_XmlParser.SelectNodeParent() == "additional-trigger-properties");
          }
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.SelectNodeChildError("data-pool-element");
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("data-pool-element"));
+         if (!c_Retval)
          {
-            s32_Retval = h_LoadDataElementOptArrayOptValidId(orc_Config.c_ElementId, orc_XmlParser);
+            c_Retval = h_LoadDataElementOptArrayOptValidId(orc_Config.c_ElementId, orc_XmlParser);
          }
          //Return
          orc_XmlParser.SelectNodeParent();
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.SelectNodeChildError("threshold");
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("threshold"));
+         if (!c_Retval)
          {
             //copy over value so we have the correct type:
-            s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_Config.c_Threshold, orc_XmlParser);
+            c_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_Config.c_Threshold, orc_XmlParser);
             //Return
             tgl_assert(orc_XmlParser.SelectNodeParent() == "additional-trigger-properties");
          }
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = mh_LoadJobAdditionalTriggerExpertMode(orc_Config.c_ExpertMode, orc_XmlParser);
+         c_Retval = mh_LoadJobAdditionalTriggerExpertMode(orc_Config.c_ExpertMode, orc_XmlParser);
       }
       tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -618,32 +625,32 @@ void C_OscDataLoggerJobFiler::mh_SaveJobAdditionalTriggerProperties(
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    Data loggers file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     Data loggers file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerExpertMode(
+std::error_code C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerExpertMode(
    C_OscDataLoggerJobAdditionalTriggerExpertMode & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("expert-settings") == "expert-settings")
    {
-      s32_Retval = orc_XmlParser.GetAttributeBoolError("is-enabled", orc_Config.q_Enable);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("is-enabled", orc_Config.q_Enable));
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.SelectNodeChildError("trigger-configuration");
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("trigger-configuration"));
+         if (!c_Retval)
          {
             orc_Config.c_TriggerConfiguration = orc_XmlParser.GetNodeContent();
             tgl_assert(orc_XmlParser.SelectNodeParent() == "expert-settings");
-            s32_Retval = mh_LoadJobAdditionalTriggerExpertModeTriggerDataElements(orc_Config.c_TriggerDataElementIds,
-                                                                                  orc_XmlParser);
+            c_Retval = mh_LoadJobAdditionalTriggerExpertModeTriggerDataElements(orc_Config.c_TriggerDataElementIds,
+                                                                                orc_XmlParser);
          }
       }
       tgl_assert(orc_XmlParser.SelectNodeParent() == "additional-trigger-properties");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -670,22 +677,22 @@ void C_OscDataLoggerJobFiler::mh_SaveJobAdditionalTriggerExpertMode(
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    Data loggers file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     Data loggers file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerExpertModeTriggerDataElements(
+std::error_code C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerExpertModeTriggerDataElements(
    std::vector<C_OscNodeDataPoolListElementOptArrayId> & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_Config.clear();
 
    if (orc_XmlParser.SelectNodeChild("trigger-data-element-ids") == "trigger-data-element-ids")
    {
       uint32_t u32_ExpectedSize;
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize));
+      if (!c_Retval)
       {
          std::string c_NodeName = orc_XmlParser.SelectNodeChild("trigger-data-element-id");
          if (c_NodeName == "trigger-data-element-id")
@@ -693,15 +700,15 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerExpertModeTriggerDat
             do
             {
                C_OscNodeDataPoolListElementOptArrayId c_Data;
-               s32_Retval = C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(c_Data, orc_XmlParser);
-               if (s32_Retval == C_NO_ERR)
+               c_Retval = C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(c_Data, orc_XmlParser);
+               if (!c_Retval)
                {
                   orc_Config.push_back(c_Data);
                }
 
                c_NodeName = orc_XmlParser.SelectNodeNext("trigger-data-element-id");
             }
-            while ((c_NodeName == "trigger-data-element-id") && (s32_Retval == C_NO_ERR));
+            while ((c_NodeName == "trigger-data-element-id") && (!c_Retval));
             tgl_assert(orc_XmlParser.SelectNodeParent() == "trigger-data-element-ids");
          }
          if (u32_ExpectedSize != orc_Config.size())
@@ -715,7 +722,7 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerExpertModeTriggerDat
       }
       tgl_assert(orc_XmlParser.SelectNodeParent() == "expert-settings");
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -746,21 +753,21 @@ void C_OscDataLoggerJobFiler::mh_SaveJobAdditionalTriggerExpertModeTriggerDataEl
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    Data loggers file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     Data loggers file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElements(
+std::error_code C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElements(
    std::vector<C_OscDataLoggerDataElementReference> & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("configured-data-elements");
+   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("configured-data-elements"));
 
    orc_Config.clear();
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       uint32_t u32_ExpectedSize;
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize));
+      if (!c_Retval)
       {
          std::string c_NodeName = orc_XmlParser.SelectNodeChild("configured-data-element");
          if (c_NodeName == "configured-data-element")
@@ -768,15 +775,15 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElements(
             do
             {
                C_OscDataLoggerDataElementReference c_Data;
-               s32_Retval = C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElement(c_Data, orc_XmlParser);
-               if (s32_Retval == C_NO_ERR)
+               c_Retval = C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElement(c_Data, orc_XmlParser);
+               if (!c_Retval)
                {
                   orc_Config.push_back(c_Data);
                }
 
                c_NodeName = orc_XmlParser.SelectNodeNext("configured-data-element");
             }
-            while ((c_NodeName == "configured-data-element") && (s32_Retval == C_NO_ERR));
+            while ((c_NodeName == "configured-data-element") && (!c_Retval));
             tgl_assert(orc_XmlParser.SelectNodeParent() == "configured-data-elements");
          }
          if (u32_ExpectedSize != orc_Config.size())
@@ -789,7 +796,7 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElements(
       }
       orc_XmlParser.SelectNodeParent();
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -822,37 +829,38 @@ void C_OscDataLoggerJobFiler::mh_SaveConfiguredDataElements(
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR    data read
-   C_CONFIG    Data loggers file content is invalid or incomplete
+   Errc::success    data read
+   Errc::config     Data loggers file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElement(C_OscDataLoggerDataElementReference & orc_Config,
-                                                              C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElement(C_OscDataLoggerDataElementReference & orc_Config,
+                                                                      C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.GetAttributeBoolError("use-custom-name", orc_Config.q_UseCustomName);
+   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("use-custom-name",
+                                                                                           orc_Config.q_UseCustomName));
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("custom-name");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("custom-name"));
+      if (!c_Retval)
       {
          orc_Config.c_CustomName = orc_XmlParser.GetNodeContent();
          tgl_assert(orc_XmlParser.SelectNodeParent() == "configured-data-element");
       }
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("data-pool-element");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("data-pool-element"));
+      if (!c_Retval)
       {
-         s32_Retval = h_LoadDataElementOptArrayId(orc_Config.c_ConfiguredElementId, orc_XmlParser);
+         c_Retval = h_LoadDataElementOptArrayId(orc_Config.c_ConfiguredElementId, orc_XmlParser);
       }
       //Return
       orc_XmlParser.SelectNodeParent();
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -909,14 +917,14 @@ std::string C_OscDataLoggerJobFiler::mh_LogFileTypeTypeToString(
    \param[out]  ore_Type      Type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_StringToLogFileType(const std::string & orc_String,
-                                                        C_OscDataLoggerJobProperties::E_LogFileFormat & ore_Type)
+std::error_code C_OscDataLoggerJobFiler::mh_StringToLogFileType(
+   const std::string & orc_String, C_OscDataLoggerJobProperties::E_LogFileFormat & ore_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "csv")
    {
@@ -928,10 +936,10 @@ int32_t C_OscDataLoggerJobFiler::mh_StringToLogFileType(const std::string & orc_
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -973,14 +981,14 @@ std::string C_OscDataLoggerJobFiler::mh_LocalLogTriggerTypeToString(
    \param[out]  ore_Type      Type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_StringToLocalLogTriggerType(const std::string & orc_String,
-                                                                C_OscDataLoggerJobProperties::E_LocalLogTrigger & ore_Type)
+std::error_code C_OscDataLoggerJobFiler::mh_StringToLocalLogTriggerType(
+   const std::string & orc_String, C_OscDataLoggerJobProperties::E_LocalLogTrigger & ore_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "on-change")
    {
@@ -996,10 +1004,10 @@ int32_t C_OscDataLoggerJobFiler::mh_StringToLocalLogTriggerType(const std::strin
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1041,14 +1049,14 @@ std::string C_OscDataLoggerJobFiler::mh_UseCaseTypeToString(
    \param[out]  ore_Type      Type
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::mh_StringToUseCaseType(const std::string & orc_String,
-                                                        C_OscDataLoggerJobProperties::E_UseCase & ore_Type)
+std::error_code C_OscDataLoggerJobFiler::mh_StringToUseCaseType(const std::string & orc_String,
+                                                                C_OscDataLoggerJobProperties::E_UseCase & ore_Type)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "manual")
    {
@@ -1064,8 +1072,8 @@ int32_t C_OscDataLoggerJobFiler::mh_StringToUseCaseType(const std::string & orc_
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }

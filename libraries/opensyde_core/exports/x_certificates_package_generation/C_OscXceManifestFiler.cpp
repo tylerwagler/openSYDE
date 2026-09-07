@@ -114,8 +114,8 @@ std::error_code C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config,
 std::error_code C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, const std::string & orc_Path)
 {
    C_OscXmlParser c_XmlParser;
-   std::error_code c_Retval = make_error_code_from_stw(
-      C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path, "opensyde-update-package-manifest"));
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
+                                                                          "opensyde-update-package-manifest");
 
    if (!c_Retval)
    {
@@ -151,9 +151,8 @@ std::error_code C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config,
 {
    std::string c_Types;
    //the XML parser and the filer utilities still report the STW int32_t error convention
-   std::error_code c_Retval = make_error_code_from_stw(
-      C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
-                                           "Loading manifest data"));
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
+                                                                   "Loading manifest data");
 
    if (!c_Retval)
    {
@@ -178,9 +177,8 @@ std::error_code C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config,
       c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("x-app-security-certificates"));
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(
-            C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_PACKAGE_VERSION_1, "package-version",
-                                                 "Loading manifest data"));
+         c_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_PACKAGE_VERSION_1, "package-version",
+                                                         "Loading manifest data");
       }
       if (!c_Retval)
       {

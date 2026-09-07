@@ -101,11 +101,13 @@ C_SydeSup::E_Result C_SupCreatePackage::Create()
    {
       C_OscSystemFilerUtil::h_AdaptProjectPathToSystemDefinition(mc_OsyProjectPath, c_SysDefPath);
       C_OscSystemFilerUtil::h_AdaptProjectPathToSystemViews(mc_OsyProjectPath, c_SysViewPath);
+      //the filer reports std::error_code now; this class still runs on the STW int32_t convention
       s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(c_SystemDefinition, c_SysDefPath,
-                                                                          mc_DeviceDefPath);
+                                                                          mc_DeviceDefPath).value();
       if (s32_Return == C_NO_ERR)
       {
-         s32_Return = C_OscViewFiler::h_LoadSystemViewsFile(c_SysViews, c_SysViewPath, c_SystemDefinition.c_Nodes);
+         s32_Return = C_OscViewFiler::h_LoadSystemViewsFile(c_SysViews, c_SysViewPath,
+                                                            c_SystemDefinition.c_Nodes).value();
       }
       if (s32_Return != C_NO_ERR)
       {

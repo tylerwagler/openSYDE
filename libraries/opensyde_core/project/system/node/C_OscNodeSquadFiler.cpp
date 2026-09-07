@@ -11,10 +11,12 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <system_error>
 
 #include "TglUtils.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscNodeSquadFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
 
@@ -51,22 +53,22 @@ C_OscNodeSquadFiler::C_OscNodeSquadFiler()
    \param[in,out]  orc_XmlParser    XML parser
 
    \return
-   C_NO_ERR   no error
-   C_CONFIG   content is invalid or incomplete
+   Errc::success    no error
+   Errc::config     content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeSquadFiler::h_LoadNodeGroups(std::vector<C_OscNodeSquad> & orc_NodeGroups,
-                                              C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeSquadFiler::h_LoadNodeGroups(std::vector<C_OscNodeSquad> & orc_NodeGroups,
+                                                      C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_NodeGroups.clear();
    if (orc_XmlParser.SelectNodeChild("node-groups") == "node-groups")
    {
       uint32_t u32_LengthNodeGroup;
 
-      s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_LengthNodeGroup);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("length", u32_LengthNodeGroup));
+      if (!c_Retval)
       {
          std::string c_NodeName;
          orc_NodeGroups.reserve(u32_LengthNodeGroup);
@@ -76,37 +78,37 @@ int32_t C_OscNodeSquadFiler::h_LoadNodeGroups(std::vector<C_OscNodeSquad> & orc_
             do
             {
                C_OscNodeSquad c_NewNodeGroup;
-               s32_Retval = C_OscNodeSquadFiler::h_LoadNodeGroup(c_NewNodeGroup, orc_XmlParser);
-               if (s32_Retval == C_NO_ERR)
+               c_Retval = C_OscNodeSquadFiler::h_LoadNodeGroup(c_NewNodeGroup, orc_XmlParser);
+               if (!c_Retval)
                {
                   orc_NodeGroups.push_back(c_NewNodeGroup);
                }
                c_NodeName = orc_XmlParser.SelectNodeNext("node-group");
             }
-            while ((c_NodeName == "node-group") && (s32_Retval == C_NO_ERR));
-            if (s32_Retval == C_NO_ERR)
+            while ((c_NodeName == "node-group") && (!c_Retval));
+            if (!c_Retval)
             {
                if (u32_LengthNodeGroup != orc_NodeGroups.size())
                {
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                   osc_write_log_error("Loading system definition",
                                       "Expected " + std::to_string(
                                          u32_LengthNodeGroup) + " node groups but received " +
                                       std::to_string(orc_NodeGroups.size()) + " node groups.");
                }
-               if (s32_Retval == C_NO_ERR)
+               if (!c_Retval)
                {
                   tgl_assert(orc_XmlParser.SelectNodeParent() == "node-groups");
                }
             }
          }
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          orc_XmlParser.SelectNodeParent();
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -116,47 +118,47 @@ int32_t C_OscNodeSquadFiler::h_LoadNodeGroups(std::vector<C_OscNodeSquad> & orc_
    \param[in,out]  orc_XmlParser    XML parser
 
    \return
-   C_NO_ERR   no error
-   C_CONFIG   content is invalid or incomplete
+   Errc::success    no error
+   Errc::config     content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeSquadFiler::h_LoadNodeGroup(C_OscNodeSquad & orc_NodeGroup, C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscNodeSquadFiler::h_LoadNodeGroup(C_OscNodeSquad & orc_NodeGroup, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("base-name");
+   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("base-name"));
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       orc_NodeGroup.c_BaseName = orc_XmlParser.GetNodeContent();
       orc_XmlParser.SelectNodeParent();
-      s32_Retval = orc_XmlParser.SelectNodeChildError("sub-node-indices");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("sub-node-indices"));
+      if (!c_Retval)
       {
          uint32_t u32_LengthSubIndices;
-         s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_LengthSubIndices);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("length", u32_LengthSubIndices));
+         if (!c_Retval)
          {
             orc_NodeGroup.c_SubNodeIndexes.clear();
             orc_NodeGroup.c_SubNodeIndexes.reserve(u32_LengthSubIndices);
-            s32_Retval = orc_XmlParser.SelectNodeChildError("sub-node-index");
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("sub-node-index"));
+            if (!c_Retval)
             {
                std::string c_NodeName;
                do
                {
                   uint32_t u32_Value;
-                  s32_Retval = orc_XmlParser.GetAttributeUint32Error("value", u32_Value);
-                  if (s32_Retval == C_NO_ERR)
+                  c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("value", u32_Value));
+                  if (!c_Retval)
                   {
                      orc_NodeGroup.c_SubNodeIndexes.push_back(u32_Value);
                   }
                   c_NodeName = orc_XmlParser.SelectNodeNext("sub-node-index");
                }
-               while ((c_NodeName == "sub-node-index") && (s32_Retval == C_NO_ERR));
-               if (s32_Retval == C_NO_ERR)
+               while ((c_NodeName == "sub-node-index") && (!c_Retval));
+               if (!c_Retval)
                {
                   if (u32_LengthSubIndices != orc_NodeGroup.c_SubNodeIndexes.size())
                   {
-                     s32_Retval = C_CONFIG;
+                     c_Retval = Errc::config;
                      osc_write_log_error("Loading system definition",
                                          "Expected " + std::to_string(
                                             u32_LengthSubIndices) + " sub node indices but received " +
@@ -164,19 +166,19 @@ int32_t C_OscNodeSquadFiler::h_LoadNodeGroup(C_OscNodeSquad & orc_NodeGroup, C_O
                                             orc_NodeGroup.c_SubNodeIndexes.size()) + " sub node indices.");
                   }
                }
-               if (s32_Retval == C_NO_ERR)
+               if (!c_Retval)
                {
                   tgl_assert(orc_XmlParser.SelectNodeParent() == "sub-node-indices");
                }
             }
          }
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
             orc_XmlParser.SelectNodeParent();
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

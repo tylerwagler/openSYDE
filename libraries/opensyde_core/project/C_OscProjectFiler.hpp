@@ -17,6 +17,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include <string>
+#include <system_error>
 #include "C_OscProject.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -31,13 +32,13 @@ namespace opensyde_core
 class C_OscProjectFiler
 {
 public:
-   static int32_t h_Save(C_OscProject & orc_Project, const std::string & orc_Path,
-                         const std::string & orc_OpenSydeVersion);
-   static int32_t h_Load(C_OscProject & orc_Project, const std::string & orc_Path);
+   static std::error_code h_Save(C_OscProject & orc_Project, const std::string & orc_Path,
+                                 const std::string & orc_OpenSydeVersion);
+   static std::error_code h_Load(C_OscProject & orc_Project, const std::string & orc_Path);
 
 private:
-   static int32_t mh_SaveInternal(C_OscProject & orc_Project, const std::string & orc_Path,
-                                  const std::string & orc_OpenSydeVersion, const bool oq_New);
+   static std::error_code mh_SaveInternal(C_OscProject & orc_Project, const std::string & orc_Path,
+                                          const std::string & orc_OpenSydeVersion, const bool oq_New);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

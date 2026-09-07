@@ -358,7 +358,8 @@ int main(const int argc, char_t * const opacn_Argv[])
 
    // --- 1) Load V2 TSP --------------------------------------------------------------------------------------------
    C_OscTargetSupportPackageV2 c_V2;
-   int32_t s32_Retval = C_OscTargetSupportPackageV2Filer::h_Load(c_V2, c_InputPath);
+   //the filer reports std::error_code now; this tool still runs on the STW int32_t convention
+   int32_t s32_Retval = C_OscTargetSupportPackageV2Filer::h_Load(c_V2, c_InputPath).value();
    if (s32_Retval != C_NO_ERR)
    {
       std::cerr << mhc_TOOL_NAME.c_str() << ": failed to load V2 TSP (rc=" << s32_Retval << ")\n";
@@ -413,7 +414,8 @@ int main(const int argc, char_t * const opacn_Argv[])
 
    std::vector<std::string> c_CreatedFiles;
    const std::map<uint32_t, std::string> c_EmptyNodeMap;
-   s32_Retval = C_OscNodeFiler::h_SaveNodeFile(c_Node, c_OscNodePath, &c_CreatedFiles, c_EmptyNodeMap);
+   //likewise: convert at the boundary, the local stays on the STW int32_t convention
+   s32_Retval = C_OscNodeFiler::h_SaveNodeFile(c_Node, c_OscNodePath, &c_CreatedFiles, c_EmptyNodeMap).value();
    if (s32_Retval != C_NO_ERR)
    {
       std::cerr << mhc_TOOL_NAME.c_str() << ": h_SaveNodeFile failed (rc=" << s32_Retval << ")\n";

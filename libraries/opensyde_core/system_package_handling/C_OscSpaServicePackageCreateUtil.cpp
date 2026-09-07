@@ -274,9 +274,8 @@ std::error_code C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(const C
 
    std::vector<std::string> c_AdditionalFiles;
    //C_OscSystemDefinitionFiler still reports the STW int32_t convention
-   std::error_code c_Return = make_error_code_from_stw(
-      C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(orc_SystemDefinition,
-                                                             c_SysDefPath, &c_AdditionalFiles));
+   std::error_code c_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(orc_SystemDefinition, c_SysDefPath,
+                                                                                     &c_AdditionalFiles);
    if (!c_Return)
    {
       //Add files to pack

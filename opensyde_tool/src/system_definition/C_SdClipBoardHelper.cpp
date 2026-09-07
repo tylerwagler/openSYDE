@@ -114,7 +114,8 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPool(C_OscNodeDataPool & orc_OscContent
                {
                   if (c_StringXml.SelectNodeChild("data-pool") == "data-pool")
                   {
-                     s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPool(orc_OscContent, c_StringXml);
+                     //the project filers report std::error_code now; this class keeps the STW int32_t convention
+                     s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPool(orc_OscContent, c_StringXml).value();
                   }
                   else
                   {
@@ -212,7 +213,8 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolLists(std::vector<C_OscNodeDataPool
       {
          if (c_StringXml.SelectNodeChild("type") == "type")
          {
-            s32_Retval = C_OscNodeDataPoolFiler::h_StringToDataPool(c_StringXml.GetNodeContent(), ore_Type);
+            //the project filers report std::error_code now; this class keeps the STW int32_t convention
+            s32_Retval = C_OscNodeDataPoolFiler::h_StringToDataPool(c_StringXml.GetNodeContent(), ore_Type).value();
             if (s32_Retval == C_NO_ERR)
             {
                //Return
@@ -230,7 +232,8 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolLists(std::vector<C_OscNodeDataPool
                      {
                         if (c_StringXml.SelectNodeChild("lists") == "lists")
                         {
-                           s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolLists(orc_OscContent, c_StringXml);
+                           s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolLists(orc_OscContent,
+                                                                                    c_StringXml).value();
                         }
                         else
                         {
@@ -377,7 +380,9 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListElementsFromString(
                {
                   if (c_StringXml.SelectNodeChild("data-elements") == "data-elements")
                   {
-                     s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(orc_OscContent, c_StringXml);
+                     //the project filers report std::error_code now; this class keeps the STW int32_t convention
+                     s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(orc_OscContent,
+                                                                                     c_StringXml).value();
                   }
                   else
                   {
@@ -581,7 +586,8 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromString(
       {
          if (c_StringXml.SelectNodeChild("data-sets") == "data-sets")
          {
-            s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(orc_OscNames, c_StringXml);
+            //the project filers report std::error_code now; this class keeps the STW int32_t convention
+            s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(orc_OscNames, c_StringXml).value();
             if (s32_Retval == C_NO_ERR)
             {
                //Return
@@ -615,7 +621,7 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromString(
                                     //Load content
                                     s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(
                                        c_CurDataSetValueValue,
-                                       c_StringXml);
+                                       c_StringXml).value();
                                  }
 
                                  //Append
@@ -803,7 +809,8 @@ int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_M
       {
          if (c_StringXml.SelectNodeChild("message") == "message")
          {
-            s32_Retval = C_OscNodeCommFiler::h_LoadNodeComMessages(orc_Messages, c_StringXml);
+            //the project filers report std::error_code now; this class keeps the STW int32_t convention
+            s32_Retval = C_OscNodeCommFiler::h_LoadNodeComMessages(orc_Messages, c_StringXml).value();
             if (s32_Retval == C_NO_ERR)
             {
                //Return
@@ -1073,8 +1080,9 @@ int32_t C_SdClipBoardHelper::h_LoadMessageIndexFromString(const QString & orc_In
 
                if (c_StringXml.SelectNodeChild("protocol-type") == "protocol-type")
                {
-                  if (C_OscNodeCommFiler::h_StringToCommunicationProtocol(c_StringXml.GetNodeContent(),
-                                                                          c_MessageId.e_ComProtocol) != C_NO_ERR)
+                  //the project filers report std::error_code now; this class keeps the STW int32_t convention
+                  if (C_OscNodeCommFiler::h_StringToCommunicationProtocol(
+                         c_StringXml.GetNodeContent(), c_MessageId.e_ComProtocol).value() != C_NO_ERR)
                   {
                      s32_Retval = C_RANGE;
                   }
@@ -1175,8 +1183,10 @@ int32_t C_SdClipBoardHelper::h_LoadDataSnapShotFromClipboard(C_SdTopologyDataSna
       C_OscNodeSquadFiler::h_LoadNodeGroups(orc_Data.c_OscNodeGroups, c_StringXml);
       if (c_StringXml.SelectNodeChild("nodes-core") == "nodes-core")
       {
+         //the project filers report std::error_code now; this class keeps the STW int32_t convention
          s32_Retval = C_OscSystemDefinitionFiler::h_LoadNodes(orc_Data.c_OscNodes, c_StringXml,
-                                                              C_OscSystemDefinition::hc_Devices, "", true, false);
+                                                              C_OscSystemDefinition::hc_Devices, "", true,
+                                                              false).value();
          if (s32_Retval == C_NO_ERR)
          {
             //Return
@@ -1194,7 +1204,7 @@ int32_t C_SdClipBoardHelper::h_LoadDataSnapShotFromClipboard(C_SdTopologyDataSna
       }
       if ((c_StringXml.SelectNodeChild("buses-core") == "buses-core") && (s32_Retval == C_NO_ERR))
       {
-         s32_Retval = C_OscSystemDefinitionFiler::h_LoadBuses(orc_Data.c_OscBuses, c_StringXml);
+         s32_Retval = C_OscSystemDefinitionFiler::h_LoadBuses(orc_Data.c_OscBuses, c_StringXml).value();
          if (s32_Retval == C_NO_ERR)
          {
             //Return
@@ -1384,7 +1394,8 @@ int32_t C_SdClipBoardHelper::mh_LoadSignalsFromString(const QString & orc_Input,
       {
          if (c_StringXml.SelectNodeChild("com-signals") == "com-signals")
          {
-            s32_Retval = C_OscNodeCommFiler::h_LoadNodeComSignals(orc_Signals, c_StringXml);
+            //the project filers report std::error_code now; this class keeps the STW int32_t convention
+            s32_Retval = C_OscNodeCommFiler::h_LoadNodeComSignals(orc_Signals, c_StringXml).value();
             if (s32_Retval == C_NO_ERR)
             {
                //Return

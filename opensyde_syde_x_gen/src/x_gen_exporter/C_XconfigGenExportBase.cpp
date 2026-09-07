@@ -365,9 +365,9 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::LoadSystemDefinitio
    E_ResultCode e_Return = eRESULT_OK;
    int32_t s32_Return;
 
-   s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(mc_SystemDefinition,
-                                                                       mc_SystemDefinitionFilePath,
-                                                                       mc_DeviceDefinitions);
+   //the filer reports std::error_code now; this class still runs on the STW int32_t convention
+   s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(mc_SystemDefinition, mc_SystemDefinitionFilePath,
+                                                                       mc_DeviceDefinitions).value();
 
    if (s32_Return == C_NO_ERR)
    {

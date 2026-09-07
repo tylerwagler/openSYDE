@@ -116,8 +116,8 @@ std::error_code C_OscHalcDefFiler::h_LoadFile(C_OscHalcDefBase & orc_IoData, con
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscHalcDefFiler::h_SaveFile(const C_OscHalcDefBase & orc_IoData, const std::string & orc_Path)
 {
-   const std::error_code c_Retval = make_error_code_from_stw(
-      C_OscSystemFilerUtil::h_SaveStringToFile(orc_IoData.c_FileString, orc_Path, "Saving HALC definition"));
+   const std::error_code c_Retval = C_OscSystemFilerUtil::h_SaveStringToFile(orc_IoData.c_FileString, orc_Path,
+                                                                             "Saving HALC definition");
 
    return c_Retval;
 }

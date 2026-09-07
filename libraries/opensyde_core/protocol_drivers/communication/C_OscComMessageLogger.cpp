@@ -301,8 +301,7 @@ std::error_code C_OscComMessageLogger::AddOsySysDef(const std::string & orc_Path
       // Optional parameters to skip contents of h_LoadSystemDefinitionFile are not used,
       // because we are not in SYDEsup or SYDE Coder C context (#61996) and we want all system definition data here.
       // h_LoadSystemDefinitionFile is still on the STW integer convention (wave C)
-      c_Return = make_error_code_from_stw(
-         C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(c_SysDef, orc_PathSystemDefinition, "", false));
+      c_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(c_SysDef, orc_PathSystemDefinition, "", false);
       if (c_Return == Errc::success)
       {
          uint32_t u32_BusCounter;

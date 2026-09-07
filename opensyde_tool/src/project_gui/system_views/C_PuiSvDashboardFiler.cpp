@@ -379,7 +379,8 @@ int32_t C_PuiSvDashboardFiler::h_LoadSliderValue(C_PuiSvDbSlider & orc_Slider, C
    {
       if (orc_XmlParser.SelectNodeChild("content") == "content")
       {
-         if (C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_Slider.c_Value, orc_XmlParser) != C_NO_ERR)
+         //the project filers report std::error_code now; this class keeps the STW int32_t convention
+         if (C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_Slider.c_Value, orc_XmlParser).value() != C_NO_ERR)
          {
             s32_Retval = C_CONFIG;
          }
@@ -892,7 +893,8 @@ int32_t C_PuiSvDashboardFiler::mh_LoadSpinBoxes(std::vector<C_PuiSvDbSpinBox> & 
             }
             if (orc_XmlParser.SelectNodeChild("content") == "content")
             {
-               if (C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(c_Box.c_Value, orc_XmlParser) != C_NO_ERR)
+               //the project filers report std::error_code now; this class keeps the STW int32_t convention
+               if (C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(c_Box.c_Value, orc_XmlParser).value() != C_NO_ERR)
                {
                   s32_Retval = C_CONFIG;
                }
@@ -1358,8 +1360,9 @@ int32_t C_PuiSvDashboardFiler::mh_LoadWriteWidgetBase(C_PuiSvDbWriteWidgetBase &
          }
          if (orc_XmlParser.SelectNodeChild("value") == "value")
          {
+            //the project filers report std::error_code now; this class keeps the STW int32_t convention
             if (C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_WriteWidget.c_InitialValue,
-                                                                orc_XmlParser) != C_NO_ERR)
+                                                                orc_XmlParser).value() != C_NO_ERR)
             {
                s32_Retval = C_CONFIG;
             }
@@ -1569,7 +1572,8 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamValues(std::vector<C_OscNodeDataPoolC
          do
          {
             C_OscNodeDataPoolContent c_Value;
-            s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(c_Value, orc_XmlParser);
+            //the project filers report std::error_code now; this class keeps the STW int32_t convention
+            s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(c_Value, orc_XmlParser).value();
             orc_Values.push_back(c_Value);
             //Next
             c_CurrentValueNode = orc_XmlParser.SelectNodeNext("value");

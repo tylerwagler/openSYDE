@@ -442,8 +442,9 @@ int32_t C_PuiSdHandlerFiler::h_SaveDataPools(const std::vector<C_PuiSdNodeDataPo
 int32_t C_PuiSdHandlerFiler::h_SaveDataPoolFile(const C_PuiSdNodeDataPool & orc_DataPool, const QString & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
-                                                                    "opensyde-dp-ui-definition");
+                                                                    "opensyde-dp-ui-definition").value();
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -571,9 +572,9 @@ int32_t C_PuiSdHandlerFiler::h_LoadSharedDatapoolsFile(const QString & orc_FileP
                                                        C_PuiSdSharedDatapools & orc_SharedDatapools)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
-                                                                         orc_FilePath.toStdString().c_str(),
-                                                                         "opensyde-shared-datapools-ui-definition");
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
+   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_FilePath.toStdString().c_str(
+      ), "opensyde-shared-datapools-ui-definition").value();
 
    orc_SharedDatapools.c_SharedDatapools.clear();
 
@@ -767,8 +768,9 @@ int32_t C_PuiSdHandlerFiler::h_SaveSharedDatapoolsFile(const QString & orc_FileP
                                                        const C_PuiSdSharedDatapools & orc_SharedDatapools)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
-                                                                    "opensyde-shared-datapools-ui-definition");
+                                                                    "opensyde-shared-datapools-ui-definition").value();
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -1337,8 +1339,9 @@ int32_t C_PuiSdHandlerFiler::h_SaveCanProtocolFile(const C_PuiSdNodeCanProtocol 
                                                    const QString & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
-                                                                    "opensyde-comm-ui-definition");
+                                                                    "opensyde-comm-ui-definition").value();
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -1616,9 +1619,10 @@ int32_t C_PuiSdHandlerFiler::h_LoadNodeFile(C_PuiSdNode & orc_Node, const QStrin
                                             const QDir * const opc_BasePath, C_OscNode * const opc_OscNode)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
                                                                          orc_FilePath.toStdString().c_str(),
-                                                                         "opensyde-node-ui-definition");
+                                                                         "opensyde-node-ui-definition").value();
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -1901,7 +1905,8 @@ int32_t C_PuiSdHandlerFiler::h_LoadLastKnownHalcCrcs(std::map<C_OscNodeDataPoolL
          do
          {
             C_OscNodeDataPoolListElementOptArrayId c_Id;
-            s32_Retval = C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(c_Id, orc_XmlParser);
+            //the project filers report std::error_code now; this class keeps the STW int32_t convention
+            s32_Retval = C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(c_Id, orc_XmlParser).value();
             if (s32_Retval == C_NO_ERR)
             {
                if (orc_XmlParser.AttributeExists("crc"))
@@ -1998,8 +2003,9 @@ int32_t C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(const QString & orc_Fi
                                                                                                                                                                                C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
-                                                                    "opensyde-system-ui-definition");
+                                                                    "opensyde-system-ui-definition").value();
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -2101,9 +2107,10 @@ int32_t C_PuiSdHandlerFiler::h_LoadSystemDefinitionUiFile(const QString & orc_Fi
                                                           std::vector<C_OscNode> * const opc_OscNodes)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
                                                                          orc_FilePath.toStdString().c_str(),
-                                                                         "opensyde-system-ui-definition");
+                                                                         "opensyde-system-ui-definition").value();
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -2290,9 +2297,10 @@ int32_t C_PuiSdHandlerFiler::mh_LoadDatapoolFile(C_PuiSdNodeDataPool & orc_DataP
                                                  C_OscNodeDataPool * const opc_OscDataPool)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
                                                                          orc_FilePath.toStdString().c_str(),
-                                                                         "opensyde-dp-ui-definition");
+                                                                         "opensyde-dp-ui-definition").value();
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -2365,9 +2373,10 @@ int32_t C_PuiSdHandlerFiler::mh_LoadDatapoolFile(C_PuiSdNodeDataPool & orc_DataP
 int32_t C_PuiSdHandlerFiler::mh_LoadCommFile(C_PuiSdNodeCanProtocol & orc_UiCanProtocol, const QString & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
                                                                          orc_FilePath.toStdString().c_str(),
-                                                                         "opensyde-comm-ui-definition");
+                                                                         "opensyde-comm-ui-definition").value();
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -2567,8 +2576,9 @@ int32_t C_PuiSdHandlerFiler::mh_SaveNodeFile(const C_PuiSdNode & orc_UiNode, con
                                              const QString & orc_FilePath, const QDir * const opc_BasePath)
 {
    C_OscXmlParser c_XmlParser;
+   //the project filers report std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
-                                                                    "opensyde-node-ui-definition");
+                                                                    "opensyde-node-ui-definition").value();
 
    if (s32_Retval == C_NO_ERR)
    {

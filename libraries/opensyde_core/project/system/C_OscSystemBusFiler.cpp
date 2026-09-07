@@ -14,8 +14,10 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscSystemBusFiler.hpp"
 #include <string>
+#include <system_error>
 #include "TglUtils.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -48,13 +50,13 @@ using namespace stw::errors;
    \param[in,out]  orc_XmlParser    XML parser
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete (content of orc_Bus is undefined)
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete (content of orc_Bus is undefined)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Name
    if (orc_XmlParser.SelectNodeChild("name") == "name")
@@ -66,10 +68,10 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
    else
    {
       osc_write_log_error("Loading bus definition", "Could not find \"bus\".\"name\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
    //Comment
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("comment") == "comment")
       {
@@ -80,11 +82,11 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
       //Type
       if (orc_XmlParser.SelectNodeChild("type") == "type")
       {
-         s32_Retval = C_OscSystemFilerUtil::h_BusTypeStringToEnum(orc_XmlParser.GetNodeContent(), orc_Bus.e_Type);
-         if (s32_Retval != C_NO_ERR)
+         c_Retval = C_OscSystemFilerUtil::h_BusTypeStringToEnum(orc_XmlParser.GetNodeContent(), orc_Bus.e_Type);
+         if (c_Retval)
          {
             osc_write_log_error("Loading bus definition", "Could not find \"bus\".\"type\" node.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "bus");
@@ -92,11 +94,11 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
       else
       {
          osc_write_log_error("Loading bus definition", "Could not find \"bus\".\"type\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    //Bitrate
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("bitrate") == "bitrate")
       {
@@ -108,7 +110,7 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
          {
             osc_write_log_error("Loading bus definition", "Invalid value for \"bitrate\".\"number\".");
             orc_Bus.u64_BitRate = 0ULL;
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "bus");
@@ -116,15 +118,15 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
       else
       {
          osc_write_log_error("Loading bus definition", "Could not find \"bus\".\"bitrate\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_LoadCanFdProperties(orc_Bus, orc_XmlParser);
+      c_Retval = mh_LoadCanFdProperties(orc_Bus, orc_XmlParser);
    }
    //Bus id
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("bus-id") == "bus-id")
       {
@@ -136,7 +138,7 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
          {
             osc_write_log_error("Loading bus definition", "Invalid value for \"bus-id\".\"number\".");
             orc_Bus.u8_BusId = 0;
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "bus");
@@ -144,11 +146,11 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
       else
       {
          osc_write_log_error("Loading bus definition", "Could not find \"bus\".\"bus-id\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    //Rx delta time
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (orc_XmlParser.SelectNodeChild("rx-delta-time") == "rx-delta-time")
       {
@@ -160,7 +162,7 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
          {
             osc_write_log_error("Loading bus definition", "Invalid value for \"rx-delta-time\".\"number\".");
             orc_Bus.u16_RxTimeoutOffsetMs = 0U;
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "bus");
@@ -168,15 +170,15 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
       else
       {
          osc_write_log_error("Loading bus definition", "Could not find \"bus\".\"rx-delta-time\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    //Useable for routing
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       orc_Bus.q_UseableForRouting = orc_XmlParser.GetAttributeBool("useable-for-routing", true);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -234,22 +236,24 @@ void C_OscSystemBusFiler::h_SaveBus(const C_OscSystemBus & orc_Bus, C_OscXmlPars
    \param[in,out]  orc_XmlParser    Xml parser
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete (content of orc_Bus is undefined)
+   Errc::success    data read
+   Errc::config     content of file is invalid or incomplete (content of orc_Bus is undefined)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler::mh_LoadCanFdProperties(C_OscSystemBus & orc_Bus, C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscSystemBusFiler::mh_LoadCanFdProperties(C_OscSystemBus & orc_Bus,
+                                                            C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("can-fd") == "can-fd")
    {
-      s32_Retval = orc_XmlParser.GetAttributeBoolError("active", orc_Bus.q_UseCanFd);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("active", orc_Bus.q_UseCanFd));
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.GetAttributeUint64Error("bitrate", orc_Bus.u64_CanFdBitRate);
+         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint64Error("bitrate",
+                                                                                   orc_Bus.u64_CanFdBitRate));
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "bus");
@@ -261,7 +265,7 @@ int32_t C_OscSystemBusFiler::mh_LoadCanFdProperties(C_OscSystemBus & orc_Bus, C_
       orc_Bus.u64_CanFdBitRate = 2000000ULL;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

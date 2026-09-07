@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include <string>
+#include <system_error>
 #include "C_OscDeviceDefinition.hpp"
 #include "C_OscXmlParser.hpp"
 
@@ -37,35 +38,38 @@ private:
                                                     uint32_t & oru32_RequestDownloadTimeout,
                                                     uint32_t & oru32_TransferDataTimeout, bool & orq_IsFileBased);
 
-   static int32_t mh_Load(C_OscDeviceDefinition & orc_DeviceDefinition, C_OscXmlParser & orc_Parser,
-                          const std::string & orc_Path);
-   static int32_t mh_LoadSubDevice(C_OscSubDeviceDefinition & orc_SubDeviceDefinition, C_OscXmlParser & orc_Parser,
-                                   const C_OscDeviceDefinition & orc_DeviceDefinition,
-                                   const std::string & orc_Path);
+   static std::error_code mh_Load(C_OscDeviceDefinition & orc_DeviceDefinition, C_OscXmlParser & orc_Parser,
+                                  const std::string & orc_Path);
+   static std::error_code mh_LoadSubDevice(C_OscSubDeviceDefinition & orc_SubDeviceDefinition,
+                                           C_OscXmlParser & orc_Parser,
+                                           const C_OscDeviceDefinition & orc_DeviceDefinition,
+                                           const std::string & orc_Path);
    static void mh_SaveSubDevice(const C_OscSubDeviceDefinition & orc_SubDeviceDefinition, C_OscXmlParser & orc_Parser);
-   static int32_t mh_HandleConnectedInterfaces(C_OscDeviceDefinition & orc_DeviceDefinition);
-   static int32_t mh_CheckContentErrors(const C_OscDeviceDefinition & orc_DeviceDefinition);
-   static int32_t mh_CheckNotConnectedInterface(const C_OscDeviceDefinition & orc_DeviceDefinition);
-   static int32_t mh_CheckNotConnectedInterfaceByType(const C_OscDeviceDefinition & orc_DeviceDefinition,
-                                                      const C_OscSystemBus::E_Type oe_Type,
-                                                      const uint8_t ou8_NumAvailableInterfaces);
-   static int32_t mh_CheckNotConnectedDevice(const C_OscDeviceDefinition & orc_DeviceDefinition);
+   static std::error_code mh_HandleConnectedInterfaces(C_OscDeviceDefinition & orc_DeviceDefinition);
+   static std::error_code mh_CheckContentErrors(const C_OscDeviceDefinition & orc_DeviceDefinition);
+   static std::error_code mh_CheckNotConnectedInterface(const C_OscDeviceDefinition & orc_DeviceDefinition);
+   static std::error_code mh_CheckNotConnectedInterfaceByType(const C_OscDeviceDefinition & orc_DeviceDefinition,
+                                                              const C_OscSystemBus::E_Type oe_Type,
+                                                              const uint8_t ou8_NumAvailableInterfaces);
+   static std::error_code mh_CheckNotConnectedDevice(const C_OscDeviceDefinition & orc_DeviceDefinition);
    static bool mh_CheckNotConnectedDeviceByType(const C_OscSubDeviceDefinition & orc_SubDeviceDefinition,
                                                 const C_OscSystemBus::E_Type oe_Type,
                                                 const uint8_t ou8_NumAvailableInterfaces);
-   static int32_t mh_CheckDeviceName(const C_OscDeviceDefinition & orc_DeviceDefinition);
-   static int32_t mh_LoadCanFdProperties(C_OscDeviceDefinition & orc_DeviceDefinition, C_OscXmlParser & orc_Parser);
+   static std::error_code mh_CheckDeviceName(const C_OscDeviceDefinition & orc_DeviceDefinition);
+   static std::error_code mh_LoadCanFdProperties(C_OscDeviceDefinition & orc_DeviceDefinition,
+                                                 C_OscXmlParser & orc_Parser);
    static void mh_SaveCanFdProperties(const C_OscDeviceDefinition & orc_DeviceDefinition, C_OscXmlParser & orc_Parser);
-   static int32_t mh_LoadCanFdBitrates(std::vector<uint16_t> & orc_CanFdDataBitrates, C_OscXmlParser & orc_Parser);
+   static std::error_code mh_LoadCanFdBitrates(std::vector<uint16_t> & orc_CanFdDataBitrates,
+                                               C_OscXmlParser & orc_Parser);
    static void mh_SaveCanFdBitrates(const std::vector<uint16_t> & orc_CanFdDataBitrates, C_OscXmlParser & orc_Parser);
-   static int32_t mh_LoadFeatures(std::vector<C_OscSupportedCanInterfaceFeatures> & orc_SupportedCanFeatures,
-                                  C_OscXmlParser & orc_Parser);
+   static std::error_code mh_LoadFeatures(std::vector<C_OscSupportedCanInterfaceFeatures> & orc_SupportedCanFeatures,
+                                          C_OscXmlParser & orc_Parser);
    static void mh_SaveFeatures(const std::vector<C_OscSupportedCanInterfaceFeatures> & orc_SupportedCanFeatures,
                                C_OscXmlParser & orc_Parser);
 
 public:
-   static int32_t h_Load(C_OscDeviceDefinition & orc_DeviceDefinition, const std::string & orc_Path);
-   static int32_t h_Save(const C_OscDeviceDefinition & orc_DeviceDefinition, const std::string & orc_Path);
+   static std::error_code h_Load(C_OscDeviceDefinition & orc_DeviceDefinition, const std::string & orc_Path);
+   static std::error_code h_Save(const C_OscDeviceDefinition & orc_DeviceDefinition, const std::string & orc_Path);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

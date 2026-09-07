@@ -526,14 +526,12 @@ std::error_code C_OscParamSetInterpretedNodeFiler::mh_LoadElement(C_OscParamSetI
 
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(
-         C_OscNodeDataPoolFiler::h_LoadDataPoolElementType(orc_Element.c_NvmValue, orc_XmlParser));
+      c_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolElementType(orc_Element.c_NvmValue, orc_XmlParser);
       if ((!c_Retval) && (orc_XmlParser.SelectNodeChild("value") == "value"))
       {
          std::string c_Error;
-         c_Retval = make_error_code_from_stw(
-            C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(orc_Element.c_NvmValue, orc_XmlParser, true,
-                                                              &c_Error));
+         c_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(orc_Element.c_NvmValue, orc_XmlParser, true,
+                                                                       &c_Error);
          if (c_Retval)
          {
             osc_write_log_error("Loading Dataset data",

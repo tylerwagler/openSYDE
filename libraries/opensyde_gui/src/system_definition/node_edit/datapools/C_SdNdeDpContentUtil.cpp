@@ -2914,7 +2914,8 @@ int32_t C_SdNdeDpContentUtil::h_SetAllContentFromString(const QString & orc_Inpu
 
    c_Xml.LoadFromString(orc_Input.toStdString());
    c_Xml.SelectRoot();
-   return C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_Output, c_Xml);
+   //the filer reports std::error_code now; this class still runs on the STW int32_t convention
+   return C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_Output, c_Xml).value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

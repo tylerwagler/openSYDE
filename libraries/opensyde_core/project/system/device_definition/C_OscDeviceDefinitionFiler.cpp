@@ -15,7 +15,9 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
+#include <system_error>
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
 #include "C_OscUtils.hpp"
@@ -114,31 +116,31 @@ void C_OscDeviceDefinitionFiler::mh_ParseOpenSydeFlashloaderParameter(const C_Os
    \param[in]   orc_Path               path to file
 
    \return
-   C_NO_ERR   data read and placed into device definition instance
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read and placed into device definition instance
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDefinition, C_OscXmlParser & orc_Parser,
-                                            const std::string & orc_Path)
+std::error_code C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDefinition,
+                                                    C_OscXmlParser & orc_Parser, const std::string & orc_Path)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    uint32_t u32_Value;
 
    std::string c_Text;
 
-   s32_Return = orc_Parser.SelectNodeChildError("global");
-   if (s32_Return == C_NO_ERR)
+   c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("global"));
+   if (!c_Return)
    {
       c_Text = orc_Parser.SelectNodeChild("device-name");
       if (c_Text != "device-name")
       {
          osc_write_log_error("Loading device definition", "XML node \"device-name\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       orc_DeviceDefinition.c_DeviceName = orc_Parser.GetNodeContent();
       //Optional alias
@@ -152,10 +154,10 @@ int32_t C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDe
       if (c_Text != "device-description")
       {
          osc_write_log_error("Loading device definition", "XML node \"device-description\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       orc_DeviceDefinition.c_DeviceDescription = orc_Parser.GetNodeContent();
 
@@ -165,10 +167,10 @@ int32_t C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDe
       if (c_Text != "image")
       {
          osc_write_log_error("Loading device definition", "XML node \"image\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       orc_DeviceDefinition.c_ImagePath = orc_Parser.GetNodeContent();
       orc_Parser.SelectNodeParent(); //back to parent ...
@@ -176,7 +178,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDe
       if (c_Text != "bus-systems-available")
       {
          osc_write_log_error("Loading device definition", "XML node \"bus-systems-available\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       //expand the potentially relative image path to an absolute path
       // we will need it later to open the image in the UI
@@ -186,40 +188,40 @@ int32_t C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDe
       // it is needed for creating service update package (see #24474)
       orc_DeviceDefinition.c_FilePath = orc_Path;
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       u32_Value = orc_Parser.GetAttributeUint32("can");
       if (u32_Value > 255)
       {
          osc_write_log_error("Loading device definition", "XML node \"can\" contains invalid value.");
-         s32_Return = C_CONFIG; //not a valid number
+         c_Return = Errc::config; //not a valid number
       }
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
          orc_DeviceDefinition.u8_NumCanBusses = static_cast<uint8_t>(u32_Value);
          u32_Value = orc_Parser.GetAttributeUint32("ethernet");
          if (u32_Value > 255)
          {
             osc_write_log_error("Loading device definition", "XML node \"ethernet\" contains invalid value.");
-            s32_Return = C_CONFIG; //not a number
+            c_Return = Errc::config; //not a number
          }
-         if (s32_Return == C_NO_ERR)
+         if (!c_Return)
          {
             orc_DeviceDefinition.u8_NumEthernetBusses = static_cast<uint8_t>(u32_Value);
          }
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       orc_Parser.SelectNodeParent(); //back to parent ...
       c_Text = orc_Parser.SelectNodeChild("can-bitrates-support");
       if (c_Text != "can-bitrates-support")
       {
          osc_write_log_error("Loading device definition", "XML node \"can-bitrates-support\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
          //get bitrates
          c_Text = orc_Parser.SelectNodeChild("can-bitrate");
@@ -236,29 +238,29 @@ int32_t C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDe
                {
                   osc_write_log_error("Loading device definition",
                                       "XML node \"can-bitrate\" attribute \"value\" not found.");
-                  s32_Return = C_CONFIG;
+                  c_Return = Errc::config;
                }
                c_Text = orc_Parser.SelectNodeNext("can-bitrate");
             }
-            while ((c_Text == "can-bitrate") && (s32_Return == C_NO_ERR));
+            while ((c_Text == "can-bitrate") && (!c_Return));
             orc_Parser.SelectNodeParent(); //back to parent of parent ...
          }
          c_Text = orc_Parser.SelectNodeParent(); //back to parent of parent ...
          tgl_assert(c_Text == "global");
       }
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
-         s32_Return = mh_LoadCanFdProperties(orc_DeviceDefinition, orc_Parser);
+         c_Return = mh_LoadCanFdProperties(orc_DeviceDefinition, orc_Parser);
       }
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
          if (orc_Parser.SelectNodeChild("manufacturer-string") == "manufacturer-string")
          {
-            s32_Return = orc_Parser.SelectNodeChildError("id");
-            if (s32_Return == C_NO_ERR)
+            c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("id"));
+            if (!c_Return)
             {
-               s32_Return = orc_Parser.GetAttributeUint32Error("value", u32_Value);
-               if (s32_Return == C_NO_ERR)
+               c_Return = make_error_code_from_stw(orc_Parser.GetAttributeUint32Error("value", u32_Value));
+               if (!c_Return)
                {
                   orc_DeviceDefinition.u8_ManufacturerId = static_cast<uint8_t>(u32_Value);
                }
@@ -269,17 +271,17 @@ int32_t C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDe
                c_Text = orc_Parser.SelectNodeParent(); //back to parent of parent ...
                tgl_assert(c_Text == "manufacturer-string");
             }
-            if (s32_Return == C_NO_ERR)
+            if (!c_Return)
             {
-               s32_Return = orc_Parser.SelectNodeChildError("display-value");
-               if (s32_Return == C_NO_ERR)
+               c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("display-value"));
+               if (!c_Return)
                {
                   orc_DeviceDefinition.c_ManufacturerDisplayValue = orc_Parser.GetNodeContent();
                   c_Text = orc_Parser.SelectNodeParent(); //back to parent of parent ...
                   tgl_assert(c_Text == "manufacturer-string");
                }
             }
-            if (s32_Return == C_NO_ERR)
+            if (!c_Return)
             {
                //look up mh_LoadSubDevice "protocol-diagnostics"
                //if (SelectNodeChild != "toolbox-node-image") { //optional } else { orc_DeviceDefinition.c_ToolboxIcon =
@@ -334,29 +336,29 @@ int32_t C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDe
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_Text = orc_Parser.SelectNodeParent(); //back to parent of parent ...
       tgl_assert(c_Text == "opensyde-device-definition");
-      s32_Return = orc_Parser.SelectNodeChildError("sub-devices");
-      if (s32_Return == C_NO_ERR)
+      c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("sub-devices"));
+      if (!c_Return)
       {
-         s32_Return = orc_Parser.SelectNodeChildError("sub-device");
-         if (s32_Return == C_NO_ERR)
+         c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("sub-device"));
+         if (!c_Return)
          {
             do
             {
                C_OscSubDeviceDefinition c_SubDevice;
-               s32_Return = C_OscDeviceDefinitionFiler::mh_LoadSubDevice(c_SubDevice, orc_Parser, orc_DeviceDefinition,
-                                                                         orc_Path);
+               c_Return = C_OscDeviceDefinitionFiler::mh_LoadSubDevice(c_SubDevice, orc_Parser, orc_DeviceDefinition,
+                                                                       orc_Path);
                orc_DeviceDefinition.c_SubDevices.push_back(c_SubDevice);
                c_Text = orc_Parser.SelectNodeNext("sub-device");
             }
-            while ((c_Text == "sub-device") && (s32_Return == C_NO_ERR));
+            while ((c_Text == "sub-device") && (!c_Return));
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -370,16 +372,16 @@ int32_t C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_DeviceDe
    \param[in]   orc_Path                  path to file
 
    \return
-   C_NO_ERR   data read and placed into device definition instance
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read and placed into device definition instance
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & orc_SubDeviceDefinition,
-                                                     C_OscXmlParser & orc_Parser,
-                                                     const C_OscDeviceDefinition & orc_DeviceDefinition,
-                                                     const std::string & orc_Path)
+std::error_code C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & orc_SubDeviceDefinition,
+                                                             C_OscXmlParser & orc_Parser,
+                                                             const C_OscDeviceDefinition & orc_DeviceDefinition,
+                                                             const std::string & orc_Path)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    std::string c_Text;
 
@@ -392,24 +394,24 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
    orc_SubDeviceDefinition.c_ConnectedInterfaces.clear();
    if (orc_Parser.SelectNodeChild("connected-interfaces") == "connected-interfaces")
    {
-      s32_Return = orc_Parser.SelectNodeChildError("interface");
-      if (s32_Return == C_NO_ERR)
+      c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("interface"));
+      if (!c_Return)
       {
          do
          {
-            s32_Return = orc_Parser.GetAttributeStringError("name", c_Text);
-            if (s32_Return == C_NO_ERR)
+            c_Return = make_error_code_from_stw(orc_Parser.GetAttributeStringError("name", c_Text));
+            if (!c_Return)
             {
                bool q_Tmp;
-               s32_Return = orc_Parser.GetAttributeBoolError("connected", q_Tmp);
-               if (s32_Return == C_NO_ERR)
+               c_Return = make_error_code_from_stw(orc_Parser.GetAttributeBoolError("connected", q_Tmp));
+               if (!c_Return)
                {
                   orc_SubDeviceDefinition.c_ConnectedInterfaces[LowerCaseCompat(c_Text)] = q_Tmp;
                }
             }
             c_Text = orc_Parser.SelectNodeNext("interface");
          }
-         while ((c_Text == "interface") && (s32_Return == C_NO_ERR));
+         while ((c_Text == "interface") && (!c_Return));
          c_Text = orc_Parser.SelectNodeParent(); //back to parent ...
          tgl_assert(c_Text == "connected-interfaces");
       }
@@ -444,7 +446,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
       {
          osc_write_log_error("Loading device definition",
                              "XML attribute \"is-programmable\" not found.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       orc_Parser.SelectNodeParent(); //back to parent ...
    }
@@ -704,7 +706,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefinition & 
       tgl_assert(c_Text == "sub-device");
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -805,13 +807,13 @@ void C_OscDeviceDefinitionFiler::mh_SaveSubDevice(const C_OscSubDeviceDefinition
    \param[in,out]  orc_DeviceDefinition   Device definition
 
    \return
-   C_NO_ERR   data read and placed into device definition instance
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read and placed into device definition instance
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::mh_HandleConnectedInterfaces(C_OscDeviceDefinition & orc_DeviceDefinition)
+std::error_code C_OscDeviceDefinitionFiler::mh_HandleConnectedInterfaces(C_OscDeviceDefinition & orc_DeviceDefinition)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (orc_DeviceDefinition.c_SubDevices.size() <= 1L)
    {
@@ -835,42 +837,42 @@ int32_t C_OscDeviceDefinitionFiler::mh_HandleConnectedInterfaces(C_OscDeviceDefi
    {
       //Check
       for (uint32_t u32_ItSubDev = 0UL;
-           (u32_ItSubDev < orc_DeviceDefinition.c_SubDevices.size()) && (s32_Return == C_NO_ERR); ++u32_ItSubDev)
+           (u32_ItSubDev < orc_DeviceDefinition.c_SubDevices.size()) && (!c_Return); ++u32_ItSubDev)
       {
          const C_OscSubDeviceDefinition & rc_SubDevice = orc_DeviceDefinition.c_SubDevices[u32_ItSubDev];
          if (rc_SubDevice.c_SubDeviceName.empty())
          {
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
             osc_write_log_error("Loading device definition", "sub device name empty in multiple sub device setting");
          }
          for (uint32_t u32_ItCan = 0UL;
-              (u32_ItCan < static_cast<uint32_t>(orc_DeviceDefinition.u8_NumCanBusses)) && (s32_Return == C_NO_ERR);
+              (u32_ItCan < static_cast<uint32_t>(orc_DeviceDefinition.u8_NumCanBusses)) && (!c_Return);
               ++u32_ItCan)
          {
             const std::string c_Interface = "can" + std::to_string(u32_ItCan + 1U);
             if (rc_SubDevice.c_ConnectedInterfaces.count(c_Interface) != 1UL)
             {
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
                osc_write_log_error("Loading device definition",
                                    "entry for \"" + c_Interface + "\" missing in node \"connected-interfaces\"");
             }
          }
          for (uint32_t u32_ItEth = 0UL;
               (u32_ItEth < static_cast<uint32_t>(orc_DeviceDefinition.u8_NumEthernetBusses)) &&
-              (s32_Return == C_NO_ERR);
+              (!c_Return);
               ++u32_ItEth)
          {
             const std::string c_Interface = "eth" + std::to_string(u32_ItEth + 1U);
             if (rc_SubDevice.c_ConnectedInterfaces.count(c_Interface) != 1UL)
             {
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
                osc_write_log_error("Loading device definition",
                                    "entry for \"" + c_Interface + "\" missing in node \"connected-interfaces\"");
             }
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -879,24 +881,24 @@ int32_t C_OscDeviceDefinitionFiler::mh_HandleConnectedInterfaces(C_OscDeviceDefi
    \param[in]  orc_DeviceDefinition    Device definition
 
    \return
-   C_NO_ERR   no error detected
-   C_CONFIG   error detected
+   Errc::success    no error detected
+   Errc::config     error detected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::mh_CheckContentErrors(const C_OscDeviceDefinition & orc_DeviceDefinition)
+std::error_code C_OscDeviceDefinitionFiler::mh_CheckContentErrors(const C_OscDeviceDefinition & orc_DeviceDefinition)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
-   s32_Retval = mh_CheckNotConnectedInterface(orc_DeviceDefinition);
-   if (s32_Retval == C_NO_ERR)
+   c_Retval = mh_CheckNotConnectedInterface(orc_DeviceDefinition);
+   if (!c_Retval)
    {
-      s32_Retval = mh_CheckNotConnectedDevice(orc_DeviceDefinition);
+      c_Retval = mh_CheckNotConnectedDevice(orc_DeviceDefinition);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_CheckDeviceName(orc_DeviceDefinition);
+      c_Retval = mh_CheckDeviceName(orc_DeviceDefinition);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -905,21 +907,22 @@ int32_t C_OscDeviceDefinitionFiler::mh_CheckContentErrors(const C_OscDeviceDefin
    \param[in]  orc_DeviceDefinition    Device definition
 
    \return
-   C_NO_ERR   no error detected
-   C_CONFIG   error detected
+   Errc::success    no error detected
+   Errc::config     error detected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::mh_CheckNotConnectedInterface(const C_OscDeviceDefinition & orc_DeviceDefinition)
+std::error_code C_OscDeviceDefinitionFiler::mh_CheckNotConnectedInterface(
+   const C_OscDeviceDefinition & orc_DeviceDefinition)
 {
-   int32_t s32_Retval = mh_CheckNotConnectedInterfaceByType(orc_DeviceDefinition, C_OscSystemBus::eCAN,
-                                                            orc_DeviceDefinition.u8_NumCanBusses);
+   std::error_code c_Retval = mh_CheckNotConnectedInterfaceByType(orc_DeviceDefinition, C_OscSystemBus::eCAN,
+                                                                  orc_DeviceDefinition.u8_NumCanBusses);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_CheckNotConnectedInterfaceByType(orc_DeviceDefinition, C_OscSystemBus::eETHERNET,
-                                                       orc_DeviceDefinition.u8_NumEthernetBusses);
+      c_Retval = mh_CheckNotConnectedInterfaceByType(orc_DeviceDefinition, C_OscSystemBus::eETHERNET,
+                                                     orc_DeviceDefinition.u8_NumEthernetBusses);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -930,15 +933,15 @@ int32_t C_OscDeviceDefinitionFiler::mh_CheckNotConnectedInterface(const C_OscDev
    \param[in]  ou8_NumAvailableInterfaces    Number of available interfaces
 
    \return
-   C_NO_ERR   no error detected
-   C_CONFIG   error detected
+   Errc::success    no error detected
+   Errc::config     error detected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::mh_CheckNotConnectedInterfaceByType(
+std::error_code C_OscDeviceDefinitionFiler::mh_CheckNotConnectedInterfaceByType(
    const C_OscDeviceDefinition & orc_DeviceDefinition, const C_OscSystemBus::E_Type oe_Type,
    const uint8_t ou8_NumAvailableInterfaces)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    for (uint8_t u8_ItInterface = 0U; u8_ItInterface < ou8_NumAvailableInterfaces; ++u8_ItInterface)
    {
@@ -957,11 +960,11 @@ int32_t C_OscDeviceDefinitionFiler::mh_CheckNotConnectedInterfaceByType(
       {
          const std::string c_Interface = C_OscSubDeviceDefinition::h_GetInterfaceNameLower(oe_Type,
                                                                                                      u8_ItInterface);
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
          osc_write_log_error("Loading device definition", "Could not find usage for interface " + c_Interface);
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -970,13 +973,14 @@ int32_t C_OscDeviceDefinitionFiler::mh_CheckNotConnectedInterfaceByType(
    \param[in]  orc_DeviceDefinition    Device definition
 
    \return
-   C_NO_ERR   no error detected
-   C_CONFIG   error detected
+   Errc::success    no error detected
+   Errc::config     error detected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::mh_CheckNotConnectedDevice(const C_OscDeviceDefinition & orc_DeviceDefinition)
+std::error_code C_OscDeviceDefinitionFiler::mh_CheckNotConnectedDevice(
+   const C_OscDeviceDefinition & orc_DeviceDefinition)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    for (uint32_t u32_ItSubDevice = 0UL; u32_ItSubDevice < orc_DeviceDefinition.c_SubDevices.size(); ++u32_ItSubDevice)
    {
@@ -987,14 +991,14 @@ int32_t C_OscDeviceDefinitionFiler::mh_CheckNotConnectedDevice(const C_OscDevice
          if (!C_OscDeviceDefinitionFiler::mh_CheckNotConnectedDeviceByType(rc_SubDevice, C_OscSystemBus::eETHERNET,
                                                                            orc_DeviceDefinition.u8_NumEthernetBusses))
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
             osc_write_log_error("Loading device definition",
                                 "Could not find any connected interface for node \"" + rc_SubDevice.c_SubDeviceName +
                                 "\"");
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1032,25 +1036,25 @@ bool C_OscDeviceDefinitionFiler::mh_CheckNotConnectedDeviceByType(
    \param[in]  orc_DeviceDefinition    Device definition
 
    \return
-   C_NO_ERR   no error detected
-   C_CONFIG   error detected
+   Errc::success    no error detected
+   Errc::config     error detected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::mh_CheckDeviceName(const C_OscDeviceDefinition & orc_DeviceDefinition)
+std::error_code C_OscDeviceDefinitionFiler::mh_CheckDeviceName(const C_OscDeviceDefinition & orc_DeviceDefinition)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    for (uint32_t u32_ItSubDevice = 0UL; u32_ItSubDevice < orc_DeviceDefinition.c_SubDevices.size(); ++u32_ItSubDevice)
    {
       const C_OscSubDeviceDefinition & rc_SubDevice = orc_DeviceDefinition.c_SubDevices[u32_ItSubDevice];
       if (!C_OscUtils::h_CheckValidCeName(rc_SubDevice.c_SubDeviceName))
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
          osc_write_log_error("Loading device definition",
                              "Invalid device name \"" + rc_SubDevice.c_SubDeviceName + "\" (non C compliant)");
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1060,20 +1064,20 @@ int32_t C_OscDeviceDefinitionFiler::mh_CheckDeviceName(const C_OscDeviceDefiniti
    \param[in,out]  orc_Parser             Parser
 
    \return
-   C_NO_ERR   no error detected
-   C_CONFIG   error detected
+   Errc::success    no error detected
+   Errc::config     error detected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::mh_LoadCanFdProperties(C_OscDeviceDefinition & orc_DeviceDefinition,
-                                                           C_OscXmlParser & orc_Parser)
+std::error_code C_OscDeviceDefinitionFiler::mh_LoadCanFdProperties(C_OscDeviceDefinition & orc_DeviceDefinition,
+                                                                   C_OscXmlParser & orc_Parser)
 {
-   int32_t s32_Retval = mh_LoadCanFdBitrates(orc_DeviceDefinition.c_SupportedCanFdDataBitrates, orc_Parser);
+   std::error_code c_Retval = mh_LoadCanFdBitrates(orc_DeviceDefinition.c_SupportedCanFdDataBitrates, orc_Parser);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = mh_LoadFeatures(orc_DeviceDefinition.c_SupportedCanFeatures, orc_Parser);
+      c_Retval = mh_LoadFeatures(orc_DeviceDefinition.c_SupportedCanFeatures, orc_Parser);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1097,14 +1101,14 @@ void C_OscDeviceDefinitionFiler::mh_SaveCanFdProperties(const C_OscDeviceDefinit
    \param[in,out]  orc_Parser             Parser
 
    \return
-   C_NO_ERR   no error detected
-   C_CONFIG   error detected
+   Errc::success    no error detected
+   Errc::config     error detected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::mh_LoadCanFdBitrates(std::vector<uint16_t> & orc_CanFdDataBitrates,
-                                                         C_OscXmlParser & orc_Parser)
+std::error_code C_OscDeviceDefinitionFiler::mh_LoadCanFdBitrates(std::vector<uint16_t> & orc_CanFdDataBitrates,
+                                                                 C_OscXmlParser & orc_Parser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_CanFdDataBitrates.clear();
    if (orc_Parser.SelectNodeChild("can-fd-data-bitrates-support") == "can-fd-data-bitrates-support")
@@ -1114,16 +1118,16 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadCanFdBitrates(std::vector<uint16_t> &
          do
          {
             uint32_t u32_BitRate;
-            s32_Retval = orc_Parser.GetAttributeUint32Error("value", u32_BitRate);
+            c_Retval = make_error_code_from_stw(orc_Parser.GetAttributeUint32Error("value", u32_BitRate));
             orc_CanFdDataBitrates.push_back(static_cast<int16_t>(u32_BitRate));
          }
          while ((orc_Parser.SelectNodeNext("can-fd-data-bitrate") == "can-fd-data-bitrate") &&
-                (s32_Retval == C_NO_ERR));
+                (!c_Retval));
          orc_Parser.SelectNodeParent();
       }
       orc_Parser.SelectNodeParent();
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1154,14 +1158,14 @@ void C_OscDeviceDefinitionFiler::mh_SaveCanFdBitrates(const std::vector<uint16_t
    \param[in,out]  orc_Parser                Parser
 
    \return
-   C_NO_ERR   no error detected
-   C_CONFIG   error detected
+   Errc::success    no error detected
+   Errc::config     error detected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::mh_LoadFeatures(
+std::error_code C_OscDeviceDefinitionFiler::mh_LoadFeatures(
    std::vector<C_OscSupportedCanInterfaceFeatures> & orc_SupportedCanFeatures, C_OscXmlParser & orc_Parser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_SupportedCanFeatures.clear();
    if (orc_Parser.SelectNodeChild("supported-can-features") == "supported-can-features")
@@ -1171,20 +1175,21 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadFeatures(
          do
          {
             C_OscSupportedCanInterfaceFeatures c_Feature;
-            s32_Retval = orc_Parser.GetAttributeStringError("name", c_Feature.c_Interface);
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = make_error_code_from_stw(orc_Parser.GetAttributeStringError("name", c_Feature.c_Interface));
+            if (!c_Retval)
             {
-               s32_Retval = orc_Parser.GetAttributeBoolError("can-fd", c_Feature.q_SupportsCanFd);
+               c_Retval = make_error_code_from_stw(orc_Parser.GetAttributeBoolError("can-fd",
+                                                                                    c_Feature.q_SupportsCanFd));
                orc_SupportedCanFeatures.push_back(c_Feature);
             }
          }
          while ((orc_Parser.SelectNodeNext("interface") == "interface") &&
-                (s32_Retval == C_NO_ERR));
+                (!c_Retval));
          orc_Parser.SelectNodeParent();
       }
       orc_Parser.SelectNodeParent();
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1220,21 +1225,21 @@ void C_OscDeviceDefinitionFiler::mh_SaveFeatures(
    \param[in]   orc_Path               path to file
 
    \return
-   C_NO_ERR   data read and placed into device definition instance
-   C_RANGE    specified file does not exist
-   C_NOACT    specified file is invalid (invalid XML file)
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success    data read and placed into device definition instance
+   Errc::range      specified file does not exist
+   Errc::noact      specified file is invalid (invalid XML file)
+   Errc::config     content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDefinition,
-                                           const std::string & orc_Path)
+std::error_code C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDefinition,
+                                                   const std::string & orc_Path)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (TglFileExists(orc_Path) == false)
    {
       osc_write_log_error("Loading device definition", "File not found: \"" + orc_Path + "\".");
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -1244,8 +1249,8 @@ int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDef
 
       c_Xml.SetLogHeading("Loading device definition");
 
-      s32_Return = c_Xml.LoadFromFile(orc_Path); //open XML file
-      if (s32_Return == C_NO_ERR)
+      c_Return = make_error_code_from_stw(c_Xml.LoadFromFile(orc_Path)); //open XML file
+      if (!c_Return)
       {
          std::string c_Text;
          //Check if root node exists:
@@ -1254,7 +1259,7 @@ int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDef
          if (c_Text != "opensyde-device-definition")
          {
             osc_write_log_error("Loading device definition", "XML node \"opensyde-device-definition\" not found.");
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
          else
          {
@@ -1269,11 +1274,11 @@ int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDef
                {
                   osc_write_log_error("Loading device definition",
                                       "\"file-version\" could not be converted to a number.");
-                  s32_Return = C_CONFIG;
+                  c_Return = Errc::config;
                }
 
                //is the file version one we know ?
-               if (s32_Return == C_NO_ERR)
+               if (!c_Return)
                {
                   osc_write_log_info("Loading device definition", "Value of \"file-version\": " +
                                      std::to_string(u16_FileVersion));
@@ -1283,34 +1288,34 @@ int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDef
                   //Check file version
                   if (u16_FileVersion == mhu16_FILE_VERSION)
                   {
-                     s32_Return = C_OscDeviceDefinitionFiler::mh_Load(orc_DeviceDefinition, c_Xml, orc_Path);
+                     c_Return = C_OscDeviceDefinitionFiler::mh_Load(orc_DeviceDefinition, c_Xml, orc_Path);
                   }
                   else
                   {
                      osc_write_log_error("Loading device definition",
                                          "Version defined by \"file-version\" is not supported.");
-                     s32_Return = C_CONFIG;
+                     c_Return = Errc::config;
                   }
                }
             }
             else
             {
                osc_write_log_error("Loading device definition", "XML node \"file-version\" not found.");
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
             }
          }
       }
       else
       {
          osc_write_log_error("Loading device definition", "Could not open XML file \"" + orc_Path + "\".");
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
-      s32_Return = C_OscDeviceDefinitionFiler::mh_HandleConnectedInterfaces(orc_DeviceDefinition);
+      c_Return = C_OscDeviceDefinitionFiler::mh_HandleConnectedInterfaces(orc_DeviceDefinition);
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1323,16 +1328,16 @@ int32_t C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_DeviceDef
    \param[in]  orc_Path                path to file
 
    \return
-   C_NO_ERR   data written to file
-   C_RANGE    device definition invalid
-   C_RD_WR    could not erase pre-existing file before saving
-   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   Errc::success    data written to file
+   Errc::range      device definition invalid
+   Errc::rd_wr      could not erase pre-existing file before saving
+   Errc::rd_wr      could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler::h_Save(const C_OscDeviceDefinition & orc_DeviceDefinition,
-                                           const std::string & orc_Path)
+std::error_code C_OscDeviceDefinitionFiler::h_Save(const C_OscDeviceDefinition & orc_DeviceDefinition,
+                                                   const std::string & orc_Path)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (TglFileExists(orc_Path) == true)
    {
@@ -1342,10 +1347,10 @@ int32_t C_OscDeviceDefinitionFiler::h_Save(const C_OscDeviceDefinition & orc_Dev
       if (x_Return != 0)
       {
          osc_write_log_error("Saving device definition", "Could not erase pre-existing file \"" + orc_Path + "\".");
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       uint32_t u32_Counter;
       C_OscXmlParser c_Xml;
@@ -1390,18 +1395,18 @@ int32_t C_OscDeviceDefinitionFiler::h_Save(const C_OscDeviceDefinition & orc_Dev
       }
       c_Xml.SelectNodeParent();
 
-      s32_Return = c_Xml.SaveToFile(orc_Path);
-      if (s32_Return != C_NO_ERR)
+      c_Return = make_error_code_from_stw(c_Xml.SaveToFile(orc_Path));
+      if (c_Return)
       {
          osc_write_log_error("Saving Device definition", "Could not write to file \"" + orc_Path + "\".");
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
    else
    {
       osc_write_log_error("Saving Device definition", "No sub devices found.");
-      s32_Return = C_RD_WR;
+      c_Return = Errc::rd_wr;
    }
 
-   return s32_Return;
+   return c_Return;
 }

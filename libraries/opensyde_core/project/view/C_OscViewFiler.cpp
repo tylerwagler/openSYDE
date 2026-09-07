@@ -9,10 +9,12 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <system_error>
 #include "C_SclStringCompat.hpp"
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
 #include "C_OscXmlParserLog.hpp"
@@ -54,38 +56,38 @@ C_OscViewFiler::C_OscViewFiler(void)
    \param[in]      orc_OscNodes           OSC node information
 
    \return
-   C_NO_ERR    information loaded
-   C_CONFIG    error loading information
+   Errc::success    information loaded
+   Errc::config     error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_LoadSystemViewsFile(std::vector<C_OscViewData> & orc_Views,
-                                              const std::string & orc_PathSystemViews,
-                                              const std::vector<C_OscNode> & orc_OscNodes)
+std::error_code C_OscViewFiler::h_LoadSystemViewsFile(std::vector<C_OscViewData> & orc_Views,
+                                                      const std::string & orc_PathSystemViews,
+                                                      const std::vector<C_OscNode> & orc_OscNodes)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_PathSystemViews) == true)
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading System Views");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_PathSystemViews);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_PathSystemViews));
+      if (!c_Retval)
       {
-         s32_Retval = h_LoadViewsOsc(orc_Views, orc_OscNodes, c_XmlParser, orc_PathSystemViews);
+         c_Retval = h_LoadViewsOsc(orc_Views, orc_OscNodes, c_XmlParser, orc_PathSystemViews);
       }
       else
       {
          osc_write_log_error("Loading System Views",
                              "File \"" + orc_PathSystemViews + "\" could not be opened.");
-         s32_Retval = C_NOACT;
+         c_Retval = Errc::noact;
       }
    }
    else
    {
       osc_write_log_error("Loading System Views", "File \"" + orc_PathSystemViews + "\" does not exist.");
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -97,15 +99,15 @@ int32_t C_OscViewFiler::h_LoadSystemViewsFile(std::vector<C_OscViewData> & orc_V
    \param[in]      orc_BasePath     Base path
 
    \return
-   C_NO_ERR    information loaded
-   C_CONFIG    error loading information
+   Errc::success    information loaded
+   Errc::config     error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
-                                       const std::vector<C_OscNode> & orc_OscNodes, C_OscXmlParserBase & orc_XmlParser,
-                                       const std::string & orc_BasePath)
+std::error_code C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
+                                               const std::vector<C_OscNode> & orc_OscNodes,
+                                               C_OscXmlParserBase & orc_XmlParser, const std::string & orc_BasePath)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("opensyde-system-views") == "opensyde-system-views")
    {
@@ -133,22 +135,22 @@ int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
             {
                const std::string c_File =
                   C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, orc_XmlParser.GetNodeContent());
-               s32_Retval = mh_LoadViewFileOsc(c_View, c_File, orc_OscNodes);
+               c_Retval = mh_LoadViewFileOsc(c_View, c_File, orc_OscNodes);
             }
             else
             {
-               s32_Retval = h_LoadViewOsc(c_View, orc_XmlParser, orc_OscNodes);
+               c_Retval = h_LoadViewOsc(c_View, orc_XmlParser, orc_OscNodes);
             }
             orc_Views.push_back(c_View);
             //Next
             c_CurrentViewNode = orc_XmlParser.SelectNodeNext("opensyde-system-view");
          }
-         while ((c_CurrentViewNode == "opensyde-system-view") && (s32_Retval == C_NO_ERR));
+         while ((c_CurrentViewNode == "opensyde-system-view") && (!c_Retval));
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-views");
       }
       //Compare length
-      if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true))
+      if ((!c_Retval) && (q_ExpectedSizeHere == true))
       {
          if (u32_ExpectedSize != orc_Views.size())
          {
@@ -163,11 +165,11 @@ int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       osc_write_log_error("Loading views", "Node \"opensyde-system-views\" not found.");
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -178,14 +180,14 @@ int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
    \param[in]      orc_OscNodes     OSC node information (Necessary for update information)
 
    \return
-   C_NO_ERR    information loaded
-   C_CONFIG    error loading information
+   Errc::success    information loaded
+   Errc::config     error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_LoadViewOsc(C_OscViewData & orc_View, C_OscXmlParserBase & orc_XmlParser,
-                                      const std::vector<C_OscNode> & orc_OscNodes)
+std::error_code C_OscViewFiler::h_LoadViewOsc(C_OscViewData & orc_View, C_OscXmlParserBase & orc_XmlParser,
+                                              const std::vector<C_OscNode> & orc_OscNodes)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("name") == "name")
    {
@@ -196,22 +198,21 @@ int32_t C_OscViewFiler::h_LoadViewOsc(C_OscViewData & orc_View, C_OscXmlParserBa
    else
    {
       osc_write_log_error("Loading view", "Node \"name\" not found.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       std::vector<uint8_t> c_NodeActiveFlags;
-      s32_Retval = C_OscViewFiler::mh_LoadNodeActiveFlags(c_NodeActiveFlags, orc_XmlParser);
+      c_Retval = C_OscViewFiler::mh_LoadNodeActiveFlags(c_NodeActiveFlags, orc_XmlParser);
       orc_View.SetNodeActiveFlags(c_NodeActiveFlags);
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          std::vector<C_OscViewNodeUpdate> c_NodeUpdateInformation;
          //If you have an async project this might help
          //c_NodeUpdateInformation.resize(c_NodeActiveFlags.size(),C_OscViewNodeUpdate());
-         s32_Retval =
-            C_OscViewFiler::mh_LoadNodeUpdateInformation(c_NodeUpdateInformation, orc_XmlParser, orc_OscNodes);
+         c_Retval = C_OscViewFiler::mh_LoadNodeUpdateInformation(c_NodeUpdateInformation, orc_XmlParser, orc_OscNodes);
          orc_View.SetNodeUpdateInformation(c_NodeUpdateInformation);
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
             if (orc_XmlParser.SelectNodeChild("pc") == "pc")
             {
@@ -224,7 +225,7 @@ int32_t C_OscViewFiler::h_LoadViewOsc(C_OscViewData & orc_View, C_OscXmlParserBa
             else
             {
                osc_write_log_error("Loading view", "Node \"pc\" not found.");
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
          }
          else
@@ -234,7 +235,7 @@ int32_t C_OscViewFiler::h_LoadViewOsc(C_OscViewData & orc_View, C_OscXmlParserBa
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -343,14 +344,14 @@ void C_OscViewFiler::h_SavePc(const C_OscViewPc & orc_OscPc, C_OscXmlParserBase 
    \param[out]  ore_State     State
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_StringToSecurityOptionDebugger(const std::string & orc_String,
-                                                         C_OscViewNodeUpdate::E_StateDebugger & ore_State)
+std::error_code C_OscViewFiler::h_StringToSecurityOptionDebugger(const std::string & orc_String,
+                                                                 C_OscViewNodeUpdate::E_StateDebugger & ore_State)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "activate" == 0)
    {
@@ -368,9 +369,9 @@ int32_t C_OscViewFiler::h_StringToSecurityOptionDebugger(const std::string & orc
    {
       //Default
       ore_State = C_OscViewNodeUpdate::eST_DEB_NO_CHANGE;
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -380,14 +381,14 @@ int32_t C_OscViewFiler::h_StringToSecurityOptionDebugger(const std::string & orc
    \param[out]  ore_State     State
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_StringToSecurityOptionAuthentication(const std::string & orc_String,
-                                                               C_OscViewNodeUpdate::E_StateSecureAuthentication & ore_State)
+std::error_code C_OscViewFiler::h_StringToSecurityOptionAuthentication(
+   const std::string & orc_String, C_OscViewNodeUpdate::E_StateSecureAuthentication & ore_State)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "activate" == 0)
    {
@@ -405,9 +406,9 @@ int32_t C_OscViewFiler::h_StringToSecurityOptionAuthentication(const std::string
    {
       //Default
       ore_State = C_OscViewNodeUpdate::eST_SEC_NO_CHANGE;
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -417,14 +418,14 @@ int32_t C_OscViewFiler::h_StringToSecurityOptionAuthentication(const std::string
    \param[out]  ore_State     State
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   Errc::success    no error
+   Errc::range      String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_StringToSecurityOptionEncryption(const std::string & orc_String,
-                                                           C_OscViewNodeUpdate::E_StateTrafficEncryption & ore_State)
+std::error_code C_OscViewFiler::h_StringToSecurityOptionEncryption(
+   const std::string & orc_String, C_OscViewNodeUpdate::E_StateTrafficEncryption & ore_State)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_String == "activate" == 0)
    {
@@ -442,9 +443,9 @@ int32_t C_OscViewFiler::h_StringToSecurityOptionEncryption(const std::string & o
    {
       //Default
       ore_State = C_OscViewNodeUpdate::eST_TEN_NO_CHANGE;
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -549,14 +550,14 @@ std::string C_OscViewFiler::h_SecurityOptionEncryptionToString(
    \param[in,out]  orc_XmlParser          XML parser with the "current" element set to the "opensyde-system-view" element
 
    \return
-   C_NO_ERR    information loaded
-   C_CONFIG    error loading information
+   Errc::success    information loaded
+   Errc::config     error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::mh_LoadNodeActiveFlags(std::vector<uint8_t> & orc_NodeActiveFlags,
-                                               C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscViewFiler::mh_LoadNodeActiveFlags(std::vector<uint8_t> & orc_NodeActiveFlags,
+                                                       C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Clear last node active flags
    orc_NodeActiveFlags.clear();
@@ -581,10 +582,10 @@ int32_t C_OscViewFiler::mh_LoadNodeActiveFlags(std::vector<uint8_t> & orc_NodeAc
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -598,15 +599,15 @@ int32_t C_OscViewFiler::mh_LoadNodeActiveFlags(std::vector<uint8_t> & orc_NodeAc
    \param[in]      orc_OscNodes                 OSC node information (Necessary for update information)
 
    \return
-   C_NO_ERR    information loaded
-   C_CONFIG    error loading information
+   Errc::success    information loaded
+   Errc::config     error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUpdate> & orc_NodeUpdateInformation,
-                                                     C_OscXmlParserBase & orc_XmlParser,
-                                                     const std::vector<C_OscNode> & orc_OscNodes)
+std::error_code C_OscViewFiler::mh_LoadNodeUpdateInformation(
+   std::vector<C_OscViewNodeUpdate> & orc_NodeUpdateInformation, C_OscXmlParserBase & orc_XmlParser,
+   const std::vector<C_OscNode> & orc_OscNodes)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Clear last
    orc_NodeUpdateInformation.clear();
@@ -625,7 +626,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUp
                const C_OscNode & rc_Node = orc_OscNodes[u32_Counter];
                C_OscViewNodeUpdate c_UpdateInfo;
 
-               s32_Retval = mh_LoadOneNodeUpdateInformation(c_UpdateInfo, orc_XmlParser, rc_Node);
+               c_Retval = mh_LoadOneNodeUpdateInformation(c_UpdateInfo, orc_XmlParser, rc_Node);
                orc_NodeUpdateInformation.push_back(c_UpdateInfo);
                //Next
                c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeNext("node-update-information");
@@ -635,10 +636,10 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUp
             else
             {
                // For each update information must exist a node
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
          }
-         while ((c_CurrentNodeUpdateInformationNode == "node-update-information") && (s32_Retval == C_NO_ERR));
+         while ((c_CurrentNodeUpdateInformationNode == "node-update-information") && (!c_Retval));
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "node-update-informations");
       }
@@ -662,7 +663,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUp
                {
                   const C_OscNode & rc_Node = orc_OscNodes[u32_Counter];
                   C_OscViewNodeUpdate c_UpdateInfo;
-                  s32_Retval = mh_LoadOneNodeUpdateInformation(c_UpdateInfo, orc_XmlParser, rc_Node);
+                  c_Retval = mh_LoadOneNodeUpdateInformation(c_UpdateInfo, orc_XmlParser, rc_Node);
                   orc_NodeUpdateInformation.push_back(c_UpdateInfo);
                   //Next
                   c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeNext("node-specific-update-information");
@@ -672,11 +673,11 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUp
                else
                {
                   // For each update information must exist a node
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
             }
             while ((c_CurrentNodeUpdateInformationNode == "node-specific-update-information") &&
-                   (s32_Retval == C_NO_ERR));
+                   (!c_Retval));
             //Return
             tgl_assert(orc_XmlParser.SelectNodeParent() == "node-update-information");
          }
@@ -686,11 +687,11 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUp
       else
       {
          osc_write_log_error("Loading view", "Node \"node-update-information\" not found.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -753,16 +754,17 @@ void C_OscViewFiler::mh_LoadNodeUpdateInformationPaths(std::vector<std::string> 
    \param[in]      orc_Node                     Node
 
    \return
-   C_NO_ERR    information loaded
-   C_CONFIG    error loading information
+   Errc::success    information loaded
+   Errc::config     error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & orc_NodeUpdateInformation,
-                                                        C_OscXmlParserBase & orc_XmlParser, const C_OscNode & orc_Node)
+std::error_code C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & orc_NodeUpdateInformation,
+                                                                C_OscXmlParserBase & orc_XmlParser,
+                                                                const C_OscNode & orc_Node)
 {
    std::vector<std::string> c_Paths;
    std::vector<bool> c_SkipFlags;
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.AttributeExists("position") == true)
    {
@@ -864,10 +866,10 @@ int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & or
       orc_NodeUpdateInformation.SetSkipUpdateOfParamInfosFlags(c_ParamSetSkipFlags);
       orc_NodeUpdateInformation.SetSkipUpdateOfPathsFlags(c_FileBasedSkipFlags, C_OscViewNodeUpdate::eFTP_FILE_BASED);
 
-      s32_Retval = C_OscViewFiler::mh_LoadNodeUpdateInformationSecurity(orc_NodeUpdateInformation, orc_XmlParser);
+      c_Retval = C_OscViewFiler::mh_LoadNodeUpdateInformationSecurity(orc_NodeUpdateInformation, orc_XmlParser);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -974,44 +976,44 @@ void C_OscViewFiler::mh_LoadNodeUpdateInformationSkipUpdateOfFiles(std::vector<b
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Information loaded
-   \retval   C_CONFIG   Error loading information
+   \retval   Errc::success   Information loaded
+   \retval   Errc::config    Error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::mh_LoadNodeUpdateInformationSecurity(C_OscViewNodeUpdate & orc_NodeUpdateInformation,
-                                                             C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscViewFiler::mh_LoadNodeUpdateInformationSecurity(C_OscViewNodeUpdate & orc_NodeUpdateInformation,
+                                                                     C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("pem-file") == "pem-file")
    {
       bool q_Value;
-      s32_Retval = orc_XmlParser.GetAttributeBoolError("skip", q_Value);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("skip", q_Value));
+      if (!c_Retval)
       {
          orc_NodeUpdateInformation.SetSkipUpdateOfPemFile(q_Value);
 
-         s32_Retval = orc_XmlParser.SelectNodeChildError("path");
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("path"));
+         if (!c_Retval)
          {
             orc_NodeUpdateInformation.SetPemFilePath(orc_XmlParser.GetNodeContent().c_str());
             //Return
             tgl_assert(orc_XmlParser.SelectNodeParent() == "pem-file");
          }
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = C_OscViewFiler::mh_LoadNodeUpdateInformationSecurityStates(orc_NodeUpdateInformation,
-                                                                                 orc_XmlParser);
+         c_Retval = C_OscViewFiler::mh_LoadNodeUpdateInformationSecurityStates(orc_NodeUpdateInformation,
+                                                                               orc_XmlParser);
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "node-specific-update-information");
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1023,60 +1025,60 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformationSecurity(C_OscViewNodeUpdate
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Information loaded
-   \retval   C_CONFIG   Error loading information
+   \retval   Errc::success   Information loaded
+   \retval   Errc::config    Error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::mh_LoadNodeUpdateInformationSecurityStates(C_OscViewNodeUpdate & orc_NodeUpdateInformation,
-                                                                   C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscViewFiler::mh_LoadNodeUpdateInformationSecurityStates(
+   C_OscViewNodeUpdate & orc_NodeUpdateInformation, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("states");
+   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("states"));
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       C_OscViewNodeUpdate::E_StateSecureAuthentication e_StateSecureAuthentication =
          C_OscViewNodeUpdate::eST_SEC_NO_CHANGE;
       C_OscViewNodeUpdate::E_StateDebugger e_StateDebugger = C_OscViewNodeUpdate::eST_DEB_NO_CHANGE;
       C_OscViewNodeUpdate::E_StateTrafficEncryption e_StateTrafficEncryption = C_OscViewNodeUpdate::eST_TEN_NO_CHANGE;
-      s32_Retval = orc_XmlParser.SelectNodeChildError("security");
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("security"));
+      if (!c_Retval)
       {
-         s32_Retval = C_OscViewFiler::h_StringToSecurityOptionAuthentication(
-            orc_XmlParser.GetNodeContent().c_str(), e_StateSecureAuthentication);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = C_OscViewFiler::h_StringToSecurityOptionAuthentication(orc_XmlParser.GetNodeContent().c_str(),
+                                                                           e_StateSecureAuthentication);
+         if (!c_Retval)
          {
             //Return
             tgl_assert(orc_XmlParser.SelectNodeParent() == "states");
          }
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = orc_XmlParser.SelectNodeChildError("debugger");
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("debugger"));
+         if (!c_Retval)
          {
-            s32_Retval = C_OscViewFiler::h_StringToSecurityOptionDebugger(
-               orc_XmlParser.GetNodeContent().c_str(), e_StateDebugger);
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = C_OscViewFiler::h_StringToSecurityOptionDebugger(orc_XmlParser.GetNodeContent().c_str(),
+                                                                        e_StateDebugger);
+            if (!c_Retval)
             {
                //Return
                tgl_assert(orc_XmlParser.SelectNodeParent() == "states");
             }
          }
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          if (orc_XmlParser.SelectNodeChild("traffic-encryption") == "traffic-encryption")
          {
-            s32_Retval = C_OscViewFiler::h_StringToSecurityOptionEncryption(
-               orc_XmlParser.GetNodeContent().c_str(), e_StateTrafficEncryption);
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = C_OscViewFiler::h_StringToSecurityOptionEncryption(orc_XmlParser.GetNodeContent().c_str(),
+                                                                          e_StateTrafficEncryption);
+            if (!c_Retval)
             {
                //Return
                tgl_assert(orc_XmlParser.SelectNodeParent() == "states");
             }
          }
       }
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          orc_NodeUpdateInformation.SetStates(e_StateSecureAuthentication, e_StateDebugger, e_StateTrafficEncryption);
 
@@ -1084,7 +1086,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformationSecurityStates(C_OscViewNode
          tgl_assert(orc_XmlParser.SelectNodeParent() == "pem-file");
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1095,16 +1097,16 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformationSecurityStates(C_OscViewNode
    \param[in]      orc_OscNodes  OSC node information (Necessary for update information)
 
    \return
-   C_NO_ERR    information loaded
-   C_CONFIG    error loading information
+   Errc::success    information loaded
+   Errc::config     error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const std::string & orc_FilePath,
-                                           const std::vector<C_OscNode> & orc_OscNodes)
+std::error_code C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const std::string & orc_FilePath,
+                                                   const std::vector<C_OscNode> & orc_OscNodes)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_FilePath,
-                                                                         "opensyde-view-definition");
+   std::error_code c_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_FilePath,
+                                                                               "opensyde-view-definition");
 
    //File version
    if (c_XmlParser.SelectNodeChild("file-version") == "file-version")
@@ -1117,11 +1119,11 @@ int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const std::
       catch (...)
       {
          osc_write_log_error("Loading view", "\"file-version\" could not be converted to a number.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
 
       //is the file version one we know ?
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
          osc_write_log_info("Loading view", "Value of \"file-version\": " +
                             std::to_string(u16_FileVersion));
@@ -1130,7 +1132,7 @@ int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const std::
          {
             osc_write_log_error("Loading view",
                                 "Version defined by \"file-version\" is not supported.");
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
 
@@ -1140,27 +1142,27 @@ int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const std::
    else
    {
       osc_write_log_error("Loading view", "Could not find \"file-version\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       if (c_XmlParser.SelectNodeChild("opensyde-system-view") == "opensyde-system-view")
       {
-         s32_Retval = C_OscViewFiler::h_LoadViewOsc(orc_View, c_XmlParser, orc_OscNodes);
+         c_Retval = C_OscViewFiler::h_LoadViewOsc(orc_View, c_XmlParser, orc_OscNodes);
       }
       else
       {
          osc_write_log_error("Loading view", "Could not find \"opensyde-system-view\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
    else
    {
       //More details are in log
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
