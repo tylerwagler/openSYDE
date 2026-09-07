@@ -85,6 +85,23 @@ Notes that have bitten CI before:
   carries a vendored copy at `libraries/qcustomplot/`. Confirm which one the build
   should use before relying on the system package — see "Known Broken" below.
 
+### Verifying tool-tree changes
+
+`opensyde_core` builds on its own and does **not** compile the seven sibling tool
+trees, so a clean core build proves nothing about them. Any change to a signature
+in core must be checked with a full eight-tool build. Grep is not a substitute:
+callers reach migrated classes through base-class pointers, share method names
+with unmigrated classes, and compare rather than assign.
+
+A 48-core build host makes this cheap — ~3 minutes for all eight tools against
+~18 on a laptop. See `docs/remote-build.md`.
+
+```bash
+ssh claude@claude 'cd ~/Projects/openSYDE && git fetch origin && git checkout develop \
+  && git pull --ff-only origin develop && git submodule update --init --recursive \
+  && ./build.sh -b Debug -j 48 all'
+```
+
 ### Build outputs
 
 Per-tool build directories under `build/`; deploy target defaults to
