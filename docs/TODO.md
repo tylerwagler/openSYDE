@@ -266,36 +266,39 @@ All 45 warnings the flags surfaced are cleared:
 specific warning at its site with a comment explaining why, rather than dropping
 the flag.
 
-## Extending -Werror to the eight tool trees
+## Warnings as errors — done everywhere
 
-`opensyde_core` builds with `-Wall -Wextra -Werror` and zero diagnostics. The tool
-trees use `-Wall -Wextra -Wpedantic` without `-Werror`.
+`opensyde_core` and all eight tool trees build with `-Werror` and zero
+diagnostics in code we own.
 
-A full clean eight-tool build produces **two warnings, and neither is our code** —
-both are `-Woverloaded-virtual` in `Scanner.cpp`, which flex generates inside the
-vendored `Vector_DBC` submodule. Every line we own is already warning-free, so
-this is not a cleanup project.
+This closes the gap that hid `C_OscViewFiler`'s nine inverted security-option
+comparisons: GCC reported them as `-Wparentheses`, part of `-Wall`, and the tool
+builds *were* emitting that warning. Nobody read it, and core wasn't compiled
+with warnings at all.
 
-The obstacle is how the flags are set. Each tool does:
-
-```cmake
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -std=c++17")   # pjt/toolchain_linux.cmake
-add_compile_options(-Wno-deprecated-declarations -Wall -Wextra)
-```
-
-Those are **directory-scoped**, so they propagate into `add_subdirectory` targets —
-including the submodule. Appending `-Werror` there would turn the two generated
-flex warnings into hard errors and break the build for a reason that has nothing
-to do with openSYDE.
-
-Doing it properly means converting each tool to target-scoped options:
+The tools apply `-Werror` at **target scope**, not through `CMAKE_CXX_FLAGS` or
+`add_compile_options`:
 
 ```cmake
-target_compile_options(<tool_target> PRIVATE -Wall -Wextra -Werror)
+if(NOT MSVC)
+   foreach(OSY_WERROR_TARGET openSYDE)
+      if(TARGET ${OSY_WERROR_TARGET})
+         target_compile_options(${OSY_WERROR_TARGET} PRIVATE -Werror)
+      endif()
+   endforeach()
+endif()
 ```
 
-That is eight `CMakeLists.txt` files and needs the full eight-tool build as its
-gate. Worth doing — the `-Wparentheses` that would have caught the inverted
-security-option comparisons was being emitted by *these* builds and read by
-nobody — but it is a build-system change, not a warning fix, and should land on
-its own rather than riding along with unrelated work.
+Directory-scoped flags propagate into `add_subdirectory` targets, including the
+vendored `can-libraries` submodule, whose flex-generated
+`Vector_DBC/Scanner.cpp` emits two `-Woverloaded-virtual` warnings we neither own
+nor can fix. Verified at the compile-command level that the split holds:
+
+| | flags |
+|---|---|
+| `Vector_DBC/Scanner.cpp` | `-Wall -Wextra -Wpedantic` |
+| openSYDE sources | `-Wall -Wextra -Wpedantic -Werror` |
+
+**Do not "simplify" this into `CMAKE_CXX_FLAGS`** — it will break the submodule
+build. `sydesuplib` is covered as well as `SYDEsup`; a couple of targets are
+defined conditionally, hence the `if(TARGET ...)` guard.

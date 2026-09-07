@@ -182,3 +182,28 @@ if (${INSTALL_SYDESUP_LIB})
    install(FILES ${SYDESUP_API_HEADERS} DESTINATION ${INSTALL_DIR}/sydesup_lib)
    install(FILES ${SYDESUP_API_HEADERS_STWTYPES} DESTINATION ${INSTALL_DIR}/sydesup_lib/stwtypes)
 endif()
+
+# --- WARNINGS AS ERRORS -----------------------------------------------------------------------------------------------
+# opensyde_core has built with -Wall -Wextra -Werror and zero diagnostics since the
+# core warning sweep. These trees already compiled with -Wall -Wextra -Wpedantic but
+# without -Werror, and every line we own here is warning-free -- so this only pins
+# what is already true.
+#
+# It matters because the -Wparentheses that would have caught C_OscViewFiler's nine
+# inverted security-option comparisons was emitted by *these* builds, and read by
+# nobody.
+#
+# Deliberately target-scoped rather than appended to CMAKE_CXX_FLAGS or
+# add_compile_options: those are directory-scoped and propagate into
+# add_subdirectory targets, including the vendored can-libraries submodule, whose
+# flex-generated Vector_DBC/Scanner.cpp emits two -Woverloaded-virtual warnings we
+# neither own nor can fix. Target scope keeps -Werror on our sources only.
+#
+# if(TARGET ...) because some of these are defined conditionally.
+if(NOT MSVC)
+   foreach(OSY_WERROR_TARGET sydesuplib SYDEsup)
+      if(TARGET ${OSY_WERROR_TARGET})
+         target_compile_options(${OSY_WERROR_TARGET} PRIVATE -Werror)
+      endif()
+   endforeach()
+endif()
