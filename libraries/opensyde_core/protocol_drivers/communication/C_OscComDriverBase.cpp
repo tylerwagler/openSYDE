@@ -426,7 +426,8 @@ std::error_code C_OscComDriverBase::SendCanMessageDirect(T_STWCAN_Msg_TX & orc_M
    if (this->mpc_CanDispatcher != nullptr)
    {
       const std::error_code c_SendResult = this->mpc_CanDispatcher->CAN_Send_Msg(orc_Msg);
-      c_Return = Errc::success;
+      //report what the transmit actually did; this previously always reported success
+      c_Return = c_SendResult;
 
       if (mpc_AutoSupportProtocol->SupportInvertedCanMessage(orc_Msg.u32_ID))
       {

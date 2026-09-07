@@ -77,7 +77,8 @@ C_OscCanDispatcherOsyRouter::C_OscCanDispatcherOsyRouter(C_OscProtocolDriverOsy 
    mrc_OsyProtocol(orc_OsyProtocol),
    mu8_RoutingChannel(0U),
    mu32_FilterId(0U),
-   mu32_FilterMask(0xFFFFFFFFU)
+   mu32_FilterMask(0xFFFFFFFFU),
+   mu8_NrCode(0U)
 {
    orc_OsyProtocol.InitializeTunnelCanMessage(&C_OscCanDispatcherOsyRouter::mh_OsyTunnelCanMessageReceived, this);
 }

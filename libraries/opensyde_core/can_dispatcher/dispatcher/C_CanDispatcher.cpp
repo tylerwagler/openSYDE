@@ -565,7 +565,7 @@ std::error_code C_CanDispatcher::ClearQueue(const uint16_t ou16_Handle)
    \return
    Errc::success   -> reference message read      \n
    Errc::range     -> invalid ou16_Handle         \n
-   Errc::warn      -> no new message
+   Errc::noact     -> no new message
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_CanDispatcher::CAN_Read_Msg(const uint16_t ou16_Handle, T_STWCAN_Msg_RX & orc_Message)
