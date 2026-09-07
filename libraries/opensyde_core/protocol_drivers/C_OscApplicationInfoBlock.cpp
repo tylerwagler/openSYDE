@@ -318,6 +318,16 @@ int32_t C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const opu8_Data
 
    if (s32_Return == C_NO_ERR)
    {
+      //the length check above only covers the shortest header (V1: 7 magic bytes). A V2/V3 magic is one byte
+      //longer, so re-check before every read rather than assuming the header fits.
+      if (u16_Index >= ou16_NumBytesAvailable)
+      {
+         s32_Return = C_OVERFLOW;
+      }
+   }
+
+   if (s32_Return == C_NO_ERR)
+   {
       c_Temp.u8_StructVersion = opu8_Data[u16_Index];
       if ((c_Temp.u8_StructVersion != 1U) && (c_Temp.u8_StructVersion != 2U) && (c_Temp.u8_StructVersion != 3U))
       {
@@ -330,8 +340,15 @@ int32_t C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const opu8_Data
       {
       case 1: //no break
       case 2:
-         c_Temp.u8_ContentMap = opu8_Data[u16_Index];
-         u16_Index += 1U; //skip content map
+         if (u16_Index >= ou16_NumBytesAvailable)
+         {
+            s32_Return = C_OVERFLOW; //content map byte is not there
+         }
+         else
+         {
+            c_Temp.u8_ContentMap = opu8_Data[u16_Index];
+            u16_Index += 1U; //skip content map
+         }
          break;
       case 3:
          c_Temp.u8_ContentMap = 0x1FU; //all data mandatory here
@@ -344,7 +361,10 @@ int32_t C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const opu8_Data
 
    if (s32_Return == C_NO_ERR)
    {
-      s32_Return = c_Temp.m_ParsePayload(&opu8_Data[u16_Index], ou16_NumBytesAvailable - u16_Index,
+      //m_ParsePayload takes the remaining length as uint16_t, so an index past the end would wrap to a huge
+      //value and defeat every bounds check inside it. The guards above are what keep that from happening.
+      s32_Return = c_Temp.m_ParsePayload(&opu8_Data[u16_Index],
+                                         static_cast<uint16_t>(ou16_NumBytesAvailable - u16_Index),
                                          c_Temp.u8_StructVersion);
    }
 
