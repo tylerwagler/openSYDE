@@ -134,8 +134,8 @@ C_SydeSup::E_Result C_SydeSup::m_OpenCan(const std::string & orc_CanDriver, cons
    }
    else
    {
-      const int32_t s32_Return = mpc_CanDispatcher->CAN_Init(static_cast<int32_t>(ou64_BitrateBps / 1000ULL));
-      if (s32_Return != C_NO_ERR)
+      const std::error_code c_Return = mpc_CanDispatcher->CAN_Init(static_cast<int32_t>(ou64_BitrateBps / 1000ULL));
+      if (c_Return != Errc::success)
       {
          delete mpc_CanDispatcher;
          mpc_CanDispatcher = nullptr;

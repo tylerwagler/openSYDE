@@ -121,13 +121,17 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
                   }
                   else if (oq_InitCan == true)
                   {
-                     s32_Retval =
+                     const std::error_code c_CanInitResult =
                         (*oppc_CanDispatcher)->CAN_Init(static_cast<int32_t>(pc_Bus->u64_BitRate / 1000ULL));
-                     if (s32_Retval != C_NO_ERR)
+                     if (c_CanInitResult != Errc::success)
                      {
                         delete *oppc_CanDispatcher;
                         *oppc_CanDispatcher = nullptr;
                         s32_Retval = C_COM;
+                     }
+                     else
+                     {
+                        s32_Retval = C_NO_ERR;
                      }
                   }
                   else

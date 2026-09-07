@@ -775,13 +775,15 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
       }
       else
       {
-         s32_Return = this->mpc_CanDispatcher->CAN_Init(s32_Bitrate);
-         if (s32_Return == C_NO_ERR)
+         const std::error_code c_CanInitResult = this->mpc_CanDispatcher->CAN_Init(s32_Bitrate);
+         if (c_CanInitResult == Errc::success)
          {
+            s32_Return = C_NO_ERR;
             osc_write_log_info("Initialization", "CAN interface initialized.");
          }
          else
          {
+            s32_Return = C_COM;
             osc_write_log_error("Initialization", "Could not initialize the CAN interface!");
          }
       }

@@ -99,7 +99,7 @@ C_SyvUpSequences::~C_SyvUpSequences(void)
 
     if (this->mpc_CanDispatcher != nullptr)
     {
-       this->mpc_CanDispatcher->CAN_Exit();
+       (void)this->mpc_CanDispatcher->CAN_Exit();
        delete mpc_CanDispatcher;
     }
 
@@ -183,13 +183,10 @@ int32_t C_SyvUpSequences::ReinitDispatcher(void)
             {
                if (this->mpc_CanDispatcher != nullptr)
                {
-                  s32_Return = this->mpc_CanDispatcher->CAN_Init(
+                  const std::error_code c_CanInitResult = this->mpc_CanDispatcher->CAN_Init(
                      static_cast<int32_t>(pc_Bus->u64_BitRate / 1000ULL));
 
-                  if (s32_Return != C_NO_ERR)
-                  {
-                     s32_Return = C_COM;
-                  }
+                  s32_Return = (c_CanInitResult == Errc::success) ? C_NO_ERR : C_COM;
                }
                else
                {
@@ -219,7 +216,7 @@ void C_SyvUpSequences::CloseDispatcher(void)
    if ((this->IsInitialized() == true) &&
        (this->mpc_CanDispatcher != nullptr))
    {
-      this->mpc_CanDispatcher->CAN_Exit();
+      (void)this->mpc_CanDispatcher->CAN_Exit();
    }
 }
 

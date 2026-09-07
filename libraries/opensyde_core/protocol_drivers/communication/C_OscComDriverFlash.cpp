@@ -126,13 +126,11 @@ std::error_code C_OscComDriverFlash::InitCanAndSetCanBitrate(const uint32_t ou32
 
    if (pc_CanDispatcher != nullptr)
    {
-      pc_CanDispatcher->CAN_Exit();
-      // CAN_Init belongs to the stw::can dispatcher abstraction, which is not on the STW error
-      // convention; its value is never propagated, only tested for success, so keep it a plain int32_t
-      const int32_t s32_CanInitResult = pc_CanDispatcher->CAN_Init(static_cast<int32_t>(ou32_Bitrate));
+      (void)pc_CanDispatcher->CAN_Exit();
+      const std::error_code c_CanInitResult = pc_CanDispatcher->CAN_Init(static_cast<int32_t>(ou32_Bitrate));
 
       c_Return = Errc::success;
-      if (s32_CanInitResult != C_NO_ERR)
+      if (c_CanInitResult != Errc::success)
       {
          c_Return = Errc::com;
       }

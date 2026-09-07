@@ -249,7 +249,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_HandleIncomingFirstFrame(const T_
       c_TxMsg.au8_Data[2] = 0U; //no separation time (STmin)
 
       //lint -e{613}  //caller is responsible for valid dispatcher
-      if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != Errc::success)
       {
          m_LogWarningWithHeader("Could not send flow control CAN message.", TGL_UTIL_FUNC_ID);
          c_Return = Errc::com;
@@ -309,7 +309,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_SendNextConsecutiveFrames(void)
 
       //send message:
       //lint -e{613}  //caller is responsible for valid dispatcher
-      if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != Errc::success)
       {
          //most likely Tx buffer is full; but we cannot be 100% sure, so write a log entry
          m_LogWarningWithHeader("Could not send consecutive frame CAN message (Tx buffer full ?).", TGL_UTIL_FUNC_ID);
@@ -638,7 +638,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_BroadcastSendDiagnosticSessionCon
       c_Service.c_Data[1] = ou8_Session | 0x80U;
       mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
       {
          m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
          c_Return = Errc::com;
@@ -708,14 +708,14 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_HandleBroadcastSetNodeIdBySerialN
    // No further abort condition. Wait always the entire timeout time to get all positive and negative responses
    while ((TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime)
    {
-      int32_t s32_ReturnLocal;
+      std::error_code c_ReturnLocal = Errc::success;
 
       //trigger dispatcher
       //ignore return value: we cannot be sure some other client did not check before us
       (void)mpc_CanDispatcher->DispatchIncoming();
 
-      s32_ReturnLocal = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Response);
-      if (s32_ReturnLocal == C_NO_ERR)
+      c_ReturnLocal = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Response);
+      if (c_ReturnLocal == Errc::success)
       {
          //format OK ?
          if ((c_Response.u8_DLC == 5U) && (c_Response.au8_Data[0] == (mhu8_ISO15765_N_PCI_SF + 4U)) &&
@@ -833,7 +833,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::Cycle(void)
                   T_STWCAN_Msg_TX c_Msg;
                   mh_ComposeSingleFrame(mc_TxService.c_ServiceData, m_GetTxIdentifier(), c_Msg);
 
-                  if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
+                  if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
                   {
                      m_LogWarningWithHeader("Could not send single frame CAN message.", TGL_UTIL_FUNC_ID);
                      c_Return = Errc::com; //terminate loop
@@ -860,7 +860,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::Cycle(void)
                   c_TxMsg.au8_Data[1] = static_cast<uint8_t>(u32_CountBytes & 0xFFU);
                   (void)std::memcpy(&c_TxMsg.au8_Data[2], &mc_TxService.c_ServiceData.c_Data[0], 6U);
 
-                  if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != C_NO_ERR)
+                  if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != Errc::success)
                   {
                      m_LogWarningWithHeader("Could not send first frame CAN message.", TGL_UTIL_FUNC_ID);
                      c_Return = Errc::com; //terminate loop, as the shared status used to
@@ -890,7 +890,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::Cycle(void)
                                           u32_BytesForNextMessage);
 
                         c_TxMsg.u8_DLC = static_cast<uint8_t>(u32_BytesForNextMessage + 1U);
-                        if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != C_NO_ERR)
+                        if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != Errc::success)
                         {
                            //We do not handle Tx buffer issues with the OMF-CFs (like we do with regular CFs)
                            //The OMF mechanism is only used for smaller services with low numbers of messages without
@@ -922,7 +922,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::Cycle(void)
                   (void)std::memcpy(&c_TxMsg.au8_Data[2], &mc_TxService.c_ServiceData.c_Data[0], 6U);
                   mc_TxService.u16_TransmissionIndex = 6U;
                   mc_TxService.u8_SequenceNumber = 1U;
-                  if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != C_NO_ERR)
+                  if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != Errc::success)
                   {
                      m_LogWarningWithHeader("Could not send first frame CAN message.", TGL_UTIL_FUNC_ID);
                      c_Return = Errc::com;
@@ -978,12 +978,11 @@ std::error_code C_OscProtocolDriverOsyTpCan::Cycle(void)
       (void)mpc_CanDispatcher->DispatchIncoming();
 
       //read all incoming messages:
-      //the dispatcher reports the integer convention; this local stays on it
-      int32_t s32_CanResult = C_NO_ERR;
-      while (s32_CanResult == C_NO_ERR)
+      std::error_code c_CanResult = Errc::success;
+      while (c_CanResult == Errc::success)
       {
-         s32_CanResult = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Msg);
-         if ((s32_CanResult == C_NO_ERR) && (c_Msg.u8_DLC > 0U))
+         c_CanResult = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Msg);
+         if ((c_CanResult == Errc::success) && (c_Msg.u8_DLC > 0U))
          {
             //return values of frame handler functions are ignored
             //- problem details are reported there in the log
@@ -1044,7 +1043,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::SetNodeIdentifiers(
    if ((!c_Return) && (mpc_CanDispatcher != nullptr))
    {
       //Clear Rx queue; we are no longer interested in that old stuff:
-      mpc_CanDispatcher->ClearQueue(mu16_DispatcherClientHandle);
+      (void)mpc_CanDispatcher->ClearQueue(mu16_DispatcherClientHandle);
 
       //reconfigure Rx filter:
       c_Return = this->m_SetRxFilter(false);
@@ -1090,7 +1089,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::SetNodeIdentifiersForBroadcasts(
    if ((!c_Return) && (mpc_CanDispatcher != nullptr))
    {
       //Clear Rx queue; we are no longer interested in that old stuff:
-      mpc_CanDispatcher->ClearQueue(mu16_DispatcherClientHandle);
+      (void)mpc_CanDispatcher->ClearQueue(mu16_DispatcherClientHandle);
 
       //reconfigure Rx filter:
       c_Return = this->m_SetRxFilter(true);
@@ -1216,9 +1215,8 @@ std::error_code C_OscProtocolDriverOsyTpCan::m_SetRxFilter(const bool oq_ForBroa
                           (static_cast<uint32_t>(mc_ClientId.u8_NodeIdentifier) << 8U);
       c_Filter.u32_Mask = 0x1FFFFF80U; //must be exactly for us; but sender may be anyone
    }
-   //the dispatcher reports the integer STW convention; bridge it into this category
    //lint -e{613}  //caller is responsible for valid dispatcher
-   return make_error_code_from_stw(mpc_CanDispatcher->SetRXFilter(mu16_DispatcherClientHandle, c_Filter));
+   return mpc_CanDispatcher->SetRXFilter(mu16_DispatcherClientHandle, c_Filter);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1251,7 +1249,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::SetDispatcher(C_CanDispatcher * con
    //register with new dispatcher:
    if (mpc_CanDispatcher != nullptr)
    {
-      if (mpc_CanDispatcher->RegisterClient(mu16_DispatcherClientHandle) != C_NO_ERR)
+      if (mpc_CanDispatcher->RegisterClient(mu16_DispatcherClientHandle) != Errc::success)
       {
          c_Return = Errc::config;
       }
@@ -1308,13 +1306,13 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
       C_OscProtocolDriverOsyService c_Service;
       T_STWCAN_Msg_TX c_Msg;
       T_STWCAN_Msg_RX c_Response;
-      int32_t s32_ReturnLocal;
+      std::error_code c_ReturnLocal = Errc::success;
 
       c_Service.c_Data.resize(1);
       c_Service.c_Data[0] = mhu8_OSY_BC_SI_READ_SERIAL_NUMBER;
       mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
       {
          m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
          c_Return = Errc::com;
@@ -1330,8 +1328,8 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
             //ignore return value: we cannot be sure some other client did not check before us
             (void)mpc_CanDispatcher->DispatchIncoming();
 
-            s32_ReturnLocal = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Response);
-            if (s32_ReturnLocal == C_NO_ERR)
+            c_ReturnLocal = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Response);
+            if (c_ReturnLocal == Errc::success)
             {
                //format OK (frame type; number of bytes; service) ?
                if ((c_Response.u8_DLC == 8U) &&
@@ -1381,7 +1379,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
          {
             q_Continue = false;
 
-            if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
+            if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
             {
                m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
                c_Return = Errc::com;
@@ -1397,8 +1395,8 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
                   //ignore return value: we cannot be sure some other client did not check before us
                   (void)mpc_CanDispatcher->DispatchIncoming();
 
-                  s32_ReturnLocal = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Response);
-                  if (s32_ReturnLocal == C_NO_ERR)
+                  c_ReturnLocal = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Response);
+                  if (c_ReturnLocal == Errc::success)
                   {
                      //format OK (frame type; number of bytes; service) ?
                      if ((c_Response.u8_DLC == 8U) &&
@@ -1707,7 +1705,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastRequestProgramming(
       c_Service.c_Data[3] = static_cast<uint8_t>(mhu16_OSY_BC_RC_SID_REQUEST_PROGRAMMING & 0xFFU);
       mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
       {
          m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
          c_Return = Errc::com;
@@ -1720,14 +1718,14 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastRequestProgramming(
 
          while ((TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime)
          {
-            int32_t s32_ReturnLocal;
+            std::error_code c_ReturnLocal = Errc::success;
 
             //trigger dispatcher
             //ignore return value: we cannot be sure some other client did not check before us
             (void)mpc_CanDispatcher->DispatchIncoming();
 
-            s32_ReturnLocal = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Response);
-            if (s32_ReturnLocal == C_NO_ERR)
+            c_ReturnLocal = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Response);
+            if (c_ReturnLocal == Errc::success)
             {
                C_BroadcastRequestProgrammingResults c_Result;
                bool q_ResultReceived = true;
@@ -1834,7 +1832,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
       c_Service.c_Data[6] = orc_SerialNumber.au8_SerialNumber[2];
       mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
       {
          m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
          c_Return = Errc::com;
@@ -1848,7 +1846,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
          c_Service.c_Data[6] = orc_SerialNumber.au8_SerialNumber[5];
          mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-         if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
+         if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
          {
             m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
             c_Return = Errc::com;
@@ -1864,7 +1862,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
             c_Service.c_Data[5] = orc_NewNodeId.u8_NodeIdentifier;
             mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-            if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
+            if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
             {
                m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
                c_Return = Errc::com;
@@ -1994,7 +1992,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumberExt
 
          mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-         if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
+         if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
          {
             m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
             c_Return = Errc::com;
@@ -2060,7 +2058,7 @@ std::error_code C_OscProtocolDriverOsyTpCan::BroadcastEcuReset(const uint8_t ou8
       c_Service.c_Data[1] = ou8_ResetType;
       mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != Errc::success)
       {
          m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
          c_Return = Errc::com;
@@ -2115,7 +2113,7 @@ void C_OscProtocolDriverOsyTpCan::ClearDispatcherQueue(void)
 {
    if (this->mpc_CanDispatcher != nullptr)
    {
-      this->mpc_CanDispatcher->ClearQueue(this->mu16_DispatcherClientHandle);
+      (void)this->mpc_CanDispatcher->ClearQueue(this->mu16_DispatcherClientHandle);
    }
 }
 

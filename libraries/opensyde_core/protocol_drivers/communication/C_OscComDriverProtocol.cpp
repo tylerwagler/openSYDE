@@ -2404,8 +2404,7 @@ std::error_code C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_Activ
                   if (c_Return == Errc::success)
                   {
                      // Start legacy routing
-                     // C_OscCanDispatcherOsyRouter is still on the STW integer convention (CAN dispatcher wave)
-                     c_Return = make_error_code_from_stw(pc_RoutingDispatcher->CAN_Init());
+                     c_Return = pc_RoutingDispatcher->CAN_Init();
 
                      if ((c_Return == Errc::warn) &&
                          (pc_RoutingDispatcher->GetNrCodeOfCanInit() ==
@@ -2832,7 +2831,7 @@ void C_OscComDriverProtocol::m_StopRoutingSpecific(const uint32_t ou32_ActiveNod
          this->m_SetNodeSecurityAccess(u32_ActiveRouterNode, 5, nullptr);
       }
 
-      this->mc_LegacyRouterDispatchers[ou32_ActiveNode]->CAN_Exit();
+      (void)this->mc_LegacyRouterDispatchers[ou32_ActiveNode]->CAN_Exit();
       delete (this->mc_LegacyRouterDispatchers[ou32_ActiveNode]);
       this->mc_LegacyRouterDispatchers[ou32_ActiveNode] = nullptr;
    }

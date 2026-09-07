@@ -118,7 +118,7 @@ C_SyvComDriverDiag::~C_SyvComDriverDiag(void)
 
     if (mpc_CanDispatcher != nullptr)
     {
-       this->mpc_CanDispatcher->CAN_Exit();
+       (void)this->mpc_CanDispatcher->CAN_Exit();
 
        delete mpc_CanDispatcher;
        mpc_CanDispatcher = nullptr;

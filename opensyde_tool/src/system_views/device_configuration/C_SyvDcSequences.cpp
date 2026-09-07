@@ -158,7 +158,7 @@ C_SyvDcSequences::~C_SyvDcSequences(void)
 
     if (this->mpc_CanDispatcher != nullptr)
     {
-       this->mpc_CanDispatcher->CAN_Exit();
+       (void)this->mpc_CanDispatcher->CAN_Exit();
        delete mpc_CanDispatcher;
        mpc_CanDispatcher = nullptr;
     }

@@ -144,7 +144,7 @@ std::error_code C_OscComDriverBase::InitBase(C_CanDispatcher * const opc_CanDisp
 
    if (this->mpc_CanDispatcher != nullptr)
    {
-      if (this->mpc_CanDispatcher->RegisterClient(this->mu16_DispatcherClientHandle) != C_NO_ERR)
+      if (this->mpc_CanDispatcher->RegisterClient(this->mu16_DispatcherClientHandle) != Errc::success)
       {
          c_Return = Errc::com;
       }
@@ -290,7 +290,7 @@ void C_OscComDriverBase::ClearRxMessages()
 {
    if (this->mpc_CanDispatcher != nullptr)
    {
-      this->mpc_CanDispatcher->ClearQueue(this->mu16_DispatcherClientHandle);
+      (void)this->mpc_CanDispatcher->ClearQueue(this->mu16_DispatcherClientHandle);
    }
 }
 
@@ -311,7 +311,7 @@ void C_OscComDriverBase::DistributeMessages(void)
    if ((this->mpc_CanDispatcher != nullptr) &&
        (this->mq_Started == true))
    {
-      int32_t s32_Return;
+      std::error_code c_Return = Errc::success;
       T_STWCAN_Msg_RX c_Msg;
       static uint32_t hu32_BusLoadTimeRefresh = 0U;
       uint32_t u32_BusLoadTimeDiff;
@@ -327,9 +327,9 @@ void C_OscComDriverBase::DistributeMessages(void)
       do
       {
          // Get the messages even if paused to clean the queue. The messages in the pause phase are not relevant
-         s32_Return = this->mpc_CanDispatcher->ReadFromQueue(this->mu16_DispatcherClientHandle, c_Msg);
+         c_Return = this->mpc_CanDispatcher->ReadFromQueue(this->mu16_DispatcherClientHandle, c_Msg);
 
-         if (s32_Return == C_NO_ERR)
+         if (c_Return == Errc::success)
          {
             if (c_Msg.u8_DLC <= 8)
             {
@@ -344,7 +344,7 @@ void C_OscComDriverBase::DistributeMessages(void)
             }
          }
       }
-      while (s32_Return == C_NO_ERR);
+      while (c_Return == Errc::success);
 
       // Check and update bus load
       u32_BusLoadTimeDiff = stw::tgl::TglGetTickCount() - hu32_BusLoadTimeRefresh;
@@ -425,9 +425,7 @@ std::error_code C_OscComDriverBase::SendCanMessageDirect(T_STWCAN_Msg_TX & orc_M
 
    if (this->mpc_CanDispatcher != nullptr)
    {
-      // CAN_Send_Msg belongs to the stw::can dispatcher abstraction, which is not on the STW error
-      // convention; its value is never propagated, only tested for success, so keep it a plain int32_t
-      const int32_t s32_SendResult = this->mpc_CanDispatcher->CAN_Send_Msg(orc_Msg);
+      const std::error_code c_SendResult = this->mpc_CanDispatcher->CAN_Send_Msg(orc_Msg);
       c_Return = Errc::success;
 
       if (mpc_AutoSupportProtocol->SupportInvertedCanMessage(orc_Msg.u32_ID))
@@ -443,10 +441,10 @@ std::error_code C_OscComDriverBase::SendCanMessageDirect(T_STWCAN_Msg_TX & orc_M
          orc_TransmitInvertedMsg.u8_XTD = orc_Msg.u8_XTD;
          orc_TransmitInvertedMsg.u8_RTR = orc_Msg.u8_RTR;
          orc_TransmitInvertedMsg.u8_Align = orc_Msg.u8_Align;
-         this->mpc_CanDispatcher->CAN_Send_Msg(orc_TransmitInvertedMsg);
+         (void)this->mpc_CanDispatcher->CAN_Send_Msg(orc_TransmitInvertedMsg);
       }
 
-      if (s32_SendResult == C_NO_ERR)
+      if (c_SendResult == Errc::success)
       {
          // Inform the logger about the sent message
          T_STWCAN_Msg_RX c_Msg;
@@ -609,7 +607,7 @@ void C_OscComDriverBase::PrepareForDestruction(void)
 {
    if (this->mpc_CanDispatcher != nullptr)
    {
-      this->mpc_CanDispatcher->RemoveClient(this->mu16_DispatcherClientHandle);
+      (void)this->mpc_CanDispatcher->RemoveClient(this->mu16_DispatcherClientHandle);
    }
 }
 

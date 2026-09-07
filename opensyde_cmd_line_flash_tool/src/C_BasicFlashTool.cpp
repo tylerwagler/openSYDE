@@ -371,8 +371,8 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
    }
    else
    {
-      s32_Return = pc_LocalDispatcher->CAN_Init(ms32_CanBitrate);
-      if (s32_Return != C_NO_ERR)
+      const std::error_code c_CanInitResult = pc_LocalDispatcher->CAN_Init(ms32_CanBitrate);
+      if (c_CanInitResult != Errc::success)
       {
          delete pc_LocalDispatcher;
          e_Result = eERR_INITIALIZATION_FAILED;

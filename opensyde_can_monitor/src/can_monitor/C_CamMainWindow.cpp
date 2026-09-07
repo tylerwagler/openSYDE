@@ -670,12 +670,9 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
    else
    {
       this->mc_ComDriver.InitBase(this->mpc_CanDispatcher);
-      s32_Return = this->mpc_CanDispatcher->CAN_Init();
+      const std::error_code c_CanInitResult = this->mpc_CanDispatcher->CAN_Init();
 
-      if (s32_Return != C_NO_ERR)
-      {
-         s32_Return = C_COM;
-      }
+      s32_Return = (c_CanInitResult == Errc::success) ? C_NO_ERR : C_COM;
    }
 
 #ifndef _WIN32
@@ -725,7 +722,7 @@ void C_CamMainWindow::m_CloseCan(void)
 {
    if (this->mpc_CanDispatcher != nullptr)
    {
-      this->mpc_CanDispatcher->CAN_Exit();
+      (void)this->mpc_CanDispatcher->CAN_Exit();
    }
 }
 

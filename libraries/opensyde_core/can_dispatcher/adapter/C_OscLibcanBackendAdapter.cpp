@@ -24,6 +24,7 @@
 
 #include "C_OscLibcanBackendAdapter.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglTime.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -65,13 +66,15 @@ C_OscLibcanBackendAdapter::~C_OscLibcanBackendAdapter(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscLibcanBackendAdapter::CAN_Init(void)
+std::error_code C_OscLibcanBackendAdapter::CAN_Init(void)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
+   //libcan boundary: ICanBackend::open() reports a plain bool, not an STW code.
+   //It is translated here rather than bridged with make_error_code_from_stw().
    if ((mpc_Backend == nullptr) || (mpc_Backend->open(mc_Config) == false))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -96,11 +99,11 @@ int32_t C_OscLibcanBackendAdapter::CAN_Init(void)
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscLibcanBackendAdapter::CAN_Init(const int32_t os32_BitrateKBitS)
+std::error_code C_OscLibcanBackendAdapter::CAN_Init(const int32_t os32_BitrateKBitS)
 {
    if (os32_BitrateKBitS > 0)
    {
@@ -110,41 +113,42 @@ int32_t C_OscLibcanBackendAdapter::CAN_Init(const int32_t os32_BitrateKBitS)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscLibcanBackendAdapter::CAN_Exit(void)
+std::error_code C_OscLibcanBackendAdapter::CAN_Exit(void)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (mq_Open == true)
    {
       if (mpc_Backend != nullptr)
       {
+         //libcan boundary: ICanBackend::close() has no return value
          mpc_Backend->close();
       }
       mq_Open = false;
    }
    else
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscLibcanBackendAdapter::CAN_Reset(void)
+std::error_code C_OscLibcanBackendAdapter::CAN_Reset(void)
 {
    (void)this->CAN_Exit();
    return this->CAN_Init();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscLibcanBackendAdapter::CAN_Send_Msg(const T_STWCAN_Msg_TX & orc_Message)
+std::error_code C_OscLibcanBackendAdapter::CAN_Send_Msg(const T_STWCAN_Msg_TX & orc_Message)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if ((mq_Open == false) || (mpc_Backend == nullptr))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -158,24 +162,26 @@ int32_t C_OscLibcanBackendAdapter::CAN_Send_Msg(const T_STWCAN_Msg_TX & orc_Mess
          c_Frame.data[u8_Byte] = orc_Message.au8_Data[u8_Byte];
       }
 
-      s32_Return = mpc_Backend->send(c_Frame) ? C_NO_ERR : C_COM;
+      //libcan boundary: ICanBackend::send() reports a plain bool, not an STW code
+      c_Return = (mpc_Backend->send(c_Frame) == true) ? Errc::success : Errc::com;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscLibcanBackendAdapter::m_CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
+std::error_code C_OscLibcanBackendAdapter::m_CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if ((mq_Open == false) || (mpc_Backend == nullptr))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
       ::can::Frame c_Frame;
+      //libcan boundary: ICanBackend::receive() reports a plain bool, not an STW code
       const bool q_Got = mpc_Backend->receive(c_Frame, std::chrono::milliseconds(0));
       if (q_Got == true)
       {
@@ -199,22 +205,22 @@ int32_t C_OscLibcanBackendAdapter::m_CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
          {
             orc_Message.u64_TimeStamp = TglGetTickCountUs();
          }
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
       }
       else
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscLibcanBackendAdapter::CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const
+std::error_code C_OscLibcanBackendAdapter::CAN_Get_System_Time(uint64_t & oru64_SystemTimeUs) const
 {
    oru64_SystemTimeUs = TglGetTickCountUs();
-   return C_NO_ERR;
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
