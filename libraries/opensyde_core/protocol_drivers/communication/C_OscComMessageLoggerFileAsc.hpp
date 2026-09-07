@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <fstream>
+#include <system_error>
 
 #include <string>
 
@@ -36,7 +37,7 @@ public:
                                 const bool oq_RelativeTimeStampActive);
    virtual ~C_OscComMessageLoggerFileAsc(void);
 
-   virtual int32_t OpenFile(void);
+   virtual std::error_code OpenFile(void);
    virtual void AddMessageToFile(const C_OscComMessageLoggerData & orc_MessageData);
 
 private:

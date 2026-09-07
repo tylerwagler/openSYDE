@@ -200,9 +200,10 @@ int32_t C_SyvDcSequences::InitDcSequences(const uint32_t ou32_ViewIndex)
       // pem folder is optional -> no error handling
       mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
 
+      //boundary: the callee now reports std::error_code
       s32_Return = C_OscComSequencesBase::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinition(),
                                                u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDispatcher,
-                                               this->mpc_EthernetDispatcher, &this->mc_PemDatabase);
+                                               this->mpc_EthernetDispatcher, &this->mc_PemDatabase).value();
    }
 
    return s32_Return;
@@ -601,7 +602,8 @@ int32_t C_SyvDcSequences::SendOsyBroadcastRequestProgramming(bool & orq_NotAccep
    }
    else
    {
-      s32_Return = this->mpc_ComDriver->SendOsyBroadcastRequestProgramming(orq_NotAccepted);
+      //boundary: the callee now reports std::error_code
+      s32_Return = this->mpc_ComDriver->SendOsyBroadcastRequestProgramming(orq_NotAccepted).value();
 
       if (s32_Return == C_NO_ERR)
       {
@@ -663,7 +665,8 @@ int32_t C_SyvDcSequences::ResetOpenSydeDevices(const bool oq_ToFlashloader) cons
       // In case of CAN it makes no difference
       this->mpc_ComDriver->DisconnectNodes();
 
-      s32_Return = this->mpc_ComDriver->SendOsyBroadcastEcuReset(u8_ResetType);
+      //boundary: the callee now reports std::error_code
+      s32_Return = this->mpc_ComDriver->SendOsyBroadcastEcuReset(u8_ResetType).value();
       if (s32_Return == C_NO_ERR)
       {
          osc_write_log_info("Reset openSYDE devices", "openSYDE broadcast ECU reset sent.");
@@ -699,7 +702,8 @@ int32_t C_SyvDcSequences::InitCanAndSetCanBitrate(const uint32_t ou32_Bitrate)
    }
    else
    {
-      s32_Return = this->mpc_ComDriver->InitCanAndSetCanBitrate(ou32_Bitrate);
+      //boundary: the callee now reports std::error_code
+      s32_Return = this->mpc_ComDriver->InitCanAndSetCanBitrate(ou32_Bitrate).value();
       if (s32_Return == C_NO_ERR)
       {
          osc_write_log_info("Init CAN and set new bitrate", "CAN initialized successfully.");
@@ -1032,7 +1036,8 @@ int32_t C_SyvDcSequences::m_RunScanCanEnterFlashloader(const uint32_t ou32_CanBi
    if (this->mpc_ComDriver != nullptr)
    {
       // Init the CAN bus with the CAN bitrate
-      s32_Return = this->mpc_ComDriver->InitCanAndSetCanBitrate(ou32_CanBitrate);
+      //boundary: the callee now reports std::error_code
+      s32_Return = this->mpc_ComDriver->InitCanAndSetCanBitrate(ou32_CanBitrate).value();
 
       if (s32_Return == C_NO_ERR)
       {
@@ -1045,7 +1050,8 @@ int32_t C_SyvDcSequences::m_RunScanCanEnterFlashloader(const uint32_t ou32_CanBi
          if (this->mq_OpenSydeDevicesActive == true)
          {
             // send openSYDE CAN-TP broadcast "RequestProgramming"
-            s32_Return = this->mpc_ComDriver->SendOsyBroadcastRequestProgramming(q_RequestNotAccepted);
+            //boundary: the callee now reports std::error_code
+            s32_Return = this->mpc_ComDriver->SendOsyBroadcastRequestProgramming(q_RequestNotAccepted).value();
          }
 
          // Check for error or if all nodes accepted the request
@@ -1054,8 +1060,9 @@ int32_t C_SyvDcSequences::m_RunScanCanEnterFlashloader(const uint32_t ou32_CanBi
             if (this->mq_OpenSydeDevicesActive == true)
             {
                // send openSYDE broadcast "EcuReset"
+               //boundary: the callee now reports std::error_code
                s32_Return = this->mpc_ComDriver->SendOsyBroadcastEcuReset(
-                  C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
+                  C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER).value();
             }
 
             if (s32_Return != C_NO_ERR)
@@ -1140,7 +1147,8 @@ int32_t C_SyvDcSequences::m_RunScanCanSendFlashloaderRequest(const uint32_t ou32
       if (this->mq_OpenSydeDevicesActive == true)
       {
          // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast for the duration of the scan
-         s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastEnterPreProgrammingSession();
+         //boundary: the callee now reports std::error_code
+         s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastEnterPreProgrammingSession().value();
       }
 
       QThread::msleep(5);
@@ -1213,8 +1221,9 @@ int32_t C_SyvDcSequences::m_RunScanCanGetInfoFromOpenSydeDevices(void)
       std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberExtendedResults> c_ReadSnResultExt;
 
       // * broadcast: "ReadSerialNumber"
+      //boundary: the callee now reports std::error_code
       s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastReadSerialNumber(c_ReadSnResult,
-                                                                            c_ReadSnResultExt);
+                                                                            c_ReadSnResultExt).value();
 
       if (s32_Return == C_NO_ERR)
       {
@@ -1374,7 +1383,8 @@ int32_t C_SyvDcSequences::m_RunScanEthGetInfoFromOpenSydeDevices(void)
    {
       //broadcast "RequestProgramming"
       bool q_NotAccepted;
-      s32_Return = this->mpc_ComDriver->SendOsyBroadcastRequestProgramming(q_NotAccepted);
+      //boundary: the callee now reports std::error_code
+      s32_Return = this->mpc_ComDriver->SendOsyBroadcastRequestProgramming(q_NotAccepted).value();
       if (s32_Return != C_NO_ERR)
       {
          osc_write_log_error("Scan ETH get info from openSYDE devices",
@@ -1389,8 +1399,9 @@ int32_t C_SyvDcSequences::m_RunScanEthGetInfoFromOpenSydeDevices(void)
       else
       {
          //broadcast "net reset"
+         //boundary: the callee now reports std::error_code
          s32_Return = this->mpc_ComDriver->SendOsyBroadcastEcuReset(
-            C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
+            C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER).value();
          if (s32_Return != C_NO_ERR)
          {
             osc_write_log_error("Scan ETH get info from openSYDE devices",
@@ -1408,8 +1419,10 @@ int32_t C_SyvDcSequences::m_RunScanEthGetInfoFromOpenSydeDevices(void)
          QThread::msleep(this->GetMinimumFlashloaderResetWaitTime(C_OscComDriverFlash::eNO_CHANGES_ETHERNET));
 
          //broadcast: "get device info" (returns serial number and device name)
-         s32_Return = this->mpc_ComDriver->SendOsyEthBroadcastGetDeviceInformation(c_ReadDeviceInfoResults,
-                                                                                   c_ReadDeviceInfoExtendedResults);
+         //boundary: the callee now reports std::error_code
+         s32_Return =
+            this->mpc_ComDriver->SendOsyEthBroadcastGetDeviceInformation(
+               c_ReadDeviceInfoResults, c_ReadDeviceInfoExtendedResults).value();
          if (s32_Return != C_NO_ERR)
          {
             osc_write_log_error("Scan ETH get info from openSYDE devices",
@@ -1650,6 +1663,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithBroadcasts(
 
             if (rc_CurConfig.c_SerialNumber.q_ExtFormatUsed == false)
             {
+               //boundary: the callee now reports std::error_code
                s32_Return =
                   this->mpc_ComDriver->SendOsyEthBroadcastSetIpAddress(
                      rc_CurConfig.c_SerialNumber,
@@ -1657,10 +1671,11 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithBroadcasts(
                      rc_CurConfig.c_IpAddresses[u32_InterfaceCounter].au8_NetMask,
                      rc_CurConfig.c_IpAddresses[u32_InterfaceCounter].au8_DefaultGateway,
                      c_ServerIdOfCurBus,
-                     au8_ResponseIp, &u8_CommError);
+                     au8_ResponseIp, &u8_CommError).value();
             }
             else
             {
+               //boundary: the callee now reports std::error_code
                s32_Return =
                   this->mpc_ComDriver->SendOsyEthBroadcastSetIpAddressExtended(
                      rc_CurConfig.c_SerialNumber,
@@ -1669,7 +1684,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithBroadcasts(
                      rc_CurConfig.c_IpAddresses[u32_InterfaceCounter].au8_DefaultGateway,
                      c_ServerIdOfCurBus,
                      rc_CurConfig.u8_SubNodeId,
-                     au8_ResponseIp, &u8_CommError);
+                     au8_ResponseIp, &u8_CommError).value();
             }
 
             if (s32_Return != C_NO_ERR)
@@ -1826,9 +1841,10 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                         C_OscProtocolDriverOsyTpIp c_TpIp;
 
                         // We need to connect to the old connection
+                        //boundary: the callee now reports std::error_code
                         s32_Return = this->mpc_ComDriver->EthConnectNode(c_ServerIdOfCurBusWithOldNodeId,
                                                                          rc_CurConfig.c_OldComConfig.au8_OldIpAddress,
-                                                                         c_TemporaryProtocol, c_TpIp);
+                                                                         c_TemporaryProtocol, c_TpIp).value();
                         if (s32_Return != C_NO_ERR)
                         {
                            std::string c_Text;
@@ -1842,10 +1858,11 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                         if (s32_Return == C_NO_ERR)
                         {
                            // Set session
+                           //boundary: the callee now reports std::error_code
                            s32_Return = this->mpc_ComDriver->SendOsySetPreProgrammingMode(
                               c_TemporaryProtocol,
                               false,
-                              &u8_ErrCode);
+                              &u8_ErrCode).value();
 
                            if (s32_Return != C_NO_ERR)
                            {
@@ -1866,9 +1883,10 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                         if (s32_Return == C_NO_ERR)
                         {
                            // Set node id
+                           //boundary: the callee now reports std::error_code
                            s32_Return = C_OscComDriverFlash::h_SendOsySetNodeIdForChannel(
                               c_TemporaryProtocol, static_cast<uint8_t>(rc_InterfaceSettings.e_InterfaceType),
-                              rc_InterfaceSettings.u8_InterfaceNumber, c_ServerIdOfCurBus, &u8_ErrCode);
+                              rc_InterfaceSettings.u8_InterfaceNumber, c_ServerIdOfCurBus, &u8_ErrCode).value();
 
                            // Configuration function for CAN, so the interface is type CAN for sure
                            this->m_RunConfOpenSydeDevicesState(hu32_SETNODEID, s32_Return, c_ServerIdOfCurBus,
@@ -1894,13 +1912,14 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                         if (s32_Return == C_NO_ERR)
                         {
                            // Set node id
+                           //boundary: the callee now reports std::error_code
                            s32_Return = C_OscComDriverFlash::h_SendOsySetIpAddressForChannel(
                               c_TemporaryProtocol,
                               rc_InterfaceSettings.u8_InterfaceNumber,
                               rc_CurConfig.c_IpAddresses[u32_InterfaceCounter].au8_IpAddress,
                               rc_CurConfig.c_IpAddresses[u32_InterfaceCounter].au8_NetMask,
                               rc_CurConfig.c_IpAddresses[u32_InterfaceCounter].au8_DefaultGateway,
-                              &u8_ErrCode);
+                              &u8_ErrCode).value();
 
                            // Configuration function for CAN, so the interface is type CAN for sure
                            this->m_RunConfOpenSydeDevicesState(hu32_SETIPADDRESS, s32_Return, c_ServerIdOfCurBus,
@@ -1994,7 +2013,8 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
    {
       // * broadcast: "RequestProgramming"
       bool q_RequestNotAccepted;
-      s32_Return = this->mpc_ComDriver->SendOsyBroadcastRequestProgramming(q_RequestNotAccepted);
+      //boundary: the callee now reports std::error_code
+      s32_Return = this->mpc_ComDriver->SendOsyBroadcastRequestProgramming(q_RequestNotAccepted).value();
       if (s32_Return == C_NO_ERR)
       {
          // Check the result
@@ -2025,8 +2045,9 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
          this->m_RunConfEthOpenSydeDevicesProgress(50U);
       }
 
+      //boundary: the callee now reports std::error_code
       s32_Return = this->mpc_ComDriver->SendOsyBroadcastEcuReset(
-         C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
+         C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER).value();
 
       if (s32_Return != C_NO_ERR)
       {
@@ -2073,7 +2094,8 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
          }
 
          //first time we need to explicitly contact the node: reconnect (required for Ethernet)
-         s32_Return = this->mpc_ComDriver->ReConnectNode(orc_UsedServerIds[u32_DeviceCounter]);
+         //boundary: the callee now reports std::error_code
+         s32_Return = this->mpc_ComDriver->ReConnectNode(orc_UsedServerIds[u32_DeviceCounter]).value();
          if (s32_Return != C_NO_ERR)
          {
             std::string c_Text;
@@ -2085,8 +2107,9 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
 
          // ** "DiagnosticSessionControl(Preprogramming)"
          // ** activate "SecurityAccess" for Level 1
+         //boundary: the callee now reports std::error_code
          s32_Return = this->mpc_ComDriver->SendOsySetPreProgrammingMode(orc_UsedServerIds[u32_DeviceCounter], false,
-                                                                        &u8_NrCode);
+                                                                        &u8_NrCode).value();
 
          if (s32_Return != C_NO_ERR)
          {
@@ -2350,7 +2373,8 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithBroadcasts(
 
    // All openSYDE nodes must be in default session.
    // The broadcast SetNodeIdBySerialNumber works only in this session.
-   s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastEnterDefaultSession();
+   //boundary: the callee now reports std::error_code
+   s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastEnterDefaultSession().value();
 
    if (s32_Return == C_NO_ERR)
    {
@@ -2388,16 +2412,18 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithBroadcasts(
 
                   if (rc_CurConfig.c_SerialNumber.q_ExtFormatUsed == false)
                   {
+                     //boundary: the callee now reports std::error_code
                      s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastSetNodeIdBySerialNumber(
                         rc_CurConfig.c_SerialNumber,
-                        c_ServerIdOfCurBus);
+                        c_ServerIdOfCurBus).value();
                   }
                   else
                   {
+                     //boundary: the callee now reports std::error_code
                      s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastSetNodeIdBySerialNumberExtended(
                         rc_CurConfig.c_SerialNumber,
                         rc_CurConfig.u8_SubNodeId,
-                        c_ServerIdOfCurBus);
+                        c_ServerIdOfCurBus).value();
                   }
 
                   // Get the real interface number of the bus
@@ -2531,9 +2557,10 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
                      {
                         uint8_t u8_ErrCode;
                         // Set session
+                        //boundary: the callee now reports std::error_code
                         s32_Return = this->mpc_ComDriver->SendOsySetPreProgrammingMode(c_ServerIdOfCurBusWithOldNodeId,
                                                                                        false,
-                                                                                       &u8_ErrCode);
+                                                                                       &u8_ErrCode).value();
                         if (s32_Return != C_NO_ERR)
                         {
                            std::string c_Text;
@@ -2552,9 +2579,10 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
                         if (s32_Return == C_NO_ERR)
                         {
                            // Set node id
+                           //boundary: the callee now reports std::error_code
                            s32_Return = this->mpc_ComDriver->SendOsySetNodeIdForChannel(
                               c_ServerIdOfCurBusWithOldNodeId, static_cast<uint8_t>(rc_ComInterface.e_InterfaceType),
-                              rc_ComInterface.u8_InterfaceNumber, c_ServerIdOfCurBus);
+                              rc_ComInterface.u8_InterfaceNumber, c_ServerIdOfCurBus).value();
 
                            // Configuration function for CAN, so the interface is type CAN for sure
                            this->m_RunConfOpenSydeDevicesState(hu32_SETNODEID, s32_Return, c_ServerIdOfCurBus,
@@ -2841,9 +2869,10 @@ int32_t C_SyvDcSequences::m_SetCanOpenSydeBitrate(const C_OscProtocolDriverOsyNo
                            const C_OscProtocolDriverOsyNode c_StateConfiguredInterface(pc_Bus->u8_BusId,
                                                                                        rc_InterfaceSettings.u8_NodeId);
 
+                           //boundary: the callee now reports std::error_code
                            s32_Return = this->mpc_ComDriver->SendOsySetBitrate(
                               orc_ServerId, rc_InterfaceSettings.u8_InterfaceNumber,
-                              orc_DeviceConfig.c_CanBitrates[u32_CanCounter]);
+                              orc_DeviceConfig.c_CanBitrates[u32_CanCounter]).value();
 
                            this->m_RunConfOpenSydeDevicesState(hu32_SETCANBITRATE, s32_Return,
                                                                c_StateConfiguredInterface,
@@ -2941,11 +2970,12 @@ int32_t C_SyvDcSequences::m_SetEthOpenSydeIpAddress(const C_OscProtocolDriverOsy
                      const C_OscProtocolDriverOsyNode c_StateConfiguredInterface(pc_Bus->u8_BusId,
                                                                                  rc_InterfaceSettings.u8_NodeId);
 
+                     //boundary: the callee now reports std::error_code
                      s32_Return = this->mpc_ComDriver->SendOsySetIpAddressForChannel(
                         orc_ServerId, rc_InterfaceSettings.u8_InterfaceNumber,
                         orc_DeviceConfig.c_IpAddresses[u32_EthCounter].au8_IpAddress,
                         orc_DeviceConfig.c_IpAddresses[u32_EthCounter].au8_NetMask,
-                        orc_DeviceConfig.c_IpAddresses[u32_EthCounter].au8_DefaultGateway);
+                        orc_DeviceConfig.c_IpAddresses[u32_EthCounter].au8_DefaultGateway).value();
 
                      this->m_RunConfOpenSydeDevicesState(hu32_SETIPADDRESS, s32_Return, c_StateConfiguredInterface,
                                                          rc_InterfaceSettings.e_InterfaceType,
@@ -3042,9 +3072,10 @@ int32_t C_SyvDcSequences::m_SetOpenSydeNodeIds(const C_OscProtocolDriverOsyNode 
                         const C_OscProtocolDriverOsyNode c_NewId(orc_DeviceConfig.c_BusIds[u32_BusCounter],
                                                                  orc_DeviceConfig.c_NodeIds[u32_BusCounter]);
 
+                        //boundary: the callee now reports std::error_code
                         s32_Return = this->mpc_ComDriver->SendOsySetNodeIdForChannel(
                            orc_ServerId, static_cast<uint8_t>(rc_InterfaceSettings.e_InterfaceType),
-                           rc_InterfaceSettings.u8_InterfaceNumber, c_NewId);
+                           rc_InterfaceSettings.u8_InterfaceNumber, c_NewId).value();
 
                         this->m_RunConfOpenSydeDevicesState(hu32_SETNODEID, s32_Return, c_NewId,
                                                             rc_InterfaceSettings.e_InterfaceType,
@@ -3181,7 +3212,8 @@ int32_t C_SyvDcSequences::m_ReadBackEth(void)
          stw::opensyde_core::C_OscProtocolDriverOsyNode & rc_OsyServerId = this->mc_OpenSydeIds[u32_DeviceCounter];
 
          // we need to explicitly contact the node after the reset: reconnect (required for Ethernet)
-         s32_Return = this->mpc_ComDriver->ReConnectNode(rc_OsyServerId);
+         //boundary: the callee now reports std::error_code
+         s32_Return = this->mpc_ComDriver->ReConnectNode(rc_OsyServerId).value();
 
          if (s32_Return != C_NO_ERR)
          {
@@ -3194,7 +3226,8 @@ int32_t C_SyvDcSequences::m_ReadBackEth(void)
          else
          {
             uint8_t u8_NrCode;
-            s32_Return = this->mpc_ComDriver->SendOsySetPreProgrammingMode(rc_OsyServerId, false, &u8_NrCode);
+            //boundary: the callee now reports std::error_code
+            s32_Return = this->mpc_ComDriver->SendOsySetPreProgrammingMode(rc_OsyServerId, false, &u8_NrCode).value();
 
             if (s32_Return == C_NOACT)
             {
@@ -3298,7 +3331,8 @@ int32_t C_SyvDcSequences::m_ReadBack(void)
          if (this->mc_OpenSydeSnrExtFormat[u32_DeviceCounter] == false)
          {
             // ** perform "readdatabyID(SerialNumber)"
-            s32_Return = this->mpc_ComDriver->SendOsyReadSerialNumber(rc_OsyServerId, c_SerialNumber);
+            //boundary: the callee now reports std::error_code
+            s32_Return = this->mpc_ComDriver->SendOsyReadSerialNumber(rc_OsyServerId, c_SerialNumber).value();
 
             if (s32_Return == C_NO_ERR)
             {
@@ -3314,7 +3348,8 @@ int32_t C_SyvDcSequences::m_ReadBack(void)
          else
          {
             // ** perform "readdatabyID(SerialNumberExt)"
-            s32_Return = this->mpc_ComDriver->SendOsyReadSerialNumberExt(rc_OsyServerId, c_SerialNumber);
+            //boundary: the callee now reports std::error_code
+            s32_Return = this->mpc_ComDriver->SendOsyReadSerialNumberExt(rc_OsyServerId, c_SerialNumber).value();
 
             if (s32_Return == C_NO_ERR)
             {
@@ -3333,7 +3368,8 @@ int32_t C_SyvDcSequences::m_ReadBack(void)
             std::string c_OsyDeviceName;
 
             // ** perform "readdatabyID(DeviceName)"
-            s32_Return = this->mpc_ComDriver->SendOsyReadDeviceName(rc_OsyServerId, c_OsyDeviceName);
+            //boundary: the callee now reports std::error_code
+            s32_Return = this->mpc_ComDriver->SendOsyReadDeviceName(rc_OsyServerId, c_OsyDeviceName).value();
 
             if (s32_Return == C_NO_ERR)
             {

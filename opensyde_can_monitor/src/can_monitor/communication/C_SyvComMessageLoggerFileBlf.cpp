@@ -11,9 +11,11 @@
 #include "precomp_headers.hpp"
 
 #include <cstring>
+#include <system_error>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclStringCompat.hpp"
 
 #include "C_SyvComMessageLoggerFileBlf.hpp"
@@ -76,13 +78,13 @@ C_SyvComMessageLoggerFileBlf::~C_SyvComMessageLoggerFileBlf(void) noexcept
    An already opened file will be closed and deleted.
 
    \return
-   C_NO_ERR    File successfully opened and created
-   C_RD_WR     Error on creating file, folders or deleting old file
+   Errc::success    File successfully opened and created
+   Errc::rd_wr      Error on creating file, folders or deleting old file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComMessageLoggerFileBlf::OpenFile(void)
+std::error_code C_SyvComMessageLoggerFileBlf::OpenFile(void)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (this->mc_File.is_open() == true)
    {
@@ -96,20 +98,20 @@ int32_t C_SyvComMessageLoggerFileBlf::OpenFile(void)
       this->mc_FilePath += ".blf";
    }
 
-   s32_Return = C_OscComMessageLoggerFileBase::OpenFile();
+   c_Return = C_OscComMessageLoggerFileBase::OpenFile();
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
       this->mc_File.open(this->mc_FilePath.c_str(), std::ios_base::out);
 
       if (this->mc_File.is_open() == false)
       {
          // Error on opening the BLF file
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

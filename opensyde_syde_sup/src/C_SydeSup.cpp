@@ -681,8 +681,9 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
       if (s32_Return == C_NO_ERR)
       {
          // initialize sequence
+         //boundary: the callee now reports std::error_code
          s32_Return = c_Sequence.Init(c_SystemDefinition, u32_ActiveBusIndex, c_ActiveNodes, mpc_CanDispatcher,
-                                      mpc_EthDispatcher, &this->mc_PemDatabase);
+                                      mpc_EthDispatcher, &this->mc_PemDatabase).value();
          // tell report methods to not print to console
          c_Sequence.SetQuiet(mq_Quiet);
       }

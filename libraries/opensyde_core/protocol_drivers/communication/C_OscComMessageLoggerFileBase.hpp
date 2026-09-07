@@ -12,6 +12,7 @@
 #define C_OSCCOMMESSAGELOGGERFILEBASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include "stwtypes.hpp"
 #include "C_OscComMessageLoggerData.hpp"
 
@@ -31,7 +32,7 @@ public:
                                  const std::string & orc_ProtocolName);
    virtual ~C_OscComMessageLoggerFileBase(void);
 
-   virtual int32_t OpenFile(void);
+   virtual std::error_code OpenFile(void);
    virtual void AddMessageToFile(const C_OscComMessageLoggerData & orc_MessageData) = 0;
 
    void SetProtocolName(const std::string & orc_ProtocolName);

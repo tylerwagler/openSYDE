@@ -15,6 +15,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <system_error>
 #include "stwtypes.hpp"
 #include "C_OscRoutingRoute.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
@@ -44,33 +45,34 @@ public:
    C_OscComDriverProtocol(void);
    virtual ~C_OscComDriverProtocol(void);
 
-   virtual int32_t Init(const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex,
-                        const std::vector<uint8_t> & orc_ActiveNodes,
-                        stw::can::C_CanDispatcher * const opc_CanDispatcher, C_OscIpDispatcher * const opc_IpDispatcher,
-                        C_OscSecurityPemDatabase * const opc_SecurityPemDb);
-   int32_t SendTesterPresent(const std::set<uint32_t> * const opc_SkipNodes = nullptr);
-   int32_t SendTesterPresent(const std::vector<uint32_t> & orc_ActiveNodes) const;
-   int32_t SendTesterPresent(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
-   int32_t StartRouting(const uint32_t ou32_NodeIndex, uint32_t * const opu32_ErrorNodeIndex = nullptr);
-   int32_t StopRouting(const uint32_t ou32_NodeIndex);
-   int32_t IsRoutingNecessary(const uint32_t ou32_NodeIndex);
+   virtual std::error_code Init(const C_OscSystemDefinition & orc_SystemDefinition,
+                                const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes,
+                                stw::can::C_CanDispatcher * const opc_CanDispatcher,
+                                C_OscIpDispatcher * const opc_IpDispatcher,
+                                C_OscSecurityPemDatabase * const opc_SecurityPemDb);
+   std::error_code SendTesterPresent(const std::set<uint32_t> * const opc_SkipNodes = nullptr);
+   std::error_code SendTesterPresent(const std::vector<uint32_t> & orc_ActiveNodes) const;
+   std::error_code SendTesterPresent(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
+   std::error_code StartRouting(const uint32_t ou32_NodeIndex, uint32_t * const opu32_ErrorNodeIndex = nullptr);
+   std::error_code StopRouting(const uint32_t ou32_NodeIndex);
+   std::error_code IsRoutingNecessary(const uint32_t ou32_NodeIndex);
    bool IsEthToEthRoutingNecessary(const uint32_t ou32_RouterNodeIndex) const;
-   int32_t GetBusIndexOfRoutingNode(const uint32_t ou32_NodeIndex, uint32_t & oru32_BusIndex);
+   std::error_code GetBusIndexOfRoutingNode(const uint32_t ou32_NodeIndex, uint32_t & oru32_BusIndex);
    uint32_t GetRoutingPointMaximum(void) const;
    uint32_t GetRoutingPointCount(const uint32_t ou32_NodeIndex, bool & orq_Active) const;
    void GetRouteOfNode(const uint32_t ou32_NodeIndex, C_OscRoutingRoute & orc_Route) const;
-   int32_t GetRoutingTargetInterfaceType(const uint32_t ou32_NodeIndex,
-                                         C_OscSystemBus::E_Type & ore_InterfaceType) const;
-   int32_t GetServerIdOfLastRouter(const uint32_t ou32_NodeIndex,
-                                   C_OscProtocolDriverOsyNode & orc_RouterServerId) const;
+   std::error_code GetRoutingTargetInterfaceType(const uint32_t ou32_NodeIndex,
+                                                 C_OscSystemBus::E_Type & ore_InterfaceType) const;
+   std::error_code GetServerIdOfLastRouter(const uint32_t ou32_NodeIndex,
+                                           C_OscProtocolDriverOsyNode & orc_RouterServerId) const;
 
    const C_OscProtocolDriverOsyNode & GetClientId(void) const;
    bool GetNodeIndex(const C_OscProtocolDriverOsyNode & orc_ServerId, uint32_t & oru32_NodeIndex) const;
    void ClearDispatcherQueue(void);
    bool IsInitialized(void) const;
 
-   int32_t ReConnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
-   int32_t DisconnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
+   std::error_code ReConnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
+   std::error_code DisconnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
    void DisconnectNodes(void) const;
 
    virtual void PrepareForDestruction(void);
@@ -117,32 +119,39 @@ protected:
    C_OscProtocolDriverOsy * m_GetOsyProtocol(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
    std::string m_GetActiveNodeName(const uint32_t ou32_ActiveNodeIndex) const;
 
-   int32_t m_SetNodeSessionId(const uint32_t ou32_ActiveNode, const uint8_t ou8_SessionId,
-                              const bool oq_CheckForSession, uint8_t * const opu8_NrCode) const;
-   int32_t m_SetNodeSessionId(C_OscProtocolDriverOsy * const opc_ExistingProtocol, const uint8_t ou8_SessionId,
-                              const bool oq_CheckForSession, uint8_t * const opu8_NrCode) const;
-   int32_t m_SetNodesSessionId(const uint8_t ou8_SessionId, const bool oq_CheckForSession,
-                               std::set<uint32_t> & orc_DefectNodeIndices) const;
-   int32_t m_SetNodesSessionId(const std::vector<uint32_t> & orc_ActiveNodes, const uint8_t ou8_SessionId,
-                               const bool oq_CheckForSession, std::set<uint32_t> & orc_DefectNodeIndices) const;
-   int32_t m_SetNodeSessionIdWithExpectation(const uint32_t ou32_ActiveNode,
-                                             const uint8_t ou8_ExpectedNeededSession) const;
-   int32_t m_SetNodeSecurityAccess(const uint32_t ou32_ActiveNode, const uint8_t ou8_SecurityLevel,
-                                   uint8_t * const opu8_NrCode, bool * const opq_SecureAuthenticationActive = nullptr,
-                                   bool * const opq_TrafficEncryptionActive = nullptr) const;
-   int32_t m_SetNodeSecurityAccess(C_OscProtocolDriverOsy * const opc_ExistingProtocol, const uint8_t ou8_SecurityLevel,
-                                   uint8_t * const opu8_NrCode, bool * const opq_SecureAuthenticationActive = nullptr,
-                                   bool * const opq_TrafficEncryptionActive = nullptr) const;
-   int32_t m_SetNodesSecurityAccess(const uint8_t ou8_SecurityLevel, std::set<uint32_t> & orc_ErrorActiveNodes) const;
-   int32_t m_SetNodesSecurityAccess(const std::vector<uint32_t> & orc_ActiveNodes, const uint8_t ou8_SecurityLevel,
-                                    std::set<uint32_t> & orc_ErrorActiveNodes) const;
+   std::error_code m_SetNodeSessionId(const uint32_t ou32_ActiveNode, const uint8_t ou8_SessionId,
+                                      const bool oq_CheckForSession, uint8_t * const opu8_NrCode) const;
+   std::error_code m_SetNodeSessionId(C_OscProtocolDriverOsy * const opc_ExistingProtocol,
+                                      const uint8_t ou8_SessionId, const bool oq_CheckForSession,
+                                      uint8_t * const opu8_NrCode) const;
+   std::error_code m_SetNodesSessionId(const uint8_t ou8_SessionId, const bool oq_CheckForSession,
+                                       std::set<uint32_t> & orc_DefectNodeIndices) const;
+   std::error_code m_SetNodesSessionId(const std::vector<uint32_t> & orc_ActiveNodes, const uint8_t ou8_SessionId,
+                                       const bool oq_CheckForSession,
+                                       std::set<uint32_t> & orc_DefectNodeIndices) const;
+   std::error_code m_SetNodeSessionIdWithExpectation(const uint32_t ou32_ActiveNode,
+                                                     const uint8_t ou8_ExpectedNeededSession) const;
+   std::error_code m_SetNodeSecurityAccess(const uint32_t ou32_ActiveNode, const uint8_t ou8_SecurityLevel,
+                                           uint8_t * const opu8_NrCode,
+                                           bool * const opq_SecureAuthenticationActive = nullptr,
+                                           bool * const opq_TrafficEncryptionActive = nullptr) const;
+   std::error_code m_SetNodeSecurityAccess(C_OscProtocolDriverOsy * const opc_ExistingProtocol,
+                                           const uint8_t ou8_SecurityLevel, uint8_t * const opu8_NrCode,
+                                           bool * const opq_SecureAuthenticationActive = nullptr,
+                                           bool * const opq_TrafficEncryptionActive = nullptr) const;
+   std::error_code m_SetNodesSecurityAccess(const uint8_t ou8_SecurityLevel,
+                                            std::set<uint32_t> & orc_ErrorActiveNodes) const;
+   std::error_code m_SetNodesSecurityAccess(const std::vector<uint32_t> & orc_ActiveNodes,
+                                            const uint8_t ou8_SecurityLevel,
+                                            std::set<uint32_t> & orc_ErrorActiveNodes) const;
 
-   int32_t m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNode, uint32_t * const opu32_ErrorActiveNodeIndex);
-   int32_t m_StartRouting(const uint32_t ou32_ActiveNode, uint32_t * const opu32_ErrorActiveNodeIndex);
+   std::error_code m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNode, uint32_t * const opu32_ErrorActiveNodeIndex);
+   std::error_code m_StartRouting(const uint32_t ou32_ActiveNode, uint32_t * const opu32_ErrorActiveNodeIndex);
    void m_StopRouting(const uint32_t ou32_ActiveNode);
    void m_StopRoutingOfActiveNodes(void);
-   int32_t m_StopRoutingOfRoutingPoint(const uint32_t ou32_ActiveNode, const uint32_t ou32_ActiveOsyTargetNode,
-                                       const C_OscRoutingRoutePoint & orc_Point, const bool oq_FirstPoint);
+   std::error_code m_StopRoutingOfRoutingPoint(const uint32_t ou32_ActiveNode,
+                                               const uint32_t ou32_ActiveOsyTargetNode,
+                                               const C_OscRoutingRoutePoint & orc_Point, const bool oq_FirstPoint);
 
    //-----------------------------------------------------------------------------
    /*!
@@ -177,10 +186,10 @@ protected:
                   Diagnose protocol is NULL
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t m_StartRoutingSpecific(const uint32_t ou32_ActiveNode, const C_OscNode * const opc_Node,
-                                          const C_OscRoutingRoutePoint & orc_LastNodeOfRouting,
-                                          C_OscProtocolDriverOsy * opc_ProtocolOsyOfLastNodeOfRouting,
-                                          C_OscCanDispatcherOsyRouter ** const oppc_RoutingDispatcher) = 0;
+   virtual std::error_code m_StartRoutingSpecific(const uint32_t ou32_ActiveNode, const C_OscNode * const opc_Node,
+                                                  const C_OscRoutingRoutePoint & orc_LastNodeOfRouting,
+                                                  C_OscProtocolDriverOsy * opc_ProtocolOsyOfLastNodeOfRouting,
+                                                  C_OscCanDispatcherOsyRouter ** const oppc_RoutingDispatcher) = 0;
 
    virtual void m_StopRoutingSpecific(const uint32_t ou32_ActiveNode);
 
@@ -208,16 +217,17 @@ private:
 
    C_OscSecurityPemDatabase * mpc_SecurityPemDb;
 
-   int32_t m_InitRoutesAndActiveNodes(void);
-   int32_t m_InitServerIds(void);
-   int32_t m_InitForCan(void);
-   int32_t m_InitForEthernet(void);
+   std::error_code m_InitRoutesAndActiveNodes(void);
+   std::error_code m_InitServerIds(void);
+   std::error_code m_InitForCan(void);
+   std::error_code m_InitForEthernet(void);
 
-   int32_t m_GetActiveIndexOfIp2IpRouter(const uint32_t ou32_ActiveIndexTarget,
-                                         uint32_t & oru32_ActiveIndexRouterClient,
-                                         uint32_t & oru32_ActiveIndexRouterTarget);
-   int32_t m_GetActiveIndexOfIp2CanRouter(const uint32_t ou32_ActiveIndexTarget, uint32_t & oru32_ActiveIndexRouter);
-   int32_t m_InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle);
+   std::error_code m_GetActiveIndexOfIp2IpRouter(const uint32_t ou32_ActiveIndexTarget,
+                                                 uint32_t & oru32_ActiveIndexRouterClient,
+                                                 uint32_t & oru32_ActiveIndexRouterTarget);
+   std::error_code m_GetActiveIndexOfIp2CanRouter(const uint32_t ou32_ActiveIndexTarget,
+                                                  uint32_t & oru32_ActiveIndexRouter);
+   std::error_code m_InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle);
 
    //Avoid call
    C_OscComDriverProtocol(const C_OscComDriverProtocol &);

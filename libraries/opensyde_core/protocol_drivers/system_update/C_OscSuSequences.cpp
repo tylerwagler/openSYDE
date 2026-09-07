@@ -329,7 +329,8 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(const std::vector<std::string> 
       (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_CHECK_DEVICE_NAME_START, C_NO_ERR, 10U, mc_CurrentNode,
                              "X-checking device name of device against HEX file contents ...");
       //get target device name for comparison with PC-side files:
-      s32_Return = this->mpc_ComDriver->SendOsyReadDeviceName(mc_CurrentNode, c_DeviceName, &u8_NrCode);
+      //boundary: the callee now reports std::error_code
+      s32_Return = this->mpc_ComDriver->SendOsyReadDeviceName(mc_CurrentNode, c_DeviceName, &u8_NrCode).value();
       if (s32_Return != C_NO_ERR)
       {
          (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_CHECK_DEVICE_NAME_COMM_ERROR, s32_Return, 10U,
@@ -422,7 +423,8 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(const std::vector<std::string> 
       if (orq_SetProgrammingMode == true)
       {
          // In the whole update sequence, setting the programming mode only one time
-         s32_Return = this->mpc_ComDriver->SendOsySetProgrammingMode(mc_CurrentNode);
+         //boundary: the callee now reports std::error_code
+         s32_Return = this->mpc_ComDriver->SendOsySetProgrammingMode(mc_CurrentNode).value();
          orq_SetProgrammingMode = false;
       }
       if (s32_Return != C_NO_ERR)
@@ -459,12 +461,13 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(const std::vector<std::string> 
                for (uint16_t u16_Area = 0U; u16_Area < pc_HexDump->at_Blocks.size(); u16_Area++)
                {
                   uint8_t u8_NrCode;
+                  //boundary: the callee now reports std::error_code
                   s32_Return =
                      this->mpc_ComDriver->SendOsyCheckFlashMemoryAvailable(
                         mc_CurrentNode,
                         pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
                         pc_HexDump->at_Blocks[u16_Area].au8_Data.size(),
-                        &u8_NrCode);
+                        &u8_NrCode).value();
                   if (s32_Return != C_NO_ERR)
                   {
                      std::string c_ErrorText;
@@ -605,11 +608,12 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeHex(const stw::hex_file::C_HexDa
          //set a proper timeout
          (void)this->mpc_ComDriver->OsySetPollingTimeout(mc_CurrentNode, ou32_RequestDownloadTimeout);
 
+         //boundary: the callee now reports std::error_code
          s32_Return = this->mpc_ComDriver->SendOsyRequestDownload(
             mc_CurrentNode,
             orc_HexDataDump.at_Blocks[s32_Area].u32_AddressOffset,
             orc_HexDataDump.at_Blocks[s32_Area].au8_Data.size(),
-            u32_MaxBlockLength, &u8_NrCode);
+            u32_MaxBlockLength, &u8_NrCode).value();
 
          if (s32_Return != C_NO_ERR)
          {
@@ -677,8 +681,9 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeHex(const stw::hex_file::C_HexDa
                                                                                                u32_RemainingBytes)],
                             c_Data.size());
 
+               //boundary: the callee now reports std::error_code
                s32_Return = this->mpc_ComDriver->SendOsyTransferData(mc_CurrentNode, u8_BlockSequenceCounter, c_Data,
-                                                                     &u8_NrCode);
+                                                                     &u8_NrCode).value();
                if (s32_Return == C_NO_ERR)
                {
                   u32_RemainingBytes -= static_cast<uint32_t>(c_Data.size());
@@ -727,15 +732,19 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeHex(const stw::hex_file::C_HexDa
             (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_EXIT_FINAL_START, C_NO_ERR,
                                    u8_ProgressPercentage, mc_CurrentNode,
                                    "Finalizing the final area and checking the signature ...");
-            s32_Return = this->mpc_ComDriver->SendOsyRequestTransferExitAddressBased(mc_CurrentNode, true,
-                                                                                     ou32_SignatureAddress, &u8_NrCode);
+            //boundary: the callee now reports std::error_code
+            s32_Return =
+               this->mpc_ComDriver->SendOsyRequestTransferExitAddressBased(mc_CurrentNode, true,
+                                                                           ou32_SignatureAddress,
+                                                                           &u8_NrCode).value();
          }
          else
          {
             (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_EXIT_START, C_NO_ERR,
                                    u8_ProgressPercentage, mc_CurrentNode, "Finalizing the area ...");
+            //boundary: the callee now reports std::error_code
             s32_Return = this->mpc_ComDriver->SendOsyRequestTransferExitAddressBased(mc_CurrentNode, false, 0U,
-                                                                                     &u8_NrCode);
+                                                                                     &u8_NrCode).value();
          }
 
          if (s32_Return != C_NO_ERR)
@@ -820,7 +829,8 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeFile(const std::vector<std::string>
    if (orq_SetProgrammingMode == true)
    {
       // In the whole update sequence, setting the programming mode only one time
-      s32_Return = this->mpc_ComDriver->SendOsySetProgrammingMode(mc_CurrentNode);
+      //boundary: the callee now reports std::error_code
+      s32_Return = this->mpc_ComDriver->SendOsySetProgrammingMode(mc_CurrentNode).value();
       orq_SetProgrammingMode = false;
    }
    if (s32_Return != C_NO_ERR)
@@ -959,9 +969,10 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(const std::string & orc_Fil
          //set a proper timeout
          (void)this->mpc_ComDriver->OsySetPollingTimeout(mc_CurrentNode, ou32_RequestDownloadTimeout);
 
+         //boundary: the callee now reports std::error_code
          s32_Return = this->mpc_ComDriver->SendOsyRequestFileTransfer(
             mc_CurrentNode, TglExtractFileName(orc_FileToFlash), u32_TotalNumberOfBytes, u32_MaxBlockLength,
-            &u8_NrCode);
+            &u8_NrCode).value();
 
          if (s32_Return != C_NO_ERR)
          {
@@ -1055,8 +1066,9 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(const std::string & orc_Fil
             }
             else
             {
+               //boundary: the callee now reports std::error_code
                s32_Return = this->mpc_ComDriver->SendOsyTransferData(mc_CurrentNode, u8_BlockSequenceCounter, c_Data,
-                                                                     &u8_NrCode);
+                                                                     &u8_NrCode).value();
                if (s32_Return == C_NO_ERR)
                {
                   //update continuous CRC:
@@ -1115,8 +1127,10 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(const std::string & orc_Fil
       //finalize transfer CRC:
       u32_TransferCrc ^= 0xFFFFFFFFU;
 
+      //boundary: the callee now reports std::error_code
       s32_Return =
-         this->mpc_ComDriver->SendOsyRequestTransferExitFileBased(mc_CurrentNode, u32_TransferCrc, &u8_NrCode);
+         this->mpc_ComDriver->SendOsyRequestTransferExitFileBased(mc_CurrentNode, u32_TransferCrc,
+                                                                  &u8_NrCode).value();
       if (s32_Return != C_NO_ERR)
       {
          orc_StateOtherFile.e_RequestTransferFileExitSent = eSUSEQ_STATE_ERROR;
@@ -1143,8 +1157,9 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(const std::string & orc_Fil
          {
             //do not overwrite s32_Return; this function shall still fail if finalize failed
             int32_t s32_LocalReturn;
+            //boundary: the callee now reports std::error_code
             s32_LocalReturn = this->mpc_ComDriver->SendOsyRequestFileBasedTransferExitResult(
-               mc_CurrentNode, c_TransferExitResult, &u8_NrCode);
+               mc_CurrentNode, c_TransferExitResult, &u8_NrCode).value();
             if (s32_LocalReturn != C_NO_ERR)
             {
                orc_StateOtherFile.e_RequestTransferFileExitResultSent = eSUSEQ_STATE_ERROR;
@@ -1273,7 +1288,8 @@ int32_t C_OscSuSequences::m_WriteNvmOpenSyde(const std::vector<std::string> & or
          if (oq_SetProgrammingMode == true)
          {
             // In the whole update sequence, setting the programming mode only one time
-            s32_Return = this->mpc_ComDriver->SendOsySetProgrammingMode(mc_CurrentNode);
+            //boundary: the callee now reports std::error_code
+            s32_Return = this->mpc_ComDriver->SendOsySetProgrammingMode(mc_CurrentNode).value();
             // Last step with this security level in this sequence
          }
          if (s32_Return != C_NO_ERR)
@@ -1475,7 +1491,9 @@ int32_t C_OscSuSequences::m_WritePemOpenSydeFile(const std::string & orc_FileToW
                {
                   // In the whole update sequence, setting the programming mode only one time
                   const uint8_t u8_SECURITY_LEVEL = 1U;
-                  s32_Return = this->mpc_ComDriver->SendOsySetProgrammingMode(mc_CurrentNode, &u8_SECURITY_LEVEL);
+                  //boundary: the callee now reports std::error_code
+                  s32_Return =
+                     this->mpc_ComDriver->SendOsySetProgrammingMode(mc_CurrentNode, &u8_SECURITY_LEVEL).value();
                   orq_SetProgrammingMode = false;
                }
                if (s32_Return != C_NO_ERR)
@@ -1499,11 +1517,12 @@ int32_t C_OscSuSequences::m_WritePemOpenSydeFile(const std::string & orc_FileToW
                const std::vector<uint8_t> c_KeySerialNumber = c_PemFile.GetKeyInfo().GetCertificateSerialNumber();
                uint8_t u8_NrCode;
 
+               //boundary: the callee now reports std::error_code
                s32_Return = this->mpc_ComDriver->SendOsyWriteSecurityAuthenticationKey(this->mc_CurrentNode,
                                                                                        c_PubKeyModulus,
                                                                                        c_PubKeyExponent,
                                                                                        c_KeySerialNumber,
-                                                                                       &u8_NrCode);
+                                                                                       &u8_NrCode).value();
 
                if (s32_Return != C_NO_ERR)
                {
@@ -1597,7 +1616,8 @@ int32_t C_OscSuSequences::m_WriteOpenSydeNodeStates(const C_OscSuSequences::C_Do
       if (orq_SetProgrammingMode == true)
       {
          // In the whole update sequence, setting the programming mode only one time
-         s32_Return = this->mpc_ComDriver->SendOsySetProgrammingMode(mc_CurrentNode, &u8_SECURITY_LEVEL);
+         //boundary: the callee now reports std::error_code
+         s32_Return = this->mpc_ComDriver->SendOsySetProgrammingMode(mc_CurrentNode, &u8_SECURITY_LEVEL).value();
          orq_SetProgrammingMode = false;
       }
       if (s32_Return != C_NO_ERR)
@@ -1625,10 +1645,11 @@ int32_t C_OscSuSequences::m_WriteOpenSydeNodeStates(const C_OscSuSequences::C_Do
          {
             uint8_t u8_NrCode;
             // Only RSA 1024 supported at the moment, so 0 for security authentication algorithm
+            //boundary: the callee now reports std::error_code
             s32_Return = this->mpc_ComDriver->SendOsyWriteSecurityAuthenticationActivation(
                this->mc_CurrentNode,
                orc_ApplicationsToWrite.q_SecureAuthenticationEnabled,
-               0U, &u8_NrCode);
+               0U, &u8_NrCode).value();
 
             if (s32_Return == C_NO_ERR)
             {
@@ -1677,10 +1698,11 @@ int32_t C_OscSuSequences::m_WriteOpenSydeNodeStates(const C_OscSuSequences::C_Do
          {
             uint8_t u8_NrCode;
             // Only ECDH/AES supported, so 0 for traffic encryption algorithm
+            //boundary: the callee now reports std::error_code
             s32_Return = this->mpc_ComDriver->SendOsyWriteSecurityTrafficEncryptionActivation(
                this->mc_CurrentNode,
                orc_ApplicationsToWrite.q_TrafficEncryptionEnabled,
-               0U, &u8_NrCode);
+               0U, &u8_NrCode).value();
 
             if (s32_Return == C_NO_ERR)
             {
@@ -1728,9 +1750,10 @@ int32_t C_OscSuSequences::m_WriteOpenSydeNodeStates(const C_OscSuSequences::C_Do
               (orc_ApplicationsToWrite.q_DebuggerEnabled == false)))
          {
             uint8_t u8_NrCode;
+            //boundary: the callee now reports std::error_code
             s32_Return = this->mpc_ComDriver->SendOsyWriteDebuggerEnabled(this->mc_CurrentNode,
                                                                           orc_ApplicationsToWrite.q_DebuggerEnabled,
-                                                                          &u8_NrCode);
+                                                                          &u8_NrCode).value();
 
             if (s32_Return == C_NO_ERR)
             {
@@ -1824,8 +1847,9 @@ int32_t C_OscSuSequences::m_WriteFingerPrintOsy(void)
       c_UserName = "unknown";
    }
 
+   //boundary: the callee now reports std::error_code
    s32_Return = this->mpc_ComDriver->SendOsyWriteApplicationSoftwareFingerprint(mc_CurrentNode, au8_Date, au8_Time,
-                                                                                c_UserName, &u8_NrCode);
+                                                                                c_UserName, &u8_NrCode).value();
    if (s32_Return != C_NO_ERR)
    {
       (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FINGERPRINT_ERROR, s32_Return, 30U, mc_CurrentNode,
@@ -1880,9 +1904,11 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
       // level 1
       (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_SET_SESSION_START, C_NO_ERR, ou8_ProgressToReport, mc_CurrentNode,
                              "Activating PreProgramming session ...");
-      s32_Return = this->mpc_ComDriver->SendOsySetPreProgrammingMode(mc_CurrentNode, false, &u8_NrCode,
-                                                                     &orc_NodeState.q_AuthenticationNecessary,
-                                                                     &orc_NodeState.q_TrafficEncryptionNecessary);
+      //boundary: the callee now reports std::error_code
+      s32_Return =
+         this->mpc_ComDriver->SendOsySetPreProgrammingMode(mc_CurrentNode, false, &u8_NrCode,
+                                                           &orc_NodeState.q_AuthenticationNecessary,
+                                                           &orc_NodeState.q_TrafficEncryptionNecessary).value();
       if (s32_Return != C_NO_ERR)
       {
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_SET_SESSION_ERROR, s32_Return, ou8_ProgressToReport,
@@ -1908,7 +1934,8 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
       //get device name
       (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_DEVICE_NAME_START, C_NO_ERR, ou8_ProgressToReport, mc_CurrentNode,
                              "Reading device name ...");
-      s32_Return = this->mpc_ComDriver->SendOsyReadDeviceName(mc_CurrentNode, c_Info.c_DeviceName, &u8_NrCode);
+      //boundary: the callee now reports std::error_code
+      s32_Return = this->mpc_ComDriver->SendOsyReadDeviceName(mc_CurrentNode, c_Info.c_DeviceName, &u8_NrCode).value();
       if (s32_Return != C_NO_ERR)
       {
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_DEVICE_NAME_ERROR, s32_Return, ou8_ProgressToReport,
@@ -1926,7 +1953,8 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
                              "Reading flash block information ...");
 
       //we need security level 1 for that:
-      s32_Return = this->mpc_ComDriver->SendOsySetSecurityLevel(mc_CurrentNode, 1U, &u8_NrCode);
+      //boundary: the callee now reports std::error_code
+      s32_Return = this->mpc_ComDriver->SendOsySetSecurityLevel(mc_CurrentNode, 1U, &u8_NrCode).value();
       if (s32_Return != C_NO_ERR)
       {
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_SECURITY_ERROR, s32_Return,
@@ -1946,8 +1974,9 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
          if (rc_CurNode.pc_DeviceDefinition->c_SubDevices[rc_CurNode.u32_SubDeviceIndex].
              q_FlashloaderOpenSydeIsFileBased == false)
          {
+            //boundary: the callee now reports std::error_code
             s32_Return = this->mpc_ComDriver->SendOsyReadAllFlashBlockData(mc_CurrentNode, c_Info.c_Applications,
-                                                                           &u8_NrCode);
+                                                                           &u8_NrCode).value();
             if (s32_Return != C_NO_ERR)
             {
                (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_ERROR, s32_Return, ou8_ProgressToReport,
@@ -1968,9 +1997,10 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
    {
       (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASHLOADER_INFO_START, C_NO_ERR, ou8_ProgressToReport,
                              mc_CurrentNode, "Reading even more information ...");
+      //boundary: the callee now reports std::error_code
       s32_Return = this->mpc_ComDriver->SendOsyReadInformationFromFlashloader(mc_CurrentNode,
                                                                               c_Info.c_MoreInformation,
-                                                                              &u8_NrCode);
+                                                                              &u8_NrCode).value();
       if (s32_Return != C_NO_ERR)
       {
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASHLOADER_INFO_ERROR, s32_Return, ou8_ProgressToReport,
@@ -1992,9 +2022,10 @@ int32_t C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t ou8_Prog
       (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASHLOADER_CHECK_DEBUGGER_ACTIVATION_START, C_NO_ERR,
                              ou8_ProgressToReport,
                              mc_CurrentNode, "Reading debugger activation state ...");
+      //boundary: the callee now reports std::error_code
       s32_Return = this->mpc_ComDriver->SendOsyReadDebuggerEnabled(mc_CurrentNode,
                                                                    orc_NodeState.q_DebuggerEnabled,
-                                                                   &u8_NrCode);
+                                                                   &u8_NrCode).value();
 
       if (s32_Return != C_NO_ERR)
       {
@@ -2516,13 +2547,15 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
 
          if (q_IsActive == true)
          {
-            s32_Return = this->mpc_ComDriver->IsRoutingNecessary(u16_Node);
+            //boundary: the callee now reports std::error_code
+            s32_Return = this->mpc_ComDriver->IsRoutingNecessary(u16_Node).value();
 
             // Continue with nodes without routing
             if (s32_Return == C_NOACT)
             {
                (void)e_ProtocolType;
-               s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode);
+               //boundary: the callee now reports std::error_code
+               s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode).value();
 
                if (s32_Return != C_NO_ERR)
                {
@@ -2544,7 +2577,8 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                else
                {
                   // Set the request programming flag to bring the server into flashloader
-                  s32_Return = this->mpc_ComDriver->SendOsyRequestProgramming(mc_CurrentNode);
+                  //boundary: the callee now reports std::error_code
+                  s32_Return = this->mpc_ComDriver->SendOsyRequestProgramming(mc_CurrentNode).value();
 
                   this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
 
@@ -2575,13 +2609,15 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
 
             if (q_IsActive == true)
             {
-               s32_Return = this->mpc_ComDriver->IsRoutingNecessary(u16_Node);
+               //boundary: the callee now reports std::error_code
+               s32_Return = this->mpc_ComDriver->IsRoutingNecessary(u16_Node).value();
 
                // Continue with nodes without routing
                if (s32_Return == C_NOACT)
                {
                   (void)e_ProtocolType;
-                  s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode);
+                  //boundary: the callee now reports std::error_code
+                  s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode).value();
 
                   if (s32_Return != C_NO_ERR)
                   {
@@ -2602,9 +2638,10 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                   }
                   else
                   {
+                     //boundary: the callee now reports std::error_code
                      s32_Return = this->mpc_ComDriver->SendOsyEcuReset(
                         mc_CurrentNode,
-                        C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
+                        C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER).value();
 
                      this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
 
@@ -2648,7 +2685,8 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                if (this->mq_OpenSydeDevicesActive == true)
                {
                   // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast
-                  s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastEnterPreProgrammingSession();
+                  //boundary: the callee now reports std::error_code
+                  s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastEnterPreProgrammingSession().value();
                   if (s32_Return != C_NO_ERR)
                   {
                      (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_BC_ENTER_PRE_PROGRAMMING_ERROR, s32_Return,
@@ -2696,7 +2734,8 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_BC_PING_START, C_NO_ERR, 30U, mc_CurrentNode,
                                       "Checking node state ...");
 
-               s32_Return = this->mpc_ComDriver->IsRoutingNecessary(u16_Node);
+               //boundary: the callee now reports std::error_code
+               s32_Return = this->mpc_ComDriver->IsRoutingNecessary(u16_Node).value();
 
                // Continue with nodes without routing
                if (s32_Return == C_NOACT)
@@ -2704,7 +2743,8 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                   (void)e_ProtocolType;
                   //if connected via Ethernet we need to reconnect as the reset will break the active TCP
                   // connection
-                  s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode);
+                  //boundary: the callee now reports std::error_code
+                  s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode).value();
 
                   if (s32_Return != C_NO_ERR)
                   {
@@ -2725,8 +2765,10 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                      //We want to confirm the device is in flashloader anyway.
                      //So we use this service (it will fail if the node is in the application
                      // as there is no "PreProgramming" session there.
+                     //boundary: the callee now reports std::error_code
                      s32_Return =
-                        this->mpc_ComDriver->SendOsySetPreProgrammingMode(mc_CurrentNode, true, &u8_NrCode);
+                        this->mpc_ComDriver->SendOsySetPreProgrammingMode(mc_CurrentNode, true,
+                                                                          &u8_NrCode).value();
                      if (s32_Return != C_NO_ERR)
                      {
                         (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR, s32_Return, 30U,
@@ -2781,7 +2823,8 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
             C_OscNodeProperties::E_FlashLoaderProtocol e_ProtocolType;
             uint32_t u32_BusIndex;
 
-            if (this->mpc_ComDriver->GetBusIndexOfRoutingNode(u16_Node, u32_BusIndex) == C_NO_ERR)
+            //boundary: the callee now reports std::error_code
+            if (this->mpc_ComDriver->GetBusIndexOfRoutingNode(u16_Node, u32_BusIndex).value() == C_NO_ERR)
             {
                const bool q_IsActive = m_IsNodeActive(u16_Node, u32_BusIndex, e_ProtocolType, mc_CurrentNode);
 
@@ -2799,20 +2842,23 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                      (void)m_ReportProgress(eACTIVATE_FLASHLOADER_ROUTING_START, C_NO_ERR, 40U, mc_CurrentNode,
                                             "Starting routing for node ...");
 
-                     s32_Return = this->mpc_ComDriver->StartRouting(u16_Node, &u32_ErrorIndex);
+                     //boundary: the callee now reports std::error_code
+                     s32_Return = this->mpc_ComDriver->StartRouting(u16_Node, &u32_ErrorIndex).value();
 
                      if (s32_Return == C_NO_ERR)
                      {
                         (void)e_ProtocolType;
                         // Set the request programming flag to bring the server into flashloader
-                        s32_Return = this->mpc_ComDriver->SendOsyRequestProgramming(mc_CurrentNode);
+                        //boundary: the callee now reports std::error_code
+                        s32_Return = this->mpc_ComDriver->SendOsyRequestProgramming(mc_CurrentNode).value();
 
                         // Reset the server
                         if (s32_Return == C_NO_ERR)
                         {
+                           //boundary: the callee now reports std::error_code
                            s32_Return = this->mpc_ComDriver->SendOsyEcuReset(
                               mc_CurrentNode,
-                              C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
+                              C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER).value();
 
                            (void)this->m_DisconnectFromTargetServer();
 
@@ -2847,8 +2893,9 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                            stw::opensyde_core::C_OscProtocolDriverOsyNode c_LastRouter;
 
                            // Check what interface is used of target (not the local bus)
+                           //boundary: the callee now reports std::error_code
                            tgl_assert(this->mpc_ComDriver->GetRoutingTargetInterfaceType(
-                                         u16_Node, e_TargetInterfaceType) == C_NO_ERR);
+                                         u16_Node, e_TargetInterfaceType).value() == C_NO_ERR);
                            if (e_TargetInterfaceType == C_OscSystemBus::eCAN)
                            {
                               e_WaitType = C_OscComDriverFlash::eNO_CHANGES_CAN;
@@ -2858,12 +2905,15 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                               e_WaitType = C_OscComDriverFlash::eNO_CHANGES_ETHERNET;
                            }
 
+                           //boundary: the callee now reports std::error_code
                            tgl_assert(this->GetMinimumFlashloaderResetWaitTime(e_WaitType,
-                                                                               this->mc_CurrentNode,
-                                                                               u32_WaitTime) == C_NO_ERR);
+                                                                              this->mc_CurrentNode,
+                                                                              u32_WaitTime).value() == C_NO_ERR);
 
+                           //boundary: the callee now reports std::error_code
                            tgl_assert(this->mpc_ComDriver->GetServerIdOfLastRouter(u16_Node,
-                                                                                   c_LastRouter) == C_NO_ERR);
+                                                                                  c_LastRouter).value() ==
+                                      C_NO_ERR);
 
                            u32_StartTime = stw::tgl::TglGetTickCount();
                            u32_LastSentTesterPresent = u32_StartTime;
@@ -2881,7 +2931,8 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                               {
                                  // We need TesterPresent to keep the routing connection alive
                                  // Send it to the last routing point
-                                 s32_Return = this->mpc_ComDriver->SendTesterPresent(c_LastRouter);
+                                 //boundary: the callee now reports std::error_code
+                                 s32_Return = this->mpc_ComDriver->SendTesterPresent(c_LastRouter).value();
 
                                  if (s32_Return != C_NO_ERR)
                                  {
@@ -2914,8 +2965,10 @@ int32_t C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstError)
                            //We want to confirm the device is in flashloader anyway.
                            //So we use this service (it will fail if the node is in the application
                            // as there is no "PreProgramming" session there.
+                           //boundary: the callee now reports std::error_code
                            s32_Return =
-                              this->mpc_ComDriver->SendOsySetPreProgrammingMode(mc_CurrentNode, true, &u8_NrCode);
+                              this->mpc_ComDriver->SendOsySetPreProgrammingMode(mc_CurrentNode, true,
+                                                                                &u8_NrCode).value();
 
                            if (s32_Return != C_NO_ERR)
                            {
@@ -3108,7 +3161,8 @@ int32_t C_OscSuSequences::ReadDeviceInformation(const bool oq_FailOnFirstError)
                uint32_t u32_BusIndex;
                bool q_RoutingActivated = false;
 
-               s32_Return = this->mpc_ComDriver->GetBusIndexOfRoutingNode(u16_Node, u32_BusIndex);
+               //boundary: the callee now reports std::error_code
+               s32_Return = this->mpc_ComDriver->GetBusIndexOfRoutingNode(u16_Node, u32_BusIndex).value();
 
                if (s32_Return == C_NOACT)
                {
@@ -3119,7 +3173,8 @@ int32_t C_OscSuSequences::ReadDeviceInformation(const bool oq_FailOnFirstError)
                else if (s32_Return == C_NO_ERR)
                {
                   // Routing necessary
-                  s32_Return = this->mpc_ComDriver->StartRouting(u16_Node);
+                  //boundary: the callee now reports std::error_code
+                  s32_Return = this->mpc_ComDriver->StartRouting(u16_Node).value();
                   q_RoutingActivated = true;
                }
                else
@@ -3496,7 +3551,8 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
             uint32_t u32_BusIndex;
             bool q_RoutingActivated = false;
 
-            s32_Return = this->mpc_ComDriver->GetBusIndexOfRoutingNode(u32_NodeIndex, u32_BusIndex);
+            //boundary: the callee now reports std::error_code
+            s32_Return = this->mpc_ComDriver->GetBusIndexOfRoutingNode(u32_NodeIndex, u32_BusIndex).value();
 
             if (s32_Return == C_NOACT)
             {
@@ -3508,7 +3564,8 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
             {
                uint32_t u32_ErrorIndex = 0U;
                // Routing necessary
-               s32_Return = this->mpc_ComDriver->StartRouting(u32_NodeIndex, &u32_ErrorIndex);
+               //boundary: the callee now reports std::error_code
+               s32_Return = this->mpc_ComDriver->StartRouting(u32_NodeIndex, &u32_ErrorIndex).value();
 
                if (s32_Return != C_NO_ERR)
                {
@@ -3570,8 +3627,9 @@ int32_t C_OscSuSequences::UpdateSystem(const std::vector<C_OscSuSequences::C_DoF
                         if (s32_Return == C_NO_ERR)
                         {
                            //check which protocol features are available
+                           //boundary: the callee now reports std::error_code
                            s32_Return = this->mpc_ComDriver->SendOsyReadListOfFeatures(this->mc_CurrentNode,
-                                                                                       c_AvailableFeatures);
+                                                                                       c_AvailableFeatures).value();
                            if (s32_Return != C_NO_ERR)
                            {
                               (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_READ_FEATURE_ERROR, s32_Return, 10U,
@@ -3749,7 +3807,8 @@ int32_t C_OscSuSequences::ResetSystem(void)
                   uint32_t u32_BusIndex;
                   bool q_RoutingActivated = false;
 
-                  s32_Return = this->mpc_ComDriver->GetBusIndexOfRoutingNode(u32_Node, u32_BusIndex);
+                  //boundary: the callee now reports std::error_code
+                  s32_Return = this->mpc_ComDriver->GetBusIndexOfRoutingNode(u32_Node, u32_BusIndex).value();
 
                   if (s32_Return == C_NOACT)
                   {
@@ -3760,7 +3819,8 @@ int32_t C_OscSuSequences::ResetSystem(void)
                   else if (s32_Return == C_NO_ERR)
                   {
                      // Routing necessary
-                     s32_Return = this->mpc_ComDriver->StartRouting(u32_Node);
+                     //boundary: the callee now reports std::error_code
+                     s32_Return = this->mpc_ComDriver->StartRouting(u32_Node).value();
                      q_RoutingActivated = true;
                   }
                   else
@@ -3780,9 +3840,10 @@ int32_t C_OscSuSequences::ResetSystem(void)
 
                         if (s32_Return == C_NO_ERR)
                         {
+                           //boundary: the callee now reports std::error_code
                            s32_Return = this->mpc_ComDriver->SendOsyEcuReset(
                               mc_CurrentNode,
-                              C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON);
+                              C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON).value();
 
                            (void)this->m_DisconnectFromTargetServer();
                         }
@@ -4028,13 +4089,15 @@ int32_t C_OscSuSequences::m_ReconnectToTargetServer(const bool oq_RestartRouting
                   // Restart routing when the routing is still necessary. Only a problem when using
                   // Ethernet to Ethernet routing a target is connected to Ethernet and not CAN.
                   // The routing connection on the last router server will be dropped by reseting the target server.
-                  s32_Return = this->mpc_ComDriver->StartRouting(ou32_NodeIndex);
+                  //boundary: the callee now reports std::error_code
+                  s32_Return = this->mpc_ComDriver->StartRouting(ou32_NodeIndex).value();
                }
             }
 
             if (s32_Return == C_NO_ERR)
             {
-               s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode);
+               //boundary: the callee now reports std::error_code
+               s32_Return = this->mpc_ComDriver->ReConnectNode(mc_CurrentNode).value();
             }
          }
          break;
@@ -4071,7 +4134,8 @@ int32_t C_OscSuSequences::m_DisconnectFromTargetServer(const bool oq_DisconnectO
          {
             if (this->mc_CurrentNode.u8_BusIdentifier == this->mpc_ComDriver->GetClientId().u8_BusIdentifier)
             {
-               s32_Return = this->mpc_ComDriver->DisconnectNode(mc_CurrentNode);
+               //boundary: the callee now reports std::error_code
+               s32_Return = this->mpc_ComDriver->DisconnectNode(mc_CurrentNode).value();
             }
             else if (oq_DisconnectOnIp2IpRouting == true)
             {

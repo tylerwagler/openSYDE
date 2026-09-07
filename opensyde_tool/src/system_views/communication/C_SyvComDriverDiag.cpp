@@ -19,6 +19,7 @@
 #include <QThread>
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_SyvComDriverDiag.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -166,9 +167,10 @@ int32_t C_SyvComDriverDiag::InitDiag(void)
       // pem folder is optional -> no error handling
       mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
 
+      //boundary: the callee now reports std::error_code
       s32_Return = C_OscComDriverProtocol::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst(),
                                                 u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDispatcher,
-                                                this->mpc_EthernetDispatcher, &this->mc_PemDatabase);
+                                                this->mpc_EthernetDispatcher, &this->mc_PemDatabase).value();
    }
 
    // Get active diag nodes
@@ -290,12 +292,15 @@ int32_t C_SyvComDriverDiag::SetDiagnosticMode(QString & orc_ErrorDetails)
       // Bring all nodes to the same session and security level
       // But check if the server is already in the correct session. The routing init has set some servers
       // to the session already
+      //boundary: the callee now reports std::error_code
       s32_Return = this->m_SetNodesSessionId(this->mc_ActiveDiagNodes,
                                              C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_EXTENDED_DIAGNOSIS, true,
-                                             this->mc_DefectNodeIndices);
+                                             this->mc_DefectNodeIndices).value();
       if (s32_Return == C_NO_ERR)
       {
-         s32_Return = this->m_SetNodesSecurityAccess(this->mc_ActiveDiagNodes, 1U, this->mc_DefectNodeIndices);
+         //boundary: the callee now reports std::error_code
+         s32_Return = this->m_SetNodesSecurityAccess(this->mc_ActiveDiagNodes, 1U,
+                                                     this->mc_DefectNodeIndices).value();
          if (s32_Return != C_NO_ERR)
          {
             osc_write_log_error("Initializing diagnostic protocol", "Could not get security access");
@@ -749,7 +754,8 @@ void C_SyvComDriverDiag::StopCycling(void)
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComDriverDiag::SendTesterPresentToActiveNodes(void)
 {
-   return this->SendTesterPresent(this->mc_ActiveCommunicatingNodes);
+   //boundary: the callee now reports std::error_code
+   return this->SendTesterPresent(this->mc_ActiveCommunicatingNodes).value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1512,16 +1518,17 @@ bool C_SyvComDriverDiag::m_IsRoutingSpecificNecessary(const C_OscNode & orc_Node
    \param[out]  oppc_RoutingDispatcher                The legacy routing dispatcher
 
    \return
-   C_NO_ERR    Specific server necessary and legacy routing dispatcher created
-   C_NOACT     No specific server necessary
-   C_CONFIG    opc_ProtocolOsyOfLastNodeOfRouting is NULL
-               Diagnose protocol is NULL
+   Errc::success    Specific server necessary and legacy routing dispatcher created
+   Errc::noact      No specific server necessary
+   Errc::config     opc_ProtocolOsyOfLastNodeOfRouting is NULL
+                    Diagnose protocol is NULL
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComDriverDiag::m_StartRoutingSpecific(const uint32_t ou32_ActiveNode, const C_OscNode * const opc_Node,
-                                                   const C_OscRoutingRoutePoint & orc_LastNodeOfRouting,
-                                                   C_OscProtocolDriverOsy * const opc_ProtocolOsyOfLastNodeOfRouting,
-                                                   C_OscCanDispatcherOsyRouter ** const oppc_RoutingDispatcher)
+std::error_code C_SyvComDriverDiag::m_StartRoutingSpecific(
+   const uint32_t ou32_ActiveNode, const C_OscNode * const opc_Node,
+   const C_OscRoutingRoutePoint & orc_LastNodeOfRouting,
+   C_OscProtocolDriverOsy * const opc_ProtocolOsyOfLastNodeOfRouting,
+   C_OscCanDispatcherOsyRouter ** const oppc_RoutingDispatcher)
 {
    (void) ou32_ActiveNode;
    (void) opc_Node;
@@ -1529,7 +1536,7 @@ int32_t C_SyvComDriverDiag::m_StartRoutingSpecific(const uint32_t ou32_ActiveNod
    (void) opc_ProtocolOsyOfLastNodeOfRouting;
    (void) oppc_RoutingDispatcher;
 
-   return C_NOACT;
+   return Errc::noact;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1938,7 +1945,8 @@ int32_t C_SyvComDriverDiag::m_StartRoutingDiag(QString & orc_ErrorDetails, std::
    {
       // Get the original active node index
       const uint32_t u32_ActiveNode = this->mc_ActiveDiagNodes[u32_DiagNodeCounter];
-      s32_Return = this->m_StartRoutingIp2Ip(u32_ActiveNode, &u32_ErrorActiveNodeIndex);
+      //boundary: the callee now reports std::error_code
+      s32_Return = this->m_StartRoutingIp2Ip(u32_ActiveNode, &u32_ErrorActiveNodeIndex).value();
 
       if (s32_Return != C_NO_ERR)
       {
@@ -1963,7 +1971,8 @@ int32_t C_SyvComDriverDiag::m_StartRoutingDiag(QString & orc_ErrorDetails, std::
          tgl_assert(pc_Node != nullptr);
          if (pc_Node != nullptr)
          {
-            s32_Return = this->m_StartRouting(u32_ActiveNode, &u32_ErrorActiveNodeIndex);
+            //boundary: the callee now reports std::error_code
+            s32_Return = this->m_StartRouting(u32_ActiveNode, &u32_ErrorActiveNodeIndex).value();
 
             tgl_assert(pc_Node->pc_DeviceDefinition != nullptr);
             // Reconnect is only supported by openSYDE nodes
@@ -1971,7 +1980,8 @@ int32_t C_SyvComDriverDiag::m_StartRoutingDiag(QString & orc_ErrorDetails, std::
                 (s32_Return == C_NO_ERR) &&
                 (this->GetClientId().u8_BusIdentifier == this->mc_ServerIds[u32_ActiveNode].u8_BusIdentifier))
             {
-               s32_Return = this->ReConnectNode(this->mc_ServerIds[u32_ActiveNode]);
+               //boundary: the callee now reports std::error_code
+               s32_Return = this->ReConnectNode(this->mc_ServerIds[u32_ActiveNode]).value();
             }
 
             if (s32_Return != C_NO_ERR)

@@ -1336,8 +1336,9 @@ void C_CamMainWindow::m_OnDatabaseLoadFinished(const int32_t os32_Result)
                {
                   const stw::opensyde_core::C_OscSystemDefinition c_Tmp;
                   stw::opensyde_core::C_OscComMessageLoggerOsySysDefConfig c_SystemDefinition(c_Tmp, 0UL);
+                  //boundary: the callee now reports std::error_code
                   if (pc_MessageMonitor->GetOsySysDef(this->mc_CurrentLoadedFile.toStdString().c_str(),
-                                                      c_SystemDefinition) == C_NO_ERR)
+                                                      c_SystemDefinition).value() == C_NO_ERR)
                   {
                      //Add to currently loaded files
                      C_CamDbHandler::h_GetInstance()->AddOsyFile(this->mc_CurrentLoadedFileOrg, c_SystemDefinition);

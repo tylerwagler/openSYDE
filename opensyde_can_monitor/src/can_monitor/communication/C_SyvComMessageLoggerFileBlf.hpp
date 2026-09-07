@@ -12,6 +12,7 @@
 #define C_SYVCOMMESSAGELOGGERFILEBLF_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 
 #include "C_OscComMessageLoggerFileBase.hpp"
 
@@ -33,7 +34,7 @@ public:
    C_SyvComMessageLoggerFileBlf(const std::string & orc_FilePath = "");
    ~C_SyvComMessageLoggerFileBlf(void) noexcept override;
 
-   int32_t OpenFile(void) override;
+   std::error_code OpenFile(void) override;
    void AddMessageToFile(const stw::opensyde_core::C_OscComMessageLoggerData & orc_MessageData) override;
 
 private:

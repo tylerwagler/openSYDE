@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <list>
+#include <system_error>
 
 #include "stwtypes.hpp"
 #include "stw_can.hpp"
@@ -48,11 +49,11 @@ public:
    C_OscComDriverBase(void);
    virtual ~C_OscComDriverBase(void);
 
-   int32_t InitBase(stw::can::C_CanDispatcher * const opc_CanDispatcher);
+   std::error_code InitBase(stw::can::C_CanDispatcher * const opc_CanDispatcher);
 
    void RegisterLogger(C_OscComMessageLogger * const opc_Logger);
 
-   virtual int32_t StartLogging(const int32_t os32_Bitrate);
+   virtual std::error_code StartLogging(const int32_t os32_Bitrate);
    virtual void StopLogging(void);
 
    virtual void ContinueLogging(void);
@@ -63,7 +64,7 @@ public:
    virtual void ClearRxMessages(void);
    virtual void DistributeMessages(void);
    virtual void SendCanMessageQueued(const stw::can::T_STWCAN_Msg_TX & orc_Msg);
-   int32_t SendCanMessageDirect(stw::can::T_STWCAN_Msg_TX & orc_Msg);
+   std::error_code SendCanMessageDirect(stw::can::T_STWCAN_Msg_TX & orc_Msg);
 
    virtual void SendCanMessage(C_OscComDriverBaseCanMessage & orc_MsgCfg, const bool oq_SetAutoSupportMode,
                                const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType);

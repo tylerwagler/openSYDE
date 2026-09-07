@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <deque>
+#include <system_error>
 #include <QRecursiveMutex>
 
 #include "stw_can.hpp"
@@ -36,7 +37,7 @@ public:
    C_CamComDriverBase(void);
    ~C_CamComDriverBase(void) override;
 
-   int32_t StartLogging(const int32_t os32_Bitrate) override;
+   std::error_code StartLogging(const int32_t os32_Bitrate) override;
    void StopLogging(void) override;
 
    void ContinueLogging(void) override;

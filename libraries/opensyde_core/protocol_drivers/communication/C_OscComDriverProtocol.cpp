@@ -20,8 +20,10 @@
 
 #include <limits>
 #include <iostream>
+#include <system_error>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
 #include "TglUtils.hpp"
 #include "C_OscComDriverProtocol.hpp"
@@ -122,24 +124,25 @@ C_OscComDriverProtocol::~C_OscComDriverProtocol(void)
                                        Needed if nodes with enabled security are used in the system
 
    \return
-   C_NO_ERR      Operation success
-   C_NOACT       No active nodes
-   C_CONFIG      Invalid system definition for parameters
-                 TCP connection failed
-   C_OVERFLOW    Unknown transport protocol or unknown diagnostic server for at least one node
-   C_COM         CAN initialization failed or no route found for at least one node
-   C_CHECKSUM    Internal buffer overflow detected
-   C_DEFAULT     Parameter ou32_ActiveBusIndex invalid
-   C_RANGE       Routing configuration failed
+   Errc::success     Operation success
+   Errc::noact       No active nodes
+   Errc::config      Invalid system definition for parameters
+                     TCP connection failed
+   Errc::overflow    Unknown transport protocol or unknown diagnostic server for at least one node
+   Errc::com         CAN initialization failed or no route found for at least one node
+   Errc::checksum    Internal buffer overflow detected
+   Errc::default_    Parameter ou32_ActiveBusIndex invalid
+   Errc::range       Routing configuration failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::Init(const C_OscSystemDefinition & orc_SystemDefinition,
-                                     const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes,
-                                     C_CanDispatcher * const opc_CanDispatcher,
-                                     C_OscIpDispatcher * const opc_IpDispatcher,
-                                     C_OscSecurityPemDatabase * const opc_SecurityPemDb)
+std::error_code C_OscComDriverProtocol::Init(const C_OscSystemDefinition & orc_SystemDefinition,
+                                             const uint32_t ou32_ActiveBusIndex,
+                                             const std::vector<uint8_t> & orc_ActiveNodes,
+                                             C_CanDispatcher * const opc_CanDispatcher,
+                                             C_OscIpDispatcher * const opc_IpDispatcher,
+                                             C_OscSecurityPemDatabase * const opc_SecurityPemDb)
 {
-   int32_t s32_Retval = C_NOACT;
+   std::error_code c_Retval = Errc::noact;
    uint32_t u32_Counter;
 
    // Check the parameters
@@ -148,22 +151,22 @@ int32_t C_OscComDriverProtocol::Init(const C_OscSystemDefinition & orc_SystemDef
    {
       if (orc_ActiveNodes[u32_Counter] == 1U)
       {
-         s32_Retval = C_NO_ERR;
+         c_Retval = Errc::success;
          break;
       }
    }
 
    if (ou32_ActiveBusIndex >= orc_SystemDefinition.c_Buses.size())
    {
-      s32_Retval = C_DEFAULT;
+      c_Retval = Errc::default_;
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (c_Retval == Errc::success)
    {
-      s32_Retval = this->InitBase(opc_CanDispatcher);
+      c_Retval = this->InitBase(opc_CanDispatcher);
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (c_Retval == Errc::success)
    {
       //clear map with all nodes' traffic encryption configuration
       C_OscProtocolSecuritySubLayer::h_ClearAll();
@@ -176,13 +179,13 @@ int32_t C_OscComDriverProtocol::Init(const C_OscSystemDefinition & orc_SystemDef
       this->mpc_SecurityPemDb = opc_SecurityPemDb;
 
       //No check for connected because error check passed
-      s32_Retval = m_InitRoutesAndActiveNodes();
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = m_InitRoutesAndActiveNodes();
+      if (c_Retval == Errc::success)
       {
          if (this->mu32_ActiveNodeCount > 0)
          {
-            s32_Retval = m_InitServerIds();
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = m_InitServerIds();
+            if (c_Retval == Errc::success)
             {
                //Init client ID
                this->mc_ClientId.u8_NodeIdentifier = mhu8_NODE_ID_CLIENT;
@@ -191,13 +194,13 @@ int32_t C_OscComDriverProtocol::Init(const C_OscSystemDefinition & orc_SystemDef
                switch (orc_SystemDefinition.c_Buses[this->mu32_ActiveBusIndex].e_Type)
                {
                case C_OscSystemBus::eCAN:
-                  s32_Retval = m_InitForCan();
+                  c_Retval = m_InitForCan();
                   break;
                case C_OscSystemBus::eETHERNET:
-                  s32_Retval = m_InitForEthernet();
+                  c_Retval = m_InitForEthernet();
                   break;
                default:
-                  s32_Retval = C_OVERFLOW;
+                  c_Retval = Errc::overflow;
                   break;
                }
             }
@@ -206,18 +209,18 @@ int32_t C_OscComDriverProtocol::Init(const C_OscSystemDefinition & orc_SystemDef
          {
             osc_write_log_info("COMM driver initialization",
                                "Information: no nodes active (or not configured for update or diagnostics)");
-            s32_Retval = C_NOACT;
+            c_Retval = Errc::noact;
          }
       }
       else
       {
          // Routing error
          osc_write_log_error("COMM driver initialization", "Failed: routing initialization error");
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -226,14 +229,14 @@ int32_t C_OscComDriverProtocol::Init(const C_OscSystemDefinition & orc_SystemDef
    \param[in]     opc_SkipNodes     optional pointer to a container with nodes for not sending the tester present
 
    \return
-   C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly.
-   C_COM       Error of service
+   Errc::success    All nodes set to session successfully
+   Errc::config     Init function was not called or not successful or protocol was not initialized properly.
+   Errc::com        Error of service
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::SendTesterPresent(const std::set<uint32_t> * const opc_SkipNodes)
+std::error_code C_OscComDriverProtocol::SendTesterPresent(const std::set<uint32_t> * const opc_SkipNodes)
 {
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
    if (this->mq_Initialized == true)
    {
@@ -249,12 +252,13 @@ int32_t C_OscComDriverProtocol::SendTesterPresent(const std::set<uint32_t> * con
             if (pc_ProtocolOsy != nullptr)
             {
                // Send tester present message without expecting a response
-               s32_Return = pc_ProtocolOsy->OsyTesterPresent(1U);
+               // OsyTesterPresent is C_OscProtocolDriverOsy, still on the STW integer convention
+               c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsyTesterPresent(1U));
 
-               if (s32_Return != C_NO_ERR)
+               if (c_Return != Errc::success)
                {
                   // No response expected. All errors caused by client. We can break here.
-                  s32_Return = C_COM;
+                  c_Return = Errc::com;
                   break;
                }
             }
@@ -262,7 +266,7 @@ int32_t C_OscComDriverProtocol::SendTesterPresent(const std::set<uint32_t> * con
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -271,15 +275,15 @@ int32_t C_OscComDriverProtocol::SendTesterPresent(const std::set<uint32_t> * con
    \param[in]     orc_ServerId     Node to send the tester present
 
    \return
-   C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly.
-   C_COM       Error of service
+   Errc::success    All nodes set to session successfully
+   Errc::config     Init function was not called or not successful or protocol was not initialized properly.
+   Errc::com        Error of service
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::SendTesterPresent(const stw::opensyde_core::C_OscProtocolDriverOsyNode & orc_ServerId)
-const
+std::error_code C_OscComDriverProtocol::SendTesterPresent(
+   const stw::opensyde_core::C_OscProtocolDriverOsyNode & orc_ServerId) const
 {
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
    if (this->mq_Initialized == true)
    {
@@ -287,17 +291,18 @@ const
       if (pc_ProtocolOsy != nullptr)
       {
          // Send tester present message without expecting a response
-         s32_Return = pc_ProtocolOsy->OsyTesterPresent(1U);
+         // OsyTesterPresent is C_OscProtocolDriverOsy, still on the STW integer convention
+         c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsyTesterPresent(1U));
 
-         if (s32_Return != C_NO_ERR)
+         if (c_Return != Errc::success)
          {
             // No response expected. All errors caused by client. We can break here.
-            s32_Return = C_COM;
+            c_Return = Errc::com;
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -306,15 +311,15 @@ const
    \param[in]     orc_ActiveNodes   Active nodes to send the tester present
 
    \return
-   C_NO_ERR    All tester present messages sent successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly.
-   C_COM       Error of service
+   Errc::success    All tester present messages sent successfully
+   Errc::config     Init function was not called or not successful or protocol was not initialized properly.
+   Errc::com        Error of service
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::SendTesterPresent(const std::vector<uint32_t> & orc_ActiveNodes)
+std::error_code C_OscComDriverProtocol::SendTesterPresent(const std::vector<uint32_t> & orc_ActiveNodes)
 const
 {
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
    if (this->mq_Initialized == true)
    {
@@ -329,27 +334,28 @@ const
             if (pc_ProtocolOsy != nullptr)
             {
                // Send tester present message without expecting a response
-               s32_Return = pc_ProtocolOsy->OsyTesterPresent(1U);
+               // OsyTesterPresent is C_OscProtocolDriverOsy, still on the STW integer convention
+               c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsyTesterPresent(1U));
 
-               if (s32_Return != C_NO_ERR)
+               if (c_Return != Errc::success)
                {
                   // No response expected. All errors caused by client. We can break here.
-                  s32_Return = C_COM;
+                  c_Return = Errc::com;
                }
             }
             else
             {
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
             }
          }
          else
          {
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -364,41 +370,42 @@ const
    \param[in]   ou32_NodeIndex         node index to read from
    \param[out]  opu32_ErrorNodeIndex   optional pointer for node index which caused the error on starting routing if
                                        an error occurred
-                                       is set when return value is not C_NO_ERR, C_RANGE and C_CONFIG
+                                       is set when return value is not Errc::success, Errc::range and Errc::config
 
    \return
-   C_NO_ERR   request sent, positive response received
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not send request (e.g. Tx buffer full)
-   C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-   C_WARN     error response
-   C_RD_WR    malformed protocol response
-   C_RANGE    node index out of range
-   C_COM      communication driver reported error
-   C_NOACT    At least one node does not support Ethernet to Ethernet routing
-   C_CHECKSUM Security related error (something went wrong while handshaking with the server)
+   Errc::success     request sent, positive response received
+   Errc::timeout     expected response not received within timeout
+   Errc::noact       could not send request (e.g. Tx buffer full)
+   Errc::config      pre-requisites not correct; e.g. driver not initialized
+   Errc::warn        error response
+   Errc::rd_wr       malformed protocol response
+   Errc::range       node index out of range
+   Errc::com         communication driver reported error
+   Errc::noact       At least one node does not support Ethernet to Ethernet routing
+   Errc::checksum    Security related error (something went wrong while handshaking with the server)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::StartRouting(const uint32_t ou32_NodeIndex, uint32_t * const opu32_ErrorNodeIndex)
+std::error_code C_OscComDriverProtocol::StartRouting(const uint32_t ou32_NodeIndex,
+                                                     uint32_t * const opu32_ErrorNodeIndex)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    const uint32_t u32_ActiveIndex = this->m_GetActiveIndex(ou32_NodeIndex);
 
    if (u32_ActiveIndex >= this->mc_ActiveNodesIndexes.size())
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
-      s32_Return = this->m_StartRoutingIp2Ip(u32_ActiveIndex, opu32_ErrorNodeIndex);
+      c_Return = this->m_StartRoutingIp2Ip(u32_ActiveIndex, opu32_ErrorNodeIndex);
 
-      if (s32_Return == C_NO_ERR)
+      if (c_Return == Errc::success)
       {
-         s32_Return = this->m_StartRouting(u32_ActiveIndex, opu32_ErrorNodeIndex);
+         c_Return = this->m_StartRouting(u32_ActiveIndex, opu32_ErrorNodeIndex);
       }
 
       if ((opu32_ErrorNodeIndex != nullptr) &&
-          (s32_Return != C_NO_ERR))
+          (c_Return != Errc::success))
       {
          // Convert active node index to node index
          tgl_assert(*opu32_ErrorNodeIndex < this->mc_ActiveNodesIndexes.size());
@@ -409,7 +416,7 @@ int32_t C_OscComDriverProtocol::StartRouting(const uint32_t ou32_NodeIndex, uint
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -418,25 +425,25 @@ int32_t C_OscComDriverProtocol::StartRouting(const uint32_t ou32_NodeIndex, uint
    \param[in]   ou32_NodeIndex       node index to read from
 
    \return
-   C_NO_ERR   routing stopped
-   C_RANGE    node index out of range
+   Errc::success    routing stopped
+   Errc::range      node index out of range
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::StopRouting(const uint32_t ou32_NodeIndex)
+std::error_code C_OscComDriverProtocol::StopRouting(const uint32_t ou32_NodeIndex)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    const uint32_t u32_ActiveIndex = this->m_GetActiveIndex(ou32_NodeIndex);
 
    if (u32_ActiveIndex >= this->mc_ActiveNodesIndexes.size())
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
       this->m_StopRouting(u32_ActiveIndex);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -445,14 +452,14 @@ int32_t C_OscComDriverProtocol::StopRouting(const uint32_t ou32_NodeIndex)
    \param[in]   ou32_NodeIndex       node index to read from
 
    \return
-   C_NO_ERR     Routing is necessary for node
-   C_NOACT      Routing is not necessary for node or node is not active
-   C_RANGE      Node index out of range
+   Errc::success    Routing is necessary for node
+   Errc::noact      Routing is not necessary for node or node is not active
+   Errc::range      Node index out of range
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::IsRoutingNecessary(const uint32_t ou32_NodeIndex)
+std::error_code C_OscComDriverProtocol::IsRoutingNecessary(const uint32_t ou32_NodeIndex)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    bool q_Found;
    const uint32_t u32_ActiveIndex = this->m_GetActiveIndex(ou32_NodeIndex, &q_Found);
 
@@ -460,23 +467,23 @@ int32_t C_OscComDriverProtocol::IsRoutingNecessary(const uint32_t ou32_NodeIndex
    {
       if (u32_ActiveIndex >= this->mc_Routes.size())
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
       else if (this->mc_Routes[u32_ActiveIndex].c_VecRoutePoints.size() > 0)
       {
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
       }
       else
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
    else
    {
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -532,14 +539,15 @@ bool C_OscComDriverProtocol::IsEthToEthRoutingNecessary(const uint32_t ou32_Rout
    \param[out]  oru32_BusIndex       bus index
 
    \return
-   C_NO_ERR     Routing is necessary for node
-   C_NOACT      Routing is not necessary for node or node is not active
-   C_RANGE      Node index out of range
+   Errc::success    Routing is necessary for node
+   Errc::noact      Routing is not necessary for node or node is not active
+   Errc::range      Node index out of range
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::GetBusIndexOfRoutingNode(const uint32_t ou32_NodeIndex, uint32_t & oru32_BusIndex)
+std::error_code C_OscComDriverProtocol::GetBusIndexOfRoutingNode(const uint32_t ou32_NodeIndex,
+                                                                 uint32_t & oru32_BusIndex)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    bool q_Found;
    const uint32_t u32_ActiveIndex = this->m_GetActiveIndex(ou32_NodeIndex, &q_Found);
 
@@ -547,11 +555,11 @@ int32_t C_OscComDriverProtocol::GetBusIndexOfRoutingNode(const uint32_t ou32_Nod
    {
       if (u32_ActiveIndex >= this->mc_Routes.size())
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
       else if (this->mc_Routes[u32_ActiveIndex].c_VecRoutePoints.size() > 0)
       {
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
          // Get the bus index on the target server
          oru32_BusIndex = this->mc_Routes[u32_ActiveIndex].c_VecRoutePoints[this->mc_Routes[u32_ActiveIndex].
                                                                             c_VecRoutePoints.size() -
@@ -559,15 +567,15 @@ int32_t C_OscComDriverProtocol::GetBusIndexOfRoutingNode(const uint32_t ou32_Nod
       }
       else
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
    else
    {
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -651,20 +659,20 @@ void C_OscComDriverProtocol::GetRouteOfNode(const uint32_t ou32_NodeIndex, C_Osc
    \param[in]   ou32_NodeIndex         Node index to get info from
    \param[out]  ore_InterfaceType      Used interface type of target node on its route
 
-   \retval   C_NO_ERR   Detailed description of 1st return value
-   \retval   C_RANGE    Node index out of range
-   \retval   C_CONFIG   Route of node is not valid
+   \retval   Errc::success    Detailed description of 1st return value
+   \retval   Errc::range      Node index out of range
+   \retval   Errc::config     Route of node is not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::GetRoutingTargetInterfaceType(const uint32_t ou32_NodeIndex,
-                                                              C_OscSystemBus::E_Type & ore_InterfaceType) const
+std::error_code C_OscComDriverProtocol::GetRoutingTargetInterfaceType(const uint32_t ou32_NodeIndex,
+                                                                      C_OscSystemBus::E_Type & ore_InterfaceType) const
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    const uint32_t u32_ActiveIndex = this->m_GetActiveIndex(ou32_NodeIndex);
 
    if (u32_ActiveIndex >= this->mc_ActiveNodesIndexes.size())
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -676,15 +684,15 @@ int32_t C_OscComDriverProtocol::GetRoutingTargetInterfaceType(const uint32_t ou3
          // connected to the target
          ore_InterfaceType = rc_ActRoute.c_VecRoutePoints[rc_ActRoute.c_VecRoutePoints.size() - 1].e_OutInterfaceType;
 
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
       }
       else
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -693,20 +701,20 @@ int32_t C_OscComDriverProtocol::GetRoutingTargetInterfaceType(const uint32_t ou3
    \param[in]   ou32_NodeIndex         Node index of target of route
    \param[out]  orc_RouterServerId     Router server Id of last router on route to target ou32_NodeIndex
 
-   \retval   C_NO_ERR   Detailed description of 1st return value
-   \retval   C_RANGE    Node index out of range
-   \retval   C_CONFIG   Route of node is not valid or has no route points
+   \retval   Errc::success    Detailed description of 1st return value
+   \retval   Errc::range      Node index out of range
+   \retval   Errc::config     Route of node is not valid or has no route points
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::GetServerIdOfLastRouter(const uint32_t ou32_NodeIndex,
-                                                        C_OscProtocolDriverOsyNode & orc_RouterServerId) const
+std::error_code C_OscComDriverProtocol::GetServerIdOfLastRouter(const uint32_t ou32_NodeIndex,
+                                                                C_OscProtocolDriverOsyNode & orc_RouterServerId) const
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    const uint32_t u32_ActiveIndex = this->m_GetActiveIndex(ou32_NodeIndex);
 
    if (u32_ActiveIndex >= this->mc_ActiveNodesIndexes.size())
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -720,15 +728,15 @@ int32_t C_OscComDriverProtocol::GetServerIdOfLastRouter(const uint32_t ou32_Node
 
          orc_RouterServerId = this->mc_ServerIds[this->m_GetActiveIndex(u32_RouterNodeIndex)];
 
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
       }
       else
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -831,15 +839,16 @@ bool C_OscComDriverProtocol::IsInitialized(void) const
    \param[in]  orc_ServerId   node to re-connect to
 
    \return
-   C_NO_ERR   re-connected
-   C_BUSY     could not re-connect to node
-   C_RANGE    node not found or no openSYDE protocol installed
-   C_CONFIG   no transport protocol installed
+   Errc::success    re-connected
+   Errc::busy       could not re-connect to node
+   Errc::range      node not found or no openSYDE protocol installed
+   Errc::config     no transport protocol installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::ReConnectNode(const stw::opensyde_core::C_OscProtocolDriverOsyNode & orc_ServerId) const
+std::error_code C_OscComDriverProtocol::ReConnectNode(
+   const stw::opensyde_core::C_OscProtocolDriverOsyNode & orc_ServerId) const
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
    bool q_Found;
    const uint32_t u32_ActiveNodeIndex = this->m_GetActiveIndex(orc_ServerId, q_Found);
 
@@ -848,10 +857,11 @@ int32_t C_OscComDriverProtocol::ReConnectNode(const stw::opensyde_core::C_OscPro
       C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNodeIndex];
       if (pc_ProtocolOsy != nullptr)
       {
-         s32_Return = pc_ProtocolOsy->ReConnect();
+         // ReConnect is C_OscProtocolDriverOsy, still on the STW integer convention
+         c_Return = make_error_code_from_stw(pc_ProtocolOsy->ReConnect());
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -860,14 +870,14 @@ int32_t C_OscComDriverProtocol::ReConnectNode(const stw::opensyde_core::C_OscPro
    \param[in]  orc_ServerId   node to disconnect from
 
    \return
-   C_NO_ERR   disconnected
-   C_NOACT    could not re-connect to node
-   C_RANGE    node not found or no openSYDE protocol installed
+   Errc::success    disconnected
+   Errc::noact      could not re-connect to node
+   Errc::range      node not found or no openSYDE protocol installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::DisconnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const
+std::error_code C_OscComDriverProtocol::DisconnectNode(const C_OscProtocolDriverOsyNode & orc_ServerId) const
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
    bool q_Found;
    const uint32_t u32_ActiveNodeIndex = this->m_GetActiveIndex(orc_ServerId, q_Found);
 
@@ -876,10 +886,11 @@ int32_t C_OscComDriverProtocol::DisconnectNode(const C_OscProtocolDriverOsyNode 
       C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[u32_ActiveNodeIndex];
       if (pc_ProtocolOsy != nullptr)
       {
-         s32_Return = pc_ProtocolOsy->Disconnect();
+         // Disconnect is C_OscProtocolDriverOsy, still on the STW integer convention
+         c_Return = make_error_code_from_stw(pc_ProtocolOsy->Disconnect());
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1141,31 +1152,32 @@ std::string C_OscComDriverProtocol::m_GetActiveNodeName(const uint32_t ou32_Acti
    \param[out]    opu8_NrCode           if != NULL: negative response code
 
    \return
-   C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly.
-   C_NOACT     Nodes has no openSYDE protocol
-   C_COM       Communication problem
-   C_WARN      Error response received
-   C_TIMEOUT   Expected response not received within timeout
+   Errc::success    All nodes set to session successfully
+   Errc::config     Init function was not called or not successful or protocol was not initialized properly.
+   Errc::noact      Nodes has no openSYDE protocol
+   Errc::com        Communication problem
+   Errc::warn       Error response received
+   Errc::timeout    Expected response not received within timeout
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_SetNodeSessionId(const uint32_t ou32_ActiveNode, const uint8_t ou8_SessionId,
-                                                   const bool oq_CheckForSession, uint8_t * const opu8_NrCode) const
+std::error_code C_OscComDriverProtocol::m_SetNodeSessionId(const uint32_t ou32_ActiveNode, const uint8_t ou8_SessionId,
+                                                           const bool oq_CheckForSession,
+                                                           uint8_t * const opu8_NrCode) const
 {
    C_OscProtocolDriverOsy * pc_ProtocolOsy = nullptr;
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (ou32_ActiveNode < this->mc_OsyProtocols.size())
    {
       pc_ProtocolOsy = this->mc_OsyProtocols[ou32_ActiveNode];
-      s32_Return = this->m_SetNodeSessionId(pc_ProtocolOsy, ou8_SessionId, oq_CheckForSession, opu8_NrCode);
+      c_Return = this->m_SetNodeSessionId(pc_ProtocolOsy, ou8_SessionId, oq_CheckForSession, opu8_NrCode);
    }
    else
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1178,19 +1190,19 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionId(const uint32_t ou32_ActiveNod
    \param[out]    opu8_NrCode           if != NULL: negative response code
 
    \return
-   C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly.
-   C_NOACT     Nodes has no openSYDE protocol
-   C_COM       Communication problem
-   C_WARN      Error response received
-   C_TIMEOUT   Expected response not received within timeout
+   Errc::success    All nodes set to session successfully
+   Errc::config     Init function was not called or not successful or protocol was not initialized properly.
+   Errc::noact      Nodes has no openSYDE protocol
+   Errc::com        Communication problem
+   Errc::warn       Error response received
+   Errc::timeout    Expected response not received within timeout
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_SetNodeSessionId(C_OscProtocolDriverOsy * const opc_ExistingProtocol,
-                                                   const uint8_t ou8_SessionId, const bool oq_CheckForSession,
-                                                   uint8_t * const opu8_NrCode) const
+std::error_code C_OscComDriverProtocol::m_SetNodeSessionId(C_OscProtocolDriverOsy * const opc_ExistingProtocol,
+                                                           const uint8_t ou8_SessionId, const bool oq_CheckForSession,
+                                                           uint8_t * const opu8_NrCode) const
 {
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
    if (this->mq_Initialized == true)
    {
@@ -1203,9 +1215,11 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionId(C_OscProtocolDriverOsy * cons
             uint8_t u8_CurrentSession;
 
             // Get the current session
-            s32_Return = opc_ExistingProtocol->OsyReadActiveDiagnosticSession(u8_CurrentSession, opu8_NrCode);
+            // OsyReadActiveDiagnosticSession is C_OscProtocolDriverOsy, still on the STW integer convention
+            c_Return = make_error_code_from_stw(
+               opc_ExistingProtocol->OsyReadActiveDiagnosticSession(u8_CurrentSession, opu8_NrCode));
 
-            if (s32_Return == C_NO_ERR)
+            if (c_Return == Errc::success)
             {
                if (u8_CurrentSession == ou8_SessionId)
                {
@@ -1213,10 +1227,10 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionId(C_OscProtocolDriverOsy * cons
                   q_SetNewSession = false;
                }
             }
-            else if ((s32_Return != C_TIMEOUT) && (s32_Return != C_WARN))
+            else if ((c_Return != Errc::timeout) && (c_Return != Errc::warn))
             {
-               // Do not change the C_TIMEOUT error
-               s32_Return = C_COM;
+               // Do not change the Errc::timeout error
+               c_Return = Errc::com;
             }
             else
             {
@@ -1225,38 +1239,40 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionId(C_OscProtocolDriverOsy * cons
          }
          else
          {
-            s32_Return = C_NO_ERR;
+            c_Return = Errc::success;
          }
 
-         if (s32_Return == C_NO_ERR)
+         if (c_Return == Errc::success)
          {
             if (q_SetNewSession == true)
             {
                // Set the session
-               s32_Return = opc_ExistingProtocol->OsyDiagnosticSessionControl(ou8_SessionId, opu8_NrCode);
+               // OsyDiagnosticSessionControl is C_OscProtocolDriverOsy, still on the STW integer convention
+               c_Return = make_error_code_from_stw(
+                  opc_ExistingProtocol->OsyDiagnosticSessionControl(ou8_SessionId, opu8_NrCode));
 
-               if ((s32_Return != C_NO_ERR) &&
-                   (s32_Return != C_TIMEOUT) &&
-                   (s32_Return != C_WARN))
+               if ((c_Return != Errc::success) &&
+                   (c_Return != Errc::timeout) &&
+                   (c_Return != Errc::warn))
                {
-                  // Do not change the C_TIMEOUT error
-                  s32_Return = C_COM;
+                  // Do not change the Errc::timeout error
+                  c_Return = Errc::com;
                }
             }
             else
             {
                // No change necessary
-               s32_Return = C_NO_ERR;
+               c_Return = Errc::success;
             }
          }
       }
       else
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1270,15 +1286,16 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionId(C_OscProtocolDriverOsy * cons
    Nodes with previous errors registered in orc_DefectNodeIndices will be skipped
 
    \return
-   C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly.
-   C_COM       Error of service
-   C_TIMEOUT   Expected response not received within timeout
+   Errc::success    All nodes set to session successfully
+   Errc::config     Init function was not called or not successful or protocol was not initialized properly.
+   Errc::com        Error of service
+   Errc::timeout    Expected response not received within timeout
                or at least one node was registered in orc_DefectNodeIndices
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_SetNodesSessionId(const uint8_t ou8_SessionId, const bool oq_CheckForSession,
-                                                    std::set<uint32_t> & orc_DefectNodeIndices) const
+std::error_code C_OscComDriverProtocol::m_SetNodesSessionId(const uint8_t ou8_SessionId,
+                                                            const bool oq_CheckForSession,
+                                                            std::set<uint32_t> & orc_DefectNodeIndices) const
 {
    std::vector<uint32_t> c_AllActiveNodes;
    uint32_t u32_Counter;
@@ -1305,18 +1322,19 @@ int32_t C_OscComDriverProtocol::m_SetNodesSessionId(const uint8_t ou8_SessionId,
    Nodes with previous errors registered in orc_DefectNodeIndices will be skipped
 
    \return
-   C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly.
-   C_COM       Error of service
-   C_TIMEOUT   Expected response not received within timeout
+   Errc::success    All nodes set to session successfully
+   Errc::config     Init function was not called or not successful or protocol was not initialized properly.
+   Errc::com        Error of service
+   Errc::timeout    Expected response not received within timeout
                or at least one node was registered in orc_DefectNodeIndices
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_SetNodesSessionId(const std::vector<uint32_t> & orc_ActiveNodes,
-                                                    const uint8_t ou8_SessionId, const bool oq_CheckForSession,
-                                                    std::set<uint32_t> & orc_DefectNodeIndices) const
+std::error_code C_OscComDriverProtocol::m_SetNodesSessionId(const std::vector<uint32_t> & orc_ActiveNodes,
+                                                            const uint8_t ou8_SessionId,
+                                                            const bool oq_CheckForSession,
+                                                            std::set<uint32_t> & orc_DefectNodeIndices) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (this->mq_Initialized == true)
    {
@@ -1329,19 +1347,19 @@ int32_t C_OscComDriverProtocol::m_SetNodesSessionId(const std::vector<uint32_t> 
          // Further communication is only necessary if the node was ok in the first place
          if (orc_DefectNodeIndices.find(u32_ActiveNode) == orc_DefectNodeIndices.end())
          {
-            const int32_t s32_Return =
+            const std::error_code c_Return =
                this->m_SetNodeSessionId(u32_ActiveNode, ou8_SessionId, oq_CheckForSession, nullptr);
 
-            if ((s32_Return != C_NO_ERR) && (s32_Return != C_NOACT))
+            if ((c_Return != Errc::success) && (c_Return != Errc::noact))
             {
-               // Do not change the C_TIMEOUT error
-               if ((s32_Return != C_TIMEOUT) && (s32_Return != C_WARN))
+               // Do not change the Errc::timeout error
+               if ((c_Return != Errc::timeout) && (c_Return != Errc::warn))
                {
-                  s32_Retval = C_COM;
+                  c_Retval = Errc::com;
                }
                else
                {
-                  s32_Retval = s32_Return;
+                  c_Retval = c_Return;
                }
                orc_DefectNodeIndices.insert(u32_ActiveNode);
             }
@@ -1349,22 +1367,22 @@ int32_t C_OscComDriverProtocol::m_SetNodesSessionId(const std::vector<uint32_t> 
          else
          {
             // It was a previous error. Only in case of a previous timeout it would be continued to here
-            s32_Retval = C_TIMEOUT;
+            c_Retval = Errc::timeout;
          }
       }
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   if (s32_Retval == C_NOACT)
+   if (c_Retval == Errc::noact)
    {
       // A server with no openSYDE protocol is no error
-      s32_Retval = C_NO_ERR;
+      c_Retval = Errc::success;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1380,19 +1398,19 @@ int32_t C_OscComDriverProtocol::m_SetNodesSessionId(const std::vector<uint32_t> 
                                               - hu8_DIAGNOSTIC_SESSION_EXTENDED_DIAGNOSIS
 
    \return
-   C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly.
-   C_COM       Error of service
-   C_TIMEOUT   Expected response not received within timeout
+   Errc::success    All nodes set to session successfully
+   Errc::config     Init function was not called or not successful or protocol was not initialized properly.
+   Errc::com        Error of service
+   Errc::timeout    Expected response not received within timeout
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_SetNodeSessionIdWithExpectation(const uint32_t ou32_ActiveNode,
-                                                                  const uint8_t ou8_ExpectedNeededSession) const
+std::error_code C_OscComDriverProtocol::m_SetNodeSessionIdWithExpectation(
+   const uint32_t ou32_ActiveNode, const uint8_t ou8_ExpectedNeededSession) const
 {
    // We need a new session
-   int32_t s32_Return = this->m_SetNodeSessionId(ou32_ActiveNode, ou8_ExpectedNeededSession, true, nullptr);
+   std::error_code c_Return = this->m_SetNodeSessionId(ou32_ActiveNode, ou8_ExpectedNeededSession, true, nullptr);
 
-   if (s32_Return == C_WARN)
+   if (c_Return == Errc::warn)
    {
       uint8_t u8_NewExpectedNeededSession;
 
@@ -1410,10 +1428,10 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionIdWithExpectation(const uint32_t
       // Special case: It is possible, that the routing node is not in the
       // server or in the flashloader as expected. It returns an error that it does not support the
       // session. Try the other possibility.
-      s32_Return = this->m_SetNodeSessionId(ou32_ActiveNode, u8_NewExpectedNeededSession, false, nullptr);
+      c_Return = this->m_SetNodeSessionId(ou32_ActiveNode, u8_NewExpectedNeededSession, false, nullptr);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1426,28 +1444,29 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionIdWithExpectation(const uint32_t
    \param[out]  opq_TrafficEncryptionActive     if != NULL: true: traffic encryption required by server
 
    \return
-   C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly or
+   Errc::success     All nodes set to session successfully
+   Errc::config      Init function was not called or not successful or protocol was not initialized properly or
                PEM database was needed but not set.
-   C_NOACT     Nodes has no openSYDE protocol
-   C_COM       Communication problem
-   C_WARN      Error response
-   C_TIMEOUT   Expected response not received within timeout
-   C_CHECKSUM  Security related error (something went wrong while handshaking with the server)
+   Errc::noact       Nodes has no openSYDE protocol
+   Errc::com         Communication problem
+   Errc::warn        Error response
+   Errc::timeout     Expected response not received within timeout
+   Errc::checksum    Security related error (something went wrong while handshaking with the server)
                Detailed error codes are logged with opu8_NrCode
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(const uint32_t ou32_ActiveNode, const uint8_t ou8_SecurityLevel,
-                                                        uint8_t * const opu8_NrCode,
-                                                        bool * const opq_SecureAuthenticationActive,
-                                                        bool * const opq_TrafficEncryptionActive) const
+std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(const uint32_t ou32_ActiveNode,
+                                                                const uint8_t ou8_SecurityLevel,
+                                                                uint8_t * const opu8_NrCode,
+                                                                bool * const opq_SecureAuthenticationActive,
+                                                                bool * const opq_TrafficEncryptionActive) const
 {
    C_OscProtocolDriverOsy * const pc_ProtocolOsy = this->mc_OsyProtocols[ou32_ActiveNode];
-   const int32_t s32_Return = this->m_SetNodeSecurityAccess(pc_ProtocolOsy, ou8_SecurityLevel, opu8_NrCode,
-                                                            opq_SecureAuthenticationActive,
-                                                            opq_TrafficEncryptionActive);
+   const std::error_code c_Return = this->m_SetNodeSecurityAccess(pc_ProtocolOsy, ou8_SecurityLevel, opu8_NrCode,
+                                                                  opq_SecureAuthenticationActive,
+                                                                  opq_TrafficEncryptionActive);
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1465,24 +1484,25 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(const uint32_t ou32_Acti
 
 
    \return
-   C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly or
+   Errc::success     All nodes set to session successfully
+   Errc::config      Init function was not called or not successful or protocol was not initialized properly or
                PEM database was needed but not set.
-   C_NOACT     Nodes has no openSYDE protocol
-   C_COM       Communication problem
-   C_WARN      Error response
-   C_TIMEOUT   Expected response not received within timeout
-   C_CHECKSUM  Security related error
+   Errc::noact       Nodes has no openSYDE protocol
+   Errc::com         Communication problem
+   Errc::warn        Error response
+   Errc::timeout     Expected response not received within timeout
+   Errc::checksum    Security related error
                (something went wrong while handshaking with the server or when handling encryption parameters)
                Detailed error codes are logged with opu8_NrCode
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy * const opc_ExistingProtocol,
-                                                        const uint8_t ou8_SecurityLevel, uint8_t * const opu8_NrCode,
-                                                        bool * const opq_SecureAuthenticationActive,
-                                                        bool * const opq_TrafficEncryptionActive) const
+std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy * const opc_ExistingProtocol,
+                                                                const uint8_t ou8_SecurityLevel,
+                                                                uint8_t * const opu8_NrCode,
+                                                                bool * const opq_SecureAuthenticationActive,
+                                                                bool * const opq_TrafficEncryptionActive) const
 {
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
    if (this->mq_Initialized == true)
    {
@@ -1500,18 +1520,20 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
          tgl_assert(opc_ExistingProtocol->pc_SecuritySubLayer != nullptr);
          opc_ExistingProtocol->pc_SecuritySubLayer->SetEncryptionIsActive(false);
 
-         s32_Return = opc_ExistingProtocol->OsySecurityAccessRequestSeed(ou8_SecurityLevel, q_SecureMode, u64_Seed,
-                                                                         q_SecureAuthenticationActive,
-                                                                         q_TrafficEncryptionActive,
-                                                                         c_TrafficEncryptionInitVector,
-                                                                         &u8_NrErrorCode);
+         // OsySecurityAccessRequestSeed is C_OscProtocolDriverOsy, still on the STW integer convention
+         c_Return = make_error_code_from_stw(
+            opc_ExistingProtocol->OsySecurityAccessRequestSeed(ou8_SecurityLevel, q_SecureMode, u64_Seed,
+                                                               q_SecureAuthenticationActive,
+                                                               q_TrafficEncryptionActive,
+                                                               c_TrafficEncryptionInitVector,
+                                                               &u8_NrErrorCode));
 
          if (opu8_NrCode != nullptr)
          {
             (*opu8_NrCode) = u8_NrErrorCode;
          }
 
-         if ((s32_Return == C_WARN) &&
+         if ((c_Return == Errc::warn) &&
              (u8_NrErrorCode == C_OscProtocolDriverOsy::hu8_NR_CODE_REQUIRED_TIME_DELAY_NOT_EXPIRED))
          {
             // Special case: The server must wait for a second to allow a request after a reset.
@@ -1522,14 +1544,15 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
 
             stw::tgl::TglSleep(1000);
 
-            s32_Return = opc_ExistingProtocol->OsySecurityAccessRequestSeed(ou8_SecurityLevel, q_SecureMode, u64_Seed,
-                                                                            q_SecureAuthenticationActive,
-                                                                            q_TrafficEncryptionActive,
-                                                                            c_TrafficEncryptionInitVector,
-                                                                            opu8_NrCode);
+            c_Return = make_error_code_from_stw(
+               opc_ExistingProtocol->OsySecurityAccessRequestSeed(ou8_SecurityLevel, q_SecureMode, u64_Seed,
+                                                                  q_SecureAuthenticationActive,
+                                                                  q_TrafficEncryptionActive,
+                                                                  c_TrafficEncryptionInitVector,
+                                                                  opu8_NrCode));
          }
 
-         if (s32_Return == C_NO_ERR)
+         if (c_Return == Errc::success)
          {
             if (q_SecureAuthenticationActive == false)
             {
@@ -1538,7 +1561,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                {
                   osc_write_log_error("Security Access",
                                       "Unexpected secure mode: disabled. For level 7 secure authentication mode should always be enabled. (No need to use level 7 without secure mode)");
-                  s32_Return = C_CHECKSUM;
+                  c_Return = Errc::checksum;
                }
                // Seed should be a fixed value:
                if (u64_Seed != 42U)
@@ -1554,7 +1577,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
             }
          }
 
-         if (s32_Return == C_NO_ERR)
+         if (c_Return == Errc::success)
          {
             //set up SendKey request data depending on security options:
             //hard-coded authentication key for non-secure operation:
@@ -1566,8 +1589,10 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
             if (q_SecureMode == false)
             {
                //none of the security options are active: use simple variant:
-               s32_Return = opc_ExistingProtocol->OsySecurityAccessSendKey(ou8_SecurityLevel, u32_THE_NON_SECURE_KEY,
-                                                                           opu8_NrCode);
+               // OsySecurityAccessSendKey is C_OscProtocolDriverOsy, still on the STW integer convention
+               c_Return = make_error_code_from_stw(
+                  opc_ExistingProtocol->OsySecurityAccessSendKey(ou8_SecurityLevel, u32_THE_NON_SECURE_KEY,
+                                                                 opu8_NrCode));
             }
             else
             {
@@ -1586,10 +1611,13 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                      {
                         //we need the server's certificate snr to look up the correct key
                         std::vector<uint8_t> c_CertSnr;
-                        s32_Return = opc_ExistingProtocol->OsyReadAuthenticationCertificateSerialNumber(c_CertSnr,
-                                                                                                        opu8_NrCode);
+                        // OsyReadAuthenticationCertificateSerialNumber is C_OscProtocolDriverOsy, still on the STW
+                        // integer convention
+                        c_Return = make_error_code_from_stw(
+                           opc_ExistingProtocol->OsyReadAuthenticationCertificateSerialNumber(c_CertSnr,
+                                                                                              opu8_NrCode));
 
-                        if (s32_Return == C_NO_ERR)
+                        if (c_Return == Errc::success)
                         {
                            //get PEM file by serial number from database
                            pc_PemKeyInfo = this->mpc_SecurityPemDb->GetPemFileBySerialNumber(c_CertSnr);
@@ -1616,18 +1644,17 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                         c_PrivKey = pc_PemKeyInfo->GetPrivateKey();
 
                         //calculate RSA signature with private key and random value from server (u64_Seed)
-                        //C_OscSecurityRsa reports std::error_code; this driver still reports int32_t
-                        s32_Return =
-                           C_OscSecurityRsa::h_SignSignature(c_PrivKey, c_RandomValue,
-                                                             c_AuthenticationSignature).value();
+                        c_Return =
+                           C_OscSecurityRsa::h_SignSignature(c_PrivKey, c_RandomValue, c_AuthenticationSignature);
 
-                        if ((s32_Return != C_NO_ERR) || (c_AuthenticationSignature.size() != 128U))
+                        if ((c_Return != Errc::success) || (c_AuthenticationSignature.size() != 128U))
                         {
                            std::string c_Tmp;
                            c_Tmp = PrintFormattedCompat("Error on calculating RSA signature: %d; signature size: %d",
-                                                s32_Return, static_cast<int32_t>(c_AuthenticationSignature.size()));
+                                                c_Return.value(),
+                                                static_cast<int32_t>(c_AuthenticationSignature.size()));
                            osc_write_log_error("Security Access", c_Tmp.c_str());
-                           s32_Return = C_CHECKSUM;
+                           c_Return = Errc::checksum;
                         }
                      }
                      else
@@ -1640,71 +1667,73 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                         {
                            osc_write_log_error("Security Access", "No PEM file found for received serial number.");
                         }
-                        s32_Return = C_CHECKSUM;
+                        c_Return = Errc::checksum;
                      }
                   }
                   else
                   {
                      osc_write_log_error("Security Access", "PEM database not initialized.");
-                     s32_Return = C_CONFIG;
+                     c_Return = Errc::config;
                   }
                }
 
-               if ((s32_Return == C_NO_ERR) && (q_TrafficEncryptionActive == true))
+               if ((c_Return == Errc::success) && (q_TrafficEncryptionActive == true))
                {
                   //get own public key; we need to sent it to the server
-                  s32_Return = opc_ExistingProtocol->pc_SecuritySubLayer->GetEcdhPublicKey(
-                     c_TrafficEncryptionPublicClientKey).value();
-                  if (s32_Return != C_NO_ERR)
+                  c_Return = opc_ExistingProtocol->pc_SecuritySubLayer->GetEcdhPublicKey(
+                     c_TrafficEncryptionPublicClientKey);
+                  if (c_Return != Errc::success)
                   {
                      osc_write_log_error("Security Access",
                                          "Traffic encryption requested by server. Could not get own ECDH public key.");
-                     s32_Return = C_CHECKSUM;
+                     c_Return = Errc::checksum;
                   }
                }
 
                //perform the actual service call
-               if (s32_Return == C_NO_ERR)
+               if (c_Return == Errc::success)
                {
                   //send composed data to server
-                  s32_Return = opc_ExistingProtocol->OsySecurityAccessSendKey(
-                     ou8_SecurityLevel,
-                     c_AuthenticationSignature,
-                     u32_THE_NON_SECURE_KEY,
-                     c_TrafficEncryptionPublicClientKey,
-                     c_TrafficEncryptionPublicServerKey,
-                     opu8_NrCode);
+                  // OsySecurityAccessSendKey is C_OscProtocolDriverOsy, still on the STW integer convention
+                  c_Return = make_error_code_from_stw(
+                     opc_ExistingProtocol->OsySecurityAccessSendKey(
+                        ou8_SecurityLevel,
+                        c_AuthenticationSignature,
+                        u32_THE_NON_SECURE_KEY,
+                        c_TrafficEncryptionPublicClientKey,
+                        c_TrafficEncryptionPublicServerKey,
+                        opu8_NrCode));
 
-                  if (s32_Return != C_NO_ERR)
+                  if (c_Return != Errc::success)
                   {
                      std::string c_Tmp;
-                     c_Tmp = PrintFormattedCompat("Error performing SecurityAccess service: %d", s32_Return);
+                     c_Tmp = PrintFormattedCompat("Error performing SecurityAccess service: %d", c_Return.value());
                      osc_write_log_error("Security Access", c_Tmp.c_str());
-                     s32_Return = C_CHECKSUM;
+                     c_Return = Errc::checksum;
                   }
                }
 
                //if encryption is on: feed server's public key and init vector to encryption engine
-               if ((s32_Return == C_NO_ERR) && (q_TrafficEncryptionActive == true))
+               if ((c_Return == Errc::success) && (q_TrafficEncryptionActive == true))
                {
                   C_OscProtocolSecuritySubLayer & rc_Ssl = (*opc_ExistingProtocol->pc_SecuritySubLayer);
 
-                  s32_Return = rc_Ssl.SetAesInitVector(c_TrafficEncryptionInitVector).value();
-                  if (s32_Return != C_NO_ERR)
+                  c_Return = rc_Ssl.SetAesInitVector(c_TrafficEncryptionInitVector);
+                  if (c_Return != Errc::success)
                   {
                      //this should not happen in real life: the only known reason would be an invalid size
                      // which should be detected by the protocol driver already.
                      osc_write_log_error("Security Access",
                                          "Traffic encryption: Could not store received aes init vector.");
-                     s32_Return = C_CHECKSUM;
+                     c_Return = Errc::checksum;
                   }
                   else
                   {
-                     s32_Return = rc_Ssl.DeriveAesKey(c_TrafficEncryptionPublicServerKey).value();
-                     if (s32_Return != C_NO_ERR)
+                     c_Return = rc_Ssl.DeriveAesKey(c_TrafficEncryptionPublicServerKey);
+                     if (c_Return != Errc::success)
                      {
                         osc_write_log_error("Security Access", "Traffic encryption: Could not derive AES key.");
-                        s32_Return = C_CHECKSUM;
+                        c_Return = Errc::checksum;
                      }
                      else
                      {
@@ -1716,13 +1745,13 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
             }
          }
 
-         if ((s32_Return != C_NO_ERR) &&
-             (s32_Return != C_TIMEOUT) &&
-             (s32_Return != C_WARN) &&
-             (s32_Return != C_CONFIG) &&
-             (s32_Return != C_CHECKSUM)) //security related error
+         if ((c_Return != Errc::success) &&
+             (c_Return != Errc::timeout) &&
+             (c_Return != Errc::warn) &&
+             (c_Return != Errc::config) &&
+             (c_Return != Errc::checksum)) //security related error
          {
-            s32_Return = C_COM;
+            c_Return = Errc::com;
          }
          if (opq_SecureAuthenticationActive != nullptr)
          {
@@ -1735,11 +1764,11 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
       }
       else
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1749,16 +1778,16 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
    \param[out]    orc_ErrorActiveNodes  All active node indexes of nodes which can not be reached
 
    \return
-   C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly.
-   C_COM       Error of service
-   C_TIMEOUT   Expected response not received within timeout
-   C_CHECKSUM  Security related error (something went wrong while handshaking with the server)
+   Errc::success     All nodes set to session successfully
+   Errc::config      Init function was not called or not successful or protocol was not initialized properly.
+   Errc::com         Error of service
+   Errc::timeout     Expected response not received within timeout
+   Errc::checksum    Security related error (something went wrong while handshaking with the server)
                Detailed error codes are logged with opu8_NrCode
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_SetNodesSecurityAccess(const uint8_t ou8_SecurityLevel,
-                                                         std::set<uint32_t> & orc_ErrorActiveNodes) const
+std::error_code C_OscComDriverProtocol::m_SetNodesSecurityAccess(const uint8_t ou8_SecurityLevel,
+                                                                 std::set<uint32_t> & orc_ErrorActiveNodes) const
 {
    std::vector<uint32_t> c_AllActiveNodes;
    uint32_t u32_Counter;
@@ -1781,57 +1810,57 @@ int32_t C_OscComDriverProtocol::m_SetNodesSecurityAccess(const uint8_t ou8_Secur
    \param[out] orc_ErrorActiveNodes     All active node indexes of nodes which can not be reached
 
    \return
-   C_NO_ERR    All nodes set to session successfully
-   C_CONFIG    Init function was not called or not successful or protocol was not initialized properly.
-   C_COM       Error of service
-   C_TIMEOUT   Expected response not received within timeout
-   C_CHECKSUM  Security related error (something went wrong while handshaking with the server)
+   Errc::success     All nodes set to session successfully
+   Errc::config      Init function was not called or not successful or protocol was not initialized properly.
+   Errc::com         Error of service
+   Errc::timeout     Expected response not received within timeout
+   Errc::checksum    Security related error (something went wrong while handshaking with the server)
                Detailed error codes are logged with opu8_NrCode
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_SetNodesSecurityAccess(const std::vector<uint32_t> & orc_ActiveNodes,
-                                                         const uint8_t ou8_SecurityLevel,
-                                                         std::set<uint32_t> & orc_ErrorActiveNodes) const
+std::error_code C_OscComDriverProtocol::m_SetNodesSecurityAccess(const std::vector<uint32_t> & orc_ActiveNodes,
+                                                                 const uint8_t ou8_SecurityLevel,
+                                                                 std::set<uint32_t> & orc_ErrorActiveNodes) const
 {
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
    if (this->mq_Initialized == true)
    {
       uint32_t u32_Counter;
 
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
 
       for (u32_Counter = 0U; u32_Counter < orc_ActiveNodes.size(); ++u32_Counter)
       {
          const uint32_t u32_ActiveNode = orc_ActiveNodes[u32_Counter];
-         s32_Return = this->m_SetNodeSecurityAccess(u32_ActiveNode, ou8_SecurityLevel, nullptr);
+         c_Return = this->m_SetNodeSecurityAccess(u32_ActiveNode, ou8_SecurityLevel, nullptr);
 
-         if ((s32_Return != C_NO_ERR) &&
-             (s32_Return != C_NOACT))
+         if ((c_Return != Errc::success) &&
+             (c_Return != Errc::noact))
          {
             //Store invalid node
             if (u32_ActiveNode < this->mc_ActiveNodesIndexes.size())
             {
                orc_ErrorActiveNodes.insert(this->mc_ActiveNodesIndexes[u32_ActiveNode]);
             }
-            // Do not change the C_TIMEOUT and C_CHECKSUM error
-            if ((s32_Return != C_TIMEOUT) &&
-                (s32_Return != C_CHECKSUM))
+            // Do not change the Errc::timeout and Errc::checksum error
+            if ((c_Return != Errc::timeout) &&
+                (c_Return != Errc::checksum))
             {
-               s32_Return = C_COM;
+               c_Return = Errc::com;
             }
             break;
          }
       }
    }
 
-   if (s32_Return == C_NOACT)
+   if (c_Return == Errc::noact)
    {
       // A server with no openSYDE protocol is no error
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1848,21 +1877,21 @@ int32_t C_OscComDriverProtocol::m_SetNodesSecurityAccess(const std::vector<uint3
                                               routing if an error occurred
 
    \return
-   C_NO_ERR    IP to IP routing started
+   Errc::success    IP to IP routing started
                No IP to IP routing necessary
-   C_CONFIG    Pre-requisites not correct; e.g. driver not initialized
-   C_WARN      Error response
-   C_BUSY      Connection to at least one server failed
-   C_COM       Communication problem
-   C_TIMEOUT   Expected response not received within timeout
-   C_RD_WR     Unexpected content in response
-   C_NOACT     At least one node does not support Ethernet to Ethernet routing
+   Errc::config     Pre-requisites not correct; e.g. driver not initialized
+   Errc::warn       Error response
+   Errc::busy       Connection to at least one server failed
+   Errc::com        Communication problem
+   Errc::timeout    Expected response not received within timeout
+   Errc::rd_wr      Unexpected content in response
+   Errc::noact      At least one node does not support Ethernet to Ethernet routing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNode,
-                                                    uint32_t * const opu32_ErrorActiveNodeIndex)
+std::error_code C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNode,
+                                                            uint32_t * const opu32_ErrorActiveNodeIndex)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    bool q_Started = false;
 
    const C_OscRoutingRoute & rc_ActRoute = this->mc_Routes[ou32_ActiveNode];
@@ -1954,7 +1983,7 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
 
                         if (q_Found == false)
                         {
-                           s32_Return = C_CONFIG;
+                           c_Return = Errc::config;
                         }
                      }
                      else
@@ -1965,44 +1994,46 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
                   }
                   else
                   {
-                     s32_Return = C_CONFIG;
+                     c_Return = Errc::config;
                   }
 
-                  if (s32_Return == C_NO_ERR)
+                  if (c_Return == Errc::success)
                   {
                      // Do not disconnect after. The connection is necessary to hold the routing alive.
-                     s32_Return = pc_ProtocolOsy->ReConnect();
+                     // C_OscProtocolDriverOsy is still on the STW integer convention
+                     c_Return = make_error_code_from_stw(pc_ProtocolOsy->ReConnect());
                   }
 
                   // Check if node supports IP to IP routing
-                  if (s32_Return == C_NO_ERR)
+                  if (c_Return == Errc::success)
                   {
                      C_OscProtocolDriverOsy::C_ListOfFeatures c_Features;
-                     s32_Return = pc_ProtocolOsy->OsyReadListOfFeatures(c_Features);
+                     // C_OscProtocolDriverOsy is still on the STW integer convention
+                     c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsyReadListOfFeatures(c_Features));
 
-                     if (s32_Return == C_NO_ERR)
+                     if (c_Return == Errc::success)
                      {
                         if (c_Features.q_EthernetToEthernetRoutingSupported == false)
                         {
                            // Node is not capable for Ethernet to Ethernet routing
-                           s32_Return = C_NOACT;
+                           c_Return = Errc::noact;
                         }
                      }
                   }
 
-                  if (s32_Return == C_NO_ERR)
+                  if (c_Return == Errc::success)
                   {
-                     s32_Return =
+                     c_Return =
                         this->m_SetNodeSessionIdWithExpectation(u32_OsyRoutingTarget, this->m_GetRoutingSessionId());
                   }
 
-                  if (s32_Return == C_NO_ERR)
+                  if (c_Return == Errc::success)
                   {
                      // We need an other security level
-                     s32_Return = this->m_SetNodeSecurityAccess(u32_OsyRoutingTarget, 5, nullptr);
+                     c_Return = this->m_SetNodeSecurityAccess(u32_OsyRoutingTarget, 5, nullptr);
                   }
 
-                  if (s32_Return == C_NO_ERR)
+                  if (c_Return == Errc::success)
                   {
                      // Get the Bus IDs
                      if ((rc_RoutePoint.u32_InBusIndex < this->mpc_SysDef->c_Buses.size()) &&
@@ -2014,40 +2045,43 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
                            this->mpc_SysDef->c_Buses[rc_RoutePoint.u32_OutBusIndex].u8_BusId;
 
                         // Configuration of the routing to the next Ethernet node
-                        s32_Return = pc_ProtocolOsy->OsySetRouteIp2IpCommunication(
-                           static_cast<uint8_t>(rc_RoutePoint.e_OutInterfaceType),
-                           rc_RoutePoint.u8_OutInterfaceNumber,
-                           u8_SourceBusId,
-                           u8_TargetBusId,
-                           this->mc_ServerIpAddresses[u32_NextEthernetNode].au8_IpAddress);
+                        // C_OscProtocolDriverOsy is still on the STW integer convention
+                        c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsySetRouteIp2IpCommunication(
+                                                               static_cast<uint8_t>(rc_RoutePoint.e_OutInterfaceType),
+                                                               rc_RoutePoint.u8_OutInterfaceNumber,
+                                                               u8_SourceBusId,
+                                                               u8_TargetBusId,
+                                                               this->mc_ServerIpAddresses[u32_NextEthernetNode].
+                                                               au8_IpAddress));
                      }
                      else
                      {
-                        s32_Return = C_CONFIG;
+                        c_Return = Errc::config;
                      }
                   }
 
                   // Poll for success
-                  if (s32_Return == C_NO_ERR)
+                  if (c_Return == Errc::success)
                   {
                      const uint32_t u32_StartTime = TglGetTickCount();
 
                      do
                      {
                         uint8_t u8_Status;
-                        s32_Return = pc_ProtocolOsy->OsyCheckRouteIp2IpCommunication(u8_Status);
+                        // C_OscProtocolDriverOsy is still on the STW integer convention
+                        c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsyCheckRouteIp2IpCommunication(u8_Status));
 
-                        if ((s32_Return != C_NO_ERR) ||
+                        if ((c_Return != Errc::success) ||
                             (u8_Status >= C_OscProtocolDriverOsy::hu8_OSY_IP_2_IP_STATUS_ERROR))
                         {
                            // Finished or error
                            q_Started = true;
 
-                           if ((s32_Return == C_NO_ERR) &&
+                           if ((c_Return == Errc::success) &&
                                (u8_Status == C_OscProtocolDriverOsy::hu8_OSY_IP_2_IP_STATUS_ERROR))
                            {
                               // Error of service
-                              s32_Return = C_WARN;
+                              c_Return = Errc::warn;
                               // If this service will not be finished without error, the router node is available
                               // and the target of the next point is not reachable
                               q_NextOneError = true;
@@ -2061,7 +2095,7 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
                         else
                         {
                            // No error and not finished yet, set timeout in case of loop abort condition
-                           s32_Return = C_TIMEOUT;
+                           c_Return = Errc::timeout;
                            // If this service will not be finished in its time, the router node is available and
                            // the target of the next point is not reachable
                            q_NextOneError = true;
@@ -2073,7 +2107,7 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
                      while (TglGetTickCount() < (u32_StartTime + 1000U));
                   }
 
-                  if ((s32_Return != C_NO_ERR) && (opu32_ErrorActiveNodeIndex != nullptr))
+                  if ((c_Return != Errc::success) && (opu32_ErrorActiveNodeIndex != nullptr))
                   {
                      if (q_NextOneError == false)
                      {
@@ -2098,11 +2132,11 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
       }
       else
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
 
-   if ((s32_Return == C_NO_ERR) &&
+   if ((c_Return == Errc::success) &&
        (q_Started == true))
    {
       osc_write_log_info("Start IP to IP Routing",
@@ -2111,19 +2145,19 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
                          " over " + std::to_string(this->mc_Routes[ou32_ActiveNode].c_VecRoutePoints.size()) +
                          " routing points started.");
    }
-   else if (s32_Return != C_NO_ERR)
+   else if (c_Return != Errc::success)
    {
       osc_write_log_error("Start IP to IP Routing",
                           "Error on starting IP to IP routing to node " + std::to_string(
                              this->mc_ActiveNodesIndexes[ou32_ActiveNode]) + " with error " +
-                          C_OscLoggingHandler::h_StwError(s32_Return));
+                          C_OscLoggingHandler::h_StwError(c_Return.value()));
    }
    else
    {
       // Nothing to do
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2151,26 +2185,26 @@ int32_t C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNo
                                               routing if an error occurred
 
    \return
-   C_NO_ERR   request sent, positive response received or no routing necessary
-   C_TIMEOUT  expected response not received within timeout
-   C_NOACT    could not send request (e.g. Tx buffer full)
-   C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-   C_WARN     error response
-   C_RD_WR    malformed protocol response
-   C_RANGE    node index out of range
-   C_COM      communication driver reported error
-   C_CHECKSUM Security related error (something went wrong while handshaking with the server)
+   Errc::success     request sent, positive response received or no routing necessary
+   Errc::timeout     expected response not received within timeout
+   Errc::noact       could not send request (e.g. Tx buffer full)
+   Errc::config      pre-requisites not correct; e.g. driver not initialized
+   Errc::warn        error response
+   Errc::rd_wr       malformed protocol response
+   Errc::range       node index out of range
+   Errc::com         communication driver reported error
+   Errc::checksum    Security related error (something went wrong while handshaking with the server)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
-                                               uint32_t * const opu32_ErrorActiveNodeIndex)
+std::error_code C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
+                                                       uint32_t * const opu32_ErrorActiveNodeIndex)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    bool q_TrafficEnryptionLegacyRoutingError = false;
 
    if (this->mc_Routes[ou32_ActiveNode].c_VecRoutePoints.size() > 0)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
       // Routing is necessary
 
       if (this->mpc_SysDef != nullptr)
@@ -2190,11 +2224,11 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
             bool q_EthernetRouter = false;
             uint32_t u32_ActiveOsyTargetNode = ou32_ActiveNode;
 
-            s32_Return = this->m_StartRoutingSpecific(ou32_ActiveNode, pc_Node, c_LastNodeOfRouting,
+            c_Return = this->m_StartRoutingSpecific(ou32_ActiveNode, pc_Node, c_LastNodeOfRouting,
                                                       pc_ProtocolOsyOfLastNodeOfRouting,
                                                       &pc_RoutingDispatcher);
 
-            if (s32_Return == C_NO_ERR)
+            if (c_Return == Errc::success)
             {
                // Specific protocol necessary. Routing dispatcher necessary.
                u32_ActiveOsyTargetNode = u32_ActiveLastNode;
@@ -2208,10 +2242,10 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                   c_ActRoute.c_VecRoutePoints.resize(c_ActRoute.c_VecRoutePoints.size() - 1);
                }
             }
-            else if (s32_Return == C_NOACT)
+            else if (c_Return == Errc::noact)
             {
                // No error. No specific protocol necessary. We need only openSYDE protocol.
-               s32_Return = C_NO_ERR;
+               c_Return = Errc::success;
                pc_ProtocolOsyOfLastNodeOfRouting = nullptr;
                q_OsyRouting = true;
             }
@@ -2221,7 +2255,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
             }
 
             // Start the routing
-            if ((s32_Return == C_NO_ERR) &&
+            if ((c_Return == Errc::success) &&
                 (q_OsyRouting == true))
             {
                // Setup and start openSYDE routing configuration
@@ -2256,23 +2290,24 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                         {
                            // We have to reconnect to the server in case of Ethernet
                            // But only if IP to IP routing did not connected already.
-                           s32_Return = pc_ProtocolOsyTarget->ReConnect();
+                           // C_OscProtocolDriverOsy is still on the STW integer convention
+                           c_Return = make_error_code_from_stw(pc_ProtocolOsyTarget->ReConnect());
                         }
 
-                        if (s32_Return == C_NO_ERR)
+                        if (c_Return == Errc::success)
                         {
                            // We need a new session
-                           s32_Return = this->m_SetNodeSessionIdWithExpectation(u32_ActiveOsyTargetNode,
+                           c_Return = this->m_SetNodeSessionIdWithExpectation(u32_ActiveOsyTargetNode,
                                                                                 this->m_GetRoutingSessionId());
                         }
 
-                        if (s32_Return == C_NO_ERR)
+                        if (c_Return == Errc::success)
                         {
                            // We need an other security level
-                           s32_Return = this->m_SetNodeSecurityAccess(u32_ActiveOsyTargetNode, 5, nullptr);
+                           c_Return = this->m_SetNodeSecurityAccess(u32_ActiveOsyTargetNode, 5, nullptr);
                         }
 
-                        if (s32_Return == C_NO_ERR)
+                        if (c_Return == Errc::success)
                         {
                            uint32_t u32_CounterTargetPoint;
                            for (u32_CounterTargetPoint = u32_CounterRoutePoints;
@@ -2292,27 +2327,29 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                                     this->mpc_SysDef->c_Buses[rc_PointTarget.u32_OutBusIndex].u8_BusId;
 
                                  // Configure the real node for each layer
-                                 s32_Return = pc_ProtocolOsyTarget->OsySetRouteDiagnosisCommunication(
-                                    static_cast<uint8_t>(rc_Point.e_InInterfaceType),
-                                    rc_Point.u8_InInterfaceNumber,
-                                    static_cast<uint8_t>(rc_Point.e_OutInterfaceType),
-                                    rc_Point.u8_OutInterfaceNumber,
-                                    u8_SourceBusId,
-                                    u8_TargetBusId);
+                                 // C_OscProtocolDriverOsy is still on the STW integer convention
+                                 c_Return = make_error_code_from_stw(
+                                    pc_ProtocolOsyTarget->OsySetRouteDiagnosisCommunication(
+                                       static_cast<uint8_t>(rc_Point.e_InInterfaceType),
+                                       rc_Point.u8_InInterfaceNumber,
+                                       static_cast<uint8_t>(rc_Point.e_OutInterfaceType),
+                                       rc_Point.u8_OutInterfaceNumber,
+                                       u8_SourceBusId,
+                                       u8_TargetBusId));
                               }
                               else
                               {
-                                 s32_Return = C_CONFIG;
+                                 c_Return = Errc::config;
                               }
 
-                              if (s32_Return != C_NO_ERR)
+                              if (c_Return != Errc::success)
                               {
                                  break;
                               }
                            }
                         }
 
-                        if ((s32_Return != C_NO_ERR) && (opu32_ErrorActiveNodeIndex != nullptr))
+                        if ((c_Return != Errc::success) && (opu32_ErrorActiveNodeIndex != nullptr))
                         {
                            *opu32_ErrorActiveNodeIndex = u32_ActiveRouterNode;
                         }
@@ -2326,7 +2363,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                      }
                      else
                      {
-                        s32_Return = C_CONFIG;
+                        c_Return = Errc::config;
                      }
                   }
                   else
@@ -2334,7 +2371,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                      q_EthernetRouter = true;
                   }
 
-                  if (s32_Return != C_NO_ERR)
+                  if (c_Return != Errc::success)
                   {
                      break;
                   }
@@ -2344,7 +2381,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
             // Init of the legacy routing
             if ((pc_RoutingDispatcher != nullptr) &&
                 (pc_ProtocolOsyOfLastNodeOfRouting != nullptr) &&
-                (s32_Return == C_NO_ERR))
+                (c_Return == Errc::success))
             {
                // Special case: No openSYDE routing, but legacy routing.
                // In case of Ethernet the connection to the legacy routing server must be established.
@@ -2357,29 +2394,31 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                   if ((pc_ProtocolOsyRouter != nullptr) &&
                       (q_EthernetRouter == false))
                   {
-                     s32_Return = pc_ProtocolOsyRouter->ReConnect();
+                     // C_OscProtocolDriverOsy is still on the STW integer convention
+                     c_Return = make_error_code_from_stw(pc_ProtocolOsyRouter->ReConnect());
                   }
                }
 
-               if (s32_Return == C_NO_ERR)
+               if (c_Return == Errc::success)
                {
                   // Use the index for the the routing dispatcher
                   // We need a new session
-                  s32_Return =
+                  c_Return =
                      this->m_SetNodeSessionIdWithExpectation(u32_ActiveLastNode, this->m_GetRoutingSessionId());
 
-                  if (s32_Return == C_NO_ERR)
+                  if (c_Return == Errc::success)
                   {
                      // We need an other security level
-                     s32_Return = this->m_SetNodeSecurityAccess(u32_ActiveLastNode, 5, nullptr);
+                     c_Return = this->m_SetNodeSecurityAccess(u32_ActiveLastNode, 5, nullptr);
                   }
 
-                  if (s32_Return == C_NO_ERR)
+                  if (c_Return == Errc::success)
                   {
                      // Start legacy routing
-                     s32_Return = pc_RoutingDispatcher->CAN_Init();
+                     // C_OscCanDispatcherOsyRouter is still on the STW integer convention (CAN dispatcher wave)
+                     c_Return = make_error_code_from_stw(pc_RoutingDispatcher->CAN_Init());
 
-                     if ((s32_Return == C_WARN) &&
+                     if ((c_Return == Errc::warn) &&
                          (pc_RoutingDispatcher->GetNrCodeOfCanInit() ==
                           C_OscProtocolDriverOsy::hu8_NR_SECURE_DATA_TRANSMISSION_NOT_ALLOWED))
                      {
@@ -2390,13 +2429,13 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                   }
                }
 
-               if ((s32_Return != C_NO_ERR) && (opu32_ErrorActiveNodeIndex != nullptr))
+               if ((c_Return != Errc::success) && (opu32_ErrorActiveNodeIndex != nullptr))
                {
                   *opu32_ErrorActiveNodeIndex = u32_ActiveLastNode;
                }
             }
 
-            if (s32_Return == C_NO_ERR)
+            if (c_Return == Errc::success)
             {
                const std::map<uint32_t,
                               uint32_t>::const_iterator c_ItRouterNode = this->mc_ActiveNodeIp2CanDispatcher.find(
@@ -2412,7 +2451,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
                   }
                   else
                   {
-                     s32_Return = C_CONFIG;
+                     c_Return = Errc::config;
                   }
                }
 
@@ -2423,7 +2462,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
       osc_write_log_info("Start Routing",
                          "Routing to node " + std::to_string(this->mc_ActiveNodesIndexes[ou32_ActiveNode]) +
@@ -2435,7 +2474,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
       osc_write_log_error("Start Routing",
                           "Error on starting routing to node " + std::to_string(
                              this->mc_ActiveNodesIndexes[ou32_ActiveNode]) + " with error " +
-                          C_OscLoggingHandler::h_StwError(s32_Return));
+                          C_OscLoggingHandler::h_StwError(c_Return.value()));
 
       if (q_TrafficEnryptionLegacyRoutingError == true)
       {
@@ -2455,7 +2494,7 @@ int32_t C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_ActiveNode,
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2508,7 +2547,7 @@ void C_OscComDriverProtocol::m_StopRouting(const uint32_t ou32_ActiveNode)
             // Stop the routing from behind
             if (this->m_StopRoutingOfRoutingPoint(ou32_ActiveNode, u32_ActiveOsyTargetNode,
                                                   rc_ActRoute.c_VecRoutePoints[s32_CounterRoutePoints],
-                                                  (s32_CounterRoutePoints == 0)) != C_NO_ERR)
+                                                  (s32_CounterRoutePoints == 0)) != Errc::success)
             {
                break;
             }
@@ -2616,7 +2655,7 @@ void C_OscComDriverProtocol::m_StopRoutingOfActiveNodes(void)
                {
                   if (this->m_StopRoutingOfRoutingPoint(u32_ActiveNode, c_ActiveOsyTargetNodes[u32_ActiveNode],
                                                         rc_ActRoute.c_VecRoutePoints[s32_RouteHopCounter],
-                                                        (s32_RouteHopCounter == 0)) != C_NO_ERR)
+                                                        (s32_RouteHopCounter == 0)) != Errc::success)
                   {
                      // No further stopping of routing necessary for this node
                      c_ActiveOsyTargetNodes[u32_ActiveNode] = -1;
@@ -2640,18 +2679,18 @@ void C_OscComDriverProtocol::m_StopRoutingOfActiveNodes(void)
    \param[in]   oq_FirstPoint              flag if point is the first point in the route
 
    \return
-   C_NO_ERR    Routing for point deactivated
-   C_NOACT     Routing for point deactivated and no further stopping necessary for this node
-   C_COM       communication driver reported error
-   C_CHECKSUM  Security related error (something went wrong while handshaking with the server)
+   Errc::success     Routing for point deactivated
+   Errc::noact       Routing for point deactivated and no further stopping necessary for this node
+   Errc::com         communication driver reported error
+   Errc::checksum    Security related error (something went wrong while handshaking with the server)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32_t ou32_ActiveNode,
-                                                            const uint32_t ou32_ActiveOsyTargetNode,
-                                                            const C_OscRoutingRoutePoint & orc_Point,
-                                                            const bool oq_FirstPoint)
+std::error_code C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32_t ou32_ActiveNode,
+                                                                    const uint32_t ou32_ActiveOsyTargetNode,
+                                                                    const C_OscRoutingRoutePoint & orc_Point,
+                                                                    const bool oq_FirstPoint)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    // Using the same connection for configuring the router and the final openSYDE target
    C_OscProtocolDriverOsy * const pc_ProtocolOsyTarget =
@@ -2664,7 +2703,7 @@ int32_t C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32_t ou32_
       if (orc_Point.e_OutInterfaceType == C_OscSystemBus::eCAN)
       {
          const uint32_t u32_CurrentNode = this->m_GetActiveIndex(orc_Point.u32_NodeIndex);
-         int32_t s32_Retval;
+         std::error_code c_Retval;
 
          // Clear all queues. In case of CAN tp the change causes that more than one queue receives
          // service responses
@@ -2675,18 +2714,19 @@ int32_t C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32_t ou32_
                                                   this->mc_ServerIds[u32_CurrentNode]);
 
          // We need an other security level
-         s32_Retval = this->m_SetNodeSecurityAccess(ou32_ActiveOsyTargetNode, 5, nullptr);
+         c_Retval = this->m_SetNodeSecurityAccess(ou32_ActiveOsyTargetNode, 5, nullptr);
 
-         if (s32_Retval == C_NO_ERR)
+         if (c_Retval == Errc::success)
          {
-            s32_Retval = pc_ProtocolOsyTarget->OsyStopRouteDiagnosisCommunication();
+            // C_OscProtocolDriverOsy is still on the STW integer convention
+         c_Retval = make_error_code_from_stw(pc_ProtocolOsyTarget->OsyStopRouteDiagnosisCommunication());
 
-            if (s32_Retval != C_NO_ERR)
+            if (c_Retval != Errc::success)
             {
                osc_write_log_error("Stop Routing",
                                    "Error on stopping routing to node " + std::to_string(
                                       orc_Point.u32_NodeIndex) + " with error " +
-                                   C_OscLoggingHandler::h_StwError(s32_Retval));
+                                   C_OscLoggingHandler::h_StwError(c_Retval.value()));
             }
          }
          else
@@ -2694,7 +2734,7 @@ int32_t C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32_t ou32_
             osc_write_log_error("Stop Routing",
                                 "Error on setting security access on node " + std::to_string(
                                    orc_Point.u32_NodeIndex) + " with error " +
-                                C_OscLoggingHandler::h_StwError(s32_Retval));
+                                C_OscLoggingHandler::h_StwError(c_Retval.value()));
          }
 
          if (oq_FirstPoint == true)
@@ -2770,11 +2810,11 @@ int32_t C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32_t ou32_
          }
 
          // No further stopping for this node necessary
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2815,15 +2855,15 @@ void C_OscComDriverProtocol::m_StopRoutingSpecific(const uint32_t ou32_ActiveNod
    Route configuration depends on child implementation of m_GetRoutingMode.
 
    \return
-   C_NO_ERR      Operation success
-   C_CONFIG      Invalid system definition
-   C_RANGE       Minimum one target node does not exist
-   C_COM         For minimum one target no routes were found
+   Errc::success    Operation success
+   Errc::config     Invalid system definition
+   Errc::range      Minimum one target node does not exist
+   Errc::com        For minimum one target no routes were found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_InitRoutesAndActiveNodes(void)
+std::error_code C_OscComDriverProtocol::m_InitRoutesAndActiveNodes(void)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (this->mpc_SysDef != nullptr)
    {
@@ -2844,8 +2884,9 @@ int32_t C_OscComDriverProtocol::m_InitRoutesAndActiveNodes(void)
             const C_OscRoutingCalculation c_RouteCalculation(this->mpc_SysDef->c_Nodes, this->mc_ActiveNodesSystem,
                                                              this->mu32_ActiveBusIndex,
                                                              u32_ItActiveFlag, e_Mode);
-            s32_Retval = c_RouteCalculation.GetState();
-            if (s32_Retval == C_NO_ERR)
+            // C_OscRoutingCalculation is still on the STW integer convention (wave C)
+            c_Retval = make_error_code_from_stw(c_RouteCalculation.GetState());
+            if (c_Retval == Errc::success)
             {
                // Get the best route for this node
                const C_OscRoutingRoute * const pc_Route = c_RouteCalculation.GetBestRoute();
@@ -2862,13 +2903,13 @@ int32_t C_OscComDriverProtocol::m_InitRoutesAndActiveNodes(void)
                }
                else
                {
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
             }
-            else if (s32_Retval == C_NOACT)
+            else if (c_Retval == Errc::noact)
             {
                //Reset error because node may still be active
-               s32_Retval = C_NO_ERR;
+               c_Retval = Errc::success;
             }
             else
             {
@@ -2880,10 +2921,10 @@ int32_t C_OscComDriverProtocol::m_InitRoutesAndActiveNodes(void)
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2893,13 +2934,13 @@ int32_t C_OscComDriverProtocol::m_InitRoutesAndActiveNodes(void)
    Also create table of IP addresses.
 
    \return
-   C_NO_ERR Operation success
-   C_CONFIG Invalid initialization
+   Errc::success    Operation success
+   Errc::config     Invalid initialization
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_InitServerIds(void)
+std::error_code C_OscComDriverProtocol::m_InitServerIds(void)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if ((this->mpc_SysDef != nullptr) &&
        (this->mc_Routes.size() == this->mu32_ActiveNodeCount))
@@ -2910,7 +2951,7 @@ int32_t C_OscComDriverProtocol::m_InitServerIds(void)
       this->mc_ServerIds.reserve(this->mu32_ActiveNodeCount);
       this->mc_ServerIpAddresses.reserve(this->mu32_ActiveNodeCount);
       for (uint32_t u32_ItActiveNode = 0;
-           (u32_ItActiveNode < this->mc_ActiveNodesIndexes.size()) && (s32_Retval == C_NO_ERR);
+           (u32_ItActiveNode < this->mc_ActiveNodesIndexes.size()) && (c_Retval == Errc::success);
            ++u32_ItActiveNode)
       {
          const C_OscSystemBus * pc_Bus;
@@ -2943,17 +2984,17 @@ int32_t C_OscComDriverProtocol::m_InitServerIds(void)
                   }
                   else
                   {
-                     s32_Retval = C_CONFIG;
+                     c_Retval = Errc::config;
                   }
                }
                else
                {
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
             }
             else
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
          }
 
@@ -3008,42 +3049,42 @@ int32_t C_OscComDriverProtocol::m_InitServerIds(void)
                }
                else
                {
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
             }
             else
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
          }
          else
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Initialize for CAN connection
 
    \return
-   C_NO_ERR      Operation success
-   C_COM         CAN initialization failed
-   C_CHECKSUM    Internal buffer overflow detected
-   C_OVERFLOW    Error on setting dispatcher or node identifier in transport protocol
-   C_RANGE       Count of server ids does not match to the count of nodes
+   Errc::success     Operation success
+   Errc::com         CAN initialization failed
+   Errc::checksum    Internal buffer overflow detected
+   Errc::overflow    Error on setting dispatcher or node identifier in transport protocol
+   Errc::range       Count of server ids does not match to the count of nodes
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_InitForCan(void)
+std::error_code C_OscComDriverProtocol::m_InitForCan(void)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (this->mc_ServerIds.size() == this->mu32_ActiveNodeCount)
    {
@@ -3055,27 +3096,25 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
          this->mc_TransportProtocols.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
          this->mc_LegacyRouterDispatchers.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
          for (uint32_t u32_ItActiveNode = 0;
-              (u32_ItActiveNode < this->mu32_ActiveNodeCount) && (s32_Retval == C_NO_ERR);
+              (u32_ItActiveNode < this->mu32_ActiveNodeCount) && (c_Retval == Errc::success);
               ++u32_ItActiveNode)
          {
             pc_TransportProtocol = new C_OscProtocolDriverOsyTpCan();
-            //boundary: this caller still uses the integer convention
-            s32_Retval = pc_TransportProtocol->SetNodeIdentifiers(this->mc_ClientId,
-                                                                  this->mc_ServerIds[u32_ItActiveNode]).value();
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = pc_TransportProtocol->SetNodeIdentifiers(this->mc_ClientId,
+                                                                this->mc_ServerIds[u32_ItActiveNode]);
+            if (c_Retval == Errc::success)
             {
-               //boundary: this caller still uses the integer convention
-               s32_Retval = pc_TransportProtocol->SetDispatcher(this->mpc_CanDispatcher).value();
-               if (s32_Retval != C_NO_ERR)
+               c_Retval = pc_TransportProtocol->SetDispatcher(this->mpc_CanDispatcher);
+               if (c_Retval != Errc::success)
                {
                   std::string c_Text = "Node \"";
                   c_Text += this->m_GetActiveNodeName(u32_ItActiveNode);
                   c_Text += "\" - SetDispatcher - error: ";
-                  c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
+                  c_Text += C_OscLoggingHandler::h_StwError(c_Retval.value());
                   c_Text += "\nC_CONFIG   could not register with dispatcher\n"
                             "C_NOACT    could not configure Rx filter\n";
                   osc_write_log_warning("Asynchronous communication", c_Text.c_str());
-                  s32_Retval = C_OVERFLOW;
+                  c_Retval = Errc::overflow;
                }
             }
             else
@@ -3083,48 +3122,47 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
                std::string c_Text = "Node \"";
                c_Text += this->m_GetActiveNodeName(u32_ItActiveNode);
                c_Text += "\" - SetNodeIdentifiers - error: ";
-               c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
+               c_Text += C_OscLoggingHandler::h_StwError(c_Retval.value());
                c_Text += "\nC_RANGE    client and/or server identifier out of range\n"
                          "C_NOACT    could not reconfigure Rx filters\n";
                osc_write_log_warning("Asynchronous communication", c_Text.c_str());
-               s32_Retval = C_OVERFLOW;
+               c_Retval = Errc::overflow;
             }
             this->mc_TransportProtocols[u32_ItActiveNode] = pc_TransportProtocol;
          }
-         if (s32_Retval == C_NO_ERR)
+         if (c_Retval == Errc::success)
          {
             //Broadcast
             mpc_CanTransportProtocolBroadcast = new C_OscProtocolDriverOsyTpCan();
-            //boundary: this caller still uses the integer convention
-            s32_Retval = this->mpc_CanTransportProtocolBroadcast->SetNodeIdentifiersForBroadcasts(this->mc_ClientId).value();
-            if (s32_Retval == C_NO_ERR)
+            c_Retval =
+               this->mpc_CanTransportProtocolBroadcast->SetNodeIdentifiersForBroadcasts(this->mc_ClientId);
+            if (c_Retval == Errc::success)
             {
-               //boundary: this caller still uses the integer convention
-               s32_Retval = this->mpc_CanTransportProtocolBroadcast->SetDispatcher(this->mpc_CanDispatcher).value();
-               if (s32_Retval != C_NO_ERR)
+               c_Retval = this->mpc_CanTransportProtocolBroadcast->SetDispatcher(this->mpc_CanDispatcher);
+               if (c_Retval != Errc::success)
                {
                   std::string c_Text = "Broadcast - SetDispatcher - error: ";
-                  c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
+                  c_Text += C_OscLoggingHandler::h_StwError(c_Retval.value());
                   c_Text += "\nC_CONFIG   could not register with dispatcher\n"
                             "C_NOACT    could not configure Rx filter\n";
                   osc_write_log_warning("Asynchronous communication", c_Text.c_str());
-                  s32_Retval = C_OVERFLOW;
+                  c_Retval = Errc::overflow;
                }
             }
             else
             {
                std::string c_Text = "Broadcast - SetNodeIdentifiers - error: ";
-               c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
+               c_Text += C_OscLoggingHandler::h_StwError(c_Retval.value());
                c_Text += "\nC_RANGE    client and/or server identifier out of range\n"
                          "C_NOACT    could not reconfigure Rx filters\n";
                osc_write_log_warning("Asynchronous communication", c_Text.c_str());
-               s32_Retval = C_OVERFLOW;
+               c_Retval = Errc::overflow;
             }
          }
       }
       else
       {
-         s32_Retval = C_COM;
+         c_Retval = Errc::com;
       }
       //lint -e{593}  pc_TransportProtocol will be saved in mc_TransportProtocols and deleted by destructor
    }
@@ -3133,25 +3171,25 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
       // Routing error
       osc_write_log_error("Comm driver initialization",
                           "Failed: CAN initialization error because of different node count to server IDs");
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Initialize for Ethernet connection
 
    \return
-   C_NO_ERR      Operation success
-   C_CONFIG      TCP initialization failed
-   C_COM         IP dispatcher is NULL or UPD Socket initialization failed
-   C_OVERFLOW    Error on setting dispatcher or node identifier in transport protocol
-   C_RANGE       Count of server ids does not match to the count of nodes
+   Errc::success     Operation success
+   Errc::config      TCP initialization failed
+   Errc::com         IP dispatcher is NULL or UPD Socket initialization failed
+   Errc::overflow    Error on setting dispatcher or node identifier in transport protocol
+   Errc::range       Count of server ids does not match to the count of nodes
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
+std::error_code C_OscComDriverProtocol::m_InitForEthernet(void)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (this->mc_ServerIds.size() == this->mu32_ActiveNodeCount)
    {
@@ -3185,16 +3223,16 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
             // These connections will be used by Ethernet to CAN routing too
             if (this->mc_Routes[u32_ItActiveNode].c_VecRoutePoints.size() == 0)
             {
-               s32_Retval = this->m_InitTcp(mc_ServerIpAddresses[u32_ItActiveNode].au8_IpAddress,
+               c_Retval = this->m_InitTcp(mc_ServerIpAddresses[u32_ItActiveNode].au8_IpAddress,
                                             c_IpDispatcherHandles[u32_ItActiveNode]);
-               if (s32_Retval != C_NO_ERR)
+               if (c_Retval != Errc::success)
                {
                   break;
                }
             }
          }
 
-         if (s32_Retval == C_NO_ERR)
+         if (c_Retval == Errc::success)
          {
             // Initialize all Ethernet connections with IP to IP routing
             for (u32_ItActiveNode = 0; u32_ItActiveNode < this->mu32_ActiveNodeCount; ++u32_ItActiveNode)
@@ -3204,10 +3242,10 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
                   uint32_t u32_Ip2IpRouterActiveNodeClientSide;
                   uint32_t u32_Ip2IpRouterActiveNodeTargetSide;
 
-                  s32_Retval = m_GetActiveIndexOfIp2IpRouter(u32_ItActiveNode, u32_Ip2IpRouterActiveNodeClientSide,
+                  c_Retval = m_GetActiveIndexOfIp2IpRouter(u32_ItActiveNode, u32_Ip2IpRouterActiveNodeClientSide,
                                                              u32_Ip2IpRouterActiveNodeTargetSide);
 
-                  if (s32_Retval == C_NO_ERR)
+                  if (c_Retval == Errc::success)
                   {
                      // Exist a dispatcher handle for this router server
                      const std::map<uint32_t,
@@ -3218,7 +3256,7 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
                      if (c_IterUniqueIp2IpRouters == c_ActiveNodeIp2IpRouters.end())
                      {
                         // New dispatcher handle necessary
-                        s32_Retval = this->m_InitTcp(
+                        c_Retval = this->m_InitTcp(
                            mc_ServerIpAddresses[u32_Ip2IpRouterActiveNodeClientSide].au8_IpAddress,
                            c_IpDispatcherHandles[u32_ItActiveNode]);
 
@@ -3241,14 +3279,14 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
                      this->mc_ActiveNodeIp2IpDispatcher.insert(
                         std::pair<uint32_t, uint32_t>(u32_ItActiveNode, u32_Ip2IpRouterActiveNodeTargetSide));
                   }
-                  else if (s32_Retval == C_NOACT)
+                  else if (c_Retval == Errc::noact)
                   {
                      uint32_t u32_Ip2CanRouterActiveNode;
 
                      // No error, no IP to IP routing, check for IP to CAN routing
-                     s32_Retval = this->m_GetActiveIndexOfIp2CanRouter(u32_ItActiveNode, u32_Ip2CanRouterActiveNode);
+                     c_Retval = this->m_GetActiveIndexOfIp2CanRouter(u32_ItActiveNode, u32_Ip2CanRouterActiveNode);
 
-                     if (s32_Retval == C_NO_ERR)
+                     if (c_Retval == Errc::success)
                      {
                         uint32_t u32_Handle;
 
@@ -3263,26 +3301,26 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
                         this->mc_ActiveNodeIp2CanDispatcher.insert(
                            std::pair<uint32_t, uint32_t>(u32_ItActiveNode, u32_Ip2CanRouterActiveNode));
                      }
-                     else if (s32_Retval == C_NOACT)
+                     else if (c_Retval == Errc::noact)
                      {
                         // No error, but no initialization here too
-                        s32_Retval = C_NO_ERR;
+                        c_Retval = Errc::success;
                      }
                      else
                      {
                         osc_write_log_error("Ethernet initialization",
                                             "Could not get index of IP to CAN router. Error Code: " +
-                                            std::to_string(s32_Retval));
+                                            std::to_string(c_Retval.value()));
                      }
                   }
                   else
                   {
                      osc_write_log_error("Ethernet initialization",
                                          "Could not get index of IP to IP router. Error Code: " +
-                                         std::to_string(s32_Retval));
+                                         std::to_string(c_Retval.value()));
                   }
 
-                  if (s32_Retval != C_NO_ERR)
+                  if (c_Retval != Errc::success)
                   {
                      break;
                   }
@@ -3290,86 +3328,84 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
             }
          }
 
-         if (s32_Retval == C_NO_ERR)
+         if (c_Retval == Errc::success)
          {
             //Broadcast
-            s32_Retval = mpc_IpDispatcher->InitUdp();
+            // C_OscIpDispatcher is still on the STW integer convention
+            c_Retval = make_error_code_from_stw(mpc_IpDispatcher->InitUdp());
 
-            if (s32_Retval == C_NO_ERR)
+            if (c_Retval == Errc::success)
             {
                //Transport protocols
                this->mc_TransportProtocols.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
                this->mc_LegacyRouterDispatchers.resize(static_cast<uint32_t>(this->mu32_ActiveNodeCount), nullptr);
 
                for (u32_ItActiveNode = 0;
-                    (u32_ItActiveNode < this->mu32_ActiveNodeCount) && (s32_Retval == C_NO_ERR);
+                    (u32_ItActiveNode < this->mu32_ActiveNodeCount) && (c_Retval == Errc::success);
                     ++u32_ItActiveNode)
                {
                   pc_TransportProtocol = new C_OscProtocolDriverOsyTpIp();
-                  //boundary: this caller still uses the integer convention
-                  s32_Retval = pc_TransportProtocol->SetNodeIdentifiers(this->mc_ClientId,
-                                                                        this->mc_ServerIds[u32_ItActiveNode]).value();
-                  if (s32_Retval == C_NO_ERR)
+                  c_Retval = pc_TransportProtocol->SetNodeIdentifiers(this->mc_ClientId,
+                                                                      this->mc_ServerIds[u32_ItActiveNode]);
+                  if (c_Retval == Errc::success)
                   {
-                     //boundary: this caller still uses the integer convention
-                     s32_Retval = pc_TransportProtocol->SetDispatcher(this->mpc_IpDispatcher,
-                                                                      c_IpDispatcherHandles[u32_ItActiveNode]).value();
-                     if (s32_Retval != C_NO_ERR)
+                     c_Retval = pc_TransportProtocol->SetDispatcher(this->mpc_IpDispatcher,
+                                                                    c_IpDispatcherHandles[u32_ItActiveNode]);
+                     if (c_Retval != Errc::success)
                      {
                         osc_write_log_error("Ethernet initialization", "Could not set IP dispatcher. Error Code: " +
-                                            std::to_string(s32_Retval));
+                                            std::to_string(c_Retval.value()));
 
                         //Invalid configuration = programming error
-                        s32_Retval = C_OVERFLOW;
+                        c_Retval = Errc::overflow;
                      }
                   }
                   else
                   {
                      osc_write_log_error("Ethernet initialization", "Could not set node identifiers. Error Code: " +
-                                         std::to_string(s32_Retval));
+                                         std::to_string(c_Retval.value()));
 
                      //Invalid configuration = programming error
-                     s32_Retval = C_OVERFLOW;
+                     c_Retval = Errc::overflow;
                   }
                   this->mc_TransportProtocols[u32_ItActiveNode] = pc_TransportProtocol;
                }
-               if (s32_Retval == C_NO_ERR)
+               if (c_Retval == Errc::success)
                {
                   //Broadcast
                   mpc_IpTransportProtocolBroadcast = new C_OscProtocolDriverOsyTpIp();
-                  //boundary: this caller still uses the integer convention
-                  s32_Retval = this->mpc_IpTransportProtocolBroadcast->SetDispatcher(this->mpc_IpDispatcher, 0U).value();
-                  if (s32_Retval != C_NO_ERR)
+                  c_Retval = this->mpc_IpTransportProtocolBroadcast->SetDispatcher(this->mpc_IpDispatcher, 0U);
+                  if (c_Retval != Errc::success)
                   {
                      //Invalid configuration = programming error
                      osc_write_log_error("Ethernet initialization", "Could not set broadcast dispatcher. Error Code: " +
                                          std::to_string(
-                                            s32_Retval));
+                                            c_Retval.value()));
 
-                     s32_Retval = C_OVERFLOW;
+                     c_Retval = Errc::overflow;
                   }
                }
             }
             else
             {
                osc_write_log_error("Ethernet initialization", "Could not initialize UDP. Error Code: " +
-                                   std::to_string(s32_Retval));
-               s32_Retval = C_COM;
+                                   std::to_string(c_Retval.value()));
+               c_Retval = Errc::com;
             }
          }
       }
       else
       {
          osc_write_log_error("Ethernet initialization", "No dispatcher defined.");
-         s32_Retval = C_COM;
+         c_Retval = Errc::com;
       }
    }
    else
    {
       osc_write_log_error("Ethernet initialization", "Incorrect node count.");
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3388,18 +3424,18 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
                                                 routing on target side or the target itself
 
    \return
-   C_NO_ERR    Router found
-   C_NOACT     No routing necessary
-               No Ethernet to Ethernet routing on the first node in the route
-   C_RANGE     ou32_ActiveIndexTarget invalid
-   C_CONFIG    Route of ou32_ActiveIndexTarget is invalid
+   Errc::success    Router found
+   Errc::noact      No routing necessary
+                    No Ethernet to Ethernet routing on the first node in the route
+   Errc::range      ou32_ActiveIndexTarget invalid
+   Errc::config     Route of ou32_ActiveIndexTarget is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_GetActiveIndexOfIp2IpRouter(const uint32_t ou32_ActiveIndexTarget,
-                                                              uint32_t & oru32_ActiveIndexRouterClient,
-                                                              uint32_t & oru32_ActiveIndexRouterTarget)
+std::error_code C_OscComDriverProtocol::m_GetActiveIndexOfIp2IpRouter(const uint32_t ou32_ActiveIndexTarget,
+                                                                      uint32_t & oru32_ActiveIndexRouterClient,
+                                                                      uint32_t & oru32_ActiveIndexRouterTarget)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    oru32_ActiveIndexRouterClient = 0U;
    oru32_ActiveIndexRouterTarget = 0U;
@@ -3410,7 +3446,7 @@ int32_t C_OscComDriverProtocol::m_GetActiveIndexOfIp2IpRouter(const uint32_t ou3
       if (rc_Route.c_VecRoutePoints.size() == 0)
       {
          // No routing necessary for the target, but Ethernet connection is necessary
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
@@ -3424,14 +3460,14 @@ int32_t C_OscComDriverProtocol::m_GetActiveIndexOfIp2IpRouter(const uint32_t ou3
 
             if (q_Found == true)
             {
-               s32_Return = C_NO_ERR;
+               c_Return = Errc::success;
             }
             else
             {
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
             }
 
-            if (s32_Return == C_NO_ERR)
+            if (c_Return == Errc::success)
             {
                int32_t s32_RoutePointCounter;
                const int32_t s32_LastRoutePoint = static_cast<int32_t>(rc_Route.c_VecRoutePoints.size()) - 1;
@@ -3458,11 +3494,11 @@ int32_t C_OscComDriverProtocol::m_GetActiveIndexOfIp2IpRouter(const uint32_t ou3
 
                         if (q_Found == true)
                         {
-                           s32_Return = C_NO_ERR;
+                           c_Return = Errc::success;
                         }
                         else
                         {
-                           s32_Return = C_CONFIG;
+                           c_Return = Errc::config;
                         }
                      }
 
@@ -3474,12 +3510,12 @@ int32_t C_OscComDriverProtocol::m_GetActiveIndexOfIp2IpRouter(const uint32_t ou3
          else
          {
             // Both interfaces must be Ethernet for IP to IP routing
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3490,17 +3526,17 @@ int32_t C_OscComDriverProtocol::m_GetActiveIndexOfIp2IpRouter(const uint32_t ou3
                                                 client side
 
    \return
-   C_NO_ERR    Router found
-   C_NOACT     No routing necessary
-               No Ethernet to Ethernet routing on the first node in the route
-   C_RANGE     ou32_ActiveIndexTarget invalid
-   C_CONFIG    Route of ou32_ActiveIndexTarget is invalid
+   Errc::success    Router found
+   Errc::noact      No routing necessary
+                    No Ethernet to Ethernet routing on the first node in the route
+   Errc::range      ou32_ActiveIndexTarget invalid
+   Errc::config     Route of ou32_ActiveIndexTarget is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_GetActiveIndexOfIp2CanRouter(const uint32_t ou32_ActiveIndexTarget,
-                                                               uint32_t & oru32_ActiveIndexRouter)
+std::error_code C_OscComDriverProtocol::m_GetActiveIndexOfIp2CanRouter(const uint32_t ou32_ActiveIndexTarget,
+                                                                       uint32_t & oru32_ActiveIndexRouter)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    oru32_ActiveIndexRouter = 0U;
 
@@ -3510,7 +3546,7 @@ int32_t C_OscComDriverProtocol::m_GetActiveIndexOfIp2CanRouter(const uint32_t ou
       if (rc_Route.c_VecRoutePoints.size() == 0)
       {
          // No routing necessary for the target, but Ethernet connection is necessary
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
@@ -3523,29 +3559,30 @@ int32_t C_OscComDriverProtocol::m_GetActiveIndexOfIp2CanRouter(const uint32_t ou
 
             if (q_Found == true)
             {
-               s32_Return = C_NO_ERR;
+               c_Return = Errc::success;
             }
             else
             {
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
             }
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle)
+std::error_code C_OscComDriverProtocol::m_InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle)
 {
-   int32_t s32_Retval = C_COM;
+   std::error_code c_Retval = Errc::com;
 
    if (this->mpc_IpDispatcher != nullptr)
    {
-      s32_Retval = mpc_IpDispatcher->InitTcp(orau8_Ip, oru32_Handle);
+      // C_OscIpDispatcher is still on the STW integer convention
+      c_Retval = make_error_code_from_stw(mpc_IpDispatcher->InitTcp(orau8_Ip, oru32_Handle));
 
-      if (s32_Retval != C_NO_ERR)
+      if (c_Retval != Errc::success)
       {
          std::string c_Text;
 
@@ -3560,5 +3597,5 @@ int32_t C_OscComDriverProtocol::m_InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }

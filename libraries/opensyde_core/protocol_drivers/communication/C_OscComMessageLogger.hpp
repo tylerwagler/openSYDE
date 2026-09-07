@@ -62,23 +62,23 @@ public:
 
    // openSYDE system definition handling
    virtual void SetProtocol(const stw::cmon_protocol::e_CanMonL7Protocols oe_Protocol);
-   int32_t AddOsySysDef(const std::string & orc_PathSystemDefinition,
-                        std::vector<C_OscSystemBus> & orc_Buses);
-   int32_t AddOsySysDef(const std::string & orc_PathSystemDefinition, const uint32_t ou32_BusIndex,
-                        std::vector<C_OscSystemBus> & orc_Buses);
-   virtual int32_t SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
-                                   const uint32_t ou32_BusIndex);
-   virtual int32_t GetOsySysDef(const std::string & orc_PathSystemDefinition,
-                                C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition);
+   std::error_code AddOsySysDef(const std::string & orc_PathSystemDefinition,
+                                std::vector<C_OscSystemBus> & orc_Buses);
+   std::error_code AddOsySysDef(const std::string & orc_PathSystemDefinition, const uint32_t ou32_BusIndex,
+                                std::vector<C_OscSystemBus> & orc_Buses);
+   virtual std::error_code SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
+                                           const uint32_t ou32_BusIndex);
+   virtual std::error_code GetOsySysDef(const std::string & orc_PathSystemDefinition,
+                                        C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition);
 
    // Generic database handling
-   virtual int32_t RemoveDatabase(const std::string & orc_Path);
-   virtual int32_t ActivateDatabase(const std::string & orc_Path, const bool oq_Active);
+   virtual std::error_code RemoveDatabase(const std::string & orc_Path);
+   virtual std::error_code ActivateDatabase(const std::string & orc_Path, const bool oq_Active);
 
    // Logging handling
-   virtual int32_t AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
-                                 const bool oq_RelativeTimeStampActive);
-   virtual int32_t RemoveLogFile(const std::string & orc_FilePath);
+   virtual std::error_code AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
+                                         const bool oq_RelativeTimeStampActive);
+   virtual std::error_code RemoveLogFile(const std::string & orc_FilePath);
    virtual void RemoveAllLogFiles(void);
 
    // Filter handling
@@ -88,7 +88,7 @@ public:
    virtual uint32_t GetFilteredMessages(void) const;
 
    // CAN bus handling
-   virtual int32_t HandleCanMessage(const stw::can::T_STWCAN_Msg_RX & orc_Msg, const bool oq_IsTx);
+   virtual std::error_code HandleCanMessage(const stw::can::T_STWCAN_Msg_RX & orc_Msg, const bool oq_IsTx);
    virtual void ResetCounter(void);
    virtual void UpdateBusLoad(const uint8_t ou8_BusLoad);
    virtual void UpdateTxErrors(const uint32_t ou32_TxErrors);

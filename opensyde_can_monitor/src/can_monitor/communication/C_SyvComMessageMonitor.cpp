@@ -12,10 +12,12 @@
 
 #include <cstring>
 #include <sstream>
+#include <system_error>
 #include <iomanip>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclStringCompat.hpp"
 
 #include "TglUtils.hpp"
@@ -206,21 +208,21 @@ int32_t C_SyvComMessageMonitor::StartAddOsySysDef(const std::string & orc_PathSy
    \param[in]  ou32_BusIndex              Bus index of CAN bus of system definition for monitoring
 
    \return
-   C_NO_ERR    Bus index for this system definition adapted
-   C_NOACT     No system definition found with this path
-   C_WARN      specified bus index was not found or is no CAN bus
+   Errc::success    Bus index for this system definition adapted
+   Errc::noact      No system definition found with this path
+   Errc::warn       specified bus index was not found or is no CAN bus
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComMessageMonitor::SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
+std::error_code C_SyvComMessageMonitor::SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
                                                 const uint32_t ou32_BusIndex)
 {
-   int32_t s32_Return;
+   std::error_code c_Return;
 
    this->mc_CriticalSectionConfig.lock();
-   s32_Return = C_OscComMessageLogger::SetOsySysDefBus(orc_PathSystemDefinition, ou32_BusIndex);
+   c_Return = C_OscComMessageLogger::SetOsySysDefBus(orc_PathSystemDefinition, ou32_BusIndex);
    this->mc_CriticalSectionConfig.unlock();
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -230,20 +232,20 @@ int32_t C_SyvComMessageMonitor::SetOsySysDefBus(const std::string & orc_PathSyst
    \param[in,out]  orc_SystemDefinition      Loaded system definition
 
    \return
-   C_NO_ERR    openSYDE system definition returned
-   C_RANGE     openSYDE system definition not found
+   Errc::success    openSYDE system definition returned
+   Errc::range      openSYDE system definition not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComMessageMonitor::GetOsySysDef(const std::string & orc_PathSystemDefinition,
+std::error_code C_SyvComMessageMonitor::GetOsySysDef(const std::string & orc_PathSystemDefinition,
                                              C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition)
 {
-   int32_t s32_Return;
+   std::error_code c_Return;
 
    this->mc_CriticalSectionConfig.lock();
-   s32_Return = C_OscComMessageLogger::GetOsySysDef(orc_PathSystemDefinition, orc_SystemDefinition);
+   c_Return = C_OscComMessageLogger::GetOsySysDef(orc_PathSystemDefinition, orc_SystemDefinition);
    this->mc_CriticalSectionConfig.unlock();
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -314,13 +316,13 @@ int32_t C_SyvComMessageMonitor::GetDbcFile(const std::string & orc_PathDbc,
    \param[in]  orc_Path    Path and filename of database file
 
    \return
-   C_NO_ERR    Database removed
-   C_NOACT     No database found with this path
+   Errc::success    Database removed
+   Errc::noact      No database found with this path
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComMessageMonitor::RemoveDatabase(const std::string & orc_Path)
+std::error_code C_SyvComMessageMonitor::RemoveDatabase(const std::string & orc_Path)
 {
-   int32_t s32_Return = C_NOACT;
+   std::error_code c_Return = Errc::noact;
 
    std::map<std::string, C_CieConverter::C_CieCommDefinition>::iterator c_ItDbc;
 
@@ -331,17 +333,17 @@ int32_t C_SyvComMessageMonitor::RemoveDatabase(const std::string & orc_Path)
       // Remove the entry
       this->mc_DbcFiles.erase(c_ItDbc);
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   if (s32_Return == C_NOACT)
+   if (c_Return == Errc::noact)
    {
       // No DBC file found, let try the base class
-      s32_Return = C_OscComMessageLogger::RemoveDatabase(orc_Path);
+      c_Return = C_OscComMessageLogger::RemoveDatabase(orc_Path);
    }
    this->mc_CriticalSectionConfig.unlock();
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -351,20 +353,20 @@ int32_t C_SyvComMessageMonitor::RemoveDatabase(const std::string & orc_Path)
    \param[in]  oq_Active   Active flag
 
    \return
-   C_NO_ERR    Database removed
-   C_NOACT     No database found with this path
+   Errc::success    Database removed
+   Errc::noact      No database found with this path
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComMessageMonitor::ActivateDatabase(const std::string & orc_Path, const bool oq_Active)
+std::error_code C_SyvComMessageMonitor::ActivateDatabase(const std::string & orc_Path, const bool oq_Active)
 {
-   int32_t s32_Return;
+   std::error_code c_Return;
 
    //Logger handling
    this->mc_CriticalSectionConfig.lock();
-   s32_Return = C_OscComMessageLogger::ActivateDatabase(orc_Path, oq_Active);
+   c_Return = C_OscComMessageLogger::ActivateDatabase(orc_Path, oq_Active);
    this->mc_CriticalSectionConfig.unlock();
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -375,20 +377,20 @@ int32_t C_SyvComMessageMonitor::ActivateDatabase(const std::string & orc_Path, c
    \param[in]  oq_RelativeTimeStampActive    Mode for writing CAN timestamp (relative or absolute)
 
    \return
-   C_NO_ERR    File added successfully
-   C_RD_WR     Error on creating file, folders or deleting old file
+   Errc::success    File added successfully
+   Errc::rd_wr      Error on creating file, folders or deleting old file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComMessageMonitor::AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
+std::error_code C_SyvComMessageMonitor::AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
                                               const bool oq_RelativeTimeStampActive)
 {
-   int32_t s32_Return;
+   std::error_code c_Return;
 
    this->mc_CriticalSectionConfig.lock();
-   s32_Return = C_OscComMessageLogger::AddLogFileAsc(orc_FilePath, oq_HexActive, oq_RelativeTimeStampActive);
+   c_Return = C_OscComMessageLogger::AddLogFileAsc(orc_FilePath, oq_HexActive, oq_RelativeTimeStampActive);
    this->mc_CriticalSectionConfig.unlock();
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -406,7 +408,8 @@ int32_t C_SyvComMessageMonitor::AddLogFileBlf(const std::string & orc_FilePath)
    int32_t s32_Return;
    C_SyvComMessageLoggerFileBlf * const pc_File = new C_SyvComMessageLoggerFileBlf(orc_FilePath);
 
-   s32_Return = pc_File->OpenFile();
+   //boundary: the callee now reports std::error_code
+   s32_Return = pc_File->OpenFile().value();
 
    this->mc_CriticalSectionConfig.lock();
    this->mc_LoggingFiles.emplace(std::pair<std::string,
@@ -425,19 +428,19 @@ int32_t C_SyvComMessageMonitor::AddLogFileBlf(const std::string & orc_FilePath)
    \param[in]  orc_FilePath   Path with file name. File extension must be .asc
 
    \return
-   C_NO_ERR    File removed
-   C_NOACT     No file with this path registered
+   Errc::success    File removed
+   Errc::noact      No file with this path registered
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComMessageMonitor::RemoveLogFile(const std::string & orc_FilePath)
+std::error_code C_SyvComMessageMonitor::RemoveLogFile(const std::string & orc_FilePath)
 {
-   int32_t s32_Return;
+   std::error_code c_Return;
 
    this->mc_CriticalSectionConfig.lock();
-   s32_Return = C_OscComMessageLogger::RemoveLogFile(orc_FilePath);
+   c_Return = C_OscComMessageLogger::RemoveLogFile(orc_FilePath);
    this->mc_CriticalSectionConfig.unlock();
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -523,14 +526,14 @@ uint32_t C_SyvComMessageMonitor::GetFilteredMessages(void) const
    \param[in]  oq_IsTx  Message was sent of this application itself
 
    \return
-   C_NO_ERR    CAN message logged
-   C_NOACT     CAN message not relevant
-   C_BUSY      Monitor is paused
+   Errc::success    CAN message logged
+   Errc::noact      CAN message not relevant
+   Errc::busy       Monitor is paused
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComMessageMonitor::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg, const bool oq_IsTx)
+std::error_code C_SyvComMessageMonitor::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg, const bool oq_IsTx)
 {
-   int32_t s32_Return;
+   std::error_code c_Return;
 
    // --- CAN-TP preprocessing ---
    C_CamCanTpResult c_TpResult;
@@ -549,7 +552,7 @@ int32_t C_SyvComMessageMonitor::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg
    // These would otherwise overwrite the reconstructed message in unique display mode.
    if ((c_TpResult.q_IsTpFrame) && (c_TpResult.q_Error) && (c_TpResult.u8_PciType == mhu8_CAN_TP_PCI_CF))
    {
-      return C_NOACT;
+      return Errc::noact;
    }
 
    // Determine the CAN message to pass to the base class.
@@ -577,9 +580,9 @@ int32_t C_SyvComMessageMonitor::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg
    {
       // Log the raw CAN-TP frame (CF with PCI byte) as-is
       this->mc_CriticalSectionCounter.lock();
-      s32_Return = C_OscComMessageLogger::HandleCanMessage(orc_Msg, oq_IsTx);
+      c_Return = C_OscComMessageLogger::HandleCanMessage(orc_Msg, oq_IsTx);
       this->mc_CriticalSectionCounter.unlock();
-      if (s32_Return == C_NO_ERR)
+      if (c_Return == Errc::success)
       {
          this->mc_CriticalSectionMsg.lock();
          {
@@ -612,18 +615,18 @@ int32_t C_SyvComMessageMonitor::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg
       c_ReconstMsg.u8_DLC = static_cast<uint8_t>(u32_ClampedLen);
 
       this->mc_CriticalSectionCounter.lock();
-      s32_Return = C_OscComMessageLogger::HandleCanMessage(c_ReconstMsg, oq_IsTx);
+      c_Return = C_OscComMessageLogger::HandleCanMessage(c_ReconstMsg, oq_IsTx);
       this->mc_CriticalSectionCounter.unlock();
    }
    else
    {
       // Normal path: log the message as-is
       this->mc_CriticalSectionCounter.lock();
-      s32_Return = C_OscComMessageLogger::HandleCanMessage(orc_Msg, oq_IsTx);
+      c_Return = C_OscComMessageLogger::HandleCanMessage(orc_Msg, oq_IsTx);
       this->mc_CriticalSectionCounter.unlock();
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
       this->mc_CriticalSectionMsg.lock();
       C_OscComMessageLoggerData c_MessageData = this->m_GetHandledCanMessage();
@@ -669,7 +672,7 @@ int32_t C_SyvComMessageMonitor::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg
       this->mc_CriticalSectionMsg.unlock();
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1457,10 +1460,12 @@ void C_SyvComMessageMonitor::m_ThreadFunc(void)
    switch (this->me_LoadingActivity)
    {
    case eADD_OSY_SYSDEF_WITHOUT_BUSINDEX:
-      this->ms32_Result = this->AddOsySysDef(this->mc_Path, this->mc_Busses);
+      //boundary: the callee now reports std::error_code
+      this->ms32_Result = this->AddOsySysDef(this->mc_Path, this->mc_Busses).value();
       break;
    case eADD_OSY_SYSDEF_WITH_BUSINDEX:
-      this->ms32_Result = this->AddOsySysDef(this->mc_Path, this->mu32_BusIndex, this->mc_Busses);
+      //boundary: the callee now reports std::error_code
+      this->ms32_Result = this->AddOsySysDef(this->mc_Path, this->mu32_BusIndex, this->mc_Busses).value();
       break;
    case eADD_DBC_FILE:
       this->ms32_Result = this->m_AddDbcFile(this->mc_Path);

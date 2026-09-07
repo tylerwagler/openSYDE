@@ -12,7 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_OscComSequencesBase.hpp"
 
@@ -87,28 +90,29 @@ C_OscComSequencesBase::~C_OscComSequencesBase(void)
                                         Needed if nodes with enabled security are used in the system
 
    \return
-   C_NO_ERR      Configuration set
-   C_CONFIG      Invalid system definition for parameters
-                 Active bus index refers to a bus that is not part of the system definition
-                 Length of active nodes vector is not identical to number of nodes in system definition
-                 No STW flashloader devices and no openSYDE devices are active
-                 No STW flashloader devices on active bus and no openSYDE devices are active, but STW flashloader on
-                     other buses are active
-   C_OVERFLOW    Unknown transport protocol or unknown diagnostic server for at least one node
-   C_NOACT       No active nodes
-   C_COM         CAN initialization failed or no route found for at least one node
-   C_CHECKSUM    Internal buffer overflow detected
-   C_DEFAULT     Parameter ou32_ActiveBusIndex invalid
-   C_RANGE       Routing configuration failed (can all nodes marked as active be reached from the defined bus ?)
+   Errc::success     Configuration set
+   Errc::config      Invalid system definition for parameters
+                     Active bus index refers to a bus that is not part of the system definition
+                     Length of active nodes vector is not identical to number of nodes in system definition
+                     No STW flashloader devices and no openSYDE devices are active
+                     No STW flashloader devices on active bus and no openSYDE devices are active, but STW flashloader on
+                        other buses are active
+   Errc::overflow    Unknown transport protocol or unknown diagnostic server for at least one node
+   Errc::noact       No active nodes
+   Errc::com         CAN initialization failed or no route found for at least one node
+   Errc::checksum    Internal buffer overflow detected
+   Errc::default_    Parameter ou32_ActiveBusIndex invalid
+   Errc::range       Routing configuration failed (can all nodes marked as active be reached from the defined bus ?)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComSequencesBase::Init(C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex,
-                                    const std::vector<uint8_t> & orc_ActiveNodes,
-                                    stw::can::C_CanDispatcher * const opc_CanDispatcher,
-                                    C_OscIpDispatcher * const opc_IpDispatcher,
-                                    C_OscSecurityPemDatabase * const opc_SecurityPemDb)
+std::error_code C_OscComSequencesBase::Init(C_OscSystemDefinition & orc_SystemDefinition,
+                                            const uint32_t ou32_ActiveBusIndex,
+                                            const std::vector<uint8_t> & orc_ActiveNodes,
+                                            stw::can::C_CanDispatcher * const opc_CanDispatcher,
+                                            C_OscIpDispatcher * const opc_IpDispatcher,
+                                            C_OscSecurityPemDatabase * const opc_SecurityPemDb)
 {
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
    if ((orc_SystemDefinition.c_Nodes.size() == orc_ActiveNodes.size()) &&
        (ou32_ActiveBusIndex < orc_SystemDefinition.c_Buses.size()))
@@ -118,22 +122,22 @@ int32_t C_OscComSequencesBase::Init(C_OscSystemDefinition & orc_SystemDefinition
       this->mc_ActiveNodes = orc_ActiveNodes;
       this->mc_TimeoutNodes.resize(this->mc_ActiveNodes.size(), 0);
 
-      s32_Return = this->mpc_ComDriver->Init(orc_SystemDefinition, ou32_ActiveBusIndex,
-                                             orc_ActiveNodes, opc_CanDispatcher, opc_IpDispatcher, opc_SecurityPemDb);
+      c_Return = this->mpc_ComDriver->Init(orc_SystemDefinition, ou32_ActiveBusIndex,
+                                           orc_ActiveNodes, opc_CanDispatcher, opc_IpDispatcher, opc_SecurityPemDb);
 
-      if (s32_Return == C_NO_ERR)
+      if (c_Return == Errc::success)
       {
          this->mq_OpenSydeDevicesActive = this->m_IsAtLeastOneOpenSydeNodeActive();
 
          // No openSYDE devices are active
          if (this->mq_OpenSydeDevicesActive == false)
          {
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -222,11 +226,11 @@ uint32_t C_OscComSequencesBase::GetMinimumFlashloaderResetWaitTime(
    \param[out]  oru32_TimeValue     Time in ms the node need at least to get from application to the Flashloader or
                                     from Flashloader to Flashloader
 
-   \retval   C_NO_ERR   Time returned
-   \retval   C_RANGE    Node with orc_ServerId does not exist or is not active
+   \retval   Errc::success    Time returned
+   \retval   Errc::range      Node with orc_ServerId does not exist or is not active
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComSequencesBase::GetMinimumFlashloaderResetWaitTime(
+std::error_code C_OscComSequencesBase::GetMinimumFlashloaderResetWaitTime(
    const C_OscComDriverFlash::E_MinimumFlashloaderResetWaitTimeType oe_Type,
    const C_OscProtocolDriverOsyNode & orc_ServerId, uint32_t & oru32_TimeValue) const
 {
