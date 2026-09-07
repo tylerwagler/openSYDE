@@ -200,9 +200,8 @@ std::error_code C_OscDataDealerNvm::NvmNotifyOfChanges(const uint8_t ou8_DataPoo
    }
    else
    {
-      c_Return = make_error_code_from_stw(
-         this->mpc_DiagProtocol->NvmNotifyOfChanges(ou8_DataPoolIndex, ou8_ListIndex,
-                                                    orq_ApplicationAcknowledge, opu8_NrCode));
+      c_Return = this->mpc_DiagProtocol->NvmNotifyOfChanges(ou8_DataPoolIndex, ou8_ListIndex,
+                                                            orq_ApplicationAcknowledge, opu8_NrCode);
    }
 
    return c_Return;
@@ -241,11 +240,11 @@ std::error_code C_OscDataDealerNvm::m_NvmReadListRaw(const C_OscNodeDataPoolList
       orc_Values.resize(u32_NumBytesToRead);
 
       // Read the entire list
-      const int32_t s32_ProtReturn = this->mpc_DiagProtocol->NvmRead(orc_List.u32_NvmStartAddress, orc_Values,
-                                                                    opu8_NrCode);
+      const std::error_code c_ProtReturn = this->mpc_DiagProtocol->NvmRead(orc_List.u32_NvmStartAddress, orc_Values,
+                                                                           opu8_NrCode);
 
       // Adapt return value
-      c_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(s32_ProtReturn);
+      c_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(c_ProtReturn);
    }
    else
    {
@@ -383,27 +382,25 @@ std::error_code C_OscDataDealerNvm::m_SaveDumpValuesToListValues(const std::vect
                     parameter out of range (checked by client side)
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::error_code C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(const int32_t os32_ProtReturnValue)
+std::error_code C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(const std::error_code & orc_ProtReturnValue)
 {
    std::error_code c_Return = Errc::success;
 
-   switch (os32_ProtReturnValue)
+   if ((orc_ProtReturnValue == Errc::success) || (orc_ProtReturnValue == Errc::timeout) ||
+       (orc_ProtReturnValue == Errc::warn) || (orc_ProtReturnValue == Errc::noact) ||
+       (orc_ProtReturnValue == Errc::com))
    {
-   case C_NO_ERR:  // No adaptation necessary
-   case C_TIMEOUT: // No adaptation necessary
-   case C_WARN:    // No adaptation necessary
-   case C_NOACT:   // No adaptation necessary
-   case C_COM:     // No adaptation necessary
       // Nothing to adapt
-      c_Return = make_error_code_from_stw(os32_ProtReturnValue);
-      break;
-   case C_RD_WR:
+      c_Return = orc_ProtReturnValue;
+   }
+   else if (orc_ProtReturnValue == Errc::rd_wr)
+   {
       c_Return = Errc::warn;
-      break;
-   default:
+   }
+   else
+   {
       // All other errors
       c_Return = Errc::config;
-      break;
    }
 
    return c_Return;

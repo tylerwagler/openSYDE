@@ -122,8 +122,9 @@ void C_OscCanDispatcherOsyRouter::SetFilterParameters(const uint8_t ou8_RoutingC
 //lint -e{8001}  //name of function dictated by base class
 int32_t C_OscCanDispatcherOsyRouter::CAN_Init(void)
 {
+   //boundary: C_CanDispatcher dictates the integer convention for this override
    return this->mrc_OsyProtocol.OsySetTunnelCanMessages(this->mu8_RoutingChannel, this->mu32_FilterId,
-                                                        this->mu32_FilterMask, &this->mu8_NrCode);
+                                                        this->mu32_FilterMask, &this->mu8_NrCode).value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -161,7 +162,8 @@ int32_t C_OscCanDispatcherOsyRouter::CAN_Init(const int32_t os32_BitrateKBitS)
 //lint -e{8001}  //name of function dictated by base class
 int32_t C_OscCanDispatcherOsyRouter::CAN_Exit(void)
 {
-   return this->mrc_OsyProtocol.OsyStopTunnelCanMessages();
+   //boundary: C_CanDispatcher dictates the integer convention for this override
+   return this->mrc_OsyProtocol.OsyStopTunnelCanMessages().value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -211,7 +213,8 @@ int32_t C_OscCanDispatcherOsyRouter::CAN_Reset(void)
 //lint -e{8001}  //name of function dictated by base class
 int32_t C_OscCanDispatcherOsyRouter::CAN_Send_Msg(const stw::can::T_STWCAN_Msg_TX & orc_Message)
 {
-   return this->mrc_OsyProtocol.OsySendCanMessage(this->mu8_RoutingChannel, orc_Message);
+   //boundary: C_CanDispatcher dictates the integer convention for this override
+   return this->mrc_OsyProtocol.OsySendCanMessage(this->mu8_RoutingChannel, orc_Message).value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

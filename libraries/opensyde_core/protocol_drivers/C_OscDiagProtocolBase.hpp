@@ -17,6 +17,7 @@
 #define C_OSCDIAGPROTOCOLBASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include "stwtypes.hpp"
 #include <string>
 
@@ -104,11 +105,11 @@ public:
       If so, then it shall return without further actions (as "cycling" is in progress anyway)
 
       \return
-      C_NO_ERR   finished cycle
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
+      Errc::success   finished cycle
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t Cycle(void) = 0;
+   virtual std::error_code Cycle(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -126,18 +127,18 @@ public:
       \param[out]    opu8_NrCode      if != NULL: negative response code in case of an error response
 
       \return
-      C_NO_ERR   request sent, positive response with expected size received
-      C_RANGE    parameter out of range (checked by client-side function)
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent, positive response with expected size received
+      Errc::range     parameter out of range (checked by client-side function)
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t DataPoolReadNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                       const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
-                                       uint8_t * const opu8_NrCode) = 0;
+   virtual std::error_code DataPoolReadNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                               const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
+                                               uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -155,18 +156,18 @@ public:
       \param[out]    opu8_NrCode      if != NULL: negative response code in case of an error response
 
       \return
-      C_NO_ERR   request sent, positive response with expected size received
-      C_RANGE    parameter out of range (checked by client-side function)
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent, positive response with expected size received
+      Errc::range     parameter out of range (checked by client-side function)
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t DataPoolReadArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                     const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
-                                     uint8_t * const opu8_NrCode) = 0;
+   virtual std::error_code DataPoolReadArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                             const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
+                                             uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -183,18 +184,19 @@ public:
       \param[out] opu8_NrCode         if != NULL: negative response code in case of an error response
 
       \return
-      C_NO_ERR   request sent, positive response received
-      C_RANGE    parameter out of range (checked by client-side function)
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent, positive response received
+      Errc::range     parameter out of range (checked by client-side function)
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t DataPoolWriteNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                        const uint16_t ou16_ElementIndex, const std::vector<uint8_t> & orc_DataToWrite,
-                                        uint8_t * const opu8_NrCode) = 0;
+   virtual std::error_code DataPoolWriteNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                                const uint16_t ou16_ElementIndex,
+                                                const std::vector<uint8_t> & orc_DataToWrite,
+                                                uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -212,18 +214,19 @@ public:
       \param[out] opu8_NrCode         if != NULL: negative response code in case of an error response
 
       \return
-      C_NO_ERR   request sent, positive response received
-      C_RANGE    parameter out of range (checked by client-side function)
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent, positive response received
+      Errc::range     parameter out of range (checked by client-side function)
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t DataPoolWriteArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                      const uint16_t ou16_ElementIndex, const std::vector<uint8_t> & orc_DataToWrite,
-                                      uint8_t * const opu8_NrCode) = 0;
+   virtual std::error_code DataPoolWriteArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                              const uint16_t ou16_ElementIndex,
+                                              const std::vector<uint8_t> & orc_DataToWrite,
+                                              uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -244,16 +247,16 @@ public:
       \param[in]  ou16_IntervalMs     interval to configure (in ms)
 
       \return
-      C_NO_ERR   request sent, positive response received (or: rail value remembered)
-      C_RANGE    parameter out of range (checked by client-side function)
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent, positive response received (or: rail value remembered)
+      Errc::range     parameter out of range (checked by client-side function)
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t DataPoolSetEventDataRate(const uint8_t ou8_Rail, const uint16_t ou16_IntervalMs) = 0;
+   virtual std::error_code DataPoolSetEventDataRate(const uint8_t ou8_Rail, const uint16_t ou16_IntervalMs) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -275,18 +278,18 @@ public:
       \param[out] opu8_NrCode         if != NULL: negative response code in case of an error response
 
       \return
-      C_NO_ERR   request sent
-      C_RANGE    parameter out of range (checked by client-side function)
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent
+      Errc::range     parameter out of range (checked by client-side function)
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t DataPoolReadCyclic(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                      const uint16_t ou16_ElementIndex, const uint8_t ou8_Rail,
-                                      uint8_t * const opu8_NrCode) = 0;
+   virtual std::error_code DataPoolReadCyclic(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                              const uint16_t ou16_ElementIndex, const uint8_t ou8_Rail,
+                                              uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -310,18 +313,18 @@ public:
       \param[out] opu8_NrCode         if != NULL: negative response code in case of an error response
 
       \return
-      C_NO_ERR   request sent
-      C_RANGE    parameter out of range (checked by client-side function)
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent
+      Errc::range     parameter out of range (checked by client-side function)
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t DataPoolReadChangeDriven(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                            const uint16_t ou16_ElementIndex, const uint8_t ou8_Rail,
-                                            const uint32_t ou32_Threshold, uint8_t * const opu8_NrCode) = 0;
+   virtual std::error_code DataPoolReadChangeDriven(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                                    const uint16_t ou16_ElementIndex, const uint8_t ou8_Rail,
+                                                    const uint32_t ou32_Threshold, uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -332,15 +335,15 @@ public:
       Shall send the request and wait for the confirmation (or error) response.
 
       \return
-      C_NO_ERR   request sent
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t DataPoolStopEventDriven(void) = 0;
+   virtual std::error_code DataPoolStopEventDriven(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -354,17 +357,17 @@ public:
       \param[out]    opu8_NrCode         if != NULL: negative response code in case of an error response
 
       \return
-      C_NO_ERR   request sent, positive response received
-      C_RANGE    parameter out of range (checked by client side)
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent, positive response received
+      Errc::range     parameter out of range (checked by client side)
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t NvmRead(const uint32_t ou32_MemoryAddress, std::vector<uint8_t> & orc_DataRecord,
-                           uint8_t * const opu8_NrCode) = 0;
+   virtual std::error_code NvmRead(const uint32_t ou32_MemoryAddress, std::vector<uint8_t> & orc_DataRecord,
+                                   uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -379,16 +382,17 @@ public:
       \param[in]  ou16_NvmAccessCount Expected NVM access count
 
       \return
-      C_NO_ERR   request sent, positive response received
-      C_RANGE    parameter out of range (checked by client side); access count zero
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent, positive response received
+      Errc::range     parameter out of range (checked by client side); access count zero
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t NvmWriteStartTransaction(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_NvmAccessCount) = 0;
+   virtual std::error_code NvmWriteStartTransaction(const uint8_t ou8_DataPoolIndex,
+                                                    const uint16_t ou16_NvmAccessCount) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -406,32 +410,32 @@ public:
       \param[out] opu8_NrCode        if != NULL: negative response code in case of an error response
 
       \return
-      C_NO_ERR   request sent, positive response received
-      C_RANGE    parameter out of range (checked by client side); e.g. data record size zero
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent, positive response received
+      Errc::range     parameter out of range (checked by client side); e.g. data record size zero
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t NvmWrite(const uint32_t ou32_MemoryAddress, const std::vector<uint8_t> & orc_DataRecord,
-                            uint8_t * const opu8_NrCode) = 0;
+   virtual std::error_code NvmWrite(const uint32_t ou32_MemoryAddress, const std::vector<uint8_t> & orc_DataRecord,
+                                    uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
       \brief   Finalize writing to NVM
 
       \return
-      C_NO_ERR   request sent, positive response received
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent, positive response received
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t NvmWriteFinalizeTransaction(void) = 0;
+   virtual std::error_code NvmWriteFinalizeTransaction(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -446,16 +450,16 @@ public:
       \param[out] opu8_NrCode         if != NULL: negative response code in case of an error response
 
       \return
-      C_NO_ERR   request sent, positive response received
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
+      Errc::success   request sent, positive response received
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t DataPoolReadVersion(const uint8_t ou8_DataPoolIndex,
-                                       uint8_t(&orau8_Version)[3],
-                                       uint8_t * const opu8_NrCode) = 0;
+   virtual std::error_code DataPoolReadVersion(const uint8_t ou8_DataPoolIndex,
+                                               uint8_t(&orau8_Version)[3],
+                                               uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -472,17 +476,17 @@ public:
       \param[out] opu8_NrCode         if != NULL: negative response code in case of an error response
 
       \return
-      C_NO_ERR   request sent, positive response received
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
+      Errc::success   request sent, positive response received
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t DataPoolReadMetaData(const uint8_t ou8_DataPoolIndex,
-                                        uint8_t(&orau8_Version)[3],
-                                        std::string & orc_Name,
-                                        uint8_t * const opu8_NrCode) = 0;
+   virtual std::error_code DataPoolReadMetaData(const uint8_t ou8_DataPoolIndex,
+                                                uint8_t(&orau8_Version)[3],
+                                                std::string & orc_Name,
+                                                uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -501,17 +505,17 @@ public:
       \param[out] orq_Match                       Datapool checksum match response
 
       \return
-      C_NO_ERR   request sent, positive response received
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent, positive response received
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t DataPoolVerify(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_NumberOfDataPoolElements,
-                                  const uint16_t ou16_DataPoolVersion, const uint32_t ou32_DataPoolChecksum,
-                                  bool & orq_Match) = 0;
+   virtual std::error_code DataPoolVerify(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_NumberOfDataPoolElements,
+                                          const uint16_t ou16_DataPoolVersion, const uint32_t ou32_DataPoolChecksum,
+                                          bool & orq_Match) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -528,16 +532,16 @@ public:
       \param[out] opu8_NrCode                 if != NULL: negative response code in case of an error response
 
       \return
-      C_NO_ERR   request sent, positive response received
-      C_TIMEOUT  expected response not received within timeout
-      C_NOACT    could not send request (e.g. Tx buffer full)
-      C_CONFIG   pre-requisites not correct; e.g. driver not initialized
-      C_WARN     error response
-      C_RD_WR    malformed protocol response
+      Errc::success   request sent, positive response received
+      Errc::timeout   expected response not received within timeout
+      Errc::noact     could not send request (e.g. Tx buffer full)
+      Errc::config    pre-requisites not correct; e.g. driver not initialized
+      Errc::warn      error response
+      Errc::rd_wr     malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
-                                      bool & orq_ApplicationAcknowledge, uint8_t * const opu8_NrCode) = 0;
+   virtual std::error_code NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
+                                              bool & orq_ApplicationAcknowledge, uint8_t * const opu8_NrCode) = 0;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

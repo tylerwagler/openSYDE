@@ -333,7 +333,7 @@ std::error_code C_OscSuSequences::m_FlashNodeOpenSydeHex(
       {
          (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_CHECK_DEVICE_NAME_COMM_ERROR, c_Return.value(), 10U,
                                 mc_CurrentNode, "Could not read device name from device. Details:" +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NrCode));
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NrCode));
          c_Return = Errc::com;
       }
 
@@ -473,7 +473,7 @@ std::error_code C_OscSuSequences::m_FlashNodeOpenSydeHex(
                         orc_FilesToFlash[u32_File].c_str(),
                         pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
                         static_cast<uint32_t>(pc_HexDump->at_Blocks[u16_Area].au8_Data.size()),
-                        C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NrCode).c_str());
+                        C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NrCode).c_str());
                      (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_CHECK_MEMORY_NOT_OK, c_Return.value(), 20U,
                                             mc_CurrentNode, c_ErrorText);
                      c_Return = Errc::com;
@@ -617,7 +617,7 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeHex(const stw::hex_file:
                                    s32_Area + 1,
                                    orc_HexDataDump.at_Blocks[s32_Area].u32_AddressOffset,
                                    static_cast<uint32_t>(orc_HexDataDump.at_Blocks[s32_Area].au8_Data.size()),
-                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                             u8_NrCode).c_str());
             (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_ERASE_ERROR, c_Return.value(),
                                    u8_ProgressPercentage, mc_CurrentNode, c_Error);
@@ -693,7 +693,7 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeHex(const stw::hex_file:
                {
                   (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_TRANSFER_ERROR, c_Return.value(),
                                          u8_ProgressPercentage, mc_CurrentNode, "Could not write data. Details: " +
-                                         C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                         C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                                   u8_NrCode));
                   c_Return = Errc::com;
                }
@@ -744,7 +744,7 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeHex(const stw::hex_file:
          {
             (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_EXIT_ERROR, c_Return.value(),
                                    u8_ProgressPercentage, mc_CurrentNode, "Could not finalize the area. Details: " +
-                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                             u8_NrCode));
             orc_StateHexFile.e_RequestTransferAddressExitSent = eSUSEQ_STATE_ERROR;
             c_Return = Errc::com;
@@ -968,7 +968,7 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeFile(
             std::string c_Error;
             c_Error = PrintFormattedCompat("Preparing file system for file \"%s\" failed. Details: %s",
                                    TglExtractFileName(orc_FileToFlash).c_str(),
-                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                             u8_NrCode).c_str());
             (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_PREPARE_ERROR, c_Return.value(),
                                    0U, mc_CurrentNode, c_Error);
@@ -1072,7 +1072,7 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeFile(
                   (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_TRANSFER_ERROR,
                                          c_Return.value(), u8_ProgressPercentage, mc_CurrentNode,
                                          "Could not write data. Details: " +
-                                         C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                         C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                                   u8_NrCode));
                   c_Return = Errc::com;
                }
@@ -1123,7 +1123,7 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeFile(
          orc_StateOtherFile.e_RequestTransferFileExitSent = eSUSEQ_STATE_ERROR;
          (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_EXIT_ERROR, c_Return.value(),
                                 u8_ProgressPercentage, mc_CurrentNode, "Could not finalize the transfer. Details: " +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NrCode));
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NrCode));
          if ((c_Return == Errc::warn) && (u8_NrCode == C_OscProtocolDriverOsy::hu8_NR_CODE_GENERAL_PROGRAMMING_FAILURE))
          {
             q_RejectedByTargetLayer = true;
@@ -1152,7 +1152,7 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeFile(
                (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_EXIT_ERROR, c_LocalReturn.value(),
                                       u8_ProgressPercentage, mc_CurrentNode,
                                       "Could not read exit result text. Details: " +
-                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_LocalReturn.value(),
+                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_LocalReturn,
                                                                                                u8_NrCode));
                c_Return = Errc::com;
                c_TransferExitResult = "unkown (reading information failed)";
@@ -1247,12 +1247,10 @@ std::error_code C_OscSuSequences::m_WriteNvmOpenSyde(
 
       //get node-IDs from ProtocolDriver and set in DiagProtocol:
       pc_TransportProtocol->GetNodeIdentifiers(c_Client, c_Server);
-      //boundary: the diagnostic protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(c_DiagProtocol.SetNodeIdentifiers(c_Client, c_Server));
+      c_Return = c_DiagProtocol.SetNodeIdentifiers(c_Client, c_Server);
       tgl_assert(c_Return == Errc::success);
       //Set transport protocol in DiagProtocol:
-      //boundary: the diagnostic protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(c_DiagProtocol.SetTransportProtocol(pc_TransportProtocol));
+      c_Return = c_DiagProtocol.SetTransportProtocol(pc_TransportProtocol);
       tgl_assert(c_Return == Errc::success);
 
       //set up DataDealer:
@@ -1295,8 +1293,7 @@ std::error_code C_OscSuSequences::m_WriteNvmOpenSyde(
       if (c_Return == Errc::success)
       {
          //check server for MaxNumberOfBlockLength
-         //boundary: the diagnostic protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(c_DiagProtocol.OsyReadMaxNumberOfBlockLength(u16_MaxBlockLength));
+         c_Return = c_DiagProtocol.OsyReadMaxNumberOfBlockLength(u16_MaxBlockLength);
          if (c_Return != Errc::success)
          {
             (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_NVM_WRITE_MAX_SIZE_ERROR, c_Return.value(), 5U,
@@ -1517,7 +1514,7 @@ std::error_code C_OscSuSequences::m_WritePemOpenSydeFile(
                   (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_SEND_ERROR, c_Return.value(),
                                          75U, mc_CurrentNode,
                                          "Could not write security authentication key. Details: " +
-                                         C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                         C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                                   u8_NrCode));
                   orc_StateSecuritySettings.e_SecureAuthenticationKeySent = eSUSEQ_STATE_ERROR;
                   c_Return = Errc::com;
@@ -1654,7 +1651,7 @@ std::error_code C_OscSuSequences::m_WriteOpenSydeNodeStates(
                                       c_Return.value(),
                                       50U, mc_CurrentNode,
                                       "Could not write security authentication activation. Details: " +
-                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                                u8_NrCode));
                c_Return = Errc::com;
             }
@@ -1705,7 +1702,7 @@ std::error_code C_OscSuSequences::m_WriteOpenSydeNodeStates(
                                       c_Return.value(),
                                       50U, mc_CurrentNode,
                                       "Could not write traffic encryption activation. Details: " +
-                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                                u8_NrCode));
                c_Return = Errc::com;
             }
@@ -1754,7 +1751,7 @@ std::error_code C_OscSuSequences::m_WriteOpenSydeNodeStates(
                (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_STATE_DEBUGGER_WRITE_SEND_ERROR, c_Return.value(),
                                       50U, mc_CurrentNode,
                                       "Could not write debugger state. Details: " +
-                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                                u8_NrCode));
                c_Return = Errc::com;
             }
@@ -1840,7 +1837,7 @@ std::error_code C_OscSuSequences::m_WriteFingerPrintOsy(void)
    {
       (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FINGERPRINT_ERROR, c_Return.value(), 30U, mc_CurrentNode,
                              "Could not write fingerprint. Details:" +
-                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NrCode));
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NrCode));
       c_Return = Errc::com;
    }
    return c_Return;
@@ -1900,7 +1897,7 @@ std::error_code C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t 
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_SET_SESSION_ERROR, c_Return.value(), ou8_ProgressToReport,
                                 mc_CurrentNode,
                                 "Error activating PreProgramming session. Details:" +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NrCode));
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NrCode));
 
          if (c_Return != Errc::checksum)
          {
@@ -1926,7 +1923,7 @@ std::error_code C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t 
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_DEVICE_NAME_ERROR, c_Return.value(), ou8_ProgressToReport,
                                 mc_CurrentNode,
                                 "Error reading device name. Details:" +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NrCode));
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NrCode));
          c_Return = Errc::com;
       }
    }
@@ -1944,7 +1941,7 @@ std::error_code C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t 
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_SECURITY_ERROR, c_Return.value(),
                                 ou8_ProgressToReport, mc_CurrentNode,
                                 "Error setting security level for reading flash block information. Details:" +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NrCode));
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NrCode));
          if (c_Return != Errc::checksum)
          {
             c_Return = Errc::com;
@@ -1964,7 +1961,7 @@ std::error_code C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t 
             {
                (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASH_BLOCKS_ERROR, c_Return.value(), ou8_ProgressToReport,
                                       mc_CurrentNode, "Error reading flash block information. Details:" +
-                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                                u8_NrCode));
                c_Return = Errc::com;
             }
@@ -1988,7 +1985,7 @@ std::error_code C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t 
       {
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASHLOADER_INFO_ERROR, c_Return.value(), ou8_ProgressToReport,
                                 mc_CurrentNode, "Error reading even more information. Details:" +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NrCode));
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NrCode));
          c_Return = Errc::com;
       }
       else
@@ -2014,7 +2011,7 @@ std::error_code C_OscSuSequences::m_ReadDeviceInformationOpenSyde(const uint8_t 
          (void)m_ReportProgress(eREAD_DEVICE_INFO_OSY_FLASHLOADER_CHECK_DEBUGGER_ACTIVATION_ERROR, c_Return.value(),
                                 ou8_ProgressToReport,
                                 mc_CurrentNode, "Error reading debugger activation state. Details:" +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NrCode));
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NrCode));
          c_Return = Errc::com;
       }
    }
@@ -2756,7 +2753,7 @@ std::error_code C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstE
                         (void)m_ReportProgress(eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR, c_Return.value(), 30U,
                                                mc_CurrentNode, "Request to set active session failed. Details:" +
                                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
-                                                  c_Return.value(), u8_NrCode));
+                                                  c_Return, u8_NrCode));
 
                         // Node is not reachable
                         this->mc_TimeoutNodes[u16_Node] = static_cast<uint8_t>(c_Return == Errc::timeout);
@@ -2949,7 +2946,7 @@ std::error_code C_OscSuSequences::ActivateFlashloader(const bool oq_FailOnFirstE
                                  eACTIVATE_FLASHLOADER_OSY_SET_SESSION_ERROR, c_Return.value(), 50U,
                                  mc_CurrentNode,
                                  "Request to set active session for routing device failed. Details:" +
-                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NrCode));
+                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NrCode));
 
                               // Node is not reachable
                               this->mc_TimeoutNodes[u16_Node] = static_cast<uint8_t>(c_Return == Errc::timeout);

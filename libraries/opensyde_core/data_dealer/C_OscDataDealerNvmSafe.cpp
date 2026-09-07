@@ -1334,36 +1334,36 @@ std::error_code C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const std::
                   for (uint32_t u32_ItEntry = 0; u32_ItEntry < pc_Node->c_Entries.size(); u32_ItEntry++)
                   {
                      const C_OscParamSetRawEntry & rc_Entry = pc_Node->c_Entries[u32_ItEntry];
-                     const int32_t s32_ProtReturn =
+                     const std::error_code c_ProtReturn =
                         this->mpc_DiagProtocol->NvmWrite(rc_Entry.u32_StartAddress, rc_Entry.c_Bytes, nullptr);
                      //Map error codes
-                     switch (s32_ProtReturn)
+                     if (c_ProtReturn == Errc::timeout)
                      {
-                     case C_TIMEOUT:
                         c_Retval = Errc::timeout;
                         ors32_ResultDetail = 1;
-                        break;
-                     case C_NOACT:
-                     case C_CONFIG:
+                     }
+                     else if ((c_ProtReturn == Errc::noact) || (c_ProtReturn == Errc::config))
+                     {
                         c_Retval = Errc::noact;
                         ors32_ResultDetail = 1;
-                        break;
-                     case C_RANGE:
-                     case C_RD_WR:
-                     case C_WARN:
+                     }
+                     else if ((c_ProtReturn == Errc::range) || (c_ProtReturn == Errc::rd_wr) ||
+                              (c_ProtReturn == Errc::warn))
+                     {
                         c_Retval = Errc::warn;
                         ors32_ResultDetail = 1;
-                        break;
-                     case C_NO_ERR: //positive result
+                     }
+                     else if (c_ProtReturn == Errc::success) //positive result
+                     {
                         c_Retval = Errc::success;
                         ors32_ResultDetail = 1;
-                        break;
-                     default:
+                     }
+                     else
+                     {
                         //Not documented error was returned by function
                         c_Retval = Errc::unknown_err;
                         osc_write_log_info("Parametrization", "Not documented error code " +
-                                           std::to_string(c_Retval.value()) + " was returned by NvmWrite");
-                        break;
+                                           std::to_string(c_ProtReturn.value()) + " was returned by NvmWrite");
                      }
                      if (c_Retval)
                      {

@@ -425,17 +425,20 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
          if (mc_CyclicTransmissionsSupported[u32_ActiveNode] == 1U)
          {
             uint16_t u16_RateMs = pc_View->GetUpdateRateFast();
-            s32_Return = this->mc_DiagProtocols[u32_ActiveNode]->DataPoolSetEventDataRate(0, u16_RateMs);
+            //boundary: the callee now reports std::error_code
+            s32_Return = this->mc_DiagProtocols[u32_ActiveNode]->DataPoolSetEventDataRate(0, u16_RateMs).value();
             if (s32_Return == C_NO_ERR)
             {
                u16_RateMs = pc_View->GetUpdateRateMedium();
-               s32_Return = this->mc_DiagProtocols[u32_ActiveNode]->DataPoolSetEventDataRate(1, u16_RateMs);
+               //boundary: the callee now reports std::error_code
+               s32_Return = this->mc_DiagProtocols[u32_ActiveNode]->DataPoolSetEventDataRate(1, u16_RateMs).value();
             }
 
             if (s32_Return == C_NO_ERR)
             {
                u16_RateMs = pc_View->GetUpdateRateSlow();
-               s32_Return = this->mc_DiagProtocols[u32_ActiveNode]->DataPoolSetEventDataRate(2, u16_RateMs);
+               //boundary: the callee now reports std::error_code
+               s32_Return = this->mc_DiagProtocols[u32_ActiveNode]->DataPoolSetEventDataRate(2, u16_RateMs).value();
             }
 
             if (s32_Return != C_NO_ERR)
@@ -504,11 +507,12 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
 
                if (c_It.value().e_TransmissionMode == C_PuiSvReadDataConfiguration::eTM_CYCLIC)
                {
+                  //boundary: the callee now reports std::error_code
                   s32_Return = this->mc_DiagProtocols[u32_ActiveNodeIndex]->DataPoolReadCyclic(
                      static_cast<uint8_t>(c_It.key().u32_DataPoolIndex),
                      static_cast<uint16_t>(c_It.key().u32_ListIndex),
                      static_cast<uint16_t>(c_It.key().u32_ElementIndex), c_It.value().u8_RailIndex,
-                     &u8_NegResponseCode);
+                     &u8_NegResponseCode).value();
                }
                else if (c_It.value().e_TransmissionMode == C_PuiSvReadDataConfiguration::eTM_ON_CHANGE)
                {
@@ -526,11 +530,12 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
                                   (static_cast<uint32_t>(c_Threshold[2]) << 16U) +
                                   (static_cast<uint32_t>(c_Threshold[3]) << 24U);
 
+                  //boundary: the callee now reports std::error_code
                   s32_Return = this->mc_DiagProtocols[u32_ActiveNodeIndex]->DataPoolReadChangeDriven(
                      static_cast<uint8_t>(c_It.key().u32_DataPoolIndex),
                      static_cast<uint16_t>(c_It.key().u32_ListIndex),
                      static_cast<uint16_t>(c_It.key().u32_ElementIndex),
-                     c_It.value().u8_RailIndex, u32_Threshold, &u8_NegResponseCode);
+                     c_It.value().u8_RailIndex, u32_Threshold, &u8_NegResponseCode).value();
                }
                else
                {
@@ -663,7 +668,9 @@ int32_t C_SyvComDriverDiag::StopCyclicTransmissions(void)
          // do not try to stop if we already have identified that it's not supported:
          if (mc_CyclicTransmissionsSupported[u32_ActiveNode] == 1U)
          {
-            const int32_t s32_Return2 = this->mc_DiagProtocols[u32_ActiveNode]->DataPoolStopEventDriven();
+            //boundary: the callee now reports std::error_code
+            const int32_t s32_Return2 =
+               this->mc_DiagProtocols[u32_ActiveNode]->DataPoolStopEventDriven().value();
             if (s32_Return2 != C_NO_ERR)
             {
                osc_write_log_warning("Asynchronous communication",
@@ -1808,12 +1815,15 @@ int32_t C_SyvComDriverDiag::m_InitDiagProtocol(void)
             {
             case C_OscNodeProperties::eDS_OPEN_SYDE:
                pc_DiagProtocolOsy = new C_OscDiagProtocolOsy();
-               s32_Retval = pc_DiagProtocolOsy->SetTransportProtocol(this->mc_TransportProtocols[u32_ItActiveNode]);
+               //boundary: the callee now reports std::error_code
+               s32_Retval =
+                  pc_DiagProtocolOsy->SetTransportProtocol(this->mc_TransportProtocols[u32_ItActiveNode]).value();
                if (s32_Retval == C_NO_ERR)
                {
+                  //boundary: the callee now reports std::error_code
                   s32_Retval =
                      pc_DiagProtocolOsy->SetNodeIdentifiers(this->GetClientId(),
-                                                            this->mc_ServerIds[u32_ItActiveNode]);
+                                                            this->mc_ServerIds[u32_ItActiveNode]).value();
                   if (s32_Retval != C_NO_ERR)
                   {
                      //Invalid configuration = programming error
@@ -2111,9 +2121,10 @@ int32_t C_SyvComDriverDiag::m_GetAllDatapoolMetadata(const uint32_t ou32_ActiveD
       C_OscProtocolDriverOsy::C_DataPoolMetaData c_Metadata;
 
       // Get meta data
+      //boundary: the callee now reports std::error_code
       s32_Return = this->mc_DiagProtocols[u32_ActiveNode]->DataPoolReadMetaData(
          static_cast<uint8_t>(u32_ItDataPool),
-         c_Metadata.au8_Version, c_Metadata.c_Name, &u8_ErrorCode);
+         c_Metadata.au8_Version, c_Metadata.c_Name, &u8_ErrorCode).value();
 
       if (s32_Return == C_NO_ERR)
       {
@@ -2555,12 +2566,13 @@ int32_t C_SyvComDriverDiag::mh_DoDatapoolCrcVerification(const C_OscNodeDataPool
                                       C_OscNodeDataPool::eCT_NON_NVM_DEFAULT_COMPAT_V1);
    }
 
+   //boundary: the callee now reports std::error_code
    s32_Return = orc_Protocol.DataPoolVerify(
       static_cast<uint8_t>(ou32_ServerDatapoolIndex),
       0U, //N/A for openSYDE protocol
       0U, //N/A for openSYDE protocol
       u32_DataPoolChecksum,
-      orq_Match);
+      orq_Match).value();
    if (s32_Return != C_NO_ERR)
    {
       // Service error
@@ -2582,7 +2594,8 @@ int32_t C_SyvComDriverDiag::m_Cycle(void)
 {
    for (uint32_t u32_Counter = 0U; u32_Counter < this->mc_DiagProtocols.size(); ++u32_Counter)
    {
-      const int32_t s32_Return = this->mc_DiagProtocols[u32_Counter]->Cycle();
+      //boundary: the callee now reports std::error_code
+      const int32_t s32_Return = this->mc_DiagProtocols[u32_Counter]->Cycle().value();
       if (s32_Return != C_NO_ERR)
       {
          // TODO Errorhandling

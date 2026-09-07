@@ -49,7 +49,7 @@ protected:
    std::error_code m_SaveDumpToList(const std::vector<uint8_t> & orc_Values, C_OscNodeDataPoolList & orc_List) const;
    std::error_code m_SaveDumpValuesToListValues(const std::vector<uint8_t> & orc_Values,
                                                 C_OscNodeDataPoolList & orc_List) const;
-   static std::error_code mh_AdaptProtocolReturnValue(const int32_t os32_ProtReturnValue);
+   static std::error_code mh_AdaptProtocolReturnValue(const std::error_code & orc_ProtReturnValue);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

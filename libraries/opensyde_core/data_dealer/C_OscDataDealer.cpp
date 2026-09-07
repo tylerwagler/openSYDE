@@ -166,15 +166,13 @@ std::error_code C_OscDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, c
          //use communication function matching the element type
          if (pc_Element->GetArray() == false)
          {
-            c_Return = make_error_code_from_stw(
-               mpc_DiagProtocol->DataPoolReadNumeric(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
-                                                     c_Data, opu8_NrCode));
+            c_Return = mpc_DiagProtocol->DataPoolReadNumeric(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
+                                                             c_Data, opu8_NrCode);
          }
          else
          {
-            c_Return = make_error_code_from_stw(
-               mpc_DiagProtocol->DataPoolReadArray(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
-                                                   c_Data, opu8_NrCode));
+            c_Return = mpc_DiagProtocol->DataPoolReadArray(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, c_Data,
+                                                           opu8_NrCode);
          }
          if (!c_Return)
          {
@@ -274,15 +272,13 @@ std::error_code C_OscDataDealer::DataPoolWrite(const uint8_t ou8_DataPoolIndex, 
             //use communication function matching the element type
             if (pc_Element->GetArray() == false)
             {
-               c_Return = make_error_code_from_stw(
-                  mpc_DiagProtocol->DataPoolWriteNumeric(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
-                                                         c_Data, opu8_NrCode));
+               c_Return = mpc_DiagProtocol->DataPoolWriteNumeric(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
+                                                                 c_Data, opu8_NrCode);
             }
             else
             {
-               c_Return = make_error_code_from_stw(
-                  mpc_DiagProtocol->DataPoolWriteArray(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
-                                                       c_Data, opu8_NrCode));
+               c_Return = mpc_DiagProtocol->DataPoolWriteArray(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
+                                                               c_Data, opu8_NrCode);
             }
          }
       }
@@ -344,8 +340,7 @@ std::error_code C_OscDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const 
 
          c_Data.resize(pc_Element->GetSizeByte());
          //request data from server
-         c_Return = make_error_code_from_stw(
-            mpc_DiagProtocol->NvmRead(pc_Element->u32_NvmStartAddress, c_Data, opu8_NrCode));
+         c_Return = mpc_DiagProtocol->NvmRead(pc_Element->u32_NvmStartAddress, c_Data, opu8_NrCode);
          if (!c_Return)
          {
             //we have data
@@ -441,8 +436,7 @@ std::error_code C_OscDataDealer::NvmWrite(const uint8_t ou8_DataPoolIndex, const
             }
 
             //write data to server:
-            c_Return = make_error_code_from_stw(
-               mpc_DiagProtocol->NvmWrite(pc_Element->u32_NvmStartAddress, c_Data, opu8_NrCode));
+            c_Return = mpc_DiagProtocol->NvmWrite(pc_Element->u32_NvmStartAddress, c_Data, opu8_NrCode);
          }
       }
    }

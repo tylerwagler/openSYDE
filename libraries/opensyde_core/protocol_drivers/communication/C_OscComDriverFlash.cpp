@@ -293,13 +293,11 @@ std::error_code C_OscComDriverFlash::EthConnectNode(const C_OscProtocolDriverOsy
       if (c_Return == Errc::success)
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            orc_TemporaryProtocol.SetTransportProtocol(&orc_TpIp));
+         c_Return = orc_TemporaryProtocol.SetTransportProtocol(&orc_TpIp);
          if (c_Return == Errc::success)
          {
             // C_OscProtocolDriverOsy is still on the STW integer convention
-            c_Return = make_error_code_from_stw(
-               orc_TemporaryProtocol.SetNodeIdentifiers(this->GetClientId(), orc_ServerId));
+            c_Return = orc_TemporaryProtocol.SetNodeIdentifiers(this->GetClientId(), orc_ServerId);
          }
       }
    }
@@ -308,8 +306,7 @@ std::error_code C_OscComDriverFlash::EthConnectNode(const C_OscProtocolDriverOsy
    if (c_Return == Errc::success)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         orc_TemporaryProtocol.ReConnect());
+      c_Return = orc_TemporaryProtocol.ReConnect();
    }
 
    return c_Return;
@@ -329,7 +326,7 @@ std::error_code C_OscComDriverFlash::EthConnectNode(const C_OscProtocolDriverOsy
 std::error_code C_OscComDriverFlash::h_EthDisconnectNode(C_OscProtocolDriverOsy & orc_TemporaryProtocol)
 {
    // C_OscProtocolDriverOsy is still on the STW integer convention
-   return make_error_code_from_stw(orc_TemporaryProtocol.Disconnect());
+   return orc_TemporaryProtocol.Disconnect();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -543,8 +540,7 @@ std::error_code C_OscComDriverFlash::SendOsyReadDeviceName(const C_OscProtocolDr
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadDeviceName(orc_DeviceName, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadDeviceName(orc_DeviceName, opu8_NrCode);
    }
    else
    {
@@ -558,8 +554,7 @@ std::error_code C_OscComDriverFlash::SendOsyReadDeviceName(const C_OscProtocolDr
       if (c_Return == Errc::success)
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            c_OsyProtocol.OsyReadDeviceName(orc_DeviceName, opu8_NrCode));
+         c_Return = c_OsyProtocol.OsyReadDeviceName(orc_DeviceName, opu8_NrCode);
       }
       else
       {
@@ -598,8 +593,7 @@ std::error_code C_OscComDriverFlash::SendOsyReadSerialNumber(const C_OscProtocol
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadEcuSerialNumber(orc_SerialNumberExt, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadEcuSerialNumber(orc_SerialNumberExt, opu8_NrCode);
    }
 
    return c_Return;
@@ -634,8 +628,7 @@ std::error_code C_OscComDriverFlash::SendOsyReadSerialNumberExt(const C_OscProto
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadEcuSerialNumberExt(orc_SerialNumberExt, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadEcuSerialNumberExt(orc_SerialNumberExt, opu8_NrCode);
    }
 
    return c_Return;
@@ -900,8 +893,7 @@ std::error_code C_OscComDriverFlash::SendOsyRequestProgramming(const C_OscProtoc
       pc_ExistingProtocol->OsyDiagnosticSessionControl(C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PREPROGRAMMING,
                                                        nullptr);
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyRequestProgramming());
+      c_Return = pc_ExistingProtocol->OsyRequestProgramming();
    }
 
    return c_Return;
@@ -934,8 +926,7 @@ std::error_code C_OscComDriverFlash::SendOsyReadActiveDiagnosticSession(const C_
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadActiveDiagnosticSession(oru8_SessionId, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadActiveDiagnosticSession(oru8_SessionId, opu8_NrCode);
    }
 
    return c_Return;
@@ -982,9 +973,8 @@ const
          uint8_t u8_NrCode;
          C_OscProtocolDriverOsy::C_FlashBlockInfo c_BlockInfo;
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            pc_ExistingProtocol->OsyReadFlashBlockData(static_cast<uint8_t>(u16_Block), c_BlockInfo,
-                                                       &u8_NrCode));
+         c_Return = pc_ExistingProtocol->OsyReadFlashBlockData(static_cast<uint8_t>(u16_Block), c_BlockInfo,
+                                                               &u8_NrCode);
          if (c_Return == Errc::success)
          {
             orc_BlockInfo.push_back(c_BlockInfo);
@@ -1039,61 +1029,53 @@ std::error_code C_OscComDriverFlash::SendOsyReadInformationFromFlashloader(
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadBootSoftwareIdentification(orc_Information.au8_FlashloaderSoftwareVersion,
-                                                                opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadBootSoftwareIdentification(orc_Information.au8_FlashloaderSoftwareVersion,
+                                                                        opu8_NrCode);
       if (c_Return == Errc::success)
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            pc_ExistingProtocol->OsyReadApplicationSoftwareFingerprint(
+         c_Return = pc_ExistingProtocol->OsyReadApplicationSoftwareFingerprint(
                orc_Information.au8_FlashFingerprintDate, orc_Information.au8_FlashFingerprintTime,
-               orc_Information.c_FlashFingerprintUserName, opu8_NrCode));
+               orc_Information.c_FlashFingerprintUserName, opu8_NrCode);
       }
 
       if (c_Return == Errc::success)
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            pc_ExistingProtocol->OsyReadHardwareNumber(orc_Information.u32_EcuArticleNumber, opu8_NrCode));
+         c_Return = pc_ExistingProtocol->OsyReadHardwareNumber(orc_Information.u32_EcuArticleNumber, opu8_NrCode);
       }
 
       if (c_Return == Errc::success)
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            pc_ExistingProtocol->OsyReadHardwareVersionNumber(orc_Information.c_EcuHardwareVersionNumber,
-                                                              opu8_NrCode));
+         c_Return = pc_ExistingProtocol->OsyReadHardwareVersionNumber(orc_Information.c_EcuHardwareVersionNumber,
+                                                                      opu8_NrCode);
       }
 
       if (c_Return == Errc::success)
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            pc_ExistingProtocol->OsyReadProtocolVersion(orc_Information.au8_ProtocolVersion, opu8_NrCode));
+         c_Return = pc_ExistingProtocol->OsyReadProtocolVersion(orc_Information.au8_ProtocolVersion, opu8_NrCode);
       }
 
       if (c_Return == Errc::success)
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            pc_ExistingProtocol->OsyReadFlashloaderProtocolVersion(
-               orc_Information.au8_FlashloaderProtocolVersion, opu8_NrCode));
+         c_Return = pc_ExistingProtocol->OsyReadFlashloaderProtocolVersion(
+               orc_Information.au8_FlashloaderProtocolVersion, opu8_NrCode);
       }
 
       if (c_Return == Errc::success)
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            pc_ExistingProtocol->OsyReadFlashCount(orc_Information.u32_FlashCount, opu8_NrCode));
+         c_Return = pc_ExistingProtocol->OsyReadFlashCount(orc_Information.u32_FlashCount, opu8_NrCode);
       }
 
       // Get available flashloader features
       if (c_Return == Errc::success)
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            pc_ExistingProtocol->OsyReadListOfFeatures(orc_Information.c_AvailableFeatures, opu8_NrCode));
+         c_Return = pc_ExistingProtocol->OsyReadListOfFeatures(orc_Information.c_AvailableFeatures, opu8_NrCode);
       }
 
       if (c_Return == Errc::success)
@@ -1101,14 +1083,12 @@ std::error_code C_OscComDriverFlash::SendOsyReadInformationFromFlashloader(
          if (orc_Information.c_AvailableFeatures.q_ExtendedSerialNumberModeImplemented == false)
          {
             // C_OscProtocolDriverOsy is still on the STW integer convention
-            c_Return = make_error_code_from_stw(
-               pc_ExistingProtocol->OsyReadEcuSerialNumber(orc_Information.c_SerialNumber, opu8_NrCode));
+            c_Return = pc_ExistingProtocol->OsyReadEcuSerialNumber(orc_Information.c_SerialNumber, opu8_NrCode);
          }
          else
          {
             // C_OscProtocolDriverOsy is still on the STW integer convention
-            c_Return = make_error_code_from_stw(
-               pc_ExistingProtocol->OsyReadEcuSerialNumberExt(orc_Information.c_SerialNumber, opu8_NrCode));
+            c_Return = pc_ExistingProtocol->OsyReadEcuSerialNumberExt(orc_Information.c_SerialNumber, opu8_NrCode);
          }
       }
 
@@ -1116,9 +1096,8 @@ std::error_code C_OscComDriverFlash::SendOsyReadInformationFromFlashloader(
           (orc_Information.c_AvailableFeatures.q_MaxNumberOfBlockLengthAvailable == true))
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            pc_ExistingProtocol->OsyReadMaxNumberOfBlockLength(orc_Information.u16_MaxNumberOfBlockLength,
-                                                               opu8_NrCode));
+         c_Return = pc_ExistingProtocol->OsyReadMaxNumberOfBlockLength(orc_Information.u16_MaxNumberOfBlockLength,
+                                                                       opu8_NrCode);
          if (c_Return != Errc::success)
          {
             orc_Information.u16_MaxNumberOfBlockLength = 0U;
@@ -1158,8 +1137,7 @@ std::error_code C_OscComDriverFlash::SendOsyCheckFlashMemoryAvailable(const C_Os
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyCheckFlashMemoryAvailable(ou32_StartAddress, ou32_Size, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyCheckFlashMemoryAvailable(ou32_StartAddress, ou32_Size, opu8_NrCode);
    }
    return c_Return;
 }
@@ -1195,9 +1173,8 @@ std::error_code C_OscComDriverFlash::SendOsyWriteApplicationSoftwareFingerprint(
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyWriteApplicationSoftwareFingerprint(orau8_Date, orau8_Time, orc_Username,
-                                                                     opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyWriteApplicationSoftwareFingerprint(orau8_Date, orau8_Time, orc_Username,
+                                                                             opu8_NrCode);
    }
    return c_Return;
 }
@@ -1232,9 +1209,8 @@ std::error_code C_OscComDriverFlash::SendOsyRequestDownload(const C_OscProtocolD
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyRequestDownload(ou32_StartAddress, ou32_Size, oru32_MaxBlockLength,
-                                                 opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyRequestDownload(ou32_StartAddress, ou32_Size, oru32_MaxBlockLength,
+                                                         opu8_NrCode);
    }
    return c_Return;
 }
@@ -1270,9 +1246,8 @@ std::error_code C_OscComDriverFlash::SendOsyRequestFileTransfer(const C_OscProto
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyRequestFileTransfer(orc_FilePath, ou32_FileSize, oru32_MaxBlockLength,
-                                                     opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyRequestFileTransfer(orc_FilePath, ou32_FileSize, oru32_MaxBlockLength,
+                                                             opu8_NrCode);
    }
    return c_Return;
 }
@@ -1306,8 +1281,7 @@ std::error_code C_OscComDriverFlash::SendOsyTransferData(const C_OscProtocolDriv
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyTransferData(ou8_BlockSequenceCounter, orc_Data, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyTransferData(ou8_BlockSequenceCounter, orc_Data, opu8_NrCode);
    }
    return c_Return;
 }
@@ -1343,9 +1317,8 @@ std::error_code C_OscComDriverFlash::SendOsyRequestTransferExitAddressBased(
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyRequestTransferExitAddressBased(oq_SendSignatureBlockAddress,
-                                                                 ou32_SignatureBlockAddress, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyRequestTransferExitAddressBased(oq_SendSignatureBlockAddress,
+                                                                         ou32_SignatureBlockAddress, opu8_NrCode);
    }
    return c_Return;
 }
@@ -1386,8 +1359,7 @@ std::error_code C_OscComDriverFlash::SendOsyRequestTransferExitFileBased(
       au8_Signature[6] = 0U; //reserved: set to zero
       au8_Signature[7] = 0U; //reserved: set to zero
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyRequestTransferExitFileBased(au8_Signature, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyRequestTransferExitFileBased(au8_Signature, opu8_NrCode);
    }
    return c_Return;
 }
@@ -1418,8 +1390,7 @@ std::error_code C_OscComDriverFlash::SendOsyRequestFileBasedTransferExitResult(
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadFileBasedTransferExitResult(orc_Result, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadFileBasedTransferExitResult(orc_Result, opu8_NrCode);
    }
    return c_Return;
 }
@@ -1446,8 +1417,7 @@ std::error_code C_OscComDriverFlash::SendOsyEcuReset(const C_OscProtocolDriverOs
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyEcuReset(ou8_ResetType));
+      c_Return = pc_ExistingProtocol->OsyEcuReset(ou8_ResetType);
    }
 
    return c_Return;
@@ -1668,8 +1638,7 @@ std::error_code C_OscComDriverFlash::SendOsySetBitrate(const C_OscProtocolDriver
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsySetBitrate(0U, ou8_ChannelIndex, ou32_Bitrate, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsySetBitrate(0U, ou8_ChannelIndex, ou32_Bitrate, opu8_NrCode);
    }
 
    return c_Return;
@@ -1705,9 +1674,8 @@ std::error_code C_OscComDriverFlash::h_SendOsySetIpAddressForChannel(C_OscProtoc
                                                                      uint8_t * const opu8_NrCode)
 {
    // C_OscProtocolDriverOsy is still on the STW integer convention
-   return make_error_code_from_stw(orc_Protocol.OsySetIpAddressForChannel(1U, ou8_ChannelIndex, orau8_IpAddress,
-                                                                         orau8_NetMask, orau8_DefaultGateway,
-                                                                         opu8_NrCode));
+   return orc_Protocol.OsySetIpAddressForChannel(1U, ou8_ChannelIndex, orau8_IpAddress, orau8_NetMask,
+                                                 orau8_DefaultGateway, opu8_NrCode);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1746,9 +1714,8 @@ std::error_code C_OscComDriverFlash::SendOsySetIpAddressForChannel(const C_OscPr
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsySetIpAddressForChannel(1U, ou8_ChannelIndex, orau8_IpAddress, orau8_NetMask,
-                                                        orau8_DefaultGateway, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsySetIpAddressForChannel(1U, ou8_ChannelIndex, orau8_IpAddress, orau8_NetMask,
+                                                                orau8_DefaultGateway, opu8_NrCode);
    }
 
    return c_Return;
@@ -1781,8 +1748,7 @@ std::error_code C_OscComDriverFlash::h_SendOsySetNodeIdForChannel(C_OscProtocolD
                                                                   uint8_t * const opu8_NrCode)
 {
    // C_OscProtocolDriverOsy is still on the STW integer convention
-   return make_error_code_from_stw(orc_Protocol.OsySetNodeIdForChannel(ou8_ChannelType, ou8_ChannelIndex,
-                                                                      orc_NewNodeId, opu8_NrCode));
+   return orc_Protocol.OsySetNodeIdForChannel(ou8_ChannelType, ou8_ChannelIndex, orc_NewNodeId, opu8_NrCode);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1818,9 +1784,8 @@ std::error_code C_OscComDriverFlash::SendOsySetNodeIdForChannel(const C_OscProto
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsySetNodeIdForChannel(ou8_ChannelType, ou8_ChannelIndex,
-                                                     orc_NewNodeId, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsySetNodeIdForChannel(ou8_ChannelType, ou8_ChannelIndex, orc_NewNodeId,
+                                                             opu8_NrCode);
    }
    else
    {
@@ -1835,9 +1800,7 @@ std::error_code C_OscComDriverFlash::SendOsySetNodeIdForChannel(const C_OscProto
       if (c_Return == Errc::success)
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            c_OsyProtocol.OsySetNodeIdForChannel(ou8_ChannelType, ou8_ChannelIndex,
-                                                 orc_NewNodeId, opu8_NrCode));
+         c_Return = c_OsyProtocol.OsySetNodeIdForChannel(ou8_ChannelType, ou8_ChannelIndex, orc_NewNodeId, opu8_NrCode);
       }
       else
       {
@@ -1876,8 +1839,7 @@ std::error_code C_OscComDriverFlash::SendOsyReadListOfFeatures(
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadListOfFeatures(orc_ListOfFeatures, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadListOfFeatures(orc_ListOfFeatures, opu8_NrCode);
    }
 
    return c_Return;
@@ -1914,8 +1876,7 @@ std::error_code C_OscComDriverFlash::SendOsyReadAuthenticationCertificateSerialN
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadAuthenticationCertificateSerialNumber(orc_SerialNumber, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadAuthenticationCertificateSerialNumber(orc_SerialNumber, opu8_NrCode);
    }
 
    return c_Return;
@@ -1952,8 +1913,7 @@ std::error_code C_OscComDriverFlash::SendOsyReadAuthenticationCertificateSerialN
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadAuthenticationCertificateSerialNumberL7(orc_SerialNumber, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadAuthenticationCertificateSerialNumberL7(orc_SerialNumber, opu8_NrCode);
    }
 
    return c_Return;
@@ -1996,9 +1956,8 @@ std::error_code C_OscComDriverFlash::SendOsyWriteSecurityAuthenticationKey(
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyWriteSecurityAuthenticationKey(orc_PublicKeyModulus, orc_PublicKeyExponent,
-                                                                orc_CertificateSerialNumber, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyWriteSecurityAuthenticationKey(orc_PublicKeyModulus, orc_PublicKeyExponent,
+                                                                        orc_CertificateSerialNumber, opu8_NrCode);
    }
 
    return c_Return;
@@ -2033,9 +1992,8 @@ std::error_code C_OscComDriverFlash::SendOsyReadSecurityAuthenticationActivation
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadSecurityAuthenticationActivation(orq_SecurityOn, oru8_SecurityAlgorithm,
-                                                                      opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadSecurityAuthenticationActivation(orq_SecurityOn, oru8_SecurityAlgorithm,
+                                                                              opu8_NrCode);
    }
 
    return c_Return;
@@ -2070,9 +2028,8 @@ std::error_code C_OscComDriverFlash::SendOsyWriteSecurityAuthenticationActivatio
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyWriteSecurityAuthenticationActivation(oq_SecurityOn, ou8_SecurityAlgorithm,
-                                                                       opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyWriteSecurityAuthenticationActivation(oq_SecurityOn, ou8_SecurityAlgorithm,
+                                                                               opu8_NrCode);
    }
 
    return c_Return;
@@ -2107,10 +2064,8 @@ std::error_code C_OscComDriverFlash::SendOsyReadSecurityTrafficEncryptionActivat
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadSecurityTrafficEncryptionActivation(orq_SecurityOn,
-                                                                         oru8_SecurityAlgorithm,
-                                                                         opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadSecurityTrafficEncryptionActivation(orq_SecurityOn, oru8_SecurityAlgorithm,
+                                                                                 opu8_NrCode);
    }
 
    return c_Return;
@@ -2145,10 +2100,8 @@ std::error_code C_OscComDriverFlash::SendOsyWriteSecurityTrafficEncryptionActiva
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyWriteSecurityTrafficEncryptionActivation(oq_SecurityOn,
-                                                                          ou8_SecurityAlgorithm,
-                                                                          opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyWriteSecurityTrafficEncryptionActivation(oq_SecurityOn, ou8_SecurityAlgorithm,
+                                                                                  opu8_NrCode);
    }
 
    return c_Return;
@@ -2182,8 +2135,7 @@ std::error_code C_OscComDriverFlash::SendOsyReadDebuggerEnabled(const C_OscProto
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyReadDebuggerEnabled(orq_DebuggerEnabled, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyReadDebuggerEnabled(orq_DebuggerEnabled, opu8_NrCode);
    }
 
    return c_Return;
@@ -2217,8 +2169,7 @@ std::error_code C_OscComDriverFlash::SendOsyWriteDebuggerEnabled(const C_OscProt
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyWriteDebuggerEnabled(oq_DebuggerEnabled, opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyWriteDebuggerEnabled(oq_DebuggerEnabled, opu8_NrCode);
    }
 
    return c_Return;
@@ -2250,9 +2201,8 @@ std::error_code C_OscComDriverFlash::SendOsyFactoryModeMasterReset(const C_OscPr
    if (pc_ExistingProtocol != nullptr)
    {
       // C_OscProtocolDriverOsy is still on the STW integer convention
-      c_Return = make_error_code_from_stw(
-         pc_ExistingProtocol->OsyFactoryMode(C_OscProtocolDriverOsy::hu8_OSY_FACTORY_MODE_MASTER_RESET,
-                                             opu8_NrCode));
+      c_Return = pc_ExistingProtocol->OsyFactoryMode(C_OscProtocolDriverOsy::hu8_OSY_FACTORY_MODE_MASTER_RESET,
+                                                     opu8_NrCode);
    }
 
    return c_Return;
@@ -2429,14 +2379,12 @@ std::error_code C_OscComDriverFlash::m_InitFlashProtocol(void)
                pc_ProtocolOsy = new C_OscProtocolDriverOsy();
                pc_ProtocolOsy->InitializeHandleWaitTime(&C_OscComDriverFlash::mh_HandleWaitTime, this);
                // C_OscProtocolDriverOsy is still on the STW integer convention
-               c_Return = make_error_code_from_stw(
-                  pc_ProtocolOsy->SetTransportProtocol(this->mc_TransportProtocols[u32_ActiveNodeCounter]));
+               c_Return = pc_ProtocolOsy->SetTransportProtocol(this->mc_TransportProtocols[u32_ActiveNodeCounter]);
                if (c_Return == Errc::success)
                {
                   // C_OscProtocolDriverOsy is still on the STW integer convention
-                  c_Return = make_error_code_from_stw(
-                     pc_ProtocolOsy->SetNodeIdentifiers(this->GetClientId(),
-                                                        this->mc_ServerIds[u32_ActiveNodeCounter]));
+                  c_Return = pc_ProtocolOsy->SetNodeIdentifiers(this->GetClientId(),
+                                                                this->mc_ServerIds[u32_ActiveNodeCounter]);
                   if (c_Return != Errc::success)
                   {
                      //Invalid configuration = programming error
@@ -2490,12 +2438,11 @@ std::error_code C_OscComDriverFlash::m_PrepareTemporaryOsyProtocol(
       if (c_Return == Errc::success)
       {
          // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Return = make_error_code_from_stw(orc_OsyProtocol.SetTransportProtocol(&orc_CanTransportProtocol));
+         c_Return = orc_OsyProtocol.SetTransportProtocol(&orc_CanTransportProtocol);
          if (c_Return == Errc::success)
          {
             // C_OscProtocolDriverOsy is still on the STW integer convention
-            c_Return = make_error_code_from_stw(orc_OsyProtocol.SetNodeIdentifiers(this->GetClientId(),
-                                                                                   orc_ServerId));
+            c_Return = orc_OsyProtocol.SetNodeIdentifiers(this->GetClientId(), orc_ServerId);
          }
       }
    }
@@ -2622,12 +2569,13 @@ void C_OscComDriverFlash::m_HandleWaitTime(void)
             if (pc_ProtocolOsy != nullptr)
             {
                // Send tester present message without expecting a response
-               const int32_t s32_Return = pc_ProtocolOsy->OsyTesterPresent(1U);
+               const std::error_code c_Return = pc_ProtocolOsy->OsyTesterPresent(1U);
 
-               if (s32_Return != C_NO_ERR)
+               if (c_Return != Errc::success)
                {
+                  //boundary: C_OscLoggingHandler still uses the integer convention
                   osc_write_log_error("Sending Tester Present", "Sending Tester Present failed with error code: " +
-                                      C_OscLoggingHandler::h_StwError(s32_Return));
+                                      C_OscLoggingHandler::h_StwError(c_Return.value()));
                }
                else
                {

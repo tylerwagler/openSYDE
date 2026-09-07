@@ -253,7 +253,7 @@ std::error_code C_OscComDriverProtocol::SendTesterPresent(const std::set<uint32_
             {
                // Send tester present message without expecting a response
                // OsyTesterPresent is C_OscProtocolDriverOsy, still on the STW integer convention
-               c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsyTesterPresent(1U));
+               c_Return = pc_ProtocolOsy->OsyTesterPresent(1U);
 
                if (c_Return != Errc::success)
                {
@@ -292,7 +292,7 @@ std::error_code C_OscComDriverProtocol::SendTesterPresent(
       {
          // Send tester present message without expecting a response
          // OsyTesterPresent is C_OscProtocolDriverOsy, still on the STW integer convention
-         c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsyTesterPresent(1U));
+         c_Return = pc_ProtocolOsy->OsyTesterPresent(1U);
 
          if (c_Return != Errc::success)
          {
@@ -335,7 +335,7 @@ const
             {
                // Send tester present message without expecting a response
                // OsyTesterPresent is C_OscProtocolDriverOsy, still on the STW integer convention
-               c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsyTesterPresent(1U));
+               c_Return = pc_ProtocolOsy->OsyTesterPresent(1U);
 
                if (c_Return != Errc::success)
                {
@@ -858,7 +858,7 @@ std::error_code C_OscComDriverProtocol::ReConnectNode(
       if (pc_ProtocolOsy != nullptr)
       {
          // ReConnect is C_OscProtocolDriverOsy, still on the STW integer convention
-         c_Return = make_error_code_from_stw(pc_ProtocolOsy->ReConnect());
+         c_Return = pc_ProtocolOsy->ReConnect();
       }
    }
    return c_Return;
@@ -887,7 +887,7 @@ std::error_code C_OscComDriverProtocol::DisconnectNode(const C_OscProtocolDriver
       if (pc_ProtocolOsy != nullptr)
       {
          // Disconnect is C_OscProtocolDriverOsy, still on the STW integer convention
-         c_Return = make_error_code_from_stw(pc_ProtocolOsy->Disconnect());
+         c_Return = pc_ProtocolOsy->Disconnect();
       }
    }
    return c_Return;
@@ -1216,8 +1216,7 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSessionId(C_OscProtocolDriverOs
 
             // Get the current session
             // OsyReadActiveDiagnosticSession is C_OscProtocolDriverOsy, still on the STW integer convention
-            c_Return = make_error_code_from_stw(
-               opc_ExistingProtocol->OsyReadActiveDiagnosticSession(u8_CurrentSession, opu8_NrCode));
+            c_Return = opc_ExistingProtocol->OsyReadActiveDiagnosticSession(u8_CurrentSession, opu8_NrCode);
 
             if (c_Return == Errc::success)
             {
@@ -1248,8 +1247,7 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSessionId(C_OscProtocolDriverOs
             {
                // Set the session
                // OsyDiagnosticSessionControl is C_OscProtocolDriverOsy, still on the STW integer convention
-               c_Return = make_error_code_from_stw(
-                  opc_ExistingProtocol->OsyDiagnosticSessionControl(ou8_SessionId, opu8_NrCode));
+               c_Return = opc_ExistingProtocol->OsyDiagnosticSessionControl(ou8_SessionId, opu8_NrCode);
 
                if ((c_Return != Errc::success) &&
                    (c_Return != Errc::timeout) &&
@@ -1521,12 +1519,10 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDri
          opc_ExistingProtocol->pc_SecuritySubLayer->SetEncryptionIsActive(false);
 
          // OsySecurityAccessRequestSeed is C_OscProtocolDriverOsy, still on the STW integer convention
-         c_Return = make_error_code_from_stw(
-            opc_ExistingProtocol->OsySecurityAccessRequestSeed(ou8_SecurityLevel, q_SecureMode, u64_Seed,
-                                                               q_SecureAuthenticationActive,
-                                                               q_TrafficEncryptionActive,
-                                                               c_TrafficEncryptionInitVector,
-                                                               &u8_NrErrorCode));
+         c_Return = opc_ExistingProtocol->OsySecurityAccessRequestSeed(ou8_SecurityLevel, q_SecureMode, u64_Seed,
+                                                                       q_SecureAuthenticationActive,
+                                                                       q_TrafficEncryptionActive,
+                                                                       c_TrafficEncryptionInitVector, &u8_NrErrorCode);
 
          if (opu8_NrCode != nullptr)
          {
@@ -1544,12 +1540,10 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDri
 
             stw::tgl::TglSleep(1000);
 
-            c_Return = make_error_code_from_stw(
-               opc_ExistingProtocol->OsySecurityAccessRequestSeed(ou8_SecurityLevel, q_SecureMode, u64_Seed,
-                                                                  q_SecureAuthenticationActive,
-                                                                  q_TrafficEncryptionActive,
-                                                                  c_TrafficEncryptionInitVector,
-                                                                  opu8_NrCode));
+            c_Return = opc_ExistingProtocol->OsySecurityAccessRequestSeed(ou8_SecurityLevel, q_SecureMode, u64_Seed,
+                                                                          q_SecureAuthenticationActive,
+                                                                          q_TrafficEncryptionActive,
+                                                                          c_TrafficEncryptionInitVector, opu8_NrCode);
          }
 
          if (c_Return == Errc::success)
@@ -1590,9 +1584,8 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDri
             {
                //none of the security options are active: use simple variant:
                // OsySecurityAccessSendKey is C_OscProtocolDriverOsy, still on the STW integer convention
-               c_Return = make_error_code_from_stw(
-                  opc_ExistingProtocol->OsySecurityAccessSendKey(ou8_SecurityLevel, u32_THE_NON_SECURE_KEY,
-                                                                 opu8_NrCode));
+               c_Return = opc_ExistingProtocol->OsySecurityAccessSendKey(ou8_SecurityLevel, u32_THE_NON_SECURE_KEY,
+                                                                         opu8_NrCode);
             }
             else
             {
@@ -1613,9 +1606,8 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDri
                         std::vector<uint8_t> c_CertSnr;
                         // OsyReadAuthenticationCertificateSerialNumber is C_OscProtocolDriverOsy, still on the STW
                         // integer convention
-                        c_Return = make_error_code_from_stw(
-                           opc_ExistingProtocol->OsyReadAuthenticationCertificateSerialNumber(c_CertSnr,
-                                                                                              opu8_NrCode));
+                        c_Return = opc_ExistingProtocol->OsyReadAuthenticationCertificateSerialNumber(c_CertSnr,
+                                                                                              opu8_NrCode);
 
                         if (c_Return == Errc::success)
                         {
@@ -1695,14 +1687,12 @@ std::error_code C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDri
                {
                   //send composed data to server
                   // OsySecurityAccessSendKey is C_OscProtocolDriverOsy, still on the STW integer convention
-                  c_Return = make_error_code_from_stw(
-                     opc_ExistingProtocol->OsySecurityAccessSendKey(
-                        ou8_SecurityLevel,
-                        c_AuthenticationSignature,
-                        u32_THE_NON_SECURE_KEY,
-                        c_TrafficEncryptionPublicClientKey,
-                        c_TrafficEncryptionPublicServerKey,
-                        opu8_NrCode));
+                  c_Return = opc_ExistingProtocol->OsySecurityAccessSendKey(ou8_SecurityLevel,
+                                                                            c_AuthenticationSignature,
+                                                                            u32_THE_NON_SECURE_KEY,
+                                                                            c_TrafficEncryptionPublicClientKey,
+                                                                            c_TrafficEncryptionPublicServerKey,
+                                                                            opu8_NrCode);
 
                   if (c_Return != Errc::success)
                   {
@@ -1945,7 +1935,7 @@ std::error_code C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_
 
          // Connect only one time if connection was used already for the node itself or an legacy routing target
          if ((pc_ProtocolOsy != nullptr) &&
-             (pc_ProtocolOsy->IsConnected() != C_NO_ERR))
+             (pc_ProtocolOsy->IsConnected() != Errc::success))
          {
             uint32_t u32_RoutePoint;
 
@@ -2001,7 +1991,7 @@ std::error_code C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_
                   {
                      // Do not disconnect after. The connection is necessary to hold the routing alive.
                      // C_OscProtocolDriverOsy is still on the STW integer convention
-                     c_Return = make_error_code_from_stw(pc_ProtocolOsy->ReConnect());
+                     c_Return = pc_ProtocolOsy->ReConnect();
                   }
 
                   // Check if node supports IP to IP routing
@@ -2009,7 +1999,7 @@ std::error_code C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_
                   {
                      C_OscProtocolDriverOsy::C_ListOfFeatures c_Features;
                      // C_OscProtocolDriverOsy is still on the STW integer convention
-                     c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsyReadListOfFeatures(c_Features));
+                     c_Return = pc_ProtocolOsy->OsyReadListOfFeatures(c_Features);
 
                      if (c_Return == Errc::success)
                      {
@@ -2046,13 +2036,13 @@ std::error_code C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_
 
                         // Configuration of the routing to the next Ethernet node
                         // C_OscProtocolDriverOsy is still on the STW integer convention
-                        c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsySetRouteIp2IpCommunication(
+                        c_Return = pc_ProtocolOsy->OsySetRouteIp2IpCommunication(
                                                                static_cast<uint8_t>(rc_RoutePoint.e_OutInterfaceType),
                                                                rc_RoutePoint.u8_OutInterfaceNumber,
                                                                u8_SourceBusId,
                                                                u8_TargetBusId,
                                                                this->mc_ServerIpAddresses[u32_NextEthernetNode].
-                                                               au8_IpAddress));
+                                                               au8_IpAddress);
                      }
                      else
                      {
@@ -2069,7 +2059,7 @@ std::error_code C_OscComDriverProtocol::m_StartRoutingIp2Ip(const uint32_t ou32_
                      {
                         uint8_t u8_Status;
                         // C_OscProtocolDriverOsy is still on the STW integer convention
-                        c_Return = make_error_code_from_stw(pc_ProtocolOsy->OsyCheckRouteIp2IpCommunication(u8_Status));
+                        c_Return = pc_ProtocolOsy->OsyCheckRouteIp2IpCommunication(u8_Status);
 
                         if ((c_Return != Errc::success) ||
                             (u8_Status >= C_OscProtocolDriverOsy::hu8_OSY_IP_2_IP_STATUS_ERROR))
@@ -2291,7 +2281,7 @@ std::error_code C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_Activ
                            // We have to reconnect to the server in case of Ethernet
                            // But only if IP to IP routing did not connected already.
                            // C_OscProtocolDriverOsy is still on the STW integer convention
-                           c_Return = make_error_code_from_stw(pc_ProtocolOsyTarget->ReConnect());
+                           c_Return = pc_ProtocolOsyTarget->ReConnect();
                         }
 
                         if (c_Return == Errc::success)
@@ -2328,14 +2318,13 @@ std::error_code C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_Activ
 
                                  // Configure the real node for each layer
                                  // C_OscProtocolDriverOsy is still on the STW integer convention
-                                 c_Return = make_error_code_from_stw(
-                                    pc_ProtocolOsyTarget->OsySetRouteDiagnosisCommunication(
+                                 c_Return = pc_ProtocolOsyTarget->OsySetRouteDiagnosisCommunication(
                                        static_cast<uint8_t>(rc_Point.e_InInterfaceType),
                                        rc_Point.u8_InInterfaceNumber,
                                        static_cast<uint8_t>(rc_Point.e_OutInterfaceType),
                                        rc_Point.u8_OutInterfaceNumber,
                                        u8_SourceBusId,
-                                       u8_TargetBusId));
+                                       u8_TargetBusId);
                               }
                               else
                               {
@@ -2395,7 +2384,7 @@ std::error_code C_OscComDriverProtocol::m_StartRouting(const uint32_t ou32_Activ
                       (q_EthernetRouter == false))
                   {
                      // C_OscProtocolDriverOsy is still on the STW integer convention
-                     c_Return = make_error_code_from_stw(pc_ProtocolOsyRouter->ReConnect());
+                     c_Return = pc_ProtocolOsyRouter->ReConnect();
                   }
                }
 
@@ -2719,7 +2708,7 @@ std::error_code C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32
          if (c_Retval == Errc::success)
          {
             // C_OscProtocolDriverOsy is still on the STW integer convention
-         c_Retval = make_error_code_from_stw(pc_ProtocolOsyTarget->OsyStopRouteDiagnosisCommunication());
+         c_Retval = pc_ProtocolOsyTarget->OsyStopRouteDiagnosisCommunication();
 
             if (c_Retval != Errc::success)
             {

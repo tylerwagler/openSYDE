@@ -94,8 +94,7 @@ std::error_code C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const op
       }
       else
       {
-         //boundary: the openSYDE protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(mc_OsyProtocol.SetTransportProtocol(&mc_TpCan));
+         c_Return = mc_OsyProtocol.SetTransportProtocol(&mc_TpCan);
          if (c_Return != Errc::success)
          {
             osc_write_log_error(c_LogActivity,
@@ -386,8 +385,7 @@ std::error_code C_OscDcBasicSequences::ScanGetInfo(void)
             }
 
             // set up temporary node IDs
-            //boundary: the openSYDE protocol driver still uses the integer convention
-            c_Return = make_error_code_from_stw(mc_OsyProtocol.SetNodeIdentifiers(c_Client, c_CurSenderId));
+            c_Return = mc_OsyProtocol.SetNodeIdentifiers(c_Client, c_CurSenderId);
             if (c_Return != Errc::success)
             {
                osc_write_log_error(c_LogActivity,
@@ -395,14 +393,13 @@ std::error_code C_OscDcBasicSequences::ScanGetInfo(void)
             }
             else
             {
-               //boundary: the openSYDE protocol driver still uses the integer convention
-               c_Return = make_error_code_from_stw(mc_OsyProtocol.OsyReadDeviceName(c_Result, &u8_NumberCode));
+               c_Return = mc_OsyProtocol.OsyReadDeviceName(c_Result, &u8_NumberCode);
             }
 
             if (c_Return != Errc::success)
             {
                osc_write_log_error(c_LogActivity, "Could not read the device's device name! Details: " +
-                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                             u8_NumberCode));
             }
             else
@@ -467,8 +464,7 @@ std::error_code C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_Current
    m_ReportProgress(c_Return.value(), "Starting device configuration...");
 
    //set up protocol for communication (which node we want to configure)
-   //boundary: the openSYDE protocol driver still uses the integer convention
-   c_Return = make_error_code_from_stw(mc_OsyProtocol.SetNodeIdentifiers(c_ClientId, c_CurrentServerId));
+   c_Return = mc_OsyProtocol.SetNodeIdentifiers(c_ClientId, c_CurrentServerId);
    if (c_Return != Errc::success)
    {
       osc_write_log_error("ProtocolSetup",
@@ -477,10 +473,8 @@ std::error_code C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_Current
    else
    {
       uint8_t u8_Nrc;
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(mc_OsyProtocol.OsyDiagnosticSessionControl(
-                                             C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PROGRAMMING,
-                                             &u8_Nrc));
+      c_Return = mc_OsyProtocol.OsyDiagnosticSessionControl(C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PROGRAMMING,
+                                                            &u8_Nrc);
 
       if (c_Return == Errc::success)
       {
@@ -494,12 +488,9 @@ std::error_code C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_Current
          std::string c_LogActivity;
 
          c_LogActivity = "Security Access";
-         //boundary: the openSYDE protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(mc_OsyProtocol.OsySecurityAccessRequestSeed(
-                                                u8_SECURITY_LEVEL, q_SecureMode, u64_Seed,
-                                                q_AuthenticationActive,
-                                                q_TrafficEncryptionActive,
-                                                c_TrafficEncryptionInitVector, &u8_Nrc));
+         c_Return = mc_OsyProtocol.OsySecurityAccessRequestSeed(u8_SECURITY_LEVEL, q_SecureMode, u64_Seed,
+                                                                q_AuthenticationActive, q_TrafficEncryptionActive,
+                                                                c_TrafficEncryptionInitVector, &u8_Nrc);
 
          if (q_SecureMode == true)
          {
@@ -510,7 +501,7 @@ std::error_code C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_Current
          else if (c_Return != Errc::success)
          {
             osc_write_log_error(c_LogActivity, "Did not get a security seed from the target device! Details: " +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_Nrc));
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_Nrc));
          }
          else
          {
@@ -527,13 +518,11 @@ std::error_code C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_Current
                osc_write_log_warning(c_LogActivity, c_Tmp.c_str());
             }
 
-            //boundary: the openSYDE protocol driver still uses the integer convention
-            c_Return = make_error_code_from_stw(mc_OsyProtocol.OsySecurityAccessSendKey(u8_SECURITY_LEVEL, u32_KEY,
-                                                                                        &u8_Nrc));
+            c_Return = mc_OsyProtocol.OsySecurityAccessSendKey(u8_SECURITY_LEVEL, u32_KEY, &u8_Nrc);
             if (c_Return != Errc::success)
             {
                osc_write_log_error(c_LogActivity, "The target device did not access the security key! Details: " +
-                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_Nrc));
+                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_Nrc));
             }
          }
       }
@@ -546,14 +535,12 @@ std::error_code C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_Current
          c_ProgressLogMsg = PrintFormattedCompat(
             "Configuring Node ID \"%d\" to Node with current ID \"%d\" on Interface CAN %u.",
             ou8_NewNodeId, ou8_CurrentNodeId, ou8_InterfaceIndex + 1U);
-         //boundary: the openSYDE protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(mc_OsyProtocol.OsySetNodeIdForChannel(0, ou8_InterfaceIndex,
-                                                                                   c_NewServerId, &u8_Nrc));
+         c_Return = mc_OsyProtocol.OsySetNodeIdForChannel(0, ou8_InterfaceIndex, c_NewServerId, &u8_Nrc);
          m_ReportProgress(c_Return.value(), c_ProgressLogMsg);
          if (c_Return != Errc::success)
          {
             osc_write_log_error(c_LogActivity, "Could not set Node ID! Details: " +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_Nrc));
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_Nrc));
          }
          else
          {
@@ -561,16 +548,13 @@ std::error_code C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_Current
             c_ProgressLogMsg = PrintFormattedCompat(
                "Configuring Bitrate %u kbit/s to Node on Interface CAN %u.",
                ou32_Bitrate, ou8_InterfaceIndex + 1U);
-            //boundary: the openSYDE protocol driver still uses the integer convention
-            c_Return = make_error_code_from_stw(mc_OsyProtocol.OsySetBitrate(0, ou8_InterfaceIndex,
-                                                                             ou32_Bitrate * 1000U,
-                                                                             &u8_Nrc));
+            c_Return = mc_OsyProtocol.OsySetBitrate(0, ou8_InterfaceIndex, ou32_Bitrate * 1000U, &u8_Nrc);
             m_ReportProgress(c_Return.value(), c_ProgressLogMsg);
 
             if (c_Return != Errc::success)
             {
                osc_write_log_error(c_LogActivity, "Could not set Bitrate! Details: " +
-                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_Nrc));
+                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_Nrc));
             }
          }
       }

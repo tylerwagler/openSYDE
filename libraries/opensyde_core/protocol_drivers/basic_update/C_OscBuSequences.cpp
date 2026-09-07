@@ -107,8 +107,7 @@ std::error_code C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_Can
       }
       else
       {
-         //boundary: the openSYDE protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(mc_OsyProtocol.SetTransportProtocol(&mc_TpCan));
+         c_Return = mc_OsyProtocol.SetTransportProtocol(&mc_TpCan);
          if (c_Return != Errc::success)
          {
             osc_write_log_error(c_LogActivity,
@@ -126,8 +125,7 @@ std::error_code C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_Can
       c_Server.u8_NodeIdentifier = ou8_NodeId;
       c_Server.u8_BusIdentifier = 0U;
 
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(mc_OsyProtocol.SetNodeIdentifiers(c_Client, c_Server));
+      c_Return = mc_OsyProtocol.SetNodeIdentifiers(c_Client, c_Server);
       if (c_Return != Errc::success)
       {
          osc_write_log_error(c_LogActivity, "Could not configure the node IDs! Is the server node ID within range?");
@@ -168,8 +166,7 @@ std::error_code C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_Flashl
       u32_WaitTime = u32_SCAN_TIME_MS;
    }
 
-   //boundary: the openSYDE protocol driver still uses the integer convention
-   c_Return = make_error_code_from_stw(mc_OsyProtocol.OsyRequestProgramming(&u8_NumberCode));
+   c_Return = mc_OsyProtocol.OsyRequestProgramming(&u8_NumberCode);
    if (c_Return != Errc::success)
    {
       //not a showstopper; user can still use the "manual reset" approach
@@ -184,9 +181,7 @@ std::error_code C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_Flashl
    }
 
    //request "ResetToFlashloader"
-   //boundary: the openSYDE protocol driver still uses the integer convention
-   c_Return = make_error_code_from_stw(
-         mc_OsyProtocol.OsyEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER));
+   c_Return = mc_OsyProtocol.OsyEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
    if (c_Return != Errc::success)
    {
       //also not a showstopper; user can still use the "manual reset" approach
@@ -238,7 +233,7 @@ std::error_code C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_Flashl
    if (c_Return != Errc::success)
    {
       osc_write_log_error(c_LogActivity, "Could not connect to the target device! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
    }
 
    if (c_Return == Errc::success)
@@ -268,132 +263,114 @@ std::error_code C_OscBuSequences::ReadDeviceInformation(void)
 
    m_ReportProgress(c_Return.value(), "Starting to read the device information...");
 
-   //boundary: the openSYDE protocol driver still uses the integer convention
-   c_Return = make_error_code_from_stw(
-         mc_OsyProtocol.OsyReadHardwareNumber(c_Info.u32_EcuArticleNumber, &u8_NumberCode));
+   c_Return = mc_OsyProtocol.OsyReadHardwareNumber(c_Info.u32_EcuArticleNumber, &u8_NumberCode);
 
    if (c_Return != Errc::success)
    {
       osc_write_log_error("Read Article Number", "Could not read the device's article number! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
    }
    else
    {
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(
-            mc_OsyProtocol.OsyReadHardwareVersionNumber(c_Info.c_EcuHardwareVersionNumber, &u8_NumberCode));
+      c_Return = mc_OsyProtocol.OsyReadHardwareVersionNumber(c_Info.c_EcuHardwareVersionNumber, &u8_NumberCode);
    }
 
    if (c_Return != Errc::success)
    {
       osc_write_log_error("Read Hardware Version", "Could not read the device's hardware version number! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
    }
    else
    {
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(mc_OsyProtocol.OsyReadDeviceName(c_DeviceName, &u8_NumberCode));
+      c_Return = mc_OsyProtocol.OsyReadDeviceName(c_DeviceName, &u8_NumberCode);
    }
 
    if (c_Return != Errc::success)
    {
       osc_write_log_error("Read Device Name", "Could not read the device's device name! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
    }
    else
    {
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(
-            mc_OsyProtocol.OsyReadProtocolVersion(c_Info.au8_ProtocolVersion, &u8_NumberCode));
+      c_Return = mc_OsyProtocol.OsyReadProtocolVersion(c_Info.au8_ProtocolVersion, &u8_NumberCode);
    }
 
    if (c_Return != Errc::success)
    {
       osc_write_log_error("Read Protocol Version", "Could not read the device's protocol version! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
    }
    else
    {
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(
-            mc_OsyProtocol.OsyReadBootSoftwareIdentification(c_Info.au8_FlashloaderSoftwareVersion,
-                                                                          &u8_NumberCode));
+      c_Return = mc_OsyProtocol.OsyReadBootSoftwareIdentification(c_Info.au8_FlashloaderSoftwareVersion,
+                                                                  &u8_NumberCode);
    }
 
    if (c_Return != Errc::success)
    {
       osc_write_log_error("Read Flashloader Versions",
                           "Could not read the device's flashloader implementation version! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
    }
    else
    {
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(
-            mc_OsyProtocol.OsyReadFlashloaderProtocolVersion(c_Info.au8_FlashloaderProtocolVersion,
-                                                                          &u8_NumberCode));
+      c_Return = mc_OsyProtocol.OsyReadFlashloaderProtocolVersion(c_Info.au8_FlashloaderProtocolVersion,
+                                                                  &u8_NumberCode);
    }
 
    if (c_Return != Errc::success)
    {
       osc_write_log_error("Read Flashloader Versions",
                           "Could not read the device's flashloader protocol version! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
    }
    else
    {
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(mc_OsyProtocol.OsyReadFlashCount(c_Info.u32_FlashCount, &u8_NumberCode));
+      c_Return = mc_OsyProtocol.OsyReadFlashCount(c_Info.u32_FlashCount, &u8_NumberCode);
    }
 
    if (c_Return != Errc::success)
    {
       osc_write_log_error("Read Flash Count", "Could not read number of times the device has been flashed! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
    }
    else
    {
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(
-            mc_OsyProtocol.OsyReadApplicationSoftwareFingerprint(c_Info.au8_FlashFingerprintDate,
-                                                                              c_Info.au8_FlashFingerprintTime,
-                                                                              c_Info.c_FlashFingerprintUserName,
-                                                                              &u8_NumberCode));
+      c_Return = mc_OsyProtocol.OsyReadApplicationSoftwareFingerprint(c_Info.au8_FlashFingerprintDate,
+                                                                      c_Info.au8_FlashFingerprintTime,
+                                                                      c_Info.c_FlashFingerprintUserName,
+                                                                      &u8_NumberCode);
    }
 
    if (c_Return != Errc::success)
    {
       osc_write_log_error("Read Fingerprint",
                           "Could not read the device's application software fingerprint! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
    }
    else
    {
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(
-            mc_OsyProtocol.OsyReadListOfFeatures(c_Info.c_AvailableFeatures, &u8_NumberCode));
+      c_Return = mc_OsyProtocol.OsyReadListOfFeatures(c_Info.c_AvailableFeatures, &u8_NumberCode);
    }
 
    if (c_Return != Errc::success)
    {
       osc_write_log_error("Read Features",
                           "Could not read the device's list of available features! Details: " +
-                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                          C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
    }
    else
    {
       if (c_Info.c_AvailableFeatures.q_MaxNumberOfBlockLengthAvailable == true)
       {
-         //boundary: the openSYDE protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(
-               mc_OsyProtocol.OsyReadMaxNumberOfBlockLength(c_Info.u16_MaxNumberOfBlockLength, &u8_NumberCode));
+         c_Return = mc_OsyProtocol.OsyReadMaxNumberOfBlockLength(c_Info.u16_MaxNumberOfBlockLength, &u8_NumberCode);
       }
       if (c_Return != Errc::success)
       {
          c_Info.u16_MaxNumberOfBlockLength = 0U;
          osc_write_log_error("Read MaxNumberOfBlockLength",
                              "Could not read the device's maximum number of block length! Details: " +
-                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
       }
    }
 
@@ -402,21 +379,17 @@ std::error_code C_OscBuSequences::ReadDeviceInformation(void)
    {
       if (c_Info.c_AvailableFeatures.q_ExtendedSerialNumberModeImplemented == false)
       {
-         //boundary: the openSYDE protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(
-               mc_OsyProtocol.OsyReadEcuSerialNumber(c_Info.c_SerialNumber, &u8_NumberCode));
+         c_Return = mc_OsyProtocol.OsyReadEcuSerialNumber(c_Info.c_SerialNumber, &u8_NumberCode);
       }
       else
       {
-         //boundary: the openSYDE protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(
-               mc_OsyProtocol.OsyReadEcuSerialNumberExt(c_Info.c_SerialNumber, &u8_NumberCode));
+         c_Return = mc_OsyProtocol.OsyReadEcuSerialNumberExt(c_Info.c_SerialNumber, &u8_NumberCode);
       }
 
       if (c_Return != Errc::success)
       {
          osc_write_log_error("Read Serial Number", "Could not read the device's serial number! Details: " +
-                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
       }
    }
 
@@ -480,14 +453,12 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
       osc_write_log_info(c_LogActivity, "Activating programming session ...");
 
       //try to enter programming session
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(
-            mc_OsyProtocol.OsyDiagnosticSessionControl(C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PROGRAMMING,
-                                                       &u8_NumberCode));
+      c_Return = mc_OsyProtocol.OsyDiagnosticSessionControl(C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PROGRAMMING,
+                                                            &u8_NumberCode);
       if (c_Return != Errc::success)
       {
          osc_write_log_error(c_LogActivity, "Could not activate the programming session! Details: " +
-                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
       }
    }
 
@@ -502,12 +473,9 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
       std::vector<uint8_t> c_TrafficEncryptionInitVector;
 
       c_LogActivity = "Security Access";
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(
-            mc_OsyProtocol.OsySecurityAccessRequestSeed(u8_SECURITY_LEVEL, q_SecureMode, u64_Seed,
-                                                                     q_AuthenticationActive,
-                                                                     q_TrafficEncryptionActive,
-                                                                     c_TrafficEncryptionInitVector, &u8_NumberCode));
+      c_Return = mc_OsyProtocol.OsySecurityAccessRequestSeed(u8_SECURITY_LEVEL, q_SecureMode, u64_Seed,
+                                                             q_AuthenticationActive, q_TrafficEncryptionActive,
+                                                             c_TrafficEncryptionInitVector, &u8_NumberCode);
 
       if ((c_Return == Errc::warn) &&
           (u8_NumberCode == C_OscProtocolDriverOsy::hu8_NR_CODE_REQUIRED_TIME_DELAY_NOT_EXPIRED))
@@ -520,12 +488,9 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
 
          stw::tgl::TglSleep(1000);
 
-         //boundary: the openSYDE protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(
-               mc_OsyProtocol.OsySecurityAccessRequestSeed(u8_SECURITY_LEVEL, q_SecureMode, u64_Seed,
-                                                                        q_AuthenticationActive,
-                                                                        q_TrafficEncryptionActive,
-                                                                        c_TrafficEncryptionInitVector, &u8_NumberCode));
+         c_Return = mc_OsyProtocol.OsySecurityAccessRequestSeed(u8_SECURITY_LEVEL, q_SecureMode, u64_Seed,
+                                                                q_AuthenticationActive, q_TrafficEncryptionActive,
+                                                                c_TrafficEncryptionInitVector, &u8_NumberCode);
       }
 
       if (q_SecureMode == true)
@@ -537,7 +502,7 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
       else if (c_Return != Errc::success)
       {
          osc_write_log_error(c_LogActivity, "Did not get a security seed from the target device! Details: " +
-                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
       }
       else
       {
@@ -555,12 +520,11 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
             osc_write_log_warning(c_LogActivity, c_Tmp.c_str());
          }
 
-         //boundary: the openSYDE protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(mc_OsyProtocol.OsySecurityAccessSendKey(3U, u32_KEY, &u8_NumberCode));
+         c_Return = mc_OsyProtocol.OsySecurityAccessSendKey(3U, u32_KEY, &u8_NumberCode);
          if (c_Return != Errc::success)
          {
             osc_write_log_error(c_LogActivity, "The target device did not access the security key! Details: " +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                          u8_NumberCode));
          }
       }
@@ -575,12 +539,9 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
       //do we have enough space for the hex file data ?
       for (uint16_t u16_Area = 0U; u16_Area < pc_HexDump->at_Blocks.size(); u16_Area++)
       {
-         //boundary: the openSYDE protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(
-               mc_OsyProtocol.OsyCheckFlashMemoryAvailable(
-                  pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
-                  pc_HexDump->at_Blocks[u16_Area].au8_Data.size(),
-                  &u8_NumberCode));
+         c_Return = mc_OsyProtocol.OsyCheckFlashMemoryAvailable(pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
+                                                                pc_HexDump->at_Blocks[u16_Area].au8_Data.size(),
+                                                                &u8_NumberCode);
          if (c_Return != Errc::success)
          {
             std::string c_Error;
@@ -588,7 +549,7 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
                                    static_cast<uint32_t>(pc_HexDump->at_Blocks[u16_Area].au8_Data.size()));
             osc_write_log_error(c_LogActivity,  "Could not get confirmation about flash memory availability " +
                                 c_Error + "! Details: " +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                          u8_NumberCode));
             break;
          }
@@ -620,13 +581,11 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
          c_UserName = "unknown";
       }
 
-      //boundary: the openSYDE protocol driver still uses the integer convention
-      c_Return = make_error_code_from_stw(
-            mc_OsyProtocol.OsyWriteApplicationSoftwareFingerprint(au8_Date, au8_Time, c_UserName, &u8_NumberCode));
+      c_Return = mc_OsyProtocol.OsyWriteApplicationSoftwareFingerprint(au8_Date, au8_Time, c_UserName, &u8_NumberCode);
       if (c_Return != Errc::success)
       {
          osc_write_log_error(c_LogActivity, "Could not set the SW fingerprint! Details: " +
-                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_NumberCode));
+                             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return, u8_NumberCode));
       }
    }
 
@@ -655,18 +614,16 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
          //set a proper timeout
          mc_OsyProtocol.SetTimeoutPolling(ou32_RequestDownloadTimeout);
 
-         //boundary: the openSYDE protocol driver still uses the integer convention
-         c_Return = make_error_code_from_stw(
-               mc_OsyProtocol.OsyRequestDownload(pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
-                                                              pc_HexDump->at_Blocks[u16_Area].au8_Data.size(),
-                                                              u32_MaxBlockLength, &u8_NumberCode));
+         c_Return = mc_OsyProtocol.OsyRequestDownload(pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
+                                                      pc_HexDump->at_Blocks[u16_Area].au8_Data.size(),
+                                                      u32_MaxBlockLength, &u8_NumberCode);
          if (c_Return != Errc::success)
          {
             std::string c_Error;
             c_Error = PrintFormattedCompat("(Offset: 0x%08X Size: 0x%08X)", pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
                                    static_cast<uint32_t>(pc_HexDump->at_Blocks[u16_Area].au8_Data.size()));
             osc_write_log_error(c_LogActivity, "Could not request download " + c_Error + "! Details: " +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                          u8_NumberCode));
             q_ErrorOccurred = true;
          }
@@ -699,9 +656,7 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
                   &pc_HexDump->at_Blocks[u16_Area].au8_Data[s32_Size - s32_RemainingBytes],
                   c_Data.size());
 
-               //boundary: the openSYDE protocol driver still uses the integer convention
-               c_Return = make_error_code_from_stw(
-                     mc_OsyProtocol.OsyTransferData(u8_BlockSequenceCounter, c_Data, &u8_NumberCode));
+               c_Return = mc_OsyProtocol.OsyTransferData(u8_BlockSequenceCounter, c_Data, &u8_NumberCode);
                if (c_Return == Errc::success)
                {
                   std::string c_Text;
@@ -722,7 +677,7 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
                else
                {
                   osc_write_log_error(c_LogActivity, "Could not transfer data. Details: " +
-                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                                u8_NumberCode));
                   break;
                }
@@ -748,22 +703,18 @@ std::error_code C_OscBuSequences::UpdateNode(const std::string & orc_HexFilePath
             {
                osc_write_log_info(c_LogActivity,
                                   "This is the last area, we'll better check the signature as well ...");
-               //boundary: the openSYDE protocol driver still uses the integer convention
-               c_Return = make_error_code_from_stw(
-                     mc_OsyProtocol.OsyRequestTransferExitAddressBased(true, u32_SignatureBlockAddress,
-                                                                                    &u8_NumberCode));
+               c_Return = mc_OsyProtocol.OsyRequestTransferExitAddressBased(true, u32_SignatureBlockAddress,
+                                                                            &u8_NumberCode);
             }
             else
             {
-               //boundary: the openSYDE protocol driver still uses the integer convention
-               c_Return = make_error_code_from_stw(
-                     mc_OsyProtocol.OsyRequestTransferExitAddressBased(false, 0U, &u8_NumberCode));
+               c_Return = mc_OsyProtocol.OsyRequestTransferExitAddressBased(false, 0U, &u8_NumberCode);
             }
 
             if (c_Return != Errc::success)
             {
                osc_write_log_error(c_LogActivity, "Could not finalize the area! Details: " +
-                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return,
                                                                                             u8_NumberCode));
                q_ErrorOccurred = true;
             }
@@ -804,8 +755,7 @@ std::error_code C_OscBuSequences::ResetSystem(void)
    m_ReportProgress(c_Return.value(), "Starting system reset... ");
 
    osc_write_log_info(c_LogActivity, "Resetting the target device ...");
-   //boundary: the openSYDE protocol driver still uses the integer convention
-   c_Return = make_error_code_from_stw(mc_OsyProtocol.OsyEcuReset());
+   c_Return = mc_OsyProtocol.OsyEcuReset();
    if (c_Return != Errc::success)
    {
       osc_write_log_error(c_LogActivity, "Could not reset the target device!");

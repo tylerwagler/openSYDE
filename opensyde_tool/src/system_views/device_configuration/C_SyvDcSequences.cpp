@@ -25,6 +25,7 @@
 #include <QThread>
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
 #include "TglUtils.hpp"
 #include "C_Uti.hpp"
@@ -1874,7 +1875,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier,
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
                                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
-                                                       s32_Return,
+                                                       make_error_code_from_stw(s32_Return),
                                                        u8_ErrCode).c_str());
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
@@ -1903,7 +1904,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier,
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
                                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
-                                                       s32_Return,
+                                                       make_error_code_from_stw(s32_Return),
                                                        u8_ErrCode).c_str());
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
@@ -1936,7 +1937,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier,
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
                                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
-                                                       s32_Return,
+                                                       make_error_code_from_stw(s32_Return),
                                                        u8_ErrCode).c_str());
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
@@ -2117,8 +2118,8 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
             c_Text = PrintFormattedCompat("openSYDE setting preprogramming mode failed on node with ID %d on bus with ID"
                                   " %d with error: %s", orc_UsedServerIds[u32_DeviceCounter].u8_NodeIdentifier,
                                   orc_UsedServerIds[u32_DeviceCounter].u8_BusIdentifier,
-                                  C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
-                                                                                           u8_NrCode).c_str());
+                                  C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
+                                     make_error_code_from_stw(s32_Return), u8_NrCode).c_str());
             osc_write_log_error("Configure openSYDE devices", c_Text);
          }
 
@@ -2571,7 +2572,7 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
                                                  c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier,
                                                  c_ServerIdOfCurBus.u8_NodeIdentifier,
                                                  C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
-                                                    s32_Return,
+                                                    make_error_code_from_stw(s32_Return),
                                                     u8_ErrCode).c_str());
                            osc_write_log_error("Configure openSYDE devices", c_Text);
                         }
@@ -2599,7 +2600,7 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier,
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
                                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
-                                                       s32_Return,
+                                                       make_error_code_from_stw(s32_Return),
                                                        u8_ErrCode).c_str());
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
@@ -3242,8 +3243,8 @@ int32_t C_SyvDcSequences::m_ReadBackEth(void)
                c_Text = PrintFormattedCompat("openSYDE setting preprogramming mode failed on node with ID %d on bus with ID"
                                      " %d with error: %s", rc_OsyServerId.u8_NodeIdentifier,
                                      rc_OsyServerId.u8_BusIdentifier,
-                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
-                                                                                              u8_NrCode).c_str());
+                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
+                                        make_error_code_from_stw(s32_Return), u8_NrCode).c_str());
                osc_write_log_error("Configure openSYDE devices", c_Text);
             }
          }
