@@ -28,12 +28,32 @@ that do not regress existing functionality.
 | 2 — Remove `C_SclDynamicArray` | ✅ **Complete** | Zero references remain. |
 | 3 — Retire `C_SclString` | ✅ **Complete** | Class deleted; `C_SclStringCompat.hpp` helpers remain, ~94 files still call them. `C_SclStringList` / `C_SclIniFile` still exist. See `PHASE3_PLAN.md`. |
 | 4 — Replace homegrown AES | ✅ **Complete for files; wire protocol out of scope** | File encryption is now AES-256-GCM + PBKDF2, with a versioned header and key wiping. The protocol sub-layer is deliberately unchanged — see below. |
-| 5 — Error handling | 🔶 **Started** | `C_OscErrorCategory` (`Errc` + `STWErrorCategory`) exists; the security API returns `std::error_code`. The bulk of the int32_t call sites are unmigrated. 16 sites bridge with the wrong idiom — see below. |
+| 5 — Error handling | 🔶 **In progress** | Waves 1–3 done: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc. `data_dealer`, `exports`, `imports`, `halc` and `security` are now clean. Remaining: `protocol_drivers` and `project`. 16 sites bridge with the wrong idiom — see below. |
 | 6.1 — Singletons | ✅ **Complete, deviating from plan** | Meyer's singleton **rejected** — see below. Race fixed with `std::call_once`; `h_Destroy()` and teardown ordering kept. |
 | 6.2 — Standard mutex | ✅ **Complete** | `C_TglCriticalSection` and all four `TglTasks` files deleted; 52 call sites on `std::mutex`. |
 | 6.3 — Smart pointers | 🚫 **Closed, no defect found** | Exit criterion is wrong as written, and the hazards it implies do not exist here — see below. |
 | 7 — Performance | 🚫 **Blocked on its own criteria** | Prescribes `std::format` (C++20) in a C++17 codebase, and its exit criteria require benchmarks that do not exist — see below. |
 | 8 — Build system | 🔶 **Partial** | CMake minimum raised to 3.25 across the Vector submodules; CI matrix reworked; ccache added. The unified root build remains open — see below. |
+
+### Phase 5 — what is left, measured
+
+Counting `int32_t`-returning declarations in core headers (an upper bound: it
+includes functions that return a count rather than a status):
+
+| Subsystem | Remaining | Note |
+|---|---|---|
+| `protocol_drivers` | 317 | ECU-facing. Characterisation tests exist now for `C_OscProtocolSerialNumber` and `C_OscApplicationInfoBlock`; the rest is untested. |
+| `project` | 213 | Roughly 640 caller files — the caller set, not the function count, is what makes this one big. |
+| `xml_parser` | 26 | `C_OscXmlParserBase` is shared by every tree. Its own wave, never a rider on another. |
+| `system_update_package` | 4 | Plus the 16 wrong-idiom bridge sites below. |
+| `scl` | 4 | |
+| `data_dealer`, `exports`, `imports`, `halc`, `security` | 0 | Done. |
+
+68 core headers now use `std::error_code`.
+
+Both large waves have to run alone. `protocol_drivers` and `project` overlap
+heavily in callers, and the two-agent parallelism that worked for halc + security
+depended on their caller sets being disjoint — which these are not.
 
 ### Phase 5 — two bridging idioms are in the tree, only one is right
 
