@@ -28,7 +28,7 @@ that do not regress existing functionality.
 | 2 — Remove `C_SclDynamicArray` | ✅ **Complete** | Zero references remain. |
 | 3 — Retire `C_SclString` | ✅ **Complete** | Class deleted; `C_SclStringCompat.hpp` helpers remain, ~94 files still call them. `C_SclStringList` / `C_SclIniFile` still exist. See `PHASE3_PLAN.md`. |
 | 4 — Replace homegrown AES | ✅ **Complete for files; wire protocol out of scope** | File encryption is now AES-256-GCM + PBKDF2, with a versioned header and key wiping. The protocol sub-layer is deliberately unchanged — see below. |
-| 5 — Error handling | 🔶 **In progress** | Waves 1–4B done: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc, plus protocol_drivers transport (4A) and communication (4B). Clean: `data_dealer`, `exports`, `imports`, `halc`, `security`, `protocol_drivers/communication`. Remaining: protocol_drivers 4C (32, in flight), the CAN dispatcher (33), `xml_parser` (13) and `project` (213). No `static_cast<Errc>` remains anywhere. |
+| 5 — Error handling | ✅ **Complete** | Every STW `int32_t` error return in `opensyde_core` is `std::error_code`. Nine waves: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc, protocol_drivers (4 sub-waves, 309 functions), CAN dispatcher, IP dispatcher, xml_parser, project filers and data model, and a final six. Bridging scaffolding fell 238 → 8. 19 functions stay on `int32_t` on purpose — see below. No `static_cast<Errc>` anywhere.  |
 | 6.1 — Singletons | ✅ **Complete, deviating from plan** | Meyer's singleton **rejected** — see below. Race fixed with `std::call_once`; `h_Destroy()` and teardown ordering kept. |
 | 6.2 — Standard mutex | ✅ **Complete** | `C_TglCriticalSection` and all four `TglTasks` files deleted; 52 call sites on `std::mutex`. |
 | 6.3 — Smart pointers | 🚫 **Closed, no defect found** | Exit criterion is wrong as written, and the hazards it implies do not exist here — see below. |
@@ -54,6 +54,43 @@ includes functions that return a count rather than a status):
 Both large waves have to run alone. `protocol_drivers` and `project` overlap
 heavily in callers, and the two-agent parallelism that worked for halc + security
 depended on their caller sets being disjoint — which these are not.
+
+### Phase 5 — the 19 functions that stay on int32_t
+
+The migration is complete, and these are deliberate. Two reasons, and neither is
+"not got to yet":
+
+**They return a value, not a status.** Converting destroys the value.
+
+| Function | Returns |
+|---|---|
+| `C_OscXmlParser::GetAttributeSint32` | the attribute (takes a default) |
+| `C_OscApplicationInfoBlock::GetInfoLevel` | 0..9, or `C_RANGE` |
+| `C_CanDispatcher::DispatchIncoming` | count of dispatched messages |
+| `C_SclIniFile::ReadInteger` | the integer read |
+| `C_SclStringList::IndexOf` / `IndexOfName` | an index |
+| `C_OscNodeDataPool::GetFreeBytes`, `C_OscNodeDataPoolList::GetFreeBytes` | signed byte count; **negative means the list overflows its NvM size** |
+| `C_OscNode::GetDataPoolIndex` / `GetDataPoolTypeIndex` | index, or -1 |
+| `C_OscNodeDataPoolContent::GetValueS32` / `GetValueArrS32Element` | the stored value |
+| `C_OscCanProtocol::h_GetListIndex` | index, or -1 |
+
+`h_GetListIndex` is the instructive one: its sibling `h_GetComListIndex` *is* a
+status returning the index through an out-parameter. The two differ only in shape,
+so name alone gets it wrong.
+
+**They use a foreign convention.** These must never be bridged with
+`make_error_code_from_stw` or become `Errc`.
+
+| Function | Convention |
+|---|---|
+| `C_HexFile::GetDataByAddress` / `FindPattern` / `mh_FindPattern` | plain 0 / -1 / -2 |
+| `C_Md5Checksum::mh_Md5Process` / `mh_Md5Done` | internal MD5 |
+| `C_SclChecksums::CalcCRC32TriCore` | documented 0 / -1 |
+
+Foreign-convention conflation was the most repeated mistake of this migration —
+four separate instances (`TglRemoveDirectory`, `mz_compress`, `TglCreateDirectory`,
+and the socket API in `CloseTcp`), each invisible in testing because 0 means
+success on both sides.
 
 ### Phase 5 — the remaining counts are upper bounds, and some are mostly noise
 
