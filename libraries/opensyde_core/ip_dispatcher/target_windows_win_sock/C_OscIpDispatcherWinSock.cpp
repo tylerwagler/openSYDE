@@ -19,6 +19,7 @@
 #include <iphlpapi.h> //Windows IP helper utilities
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscIpDispatcherWinSock.hpp"
 #include "TglFile.hpp"
@@ -194,10 +195,10 @@ C_OscIpDispatcherWinSock::~C_OscIpDispatcherWinSock(void)
    \param[out]    oru32_Handle  handle to new TCP connection (to be used in subsequent calls of TCP functions)
 
    \return
-   C_NO_ERR   Connection created
+   Errc::success   Connection created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle)
+std::error_code C_OscIpDispatcherWinSock::InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle)
 {
    C_TcpConnection c_NewConnection;
 
@@ -207,7 +208,7 @@ int32_t C_OscIpDispatcherWinSock::InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t
    this->mc_SocketsTcp.push_back(c_NewConnection);
    oru32_Handle = static_cast<uint32_t>(mc_SocketsTcp.size() - 1U);
 
-   return C_NO_ERR;
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -220,13 +221,13 @@ int32_t C_OscIpDispatcherWinSock::InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t
    If mc_PreferredInterfaceName is not an empty string, only IPs of an adapter with this name will be used.
 
    \return
-   C_NO_ERR     IPs listed
-   C_NOACT      could not get IP information
+   Errc::success   IPs listed
+   Errc::noact     could not get IP information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
+std::error_code C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
 {
-   int32_t s32_Return = C_NOACT;
+   std::error_code c_Return = Errc::noact;
    PIP_ADAPTER_ADDRESSES pc_Addresses;
    uint32_t u32_RetVal;
    //lint -e{8080} //using type provided by the library for compatibility
@@ -275,7 +276,7 @@ int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
 
                      osc_write_log_info("openSYDE IP-TP", c_Info);
 
-                     s32_Return = C_NO_ERR;
+                     c_Return = Errc::success;
                   }
                }
 
@@ -293,7 +294,7 @@ int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
 
    delete[] pc_Addresses;
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -308,11 +309,11 @@ int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
    \param[in,out]  orc_Connection     TCP connection status and configuration
 
    \return
-   C_NO_ERR   connected ...
-   C_BUSY     connection failed
+   Errc::success   connected ...
+   Errc::busy      connection failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection) const
+std::error_code C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection) const
 {
    bool q_Error = false;
 
@@ -429,7 +430,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
          }
       }
    }
-   return (q_Error == true) ? C_BUSY : C_NO_ERR;
+   return (q_Error == true) ? Errc::busy : Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -441,13 +442,14 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
    \param[out]  orx_Socket       Resulting socket handle
 
    \return
-   C_NO_ERR   socket set up
-   C_NOACT    could not set up socket
+   Errc::success   socket set up
+   Errc::noact     could not set up socket
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{8080} //using type to match library interface
-int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort, const uint32_t ou32_IpToBindTo,
-                                                       SOCKET & orx_Socket) const
+std::error_code C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
+                                                               const uint32_t ou32_IpToBindTo,
+                                                               SOCKET & orx_Socket) const
 {
    bool q_Error = false;
    int x_Return; //lint !e8080 !e970 //using type to match library interface
@@ -532,7 +534,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
          //nothing more for now ...
       }
    }
-   return (q_Error == true) ? C_NOACT : C_NO_ERR;
+   return (q_Error == true) ? Errc::noact : Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -563,17 +565,17 @@ std::string C_OscIpDispatcherWinSock::mh_IpToText(const uint8_t (&orau8_Ip)[4])
    ** set permissions to send broadcasts
 
    \return
-   C_NO_ERR   connected ...
-   C_NOACT    connection failed
+   Errc::success   connected ...
+   Errc::noact     connection failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::InitUdp(void)
+std::error_code C_OscIpDispatcherWinSock::InitUdp(void)
 {
    bool q_Error = false;
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   s32_Return = m_GetAllInstalledInterfaceIps();
-   if (s32_Return != C_NO_ERR)
+   c_Return = m_GetAllInstalledInterfaceIps();
+   if (c_Return)
    {
       //we could not find out which interfaces we have: try "any"
       osc_write_log_warning("openSYDE IP-TP", "UDP init: could not find IP(s) of local interfaces. Trying \"any\" ...");
@@ -592,13 +594,13 @@ int32_t C_OscIpDispatcherWinSock::InitUdp(void)
    for (uint32_t u32_Interface = 0U; u32_Interface < mc_LocalInterfaceIps.size(); u32_Interface++)
    {
       //create UDP socket:
-      s32_Return = m_ConfigureUdpSocket(false, mc_LocalInterfaceIps[u32_Interface], mc_SocketsUdpClient[u32_Interface]);
-      if (s32_Return == C_NO_ERR)
+      c_Return = m_ConfigureUdpSocket(false, mc_LocalInterfaceIps[u32_Interface], mc_SocketsUdpClient[u32_Interface]);
+      if (!c_Return)
       {
-         s32_Return =
+         c_Return =
             m_ConfigureUdpSocket(true, mc_LocalInterfaceIps[u32_Interface], mc_SocketsUdpServer[u32_Interface]);
       }
-      if (s32_Return != C_NO_ERR)
+      if (c_Return)
       {
          q_Error = true;
          break;
@@ -611,7 +613,7 @@ int32_t C_OscIpDispatcherWinSock::InitUdp(void)
       this->CloseUdp();
    }
 
-   return (q_Error == true) ? C_NOACT : C_NO_ERR;
+   return (q_Error == true) ? Errc::noact : Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -620,24 +622,24 @@ int32_t C_OscIpDispatcherWinSock::InitUdp(void)
    \param[in]   ou32_Handle   handle obtained by InitTcp()
 
    \return
-   C_NO_ERR   is connected
-   C_NOACT    is not connected
-   C_RANGE    invalid handle
+   Errc::success   is connected
+   Errc::noact     is not connected
+   Errc::range     invalid handle
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::IsTcpConnected(const uint32_t ou32_Handle)
+std::error_code C_OscIpDispatcherWinSock::IsTcpConnected(const uint32_t ou32_Handle)
 {
-   int32_t s32_Return = C_NOACT;
+   std::error_code c_Return = Errc::noact;
 
    if (ou32_Handle >= this->mc_SocketsTcp.size())
    {
       osc_write_log_error("openSYDE IP-TP", "IsTcpConnected called with invalid handle.");
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else if (this->mc_SocketsTcp[ou32_Handle].x_Socket == m_WsInvalidSocket())
    {
       // Socket not opened yet
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
    else
    {
@@ -650,12 +652,12 @@ int32_t C_OscIpDispatcherWinSock::IsTcpConnected(const uint32_t ou32_Handle)
 
       if (x_BytesRead > 0)
       {
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
       }
       else if (x_BytesRead == 0)
       {
          // Connection closed by remote peer
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       else
       {
@@ -666,12 +668,12 @@ int32_t C_OscIpDispatcherWinSock::IsTcpConnected(const uint32_t ou32_Handle)
          // But the connection is already established.
          if (x_SocketError == WSAEWOULDBLOCK)
          {
-            s32_Return = C_NO_ERR;
+            c_Return = Errc::success;
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -687,19 +689,19 @@ int32_t C_OscIpDispatcherWinSock::IsTcpConnected(const uint32_t ou32_Handle)
    \param[in]   ou32_Handle   handle obtained by InitTcp()
 
    \return
-   C_NO_ERR   reconnected
-   C_BUSY     connection failed
-   C_RANGE    invalid handle
+   Errc::success   reconnected
+   Errc::busy      connection failed
+   Errc::range     invalid handle
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::ReConnectTcp(const uint32_t ou32_Handle)
+std::error_code C_OscIpDispatcherWinSock::ReConnectTcp(const uint32_t ou32_Handle)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (ou32_Handle >= this->mc_SocketsTcp.size())
    {
       osc_write_log_error("openSYDE IP-TP", "ReConnectTcp called with invalid handle.");
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -711,14 +713,14 @@ int32_t C_OscIpDispatcherWinSock::ReConnectTcp(const uint32_t ou32_Handle)
          this->mc_SocketsTcp[ou32_Handle].x_Socket = m_WsInvalidSocket();
       }
       //connect:
-      s32_Return = this->m_ConnectTcp(this->mc_SocketsTcp[ou32_Handle]);
-      if (s32_Return != C_NO_ERR)
+      c_Return = this->m_ConnectTcp(this->mc_SocketsTcp[ou32_Handle]);
+      if (c_Return)
       {
          (void)closesocket(this->mc_SocketsTcp[ou32_Handle].x_Socket);
          this->mc_SocketsTcp[ou32_Handle].x_Socket = m_WsInvalidSocket();
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -730,19 +732,19 @@ int32_t C_OscIpDispatcherWinSock::ReConnectTcp(const uint32_t ou32_Handle)
    \param[in]   ou32_Handle   handle obtained by InitTcp()
 
    \return
-   C_NO_ERR   disconnected ...
-   C_RANGE    handle invalid
+   Errc::success   disconnected ...
+   Errc::range     handle invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::CloseTcp(const uint32_t ou32_Handle)
+std::error_code C_OscIpDispatcherWinSock::CloseTcp(const uint32_t ou32_Handle)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if ((ou32_Handle >= this->mc_SocketsTcp.size()) ||
        (this->mc_SocketsTcp[ou32_Handle].x_Socket == m_WsInvalidSocket()))
    {
       osc_write_log_error("openSYDE IP-TP", "CloseTcp called with invalid handle.");
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -755,7 +757,11 @@ int32_t C_OscIpDispatcherWinSock::CloseTcp(const uint32_t ou32_Handle)
 
       shutdown(this->mc_SocketsTcp[ou32_Handle].x_Socket, SD_BOTH);
 
-      s32_Return = closesocket(this->mc_SocketsTcp[ou32_Handle].x_Socket);
+      //closesocket() reports the WinSock convention (0 / SOCKET_ERROR plus WSAGetLastError()),
+      //not the STW one: translate explicitly
+      const int x_CloseResult = //lint !e8080 !e970 //using type to match library interface
+                                closesocket(this->mc_SocketsTcp[ou32_Handle].x_Socket);
+      c_Return = (x_CloseResult == 0) ? Errc::success : Errc::unknown_err;
       this->mc_SocketsTcp[ou32_Handle].x_Socket = m_WsInvalidSocket();
 
       osc_write_log_info("openSYDE IP-TP",
@@ -764,7 +770,7 @@ int32_t C_OscIpDispatcherWinSock::CloseTcp(const uint32_t ou32_Handle)
                          " on client port: " + std::to_string(ntohs(c_SocketInfo.sin_port)));
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -774,10 +780,10 @@ int32_t C_OscIpDispatcherWinSock::CloseTcp(const uint32_t ou32_Handle)
    - close opened UDP client sockets
 
    \return
-   C_NO_ERR   disconnected ...
+   Errc::success   disconnected ...
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::CloseUdp(void)
+std::error_code C_OscIpDispatcherWinSock::CloseUdp(void)
 {
    for (uint32_t u32_Interface = 0U; u32_Interface < mc_SocketsUdpClient.size(); u32_Interface++)
    {
@@ -792,7 +798,7 @@ int32_t C_OscIpDispatcherWinSock::CloseUdp(void)
    }
    mc_SocketsUdpClient.resize(0);
    mc_SocketsUdpServer.resize(0);
-   return C_NO_ERR;
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -805,29 +811,29 @@ int32_t C_OscIpDispatcherWinSock::CloseUdp(void)
    \param[in]   orc_Data      data to sent
 
    \return
-   C_NO_ERR   data sent successfully
-   C_CONFIG   required socket not initialized
-   C_RD_WR    error sending data
-   C_RANGE    handle invalid
+   Errc::success   data sent successfully
+   Errc::config    required socket not initialized
+   Errc::rd_wr     error sending data
+   Errc::range     handle invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data)
+std::error_code C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (ou32_Handle >= this->mc_SocketsTcp.size())
    {
       osc_write_log_error("openSYDE IP-TP", "SendTcp called with invalid handle.");
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
 
       if (this->mc_SocketsTcp[ou32_Handle].x_Socket == m_WsInvalidSocket())
       {
          osc_write_log_error("openSYDE IP-TP", "SendTcp called with invalid socket.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -866,11 +872,11 @@ int32_t C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const std:
                                    std::to_string(orc_Data.size()) +
                                    "sent: " + std::to_string(x_BytesSent));
             }
-            s32_Return = C_RD_WR;
+            c_Return = Errc::rd_wr;
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -887,30 +893,30 @@ int32_t C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const std:
                                  out: received data
 
    \return
-   C_NO_ERR   data read successfully
-   C_CONFIG   required socket not initialized
-   C_NOACT    not enough bytes
-   C_RD_WR    error reading data
-   C_RANGE    handle invalid
+   Errc::success   data read successfully
+   Errc::config    required socket not initialized
+   Errc::noact     not enough bytes
+   Errc::rd_wr     error reading data
+   Errc::range     handle invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data)
+std::error_code C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (ou32_Handle >= this->mc_SocketsTcp.size())
    {
       osc_write_log_error("openSYDE IP-TP", "ReadTcp called with invalid handle.");
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
 
       if (this->mc_SocketsTcp[ou32_Handle].x_Socket == m_WsInvalidSocket())
       {
          osc_write_log_error("openSYDE IP-TP", "ReadTcp called with invalid socket.");
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -931,7 +937,7 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, std::vecto
                                          reinterpret_cast<char_t *>(&orc_Data[0]), x_BytesToRead, 0);
             if (x_BytesRead == x_BytesToRead)
             {
-               s32_Return = C_NO_ERR;
+               c_Return = Errc::success;
             }
             else
             {
@@ -939,7 +945,7 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, std::vecto
                osc_write_log_error("openSYDE IP-TP",
                                    "TCP unexpected error: data reported as available but reading failed. IP-Address: " +
                                    mh_IpToText(this->mc_SocketsTcp[ou32_Handle].au8_IpAddress));
-               s32_Return = C_RD_WR;
+               c_Return = Errc::rd_wr;
             }
          }
          else if (x_Return == SOCKET_ERROR)
@@ -954,7 +960,7 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, std::vecto
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -977,23 +983,26 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, std::vecto
                                              out: received data
 
    \return
-   C_NO_ERR   data read successfully
-   C_CONFIG   required socket not initialized
-   C_NOACT    not enough bytes
-   C_RD_WR    error reading data
-   C_RANGE    handle invalid
-   C_WARN     data is not for the server with the node identifier and bus identifier
+   Errc::success   data read successfully
+   Errc::config    required socket not initialized
+   Errc::noact     not enough bytes
+   Errc::rd_wr     error reading data
+   Errc::range     handle invalid
+   Errc::warn      data is not for the server with the node identifier and bus identifier
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, const uint8_t ou8_ClientBusIdentifier,
-                                          const uint8_t ou8_ClientNodeIdentifier, const uint8_t ou8_ServerBusIdentifier,
-                                          const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data)
+std::error_code C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle,
+                                                  const uint8_t ou8_ClientBusIdentifier,
+                                                  const uint8_t ou8_ClientNodeIdentifier,
+                                                  const uint8_t ou8_ServerBusIdentifier,
+                                                  const uint8_t ou8_ServerNodeIdentifier,
+                                                  std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   s32_Return = this->ReadTcp(ou32_Handle, orc_Data);
+   c_Return = this->ReadTcp(ou32_Handle, orc_Data);
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       if (orc_Data.size() > 4)
       {
@@ -1035,20 +1044,20 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, const uint
 
             mhc_LockBuffer.unlock();
 
-            s32_Return = C_WARN;
+            c_Return = Errc::warn;
          }
          else
          {
-            s32_Return = C_NO_ERR;
+            c_Return = Errc::success;
          }
       }
       else
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1068,16 +1077,17 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, const uint
                                              out: received data
 
    \return
-   C_NO_ERR   data read successfully
-   C_NOACT    no data for these identifier
+   Errc::success   data read successfully
+   Errc::noact     no data for these identifier
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier,
-                                                const uint8_t ou8_ClientNodeIdentifier,
-                                                const uint8_t ou8_ServerBusIdentifier,
-                                                const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data)
+std::error_code C_OscIpDispatcherWinSock::ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier,
+                                                        const uint8_t ou8_ClientNodeIdentifier,
+                                                        const uint8_t ou8_ServerBusIdentifier,
+                                                        const uint8_t ou8_ServerNodeIdentifier,
+                                                        std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Return = C_NOACT;
+   std::error_code c_Return = Errc::noact;
 
    std::map<C_BufferIdentifier, std::list<std::vector<uint8_t> > >::iterator c_ItBuffer;
    const C_BufferIdentifier c_Id(ou8_ClientBusIdentifier, ou8_ClientNodeIdentifier, ou8_ServerBusIdentifier,
@@ -1099,12 +1109,12 @@ int32_t C_OscIpDispatcherWinSock::ReadTcpBuffer(const uint8_t ou8_ClientBusIdent
          // Remove the read data package
          rc_List.erase(rc_List.begin());
 
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
       }
    }
    mhc_LockBuffer.unlock();
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1116,19 +1126,19 @@ int32_t C_OscIpDispatcherWinSock::ReadTcpBuffer(const uint8_t ou8_ClientBusIdent
    \param[in]  orc_Data   data to sent
 
    \return
-   C_NO_ERR   data sent successfully
-   C_CONFIG   required socket not initialized
-   C_RD_WR    error sending data
+   Errc::success   data sent successfully
+   Errc::config    required socket not initialized
+   Errc::rd_wr     error sending data
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & orc_Data)
+std::error_code C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (mc_SocketsUdpClient.size() == 0)
    {
       osc_write_log_error("openSYDE IP-TP", "SendUdp called with no socket.");
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -1153,7 +1163,7 @@ int32_t C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & orc_Data)
             {
                osc_write_log_error("openSYDE IP-TP",
                                    "SendUdp sendto error: " + std::to_string(WSAGetLastError()));
-               s32_Return = C_RD_WR;
+               c_Return = Errc::rd_wr;
             }
          }
          else
@@ -1164,7 +1174,7 @@ int32_t C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & orc_Data)
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1181,19 +1191,19 @@ int32_t C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & orc_Data)
    \param[out]  orau8_Ip   IP address the request was received from
 
    \return
-   C_NO_ERR   datagram read successfully
-   C_CONFIG   required socket not initialized
-   C_NOACT    no data received
+   Errc::success   datagram read successfully
+   Errc::config    required socket not initialized
+   Errc::noact     no data received
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::ReadUdp(std::vector<uint8_t> & orc_Data, uint8_t (&orau8_Ip)[4])
+std::error_code C_OscIpDispatcherWinSock::ReadUdp(std::vector<uint8_t> & orc_Data, uint8_t (&orau8_Ip)[4])
 {
-   int32_t s32_Return = C_NOACT;
+   std::error_code c_Return = Errc::noact;
 
    if (mc_SocketsUdpServer.size() == 0)
    {
       osc_write_log_error("openSYDE IP-TP", "ReadUdp called with no socket.");
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -1243,11 +1253,11 @@ int32_t C_OscIpDispatcherWinSock::ReadUdp(std::vector<uint8_t> & orc_Data, uint8
                   //Also: we should not just accept anything that is thrown upon us ...
                   if (c_Sender.sin_port == htons(13400))
                   {
-                     s32_Return = C_NO_ERR;
+                     c_Return = Errc::success;
                   }
                   else
                   {
-                     s32_Return = C_NOACT;
+                     c_Return = Errc::noact;
                   }
                   break; //we have a package ...
                }
@@ -1258,7 +1268,7 @@ int32_t C_OscIpDispatcherWinSock::ReadUdp(std::vector<uint8_t> & orc_Data, uint8
                                       "ReadUdp unexpected error: data reported as available but reading failed. Reported size: " +
                                       std::to_string(
                                          orc_Data.size()) + " Read size: " + std::to_string(x_Return));
-                  s32_Return = C_RD_WR;
+                  c_Return = Errc::rd_wr;
                }
             }
          }
@@ -1270,7 +1280,7 @@ int32_t C_OscIpDispatcherWinSock::ReadUdp(std::vector<uint8_t> & orc_Data, uint8
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

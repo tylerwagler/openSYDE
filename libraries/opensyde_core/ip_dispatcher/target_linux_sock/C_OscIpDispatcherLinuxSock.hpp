@@ -18,7 +18,9 @@
 #include <vector>
 #include <map>
 #include <list>
+#include <system_error>
 #include "stwtypes.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscIpDispatcher.hpp"
 #include <string>
 
@@ -72,9 +74,11 @@ private:
    static std::map<C_BufferIdentifier, std::list<std::vector<uint8_t> > > mhc_TcpBuffer; ///< dispatcher buffer
    static std::mutex mhc_LockBuffer;
 
-   int32_t m_GetAllInstalledInterfaceIps(void);
-   int32_t m_ConnectTcp(C_TcpConnection & orc_Connection) const;
-   int32_t m_ConfigureUdpSocket(const bool oq_ServerPort, const uint32_t ou32_IpToBindTo, int32_t & ors32_Socket) const;
+   std::error_code m_GetAllInstalledInterfaceIps(void);
+   std::error_code m_ConnectTcp(C_TcpConnection & orc_Connection) const;
+   //ors32_Socket returns a socket descriptor, not an error code -> stays on int32_t
+   std::error_code m_ConfigureUdpSocket(const bool oq_ServerPort, const uint32_t ou32_IpToBindTo,
+                                        int32_t & ors32_Socket) const;
 
    static std::string mh_IpToText(const uint8_t (&orau8_Ip)[4]);
 
@@ -82,23 +86,26 @@ public:
    C_OscIpDispatcherLinuxSock(void);
    virtual ~C_OscIpDispatcherLinuxSock(void);
 
-   virtual int32_t InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle);
-   virtual int32_t InitUdp(void);
-   virtual int32_t IsTcpConnected(const uint32_t ou32_Handle);
-   virtual int32_t ReConnectTcp(const uint32_t ou32_Handle);
+   virtual std::error_code InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle);
+   virtual std::error_code InitUdp(void);
+   virtual std::error_code IsTcpConnected(const uint32_t ou32_Handle);
+   virtual std::error_code ReConnectTcp(const uint32_t ou32_Handle);
 
-   virtual int32_t CloseTcp(const uint32_t ou32_Handle);
-   virtual int32_t CloseUdp(void);
-   virtual int32_t SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data);
-   virtual int32_t ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data);
-   virtual int32_t ReadTcp(const uint32_t ou32_Handle, const uint8_t ou8_ClientBusIdentifier,
-                           const uint8_t ou8_ClientNodeIdentifier, const uint8_t ou8_ServerBusIdentifier,
-                           const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data);
-   virtual int32_t ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier, const uint8_t ou8_ClientNodeIdentifier,
-                                 const uint8_t ou8_ServerBusIdentifier, const uint8_t ou8_ServerNodeIdentifier,
-                                 std::vector<uint8_t> & orc_Data);
-   virtual int32_t SendUdp(const std::vector<uint8_t> & orc_Data);
-   virtual int32_t ReadUdp(std::vector<uint8_t> &orc_Data, uint8_t(&orau8_Ip)[4]);
+   virtual std::error_code CloseTcp(const uint32_t ou32_Handle);
+   virtual std::error_code CloseUdp(void);
+   virtual std::error_code SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data);
+   virtual std::error_code ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data);
+   virtual std::error_code ReadTcp(const uint32_t ou32_Handle, const uint8_t ou8_ClientBusIdentifier,
+                                   const uint8_t ou8_ClientNodeIdentifier,
+                                   const uint8_t ou8_ServerBusIdentifier,
+                                   const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data);
+   virtual std::error_code ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier,
+                                         const uint8_t ou8_ClientNodeIdentifier,
+                                         const uint8_t ou8_ServerBusIdentifier,
+                                         const uint8_t ou8_ServerNodeIdentifier,
+                                         std::vector<uint8_t> & orc_Data);
+   virtual std::error_code SendUdp(const std::vector<uint8_t> & orc_Data);
+   virtual std::error_code ReadUdp(std::vector<uint8_t> &orc_Data, uint8_t(&orau8_Ip)[4]);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

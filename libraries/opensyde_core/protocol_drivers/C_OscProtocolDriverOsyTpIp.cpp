@@ -202,8 +202,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::IsConnected(void)
    }
    else
    {
-      //the IP dispatcher reports the integer STW convention; bridge it into this category
-      c_Return = make_error_code_from_stw(this->mpc_Dispatcher->IsTcpConnected(this->mu32_DispatcherHandle));
+      c_Return = this->mpc_Dispatcher->IsTcpConnected(this->mu32_DispatcherHandle);
    }
 
    return c_Return;
@@ -230,11 +229,10 @@ std::error_code C_OscProtocolDriverOsyTpIp::ReConnect(void)
    }
    else
    {
-      //the IP dispatcher reports the integer STW convention; bridge it into this category
-      c_Return = make_error_code_from_stw(this->mpc_Dispatcher->IsTcpConnected(this->mu32_DispatcherHandle));
+      c_Return = this->mpc_Dispatcher->IsTcpConnected(this->mu32_DispatcherHandle);
       if (c_Return == Errc::noact)
       {
-         c_Return = make_error_code_from_stw(this->mpc_Dispatcher->ReConnectTcp(this->mu32_DispatcherHandle));
+         c_Return = this->mpc_Dispatcher->ReConnectTcp(this->mu32_DispatcherHandle);
       }
    }
 
@@ -266,8 +264,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::Disconnect(void)
 
       if (!c_Return)
       {
-         //the IP dispatcher reports the integer STW convention; bridge it into this category
-         c_Return = make_error_code_from_stw(this->mpc_Dispatcher->CloseTcp(this->mu32_DispatcherHandle));
+         c_Return = this->mpc_Dispatcher->CloseTcp(this->mu32_DispatcherHandle);
       }
    }
 
@@ -314,7 +311,7 @@ const
       std::vector<uint8_t> c_Request;
       c_Header.ComposeHeader(c_Request);
 
-      if (mpc_Dispatcher->SendUdp(c_Request) != C_NO_ERR)
+      if (mpc_Dispatcher->SendUdp(c_Request))
       {
          m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
          c_Return = Errc::com;
@@ -330,8 +327,8 @@ const
 
          while ((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime)
          {
-            int32_t s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, au8_Ip);
-            if (s32_ReturnLocal == C_NO_ERR)
+            const std::error_code c_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, au8_Ip);
+            if (!c_ReturnLocal)
             {
                if (((c_Response.size() >= (C_DoIpHeader::hu8_DOIP_HEADER_SIZE + u32_PAYLOAD_SIZE_EXT_MIN)) &&
                     (c_Response.size() <= (C_DoIpHeader::hu8_DOIP_HEADER_SIZE + u32_PAYLOAD_SIZE_EXT_MAX))))
@@ -473,7 +470,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscPro
    else
    {
       C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_REQ, 21U);
-      int32_t s32_ReturnLocal;
+      std::error_code c_ReturnLocal = Errc::success;
       c_Header.ComposeHeader(c_Request);
       (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE], &orc_SerialNumber.au8_SerialNumber[0], 6);
       // Mode flag. Bit 1 is IP address, bit 2 is node identifier
@@ -484,8 +481,8 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscPro
       c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 19] = orc_NewNodeId.u8_BusIdentifier;
       c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 20] = orc_NewNodeId.u8_NodeIdentifier;
 
-      s32_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
-      if (s32_ReturnLocal != C_NO_ERR)
+      c_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
+      if (c_ReturnLocal)
       {
          m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
          c_Return = Errc::com;
@@ -499,8 +496,8 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscPro
          while (((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime) && (q_Done == false))
          {
             //check for response
-            s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
-            if (s32_ReturnLocal == C_NO_ERR)
+            c_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
+            if (!c_ReturnLocal)
             {
                if (c_Response.size() == (C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 9U))
                {
@@ -636,7 +633,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const 
       const std::vector<uint8_t> c_SerialNumberRaw = orc_SerialNumber.GetSerialNumberAsRawData();
       C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_EXT_REQ,
                             (static_cast<uint32_t>(18U) + u8_SerialNumberLength));
-      int32_t s32_ReturnLocal;
+      std::error_code c_ReturnLocal = Errc::success;
 
       c_Header.ComposeHeader(c_Request);
       // Mode flag. Bit 1 is IP address, bit 2 is node identifier
@@ -654,8 +651,8 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const 
       (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 18],
                         &c_SerialNumberRaw[0], u8_SerialNumberLength);
 
-      s32_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
-      if (s32_ReturnLocal != C_NO_ERR)
+      c_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
+      if (c_ReturnLocal)
       {
          m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
          c_Return = Errc::com;
@@ -669,8 +666,8 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const 
          while (((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime) && (q_Done == false))
          {
             //check for response
-            s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
-            if (s32_ReturnLocal == C_NO_ERR)
+            c_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, orau8_ResponseIp);
+            if (!c_ReturnLocal)
             {
                if (static_cast<uint32_t>(c_Response.size()) ==
                    (static_cast<uint32_t>(C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6U) + u8_SerialNumberLength))
@@ -814,7 +811,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
 
       c_Header.ComposeHeader(c_Request);
 
-      if (mpc_Dispatcher->SendUdp(c_Request) != C_NO_ERR)
+      if (mpc_Dispatcher->SendUdp(c_Request))
       {
          m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
          c_Return = Errc::com;
@@ -828,8 +825,8 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
 
          while ((stw::tgl::TglGetTickCount() - mu32_BroadcastTimeoutMs) < u32_StartTime)
          {
-            int32_t s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, au8_Ip);
-            if (s32_ReturnLocal == C_NO_ERR)
+            const std::error_code c_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, au8_Ip);
+            if (!c_ReturnLocal)
             {
                if (c_Response.size() == (C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 2 + 1))
                {
@@ -937,7 +934,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::BroadcastNetReset(const uint8_t ou8_
       // set reset type
       c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 7] = ou8_ResetType;
 
-      if (mpc_Dispatcher->SendUdp(c_Request) != C_NO_ERR)
+      if (mpc_Dispatcher->SendUdp(c_Request))
       {
          m_LogWarningWithHeader("Could not send UDP broadcast request.", TGL_UTIL_FUNC_ID);
          c_Return = Errc::com;
@@ -1053,8 +1050,8 @@ std::error_code C_OscProtocolDriverOsyTpIp::Cycle(void)
       //doubles as the loop control: a failed send stops the loop just as an empty queue does
       std::error_code c_TxResult = Errc::success;
 
-      //the Rx pass below runs on the dispatcher's integer convention, so it keeps its own control variable
-      int32_t s32_RxResult;
+      //the Rx pass has its own control variable: it doubles as the read-loop condition
+      std::error_code c_RxResult = Errc::success;
 
       //do we have requests to send ?
       while (!c_TxResult)
@@ -1066,7 +1063,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::Cycle(void)
             std::vector<uint8_t> c_Request;
             m_ComposeRequest(c_Service, c_Request);
 
-            if (mpc_Dispatcher->SendTcp(this->mu32_DispatcherHandle, c_Request) != C_NO_ERR)
+            if (mpc_Dispatcher->SendTcp(this->mu32_DispatcherHandle, c_Request))
             {
                m_LogWarningWithHeader("Could not send TCP request. Service data lost.", TGL_UTIL_FUNC_ID);
                c_TxResult = Errc::com;
@@ -1077,15 +1074,15 @@ std::error_code C_OscProtocolDriverOsyTpIp::Cycle(void)
       if (c_TxResult == Errc::com)
       {
          c_ReturnFunc = Errc::com;
-         s32_RxResult = C_COM; //as before, a failed send skips the Rx pass entirely
+         c_RxResult = Errc::com; //as before, a failed send skips the Rx pass entirely
       }
       else
       {
-         s32_RxResult = C_NO_ERR;
+         c_RxResult = Errc::success;
       }
 
       //read all incoming messages:
-      while (s32_RxResult == C_NO_ERR)
+      while (!c_RxResult)
       {
          std::vector<uint8_t> c_Data;
          bool q_DataFromBuffer = false;
@@ -1099,19 +1096,19 @@ std::error_code C_OscProtocolDriverOsyTpIp::Cycle(void)
          if (mc_RxState.e_Status == C_TcpRxServiceState::eIDLE)
          {
             //look in the buffer first
-            s32_RxResult = this->mpc_Dispatcher->ReadTcpBuffer(this->mc_ClientId.u8_BusIdentifier,
-                                                             this->mc_ClientId.u8_NodeIdentifier,
-                                                             this->mc_ServerId.u8_BusIdentifier,
-                                                             this->mc_ServerId.u8_NodeIdentifier,
-                                                             c_Data);
+            c_RxResult = this->mpc_Dispatcher->ReadTcpBuffer(this->mc_ClientId.u8_BusIdentifier,
+                                                            this->mc_ClientId.u8_NodeIdentifier,
+                                                            this->mc_ServerId.u8_BusIdentifier,
+                                                            this->mc_ServerId.u8_NodeIdentifier,
+                                                            c_Data);
 
-            if (s32_RxResult != C_NO_ERR)
+            if (c_RxResult)
             {
                // No data in buffer, search for new data
                //try to get header ...
                c_Data.resize(C_DoIpHeader::hu8_DOIP_HEADER_SIZE);
-               s32_RxResult = mpc_Dispatcher->ReadTcp(this->mu32_DispatcherHandle, c_Data);
-               if (s32_RxResult == C_NO_ERR)
+               c_RxResult = mpc_Dispatcher->ReadTcp(this->mu32_DispatcherHandle, c_Data);
+               if (!c_RxResult)
                {
                   //we got the header ...
                   const std::error_code c_HeaderResult = mc_RxState.c_ServiceHeader.DecodeHeader(c_Data);
@@ -1141,7 +1138,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::Cycle(void)
                      //unexpected ...
                      m_LogWarningWithHeader("Internal error parsing DoIp header.", TGL_UTIL_FUNC_ID);
                   }
-                  s32_RxResult = C_NO_ERR; //maybe there's more ...
+                  c_RxResult = Errc::success; //maybe there's more ...
                }
             }
             else
@@ -1159,15 +1156,15 @@ std::error_code C_OscProtocolDriverOsyTpIp::Cycle(void)
             {
                c_Data.resize(mc_RxState.c_ServiceHeader.u32_PayloadSize);
 
-               s32_RxResult = mpc_Dispatcher->ReadTcp(this->mu32_DispatcherHandle,
-                                                    this->mc_ClientId.u8_BusIdentifier,
-                                                    this->mc_ClientId.u8_NodeIdentifier,
-                                                    this->mc_ServerId.u8_BusIdentifier,
-                                                    this->mc_ServerId.u8_NodeIdentifier,
-                                                    c_Data);
+               c_RxResult = mpc_Dispatcher->ReadTcp(this->mu32_DispatcherHandle,
+                                                   this->mc_ClientId.u8_BusIdentifier,
+                                                   this->mc_ClientId.u8_NodeIdentifier,
+                                                   this->mc_ServerId.u8_BusIdentifier,
+                                                   this->mc_ServerId.u8_NodeIdentifier,
+                                                   c_Data);
             }
 
-            if (s32_RxResult == C_NO_ERR)
+            if (!c_RxResult)
             {
                //we got the payload ...
                if (c_Data.size() < 4)
@@ -1186,7 +1183,7 @@ std::error_code C_OscProtocolDriverOsyTpIp::Cycle(void)
                      {
                         m_LogWarningWithHeader("Rx Queue overflow. Incoming TCP response dumped.", TGL_UTIL_FUNC_ID);
                         //a full queue ended the read loop before; keep that
-                        s32_RxResult = C_NOACT;
+                        c_RxResult = Errc::noact;
                      }
                   }
                   else
@@ -1199,11 +1196,11 @@ std::error_code C_OscProtocolDriverOsyTpIp::Cycle(void)
                }
                mc_RxState.e_Status = C_TcpRxServiceState::eIDLE;
             }
-            else if (s32_RxResult == C_WARN)
+            else if (c_RxResult == Errc::warn)
             {
                // Receiving of an other server. Check further messages
                mc_RxState.e_Status = C_TcpRxServiceState::eIDLE;
-               s32_RxResult = C_NO_ERR;
+               c_RxResult = Errc::success;
             }
             else
             {

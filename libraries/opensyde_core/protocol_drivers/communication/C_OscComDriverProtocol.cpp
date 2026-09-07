@@ -3319,8 +3319,7 @@ std::error_code C_OscComDriverProtocol::m_InitForEthernet(void)
          if (c_Retval == Errc::success)
          {
             //Broadcast
-            // C_OscIpDispatcher is still on the STW integer convention
-            c_Retval = make_error_code_from_stw(mpc_IpDispatcher->InitUdp());
+            c_Retval = mpc_IpDispatcher->InitUdp();
 
             if (c_Retval == Errc::success)
             {
@@ -3567,8 +3566,7 @@ std::error_code C_OscComDriverProtocol::m_InitTcp(const uint8_t (&orau8_Ip)[4], 
 
    if (this->mpc_IpDispatcher != nullptr)
    {
-      // C_OscIpDispatcher is still on the STW integer convention
-      c_Retval = make_error_code_from_stw(mpc_IpDispatcher->InitTcp(orau8_Ip, oru32_Handle));
+      c_Retval = mpc_IpDispatcher->InitTcp(orau8_Ip, oru32_Handle);
 
       if (c_Retval != Errc::success)
       {

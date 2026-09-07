@@ -281,8 +281,7 @@ std::error_code C_OscComDriverFlash::EthConnectNode(const C_OscProtocolDriverOsy
    {
       uint32_t u32_Handle;
       C_OscIpDispatcher * const pc_IpDispatcher = this->m_GetIpDispatcher();
-      // C_OscIpDispatcher is still on the STW integer convention
-      c_Return = make_error_code_from_stw(pc_IpDispatcher->InitTcp(orau8_IpAddress, u32_Handle));
+      c_Return = pc_IpDispatcher->InitTcp(orau8_IpAddress, u32_Handle);
       if (c_Return == Errc::success)
       {
          c_Return = orc_TpIp.SetDispatcher(pc_IpDispatcher, u32_Handle);

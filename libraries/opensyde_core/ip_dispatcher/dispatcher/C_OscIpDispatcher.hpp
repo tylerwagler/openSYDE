@@ -22,7 +22,10 @@
 #define C_OSCIPDISPATCHER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <vector>
+#include <system_error>
 #include "stwtypes.hpp"
+#include "C_OscErrorCategory.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -89,11 +92,11 @@ public:
       \param[out]    oru32_Handle  handle to new TCP connection (to be used in subsequent calls of TCP functions)
 
       \return
-      C_NO_ERR   connected ...
-      C_NOACT    connection failed
+      Errc::success   connected ...
+      Errc::noact     connection failed
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle) = 0;
+   virtual std::error_code InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t & oru32_Handle) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -102,12 +105,12 @@ public:
       \param[in]   ou32_Handle   handle obtained by InitTcp()
 
       \return
-      C_NO_ERR   is connected
-      C_NOACT    is not connected
-      C_RANGE    invalid handle
+      Errc::success   is connected
+      Errc::noact     is not connected
+      Errc::range     invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t IsTcpConnected(const uint32_t ou32_Handle) = 0;
+   virtual std::error_code IsTcpConnected(const uint32_t ou32_Handle) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -124,12 +127,12 @@ public:
      \param[in]   ou32_Handle   handle obtained by InitTcp()
 
       \return
-      C_NO_ERR   reconnected
-      C_NOACT    connection failed
-      C_RANGE    invalid handle
+      Errc::success   reconnected
+      Errc::noact     connection failed
+      Errc::range     invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t ReConnectTcp(const uint32_t ou32_Handle) = 0;
+   virtual std::error_code ReConnectTcp(const uint32_t ou32_Handle) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -143,11 +146,11 @@ public:
       ** set permissions to send broadcasts
 
       \return
-      C_NO_ERR   connected ...
-      C_NOACT    creation failed
+      Errc::success   connected ...
+      Errc::noact     creation failed
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t InitUdp(void) = 0;
+   virtual std::error_code InitUdp(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -159,11 +162,11 @@ public:
       \param[in]   ou32_Handle   handle obtained by InitTcp()
 
       \return
-      C_NO_ERR   disconnected ...
-      C_RANGE    invalid handle
+      Errc::success   disconnected ...
+      Errc::range     invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t CloseTcp(const uint32_t ou32_Handle) = 0;
+   virtual std::error_code CloseTcp(const uint32_t ou32_Handle) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -173,10 +176,10 @@ public:
       - close opened UDP sockets
 
       \return
-      C_NO_ERR   disconnected ...
+      Errc::success   disconnected ...
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t CloseUdp(void) = 0;
+   virtual std::error_code CloseUdp(void) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -189,12 +192,12 @@ public:
       \param[in]  orc_Data      data to sent
 
       \return
-      C_NO_ERR   data sent successfully
-      C_RD_WR    error sending data
-      C_RANGE    invalid handle
+      Errc::success   data sent successfully
+      Errc::rd_wr     error sending data
+      Errc::range     invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data) = 0;
+   virtual std::error_code SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -211,13 +214,13 @@ public:
                                     out: received data
 
       \return
-      C_NO_ERR   data read successfully
-      C_NOACT    not enough bytes
-      C_RD_WR    error reading data
-      C_RANGE    invalid handle
+      Errc::success   data read successfully
+      Errc::noact     not enough bytes
+      Errc::rd_wr     error reading data
+      Errc::range     invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data) = 0;
+   virtual std::error_code ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -239,16 +242,17 @@ public:
                                                 out: received data
 
       \return
-      C_NO_ERR   data read successfully
-      C_NOACT    not enough bytes
-      C_RD_WR    error reading data
-      C_RANGE    invalid handle
-      C_WARN     data is not for the server and/or client with the node identifier and bus identifier
+      Errc::success   data read successfully
+      Errc::noact     not enough bytes
+      Errc::rd_wr     error reading data
+      Errc::range     invalid handle
+      Errc::warn      data is not for the server and/or client with the node identifier and bus identifier
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t ReadTcp(const uint32_t ou32_Handle, const uint8_t ou8_ClientBusIdentifier,
-                           const uint8_t ou8_ClientNodeIdentifier, const uint8_t ou8_ServerBusIdentifier,
-                           const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data) = 0;
+   virtual std::error_code ReadTcp(const uint32_t ou32_Handle, const uint8_t ou8_ClientBusIdentifier,
+                                   const uint8_t ou8_ClientNodeIdentifier,
+                                   const uint8_t ou8_ServerBusIdentifier,
+                                   const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -268,13 +272,15 @@ public:
                                                 out: received data
 
       \return
-      C_NO_ERR   data read successfully
-      C_NOACT    no data for these identifier
+      Errc::success   data read successfully
+      Errc::noact     no data for these identifier
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier, const uint8_t ou8_ClientNodeIdentifier,
-                                 const uint8_t ou8_ServerBusIdentifier, const uint8_t ou8_ServerNodeIdentifier,
-                                 std::vector<uint8_t> & orc_Data) = 0;
+   virtual std::error_code ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier,
+                                         const uint8_t ou8_ClientNodeIdentifier,
+                                         const uint8_t ou8_ServerBusIdentifier,
+                                         const uint8_t ou8_ServerNodeIdentifier,
+                                         std::vector<uint8_t> & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -286,11 +292,11 @@ public:
       \param[in]  orc_Data   data to sent
 
       \return
-      C_NO_ERR   data sent successfully
-      C_RD_WR    error sending data
+      Errc::success   data sent successfully
+      Errc::rd_wr     error sending data
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t SendUdp(const std::vector<uint8_t> & orc_Data) = 0;
+   virtual std::error_code SendUdp(const std::vector<uint8_t> & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -306,11 +312,11 @@ public:
       \param[out]  orau8_Ip   IP address of sender of data
 
       \return
-      C_NO_ERR   data sent successfully
-      C_NOACT    no data received
+      Errc::success   data sent successfully
+      Errc::noact     no data received
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t ReadUdp(std::vector<uint8_t> &orc_Data, uint8_t(&orau8_Ip)[4]) = 0;
+   virtual std::error_code ReadUdp(std::vector<uint8_t> &orc_Data, uint8_t(&orau8_Ip)[4]) = 0;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
