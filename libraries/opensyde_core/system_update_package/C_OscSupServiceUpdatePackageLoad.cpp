@@ -250,7 +250,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
                // directory is itself the device-bundle root that the scanner walks.
                const std::string c_SysDefPath = c_TargetUnzipPath + mhc_SUP_SYSDEF;
 
-               c_Return = static_cast<Errc>(C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(orc_SystemDefinition,
+               c_Return = make_error_code_from_stw(C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(orc_SystemDefinition,
                                                                                                   c_SysDefPath,
                                                                                                   c_TargetUnzipPath,
                                                                                                   true, nullptr,
@@ -569,7 +569,14 @@ std::error_code C_OscSupServiceUpdatePackageLoad::mh_UnpackNodes(const std::vect
       {
          const std::string c_FinalZipPath = orc_TargetUnzipPath + orc_PackageFiles[u32_ItPackage];
          const std::string c_TargetFolder = orc_NodeFoldersAbs[u32_ItPackage];
-         c_Return = static_cast<Errc>(TglCreateDirectory(c_TargetFolder));
+         //TglCreateDirectory returns plain 0/non-zero, not an STW error code, so map it
+         //explicitly rather than bridging it as though it were one
+         if (TglCreateDirectory(c_TargetFolder) != 0)
+         {
+            osc_write_log_error("Unpacking package",
+                                "Could not create folder \"" + c_TargetFolder + "\".");
+            c_Return = Errc::rd_wr;
+         }
          if (!c_Return)
          {
             if (c_DecryptNodes[u32_ItPackage] == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE)

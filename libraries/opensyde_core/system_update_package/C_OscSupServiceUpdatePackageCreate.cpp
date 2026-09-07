@@ -143,7 +143,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(const s
       if (!c_Retval)
       {
          //h_CreatePackage still reports int32_t for its callers outside this subsystem
-         c_Retval = static_cast<Errc>(h_CreatePackage(orc_PackagePath, orc_SystemDefinition, ou32_ActiveBusIndex,
+         c_Retval = make_error_code_from_stw(h_CreatePackage(orc_PackagePath, orc_SystemDefinition, ou32_ActiveBusIndex,
                                                       orc_ActiveNodes,
                                                       orc_NodesUpdateOrder, orc_ApplicationsToWrite,
                                                       orc_WarningMessages,
@@ -260,7 +260,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const std::string & 
                                                             mhc_PACKAGE_EXT_TMP, c_PackagePathTmp);
 
       // create folders and copy applications to them
-      c_Return = static_cast<Errc>(C_OscSuSequences::h_CreateTemporaryFolder(orc_SystemDefinition.c_Nodes,
+      c_Return = make_error_code_from_stw(C_OscSuSequences::h_CreateTemporaryFolder(orc_SystemDefinition.c_Nodes,
                                                                             orc_ActiveNodes,
                                                                             c_PackagePathTmp, c_ApplicationsToWrite,
                                                                             &c_ErrorPath));

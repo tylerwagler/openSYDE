@@ -151,7 +151,7 @@ std::error_code C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::
          {
             C_OscXmlParserLog c_XmlParser;
             c_XmlParser.SetLogHeading("Loading secure update collection definition");
-            c_Retval = static_cast<Errc>(c_XmlParser.LoadFromFile(orc_Files[u32_NodeCounter]));
+            c_Retval = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_Files[u32_NodeCounter]));
             if (!c_Retval)
             {
                // get update position
@@ -254,7 +254,7 @@ std::error_code C_OscSupNodeDefinitionFiler::mh_SaveNode(const std::string & orc
    mh_SaveSignatureFile(orc_Node, c_XmlParser);
 
    // save update package definition file
-   c_Result = static_cast<Errc>(c_XmlParser.SaveToFile(orc_File));
+   c_Result = make_error_code_from_stw(c_XmlParser.SaveToFile(orc_File));
    if (c_Result)
    {
       c_Result = Errc::rd_wr;
@@ -377,7 +377,7 @@ std::error_code C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSectionVersion1Mino
    std::map<uint32_t, uint32_t> & orc_PositionMap, const std::string & orc_NodeFolderAbs,
    C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval = static_cast<Errc>(orc_XmlParser.SelectNodeChildError(mc_SECURITY));
+   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError(mc_SECURITY));
 
    if (!c_Retval)
    {
@@ -458,21 +458,21 @@ std::error_code C_OscSupNodeDefinitionFiler::mh_LoadPemConfigOption(const std::s
                                                                     const std::string & orc_NodeFolderAbs,
                                                                     std::string * const opc_FileName)
 {
-   std::error_code c_Retval = static_cast<Errc>(orc_XmlParser.SelectNodeChildError(orc_NodeName));
+   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError(orc_NodeName));
 
    if (!c_Retval)
    {
-      c_Retval = static_cast<Errc>(orc_XmlParser.GetAttributeBoolError(mc_SECURITY_SEND_ATTR, orq_SendOption));
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError(mc_SECURITY_SEND_ATTR, orq_SendOption));
    }
    if (!c_Retval)
    {
-      c_Retval = static_cast<Errc>(orc_XmlParser.GetAttributeBoolError(mc_SECURITY_ENAB_ATTR, orq_EnabledOption));
+      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError(mc_SECURITY_ENAB_ATTR, orq_EnabledOption));
    }
    if (oq_AddFileOption)
    {
       if (!c_Retval)
       {
-         c_Retval = static_cast<Errc>(orc_XmlParser.SelectNodeChildError(mc_PEM_FILE));
+         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError(mc_PEM_FILE));
       }
       if (!c_Retval)
       {
