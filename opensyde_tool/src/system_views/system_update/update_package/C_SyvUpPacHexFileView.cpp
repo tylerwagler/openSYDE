@@ -257,7 +257,7 @@ void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexF
    orc_Content += "</td>";
    orc_Content += "</tr>";
    orc_Content += "</table>";
-   for (int32_t s32_ItAppl = 0UL; s32_ItAppl < c_InfoBlocks.size(); ++s32_ItAppl)
+   for (int32_t s32_ItAppl = 0L; s32_ItAppl < static_cast<int32_t>(c_InfoBlocks.size()); ++s32_ItAppl)
    {
       const stw::opensyde_core::C_OscApplicationInfoBlock & rc_CurInfo = c_InfoBlocks[s32_ItAppl];
       orc_Content += "<h3>" +

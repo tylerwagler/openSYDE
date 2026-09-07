@@ -265,3 +265,37 @@ All 45 warnings the flags surfaced are cleared:
 `-Werror` is on deliberately. If it ever blocks legitimate work, silence the
 specific warning at its site with a comment explaining why, rather than dropping
 the flag.
+
+## Extending -Werror to the eight tool trees
+
+`opensyde_core` builds with `-Wall -Wextra -Werror` and zero diagnostics. The tool
+trees use `-Wall -Wextra -Wpedantic` without `-Werror`.
+
+A full clean eight-tool build produces **two warnings, and neither is our code** —
+both are `-Woverloaded-virtual` in `Scanner.cpp`, which flex generates inside the
+vendored `Vector_DBC` submodule. Every line we own is already warning-free, so
+this is not a cleanup project.
+
+The obstacle is how the flags are set. Each tool does:
+
+```cmake
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -std=c++17")   # pjt/toolchain_linux.cmake
+add_compile_options(-Wno-deprecated-declarations -Wall -Wextra)
+```
+
+Those are **directory-scoped**, so they propagate into `add_subdirectory` targets —
+including the submodule. Appending `-Werror` there would turn the two generated
+flex warnings into hard errors and break the build for a reason that has nothing
+to do with openSYDE.
+
+Doing it properly means converting each tool to target-scoped options:
+
+```cmake
+target_compile_options(<tool_target> PRIVATE -Wall -Wextra -Werror)
+```
+
+That is eight `CMakeLists.txt` files and needs the full eight-tool build as its
+gate. Worth doing — the `-Wparentheses` that would have caught the inverted
+security-option comparisons was being emitted by *these* builds and read by
+nobody — but it is a build-system change, not a warning fix, and should land on
+its own rather than riding along with unrelated work.
