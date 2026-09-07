@@ -166,11 +166,16 @@ std::error_code C_OscHexFile::GetApplicationInformationBlocks(std::vector<C_OscA
          case -2:  //data read but not fully
             if (u16_Size < 2U) //we need at least 2 bytes for the header information
             {
+               //skip past this pattern before retrying, or FindPattern below matches the same
+               //address again and the loop never terminates
+               u32_Address += APPLICATION_INFO_MAGIC_LENGTH_V1;
                continue;
             }
             break;
          case -1:
          default:
+            //as above: advance, or this is an infinite loop
+            u32_Address += APPLICATION_INFO_MAGIC_LENGTH_V1;
             continue; //nothing we can handle or undefined error -> continue
          }
 
