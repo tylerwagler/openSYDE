@@ -286,7 +286,7 @@ void C_OgeCbxMultiSelect::SetItem(const QString & orc_DisplayName)
 
       if (pc_Item != nullptr)
       {
-         if (pc_Item->text().toStdString().c_str() == orc_DisplayName)
+         if (pc_Item->text().toStdString() == orc_DisplayName)
          {
             pc_Item->setCheckState(Qt::Checked);
             // set display text

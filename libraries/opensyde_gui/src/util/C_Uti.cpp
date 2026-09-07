@@ -663,12 +663,12 @@ QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat)
    uint32_t u32_ValSize;
    int32_t s32_InfoSize;
 
-   s32_InfoSize = GetFileVersionInfoSizeA(c_FileName.toStdString().c_str(), nullptr);
+   s32_InfoSize = GetFileVersionInfoSizeA(c_FileName.toStdString(), nullptr);
    if (s32_InfoSize != 0)
    {
       uint8_t * pu8_Buffer;
       pu8_Buffer = new uint8_t[static_cast<uint32_t>(s32_InfoSize)];
-      if (GetFileVersionInfoA(c_FileName.toStdString().c_str(), 0, s32_InfoSize, pu8_Buffer) != FALSE)
+      if (GetFileVersionInfoA(c_FileName.toStdString(), 0, s32_InfoSize, pu8_Buffer) != FALSE)
       {
          //reinterpret_cast required due to function interface
          if (VerQueryValueA(pu8_Buffer, "\\",
@@ -1034,8 +1034,8 @@ QString C_Uti::h_ConvertVersionToStwStyle(const QString & orc_Version)
 //----------------------------------------------------------------------------------------------------------------------
 QString C_Uti::h_ConcatPathIfNecessary(const QString & orc_BaseDir, const QString & orc_RelativeOrAbsolutePath)
 {
-   QString c_Result = C_OscUtils::h_ConcatPathIfNecessary(orc_BaseDir.toStdString().c_str(),
-                                                          orc_RelativeOrAbsolutePath.toStdString().c_str()).c_str();
+   QString c_Result = C_OscUtils::h_ConcatPathIfNecessary(orc_BaseDir.toStdString(),
+                                                          orc_RelativeOrAbsolutePath.toStdString()).c_str();
 
    // do some path beautifying
    if (c_Result.contains("%") == false)
@@ -1062,7 +1062,7 @@ QString C_Uti::h_GetUniqueNameQt(const std::map<std::string, bool> & orc_Existin
                                  const QString & orc_ProposedName)
 {
    const std::string c_Result =
-      C_OscUtils::h_GetUniqueName(orc_ExistingStrings, orc_ProposedName.toStdString().c_str(), 0UL);
+      C_OscUtils::h_GetUniqueName(orc_ExistingStrings, orc_ProposedName.toStdString(), 0UL);
 
    return c_Result.c_str();
 }
@@ -1280,7 +1280,7 @@ void C_Uti::h_GetAllFilePathsInFolder(const QString & orc_FolderPath, std::vecto
       }
       else if (c_File.isFile() == true)
       {
-         orc_FilePaths.emplace_back(c_Path.toStdString().c_str());
+         orc_FilePaths.emplace_back(c_Path.toStdString());
       }
       else
       {

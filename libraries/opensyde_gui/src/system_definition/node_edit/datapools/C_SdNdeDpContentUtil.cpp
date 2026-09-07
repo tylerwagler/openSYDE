@@ -2912,7 +2912,7 @@ int32_t C_SdNdeDpContentUtil::h_SetAllContentFromString(const QString & orc_Inpu
 {
    C_OscXmlParser c_Xml;
 
-   c_Xml.LoadFromString(orc_Input.toStdString().c_str());
+   c_Xml.LoadFromString(orc_Input.toStdString());
    c_Xml.SelectRoot();
    return C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_Output, c_Xml);
 }

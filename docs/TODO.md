@@ -143,3 +143,65 @@ Future passes if/when they become valuable:
 - **MinGW Runtime** — Windows-only. `__MINGW32_MAJOR_VERSION` is
   available at compile time inside `#ifdef __MINGW32__`. Linux builds
   shouldn't show this line at all.
+
+## Remove redundant `.toStdString().c_str()`
+
+`qstring.toStdString().c_str()` appears **472 times** across 121 files. It is not
+a bug — no site stores the resulting pointer, so there is no dangling-pointer UB
+— but it is a redundant round trip:
+
+```
+QString -> std::string   (alloc + copy)
+        -> const char*   (free)
+        -> std::string   (strlen + alloc + copy again)
+```
+
+### Why it is there
+
+Upstream has the same pattern and **it was correct there**. The destinations used
+to be `C_SclString`, which had an implicit constructor from `const char*` and
+none from `std::string`, so `.c_str()` was the only way to assign. Phase 3
+replaced `C_SclString` with `std::string`, which made the `.c_str()` redundant —
+but a mechanical migration has no reason to notice, so it stayed.
+
+There is also a latent correctness wrinkle: `.c_str()` truncates at an embedded
+NUL. Harmless for paths and names; not something you want on a data field.
+
+### Distribution
+
+| Tree | Occurrences |
+|---|---|
+| `opensyde_tool` | 381 |
+| `opensyde_can_monitor` | 46 |
+| `libraries` | 38 — **done**, see below |
+| `opensyde_syde_flash` | 7 |
+
+### How to do it — do NOT blanket-sed
+
+`libraries/` was completed as a trial: 38 removed, and **4 had to be restored**
+because those sites genuinely need a `const char*` (`QString::replace(int, int,
+const char *)` and two `QByteArray` overloads). That is roughly **1 in 10**, so a
+blind sweep across the remaining 434 would break something like 40 call sites.
+
+The compiler has to be in the loop. Two options:
+
+1. Per-file syntax check, which is fast and needs no full build:
+   ```
+   QT=$(pkg-config --cflags Qt6Widgets Qt6Core Qt6Gui Qt6Svg)
+   INC=$(for d in $(find libraries/opensyde_core libraries/opensyde_gui opensyde_tool/src \
+         -maxdepth 4 -type d -not -path '*miniz*' -not -path '*temp_*'); do echo -n "-I$d "; done)
+   g++ -fsyntax-only -std=c++17 -fPIC $QT $INC <file>
+   ```
+   Remove all `.c_str()` in a file, compile, restore only the lines that fail.
+2. Remove in bulk and let CI find the failures. Cheaper in effort, noisier in
+   history, and `opensyde_tool` at 381 sites would likely need several rounds.
+
+Option 1 is preferred, done a directory at a time.
+
+### Status
+
+- `libraries/` — done (34 removed, 4 correctly kept). One file,
+  `C_CieImportDbc.cpp`, could not be syntax-checked locally due to an include
+  path and rests on CI.
+- `opensyde_tool`, `opensyde_can_monitor`, `opensyde_syde_flash` — outstanding,
+  434 sites.
