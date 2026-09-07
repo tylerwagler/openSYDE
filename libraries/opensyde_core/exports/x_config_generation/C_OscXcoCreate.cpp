@@ -164,7 +164,6 @@ std::error_code C_OscXcoCreate::h_CreatePackage(const std::string & orc_PackageP
    // cleanup: delete temporary result folder
    if (q_TemporaryFolderCreated == true)
    {
-      //h_CleanUpTempFolder reads and updates the STW int32_t error value
       C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder("Creating Update Package",
                                                             c_PackagePathTmp, c_Return, mhc_ErrorMessage);
    }

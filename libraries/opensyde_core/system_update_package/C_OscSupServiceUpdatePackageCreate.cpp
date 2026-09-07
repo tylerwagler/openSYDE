@@ -329,8 +329,6 @@ std::error_code C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const std::s
    // cleanup: delete temporary result folder
    if (q_TemporaryFolderCreated == true)
    {
-      //h_CleanUpTempFolder still reads and writes the legacy int32_t representation
-
       C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder("Creating Update Package",
                                                             c_PackagePathTmp, c_Return, mhc_ErrorMessage);
    }
