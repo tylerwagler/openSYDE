@@ -50,11 +50,11 @@ public:
 class C_OscProtocolDriverOsyNode
 {
 public:
-   static const uint8_t mhu8_MAX_BUS    = 0x0FU; ///< Maximum count of buses
-   static const uint8_t mhu8_MAX_NODE   = 0x7FU; ///< Maximum count of nodes is mhu8_MAX_NODE - 1
+   static constexpr uint8_t mhu8_MAX_BUS    = 0x0FU; ///< Maximum count of buses
+   static constexpr uint8_t mhu8_MAX_NODE   = 0x7FU; ///< Maximum count of nodes is mhu8_MAX_NODE - 1
    ///< and mhu8_MAX_NODE is reserved for broadcasts
 
-   static const uint8_t mhu8_NODE_ID_BROADCASTS = 0x7FU;
+   static constexpr uint8_t mhu8_NODE_ID_BROADCASTS = 0x7FU;
 
    C_OscProtocolDriverOsyNode(void);
    C_OscProtocolDriverOsyNode(const uint8_t ou8_BusIdentifier, const uint8_t ou8_NodeIdentifier);
@@ -94,9 +94,9 @@ protected:
 
 public:
    ///common parameters for the different transport protocols
-   static const uint8_t hu8_OSY_RESET_TYPE_KEY_OFF_ON           = 0x02U;
-   static const uint8_t hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER = 0x60U;
-   static const uint16_t hu16_OSY_MAXIMUM_SERVICE_SIZE          = 4095U;
+   static constexpr uint8_t hu8_OSY_RESET_TYPE_KEY_OFF_ON           = 0x02U;
+   static constexpr uint8_t hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER = 0x60U;
+   static constexpr uint16_t hu16_OSY_MAXIMUM_SERVICE_SIZE          = 4095U;
 
    explicit C_OscProtocolDriverOsyTpBase(const uint16_t ou16_MaxServiceQueueSize);
    virtual ~C_OscProtocolDriverOsyTpBase(void);
