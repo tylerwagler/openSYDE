@@ -813,7 +813,7 @@ std::error_code C_OscBuSequences::ResetSystem(void)
    else
    {
       TglSleep(500); //wait a little to make sure the device has performed the reset
-      osc_write_log_error(c_LogActivity, "Successfully sent reset to target device!");
+      osc_write_log_info(c_LogActivity, "Successfully sent reset to target device!");
    }
 
    m_ReportProgress(c_Return.value(), "System reset finished.");
