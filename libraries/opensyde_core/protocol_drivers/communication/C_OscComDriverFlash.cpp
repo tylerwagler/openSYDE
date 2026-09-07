@@ -275,7 +275,7 @@ std::error_code C_OscComDriverFlash::EthConnectNode(const C_OscProtocolDriverOsy
                                                     C_OscProtocolDriverOsy & orc_TemporaryProtocol,
                                                     C_OscProtocolDriverOsyTpIp & orc_TpIp)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    // Prepare the temporary protocol and its tp
    c_Return = orc_TpIp.SetNodeIdentifiers(this->GetClientId(), orc_ServerId);
@@ -351,7 +351,7 @@ std::error_code C_OscComDriverFlash::h_EthDisconnectNode(C_OscProtocolDriverOsy 
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscComDriverFlash::SendOsyBroadcastRequestProgramming(bool & orq_NotAccepted) const
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    orq_NotAccepted = false;
 
@@ -405,7 +405,7 @@ std::error_code C_OscComDriverFlash::SendOsyBroadcastRequestProgramming(bool & o
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscComDriverFlash::SendOsyBroadcastEcuReset(const uint8_t ou8_ResetType) const
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if ((this->mpc_CanTransportProtocolBroadcast == nullptr) &&
        (this->mpc_IpTransportProtocolBroadcast == nullptr))
@@ -441,7 +441,7 @@ std::error_code C_OscComDriverFlash::SendOsyBroadcastEcuReset(const uint8_t ou8_
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscComDriverFlash::SendOsyCanBroadcastEnterPreProgrammingSession(void) const
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (this->mpc_CanTransportProtocolBroadcast == nullptr)
    {
@@ -469,7 +469,7 @@ std::error_code C_OscComDriverFlash::SendOsyCanBroadcastEnterPreProgrammingSessi
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscComDriverFlash::SendOsyCanBroadcastEnterDefaultSession(void) const
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (this->mpc_CanTransportProtocolBroadcast == nullptr)
    {
@@ -499,7 +499,7 @@ std::error_code C_OscComDriverFlash::SendOsyCanBroadcastReadSerialNumber(
    std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberExtendedResults> & orc_ExtendedResponses)
 const
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (this->mpc_CanTransportProtocolBroadcast == nullptr)
    {
@@ -666,7 +666,7 @@ std::error_code C_OscComDriverFlash::SendOsyCanBroadcastSetNodeIdBySerialNumber(
    uint8_t * const opu8_NrCode)
 const
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (this->mpc_CanTransportProtocolBroadcast == nullptr)
    {
@@ -707,7 +707,7 @@ std::error_code C_OscComDriverFlash::SendOsyCanBroadcastSetNodeIdBySerialNumberE
    const C_OscProtocolSerialNumber & orc_SerialNumber, const uint8_t ou8_SubNodeId,
    const C_OscProtocolDriverOsyNode & orc_NewNodeId, uint8_t * const opu8_NrCode) const
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (this->mpc_CanTransportProtocolBroadcast == nullptr)
    {
@@ -742,7 +742,7 @@ std::error_code C_OscComDriverFlash::SendOsyEthBroadcastGetDeviceInformation(
    std::vector<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults> & orc_ReadDeviceInfoExtendedResults)
 const
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (this->mpc_IpTransportProtocolBroadcast == nullptr)
    {
@@ -797,7 +797,7 @@ std::error_code C_OscComDriverFlash::SendOsyEthBroadcastSetIpAddress(const C_Osc
                                                                      uint8_t (&orau8_ResponseIp)[4],
                                                                      uint8_t * const opu8_ErrorResult) const
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (this->mpc_IpTransportProtocolBroadcast == nullptr)
    {
@@ -851,7 +851,7 @@ std::error_code C_OscComDriverFlash::SendOsyEthBroadcastSetIpAddressExtended(
    const C_OscProtocolDriverOsyNode & orc_NewNodeId, const uint8_t ou8_SubNodeId, uint8_t (&orau8_ResponseIp)[4],
    uint8_t * const opu8_ErrorResult) const
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (this->mpc_IpTransportProtocolBroadcast == nullptr)
    {
@@ -2480,7 +2480,7 @@ std::error_code C_OscComDriverFlash::m_PrepareTemporaryOsyProtocol(
    const C_OscProtocolDriverOsyNode & orc_ServerId, C_OscProtocolDriverOsy & orc_OsyProtocol,
    C_OscProtocolDriverOsyTpCan & orc_CanTransportProtocol)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    c_Return = orc_CanTransportProtocol.SetNodeIdentifiers(this->GetClientId(), orc_ServerId);
    if (c_Return == Errc::success)

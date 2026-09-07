@@ -125,7 +125,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(const s
                                                                          const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes, const std::vector<uint32_t> & orc_NodesUpdateOrder, const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage, const std::string & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<std::string> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
                                                                          const std::vector<std::string> & orc_NodeSignaturePemFiles)
 {
-   std::error_code c_Retval;
+   std::error_code c_Retval = Errc::success;
 
    mh_Init();
 
@@ -224,7 +224,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const std::string & 
                                                             const vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage, const std::string & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<std::string> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
                                                             const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    bool q_TemporaryFolderCreated = false; // for cleanup at the end of this function
 
@@ -365,7 +365,7 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_CheckSecurityParameters(
    const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys, const uint32_t ou32_NumNodes,
    const std::string & orc_Mode, const std::string & orc_Function)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (orc_SignatureNodes.size() != orc_NodeSignatureKeys.size())
    {
@@ -399,7 +399,7 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_CheckPemFileParameters(
    const std::vector<std::string> & orc_NodeSignaturePemFiles, const std::vector<uint8_t> & orc_SignatureNodes,
    const uint32_t ou32_NumNodes)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (orc_SignatureNodes.size() != orc_NodeSignaturePemFiles.size())
    {
@@ -635,7 +635,7 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_SupDefParamAdapter(const 
                                                                           const vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                                                                           C_OscSupDefinition & orc_SupDefContent)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
    C_OscSupDefinition c_SupDefContent;
 
    // get general content
@@ -834,7 +834,7 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_CreateDefFilesAndZipSecur
    const std::vector<std::string> & orc_EncryptNodesPassword,
    const std::vector<uint8_t> & orc_AddSignatureNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    vector<std::set<std::string> > c_SecFiles;
    std::vector<std::string> c_SecPackageFilesRel;
@@ -908,7 +908,7 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(
    const std::vector<std::string> & orc_EncryptNodesPassword, const uint32_t ou32_NodeCount,
    std::set<std::string> & orc_SupFiles)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    tgl_assert((orc_NodeFoldersAbs.size() == orc_SecFiles.size()) && ((orc_SecPackageFilesRel.size() ==
                                                                       orc_SecFiles.size()) &&
@@ -986,7 +986,7 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_HandleNodeDefCreation(
    const uint32_t ou32_NodeCount, std::vector<C_OscSupNodeDefinition> & orc_SupDefNodes,
    std::vector<std::set<std::string> > & orc_SecFiles, const bool oq_UseMinorVersion1)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_AddSignatureNodes;
    const std::vector<std::vector<uint8_t> > c_Unused;
@@ -1053,7 +1053,7 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_HandleSignatureCreation(
    const std::vector<uint8_t> & orc_AddSignatureNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
    const uint32_t ou32_NodeCount, std::vector<std::set<std::string> > & orc_SecFiles)
 {
-   std::error_code c_Retval;
+   std::error_code c_Retval = Errc::success;
 
    std::vector<uint8_t> c_AddSignatureNodes;
    std::vector<std::vector<uint8_t> > c_NodeSignatureKeys;

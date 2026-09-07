@@ -77,7 +77,7 @@ std::error_code C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const std:
                                                                       const bool oq_UseMinorVersion1)
 {
    const std::string c_FileName = TglFileIncludeTrailingDelimiter(orc_Path) + hc_PACKAGE_UPDATE_DEF;
-   std::error_code c_Result;
+   std::error_code c_Result = Errc::success;
 
    // fill update package definition
    C_OscXmlParser c_XmlParser;
@@ -144,7 +144,7 @@ std::error_code C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const std::s
                                                                     std::vector<uint32_t> & orc_UpdatePosition,
                                                                     std::vector<std::string> & orc_PackageFiles)
 {
-   std::error_code c_Retval;
+   std::error_code c_Retval = Errc::success;
    C_OscXmlParser c_XmlParser;
 
    if (oq_IsZip)

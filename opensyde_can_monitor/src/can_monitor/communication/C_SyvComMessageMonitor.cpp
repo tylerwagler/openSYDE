@@ -216,7 +216,7 @@ int32_t C_SyvComMessageMonitor::StartAddOsySysDef(const std::string & orc_PathSy
 std::error_code C_SyvComMessageMonitor::SetOsySysDefBus(const std::string & orc_PathSystemDefinition,
                                                 const uint32_t ou32_BusIndex)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    this->mc_CriticalSectionConfig.lock();
    c_Return = C_OscComMessageLogger::SetOsySysDefBus(orc_PathSystemDefinition, ou32_BusIndex);
@@ -239,7 +239,7 @@ std::error_code C_SyvComMessageMonitor::SetOsySysDefBus(const std::string & orc_
 std::error_code C_SyvComMessageMonitor::GetOsySysDef(const std::string & orc_PathSystemDefinition,
                                              C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    this->mc_CriticalSectionConfig.lock();
    c_Return = C_OscComMessageLogger::GetOsySysDef(orc_PathSystemDefinition, orc_SystemDefinition);
@@ -359,7 +359,7 @@ std::error_code C_SyvComMessageMonitor::RemoveDatabase(const std::string & orc_P
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_SyvComMessageMonitor::ActivateDatabase(const std::string & orc_Path, const bool oq_Active)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    //Logger handling
    this->mc_CriticalSectionConfig.lock();
@@ -384,7 +384,7 @@ std::error_code C_SyvComMessageMonitor::ActivateDatabase(const std::string & orc
 std::error_code C_SyvComMessageMonitor::AddLogFileAsc(const std::string & orc_FilePath, const bool oq_HexActive,
                                               const bool oq_RelativeTimeStampActive)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    this->mc_CriticalSectionConfig.lock();
    c_Return = C_OscComMessageLogger::AddLogFileAsc(orc_FilePath, oq_HexActive, oq_RelativeTimeStampActive);
@@ -434,7 +434,7 @@ int32_t C_SyvComMessageMonitor::AddLogFileBlf(const std::string & orc_FilePath)
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_SyvComMessageMonitor::RemoveLogFile(const std::string & orc_FilePath)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    this->mc_CriticalSectionConfig.lock();
    c_Return = C_OscComMessageLogger::RemoveLogFile(orc_FilePath);
@@ -533,7 +533,7 @@ uint32_t C_SyvComMessageMonitor::GetFilteredMessages(void) const
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_SyvComMessageMonitor::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg, const bool oq_IsTx)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    // --- CAN-TP preprocessing ---
    C_CamCanTpResult c_TpResult;

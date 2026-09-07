@@ -540,7 +540,7 @@ std::error_code C_OscSecurityAesFile::h_CreateEncryptedZipFile(const std::string
                                                                const std::string & orc_Key,
                                                                std::string * const opc_ErrorMessage)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    const std::string c_ZipFileTmp = orc_PathForZipFile + std::string("_tmp");
    std::string c_ErrorText;
@@ -626,7 +626,7 @@ std::error_code C_OscSecurityAesFile::h_UnpackEncryptedZipFile(const std::string
                                                                const std::string & orc_Key,
                                                                std::string * const opc_ErrorMessage)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
    std::string c_ZipFileTmp = orc_PathOfZipFile + std::string("_tmp");
    bool q_TemporaryFileUsed = true;
 

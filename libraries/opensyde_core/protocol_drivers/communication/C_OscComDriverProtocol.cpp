@@ -2703,7 +2703,7 @@ std::error_code C_OscComDriverProtocol::m_StopRoutingOfRoutingPoint(const uint32
       if (orc_Point.e_OutInterfaceType == C_OscSystemBus::eCAN)
       {
          const uint32_t u32_CurrentNode = this->m_GetActiveIndex(orc_Point.u32_NodeIndex);
-         std::error_code c_Retval;
+         std::error_code c_Retval = Errc::success;
 
          // Clear all queues. In case of CAN tp the change causes that more than one queue receives
          // service responses

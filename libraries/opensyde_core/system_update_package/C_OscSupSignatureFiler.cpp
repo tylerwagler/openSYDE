@@ -61,7 +61,7 @@ static const std::string mc_NODE_SIG_VALUE_ATTR = "value";                      
 std::error_code C_OscSupSignatureFiler::h_CreateSignatureFile(const std::string & orc_Path,
                                                               const std::string & orc_Signature)
 {
-   std::error_code c_Result;
+   std::error_code c_Result = Errc::success;
 
    // fill update package definition
    C_OscXmlParser c_XmlParser;
@@ -105,7 +105,7 @@ std::error_code C_OscSupSignatureFiler::h_CreateSignatureFile(const std::string 
 std::error_code C_OscSupSignatureFiler::h_LoadSignatureFile(const std::string & orc_Path,
                                                             std::string & orc_Signature)
 {
-   std::error_code c_Result;
+   std::error_code c_Result = Errc::success;
    C_OscXmlParser c_XmlParser;
 
    c_Result = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_Path));

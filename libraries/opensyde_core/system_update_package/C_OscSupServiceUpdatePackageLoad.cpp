@@ -200,7 +200,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
                                                            vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<std::string> & orc_DecryptNodesPassword,
                                                            const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    std::string c_TargetUnzipPath = C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(orc_TargetUnzipPath);
 
@@ -332,7 +332,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscSupServiceUpdatePackageLoad::mh_CheckSupFiles(const std::string & orc_PackagePath)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<std::string> c_NecessaryFiles; //those are the files we look for
 
@@ -365,7 +365,7 @@ std::error_code C_OscSupServiceUpdatePackageLoad::mh_CheckParamsToProcessPackage
                                                                                  std::string & orc_TargetUnzipPath,
                                                                                  const bool oq_IsZip)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (oq_IsZip)
    {
@@ -428,7 +428,7 @@ std::error_code C_OscSupServiceUpdatePackageLoad::mh_CheckParamsToProcessPackage
 std::error_code C_OscSupServiceUpdatePackageLoad::mh_SetNodesUpdateOrder(
    const map<uint32_t, uint32_t> & orc_UpdateOrderByNodes, vector<uint32_t> & orc_NodesUpdateOrder)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (orc_UpdateOrderByNodes.size() == 0)
    {
@@ -556,7 +556,7 @@ std::error_code C_OscSupServiceUpdatePackageLoad::mh_UnpackNodes(const std::vect
                                                                  const std::string & orc_TargetUnzipPath,
                                                                  const std::vector<std::string> & orc_NodeFoldersAbs)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    std::vector<uint8_t> c_DecryptNodes;
    std::vector<std::string> c_DecryptNodesPassword;
@@ -622,7 +622,7 @@ std::error_code C_OscSupServiceUpdatePackageLoad::mh_VerifySignatures(
    const std::vector<uint8_t> & orc_ActiveNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
    const std::vector<std::string> & orc_Signatures, const std::vector<std::string> & orc_AbsSydeSecureDefFileNames)
 {
-   std::error_code c_Retval;
+   std::error_code c_Retval = Errc::success;
 
    std::vector<std::vector<uint8_t> > c_NodeSignatureKeys;
    mh_AdaptCommonSignatureParameters(orc_NodeSignatureKeys,

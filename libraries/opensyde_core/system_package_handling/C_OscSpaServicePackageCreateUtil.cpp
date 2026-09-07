@@ -349,7 +349,7 @@ std::error_code C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
       const std::string c_TargetDir = c_TempPathTrailing + rc_DeviceName;
       const std::string c_TargetFile = c_TargetDir + "/device.syd";
 
-      std::error_code c_Ec;
+      std::error_code c_Ec = Errc::success;
       fs::create_directories(fs::path(c_TargetDir.c_str()), c_Ec);
       if (c_Ec)
       {

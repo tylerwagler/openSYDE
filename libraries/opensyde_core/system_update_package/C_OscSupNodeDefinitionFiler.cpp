@@ -88,7 +88,7 @@ std::error_code C_OscSupNodeDefinitionFiler::h_SaveNodes(const std::vector<std::
                                                          const std::vector<C_OscSupNodeDefinition> & orc_Nodes,
                                                          const bool oq_UseMinorVersion1)
 {
-   std::error_code c_Retval;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Nodes.size() == orc_Files.size())
    {
@@ -134,7 +134,7 @@ std::error_code C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<std::
                                                                                                                                      uint32_t> & orc_UpdateOrderByNodes, const std::vector<uint32_t> & orc_UpdatePosition, std::vector<std::string> & orc_Signatures,
                                                          const bool oq_UseMinorVersion1)
 {
-   std::error_code c_Retval;
+   std::error_code c_Retval = Errc::success;
 
    tgl_assert((orc_Files.size() == orc_NodeFoldersAbs.size()) &&
               ((orc_Files.size() == orc_ActiveNodes.size()) && (orc_Files.size() == orc_UpdatePosition.size())));
@@ -224,7 +224,7 @@ std::error_code C_OscSupNodeDefinitionFiler::mh_SaveNode(const std::string & orc
                                                          const C_OscSupNodeDefinition & orc_Node,
                                                          const bool oq_UseMinorVersion1)
 {
-   std::error_code c_Result;
+   std::error_code c_Result = Errc::success;
    C_OscXmlParser c_XmlParser;
 
    //Root Node
@@ -657,7 +657,7 @@ std::error_code C_OscSupNodeDefinitionFiler::mh_LoadSignatureFile(const std::str
                                                                   std::string & orc_Signature,
                                                                   C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild(mc_SIG_FILE) == mc_SIG_FILE)
    {
@@ -687,7 +687,7 @@ std::error_code C_OscSupNodeDefinitionFiler::mh_LoadSignatureFile(const std::str
 std::error_code C_OscSupNodeDefinitionFiler::mh_CheckFileVersion(const bool oq_UseMinorVersion1,
                                                                  C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("file-version") == "file-version")
    {

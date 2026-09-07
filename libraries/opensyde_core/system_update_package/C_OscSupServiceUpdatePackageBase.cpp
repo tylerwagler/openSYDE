@@ -105,7 +105,7 @@ std::error_code C_OscSupServiceUpdatePackageBase::mh_CheckCommonSecurityParamete
    const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys, const uint32_t ou32_NumNodes,
    const std::string & orc_Mode, const std::string & orc_Function)
 {
-   std::error_code c_Return;
+   std::error_code c_Return = Errc::success;
 
    if (orc_EncryptNodes.size() != orc_EncryptNodesPassword.size())
    {
@@ -311,7 +311,7 @@ std::error_code C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const std::strin
 std::error_code C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(const std::string & orc_FilePath,
                                                                      C_OscSecurityEcdsa & orc_Signature)
 {
-   std::error_code c_Retval;
+   std::error_code c_Retval = Errc::success;
    const uint32_t u32_SECTION_SIZE = 256;
 
    std::ifstream c_InputFileStream;
@@ -362,7 +362,7 @@ std::error_code C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(ifst
                                                                             C_OscSecurityEcdsa & orc_Signature,
                                                                             const uint32_t ou32_SectionLength)
 {
-   std::error_code c_Retval;
+   std::error_code c_Retval = Errc::success;
    //read file content
    bool q_HasFailed;
 

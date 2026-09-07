@@ -224,7 +224,7 @@ std::error_code C_OscHexFile::CalcFileChecksum(uint32_t & oru32_Checksum)
 {
    //GetDataDump reports the hex_file category, which is a different set of codes to the STW one this
    //function returns - hence the separate local.
-   std::error_code c_DumpError;
+   std::error_code c_DumpError = Errc::success;
    const C_HexDataDump * pc_Dump;
 
    pc_Dump = this->GetDataDump(c_DumpError);
