@@ -112,26 +112,36 @@ Per-tool build directories under `build/`; deploy target defaults to
 Google Test + CTest, in `libraries/opensyde_core/tests/`. Enable with
 `-DOPENSYDE_CORE_BUILD_TESTS=ON`, run with `ctest`.
 
-Current suites: `test_checksums`, `test_dynamic_array`, `test_logging`,
-`test_osc_error_category`, `test_scl_string`, `test_stwerrors`, `test_stwtypes`,
-`test_xml_parser`.
+13 suites, 175 tests: `test_application_info_block`, `test_checksums`,
+`test_dynamic_array`, `test_hex_file`, `test_hex_string_parsing`, `test_logging`,
+`test_osc_error_category`, `test_protocol_serial_number`, `test_scl_string`,
+`test_security_aes_file`, `test_stwerrors`, `test_stwtypes`, `test_xml_parser`.
+
+Several of these are regression pins for defects the phase 2/3 migrations
+introduced and CI did not catch, so prefer extending them over replacing them.
 
 ## CI
 
 `.github/workflows/build.yml`, on push/PR to `main`, `develop`, `master`.
 
-- **Core Library** — matrix of `ubuntu-24.04` × `ubuntu-26.04` × `g++-12` × `g++-13`.
-  Configures with full subsystem coverage, builds, runs `ctest`.
-- **GUI Tools** — `ubuntu-24.04` and `ubuntu-26.04`, smoke-builds all eight tools via
-  `./build.sh -b Debug all`.
+- **Core Library** — `ubuntu-26.04`. Configures with full subsystem coverage,
+  builds, runs `ctest`. ~1.5 min.
+- **GUI Tools** — `ubuntu-26.04`, smoke-builds all eight tools via
+  `./build.sh -b Debug all`. ~13-18 min.
 
-`ubuntu-26.04` is still a preview runner image, so resolute jobs are
-`continue-on-error` — they report breakage without gating.
+One runner, one compiler — the distro default `g++`, unpinned, which is what
+resolute users actually get. Neither job is `continue-on-error`: as the only
+targets they have to gate, or CI stops meaning anything.
 
 Keep CI green. The core job was red from the moment it was introduced until
 2026-09-06, and that gap is precisely how phase-2 and phase-3 migration residue
 (`GetLength()` on `std::vector`, mangled `std::stoi` artifacts) survived unnoticed.
 A job that does not run is not a quality gate.
+
+**CI does not compile anything behind `#ifdef _WIN32`.** Both runners are Linux
+and so is the remote build host. 23 files carry `_WIN32` conditionals; most guard
+a few lines, but `C_SdNdeDalTriggerCheckHelper.cpp` is stubbed wholesale on Linux
+and roughly 1,124 of its lines are never built. See `docs/TODO.md`.
 
 ## Repository Layout
 
@@ -188,8 +198,35 @@ helpers; prefer idiomatic `std::string` in new code and do not add new compat he
 `C_RD_WR` (-7), `C_CONFIG` (-10), `C_TIMEOUT` (-12).
 
 `C_OscErrorCategory.hpp` adds an `Errc` enum + `STWErrorCategory` so these integrate
-with `std::error_code`. The security API already returns `std::error_code`; callers
-that need the legacy integer use `.value()`.
+with `std::error_code`. Callers that still need the legacy integer use `.value()`.
+`hex_file` has its own category (`C_HexFileErrorCategory`) because its codes are not
+STW codes.
+
+**Bridging unmigrated callees.** Migrated code has to call code that still returns
+`int32_t`. There is exactly one correct way to convert:
+
+```cpp
+c_Retval = make_error_code_from_stw(Legacy());   // yes
+c_Retval = static_cast<Errc>(Legacy());          // no
+```
+
+`static_cast<Errc>` names no conversion and asserts "this integer is an STW error
+code" without checking. Any value outside the 13-member set becomes an enumerator
+that does not exist, and a foreign status code is silently relabelled as an STW one.
+Two such conflations have already been introduced and fixed here
+(`TglRemoveDirectory`, `mz_compress`) — both invisible in testing, because 0 means
+success on both sides. 16 sites still use the wrong idiom, all in
+`system_update_package/`; see the phase 5 section of
+`docs/agent_plans/codebase_audit/PLAN.md`.
+
+**Before bridging, read the callee's own `\return` block.** Not every function
+returning `int32_t` returns an STW code — TGL file helpers return plain 0/non-zero,
+miniz returns its own codes, and OpenSSL returns 1 for success, the opposite
+polarity.
+
+**Grep for comparisons, not just assignments.** `if (Call() == C_NO_ERR)` matches no
+assignment-shaped search, and callers frequently reach a migrated class through a
+base-class pointer without ever naming it.
 
 ### File header
 
@@ -229,11 +266,11 @@ detail.
 | 1 — Correctness bugs | Done |
 | 2 — Remove `C_SclDynamicArray` → `std::vector` | Done |
 | 3 — Retire `C_SclString` → `std::string` | Done |
-| 4 — Replace homegrown AES | Largely done — `security/aes/` sources removed, `C_OscSecurityAesCbc` uses OpenSSL EVP. Note it is AES-128-CBC, not the AES-256-GCM the plan specifies |
-| 5 — Error handling modernization | Started — `C_OscErrorCategory` exists, security API converted |
-| 6 — Concurrency & singletons | Not started |
+| 4 — Replace homegrown AES | Done for files; wire protocol deliberately out of scope. `C_OscSecurityAesFile` is AES-256-GCM + PBKDF2 (600k) with a versioned 56-byte header and key wiping. `C_OscSecurityAesCbc` remains AES-128-CBC and is still used by `C_OscProtocolSecuritySubLayer` — changing that is an ECU-side protocol change, not a PC-side one |
+| 5 — Error handling modernization | In progress — `C_OscErrorCategory` (`Errc` + `STWErrorCategory`), `hex_file` has its own category. Waves done: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc. Remaining: `protocol_drivers` (~292) and `project` (~204, ~640 caller files) — each large enough to run alone |
+| 6 — Concurrency & singletons | 6.1 done (`std::call_once`; Meyer's singleton rejected). 6.2 done (`C_TglCriticalSection` and `TglTasks` deleted, 52 sites on `std::mutex`). 6.3 closed — no defect found |
 | 7 — Performance | Not started |
-| 8 — Build system modernization | Not started |
+| 8 — Build system modernization | Partial — CMake minimum 3.25, CI reworked, ccache added. Unified root build still open |
 
 Cross-cutting follow-ups (dark mode, Linux version string, About dialog) live in
 `docs/TODO.md`; in-code `TODO`/`FIXME` markers are catalogued in
