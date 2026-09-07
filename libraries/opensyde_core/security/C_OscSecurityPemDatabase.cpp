@@ -280,7 +280,7 @@ std::vector<std::string> C_OscSecurityPemDatabase::mh_GetPemFiles(const std::str
    std::vector<C_TglFileSearchRecord> c_FilesScl;
 
    TglFileFind(orc_FolderPath + "*", c_FilesScl);
-   for (int32_t s32_It = 0; s32_It < c_FilesScl.size(); ++s32_It)
+   for (int32_t s32_It = 0; s32_It < static_cast<int32_t>(c_FilesScl.size()); ++s32_It)
    {
       const C_TglFileSearchRecord & rc_FileRecord = c_FilesScl[s32_It];
       const std::string c_FileNameScl = rc_FileRecord.c_FileName;

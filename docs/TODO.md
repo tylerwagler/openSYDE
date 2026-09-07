@@ -241,10 +241,10 @@ Options, cheapest first:
 
 Option 3 is the one worth doing if that file gets touched again.
 
-## Clear the 45 warnings now visible in the core build
+## Core build warnings — done
 
-`libraries/opensyde_core/CMakeLists.txt` now sets `-Wall -Wextra`. It previously
-set no warning flags at all, while the eight tool trees had used
+`libraries/opensyde_core/CMakeLists.txt` now sets `-Wall -Wextra -Werror`. It
+previously set no warning flags at all, while the eight tool trees had used
 `-Wall -Wextra -Wpedantic` all along — so the most safety-critical code in the
 repository was the only part compiled without them.
 
@@ -254,14 +254,14 @@ project file. GCC reports it as `-Wparentheses`, part of `-Wall`. Verified after
 the fact — compiling the pre-fix file with `-Wall` emits the warning at all nine
 lines.
 
-`-Werror` is deliberately **not** set, because warnings pre-date the change. 18 of the original 45 are already fixed:
+All 45 warnings the flags surfaced are cleared:
 
-| Count | Warning | Notes |
+| Was | Warning | Resolution |
 |---|---|---|
-| 26 | `-Wsign-compare` | Signed loop counters against `.size()`. 10 in `C_SclIniFile.cpp`, 3 each in `C_OscSuSequences`, `C_OscCanOpenObjectDictionary`, `C_HexFile`, 2 in `C_CanDispatcher`, singles elsewhere. Mechanical, but touches hot paths. |
-| ~~18~~ 0 | `-Winvalid-pch` | **Fixed.** The precompiled header is `PUBLIC` but `_LARGEFILE64_SOURCE` was `PRIVATE`, so targets reusing the PCH did not define it, the preprocessor state no longer matched, and GCC discarded the PCH — 18 warnings, each recompiling the whole header set. Making the define `PUBLIC` to match the PCH cleared all 18. |
-| 1 | `-Wunused-variable` | |
+| 18 | `-Winvalid-pch` | The PCH was `PUBLIC` but `_LARGEFILE64_SOURCE` was `PRIVATE`, so targets reusing the PCH did not define it and GCC discarded it — each one recompiling the whole header set. Made the define `PUBLIC` to match. |
+| 26 | `-Wsign-compare` | `int32_t` loop counters against `.size()`. Cast the size rather than retyping counters. Two were `size() - 1` comparisons that also underflowed to `SIZE_MAX` on an empty container; casting before subtracting fixes that too. |
+| 1 | `-Wunused-variable` | A shadowed outer declaration, never read. |
 
-The PCH one is done. That leaves 27: the sign-compares are mechanical but touch
-hot paths, and once they are clear `-Werror` becomes viable and this class of bug
-can never reach a commit again.
+`-Werror` is on deliberately. If it ever blocks legitimate work, silence the
+specific warning at its site with a comment explaining why, rather than dropping
+the flag.

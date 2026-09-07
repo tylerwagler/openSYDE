@@ -568,13 +568,13 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeHex(const stw::hex_file:
                           "Flashing HEX file ...");
 
    //get total number of bytes for progress calculations:
-   for (int32_t s32_Area = 0U; s32_Area < orc_HexDataDump.at_Blocks.size(); s32_Area++)
+   for (int32_t s32_Area = 0U; s32_Area < static_cast<int32_t>(orc_HexDataDump.at_Blocks.size()); s32_Area++)
    {
       u32_TotalNumberOfBytes += static_cast<uint32_t>(orc_HexDataDump.at_Blocks[s32_Area].au8_Data.size());
    }
 
    //flash all areas
-   for (int32_t s32_Area = 0U; s32_Area < orc_HexDataDump.at_Blocks.size(); s32_Area++)
+   for (int32_t s32_Area = 0U; s32_Area < static_cast<int32_t>(orc_HexDataDump.at_Blocks.size()); s32_Area++)
    {
       const uint32_t u32_AreaSize = orc_HexDataDump.at_Blocks[s32_Area].au8_Data.size();
       uint32_t u32_MaxBlockLength = 0U;
@@ -722,7 +722,7 @@ std::error_code C_OscSuSequences::m_FlashOneFileOpenSydeHex(const stw::hex_file:
                                 u8_ProgressPercentage, mc_CurrentNode, c_Text);
 
          //if it's the last area we need to check the signature
-         if (s32_Area == (orc_HexDataDump.at_Blocks.size() - 1))
+         if (s32_Area == (static_cast<int32_t>(orc_HexDataDump.at_Blocks.size()) - 1))
          {
             (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_EXIT_FINAL_START, C_NO_ERR,
                                    u8_ProgressPercentage, mc_CurrentNode,

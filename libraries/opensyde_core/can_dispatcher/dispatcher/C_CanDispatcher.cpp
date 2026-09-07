@@ -331,7 +331,7 @@ int32_t C_CanDispatcher::DispatchIncoming(void)
       if (c_Return == Errc::success)
       {
          s32_NumMessages++;
-         for (s32_Loop = 0; s32_Loop < mc_InstalledClients.size(); s32_Loop++)
+         for (s32_Loop = 0; s32_Loop < static_cast<int32_t>(mc_InstalledClients.size()); s32_Loop++)
          {
             if (mc_InstalledClients[s32_Loop].c_RXFilter.DoesMessagePass(t_Msg) == true)
             {
@@ -596,7 +596,7 @@ std::error_code C_CanDispatcher::CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
    if (c_Return == Errc::success)
    {
       //dispatch to installed clients:
-      for (s32_Loop = 0; s32_Loop < mc_InstalledClients.size(); s32_Loop++)
+      for (s32_Loop = 0; s32_Loop < static_cast<int32_t>(mc_InstalledClients.size()); s32_Loop++)
       {
          if (mc_InstalledClients[s32_Loop].c_RXFilter.DoesMessagePass(orc_Message) == true)
          {

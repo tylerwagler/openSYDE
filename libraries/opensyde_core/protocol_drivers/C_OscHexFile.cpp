@@ -318,7 +318,7 @@ std::error_code C_OscHexFile::ScanDeviceIdFromHexFile(std::string & orc_DeviceId
    if ((!c_Return) && (c_InfoBlocks.size() > 0))
    {
       int32_t s32_Index;
-      for (s32_Index = 0; s32_Index < c_InfoBlocks.size(); s32_Index++)
+      for (s32_Index = 0; s32_Index < static_cast<int32_t>(c_InfoBlocks.size()); s32_Index++)
       {
          if (c_InfoBlocks[s32_Index].ContainsDeviceID() == true)
          {

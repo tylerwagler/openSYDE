@@ -183,7 +183,7 @@ void C_OscCanOpenObjectDictionary::m_RememberFileHash()
 {
    this->mu32_OriginalFileHash = 0xFFFFFFFFU;
 
-   for (int32_t s32_Line = 0; s32_Line < this->c_TextFileContent.Strings.size(); s32_Line++)
+   for (int32_t s32_Line = 0; s32_Line < static_cast<int32_t>(this->c_TextFileContent.Strings.size()); s32_Line++)
    {
       stw::scl::C_SclChecksums::CalcCRC32(this->c_TextFileContent.Strings[s32_Line].c_str(),
                                           this->c_TextFileContent.Strings[s32_Line].length(),
@@ -229,7 +229,7 @@ std::error_code C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & o
       //go through all sections and set up c_Objects
       std::vector<C_SclIniSection> & rc_Sections = c_IniFile.GetIniSections();
 
-      for (int32_t s32_Section = 0U; s32_Section < rc_Sections.size(); s32_Section++)
+      for (int32_t s32_Section = 0U; s32_Section < static_cast<int32_t>(rc_Sections.size()); s32_Section++)
       {
          //We are only interested in the sections describing objects or objects with subobjects.
          //All other sections will be ignored.
@@ -456,7 +456,7 @@ std::error_code C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint1
    orc_Object.q_IsMappableIntoPdo = false;
 
    std::vector<C_SclIniKey> & rc_Keys = orc_Section.c_Keys;
-   for (int32_t s32_Key = 0; s32_Key < rc_Keys.size(); s32_Key++)
+   for (int32_t s32_Key = 0; s32_Key < static_cast<int32_t>(rc_Keys.size()); s32_Key++)
    {
       const std::string c_KeyUpperCase = UpperCaseCompat(rc_Keys[s32_Key].c_Key);
 

@@ -149,7 +149,7 @@ bool C_SclIniFile::m_Load(const std::string & orc_FileName)
    // of resizing them when new values are added.
    //But performance tests showed better performance with this single pass approach.
    //So all the string checking only needs to be done once.
-   for (s32_Index = 0; s32_Index < c_List.Strings.size(); s32_Index++)
+   for (s32_Index = 0; s32_Index < static_cast<int32_t>(c_List.Strings.size()); s32_Index++)
    {
       C_SclIniFile::mh_CopyLessTrim(c_List.Strings[s32_Index]);
       const std::string & rc_Line = c_List.Strings[s32_Index];
@@ -671,7 +671,7 @@ void C_SclIniFile::EraseSection(const std::string & orc_Section)
 {
    int32_t s32_Index;
 
-   for (s32_Index = 0; s32_Index < mc_Sections.size(); s32_Index++)
+   for (s32_Index = 0; s32_Index < static_cast<int32_t>(mc_Sections.size()); s32_Index++)
    {
       if (LowerCaseCompat(mc_Sections[s32_Index].c_Name).compare(LowerCaseCompat(orc_Section)) == 0)
       {
@@ -705,7 +705,7 @@ void C_SclIniFile::DeleteKey(const std::string & orc_Section, const std::string 
       return;
    }
 
-   for (s32_Index = 0; s32_Index < pc_Section->c_Keys.size(); s32_Index++)
+   for (s32_Index = 0; s32_Index < static_cast<int32_t>(pc_Section->c_Keys.size()); s32_Index++)
    {
       if (LowerCaseCompat(pc_Section->c_Keys[s32_Index].c_Key).compare(LowerCaseCompat(orc_Key)) == 0)
       {
@@ -803,7 +803,7 @@ C_SclIniKey * C_SclIniSection::GetKey(const std::string & orc_Key)
    s32_LastIndex = ms32_PreviousKeyIndex;
 
    //Search from last successful point to the end
-   for (s32_Index = s32_LastIndex; s32_Index < this->c_Keys.size(); s32_Index++)
+   for (s32_Index = s32_LastIndex; s32_Index < static_cast<int32_t>(this->c_Keys.size()); s32_Index++)
    {
       if (LowerCaseCompat(this->c_Keys[s32_Index].c_Key).compare(LowerCaseCompat(orc_Key)) == 0)
       {
@@ -866,7 +866,7 @@ C_SclIniSection * C_SclIniFile::m_GetSection(const std::string & orc_Section)
    s32_LastIndex = ms32_PreviousSectionIndex;
 
    //Search from last successful point to the end
-   for (s32_Index = s32_LastIndex; s32_Index < mc_Sections.size(); s32_Index++)
+   for (s32_Index = s32_LastIndex; s32_Index < static_cast<int32_t>(mc_Sections.size()); s32_Index++)
    {
       if (LowerCaseCompat(mc_Sections[s32_Index].c_Name).compare(LowerCaseCompat(orc_Section)) == 0)
       {
@@ -942,7 +942,7 @@ void C_SclIniFile::ReadSection(const std::string & orc_Section, C_SclStringList 
    if (pc_Section != nullptr)
    {
       opc_Strings->Strings.resize(static_cast<int32_t>(u32_OldLength) + pc_Section->c_Keys.size());
-      for (s32_Loop = 0; s32_Loop < pc_Section->c_Keys.size(); s32_Loop++)
+      for (s32_Loop = 0; s32_Loop < static_cast<int32_t>(pc_Section->c_Keys.size()); s32_Loop++)
       {
          opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] = pc_Section->c_Keys[s32_Loop].c_Key;
       }
@@ -980,7 +980,7 @@ void C_SclIniFile::ReadSectionValues(const std::string & orc_Section, C_SclStrin
    if (pc_Section != nullptr)
    {
       opc_Strings->Strings.resize(static_cast<int32_t>(u32_OldLength) + pc_Section->c_Keys.size());
-      for (s32_Loop = 0; s32_Loop < pc_Section->c_Keys.size(); s32_Loop++)
+      for (s32_Loop = 0; s32_Loop < static_cast<int32_t>(pc_Section->c_Keys.size()); s32_Loop++)
       {
          opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
             pc_Section->c_Keys[s32_Loop].c_Key + "=" + pc_Section->c_Keys[s32_Loop].c_Value;
@@ -1013,7 +1013,7 @@ void C_SclIniFile::ReadSections(C_SclStringList * const opc_Strings, const bool 
    }
 
    opc_Strings->Strings.resize(static_cast<int32_t>(u32_OldLength) + mc_Sections.size());
-   for (s32_Loop = 0; s32_Loop < mc_Sections.size(); s32_Loop++)
+   for (s32_Loop = 0; s32_Loop < static_cast<int32_t>(mc_Sections.size()); s32_Loop++)
    {
       opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] = mc_Sections[s32_Loop].c_Name;
    }
@@ -1066,7 +1066,7 @@ void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
 
    orc_Strings.Clear();
 
-   for (s32_Section = 0; s32_Section < mc_Sections.size(); s32_Section++)
+   for (s32_Section = 0; s32_Section < static_cast<int32_t>(mc_Sections.size()); s32_Section++)
    {
       pc_Section = &mc_Sections[s32_Section];
 
@@ -1096,7 +1096,7 @@ void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
       }
 
       //add one blank line after every section (increases readability; required by some parsers)
-      if (s32_Section < (mc_Sections.size() - 1))
+      if (s32_Section < (static_cast<int32_t>(mc_Sections.size()) - 1))
       {
          orc_Strings.Add("");
       }

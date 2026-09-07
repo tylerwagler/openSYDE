@@ -1450,7 +1450,7 @@ std::error_code C_OscHalcDefStructFiler::mh_ParseAttributeAvailability(
    {
       std::vector<std::string> c_SplittedString;
       TokenizeCompat(orc_AttributeContent, ",", c_SplittedString);
-      for (int32_t s32_ItSplit = 0L; s32_ItSplit < c_SplittedString.size(); ++s32_ItSplit)
+      for (int32_t s32_ItSplit = 0L; s32_ItSplit < static_cast<int32_t>(c_SplittedString.size()); ++s32_ItSplit)
       {
           const std::string c_CurSplit = TrimCompat(c_SplittedString[s32_ItSplit]);
          bool q_Found = false;

@@ -245,7 +245,7 @@ std::error_code C_OscParamSetRawNodeFiler::mh_LoadEntry(C_OscParamSetRawEntry & 
           std::vector<std::string> c_Tokens;
           TokenizeCompat(c_Content, ";", c_Tokens);
           orc_Entry.c_Bytes.reserve(c_Tokens.size());
-          for (int32_t s32_It = 0; (s32_It < c_Tokens.size()) && (!c_Retval); ++s32_It)
+          for (int32_t s32_It = 0; (s32_It < static_cast<int32_t>(c_Tokens.size())) && (!c_Retval); ++s32_It)
           {
              const std::string & rc_Token = c_Tokens[s32_It];
             try

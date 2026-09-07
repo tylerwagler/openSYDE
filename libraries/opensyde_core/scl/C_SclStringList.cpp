@@ -326,7 +326,6 @@ void C_SclStringList::LoadFromFile(const std::string & orc_FileName)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SclStringList::SaveToFile(const std::string & orc_FileName)
 {
-   int32_t s32_Line;
    uint32_t u32_NumWritten;
 
    std::FILE * const pc_File = std::fopen(orc_FileName.c_str(), "wb");

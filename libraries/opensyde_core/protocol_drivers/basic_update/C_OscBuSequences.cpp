@@ -808,7 +808,7 @@ std::error_code C_OscBuSequences::h_ReadHexFile(const std::string & orc_HexFileP
       osc_write_log_info(c_LogActivity, "Number of application information blocks in HEX file: " +
                          std::to_string(c_InfoBlocks.size()));
 
-      for (int32_t s32_Index = 0; s32_Index < c_InfoBlocks.size(); s32_Index++)
+      for (int32_t s32_Index = 0; s32_Index < static_cast<int32_t>(c_InfoBlocks.size()); s32_Index++)
       {
          C_SclStringList c_Lines;
          std::string c_Help;

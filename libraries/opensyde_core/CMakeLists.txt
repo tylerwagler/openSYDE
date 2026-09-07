@@ -968,11 +968,11 @@ add_library(opensyde_core ${OPENSYDE_CORE_SOURCES})
 # where nobody was reading core's output because core was not compiled there with
 # warnings on.
 #
-# Not -Werror: 27 pre-existing warnings remain -- 26 -Wsign-compare (mostly signed
-# loop counters against .size()) and one unused variable. Tracked in
-# docs/TODO.md; turning on -Werror before they are cleared would break the build.
+# -Werror is on because the count is zero and the point is to keep it there. If
+# this ever blocks legitimate work, silence the specific warning at its site
+# with a comment explaining why, rather than dropping the flag.
 if(NOT MSVC)
-   target_compile_options(opensyde_core PRIVATE -Wall -Wextra)
+   target_compile_options(opensyde_core PRIVATE -Wall -Wextra -Werror)
 endif()
 
 # Enable large file support on Linux (required by miniz for 64-bit file I/O).

@@ -1012,7 +1012,7 @@ std::error_code C_HexFile::CreateHexFile(const C_HexDataDump & orc_Dump, const u
 
    if (u32_Error == NO_ERR)
    {
-      for (s32_Block = 0U; s32_Block < orc_Dump.at_Blocks.size(); s32_Block++)
+      for (s32_Block = 0U; s32_Block < static_cast<int32_t>(orc_Dump.at_Blocks.size()); s32_Block++)
       {
          s32_Length = 0;
          pc_Block = &orc_Dump.at_Blocks[s32_Block];
@@ -2240,7 +2240,7 @@ int32_t C_HexFile::GetDataByAddress(const uint32_t ou32_Address, uint16_t & oru1
       return -1;
    }
 
-   for (s32_Block = 0; s32_Block < pc_HexFileData->at_Blocks.size(); s32_Block++)
+   for (s32_Block = 0; s32_Block < static_cast<int32_t>(pc_HexFileData->at_Blocks.size()); s32_Block++)
    {
       u32_BlockLength = pc_HexFileData->at_Blocks[s32_Block].au8_Data.size();
       if ((ou32_Address <= (pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset + u32_BlockLength)) &&
@@ -2354,7 +2354,7 @@ int32_t C_HexFile::FindPattern(uint32_t & oru32_Address, const uint8_t ou8_Patte
       return -1;
    }
 
-   for (s32_Block = 0; s32_Block < pc_HexFileData->at_Blocks.size(); s32_Block++)
+   for (s32_Block = 0; s32_Block < static_cast<int32_t>(pc_HexFileData->at_Blocks.size()); s32_Block++)
    {
       u32_BlockLength = pc_HexFileData->at_Blocks[s32_Block].au8_Data.size();
       if (oru32_Address < (pc_HexFileData->at_Blocks[s32_Block].u32_AddressOffset + u32_BlockLength))
