@@ -120,15 +120,21 @@ jobs:
             flex bison libfl-dev \
             libqcustomplot-dev
 
-      # build.sh configures each of the eight tools separately, so opensyde_core
-      # is compiled once per tool. ccache is meant to collapse those repeats.
+      # build.sh now drives the root CMakeLists: opensyde_core is compiled once
+      # and every tool links that archive. The old reason for ccache here --
+      # collapsing eight duplicate core builds within a single run -- is gone,
+      # and a clean `all` dropped from 1,139 core objects across eight archives
+      # to 220 in one.
       #
-      # Two settings are required or it does almost nothing. The first run
-      # measured 2240 of 2445 calls (91.6%) as UNCACHEABLE with a 0.49% hit
-      # rate, because every tool uses target_precompile_headers and ccache
-      # refuses PCH builds unless sloppiness allows them. CCACHE_BASEDIR
-      # rewrites absolute paths relative to the workspace so an object built
-      # under one tool's build directory can match another's.
+      # ccache is kept because it still collapses work *across* runs via the
+      # restore-key below, which is the larger win on CI.
+      #
+      # CCACHE_SLOPPINESS is still required: every target uses
+      # target_precompile_headers and ccache refuses PCH builds without it. The
+      # first run measured 2240 of 2445 calls (91.6%) UNCACHEABLE with a 0.49%
+      # hit rate for exactly that reason. CCACHE_BASEDIR rewrites absolute paths
+      # relative to the workspace so a cached object still matches when the
+      # workspace path differs between runs.
       - name: Restore ccache
         uses: actions/cache@v4
         with:
@@ -146,3 +152,17 @@ jobs:
       - name: ccache statistics
         if: always()
         run: ccache --show-stats
+
+      # build.sh no longer exercises the per-tool path, but each tool's own
+      # pjt/CMakeLists.txt is still expected to configure standalone -- it guards
+      # its core add_subdirectory with if(NOT TARGET opensyde_core) and falls back
+      # to building its own core with its own SKIP_* set. Nothing else tests that
+      # now, so it would rot silently. Configure only: this catches a broken guard
+      # or a missing variable in seconds, without paying for a second core build.
+      - name: Verify a tool still configures standalone
+        run: >
+          cmake
+          -S opensyde_tsp_convert/pjt
+          -B build/standalone-check
+          -G Ninja
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
