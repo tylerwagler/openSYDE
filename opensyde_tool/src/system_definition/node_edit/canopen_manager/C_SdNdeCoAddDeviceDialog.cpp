@@ -437,7 +437,7 @@ void C_SdNdeCoAddDeviceDialog::m_OnLoadEds(void)
       C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath()).toStdString().c_str();
    const QFileInfo c_FileInfo(c_File.c_str());
 
-   if (c_CanOpenObjDictionary.LoadFromFile(c_File) == C_NO_ERR)
+   if (!c_CanOpenObjDictionary.LoadFromFile(c_File))
    {
       C_SclIniFile c_IniFile(c_File);
 

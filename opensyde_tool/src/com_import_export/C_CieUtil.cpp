@@ -439,6 +439,7 @@ int32_t C_CieUtil::h_GetDeviceInfo(const uint32_t ou32_DeviceNodeIndex, const ui
          C_OscEdsDcfImportMessageGroup c_InvalidOscRxMessageData;
          C_OscEdsDcfImportMessageGroup c_InvalidOscTxMessageData;
          std::vector<std::vector<std::string> > c_InvalidImportMessagesPerMessage;
+         //h_Import reports std::error_code; this function still uses the STW int32_t convention
          s32_Retval = C_OscImportEdsDcf::h_Import(
             C_PuiUtil::h_GetAbsolutePathFromProject(
                orc_EdsPath).toStdString().c_str(),
@@ -448,7 +449,7 @@ int32_t C_CieUtil::h_GetDeviceInfo(const uint32_t ou32_DeviceNodeIndex, const ui
             c_ImportMessagesPerMessage, c_ParsingError, C_OscCanProtocol::eCAN_OPEN,
             c_InvalidOscRxMessageData,
             c_InvalidOscTxMessageData,
-            c_InvalidImportMessagesPerMessage);
+            c_InvalidImportMessagesPerMessage).value();
          orc_ParsingError = c_ParsingError.c_str();
          if (s32_Retval == C_NO_ERR)
          {
@@ -864,6 +865,7 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
             C_OscEdsDcfImportMessageGroup c_InvalidOscRxMessageData;
             C_OscEdsDcfImportMessageGroup c_InvalidOscTxMessageData;
             std::vector<std::vector<std::string> > c_InvalidImportMessagesPerMessage;
+            //h_Import reports std::error_code; the error reporting below still uses the STW int32_t convention
             const int32_t s32_ImportResult = C_OscImportEdsDcf::h_Import(
                orc_FullFilePath.toStdString().c_str(), rc_CurInterface.u8_NodeId,
                c_OscRxMessageData,
@@ -871,7 +873,7 @@ int32_t C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex, const C_Osc
                c_ImportMessagesPerMessage, c_ParsingError, oe_ProtocolType,
                c_InvalidOscRxMessageData,
                c_InvalidOscTxMessageData,
-               c_InvalidImportMessagesPerMessage);
+               c_InvalidImportMessagesPerMessage).value();
             if (s32_ImportResult == C_NO_ERR)
             {
                C_CieImportDataAssignment c_NodeAssignment;

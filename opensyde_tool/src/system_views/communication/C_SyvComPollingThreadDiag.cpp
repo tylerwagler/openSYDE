@@ -154,37 +154,37 @@ void C_SyvComPollingThreadDiag::run(void)
    {
    case eDPREAD:
       ms32_Result = mpc_Dealer->DataPoolReadWithWidget(mu8_DataPoolIndex, mu16_ListIndex, mu16_ElementIndex,
-                                                       mpc_DashboardWidget, &mu8_Nrc);
+                                                       mpc_DashboardWidget, &mu8_Nrc).value();
       break;
    case eDPWRITE:
-      ms32_Result = mpc_Dealer->DataPoolWrite(mu8_DataPoolIndex, mu16_ListIndex, mu16_ElementIndex, &mu8_Nrc);
+      ms32_Result = mpc_Dealer->DataPoolWrite(mu8_DataPoolIndex, mu16_ListIndex, mu16_ElementIndex, &mu8_Nrc).value();
       break;
    case eNVMREAD:
-      ms32_Result = mpc_Dealer->NvmRead(mu8_DataPoolIndex, mu16_ListIndex, mu16_ElementIndex, &mu8_Nrc);
+      ms32_Result = mpc_Dealer->NvmRead(mu8_DataPoolIndex, mu16_ListIndex, mu16_ElementIndex, &mu8_Nrc).value();
       break;
    case eNVMWRITE:
-      ms32_Result = mpc_Dealer->NvmWrite(mu8_DataPoolIndex, mu16_ListIndex, mu16_ElementIndex, &mu8_Nrc);
+      ms32_Result = mpc_Dealer->NvmWrite(mu8_DataPoolIndex, mu16_ListIndex, mu16_ElementIndex, &mu8_Nrc).value();
       break;
    case eNVMREADLIST:
-      ms32_Result = mpc_Dealer->NvmReadList(mu8_DataPoolIndex, mu16_ListIndex, &mu8_Nrc);
+      ms32_Result = mpc_Dealer->NvmReadList(mu8_DataPoolIndex, mu16_ListIndex, &mu8_Nrc).value();
       break;
    case eNVMSAFEWRITECHANGEDVALUES:
       // Special case: Output parameter
       this->mc_ChangedElements.clear();
-      ms32_Result = mpc_Dealer->NvmSafeWriteChangedValues(this->mc_ChangedElements, &this->mc_ListIds, &mu8_Nrc);
+      ms32_Result = mpc_Dealer->NvmSafeWriteChangedValues(this->mc_ChangedElements, &this->mc_ListIds, &mu8_Nrc).value();
       break;
    case eNVMSAFEREAD:
-      ms32_Result = mpc_Dealer->NvmSafeReadValues(this->mpc_ParamNodeValues, &mu8_Nrc);
+      ms32_Result = mpc_Dealer->NvmSafeReadValues(this->mpc_ParamNodeValues, &mu8_Nrc).value();
       break;
    case eNVMSAFEWRITECRCS:
-      ms32_Result = mpc_Dealer->NvmSafeWriteCrcs(&mu8_Nrc);
+      ms32_Result = mpc_Dealer->NvmSafeWriteCrcs(&mu8_Nrc).value();
       break;
    case eNVMNOTIFYOFCHANGES:
       ms32_Result = mpc_Dealer->NvmNotifyOfChanges(mu8_DataPoolIndex, static_cast<uint8_t>(mu16_ListIndex),
-                                                   mq_ApplicationAcknowledge, &mu8_Nrc);
+                                                   mq_ApplicationAcknowledge, &mu8_Nrc).value();
       break;
    case eNVMSAFEREADPARAMETERVALUES:
-      ms32_Result = mpc_Dealer->NvmSafeReadParameterValues(this->mc_ListIds, &mu8_Nrc);
+      ms32_Result = mpc_Dealer->NvmSafeReadParameterValues(this->mc_ListIds, &mu8_Nrc).value();
       break;
    default:
       tgl_assert(false);

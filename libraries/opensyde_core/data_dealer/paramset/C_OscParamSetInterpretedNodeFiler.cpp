@@ -15,7 +15,10 @@
 #include <cstdio>
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscChecksummedXml.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
 #include "C_OscParamSetInterpretedNodeFiler.hpp"
@@ -52,28 +55,28 @@ using namespace stw::opensyde_core;
                                                 Warning: flag is never set to false if optional content is present
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler::h_LoadInterpretedNode(C_OscParamSetInterpretedNode & orc_Node,
-                                                                 C_OscXmlParserBase & orc_XmlParser,
-                                                                 bool & orq_MissingOptionalContent)
+std::error_code C_OscParamSetInterpretedNodeFiler::h_LoadInterpretedNode(C_OscParamSetInterpretedNode & orc_Node,
+                                                                         C_OscXmlParserBase & orc_XmlParser,
+                                                                         bool & orq_MissingOptionalContent)
 {
-   int32_t s32_Retval = C_OscParamSetFilerBase::mh_LoadNodeName(orc_Node.c_Name, orc_XmlParser);
+   std::error_code c_Retval = C_OscParamSetFilerBase::mh_LoadNodeName(orc_Node.c_Name, orc_XmlParser);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       std::vector<C_OscParamSetDataPoolInfo> c_DataPoolInfos;
-      s32_Retval = C_OscParamSetFilerBase::mh_LoadDataPoolInfos(c_DataPoolInfos, orc_XmlParser,
+      c_Retval = C_OscParamSetFilerBase::mh_LoadDataPoolInfos(c_DataPoolInfos, orc_XmlParser,
                                                                 orq_MissingOptionalContent);
-      if (s32_Retval == C_NO_ERR)
+      if (!c_Retval)
       {
-         s32_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadDataPools(orc_Node.c_DataPools, c_DataPoolInfos,
+         c_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadDataPools(orc_Node.c_DataPools, c_DataPoolInfos,
                                                                           orc_XmlParser);
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -124,15 +127,15 @@ C_OscParamSetInterpretedNodeFiler::C_OscParamSetInterpretedNodeFiler(void) :
    \param[in,out]  orc_XmlParser       XML with specified node active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadDataPools(
+std::error_code C_OscParamSetInterpretedNodeFiler::mh_LoadDataPools(
    std::vector<C_OscParamSetInterpretedDataPool> & orc_DataPools,
    const std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_DataPools.clear();
    if (orc_XmlParser.SelectNodeChild("interpreted") == "interpreted")
@@ -151,8 +154,8 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadDataPools(
                c_Item.c_DataPoolInfo = orc_DataPoolInfos[u32_ItDataPoolInfo];
                ++u32_ItDataPoolInfo;
                //Content
-               s32_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadDataPool(c_Item, orc_XmlParser);
-               if (s32_Retval == C_NO_ERR)
+               c_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadDataPool(c_Item, orc_XmlParser);
+               if (!c_Retval)
                {
                   orc_DataPools.push_back(c_Item);
                }
@@ -160,27 +163,27 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadDataPools(
             else
             {
                osc_write_log_error("Loading Dataset data", "Information for too many data pools present.");
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
 
             //Next
             c_SelectedNode = orc_XmlParser.SelectNodeNext("datapool");
          }
-         while ((c_SelectedNode == "datapool") && (s32_Retval == C_NO_ERR));
+         while ((c_SelectedNode == "datapool") && (!c_Retval));
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "interpreted");
       }
       else
       {
          osc_write_log_error("Loading Dataset data", "Could not find \"node\".\"interpreted\".\"datapool\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
       //Check  number of found data pools
-      if ((s32_Retval == C_NO_ERR) && (orc_DataPools.size() != orc_DataPoolInfos.size()))
+      if ((!c_Retval) && (orc_DataPools.size() != orc_DataPoolInfos.size()))
       {
          osc_write_log_error("Loading Dataset data", "Number of Datapools described in file does not match number of "
                              "defined Datapools.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
@@ -188,9 +191,9 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadDataPools(
    else
    {
       osc_write_log_error("Loading Dataset data", "Could not find \"node\".\"interpreted\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -230,16 +233,17 @@ void C_OscParamSetInterpretedNodeFiler::mh_SaveDataPools(
    \param[in,out]  orc_XmlParser    XML with specified node active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadDataPool(C_OscParamSetInterpretedDataPool & orc_DataPool,
-                                                           C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscParamSetInterpretedNodeFiler::mh_LoadDataPool(C_OscParamSetInterpretedDataPool & orc_DataPool,
+                                                                   C_OscXmlParserBase & orc_XmlParser)
 {
-   const int32_t s32_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadLists(orc_DataPool.c_Lists, orc_XmlParser);
+   const std::error_code c_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadLists(orc_DataPool.c_Lists,
+                                                                                   orc_XmlParser);
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -270,14 +274,14 @@ void C_OscParamSetInterpretedNodeFiler::mh_SaveDataPool(const C_OscParamSetInter
    \param[in,out]  orc_XmlParser    XML with specified node active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadLists(std::vector<C_OscParamSetInterpretedList> & orc_Lists,
-                                                        C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscParamSetInterpretedNodeFiler::mh_LoadLists(std::vector<C_OscParamSetInterpretedList> & orc_Lists,
+                                                                C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_Lists.clear();
    if (orc_XmlParser.SelectNodeChild("lists") == "lists")
@@ -289,8 +293,8 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadLists(std::vector<C_OscParamSe
          do
          {
             C_OscParamSetInterpretedList c_Item;
-            s32_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadList(c_Item, orc_XmlParser);
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadList(c_Item, orc_XmlParser);
+            if (!c_Retval)
             {
                orc_Lists.push_back(c_Item);
             }
@@ -298,7 +302,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadLists(std::vector<C_OscParamSe
             //Next
             c_SelectedNode = orc_XmlParser.SelectNodeNext("list");
          }
-         while ((c_SelectedNode == "list") && (s32_Retval == C_NO_ERR));
+         while ((c_SelectedNode == "list") && (!c_Retval));
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "lists");
       }
@@ -306,7 +310,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadLists(std::vector<C_OscParamSe
       {
          osc_write_log_error("Loading Dataset data",
                              "Could not find \"node\".\"interpreted\".\"datapool\".\"lists\".\"list\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "datapool");
@@ -315,9 +319,9 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadLists(std::vector<C_OscParamSe
    {
       osc_write_log_error("Loading Dataset data",
                           "Could not find \"node\".\"interpreted\".\"datapool\".\"lists\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -357,14 +361,14 @@ void C_OscParamSetInterpretedNodeFiler::mh_SaveLists(const std::vector<C_OscPara
    \param[in,out]  orc_XmlParser    XML with specified node active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadList(C_OscParamSetInterpretedList & orc_List,
-                                                       C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscParamSetInterpretedNodeFiler::mh_LoadList(C_OscParamSetInterpretedList & orc_List,
+                                                               C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("name") == "name")
    {
@@ -375,14 +379,14 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadList(C_OscParamSetInterpretedL
    else
    {
       osc_write_log_error("Loading Dataset data", "Could not find \"list\".\"name\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadElements(orc_List.c_Elements, orc_XmlParser);
+      c_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadElements(orc_List.c_Elements, orc_XmlParser);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -414,14 +418,14 @@ void C_OscParamSetInterpretedNodeFiler::mh_SaveList(const C_OscParamSetInterpret
    \param[in,out]  orc_XmlParser    XML with specified node active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElements(std::vector<C_OscParamSetInterpretedElement> & orc_Elements,
-                                                           C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscParamSetInterpretedNodeFiler::mh_LoadElements(
+   std::vector<C_OscParamSetInterpretedElement> & orc_Elements, C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_Elements.clear();
    if (orc_XmlParser.SelectNodeChild("elements") == "elements")
@@ -433,8 +437,8 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElements(std::vector<C_OscPara
          do
          {
             C_OscParamSetInterpretedElement c_Item;
-            s32_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadElement(c_Item, orc_XmlParser);
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = C_OscParamSetInterpretedNodeFiler::mh_LoadElement(c_Item, orc_XmlParser);
+            if (!c_Retval)
             {
                orc_Elements.push_back(c_Item);
             }
@@ -442,14 +446,14 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElements(std::vector<C_OscPara
             //Next
             c_SelectedNode = orc_XmlParser.SelectNodeNext("element");
          }
-         while ((c_SelectedNode == "element") && (s32_Retval == C_NO_ERR));
+         while ((c_SelectedNode == "element") && (!c_Retval));
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "elements");
       }
       else
       {
          osc_write_log_error("Loading Dataset data", "Could not find \"elements\".\"element\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "list");
@@ -457,9 +461,9 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElements(std::vector<C_OscPara
    else
    {
       osc_write_log_error("Loading Dataset data", "Could not find \"list\".\"elements\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -499,14 +503,14 @@ void C_OscParamSetInterpretedNodeFiler::mh_SaveElements(
    \param[in,out]  orc_XmlParser    XML with specified node active
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElement(C_OscParamSetInterpretedElement & orc_Element,
-                                                          C_OscXmlParserBase & orc_XmlParser)
+std::error_code C_OscParamSetInterpretedNodeFiler::mh_LoadElement(C_OscParamSetInterpretedElement & orc_Element,
+                                                                  C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("name") == "name")
    {
@@ -517,22 +521,24 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElement(C_OscParamSetInterpret
    else
    {
       osc_write_log_error("Loading Dataset data", "Could not find \"element\".\"name\" node.");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolElementType(orc_Element.c_NvmValue, orc_XmlParser);
-      if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("value") == "value"))
+      c_Retval = make_error_code_from_stw(
+         C_OscNodeDataPoolFiler::h_LoadDataPoolElementType(orc_Element.c_NvmValue, orc_XmlParser));
+      if ((!c_Retval) && (orc_XmlParser.SelectNodeChild("value") == "value"))
       {
          std::string c_Error;
-         s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(orc_Element.c_NvmValue, orc_XmlParser, true,
-                                                                         &c_Error);
-         if (s32_Retval != C_NO_ERR)
+         c_Retval = make_error_code_from_stw(
+            C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(orc_Element.c_NvmValue, orc_XmlParser, true,
+                                                              &c_Error));
+         if (c_Retval)
          {
             osc_write_log_error("Loading Dataset data",
                                 "Invalid content of \"element\".\"value\" node: " +  c_Error);
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "element");
@@ -540,11 +546,11 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElement(C_OscParamSetInterpret
       else
       {
          osc_write_log_error("Loading Dataset data", "Could not find \"element\".\"value\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

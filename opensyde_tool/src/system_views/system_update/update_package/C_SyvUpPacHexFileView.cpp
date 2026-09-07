@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
 #include <QDateTime>
 #include <QFileInfo>
 #include <QCryptographicHash>
@@ -105,10 +106,10 @@ void C_SyvUpPacHexFileView::m_LoadInfo(void) const
 {
    QString c_Text = "<html><body>";
    C_OscHexFile c_HexFile;
-   uint32_t u32_Result;
+   std::error_code c_Result = stw::errors::Errc::success;
 
-   u32_Result = c_HexFile.LoadFromFile(this->mc_AbsoluteFilePath.toStdString().c_str());
-   if (u32_Result == stw::hex_file::NO_ERR)
+   c_Result = c_HexFile.LoadFromFile(this->mc_AbsoluteFilePath.toStdString().c_str());
+   if (!c_Result)
    {
       mh_AddFileSection(this->mc_AbsoluteFilePath, c_Text);
       mh_AddDataInformation(c_HexFile, c_Text);

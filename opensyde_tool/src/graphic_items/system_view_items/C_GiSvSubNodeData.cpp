@@ -12,6 +12,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include <system_error>
 #include <string>
 #include "C_SclStringCompat.hpp"
 #include "TglUtils.hpp"
@@ -929,10 +930,10 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
       const std::string c_Path = orc_FinalFilePaths[u32_ItFile].toStdString().c_str();
       // c_Path is already absolute and placeholder variables got resolved!
       C_OscHexFile c_HexFile;
-      uint32_t u32_Result;
+      std::error_code c_Result = stw::errors::Errc::success;
 
-      u32_Result = c_HexFile.LoadFromFile(c_Path.c_str());
-      if (u32_Result == stw::hex_file::NO_ERR)
+      c_Result = c_HexFile.LoadFromFile(c_Path.c_str());
+      if (!c_Result)
       {
          stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
          const int32_t s32_Result = c_HexFile.ScanApplicationInformationBlockFromHexFile(
@@ -947,7 +948,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
       {
          const std::string c_Text = "Could not open HEX file \"" +
                                               c_Path + "\" Details: " +
-                                              c_HexFile.ErrorCodeToErrorText(u32_Result);
+                                              c_HexFile.ErrorCodeToErrorText(c_Result);
          osc_write_log_error("Preparing Flashloader Information", c_Text);
       }
    }

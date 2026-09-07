@@ -128,10 +128,8 @@ std::error_code C_OscXcoLoad::h_ProcessPackage(const std::string & orc_PackagePa
 std::error_code C_OscXcoLoad::mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
                                                              const std::string & orc_TargetUnzipPath)
 {
-   //C_OscSpaServicePackageLoadUtil still reports the STW int32_t error convention
-   std::error_code c_Return = make_error_code_from_stw(
-      C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(orc_PackagePath, orc_TargetUnzipPath,
-                                                                      mhc_USE_CASE, mhc_ErrorMessage));
+   std::error_code c_Return = C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(orc_PackagePath, orc_TargetUnzipPath,
+                                                                      mhc_USE_CASE, mhc_ErrorMessage);
 
    //check if all files are present
    if (!c_Return)
@@ -181,14 +179,11 @@ std::error_code C_OscXcoLoad::mh_CheckXcfgFiles(const std::string & orc_PackageP
    c_NecessaryFilesTop.push_back(C_OscXcoManifestFiler::hc_FILE_NAME); //".syde_pkg"
    c_NecessaryFilesSysDef.push_back(hc_XCFG_SYSDEF);                   //".syde_sysdef"
 
-   //C_OscSpaServicePackageLoadUtil still reports the STW int32_t error convention
-   c_Return = make_error_code_from_stw(
-      C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath, c_NecessaryFilesTop));
+   c_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath, c_NecessaryFilesTop);
    if (!c_Return)
    {
-      c_Return = make_error_code_from_stw(
-         C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath + hc_XCFG_SYSDEF_FOLDER,
-                                                            c_NecessaryFilesSysDef));
+      c_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath + hc_XCFG_SYSDEF_FOLDER,
+                                                            c_NecessaryFilesSysDef);
    }
 
    return c_Return;

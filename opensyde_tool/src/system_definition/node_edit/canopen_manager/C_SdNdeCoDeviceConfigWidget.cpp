@@ -674,7 +674,7 @@ void C_SdNdeCoDeviceConfigWidget::m_LoadFromData(void)
          //supported
          // check for read-only
          bool q_HbProducerRo = true;
-         tgl_assert(rc_EdsFileContent.IsHeartbeatProducerRo(q_HbProducerRo) == C_NO_ERR);
+         tgl_assert(!rc_EdsFileContent.IsHeartbeatProducerRo(q_HbProducerRo));
          this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing->setEnabled(!q_HbProducerRo);
 
          this->mpc_Ui->pc_CheckBoxEnableHeartbeatProducing->setChecked(pc_CanOpenDeviceInfo->q_EnableHeartbeatProducing);
@@ -693,7 +693,7 @@ void C_SdNdeCoDeviceConfigWidget::m_LoadFromData(void)
          //supported
          // check for read-only
          bool q_HbConsumerRo = true;
-         tgl_assert(rc_EdsFileContent.IsHeartbeatConsumerRo(q_HbConsumerRo) == C_NO_ERR);
+         tgl_assert(!rc_EdsFileContent.IsHeartbeatConsumerRo(q_HbConsumerRo));
 
          this->mpc_Ui->pc_CheckBoxEnableHeartbeatConsuming->setEnabled(!q_HbConsumerRo);
 

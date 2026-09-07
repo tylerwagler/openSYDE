@@ -16,8 +16,10 @@
 #include <sstream>   //for std::istringstream
 #include <iomanip>
 #include <algorithm> //for std::sort
+#include <system_error>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscCanOpenObjectDictionary.hpp"
 #include <string>
@@ -202,15 +204,15 @@ void C_OscCanOpenObjectDictionary::m_RememberFileHash()
    \param[in]     orc_File        File path
 
    \return
-   C_NO_ERR    file loaded, content stored in c_Objects
-   C_RANGE     file does not exist
-   C_CONFIG    could not parse file (is it a valid EDS file ?)
-                use GetLastErrorText() to get details
+   Errc::success  file loaded, content stored in c_Objects
+   Errc::range    file does not exist
+   Errc::config   could not parse file (is it a valid EDS file ?)
+                  use GetLastErrorText() to get details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
+std::error_code C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    mu32_OriginalFileHash = 0U;
    mc_LastError = "";
@@ -218,7 +220,7 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
 
    if (TglFileExists(orc_File) == false)
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -242,7 +244,7 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
                //create new map entry or use existing depending on sequence of sections in EDS file
                C_OscCanOpenObject & rc_Object = c_OdObjects[u16_Index];
 
-               s32_Return = m_GetObjectDescription(u16_Index, 0U, false, rc_Section, rc_Object);
+               c_Return = m_GetObjectDescription(u16_Index, 0U, false, rc_Section, rc_Object);
             }
             catch (...)
             {
@@ -263,7 +265,7 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
                //sub-object really should be created here as it should not be present multiple times
                C_OscCanOpenObjectData & rc_SubObject = rc_Object.c_SubObjects[u8_SubIndex];
 
-               s32_Return = m_GetObjectDescription(u16_Index, u8_SubIndex, true, rc_Section, rc_SubObject);
+               c_Return = m_GetObjectDescription(u16_Index, u8_SubIndex, true, rc_Section, rc_SubObject);
             }
             catch (...)
             {
@@ -276,7 +278,7 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
          {
             //nothing that we are interested in for now ...
          }
-         if (s32_Return != C_NO_ERR)
+         if (c_Return)
          {
             //error in EDS file; abort
             break;
@@ -284,33 +286,33 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
       }
 
       //check whether all referenced objects exists:
-      s32_Return = m_CheckForExistingObjects("MandatoryObjects", c_IniFile);
-      if (s32_Return == C_NO_ERR)
+      c_Return = m_CheckForExistingObjects("MandatoryObjects", c_IniFile);
+      if (!c_Return)
       {
-         s32_Return = m_CheckForExistingObjects("OptionalObjects", c_IniFile);
+         c_Return = m_CheckForExistingObjects("OptionalObjects", c_IniFile);
       }
 
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
-         s32_Return = m_CheckForExistingObjects("ManufacturerObjects", c_IniFile);
+         c_Return = m_CheckForExistingObjects("ManufacturerObjects", c_IniFile);
       }
 
-      if (s32_Return != C_NO_ERR)
+      if (c_Return)
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
 
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
          std::string c_InfoError;
-         s32_Return = this->c_InfoBlock.LoadFromFile(c_IniFile, c_InfoError);
-         if (s32_Return != C_NO_ERR)
+         c_Return = this->c_InfoBlock.LoadFromFile(c_IniFile, c_InfoError);
+         if (c_Return)
          {
             this->mc_LastError = c_InfoError;
          }
       }
 
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
          //remember full original content of file
          c_IniFile.GetFileAsStringList(this->c_TextFileContent);
@@ -318,7 +320,7 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -330,14 +332,14 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & orc_File)
    \param[in,out]     orc_IniFile                 Loaded ini file instance
 
    \return
-   C_NO_ERR    all referenced objects exist
-   C_CONFIG    at least one referenced object does not exist
+   Errc::success  all referenced objects exist
+   Errc::config   at least one referenced object does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const std::string & orc_Blockname,
-                                                                C_SclIniFile & orc_IniFile)
+std::error_code C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const std::string & orc_Blockname,
+                                                                        C_SclIniFile & orc_IniFile)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    const uint16_t u16_NumEntries = orc_IniFile.ReadUint16(orc_Blockname, "SupportedObjects", 0);
 
@@ -348,10 +350,10 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const std::strin
       if (c_Index == "")
       {
          mc_LastError = orc_Blockname + ": SupportedObjects inconsistent with object list !";
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
 
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
          uint16_t u16_Index;
          //is the index numeric as expected?
@@ -362,10 +364,10 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const std::strin
          catch (...)
          {
             mc_LastError = orc_Blockname + ": File contains non-numeric Index in SupportedObjects !";
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
 
-         if (s32_Return == C_NO_ERR)
+         if (!c_Return)
          {
             //does the referenced object exist in the file?
             const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = c_OdObjects.find(u16_Index);
@@ -373,12 +375,12 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const std::strin
             {
                mc_LastError = orc_Blockname + ": References object 0x" +
                               mh_IntToHex(u16_Index, 4) + "which is not described in the file.";
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
             }
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -391,13 +393,15 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const std::strin
    \param[out]    orc_Object         read information
 
    \return
-   C_NO_ERR    data read and placed into orc_Object
-   C_CONFIG    invalid data (see mc_LastError for details)
+   Errc::success  data read and placed into orc_Object
+   Errc::config   invalid data (see mc_LastError for details)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
-                                                             const bool oq_IsSubIndex, C_SclIniSection & orc_Section,
-                                                             C_OscCanOpenObjectData & orc_Object)
+std::error_code C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16_Index,
+                                                                     const uint8_t ou8_SubIndex,
+                                                                     const bool oq_IsSubIndex,
+                                                                     C_SclIniSection & orc_Section,
+                                                                     C_OscCanOpenObjectData & orc_Object)
 {
    const uint32_t u32_NUM_STRINGS_TO_SEARCH = 10U;
 
@@ -431,7 +435,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
       false
    };
 
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    //preset values:
    orc_Object.u16_Index = ou16_Index;
@@ -480,7 +484,7 @@ orc_Object.u8_NumSubs = static_cast<uint8_t>(std::stoi(rc_Value));
                    mc_LastError = PrintFormattedCompat("File contains non-numeric SubNumber for object %04X.%02X !",
                                                static_cast<uint32_t>(ou16_Index),
                                                static_cast<uint32_t>(ou8_SubIndex));
-                   s32_Return = C_CONFIG;
+                   c_Return = Errc::config;
                 }
                 break;
              case 3:
@@ -493,7 +497,7 @@ orc_Object.u8_NumSubs = static_cast<uint8_t>(std::stoi(rc_Value));
                   mc_LastError = PrintFormattedCompat("File contains non-numeric DataType for object %04X.%02X !",
                                               static_cast<uint32_t>(ou16_Index),
                                               static_cast<uint32_t>(ou8_SubIndex));
-                  s32_Return = C_CONFIG;
+                  c_Return = Errc::config;
                }
                break;
             case 4:
@@ -525,7 +529,7 @@ orc_Object.u8_NumSubs = static_cast<uint8_t>(std::stoi(rc_Value));
                         rc_Value.c_str(),
                         static_cast<uint32_t>(ou16_Index),
                         static_cast<uint32_t>(ou8_SubIndex));
-                     s32_Return = C_CONFIG;
+                     c_Return = Errc::config;
                   }
                }
                catch (...)
@@ -535,7 +539,7 @@ orc_Object.u8_NumSubs = static_cast<uint8_t>(std::stoi(rc_Value));
                      rc_Value.c_str(),
                      static_cast<uint32_t>(ou16_Index),
                      static_cast<uint32_t>(ou8_SubIndex));
-                  s32_Return = C_CONFIG;
+                  c_Return = Errc::config;
                }
                break;
             case 8:
@@ -545,13 +549,13 @@ orc_Object.u8_NumSubs = static_cast<uint8_t>(std::stoi(rc_Value));
                orc_Object.c_Denotation = rc_Value;
                break;
             default:
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
                break;
             }
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -565,14 +569,15 @@ orc_Object.u8_NumSubs = static_cast<uint8_t>(std::stoi(rc_Value));
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value found
-   \retval   C_RANGE    Value missing
+   \retval   Errc::success   Value found
+   \retval   Errc::range     Value missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::m_IsSectionRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
-                                                    const uint8_t ou8_OdSubIndex, bool & orq_IsRo) const
+std::error_code C_OscCanOpenObjectDictionary::m_IsSectionRo(const uint16_t ou16_PdoIndex,
+                                                            const bool oq_MessageIsTx,
+                                                            const uint8_t ou8_OdSubIndex, bool & orq_IsRo) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    const uint16_t u16_ObjectIndex =
       C_OscCanOpenObjectDictionary::h_GetCanOpenObjectDictionaryIndexForPdo(ou16_PdoIndex, oq_MessageIsTx);
    const C_OscCanOpenObjectData * const pc_Object = this->GetCanOpenSubIndexObject(u16_ObjectIndex, ou8_OdSubIndex);
@@ -583,9 +588,9 @@ int32_t C_OscCanOpenObjectDictionary::m_IsSectionRo(const uint16_t ou16_PdoIndex
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -924,13 +929,13 @@ uint8_t C_OscCanOpenObjectDictionary::GetNumHeartbeatConsumers() const
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value found
-   \retval   C_RANGE    Value missing
+   \retval   Errc::success   Value found
+   \retval   Errc::range     Value missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::IsHeartbeatConsumerRo(bool & orq_IsRo) const
+std::error_code C_OscCanOpenObjectDictionary::IsHeartbeatConsumerRo(bool & orq_IsRo) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    // Checking the first consumer for read only because this is the entry which will be used for the user specified
    // value when it is not read-only
    const C_OscCanOpenObjectData * const pc_Object =
@@ -942,9 +947,9 @@ int32_t C_OscCanOpenObjectDictionary::IsHeartbeatConsumerRo(bool & orq_IsRo) con
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -970,13 +975,13 @@ bool C_OscCanOpenObjectDictionary::IsHeartbeatProducerSupported() const
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value found
-   \retval   C_RANGE    Value missing
+   \retval   Errc::success   Value found
+   \retval   Errc::range     Value missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::IsHeartbeatProducerRo(bool & orq_IsRo) const
+std::error_code C_OscCanOpenObjectDictionary::IsHeartbeatProducerRo(bool & orq_IsRo) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    const C_OscCanOpenObjectData * const pc_Object = this->GetCanOpenObject(hu16_OD_INDEX_HEARTBEAT_PRODUCER);
 
    if (pc_Object != nullptr)
@@ -985,9 +990,9 @@ int32_t C_OscCanOpenObjectDictionary::IsHeartbeatProducerRo(bool & orq_IsRo) con
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1110,18 +1115,19 @@ bool C_OscCanOpenObjectDictionary::DoesEventTimerSectionExist(const uint16_t ou1
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value found
-   \retval   C_RANGE    Value missing
+   \retval   Errc::success   Value found
+   \retval   Errc::range     Value missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::IsCobIdRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
-                                                bool & orq_IsRo) const
+std::error_code C_OscCanOpenObjectDictionary::IsCobIdRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
+                                                        bool & orq_IsRo) const
 {
-   const int32_t s32_Retval = this->m_IsSectionRo(ou16_PdoIndex, oq_MessageIsTx,
-                                                  C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_COB_ID,
-                                                  orq_IsRo);
+   const std::error_code c_Retval = this->m_IsSectionRo(
+      ou16_PdoIndex, oq_MessageIsTx,
+      C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_COB_ID,
+      orq_IsRo);
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1134,19 +1140,19 @@ int32_t C_OscCanOpenObjectDictionary::IsCobIdRo(const uint16_t ou16_PdoIndex, co
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value found
-   \retval   C_RANGE    Value missing
+   \retval   Errc::success   Value found
+   \retval   Errc::range     Value missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::IsInhibitTimeRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
-                                                      bool & orq_IsRo) const
+std::error_code C_OscCanOpenObjectDictionary::IsInhibitTimeRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
+                                                              bool & orq_IsRo) const
 {
-   const int32_t s32_Retval = this->m_IsSectionRo(
+   const std::error_code c_Retval = this->m_IsSectionRo(
       ou16_PdoIndex, oq_MessageIsTx,
       C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_INHIBIT_TIME,
       orq_IsRo);
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1159,19 +1165,19 @@ int32_t C_OscCanOpenObjectDictionary::IsInhibitTimeRo(const uint16_t ou16_PdoInd
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value found
-   \retval   C_RANGE    Value missing
+   \retval   Errc::success   Value found
+   \retval   Errc::range     Value missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::IsEventTimerRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
-                                                     bool & orq_IsRo) const
+std::error_code C_OscCanOpenObjectDictionary::IsEventTimerRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
+                                                             bool & orq_IsRo) const
 {
-   const int32_t s32_Retval = this->m_IsSectionRo(
+   const std::error_code c_Retval = this->m_IsSectionRo(
       ou16_PdoIndex, oq_MessageIsTx,
       C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER,
       orq_IsRo);
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1184,18 +1190,20 @@ int32_t C_OscCanOpenObjectDictionary::IsEventTimerRo(const uint16_t ou16_PdoInde
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value found
-   \retval   C_RANGE    Value missing
+   \retval   Errc::success   Value found
+   \retval   Errc::range     Value missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::IsTransmissionTypeRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
-                                                           bool & orq_IsRo) const
+std::error_code C_OscCanOpenObjectDictionary::IsTransmissionTypeRo(const uint16_t ou16_PdoIndex,
+                                                                   const bool oq_MessageIsTx,
+                                                                   bool & orq_IsRo) const
 {
-   const int32_t s32_Retval = this->m_IsSectionRo(ou16_PdoIndex, oq_MessageIsTx,
-                                                  C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE,
-                                                  orq_IsRo);
+   const std::error_code c_Retval = this->m_IsSectionRo(
+      ou16_PdoIndex, oq_MessageIsTx,
+      C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE,
+      orq_IsRo);
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1208,18 +1216,19 @@ int32_t C_OscCanOpenObjectDictionary::IsTransmissionTypeRo(const uint16_t ou16_P
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value found
-   \retval   C_RANGE    Value missing
+   \retval   Errc::success   Value found
+   \retval   Errc::range     Value missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::IsSyncStartRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
-                                                    bool & orq_IsRo) const
+std::error_code C_OscCanOpenObjectDictionary::IsSyncStartRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
+                                                            bool & orq_IsRo) const
 {
-   const int32_t s32_Retval = this->m_IsSectionRo(ou16_PdoIndex, oq_MessageIsTx,
-                                                  C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_SYNC_START_VALUE,
-                                                  orq_IsRo);
+   const std::error_code c_Retval = this->m_IsSectionRo(
+      ou16_PdoIndex, oq_MessageIsTx,
+      C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_SYNC_START_VALUE,
+      orq_IsRo);
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1232,14 +1241,14 @@ int32_t C_OscCanOpenObjectDictionary::IsSyncStartRo(const uint16_t ou16_PdoIndex
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value found
-   \retval   C_RANGE    Value missing
+   \retval   Errc::success   Value found
+   \retval   Errc::range     Value missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::IsPdoMappingRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
-                                                     bool & orq_IsRo) const
+std::error_code C_OscCanOpenObjectDictionary::IsPdoMappingRo(const uint16_t ou16_PdoIndex, const bool oq_MessageIsTx,
+                                                             bool & orq_IsRo) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    const uint16_t u16_ObjectIndex =
       C_OscCanOpenObjectDictionary::h_GetCanOpenObjectDictionaryIndexForPdo(ou16_PdoIndex, oq_MessageIsTx) +
       C_OscCanOpenObjectDictionary::hu16_OD_PDO_MAPPING_OFFSET;
@@ -1251,9 +1260,9 @@ int32_t C_OscCanOpenObjectDictionary::IsPdoMappingRo(const uint16_t ou16_PdoInde
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

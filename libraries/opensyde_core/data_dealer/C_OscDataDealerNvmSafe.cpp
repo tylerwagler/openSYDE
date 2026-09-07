@@ -22,8 +22,11 @@
 #include "precomp_headers.hpp"
 #include "C_SclStringCompat.hpp"
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglFile.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -99,20 +102,20 @@ C_OscDataDealerNvmSafe::~C_OscDataDealerNvmSafe(void)
    \param[in]  orc_Node    Node with datapools for checking the CRCs
 
    \return
-   C_NO_ERR    All list checksums are valid
-   C_CHECKSUM  At least one checksum of a list is invalid
-   C_RANGE     At least one datapool has the flag q_IsSafety set to true and
-               at least one of its list has the flag q_NvmCrcActive set to false
-   C_CONFIG    No diagnostic protocol are known (was this class properly Initialize()d ?)
+   Errc::success  All list checksums are valid
+   Errc::checksum At least one checksum of a list is invalid
+   Errc::range    At least one datapool has the flag q_IsSafety set to true and
+                  at least one of its list has the flag q_NvmCrcActive set to false
+   Errc::config   No diagnostic protocol are known (was this class properly Initialize()d ?)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeCheckCrcs(const C_OscNode & orc_Node) const
+std::error_code C_OscDataDealerNvmSafe::NvmSafeCheckCrcs(const C_OscNode & orc_Node) const
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (this->mpc_DiagProtocol == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -138,26 +141,26 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckCrcs(const C_OscNode & orc_Node) con
                   if (rc_List.u32_NvmCrc != static_cast<uint32_t>(u16_CalcCrc))
                   {
                      // Checksum of list is invalid
-                     s32_Return = C_CHECKSUM;
+                     c_Return = Errc::checksum;
                   }
                }
                else if (orc_Node.c_DataPools[u32_DataPoolCounter].q_IsSafety == true)
                {
                   // A list in a safety datapool shall have a CRC
-                  s32_Return = C_RANGE;
+                  c_Return = Errc::range;
                }
                else
                {
                   // Nothing to do
                }
 
-               if (s32_Return != C_NO_ERR)
+               if (c_Return)
                {
                   break;
                }
             }
 
-            if (s32_Return != C_NO_ERR)
+            if (c_Return)
             {
                break;
             }
@@ -165,7 +168,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckCrcs(const C_OscNode & orc_Node) con
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -183,39 +186,39 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckCrcs(const C_OscNode & orc_Node) con
    \param[out]    opu8_NrCode               if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    Writing successful
-   C_CONFIG    no node or diagnostic protocol are known (was this class properly Initialized ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_OVERFLOW  At least one value lies outside of the defined minimum and maximum range. (checked by client side)
-   C_BUSY      No changed value found and no additional lists specified (checked by client side)
-   C_TIMEOUT   Expected server response not received within timeout
-   C_NOACT     Could not send request (e.g. Tx buffer full)
-   C_WARN      server sent error response
-   C_RD_WR     unexpected content in server response
-   C_COM       expected server response not received because of communication error
+   Errc::success  Writing successful
+   Errc::config   no node or diagnostic protocol are known (was this class properly Initialized ?)
+                  protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::overflow At least one value lies outside of the defined minimum and maximum range. (checked by client side)
+   Errc::busy     No changed value found and no additional lists specified (checked by client side)
+   Errc::timeout  Expected server response not received within timeout
+   Errc::noact    Could not send request (e.g. Tx buffer full)
+   Errc::warn     server sent error response
+   Errc::rd_wr    unexpected content in server response
+   Errc::com      expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
+std::error_code C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
    std::vector<C_OscNodeDataPoolListElementId> & orc_ChangedElements,
    const std::vector<C_OscNodeDataPoolListId> * const opc_AdditionalListsToUpdate, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    // Reset the container for changed lists. Will be used by NvmSafeReadValues.
    this->mc_ChangedLists.clear();
 
    if ((this->mpc_Node == nullptr) || (this->mpc_DiagProtocol == nullptr))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
       //Check the additional parameter first to not write anything if this one does contain invalid indices
       if ((opc_AdditionalListsToUpdate != nullptr) && (opc_AdditionalListsToUpdate->size() > 0UL))
       {
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
          for (uint32_t u32_ItAdditionalIndex = 0;
-              (u32_ItAdditionalIndex < opc_AdditionalListsToUpdate->size()) && (s32_Return == C_NO_ERR);
+              (u32_ItAdditionalIndex < opc_AdditionalListsToUpdate->size()) && (!c_Return);
               ++u32_ItAdditionalIndex)
          {
             const C_OscNodeDataPoolListId & rc_CurAdditionalIndex =
@@ -231,21 +234,21 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
                }
                else
                {
-                  s32_Return = C_CONFIG;
+                  c_Return = Errc::config;
                }
             }
             else
             {
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
             }
          }
       }
       else
       {
-         s32_Return = C_BUSY;
+         c_Return = Errc::busy;
       }
 
-      if (s32_Return != C_CONFIG)
+      if (c_Return != Errc::config)
       {
          uint32_t u32_DataPoolCounter;
          C_OscNodeDataPoolListElementId c_ElementId;
@@ -282,10 +285,11 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
                if (u16_AccessCount > 0U)
                {
                   // Prepare the transaction for this datapool
-                  s32_Return = this->mpc_DiagProtocol->NvmWriteStartTransaction(
-                     static_cast<uint8_t>(u32_DataPoolCounter),
-                     u16_AccessCount);
-                  if (s32_Return == C_NO_ERR)
+                  // Adapt errorcode
+                  c_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(
+                     this->mpc_DiagProtocol->NvmWriteStartTransaction(static_cast<uint8_t>(u32_DataPoolCounter),
+                                                                      u16_AccessCount));
+                  if (!c_Return)
                   {
                      // Write the concrete elements
                      for (u32_ListCounter = 0U; u32_ListCounter < pc_DataPool->c_Lists.size(); ++u32_ListCounter)
@@ -322,13 +326,12 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
                                  }
 
                                  // Element value was changed and is valid
-                                 s32_Return =
-                                    this->mpc_DiagProtocol->NvmWrite(pc_Element->u32_NvmStartAddress, c_ElementData,
-                                                                     opu8_NrCode);
                                  // Adapt errorcode
-                                 s32_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(s32_Return);
+                                 c_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(
+                                    this->mpc_DiagProtocol->NvmWrite(pc_Element->u32_NvmStartAddress, c_ElementData,
+                                                                     opu8_NrCode));
 
-                                 if (s32_Return == C_NO_ERR)
+                                 if (!c_Return)
                                  {
                                     // Element written
                                     // Return the entire element id
@@ -344,41 +347,36 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
                               }
                               else
                               {
-                                 s32_Return = C_OVERFLOW;
+                                 c_Return = Errc::overflow;
                               }
                            }
 
-                           if (s32_Return != C_NO_ERR)
+                           if (c_Return)
                            {
                               // Service failed. Abort writing.
                               break;
                            }
                         }
 
-                        if (s32_Return != C_NO_ERR)
+                        if (c_Return)
                         {
                            // Service failed. Abort writing.
                            break;
                         }
                      }
                   }
-                  else
-                  {
-                     // Start service failed. Adapt errorcode
-                     s32_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(s32_Return);
-                  }
 
-                  if (s32_Return == C_NO_ERR)
+                  if (!c_Return)
                   {
                      // All elements of datapool written. Finish this transaction.
-                     s32_Return = this->mpc_DiagProtocol->NvmWriteFinalizeTransaction();
                      // Adapt return value
-                     s32_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(s32_Return);
+                     c_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(
+                        this->mpc_DiagProtocol->NvmWriteFinalizeTransaction());
                   }
                }
 
-               //Stop if service failure, continue with C_BUSY (don't stop if no elements found in first datapool)
-               if ((s32_Return != C_NO_ERR) && (s32_Return != C_BUSY))
+               //Stop if service failure, continue with Errc::busy (don't stop if no elements found in first datapool)
+               if ((c_Return) && (c_Return != Errc::busy))
                {
                   // Service failed. Abort writing.
                   break;
@@ -388,7 +386,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -404,31 +402,32 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
    \param[out] opu8_NrCode   if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    Values read successful
-   C_CONFIG    No node or diagnostic protocol are known (was this class properly Initialize()d ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_OVERFLOW  At least one list has no elements.
-   C_RD_WR     No list contains datapool elements that were
-               written by the preceding call to "NvmSafeWriteChangedValues"
-   C_RANGE     At least one index of a datapool or a list of changed lists is invalid or
-               datapool element size configuration does not match with count of read bytes
-   C_TIMEOUT   Expected server response not received within timeout
-   C_NOACT     Could not send request (e.g. Tx buffer full)
-   C_WARN      Server sent error response
-   C_COM       expected server response not received because of communication error
+   Errc::success  Values read successful
+   Errc::config   No node or diagnostic protocol are known (was this class properly Initialize()d ?)
+                  protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::overflow At least one list has no elements.
+   Errc::rd_wr    No list contains datapool elements that were
+                  written by the preceding call to "NvmSafeWriteChangedValues"
+   Errc::range    At least one index of a datapool or a list of changed lists is invalid or
+                  datapool element size configuration does not match with count of read bytes
+   Errc::timeout  Expected server response not received within timeout
+   Errc::noact    Could not send request (e.g. Tx buffer full)
+   Errc::warn     Server sent error response
+   Errc::com      expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeReadValues(const C_OscNode * (&orpc_NodeCopy), uint8_t * const opu8_NrCode)
+std::error_code C_OscDataDealerNvmSafe::NvmSafeReadValues(const C_OscNode * (&orpc_NodeCopy),
+                                                          uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if ((this->mpc_Node == nullptr) || (this->mpc_DiagProtocol == nullptr))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
-      s32_Return = C_RD_WR;
+      c_Return = Errc::rd_wr;
 
       // Copy the original instance
       this->mc_NodeCopy = *this->mpc_Node;
@@ -458,34 +457,34 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadValues(const C_OscNode * (&orpc_NodeC
                   rc_List.c_Elements[u32_ElementCounter].q_NvmValueIsValid = false;
                }
 
-               s32_Return = this->m_NvmReadListRaw(rc_List, c_Values, opu8_NrCode);
+               c_Return = this->m_NvmReadListRaw(rc_List, c_Values, opu8_NrCode);
 
-               if (s32_Return == C_NO_ERR)
+               if (!c_Return)
                {
                   // Store the read values into the copy without checking and updating the CRC.
                   // The valid flag will be set to true if the element was read
-                  s32_Return = this->m_SaveDumpValuesToListValues(c_Values, rc_List);
+                  c_Return = this->m_SaveDumpValuesToListValues(c_Values, rc_List);
 
-                  if (s32_Return == C_RD_WR)
+                  if (c_Return == Errc::rd_wr)
                   {
                      // Remap the error
-                     s32_Return = C_RANGE;
+                     c_Return = Errc::range;
                   }
                }
             }
             else
             {
-               s32_Return = C_RANGE;
+               c_Return = Errc::range;
             }
 
-            if (s32_Return != C_NO_ERR)
+            if (c_Return)
             {
                break;
             }
          }
       }
    }
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       orpc_NodeCopy = &this->mc_NodeCopy;
    }
@@ -494,7 +493,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadValues(const C_OscNode * (&orpc_NodeC
       orpc_NodeCopy = nullptr;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -506,32 +505,32 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadValues(const C_OscNode * (&orpc_NodeC
    \param[out]   opu8_NrCode   if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    CRCs written successfully
-   C_CONFIG    No node or diagnostic protocol are known (was this class properly Initialized ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_CHECKSUM  At least one datapool of type "NVM" has the flag q_IsSafety set to true and
-               at least one of its lists has the flag q_NvmCrcActive set to false.
-   C_RANGE     The size of at least one list of NVM datapools of the copy of C_OscNode differs to the original instance.
-               The count of lists of NVM datapools of the copy of C_OscNode differs to the original instance.
-               The count of the datapools of the copy of C_OscNode differs to the original instance.
-   C_BUSY      No list contains datapool elements that were
-               written by the preceding call to "NvmSafeWriteChangedValues"
-   C_OVERFLOW  At least one changed list has no elements.
-   C_DEFAULT   At least one element of the changed lists has the flag q_IsValid set to false.
-   C_TIMEOUT   Expected server response not received within timeout
-   C_NOACT     Could not send request (e.g. Tx buffer full)
-   C_WARN      Server sent error response
-   C_RD_WR     unexpected content in server response
-   C_COM       expected server response not received because of communication error
+   Errc::success  CRCs written successfully
+   Errc::config   No node or diagnostic protocol are known (was this class properly Initialized ?)
+                  protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::checksum At least one datapool of type "NVM" has the flag q_IsSafety set to true and
+                  at least one of its lists has the flag q_NvmCrcActive set to false.
+   Errc::range    The size of at least one list of NVM datapools of the copy of C_OscNode differs to the original instance.
+                  The count of lists of NVM datapools of the copy of C_OscNode differs to the original instance.
+                  The count of the datapools of the copy of C_OscNode differs to the original instance.
+   Errc::busy     No list contains datapool elements that were
+                  written by the preceding call to "NvmSafeWriteChangedValues"
+   Errc::overflow At least one changed list has no elements.
+   Errc::default_ At least one element of the changed lists has the flag q_IsValid set to false.
+   Errc::timeout  Expected server response not received within timeout
+   Errc::noact    Could not send request (e.g. Tx buffer full)
+   Errc::warn     Server sent error response
+   Errc::rd_wr    unexpected content in server response
+   Errc::com      expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
+std::error_code C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if ((this->mpc_Node == nullptr) || (this->mpc_DiagProtocol == nullptr))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -539,7 +538,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
       uint32_t u32_ListCounter;
       std::set<C_OscNodeDataPoolListId>::const_iterator c_ItChangedList;
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
 
       // Check all common preconditions
       if (this->mc_NodeCopy.c_DataPools.size() == this->mpc_Node->c_DataPools.size())
@@ -561,17 +560,17 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
                       this->mpc_Node->c_DataPools[u32_DataPoolCounter].c_Lists[u32_ListCounter].u32_NvmSize)
                   {
                      // NVM size of list different
-                     s32_Return = C_RANGE;
+                     c_Return = Errc::range;
                      break;
                   }
                }
             }
             else
             {
-               s32_Return = C_RANGE;
+               c_Return = Errc::range;
             }
 
-            if (s32_Return != C_NO_ERR)
+            if (c_Return)
             {
                break;
             }
@@ -579,11 +578,11 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
       }
       else
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
 
       // Check pre conditions of changed lists
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
          // Read all changed lists
          for (c_ItChangedList = this->mc_ChangedLists.begin();
@@ -599,7 +598,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
                if (this->mc_NodeCopy.c_DataPools[u32_DataPoolCounter].c_Lists[u32_ListCounter].c_Elements.size() == 0)
                {
                   // No elements in list
-                  s32_Return = C_OVERFLOW;
+                  c_Return = Errc::overflow;
                }
                else if ((this->mc_NodeCopy.c_DataPools[u32_DataPoolCounter].q_IsSafety == true) &&
                         (this->mc_NodeCopy.c_DataPools[u32_DataPoolCounter].c_Lists[u32_ListCounter].q_NvmCrcActive
@@ -607,7 +606,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
                          false))
                {
                   // Checksum is deactivated in a safety datapool
-                  s32_Return = C_CHECKSUM;
+                  c_Return = Errc::checksum;
                }
                else
                {
@@ -622,7 +621,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
                             u32_ElementCounter].q_NvmValueIsValid == false)
                      {
                         // Element was not read from ECU
-                        s32_Return = C_BUSY;
+                        c_Return = Errc::busy;
                         break;
                      }
                   }
@@ -630,10 +629,10 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
             }
             else
             {
-               s32_Return = C_RANGE;
+               c_Return = Errc::range;
             }
 
-            if (s32_Return != C_NO_ERR)
+            if (c_Return)
             {
                break;
             }
@@ -641,9 +640,9 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
       }
 
       // Writing of CRC to ECU
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
-         s32_Return = C_BUSY;
+         c_Return = Errc::busy;
 
          for (c_ItChangedList = this->mc_ChangedLists.begin();
               c_ItChangedList != this->mc_ChangedLists.end();
@@ -669,25 +668,25 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t * const opu8_NrCode)
                   rc_List.GetCrcAsLittleEndianBlob(c_CrcData);
                }
 
-               s32_Return = this->mpc_DiagProtocol->NvmWrite(rc_List.u32_NvmStartAddress, c_CrcData, opu8_NrCode);
+               // Adapt errorcode
+               c_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(
+                  this->mpc_DiagProtocol->NvmWrite(rc_List.u32_NvmStartAddress, c_CrcData, opu8_NrCode));
 
-               if (s32_Return != C_NO_ERR)
+               if (c_Return)
                {
-                  // Adapt errorcode
-                  s32_Return = C_OscDataDealerNvm::mh_AdaptProtocolReturnValue(s32_Return);
                   break;
                }
             }
             else
             {
                // No CRC active
-               s32_Return = C_NO_ERR;
+               c_Return = Errc::success;
             }
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -710,22 +709,22 @@ void C_OscDataDealerNvmSafe::NvmSafeClearInternalContent(void)
    \param[out]  opu8_NrCode   if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   Data prepared for file
-   C_OVERFLOW Wrong sequence of function calls
-   C_RANGE    Data pool list IDs invalid
-   C_CHECKSUM CRC over the values of a parameter list read from the ECU does not match those values
-   C_CONFIG   No valid diagnostic protocol is set
-               or no valid pointer to the original instance of "C_OscNode" is set in "C_OscDataDealer"
-   C_NOACT    Server communication protocol service could not be requested
-   C_TIMEOUT  Server communication protocol service has timed out
-   C_WARN     Server communication protocol service error response was received
-   C_COM      expected server response not received because of communication error
+   Errc::success  Data prepared for file
+   Errc::overflow Wrong sequence of function calls
+   Errc::range    Data pool list IDs invalid
+   Errc::checksum CRC over the values of a parameter list read from the ECU does not match those values
+   Errc::config   No valid diagnostic protocol is set
+                  or no valid pointer to the original instance of "C_OscNode" is set in "C_OscDataDealer"
+   Errc::noact    Server communication protocol service could not be requested
+   Errc::timeout  Server communication protocol service has timed out
+   Errc::warn     Server communication protocol service error response was received
+   Errc::com      expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_OscNodeDataPoolListId> & orc_ListIds,
-                                                           uint8_t * const opu8_NrCode)
+std::error_code C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(
+   const std::vector<C_OscNodeDataPoolListId> & orc_ListIds, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Reset state
    this->me_CreateParameterSetWorkflowState = C_OscDataDealerNvmSafe::eCPSFS_IDLE;
@@ -738,7 +737,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
             C_OscParamSetRawNode c_RawNode;
             c_RawNode.c_Entries.reserve(orc_ListIds.size() * 2);
             //Add invalid CRC entries
-            for (uint32_t u32_ItList = 0; (u32_ItList < orc_ListIds.size()) && (s32_Retval == C_NO_ERR); ++u32_ItList)
+            for (uint32_t u32_ItList = 0; (u32_ItList < orc_ListIds.size()) && (!c_Retval); ++u32_ItList)
             {
                const C_OscNodeDataPoolListId & rc_DataPoolListId = orc_ListIds[u32_ItList];
                if ((rc_DataPoolListId.u32_NodeIndex == this->mu32_NodeIndex) &&
@@ -762,18 +761,18 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
                   }
                   else
                   {
-                     s32_Retval = C_RANGE;
+                     c_Retval = Errc::range;
                   }
                }
                else
                {
-                  s32_Retval = C_RANGE;
+                  c_Retval = Errc::range;
                }
             }
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
                //Read list values
-               for (uint32_t u32_ItList = 0; (u32_ItList < orc_ListIds.size()) && (s32_Retval == C_NO_ERR);
+               for (uint32_t u32_ItList = 0; (u32_ItList < orc_ListIds.size()) && (!c_Retval);
                     ++u32_ItList)
                {
                   const C_OscNodeDataPoolListId & rc_DataPoolListId = orc_ListIds[u32_ItList];
@@ -786,20 +785,20 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
                      {
                         C_OscParamSetRawEntry c_RawEntry;
                         C_OscNodeDataPoolList & rc_List = rc_DataPool.c_Lists[rc_DataPoolListId.u32_ListIndex];
-                        s32_Retval = m_CreateRawEntryAndPrepareInterpretedData(rc_List, c_RawEntry, opu8_NrCode);
+                        c_Retval = m_CreateRawEntryAndPrepareInterpretedData(rc_List, c_RawEntry, opu8_NrCode);
                         c_RawNode.c_Entries.push_back(c_RawEntry);
                      }
                      else
                      {
-                        s32_Retval = C_RANGE;
+                        c_Retval = Errc::range;
                      }
                   }
                   else
                   {
-                     s32_Retval = C_RANGE;
+                     c_Retval = Errc::range;
                   }
                }
-               if (s32_Retval == C_NO_ERR)
+               if (!c_Retval)
                {
                   std::vector<uint32_t> c_AlreadyUsedDataPoolIndices;
                   C_OscParamSetInterpretedNode c_InterpretedNode;
@@ -808,7 +807,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
                   c_RawNode.c_Name = this->mpc_Node->c_Properties.c_Name;
                   c_InterpretedNode.c_Name = this->mpc_Node->c_Properties.c_Name;
                   //Data pools
-                  for (uint32_t u32_ItCurListId = 0; (u32_ItCurListId < orc_ListIds.size()) && (s32_Retval == C_NO_ERR);
+                  for (uint32_t u32_ItCurListId = 0; (u32_ItCurListId < orc_ListIds.size()) && (!c_Retval);
                        ++u32_ItCurListId)
                   {
                      const C_OscNodeDataPoolListId & rc_DataPoolListId = orc_ListIds[u32_ItCurListId];
@@ -825,7 +824,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
                            tgl_assert(c_AlreadyUsedDataPoolIndices.size() == c_InterpretedNode.c_DataPools.size());
                            for (uint32_t u32_ItCurrentDataPool = 0;
                                 (u32_ItCurrentDataPool < c_InterpretedNode.c_DataPools.size()) &&
-                                (s32_Retval == C_NO_ERR);
+                                (!c_Retval);
                                 ++u32_ItCurrentDataPool)
                            {
                               if (c_AlreadyUsedDataPoolIndices[u32_ItCurrentDataPool] ==
@@ -857,7 +856,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
                                  }
                                  else
                                  {
-                                    s32_Retval = C_RANGE;
+                                    c_Retval = Errc::range;
                                  }
                               }
                            }
@@ -892,20 +891,20 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
                         }
                         else
                         {
-                           s32_Retval = C_RANGE;
+                           c_Retval = Errc::range;
                         }
                      }
                      else
                      {
-                        s32_Retval = C_RANGE;
+                        c_Retval = Errc::range;
                      }
                   }
                   //Write data
-                  if (s32_Retval == C_NO_ERR)
+                  if (!c_Retval)
                   {
-                     if (this->mc_ImageFileHandler.AddRawDataForNode(c_RawNode) == C_NO_ERR)
+                     if (!this->mc_ImageFileHandler.AddRawDataForNode(c_RawNode))
                      {
-                        if (this->mc_ImageFileHandler.AddInterpretedDataForNode(c_InterpretedNode) == C_NO_ERR)
+                        if (!this->mc_ImageFileHandler.AddInterpretedDataForNode(c_InterpretedNode))
                         {
                            //Finished
                            //Update state
@@ -913,12 +912,12 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
                         }
                         else
                         {
-                           s32_Retval = C_RANGE;
+                           c_Retval = Errc::range;
                         }
                      }
                      else
                      {
-                        s32_Retval = C_RANGE;
+                        c_Retval = Errc::range;
                      }
                   }
                }
@@ -926,20 +925,20 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
          }
          else
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_OVERFLOW;
+      c_Retval = Errc::overflow;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -953,25 +952,25 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(const std::vector<C_O
    \param[in] orc_FileInfo Optional general file information
 
    \return
-   C_NO_ERR   data saved
-   C_RANGE    file already exists
-   C_OVERFLOW Wrong sequence of function calls
-   C_BUSY     file already exists
-   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   Errc::success  data saved
+   Errc::range    file already exists
+   Errc::overflow Wrong sequence of function calls
+   Errc::busy     file already exists
+   Errc::rd_wr    could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeCreateCleanFileWithoutCrc(const std::string & orc_Path,
-                                                                 const C_OscParamSetInterpretedFileInfoData & orc_FileInfo)
+std::error_code C_OscDataDealerNvmSafe::NvmSafeCreateCleanFileWithoutCrc(
+   const std::string & orc_Path, const C_OscParamSetInterpretedFileInfoData & orc_FileInfo)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_Path) == false)
    {
       if (this->me_ParameterSetFileState == C_OscDataDealerNvmSafe::ePSFS_DATA_RESET)
       {
          this->mc_ImageFileHandler.AddInterpretedFileData(orc_FileInfo);
-         s32_Retval = this->mc_ImageFileHandler.CreateCleanFileWithoutCrc(orc_Path);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = this->mc_ImageFileHandler.CreateCleanFileWithoutCrc(orc_Path);
+         if (!c_Retval)
          {
             //Update internal variable
             this->mc_ParameterSetFilePath = orc_Path;
@@ -981,14 +980,14 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCreateCleanFileWithoutCrc(const std::stri
       }
       else
       {
-         s32_Retval = C_OVERFLOW;
+         c_Retval = Errc::overflow;
       }
    }
    else
    {
-      s32_Retval = C_BUSY;
+      c_Retval = Errc::busy;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1003,24 +1002,24 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCreateCleanFileWithoutCrc(const std::stri
    \param[in] orc_Path   Parameter file path
 
    \return
-   C_NO_ERR   data read
-   C_OVERFLOW Wrong sequence of function calls
-   C_RANGE    Path does not match the path of the preceding function calls
-   C_RD_WR    specified file does not exist
-              specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG   file does not contain essential information
+   Errc::success  data read
+   Errc::overflow Wrong sequence of function calls
+   Errc::range    Path does not match the path of the preceding function calls
+   Errc::rd_wr    specified file does not exist
+                  specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config   file does not contain essential information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithoutCrc(const std::string & orc_Path)
+std::error_code C_OscDataDealerNvmSafe::NvmSafeReadFileWithoutCrc(const std::string & orc_Path)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
    if (this->me_ParameterSetFileState == C_OscDataDealerNvmSafe::ePSFS_FILE_CREATED)
    {
       if (this->mc_ParameterSetFilePath == orc_Path)
       {
-         s32_Retval = this->mc_ImageFileHandler.ReadFile(orc_Path, true);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = this->mc_ImageFileHandler.ReadFile(orc_Path, true);
+         if (!c_Retval)
          {
             //Update state
             this->me_ParameterSetFileState = C_OscDataDealerNvmSafe::ePSFS_FILE_READ_WITHOUT_CRC;
@@ -1028,14 +1027,14 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithoutCrc(const std::string & or
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_OVERFLOW;
+      c_Retval = Errc::overflow;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1045,17 +1044,17 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithoutCrc(const std::string & or
    \param[out] orc_DataPoolLists Loaded data pool lists (Always cleared at start)
 
    \return
-   C_NO_ERR   Lists valid
-   C_OVERFLOW Wrong sequence of function calls
-   C_RANGE    Path does not match the path of the preceding function calls
-   C_CONFIG   Mismatch of data with current node
-               or no valid pointer to the original instance of "C_OscNode" is set in "C_OscDataDealer"
+   Errc::success  Lists valid
+   Errc::overflow Wrong sequence of function calls
+   Errc::range    Path does not match the path of the preceding function calls
+   Errc::config   Mismatch of data with current node
+                  or no valid pointer to the original instance of "C_OscNode" is set in "C_OscDataDealer"
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(const std::string & orc_Path,
-                                                                  std::vector<C_OscNodeDataPoolListId> & orc_DataPoolLists)
+std::error_code C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(
+   const std::string & orc_Path, std::vector<C_OscNodeDataPoolListId> & orc_DataPoolLists)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_DataPoolLists.clear();
    if (this->me_CreateParameterSetWorkflowState == C_OscDataDealerNvmSafe::eCPSFS_FILE_CREATED)
@@ -1068,19 +1067,19 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(const std::str
                this->mpc_Node->c_Properties.c_Name);
             if (pc_Node != nullptr)
             {
-               if (m_CheckParameterFileContent(*pc_Node) == C_NO_ERR)
+               if (!m_CheckParameterFileContent(*pc_Node))
                {
                   //For each raw data pool
                   //For each raw entry
                   for (uint32_t u32_ItRawEntry =
-                          0; (u32_ItRawEntry < pc_Node->c_Entries.size()) && (s32_Retval == C_NO_ERR);
+                          0; (u32_ItRawEntry < pc_Node->c_Entries.size()) && (!c_Retval);
                        ++u32_ItRawEntry)
                   {
                      bool q_Found = false;
                      const C_OscParamSetRawEntry & rc_CurRawEntry = pc_Node->c_Entries[u32_ItRawEntry];
                      //Find data pool list
                      for (uint32_t u32_ItDataPool = 0;
-                          (u32_ItDataPool < this->mpc_Node->c_DataPools.size()) && (s32_Retval == C_NO_ERR);
+                          (u32_ItDataPool < this->mpc_Node->c_DataPools.size()) && (!c_Retval);
                           ++u32_ItDataPool)
                      {
                         const C_OscNodeDataPool & rc_DataPool = this->mpc_Node->c_DataPools[u32_ItDataPool];
@@ -1092,7 +1091,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(const std::str
                              rc_CurRawEntry.u32_StartAddress))
                         {
                            for (uint32_t u32_ItList = 0;
-                                (u32_ItList < rc_DataPool.c_Lists.size()) && (s32_Retval == C_NO_ERR); ++u32_ItList)
+                                (u32_ItList < rc_DataPool.c_Lists.size()) && (!c_Retval); ++u32_ItList)
                            {
                               const C_OscNodeDataPoolList & rc_List = rc_DataPool.c_Lists[u32_ItList];
                               //Check list address range
@@ -1111,7 +1110,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(const std::str
                                  }
                                  else
                                  {
-                                    s32_Retval = C_CONFIG;
+                                    c_Retval = Errc::config;
                                  }
                               }
                            }
@@ -1119,10 +1118,10 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(const std::str
                      }
                      if (q_Found == false)
                      {
-                        s32_Retval = C_CONFIG;
+                        c_Retval = Errc::config;
                      }
                   }
-                  if (s32_Retval == C_NO_ERR)
+                  if (!c_Retval)
                   {
                      //Remove duplicates
                      const std::vector<C_OscNodeDataPoolListId> c_Copy = orc_DataPoolLists;
@@ -1157,36 +1156,36 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(const std::str
                      }
                      else
                      {
-                        s32_Retval = C_CONFIG;
+                        c_Retval = Errc::config;
                      }
                   }
                }
                else
                {
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                }
             }
             else
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
             }
          }
          else
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
          }
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_OVERFLOW;
+      c_Retval = Errc::overflow;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1199,42 +1198,42 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(const std::str
    \param[in] orc_Path   Parameter set file path
 
    \return
-   C_NO_ERR   CRC updated
-   C_OVERFLOW Wrong sequence of function calls
-   C_RANGE    Path does not match the path of the preceding function calls
-   C_RD_WR    specified file does not exist
-              specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::success  CRC updated
+   Errc::overflow Wrong sequence of function calls
+   Errc::range    Path does not match the path of the preceding function calls
+   Errc::rd_wr    specified file does not exist
+                  specified file is present but structure is invalid (e.g. invalid XML file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeUpdateCrcForFile(const std::string & orc_Path)
+std::error_code C_OscDataDealerNvmSafe::NvmSafeUpdateCrcForFile(const std::string & orc_Path)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
    if (this->me_ParameterSetFileState == C_OscDataDealerNvmSafe::ePSFS_FILE_READ_WITHOUT_CRC)
    {
       if (this->mc_ParameterSetFilePath == orc_Path)
       {
-         s32_Retval = C_OscParamSetHandler::h_UpdateCrcForFile(orc_Path);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = C_OscParamSetHandler::h_UpdateCrcForFile(orc_Path);
+         if (!c_Retval)
          {
             //Update state
             this->me_ParameterSetFileState = C_OscDataDealerNvmSafe::ePSFS_IDLE;
          }
          else
          {
-            s32_Retval = C_RD_WR;
+            c_Retval = Errc::rd_wr;
          }
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_OVERFLOW;
+      c_Retval = Errc::overflow;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1246,18 +1245,18 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeUpdateCrcForFile(const std::string & orc_
    \param[in] orc_Path   Parameter set file path
 
    \return
-   C_NO_ERR   data read
-   C_RD_WR    specified file does not exist
-              specified file is present but structure is invalid (e.g. invalid XML file)
-   C_CONFIG   file does not contain data for exactly one node (zero or more than one)
-   C_CHECKSUM specified file is present but checksum is invalid
+   Errc::success  data read
+   Errc::rd_wr    specified file does not exist
+                  specified file is present but structure is invalid (e.g. invalid XML file)
+   Errc::config   file does not contain data for exactly one node (zero or more than one)
+   Errc::checksum specified file is present but checksum is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithCrc(const std::string & orc_Path)
+std::error_code C_OscDataDealerNvmSafe::NvmSafeReadFileWithCrc(const std::string & orc_Path)
 {
-   int32_t s32_Retval = this->mc_ImageFileHandler.ReadFile(orc_Path, false);
+   std::error_code c_Retval = this->mc_ImageFileHandler.ReadFile(orc_Path, false);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       //data for one file contained ?
       if (this->mc_ImageFileHandler.GetNumberOfNodes() != 1U)
@@ -1267,7 +1266,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithCrc(const std::string & orc_P
             "File \"%s\"  Expected: contains parameters for one device  Found: contains parameters for %u devices\n",
             orc_Path.c_str(), this->mc_ImageFileHandler.GetNumberOfNodes());
          this->mc_ImageFileHandler.ClearContent();
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
          osc_write_log_error("Loading parameter set file", c_Error);
       }
       else
@@ -1277,15 +1276,15 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithCrc(const std::string & orc_P
          this->mc_ParameterSetFilePath = orc_Path;
       }
    }
-   else if (s32_Retval == C_CHECKSUM)
+   else if (c_Retval == Errc::checksum)
    {
       //Same return value
    }
    else
    {
-      s32_Retval = C_RD_WR;
+      c_Retval = Errc::rd_wr;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1299,21 +1298,22 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithCrc(const std::string & orc_P
    \param[out] ors32_ResultDetail Result detail
 
    \return
-   Return        Error Detail
-   C_NO_ERR      1            File successfully written to ECU
-   C_OVERFLOW    5            Wrong sequence of function calls
-                 6            Path mismatch with previous function call
-   C_CONFIG      1            No valid diagnostic protocol is set in "C_OscDataDealer"
-                 2            No valid pointer to the original instance of "C_OscNode" is set in "C_OscDataDealer"
-   C_NOACT       1            Communication protocol service could not be requested
-   C_TIMEOUT     1            Communication protocol service has timed out
-   C_WARN        1            Communication protocol service error response was received
-   C_UNKNOWN_ERR <undefined>  Communication protocol failed with non-specified error code
+   Return            Error Detail
+   Errc::success     1            File successfully written to ECU
+   Errc::overflow    5            Wrong sequence of function calls
+                     6            Path mismatch with previous function call
+   Errc::config      1            No valid diagnostic protocol is set in "C_OscDataDealer"
+                     2            No valid pointer to the original instance of "C_OscNode" is set in "C_OscDataDealer"
+   Errc::noact       1            Communication protocol service could not be requested
+   Errc::timeout     1            Communication protocol service has timed out
+   Errc::warn        1            Communication protocol service error response was received
+   Errc::unknown_err <undefined>  Communication protocol failed with non-specified error code
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const std::string & orc_Path, int32_t & ors32_ResultDetail)
+std::error_code C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const std::string & orc_Path,
+                                                                     int32_t & ors32_ResultDetail)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    ors32_ResultDetail = -1;
    if (this->mpc_Node != nullptr)
@@ -1334,35 +1334,38 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const std::string &
                   for (uint32_t u32_ItEntry = 0; u32_ItEntry < pc_Node->c_Entries.size(); u32_ItEntry++)
                   {
                      const C_OscParamSetRawEntry & rc_Entry = pc_Node->c_Entries[u32_ItEntry];
-                     s32_Retval = this->mpc_DiagProtocol->NvmWrite(rc_Entry.u32_StartAddress, rc_Entry.c_Bytes, nullptr);
+                     const int32_t s32_ProtReturn =
+                        this->mpc_DiagProtocol->NvmWrite(rc_Entry.u32_StartAddress, rc_Entry.c_Bytes, nullptr);
                      //Map error codes
-                     switch (s32_Retval)
+                     switch (s32_ProtReturn)
                      {
                      case C_TIMEOUT:
+                        c_Retval = Errc::timeout;
                         ors32_ResultDetail = 1;
                         break;
                      case C_NOACT:
                      case C_CONFIG:
-                        s32_Retval = C_NOACT;
+                        c_Retval = Errc::noact;
                         ors32_ResultDetail = 1;
                         break;
                      case C_RANGE:
                      case C_RD_WR:
                      case C_WARN:
-                        s32_Retval = C_WARN;
+                        c_Retval = Errc::warn;
                         ors32_ResultDetail = 1;
                         break;
                      case C_NO_ERR: //positive result
+                        c_Retval = Errc::success;
                         ors32_ResultDetail = 1;
                         break;
                      default:
                         //Not documented error was returned by function
-                        s32_Retval = C_UNKNOWN_ERR;
+                        c_Retval = Errc::unknown_err;
                         osc_write_log_info("Parametrization", "Not documented error code " +
-                                           std::to_string(s32_Retval) + " was returned by NvmWrite");
+                                           std::to_string(c_Retval.value()) + " was returned by NvmWrite");
                         break;
                      }
-                     if (s32_Retval != C_NO_ERR)
+                     if (c_Retval)
                      {
                         break;
                      }
@@ -1371,29 +1374,29 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const std::string &
             }
             else
             {
-               s32_Retval = C_OVERFLOW;
+               c_Retval = Errc::overflow;
                ors32_ResultDetail = 6;
             }
          }
          else
          {
-            s32_Retval = C_OVERFLOW;
+            c_Retval = Errc::overflow;
             ors32_ResultDetail = 5;
          }
       }
       else
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
          ors32_ResultDetail = 1;
       }
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       ors32_ResultDetail = 2;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1424,17 +1427,17 @@ void C_OscDataDealerNvmSafe::mh_CreateInterpretedList(const C_OscNodeDataPoolLis
    \param[in]  orc_Node    Raw node parameters to check
 
    \return
-   C_NO_ERR   Match
-   C_CONFIG   Node not set
-   C_RANGE    Node mismatch
-   C_TIMEOUT  Data pool not found
-   C_CHECKSUM Data pool CRC mismatch
-   C_RD_WR    Data pool version mismatch
+   Errc::success  Match
+   Errc::config   Node not set
+   Errc::range    Node mismatch
+   Errc::timeout  Data pool not found
+   Errc::checksum Data pool CRC mismatch
+   Errc::rd_wr    Data pool version mismatch
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::m_CheckParameterFileContent(const C_OscParamSetRawNode & orc_Node) const
+std::error_code C_OscDataDealerNvmSafe::m_CheckParameterFileContent(const C_OscParamSetRawNode & orc_Node) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (this->mpc_Node != nullptr)
    {
@@ -1442,14 +1445,14 @@ int32_t C_OscDataDealerNvmSafe::m_CheckParameterFileContent(const C_OscParamSetR
       {
          //Check all data pool info segments
          for (uint32_t u32_ItReadDataPool = 0U;
-              (u32_ItReadDataPool < orc_Node.c_DataPools.size()) && (s32_Retval == C_NO_ERR);
+              (u32_ItReadDataPool < orc_Node.c_DataPools.size()) && (!c_Retval);
               ++u32_ItReadDataPool)
          {
             const C_OscParamSetDataPoolInfo & rc_DataPoolInfo = orc_Node.c_DataPools[u32_ItReadDataPool];
             bool q_Found = false;
             //Find matching data pool
             for (uint32_t u32_ItNodeDataPool = 0U;
-                 (u32_ItNodeDataPool < this->mpc_Node->c_DataPools.size()) && (s32_Retval == C_NO_ERR);
+                 (u32_ItNodeDataPool < this->mpc_Node->c_DataPools.size()) && (!c_Retval);
                  ++u32_ItNodeDataPool)
             {
                const C_OscNodeDataPool & rc_NodeDataPool = this->mpc_Node->c_DataPools[u32_ItNodeDataPool];
@@ -1461,13 +1464,13 @@ int32_t C_OscDataDealerNvmSafe::m_CheckParameterFileContent(const C_OscParamSetR
                   //Check content
                   if (rc_DataPoolInfo.u32_DataPoolCrc != u32_Crc)
                   {
-                     s32_Retval = C_CHECKSUM;
+                     c_Retval = Errc::checksum;
                   }
                   else if ((((rc_DataPoolInfo.au8_Version[0] != rc_NodeDataPool.au8_Version[0])) ||
                             (rc_DataPoolInfo.au8_Version[1] != rc_NodeDataPool.au8_Version[1])) ||
                            (rc_DataPoolInfo.au8_Version[2] != rc_NodeDataPool.au8_Version[2]))
                   {
-                     s32_Retval = C_RD_WR;
+                     c_Retval = Errc::rd_wr;
                   }
                   else
                   {
@@ -1477,20 +1480,20 @@ int32_t C_OscDataDealerNvmSafe::m_CheckParameterFileContent(const C_OscParamSetR
             }
             if (q_Found == false)
             {
-               s32_Retval = C_TIMEOUT;
+               c_Retval = Errc::timeout;
             }
          }
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1501,71 +1504,69 @@ int32_t C_OscDataDealerNvmSafe::m_CheckParameterFileContent(const C_OscParamSetR
    \param[out] opu8_NrCode if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR   Entry successfully created
-   C_RANGE    List has no elements. Nothing to read.
-              Datapool element size configuration does not match with count of read bytes
-   C_TIMEOUT  Expected response not received within timeout
-   C_NOACT    Could not send request (e.g. Tx buffer full)
-   C_WARN     Error response or malformed protocol response
-   C_CONFIG   Pre-requisites not correct; e.g. driver not initialized or
-              parameter out of range (checked by client side)
-   C_RD_WR    Datapool element size configuration does not match with count of read bytes
-   C_CHECKSUM Checksum of read datapool list is invalid
-   C_COM      expected server response not received because of communication error
+   Errc::success  Entry successfully created
+   Errc::range    List has no elements. Nothing to read.
+                  Datapool element size configuration does not match with count of read bytes
+   Errc::timeout  Expected response not received within timeout
+   Errc::noact    Could not send request (e.g. Tx buffer full)
+   Errc::warn     Error response or malformed protocol response
+   Errc::config   Pre-requisites not correct; e.g. driver not initialized or
+                  parameter out of range (checked by client side)
+   Errc::rd_wr    Datapool element size configuration does not match with count of read bytes
+   Errc::checksum Checksum of read datapool list is invalid
+   Errc::com      expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvmSafe::m_CreateRawEntryAndPrepareInterpretedData(C_OscNodeDataPoolList & orc_List,
-                                                                          C_OscParamSetRawEntry & orc_Entry,
-                                                                          uint8_t * const opu8_NrCode)
+std::error_code C_OscDataDealerNvmSafe::m_CreateRawEntryAndPrepareInterpretedData(C_OscNodeDataPoolList & orc_List,
+                                                                                  C_OscParamSetRawEntry & orc_Entry,
+                                                                                  uint8_t * const opu8_NrCode)
 {
    std::vector<uint8_t> c_Values;
-   int32_t s32_Retval = this->m_NvmReadListRaw(orc_List, c_Values, opu8_NrCode);
-   if (s32_Retval == C_NO_ERR)
+   std::error_code c_Retval = this->m_NvmReadListRaw(orc_List, c_Values, opu8_NrCode);
+   if (!c_Retval)
    {
       //Raw
       orc_Entry.u32_StartAddress = orc_List.u32_NvmStartAddress;
       orc_Entry.c_Bytes = c_Values;
-      s32_Retval = this->m_SaveDumpToList(c_Values, orc_List);
-      if (s32_Retval != C_NO_ERR)
+      c_Retval = this->m_SaveDumpToList(c_Values, orc_List);
+      if (c_Retval)
       {
          //Translate error values if necessary
-         switch (s32_Retval)
+         if (c_Retval == Errc::rd_wr)
          {
-         case C_RD_WR:
-            s32_Retval = C_RANGE;
-            break;
-         case C_CHECKSUM:
-            s32_Retval = C_CHECKSUM;
-            break;
-         default:
+            c_Retval = Errc::range;
+         }
+         else if (c_Retval == Errc::checksum)
+         {
+            c_Retval = Errc::checksum;
+         }
+         else
+         {
             //Not documented error was returned by function
-            s32_Retval = C_UNKNOWN_ERR;
+            c_Retval = Errc::unknown_err;
             osc_write_log_info("parametrization",
                                "Not documented error was returned by m_InterpretDumbToList");
-            break;
          }
       }
    }
    else
    {
       //Translate error values if necessary
-      switch (s32_Retval)
+      if (((c_Retval == Errc::timeout) || (c_Retval == Errc::warn)) || (c_Retval == Errc::noact))
       {
-      case C_TIMEOUT:
-      case C_WARN:
-      case C_NOACT:
          //Same error value
-         break;
-      case C_OVERFLOW:
-         s32_Retval = C_RANGE;
-         break;
-      default:
+      }
+      else if (c_Retval == Errc::overflow)
+      {
+         c_Retval = Errc::range;
+      }
+      else
+      {
          //Not documented error was returned by function
-         s32_Retval = C_UNKNOWN_ERR;
+         c_Retval = Errc::unknown_err;
          osc_write_log_info("parametrization",
                             "Not documented error was returned by m_NvmReadListRaw");
-         break;
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }

@@ -957,7 +957,7 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
             //User settings store
             C_UsHandler::h_GetInstance()->SetProjSvParamImport(pc_View->GetName().c_str(), c_File);
 
-            s32_Result = c_ParamSetHandler.ReadFile(c_File.toStdString().c_str(), true, true);
+            s32_Result = c_ParamSetHandler.ReadFile(c_File.toStdString().c_str(), true, true).value();
 
             if (s32_Result == C_NO_ERR)
             {
@@ -1218,7 +1218,8 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
             // Prepare the param set handler
             for (u32_IntNodeCounter = 0U; u32_IntNodeCounter < c_IntNodes.size(); ++u32_IntNodeCounter)
             {
-               s32_Result = c_ParamSetFileHandler.AddInterpretedDataForNode(c_IntNodes[u32_IntNodeCounter]);
+               s32_Result =
+                  c_ParamSetFileHandler.AddInterpretedDataForNode(c_IntNodes[u32_IntNodeCounter]).value();
 
                if (s32_Result != C_NO_ERR)
                {
@@ -1277,7 +1278,7 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                      if (q_Continue == true)
                      {
                         s32_Result = c_ParamSetFileHandler.CreateCleanFileWithoutCrc(
-                           c_FileName.toStdString().c_str(), true);
+                           c_FileName.toStdString().c_str(), true).value();
                      }
                      else
                      {

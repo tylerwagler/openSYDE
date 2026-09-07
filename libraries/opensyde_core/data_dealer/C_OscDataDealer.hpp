@@ -13,8 +13,10 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <system_error>
 
 #include "stwtypes.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_OscNode.hpp"
 #include "C_OscDiagProtocolBase.hpp"
@@ -41,14 +43,14 @@ public:
                    C_OscDiagProtocolBase * const opc_DiagProtocol);
 
    uint32_t GetNodeIndex(void) const;
-   virtual int32_t DataPoolRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode);
-   int32_t DataPoolWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                         const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode);
-   virtual int32_t NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                           const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode);
-   int32_t NvmWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex, const uint16_t ou16_ElementIndex,
-                    uint8_t * const opu8_NrCode);
+   virtual std::error_code DataPoolRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                        const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode);
+   std::error_code DataPoolWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                 const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode);
+   virtual std::error_code NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                   const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode);
+   std::error_code NvmWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                            const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode);
 
 protected:
    //Called by the DataDealer after it has placed the data in the data pool content structure associated with

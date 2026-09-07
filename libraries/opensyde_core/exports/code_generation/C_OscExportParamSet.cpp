@@ -427,12 +427,11 @@ std::error_code C_OscExportParamSet::mh_WriteParameterSetImage(const C_OscParamS
    C_OscParamSetHandler c_DataHandler;
 
    // Add raw & interpreted data
-   //C_OscParamSetHandler still reports the STW int32_t error convention
-   c_Retval = make_error_code_from_stw(c_DataHandler.AddInterpretedDataForNode(orc_IntNode));
+   c_Retval = c_DataHandler.AddInterpretedDataForNode(orc_IntNode);
 
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(c_DataHandler.AddRawDataForNode(orc_RawNode));
+      c_Retval = c_DataHandler.AddRawDataForNode(orc_RawNode);
    }
 
    if (c_Retval)
@@ -459,13 +458,13 @@ std::error_code C_OscExportParamSet::mh_WriteParameterSetImage(const C_OscParamS
       c_DataHandler.AddInterpretedFileData(c_FileInfo);
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(c_DataHandler.CreateCleanFileWithoutCrc(c_Path));
+         c_Retval = c_DataHandler.CreateCleanFileWithoutCrc(c_Path);
       }
 
       // Add file CRC
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(C_OscParamSetHandler::h_UpdateCrcForFile(c_Path));
+         c_Retval = C_OscParamSetHandler::h_UpdateCrcForFile(c_Path);
       }
 
       // Handle file names

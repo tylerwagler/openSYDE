@@ -12,7 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglFile.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscCanOpenManagerDeviceInfo.hpp"
@@ -112,8 +115,8 @@ const C_OscCanOpenObjectDictionary & C_OscCanOpenManagerDeviceInfo::GetEdsFileCo
    {
       if (TglFileExists(this->c_ProjectEdsFilePath))
       {
-         const int32_t s32_Retval = this->mc_EdsFileContent.LoadFromFile(this->c_ProjectEdsFilePath);
-         if (s32_Retval != C_NO_ERR)
+         const std::error_code c_Retval = this->mc_EdsFileContent.LoadFromFile(this->c_ProjectEdsFilePath);
+         if (c_Retval)
          {
             osc_write_log_error("CANopen manager device information", "Failed to load from EDS file \"" +
                                 this->c_ProjectEdsFilePath + "\" Error: \"" + this->mc_EdsFileContent.GetLastErrorText() +

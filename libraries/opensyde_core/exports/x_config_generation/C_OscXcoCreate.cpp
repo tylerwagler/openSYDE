@@ -114,11 +114,9 @@ std::error_code C_OscXcoCreate::h_CreatePackage(const std::string & orc_PackageP
       std::vector<std::string> c_AllStaticSubFolders;
       c_AllStaticSubFolders.push_back(hc_XCFG_SYSDEF_FOLDER);
       c_AllStaticSubFolders.push_back(hc_INI_DEV_FOLDER);
-      //C_OscSpaServicePackageCreateUtil still reports the STW int32_t error convention
-      c_Return = make_error_code_from_stw(
-         C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(
+         c_Return = C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(
             orc_PackagePath, orc_TemporaryDirectory, mhc_USE_CASE, hc_PACKAGE_EXT, hc_PACKAGE_EXT_TMP,
-            c_AllStaticSubFolders, c_PackagePathTmp, mhc_ErrorMessage));
+            c_AllStaticSubFolders, c_PackagePathTmp, mhc_ErrorMessage);
 
       q_TemporaryFolderCreated = true; // at least partly
    }
@@ -143,37 +141,32 @@ std::error_code C_OscXcoCreate::h_CreatePackage(const std::string & orc_PackageP
       const std::string c_SysDefPath = TglFileIncludeTrailingDelimiter(
          c_PackagePathTmp + hc_XCFG_SYSDEF_FOLDER);
 
-      c_Return = make_error_code_from_stw(
-         C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(
+      c_Return = C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(
             orc_SystemDefinition, hc_XCFG_SYSDEF, mhc_USE_CASE, c_SysDefPath,
-            TglFileIncludeTrailingDelimiter(hc_XCFG_SYSDEF_FOLDER), c_XcfgFiles, mhc_ErrorMessage));
+            TglFileIncludeTrailingDelimiter(hc_XCFG_SYSDEF_FOLDER), c_XcfgFiles, mhc_ErrorMessage);
    }
    // device.ini and device definition files
    if (!c_Return)
    {
       const std::string c_DevDefPath = TglFileIncludeTrailingDelimiter(c_PackagePathTmp + hc_INI_DEV_FOLDER);
 
-      c_Return = make_error_code_from_stw(
-         C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
+      c_Return = C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
             orc_SystemDefinition, mhc_USE_CASE, c_DevDefPath, TglFileIncludeTrailingDelimiter(hc_INI_DEV_FOLDER),
-            c_XcfgFiles, mhc_ErrorMessage));
+            c_XcfgFiles, mhc_ErrorMessage);
    }
    // package temporary result folder to zip file
    if ((!c_Return) || (c_Return == Errc::warn))
    {
-      c_Return = make_error_code_from_stw(
-         C_OscSpaServicePackageCreateUtil::h_CreateZip(mhc_USE_CASE, c_PackagePathTmp, c_TargetZipArchive,
-                                                      c_XcfgFiles, mhc_ErrorMessage));
+      c_Return = C_OscSpaServicePackageCreateUtil::h_CreateZip(mhc_USE_CASE, c_PackagePathTmp, c_TargetZipArchive,
+                                                      c_XcfgFiles, mhc_ErrorMessage);
    }
 
    // cleanup: delete temporary result folder
    if (q_TemporaryFolderCreated == true)
    {
       //h_CleanUpTempFolder reads and updates the STW int32_t error value
-      int32_t s32_CleanUpResult = c_Return.value();
       C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder("Creating Update Package",
-                                                            c_PackagePathTmp, s32_CleanUpResult, mhc_ErrorMessage);
-      c_Return = make_error_code_from_stw(s32_CleanUpResult);
+                                                            c_PackagePathTmp, c_Return, mhc_ErrorMessage);
    }
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
@@ -200,10 +193,8 @@ std::error_code C_OscXcoCreate::mh_CheckParamsToCreatePackage(const std::string 
                                                               const C_OscSystemDefinition & orc_SystemDefinition,
                                                               const C_OscXcoManifest & orc_Manifest)
 {
-   //C_OscSpaServicePackageCreateUtil still reports the STW int32_t error convention
-   std::error_code c_Return = make_error_code_from_stw(
-      C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath, mhc_USE_CASE, hc_PACKAGE_EXT,
-                                                               hc_PACKAGE_EXT_TMP, mhc_ErrorMessage));
+   std::error_code c_Return = C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath, mhc_USE_CASE, hc_PACKAGE_EXT,
+                                                               hc_PACKAGE_EXT_TMP, mhc_ErrorMessage);
 
    // active bus index in range?
    if (!c_Return)

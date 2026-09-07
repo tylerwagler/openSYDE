@@ -1320,7 +1320,7 @@ int32_t C_OscSuSequences::m_WriteNvmOpenSyde(const std::vector<std::string> & or
             }
             else
             {
-               s32_Return = c_Dealer.NvmSafeReadFileWithCrc(orc_FilesToWrite[u16_File]);
+               s32_Return = c_Dealer.NvmSafeReadFileWithCrc(orc_FilesToWrite[u16_File]).value();
                if (s32_Return != C_NO_ERR)
                {
                   rc_State.e_FileLoaded = eSUSEQ_STATE_ERROR;
@@ -1355,7 +1355,8 @@ int32_t C_OscSuSequences::m_WriteNvmOpenSyde(const std::vector<std::string> & or
                else
                {
                   int32_t s32_ResultDetail;
-                  s32_Return = c_Dealer.NvmSafeWriteParameterSetFile(orc_FilesToWrite[u16_File], s32_ResultDetail);
+                  s32_Return =
+                     c_Dealer.NvmSafeWriteParameterSetFile(orc_FilesToWrite[u16_File], s32_ResultDetail).value();
                }
                if (s32_Return != C_NO_ERR)
                {

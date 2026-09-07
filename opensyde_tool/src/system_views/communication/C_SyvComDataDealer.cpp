@@ -14,7 +14,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_SyvComDataDealer.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -140,28 +143,29 @@ void C_SyvComDataDealer::RegisterWidget(C_PuiSvDbDataElementHandler * const opc_
    \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    data read and placed in data pool
-   C_CONFIG    no node or diagnostic protocol are known (was this class properly Initialize()d ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_RANGE     specified data pool, list, element does not exist in data pools of configured node
-               protocol driver reported parameter out of range (does the protocol support the index range ?)
-   C_TIMEOUT   expected response not received within timeout
-   C_NOACT     could not send request (e.g. Tx buffer full)
-   C_RD_WR     protocol driver reported protocol violation
-   C_WARN      error response reveived
-   C_OVERFLOW  size of data received from server does not match size of specified data pool element
+   Errc::success  data read and placed in data pool
+   Errc::config   no node or diagnostic protocol are known (was this class properly Initialize()d ?)
+                  protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::range    specified data pool, list, element does not exist in data pools of configured node
+                  protocol driver reported parameter out of range (does the protocol support the index range ?)
+   Errc::timeout  expected response not received within timeout
+   Errc::noact    could not send request (e.g. Tx buffer full)
+   Errc::rd_wr    protocol driver reported protocol violation
+   Errc::warn     error response reveived
+   Errc::overflow size of data received from server does not match size of specified data pool element
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComDataDealer::DataPoolReadWithWidget(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                                   const uint16_t ou16_ElementIndex,
-                                                   stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const opc_DashboardWidget,
-                                                   uint8_t * const opu8_NrCode)
+std::error_code C_SyvComDataDealer::DataPoolReadWithWidget(const uint8_t ou8_DataPoolIndex,
+                                                           const uint16_t ou16_ListIndex,
+                                                           const uint16_t ou16_ElementIndex,
+                                                           stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const opc_DashboardWidget,
+                                                           uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   s32_Return = C_OscDataDealer::DataPoolRead(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, opu8_NrCode);
+   c_Return = C_OscDataDealer::DataPoolRead(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, opu8_NrCode);
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       if (opc_DashboardWidget == nullptr)
       {
@@ -174,7 +178,7 @@ int32_t C_SyvComDataDealer::DataPoolReadWithWidget(const uint8_t ou8_DataPoolInd
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -188,31 +192,31 @@ int32_t C_SyvComDataDealer::DataPoolReadWithWidget(const uint8_t ou8_DataPoolInd
    \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    data read and placed in data pool
-   C_CONFIG    no node or diagnostic protocol are known (was this class properly Initialize()d ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_RANGE     specified data pool, list, element does not exist in data pools of configured node
-               protocol driver reported parameter out of range (does the protocol support the index range ?)
-   C_TIMEOUT   expected response not received within timeout
-   C_NOACT     could not send request (e.g. Tx buffer full)
-   C_RD_WR     protocol driver reported protocol violation
-   C_WARN      error response reveived
-   C_OVERFLOW  size of data received from server does not match size of specified data pool element
+   Errc::success  data read and placed in data pool
+   Errc::config   no node or diagnostic protocol are known (was this class properly Initialize()d ?)
+                  protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::range    specified data pool, list, element does not exist in data pools of configured node
+                  protocol driver reported parameter out of range (does the protocol support the index range ?)
+   Errc::timeout  expected response not received within timeout
+   Errc::noact    could not send request (e.g. Tx buffer full)
+   Errc::rd_wr    protocol driver reported protocol violation
+   Errc::warn     error response reveived
+   Errc::overflow size of data received from server does not match size of specified data pool element
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                         const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
+std::error_code C_SyvComDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                                 const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   s32_Return = C_OscDataDealer::DataPoolRead(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, opu8_NrCode);
+   c_Return = C_OscDataDealer::DataPoolRead(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, opu8_NrCode);
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       this->m_OnReadDataPoolEventReceived(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -226,31 +230,31 @@ int32_t C_SyvComDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, const 
    \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    data read and placed in data pool
-   C_CONFIG    no node or diagnostic protocol are known (was this class properly Initialize()d ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_RANGE     specified data pool, list, element does not exist in data pools of configured node
-               protocol driver reported parameter out of range (does the protocol support the address range ?)
-   C_TIMEOUT   expected response not received within timeout
-   C_NOACT     could not send request (e.g. Tx buffer full)
-   C_RD_WR     protocol driver reported protocol violation
-   C_WARN      error response received
-   C_COM       expected server response not received because of communication error
+   Errc::success data read and placed in data pool
+   Errc::config  no node or diagnostic protocol are known (was this class properly Initialize()d ?)
+                 protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::range   specified data pool, list, element does not exist in data pools of configured node
+                 protocol driver reported parameter out of range (does the protocol support the address range ?)
+   Errc::timeout expected response not received within timeout
+   Errc::noact   could not send request (e.g. Tx buffer full)
+   Errc::rd_wr   protocol driver reported protocol violation
+   Errc::warn    error response received
+   Errc::com     expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                    const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
+std::error_code C_SyvComDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                            const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   s32_Return = C_OscDataDealer::NvmRead(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, opu8_NrCode);
+   c_Return = C_OscDataDealer::NvmRead(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, opu8_NrCode);
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       this->m_OnReadDataPoolNvmEventReceived(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -263,29 +267,29 @@ int32_t C_SyvComDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const uint1
    \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    Reading of list successful
-   C_CONFIG    no node or diagnostic protocol are known (was this class properly Initialize()d ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_RANGE     Input paramter invalid
-   C_OVERFLOW  List has no elements. Nothing to read
-   C_RD_WR     Datapool element size configuration does not match with count of read bytes
-   C_CHECKSUM  Checksum of read datapool list is invalid
-   C_TIMEOUT   Expected response not received within timeout
-   C_NOACT     Could not send request (e.g. Tx buffer full)
-   C_WARN      Error response or malformed protocol response
-   C_COM       Pre-requisites not correct; e.g. driver not initialized or
-               parameter out of range (checked by client side)
+   Errc::success  Reading of list successful
+   Errc::config   no node or diagnostic protocol are known (was this class properly Initialize()d ?)
+                  protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::range    Input paramter invalid
+   Errc::overflow List has no elements. Nothing to read
+   Errc::rd_wr    Datapool element size configuration does not match with count of read bytes
+   Errc::checksum Checksum of read datapool list is invalid
+   Errc::timeout  Expected response not received within timeout
+   Errc::noact    Could not send request (e.g. Tx buffer full)
+   Errc::warn     Error response or malformed protocol response
+   Errc::com      Pre-requisites not correct; e.g. driver not initialized or
+                  parameter out of range (checked by client side)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComDataDealer::NvmReadList(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex,
-                                        uint8_t * const opu8_NrCode)
+std::error_code C_SyvComDataDealer::NvmReadList(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex,
+                                                uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   s32_Return = C_OscDataDealerNvm::NvmReadList(ou32_DataPoolIndex, ou32_ListIndex, opu8_NrCode);
+   c_Return = C_OscDataDealerNvm::NvmReadList(ou32_DataPoolIndex, ou32_ListIndex, opu8_NrCode);
 
    //Allow checksum errors (handled by param widget)
-   if ((s32_Return == C_NO_ERR) || (s32_Return == C_CHECKSUM))
+   if ((!c_Return) || (c_Return == Errc::checksum))
    {
       uint32_t u32_ElementCounter;
       const C_OscNodeDataPoolList & rc_List = this->mpc_Node->c_DataPools[ou32_DataPoolIndex].c_Lists[ou32_ListIndex];
@@ -298,7 +302,7 @@ int32_t C_SyvComDataDealer::NvmReadList(const uint32_t ou32_DataPoolIndex, const
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

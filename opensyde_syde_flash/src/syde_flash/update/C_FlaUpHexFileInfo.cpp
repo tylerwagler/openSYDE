@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include <QFileInfo>
 #include <QDateTime>
 #include <QCryptographicHash>
@@ -57,7 +58,7 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
 {
    const QFileInfo c_FileInfo(orc_File);
    C_OscHexFile c_HexFile;
-   uint32_t u32_Result;
+   std::error_code c_Result = stw::errors::Errc::success;
 
    std::vector<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
 
@@ -65,10 +66,10 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
    c_HexFileInfo.s32_NumberOfBlocks = 0;
    c_HexFileInfo.c_FileName = c_FileInfo.fileName();
 
-   u32_Result = c_HexFile.LoadFromFile(orc_File.toStdString().c_str());
+   c_Result = c_HexFile.LoadFromFile(orc_File.toStdString().c_str());
    c_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
 
-   if (u32_Result == stw::hex_file::NO_ERR)
+   if (!c_Result)
    {
       uint32_t u32_Crc;
       c_HexFileInfo.c_TimeStamp = c_FileInfo.lastModified().toString("dd.MM.yyyy HH:mm:ss");

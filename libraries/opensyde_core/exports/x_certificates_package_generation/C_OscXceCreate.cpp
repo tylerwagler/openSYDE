@@ -123,11 +123,9 @@ std::error_code C_OscXceCreate::h_CreatePackage(
       std::vector<std::string> c_AllStaticSubFolders;
       c_AllStaticSubFolders.push_back(mhc_CERTIFICATES_FOLDER);
       c_AllStaticSubFolders.push_back(mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER);
-      //C_OscSpaServicePackageCreateUtil still reports the STW int32_t error convention
-      c_Return = make_error_code_from_stw(
-         C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(
+         c_Return = C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(
             orc_PackagePath, orc_TemporaryDirectory, mhc_USE_CASE, hc_PACKAGE_EXT, hc_PACKAGE_EXT_TMP,
-            c_AllStaticSubFolders, c_PackagePathTmp, mhc_ErrorMessage));
+            c_AllStaticSubFolders, c_PackagePathTmp, mhc_ErrorMessage);
 
       q_TemporaryFolderCreated = true; // at least partly
    }
@@ -154,19 +152,16 @@ std::error_code C_OscXceCreate::h_CreatePackage(
    // package temporary result folder to zip file
    if ((!c_Return) || (c_Return == Errc::warn))
    {
-      c_Return = make_error_code_from_stw(
-         C_OscSpaServicePackageCreateUtil::h_CreateZip(mhc_USE_CASE, c_PackagePathTmp, c_TargetZipArchive,
-                                                      c_XcertFiles, mhc_ErrorMessage));
+      c_Return = C_OscSpaServicePackageCreateUtil::h_CreateZip(mhc_USE_CASE, c_PackagePathTmp, c_TargetZipArchive,
+                                                      c_XcertFiles, mhc_ErrorMessage);
    }
 
    // cleanup: delete temporary result folder
    if (q_TemporaryFolderCreated == true)
    {
       //h_CleanUpTempFolder reads and updates the STW int32_t error value
-      int32_t s32_CleanUpResult = c_Return.value();
       C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder("Creating Update Package",
-                                                            c_PackagePathTmp, s32_CleanUpResult, mhc_ErrorMessage);
-      c_Return = make_error_code_from_stw(s32_CleanUpResult);
+                                                            c_PackagePathTmp, c_Return, mhc_ErrorMessage);
    }
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
@@ -193,10 +188,8 @@ std::error_code C_OscXceCreate::mh_CheckParamsToCreatePackage(
    const std::string & orc_PackagePath, const std::vector<std::string> & orc_CertificatesPath,
    const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters)
 {
-   //C_OscSpaServicePackageCreateUtil still reports the STW int32_t error convention
-   std::error_code c_Return = make_error_code_from_stw(
-      C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath, mhc_USE_CASE, hc_PACKAGE_EXT,
-                                                               hc_PACKAGE_EXT_TMP, mhc_ErrorMessage, false));
+   std::error_code c_Return = C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath, mhc_USE_CASE, hc_PACKAGE_EXT,
+                                                               hc_PACKAGE_EXT_TMP, mhc_ErrorMessage, false);
 
    if (!c_Return)
    {

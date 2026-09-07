@@ -72,7 +72,7 @@ int32_t C_SyvUpPacParamSetFileInfo::ReadFile(void)
    C_OscParamSetHandler c_FileHandler;
 
    const int32_t s32_Retval = c_FileHandler.ReadFile(
-      this->mc_Path.toStdString().c_str(), false, true, &u16_FileCrc, &q_OptionlContentMissing);
+      this->mc_Path.toStdString().c_str(), false, true, &u16_FileCrc, &q_OptionlContentMissing).value();
 
    if (s32_Retval == C_NO_ERR)
    {

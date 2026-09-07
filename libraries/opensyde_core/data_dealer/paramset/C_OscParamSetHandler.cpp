@@ -12,9 +12,12 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "TglUtils.hpp"
 #include "TglFile.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscChecksummedXml.hpp"
 #include "C_OscParamSetHandler.hpp"
 #include "C_OscParamSetRawNodeFiler.hpp"
@@ -54,15 +57,15 @@ C_OscParamSetHandler::C_OscParamSetHandler(void)
    \param[in] oq_InterpretedDataOnly   Flag to load only the interpreted data and not the raw data
 
    \return
-   C_NO_ERR   data saved
-   C_RANGE    file already exists
-   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
+   Errc::success   data saved
+   Errc::range     file already exists
+   Errc::rd_wr     could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetHandler::CreateCleanFileWithoutCrc(const std::string & orc_FilePath,
-                                                        const bool oq_InterpretedDataOnly) const
+std::error_code C_OscParamSetHandler::CreateCleanFileWithoutCrc(const std::string & orc_FilePath,
+                                                                const bool oq_InterpretedDataOnly) const
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (TglFileExists(orc_FilePath.c_str()) == false)
    {
@@ -87,10 +90,10 @@ int32_t C_OscParamSetHandler::CreateCleanFileWithoutCrc(const std::string & orc_
             tgl_assert(c_XmlParser.SelectNodeParent() == "nodes");
          }
 
-         s32_Return = c_XmlParser.SaveToFile(orc_FilePath);
-         if (s32_Return != C_NO_ERR)
+         c_Return = make_error_code_from_stw(c_XmlParser.SaveToFile(orc_FilePath));
+         if (c_Return)
          {
-            s32_Return = C_RD_WR;
+            c_Return = Errc::rd_wr;
          }
       }
       else
@@ -100,9 +103,9 @@ int32_t C_OscParamSetHandler::CreateCleanFileWithoutCrc(const std::string & orc_
    }
    else
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -114,21 +117,21 @@ int32_t C_OscParamSetHandler::CreateCleanFileWithoutCrc(const std::string & orc_
    \param[in,out] opu16_FileCrc              Optional storage for read file CRC
                                              (only set if no err and oq_IgnoreCrc is false)
    \param[in,out] opq_MissingOptionalContent Optional flag for indication of optional content missing
-                                             Warning: only valid if C_NO_ERR
+                                             Warning: only valid if Errc::success
 
    \return
-   C_NO_ERR   data read
-   C_RD_WR    specified file does not exist
-              specified file is present but structure is invalid (e.g. invalid XML file; not checksum found)
-   C_CHECKSUM specified file is present but checksum is invalid
-   C_CONFIG   file does not contain essential information
+   Errc::success    data read
+   Errc::rd_wr      specified file does not exist
+                    specified file is present but structure is invalid (e.g. invalid XML file; not checksum found)
+   Errc::checksum   specified file is present but checksum is invalid
+   Errc::config     file does not contain essential information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetHandler::ReadFile(const std::string & orc_FilePath, const bool oq_IgnoreCrc,
-                                       const bool oq_InterpretedDataOnly, uint16_t * const opu16_FileCrc,
-                                       bool * const opq_MissingOptionalContent)
+std::error_code C_OscParamSetHandler::ReadFile(const std::string & orc_FilePath, const bool oq_IgnoreCrc,
+                                               const bool oq_InterpretedDataOnly, uint16_t * const opu16_FileCrc,
+                                               bool * const opq_MissingOptionalContent)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    this->ClearContent();
    if (TglFileExists(orc_FilePath) == true)
@@ -143,19 +146,19 @@ int32_t C_OscParamSetHandler::ReadFile(const std::string & orc_FilePath, const b
          pc_Parser = new C_OscChecksummedXml();
       }
 
-      s32_Retval = pc_Parser->LoadFromFile(orc_FilePath);
-      if (s32_Retval == C_NO_ERR)
+      c_Retval = make_error_code_from_stw(pc_Parser->LoadFromFile(orc_FilePath));
+      if (!c_Retval)
       {
          if (pc_Parser->SelectRoot() == "opensyde-parameter-sets")
          {
-            s32_Retval = C_OscParamSetRawNodeFiler::h_CheckFileVersion(*pc_Parser);
-            if (s32_Retval == C_NO_ERR)
+            c_Retval = C_OscParamSetRawNodeFiler::h_CheckFileVersion(*pc_Parser);
+            if (!c_Retval)
             {
                bool q_MissingOptionalContent = false;
                C_OscParamSetRawNodeFiler::h_LoadFileInfo(*pc_Parser, this->mc_Data.c_FileInfo,
                                                          q_MissingOptionalContent);
-               s32_Retval = this->m_LoadNodes(*pc_Parser, oq_InterpretedDataOnly, q_MissingOptionalContent);
-               if ((opu16_FileCrc != nullptr) && (s32_Retval == C_NO_ERR))
+               c_Retval = this->m_LoadNodes(*pc_Parser, oq_InterpretedDataOnly, q_MissingOptionalContent);
+               if ((opu16_FileCrc != nullptr) && (!c_Retval))
                {
                   *opu16_FileCrc = static_cast<uint16_t>(pc_Parser->GetAttributeUint32("file_crc"));
                }
@@ -168,30 +171,30 @@ int32_t C_OscParamSetHandler::ReadFile(const std::string & orc_FilePath, const b
          else
          {
             osc_write_log_error("Loading Dataset data", "Could not find root element \"opensyde-parameter-sets\".");
-            s32_Retval = C_RD_WR;
+            c_Retval = Errc::rd_wr;
          }
       }
       else
       {
-         if (s32_Retval != C_CHECKSUM)
+         if (c_Retval != Errc::checksum)
          {
-            s32_Retval = C_RD_WR;
+            c_Retval = Errc::rd_wr;
          }
       }
       delete pc_Parser;
    }
    else
    {
-      s32_Retval = C_RD_WR;
+      c_Retval = Errc::rd_wr;
    }
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       const std::string c_Text = "Could not load file \"" + orc_FilePath + "\". Error code: " +
-                                 std::to_string(s32_Retval);
+                                 std::to_string(c_Retval.value());
       osc_write_log_error("Loading Dataset data", c_Text);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -200,13 +203,13 @@ int32_t C_OscParamSetHandler::ReadFile(const std::string & orc_FilePath, const b
    \param[in] orc_FilePath Parameter file path
 
    \return
-   C_NO_ERR CRC updated
-   C_CONFIG Unexpected XML format
-   C_RD_WR  Error accessing file system
-   C_RANGE  File does not exist
+   Errc::success   CRC updated
+   Errc::config    Unexpected XML format
+   Errc::rd_wr     Error accessing file system
+   Errc::range     File does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetHandler::h_UpdateCrcForFile(const std::string & orc_FilePath)
+std::error_code C_OscParamSetHandler::h_UpdateCrcForFile(const std::string & orc_FilePath)
 {
    return C_OscParamSetFilerBase::h_AddCrc(orc_FilePath);
 }
@@ -227,27 +230,27 @@ void C_OscParamSetHandler::ClearContent(void)
    \param[in] orc_Content Raw data for node (Node name used as ID)
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success   Operation success
+   Errc::range     Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetHandler::AddRawDataForNode(const C_OscParamSetRawNode & orc_Content)
+std::error_code C_OscParamSetHandler::AddRawDataForNode(const C_OscParamSetRawNode & orc_Content)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    for (uint32_t u32_ItRawNode = 0; u32_ItRawNode < this->mc_RawNodes.size(); ++u32_ItRawNode)
    {
       const C_OscParamSetRawNode & rc_CurRawNode = this->mc_RawNodes[u32_ItRawNode];
       if (rc_CurRawNode.c_Name == orc_Content.c_Name)
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       this->mc_RawNodes.push_back(orc_Content);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -267,13 +270,13 @@ void C_OscParamSetHandler::AddInterpretedFileData(const C_OscParamSetInterpreted
    \param[in] orc_Content Interpreted data for node (Node name used as ID)
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success   Operation success
+   Errc::range     Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetHandler::AddInterpretedDataForNode(const C_OscParamSetInterpretedNode & orc_Content)
+std::error_code C_OscParamSetHandler::AddInterpretedDataForNode(const C_OscParamSetInterpretedNode & orc_Content)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    for (uint32_t u32_ItInterpretedNode = 0; u32_ItInterpretedNode < this->mc_Data.c_InterpretedNodes.size();
         ++u32_ItInterpretedNode)
@@ -282,14 +285,14 @@ int32_t C_OscParamSetHandler::AddInterpretedDataForNode(const C_OscParamSetInter
          this->mc_Data.c_InterpretedNodes[u32_ItInterpretedNode];
       if (rc_CurInterpretedNode.c_Name == orc_Content.c_Name)
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
       this->mc_Data.c_InterpretedNodes.push_back(orc_Content);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -380,14 +383,14 @@ const C_OscParamSetRawNode * C_OscParamSetHandler::GetRawDataForNode(const uint3
                                              Warning: flag is never set to false if optional content is present
 
    \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   Errc::success   data read
+   Errc::config    content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetHandler::m_LoadNodes(C_OscXmlParser & orc_XmlParser, const bool oq_InterpretedDataOnly,
-                                          bool & orq_MissingOptionalContent)
+std::error_code C_OscParamSetHandler::m_LoadNodes(C_OscXmlParser & orc_XmlParser, const bool oq_InterpretedDataOnly,
+                                                  bool & orq_MissingOptionalContent)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_XmlParser.SelectNodeChild("nodes") == "nodes")
    {
@@ -402,9 +405,9 @@ int32_t C_OscParamSetHandler::m_LoadNodes(C_OscXmlParser & orc_XmlParser, const 
             //Content
             if (oq_InterpretedDataOnly == false)
             {
-               s32_Retval = C_OscParamSetRawNodeFiler::h_LoadRawNode(c_RawItem, orc_XmlParser,
-                                                                     orq_MissingOptionalContent);
-               if (s32_Retval == C_NO_ERR)
+               c_Retval = C_OscParamSetRawNodeFiler::h_LoadRawNode(c_RawItem, orc_XmlParser,
+                                                                   orq_MissingOptionalContent);
+               if (!c_Retval)
                {
                   this->mc_RawNodes.push_back(c_RawItem);
                }
@@ -412,14 +415,14 @@ int32_t C_OscParamSetHandler::m_LoadNodes(C_OscXmlParser & orc_XmlParser, const 
             else
             {
                // Do not load the raw data
-               s32_Retval = C_NO_ERR;
+               c_Retval = Errc::success;
             }
 
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
-               s32_Retval = C_OscParamSetInterpretedNodeFiler::h_LoadInterpretedNode(c_InterpretedItem, orc_XmlParser,
-                                                                                     orq_MissingOptionalContent);
-               if (s32_Retval == C_NO_ERR)
+               c_Retval = C_OscParamSetInterpretedNodeFiler::h_LoadInterpretedNode(c_InterpretedItem, orc_XmlParser,
+                                                                                  orq_MissingOptionalContent);
+               if (!c_Retval)
                {
                   this->mc_Data.c_InterpretedNodes.push_back(c_InterpretedItem);
                }
@@ -428,14 +431,14 @@ int32_t C_OscParamSetHandler::m_LoadNodes(C_OscXmlParser & orc_XmlParser, const 
             //Next
             c_SelectedNode = orc_XmlParser.SelectNodeNext("node");
          }
-         while ((c_SelectedNode == "node") && (s32_Retval == C_NO_ERR));
+         while ((c_SelectedNode == "node") && (!c_Retval));
          //Return
          tgl_assert(orc_XmlParser.SelectNodeParent() == "nodes");
       }
       else
       {
          osc_write_log_error("Loading Dataset data", "Could not find \"nodes\".\"node\" node.");
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-parameter-sets");
@@ -443,7 +446,7 @@ int32_t C_OscParamSetHandler::m_LoadNodes(C_OscXmlParser & orc_XmlParser, const 
    else
    {
       osc_write_log_error("Loading Dataset data", "Could not find \"nodes\".");
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }

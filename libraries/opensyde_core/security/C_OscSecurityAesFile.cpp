@@ -545,20 +545,19 @@ std::error_code C_OscSecurityAesFile::h_CreateEncryptedZipFile(const std::string
    const std::string c_ZipFileTmp = orc_PathForZipFile + std::string("_tmp");
    std::string c_ErrorText;
 
-   const int32_t s32_ZipResult = C_OscZipFile::h_CreateZipFile(orc_FolderPathToZip, orc_SupFiles, c_ZipFileTmp,
+   const std::error_code c_ZipResult = C_OscZipFile::h_CreateZipFile(orc_FolderPathToZip, orc_SupFiles, c_ZipFileTmp,
                                                                 &c_ErrorText);
-   if (s32_ZipResult != C_NO_ERR)
+   if (c_ZipResult)
    {
       osc_write_log_error("Creating Encrypted Zip File", "Creating zip file failed with error: " +
-                          C_OscLoggingHandler::h_StwError(s32_ZipResult) +
+                          c_ZipResult.message() +
                           " and error text: " + c_ErrorText.c_str());
 
       if (opc_ErrorMessage != nullptr)
       {
          *opc_ErrorMessage = c_ErrorText;
       }
-      // Map the int32_t error to our error_code
-      return std::error_code(s32_ZipResult, STWErrorCategory::Instance());
+      return c_ZipResult;
    }
 
    if (orc_Key != "")
@@ -646,23 +645,23 @@ std::error_code C_OscSecurityAesFile::h_UnpackEncryptedZipFile(const std::string
    if (c_Return == Errc::success)
    {
       std::string c_ErrorText;
-      const int32_t s32_UnzipResult = C_OscZipFile::h_UnpackZipFile(c_ZipFileTmp, orc_FolderPathToUnzip, &c_ErrorText);
+      const std::error_code c_UnzipResult = C_OscZipFile::h_UnpackZipFile(c_ZipFileTmp, orc_FolderPathToUnzip, &c_ErrorText);
 
       if (q_TemporaryFileUsed == true)
       {
          // Remove the non encrypted temporary file
          if (std::remove(c_ZipFileTmp.c_str()) != 0)
          {
-            if (s32_UnzipResult == C_NO_ERR)
+            if (!c_UnzipResult)
             {
                c_Return = Errc::busy;
             }
          }
       }
 
-      if (s32_UnzipResult != C_NO_ERR)
+      if (c_UnzipResult)
       {
-         c_Return = std::error_code(s32_UnzipResult, STWErrorCategory::Instance());
+         c_Return = c_UnzipResult;
       }
 
       if (c_Return != Errc::success)

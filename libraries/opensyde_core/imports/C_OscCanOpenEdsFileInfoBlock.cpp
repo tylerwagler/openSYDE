@@ -12,7 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscCanOpenEdsFileInfoBlock.hpp"
 #include "C_OscCanOpenEdsDeviceInfoBlock.hpp"
@@ -80,15 +83,15 @@ void C_OscCanOpenEdsFileInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Values read
-   \retval   C_CONFIG   At least one value not found, for details see error message
+   \retval   Errc::success   Values read
+   \retval   Errc::config    At least one value not found, for details see error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenEdsFileInfoBlock::LoadFromIni(stw::scl::C_SclIniFile & orc_File,
-                                                  std::string & orc_LastError)
+std::error_code C_OscCanOpenEdsFileInfoBlock::LoadFromIni(stw::scl::C_SclIniFile & orc_File,
+                                                          std::string & orc_LastError)
 {
    //lint -e{8062} Kept for later error reporting
-   const int32_t s32_Retval = C_NO_ERR;
+   const std::error_code c_Retval = Errc::success;
    const std::string c_SectionName = "FileInfo";
 
    orc_LastError = "";
@@ -110,5 +113,5 @@ int32_t C_OscCanOpenEdsFileInfoBlock::LoadFromIni(stw::scl::C_SclIniFile & orc_F
       this->c_ModifiedBy = orc_File.ReadString(c_SectionName, "ModifiedBy", "");
    }
 
-   return s32_Retval;
+   return c_Retval;
 }

@@ -284,23 +284,23 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const std::string & 
    // * system definition file
    if (!c_Return)
    {
-      c_Return = static_cast<Errc>(C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(orc_SystemDefinition,
+      c_Return = C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(orc_SystemDefinition,
                                                                                            mhc_SUP_SYSDEF,
                                                                                            "Creating Update Package",
                                                                                            c_PackagePathTmp, "",
                                                                                            c_SupFiles,
-                                                                                           mhc_ErrorMessage));
+                                                                                           mhc_ErrorMessage);
    }
 
    // device.ini and device definition files
    if (!c_Return)
    {
-      c_Return = static_cast<Errc>(C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
+      c_Return = C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
                                       orc_SystemDefinition,
                                       "Creating Update Package",
                                       c_PackagePathTmp, "",
                                       c_SupFiles,
-                                      mhc_ErrorMessage));
+                                      mhc_ErrorMessage);
    }
 
    // * service update package file (service_update_package.syde_supdef)
@@ -323,20 +323,19 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const std::string & 
    // package temporary result folder to zip file
    if ((!c_Return) || (c_Return == Errc::warn))
    {
-      c_Return = static_cast<Errc>(C_OscSpaServicePackageCreateUtil::h_CreateZip("Creating Update Package",
+      c_Return = C_OscSpaServicePackageCreateUtil::h_CreateZip("Creating Update Package",
                                                                                  c_PackagePathTmp,
                                                                                  c_TargetZipArchive, c_SupFiles,
-                                                                                 mhc_ErrorMessage));
+                                                                                 mhc_ErrorMessage);
    }
 
    // cleanup: delete temporary result folder
    if (q_TemporaryFolderCreated == true)
    {
       //h_CleanUpTempFolder still reads and writes the legacy int32_t representation
-      int32_t s32_ErrVal = c_Return.value();
+
       C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder("Creating Update Package",
-                                                            c_PackagePathTmp, s32_ErrVal, mhc_ErrorMessage);
-      c_Return = static_cast<Errc>(s32_ErrVal);
+                                                            c_PackagePathTmp, c_Return, mhc_ErrorMessage);
    }
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
@@ -531,12 +530,12 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_CheckParamsToCreatePackag
                                                                                   const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex, const vector<uint8_t> & orc_ActiveNodes, const vector<uint32_t> & orc_NodesUpdateOrder, const vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<std::string> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
                                                                                   const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
-   std::error_code c_Return = static_cast<Errc>(C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(
+   std::error_code c_Return = C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(
                                                    orc_PackagePath,
                                                    "Creating Update Package",
                                                    mhc_PACKAGE_EXT,
                                                    mhc_PACKAGE_EXT_TMP,
-                                                   mhc_ErrorMessage));
+                                                   mhc_ErrorMessage);
 
    // active bus index in range?
    if (!c_Return)
@@ -946,9 +945,9 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(
             else
             {
                c_Return =
-                  static_cast<Errc>(C_OscZipFile::h_CreateZipFile(orc_NodeFoldersAbs[u32_File], orc_SecFiles[u32_File],
+                  C_OscZipFile::h_CreateZipFile(orc_NodeFoldersAbs[u32_File], orc_SecFiles[u32_File],
                                                                   orc_SecPackageFilesAbs[u32_File],
-                                                                  &mhc_ErrorMessage));
+                                                                  &mhc_ErrorMessage);
             }
             if (!c_Return)
             {

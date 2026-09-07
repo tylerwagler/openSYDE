@@ -2,9 +2,12 @@
 
 #include <cstring>
 #include "stw_can.hpp"
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocol.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_CanMonProtocolCanOpen.hpp"
 #include "C_CanMonProtocolGd.hpp"
 #include "C_CanMonProtocolL2.hpp"
@@ -28,9 +31,9 @@ using namespace stw::can;
 
 //---------------------------------------------------------------------------
 
-int32_t C_CanMonProtocols::GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, std::string & orc_Description) const
+std::error_code C_CanMonProtocols::GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, std::string & orc_Description) const
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (static_cast<int32_t>(oe_L7Protocol) < gs32_CMON_NUM_PROTOCOLS)
    {
@@ -39,9 +42,9 @@ int32_t C_CanMonProtocols::GetProtocolName(const e_CanMonL7Protocols oe_L7Protoc
    else
    {
       orc_Description = "Protocol: Unknown";
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //---------------------------------------------------------------------------
@@ -187,10 +190,10 @@ e_CanMonL7Protocols C_CanMonProtocols::GetProtocolMode(void) const
 
 //---------------------------------------------------------------------------
 
-int32_t C_CanMonProtocols::SetProtocolMode(const e_CanMonL7Protocols oe_L7Protocol)
+std::error_code C_CanMonProtocols::SetProtocolMode(const e_CanMonL7Protocols oe_L7Protocol)
 {
    me_ActiveProtocol = oe_L7Protocol;
-   return C_NO_ERR;
+   return Errc::success;
 }
 
 //---------------------------------------------------------------------------
@@ -202,7 +205,7 @@ bool C_CanMonProtocols::GetDecimalMode(void) const
 
 //---------------------------------------------------------------------------
 
-int32_t C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal)
+std::error_code C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal)
 {
    int32_t s32_Loop;
 
@@ -214,7 +217,7 @@ int32_t C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal)
       mapc_Protocols[s32_Loop]->SetDecimal(oq_Decimal);
    }
 
-   return C_NO_ERR;
+   return Errc::success;
 }
 
 //-----------------------------------------------------------------------------
@@ -234,31 +237,31 @@ int32_t C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal)
    C_RD_WR   -> could not write
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocols::SaveProtocolParametersToIni(const std::string & orc_FileName,
+std::error_code C_CanMonProtocols::SaveProtocolParametersToIni(const std::string & orc_FileName,
                                                        const std::string & orc_Section)
 const
 {
-   int32_t s32_Return;
-   int32_t s32_Loop;
+   std::error_code c_Return = Errc::success;
 
    try
    {
       C_SclIniFile c_IniFile(orc_FileName);
-      s32_Return = 0;
-      for (s32_Loop = 0; s32_Loop < gs32_CMON_NUM_PROTOCOLS; s32_Loop++)
+      //The pre-migration code summed the per-protocol results and mapped any
+      //non-zero total to C_RD_WR. Record the first failure instead, but keep
+      //writing every protocol so behaviour is unchanged.
+      for (int32_t s32_Loop = 0; s32_Loop < gs32_CMON_NUM_PROTOCOLS; s32_Loop++)
       {
-         s32_Return += mapc_Protocols[s32_Loop]->SaveParamsToIni(c_IniFile, orc_Section);
-      }
-      if (s32_Return != C_NO_ERR)
-      {
-         s32_Return = C_RD_WR;
+         if (mapc_Protocols[s32_Loop]->SaveParamsToIni(c_IniFile, orc_Section))
+         {
+            c_Return = Errc::rd_wr;
+         }
       }
    }
    catch (...)
    {
-      s32_Return = C_RD_WR;
+      c_Return = Errc::rd_wr;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //-----------------------------------------------------------------------------
@@ -277,32 +280,31 @@ const
    C_RD_WR   -> could not read (file does not exist)
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocols::LoadProtocolParametersFromIni(const std::string & orc_FileName,
+std::error_code C_CanMonProtocols::LoadProtocolParametersFromIni(const std::string & orc_FileName,
                                                          const std::string & orc_Section)
 const
 {
-   int32_t s32_Return;
-   int32_t s32_Loop;
+   std::error_code c_Return = Errc::success;
 
    if (TglFileExists(orc_FileName) == false)
    {
-      s32_Return = C_RD_WR;
+      c_Return = Errc::rd_wr;
    }
    else
    {
       C_SclIniFile c_IniFile(orc_FileName);
 
-      s32_Return  = 0;
-      for (s32_Loop = 0; s32_Loop < gs32_CMON_NUM_PROTOCOLS; s32_Loop++)
+      //see SaveProtocolParametersToIni: any per-protocol failure maps to rd_wr,
+      //and every protocol is still read
+      for (int32_t s32_Loop = 0; s32_Loop < gs32_CMON_NUM_PROTOCOLS; s32_Loop++)
       {
-         s32_Return += mapc_Protocols[s32_Loop]->LoadParamsFromIni(c_IniFile, orc_Section);
-      }
-      if (s32_Return != C_NO_ERR)
-      {
-         s32_Return = C_RD_WR;
+         if (mapc_Protocols[s32_Loop]->LoadParamsFromIni(c_IniFile, orc_Section))
+         {
+            c_Return = Errc::rd_wr;
+         }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //-----------------------------------------------------------------------------

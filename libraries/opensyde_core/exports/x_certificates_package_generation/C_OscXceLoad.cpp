@@ -115,10 +115,8 @@ std::error_code C_OscXceLoad::h_ProcessPackage(const std::string & orc_PackagePa
 std::error_code C_OscXceLoad::mh_CheckParamsToProcessPackage(const std::string & orc_PackagePath,
                                                              const std::string & orc_TargetUnzipPath)
 {
-   //C_OscSpaServicePackageLoadUtil still reports the STW int32_t error convention
-   std::error_code c_Return = make_error_code_from_stw(
-      C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(orc_PackagePath, orc_TargetUnzipPath,
-                                                                      mhc_USE_CASE, mhc_ErrorMessage));
+   std::error_code c_Return = C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(orc_PackagePath, orc_TargetUnzipPath,
+                                                                      mhc_USE_CASE, mhc_ErrorMessage);
 
    //check if all files are present
    if (!c_Return)
@@ -164,9 +162,7 @@ std::error_code C_OscXceLoad::mh_CheckXcertFiles(const std::string & orc_Package
 
    c_NecessaryFilesTop.push_back(C_OscXceManifestFiler::hc_FILE_NAME); //".syde_pkg"
 
-   //C_OscSpaServicePackageLoadUtil still reports the STW int32_t error convention
-   c_Return = make_error_code_from_stw(
-      C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath, c_NecessaryFilesTop));
+   c_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath, c_NecessaryFilesTop);
 
    return c_Return;
 }

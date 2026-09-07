@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include <QFileInfo>
 
 #include "stwerrors.hpp"
@@ -364,8 +365,8 @@ void C_SyvUpInformationWidget::InitUpdatePackage(
                {
                   //Do the address based byte count stuff
                   C_OscHexFile c_HexFile;
-                  const uint32_t u32_Result = c_HexFile.LoadFromFile(rc_File.c_str());
-                  if (u32_Result == stw::hex_file::NO_ERR)
+                  const std::error_code c_Result = c_HexFile.LoadFromFile(rc_File.c_str());
+                  if (!c_Result)
                   {
                      q_UseFileSize = false;
                      c_Files.push_back(static_cast<uint64_t>(c_HexFile.ByteCount()));
@@ -391,7 +392,7 @@ void C_SyvUpInformationWidget::InitUpdatePackage(
             {
                const std::string & rc_File = rc_Device.c_FilesToWriteToNvm[u32_ItFile];
                C_OscParamSetHandler c_FileHandler;
-               if (c_FileHandler.ReadFile(rc_File, false, true, nullptr) == C_NO_ERR)
+               if (!c_FileHandler.ReadFile(rc_File, false, true, nullptr))
                {
                   const C_OscParamSetInterpretedData & rc_InterpretedData = c_FileHandler.GetInterpretedData();
                   if (rc_InterpretedData.c_InterpretedNodes.size() >= 1UL)

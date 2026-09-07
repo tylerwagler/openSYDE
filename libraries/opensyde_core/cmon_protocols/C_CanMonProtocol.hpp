@@ -10,6 +10,10 @@
 #define CCMONPROTOCOLHPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
+#include "C_OscErrorCategory.hpp"
+
 #include "stwtypes.hpp"
 #include "stw_can.hpp"
 #include "C_CanMonProtocolBase.hpp"
@@ -68,12 +72,12 @@ public:
    C_CanMonProtocols(const C_CanMonProtocols & orc_Source);               //copying will cause compiler error
    C_CanMonProtocols & operator = (const C_CanMonProtocols & orc_Source); //assignment will cause compiler error
 
-   int32_t SetProtocolMode(const e_CanMonL7Protocols oe_L7Protocol);
+   std::error_code SetProtocolMode(const e_CanMonL7Protocols oe_L7Protocol);
    e_CanMonL7Protocols GetProtocolMode(void) const;
 
-   int32_t GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, std::string & orc_Description) const;
+   std::error_code GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, std::string & orc_Description) const;
 
-   int32_t SetDecimalMode(const bool oq_Decimal);
+   std::error_code SetDecimalMode(const bool oq_Decimal);
    bool GetDecimalMode(void) const;
 
    static std::string FormatTimeStamp(const uint64_t ou64_TimeStampUs, const bool oq_LeftFillBlanks = false);
@@ -88,9 +92,9 @@ public:
    std::string MessageToStringLog(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
    std::string MessageToStringLog(const stw::can::T_STWCAN_Msg_TX & orc_Msg) const;
 
-   int32_t SaveProtocolParametersToIni(const std::string & orc_FileName,
+   std::error_code SaveProtocolParametersToIni(const std::string & orc_FileName,
                                        const std::string & orc_Section) const;
-   int32_t LoadProtocolParametersFromIni(const std::string & orc_FileName,
+   std::error_code LoadProtocolParametersFromIni(const std::string & orc_FileName,
                                          const std::string & orc_Section) const;
 };
 

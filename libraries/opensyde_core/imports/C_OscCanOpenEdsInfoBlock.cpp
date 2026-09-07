@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "TglFile.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_SclIniFile.hpp"
@@ -69,19 +72,19 @@ void C_OscCanOpenEdsInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Values read
-   \retval   C_CONFIG   At least one value not found, for details see error message
+   \retval   Errc::success   Values read
+   \retval   Errc::config    At least one value not found, for details see error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenEdsInfoBlock::LoadFromFile(C_SclIniFile & orc_File, std::string & orc_LastError)
+std::error_code C_OscCanOpenEdsInfoBlock::LoadFromFile(C_SclIniFile & orc_File, std::string & orc_LastError)
 {
-   int32_t s32_Retval = this->c_FileInfo.LoadFromIni(orc_File, orc_LastError);
+   std::error_code c_Retval = this->c_FileInfo.LoadFromIni(orc_File, orc_LastError);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = this->c_DeviceInfo.LoadFromIni(orc_File, orc_LastError);
+      c_Retval = this->c_DeviceInfo.LoadFromIni(orc_File, orc_LastError);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

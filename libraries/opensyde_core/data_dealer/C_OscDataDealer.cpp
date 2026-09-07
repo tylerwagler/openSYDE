@@ -14,8 +14,11 @@
 #include "precomp_headers.hpp"
 #include "C_SclStringCompat.hpp"
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscDataDealer.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -123,26 +126,26 @@ uint32_t C_OscDataDealer::GetNodeIndex(void) const
    \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    data read and placed in data pool
-   C_CONFIG    no node or diagnostic protocol are known (was this class properly Initialize()d ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_RANGE     specified data pool, list, element does not exist in data pools of configured node
-               protocol driver reported parameter out of range (does the protocol support the index range ?)
-   C_TIMEOUT   expected response not received within timeout
-   C_NOACT     could not send request (e.g. Tx buffer full)
-   C_RD_WR     protocol driver reported protocol violation
-   C_WARN      error response received
-   C_OVERFLOW  size of data received from server does not match size of specified data pool element
+   Errc::success    data read and placed in data pool
+   Errc::config     no node or diagnostic protocol are known (was this class properly Initialize()d ?)
+                    protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::range      specified data pool, list, element does not exist in data pools of configured node
+                    protocol driver reported parameter out of range (does the protocol support the index range ?)
+   Errc::timeout    expected response not received within timeout
+   Errc::noact      could not send request (e.g. Tx buffer full)
+   Errc::rd_wr      protocol driver reported protocol violation
+   Errc::warn       error response received
+   Errc::overflow   size of data received from server does not match size of specified data pool element
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                      const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
+std::error_code C_OscDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                              const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -153,7 +156,7 @@ int32_t C_OscDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, const uin
       //does the specified element exist ?
       if (pc_Element == nullptr)
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
       else
       {
@@ -163,20 +166,22 @@ int32_t C_OscDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, const uin
          //use communication function matching the element type
          if (pc_Element->GetArray() == false)
          {
-            s32_Return = mpc_DiagProtocol->DataPoolReadNumeric(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
-                                                               c_Data, opu8_NrCode);
+            c_Return = make_error_code_from_stw(
+               mpc_DiagProtocol->DataPoolReadNumeric(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
+                                                     c_Data, opu8_NrCode));
          }
          else
          {
-            s32_Return = mpc_DiagProtocol->DataPoolReadArray(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
-                                                             c_Data, opu8_NrCode);
+            c_Return = make_error_code_from_stw(
+               mpc_DiagProtocol->DataPoolReadArray(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
+                                                   c_Data, opu8_NrCode));
          }
-         if (s32_Return == C_NO_ERR)
+         if (!c_Return)
          {
             //we have data: is the size as expected ?
             if (c_Data.size() != pc_Element->GetSizeByte())
             {
-               s32_Return = C_OVERFLOW;
+               c_Return = Errc::overflow;
             }
             else
             {
@@ -195,7 +200,7 @@ int32_t C_OscDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, const uin
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -212,27 +217,27 @@ int32_t C_OscDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex, const uin
    \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    data written to server
-   C_CONFIG    no node or diagnostic protocol are known (was this class properly Initialize()d ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_RANGE     specified data pool, list, element does not exist in data pools of configured node
-               protocol driver reported parameter out of range (does the protocol support the index range ?)
-   C_OVERFLOW  value in data pool does not lie within defined min/max range (checked on client side)
-   C_TIMEOUT   expected response not received within timeout
-   C_NOACT     could not send request (e.g. Tx buffer full)
-   C_RD_WR     protocol driver reported protocol violation
-   C_WARN      error response received
-   C_COM       communication driver reported error
+   Errc::success    data written to server
+   Errc::config     no node or diagnostic protocol are known (was this class properly Initialize()d ?)
+                    protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::range      specified data pool, list, element does not exist in data pools of configured node
+                    protocol driver reported parameter out of range (does the protocol support the index range ?)
+   Errc::overflow   value in data pool does not lie within defined min/max range (checked on client side)
+   Errc::timeout    expected response not received within timeout
+   Errc::noact      could not send request (e.g. Tx buffer full)
+   Errc::rd_wr      protocol driver reported protocol violation
+   Errc::warn       error response received
+   Errc::com        communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealer::DataPoolWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                       const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
+std::error_code C_OscDataDealer::DataPoolWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                               const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -242,17 +247,17 @@ int32_t C_OscDataDealer::DataPoolWrite(const uint8_t ou8_DataPoolIndex, const ui
       //does the specified element exist ?
       if (pc_Element == nullptr)
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
       else
       {
          std::vector<uint8_t> c_Data;
 
          //is the value within the defines min/max ranges ?
-         s32_Return = pc_Element->CheckValueRange();
-         if (s32_Return != C_NO_ERR)
+         c_Return = make_error_code_from_stw(pc_Element->CheckValueRange());
+         if (c_Return)
          {
-            s32_Return = C_OVERFLOW;
+            c_Return = Errc::overflow;
          }
          else
          {
@@ -269,18 +274,20 @@ int32_t C_OscDataDealer::DataPoolWrite(const uint8_t ou8_DataPoolIndex, const ui
             //use communication function matching the element type
             if (pc_Element->GetArray() == false)
             {
-               s32_Return = mpc_DiagProtocol->DataPoolWriteNumeric(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
-                                                                   c_Data, opu8_NrCode);
+               c_Return = make_error_code_from_stw(
+                  mpc_DiagProtocol->DataPoolWriteNumeric(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
+                                                         c_Data, opu8_NrCode));
             }
             else
             {
-               s32_Return = mpc_DiagProtocol->DataPoolWriteArray(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
-                                                                 c_Data, opu8_NrCode);
+               c_Return = make_error_code_from_stw(
+                  mpc_DiagProtocol->DataPoolWriteArray(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
+                                                       c_Data, opu8_NrCode));
             }
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -299,26 +306,26 @@ int32_t C_OscDataDealer::DataPoolWrite(const uint8_t ou8_DataPoolIndex, const ui
    \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    data read and placed in data pool
-   C_CONFIG    no node or diagnostic protocol are known (was this class properly Initialize()d ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_RANGE     specified data pool, list, element does not exist in data pools of configured node
-               protocol driver reported parameter out of range (does the protocol support the address range ?)
-   C_TIMEOUT   expected response not received within timeout
-   C_NOACT     could not send request (e.g. Tx buffer full)
-   C_RD_WR     protocol driver reported protocol violation
-   C_WARN      error response received
-   C_COM       expected server response not received because of communication error
+   Errc::success    data read and placed in data pool
+   Errc::config     no node or diagnostic protocol are known (was this class properly Initialize()d ?)
+                    protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::range      specified data pool, list, element does not exist in data pools of configured node
+                    protocol driver reported parameter out of range (does the protocol support the address range ?)
+   Errc::timeout    expected response not received within timeout
+   Errc::noact      could not send request (e.g. Tx buffer full)
+   Errc::rd_wr      protocol driver reported protocol violation
+   Errc::warn       error response received
+   Errc::com        expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                 const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
+std::error_code C_OscDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                         const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -329,7 +336,7 @@ int32_t C_OscDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t
       //does the specified element exist ?
       if (pc_Element == nullptr)
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
       else
       {
@@ -337,8 +344,9 @@ int32_t C_OscDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t
 
          c_Data.resize(pc_Element->GetSizeByte());
          //request data from server
-         s32_Return = mpc_DiagProtocol->NvmRead(pc_Element->u32_NvmStartAddress, c_Data, opu8_NrCode);
-         if (s32_Return == C_NO_ERR)
+         c_Return = make_error_code_from_stw(
+            mpc_DiagProtocol->NvmRead(pc_Element->u32_NvmStartAddress, c_Data, opu8_NrCode));
+         if (!c_Return)
          {
             //we have data
             //convert to native endianness depending on the type ...
@@ -354,7 +362,7 @@ int32_t C_OscDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -378,27 +386,27 @@ int32_t C_OscDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex, const uint16_t
    \param[out]    opu8_NrCode          if != NULL: negative response code in case of an error response
 
    \return
-   C_NO_ERR    data written to server
-   C_CONFIG    no node or diagnostic protocol are known (was this class properly Initialize()d ?)
-               protocol driver reported configuration error (was the protocol driver properly initialized ?)
-   C_RANGE     specified data pool, list, element does not exist in data pools of configured node
-               protocol driver reported parameter out of range (does the protocol support the index range ?)
-   C_OVERFLOW  value in data pool does not lie within defined min/max range (checked on client side)
-   C_TIMEOUT   expected response not received within timeout
-   C_NOACT     could not send request (e.g. Tx buffer full)
-   C_RD_WR     protocol driver reported protocol violation
-   C_WARN      error response received
-   C_COM       expected server response not received because of communication error
+   Errc::success    data written to server
+   Errc::config     no node or diagnostic protocol are known (was this class properly Initialize()d ?)
+                    protocol driver reported configuration error (was the protocol driver properly initialized ?)
+   Errc::range      specified data pool, list, element does not exist in data pools of configured node
+                    protocol driver reported parameter out of range (does the protocol support the index range ?)
+   Errc::overflow   value in data pool does not lie within defined min/max range (checked on client side)
+   Errc::timeout    expected response not received within timeout
+   Errc::noact      could not send request (e.g. Tx buffer full)
+   Errc::rd_wr      protocol driver reported protocol violation
+   Errc::warn       error response received
+   Errc::com        expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealer::NvmWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                  const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
+std::error_code C_OscDataDealer::NvmWrite(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
+                                          const uint16_t ou16_ElementIndex, uint8_t * const opu8_NrCode)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if ((mpc_Node == nullptr) || (mpc_DiagProtocol == nullptr))
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -408,17 +416,17 @@ int32_t C_OscDataDealer::NvmWrite(const uint8_t ou8_DataPoolIndex, const uint16_
       //does the specified element exist ?
       if (pc_Element == nullptr)
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
       else
       {
          std::vector<uint8_t> c_Data;
 
          //is the value within the defined min/max ranges ?
-         s32_Return = pc_Element->CheckNvmValueRange();
-         if (s32_Return != C_NO_ERR)
+         c_Return = make_error_code_from_stw(pc_Element->CheckNvmValueRange());
+         if (c_Return)
          {
-            s32_Return = C_OVERFLOW;
+            c_Return = Errc::overflow;
          }
          else
          {
@@ -433,11 +441,12 @@ int32_t C_OscDataDealer::NvmWrite(const uint8_t ou8_DataPoolIndex, const uint16_
             }
 
             //write data to server:
-            s32_Return = mpc_DiagProtocol->NvmWrite(pc_Element->u32_NvmStartAddress, c_Data, opu8_NrCode);
+            c_Return = make_error_code_from_stw(
+               mpc_DiagProtocol->NvmWrite(pc_Element->u32_NvmStartAddress, c_Data, opu8_NrCode));
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

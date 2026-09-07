@@ -339,8 +339,8 @@ std::error_code C_OscSupServiceUpdatePackageLoad::mh_CheckSupFiles(const std::st
    c_NecessaryFiles.push_back(C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF); //".syde_supdef"
    c_NecessaryFiles.push_back(mhc_SUP_SYSDEF);                                 //".syde_sysdef"
 
-   c_Return = static_cast<Errc>(C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath,
-                                                                                    c_NecessaryFiles));
+   c_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath,
+                                                                                    c_NecessaryFiles);
 
    return c_Return;
 }
@@ -369,11 +369,11 @@ std::error_code C_OscSupServiceUpdatePackageLoad::mh_CheckParamsToProcessPackage
 
    if (oq_IsZip)
    {
-      c_Return = static_cast<Errc>(C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(
+      c_Return = C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(
                                       orc_PackagePath,
                                       orc_TargetUnzipPath,
                                       "Unpacking Update Package",
-                                      mhc_ErrorMessage));
+                                      mhc_ErrorMessage);
 
       //check if all files are present
       if (!c_Return)
@@ -580,8 +580,8 @@ std::error_code C_OscSupServiceUpdatePackageLoad::mh_UnpackNodes(const std::vect
             }
             else
             {
-               c_Return = static_cast<Errc>(C_OscZipFile::h_UnpackZipFile(c_FinalZipPath, c_TargetFolder,
-                                                                          &mhc_ErrorMessage));
+               c_Return = C_OscZipFile::h_UnpackZipFile(c_FinalZipPath, c_TargetFolder,
+                                                                          &mhc_ErrorMessage);
             }
          }
       }

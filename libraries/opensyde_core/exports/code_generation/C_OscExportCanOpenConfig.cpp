@@ -1390,7 +1390,7 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
       if (rc_CurrentPdo.c_CanOpenManagerOwnerNodeIndex.u32_NodeIndex == ou32_NodeIndex)
       {
          uint16_t u16_ObjectIndex;
-         int32_t s32_Return;
+         std::error_code c_Return = Errc::success;
          std::string c_PdoCommentText;
          const C_OscCanOpenObjectDictionary & rc_Od = orc_DeviceInfo.GetEdsFileContent();
          C_OscExportCanOpenConciseEntry c_Entry = C_OscExportCanOpenConciseEntry();
@@ -1412,8 +1412,8 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
             std::to_string(static_cast<uint32_t>(rc_CurrentPdo.u16_CanOpenManagerPdoIndex) + 1U);
 
          //check if COB-ID is missing or RO
-         s32_Return = rc_Od.IsCobIdRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_CobIdIsRo);
-         if (s32_Return != C_NO_ERR)
+         c_Return = rc_Od.IsCobIdRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_CobIdIsRo);
+         if (c_Return)
          {
             //if there is no entry we cannot assume it is writable
             q_CobIdIsRo = true;
@@ -1445,10 +1445,10 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
          {
             bool q_SectionRo;
             //check if transmission type is missing or RO
-            s32_Return = rc_Od.IsTransmissionTypeRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
+            c_Return = rc_Od.IsTransmissionTypeRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
 
             // _525
-            if ((s32_Return == C_NO_ERR) && (q_SectionRo == false))
+            if ((!c_Return) && (q_SectionRo == false))
             {
                uint8_t u8_TxMethodType = 0U;
                switch (rc_CurrentPdo.e_TxMethod)
@@ -1483,9 +1483,9 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
             }
 
             //check if inhibit time is missing or RO
-            s32_Return = rc_Od.IsInhibitTimeRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
+            c_Return = rc_Od.IsInhibitTimeRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
 
-            if ((s32_Return == C_NO_ERR) && (q_SectionRo == false))
+            if ((!c_Return) && (q_SectionRo == false))
             {
                //resolution of 100 micro second is needed for CANopen stack
                const uint16_t u16_InhibitTimeMicro = static_cast<uint16_t>(rc_CurrentPdo.u16_DelayTimeMs * 10U);
@@ -1498,9 +1498,9 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
             }
 
             //check if event time is missing or RO
-            s32_Return = rc_Od.IsEventTimerRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
+            c_Return = rc_Od.IsEventTimerRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
 
-            if ((s32_Return == C_NO_ERR) && (q_SectionRo == false))
+            if ((!c_Return) && (q_SectionRo == false))
             {
                uint16_t u16_EventTime;
 
@@ -1528,9 +1528,9 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
             if (oq_IsTx)
             {
                //check if sync start value is missing or RO (_525)
-               s32_Return = rc_Od.IsSyncStartRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
+               c_Return = rc_Od.IsSyncStartRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
 
-               if ((s32_Return == C_NO_ERR) && (q_SectionRo == false))
+               if ((!c_Return) && (q_SectionRo == false))
                {
                   //explicitly write "0" if the device does support sub06
                   const uint8_t u8_SYNC_START_VALUE = 0U;
@@ -1552,11 +1552,11 @@ void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
             u16_ObjectIndex += rc_CurrentPdo.u16_CanOpenManagerPdoIndex;
 
             //check if PDO mapping is missing or RO
-            s32_Return = rc_Od.IsPdoMappingRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
+            c_Return = rc_Od.IsPdoMappingRo(rc_CurrentPdo.u16_CanOpenManagerPdoIndex, oq_IsTx, q_SectionRo);
 
             //mapping can only be changed if the COB-ID is writable; otherwise the PDO is still active and cannot be
             // remapped
-            if ((s32_Return == C_NO_ERR) && (q_SectionRo == false) && (q_CobIdIsRo == false))
+            if ((!c_Return) && (q_SectionRo == false) && (q_CobIdIsRo == false))
             {
                //Clear PDO mapping
                c_Entry.SetConciseEntry(u16_ObjectIndex, 0x00U, static_cast<uint8_t>(0x0U),

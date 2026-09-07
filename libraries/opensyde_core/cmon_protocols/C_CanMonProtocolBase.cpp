@@ -10,9 +10,12 @@
 //----------------------------------------------------------------------------------------------------------------------
 #include "precomp_headers.hpp" //pre-compiled headers
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolBase.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include <string>
 #include "C_SclStringCompat.hpp"
@@ -38,11 +41,11 @@ using namespace stw::scl;
    else      -> error writing data
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocolBase::SaveParamsToIni(C_SclIniFile & orc_IniFile, const std::string & orc_Section)
+std::error_code C_CanMonProtocolBase::SaveParamsToIni(C_SclIniFile & orc_IniFile, const std::string & orc_Section)
 {
    (void)orc_IniFile;
    (void)orc_Section;
-   return C_NO_ERR; //nothing to save by default
+   return Errc::success; //nothing to save by default
 }
 
 //-----------------------------------------------------------------------------
@@ -60,11 +63,11 @@ int32_t C_CanMonProtocolBase::SaveParamsToIni(C_SclIniFile & orc_IniFile, const 
    else      -> error reading data
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocolBase::LoadParamsFromIni(C_SclIniFile & orc_IniFile, const std::string & orc_Section)
+std::error_code C_CanMonProtocolBase::LoadParamsFromIni(C_SclIniFile & orc_IniFile, const std::string & orc_Section)
 {
    (void)orc_IniFile;
    (void)orc_Section;
-   return C_NO_ERR; //nothing to load by default
+   return Errc::success; //nothing to load by default
 }
 
 //-----------------------------------------------------------------------------

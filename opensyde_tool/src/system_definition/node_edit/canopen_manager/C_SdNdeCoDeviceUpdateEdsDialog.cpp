@@ -874,8 +874,8 @@ void C_SdNdeCoDeviceUpdateEdsDialog::mh_AddAdaptedMessage(const C_OscCanOpenMana
                                                              c_NewOscMessage,
                                                              oq_MessageIsTxInEds, c_WarningMessages);
 
-   tgl_assert(rc_EdsFileContent.IsPdoMappingRo(c_NewOscMessage.u16_CanOpenManagerPdoIndex,
-                                               oq_MessageIsTxInEds, q_IsRo) == C_NO_ERR);
+   tgl_assert(!rc_EdsFileContent.IsPdoMappingRo(c_NewOscMessage.u16_CanOpenManagerPdoIndex,
+                                                oq_MessageIsTxInEds, q_IsRo));
    if (q_IsRo)
    {
       //Add info
@@ -985,7 +985,7 @@ C_OscCanOpenManagerDeviceInfo C_SdNdeCoDeviceUpdateEdsDialog::m_AdaptConfig(
       // Conditional replace
       if (rc_EdsFileContent.IsHeartbeatProducerSupported())
       {
-         tgl_assert(rc_EdsFileContent.IsHeartbeatProducerRo(q_IsRo) == C_NO_ERR);
+         tgl_assert(!rc_EdsFileContent.IsHeartbeatProducerRo(q_IsRo));
          if (q_IsRo)
          {
             c_NewConfig.q_EnableHeartbeatProducing = false;
@@ -999,7 +999,7 @@ C_OscCanOpenManagerDeviceInfo C_SdNdeCoDeviceUpdateEdsDialog::m_AdaptConfig(
       }
       if (rc_EdsFileContent.GetNumHeartbeatConsumers() != 0)
       {
-         tgl_assert(rc_EdsFileContent.IsHeartbeatConsumerRo(q_IsRo) == C_NO_ERR);
+         tgl_assert(!rc_EdsFileContent.IsHeartbeatConsumerRo(q_IsRo));
          if (q_IsRo)
          {
             c_NewConfig.q_EnableHeartbeatConsuming = false;
@@ -1045,8 +1045,8 @@ void C_SdNdeCoDeviceUpdateEdsDialog::mh_AdaptMessageProperties(const C_OscCanOpe
    bool q_IsRo;
    const C_OscCanOpenObjectDictionary & rc_EdsFileContent = orc_NewConfig.GetEdsFileContent();
 
-   tgl_assert(rc_EdsFileContent.IsCobIdRo(orc_NewOscMessage.u16_CanOpenManagerPdoIndex,
-                                          oq_MessageIsTxInEds, q_IsRo) == C_NO_ERR);
+   tgl_assert(!rc_EdsFileContent.IsCobIdRo(orc_NewOscMessage.u16_CanOpenManagerPdoIndex,
+                                           oq_MessageIsTxInEds, q_IsRo));
    if (q_IsRo)
    {
       if (orc_NewOscMessage.u32_CanId != orc_ImportedOscMessageData.u32_CanId)
@@ -1095,8 +1095,8 @@ void C_SdNdeCoDeviceUpdateEdsDialog::mh_AdaptMessageProperties(const C_OscCanOpe
          orc_NewOscMessage.q_IsExtended = orc_ImportedOscMessageData.q_IsExtended;
       }
    }
-   tgl_assert(rc_EdsFileContent.IsTransmissionTypeRo(orc_NewOscMessage.u16_CanOpenManagerPdoIndex,
-                                                     oq_MessageIsTxInEds, q_IsRo) == C_NO_ERR);
+   tgl_assert(!rc_EdsFileContent.IsTransmissionTypeRo(orc_NewOscMessage.u16_CanOpenManagerPdoIndex,
+                                                      oq_MessageIsTxInEds, q_IsRo));
    if (q_IsRo)
    {
       if (orc_NewOscMessage.e_TxMethod != orc_ImportedOscMessageData.e_TxMethod)
@@ -1113,8 +1113,8 @@ void C_SdNdeCoDeviceUpdateEdsDialog::mh_AdaptMessageProperties(const C_OscCanOpe
             orc_ImportedOscMessageData.u8_CanOpenTxMethodAdditionalInfo;
       }
    }
-   if (rc_EdsFileContent.IsInhibitTimeRo(orc_NewOscMessage.u16_CanOpenManagerPdoIndex,
-                                         oq_MessageIsTxInEds, q_IsRo) == C_NO_ERR)
+   if (!rc_EdsFileContent.IsInhibitTimeRo(orc_NewOscMessage.u16_CanOpenManagerPdoIndex,
+                                          oq_MessageIsTxInEds, q_IsRo))
    {
       if (q_IsRo)
       {
@@ -1130,8 +1130,8 @@ void C_SdNdeCoDeviceUpdateEdsDialog::mh_AdaptMessageProperties(const C_OscCanOpe
          }
       }
    }
-   if (rc_EdsFileContent.IsEventTimerRo(orc_NewOscMessage.u16_CanOpenManagerPdoIndex,
-                                        oq_MessageIsTxInEds, q_IsRo) == C_NO_ERR)
+   if (!rc_EdsFileContent.IsEventTimerRo(orc_NewOscMessage.u16_CanOpenManagerPdoIndex,
+                                         oq_MessageIsTxInEds, q_IsRo))
    {
       if (q_IsRo)
       {

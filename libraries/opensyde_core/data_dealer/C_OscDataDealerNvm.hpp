@@ -12,7 +12,10 @@
 #define C_OSCDATADEALERNVM_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "C_OscDataDealer.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscNodeDataPoolList.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -35,18 +38,18 @@ public:
    virtual ~C_OscDataDealerNvm(void);
 
    uint16_t NvmCalcCrc(const C_OscNodeDataPoolList & orc_List) const;
-   virtual int32_t NvmReadList(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex,
-                               uint8_t * const opu8_NrCode);
-   int32_t NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
-                              bool & orq_ApplicationAcknowledge, uint8_t * const opu8_NrCode);
+   virtual std::error_code NvmReadList(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex,
+                                       uint8_t * const opu8_NrCode);
+   std::error_code NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
+                                      bool & orq_ApplicationAcknowledge, uint8_t * const opu8_NrCode);
 
 protected:
-   int32_t m_NvmReadListRaw(const C_OscNodeDataPoolList & orc_List, std::vector<uint8_t> & orc_Values,
-                            uint8_t * const opu8_NrCode);
-   int32_t m_SaveDumpToList(const std::vector<uint8_t> & orc_Values, C_OscNodeDataPoolList & orc_List) const;
-   int32_t m_SaveDumpValuesToListValues(const std::vector<uint8_t> & orc_Values,
-                                        C_OscNodeDataPoolList & orc_List) const;
-   static int32_t mh_AdaptProtocolReturnValue(const int32_t os32_ProtReturnValue);
+   std::error_code m_NvmReadListRaw(const C_OscNodeDataPoolList & orc_List, std::vector<uint8_t> & orc_Values,
+                                    uint8_t * const opu8_NrCode);
+   std::error_code m_SaveDumpToList(const std::vector<uint8_t> & orc_Values, C_OscNodeDataPoolList & orc_List) const;
+   std::error_code m_SaveDumpValuesToListValues(const std::vector<uint8_t> & orc_Values,
+                                                C_OscNodeDataPoolList & orc_List) const;
+   static std::error_code mh_AdaptProtocolReturnValue(const int32_t os32_ProtReturnValue);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

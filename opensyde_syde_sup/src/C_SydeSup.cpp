@@ -15,6 +15,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
 #include <iostream>
 #include <getopt.h> //note: as we use getopt.h this application is not portable to all compilers
 
@@ -1485,8 +1486,8 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
 
                   C_OscHexFile c_HexFile;
 
-                  const uint32_t u32_Result = c_HexFile.LoadFromFile(c_Path.c_str());
-                  if (u32_Result == stw::hex_file::NO_ERR)
+                  const std::error_code c_Result = c_HexFile.LoadFromFile(c_Path.c_str());
+                  if (!c_Result)
                   {
                      stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
                      s32_Result = c_HexFile.ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo);
@@ -1507,7 +1508,7 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
                   {
                      const std::string c_Text = "Could not open HEX file \"" +
                                                 c_Path + "\" Details: " +
-                                                c_HexFile.ErrorCodeToErrorText(u32_Result);
+                                                c_HexFile.ErrorCodeToErrorText(c_Result);
                      osc_write_log_warning("X-Check feature", c_Text);
                      s32_Result = C_WARN;
                      break;

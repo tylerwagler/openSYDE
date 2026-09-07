@@ -24,6 +24,9 @@
 #define C_OSCZIPDATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+#include "C_OscErrorCategory.hpp"
+
 #include "stwtypes.hpp"
 #include <string>
 
@@ -39,9 +42,9 @@ namespace opensyde_core
 class C_OscZipData
 {
 public:
-   static int32_t h_Zip(uint8_t * const opu8_Destination, uint32_t & oru32_DestinationLength,
+   static std::error_code h_Zip(uint8_t * const opu8_Destination, uint32_t & oru32_DestinationLength,
                         const uint8_t * const opu8_Source, const uint32_t ou32_SourceLength);
-   static int32_t h_Unzip(uint8_t * const opu8_Destination, uint32_t & oru32_DestinationLength,
+   static std::error_code h_Unzip(uint8_t * const opu8_Destination, uint32_t & oru32_DestinationLength,
                           const uint8_t * const opu8_Source, const uint32_t ou32_SourceLength);
    static uint32_t h_GetRequiredBufSizeForZipping(const uint32_t ou32_SourceLength);
 };

@@ -1071,11 +1071,11 @@ void C_SdNdeCoConfigTreeView::mh_InitMappableSignals(
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < c_It->second.size(); ++u32_ItSig)
       {
          C_OscCanOpenManagerMappableSignal c_Entry;
-         if (C_OscImportEdsDcf::h_ParseSignalContent(orc_EdsDictionary.c_OdObjects, c_It->first,
-                                                     c_It->second[u32_ItSig], 0UL,
-                                                     true, oq_IsEds, c_Entry.c_SignalData,
-                                                     c_Entry.c_DatapoolData,
-                                                     c_Entry.q_AutoMinMaxUsed) == C_NO_ERR)
+         if (!C_OscImportEdsDcf::h_ParseSignalContent(orc_EdsDictionary.c_OdObjects, c_It->first,
+                                                      c_It->second[u32_ItSig], 0UL,
+                                                      true, oq_IsEds, c_Entry.c_SignalData,
+                                                      c_Entry.c_DatapoolData,
+                                                      c_Entry.q_AutoMinMaxUsed))
          {
             C_CieUtil::h_AdaptName(c_Entry.c_DatapoolData.c_Name, c_Entry.c_DatapoolData.c_Comment, false);
             orc_MappableSignals.push_back(c_Entry);
@@ -1172,7 +1172,7 @@ void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceI
       //supported
       // check for read-only
       bool q_HbProducerRo = true;
-      tgl_assert(rc_EdsFileContent.IsHeartbeatProducerRo(q_HbProducerRo) == C_NO_ERR);
+      tgl_assert(!rc_EdsFileContent.IsHeartbeatProducerRo(q_HbProducerRo));
 
       // get default value first (100 ms)
       const int32_t s32_DefaultHeartbeatProducerTimeMs =
@@ -1228,7 +1228,7 @@ void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceI
    {
       // check for read-only
       bool q_HbConsumerRo = true;
-      tgl_assert(rc_EdsFileContent.IsHeartbeatConsumerRo(q_HbConsumerRo) == C_NO_ERR);
+      tgl_assert(!rc_EdsFileContent.IsHeartbeatConsumerRo(q_HbConsumerRo));
 
       orc_Device.q_EnableHeartbeatConsuming = !q_HbConsumerRo;
 

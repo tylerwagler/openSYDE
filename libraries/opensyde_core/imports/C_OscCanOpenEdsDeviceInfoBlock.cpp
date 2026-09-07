@@ -12,7 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscCanOpenEdsDeviceInfoBlock.hpp"
 
@@ -100,15 +103,15 @@ void C_OscCanOpenEdsDeviceInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Values read
-   \retval   C_CONFIG   At least one value not found, for details see error message
+   \retval   Errc::success   Values read
+   \retval   Errc::config    At least one value not found, for details see error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenEdsDeviceInfoBlock::LoadFromIni(stw::scl::C_SclIniFile & orc_File,
-                                                    std::string & orc_LastError)
+std::error_code C_OscCanOpenEdsDeviceInfoBlock::LoadFromIni(stw::scl::C_SclIniFile & orc_File,
+                                                            std::string & orc_LastError)
 {
    //lint -e{8062} Kept for later error reporting
-   const int32_t s32_Retval = C_NO_ERR;
+   const std::error_code c_Retval = Errc::success;
    const std::string c_SectionName = "DeviceInfo";
 
    orc_LastError = "";
@@ -142,7 +145,7 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::LoadFromIni(stw::scl::C_SclIniFile & orc
       this->c_OrderCode = orc_File.ReadString(c_SectionName, "OrderCode", "");
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -170,18 +173,18 @@ uint8_t C_OscCanOpenEdsDeviceInfoBlock::GetGranularity() const
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value read
-   \retval   C_CONFIG   Value not found, for details see error message
+   \retval   Errc::success   Value read
+   \retval   Errc::config    Value not found, for details see error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadStringValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                                                     const std::string & orc_SectionName,
-                                                                     const std::string & orc_KeyName,
-                                                                     std::string & orc_OutputValue,
-                                                                     std::string & orc_ErrorMessage,
-                                                                     const std::string & orc_DefaultValue)
+std::error_code C_OscCanOpenEdsDeviceInfoBlock::h_LoadStringValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
+                                                                             const std::string & orc_SectionName,
+                                                                             const std::string & orc_KeyName,
+                                                                             std::string & orc_OutputValue,
+                                                                             std::string & orc_ErrorMessage,
+                                                                             const std::string & orc_DefaultValue)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_File.ValueExists(orc_SectionName, orc_KeyName))
    {
@@ -190,10 +193,10 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadStringValueFromIniFile(stw::scl::C
    else
    {
       orc_OutputValue = orc_DefaultValue;
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(orc_SectionName, orc_KeyName, orc_ErrorMessage);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -209,18 +212,18 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadStringValueFromIniFile(stw::scl::C
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value read
-   \retval   C_CONFIG   Value not found, for details see error message
+   \retval   Errc::success   Value read
+   \retval   Errc::config    Value not found, for details see error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU8ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                                                 const std::string & orc_SectionName,
-                                                                 const std::string & orc_KeyName,
-                                                                 uint8_t & oru8_OutputValue,
-                                                                 std::string & orc_ErrorMessage,
-                                                                 const uint8_t ou8_DefaultValue)
+std::error_code C_OscCanOpenEdsDeviceInfoBlock::h_LoadU8ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
+                                                                         const std::string & orc_SectionName,
+                                                                         const std::string & orc_KeyName,
+                                                                         uint8_t & oru8_OutputValue,
+                                                                         std::string & orc_ErrorMessage,
+                                                                         const uint8_t ou8_DefaultValue)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_File.ValueExists(orc_SectionName, orc_KeyName))
    {
@@ -229,10 +232,10 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU8ValueFromIniFile(stw::scl::C_Scl
    else
    {
       oru8_OutputValue = ou8_DefaultValue;
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(orc_SectionName, orc_KeyName, orc_ErrorMessage);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -248,18 +251,18 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU8ValueFromIniFile(stw::scl::C_Scl
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value read
-   \retval   C_CONFIG   Value not found, for details see error message
+   \retval   Errc::success   Value read
+   \retval   Errc::config    Value not found, for details see error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU16ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                                                  const std::string & orc_SectionName,
-                                                                  const std::string & orc_KeyName,
-                                                                  uint16_t & oru16_OutputValue,
-                                                                  std::string & orc_ErrorMessage,
-                                                                  const uint16_t ou16_DefaultValue)
+std::error_code C_OscCanOpenEdsDeviceInfoBlock::h_LoadU16ValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
+                                                                          const std::string & orc_SectionName,
+                                                                          const std::string & orc_KeyName,
+                                                                          uint16_t & oru16_OutputValue,
+                                                                          std::string & orc_ErrorMessage,
+                                                                          const uint16_t ou16_DefaultValue)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_File.ValueExists(orc_SectionName, orc_KeyName))
    {
@@ -268,10 +271,10 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU16ValueFromIniFile(stw::scl::C_Sc
    else
    {
       oru16_OutputValue = ou16_DefaultValue;
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(orc_SectionName, orc_KeyName, orc_ErrorMessage);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -287,18 +290,18 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU16ValueFromIniFile(stw::scl::C_Sc
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Value read
-   \retval   C_CONFIG   Value not found, for details see error message
+   \retval   Errc::success   Value read
+   \retval   Errc::config    Value not found, for details see error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadBoolValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
-                                                                   const std::string & orc_SectionName,
-                                                                   const std::string & orc_KeyName,
-                                                                   bool & orq_OutputValue,
-                                                                   std::string & orc_ErrorMessage,
-                                                                   const bool oq_DefaultValue)
+std::error_code C_OscCanOpenEdsDeviceInfoBlock::h_LoadBoolValueFromIniFile(stw::scl::C_SclIniFile & orc_File,
+                                                                           const std::string & orc_SectionName,
+                                                                           const std::string & orc_KeyName,
+                                                                           bool & orq_OutputValue,
+                                                                           std::string & orc_ErrorMessage,
+                                                                           const bool oq_DefaultValue)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_File.ValueExists(orc_SectionName, orc_KeyName))
    {
@@ -307,10 +310,10 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadBoolValueFromIniFile(stw::scl::C_S
    else
    {
       orq_OutputValue = oq_DefaultValue;
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(orc_SectionName, orc_KeyName, orc_ErrorMessage);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
