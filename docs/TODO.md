@@ -254,14 +254,14 @@ project file. GCC reports it as `-Wparentheses`, part of `-Wall`. Verified after
 the fact — compiling the pre-fix file with `-Wall` emits the warning at all nine
 lines.
 
-`-Werror` is deliberately **not** set, because 45 warnings pre-date the change:
+`-Werror` is deliberately **not** set, because warnings pre-date the change. 18 of the original 45 are already fixed:
 
 | Count | Warning | Notes |
 |---|---|---|
 | 26 | `-Wsign-compare` | Signed loop counters against `.size()`. 10 in `C_SclIniFile.cpp`, 3 each in `C_OscSuSequences`, `C_OscCanOpenObjectDictionary`, `C_HexFile`, 2 in `C_CanDispatcher`, singles elsewhere. Mechanical, but touches hot paths. |
-| 18 | `-Winvalid-pch` | The `_LARGEFILE64_SOURCE` mismatch — `target_compile_definitions(opensyde_core PRIVATE _LARGEFILE64_SOURCE)` is applied to the TUs but not to the precompiled header, so **18 translation units silently reject the PCH** and recompile the whole header set. This is a build-time cost as well as noise. |
+| ~~18~~ 0 | `-Winvalid-pch` | **Fixed.** The precompiled header is `PUBLIC` but `_LARGEFILE64_SOURCE` was `PRIVATE`, so targets reusing the PCH did not define it, the preprocessor state no longer matched, and GCC discarded the PCH — 18 warnings, each recompiling the whole header set. Making the define `PUBLIC` to match the PCH cleared all 18. |
 | 1 | `-Wunused-variable` | |
 
-Worth doing in that order: the PCH one is a single CMake change and also speeds
-up the build, the sign-compares are mechanical, and once both are clear `-Werror`
-becomes viable and this class of bug can never reach a commit again.
+The PCH one is done. That leaves 27: the sign-compares are mechanical but touch
+hot paths, and once they are clear `-Werror` becomes viable and this class of bug
+can never reach a commit again.

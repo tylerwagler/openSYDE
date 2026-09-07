@@ -968,17 +968,23 @@ add_library(opensyde_core ${OPENSYDE_CORE_SOURCES})
 # where nobody was reading core's output because core was not compiled there with
 # warnings on.
 #
-# Not -Werror: 45 pre-existing warnings remain -- 26 -Wsign-compare (mostly signed
-# loop counters against .size()), 18 -Winvalid-pch from the _LARGEFILE64_SOURCE
-# mismatch below, and one unused variable. All tracked in docs/TODO.md; turning
-# on -Werror before they are cleared would just break the build.
+# Not -Werror: 27 pre-existing warnings remain -- 26 -Wsign-compare (mostly signed
+# loop counters against .size()) and one unused variable. Tracked in
+# docs/TODO.md; turning on -Werror before they are cleared would break the build.
 if(NOT MSVC)
    target_compile_options(opensyde_core PRIVATE -Wall -Wextra)
 endif()
 
-# Enable large file support on Linux (required by miniz for 64-bit file I/O)
+# Enable large file support on Linux (required by miniz for 64-bit file I/O).
+#
+# PUBLIC, not PRIVATE, and that matters: the precompiled header below is PUBLIC,
+# so consumers reuse a PCH that was compiled with this define. When the define
+# was PRIVATE they did not have it themselves, the preprocessor state no longer
+# matched, and GCC silently discarded the PCH -- 18 -Winvalid-pch warnings from
+# the test targets alone, each one recompiling the whole header set. A PUBLIC PCH
+# needs the flags that shaped it to be PUBLIC too.
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   target_compile_definitions(opensyde_core PRIVATE _LARGEFILE64_SOURCE)
+   target_compile_definitions(opensyde_core PUBLIC _LARGEFILE64_SOURCE)
 endif()
 
 # add all include directories to library target and make public
