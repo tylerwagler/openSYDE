@@ -88,6 +88,35 @@ rsync -az --delete --exclude .git --exclude build --exclude result \
 ssh claude@claude 'cd ~/Projects/openSYDE && ./build.sh -b Debug -j 48 all'
 ```
 
+## Do not pipe build.sh and then read `$?`
+
+`build.sh` is correct: it accumulates failures in a `FAILED` array and `exit 1`s
+if any tool failed. But in
+
+```bash
+./build.sh -b Debug -j 48 all 2>&1 | grep -E "built successfully|Status:"
+```
+
+`$?` is **grep's** status, not the build's, so a failed build reports success.
+This has already misled one agent into filing `build.sh` as broken.
+
+CI is not affected — `.github/workflows/build.yml` runs `./build.sh -b Debug all`
+directly with no pipe.
+
+Two ways to keep the filtering without the trap:
+
+```bash
+# check the exit code explicitly
+./build.sh -b Debug -j 48 all > /tmp/build.log 2>&1; echo "rc=$?"; grep -E "built successfully|FAILED|Status:" /tmp/build.log
+
+# or rely on the summary line, which is only printed when nothing failed
+./build.sh -b Debug -j 48 all 2>&1 | grep -E "built successfully|error:|FAILED|Status:"
+```
+
+The second is safe **only** because `Status:     All tools built successfully`
+appears in the `else` branch — if any tool fails you get `FAILED:` instead. Grep
+for `FAILED` too, or the distinction is invisible.
+
 Collect *every* error rather than stopping at the first — the difference between
 one round and four:
 
