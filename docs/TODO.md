@@ -87,66 +87,31 @@ Lower-priority code-simplification candidates from the audit:
   plan) is the next big candidate for "does this earn its keep?"
   scrutiny.
 
-## Fix application version on Linux ("V?.??r?" placeholder)
-
-The About dialog of all three GUI apps (openSYDE, CAN Monitor,
-SYDEflash) shows the literal string `V?.??r?` on Linux instead of a
-real version. Root cause:
-`libraries/opensyde_gui/src/util/C_Uti.cpp::h_GetApplicationVersion`
-initialises the local string to that placeholder and only overwrites
-it inside `#ifdef _WIN32`, where it reads `VS_FIXEDFILEINFO` from the
-Win32 file version resource. The Linux branch was never wired up.
-
-The CLI tools (`opensyde_syde_sup`, `opensyde_syde_x_gen`) already use a
-different pattern: a hand-edited `version_config.hpp` with
-`PROJECT_VERSION_MAJOR/MINOR/RELEASE/BUILD` macros, included directly.
-
-Two viable fixes:
-
-1. **Adopt the `version_config.hpp` pattern for the GUI apps too** — add
-   the file (or share one across apps), reference its macros from
-   `C_Uti::h_GetApplicationVersion` in a `#else` branch. Closest to the
-   existing pattern; manual bumps on each release.
-2. **Inject via CMake** — `project(... VERSION x.y.z)` plus
-   `target_compile_definitions` in each app's CMakeLists, then
-   `QApplication::setApplicationVersion(...)` in `main()` and read
-   `QApplication::applicationVersion()` from `C_Uti`. Cleaner, single
-   source of truth, but a wider edit.
-
-Either way, also update each app's `*resources.rc` so the Windows
-build keeps the same string the Linux build emits.
-
 ## Show actually-linked library versions in About
 
-The About body in `C_NagAboutDialog::InitDynamicNames` originally
-listed open-source dependencies as hardcoded strings, including
-`"Qt 6.8.3 by The Qt Company"`. The Qt line is now dynamic
-(commit `45c8b9be` — uses `qVersion()`). The remaining lines
-(`gettext`, `TinyXML-2`, `The MinGW Runtime`) currently show no
-version, so there's no rot risk today, but adding versions would make
-the dialog more useful.
+The dependency *list* in `C_NagAboutDialog::InitDynamicNames` is now accurate:
+gettext was removed (this fork is English-only and the i18n infrastructure is
+stripped), the MinGW Runtime line is guarded by `__MINGW32__` so it never shows on
+this Linux-first fork, and the libraries genuinely linked through `opensyde_core`
+— TinyXML-2, Miniz, Vector::DBC/BLF, OpenSSL, zlib — are listed rather than left
+commented out. Vector::DBC/BLF is GPL-3, so omitting it was the more serious
+direction of error for an attribution dialog.
 
-Future passes if/when they become valuable:
+What remains is *versions*, not names. Only Qt reports one (`qVersion()`):
 
-- **OpenSSL** — would have to be conditional. `opensyde_tool` links
-  OpenSSL for security features; CAN Monitor and SYDEflash do not
-  (`OPENSYDE_CORE_SKIP_SECURITY` for SYDEflash). The OpenSSL line in
-  `C_NagAboutDialog.cpp` is currently commented out for the same
-  reason. If exposed, query via `OpenSSL_version(OPENSSL_VERSION)`.
-- **TinyXML-2** — `tinyxml2.h` lives in `libraries/opensyde_core/`
-  and isn't currently included by `opensyde_gui`. Adding the include
-  would create a new (small) dependency just to print a version.
-  `TIXML2_MAJOR_VERSION` etc. macros are header-only.
-- **gettext** — runtime version API isn't portable across all
-  gettext implementations. Easiest path is a CMake-injected version
-  macro from `pkg-config` / `find_package(Intl)`.
-- **MinGW Runtime** — Windows-only. `__MINGW32_MAJOR_VERSION` is
-  available at compile time inside `#ifdef __MINGW32__`. Linux builds
-  shouldn't show this line at all.
+- **OpenSSL** — would have to be conditional. `opensyde_tool` links it; SYDEflash
+  does not (`OPENSYDE_CORE_SKIP_SECURITY`). Query via
+  `OpenSSL_version(OPENSSL_VERSION)`.
+- **TinyXML-2** — `TIXML2_MAJOR_VERSION` etc. are header-only macros, but
+  `tinyxml2.h` is not currently included by `opensyde_gui`, so this adds an
+  include purely to print a version.
+- **zlib** — `ZLIB_VERSION` from `zlib.h`, same tradeoff.
+- **Miniz / Vector::DBC** — vendored; a version would have to be injected by
+  CMake from the submodule.
 
 ## Remove redundant `.toStdString().c_str()`
 
-`qstring.toStdString().c_str()` appears **472 times** across 121 files. It is not
+`qstring.toStdString().c_str()` appears **445 times** (re-counted; an earlier note said 472 before `libraries/` was done, and 434 after, both of which are wrong now). It is not
 a bug — no site stores the resulting pointer, so there is no dangling-pointer UB
 — but it is a redundant round trip:
 
@@ -204,7 +169,7 @@ Option 1 is preferred, done a directory at a time.
   `C_CieImportDbc.cpp`, could not be syntax-checked locally due to an include
   path and rests on CI.
 - `opensyde_tool`, `opensyde_can_monitor`, `opensyde_syde_flash` — outstanding,
-  434 sites.
+  445 sites as of the phase 5 completion.
 
 ## Windows-only code paths are never compiled
 

@@ -99,11 +99,15 @@ void C_NagAboutDialog::InitStaticNames(void) const
    c_Text += this->mc_ProductName;
    c_Text += " uses the following open source libraries:\n";
    c_Text += static_cast<QString>("    - Qt %1 by The Qt Company\n").arg(qVersion());
-   c_Text += "    - gettext by the Free Software Foundation\n";
    c_Text += "    - TinyXML-2 by Lee Thomason and others\n";
+   c_Text += "    - Miniz by Rich Geldreich and others\n";
+   c_Text += "    - Vector::DBC and Vector::BLF by Tobias Lorenz\n";
+   c_Text += "    - OpenSSL by The OpenSSL Project\n";
+   c_Text += "    - zlib by Jean-loup Gailly and Mark Adler\n";
+#ifdef __MINGW32__
    c_Text += "    - The MinGW Runtime\n";
+#endif
 
-   //   c_Text += "    - Vector::DBC Module by Tobias Lorenz\n";
    //   c_Text += "    - Bison\n";
    //   c_Text += "    - Flex\n";
 
