@@ -422,17 +422,22 @@ void C_FlaUpSequences::m_ThreadFunc(void)
       // Nothing to do. Should not happen.
       break;
    case eACTIVATEFLASHLOADER:
-      this->ms32_Result = this->ActivateFlashLoader(mu32_FlashloaderResetWaitTime);
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+      this->ms32_Result = this->ActivateFlashLoader(mu32_FlashloaderResetWaitTime).value();
       break;
    case eREADDEVICEINFO:
-      this->ms32_Result = this->ReadDeviceInformation();
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+      this->ms32_Result = this->ReadDeviceInformation().value();
       break;
    case eUPDATENODE:
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
       this->ms32_Result = this->UpdateNode(this->mc_HexFilePath.toStdString().c_str(),
-                                           this->mu32_RequestDownloadTimeout, this->mu32_TransferDataTimeout);
+                                           this->mu32_RequestDownloadTimeout,
+                                           this->mu32_TransferDataTimeout).value();
       break;
    case eRESETSYSTEM:
-      this->ms32_Result = this->ResetSystem();
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+      this->ms32_Result = this->ResetSystem().value();
       break;
    default:
       tgl_assert(false);

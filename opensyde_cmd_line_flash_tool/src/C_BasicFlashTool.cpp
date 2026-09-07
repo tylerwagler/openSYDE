@@ -379,7 +379,8 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
       }
       else
       {
-         s32_Return = c_TheSequence.Init(pc_LocalDispatcher, ms32_CanBitrate, mu8_NodeId);
+         //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+         s32_Return = c_TheSequence.Init(pc_LocalDispatcher, ms32_CanBitrate, mu8_NodeId).value();
          if (s32_Return != C_NO_ERR)
          {
             (void)pc_LocalDispatcher->CAN_Exit();
@@ -396,7 +397,8 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 
    if (e_Result == eRESULT_OK)
    {
-      s32_Return = c_TheSequence.ActivateFlashLoader(mu32_FlashloaderResetWaitTime);
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Return = c_TheSequence.ActivateFlashLoader(mu32_FlashloaderResetWaitTime).value();
       if (s32_Return != C_NO_ERR)
       {
          e_Result = eERR_ACTIVATE_FLASHLOADER;
@@ -405,7 +407,8 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 
    if (e_Result == eRESULT_OK)
    {
-      s32_Return = c_TheSequence.ReadDeviceInformation();
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Return = c_TheSequence.ReadDeviceInformation().value();
       if (s32_Return != C_NO_ERR)
       {
          e_Result = eERR_READ_DEVICE_INFO;
@@ -414,7 +417,9 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 
    if (e_Result == eRESULT_OK)
    {
-      s32_Return = c_TheSequence.UpdateNode(mc_HexFilePath, mu32_RequestDownloadTimeout, mu32_TransferDataTimeout);
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Return =
+         c_TheSequence.UpdateNode(mc_HexFilePath, mu32_RequestDownloadTimeout, mu32_TransferDataTimeout).value();
       if (s32_Return != C_NO_ERR)
       {
          e_Result = eERR_UPDATE;
@@ -423,7 +428,8 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 
    if ((e_Result == eRESULT_OK) && (mq_StartAppl == true))
    {
-      s32_Return = c_TheSequence.ResetSystem();
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Return = c_TheSequence.ResetSystem().value();
       if (s32_Return != C_NO_ERR)
       {
          e_Result = eERR_RESET;

@@ -13,8 +13,11 @@
 #include "precomp_headers.hpp"
 #include "C_SclStringCompat.hpp"
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglTime.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscDcBasicSequences.hpp"
@@ -62,38 +65,38 @@ C_OscDcBasicSequences::~C_OscDcBasicSequences()
    \param[in]  opc_CanDispatcher Pointer to concrete CAN dispatcher
 
    \return
-   C_NO_ERR    everything ok
-   else        error occurred, see log file for details
+   Errc::success    everything ok
+   else             error occurred, see log file for details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatcher)
+std::error_code C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatcher)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    const std::string c_LogActivity = "Initialization";
 
-   m_ReportProgress(s32_Return, "Starting the initialization of CAN driver and protocol ... ");
+   m_ReportProgress(c_Return.value(), "Starting the initialization of CAN driver and protocol ... ");
 
    this->mpc_CanDispatcher = opc_CanDispatcher;
 
    if (this->mpc_CanDispatcher == nullptr)
    {
-      s32_Return = C_COM;
+      c_Return = Errc::com;
       osc_write_log_error(c_LogActivity, "Could not used CAN! CAN Dispatcher is invalid.");
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
-      //boundary: this caller still uses the integer convention
-      s32_Return = mc_TpCan.SetDispatcher(this->mpc_CanDispatcher).value();
-      if (s32_Return != C_NO_ERR)
+      c_Return = mc_TpCan.SetDispatcher(this->mpc_CanDispatcher);
+      if (c_Return != Errc::success)
       {
          osc_write_log_error(c_LogActivity, "Setting CAN dispatcher for CAN transport protocol failed!");
       }
       else
       {
-         s32_Return = mc_OsyProtocol.SetTransportProtocol(&mc_TpCan);
-         if (s32_Return != C_NO_ERR)
+         //boundary: the openSYDE protocol driver still uses the integer convention
+         c_Return = make_error_code_from_stw(mc_OsyProtocol.SetTransportProtocol(&mc_TpCan));
+         if (c_Return != Errc::success)
          {
             osc_write_log_error(c_LogActivity,
                                 "Setting CAN transport protocol to the openSYDE protocol driver failed!");
@@ -101,24 +104,23 @@ int32_t C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const opc_CanDis
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (c_Return == Errc::success)
    {
       C_OscProtocolDriverOsyNode c_Client;
       c_Client.u8_NodeIdentifier = 126;
       c_Client.u8_BusIdentifier = 0U;
 
-      //boundary: this caller still uses the integer convention
-      s32_Return = mc_TpCan.SetNodeIdentifiersForBroadcasts(c_Client).value();
+      c_Return = mc_TpCan.SetNodeIdentifiersForBroadcasts(c_Client);
 
-      if (s32_Return != C_NO_ERR)
+      if (c_Return != Errc::success)
       {
          osc_write_log_warning(c_LogActivity, "Could not configure the clients broadcast node ID.");
       }
    }
 
-   m_ReportProgress(s32_Return, "Initialization finished.");
+   m_ReportProgress(c_Return.value(), "Initialization finished.");
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -134,20 +136,20 @@ int32_t C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const opc_CanDis
    \param[in]  ou32_FlashloaderResetWaitTime    Flashloader reset wait time
 
    \return
-   C_NO_ERR   Sequence finished
-   else       error occurred
+   Errc::success   Sequence finished
+   else            error occurred
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_FlashloaderResetWaitTime)
+std::error_code C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_FlashloaderResetWaitTime)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    const std::string c_LogActivity = "Scan Activate Flashloader";
    const uint32_t u32_SCAN_TIME_MS = 5000U;
    uint32_t u32_WaitTime = ou32_FlashloaderResetWaitTime;
 
    std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastRequestProgrammingResults> c_Results;
 
-   m_ReportProgress(s32_Return, "Starting the scan for flashloader activation ... ");
+   m_ReportProgress(c_Return.value(), "Starting the scan for flashloader activation ... ");
 
    if (u32_WaitTime < u32_SCAN_TIME_MS)
    {
@@ -155,16 +157,15 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
       u32_WaitTime = u32_SCAN_TIME_MS;
    }
 
-   //boundary: this caller still uses the integer convention
-   s32_Return = this->mc_TpCan.BroadcastRequestProgramming(c_Results).value();
+   c_Return = this->mc_TpCan.BroadcastRequestProgramming(c_Results);
 
    m_ReportProgress(C_NO_ERR, "Broadcasting \"request programming\" flag: " +
                     std::to_string(c_Results.size()) + " device(s) answered. ");
 
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       osc_write_log_error(c_LogActivity,
-                          "openSYDE ECU reset broadcast failed with error: " + std::to_string(s32_Return));
+                          "openSYDE ECU reset broadcast failed with error: " + std::to_string(c_Return.value()));
    }
    else
    {
@@ -173,13 +174,13 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
       {
          if (c_Results[u32_ResponseIndex].q_RequestAccepted == false)
          {
-            s32_Return = C_COM;
+            c_Return = Errc::com;
             break;
          }
       }
    }
 
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       osc_write_log_error(c_LogActivity,
                           "At least one reached device did not accept setting the \"request programming\" flag.");
@@ -187,13 +188,12 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
    else
    {
       //broadcast "ResetToFlashloader"
-      //boundary: this caller still uses the integer convention
-      s32_Return = mc_TpCan.BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER).value();
+      c_Return = mc_TpCan.BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
 
-      if (s32_Return != C_NO_ERR)
+      if (c_Return != Errc::success)
       {
          osc_write_log_error(c_LogActivity,
-                             "openSYDE request node reset failed with error: " + std::to_string(s32_Return));
+                             "openSYDE request node reset failed with error: " + std::to_string(c_Return.value()));
       }
    }
 
@@ -212,18 +212,17 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
    do
    {
       // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast
-      //boundary: this caller still uses the integer convention
-      s32_Return = mc_TpCan.BroadcastSendEnterPreProgrammingSession().value();
-      if (s32_Return != C_NO_ERR)
+      c_Return = mc_TpCan.BroadcastSendEnterPreProgrammingSession();
+      if (c_Return != Errc::success)
       {
          osc_write_log_error(c_LogActivity,
                              "Sending broadcast to enter preprogramming session failed with result " +
-                             std::to_string(s32_Return));
+                             std::to_string(c_Return.value()));
 
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
 
-      if (s32_Return != C_NO_ERR)
+      if (c_Return != Errc::success)
       {
          break;
       }
@@ -240,9 +239,9 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
    }
    mc_TpCan.ClearDispatcherQueue();
 
-   m_ReportProgress(s32_Return, "Scan for flashloader activation finished. ");
+   m_ReportProgress(c_Return.value(), "Scan for flashloader activation finished. ");
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -257,28 +256,27 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
    * For all nodes that have an unique ID: directed read device name
 
    \return
-   C_NO_ERR    everything ok
-   else        error occurred, see log file for details
+   Errc::success    everything ok
+   else             error occurred, see log file for details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDcBasicSequences::ScanGetInfo(void)
+std::error_code C_OscDcBasicSequences::ScanGetInfo(void)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    const std::string c_LogActivity = "Scan Device Info";
 
    std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults> c_ReadSnResult;
    std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberExtendedResults> c_ReadSnResultExt;
 
-   m_ReportProgress(s32_Return, "Starting the scan for getting devices information ... ");
+   m_ReportProgress(c_Return.value(), "Starting the scan for getting devices information ... ");
 
    // broadcast: "ReadSerialNumber"
-   //boundary: this caller still uses the integer convention
-   s32_Return = this->mc_TpCan.BroadcastReadSerialNumber(c_ReadSnResult, c_ReadSnResultExt).value();
+   c_Return = this->mc_TpCan.BroadcastReadSerialNumber(c_ReadSnResult, c_ReadSnResultExt);
 
-   if (s32_Return != C_NO_ERR)
+   if (c_Return != Errc::success)
    {
       osc_write_log_error(c_LogActivity, "openSYDE serial number broadcast failed with error: " +
-                          std::to_string(s32_Return));
+                          std::to_string(c_Return.value()));
    }
    else
 
@@ -336,7 +334,7 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void)
                   // Special case: In case of at least one node with active security no broadcasts
                   // can be used by the configuration sequence. Therefore the node IDs must be unique for
                   // using direct communication.
-                  s32_Return = C_CHECKSUM;
+                  c_Return = Errc::checksum;
 
                   osc_write_log_error(c_LogActivity,
                                       "At least one node has the security feature activated and at least"
@@ -354,7 +352,7 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void)
 
       tgl_assert((c_ReadSnResult.size() + c_ReadSnResultExt.size()) == c_DeviceInfoResult.size());
 
-      if (s32_Return == C_NO_ERR)
+      if (c_Return == Errc::success)
       {
          C_OscProtocolDriverOsyNode c_CurSenderId;
          std::string c_Result;
@@ -388,21 +386,24 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void)
             }
 
             // set up temporary node IDs
-            s32_Return = mc_OsyProtocol.SetNodeIdentifiers(c_Client, c_CurSenderId);
-            if (s32_Return != C_NO_ERR)
+            //boundary: the openSYDE protocol driver still uses the integer convention
+            c_Return = make_error_code_from_stw(mc_OsyProtocol.SetNodeIdentifiers(c_Client, c_CurSenderId));
+            if (c_Return != Errc::success)
             {
                osc_write_log_error(c_LogActivity,
                                    "Could not configure the node IDs! Is the server node ID within range?");
             }
             else
             {
-               s32_Return = mc_OsyProtocol.OsyReadDeviceName(c_Result, &u8_NumberCode);
+               //boundary: the openSYDE protocol driver still uses the integer convention
+               c_Return = make_error_code_from_stw(mc_OsyProtocol.OsyReadDeviceName(c_Result, &u8_NumberCode));
             }
 
-            if (s32_Return != C_NO_ERR)
+            if (c_Return != Errc::success)
             {
                osc_write_log_error(c_LogActivity, "Could not read the device's device name! Details: " +
-                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
+                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(),
+                                                                                            u8_NumberCode));
             }
             else
             {
@@ -410,13 +411,13 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void)
             }
          }
       }
-      m_ReportProgress(s32_Return, "Found " + std::to_string(c_DeviceInfoResult.size()) + " device(s).");
+      m_ReportProgress(c_Return.value(), "Found " + std::to_string(c_DeviceInfoResult.size()) + " device(s).");
       m_ReportDevicesInfoRead(c_DeviceInfoResult, q_SecurityFeatureUsed);
    }
 
-   m_ReportProgress(s32_Return, "Scan for getting devices information finished.");
+   m_ReportProgress(c_Return.value(), "Scan for getting devices information finished.");
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -426,22 +427,21 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void)
    The com driver is expected to be initialized for broadcasting as it is done in Init().
 
    \return
-   C_NO_ERR    everything ok
-   else        error occurred, see log file for details
+   Errc::success    everything ok
+   else             error occurred, see log file for details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDcBasicSequences::ResetSystem(void)
+std::error_code C_OscDcBasicSequences::ResetSystem(void)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
-   m_ReportProgress(s32_Return, "Starting system reset broadcast...");
+   m_ReportProgress(c_Return.value(), "Starting system reset broadcast...");
 
-   //boundary: this caller still uses the integer convention
-   s32_Return = mc_TpCan.BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON).value();
+   c_Return = mc_TpCan.BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON);
 
-   m_ReportProgress(s32_Return, "System reset broadcast finished.");
+   m_ReportProgress(c_Return.value(), "System reset broadcast finished.");
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -453,22 +453,23 @@ int32_t C_OscDcBasicSequences::ResetSystem(void)
   \param[in]   ou8_InterfaceIndex  Interface the target is connected
 
    \return
-   C_NO_ERR    everything ok
-   else        error occurred, see log file for details
+   Errc::success    everything ok
+   else             error occurred, see log file for details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, const uint8_t ou8_NewNodeId,
-                                               const uint32_t ou32_Bitrate, const uint8_t ou8_InterfaceIndex)
+std::error_code C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, const uint8_t ou8_NewNodeId,
+                                                       const uint32_t ou32_Bitrate, const uint8_t ou8_InterfaceIndex)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    const C_OscProtocolDriverOsyNode c_ClientId(0, 126);
    const C_OscProtocolDriverOsyNode c_CurrentServerId(0, ou8_CurrentNodeId);
 
-   m_ReportProgress(s32_Return, "Starting device configuration...");
+   m_ReportProgress(c_Return.value(), "Starting device configuration...");
 
    //set up protocol for communication (which node we want to configure)
-   s32_Return = mc_OsyProtocol.SetNodeIdentifiers(c_ClientId, c_CurrentServerId);
-   if (s32_Return != C_NO_ERR)
+   //boundary: the openSYDE protocol driver still uses the integer convention
+   c_Return = make_error_code_from_stw(mc_OsyProtocol.SetNodeIdentifiers(c_ClientId, c_CurrentServerId));
+   if (c_Return != Errc::success)
    {
       osc_write_log_error("ProtocolSetup",
                           "Could not configure Node IDs for transport protocol. Are the IDs in range?");
@@ -476,11 +477,12 @@ int32_t C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, 
    else
    {
       uint8_t u8_Nrc;
-      s32_Return = mc_OsyProtocol.OsyDiagnosticSessionControl(
-         C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PROGRAMMING,
-         &u8_Nrc);
+      //boundary: the openSYDE protocol driver still uses the integer convention
+      c_Return = make_error_code_from_stw(mc_OsyProtocol.OsyDiagnosticSessionControl(
+                                             C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PROGRAMMING,
+                                             &u8_Nrc));
 
-      if (s32_Return == C_NO_ERR)
+      if (c_Return == Errc::success)
       {
          //set security level 1; we want to change ID and Bitrate...
          const uint8_t u8_SECURITY_LEVEL = 1U;
@@ -492,21 +494,23 @@ int32_t C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, 
          std::string c_LogActivity;
 
          c_LogActivity = "Security Access";
-         s32_Return = mc_OsyProtocol.OsySecurityAccessRequestSeed(u8_SECURITY_LEVEL, q_SecureMode, u64_Seed,
-                                                                  q_AuthenticationActive,
-                                                                  q_TrafficEncryptionActive,
-                                                                  c_TrafficEncryptionInitVector, &u8_Nrc);
+         //boundary: the openSYDE protocol driver still uses the integer convention
+         c_Return = make_error_code_from_stw(mc_OsyProtocol.OsySecurityAccessRequestSeed(
+                                                u8_SECURITY_LEVEL, q_SecureMode, u64_Seed,
+                                                q_AuthenticationActive,
+                                                q_TrafficEncryptionActive,
+                                                c_TrafficEncryptionInitVector, &u8_Nrc));
 
          if (q_SecureMode == true)
          {
             osc_write_log_error(c_LogActivity, "SecurityAccess request reported that security is on. "
                                 "No security support here. Use openSYDE GUI tool for this feature.");
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
-         else if (s32_Return != C_NO_ERR)
+         else if (c_Return != Errc::success)
          {
             osc_write_log_error(c_LogActivity, "Did not get a security seed from the target device! Details: " +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_Nrc));
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_Nrc));
          }
          else
          {
@@ -523,16 +527,18 @@ int32_t C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, 
                osc_write_log_warning(c_LogActivity, c_Tmp.c_str());
             }
 
-            s32_Return = mc_OsyProtocol.OsySecurityAccessSendKey(u8_SECURITY_LEVEL, u32_KEY, &u8_Nrc);
-            if (s32_Return != C_NO_ERR)
+            //boundary: the openSYDE protocol driver still uses the integer convention
+            c_Return = make_error_code_from_stw(mc_OsyProtocol.OsySecurityAccessSendKey(u8_SECURITY_LEVEL, u32_KEY,
+                                                                                        &u8_Nrc));
+            if (c_Return != Errc::success)
             {
                osc_write_log_error(c_LogActivity, "The target device did not access the security key! Details: " +
-                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_Nrc));
+                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_Nrc));
             }
          }
       }
       //now we can start setting the Node ID and Bitrate
-      if (s32_Return == C_NO_ERR)
+      if (c_Return == Errc::success)
       {
          const std::string c_LogActivity = "NodeConfiguration";
          const C_OscProtocolDriverOsyNode c_NewServerId(0, ou8_NewNodeId);
@@ -540,12 +546,14 @@ int32_t C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, 
          c_ProgressLogMsg = PrintFormattedCompat(
             "Configuring Node ID \"%d\" to Node with current ID \"%d\" on Interface CAN %u.",
             ou8_NewNodeId, ou8_CurrentNodeId, ou8_InterfaceIndex + 1U);
-         s32_Return = mc_OsyProtocol.OsySetNodeIdForChannel(0, ou8_InterfaceIndex, c_NewServerId, &u8_Nrc);
-         m_ReportProgress(s32_Return, c_ProgressLogMsg);
-         if (s32_Return != C_NO_ERR)
+         //boundary: the openSYDE protocol driver still uses the integer convention
+         c_Return = make_error_code_from_stw(mc_OsyProtocol.OsySetNodeIdForChannel(0, ou8_InterfaceIndex,
+                                                                                   c_NewServerId, &u8_Nrc));
+         m_ReportProgress(c_Return.value(), c_ProgressLogMsg);
+         if (c_Return != Errc::success)
          {
             osc_write_log_error(c_LogActivity, "Could not set Node ID! Details: " +
-                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_Nrc));
+                                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_Nrc));
          }
          else
          {
@@ -553,22 +561,24 @@ int32_t C_OscDcBasicSequences::ConfigureDevice(const uint8_t ou8_CurrentNodeId, 
             c_ProgressLogMsg = PrintFormattedCompat(
                "Configuring Bitrate %u kbit/s to Node on Interface CAN %u.",
                ou32_Bitrate, ou8_InterfaceIndex + 1U);
-            s32_Return = mc_OsyProtocol.OsySetBitrate(0, ou8_InterfaceIndex, ou32_Bitrate * 1000U,
-                                                      &u8_Nrc);
-            m_ReportProgress(s32_Return, c_ProgressLogMsg);
+            //boundary: the openSYDE protocol driver still uses the integer convention
+            c_Return = make_error_code_from_stw(mc_OsyProtocol.OsySetBitrate(0, ou8_InterfaceIndex,
+                                                                             ou32_Bitrate * 1000U,
+                                                                             &u8_Nrc));
+            m_ReportProgress(c_Return.value(), c_ProgressLogMsg);
 
-            if (s32_Return != C_NO_ERR)
+            if (c_Return != Errc::success)
             {
                osc_write_log_error(c_LogActivity, "Could not set Bitrate! Details: " +
-                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_Nrc));
+                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(c_Return.value(), u8_Nrc));
             }
          }
       }
    }
 
-   m_ReportProgress(s32_Return, "Device configuration finished.");
+   m_ReportProgress(c_Return.value(), "Device configuration finished.");
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

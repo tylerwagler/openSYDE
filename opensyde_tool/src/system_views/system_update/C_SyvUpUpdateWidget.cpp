@@ -1770,7 +1770,8 @@ void C_SyvUpUpdateWidget::m_Timer(void)
             this->mpc_Ui->pc_PbConnect->setEnabled(true);
 
             // Get the connect status of the nodes
-            tgl_assert(this->mpc_UpSequences->GetConnectStates(c_NodeStates) == C_NO_ERR);
+            //boundary: C_SyvUpSequences reports std::error_code, this class keeps the int32_t flow
+            tgl_assert(this->mpc_UpSequences->GetConnectStates(c_NodeStates).value() == C_NO_ERR);
             Q_EMIT (this->SigNodeConnectStates(c_NodeStates, this->mc_NodePreconditionErrors));
 
             m_HandleConnectionFailure();
@@ -1783,7 +1784,8 @@ void C_SyvUpUpdateWidget::m_Timer(void)
             // Get the connect status of the nodes and inform the UI
             std::vector<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> c_NodeStates;
 
-            tgl_assert(this->mpc_UpSequences->GetConnectStates(c_NodeStates) == C_NO_ERR);
+            //boundary: C_SyvUpSequences reports std::error_code, this class keeps the int32_t flow
+            tgl_assert(this->mpc_UpSequences->GetConnectStates(c_NodeStates).value() == C_NO_ERR);
             Q_EMIT (this->SigNodeConnectStates(c_NodeStates, this->mc_NodePreconditionErrors));
          }
 
@@ -1925,7 +1927,8 @@ void C_SyvUpUpdateWidget::m_Timer(void)
             // Get the connect status of the nodes and inform the UI
             std::vector<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> c_NodeStates;
 
-            tgl_assert(this->mpc_UpSequences->GetUpdateStates(c_NodeStates) == C_NO_ERR);
+            //boundary: C_SyvUpSequences reports std::error_code, this class keeps the int32_t flow
+            tgl_assert(this->mpc_UpSequences->GetUpdateStates(c_NodeStates).value() == C_NO_ERR);
             Q_EMIT (this->SigNodeUpdateStates(c_NodeStates));
          }
 

@@ -256,11 +256,12 @@ int32_t C_SyvUpSequences::SyvUpCreateTemporaryFolder(const std::string & orc_Tar
        (pc_View != nullptr))
    {
       std::string c_ErrorPath;
+      //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
       s32_Return = C_OscSuSequences::h_CreateTemporaryFolder(
          C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().c_Nodes,
          this->mc_ActiveNodes,
          orc_TargetPath,
-         orc_ApplicationsToWrite, &c_ErrorPath);
+         orc_ApplicationsToWrite, &c_ErrorPath).value();
       orc_ErrorPath = c_ErrorPath.c_str();
    }
 
@@ -825,25 +826,25 @@ void C_SyvUpSequences::AbortCurrentProgress(void)
 
    \param[out]      orc_ConnectStatesNodes   Detailed output parameter description
 
-   \retval   C_NO_ERR   States returned
-   \retval   C_BUSY     previously started sequence still going on
+   \retval   Errc::success   States returned
+   \retval   Errc::busy      previously started sequence still going on
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvUpSequences::GetConnectStates(std::vector<C_OscSuSequencesNodeConnectStates> & orc_ConnectStatesNodes)
-const
+std::error_code C_SyvUpSequences::GetConnectStates(
+   std::vector<C_OscSuSequencesNodeConnectStates> & orc_ConnectStatesNodes) const
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (this->mpc_Thread->isRunning() == true)
    {
-      s32_Return = C_BUSY;
+      c_Return = Errc::busy;
    }
    else
    {
-      s32_Return = C_OscSuSequences::GetConnectStates(orc_ConnectStatesNodes);
+      c_Return = C_OscSuSequences::GetConnectStates(orc_ConnectStatesNodes);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -855,24 +856,25 @@ const
 
    \param[out]      orc_UpdateStatesNodes   Detailed output parameter description
 
-   \retval   C_NO_ERR   States returned
-   \retval   C_BUSY     previously started sequence still going on
+   \retval   Errc::success   States returned
+   \retval   Errc::busy      previously started sequence still going on
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvUpSequences::GetUpdateStates(std::vector<C_OscSuSequencesNodeUpdateStates> & orc_UpdateStatesNodes) const
+std::error_code C_SyvUpSequences::GetUpdateStates(
+   std::vector<C_OscSuSequencesNodeUpdateStates> & orc_UpdateStatesNodes) const
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (this->mpc_Thread->isRunning() == true)
    {
-      s32_Return = C_BUSY;
+      c_Return = Errc::busy;
    }
    else
    {
-      s32_Return = C_OscSuSequences::GetUpdateStates(orc_UpdateStatesNodes);
+      c_Return = C_OscSuSequences::GetUpdateStates(orc_UpdateStatesNodes);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1004,7 +1006,8 @@ void C_SyvUpSequences::m_ThreadFunc(void)
          // Nothing to do. Should not happen.
          break;
       case eACTIVATE_FLASHLOADER:
-         this->ms32_Result = this->ActivateFlashloader(false);
+         //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+         this->ms32_Result = this->ActivateFlashloader(false).value();
          //Ignore error (Same error should be reported with read device information)
          if (this->ms32_Result == C_WARN)
          {
@@ -1012,13 +1015,16 @@ void C_SyvUpSequences::m_ThreadFunc(void)
          }
          break;
       case eREAD_DEVICE_INFORMATION:
-         this->ms32_Result = this->ReadDeviceInformation(false);
+         //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+         this->ms32_Result = this->ReadDeviceInformation(false).value();
          break;
       case eUPDATE_SYSTEM:
-         this->ms32_Result = this->UpdateSystem(this->mc_NodesToFlash, this->mc_NodesOrder);
+         //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+         this->ms32_Result = this->UpdateSystem(this->mc_NodesToFlash, this->mc_NodesOrder).value();
          break;
       case eRESET_SYSTEM:
-         this->ms32_Result = this->ResetSystem();
+         //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+         this->ms32_Result = this->ResetSystem().value();
          //Wait until every device is restarted
          QThread::msleep(2000);
          break;

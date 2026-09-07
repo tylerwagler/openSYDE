@@ -147,7 +147,8 @@ int32_t C_FlaSenDcBasicSequences::InitDcSequences(const std::string & orc_CanCha
 
    if (s32_Return == C_NO_ERR)
    {
-      s32_Return = this->Init(this->mpc_CanDispatcher);
+      //boundary: C_OscDcBasicSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Return = this->Init(this->mpc_CanDispatcher).value();
    }
 
    return s32_Return;
@@ -403,16 +404,21 @@ void C_FlaSenDcBasicSequences::m_ThreadFunc(void)
       // Nothing to do. Should not happen.
       break;
    case eSCAN_ENTER_FLASHLOADER:
-      this->ms32_Result = this->ScanEnterFlashloader(mu32_FlashloaderResetWaitTime);
+      //boundary: C_OscDcBasicSequences reports std::error_code, this class keeps the int32_t flow
+      this->ms32_Result = this->ScanEnterFlashloader(mu32_FlashloaderResetWaitTime).value();
       break;
    case eSCAN_GET_INFO:
-      this->ms32_Result = this->ScanGetInfo();
+      //boundary: C_OscDcBasicSequences reports std::error_code, this class keeps the int32_t flow
+      this->ms32_Result = this->ScanGetInfo().value();
       break;
    case eRESET_SYSTEM:
-      this->ms32_Result = this->ResetSystem();
+      //boundary: C_OscDcBasicSequences reports std::error_code, this class keeps the int32_t flow
+      this->ms32_Result = this->ResetSystem().value();
       break;
    case eCONF_DEVICES:
-      this->ms32_Result = this->ConfigureDevice(mu8_CurrentNodeId, mu8_NewNodeId, mu32_CanBitrate, mu8_InterfaceIndex);
+      //boundary: C_OscDcBasicSequences reports std::error_code, this class keeps the int32_t flow
+      this->ms32_Result =
+         this->ConfigureDevice(mu8_CurrentNodeId, mu8_NewNodeId, mu32_CanBitrate, mu8_InterfaceIndex).value();
       break;
    default:
       tgl_assert(false);

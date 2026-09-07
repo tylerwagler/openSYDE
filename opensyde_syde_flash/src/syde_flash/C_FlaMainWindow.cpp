@@ -810,9 +810,10 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
    if (s32_Return == C_NO_ERR)
    {
       // initialize sequence
+      //boundary: C_OscBuSequences reports std::error_code, this class keeps the int32_t flow
       s32_Return = this->mpc_UpSequences->Init(this->mpc_CanDispatcher,
                                                this->mpc_Ui->pc_GeneralPropertiesWidget->GetBitrate(),
-                                               this->mpc_Ui->pc_GeneralPropertiesWidget->GetNodeId());
+                                               this->mpc_Ui->pc_GeneralPropertiesWidget->GetNodeId()).value();
    }
 
    if (s32_Return != C_NO_ERR)

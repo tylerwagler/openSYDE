@@ -260,10 +260,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const std::string & 
                                                             mhc_PACKAGE_EXT_TMP, c_PackagePathTmp);
 
       // create folders and copy applications to them
-      c_Return = make_error_code_from_stw(C_OscSuSequences::h_CreateTemporaryFolder(orc_SystemDefinition.c_Nodes,
-                                                                            orc_ActiveNodes,
-                                                                            c_PackagePathTmp, c_ApplicationsToWrite,
-                                                                            &c_ErrorPath));
+      c_Return = C_OscSuSequences::h_CreateTemporaryFolder(orc_SystemDefinition.c_Nodes, orc_ActiveNodes,
+                                                          c_PackagePathTmp, c_ApplicationsToWrite, &c_ErrorPath);
       if (c_Return)
       {
          // very strange! normally the precondition check should

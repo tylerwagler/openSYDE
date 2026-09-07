@@ -70,10 +70,10 @@ public:
       eRESET_SYSTEM
    };
 
-   int32_t GetConnectStates(std::vector<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> & orc_ConnectStatesNodes)
-   const override;
-   int32_t GetUpdateStates(std::vector<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> & orc_UpdateStatesNodes)
-   const override;
+   std::error_code GetConnectStates(
+      std::vector<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> & orc_ConnectStatesNodes) const override;
+   std::error_code GetUpdateStates(
+      std::vector<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> & orc_UpdateStatesNodes) const override;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

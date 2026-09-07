@@ -2885,7 +2885,7 @@ std::error_code C_OscComDriverProtocol::m_InitRoutesAndActiveNodes(void)
                                                              this->mu32_ActiveBusIndex,
                                                              u32_ItActiveFlag, e_Mode);
             // C_OscRoutingCalculation is still on the STW integer convention (wave C)
-            c_Retval = make_error_code_from_stw(c_RouteCalculation.GetState());
+            c_Retval = c_RouteCalculation.GetState();
             if (c_Retval == Errc::success)
             {
                // Get the best route for this node

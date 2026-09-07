@@ -12,8 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <list>
+#include <system_error>
 
 #include "stwtypes.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_OscRoutingRoute.hpp"
 #include "C_OscNode.hpp"
@@ -46,7 +48,7 @@ public:
 
    const std::vector<C_OscRoutingRoute> * GetRoutes(void) const;
    const C_OscRoutingRoute * GetBestRoute(void) const;
-   int32_t GetState(void) const;
+   std::error_code GetState(void) const;
    bool CheckItfNumberForRouting(const uint32_t ou32_TargetNodeIndex,
                                  const C_OscNodeComInterfaceSettings & orc_ComItfSettings) const;
 
@@ -56,7 +58,7 @@ private:
    C_OscRoutingCalculation & operator =(const C_OscRoutingCalculation &);
 
    void m_SearchRoute(void);
-   int32_t m_CheckTargetNodeConfig(void) const;
+   std::error_code m_CheckTargetNodeConfig(void) const;
    void m_SearchRoutePointsOnBus(const uint32_t ou32_BusIndex);
    std::vector<uint32_t> m_GetAllRoutePointsOfNodeOnOneInput(const C_OscRoutingRoutePoint & orc_InPoint,
                                                              const uint32_t ou32_InItfNumber);
@@ -66,7 +68,7 @@ private:
    void m_AddOneOpenRoute(const C_OscRoutingRoute & orc_Route);
    void m_AddOneRouteToTarget(const C_OscRoutingRoute & orc_Route);
 
-   int32_t m_CheckRoutesForLimitations(void);
+   std::error_code m_CheckRoutesForLimitations(void);
 
    uint32_t mu32_StartBusIndex;
    uint32_t mu32_TargetNodeIndex;
@@ -75,7 +77,7 @@ private:
    std::vector<C_OscRoutingRoutePoint> mc_AllRoutePoints;
    std::vector<C_OscRoutingRoute> mc_RoutesToTarget;
    std::list<C_OscRoutingRoute> mc_AllOpenRoutes;
-   int32_t ms32_ResultState;
+   std::error_code mc_ResultState;
 
    std::vector<uint32_t> mc_CheckedBuses;
    bool mq_PcBus;

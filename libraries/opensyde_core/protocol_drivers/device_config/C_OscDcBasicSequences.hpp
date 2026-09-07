@@ -10,10 +10,12 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <string>
+#include <system_error>
 #include "C_CanDispatcher.hpp"
 #include "C_OscProtocolDriverOsyTpCan.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
 #include "C_OscDcDeviceInformation.hpp"
+#include "C_OscErrorCategory.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -30,12 +32,12 @@ public:
    C_OscDcBasicSequences(void);
    virtual ~C_OscDcBasicSequences(void);
 
-   int32_t Init(stw::can::C_CanDispatcher * const opc_CanDispatcher);
-   int32_t ScanEnterFlashloader(const uint32_t ou32_FlashloaderResetWaitTime);
-   int32_t ScanGetInfo(void);
-   int32_t ResetSystem(void);
-   int32_t ConfigureDevice(const uint8_t ou8_CurrentNodeId, const uint8_t ou8_NewNodeId, const uint32_t ou32_Bitrate,
-                           const uint8_t ou8_InterfaceIndex);
+   std::error_code Init(stw::can::C_CanDispatcher * const opc_CanDispatcher);
+   std::error_code ScanEnterFlashloader(const uint32_t ou32_FlashloaderResetWaitTime);
+   std::error_code ScanGetInfo(void);
+   std::error_code ResetSystem(void);
+   std::error_code ConfigureDevice(const uint8_t ou8_CurrentNodeId, const uint8_t ou8_NewNodeId,
+                                   const uint32_t ou32_Bitrate, const uint8_t ou8_InterfaceIndex);
 
    static std::string h_DevicesInfoToString(
       const std::vector<C_OscDcDeviceInformation> & orc_DeviceInfoResult, const bool oq_SecurityFeatureUsed);

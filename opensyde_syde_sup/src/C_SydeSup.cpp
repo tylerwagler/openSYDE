@@ -697,7 +697,8 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
       case C_NO_ERR:
          h_WriteLog("Setup Sequence", "Sequence initialized.");
          // activate Flashloader
-         s32_Return = c_Sequence.ActivateFlashloader();
+         //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+         s32_Return = c_Sequence.ActivateFlashloader().value();
          break;
       case C_RANGE:
          e_Result = eERR_SEQUENCE_ROUTING;
@@ -1379,7 +1380,8 @@ void C_SydeSup::m_Conclude(C_SupSuSequences & orc_Sequence, const bool & orq_Res
    // reset system (if Flashloader activation failed or system update succeeded)
    if (orq_ResetSystem == true)
    {
-      s32_Result = orc_Sequence.ResetSystem();
+      //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Result = orc_Sequence.ResetSystem().value();
       if (s32_Result == C_NO_ERR)
       {
          h_WriteLog("Reset System", "System reset successful.", false, mq_Quiet);
@@ -1434,7 +1436,8 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
       c_NodeApplicationsHelperStruct.resize(orc_ActiveNodes.size());
 
       orc_Sequence.ClearActiveDeviceInformation();
-      s32_Result = orc_Sequence.ReadDeviceInformation();
+      //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Result = orc_Sequence.ReadDeviceInformation().value();
 
       if (s32_Result == C_NO_ERR)
       {
@@ -1598,7 +1601,8 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
 
    if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
    {
-      s32_Result = orc_Sequence.UpdateSystem(orc_ApplicationsToWrite, orc_NodesUpdateOrder);
+      //boundary: C_OscSuSequences reports std::error_code, this class keeps the int32_t flow
+      s32_Result = orc_Sequence.UpdateSystem(orc_ApplicationsToWrite, orc_NodesUpdateOrder).value();
    }
    return s32_Result;
 }

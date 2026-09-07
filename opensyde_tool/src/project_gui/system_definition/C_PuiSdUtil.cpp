@@ -904,7 +904,8 @@ bool C_PuiSdUtil::h_CheckXappNodeReachable(const uint32_t ou32_SdNodeIndex, cons
                                                         u32_BusIndex,
                                                         ou32_TargetNodeIndex, C_OscRoutingCalculation::eDIAGNOSTIC);
 
-            const int32_t s32_Retval = c_Calculation.GetState();
+            // C_OscRoutingCalculation reports std::error_code; this function keeps the int32_t flow
+            const int32_t s32_Retval = c_Calculation.GetState().value();
 
             if (s32_Retval == C_NO_ERR)
             {
