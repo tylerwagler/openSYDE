@@ -46,7 +46,14 @@ else()
    set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          0)
    set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           0)
 endif()
-add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/osy_core)
+# Only pull in our own copy of opensyde_core when nothing has provided it already.
+# Building this tool on its own (the historical path, and what build.sh does) takes
+# this branch and is unchanged. The root CMakeLists.txt adds one core configured with
+# every subsystem enabled before adding the tools, so a whole-repo build shares a
+# single core archive instead of compiling it once per tool.
+if(NOT TARGET opensyde_core)
+   add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/osy_core)
+endif()
 
 # warn a lot
 # Unfortunately forcing C90 by using "-Wc90-c99-compat" or "-std=c89" would (correctly) also prohibit
