@@ -55,7 +55,7 @@ protected:
    EVP_PKEY * mpc_TheKey;
    uint8_t * mpu8_AesKey;
 
-   int32_t m_ExtractCompressedPublicKey(uint8_t(&orau8_PublicKey)[hu32_PUBLIC_KEY_LENGTH]) const;
+   std::error_code m_ExtractCompressedPublicKey(uint8_t(&orau8_PublicKey)[hu32_PUBLIC_KEY_LENGTH]) const;
    static EVP_PKEY * mh_CreateEvpPkeyFromRawPublicKey(const uint8_t(&orau8_PublicKey)[hu32_PUBLIC_KEY_LENGTH]);
 };
 

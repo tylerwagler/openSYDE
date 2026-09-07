@@ -101,13 +101,14 @@ std::error_code C_OscSecurityEcdhAes::GetAesKey(uint8_t(&orau8_AesKey)[hu32_AES_
 
    \param[out]       orau8_PublicKey          Public key
 
-   \retval  C_NO_ERR    key available
-   \retval  C_NOACT     error trying to extract key
+   \return
+   std::error_code with Errc::success if the key is available, Errc::noact on an error trying to extract it
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdhAes::m_ExtractCompressedPublicKey(uint8_t (&orau8_PublicKey)[hu32_PUBLIC_KEY_LENGTH]) const
+std::error_code C_OscSecurityEcdhAes::m_ExtractCompressedPublicKey(
+   uint8_t (&orau8_PublicKey)[hu32_PUBLIC_KEY_LENGTH]) const
 {
-   int32_t s32_Result = C_NOACT;
+   std::error_code c_Result = Errc::noact;
 
    if (mpc_TheKey != nullptr)
    {
@@ -119,10 +120,10 @@ int32_t C_OscSecurityEcdhAes::m_ExtractCompressedPublicKey(uint8_t (&orau8_Publi
       if ((x_Result == 1) && (x_KeyLength == hu32_PUBLIC_KEY_LENGTH))
       {
          //sizes other than 33 should not happen; a compressed key should always be 33 bytes
-         s32_Result = C_NO_ERR;
+         c_Result = Errc::success;
       }
    }
-   return s32_Result;
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -248,8 +249,8 @@ std::error_code C_OscSecurityEcdhAes::CreateEcKeys(uint8_t (&orau8_PublicKey)[hu
             if ((x_Result == 1) && (mpc_TheKey != nullptr))
             {
                //extract binary keys and remember:
-               const int32_t s32_ExtractResult = m_ExtractCompressedPublicKey(orau8_PublicKey);
-               if (s32_ExtractResult == C_NO_ERR)
+               const std::error_code c_ExtractResult = m_ExtractCompressedPublicKey(orau8_PublicKey);
+               if (!c_ExtractResult)
                {
                   EVP_PKEY_CTX_free(pc_KeyContext);
                   return Errc::success;

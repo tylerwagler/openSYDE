@@ -1616,8 +1616,10 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                         c_PrivKey = pc_PemKeyInfo->GetPrivateKey();
 
                         //calculate RSA signature with private key and random value from server (u64_Seed)
+                        //C_OscSecurityRsa reports std::error_code; this driver still reports int32_t
                         s32_Return =
-                           C_OscSecurityRsa::h_SignSignature(c_PrivKey, c_RandomValue, c_AuthenticationSignature);
+                           C_OscSecurityRsa::h_SignSignature(c_PrivKey, c_RandomValue,
+                                                             c_AuthenticationSignature).value();
 
                         if ((s32_Return != C_NO_ERR) || (c_AuthenticationSignature.size() != 128U))
                         {

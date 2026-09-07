@@ -16,6 +16,7 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <system_error>
 
 #include "openssl/x509.h"
 #include "openssl/evp.h"
@@ -26,6 +27,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscSecurityEcdsa.hpp"
 #include "TglUtils.hpp"
 #include "C_SclStringCompat.hpp"
@@ -89,13 +91,13 @@ C_OscSecurityEcdsa::C_Ecdsa256Signature::C_Ecdsa256Signature()
 
    \param[out]  orc_Signature   string representation of DER encoded signature
 
-   \retval   C_NO_ERR   No problems
-   \retval   C_CONFIG   Held data not valid; conversion failed
+   \return
+   std::error_code with Errc::success on success, Errc::config if the held data is not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::GetAsDerString(std::string & orc_Signature) const
+std::error_code C_OscSecurityEcdsa::C_Ecdsa256Signature::GetAsDerString(std::string & orc_Signature) const
 {
-   int32_t s32_Return = C_CONFIG;
+   std::error_code c_Return = Errc::config;
 
    orc_Signature = "";
 
@@ -136,7 +138,7 @@ int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::GetAsDerString(std::string & or
 
                   delete[] pu8_OriginalBuffer;
 
-                  s32_Return = C_NO_ERR;
+                  c_Return = Errc::success;
                }
             }
             ECDSA_SIG_free(pc_Signature);
@@ -149,7 +151,7 @@ int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::GetAsDerString(std::string & or
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -159,13 +161,13 @@ int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::GetAsDerString(std::string & or
 
    \param[in]  orc_Signature   string representation of DER encoded signature
 
-   \retval   C_NO_ERR   No problems
-   \retval   C_RANGE    No valid signature in string; conversion failed
+   \return
+   std::error_code with Errc::success on success, Errc::range if the string holds no valid signature
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::SetFromDerString(const std::string & orc_Signature)
+std::error_code C_OscSecurityEcdsa::C_Ecdsa256Signature::SetFromDerString(const std::string & orc_Signature)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
    //maximum size for DER encoded: 72 bytes
    const uint32_t u32_MAX_LENGTH_DER_ENCODED_BYTES = 72U;
 
@@ -216,13 +218,13 @@ int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::SetFromDerString(const std::str
                tgl_assert(x_Result == BN_num_bytes(pc_SignatureSpart)); //we already checked size above; this would
                                                                         // be unexpected
                this->u8_NumBytesUsedSpart = static_cast<uint8_t>(x_Result);
-               s32_Return = C_NO_ERR;
+               c_Return = Errc::success;
             }
             ECDSA_SIG_free(pc_Signature);
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -266,14 +268,15 @@ C_OscSecurityEcdsa::~C_OscSecurityEcdsa()
    \param[in]    orc_X509              certificate data
    \param[in]    orau8_Binary          public key in binary format
 
-   \retval   C_NO_ERR   Conversion done
-   \retval   C_RANGE    Could not parse key from certificate
+   \return
+   std::error_code with Errc::success on success, Errc::range if the key could not be parsed from the certificate
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(const std::vector<uint8_t> & orc_X509, uint8_t(
-                                                                     &orau8_Binary)[C_OscSecurityEcdsa::hu32_SECP256R1_PUBLIC_KEY_LENGTH])
+std::error_code C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(
+   const std::vector<uint8_t> & orc_X509,
+   uint8_t(&orau8_Binary)[C_OscSecurityEcdsa::hu32_SECP256R1_PUBLIC_KEY_LENGTH])
 {
-   int32_t s32_Result = C_RANGE;
+   std::error_code c_Result = Errc::range;
 
    if (orc_X509.size() != 0)
    {
@@ -342,7 +345,7 @@ int32_t C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(const std::vec
                            tgl_assert(x_Result == 32); //size already checked; this would be unexpected
                            x_Result = BN_bn2bin(pc_Ypart, &orau8_Binary[32]);
                            tgl_assert(x_Result == 32); //size already checked; this would be unexpected
-                           s32_Result = C_NO_ERR;
+                           c_Result = Errc::success;
                         }
                         BN_clear_free(pc_Xpart);
                         BN_clear_free(pc_Ypart);
@@ -357,7 +360,7 @@ int32_t C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(const std::vec
          EVP_PKEY_free(pc_EvpKey);
       }
    }
-   return s32_Result;
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -382,16 +385,18 @@ int32_t C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(const std::vec
    \param[out]   orc_Signature         The signature over the digest.
    \param[out]   orc_ErrorMessage      Error feedback for caller
 
-   \retval   C_NO_ERR   Signature successfully generated
-   \retval   C_RANGE    Invalid key; technically this should not happen as we do not explicitly check the key content
-   \retval   C_NOACT    Could not generate signature
+   \return
+   std::error_code with Errc::success on success,
+   Errc::range on an invalid key (should not happen as we do not explicitly check the key content),
+   Errc::noact if the signature could not be generated
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(const uint8_t (&orau8_Digest)[hu32_SHA256_FINAL_LENGTH],
-                                                          const uint8_t(&orau8_PrivateKey)[hu32_SECP256R1_PRIVATE_KEY_LENGTH], C_Ecdsa256Signature & orc_Signature,
-                                                          std::string & orc_ErrorMessage)
+std::error_code C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(
+   const uint8_t (&orau8_Digest)[hu32_SHA256_FINAL_LENGTH],
+   const uint8_t(&orau8_PrivateKey)[hu32_SECP256R1_PRIVATE_KEY_LENGTH], C_Ecdsa256Signature & orc_Signature,
+   std::string & orc_ErrorMessage)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    //converting the binary data of private key back to openSSL internal structures
    BIGNUM * const pc_BigNum = BN_bin2bn(&orau8_PrivateKey[0], hu32_SECP256R1_PRIVATE_KEY_LENGTH, nullptr);
@@ -437,7 +442,7 @@ int32_t C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(const uint8_t (&orau8_
 
          if (pc_EvpKey != nullptr)
          {
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
 
             //Sign the digest using EVP_PKEY_sign (produces DER-encoded ECDSA signature)
             EVP_PKEY_CTX * const pc_SignCtx = EVP_PKEY_CTX_new(pc_EvpKey, nullptr);
@@ -485,7 +490,7 @@ int32_t C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(const uint8_t (&orau8_
                               x_Result = BN_bn2bin(pc_SignatureSpart, &orc_Signature.au8_Spart[0]);
                               tgl_assert(x_Result == BN_num_bytes(pc_SignatureSpart));
                               orc_Signature.u8_NumBytesUsedSpart = static_cast<uint8_t>(x_Result);
-                              s32_Return = C_NO_ERR;
+                              c_Return = Errc::success;
                            }
                            ECDSA_SIG_free(pc_Signature);
                         }
@@ -513,7 +518,7 @@ int32_t C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(const uint8_t (&orau8_
       orc_ErrorMessage = "Could not convert private key from data. Maybe check pem file.";
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -534,18 +539,18 @@ int32_t C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(const uint8_t (&orau8_
    \param[out]     orq_Valid        true: signature valid
                                     false: signature not valid
 
-   \retval   C_NO_ERR   Signature was checked (result in orq_Valid)
-   \retval   C_RANGE    Invalid input
-                        (key and/or signature in unexpected format)
-   \retval   C_NOACT    Signature verification failed
-                        (internal error returned by used security library; should not happen in regular use cases)
+   \return
+   std::error_code with Errc::success if the signature was checked (result in orq_Valid),
+   Errc::range on invalid input (key and/or signature in unexpected format),
+   Errc::noact if the verification itself failed
+   (internal error returned by used security library; should not happen in regular use cases)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdsa::h_VerifyEcdsaSecp256r1Signature(
+std::error_code C_OscSecurityEcdsa::h_VerifyEcdsaSecp256r1Signature(
    const uint8_t(&orau8_PublicKey)[hu32_SECP256R1_PUBLIC_KEY_LENGTH], const C_Ecdsa256Signature & orc_Signature,
    const uint8_t (&orau8_Digest)[hu32_SHA256_FINAL_LENGTH], bool & orq_Valid)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    //set default if caller did not
    orq_Valid = false;
@@ -631,15 +636,15 @@ int32_t C_OscSecurityEcdsa::h_VerifyEcdsaSecp256r1Signature(
                               switch (x_Result)
                               {
                               case 0: //check done; result stays "false"
-                                 s32_Return = C_NO_ERR;
+                                 c_Return = Errc::success;
                                  break;
                               case 1: //check done; result becomes "true"
-                                 s32_Return = C_NO_ERR;
+                                 c_Return = Errc::success;
                                  orq_Valid = true;
                                  break;
                               case -1: //function reports an error
                               default: //undefined function result
-                                 s32_Return = C_NOACT;
+                                 c_Return = Errc::noact;
                                  break;
                               }
                            }
@@ -660,7 +665,7 @@ int32_t C_OscSecurityEcdsa::h_VerifyEcdsaSecp256r1Signature(
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -671,13 +676,13 @@ int32_t C_OscSecurityEcdsa::h_VerifyEcdsaSecp256r1Signature(
    * Sha256Update (at least once)
    * Sha256GetDigest (once)
 
-   \retval   C_NO_ERR   Engine initialized
-   \retval   C_NOACT    Initialization failed
+   \return
+   std::error_code with Errc::success if the engine was initialized, Errc::noact if initialization failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdsa::Sha256Init()
+std::error_code C_OscSecurityEcdsa::Sha256Init()
 {
-   int32_t s32_Return = C_NOACT;
+   std::error_code c_Return = Errc::noact;
 
    //defensive measure: if context was not finalized then clear first:
    if (mpc_MdContext != nullptr)
@@ -693,10 +698,10 @@ int32_t C_OscSecurityEcdsa::Sha256Init()
                                                                               // match library interface
    if (x_Result == 1)
    {
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -707,21 +712,22 @@ int32_t C_OscSecurityEcdsa::Sha256Init()
    \param[in]  opu8_Data        Data to calculate the SHA value over
    \param[in]  ou32_NumBytes    Size of memory referenced by opu8_Data in bytes
 
-   \retval   C_NO_ERR   Data streamed into SHA calculation
-   \retval   C_RANGE    opu8_Data is NULL
-   \retval   C_CONFIG   Engine was not initialized with Sha256Init
-   \retval   C_NOACT    Calculation failed
+   \return
+   std::error_code with Errc::success if the data was streamed into the SHA calculation,
+   Errc::range if opu8_Data is NULL,
+   Errc::config if the engine was not initialized with Sha256Init,
+   Errc::noact if the calculation failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdsa::Sha256Update(const uint8_t * const opu8_Data, const uint32_t ou32_NumBytes)
+std::error_code C_OscSecurityEcdsa::Sha256Update(const uint8_t * const opu8_Data, const uint32_t ou32_NumBytes)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (opu8_Data != nullptr)
    {
       if (mpc_MdContext == nullptr)
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
@@ -731,16 +737,16 @@ int32_t C_OscSecurityEcdsa::Sha256Update(const uint8_t * const opu8_Data, const 
                                                                                          // interface
          if (x_Result != 1)
          {
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
          }
          else
          {
-            s32_Return = C_NO_ERR;
+            c_Return = Errc::success;
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -750,18 +756,19 @@ int32_t C_OscSecurityEcdsa::Sha256Update(const uint8_t * const opu8_Data, const 
 
    \param[out]  orau8_Digest   Resulting digest value
 
-   \retval   C_NO_ERR   No problems
-   \retval   C_CONFIG   Engine was not initialized with Sha256Init
-   \retval   C_NOACT    Getting digest value failed
+   \return
+   std::error_code with Errc::success on success,
+   Errc::config if the engine was not initialized with Sha256Init,
+   Errc::noact if getting the digest value failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdsa::Sha256GetDigest(uint8_t (&orau8_Digest)[hu32_SHA256_FINAL_LENGTH])
+std::error_code C_OscSecurityEcdsa::Sha256GetDigest(uint8_t (&orau8_Digest)[hu32_SHA256_FINAL_LENGTH])
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (mpc_MdContext == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -771,12 +778,12 @@ int32_t C_OscSecurityEcdsa::Sha256GetDigest(uint8_t (&orau8_Digest)[hu32_SHA256_
                                                                                       // to match library interface
       if ((x_Result != 1) || (x_Size != hu32_SHA256_FINAL_LENGTH))
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
       //clean up:
       EVP_MD_CTX_free(mpc_MdContext);
       mpc_MdContext = nullptr;
    }
 
-   return s32_Return;
+   return c_Return;
 }

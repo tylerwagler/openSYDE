@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "TglFile.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclStringList.hpp"
 #include "C_OscSecurityPem.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -119,26 +122,24 @@ const C_OscSecurityPemKeyInfo * C_OscSecurityPemDatabase::GetLevel7PemInformatio
    \param[in]  orc_Path    Path
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   Information extracted
-   \retval   C_RANGE    File not found
-   \retval   C_CONFIG   Invalid file content
+   std::error_code with Errc::success if the information was extracted,
+   Errc::range if the file was not found,
+   Errc::config on invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemDatabase::AddLevel7PemFile(const std::string & orc_Path)
+std::error_code C_OscSecurityPemDatabase::AddLevel7PemFile(const std::string & orc_Path)
 {
-   int32_t s32_Retval;
+   std::error_code c_Retval = Errc::success;
 
    if (TglFileExists(orc_Path))
    {
-      s32_Retval = C_OscSecurityPemDatabase::m_TryAddKeyFromPath(orc_Path, false);
+      c_Retval = C_OscSecurityPemDatabase::m_TryAddKeyFromPath(orc_Path, false);
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -147,15 +148,12 @@ int32_t C_OscSecurityPemDatabase::AddLevel7PemFile(const std::string & orc_Path)
    \param[in]  orc_FolderPath    Folder path
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   Information extracted
-   \retval   C_RANGE    Folder not found
+   std::error_code with Errc::success if the information was extracted, Errc::range if the folder was not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemDatabase::ParseFolder(const std::string & orc_FolderPath)
+std::error_code C_OscSecurityPemDatabase::ParseFolder(const std::string & orc_FolderPath)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    const std::string c_SclFolderPathWithDelimiter =
       stw::tgl::TglFileIncludeTrailingDelimiter(orc_FolderPath);
@@ -170,7 +168,7 @@ int32_t C_OscSecurityPemDatabase::ParseFolder(const std::string & orc_FolderPath
       for (uint32_t u32_It = 0UL; u32_It < c_Files.size(); ++u32_It)
       {
          const std::string c_CurFolderPath = c_Files[u32_It];
-         C_OscSecurityPemDatabase::m_TryAddKeyFromPath(c_CurFolderPath, true);
+         (void)C_OscSecurityPemDatabase::m_TryAddKeyFromPath(c_CurFolderPath, true);
       }
       osc_write_log_info("Read PEM database",
                          "Imported " + std::to_string(
@@ -180,9 +178,9 @@ int32_t C_OscSecurityPemDatabase::ParseFolder(const std::string & orc_FolderPath
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -192,22 +190,20 @@ int32_t C_OscSecurityPemDatabase::ParseFolder(const std::string & orc_FolderPath
    \param[in]  oq_AddToList   Add to list (or alternative level 7 file)
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   Information extracted
-   \retval   C_RANGE    File not found
-   \retval   C_CONFIG   Invalid file content
+   std::error_code with Errc::success if the information was extracted,
+   Errc::range if the file was not found,
+   Errc::config on invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const std::string & orc_Path, const bool oq_AddToList)
+std::error_code C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const std::string & orc_Path, const bool oq_AddToList)
 {
    C_OscSecurityPem c_NewFile;
 
    std::string c_ErrorMessage;
-   int32_t s32_Retval = c_NewFile.LoadFromFile(orc_Path, c_ErrorMessage);
-   if (s32_Retval == C_NO_ERR)
+   std::error_code c_Retval = c_NewFile.LoadFromFile(orc_Path, c_ErrorMessage);
+   if (!c_Retval)
    {
-      s32_Retval = m_TryAddKey(c_NewFile.GetKeyInfo(), c_ErrorMessage, oq_AddToList);
+      c_Retval = m_TryAddKey(c_NewFile.GetKeyInfo(), c_ErrorMessage, oq_AddToList);
    }
    if (c_ErrorMessage.size() > 0UL)
    {
@@ -223,7 +219,7 @@ int32_t C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const std::string & orc_Pa
       osc_write_log_warning(c_Heading,
                             "Error reading file \"" + orc_Path + "\": " + c_ErrorMessage);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -234,16 +230,13 @@ int32_t C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const std::string & orc_Pa
    \param[in]      oq_AddToList        Add to list (or alternative level 7 file)
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   Information extracted
-   \retval   C_CONFIG   Invalid file content
+   std::error_code with Errc::success if the information was extracted, Errc::config on invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemDatabase::m_TryAddKey(const C_OscSecurityPemKeyInfo & orc_NewKey,
-                                              std::string & orc_ErrorMessage, const bool oq_AddToList)
+std::error_code C_OscSecurityPemDatabase::m_TryAddKey(const C_OscSecurityPemKeyInfo & orc_NewKey,
+                                                      std::string & orc_ErrorMessage, const bool oq_AddToList)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_NewKey.AreKeysAvailable(orc_ErrorMessage, oq_AddToList))
    {
@@ -255,7 +248,7 @@ int32_t C_OscSecurityPemDatabase::m_TryAddKey(const C_OscSecurityPemKeyInfo & or
          }
          else
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
             orc_ErrorMessage = "ignored because serial number already exists";
          }
       }
@@ -267,9 +260,9 @@ int32_t C_OscSecurityPemDatabase::m_TryAddKey(const C_OscSecurityPemKeyInfo & or
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -14,6 +14,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <system_error>
 
 #include "openssl/x509.h"
 #include "openssl/x509v3.h"
@@ -22,6 +23,7 @@
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscSecurityPemBase.hpp"
 
@@ -106,16 +108,14 @@ const std::string & C_OscSecurityPemBase::GetMetaInfos() const
    \param[in,out]  orc_ErrorMessage    Error message (does not include file name)
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   Information extracted
-   \retval   C_RANGE    File not found
-   \retval   C_CONFIG   Invalid file content
+   std::error_code with Errc::success if the information was extracted,
+   Errc::range if the file was not found,
+   Errc::config on invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemBase::LoadFromFile(const std::string & orc_FileName, std::string & orc_ErrorMessage)
+std::error_code C_OscSecurityPemBase::LoadFromFile(const std::string & orc_FileName, std::string & orc_ErrorMessage)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    this->Clear();
 
@@ -129,23 +129,23 @@ int32_t C_OscSecurityPemBase::LoadFromFile(const std::string & orc_FileName, std
          std::vector<uint8_t> c_BufferFile;
          c_BufferFile.resize(c_PemFileContent.size());
          memcpy(&c_BufferFile[0], c_PemFileContent.data(), c_PemFileContent.size());
-         s32_Retval = this->m_ReadPublicKey(c_BufferFile, orc_ErrorMessage);
-         if (s32_Retval == C_NO_ERR)
+         c_Retval = this->m_ReadPublicKey(c_BufferFile, orc_ErrorMessage);
+         if (!c_Retval)
          {
-            s32_Retval = this->m_ReadMetaInfos(c_BufferFile, orc_ErrorMessage);
+            c_Retval = this->m_ReadMetaInfos(c_BufferFile, orc_ErrorMessage);
          }
-         if (s32_Retval == C_NO_ERR)
+         if (!c_Retval)
          {
-            s32_Retval = this->m_ReadPrivateKey(c_BufferFile, orc_ErrorMessage);
+            c_Retval = this->m_ReadPrivateKey(c_BufferFile, orc_ErrorMessage);
          }
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
       orc_ErrorMessage += "could not read file";
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -163,16 +163,13 @@ int32_t C_OscSecurityPemBase::LoadFromFile(const std::string & orc_FileName, std
    \param[in,out]  orc_ErrorMessage    Error message
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   Information extracted
-   \retval   C_CONFIG   Invalid file content
+   std::error_code with Errc::success if the information was extracted, Errc::config on invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemBase::m_ReadPublicKey(const std::vector<uint8_t> & orc_FileContent,
-                                              std::string & orc_ErrorMessage)
+std::error_code C_OscSecurityPemBase::m_ReadPublicKey(const std::vector<uint8_t> & orc_FileContent,
+                                                      std::string & orc_ErrorMessage)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    const int x_ContentSize = static_cast<int>(orc_FileContent.size()); //lint !e970 !e8080 //use type expected by API
    BIO * const pc_PubKeyFile = BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
@@ -294,7 +291,7 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(const std::vector<uint8_t> & orc_F
                         c_PubKeySerialNumber.resize(u32_SerialNumberCount);
                         if (u32_SerialNumberCount == 0)
                         {
-                           s32_Retval = C_CONFIG;
+                           c_Retval = Errc::config;
                            orc_ErrorMessage = "Public key: could not convert serial number into bytes";
                         }
                         else
@@ -304,7 +301,7 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(const std::vector<uint8_t> & orc_F
                            {
                               std::stringstream c_Stream;
                               c_Stream << c_PubKeySerialNumber.size();
-                              s32_Retval = C_CONFIG;
+                              c_Retval = Errc::config;
                               orc_ErrorMessage = "Public key: serial number has invalid size, should be [3,22], is: " +
                                                  c_Stream.str();
                            }
@@ -331,7 +328,7 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(const std::vector<uint8_t> & orc_F
                               }
                               else
                               {
-                                 s32_Retval = C_CONFIG;
+                                 c_Retval = Errc::config;
                                  orc_ErrorMessage = "Public key: serial number format unknown";
                               }
                            }
@@ -340,14 +337,14 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(const std::vector<uint8_t> & orc_F
                   }
                   else
                   {
-                     s32_Retval = C_CONFIG;
+                     c_Retval = Errc::config;
                      orc_ErrorMessage = "Public key: could not get serial number";
                   }
                }
             }
             else
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
                orc_ErrorMessage = "Public key: could not convert X509 section into bytes";
             }
          }
@@ -355,17 +352,17 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(const std::vector<uint8_t> & orc_F
       }
       else
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
          orc_ErrorMessage = "Public key: X509 section not found";
       }
       BIO_free(pc_PubKeyFile);
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       orc_ErrorMessage = "Public key: could not read file content";
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -375,16 +372,13 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(const std::vector<uint8_t> & orc_F
    \param[in,out]  orc_ErrorMessage    Error message
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   Information extracted
-   \retval   C_CONFIG   Invalid file content
+   std::error_code with Errc::success if the information was extracted, Errc::config on invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemBase::m_ReadMetaInfos(const std::vector<uint8_t> & orc_FileContent,
-                                              std::string & orc_ErrorMessage)
+std::error_code C_OscSecurityPemBase::m_ReadMetaInfos(const std::vector<uint8_t> & orc_FileContent,
+                                                      std::string & orc_ErrorMessage)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    const int x_ContentSize = static_cast<int>(orc_FileContent.size()); //lint !e970 !e8080 //use type expected by API
    BIO * const pc_PubKeyFile = BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
@@ -413,35 +407,35 @@ int32_t C_OscSecurityPemBase::m_ReadMetaInfos(const std::vector<uint8_t> & orc_F
                }
                else
                {
-                  s32_Retval = C_CONFIG;
+                  c_Retval = Errc::config;
                   orc_ErrorMessage = "Public key: could not get mem pointer for buffer object";
                }
             }
             else
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
                orc_ErrorMessage = "Public key: could not print meta options";
             }
             BIO_free(pc_PrintBuffer);
          }
          else
          {
-            s32_Retval = C_CONFIG;
+            c_Retval = Errc::config;
             orc_ErrorMessage = "Public key: could not create buffer object";
          }
          X509_free(pc_RsaPub);
       }
       else
       {
-         s32_Retval = C_CONFIG;
+         c_Retval = Errc::config;
          orc_ErrorMessage = "Public key: X509 section not found";
       }
       BIO_free(pc_PubKeyFile);
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       orc_ErrorMessage = "Public key: could not read file content";
    }
-   return s32_Retval;
+   return c_Retval;
 }

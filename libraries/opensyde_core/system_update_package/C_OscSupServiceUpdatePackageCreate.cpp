@@ -1136,9 +1136,8 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_CalcSig(const std::string
 
          (void)std::memcpy(&au8_PrivateKey[0], &orc_Key[0], C_OscSecurityEcdsa::hu32_SECP256R1_PRIVATE_KEY_LENGTH);
 
-         c_Retval =
-            static_cast<Errc>(C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(au8_BinDigest, au8_PrivateKey,
-                                                                                c_Signature, c_Error));
+         c_Retval = C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(au8_BinDigest, au8_PrivateKey,
+                                                                      c_Signature, c_Error);
          if (c_Retval)
          {
             mhc_ErrorMessage = c_Error;
@@ -1146,7 +1145,7 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_CalcSig(const std::string
          }
          else
          {
-            c_Retval = static_cast<Errc>(c_Signature.GetAsDerString(orc_Signature));
+            c_Retval = c_Signature.GetAsDerString(orc_Signature);
             tgl_assert(!c_Retval); //the library gave us this signature; why would it not be valid ?
 
             mh_DigestToString(au8_BinDigest, c_Log);
@@ -1180,7 +1179,7 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_GetPemFileContent(const s
                                                                          const std::vector<uint8_t> & orc_SignatureNodes, const std::vector<std::string> & orc_NodeSignaturePemFiles, const uint32_t ou32_NumNodes, std::vector<uint8_t> & orc_PreparedSignatureNodes,
                                                                          std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
-   std::error_code c_Retval;
+   std::error_code c_Retval = Errc::success;
 
    std::vector<std::string> c_NodeSignaturePemFiles;
    mh_AdaptPemFileParameters(orc_SignatureNodes, orc_NodeSignaturePemFiles, ou32_NumNodes, c_NodeSignaturePemFiles,
@@ -1196,7 +1195,7 @@ std::error_code C_OscSupServiceUpdatePackageCreate::mh_GetPemFileContent(const s
          {
             std::string c_Err;
             C_OscSecurityPemSecUpdate c_Pem;
-            c_Retval = static_cast<Errc>(c_Pem.LoadFromFile(c_NodeSignaturePemFiles[u32_ItNode].c_str(), c_Err));
+            c_Retval = c_Pem.LoadFromFile(c_NodeSignaturePemFiles[u32_ItNode].c_str(), c_Err);
             if (c_Retval)
             {
                mhc_ErrorMessage = c_Err;

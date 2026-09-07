@@ -672,7 +672,7 @@ std::error_code C_OscSupServiceUpdatePackageLoad::mh_VerifySignature(
 {
    C_OscSecurityEcdsa::C_Ecdsa256Signature c_Signature;
 
-   std::error_code c_Retval = static_cast<Errc>(c_Signature.SetFromDerString(orc_Signature));
+   std::error_code c_Retval = c_Signature.SetFromDerString(orc_Signature);
 
    if (c_Retval)
    {
@@ -692,14 +692,13 @@ std::error_code C_OscSupServiceUpdatePackageLoad::mh_VerifySignature(
          mh_DigestToString(au8_BinDigest, c_Log);
          osc_write_log_info("Processing Update Package", "Calculated security digest: " + c_Log);
 
-         c_Retval = static_cast<Errc>(C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(orc_NodeSignatureKeys,
-                                                                                                au8_PublicKey));
+         c_Retval = C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(orc_NodeSignatureKeys,
+                                                                              au8_PublicKey);
          if (!c_Retval)
          {
             bool q_Valid;
-            c_Retval = static_cast<Errc>(C_OscSecurityEcdsa::h_VerifyEcdsaSecp256r1Signature(au8_PublicKey,
-                                                                                             c_Signature,
-                                                                                             au8_BinDigest, q_Valid));
+            c_Retval = C_OscSecurityEcdsa::h_VerifyEcdsaSecp256r1Signature(au8_PublicKey, c_Signature,
+                                                                           au8_BinDigest, q_Valid);
             if ((c_Retval) || (q_Valid == false))
             {
                osc_write_log_error("Processing Update Package", "ECDSA signature check failed.");
@@ -759,8 +758,8 @@ void C_OscSupServiceUpdatePackageLoad::mh_GetPemFileContent(const std::vector<st
    {
       std::string c_Err;
       C_OscSecurityPemSecUpdate c_Pem;
-      const int32_t s32_Retval = c_Pem.LoadFromFile(orc_NodeSignaturePemFiles[u32_ItNode].c_str(), c_Err);
-      if (s32_Retval != C_NO_ERR)
+      const std::error_code c_Retval = c_Pem.LoadFromFile(orc_NodeSignaturePemFiles[u32_ItNode].c_str(), c_Err);
+      if (c_Retval)
       {
          osc_write_log_warning("Reading pem files", mhc_ErrorMessage);
       }

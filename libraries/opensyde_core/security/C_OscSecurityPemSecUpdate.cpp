@@ -13,11 +13,14 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "openssl/pem.h"
 #include "openssl/evp.h"
 #include "openssl/core_names.h"
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "stwtypes.hpp"
 #include "C_OscUtils.hpp"
 #include "TglFile.hpp"
@@ -63,25 +66,24 @@ C_OscSecurityPemSecUpdate::C_OscSecurityPemSecUpdate() :
    \param[in,out]  orc_ErrorMessage    Error message (does not include file name)
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR    Information extracted
-   \retval   C_RANGE     File not found
-   \retval   C_CONFIG    Invalid file content
-   \retval   C_OVERFLOW  usage flags not set as expected
+   std::error_code with Errc::success if the information was extracted,
+   Errc::range if the file was not found,
+   Errc::config on invalid file content,
+   Errc::overflow if the usage flags are not set as expected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemSecUpdate::LoadFromFile(const std::string & orc_FileName, std::string & orc_ErrorMessage)
+std::error_code C_OscSecurityPemSecUpdate::LoadFromFile(const std::string & orc_FileName,
+                                                        std::string & orc_ErrorMessage)
 {
-   int32_t s32_Result = C_OscSecurityPemBase::LoadFromFile(orc_FileName, orc_ErrorMessage);
+   std::error_code c_Result = C_OscSecurityPemBase::LoadFromFile(orc_FileName, orc_ErrorMessage);
 
-   if (s32_Result == C_NO_ERR)
+   if (!c_Result)
    {
       const C_OscSecurityPemKeyInfo::C_CertificateKeyUsageInformation c_UsageInfo = mc_KeyInfo.GetKeyUsageInformation();
       if ((c_UsageInfo.q_KeyUsageDefined == false) || (c_UsageInfo.q_KeyUsageDigitalSignature == false) ||
           (c_UsageInfo.q_ExtendedKeyUsageDefined == false) || (c_UsageInfo.q_ExtendedKeyUsageEmailProtection == false))
       {
-         s32_Result = C_OVERFLOW;
+         c_Result = Errc::overflow;
          if (orc_ErrorMessage.empty() == false)
          {
             orc_ErrorMessage += " ";
@@ -91,7 +93,7 @@ int32_t C_OscSecurityPemSecUpdate::LoadFromFile(const std::string & orc_FileName
                              "to be set.";
       }
    }
-   return s32_Result;
+   return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -103,14 +105,13 @@ int32_t C_OscSecurityPemSecUpdate::LoadFromFile(const std::string & orc_FileName
    \param[in,out]  orc_ErrorMessage    Error message
 
    \return
-   C_NO_ERR   Information extracted
-   C_CONFIG   Invalid file content
+   std::error_code with Errc::success if the information was extracted, Errc::config on invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent,
-                                                    std::string & orc_ErrorMessage)
+std::error_code C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent,
+                                                            std::string & orc_ErrorMessage)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    const int x_ContentSize = static_cast<int>(orc_FileContent.size()); //lint !e970 !e8080 //use type expected by API
    //read pem file content into a BIO (= openSSL I/O stream)
@@ -151,9 +152,9 @@ int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<uint8_t> &
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       orc_ErrorMessage = "Private key: could not read file content.";
    }
 
-   return s32_Retval;
+   return c_Retval;
 }

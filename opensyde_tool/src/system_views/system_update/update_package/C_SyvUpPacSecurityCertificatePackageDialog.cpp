@@ -24,6 +24,7 @@
 #include "C_OscSecurityPemSecUpdate.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include <string>
+#include <system_error>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -583,9 +584,10 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckUpdatePath()
          std::string c_ErrorMessage;
 
          // C_OscSecurityPemSecUpdate::LoadFromFile checks for correct key usage
-         const int32_t s32_Result = c_Pem.LoadFromFile(this->GetPublicKeyPath().toStdString(), c_ErrorMessage);
+         const std::error_code c_Result = c_Pem.LoadFromFile(this->GetPublicKeyPath().toStdString(),
+                                                             c_ErrorMessage);
 
-         if (s32_Result != C_NO_ERR)
+         if (c_Result)
          {
             osc_write_log_error("Load PEM file",
                                 c_ErrorMessage + " (Path: " + this->GetPublicKeyPath().toStdString() + ")");
@@ -674,9 +676,9 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckAuthPemFiles(QString 
             C_OscSecurityPem c_Pem;
             std::string c_ErrorMessage;
 
-            const int32_t s32_Result = c_Pem.LoadFromFile(rc_CurFile.toStdString(), c_ErrorMessage);
+            const std::error_code c_Result = c_Pem.LoadFromFile(rc_CurFile.toStdString(), c_ErrorMessage);
 
-            if (s32_Result != C_NO_ERR)
+            if (c_Result)
             {
                osc_write_log_error("Load PEM file",
                                    c_ErrorMessage + " (Path: " + rc_CurFile.toStdString() + ")");

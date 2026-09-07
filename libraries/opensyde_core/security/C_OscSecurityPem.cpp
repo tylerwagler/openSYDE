@@ -14,6 +14,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <system_error>
 
 #include "openssl/x509.h"
 #include "openssl/pem.h"
@@ -22,6 +23,7 @@
 #include "TglFile.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscSecurityPem.hpp"
 
@@ -60,28 +62,26 @@ C_OscSecurityPem::C_OscSecurityPem() :
    \param[in,out]  orc_ErrorMessage    Error message (does not include file name)
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   Information extracted
-   \retval   C_RANGE    File not found
-   \retval   C_CONFIG   Invalid file content
-   \retval   C_CHECKSUM Could not parse modulus and exponent from key
+   std::error_code with Errc::success if the information was extracted,
+   Errc::range if the file was not found,
+   Errc::config on invalid file content,
+   Errc::checksum if modulus and exponent could not be parsed from the key
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPem::h_ExtractModulusAndExponentFromFile(const std::string & orc_FileName,
+std::error_code C_OscSecurityPem::h_ExtractModulusAndExponentFromFile(const std::string & orc_FileName,
                                                               std::vector<uint8_t> & orc_Modulus,
                                                               std::vector<uint8_t> & orc_Exponent,
                                                               std::string & orc_ErrorMessage)
 {
    C_OscSecurityPem c_Pem;
-   int32_t s32_Retval = c_Pem.LoadFromFile(orc_FileName, orc_ErrorMessage);
+   std::error_code c_Retval = c_Pem.LoadFromFile(orc_FileName, orc_ErrorMessage);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = C_OscSecurityPem::h_ExtractModulusAndExponent(c_Pem.GetKeyInfo().GetX509CertificateData(),
+      c_Retval = C_OscSecurityPem::h_ExtractModulusAndExponent(c_Pem.GetKeyInfo().GetX509CertificateData(),
                                                                  orc_Modulus, orc_Exponent, orc_ErrorMessage);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -93,18 +93,16 @@ int32_t C_OscSecurityPem::h_ExtractModulusAndExponentFromFile(const std::string 
    \param[in,out]  orc_ErrorMessage       Error message
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   Information extracted
-   \retval   C_CHECKSUM Could not parse modulus and exponent from key
+   std::error_code with Errc::success if the information was extracted,
+   Errc::checksum if modulus and exponent could not be parsed from the key
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPem::h_ExtractModulusAndExponent(const std::vector<uint8_t> & orc_PubKeyTextDecoded,
+std::error_code C_OscSecurityPem::h_ExtractModulusAndExponent(const std::vector<uint8_t> & orc_PubKeyTextDecoded,
                                                       std::vector<uint8_t> & orc_Modulus,
                                                       std::vector<uint8_t> & orc_Exponent,
                                                       std::string & orc_ErrorMessage)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    X509 * pc_X509Key = X509_new();
    const uint8_t * pu8_DataPointer = &orc_PubKeyTextDecoded[0];
 
@@ -140,30 +138,30 @@ int32_t C_OscSecurityPem::h_ExtractModulusAndExponent(const std::vector<uint8_t>
                }
                else
                {
-                  s32_Retval = C_CHECKSUM;
+                  c_Retval = Errc::checksum;
                   orc_ErrorMessage = "Could not read modulus or exponent";
                }
             }
          }
          else
          {
-            s32_Retval = C_CHECKSUM;
+            c_Retval = Errc::checksum;
             orc_ErrorMessage = "Could not get modulus and exponent part from public key";
          }
       }
       else
       {
-         s32_Retval = C_CHECKSUM;
+         c_Retval = Errc::checksum;
          orc_ErrorMessage = "Could not get public key from X509 input";
       }
       X509_free(pc_X509Key);
    }
    else
    {
-      s32_Retval = C_CHECKSUM;
+      c_Retval = Errc::checksum;
       orc_ErrorMessage = "Could not read X509 input";
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -173,15 +171,13 @@ int32_t C_OscSecurityPem::h_ExtractModulusAndExponent(const std::vector<uint8_t>
    \param[in,out]  orc_ErrorMessage    Error message
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   Information extracted
-   \retval   C_CONFIG   Invalid file content
+   std::error_code with Errc::success if the information was extracted, Errc::config on invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPem::m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent, std::string & orc_ErrorMessage)
+std::error_code C_OscSecurityPem::m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent,
+                                                   std::string & orc_ErrorMessage)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    //Private key
    const int x_ContentSize = static_cast<int>(orc_FileContent.size()); //lint !e970 !e8080 //use type expected by API
    BIO * const pc_PrivKeyFile = BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
@@ -201,7 +197,7 @@ int32_t C_OscSecurityPem::m_ReadPrivateKey(const std::vector<uint8_t> & orc_File
             this->mc_KeyInfo.SetPrivateKey(c_PrivKeyTextDecoded);
             if (u32_PrivKeyTextCount == 0)
             {
-               s32_Retval = C_CONFIG;
+               c_Retval = Errc::config;
                orc_ErrorMessage = "Private key: could not convert private key section into bytes";
             }
          }
@@ -215,8 +211,8 @@ int32_t C_OscSecurityPem::m_ReadPrivateKey(const std::vector<uint8_t> & orc_File
    }
    else
    {
-      s32_Retval = C_CONFIG;
+      c_Retval = Errc::config;
       orc_ErrorMessage = "Private key: could not read file content";
    }
-   return s32_Retval;
+   return c_Retval;
 }

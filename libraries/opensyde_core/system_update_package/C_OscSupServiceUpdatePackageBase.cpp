@@ -276,7 +276,7 @@ std::error_code C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const std::strin
 {
    C_OscSecurityEcdsa c_Signature;
 
-   std::error_code c_Retval = static_cast<Errc>(c_Signature.Sha256Init());
+   std::error_code c_Retval = c_Signature.Sha256Init();
 
    if (!c_Retval)
    {
@@ -290,7 +290,7 @@ std::error_code C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const std::strin
    }
    if (!c_Retval)
    {
-      c_Retval = static_cast<Errc>(c_Signature.Sha256GetDigest(orau8_Digest));
+      c_Retval = c_Signature.Sha256GetDigest(orau8_Digest);
    }
    return c_Retval;
 }
@@ -378,8 +378,7 @@ std::error_code C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(ifst
    }
    else
    {
-      c_Retval = static_cast<Errc>(orc_Signature.Sha256Update(&c_InputData[0],
-                                                              static_cast<uint32_t>(c_InputData.size())));
+      c_Retval = orc_Signature.Sha256Update(&c_InputData[0], static_cast<uint32_t>(c_InputData.size()));
    }
    return c_Retval;
 }

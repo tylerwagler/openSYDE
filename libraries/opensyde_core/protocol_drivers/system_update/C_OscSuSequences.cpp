@@ -1450,7 +1450,8 @@ int32_t C_OscSuSequences::m_WritePemOpenSydeFile(const std::string & orc_FileToW
          C_OscSecurityPem c_PemFile;
          std::string c_ErrorMessage;
 
-         s32_Return = c_PemFile.LoadFromFile(orc_FileToWrite.c_str(), c_ErrorMessage);
+         //C_OscSecurityPem reports std::error_code; this sequence still reports int32_t
+         s32_Return = c_PemFile.LoadFromFile(orc_FileToWrite.c_str(), c_ErrorMessage).value();
 
          if (s32_Return == C_NO_ERR)
          {
@@ -1462,7 +1463,7 @@ int32_t C_OscSuSequences::m_WritePemOpenSydeFile(const std::string & orc_FileToW
 
             s32_Return = C_OscSecurityPem::h_ExtractModulusAndExponent(c_PubKeyDecoded, c_PubKeyModulus,
                                                                        c_PubKeyExponent,
-                                                                       c_ErrorMessage);
+                                                                       c_ErrorMessage).value();
 
             if (s32_Return == C_NO_ERR)
             {

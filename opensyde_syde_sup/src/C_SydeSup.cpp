@@ -660,7 +660,9 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
          //parse pem database if cmd line parameter is not empty
          if (mc_CertFolderPath != "")
          {
-            s32_Return = mc_PemDatabase.ParseFolder(mc_CertFolderPath.c_str());
+            //ParseFolder returns std::error_code; this function threads the legacy int32_t through
+            //a dozen steps, so convert once at the boundary rather than half-migrating it
+            s32_Return = mc_PemDatabase.ParseFolder(mc_CertFolderPath.c_str()).value();
 
             if (s32_Return != C_NO_ERR)
             {

@@ -12,6 +12,7 @@
 #include <vector>
 
 #include <string>
+#include <system_error>
 
 #include "openssl/evp.h"
 
@@ -48,30 +49,29 @@ public:
       uint8_t au8_Rpart[hu32_SECP256R1_SIGNATURE_PART_LENGTH_MAX]; //r part as binary
       uint8_t au8_Spart[hu32_SECP256R1_SIGNATURE_PART_LENGTH_MAX]; //s part as binary
 
-      int32_t GetAsDerString(std::string & orc_Signature) const;
-      int32_t SetFromDerString(const std::string & orc_Signature);
+      std::error_code GetAsDerString(std::string & orc_Signature) const;
+      std::error_code SetFromDerString(const std::string & orc_Signature);
    };
 
    C_OscSecurityEcdsa();
    virtual ~C_OscSecurityEcdsa();
 
-   static int32_t h_ExtractPublicKeyFromX509Certificate(const std::vector<uint8_t> &orc_X509,
-                                                        uint8_t(&orau8_Binary)[hu32_SECP256R1_PUBLIC_KEY_LENGTH]);
+   static std::error_code h_ExtractPublicKeyFromX509Certificate(
+      const std::vector<uint8_t> &orc_X509, uint8_t(&orau8_Binary)[hu32_SECP256R1_PUBLIC_KEY_LENGTH]);
 
-   static int32_t h_CalcEcdsaSecp256r1Signature(const uint8_t(&orau8_Digest)[hu32_SHA256_FINAL_LENGTH],
-                                                const uint8_t(&orau8_PrivateKey)[hu32_SECP256R1_PRIVATE_KEY_LENGTH],
-                                                C_Ecdsa256Signature & orc_Signature,
-                                                std::string & orc_ErrorMessage);
+   static std::error_code h_CalcEcdsaSecp256r1Signature(
+      const uint8_t(&orau8_Digest)[hu32_SHA256_FINAL_LENGTH],
+      const uint8_t(&orau8_PrivateKey)[hu32_SECP256R1_PRIVATE_KEY_LENGTH], C_Ecdsa256Signature & orc_Signature,
+      std::string & orc_ErrorMessage);
 
-   static int32_t h_VerifyEcdsaSecp256r1Signature(const uint8_t(&orau8_PublicKey)[hu32_SECP256R1_PUBLIC_KEY_LENGTH],
-                                                  const C_Ecdsa256Signature & orc_Signature,
-                                                  const uint8_t(&orau8_Digest)[hu32_SHA256_FINAL_LENGTH],
-                                                  bool & orq_Valid);
+   static std::error_code h_VerifyEcdsaSecp256r1Signature(
+      const uint8_t(&orau8_PublicKey)[hu32_SECP256R1_PUBLIC_KEY_LENGTH], const C_Ecdsa256Signature & orc_Signature,
+      const uint8_t(&orau8_Digest)[hu32_SHA256_FINAL_LENGTH], bool & orq_Valid);
 
    //Utility functions for calculating SHA-2 256bits. The result is to be passed to the actual secp256r1 calculation.
-   int32_t Sha256Init();
-   int32_t Sha256Update(const uint8_t * const opu8_Data, const uint32_t ou32_NumBytes);
-   int32_t Sha256GetDigest(uint8_t(&orau8_Digest)[hu32_SHA256_FINAL_LENGTH]);
+   std::error_code Sha256Init();
+   std::error_code Sha256Update(const uint8_t * const opu8_Data, const uint32_t ou32_NumBytes);
+   std::error_code Sha256GetDigest(uint8_t(&orau8_Digest)[hu32_SHA256_FINAL_LENGTH]);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
