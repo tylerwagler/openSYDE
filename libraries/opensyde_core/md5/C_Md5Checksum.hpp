@@ -20,7 +20,9 @@
 
 #include <cstdio>
 #include <string>
+#include <system_error>
 #include "stwtypes.hpp"
+#include "C_OscErrorCategory.hpp"
 
 namespace stw
 {
@@ -46,9 +48,9 @@ private:
    };
 
    static void mh_Md5Init(C_HashState * const opc_HashState);
-   static int32_t mh_Md5Process(C_HashState * const opc_HashState, const uint8_t * opu8_Input,
+   static std::error_code mh_Md5Process(C_HashState * const opc_HashState, const uint8_t * opu8_Input,
                                 uint32_t ou32_InputLength);
-   static int32_t mh_Md5Done(C_HashState * const opc_HashState, uint8_t * const opu8_Output);
+   static std::error_code mh_Md5Done(C_HashState * const opc_HashState, uint8_t * const opu8_Output);
    static void mh_Md5Compress(C_HashState * const opc_HashState, const uint8_t * const opu8_Buffer);
 };
 }

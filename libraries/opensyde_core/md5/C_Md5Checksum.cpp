@@ -190,18 +190,18 @@ void C_Md5Checksum::mh_Md5Init(C_HashState * const opc_HashState)
    C_CONFIG  inconsistent hash engine status
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_Md5Checksum::mh_Md5Process(C_HashState * const opc_HashState, const uint8_t * opu8_Input,
+std::error_code C_Md5Checksum::mh_Md5Process(C_HashState * const opc_HashState, const uint8_t * opu8_Input,
                                      uint32_t ou32_InputLength)
 {
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
    if (opc_HashState->u32_CurLen > sizeof(opc_HashState->au8_Buffer))
    {
-      return C_CONFIG;
+      return Errc::config;
    }
    if ((opc_HashState->u64_Length + ou32_InputLength) < opc_HashState->u64_Length)
    {
-      return C_CONFIG;
+      return Errc::config;
    }
    while (ou32_InputLength > 0)
    {
@@ -229,7 +229,7 @@ int32_t C_Md5Checksum::mh_Md5Process(C_HashState * const opc_HashState, const ui
          }
       }
    }
-   return C_NO_ERR;
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -243,7 +243,7 @@ int32_t C_Md5Checksum::mh_Md5Process(C_HashState * const opc_HashState, const ui
    C_CONFIG  inconsistent hash engine status
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_Md5Checksum::mh_Md5Done(C_HashState * const opc_HashState, uint8_t * const opu8_Output)
+std::error_code C_Md5Checksum::mh_Md5Done(C_HashState * const opc_HashState, uint8_t * const opu8_Output)
 {
 #define STORE32L(x, y)                                                                     \
    (y)[3] = static_cast<uint8_t>(((x) >> 24U) & 255U); (y)[2] = static_cast<uint8_t>(((x) >> 16U) & 255U);   \
@@ -257,7 +257,7 @@ int32_t C_Md5Checksum::mh_Md5Done(C_HashState * const opc_HashState, uint8_t * c
 
    if (opc_HashState->u32_CurLen >= sizeof(opc_HashState->au8_Buffer))
    {
-      return C_CONFIG;
+      return Errc::config;
    }
 
    /* increase the length of the message */
@@ -298,7 +298,7 @@ int32_t C_Md5Checksum::mh_Md5Done(C_HashState * const opc_HashState, uint8_t * c
    {
       STORE32L(opc_HashState->au32_State[u8_Word], &opu8_Output[4 * u8_Word]);
    }
-   return C_NO_ERR;
+   return Errc::success;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

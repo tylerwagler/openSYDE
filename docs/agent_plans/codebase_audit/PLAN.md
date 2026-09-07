@@ -55,7 +55,7 @@ Both large waves have to run alone. `protocol_drivers` and `project` overlap
 heavily in callers, and the two-agent parallelism that worked for halc + security
 depended on their caller sets being disjoint — which these are not.
 
-### Phase 5 — the 19 functions that stay on int32_t
+### Phase 5 — the 17 functions that stay on int32_t
 
 The migration is complete, and these are deliberate. Two reasons, and neither is
 "not got to yet":
@@ -84,8 +84,14 @@ so name alone gets it wrong.
 | Function | Convention |
 |---|---|
 | `C_HexFile::GetDataByAddress` / `FindPattern` / `mh_FindPattern` | plain 0 / -1 / -2 |
-| `C_Md5Checksum::mh_Md5Process` / `mh_Md5Done` | internal MD5 |
 | `C_SclChecksums::CalcCRC32TriCore` | documented 0 / -1 |
+
+`C_Md5Checksum::mh_Md5Process` / `mh_Md5Done` were briefly listed here as an
+"internal MD5 convention". That was wrong — both document `C_NO_ERR` / `C_CONFIG`
+and return those literals, so they are plain STW and have since been migrated.
+The error is worth recording: I classified them from the module they live in
+rather than from their `\return` blocks, which is exactly the shortcut this
+table exists to prevent.
 
 Foreign-convention conflation was the most repeated mistake of this migration —
 four separate instances (`TglRemoveDirectory`, `mz_compress`, `TglCreateDirectory`,
