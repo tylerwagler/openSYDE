@@ -116,7 +116,7 @@ std::error_code C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage
    if (!c_Return)
    {
       //create target folder (from bottom-up if required):
-      c_Return = make_error_code_from_stw(C_OscUtils::h_CreateFolderRecursively(orc_TargetUnzipPath));
+      c_Return = C_OscUtils::h_CreateFolderRecursively(orc_TargetUnzipPath);
       if (c_Return)
       {
          orc_ErrorMessage = "Could not create folder \"" + orc_TargetUnzipPath + "\" for zip archive.";

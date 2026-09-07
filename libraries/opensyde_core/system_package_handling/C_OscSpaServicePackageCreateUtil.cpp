@@ -220,7 +220,7 @@ std::error_code C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolder
    {
       c_ErrorPath = orc_UsedTempPath;
       //create target folder (from bottom-up if required):
-      c_Return = make_error_code_from_stw(C_OscUtils::h_CreateFolderRecursively(c_ErrorPath));
+      c_Return = C_OscUtils::h_CreateFolderRecursively(c_ErrorPath);
    }
    if (!c_Return)
    {
@@ -228,7 +228,7 @@ std::error_code C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolder
       {
          c_ErrorPath = orc_UsedTempPath + orc_AllStaticSubFolders[u32_It];
          //create target folder (from bottom-up if required):
-         c_Return = make_error_code_from_stw(C_OscUtils::h_CreateFolderRecursively(c_ErrorPath));
+         c_Return = C_OscUtils::h_CreateFolderRecursively(c_ErrorPath);
       }
    }
    if (c_Return)
@@ -359,8 +359,7 @@ std::error_code C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
          continue;
       }
 
-      c_Return = make_error_code_from_stw(
-         C_OscUtils::h_CopyFile(rc_SrcPath, c_TargetFile, nullptr, &orc_ErrorMessage));
+      c_Return = C_OscUtils::h_CopyFile(rc_SrcPath, c_TargetFile, nullptr, &orc_ErrorMessage);
       if (c_Return)
       {
          orc_ErrorMessage = "Could not save device manifest for \"" + rc_DeviceName +

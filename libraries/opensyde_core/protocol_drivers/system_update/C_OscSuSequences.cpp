@@ -2257,8 +2257,7 @@ std::error_code C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_Os
    if (c_Return == Errc::success)
    {
       //create target folder (from bottom-up if required):
-      //boundary: C_OscUtils still uses the integer convention
-      c_Return = make_error_code_from_stw(C_OscUtils::h_CreateFolderRecursively(orc_TargetPath));
+      c_Return = C_OscUtils::h_CreateFolderRecursively(orc_TargetPath);
       if (c_Return != Errc::success)
       {
          if (opc_ErrorPath != nullptr)
@@ -2333,9 +2332,7 @@ std::error_code C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_Os
                }
 
                //copy file
-               //boundary: C_OscUtils still uses the integer convention
-               c_Return = make_error_code_from_stw(C_OscUtils::h_CopyFile(c_SourceFileName, c_TargetFileName,
-                                                                          opc_ErrorPath));
+               c_Return = C_OscUtils::h_CopyFile(c_SourceFileName, c_TargetFileName, opc_ErrorPath);
                if (c_Return == Errc::success)
                {
                   c_NodesToFlashNewPaths[u16_Node].c_FilesToFlash[u16_File] = c_TargetFileName;
@@ -2360,9 +2357,7 @@ std::error_code C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_Os
                   TglExtractFileName(orc_ApplicationsToWrite[u16_Node].c_FilesToWriteToNvm[u16_File]);
 
                //copy file
-               //boundary: C_OscUtils still uses the integer convention
-               c_Return = make_error_code_from_stw(C_OscUtils::h_CopyFile(c_SourceFileName, c_TargetFileName,
-                                                                          opc_ErrorPath));
+               c_Return = C_OscUtils::h_CopyFile(c_SourceFileName, c_TargetFileName, opc_ErrorPath);
                if (c_Return == Errc::success)
                {
                   c_NodesToFlashNewPaths[u16_Node].c_FilesToWriteToNvm[u16_File] = c_TargetFileName;
@@ -2384,9 +2379,7 @@ std::error_code C_OscSuSequences::h_CreateTemporaryFolder(const std::vector<C_Os
                   TglExtractFileName(orc_ApplicationsToWrite[u16_Node].c_PemFile);
 
                //copy file
-               //boundary: C_OscUtils still uses the integer convention
-               c_Return = make_error_code_from_stw(C_OscUtils::h_CopyFile(c_SourceFileName, c_TargetFileName,
-                                                                          opc_ErrorPath));
+               c_Return = C_OscUtils::h_CopyFile(c_SourceFileName, c_TargetFileName, opc_ErrorPath);
                if (c_Return == Errc::success)
                {
                   c_NodesToFlashNewPaths[u16_Node].c_PemFile = c_TargetFileName;

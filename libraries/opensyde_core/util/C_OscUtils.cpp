@@ -183,15 +183,15 @@ bool C_OscUtils::h_IsFloat32NearlyEqual(const float32_t & orf32_Float1, const fl
    \param[in]  orc_Folder  Path to create
 
    \return
-   C_NO_ERR  folder created
-   C_NOACT   could not create folder
+   Errc::success  folder created
+   Errc::noact    could not create folder
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscUtils::h_CreateFolderRecursively(const std::string & orc_Folder)
+std::error_code C_OscUtils::h_CreateFolderRecursively(const std::string & orc_Folder)
 {
    //lint -e{8080} //using type expected by the library for compatibility
    size_t x_CharIndex = 0U;
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    const std::string c_Path = orc_Folder.c_str();
 
@@ -201,14 +201,14 @@ int32_t C_OscUtils::h_CreateFolderRecursively(const std::string & orc_Folder)
       x_CharIndex = c_Path.find_first_of("\\/", x_CharIndex + 1);
 
       c_PartialPath = c_Path.substr(0, x_CharIndex);
-      s32_Return = TglCreateDirectory(c_PartialPath.c_str());
-      if (s32_Return != 0)
+      //TglCreateDirectory reports 0 for success and non-zero for failure; it is not an STW error code
+      if (TglCreateDirectory(c_PartialPath.c_str()) != 0)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
-   while ((x_CharIndex != std::string::npos) && (s32_Return == C_NO_ERR));
-   return s32_Return;
+   while ((x_CharIndex != std::string::npos) && (!c_Return));
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -689,14 +689,14 @@ void C_OscUtils::h_RangeCheckFloat(float64_t & orf64_Value)
                                           error message that caused the problem
 
    \return
-   C_NO_ERR    success
-   C_RD_WR     read/write error (see log file for details)
+   Errc::success   success
+   Errc::rd_wr     read/write error (see log file for details)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const std::string & orc_TargetFile,
-                               std::string * const opc_ErrorPath, std::string * const opc_ErrorMessage)
+std::error_code C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const std::string & orc_TargetFile,
+                                       std::string * const opc_ErrorPath, std::string * const opc_ErrorMessage)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    std::string c_ErrorMessage = "";
 
    std::fstream c_Input(orc_SourceFile.c_str(), std::fstream::in | std::fstream::binary);
@@ -704,7 +704,7 @@ int32_t C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const std::st
    {
       c_ErrorMessage = "Could not read \"" + orc_SourceFile + "\".";
       osc_write_log_error("Copying file", c_ErrorMessage);
-      s32_Return = C_RD_WR;
+      c_Return = Errc::rd_wr;
       if (opc_ErrorPath != nullptr)
       {
          *opc_ErrorPath = orc_SourceFile;
@@ -722,7 +722,7 @@ int32_t C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const std::st
       {
          c_ErrorMessage = "Could not write \"" + orc_TargetFile + "\".";
          osc_write_log_error("Copying file", c_ErrorMessage);
-         s32_Return = C_RD_WR;
+         c_Return = Errc::rd_wr;
          if (opc_ErrorPath != nullptr)
          {
             *opc_ErrorPath = orc_TargetFile;
@@ -739,7 +739,7 @@ int32_t C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const std::st
          {
             c_ErrorMessage = "Could not write stream of \"" + orc_TargetFile + "\".";
             osc_write_log_error("Copying file", c_ErrorMessage);
-            s32_Return = C_RD_WR;
+            c_Return = Errc::rd_wr;
             if (opc_ErrorPath != nullptr)
             {
                *opc_ErrorPath = orc_TargetFile;
@@ -748,13 +748,13 @@ int32_t C_OscUtils::h_CopyFile(const std::string & orc_SourceFile, const std::st
       }
    }
 
-   if ((s32_Return != C_NO_ERR) &&
+   if ((c_Return) &&
        (opc_ErrorMessage != nullptr))
    {
       *opc_ErrorMessage = c_ErrorMessage;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

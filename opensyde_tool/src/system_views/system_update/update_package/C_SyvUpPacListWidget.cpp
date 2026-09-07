@@ -824,6 +824,8 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
             else if (oq_SecureFile == true)
             {
                // pem files specified, it is a secure update package
+               //the core reports std::error_code; this function threads the legacy int32_t through
+               //GetUpdatePackage as well, so convert once at the boundary
                s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(
                   c_FullPackagePath.toStdString().c_str(),
                   rc_SystemDefinition,
@@ -834,11 +836,12 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
                   c_Warnings,
                   c_Error, "",
                   orc_EncryptNodes,
-                  orc_EncryptNodesPassword, orc_AddSignatureNodes, orc_NodeSignaturePemFiles);
+                  orc_EncryptNodesPassword, orc_AddSignatureNodes, orc_NodeSignaturePemFiles).value();
             }
             else
             {
                // unencrypted V2 update package
+               //the core reports std::error_code; converted at the boundary, see above
                s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackage(
                   c_FullPackagePath.toStdString().c_str(),
                   rc_SystemDefinition,
@@ -849,7 +852,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
                   c_Warnings,
                   c_Error, "",
                   orc_EncryptNodes,
-                  orc_EncryptNodesPassword);
+                  orc_EncryptNodesPassword).value();
             }
          }
 

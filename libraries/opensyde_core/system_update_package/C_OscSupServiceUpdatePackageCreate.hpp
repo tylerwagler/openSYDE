@@ -40,7 +40,7 @@ class C_OscSupServiceUpdatePackageCreate :
    public C_OscSupServiceUpdatePackageBase
 {
 public:
-   static int32_t h_CreatePackageUsingPemFiles(const std::string & orc_PackagePath,
+   static std::error_code h_CreatePackageUsingPemFiles(const std::string & orc_PackagePath,
                                                const C_OscSystemDefinition & orc_SystemDefinition,
                                                const uint32_t ou32_ActiveBusIndex,
                                                const std::vector<uint8_t> & orc_ActiveNodes,
@@ -52,7 +52,7 @@ public:
                                                const std::vector<uint8_t> & orc_EncryptNodes = std::vector<uint8_t>(),
                                                const std::vector<std::string> & orc_EncryptNodesPassword = std::vector<std::string>(), const std::vector<uint8_t> & orc_AddSignatureNodes = std::vector<uint8_t>(), const std::vector<std::string> & orc_NodeSignaturePemFiles = std::vector<std::string>());
 
-   static int32_t h_CreatePackage(const std::string & orc_PackagePath,
+   static std::error_code h_CreatePackage(const std::string & orc_PackagePath,
                                   const C_OscSystemDefinition & orc_SystemDefinition,
                                   const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes,
                                   const std::vector<uint32_t> & orc_NodesUpdateOrder,

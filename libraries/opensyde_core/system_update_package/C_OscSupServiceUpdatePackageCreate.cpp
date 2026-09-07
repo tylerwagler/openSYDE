@@ -97,31 +97,31 @@ using namespace stw::opensyde_core;
    \param[in]   orc_NodeSignaturePemFiles    list of all nodes contains information which pem file to use for which node
 
    \return
-   C_NO_ERR    success
-   C_WARN      could not find update position for active node (internal error which should not occur,
-                                                               difficult to test and reproduce)
-   C_RANGE     target file already exists
-               target directory for package does not exist
-               invalid package name with no package extension ".syde_sup"
-               temporary folder (orc_PackagePath with mc_PACKAGE_EXT_TMP) already exists
-   C_CONFIG    no active node for update
-               no element in update order of nodes
-               no application to update for one specific node
-   C_OVERFLOW  size of orc_ActiveNodes does not match system definition
-               size of orc_ActiveNodes is not the same as the size of nodes in orc_ApplicationsToWrite
-   C_NOACT     active bus index is not in system definition
-   C_RD_WR     could not create temporary folder with application files
-               could not save system definition file
-               could not save device definition file
-               could not save .syde_supdef file
-               could not read pem file
-               pem file did not contain private key with the correct length
-   C_BUSY      could not package result to zip archive
-               could not delete temporary result folder
-   C_CHECKSUM  size of orc_EncryptNodes does not match system definition
+   Errc::success    success
+   Errc::warn       could not find update position for active node (internal error which should not occur,
+                                                                    difficult to test and reproduce)
+   Errc::range      target file already exists
+                    target directory for package does not exist
+                    invalid package name with no package extension ".syde_sup"
+                    temporary folder (orc_PackagePath with mc_PACKAGE_EXT_TMP) already exists
+   Errc::config     no active node for update
+                    no element in update order of nodes
+                    no application to update for one specific node
+   Errc::overflow   size of orc_ActiveNodes does not match system definition
+                    size of orc_ActiveNodes is not the same as the size of nodes in orc_ApplicationsToWrite
+   Errc::noact      active bus index is not in system definition
+   Errc::rd_wr      could not create temporary folder with application files
+                    could not save system definition file
+                    could not save device definition file
+                    could not save .syde_supdef file
+                    could not read pem file
+                    pem file did not contain private key with the correct length
+   Errc::busy       could not package result to zip archive
+                    could not delete temporary result folder
+   Errc::checksum   size of orc_EncryptNodes does not match system definition
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(const std::string & orc_PackagePath,
+std::error_code C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(const std::string & orc_PackagePath,
                                                                          const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes, const std::vector<uint32_t> & orc_NodesUpdateOrder, const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage, const std::string & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<std::string> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
                                                                          const std::vector<std::string> & orc_NodeSignaturePemFiles)
 {
@@ -142,19 +142,18 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(const s
                               c_NodeSignatureKeys);
       if (!c_Retval)
       {
-         //h_CreatePackage still reports int32_t for its callers outside this subsystem
-         c_Retval = make_error_code_from_stw(h_CreatePackage(orc_PackagePath, orc_SystemDefinition, ou32_ActiveBusIndex,
-                                                      orc_ActiveNodes,
-                                                      orc_NodesUpdateOrder, orc_ApplicationsToWrite,
-                                                      orc_WarningMessages,
-                                                      orc_ErrorMessage, orc_TemporaryDirectory, orc_EncryptNodes,
-                                                      orc_EncryptNodesPassword, c_AddSignatureNodes,
-                                                      c_NodeSignatureKeys));
+         c_Retval = h_CreatePackage(orc_PackagePath, orc_SystemDefinition, ou32_ActiveBusIndex,
+                                    orc_ActiveNodes,
+                                    orc_NodesUpdateOrder, orc_ApplicationsToWrite,
+                                    orc_WarningMessages,
+                                    orc_ErrorMessage, orc_TemporaryDirectory, orc_EncryptNodes,
+                                    orc_EncryptNodesPassword, c_AddSignatureNodes,
+                                    c_NodeSignatureKeys);
       }
    }
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
 
-   return c_Retval.value();
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -194,29 +193,29 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(const s
    \param[in]   orc_NodeSignatureKeys     list of all nodes contains information which key to use for which node
 
    \return
-   C_NO_ERR    success
-   C_WARN      could not find update position for active node (internal error which should not occur,
-                                                               difficult to test and reproduce)
-   C_RANGE     target file already exists
-               target directory for package does not exist
-               invalid package name with no package extension ".syde_sup"
-               temporary folder (orc_PackagePath with mc_PACKAGE_EXT_TMP) already exists
-   C_CONFIG    no active node for update
-               no element in update order of nodes
-               no application to update for one specific node
-   C_OVERFLOW  size of orc_ActiveNodes does not match system definition
-               size of orc_ActiveNodes is not the same as the size of nodes in orc_ApplicationsToWrite
-   C_NOACT     active bus index is not in system definition
-   C_RD_WR     could not create temporary folder with application files
-               could not save system definition file
-               could not save device definition file
-               could not save .syde_supdef file
-   C_BUSY      could not package result to zip archive
-               could not delete temporary result folder
-   C_CHECKSUM  size of orc_EncryptNodes does not match system definition
+   Errc::success    success
+   Errc::warn       could not find update position for active node (internal error which should not occur,
+                                                                    difficult to test and reproduce)
+   Errc::range      target file already exists
+                    target directory for package does not exist
+                    invalid package name with no package extension ".syde_sup"
+                    temporary folder (orc_PackagePath with mc_PACKAGE_EXT_TMP) already exists
+   Errc::config     no active node for update
+                    no element in update order of nodes
+                    no application to update for one specific node
+   Errc::overflow   size of orc_ActiveNodes does not match system definition
+                    size of orc_ActiveNodes is not the same as the size of nodes in orc_ApplicationsToWrite
+   Errc::noact      active bus index is not in system definition
+   Errc::rd_wr      could not create temporary folder with application files
+                    could not save system definition file
+                    could not save device definition file
+                    could not save .syde_supdef file
+   Errc::busy       could not package result to zip archive
+                    could not delete temporary result folder
+   Errc::checksum   size of orc_EncryptNodes does not match system definition
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const std::string & orc_PackagePath,
+std::error_code C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const std::string & orc_PackagePath,
                                                             const C_OscSystemDefinition & orc_SystemDefinition,
                                                             const uint32_t ou32_ActiveBusIndex,
                                                             const vector<uint8_t> & orc_ActiveNodes,
@@ -338,7 +337,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const std::string & 
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
 
-   return c_Return.value();
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

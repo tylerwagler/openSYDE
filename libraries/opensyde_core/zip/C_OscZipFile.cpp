@@ -242,8 +242,7 @@ std::error_code C_OscZipFile::h_UnpackZipFile(const std::string & orc_SourcePath
             if (TglDirectoryExists(c_Path) == false)
             {
                // create subfolder
-               //C_OscUtils still reports the STW int32_t convention
-               c_Return = make_error_code_from_stw(C_OscUtils::h_CreateFolderRecursively(c_Path));
+               c_Return = C_OscUtils::h_CreateFolderRecursively(c_Path);
                if ((c_Return) && (opc_ErrorText != nullptr))
                {
                   (*opc_ErrorText) = "Could not create subfolder \"" + c_Path + "\".";

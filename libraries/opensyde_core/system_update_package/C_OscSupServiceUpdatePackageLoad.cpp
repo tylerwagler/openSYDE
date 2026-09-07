@@ -100,20 +100,23 @@ using namespace stw::opensyde_core;
                                              e.g. {pem} or {pem1, pem2, pem3} for all or individual nodes
 
    \return
-   C_NO_ERR    success
-   C_CONFIG    could not find update package archive or update package directory
-   C_RD_WR     could not unzip update package from disk to target path
-   C_BUSY      could not erase pre-existing target path (note: can result in partially erased target path)
-   C_RANGE     error code of a called core function (should not occur for valid and compatible service update package)
-   C_NOACT     invalid signature or error code of a called core function
-               (should not occur for valid and compatible service update package)
-   C_OVERFLOW  error code of a called core function (should not occur for valid and compatible service update package)
-   C_DEFAULT   error code of a called core function (should not occur for valid and compatible service update package)
-   C_CHECKSUM  size of orc_EncryptNodes does not match system definition
-               or wrong password
+   Errc::success    success
+   Errc::config     could not find update package archive or update package directory
+   Errc::rd_wr      could not unzip update package from disk to target path
+   Errc::busy       could not erase pre-existing target path (note: can result in partially erased target path)
+   Errc::range      error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::noact      invalid signature or error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::overflow   error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::default_   error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::checksum   size of orc_EncryptNodes does not match system definition
+                    or wrong password
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const std::string & orc_PackagePath,
+std::error_code C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const std::string & orc_PackagePath,
                                                                         const std::string & orc_TargetUnzipPath,
                                                                         C_OscSystemDefinition & orc_SystemDefinition,
                                                                         uint32_t & oru32_ActiveBusIndex,
@@ -122,23 +125,22 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const st
                                                                         std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, std::string & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<std::string> & orc_DecryptNodesPassword,
                                                                         const std::vector<std::string> & orc_NodeSignaturePemFiles)
 {
-   int32_t s32_Retval;
-
    mh_Init();
 
    std::vector<std::vector<uint8_t> > c_NodeSignatureKeys;
    mh_GetPemFileContent(orc_NodeSignaturePemFiles,
                         c_NodeSignatureKeys);
-   //h_ProcessPackage still reports int32_t for its callers outside this subsystem
-   s32_Retval = h_ProcessPackage(orc_PackagePath, orc_TargetUnzipPath, orc_SystemDefinition, oru32_ActiveBusIndex,
-                                 orc_ActiveNodes,
-                                 orc_NodesUpdateOrder, orc_ApplicationsToWrite, orc_WarningMessages,
-                                 orc_ErrorMessage, oq_IsZip, orc_DecryptNodes,
-                                 orc_DecryptNodesPassword, c_NodeSignatureKeys);
+   const std::error_code c_Retval = h_ProcessPackage(orc_PackagePath, orc_TargetUnzipPath, orc_SystemDefinition,
+                                                     oru32_ActiveBusIndex,
+                                                     orc_ActiveNodes,
+                                                     orc_NodesUpdateOrder, orc_ApplicationsToWrite,
+                                                     orc_WarningMessages,
+                                                     orc_ErrorMessage, oq_IsZip, orc_DecryptNodes,
+                                                     orc_DecryptNodesPassword, c_NodeSignatureKeys);
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -178,20 +180,24 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const st
    \param[in]   orc_NodeSignatureKeys     list of all nodes contains information which key to use for which node
 
    \return
-   C_NO_ERR    success
-   C_CONFIG    could not find update package archive or update package directory or package file version unknown
-   C_RD_WR     could not unzip update package from disk to target path or other file read issues
-   C_BUSY      could not erase pre-existing target path (note: can result in partially erased target path)
-   C_RANGE     error code of a called core function (should not occur for valid and compatible service update package)
-   C_NOACT     invalid signature or error code of a called core function
-               (should not occur for valid and compatible service update package)
-   C_OVERFLOW  error code of a called core function (should not occur for valid and compatible service update package)
-   C_DEFAULT   error code of a called core function (should not occur for valid and compatible service update package)
-   C_CHECKSUM  size of orc_EncryptNodes does not match system definition
-               or wrong password
+   Errc::success    success
+   Errc::config     could not find update package archive or update package directory
+                    or package file version unknown
+   Errc::rd_wr      could not unzip update package from disk to target path or other file read issues
+   Errc::busy       could not erase pre-existing target path (note: can result in partially erased target path)
+   Errc::range      error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::noact      invalid signature or error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::overflow   error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::default_   error code of a called core function
+                    (should not occur for valid and compatible service update package)
+   Errc::checksum   size of orc_EncryptNodes does not match system definition
+                    or wrong password
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & orc_PackagePath,
+std::error_code C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & orc_PackagePath,
                                                            const std::string & orc_TargetUnzipPath,
                                                            C_OscSystemDefinition & orc_SystemDefinition,
                                                            uint32_t & oru32_ActiveBusIndex,
@@ -300,7 +306,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const std::string & o
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
 
-   return c_Return.value();
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

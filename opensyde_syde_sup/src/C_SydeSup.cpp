@@ -561,6 +561,8 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
       //the engine below will handle if an empty password was given
       c_PasswordsForDecryption.push_back(mc_Password);
 
+      //h_ProcessPackageUsingPemFiles reports std::error_code; this function threads the legacy int32_t
+      //through a dozen steps, so convert once at the boundary rather than half-migrating it
       s32_Return = C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(mc_SupFilePath, mc_UnzipPath,
                                                                                    c_SystemDefinition,
                                                                                    u32_ActiveBusIndex,
@@ -569,7 +571,7 @@ C_SydeSup::E_Result C_SydeSup::Update(void)
                                                                                    c_WarningMessages, c_ErrorMessage,
                                                                                    q_PackageIsZip, c_DecryptNodes,
                                                                                    c_PasswordsForDecryption,
-                                                                                   c_PemFilesForNodes);
+                                                                                   c_PemFilesForNodes).value();
 
       // report success or translate errors
       switch (s32_Return) // here s32_Return is result of h_ProcessPackageUsingPemFiles

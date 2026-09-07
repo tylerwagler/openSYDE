@@ -356,8 +356,7 @@ std::error_code C_OscXceCreate::mh_CopyFile(const std::string & orc_InPath, cons
    std::string c_Error;
 
    orc_XcertFiles.insert(c_OutFile);
-   //C_OscUtils still reports the STW int32_t error convention
-   c_Return = make_error_code_from_stw(C_OscUtils::h_CopyFile(orc_InPath, c_Target, nullptr, &c_Error));
+   c_Return = C_OscUtils::h_CopyFile(orc_InPath, c_Target, nullptr, &c_Error);
    //Updated after copy not before to avoid modifications of const parameters
    if (opc_OutFilePath != nullptr)
    {

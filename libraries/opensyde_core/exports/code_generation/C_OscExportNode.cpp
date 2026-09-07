@@ -126,9 +126,7 @@ std::error_code C_OscExportNode::h_CreateSourceCode(const C_OscNode & orc_Node, 
    // create target folder
    if (!c_Retval)
    {
-      //C_OscUtils still reports the STW int32_t error convention
-      const int32_t s32_FolderResult = C_OscUtils::h_CreateFolderRecursively(orc_Path);
-      if (s32_FolderResult != C_NO_ERR)
+      if (C_OscUtils::h_CreateFolderRecursively(orc_Path))
       {
          osc_write_log_error("Creating source code", "Could not create target directory \"" + orc_Path + "\".");
          c_Retval = Errc::rd_wr;

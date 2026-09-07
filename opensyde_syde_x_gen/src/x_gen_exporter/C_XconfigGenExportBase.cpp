@@ -630,14 +630,12 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::GenerateSourceCode(
    {
       if (TglDirectoryExists(mc_OutputPath) == false)
       {
-         int32_t s32_Return;
          std::string c_Info = "Creating target folder (" + mc_OutputPath + ").";
          std::cout << c_Info.c_str() << &std::endl;
          osc_write_log_info("Code Generation", c_Info);
 
          //create target folder if required:
-         s32_Return = C_OscUtils::h_CreateFolderRecursively(mc_OutputPath);
-         if (s32_Return != C_NO_ERR)
+         if (C_OscUtils::h_CreateFolderRecursively(mc_OutputPath))
          {
             c_Info = "Could not create target folder (" + mc_OutputPath + ").";
             std::cout << "Error: " << c_Info.c_str() << &std::endl;

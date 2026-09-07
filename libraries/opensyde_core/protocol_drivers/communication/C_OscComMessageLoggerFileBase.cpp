@@ -78,7 +78,7 @@ std::error_code C_OscComMessageLoggerFileBase::OpenFile(void)
    // Check and create folder
    if (TglDirectoryExists(c_FolderPath) == false)
    {
-      if (C_OscUtils::h_CreateFolderRecursively(c_FolderPath) != C_NO_ERR)
+      if (C_OscUtils::h_CreateFolderRecursively(c_FolderPath))
       {
          c_Return = Errc::rd_wr;
       }

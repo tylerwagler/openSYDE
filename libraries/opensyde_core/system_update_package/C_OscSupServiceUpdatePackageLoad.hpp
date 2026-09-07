@@ -40,7 +40,7 @@ class C_OscSupServiceUpdatePackageLoad :
    public C_OscSupServiceUpdatePackageBase
 {
 public:
-   static int32_t h_ProcessPackageUsingPemFiles(const std::string & orc_PackagePath,
+   static std::error_code h_ProcessPackageUsingPemFiles(const std::string & orc_PackagePath,
                                                 const std::string & orc_TargetUnzipPath,
                                                 C_OscSystemDefinition & orc_SystemDefinition,
                                                 uint32_t & oru32_ActiveBusIndex, std::vector<uint8_t> & orc_ActiveNodes,
@@ -51,7 +51,7 @@ public:
                                                 const std::vector<uint8_t> & orc_DecryptNodes = std::vector<uint8_t>(),
                                                 const std::vector<std::string> & orc_DecryptNodesPassword = std::vector<std::string>(), const std::vector<std::string> & orc_NodeSignaturePemFiles = std::vector<std::string>());
 
-   static int32_t h_ProcessPackage(const std::string & orc_PackagePath,
+   static std::error_code h_ProcessPackage(const std::string & orc_PackagePath,
                                    const std::string & orc_TargetUnzipPath,
                                    C_OscSystemDefinition & orc_SystemDefinition, uint32_t & oru32_ActiveBusIndex,
                                    std::vector<uint8_t> & orc_ActiveNodes, std::vector<uint32_t> & orc_NodesUpdateOrder,

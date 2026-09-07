@@ -78,13 +78,12 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExport::m_CreateApplicationCode
                                                                                  const C_OscSystemDefinition & orc_SystemDefinition, const std::string & orc_OutputPath,
                                                                                  std::vector<std::string> & orc_CreatedFiles)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = C_OscUtils::h_CreateFolderRecursively(orc_OutputPath);
 
-   s32_Return = C_OscUtils::h_CreateFolderRecursively(orc_OutputPath);
-   if (s32_Return != C_NO_ERR)
+   if (c_Return)
    {
       osc_write_log_error("Creating X-Config Package", "Could not create target directory \"" + orc_OutputPath + "\".");
-      s32_Return = C_RD_WR;
+      c_Return = Errc::rd_wr;
    }
    else
    {
@@ -94,13 +93,10 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExport::m_CreateApplicationCode
       const std::string c_Path = TglFileIncludeTrailingDelimiter(orc_OutputPath) + "x_app.syde_xcfg";
 
       c_Manifest.c_NodeName = orc_Node.c_Properties.c_Name;
-      //h_CreatePackage now reports std::error_code; this local is still shared with
-      //C_OscUtils::h_CreateFolderRecursively above, which has not been migrated yet
-      s32_Return =
-         C_OscXcoCreate::h_CreatePackage(c_Path, orc_SystemDefinition, c_Manifest, c_Warnings, c_Error).value();
+      c_Return = C_OscXcoCreate::h_CreatePackage(c_Path, orc_SystemDefinition, c_Manifest, c_Warnings, c_Error);
       orc_CreatedFiles.push_back("x_app.syde_xcfg");
    }
-   return (s32_Return == C_NO_ERR) ? eRESULT_OK : eRESULT_X_CONFIG_GENERATION_ERROR;
+   return (!c_Return) ? eRESULT_OK : eRESULT_X_CONFIG_GENERATION_ERROR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

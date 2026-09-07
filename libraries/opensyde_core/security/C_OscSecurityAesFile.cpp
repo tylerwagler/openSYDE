@@ -569,11 +569,7 @@ std::error_code C_OscSecurityAesFile::h_CreateEncryptedZipFile(const std::string
       // No key, just copy the original zip file as result
       osc_write_log_info("Creating Encrypted Zip File", "No key defined. Encryption not necessary.");
 
-      const int32_t s32_CopyResult = C_OscUtils::h_CopyFile(c_ZipFileTmp, orc_PathForZipFile, nullptr, &c_ErrorText);
-      if (s32_CopyResult != C_NO_ERR)
-      {
-         c_Return = std::error_code(s32_CopyResult, STWErrorCategory::Instance());
-      }
+      c_Return = C_OscUtils::h_CopyFile(c_ZipFileTmp, orc_PathForZipFile, nullptr, &c_ErrorText);
    }
 
    // Remove the non encrypted temporary file
