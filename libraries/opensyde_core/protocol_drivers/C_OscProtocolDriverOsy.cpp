@@ -503,13 +503,12 @@ std::error_code C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const u
 
                if (q_Match == true)
                {
-                  osc_write_log_info("", "q_Match==true");
-
                   // Matching error response found!
                   // special handling for "responsePending": rewind Rx timeout expectation
                   if (orc_Service.c_Data[2] == hu8_NR_CODE_RESPONSE_PENDING)
                   {
-                     osc_write_log_info("", "ResponsePending detected, rewinding timeout ...");
+                     osc_write_log_info("Synchronous communication",
+                                        "ResponsePending detected, rewinding timeout ...");
                      u32_StartTime = stw::tgl::TglGetTickCount();
                      // The response of the server resets the session timeouts
                      u32_LastWaitTimeHandled = u32_StartTime;
@@ -525,8 +524,9 @@ std::error_code C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(const u
             }
             else
             {
-               m_LogErrorWithHeader(TGL_UTIL_FUNC_ID, "Synchronous communication",
-                                    "Sync negative response to unexpected service received. Ignoring.");
+               m_LogErrorWithHeader("Synchronous communication",
+                                    "Sync negative response to unexpected service received. Ignoring.",
+                                    TGL_UTIL_FUNC_ID);
             }
          }
 
