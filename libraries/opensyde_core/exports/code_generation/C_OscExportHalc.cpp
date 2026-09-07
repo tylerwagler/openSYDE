@@ -775,9 +775,9 @@ std::string C_OscExportHalc::mh_GetDpListElementReference(const std::vector<C_Os
 {
    std::string c_Return;
 
-   tgl_assert(C_OscHalcMagicianUtil::h_GetVariableName(orc_DefinitionArray, ou32_StructIndex,
-                                                       ou32_ElementIndex, orc_DomainSingularName,
-                                                       c_Return) == C_NO_ERR);
+   tgl_assert(!C_OscHalcMagicianUtil::h_GetVariableName(orc_DefinitionArray, ou32_StructIndex,
+                                                        ou32_ElementIndex, orc_DomainSingularName,
+                                                        c_Return));
    c_Return = C_OscExportUti::h_GetElementCeName(c_Return, oq_IsArray, orc_Element.GetType());
    c_Return = "&gt_" + C_OscHalcMagicianUtil::h_GetDatapoolName(oq_IsSafe) + "_DataPoolValues.t_" +
               C_OscHalcMagicianUtil::h_GetListName(ore_Type) + "Values." + c_Return;

@@ -12,7 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscHalcDefElement.hpp"
 
@@ -97,25 +100,25 @@ void C_OscHalcDefElement::SetComplexType(const C_OscHalcDefContent::E_ComplexTyp
    \param[in]  orc_Value         Enum internal value
 
    \return
-   C_NO_ERR Added successfully
-   C_RANGE  Display value already used
-   C_CONFIG Content type invalid
+   Errc::success    Added successfully
+   Errc::range      Display value already used
+   Errc::config     Content type invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefElement::AddEnumItem(const std::string & orc_DisplayName,
-                                         const C_OscNodeDataPoolContent & orc_Value)
+std::error_code C_OscHalcDefElement::AddEnumItem(const std::string & orc_DisplayName,
+                                                 const C_OscNodeDataPoolContent & orc_Value)
 {
-   int32_t s32_Retval = this->c_InitialValue.AddEnumItem(orc_DisplayName, orc_Value);
+   std::error_code c_Retval = this->c_InitialValue.AddEnumItem(orc_DisplayName, orc_Value);
 
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = this->c_MinValue.AddEnumItem(orc_DisplayName, orc_Value);
+      c_Retval = this->c_MinValue.AddEnumItem(orc_DisplayName, orc_Value);
    }
-   if (s32_Retval == C_NO_ERR)
+   if (!c_Retval)
    {
-      s32_Retval = this->c_MaxValue.AddEnumItem(orc_DisplayName, orc_Value);
+      c_Retval = this->c_MaxValue.AddEnumItem(orc_DisplayName, orc_Value);
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

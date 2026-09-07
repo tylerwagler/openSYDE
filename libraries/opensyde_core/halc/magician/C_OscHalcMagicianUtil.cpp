@@ -13,9 +13,11 @@
 #include <limits>
 #include <string>
 #include <sstream>
+#include <system_error>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscHalcMagicianUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -131,17 +133,17 @@ std::string C_OscHalcMagicianUtil::h_GetListName(const C_OscHalcDefDomain::E_Var
    \param[in]      ou32_CurChannel              Current channel
 
    \return
-   C_NO_ERR Variable name
-   C_RANGE  Invalid input
+   Errc::success    Variable name
+   Errc::range      Invalid input
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcMagicianUtil::h_GetVariableName(const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
-                                                 const uint32_t ou32_ParameterIndexStruct,
-                                                 const uint32_t ou32_ParameterIndexElement,
-                                                 const std::string & orc_DomainSingularName,
-                                                 std::string & orc_Name, const uint32_t ou32_CurChannel)
+std::error_code C_OscHalcMagicianUtil::h_GetVariableName(const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
+                                                         const uint32_t ou32_ParameterIndexStruct,
+                                                         const uint32_t ou32_ParameterIndexElement,
+                                                         const std::string & orc_DomainSingularName,
+                                                         std::string & orc_Name, const uint32_t ou32_CurChannel)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_ParameterIndexStruct < orc_DefinitionArray.size())
    {
@@ -155,7 +157,7 @@ int32_t C_OscHalcMagicianUtil::h_GetVariableName(const std::vector<C_OscHalcDefS
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -165,9 +167,9 @@ int32_t C_OscHalcMagicianUtil::h_GetVariableName(const std::vector<C_OscHalcDefS
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

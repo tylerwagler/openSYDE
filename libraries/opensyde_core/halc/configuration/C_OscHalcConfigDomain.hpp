@@ -12,6 +12,7 @@
 #include <vector>
 
 #include <string>
+#include <system_error>
 #include "C_OscHalcDefBase.hpp"
 #include "C_OscHalcDefDomain.hpp"
 #include "C_OscHalcConfigChannel.hpp"
@@ -35,18 +36,18 @@ public:
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
    void CheckChannelNameUnique(const uint32_t ou32_ChannelIndex, bool * const opq_NameConflict) const;
-   int32_t CheckChannelLinked(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex, bool & orq_IsLinked,
-                              std::vector<std::string> * const opc_LinkedChannelNames,
-                              std::vector<uint32_t> * const opc_LinkedChannelIndices,
-                              const uint32_t * const opu32_UseCaseIndex) const;
-   int32_t ResetChannelToDefault(const uint32_t ou32_ChannelIndex);
-   int32_t ResetChannelUseCase(const uint32_t ou32_ChannelIndex);
+   std::error_code CheckChannelLinked(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
+                                      bool & orq_IsLinked, std::vector<std::string> * const opc_LinkedChannelNames,
+                                      std::vector<uint32_t> * const opc_LinkedChannelIndices,
+                                      const uint32_t * const opu32_UseCaseIndex) const;
+   std::error_code ResetChannelToDefault(const uint32_t ou32_ChannelIndex);
+   std::error_code ResetChannelUseCase(const uint32_t ou32_ChannelIndex);
    void ResetDomainToDefault(void);
-   int32_t GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                                std::vector<uint32_t> * const opc_ParameterIndices,
-                                                std::vector<uint32_t> * const opc_InputIndices,
-                                                std::vector<uint32_t> * const opc_OutputIndices,
-                                                std::vector<uint32_t> * const opc_StatusIndices)
+   std::error_code GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
+                                                        std::vector<uint32_t> * const opc_ParameterIndices,
+                                                        std::vector<uint32_t> * const opc_InputIndices,
+                                                        std::vector<uint32_t> * const opc_OutputIndices,
+                                                        std::vector<uint32_t> * const opc_StatusIndices)
    const;
    void HandleFileLoadPostProcessing(const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode);
    void HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,

@@ -12,6 +12,7 @@
 #include "stwtypes.hpp"
 
 #include <string>
+#include <system_error>
 
 #include "C_OscHalcConfig.hpp"
 #include "C_OscHalcConfigStandalone.hpp"
@@ -32,9 +33,10 @@ public:
 
    static void h_GetConfigStandalone(const C_OscHalcConfig & orc_Config,
                                      C_OscHalcConfigStandalone & orc_ConfigStandalone);
-   static int32_t h_GetConfigStandaloneChannel(const C_OscHalcConfig & orc_Config, const uint32_t ou32_DomainIndex,
-                                               const uint32_t ou32_ChannelIndex, const bool oq_DomainOnly,
-                                               C_OscHalcConfigStandalone & orc_ConfigStandalone);
+   static std::error_code h_GetConfigStandaloneChannel(const C_OscHalcConfig & orc_Config,
+                                                       const uint32_t ou32_DomainIndex,
+                                                       const uint32_t ou32_ChannelIndex, const bool oq_DomainOnly,
+                                                       C_OscHalcConfigStandalone & orc_ConfigStandalone);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

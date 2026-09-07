@@ -301,8 +301,8 @@ void C_SdNdeHalcConfigImportModel::GetAdaptedConfiguration(C_OscHalcConfig & orc
                if (q_Changed == true)
                {
                   // Update the configuration with the adapted domain and channel configuration
-                  tgl_assert(orc_AdaptedConfig.SetDomainConfig(pc_DomainItem->u32_Index,
-                                                               c_DomainConfigAdaption) == C_NO_ERR);
+                  tgl_assert(!orc_AdaptedConfig.SetDomainConfig(pc_DomainItem->u32_Index,
+                                                                c_DomainConfigAdaption));
                }
             }
          }

@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscHalcConfig.hpp"
 
@@ -156,13 +159,13 @@ void C_OscHalcConfig::HandleFileLoadPostProcessing(void)
    \param[in]  orc_Domain  Domain
 
    \return
-   C_NO_ERR Value set
-   C_RANGE  Invalid index
+   Errc::success    Value set
+   Errc::range      Invalid index
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainConfig(const uint32_t ou32_Index, const C_OscHalcConfigDomain & orc_Domain)
+std::error_code C_OscHalcConfig::SetDomainConfig(const uint32_t ou32_Index, const C_OscHalcConfigDomain & orc_Domain)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_Index < this->mc_Domains.size())
    {
@@ -170,9 +173,9 @@ int32_t C_OscHalcConfig::SetDomainConfig(const uint32_t ou32_Index, const C_OscH
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -187,16 +190,16 @@ int32_t C_OscHalcConfig::SetDomainConfig(const uint32_t ou32_Index, const C_OscH
    \param[in]  ou32_UseCaseIndex    Use case index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainChannelConfig(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                                const bool oq_UseChannelIndex, const std::string & orc_Name,
-                                                const std::string & orc_Comment, const bool oq_SafetyRelevant,
-                                                const uint32_t ou32_UseCaseIndex)
+std::error_code C_OscHalcConfig::SetDomainChannelConfig(const uint32_t ou32_DomainIndex,
+                                                        const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
+                                                        const std::string & orc_Name, const std::string & orc_Comment,
+                                                        const bool oq_SafetyRelevant, const uint32_t ou32_UseCaseIndex)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -213,7 +216,7 @@ int32_t C_OscHalcConfig::SetDomainChannelConfig(const uint32_t ou32_DomainIndex,
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -227,9 +230,9 @@ int32_t C_OscHalcConfig::SetDomainChannelConfig(const uint32_t ou32_DomainIndex,
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -240,21 +243,22 @@ int32_t C_OscHalcConfig::SetDomainChannelConfig(const uint32_t ou32_DomainIndex,
    \param[in]  oq_UseChannelIndex   Use channel index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::ResetDomainChannelConfig(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                                  const bool oq_UseChannelIndex)
+std::error_code C_OscHalcConfig::ResetDomainChannelConfig(const uint32_t ou32_DomainIndex,
+                                                          const uint32_t ou32_ChannelIndex,
+                                                          const bool oq_UseChannelIndex)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
       C_OscHalcConfigDomain & rc_Domain = this->mc_Domains[ou32_DomainIndex];
       if (oq_UseChannelIndex)
       {
-         s32_Retval = rc_Domain.ResetChannelToDefault(ou32_ChannelIndex);
+         c_Retval = rc_Domain.ResetChannelToDefault(ou32_ChannelIndex);
       }
       else
       {
@@ -263,9 +267,9 @@ int32_t C_OscHalcConfig::ResetDomainChannelConfig(const uint32_t ou32_DomainInde
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -276,29 +280,30 @@ int32_t C_OscHalcConfig::ResetDomainChannelConfig(const uint32_t ou32_DomainInde
    \param[in]  oq_UseChannelIndex   Use channel index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::ResetDomainChannelUseCase(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                                   const bool oq_UseChannelIndex)
+std::error_code C_OscHalcConfig::ResetDomainChannelUseCase(const uint32_t ou32_DomainIndex,
+                                                           const uint32_t ou32_ChannelIndex,
+                                                           const bool oq_UseChannelIndex)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
       if (oq_UseChannelIndex == true)
       {
          C_OscHalcConfigDomain & rc_Domain = this->mc_Domains[ou32_DomainIndex];
-         s32_Retval = rc_Domain.ResetChannelUseCase(ou32_ChannelIndex);
+         c_Retval = rc_Domain.ResetChannelUseCase(ou32_ChannelIndex);
       }
       // domains have no use case
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -310,15 +315,15 @@ int32_t C_OscHalcConfig::ResetDomainChannelUseCase(const uint32_t ou32_DomainInd
    \param[in]  orc_Name             Name
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainChannelConfigName(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                                    const bool oq_UseChannelIndex,
-                                                    const std::string & orc_Name)
+std::error_code C_OscHalcConfig::SetDomainChannelConfigName(const uint32_t ou32_DomainIndex,
+                                                            const uint32_t ou32_ChannelIndex,
+                                                            const bool oq_UseChannelIndex, const std::string & orc_Name)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -332,7 +337,7 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigName(const uint32_t ou32_DomainIn
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -343,9 +348,9 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigName(const uint32_t ou32_DomainIn
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -357,15 +362,16 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigName(const uint32_t ou32_DomainIn
    \param[in]  orc_Comment          Comment
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainChannelConfigComment(const uint32_t ou32_DomainIndex,
-                                                       const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                                       const std::string & orc_Comment)
+std::error_code C_OscHalcConfig::SetDomainChannelConfigComment(const uint32_t ou32_DomainIndex,
+                                                               const uint32_t ou32_ChannelIndex,
+                                                               const bool oq_UseChannelIndex,
+                                                               const std::string & orc_Comment)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -379,7 +385,7 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigComment(const uint32_t ou32_Domai
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -390,9 +396,9 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigComment(const uint32_t ou32_Domai
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -404,14 +410,16 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigComment(const uint32_t ou32_Domai
    \param[in]  oq_SafetyRelevant    Safety relevant
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainChannelConfigSafety(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                                      const bool oq_UseChannelIndex, const bool oq_SafetyRelevant)
+std::error_code C_OscHalcConfig::SetDomainChannelConfigSafety(const uint32_t ou32_DomainIndex,
+                                                              const uint32_t ou32_ChannelIndex,
+                                                              const bool oq_UseChannelIndex,
+                                                              const bool oq_SafetyRelevant)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -425,7 +433,7 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigSafety(const uint32_t ou32_Domain
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -436,9 +444,9 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigSafety(const uint32_t ou32_Domain
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -450,15 +458,16 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigSafety(const uint32_t ou32_Domain
    \param[in]  ou32_UseCaseIndex    Use case index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainChannelConfigUseCase(const uint32_t ou32_DomainIndex,
-                                                       const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                                       const uint32_t ou32_UseCaseIndex)
+std::error_code C_OscHalcConfig::SetDomainChannelConfigUseCase(const uint32_t ou32_DomainIndex,
+                                                               const uint32_t ou32_ChannelIndex,
+                                                               const bool oq_UseChannelIndex,
+                                                               const uint32_t ou32_UseCaseIndex)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -472,7 +481,7 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigUseCase(const uint32_t ou32_Domai
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -483,9 +492,9 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigUseCase(const uint32_t ou32_Domai
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -498,17 +507,17 @@ int32_t C_OscHalcConfig::SetDomainChannelConfigUseCase(const uint32_t ou32_Domai
    \param[in]  orc_Parameter        Parameter
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainChannelParameterConfig(const uint32_t ou32_DomainIndex,
-                                                         const uint32_t ou32_ChannelIndex,
-                                                         const uint32_t ou32_ParameterIndex,
-                                                         const bool oq_UseChannelIndex,
-                                                         const C_OscHalcConfigParameterStruct & orc_Parameter)
+std::error_code C_OscHalcConfig::SetDomainChannelParameterConfig(const uint32_t ou32_DomainIndex,
+                                                                 const uint32_t ou32_ChannelIndex,
+                                                                 const uint32_t ou32_ParameterIndex,
+                                                                 const bool oq_UseChannelIndex,
+                                                                 const C_OscHalcConfigParameterStruct & orc_Parameter)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -524,12 +533,12 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfig(const uint32_t ou32_Dom
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -541,15 +550,15 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfig(const uint32_t ou32_Dom
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -563,18 +572,18 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfig(const uint32_t ou32_Dom
    \param[in]  orc_Parameter        Parameter
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElement(const uint32_t ou32_DomainIndex,
-                                                                const uint32_t ou32_ChannelIndex,
-                                                                const uint32_t ou32_ParameterIndex,
-                                                                const uint32_t ou32_ElementIndex,
-                                                                const bool oq_UseChannelIndex,
-                                                                const C_OscHalcConfigParameter & orc_Parameter)
+std::error_code C_OscHalcConfig::SetDomainChannelParameterConfigElement(const uint32_t ou32_DomainIndex,
+                                                                        const uint32_t ou32_ChannelIndex,
+                                                                        const uint32_t ou32_ParameterIndex,
+                                                                        const uint32_t ou32_ElementIndex,
+                                                                        const bool oq_UseChannelIndex,
+                                                                        const C_OscHalcConfigParameter & orc_Parameter)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -593,17 +602,17 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElement(const uint32_t o
                }
                else
                {
-                  s32_Retval = C_RANGE;
+                  c_Retval = Errc::range;
                }
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -618,20 +627,20 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElement(const uint32_t o
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -645,18 +654,18 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElement(const uint32_t o
    \param[in]  orc_Value            Value
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementPlain(const uint32_t ou32_DomainIndex,
-                                                                     const uint32_t ou32_ChannelIndex,
-                                                                     const uint32_t ou32_ParameterIndex,
-                                                                     const uint32_t ou32_ElementIndex,
-                                                                     const bool oq_UseChannelIndex,
-                                                                     const C_OscHalcDefContent & orc_Value)
+std::error_code C_OscHalcConfig::SetDomainChannelParameterConfigElementPlain(const uint32_t ou32_DomainIndex,
+                                                                             const uint32_t ou32_ChannelIndex,
+                                                                             const uint32_t ou32_ParameterIndex,
+                                                                             const uint32_t ou32_ElementIndex,
+                                                                             const bool oq_UseChannelIndex,
+                                                                             const C_OscHalcDefContent & orc_Value)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -678,7 +687,7 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementPlain(const uint3
                   }
                   else
                   {
-                     s32_Retval = C_RANGE;
+                     c_Retval = Errc::range;
                   }
                }
                else
@@ -688,12 +697,12 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementPlain(const uint3
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -711,7 +720,7 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementPlain(const uint3
                }
                else
                {
-                  s32_Retval = C_RANGE;
+                  c_Retval = Errc::range;
                }
             }
             else
@@ -721,15 +730,15 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementPlain(const uint3
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -743,19 +752,19 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementPlain(const uint3
    \param[in]  orc_DisplayName      Display name
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
-   C_CONFIG Enum content invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
+   Errc::config     Enum content invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementEnum(const uint32_t ou32_DomainIndex,
-                                                                    const uint32_t ou32_ChannelIndex,
-                                                                    const uint32_t ou32_ParameterIndex,
-                                                                    const uint32_t ou32_ElementIndex,
-                                                                    const bool oq_UseChannelIndex,
-                                                                    const std::string & orc_DisplayName)
+std::error_code C_OscHalcConfig::SetDomainChannelParameterConfigElementEnum(const uint32_t ou32_DomainIndex,
+                                                                            const uint32_t ou32_ChannelIndex,
+                                                                            const uint32_t ou32_ParameterIndex,
+                                                                            const uint32_t ou32_ElementIndex,
+                                                                            const bool oq_UseChannelIndex,
+                                                                            const std::string & orc_DisplayName)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -773,26 +782,26 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementEnum(const uint32
                   if (ou32_ElementIndex < rc_Struct.c_ParameterElements.size())
                   {
                      C_OscHalcConfigParameter & rc_Element = rc_Struct.c_ParameterElements[ou32_ElementIndex];
-                     s32_Retval = rc_Element.c_Value.SetEnumValue(orc_DisplayName);
+                     c_Retval = rc_Element.c_Value.SetEnumValue(orc_DisplayName);
                   }
                   else
                   {
-                     s32_Retval = C_RANGE;
+                     c_Retval = Errc::range;
                   }
                }
                else
                {
-                  s32_Retval = rc_Struct.c_Value.SetEnumValue(orc_DisplayName);
+                  c_Retval = rc_Struct.c_Value.SetEnumValue(orc_DisplayName);
                }
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -806,29 +815,29 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementEnum(const uint32
                if (ou32_ElementIndex < rc_Struct.c_ParameterElements.size())
                {
                   C_OscHalcConfigParameter & rc_Element = rc_Struct.c_ParameterElements[ou32_ElementIndex];
-                  s32_Retval = rc_Element.c_Value.SetEnumValue(orc_DisplayName);
+                  c_Retval = rc_Element.c_Value.SetEnumValue(orc_DisplayName);
                }
                else
                {
-                  s32_Retval = C_RANGE;
+                  c_Retval = Errc::range;
                }
             }
             else
             {
-               s32_Retval = rc_Struct.c_Value.SetEnumValue(orc_DisplayName);
+               c_Retval = rc_Struct.c_Value.SetEnumValue(orc_DisplayName);
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -843,20 +852,20 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementEnum(const uint32
    \param[in]  oq_Value             Value
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
-   C_CONFIG Type invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
+   Errc::config     Type invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementBitmask(const uint32_t ou32_DomainIndex,
-                                                                       const uint32_t ou32_ChannelIndex,
-                                                                       const uint32_t ou32_ParameterIndex,
-                                                                       const uint32_t ou32_ElementIndex,
-                                                                       const bool oq_UseChannelIndex,
-                                                                       const std::string & orc_DisplayName,
-                                                                       const bool oq_Value)
+std::error_code C_OscHalcConfig::SetDomainChannelParameterConfigElementBitmask(const uint32_t ou32_DomainIndex,
+                                                                               const uint32_t ou32_ChannelIndex,
+                                                                               const uint32_t ou32_ParameterIndex,
+                                                                               const uint32_t ou32_ElementIndex,
+                                                                               const bool oq_UseChannelIndex,
+                                                                               const std::string & orc_DisplayName,
+                                                                               const bool oq_Value)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -874,26 +883,26 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementBitmask(const uin
                   if (ou32_ElementIndex < rc_Struct.c_ParameterElements.size())
                   {
                      C_OscHalcConfigParameter & rc_Element = rc_Struct.c_ParameterElements[ou32_ElementIndex];
-                     s32_Retval = rc_Element.c_Value.SetBitmask(orc_DisplayName, oq_Value);
+                     c_Retval = rc_Element.c_Value.SetBitmask(orc_DisplayName, oq_Value);
                   }
                   else
                   {
-                     s32_Retval = C_RANGE;
+                     c_Retval = Errc::range;
                   }
                }
                else
                {
-                  s32_Retval = rc_Struct.c_Value.SetBitmask(orc_DisplayName, oq_Value);
+                  c_Retval = rc_Struct.c_Value.SetBitmask(orc_DisplayName, oq_Value);
                }
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -907,29 +916,29 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementBitmask(const uin
                if (ou32_ElementIndex < rc_Struct.c_ParameterElements.size())
                {
                   C_OscHalcConfigParameter & rc_Element = rc_Struct.c_ParameterElements[ou32_ElementIndex];
-                  s32_Retval = rc_Element.c_Value.SetBitmask(orc_DisplayName, oq_Value);
+                  c_Retval = rc_Element.c_Value.SetBitmask(orc_DisplayName, oq_Value);
                }
                else
                {
-                  s32_Retval = C_RANGE;
+                  c_Retval = Errc::range;
                }
             }
             else
             {
-               s32_Retval = rc_Struct.c_Value.SetBitmask(orc_DisplayName, oq_Value);
+               c_Retval = rc_Struct.c_Value.SetBitmask(orc_DisplayName, oq_Value);
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -943,19 +952,19 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementBitmask(const uin
    \param[in]  orc_Value            Value
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
-   C_CONFIG Type invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
+   Errc::config     Type invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementString(const uint32_t ou32_DomainIndex,
-                                                                      const uint32_t ou32_ChannelIndex,
-                                                                      const uint32_t ou32_ParameterIndex,
-                                                                      const uint32_t ou32_ElementIndex,
-                                                                      const bool oq_UseChannelIndex,
-                                                                      const std::string & orc_Value)
+std::error_code C_OscHalcConfig::SetDomainChannelParameterConfigElementString(const uint32_t ou32_DomainIndex,
+                                                                              const uint32_t ou32_ChannelIndex,
+                                                                              const uint32_t ou32_ParameterIndex,
+                                                                              const uint32_t ou32_ElementIndex,
+                                                                              const bool oq_UseChannelIndex,
+                                                                              const std::string & orc_Value)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -973,26 +982,26 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementString(const uint
                   if (ou32_ElementIndex < rc_Struct.c_ParameterElements.size())
                   {
                      C_OscHalcConfigParameter & rc_Element = rc_Struct.c_ParameterElements[ou32_ElementIndex];
-                     s32_Retval = rc_Element.c_Value.SetStringValue(orc_Value);
+                     c_Retval = rc_Element.c_Value.SetStringValue(orc_Value);
                   }
                   else
                   {
-                     s32_Retval = C_RANGE;
+                     c_Retval = Errc::range;
                   }
                }
                else
                {
-                  s32_Retval = rc_Struct.c_Value.SetStringValue(orc_Value);
+                  c_Retval = rc_Struct.c_Value.SetStringValue(orc_Value);
                }
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
@@ -1006,29 +1015,29 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementString(const uint
                if (ou32_ElementIndex < rc_Struct.c_ParameterElements.size())
                {
                   C_OscHalcConfigParameter & rc_Element = rc_Struct.c_ParameterElements[ou32_ElementIndex];
-                  s32_Retval = rc_Element.c_Value.SetStringValue(orc_Value);
+                  c_Retval = rc_Element.c_Value.SetStringValue(orc_Value);
                }
                else
                {
-                  s32_Retval = C_RANGE;
+                  c_Retval = Errc::range;
                }
             }
             else
             {
-               s32_Retval = rc_Struct.c_Value.SetStringValue(orc_Value);
+               c_Retval = rc_Struct.c_Value.SetStringValue(orc_Value);
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1043,19 +1052,16 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementString(const uint
    \param[in,out]  opc_StatusIndices      Status indices
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_DomainIndex,
-                                                              const uint32_t ou32_ChannelIndex,
-                                                              const bool oq_UseChannelIndex,
-                                                              std::vector<uint32_t> * const opc_ParameterIndices,
-                                                              std::vector<uint32_t> * const opc_InputIndices,
-                                                              std::vector<uint32_t> * const opc_OutputIndices,
-                                                              std::vector<uint32_t> * const opc_StatusIndices) const
+std::error_code C_OscHalcConfig::GetRelevantIndicesForSelectedUseCase(
+   const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
+   std::vector<uint32_t> * const opc_ParameterIndices, std::vector<uint32_t> * const opc_InputIndices,
+   std::vector<uint32_t> * const opc_OutputIndices, std::vector<uint32_t> * const opc_StatusIndices) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DomainIndex < this->mc_Domains.size())
    {
@@ -1065,9 +1071,9 @@ int32_t C_OscHalcConfig::GetRelevantIndicesForSelectedUseCase(const uint32_t ou3
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -1259,7 +1259,7 @@ void C_SdClipBoardHelper::h_StoreHalcItemConfigToClipboard(const C_OscHalcConfig
 
    c_StringXml.CreateAndSelectNodeChild("clip-board");
 
-   s32_Retval = C_OscHalcConfigStandaloneFiler::h_SaveDataStandalone(orc_Data, c_StringXml);
+   s32_Retval = C_OscHalcConfigStandaloneFiler::h_SaveDataStandalone(orc_Data, c_StringXml).value();
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -1290,7 +1290,7 @@ int32_t C_SdClipBoardHelper::h_LoadHalcItemConfigFromClipboard(C_OscHalcConfigSt
 
    if (c_StringXml.SelectRoot() == "clip-board")
    {
-      s32_Retval = C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(orc_Data, c_StringXml);
+      s32_Retval = C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(orc_Data, c_StringXml).value();
    }
    else
    {

@@ -15,6 +15,8 @@
 #include "C_SdNdeHalcWidget.hpp"
 #include "ui_C_SdNdeHalcWidget.h"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "constants.hpp"
@@ -400,8 +402,9 @@ void C_SdNdeHalcWidget::m_OnExportConfigClicked(void)
             C_OscHalcConfigStandalone c_StandaloneConfig;
             C_OscHalcConfigUtil::h_GetConfigStandalone(*pc_Config, c_StandaloneConfig);
 
-            s32_Result = C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(c_StandaloneConfig,
-                                                                              c_FileName.toStdString().c_str());
+            s32_Result =
+               C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(c_StandaloneConfig,
+                                                                    c_FileName.toStdString().c_str()).value();
          }
          else
          {
@@ -763,13 +766,13 @@ bool C_SdNdeHalcWidget::m_LoadHalcDefinitionFile(C_OscHalcConfig & orc_HalcConfi
    if (orc_HalcDefPath.isEmpty() == false)
    {
       // load definition directly into configuration data structure
-      const int32_t s32_LoadResult =
+      const std::error_code c_LoadResult =
          C_OscHalcDefFiler::h_LoadFile(orc_HalcConfig, orc_HalcDefPath.toStdString().c_str());
 
       // remember path for user settings
       C_UsHandler::h_GetInstance()->SetLastKnownHalcDefPath(orc_HalcDefPath);
 
-      if (s32_LoadResult == C_NO_ERR)
+      if (!c_LoadResult)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 

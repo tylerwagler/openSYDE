@@ -246,7 +246,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
                case C_OscHalcDefContent::eCT_STRING:
                   {
                      std::string c_String;
-                     if (pc_ParameterElement->c_Value.GetStringValue(c_String) == C_NO_ERR)
+                     if (!pc_ParameterElement->c_Value.GetStringValue(c_String))
                      {
                         c_Retval = c_String.c_str();
                      }

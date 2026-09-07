@@ -12,8 +12,11 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscHalcConfigDomain.hpp"
 #include "C_SclStringCompat.hpp"
 
@@ -146,17 +149,17 @@ void C_OscHalcConfigDomain::CheckChannelNameUnique(const uint32_t ou32_ChannelIn
    \param[in]      opu32_UseCaseIndex        Use case index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigDomain::CheckChannelLinked(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                                  bool & orq_IsLinked,
-                                                  std::vector<std::string> * const opc_LinkedChannelNames,
-                                                  std::vector<uint32_t> * const opc_LinkedChannelIndices,
-                                                  const uint32_t * const opu32_UseCaseIndex) const
+std::error_code C_OscHalcConfigDomain::CheckChannelLinked(const uint32_t ou32_ChannelIndex,
+                                                          const bool oq_UseChannelIndex, bool & orq_IsLinked,
+                                                          std::vector<std::string> * const opc_LinkedChannelNames,
+                                                          std::vector<uint32_t> * const opc_LinkedChannelIndices,
+                                                          const uint32_t * const opu32_UseCaseIndex) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (oq_UseChannelIndex == true)
    {
@@ -194,7 +197,7 @@ int32_t C_OscHalcConfigDomain::CheckChannelLinked(const uint32_t ou32_ChannelInd
                               }
                               else
                               {
-                                 s32_Retval = C_RANGE;
+                                 c_Retval = Errc::range;
                               }
                            }
                         }
@@ -213,12 +216,12 @@ int32_t C_OscHalcConfigDomain::CheckChannelLinked(const uint32_t ou32_ChannelInd
                }
                if (q_Found == false)
                {
-                  s32_Retval = C_RANGE;
+                  c_Retval = Errc::range;
                }
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
@@ -237,10 +240,10 @@ int32_t C_OscHalcConfigDomain::CheckChannelLinked(const uint32_t ou32_ChannelInd
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -249,13 +252,13 @@ int32_t C_OscHalcConfigDomain::CheckChannelLinked(const uint32_t ou32_ChannelInd
    \param[in]  ou32_ChannelIndex    Channel index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigDomain::ResetChannelToDefault(const uint32_t ou32_ChannelIndex)
+std::error_code C_OscHalcConfigDomain::ResetChannelToDefault(const uint32_t ou32_ChannelIndex)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if ((ou32_ChannelIndex < this->c_ChannelConfigs.size()) && (ou32_ChannelIndex < this->c_Channels.size()))
    {
@@ -263,10 +266,10 @@ int32_t C_OscHalcConfigDomain::ResetChannelToDefault(const uint32_t ou32_Channel
    }
    else
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -275,13 +278,13 @@ int32_t C_OscHalcConfigDomain::ResetChannelToDefault(const uint32_t ou32_Channel
    \param[in]  ou32_ChannelIndex    Channel index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigDomain::ResetChannelUseCase(const uint32_t ou32_ChannelIndex)
+std::error_code C_OscHalcConfigDomain::ResetChannelUseCase(const uint32_t ou32_ChannelIndex)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if ((ou32_ChannelIndex < this->c_ChannelConfigs.size()) && (ou32_ChannelIndex < this->c_Channels.size()))
    {
@@ -290,10 +293,10 @@ int32_t C_OscHalcConfigDomain::ResetChannelUseCase(const uint32_t ou32_ChannelIn
    }
    else
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -316,19 +319,16 @@ void C_OscHalcConfigDomain::ResetDomainToDefault(void)
    \param[in,out]  opc_StatusIndices      Status indices
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success    Operation success
+   Errc::range      Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigDomain::GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_ChannelIndex,
-                                                                    const bool oq_UseChannelIndex,
-                                                                    std::vector<uint32_t> * const opc_ParameterIndices,
-                                                                    std::vector<uint32_t> * const opc_InputIndices,
-                                                                    std::vector<uint32_t> * const opc_OutputIndices,
-                                                                    std::vector<uint32_t> * const opc_StatusIndices)
-const
+std::error_code C_OscHalcConfigDomain::GetRelevantIndicesForSelectedUseCase(
+   const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex, std::vector<uint32_t> * const opc_ParameterIndices,
+   std::vector<uint32_t> * const opc_InputIndices, std::vector<uint32_t> * const opc_OutputIndices,
+   std::vector<uint32_t> * const opc_StatusIndices) const
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (oq_UseChannelIndex)
    {
@@ -394,7 +394,7 @@ const
       }
       else
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
    }
    else
@@ -432,7 +432,7 @@ const
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <string>
+#include <system_error>
 #include "C_OscHalcDefContent.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -30,7 +31,7 @@ public:
    void SetType(const C_OscNodeDataPoolContent::E_Type oe_Value);
    void SetArray(const bool oq_Value);
    void SetComplexType(const C_OscHalcDefContent::E_ComplexType oe_Type);
-   int32_t AddEnumItem(const std::string & orc_DisplayName, const C_OscNodeDataPoolContent & orc_Value);
+   std::error_code AddEnumItem(const std::string & orc_DisplayName, const C_OscNodeDataPoolContent & orc_Value);
    void AddBitmaskItem(const C_OscHalcDefContentBitmaskItem & orc_Value);
 
    C_OscHalcDefContent::E_ComplexType GetComplexType(void) const;

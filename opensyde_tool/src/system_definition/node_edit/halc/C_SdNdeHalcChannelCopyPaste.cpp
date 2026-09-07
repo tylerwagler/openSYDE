@@ -63,9 +63,8 @@ void C_SdNdeHalcChannelCopyPaste::h_Copy(const uint32_t ou32_NodeIndex, const QM
    if (pc_Config != nullptr)
    {
       C_OscHalcConfigStandalone c_CopyData;
-      tgl_assert(C_OscHalcConfigUtil::h_GetConfigStandaloneChannel(*pc_Config, u32_DomainIndex, u32_ChannelIndex,
-                                                                   !q_ChannelCase,
-                                                                   c_CopyData) == C_NO_ERR);
+      tgl_assert(!C_OscHalcConfigUtil::h_GetConfigStandaloneChannel(*pc_Config, u32_DomainIndex, u32_ChannelIndex,
+                                                                    !q_ChannelCase, c_CopyData));
 
       C_SdClipBoardHelper::h_StoreHalcItemConfigToClipboard(c_CopyData);
    }

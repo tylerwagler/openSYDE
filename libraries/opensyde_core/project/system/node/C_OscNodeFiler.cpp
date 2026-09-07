@@ -1354,7 +1354,7 @@ int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig & orc_Config, C_OscXmlParser
       if (orc_BasePath.empty())
       {
          //From string
-         s32_Retval = C_OscHalcConfigFiler::h_LoadData(orc_Config, orc_XmlParser, orc_BasePath);
+         s32_Retval = C_OscHalcConfigFiler::h_LoadData(orc_Config, orc_XmlParser, orc_BasePath).value();
       }
       else
       {
@@ -1362,7 +1362,8 @@ int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig & orc_Config, C_OscXmlParser
             C_OscHalcConfigFiler::h_LoadFile(orc_Config,
                                              C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
                                                                                   orc_XmlParser.
-                                                                                  GetNodeContent()), orc_BasePath);
+                                                                                  GetNodeContent()),
+                                             orc_BasePath).value();
       }
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "node");
@@ -1399,7 +1400,8 @@ int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXml
       if (orc_BasePath.empty())
       {
          //To string
-         s32_Retval = C_OscHalcConfigFiler::h_SaveData(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
+         s32_Retval =
+            C_OscHalcConfigFiler::h_SaveData(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles).value();
       }
       else
       {
@@ -1409,7 +1411,7 @@ int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig & orc_Config, C_OscXml
          const std::string c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Save datapool file
          s32_Retval = C_OscHalcConfigFiler::h_SaveFile(orc_Config, c_CombinedFileName, orc_BasePath,
-                                                       opc_CreatedFiles);
+                                                       opc_CreatedFiles).value();
          //Set file reference
          orc_XmlParser.SetNodeContent(c_FileName);
          //Store if necessary

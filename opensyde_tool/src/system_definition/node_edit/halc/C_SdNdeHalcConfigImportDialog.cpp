@@ -121,8 +121,9 @@ int32_t C_SdNdeHalcConfigImportDialog::PrepareDialog(QString & orc_ErrorDetails)
    if (pc_Config != nullptr)
    {
       // Load the configuration only once
-      s32_Return = C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(this->mc_ImportConfig,
-                                                                        this->mc_ImportFileName.toStdString().c_str());
+      s32_Return =
+         C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(this->mc_ImportConfig,
+                                                              this->mc_ImportFileName.toStdString().c_str()).value();
 
       if (s32_Return == C_NO_ERR)
       {
