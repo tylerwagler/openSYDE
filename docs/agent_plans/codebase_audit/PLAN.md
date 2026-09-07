@@ -326,6 +326,45 @@ Two problems, neither about effort:
 Prerequisite for Phase 7: add a benchmark harness, then decide on the C++20
 question. Neither is performance work as such.
 
+### Phase 8 — the unified root build is not a refactor, and here is why
+
+The remaining Phase 8 item is a single root `CMakeLists.txt` so `opensyde_core` is
+compiled once instead of per tool. The cost it targets is real: a clean eight-tool
+build produces **1,139 core object files across five separate core builds**, and
+`build/` reaches **5.8 GB**.
+
+But the tools do not configure core the same way. Every one passes a different set
+of `OPENSYDE_CORE_SKIP_*` options — eight sets, no two alike:
+
+| Tool | Notable exclusions |
+|---|---|
+| `opensyde_tool` | protocol drivers basic/monitor, x-config generation |
+| `can_monitor` | **security**, zipping, imports, code generation, param set, … |
+| `syde_flash` | **security**, protocol drivers system/monitor, logging, … |
+| `syde_sup` | imports, code generation, x-config/x-certificates |
+| `syde_x_gen` | **security**, **linux drivers**, most protocol drivers |
+| `syde_coder_c` | **security**, **linux drivers**, protocol drivers, … |
+| `cmd_line_flash_tool` | **security**, project handling, param set, … |
+| `tsp_convert` | **security**, **linux drivers**, … |
+
+Those are not arbitrary. `OPENSYDE_CORE_SKIP_SECURITY` exists so SYDEflash and CAN
+Monitor do not acquire an OpenSSL dependency; the driver skips control which
+platform back-ends get compiled in. Collapsing to one core build changes what
+each binary depends on, which is a **deployment** decision, not a build-tidiness
+one.
+
+There is a plausible path — build core once with everything enabled as a static
+library and let the linker pull only referenced objects, which works because
+`opensyde_core` deliberately does not link OpenSSL itself (applications provide
+it, per the note in its CMakeLists). Then the SKIP flags stop affecting the
+dependency footprint and only affect what sits unused in the archive.
+
+That needs verifying per tool rather than assuming, specifically: that no skipped
+subsystem is reachable from a tool that currently excludes it, and that each
+resulting binary links the same set of external libraries as it does today. Worth
+doing, and worth doing deliberately — it is the sort of change that is invisible
+until a tool ships with a dependency it never had.
+
 ### Phase 8 — what is done and what is not
 
 Done: CMake minimum raised 3.9 → 3.25 across `Vector_DBC` / `Vector_BLF` /
