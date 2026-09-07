@@ -957,6 +957,25 @@ endif()
 # define library target including all sources
 add_library(opensyde_core ${OPENSYDE_CORE_SOURCES})
 
+# Warnings. The eight tool trees have built with -Wall -Wextra -Wpedantic all
+# along; opensyde_core set no warning flags at all, so the most safety-critical
+# code in the repository was the only part compiled without them.
+#
+# That is not theoretical. C_OscViewFiler carried nine inverted comparisons of the
+# form `if (orc_String == "activate" == 0)`, which silently swapped the debugger,
+# authentication and traffic-encryption settings read from a project file. GCC
+# reports it as -Wparentheses, part of -Wall, and did so in the tool builds --
+# where nobody was reading core's output because core was not compiled there with
+# warnings on.
+#
+# Not -Werror: 45 pre-existing warnings remain -- 26 -Wsign-compare (mostly signed
+# loop counters against .size()), 18 -Winvalid-pch from the _LARGEFILE64_SOURCE
+# mismatch below, and one unused variable. All tracked in docs/TODO.md; turning
+# on -Werror before they are cleared would just break the build.
+if(NOT MSVC)
+   target_compile_options(opensyde_core PRIVATE -Wall -Wextra)
+endif()
+
 # Enable large file support on Linux (required by miniz for 64-bit file I/O)
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    target_compile_definitions(opensyde_core PRIVATE _LARGEFILE64_SOURCE)

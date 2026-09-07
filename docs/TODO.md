@@ -240,3 +240,28 @@ Options, cheapest first:
    file.
 
 Option 3 is the one worth doing if that file gets touched again.
+
+## Clear the 45 warnings now visible in the core build
+
+`libraries/opensyde_core/CMakeLists.txt` now sets `-Wall -Wextra`. It previously
+set no warning flags at all, while the eight tool trees had used
+`-Wall -Wextra -Wpedantic` all along — so the most safety-critical code in the
+repository was the only part compiled without them.
+
+That gap hid a real defect: `C_OscViewFiler`'s nine inverted comparisons, which
+swapped the debugger / authentication / traffic-encryption settings read from a
+project file. GCC reports it as `-Wparentheses`, part of `-Wall`. Verified after
+the fact — compiling the pre-fix file with `-Wall` emits the warning at all nine
+lines.
+
+`-Werror` is deliberately **not** set, because 45 warnings pre-date the change:
+
+| Count | Warning | Notes |
+|---|---|---|
+| 26 | `-Wsign-compare` | Signed loop counters against `.size()`. 10 in `C_SclIniFile.cpp`, 3 each in `C_OscSuSequences`, `C_OscCanOpenObjectDictionary`, `C_HexFile`, 2 in `C_CanDispatcher`, singles elsewhere. Mechanical, but touches hot paths. |
+| 18 | `-Winvalid-pch` | The `_LARGEFILE64_SOURCE` mismatch — `target_compile_definitions(opensyde_core PRIVATE _LARGEFILE64_SOURCE)` is applied to the TUs but not to the precompiled header, so **18 translation units silently reject the PCH** and recompile the whole header set. This is a build-time cost as well as noise. |
+| 1 | `-Wunused-variable` | |
+
+Worth doing in that order: the PCH one is a single CMake change and also speeds
+up the build, the sign-compares are mechanical, and once both are clear `-Werror`
+becomes viable and this class of bug can never reach a commit again.
