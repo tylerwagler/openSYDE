@@ -75,7 +75,7 @@ std::error_code C_OscParamSetFilerBase::h_AddCrc(const std::string & orc_Path)
    if (TglFileExists(orc_Path) == true)
    {
       C_OscChecksummedXml c_XmlParser;
-      c_Return = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_Path));
+      c_Return = c_XmlParser.LoadFromFile(orc_Path);
       //ignore missing and incorrect CRC; we want to set it
       if ((!c_Return) || (c_Return == Errc::checksum) || (c_Return == Errc::rd_wr))
       {
@@ -86,7 +86,7 @@ std::error_code C_OscParamSetFilerBase::h_AddCrc(const std::string & orc_Path)
          }
          else
          {
-            c_Return = make_error_code_from_stw(c_XmlParser.SaveToFile(orc_Path));
+            c_Return = c_XmlParser.SaveToFile(orc_Path);
          }
       }
       if (c_Return == Errc::noact)

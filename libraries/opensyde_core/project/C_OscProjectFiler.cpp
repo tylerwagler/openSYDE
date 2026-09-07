@@ -130,7 +130,7 @@ std::error_code C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const std:
       std::string c_Tmp;
       //Open file
       C_OscXmlParser c_Xml;
-      c_Retval = make_error_code_from_stw(c_Xml.LoadFromFile(orc_Path));
+      c_Retval = c_Xml.LoadFromFile(orc_Path);
       if (!c_Retval)
       {
          //Check if file and root node exists
@@ -260,6 +260,6 @@ std::error_code C_OscProjectFiler::mh_SaveInternal(C_OscProject & orc_Project, c
    c_Xml.SetNodeContent(orc_Project.c_Version);
    c_Xml.SelectNodeParent();
 
-   c_Return = make_error_code_from_stw(c_Xml.SaveToFile(orc_Path));
+   c_Return = c_Xml.SaveToFile(orc_Path);
    return c_Return;
 }

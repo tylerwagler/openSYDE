@@ -81,7 +81,7 @@ std::error_code C_OscSupSignatureFiler::h_CreateSignatureFile(const std::string 
    tgl_assert(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
    // save signature file
-   c_Result = make_error_code_from_stw(c_XmlParser.SaveToFile(orc_Path));
+   c_Result = c_XmlParser.SaveToFile(orc_Path);
    if (c_Result)
    {
       c_Result = Errc::rd_wr;
@@ -108,7 +108,7 @@ std::error_code C_OscSupSignatureFiler::h_LoadSignatureFile(const std::string & 
    std::error_code c_Result = Errc::success;
    C_OscXmlParser c_XmlParser;
 
-   c_Result = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_Path));
+   c_Result = c_XmlParser.LoadFromFile(orc_Path);
    if (!c_Result)
    {
       tgl_assert(c_XmlParser.SelectRoot() == mc_ROOT_NAME);

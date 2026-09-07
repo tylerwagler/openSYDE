@@ -72,7 +72,7 @@ std::error_code C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config,
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading manifest data");
       //the XML parser still reports the STW int32_t error convention
-      c_Retval = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_Path));
+      c_Retval = c_XmlParser.LoadFromFile(orc_Path);
       if (!c_Retval)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-update-package-manifest")
@@ -122,7 +122,7 @@ std::error_code C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_C
       //node
       C_OscXceManifestFiler::h_SaveData(orc_Config, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_Path))
       {
          osc_write_log_error("Saving manifest data", "Could not create file.");
          c_Retval = Errc::config;
@@ -156,11 +156,11 @@ std::error_code C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config,
 
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("package"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("package");
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("types", c_Types));
+      c_Retval = orc_XmlParser.GetAttributeStringError("types", c_Types);
       if (!c_Retval)
       {
          if (c_Types != "x-app-security-certificates")
@@ -174,7 +174,7 @@ std::error_code C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config,
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("x-app-security-certificates"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("x-app-security-certificates");
       if (!c_Retval)
       {
          c_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_PACKAGE_VERSION_1, "package-version",
@@ -182,12 +182,11 @@ std::error_code C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config,
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("secure-authentication"));
+         c_Retval = orc_XmlParser.SelectNodeChildError("secure-authentication");
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(
-            orc_XmlParser.GetAttributeStringError("certificates-path", orc_Config.c_CertificatesPath));
+         c_Retval = orc_XmlParser.GetAttributeStringError("certificates-path", orc_Config.c_CertificatesPath);
          orc_XmlParser.SelectNodeParent();
       }
       if (!c_Retval)
@@ -249,16 +248,15 @@ std::error_code C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(
    std::vector<C_OscXceUpdatePackageParameters> & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
    //the XML parser still reports the STW int32_t error convention
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("secure-update"));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("secure-update");
 
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("update-package-parameters-list"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("update-package-parameters-list");
       if (!c_Retval)
       {
          uint32_t u32_ExpectedCount;
-         c_Retval = make_error_code_from_stw(
-            orc_XmlParser.GetAttributeUint32Error("num-parameters", u32_ExpectedCount));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("num-parameters", u32_ExpectedCount);
          if (!c_Retval)
          {
             uint32_t u32_ActualCount = 0UL;
@@ -345,13 +343,11 @@ std::error_code C_OscXceManifestFiler::mh_LoadUpdatePackageParameter(C_OscXceUpd
                                                                      const C_OscXmlParserBase & orc_XmlParser)
 {
    //the XML parser still reports the STW int32_t error convention
-   std::error_code c_Retval = make_error_code_from_stw(
-      orc_XmlParser.GetAttributeStringError("password", orc_Config.c_Password));
+   std::error_code c_Retval = orc_XmlParser.GetAttributeStringError("password", orc_Config.c_Password);
 
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(
-         orc_XmlParser.GetAttributeStringError("authentication_key", orc_Config.c_AuthenticationKeyPath));
+      c_Retval = orc_XmlParser.GetAttributeStringError("authentication_key", orc_Config.c_AuthenticationKeyPath);
    }
    return c_Retval;
 }

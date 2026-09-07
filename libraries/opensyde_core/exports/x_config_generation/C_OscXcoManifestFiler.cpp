@@ -66,7 +66,7 @@ std::error_code C_OscXcoManifestFiler::h_LoadFile(C_OscXcoManifest & orc_Config,
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading manifest data");
       //the XML parser still reports the STW int32_t error convention
-      c_Retval = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_Path));
+      c_Retval = c_XmlParser.LoadFromFile(orc_Path);
       if (!c_Retval)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-update-package-manifest")
@@ -116,7 +116,7 @@ std::error_code C_OscXcoManifestFiler::h_SaveFile(const C_OscXcoManifest & orc_C
       //node
       C_OscXcoManifestFiler::h_SaveData(orc_Config, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_Path))
       {
          osc_write_log_error("Saving manifest data", "Could not create file.");
          c_Retval = Errc::config;
@@ -150,11 +150,11 @@ std::error_code C_OscXcoManifestFiler::h_LoadData(C_OscXcoManifest & orc_Config,
 
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("package"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("package");
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("types", c_Types));
+      c_Retval = orc_XmlParser.GetAttributeStringError("types", c_Types);
       if (!c_Retval)
       {
          if (c_Types != "x-app-config")
@@ -168,7 +168,7 @@ std::error_code C_OscXcoManifestFiler::h_LoadData(C_OscXcoManifest & orc_Config,
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("x-app-config"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("x-app-config");
       if (!c_Retval)
       {
          c_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_PACKAGE_VERSION_1, "package-version",
@@ -176,11 +176,11 @@ std::error_code C_OscXcoManifestFiler::h_LoadData(C_OscXcoManifest & orc_Config,
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("x-app-node"));
+         c_Retval = orc_XmlParser.SelectNodeChildError("x-app-node");
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("name", orc_Config.c_NodeName));
+         c_Retval = orc_XmlParser.GetAttributeStringError("name", orc_Config.c_NodeName);
          orc_XmlParser.SelectNodeParent();
       }
       orc_XmlParser.SelectNodeParent();

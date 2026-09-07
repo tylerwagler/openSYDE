@@ -67,7 +67,7 @@ std::error_code C_OscTargetSupportPackageV2Filer::h_Load(C_OscTargetSupportPacka
    {
       C_OscXmlParser c_XmlParser;
 
-      c_Return = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_Path));
+      c_Return = c_XmlParser.LoadFromFile(orc_Path);
       if (!c_Return)
       {
          c_Return = mh_Load(orc_TargetSupportPackage, c_XmlParser);

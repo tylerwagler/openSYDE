@@ -77,7 +77,7 @@ std::error_code C_OscCanOpenManagerFiler::h_LoadFile(std::map<uint8_t, C_OscCanO
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading CANopen manager data");
-      c_Retval = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_Path));
+      c_Retval = c_XmlParser.LoadFromFile(orc_Path);
       if (!c_Retval)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-can-open-managers-config")
@@ -138,7 +138,7 @@ std::error_code C_OscCanOpenManagerFiler::h_SaveFile(const std::map<uint8_t, C_O
       if (!c_Retval)
       {
          //Don't forget to save!
-         if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR)
+         if (c_XmlParser.SaveToFile(orc_Path))
          {
             osc_write_log_error("Saving CANopen manager data", "Could not create file for node.");
             c_Retval = Errc::config;
@@ -169,13 +169,13 @@ std::error_code C_OscCanOpenManagerFiler::h_LoadData(std::map<uint8_t, C_OscCanO
                                                      C_OscXmlParserBase & orc_XmlParser,
                                                      const std::string & orc_BasePath)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("can-open-managers"));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("can-open-managers");
 
    orc_Config.clear();
    if (!c_Retval)
    {
       uint32_t u32_ExpectedSize;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
       if (!c_Retval)
       {
          std::string c_NodeName = orc_XmlParser.SelectNodeChild("can-open-manager");
@@ -184,7 +184,7 @@ std::error_code C_OscCanOpenManagerFiler::h_LoadData(std::map<uint8_t, C_OscCanO
             do
             {
                uint32_t u32_Interface;
-               c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("interface", u32_Interface));
+               c_Retval = orc_XmlParser.GetAttributeUint32Error("interface", u32_Interface);
                if (!c_Retval)
                {
                   C_OscCanOpenManagerInfo c_CanOpenManager;
@@ -332,17 +332,16 @@ std::error_code C_OscCanOpenManagerFiler::mh_SaveManagerData(const C_OscCanOpenM
 std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerProperties(C_OscCanOpenManagerInfo & orc_Config,
                                                                    C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("properties"));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("properties");
 
    if (!c_Retval)
    {
       uint32_t u32_Value;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("use-opensyde-id",
-                                                                              orc_Config.q_UseOpenSydeNodeId));
+      c_Retval = orc_XmlParser.GetAttributeBoolError("use-opensyde-id", orc_Config.q_UseOpenSydeNodeId);
 
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("node-id-value", u32_Value));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("node-id-value", u32_Value);
          if (!c_Retval)
          {
             orc_Config.u8_NodeIdValue = static_cast<uint8_t>(u32_Value);
@@ -350,7 +349,7 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerProperties(C_OscCanOpenM
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("global-sdo-timeout-ms", u32_Value));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("global-sdo-timeout-ms", u32_Value);
          if (!c_Retval)
          {
             orc_Config.u16_GlobalSdoTimeoutMs = static_cast<uint16_t>(u32_Value);
@@ -358,28 +357,25 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerProperties(C_OscCanOpenM
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("autostart-can-open-manager",
-                                                                                 orc_Config.q_AutostartCanOpenManager));
+         c_Retval = orc_XmlParser.GetAttributeBoolError("autostart-can-open-manager",
+                                                        orc_Config.q_AutostartCanOpenManager);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("start-devices",
-                                                                                 orc_Config.q_StartDevices));
+         c_Retval = orc_XmlParser.GetAttributeBoolError("start-devices", orc_Config.q_StartDevices);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("NMT-start-all",
-                                                                                 orc_Config.q_NmtStartAll));
+         c_Retval = orc_XmlParser.GetAttributeBoolError("NMT-start-all", orc_Config.q_NmtStartAll);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError(
-            "enable-heartbeat-producing", orc_Config.q_EnableHeartbeatProducing));
+         c_Retval = orc_XmlParser.GetAttributeBoolError("enable-heartbeat-producing",
+                                                        orc_Config.q_EnableHeartbeatProducing);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("heartbeat-producer-time-ms",
-                                                                                   u32_Value));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("heartbeat-producer-time-ms", u32_Value);
          if (!c_Retval)
          {
             orc_Config.u16_HeartbeatProducerTimeMs = static_cast<uint16_t>(u32_Value);
@@ -391,7 +387,7 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerProperties(C_OscCanOpenM
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("nmt-error-behaviour"));
+         c_Retval = orc_XmlParser.SelectNodeChildError("nmt-error-behaviour");
          if (!c_Retval)
          {
             const std::string c_Text = orc_XmlParser.GetNodeContent();
@@ -458,17 +454,14 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerSyncProperties(C_OscCanO
 
    if (orc_XmlParser.SelectNodeChild("sync-message") == "sync-message")
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("produce",
-                                                                              orc_Config.q_ProduceSyncMessage));
+      c_Retval = orc_XmlParser.GetAttributeBoolError("produce", orc_Config.q_ProduceSyncMessage);
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("cycle-period-us",
-                                                                                   orc_Config.u32_SyncCyclePeriodUs));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("cycle-period-us", orc_Config.u32_SyncCyclePeriodUs);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("window-length-us",
-                                                                                   orc_Config.u32_SyncWindowLengthUs));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("window-length-us", orc_Config.u32_SyncWindowLengthUs);
       }
       if (!c_Retval)
       {
@@ -518,13 +511,13 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerSubDevices(std::map<C_Os
                                                                    C_OscXmlParserBase & orc_XmlParser,
                                                                    const std::string & orc_BasePath)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("can-open-devices"));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("can-open-devices");
 
    orc_Config.clear();
    if (!c_Retval)
    {
       uint32_t u32_ExpectedSize;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
       if (!c_Retval)
       {
          std::string c_NodeName = orc_XmlParser.SelectNodeChild("can-open-device");
@@ -532,17 +525,16 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerSubDevices(std::map<C_Os
          {
             do
             {
-               c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("interface-id"));
+               c_Retval = orc_XmlParser.SelectNodeChildError("interface-id");
                if (!c_Retval)
                {
                   uint32_t u32_Value;
-                  c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("node-index", u32_Value));
+                  c_Retval = orc_XmlParser.GetAttributeUint32Error("node-index", u32_Value);
                   if (!c_Retval)
                   {
                      C_OscCanInterfaceId c_InterfaceId;
                      c_InterfaceId.u32_NodeIndex = u32_Value;
-                     c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("interface-id",
-                                                                                               u32_Value));
+                     c_Retval = orc_XmlParser.GetAttributeUint32Error("interface-id", u32_Value);
                      if (!c_Retval)
                      {
                         C_OscCanOpenManagerDeviceInfo c_DeviceInfo;
@@ -653,65 +645,58 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerSubDevice(C_OscCanOpenMa
                                                                   C_OscXmlParserBase & orc_XmlParser,
                                                                   const std::string & orc_BasePath)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("properties"));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("properties");
 
    if (!c_Retval)
    {
       uint32_t u32_Value;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("device-optional",
-                                                                              orc_Config.q_DeviceOptional));
+      c_Retval = orc_XmlParser.GetAttributeBoolError("device-optional", orc_Config.q_DeviceOptional);
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("no-initialization",
-                                                                                 orc_Config.q_NoInitialization));
+         c_Retval = orc_XmlParser.GetAttributeBoolError("no-initialization", orc_Config.q_NoInitialization);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("factory-settings-active",
-                                                                                 orc_Config.q_FactorySettingsActive));
+         c_Retval = orc_XmlParser.GetAttributeBoolError("factory-settings-active", orc_Config.q_FactorySettingsActive);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error(
-            "reset-node-object-dictionary-sub-index", u32_Value));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("reset-node-object-dictionary-sub-index", u32_Value);
          orc_Config.u8_ResetNodeObjectDictionarySubIndex = static_cast<uint8_t>(u32_Value);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError(
-            "enable-heartbeat-producing", orc_Config.q_EnableHeartbeatProducing));
+         c_Retval = orc_XmlParser.GetAttributeBoolError("enable-heartbeat-producing",
+                                                        orc_Config.q_EnableHeartbeatProducing);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("heartbeat-producer-time-ms",
-                                                                                   u32_Value));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("heartbeat-producer-time-ms", u32_Value);
          orc_Config.u16_HeartbeatProducerTimeMs = static_cast<uint16_t>(u32_Value);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("use-opensyde-id",
-                                                                                 orc_Config.q_UseOpenSydeNodeId));
+         c_Retval = orc_XmlParser.GetAttributeBoolError("use-opensyde-id", orc_Config.q_UseOpenSydeNodeId);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("node-id-value", u32_Value));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("node-id-value", u32_Value);
          orc_Config.u8_NodeIdValue = static_cast<uint8_t>(u32_Value);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError(
-            "enable-heartbeat-consuming", orc_Config.q_EnableHeartbeatConsuming));
+         c_Retval = orc_XmlParser.GetAttributeBoolError("enable-heartbeat-consuming",
+                                                        orc_Config.q_EnableHeartbeatConsuming);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("heartbeat-consumer-time-ms",
-                                                                                   u32_Value));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("heartbeat-consumer-time-ms", u32_Value);
          orc_Config.u16_HeartbeatConsumerTimeMs = static_cast<uint16_t>(u32_Value);
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError(
-            "enable-heartbeat-consuming-auto-calculation", orc_Config.q_EnableHeartbeatConsumingAutoCalculation));
+         c_Retval = orc_XmlParser.GetAttributeBoolError("enable-heartbeat-consuming-auto-calculation",
+                                                        orc_Config.q_EnableHeartbeatConsumingAutoCalculation);
       }
       if (!c_Retval)
       {
@@ -795,7 +780,7 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerSubDeviceEdsPart(C_OscCa
                                                                          C_OscXmlParserBase & orc_XmlParser,
                                                                          const std::string & orc_BasePath)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("eds-file-name"));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("eds-file-name");
 
    if (!c_Retval)
    {
@@ -804,7 +789,7 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerSubDeviceEdsPart(C_OscCa
 
       if (orc_BasePath.empty())
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("eds-file-content"));
+         c_Retval = orc_XmlParser.SelectNodeChildError("eds-file-content");
          if (!c_Retval)
          {
             //Load EDS from string: not implemented
@@ -830,7 +815,7 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerSubDeviceEdsPart(C_OscCa
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("eds-original-file-name"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("eds-original-file-name");
       orc_Config.c_OriginalEdsFileName = orc_XmlParser.GetNodeContent();
       tgl_assert(orc_XmlParser.SelectNodeParent() == "properties");
    }
@@ -924,7 +909,7 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignals(
    if (orc_XmlParser.SelectNodeChild("mappable-signals") == "mappable-signals")
    {
       uint32_t u32_ExpectedSize;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
       if (!c_Retval)
       {
          std::string c_NodeName = orc_XmlParser.SelectNodeChild("mappable-signal");
@@ -995,12 +980,11 @@ void C_OscCanOpenManagerFiler::mh_SaveManagerMappedSignals(
 std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignal(C_OscCanOpenManagerMappableSignal & orc_Config,
                                                                      C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError(
-      "is-auto-min-max-used", orc_Config.q_AutoMinMaxUsed));
+   std::error_code c_Retval = orc_XmlParser.GetAttributeBoolError("is-auto-min-max-used", orc_Config.q_AutoMinMaxUsed);
 
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("com-signal"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("com-signal");
       if (!c_Retval)
       {
          c_Retval = C_OscNodeCommFiler::h_LoadNodeComSignal(orc_Config.c_SignalData, orc_XmlParser, true);
@@ -1009,7 +993,7 @@ std::error_code C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignal(C_OscCanOpe
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("data-element"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("data-element");
       if (!c_Retval)
       {
          c_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolElement(orc_Config.c_DatapoolData, orc_XmlParser);

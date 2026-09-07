@@ -247,11 +247,10 @@ std::error_code C_OscSystemBusFiler::mh_LoadCanFdProperties(C_OscSystemBus & orc
 
    if (orc_XmlParser.SelectNodeChild("can-fd") == "can-fd")
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("active", orc_Bus.q_UseCanFd));
+      c_Retval = orc_XmlParser.GetAttributeBoolError("active", orc_Bus.q_UseCanFd);
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint64Error("bitrate",
-                                                                                   orc_Bus.u64_CanFdBitRate));
+         c_Retval = orc_XmlParser.GetAttributeUint64Error("bitrate", orc_Bus.u64_CanFdBitRate);
       }
       if (!c_Retval)
       {

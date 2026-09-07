@@ -106,7 +106,7 @@ std::error_code C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const std:
    tgl_assert(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
    // save update package definition file
-   c_Result = make_error_code_from_stw(c_XmlParser.SaveToFile(c_FileName));
+   c_Result = c_XmlParser.SaveToFile(c_FileName);
    if (c_Result)
    {
       c_Result = Errc::rd_wr;
@@ -149,14 +149,12 @@ std::error_code C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const std::s
 
    if (oq_IsZip)
    {
-      c_Retval = make_error_code_from_stw(
-         c_XmlParser.LoadFromFile(orc_TargetUnzipPath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF));
+      c_Retval = c_XmlParser.LoadFromFile(orc_TargetUnzipPath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF);
    }
    else
    {
       orc_FilePackagePath = TglFileIncludeTrailingDelimiter(orc_PackagePath);
-      c_Retval = make_error_code_from_stw(
-         c_XmlParser.LoadFromFile(orc_FilePackagePath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF));
+      c_Retval = c_XmlParser.LoadFromFile(orc_FilePackagePath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF);
    }
 
    if (!c_Retval)

@@ -186,8 +186,7 @@ std::error_code C_OscHalcDefStructFiler::h_ParseSimplestTypeValue(const std::str
                                                                   const std::string & orc_AttributeName)
 {
    std::string c_ItemStr;
-   std::error_code c_Retval = make_error_code_from_stw(
-      orc_XmlParser.GetAttributeStringError(orc_AttributeName, c_ItemStr));
+   std::error_code c_Retval = orc_XmlParser.GetAttributeStringError(orc_AttributeName, c_ItemStr);
 
    if (!c_Retval)
    {
@@ -550,7 +549,7 @@ std::error_code C_OscHalcDefStructFiler::h_SetType(C_OscXmlParserBase & orc_XmlP
                                                    std::string & orc_BaseTypeStr,
                                                    const std::string & orc_CurrentNodeName)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("type", orc_TypeStr));
+   std::error_code c_Retval = orc_XmlParser.GetAttributeStringError("type", orc_TypeStr);
 
    if (!c_Retval)
    {
@@ -607,7 +606,7 @@ std::error_code C_OscHalcDefStructFiler::h_SetType(C_OscXmlParserBase & orc_XmlP
       }
       else if (orc_TypeStr == "enum")
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("base-type", orc_BaseTypeStr));
+         c_Retval = orc_XmlParser.GetAttributeStringError("base-type", orc_BaseTypeStr);
          if (!c_Retval)
          {
             C_OscNodeDataPoolContent::E_Type e_Type;
@@ -627,7 +626,7 @@ std::error_code C_OscHalcDefStructFiler::h_SetType(C_OscXmlParserBase & orc_XmlP
       }
       else if (orc_TypeStr == "bitmask")
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("base-type", orc_BaseTypeStr));
+         c_Retval = orc_XmlParser.GetAttributeStringError("base-type", orc_BaseTypeStr);
          if (!c_Retval)
          {
             C_OscNodeDataPoolContent::E_Type e_Type;
@@ -654,7 +653,7 @@ std::error_code C_OscHalcDefStructFiler::h_SetType(C_OscXmlParserBase & orc_XmlP
       else if (orc_TypeStr == "string")
       {
          uint32_t u32_StringLength;
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("strlen", u32_StringLength));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("strlen", u32_StringLength);
          if (!c_Retval)
          {
             orc_Content.SetType(C_OscNodeDataPoolContent::eSINT8);
@@ -688,7 +687,7 @@ std::error_code C_OscHalcDefStructFiler::h_SetType(C_OscXmlParserBase & orc_XmlP
             {
                C_OscNodeDataPoolContent c_Content = orc_Content;
                std::string c_Display;
-               c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("display", c_Display));
+               c_Retval = orc_XmlParser.GetAttributeStringError("display", c_Display);
                if (!c_Retval)
                {
                   c_Retval = h_ParseSimplestTypeValue(orc_BaseTypeStr, c_Content, orc_XmlParser, "value");
@@ -748,13 +747,11 @@ std::error_code C_OscHalcDefStructFiler::h_SetType(C_OscXmlParserBase & orc_XmlP
                   //Return
                   tgl_assert(orc_XmlParser.SelectNodeParent() == "bitmask-selection");
                }
-               c_Retval = make_error_code_from_stw(
-                  orc_XmlParser.GetAttributeStringError("display", c_BitmaskItem.c_Display));
+               c_Retval = orc_XmlParser.GetAttributeStringError("display", c_BitmaskItem.c_Display);
                if (!c_Retval)
                {
                   std::string c_Content;
-                  c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError(
-                                                         "initial-apply-value-setting", c_Content));
+                  c_Retval = orc_XmlParser.GetAttributeStringError("initial-apply-value-setting", c_Content);
                   if (!c_Retval)
                   {
                       if (LowerCaseCompat(c_Content) == LowerCaseCompat(mhc_FALSE))
@@ -775,7 +772,7 @@ std::error_code C_OscHalcDefStructFiler::h_SetType(C_OscXmlParserBase & orc_XmlP
                if (!c_Retval)
                {
                   std::string c_Content;
-                  c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("value", c_Content));
+                  c_Retval = orc_XmlParser.GetAttributeStringError("value", c_Content);
                   if (!c_Retval)
                   {
                      if (c_BitmaskItem.SetValueByString(c_Content))
@@ -970,7 +967,7 @@ std::error_code C_OscHalcDefStructFiler::mh_LoadStruct(C_OscHalcDefStruct & orc_
                                                        const uint32_t ou32_DomainNameLength)
 {
    std::string c_Type;
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("type", c_Type));
+   std::error_code c_Retval = orc_XmlParser.GetAttributeStringError("type", c_Type);
 
    if (!c_Retval)
    {
@@ -990,7 +987,7 @@ std::error_code C_OscHalcDefStructFiler::mh_LoadStruct(C_OscHalcDefStruct & orc_
          }
          if (!c_Retval)
          {
-            c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("display", orc_Struct.c_Display));
+            c_Retval = orc_XmlParser.GetAttributeStringError("display", orc_Struct.c_Display);
             if (!c_Retval)
             {
                if ((orc_Struct.c_Display.length() + ou32_DomainNameLength) >
@@ -1016,7 +1013,7 @@ std::error_code C_OscHalcDefStructFiler::mh_LoadStruct(C_OscHalcDefStruct & orc_
          if (!c_Retval)
          {
             std::string c_Availability;
-            c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("availability", c_Availability));
+            c_Retval = orc_XmlParser.GetAttributeStringError("availability", c_Availability);
             if (!c_Retval)
             {
                c_Retval = C_OscHalcDefStructFiler::mh_ParseAttributeAvailability(
@@ -1167,7 +1164,7 @@ std::error_code C_OscHalcDefStructFiler::mh_LoadDataElement(
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("display", orc_Element.c_Display));
+      c_Retval = orc_XmlParser.GetAttributeStringError("display", orc_Element.c_Display);
       if (!c_Retval)
       {
          if ((orc_Element.c_Display.length() + ou32_DomainNameLength) >

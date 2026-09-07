@@ -95,7 +95,7 @@ std::error_code C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading System Definition");
-      c_Retval = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_PathSystemDefinition));
+      c_Retval = c_XmlParser.LoadFromFile(orc_PathSystemDefinition);
       if (!c_Retval)
       {
          c_Retval = h_LoadSystemDefinition(orc_SystemDefinition, c_XmlParser, orc_PathDeviceDefinitions,
@@ -170,7 +170,7 @@ std::error_code C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
       c_Return = h_SaveSystemDefinition(orc_SystemDefinition, c_XmlParser, orc_Path, opc_CreatedFiles);
       if (!c_Return)
       {
-         c_Return = make_error_code_from_stw(c_XmlParser.SaveToFile(orc_Path));
+         c_Return = c_XmlParser.SaveToFile(orc_Path);
          if (c_Return)
          {
             osc_write_log_error("Saving System Definition", "Could not write to file \"" + orc_Path + "\".");
@@ -833,8 +833,8 @@ std::error_code C_OscSystemDefinitionFiler::mh_LoadSystemDefinitionProperties(
 
    if (orc_XmlParser.SelectNodeChild("properties") == "properties")
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error(
-         "name-max-char-limit", orc_SystemDefinition.u32_NameMaxCharLimit));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("name-max-char-limit",
+                                                       orc_SystemDefinition.u32_NameMaxCharLimit);
       //Return
       tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
    }

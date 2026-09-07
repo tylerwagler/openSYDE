@@ -67,7 +67,7 @@ std::error_code C_OscNodeSquadFiler::h_LoadNodeGroups(std::vector<C_OscNodeSquad
    {
       uint32_t u32_LengthNodeGroup;
 
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("length", u32_LengthNodeGroup));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_LengthNodeGroup);
       if (!c_Retval)
       {
          std::string c_NodeName;
@@ -124,29 +124,29 @@ std::error_code C_OscNodeSquadFiler::h_LoadNodeGroups(std::vector<C_OscNodeSquad
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscNodeSquadFiler::h_LoadNodeGroup(C_OscNodeSquad & orc_NodeGroup, C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("base-name"));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("base-name");
 
    if (!c_Retval)
    {
       orc_NodeGroup.c_BaseName = orc_XmlParser.GetNodeContent();
       orc_XmlParser.SelectNodeParent();
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("sub-node-indices"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("sub-node-indices");
       if (!c_Retval)
       {
          uint32_t u32_LengthSubIndices;
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("length", u32_LengthSubIndices));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_LengthSubIndices);
          if (!c_Retval)
          {
             orc_NodeGroup.c_SubNodeIndexes.clear();
             orc_NodeGroup.c_SubNodeIndexes.reserve(u32_LengthSubIndices);
-            c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("sub-node-index"));
+            c_Retval = orc_XmlParser.SelectNodeChildError("sub-node-index");
             if (!c_Retval)
             {
                std::string c_NodeName;
                do
                {
                   uint32_t u32_Value;
-                  c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("value", u32_Value));
+                  c_Retval = orc_XmlParser.GetAttributeUint32Error("value", u32_Value);
                   if (!c_Retval)
                   {
                      orc_NodeGroup.c_SubNodeIndexes.push_back(u32_Value);

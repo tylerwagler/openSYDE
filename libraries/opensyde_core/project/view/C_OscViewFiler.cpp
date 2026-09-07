@@ -70,7 +70,7 @@ std::error_code C_OscViewFiler::h_LoadSystemViewsFile(std::vector<C_OscViewData>
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading System Views");
-      c_Retval = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_PathSystemViews));
+      c_Retval = c_XmlParser.LoadFromFile(orc_PathSystemViews);
       if (!c_Retval)
       {
          c_Retval = h_LoadViewsOsc(orc_Views, orc_OscNodes, c_XmlParser, orc_PathSystemViews);
@@ -988,12 +988,12 @@ std::error_code C_OscViewFiler::mh_LoadNodeUpdateInformationSecurity(C_OscViewNo
    if (orc_XmlParser.SelectNodeChild("pem-file") == "pem-file")
    {
       bool q_Value;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError("skip", q_Value));
+      c_Retval = orc_XmlParser.GetAttributeBoolError("skip", q_Value);
       if (!c_Retval)
       {
          orc_NodeUpdateInformation.SetSkipUpdateOfPemFile(q_Value);
 
-         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("path"));
+         c_Retval = orc_XmlParser.SelectNodeChildError("path");
          if (!c_Retval)
          {
             orc_NodeUpdateInformation.SetPemFilePath(orc_XmlParser.GetNodeContent().c_str());
@@ -1032,7 +1032,7 @@ std::error_code C_OscViewFiler::mh_LoadNodeUpdateInformationSecurity(C_OscViewNo
 std::error_code C_OscViewFiler::mh_LoadNodeUpdateInformationSecurityStates(
    C_OscViewNodeUpdate & orc_NodeUpdateInformation, C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("states"));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("states");
 
    if (!c_Retval)
    {
@@ -1040,7 +1040,7 @@ std::error_code C_OscViewFiler::mh_LoadNodeUpdateInformationSecurityStates(
          C_OscViewNodeUpdate::eST_SEC_NO_CHANGE;
       C_OscViewNodeUpdate::E_StateDebugger e_StateDebugger = C_OscViewNodeUpdate::eST_DEB_NO_CHANGE;
       C_OscViewNodeUpdate::E_StateTrafficEncryption e_StateTrafficEncryption = C_OscViewNodeUpdate::eST_TEN_NO_CHANGE;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("security"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("security");
       if (!c_Retval)
       {
          c_Retval = C_OscViewFiler::h_StringToSecurityOptionAuthentication(orc_XmlParser.GetNodeContent().c_str(),
@@ -1053,7 +1053,7 @@ std::error_code C_OscViewFiler::mh_LoadNodeUpdateInformationSecurityStates(
       }
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("debugger"));
+         c_Retval = orc_XmlParser.SelectNodeChildError("debugger");
          if (!c_Retval)
          {
             c_Retval = C_OscViewFiler::h_StringToSecurityOptionDebugger(orc_XmlParser.GetNodeContent().c_str(),

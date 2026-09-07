@@ -14,6 +14,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscXmlParserLog.hpp"
 #include "C_OscLoggingHandler.hpp"
 
@@ -64,20 +65,20 @@ void C_OscXmlParserLog::SetLogHeading(const std::string & orc_Text)
    \return
    Result of root element selection
 
-   \retval   C_NO_ERR   Root found
-   \retval   C_CONFIG   Root not found
+   \retval   Errc::success   Root found
+   \retval   Errc::config    Root not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::SelectRootError(const std::string & orc_Name)
+std::error_code C_OscXmlParserLog::SelectRootError(const std::string & orc_Name)
 {
-   const int32_t s32_Retval = C_OscXmlParser::SelectRootError(orc_Name);
+   const std::error_code c_Retval = C_OscXmlParser::SelectRootError(orc_Name);
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       m_ReportErrorForRootNodeMissing(orc_Name);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -90,20 +91,20 @@ int32_t C_OscXmlParserLog::SelectRootError(const std::string & orc_Name)
    \return
    Result of node switch
 
-   \retval   C_NO_ERR   Node switch success
-   \retval   C_CONFIG   Node switch failed
+   \retval   Errc::success   Node switch success
+   \retval   Errc::config    Node switch failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::SelectNodeChildError(const std::string & orc_Name)
+std::error_code C_OscXmlParserLog::SelectNodeChildError(const std::string & orc_Name)
 {
-   const int32_t s32_Retval = C_OscXmlParser::SelectNodeChildError(orc_Name);
+   const std::error_code c_Retval = C_OscXmlParser::SelectNodeChildError(orc_Name);
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       ReportErrorForNodeMissing(orc_Name);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -117,20 +118,20 @@ int32_t C_OscXmlParserLog::SelectNodeChildError(const std::string & orc_Name)
    \return
    Result of attribute check
 
-   \retval   C_NO_ERR   Attribute exists
-   \retval   C_CONFIG   Attribute missing
+   \retval   Errc::success   Attribute exists
+   \retval   Errc::config    Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeStringError(const std::string & orc_Name, std::string & orc_Value) const
+std::error_code C_OscXmlParserLog::GetAttributeStringError(const std::string & orc_Name, std::string & orc_Value) const
 {
-   const int32_t s32_Retval = C_OscXmlParser::GetAttributeStringError(orc_Name, orc_Value);
+   const std::error_code c_Retval = C_OscXmlParser::GetAttributeStringError(orc_Name, orc_Value);
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       m_ReportErrorForAttributeMissing(orc_Name);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -145,20 +146,20 @@ int32_t C_OscXmlParserLog::GetAttributeStringError(const std::string & orc_Name,
    \return
    Result of attribute check
 
-   \retval   C_NO_ERR   Attribute exists
-   \retval   C_CONFIG   Attribute missing
+   \retval   Errc::success   Attribute exists
+   \retval   Errc::config    Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeSint32Error(const std::string & orc_Name, int32_t & ors32_Value) const
+std::error_code C_OscXmlParserLog::GetAttributeSint32Error(const std::string & orc_Name, int32_t & ors32_Value) const
 {
-   const int32_t s32_Retval = C_OscXmlParser::GetAttributeSint32Error(orc_Name, ors32_Value);
+   const std::error_code c_Retval = C_OscXmlParser::GetAttributeSint32Error(orc_Name, ors32_Value);
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       m_ReportErrorForAttributeMissing(orc_Name);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -173,20 +174,20 @@ int32_t C_OscXmlParserLog::GetAttributeSint32Error(const std::string & orc_Name,
    \return
    Result of attribute check
 
-   \retval   C_NO_ERR   Attribute exists
-   \retval   C_CONFIG   Attribute missing
+   \retval   Errc::success   Attribute exists
+   \retval   Errc::config    Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeUint32Error(const std::string & orc_Name, uint32_t & oru32_Value) const
+std::error_code C_OscXmlParserLog::GetAttributeUint32Error(const std::string & orc_Name, uint32_t & oru32_Value) const
 {
-   const int32_t s32_Retval = C_OscXmlParser::GetAttributeUint32Error(orc_Name, oru32_Value);
+   const std::error_code c_Retval = C_OscXmlParser::GetAttributeUint32Error(orc_Name, oru32_Value);
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       m_ReportErrorForAttributeMissing(orc_Name);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -201,20 +202,20 @@ int32_t C_OscXmlParserLog::GetAttributeUint32Error(const std::string & orc_Name,
    \return
    Result of attribute check
 
-   \retval   C_NO_ERR   Attribute exists
-   \retval   C_CONFIG   Attribute missing
+   \retval   Errc::success   Attribute exists
+   \retval   Errc::config    Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeSint64Error(const std::string & orc_Name, int64_t & ors64_Value) const
+std::error_code C_OscXmlParserLog::GetAttributeSint64Error(const std::string & orc_Name, int64_t & ors64_Value) const
 {
-   const int32_t s32_Retval = C_OscXmlParser::GetAttributeSint64Error(orc_Name, ors64_Value);
+   const std::error_code c_Retval = C_OscXmlParser::GetAttributeSint64Error(orc_Name, ors64_Value);
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       m_ReportErrorForAttributeMissing(orc_Name);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -229,20 +230,20 @@ int32_t C_OscXmlParserLog::GetAttributeSint64Error(const std::string & orc_Name,
    \return
    Result of attribute check
 
-   \retval   C_NO_ERR   Attribute exists
-   \retval   C_CONFIG   Attribute missing
+   \retval   Errc::success   Attribute exists
+   \retval   Errc::config    Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeUint64Error(const std::string & orc_Name, uint64_t & oru64_Value) const
+std::error_code C_OscXmlParserLog::GetAttributeUint64Error(const std::string & orc_Name, uint64_t & oru64_Value) const
 {
-   const int32_t s32_Retval = C_OscXmlParser::GetAttributeUint64Error(orc_Name, oru64_Value);
+   const std::error_code c_Retval = C_OscXmlParser::GetAttributeUint64Error(orc_Name, oru64_Value);
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       m_ReportErrorForAttributeMissing(orc_Name);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -257,20 +258,20 @@ int32_t C_OscXmlParserLog::GetAttributeUint64Error(const std::string & orc_Name,
    \return
    Result of attribute check
 
-   \retval   C_NO_ERR   Attribute exists
-   \retval   C_CONFIG   Attribute missing
+   \retval   Errc::success   Attribute exists
+   \retval   Errc::config    Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeBoolError(const std::string & orc_Name, bool & orq_Value) const
+std::error_code C_OscXmlParserLog::GetAttributeBoolError(const std::string & orc_Name, bool & orq_Value) const
 {
-   const int32_t s32_Retval = C_OscXmlParser::GetAttributeBoolError(orc_Name, orq_Value);
+   const std::error_code c_Retval = C_OscXmlParser::GetAttributeBoolError(orc_Name, orq_Value);
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       m_ReportErrorForAttributeMissing(orc_Name);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -284,20 +285,20 @@ int32_t C_OscXmlParserLog::GetAttributeBoolError(const std::string & orc_Name, b
    \return
    Result of attribute check
 
-   \retval   C_NO_ERR   Attribute exists
-   \retval   C_CONFIG   Attribute missing
+   \retval   Errc::success   Attribute exists
+   \retval   Errc::config    Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeFloat32Error(const std::string & orc_Name, float32_t & orf32_Value) const
+std::error_code C_OscXmlParserLog::GetAttributeFloat32Error(const std::string & orc_Name, float32_t & orf32_Value) const
 {
-   const int32_t s32_Retval = C_OscXmlParser::GetAttributeFloat32Error(orc_Name, orf32_Value);
+   const std::error_code c_Retval = C_OscXmlParser::GetAttributeFloat32Error(orc_Name, orf32_Value);
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       m_ReportErrorForAttributeMissing(orc_Name);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -311,20 +312,20 @@ int32_t C_OscXmlParserLog::GetAttributeFloat32Error(const std::string & orc_Name
    \return
    Result of attribute check
 
-   \retval   C_NO_ERR   Attribute exists
-   \retval   C_CONFIG   Attribute missing
+   \retval   Errc::success   Attribute exists
+   \retval   Errc::config    Attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXmlParserLog::GetAttributeFloat64Error(const std::string & orc_Name, float64_t & orf64_Value) const
+std::error_code C_OscXmlParserLog::GetAttributeFloat64Error(const std::string & orc_Name, float64_t & orf64_Value) const
 {
-   const int32_t s32_Retval = C_OscXmlParser::GetAttributeFloat64Error(orc_Name, orf64_Value);
+   const std::error_code c_Retval = C_OscXmlParser::GetAttributeFloat64Error(orc_Name, orf64_Value);
 
-   if (s32_Retval != C_NO_ERR)
+   if (c_Retval)
    {
       m_ReportErrorForAttributeMissing(orc_Name);
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

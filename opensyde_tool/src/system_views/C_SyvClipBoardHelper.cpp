@@ -256,7 +256,8 @@ int32_t C_SyvClipBoardHelper::mh_LoadElementIdGroups(QMap<C_PuiSvDbNodeDataPoolL
                                                      const QString & orc_GenericTagName,
                                                      C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("element-id-groups");
+   //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("element-id-groups").value();
 
    if  (s32_Retval == C_NO_ERR)
    {
@@ -303,12 +304,13 @@ int32_t C_SyvClipBoardHelper::mh_LoadElementIdGroup(C_PuiSvDbNodeDataPoolListEle
                                                     C_OscXmlParserBase & orc_XmlParser)
 {
    uint32_t u32_Crc;
-   int32_t s32_Retval = orc_XmlParser.GetAttributeUint32Error("crc", u32_Crc);
+   //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+   int32_t s32_Retval = orc_XmlParser.GetAttributeUint32Error("crc", u32_Crc).value();
 
    orc_ElementIdGroup.SetCrc(u32_Crc);
    if (s32_Retval == C_NO_ERR)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("index");
+      s32_Retval = orc_XmlParser.SelectNodeChildError("index").value();
       if (s32_Retval == C_NO_ERR)
       {
          C_PuiSvDashboardFiler::h_LoadUiIndex(orc_ElementId, orc_XmlParser);

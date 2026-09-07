@@ -1,6 +1,7 @@
 #include <cstring>
 #include "gtest/gtest.h"
 #include "C_OscXmlParser.hpp"
+#include "C_OscErrorCategory.hpp"
 
 // Key API semantics:
 // - CreateNodeChild() appends a child but does NOT select it (current node unchanged)
@@ -185,7 +186,7 @@ TEST(XmlParser, RoundTrip_Simple)
    c_Writer.SaveToString(c_Xml);
 
    stw::opensyde_core::C_OscXmlParser c_Reader;
-   ASSERT_EQ(0, c_Reader.LoadFromString(c_Xml));
+   ASSERT_EQ(stw::errors::Errc::success, c_Reader.LoadFromString(c_Xml));
 
    EXPECT_EQ("config", c_Reader.SelectRoot());
    EXPECT_EQ("1.0", c_Reader.GetAttributeString("version"));
@@ -213,7 +214,7 @@ TEST(XmlParser, RoundTrip_ComplexHierarchy)
    c_Writer.SaveToString(c_Xml);
 
    stw::opensyde_core::C_OscXmlParser c_Reader;
-   ASSERT_EQ(0, c_Reader.LoadFromString(c_Xml));
+   ASSERT_EQ(stw::errors::Errc::success, c_Reader.LoadFromString(c_Xml));
 
    EXPECT_EQ("system", c_Reader.SelectRoot());
    EXPECT_EQ("test_system", c_Reader.GetAttributeString("name"));
@@ -232,7 +233,7 @@ TEST(XmlParser, RoundTrip_ComplexHierarchy)
 TEST(XmlParser, LoadInvalidXml_ReturnsError)
 {
    stw::opensyde_core::C_OscXmlParser c_Parser;
-   EXPECT_NE(0, c_Parser.LoadFromString("this is not valid xml"));
+   EXPECT_EQ(stw::errors::Errc::noact, c_Parser.LoadFromString("this is not valid xml"));
 }
 
 TEST(XmlParser, SelectRootOnEmptyDocument_ReturnsEmpty)
@@ -296,10 +297,10 @@ TEST(XmlParser, SaveAndLoadFile)
    stw::opensyde_core::C_OscXmlParser c_Writer;
    c_Writer.CreateAndSelectNodeChild("testdata");
    c_Writer.SetAttributeString("key", "value");
-   ASSERT_EQ(0, c_Writer.SaveToFile(c_TmpFile));
+   ASSERT_EQ(stw::errors::Errc::success, c_Writer.SaveToFile(c_TmpFile));
 
    stw::opensyde_core::C_OscXmlParser c_Reader;
-   ASSERT_EQ(0, c_Reader.LoadFromFile(c_TmpFile));
+   ASSERT_EQ(stw::errors::Errc::success, c_Reader.LoadFromFile(c_TmpFile));
 
    EXPECT_EQ("testdata", c_Reader.SelectRoot());
    EXPECT_EQ("value", c_Reader.GetAttributeString("key"));
@@ -310,5 +311,5 @@ TEST(XmlParser, SaveAndLoadFile)
 TEST(XmlParser, LoadNonexistentFile_ReturnsError)
 {
    stw::opensyde_core::C_OscXmlParser c_Parser;
-   EXPECT_NE(0, c_Parser.LoadFromFile("/nonexistent/path/file.xml"));
+   EXPECT_EQ(stw::errors::Errc::noact, c_Parser.LoadFromFile("/nonexistent/path/file.xml"));
 }

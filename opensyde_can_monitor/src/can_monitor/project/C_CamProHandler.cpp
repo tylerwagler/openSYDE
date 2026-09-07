@@ -996,7 +996,8 @@ int32_t C_CamProHandler::LoadFromFile(const std::string & orc_Path)
 
       Q_EMIT (this->SigClearOldConfiguration());
 
-      s32_Return = c_XmlParser.LoadFromFile(orc_Path);
+      //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Return = c_XmlParser.LoadFromFile(orc_Path).value();
       if (s32_Return == C_NO_ERR)
       {
          s32_Return = C_CamProHandlerFiler::h_Load(*this, c_XmlParser);
@@ -1085,7 +1086,8 @@ int32_t C_CamProHandler::SaveToFile(const std::string & orc_Path)
          C_OscXmlParser c_XmlParser;
          C_CamProHandlerFiler::h_Save(*this, c_XmlParser);
 
-         s32_Return = c_XmlParser.SaveToFile(orc_Path);
+         //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+         s32_Return = c_XmlParser.SaveToFile(orc_Path).value();
          if (s32_Return != C_NO_ERR)
          {
             osc_write_log_error("Saving Project", "Could not write to file \"" + orc_Path + "\".");

@@ -27,6 +27,7 @@
 #define C_OSCCHECKSUMMEDXML_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include "stwtypes.hpp"
 #include <string>
 #include "C_OscXmlParser.hpp"
@@ -52,8 +53,8 @@ private:
 public:
    C_OscChecksummedXml(void);
 
-    virtual int32_t LoadFromFile(const std::string & orc_FileName);
-    virtual int32_t SaveToFile(const std::string & orc_FileName);
+    virtual std::error_code LoadFromFile(const std::string & orc_FileName);
+    virtual std::error_code SaveToFile(const std::string & orc_FileName);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

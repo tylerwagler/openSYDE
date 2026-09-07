@@ -1342,8 +1342,10 @@ int32_t C_PuiSvDashboardFiler::mh_LoadWriteWidgetBase(C_PuiSvDbWriteWidgetBase &
    {
       if (orc_XmlParser.SelectNodeChild("connect-init-handling") == "connect-init-handling")
       {
+         //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
          s32_Retval =
-            orc_XmlParser.GetAttributeBoolError("auto-write-on-connect", orc_WriteWidget.q_AutoWriteOnConnect);
+            orc_XmlParser.GetAttributeBoolError("auto-write-on-connect",
+                                                orc_WriteWidget.q_AutoWriteOnConnect).value();
          if (orc_XmlParser.SelectNodeChild("mode") == "mode")
          {
             if (C_PuiSvDashboardFiler::mh_StringToInitialValueModeType(orc_XmlParser.GetNodeContent().c_str(),
@@ -1480,10 +1482,11 @@ int32_t C_PuiSvDashboardFiler::mh_LoadDataFormatterConfig(C_PuiSvDbDataElementDi
 
    if (orc_XmlParser.SelectNodeChild("display-formatter") == "display-formatter")
    {
-      s32_Retval = orc_XmlParser.GetAttributeBoolError("is-active", orc_Config.q_IsActive);
+      //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = orc_XmlParser.GetAttributeBoolError("is-active", orc_Config.q_IsActive).value();
       if (s32_Retval == C_NO_ERR)
       {
-         s32_Retval = orc_XmlParser.SelectNodeChildError("string");
+         s32_Retval = orc_XmlParser.SelectNodeChildError("string").value();
       }
       if (s32_Retval == C_NO_ERR)
       {

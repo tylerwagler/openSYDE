@@ -134,7 +134,8 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_Updat
          }
          if (s32_Return == C_NO_ERR)
          {
-            s32_Return = c_XmlParser.SaveToFile(orc_Path.toStdString().c_str());
+            //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+            s32_Return = c_XmlParser.SaveToFile(orc_Path.toStdString().c_str()).value();
             if (s32_Return != C_NO_ERR)
             {
                s32_Return = C_RD_WR;
@@ -3327,7 +3328,8 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading views");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.toStdString().c_str());
+      //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.toStdString().c_str()).value();
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-system-views")

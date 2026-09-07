@@ -251,7 +251,8 @@ static int32_t mh_WriteEmptyUiNodeXml(const std::string & orc_FilePath)
       tgl_assert(c_XmlParser.SelectNodeParent() == "node");
    }
 
-   return c_XmlParser.SaveToFile(orc_FilePath);
+   //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+   return c_XmlParser.SaveToFile(orc_FilePath).value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -283,7 +284,8 @@ static int32_t mh_WriteWrapperXml(const std::string & orc_OutputTspPath, const s
       tgl_assert(c_XmlParser.SelectNodeParent() == "opensyde-target-support-package");
    }
 
-   return c_XmlParser.SaveToFile(orc_OutputTspPath);
+   //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+   return c_XmlParser.SaveToFile(orc_OutputTspPath).value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

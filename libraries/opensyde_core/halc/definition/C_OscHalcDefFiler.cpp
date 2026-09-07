@@ -65,11 +65,11 @@ std::error_code C_OscHalcDefFiler::h_LoadFile(C_OscHalcDefBase & orc_IoData, con
    if (TglFileExists(orc_Path) == true)
    {
       C_OscXmlParserLog c_XmlParser;
-      c_Retval = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_Path));
+      c_Retval = c_XmlParser.LoadFromFile(orc_Path);
       if (!c_Retval)
       {
          c_XmlParser.SetLogHeading("Loading HALC definition");
-         c_Retval = make_error_code_from_stw(c_XmlParser.SelectRootError("opensyde-HALC-description"));
+         c_Retval = c_XmlParser.SelectRootError("opensyde-HALC-description");
          if (!c_Retval)
          {
             c_Retval = h_LoadData(orc_IoData, c_XmlParser);
@@ -135,7 +135,7 @@ std::error_code C_OscHalcDefFiler::h_SaveFile(const C_OscHalcDefBase & orc_IoDat
 //----------------------------------------------------------------------------------------------------------------------
 std::error_code C_OscHalcDefFiler::h_LoadData(C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("file-version"));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("file-version");
 
    //File version
    if (!c_Retval)
@@ -170,7 +170,7 @@ std::error_code C_OscHalcDefFiler::h_LoadData(C_OscHalcDefBase & orc_IoData, C_O
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("content-version"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("content-version");
       if (!c_Retval)
       {
          try
@@ -191,7 +191,7 @@ std::error_code C_OscHalcDefFiler::h_LoadData(C_OscHalcDefBase & orc_IoData, C_O
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("device-name"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("device-name");
       if (!c_Retval)
       {
          orc_IoData.c_DeviceName = orc_XmlParser.GetNodeContent();
@@ -250,7 +250,7 @@ std::error_code C_OscHalcDefFiler::h_LoadData(C_OscHalcDefBase & orc_IoData, C_O
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("domain"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("domain");
       if (!c_Retval)
       {
          std::string c_DomainNode;
@@ -386,8 +386,7 @@ std::error_code C_OscHalcDefFiler::h_LoadAvailability(const std::string & orc_At
                                                       const C_OscXmlParserBase & orc_XmlParser)
 {
    std::string c_AvailabilityString;
-   std::error_code c_Retval = make_error_code_from_stw(
-      orc_XmlParser.GetAttributeStringError(orc_AttributeName, c_AvailabilityString));
+   std::error_code c_Retval = orc_XmlParser.GetAttributeStringError(orc_AttributeName, c_AvailabilityString);
 
    if (!c_Retval)
    {
@@ -844,12 +843,11 @@ std::error_code C_OscHalcDefFiler::mh_SaveIoDomain(const C_OscHalcDefDomain & or
 std::error_code C_OscHalcDefFiler::mh_LoadIoDataDomain(C_OscHalcDefDomain & orc_IoDataDomain,
                                                        C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval = make_error_code_from_stw(
-      orc_XmlParser.GetAttributeStringError("id", orc_IoDataDomain.c_Id));
+   std::error_code c_Retval = orc_XmlParser.GetAttributeStringError("id", orc_IoDataDomain.c_Id);
 
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("name"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("name");
       if (!c_Retval)
       {
          orc_IoDataDomain.c_Name = orc_XmlParser.GetNodeContent();
@@ -1139,24 +1137,24 @@ std::error_code C_OscHalcDefFiler::mh_CheckDefaultUseCase(const C_OscHalcDefDoma
 std::error_code C_OscHalcDefFiler::mh_LoadChannels(std::vector<C_OscHalcDefChannelDef> & orc_Channels,
                                                    C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("channels"));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("channels");
 
    orc_Channels.clear();
    if (!c_Retval)
    {
       uint32_t u32_ExpectedCount = 0UL;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("count", u32_ExpectedCount));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("count", u32_ExpectedCount);
       orc_Channels.reserve(u32_ExpectedCount);
       if ((u32_ExpectedCount > 0UL) && (!c_Retval))
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("channel"));
+         c_Retval = orc_XmlParser.SelectNodeChildError("channel");
          if (!c_Retval)
          {
             std::string c_NodeChannel;
             do
             {
                C_OscHalcDefChannelDef c_Channel;
-               c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("name", c_Channel.c_Name));
+               c_Retval = orc_XmlParser.GetAttributeStringError("name", c_Channel.c_Name);
                if (!c_Retval)
                {
                   orc_Channels.push_back(c_Channel);
@@ -1212,7 +1210,7 @@ std::error_code C_OscHalcDefFiler::mh_LoadChannelUseCases(std::vector<C_OscHalcD
       C_OscNodeDataPoolContent c_Value;
       std::string c_TypeStr;
       c_Value.SetArray(false);
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("type", c_TypeStr));
+      c_Retval = orc_XmlParser.GetAttributeStringError("type", c_TypeStr);
       if (!c_Retval)
       {
          C_OscNodeDataPoolContent::E_Type e_Type;
@@ -1230,11 +1228,10 @@ std::error_code C_OscHalcDefFiler::mh_LoadChannelUseCases(std::vector<C_OscHalcD
             do
             {
                C_OscHalcDefChannelUseCase c_UseCase;
-               c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeStringError("id", c_UseCase.c_Id));
+               c_Retval = orc_XmlParser.GetAttributeStringError("id", c_UseCase.c_Id);
                if (!c_Retval)
                {
-                  c_Retval = make_error_code_from_stw(
-                     orc_XmlParser.GetAttributeStringError("display", c_UseCase.c_Display));
+                  c_Retval = orc_XmlParser.GetAttributeStringError("display", c_UseCase.c_Display);
                }
                if (!c_Retval)
                {

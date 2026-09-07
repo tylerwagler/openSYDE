@@ -241,7 +241,7 @@ std::error_code C_OscNodeFiler::h_SaveNodeFile(const C_OscNode & orc_Node, const
       c_Retval = C_OscNodeFiler::h_SaveNode(orc_Node, c_XmlParser, orc_FilePath, opc_CreatedFiles,
                                             orc_NodeIndicesToNameMap);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath))
       {
          osc_write_log_error("Saving node definition", "Could not create file for node.");
          c_Retval = Errc::config;

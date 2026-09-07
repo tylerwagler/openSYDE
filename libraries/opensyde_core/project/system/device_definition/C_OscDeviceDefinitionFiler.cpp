@@ -129,7 +129,7 @@ std::error_code C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_
 
    std::string c_Text;
 
-   c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("global"));
+   c_Return = orc_Parser.SelectNodeChildError("global");
    if (!c_Return)
    {
       c_Text = orc_Parser.SelectNodeChild("device-name");
@@ -256,10 +256,10 @@ std::error_code C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_
       {
          if (orc_Parser.SelectNodeChild("manufacturer-string") == "manufacturer-string")
          {
-            c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("id"));
+            c_Return = orc_Parser.SelectNodeChildError("id");
             if (!c_Return)
             {
-               c_Return = make_error_code_from_stw(orc_Parser.GetAttributeUint32Error("value", u32_Value));
+               c_Return = orc_Parser.GetAttributeUint32Error("value", u32_Value);
                if (!c_Return)
                {
                   orc_DeviceDefinition.u8_ManufacturerId = static_cast<uint8_t>(u32_Value);
@@ -273,7 +273,7 @@ std::error_code C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_
             }
             if (!c_Return)
             {
-               c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("display-value"));
+               c_Return = orc_Parser.SelectNodeChildError("display-value");
                if (!c_Return)
                {
                   orc_DeviceDefinition.c_ManufacturerDisplayValue = orc_Parser.GetNodeContent();
@@ -340,10 +340,10 @@ std::error_code C_OscDeviceDefinitionFiler::mh_Load(C_OscDeviceDefinition & orc_
    {
       c_Text = orc_Parser.SelectNodeParent(); //back to parent of parent ...
       tgl_assert(c_Text == "opensyde-device-definition");
-      c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("sub-devices"));
+      c_Return = orc_Parser.SelectNodeChildError("sub-devices");
       if (!c_Return)
       {
-         c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("sub-device"));
+         c_Return = orc_Parser.SelectNodeChildError("sub-device");
          if (!c_Return)
          {
             do
@@ -394,16 +394,16 @@ std::error_code C_OscDeviceDefinitionFiler::mh_LoadSubDevice(C_OscSubDeviceDefin
    orc_SubDeviceDefinition.c_ConnectedInterfaces.clear();
    if (orc_Parser.SelectNodeChild("connected-interfaces") == "connected-interfaces")
    {
-      c_Return = make_error_code_from_stw(orc_Parser.SelectNodeChildError("interface"));
+      c_Return = orc_Parser.SelectNodeChildError("interface");
       if (!c_Return)
       {
          do
          {
-            c_Return = make_error_code_from_stw(orc_Parser.GetAttributeStringError("name", c_Text));
+            c_Return = orc_Parser.GetAttributeStringError("name", c_Text);
             if (!c_Return)
             {
                bool q_Tmp;
-               c_Return = make_error_code_from_stw(orc_Parser.GetAttributeBoolError("connected", q_Tmp));
+               c_Return = orc_Parser.GetAttributeBoolError("connected", q_Tmp);
                if (!c_Return)
                {
                   orc_SubDeviceDefinition.c_ConnectedInterfaces[LowerCaseCompat(c_Text)] = q_Tmp;
@@ -1118,7 +1118,7 @@ std::error_code C_OscDeviceDefinitionFiler::mh_LoadCanFdBitrates(std::vector<uin
          do
          {
             uint32_t u32_BitRate;
-            c_Retval = make_error_code_from_stw(orc_Parser.GetAttributeUint32Error("value", u32_BitRate));
+            c_Retval = orc_Parser.GetAttributeUint32Error("value", u32_BitRate);
             orc_CanFdDataBitrates.push_back(static_cast<int16_t>(u32_BitRate));
          }
          while ((orc_Parser.SelectNodeNext("can-fd-data-bitrate") == "can-fd-data-bitrate") &&
@@ -1175,11 +1175,10 @@ std::error_code C_OscDeviceDefinitionFiler::mh_LoadFeatures(
          do
          {
             C_OscSupportedCanInterfaceFeatures c_Feature;
-            c_Retval = make_error_code_from_stw(orc_Parser.GetAttributeStringError("name", c_Feature.c_Interface));
+            c_Retval = orc_Parser.GetAttributeStringError("name", c_Feature.c_Interface);
             if (!c_Retval)
             {
-               c_Retval = make_error_code_from_stw(orc_Parser.GetAttributeBoolError("can-fd",
-                                                                                    c_Feature.q_SupportsCanFd));
+               c_Retval = orc_Parser.GetAttributeBoolError("can-fd", c_Feature.q_SupportsCanFd);
                orc_SupportedCanFeatures.push_back(c_Feature);
             }
          }
@@ -1249,7 +1248,7 @@ std::error_code C_OscDeviceDefinitionFiler::h_Load(C_OscDeviceDefinition & orc_D
 
       c_Xml.SetLogHeading("Loading device definition");
 
-      c_Return = make_error_code_from_stw(c_Xml.LoadFromFile(orc_Path)); //open XML file
+      c_Return = c_Xml.LoadFromFile(orc_Path); //open XML file
       if (!c_Return)
       {
          std::string c_Text;
@@ -1395,7 +1394,7 @@ std::error_code C_OscDeviceDefinitionFiler::h_Save(const C_OscDeviceDefinition &
       }
       c_Xml.SelectNodeParent();
 
-      c_Return = make_error_code_from_stw(c_Xml.SaveToFile(orc_Path));
+      c_Return = c_Xml.SaveToFile(orc_Path);
       if (c_Return)
       {
          osc_write_log_error("Saving Device definition", "Could not write to file \"" + orc_Path + "\".");

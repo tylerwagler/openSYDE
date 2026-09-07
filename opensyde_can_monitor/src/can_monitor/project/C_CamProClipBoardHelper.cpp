@@ -120,7 +120,7 @@ int32_t C_CamProClipBoardHelper::mh_GetParserFromClipBoard(C_OscXmlParser & orc_
    int32_t s32_Retval = C_CONFIG;
    const QString c_Content = C_UtiClipBoardHelper::mh_GetClipBoard();
 
-   if (orc_XmlParser.LoadFromString(c_Content.toStdString().c_str()) == C_NO_ERR)
+   if (!orc_XmlParser.LoadFromString(c_Content.toStdString().c_str()))
    {
       if (orc_XmlParser.SelectRoot() == "opensyde-can-monitor-configuration-clip-board")
       {

@@ -90,7 +90,7 @@ std::error_code C_OscParamSetHandler::CreateCleanFileWithoutCrc(const std::strin
             tgl_assert(c_XmlParser.SelectNodeParent() == "nodes");
          }
 
-         c_Return = make_error_code_from_stw(c_XmlParser.SaveToFile(orc_FilePath));
+         c_Return = c_XmlParser.SaveToFile(orc_FilePath);
          if (c_Return)
          {
             c_Return = Errc::rd_wr;
@@ -146,7 +146,7 @@ std::error_code C_OscParamSetHandler::ReadFile(const std::string & orc_FilePath,
          pc_Parser = new C_OscChecksummedXml();
       }
 
-      c_Retval = make_error_code_from_stw(pc_Parser->LoadFromFile(orc_FilePath));
+      c_Retval = pc_Parser->LoadFromFile(orc_FilePath);
       if (!c_Retval)
       {
          if (pc_Parser->SelectRoot() == "opensyde-parameter-sets")

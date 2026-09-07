@@ -63,7 +63,8 @@ int32_t C_SyvUpPacConfigFiler::h_LoadConfig(const QString & orc_FilePath, C_SyvU
 
       c_XmlParser.SetLogHeading("Loading Update Package Configuration");
 
-      s32_Return = c_XmlParser.LoadFromFile(orc_FilePath.toStdString().c_str());
+      //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Return = c_XmlParser.LoadFromFile(orc_FilePath.toStdString().c_str()).value();
 
       if (s32_Return == C_NO_ERR)
       {
@@ -190,7 +191,8 @@ int32_t C_SyvUpPacConfigFiler::h_SaveConfig(const QString & orc_FilePath, const 
       if (q_Success == true)
       {
          // Save file
-         s32_Return = c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str());
+         //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+         s32_Return = c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()).value();
       }
       else
       {
@@ -695,7 +697,8 @@ int32_t C_SyvUpPacConfigFiler::mh_LoadNodeUpdateInformationPem(C_SyvUpPacConfigN
 
    if (orc_XmlParser.SelectNodeChild("pem-file") == "pem-file")
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("path");
+      //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = orc_XmlParser.SelectNodeChildError("path").value();
       if (s32_Retval == C_NO_ERR)
       {
          orc_NodeConfig.c_PemFilePath = orc_XmlParser.GetNodeContent().c_str();
@@ -730,11 +733,12 @@ int32_t C_SyvUpPacConfigFiler::mh_LoadNodeUpdateInformationPem(C_SyvUpPacConfigN
 int32_t C_SyvUpPacConfigFiler::mh_LoadNodeUpdateInformationPemStates(C_SyvUpPacConfigNode & orc_NodeConfig,
                                                                      C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("states");
+   //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("states").value();
 
    if (s32_Retval == C_NO_ERR)
    {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("security");
+      s32_Retval = orc_XmlParser.SelectNodeChildError("security").value();
       if (s32_Retval == C_NO_ERR)
       {
          C_OscViewNodeUpdate::E_StateSecureAuthentication e_StateSecureAuthentication =
@@ -752,7 +756,7 @@ int32_t C_SyvUpPacConfigFiler::mh_LoadNodeUpdateInformationPemStates(C_SyvUpPacC
       if (s32_Retval == C_NO_ERR)
       {
          C_OscViewNodeUpdate::E_StateDebugger e_StateDebugger = C_OscViewNodeUpdate::eST_DEB_NO_CHANGE;
-         s32_Retval = orc_XmlParser.SelectNodeChildError("debugger");
+         s32_Retval = orc_XmlParser.SelectNodeChildError("debugger").value();
          if (s32_Retval == C_NO_ERR)
          {
             s32_Retval = C_OscViewFiler::h_StringToSecurityOptionDebugger(

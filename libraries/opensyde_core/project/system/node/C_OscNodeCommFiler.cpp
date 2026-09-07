@@ -224,7 +224,7 @@ std::error_code C_OscNodeCommFiler::h_SaveNodeComProtocolFile(const C_OscCanProt
       //node
       C_OscNodeCommFiler::h_SaveNodeComProtocol(orc_NodeComProtocol, c_XmlParser, orc_DatapoolName);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath))
       {
          osc_write_log_error("Saving node definition", "Could not create file for node.");
          c_Retval = Errc::config;
@@ -996,13 +996,12 @@ void C_OscNodeCommFiler::h_SaveNodeOwnerIndex(const C_OscCanInterfaceId & orc_Ow
 std::error_code C_OscNodeCommFiler::h_LoadNodeOwnerIndex(C_OscCanInterfaceId & orc_OwnerNodeIndex,
                                                          const C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error(
-      "node-index", orc_OwnerNodeIndex.u32_NodeIndex));
+   std::error_code c_Retval = orc_XmlParser.GetAttributeUint32Error("node-index", orc_OwnerNodeIndex.u32_NodeIndex);
 
    if (!c_Retval)
    {
       uint32_t u32_Value;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("interface-id", u32_Value));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("interface-id", u32_Value);
       orc_OwnerNodeIndex.u8_InterfaceNumber = static_cast<uint8_t>(u32_Value);
    }
 
@@ -1048,19 +1047,19 @@ std::error_code C_OscNodeCommFiler::mh_LoadMessageCanOpenPart(C_OscCanMessage & 
 
    if (orc_XmlParser.SelectNodeChild("can-open") == "can-open")
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError(
-         "cob-id-includes-node-id", orc_NodeCommMessage.q_CanOpenManagerCobIdIncludesNodeId));
+      c_Retval = orc_XmlParser.GetAttributeBoolError("cob-id-includes-node-id",
+                                                     orc_NodeCommMessage.q_CanOpenManagerCobIdIncludesNodeId);
 
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error(
-            "cob-id-offset", orc_NodeCommMessage.u32_CanOpenManagerCobIdOffset));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("cob-id-offset",
+                                                          orc_NodeCommMessage.u32_CanOpenManagerCobIdOffset);
       }
 
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeBoolError(
-            "message-active", orc_NodeCommMessage.q_CanOpenManagerMessageActive));
+         c_Retval = orc_XmlParser.GetAttributeBoolError("message-active",
+                                                        orc_NodeCommMessage.q_CanOpenManagerMessageActive);
       }
 
       if (!c_Retval)
@@ -1075,7 +1074,7 @@ std::error_code C_OscNodeCommFiler::mh_LoadMessageCanOpenPart(C_OscCanMessage & 
          {
             orc_NodeCommMessage.u8_CanOpenTxMethodAdditionalInfo = 0U;
          }
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("pdo-index", u32_Value));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("pdo-index", u32_Value);
          if (!c_Retval)
          {
             orc_NodeCommMessage.u16_CanOpenManagerPdoIndex = static_cast<uint16_t>(u32_Value);
@@ -1128,12 +1127,12 @@ void C_OscNodeCommFiler::mh_SaveNodeOwnerIndices(const C_OscCanInterfaceId & orc
 std::error_code C_OscNodeCommFiler::mh_LoadNodeOwnerIndices(C_OscCanInterfaceId & orc_OwnerNodeIndex,
                                                             C_OscXmlParserBase & orc_XmlParser)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("node-owner-indices"));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError("node-owner-indices");
 
    if (!c_Retval)
    {
       uint32_t u32_ExpectedSize;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedSize);
       if (!c_Retval)
       {
          std::string c_NodeName = orc_XmlParser.SelectNodeChild("node-owner-index");
@@ -1204,11 +1203,11 @@ std::error_code C_OscNodeCommFiler::mh_LoadSignalCanOpenPart(C_OscCanSignal & or
    if (orc_XmlParser.SelectNodeChild("can-open-object-dictionary") == "can-open-object-dictionary")
    {
       uint32_t u32_Value;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("index", u32_Value));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("index", u32_Value);
       if (!c_Retval)
       {
          orc_NodeCommSignal.u16_CanOpenManagerObjectDictionaryIndex = static_cast<uint16_t>(u32_Value);
-         c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("sub-index", u32_Value));
+         c_Retval = orc_XmlParser.GetAttributeUint32Error("sub-index", u32_Value);
          if (!c_Retval)
          {
             orc_NodeCommSignal.u8_CanOpenManagerObjectDictionarySubIndex = static_cast<uint8_t>(u32_Value);
@@ -1252,7 +1251,7 @@ std::error_code C_OscNodeCommFiler::mh_LoadSignalJ1939Part(C_OscCanSignal & orc_
    if (orc_XmlParser.SelectNodeChild("j1939-suspect-parameter") == "j1939-suspect-parameter")
    {
       uint32_t u32_Value;
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error("spn", u32_Value));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("spn", u32_Value);
       if (!c_Retval)
       {
          orc_NodeCommSignal.u32_J1939SuspectParameterNumber = u32_Value;

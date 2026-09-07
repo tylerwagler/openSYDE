@@ -122,7 +122,7 @@ std::error_code C_OscSystemFilerUtil::h_GetParserForExistingFile(C_OscXmlParser 
 
    if (TglFileExists(orc_Path))
    {
-      c_Retval = make_error_code_from_stw(orc_FileXmlParser.LoadFromFile(orc_Path));
+      c_Retval = orc_FileXmlParser.LoadFromFile(orc_Path);
       if (!c_Retval)
       {
          if (orc_FileXmlParser.SelectRoot() != orc_RootNode)
@@ -428,7 +428,7 @@ std::error_code C_OscSystemFilerUtil::h_CheckVersion(C_OscXmlParserBase & orc_Xm
                                                      const uint16_t ou16_ExpectedFileVersion,
                                                      const std::string & orc_TagName, const std::string & orc_UseCase)
 {
-   std::error_code c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError(orc_TagName));
+   std::error_code c_Retval = orc_XmlParser.SelectNodeChildError(orc_TagName);
 
    //File version
    if (!c_Retval)

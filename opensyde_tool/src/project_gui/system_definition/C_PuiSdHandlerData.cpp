@@ -74,7 +74,8 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const std::string & orc_Path, uint16_t 
    if (QFileInfo::exists(QString::fromLocal8Bit(orc_Path.c_str())) == true)
    {
       C_OscXmlParser c_XmlParser;
-      s32_Return = c_XmlParser.LoadFromFile(orc_Path);
+      //the XML parser reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Return = c_XmlParser.LoadFromFile(orc_Path).value();
       if (s32_Return == C_NO_ERR)
       {
          uint16_t u16_FileVersion;

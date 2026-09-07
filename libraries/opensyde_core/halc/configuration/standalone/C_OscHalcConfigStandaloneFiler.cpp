@@ -71,7 +71,7 @@ std::error_code C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(C_OscHalcCo
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading IO standalone data");
-      c_Retval = make_error_code_from_stw(c_XmlParser.LoadFromFile(orc_Path));
+      c_Retval = c_XmlParser.LoadFromFile(orc_Path);
       if (!c_Retval)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-node-io-config-standalone")
@@ -128,7 +128,7 @@ std::error_code C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(const C_Osc
       c_Retval = h_SaveDataStandalone(orc_IoData, c_XmlParser);
       if (!c_Retval)
       {
-         c_Retval = make_error_code_from_stw(c_XmlParser.SaveToFile(orc_Path));
+         c_Retval = c_XmlParser.SaveToFile(orc_Path);
          if (c_Retval)
          {
             osc_write_log_error("Saving IO standalone data", "Could not write to file \"" + orc_Path + "\".");

@@ -776,7 +776,7 @@ int32_t C_PuiSvHandlerFiler::mh_SaveViewFile(const C_PuiSvData & orc_View, const
       //node
       C_PuiSvHandlerFiler::mh_SaveView(orc_View, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()))
       {
          osc_write_log_error("Saving system definition UI", "Could not create file for node.");
          s32_Retval = C_CONFIG;

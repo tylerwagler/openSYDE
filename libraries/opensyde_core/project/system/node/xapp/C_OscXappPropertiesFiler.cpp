@@ -93,20 +93,19 @@ std::error_code C_OscXappPropertiesFiler::h_LoadXappProperties(C_OscXappProperti
 
    orc_XappProperties.Initialize();
 
-   c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("properties"));
+   c_Retval = orc_XmlParser.SelectNodeChildError("properties");
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error(
-         "polling-interval-ms", orc_XappProperties.u32_PollingIntervalMs));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("polling-interval-ms", orc_XappProperties.u32_PollingIntervalMs);
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.GetAttributeUint32Error(
-         "data-request-interval-ms", orc_XappProperties.u32_DataRequestIntervalMs));
+      c_Retval = orc_XmlParser.GetAttributeUint32Error("data-request-interval-ms",
+                                                       orc_XappProperties.u32_DataRequestIntervalMs);
    }
    if (!c_Retval)
    {
-      c_Retval = make_error_code_from_stw(orc_XmlParser.SelectNodeChildError("connected-interface"));
+      c_Retval = orc_XmlParser.SelectNodeChildError("connected-interface");
       if (!c_Retval)
       {
          c_Retval = C_OscXappPropertiesFiler::h_LoadCommInterfaceId(orc_XappProperties.e_ConnectedInterfaceType,
@@ -148,7 +147,7 @@ std::error_code C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(const C_OscXa
       //node
       C_OscXappPropertiesFiler::h_SaveXappProperties(orc_XappProperties, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath))
       {
          osc_write_log_error("Saving node definition", "Could not create file for node.");
          c_Retval = Errc::config;
