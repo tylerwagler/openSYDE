@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglUtils.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -2590,7 +2591,7 @@ int32_t C_PuiSvDashboard::AddParamNewDataPoolElement(const uint32_t ou32_ParamWi
             c_Content = pc_Element->c_MinValue;
             tgl_assert(C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(
                           pc_Element->c_MinValue, pc_Element->c_MaxValue, c_Content, e_Tmp,
-                          C_OscNodeDataPoolContentUtil::eTO_ZERO) == C_NO_ERR);
+                          C_OscNodeDataPoolContentUtil::eTO_ZERO) == Errc::success);
             rc_ParamWidget.c_ListValues.insert(rc_ParamWidget.c_ListValues.begin() + u32_NewIndex, c_Content);
          }
          //Expand up to new item
@@ -3255,7 +3256,7 @@ void C_PuiSvDashboard::mh_FixDashboardWriteContentType(C_PuiSvDbWriteWidgetBase 
                                                                                 pc_DpElement->c_MaxValue,
                                                                                 orc_Element.c_InitialValue, e_Unused,
                                                                                 C_OscNodeDataPoolContentUtil::eTO_ZERO) ==
-                          C_NO_ERR);
+                          Errc::success);
             }
          }
       }

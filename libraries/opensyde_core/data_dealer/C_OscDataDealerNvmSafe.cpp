@@ -309,7 +309,7 @@ std::error_code C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
                            // Check range if value was changed
                            if (pc_Element->q_NvmValueChanged == true)
                            {
-                              if (pc_Element->CheckNvmValueRange() == C_NO_ERR)
+                              if (!pc_Element->CheckNvmValueRange())
                               {
                                  std::vector<uint8_t> c_ElementData;
 

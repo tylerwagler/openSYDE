@@ -1035,11 +1035,12 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
          // set value in range, leave initial value if in range
          C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_ValueChangedTo;
          const int32_t s32_Tmp =
+            //the core class reports std::error_code now; this class keeps the STW int32_t convention
             C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(orc_Element.c_MinValue,
                                                                   orc_Element.c_MaxValue,
                                                                   c_InitialValue,
                                                                   e_ValueChangedTo,
-                                                                  C_OscNodeDataPoolContentUtil::eLEAVE_VALUE);
+                                                                  C_OscNodeDataPoolContentUtil::eLEAVE_VALUE).value();
          if (s32_Tmp == C_RANGE)
          {
             // min and max values are interchanged
@@ -1124,11 +1125,12 @@ int32_t C_CieImportDbc::mh_GetSignalValues(const Vector::DBC::Network & orc_DbcN
       // set value in range, leave default initial value if in range
       C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_ValueChangedTo;
       const int32_t s32_Tmp =
+         //the core class reports std::error_code now; this class keeps the STW int32_t convention
          C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(orc_Element.c_MinValue,
                                                                orc_Element.c_MaxValue,
                                                                c_InitialValue,
                                                                e_ValueChangedTo,
-                                                               C_OscNodeDataPoolContentUtil::eLEAVE_VALUE);
+                                                               C_OscNodeDataPoolContentUtil::eLEAVE_VALUE).value();
       if (s32_Tmp == C_RANGE)
       {
          // min and max values are interchanged

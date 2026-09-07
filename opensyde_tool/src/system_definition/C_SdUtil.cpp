@@ -1555,13 +1555,14 @@ int32_t C_SdUtil::h_GetErrorToolTipNode(const uint32_t & oru32_NodeIndex, QStrin
       std::vector<uint32_t> c_InvalidApplicationIndices;
       std::vector<uint32_t> c_InvalidDomainIndices;
       std::vector<C_OscCanProtocol::E_Type> c_InvalidProtocolTypes;
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().CheckErrorNode(
          c_NodeIndices[u32_ItNode], &q_NameConflict, &q_NameEmpty, &q_NodeIdInvalid, &q_IpInvalid, &q_DataPoolsInvalid,
          &q_ApplicationsInvalid,
          &q_DomainsInvalid, &q_CommMinSignalCountInvalid, &q_CommMaxSignalCountInvalid, &q_CoPdoCountInvalid,
          &q_CoNodeIdInvalid, &q_CoHeartbeatInvalid,
          true, &c_InvalidInterfaceIndices, &c_InvalidDataPoolIndices, &c_InvalidApplicationIndices,
-         &c_InvalidDomainIndices, &c_InvalidProtocolTypes);
+         &c_InvalidDomainIndices, &c_InvalidProtocolTypes).value();
 
       if (s32_Retval == C_NO_ERR)
       {

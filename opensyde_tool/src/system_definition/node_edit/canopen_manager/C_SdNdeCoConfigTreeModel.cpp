@@ -1385,14 +1385,16 @@ void C_SdNdeCoConfigTreeModel::m_CheckError(const QModelIndex & orc_InterfaceInd
                      bool q_NodeIdConflict;
 
                      // Device configuration errors
+                     //the core class reports std::error_code now; this class keeps the STW int32_t convention
                      s32_Retval = pc_Manager->CheckErrorDeviceCoNodeId(c_DeviceId, &q_NodeIdConflict,
-                                                                       &q_NodeIdInvalid, true);
+                                                                       &q_NodeIdInvalid, true).value();
                      tgl_assert(s32_Retval == C_NO_ERR);
                      if (s32_Retval == C_NO_ERR)
                      {
                         bool q_HeartbeatInvalid;
 
-                        s32_Retval = pc_Manager->CheckErrorDeviceHeartbeat(c_DeviceId, &q_HeartbeatInvalid);
+                        //the core class reports std::error_code now; this class keeps the STW int32_t convention
+                        s32_Retval = pc_Manager->CheckErrorDeviceHeartbeat(c_DeviceId, &q_HeartbeatInvalid).value();
                         tgl_assert(s32_Retval == C_NO_ERR);
                         if (s32_Retval == C_NO_ERR)
                         {

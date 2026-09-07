@@ -13,7 +13,10 @@
 #include "precomp_headers.hpp"
 #include "C_SclStringCompat.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscNodeDataPoolList.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
@@ -432,13 +435,13 @@ void C_OscNodeDataPoolList::HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCh
    \param[in]     orc_Data    data to set
 
    \return
-   C_NO_ERR   value set
-   C_RANGE    size of orc_Data does not match our size
+   Errc::success   value set
+   Errc::range     size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolList::SetCrcFromBigEndianBlob(const std::vector<uint8_t> & orc_Data)
+std::error_code C_OscNodeDataPoolList::SetCrcFromBigEndianBlob(const std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Data.size() == 2)
    {
@@ -446,9 +449,9 @@ int32_t C_OscNodeDataPoolList::SetCrcFromBigEndianBlob(const std::vector<uint8_t
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -460,13 +463,13 @@ int32_t C_OscNodeDataPoolList::SetCrcFromBigEndianBlob(const std::vector<uint8_t
    \param[in]     orc_Data    data to set
 
    \return
-   C_NO_ERR   value set
-   C_RANGE    size of orc_Data does not match our size
+   Errc::success   value set
+   Errc::range     size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolList::SetCrcFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data)
+std::error_code C_OscNodeDataPoolList::SetCrcFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (orc_Data.size() == 2)
    {
@@ -474,9 +477,9 @@ int32_t C_OscNodeDataPoolList::SetCrcFromLittleEndianBlob(const std::vector<uint
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -1662,15 +1662,14 @@ void C_OscComMessageLogger::mh_AddSpecialEcesSignals(C_OscNode & orc_Node,
    c_ChecksumElement.c_Comment = "Automatically generated signal to represent CRC checksum signal of the ECeS Message.";
 
    // insert signals
-   int32_t s32_Result;
-   s32_Result = orc_Node.InsertSignal(orc_Id.e_ComProtocol, orc_Id.u32_InterfaceIndex, orc_Id.u32_DatapoolIndex,
-                                      orc_Id.q_MessageIsTx, orc_Id.u32_MessageIndex, ou32_SignalIndex,
-                                      c_MessageCounterSig, c_MessageCounterElement);
-   tgl_assert(s32_Result == C_NO_ERR);
-   s32_Result = orc_Node.InsertSignal(orc_Id.e_ComProtocol, orc_Id.u32_InterfaceIndex, orc_Id.u32_DatapoolIndex,
-                                      orc_Id.q_MessageIsTx, orc_Id.u32_MessageIndex, ou32_SignalIndex + 1,
-                                      c_ChecksumSig, c_ChecksumElement);
-   tgl_assert(s32_Result == C_NO_ERR);
+   std::error_code c_Result = orc_Node.InsertSignal(orc_Id.e_ComProtocol, orc_Id.u32_InterfaceIndex, orc_Id.u32_DatapoolIndex,
+                                    orc_Id.q_MessageIsTx, orc_Id.u32_MessageIndex, ou32_SignalIndex,
+                                    c_MessageCounterSig, c_MessageCounterElement);
+   tgl_assert(!c_Result);
+   c_Result = orc_Node.InsertSignal(orc_Id.e_ComProtocol, orc_Id.u32_InterfaceIndex, orc_Id.u32_DatapoolIndex,
+                                    orc_Id.q_MessageIsTx, orc_Id.u32_MessageIndex, ou32_SignalIndex + 1,
+                                    c_ChecksumSig, c_ChecksumElement);
+   tgl_assert(!c_Result);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

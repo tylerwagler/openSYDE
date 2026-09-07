@@ -15,7 +15,10 @@
 
 #include <map>
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_OscNode.hpp"
 #include "C_SclChecksums.hpp"
@@ -92,13 +95,13 @@ void C_OscNode::Initialize(void)
    \param[in]  orc_DataPool         Data pool data
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::InsertDataPool(const uint32_t ou32_DataPoolIndex, const C_OscNodeDataPool & orc_DataPool)
+std::error_code C_OscNode::InsertDataPool(const uint32_t ou32_DataPoolIndex, const C_OscNodeDataPool & orc_DataPool)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DataPoolIndex <= this->c_DataPools.size())
    {
@@ -115,9 +118,9 @@ int32_t C_OscNode::InsertDataPool(const uint32_t ou32_DataPoolIndex, const C_Osc
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -126,13 +129,13 @@ int32_t C_OscNode::InsertDataPool(const uint32_t ou32_DataPoolIndex, const C_Osc
    \param[in]  ou32_DataPoolIndex   Data pool index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::DeleteDataPool(const uint32_t ou32_DataPoolIndex)
+std::error_code C_OscNode::DeleteDataPool(const uint32_t ou32_DataPoolIndex)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_DataPoolIndex <= this->c_DataPools.size())
    {
@@ -149,9 +152,9 @@ int32_t C_OscNode::DeleteDataPool(const uint32_t ou32_DataPoolIndex)
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -161,13 +164,13 @@ int32_t C_OscNode::DeleteDataPool(const uint32_t ou32_DataPoolIndex)
    \param[in]  ou32_Target    Target index
 
    \return
-   C_NO_ERR OK
-   C_RANGE  Something out of range
+   Errc::success OK
+   Errc::range   Something out of range
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::MoveDataPool(const uint32_t ou32_Start, const uint32_t ou32_Target)
+std::error_code C_OscNode::MoveDataPool(const uint32_t ou32_Start, const uint32_t ou32_Target)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if ((ou32_Start < this->c_DataPools.size()) && (ou32_Target < this->c_DataPools.size()))
    {
@@ -193,10 +196,10 @@ int32_t C_OscNode::MoveDataPool(const uint32_t ou32_Start, const uint32_t ou32_T
          pc_Protocol->u32_DataPoolIndex = ou32_Target;
       }
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -211,16 +214,17 @@ int32_t C_OscNode::MoveDataPool(const uint32_t ou32_Start, const uint32_t ou32_T
    \param[in]  orc_SignalData       Signal data
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::InsertMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                                 const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
-                                 const uint32_t ou32_MessageIndex, const C_OscCanMessage & orc_Message,
-                                 const std::vector<C_OscNodeDataPoolListElement> & orc_SignalData)
+std::error_code C_OscNode::InsertMessage(const C_OscCanProtocol::E_Type oe_ComProtocol,
+                                         const uint32_t ou32_InterfaceIndex, const uint32_t ou32_DatapoolIndex,
+                                         const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
+                                         const C_OscCanMessage & orc_Message,
+                                         const std::vector<C_OscNodeDataPoolListElement> & orc_SignalData)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
    C_OscNodeDataPool * const pc_DataPool = this->GetComDataPool(oe_ComProtocol, ou32_DatapoolIndex);
 
@@ -240,7 +244,7 @@ int32_t C_OscNode::InsertMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, 
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
 
          //Smaller equal because appending is also a valid option
@@ -264,7 +268,7 @@ int32_t C_OscNode::InsertMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, 
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
 
          //Recalculate affected indices
@@ -272,15 +276,15 @@ int32_t C_OscNode::InsertMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, 
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -297,17 +301,17 @@ int32_t C_OscNode::InsertMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, 
    \param[in]  orc_SignalData       Signal data
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::SetMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                              const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
-                              const uint32_t ou32_MessageIndex, const C_OscCanMessage & orc_Message,
-                              const bool oq_NewMessageIsTx,
-                              const std::vector<C_OscNodeDataPoolListElement> & orc_SignalData)
+std::error_code C_OscNode::SetMessage(const C_OscCanProtocol::E_Type oe_ComProtocol,
+                                      const uint32_t ou32_InterfaceIndex, const uint32_t ou32_DatapoolIndex,
+                                      const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
+                                      const C_OscCanMessage & orc_Message, const bool oq_NewMessageIsTx,
+                                      const std::vector<C_OscNodeDataPoolListElement> & orc_SignalData)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
 
@@ -356,15 +360,15 @@ int32_t C_OscNode::SetMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, con
          else
          {
             //Move
-            s32_Retval = this->DeleteMessage(oe_ComProtocol, ou32_InterfaceIndex, ou32_DatapoolIndex,
+            c_Retval = this->DeleteMessage(oe_ComProtocol, ou32_InterfaceIndex, ou32_DatapoolIndex,
                                              oq_MessageIsTx, ou32_MessageIndex);
 
-            if (s32_Retval == C_NO_ERR)
+            if (!c_Retval)
             {
                const std::vector<C_OscCanMessage> & rc_MatchingMessages = rc_MessageContainer.GetMessages(
                   oq_NewMessageIsTx);
                const uint32_t u32_NewMessageIndex = static_cast<uint32_t>(rc_MatchingMessages.size());
-               s32_Retval = this->InsertMessage(oe_ComProtocol, ou32_InterfaceIndex, ou32_DatapoolIndex,
+               c_Retval = this->InsertMessage(oe_ComProtocol, ou32_InterfaceIndex, ou32_DatapoolIndex,
                                                 oq_NewMessageIsTx,
                                                 u32_NewMessageIndex, orc_Message,
                                                 orc_SignalData);
@@ -374,7 +378,7 @@ int32_t C_OscNode::SetMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, con
          rc_MessageContainer.ReCalcDataElementIndices();
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -387,15 +391,15 @@ int32_t C_OscNode::SetMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, con
    \param[in]  ou32_MessageIndex    Message index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::DeleteMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                                 const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
-                                 const uint32_t ou32_MessageIndex)
+std::error_code C_OscNode::DeleteMessage(const C_OscCanProtocol::E_Type oe_ComProtocol,
+                                         const uint32_t ou32_InterfaceIndex, const uint32_t ou32_DatapoolIndex,
+                                         const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
    C_OscNodeDataPool * const pc_DataPool = this->GetComDataPool(oe_ComProtocol, ou32_DatapoolIndex);
 
@@ -425,7 +429,7 @@ int32_t C_OscNode::DeleteMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, 
                }
                else
                {
-                  s32_Retval = C_RANGE;
+                  c_Retval = Errc::range;
                }
             }
 
@@ -437,20 +441,20 @@ int32_t C_OscNode::DeleteMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, 
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -466,16 +470,17 @@ int32_t C_OscNode::DeleteMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, 
    \param[in]  orc_SignalData       Signal data for data pool
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::InsertSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                                const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
-                                const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex,
-                                const C_OscCanSignal & orc_Signal, const C_OscNodeDataPoolListElement & orc_SignalData)
+std::error_code C_OscNode::InsertSignal(const C_OscCanProtocol::E_Type oe_ComProtocol,
+                                        const uint32_t ou32_InterfaceIndex, const uint32_t ou32_DatapoolIndex,
+                                        const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
+                                        const uint32_t ou32_SignalIndex, const C_OscCanSignal & orc_Signal,
+                                        const C_OscNodeDataPoolListElement & orc_SignalData)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
    C_OscNodeDataPool * const pc_DataPool = this->GetComDataPool(oe_ComProtocol, ou32_DatapoolIndex);
 
@@ -522,25 +527,25 @@ int32_t C_OscNode::InsertSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, c
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -556,16 +561,17 @@ int32_t C_OscNode::InsertSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, c
    \param[in]  orc_SignalData       Signal data for data pool
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::SetSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                             const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
-                             const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex,
-                             const C_OscCanSignal & orc_Signal, const C_OscNodeDataPoolListElement & orc_SignalData)
+std::error_code C_OscNode::SetSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
+                                     const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
+                                     const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex,
+                                     const C_OscCanSignal & orc_Signal,
+                                     const C_OscNodeDataPoolListElement & orc_SignalData)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
    C_OscNodeDataPool * const pc_DataPool = this->GetComDataPool(oe_ComProtocol, ou32_DatapoolIndex);
 
@@ -596,25 +602,25 @@ int32_t C_OscNode::SetSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, cons
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -629,16 +635,16 @@ int32_t C_OscNode::SetSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, cons
    \param[in]  orc_Signal           Signal data for message positioning
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::SetSignalPosition(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                                     const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
-                                     const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex,
-                                     const C_OscCanSignal & orc_Signal)
+std::error_code C_OscNode::SetSignalPosition(const C_OscCanProtocol::E_Type oe_ComProtocol,
+                                             const uint32_t ou32_InterfaceIndex, const uint32_t ou32_DatapoolIndex,
+                                             const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
+                                             const uint32_t ou32_SignalIndex, const C_OscCanSignal & orc_Signal)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
 
    if (pc_Protocol != nullptr)
@@ -662,25 +668,25 @@ int32_t C_OscNode::SetSignalPosition(const C_OscCanProtocol::E_Type oe_ComProtoc
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -695,16 +701,16 @@ int32_t C_OscNode::SetSignalPosition(const C_OscCanProtocol::E_Type oe_ComProtoc
    \param[in]  ou16_MultiplexValue  New multiplex value
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::SetSignalMuxValue(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                                     const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
-                                     const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex,
-                                     const uint16_t ou16_MultiplexValue)
+std::error_code C_OscNode::SetSignalMuxValue(const C_OscCanProtocol::E_Type oe_ComProtocol,
+                                             const uint32_t ou32_InterfaceIndex, const uint32_t ou32_DatapoolIndex,
+                                             const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
+                                             const uint32_t ou32_SignalIndex, const uint16_t ou16_MultiplexValue)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
 
    if (pc_Protocol != nullptr)
@@ -725,25 +731,25 @@ int32_t C_OscNode::SetSignalMuxValue(const C_OscCanProtocol::E_Type oe_ComProtoc
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -757,15 +763,16 @@ int32_t C_OscNode::SetSignalMuxValue(const C_OscCanProtocol::E_Type oe_ComProtoc
    \param[in]  ou32_SignalIndex     Signal index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::DeleteSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                                const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
-                                const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex)
+std::error_code C_OscNode::DeleteSignal(const C_OscCanProtocol::E_Type oe_ComProtocol,
+                                        const uint32_t ou32_InterfaceIndex, const uint32_t ou32_DatapoolIndex,
+                                        const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
+                                        const uint32_t ou32_SignalIndex)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    C_OscCanProtocol * const pc_Protocol = this->GetCanProtocol(oe_ComProtocol, ou32_DatapoolIndex);
    C_OscNodeDataPool * const pc_DataPool = this->GetComDataPool(oe_ComProtocol, ou32_DatapoolIndex);
 
@@ -797,25 +804,25 @@ int32_t C_OscNode::DeleteSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, c
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1750,10 +1757,10 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
                {
                   uint32_t u32_TxListIndex;
                   uint32_t u32_RxListIndex;
-                  if ((C_OscCanProtocol::h_GetComListIndex(rc_CheckedDataPool, u32_ItContainer, true,
-                                                           u32_TxListIndex) == C_NO_ERR) &&
-                      (C_OscCanProtocol::h_GetComListIndex(rc_CheckedDataPool, u32_ItContainer, false,
-                                                           u32_RxListIndex) == C_NO_ERR))
+                  if ((!C_OscCanProtocol::h_GetComListIndex(rc_CheckedDataPool, u32_ItContainer, true,
+                                                            u32_TxListIndex)) &&
+                      (!C_OscCanProtocol::h_GetComListIndex(rc_CheckedDataPool, u32_ItContainer, false,
+                                                            u32_RxListIndex)))
                   {
                      // Parameter oq_CanOpenPdoSyncValid is true in case of no CANopen protocol
                      // to avoid a check for this scenario
@@ -2070,16 +2077,16 @@ void C_OscNode::CheckMessageName(const uint32_t ou32_InterfaceIndex, const std::
 /*! \brief  Check application process ID valid
 
    \param[in]   ou32_ApplicationIndex  Application index (ID)
-   \param[out]  orq_Valid              Valid check result (should only be used if the function returned C_NO_ERR)
+   \param[out]  orq_Valid              Valid check result (should only be used if the function returned Errc::success)
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNode::CheckApplicationProcessIdValid(const uint32_t ou32_ApplicationIndex, bool & orq_Valid) const
+std::error_code C_OscNode::CheckApplicationProcessIdValid(const uint32_t ou32_ApplicationIndex, bool & orq_Valid) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orq_Valid = true;
    if (ou32_ApplicationIndex < this->c_Applications.size())
@@ -2107,9 +2114,9 @@ int32_t C_OscNode::CheckApplicationProcessIdValid(const uint32_t ou32_Applicatio
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

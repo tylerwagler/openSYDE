@@ -12,7 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscCanProtocol.hpp"
 #include "C_SclChecksums.hpp"
 #include "TglUtils.hpp"
@@ -76,17 +79,17 @@ void C_OscCanProtocol::CalcHash(uint32_t & oru32_HashValue) const
    \param[out]  orc_Signals            Contained signals
 
    \return
-   C_NO_ERR Result valid
-   C_RANGE  Either interface, message or signal not found
+   Errc::success Result valid
+   Errc::range   Either interface, message or signal not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanProtocol::GetAllSignalsForMessage(const C_OscNodeDataPool & orc_DataPool,
+std::error_code C_OscCanProtocol::GetAllSignalsForMessage(const C_OscNodeDataPool & orc_DataPool,
                                                   const uint32_t ou32_InterfaceIndex, const uint32_t ou32_MessageIndex,
                                                   const bool oq_IsTx,
                                                   std::vector<const C_OscNodeDataPoolListElement *> & orc_Signals) const
 {
    const C_OscNodeDataPoolList * const pc_List = h_GetComListConst(orc_DataPool, ou32_InterfaceIndex, oq_IsTx);
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orc_Signals.clear();
 
@@ -110,25 +113,25 @@ int32_t C_OscCanProtocol::GetAllSignalsForMessage(const C_OscNodeDataPool & orc_
                }
                else
                {
-                  s32_Retval = C_RANGE;
+                  c_Retval = Errc::range;
                }
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -243,20 +246,20 @@ C_OscNodeDataPoolList * C_OscCanProtocol::h_GetComList(C_OscNodeDataPool & orc_D
    \param[out]  oru32_ListIndex        List index
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanProtocol::h_GetComListIndex(const C_OscNodeDataPool & orc_DataPool, const uint32_t ou32_InterfaceIndex,
+std::error_code C_OscCanProtocol::h_GetComListIndex(const C_OscNodeDataPool & orc_DataPool, const uint32_t ou32_InterfaceIndex,
                                             const bool oq_IsTx, uint32_t & oru32_ListIndex)
 {
-   int32_t s32_Retval = C_RANGE;
+   std::error_code c_Retval = Errc::range;
    const uint32_t u32_ListIndex = ou32_InterfaceIndex * 2U;
 
    if ((u32_ListIndex + 1UL) < static_cast<uint32_t>(orc_DataPool.c_Lists.size()))
    {
       const C_OscNodeDataPoolList & rc_List = orc_DataPool.c_Lists[u32_ListIndex];
-      s32_Retval = C_NO_ERR;
+      c_Retval = Errc::success;
       if (h_ListIsComTx(rc_List) == oq_IsTx)
       {
          oru32_ListIndex = u32_ListIndex;
@@ -270,7 +273,7 @@ int32_t C_OscCanProtocol::h_GetComListIndex(const C_OscNodeDataPool & orc_DataPo
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

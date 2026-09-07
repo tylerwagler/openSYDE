@@ -7,7 +7,7 @@
    roughly 640 caller files, the largest remaining wave by caller fan-out.
 
    C_OscNodeDataPoolContent is the tagged-union value type behind every datapool
-   value in the tool, and its two int32_t functions turn raw bytes read off an ECU
+   value in the tool, and its two blob setters turn raw bytes read off an ECU
    into a typed value. An endianness or sizing mistake there does not crash; it
    silently reports the wrong number for a live parameter, which is why the
    endianness cases below assert on exact byte order rather than round-trips
@@ -21,10 +21,12 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <gtest/gtest.h>
 
+#include <system_error>
 #include <vector>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -102,11 +104,11 @@ TEST(NodeDataPoolContent, BigEndianBlobUsesMostSignificantByteFirst)
 {
    C_OscNodeDataPoolContent c_Content = h_MakeScalar(C_OscNodeDataPoolContent::eUINT16);
 
-   ASSERT_EQ(C_NO_ERR, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0x01U, 0x02U})));
+   ASSERT_EQ(Errc::success, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0x01U, 0x02U})));
    EXPECT_EQ(0x0102U, c_Content.GetValueU16());
 
    c_Content = h_MakeScalar(C_OscNodeDataPoolContent::eUINT32);
-   ASSERT_EQ(C_NO_ERR, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0x01U, 0x02U, 0x03U, 0x04U})));
+   ASSERT_EQ(Errc::success, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0x01U, 0x02U, 0x03U, 0x04U})));
    EXPECT_EQ(0x01020304U, c_Content.GetValueU32());
 }
 
@@ -114,11 +116,11 @@ TEST(NodeDataPoolContent, LittleEndianBlobUsesLeastSignificantByteFirst)
 {
    C_OscNodeDataPoolContent c_Content = h_MakeScalar(C_OscNodeDataPoolContent::eUINT16);
 
-   ASSERT_EQ(C_NO_ERR, c_Content.SetValueFromLittleEndianBlob(std::vector<uint8_t>({0x01U, 0x02U})));
+   ASSERT_EQ(Errc::success, c_Content.SetValueFromLittleEndianBlob(std::vector<uint8_t>({0x01U, 0x02U})));
    EXPECT_EQ(0x0201U, c_Content.GetValueU16());
 
    c_Content = h_MakeScalar(C_OscNodeDataPoolContent::eUINT32);
-   ASSERT_EQ(C_NO_ERR, c_Content.SetValueFromLittleEndianBlob(std::vector<uint8_t>({0x01U, 0x02U, 0x03U, 0x04U})));
+   ASSERT_EQ(Errc::success, c_Content.SetValueFromLittleEndianBlob(std::vector<uint8_t>({0x01U, 0x02U, 0x03U, 0x04U})));
    EXPECT_EQ(0x04030201U, c_Content.GetValueU32());
 }
 
@@ -129,8 +131,8 @@ TEST(NodeDataPoolContent, EndiannessDecodersDisagreeOnMultiByteTypes)
    C_OscNodeDataPoolContent c_Little = h_MakeScalar(C_OscNodeDataPoolContent::eUINT32);
    const std::vector<uint8_t> c_Data({0xAAU, 0xBBU, 0xCCU, 0xDDU});
 
-   ASSERT_EQ(C_NO_ERR, c_Big.SetValueFromBigEndianBlob(c_Data));
-   ASSERT_EQ(C_NO_ERR, c_Little.SetValueFromLittleEndianBlob(c_Data));
+   ASSERT_EQ(Errc::success, c_Big.SetValueFromBigEndianBlob(c_Data));
+   ASSERT_EQ(Errc::success, c_Little.SetValueFromLittleEndianBlob(c_Data));
 
    EXPECT_NE(c_Big.GetValueU32(), c_Little.GetValueU32());
    EXPECT_EQ(0xAABBCCDDU, c_Big.GetValueU32());
@@ -142,11 +144,11 @@ TEST(NodeDataPoolContent, SignedValuesDecodeAsNegative)
    C_OscNodeDataPoolContent c_Content = h_MakeScalar(C_OscNodeDataPoolContent::eSINT16);
 
    //0xFFFF is -1 in two's complement
-   ASSERT_EQ(C_NO_ERR, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0xFFU, 0xFFU})));
+   ASSERT_EQ(Errc::success, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0xFFU, 0xFFU})));
    EXPECT_EQ(-1, c_Content.GetValueS16());
 
    c_Content = h_MakeScalar(C_OscNodeDataPoolContent::eSINT8);
-   ASSERT_EQ(C_NO_ERR, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0x80U})));
+   ASSERT_EQ(Errc::success, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0x80U})));
    EXPECT_EQ(-128, c_Content.GetValueS8()) << "sign bit was dropped";
 }
 
@@ -157,13 +159,13 @@ TEST(NodeDataPoolContent, BlobWithWrongLengthIsRejected)
 {
    C_OscNodeDataPoolContent c_Content = h_MakeScalar(C_OscNodeDataPoolContent::eUINT32);
 
-   EXPECT_EQ(C_CONFIG, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0x01U, 0x02U})));
-   EXPECT_EQ(C_CONFIG, c_Content.SetValueFromLittleEndianBlob(std::vector<uint8_t>({0x01U, 0x02U})));
-   EXPECT_EQ(C_CONFIG,
+   EXPECT_EQ(Errc::config, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0x01U, 0x02U})));
+   EXPECT_EQ(Errc::config, c_Content.SetValueFromLittleEndianBlob(std::vector<uint8_t>({0x01U, 0x02U})));
+   EXPECT_EQ(Errc::config,
              c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0x01U, 0x02U, 0x03U, 0x04U, 0x05U})));
 
    //an empty blob must not reach the &orc_Data[0] in the decoder
-   EXPECT_EQ(C_CONFIG, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>()));
+   EXPECT_EQ(Errc::config, c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>()));
 }
 
 TEST(NodeDataPoolContent, ArrayBlobDecodesEveryElement)
@@ -174,7 +176,7 @@ TEST(NodeDataPoolContent, ArrayBlobDecodesEveryElement)
    c_Content.SetType(C_OscNodeDataPoolContent::eUINT16);
    c_Content.SetArraySize(3U);
 
-   ASSERT_EQ(C_NO_ERR,
+   ASSERT_EQ(Errc::success,
              c_Content.SetValueFromBigEndianBlob(std::vector<uint8_t>({0x00U, 0x01U, 0x00U, 0x02U, 0x00U, 0x03U})));
 
    EXPECT_EQ(1U, c_Content.GetValueArrU16Element(0U));

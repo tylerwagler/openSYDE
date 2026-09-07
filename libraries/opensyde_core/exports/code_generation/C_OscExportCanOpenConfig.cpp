@@ -509,8 +509,8 @@ std::error_code C_OscExportCanOpenConfig::mh_CreateImplementationFile(const std:
    uint32_t u32_RxListIndex;
 
    //the signals lists are expected to exist even if there are no signals defined
-   if ((C_OscCanProtocol::h_GetComListIndex(orc_Datapool, ou8_InterfaceIndex, true, u32_TxListIndex) == C_NO_ERR) &&
-       (C_OscCanProtocol::h_GetComListIndex(orc_Datapool, ou8_InterfaceIndex, false, u32_RxListIndex) == C_NO_ERR))
+   if ((!C_OscCanProtocol::h_GetComListIndex(orc_Datapool, ou8_InterfaceIndex, true, u32_TxListIndex)) &&
+       (!C_OscCanProtocol::h_GetComListIndex(orc_Datapool, ou8_InterfaceIndex, false, u32_RxListIndex)))
    {
       c_Data.Clear();
       const C_OscNodeDataPoolList rc_DatapoolTxList = orc_Datapool.c_Lists[u32_TxListIndex];

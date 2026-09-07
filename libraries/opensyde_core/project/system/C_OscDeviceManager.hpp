@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <string>
+#include <system_error>
 #include "C_OscDeviceGroup.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -38,7 +39,7 @@ public:
 
    bool WasLoaded(void) const;
 
-   int32_t LoadFromPaths(const std::vector<std::string> & orc_RootPaths);
+   std::error_code LoadFromPaths(const std::vector<std::string> & orc_RootPaths);
 
 private:
    bool mq_WasLoaded;

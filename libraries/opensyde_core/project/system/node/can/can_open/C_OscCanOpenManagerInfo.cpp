@@ -12,7 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglUtils.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscCanOpenManagerInfo.hpp"
@@ -145,9 +148,9 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
       // Check all devices
       for (c_ItDevice = this->c_CanOpenDevices.begin(); c_ItDevice != this->c_CanOpenDevices.end(); ++c_ItDevice)
       {
-         tgl_assert(this->CheckErrorDeviceCoNodeId(c_ItDevice->first, pq_TempCoNodeIdConflict,
-                                                   pq_TempCoDevicesNodeIdInvalid,
-                                                   oq_CheckDeviceToDeviceErrors) == C_NO_ERR);
+         tgl_assert(!this->CheckErrorDeviceCoNodeId(c_ItDevice->first, pq_TempCoNodeIdConflict,
+                                                    pq_TempCoDevicesNodeIdInvalid,
+                                                    oq_CheckDeviceToDeviceErrors));
 
          // Transfer to the output pointer only true result to not overwrite previous detections
          if ((opq_CoNodeIdConflict != nullptr) &&
@@ -170,7 +173,7 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
       // Check all devices
       for (c_ItDevice = this->c_CanOpenDevices.begin(); c_ItDevice != this->c_CanOpenDevices.end(); ++c_ItDevice)
       {
-         tgl_assert(this->CheckErrorDeviceHeartbeat(c_ItDevice->first, opq_HearbeatTimeInvalid) == C_NO_ERR);
+         tgl_assert(!this->CheckErrorDeviceHeartbeat(c_ItDevice->first, opq_HearbeatTimeInvalid));
 
          if (*opq_HearbeatTimeInvalid == true)
          {
@@ -190,16 +193,16 @@ void C_OscCanOpenManagerInfo::CheckErrorManager(bool * const opq_CoNodeIdConflic
    \param[in]      oq_CheckDeviceToDeviceErrors   true: run error checks between devices and between manager and devices
                                                   false: run error checks between manager and device only
 
-   \retval   C_NO_ERR   Error check successful
-   \retval   C_RANGE    Parameters invalid, error check not executed
+   \retval   Errc::success   Error check successful
+   \retval   Errc::range     Parameters invalid, error check not executed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfaceId & orc_DeviceId,
+std::error_code C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfaceId & orc_DeviceId,
                                                           bool * const opq_CoNodeIdConflict,
                                                           bool * const opq_CoNodeIdInvalid,
                                                           const bool oq_CheckDeviceToDeviceErrors) const
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    const std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
       this->c_CanOpenDevices.find(orc_DeviceId);
@@ -208,7 +211,7 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfac
    {
       const C_OscCanOpenManagerDeviceInfo & rc_DevInfo = c_ItDevice->second;
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
 
       if (opq_CoNodeIdConflict != nullptr)
       {
@@ -261,7 +264,7 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfac
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -270,14 +273,14 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceCoNodeId(const C_OscCanInterfac
    \param[in]       orc_DeviceId              CANopen device ID
    \param[out]      opq_HearbeatTimeInvalid   Error with Hearbeat time of Manager detected
 
-   \retval   C_NO_ERR   Error check successful
-   \retval   C_RANGE    Parameters invalid, error check not executed
+   \retval   Errc::success   Error check successful
+   \retval   Errc::range     Parameters invalid, error check not executed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceHeartbeat(const C_OscCanInterfaceId & orc_DeviceId,
+std::error_code C_OscCanOpenManagerInfo::CheckErrorDeviceHeartbeat(const C_OscCanInterfaceId & orc_DeviceId,
                                                            bool * const opq_HearbeatTimeInvalid) const
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    const std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
       this->c_CanOpenDevices.find(orc_DeviceId);
@@ -287,7 +290,7 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceHeartbeat(const C_OscCanInterfa
    {
       const C_OscCanOpenManagerDeviceInfo & rc_DevInfo = c_ItDevice->second;
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
 
       *opq_HearbeatTimeInvalid = false;
 
@@ -301,5 +304,5 @@ int32_t C_OscCanOpenManagerInfo::CheckErrorDeviceHeartbeat(const C_OscCanInterfa
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }

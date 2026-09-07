@@ -15,6 +15,7 @@
 #include <QSpinBox>
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SdBueBusEditPropertiesWidget.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SdUtil.hpp"
@@ -732,7 +733,7 @@ void C_SdBueBusEditPropertiesWidget::m_CheckBusId(void) const
    tgl_assert(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().CheckErrorBus(this->mu32_BusIndex,
                                                                                            nullptr,
                                                                                            nullptr, &q_IdIsValid,
-                                                                                           nullptr) == C_NO_ERR);
+                                                                                           nullptr) == Errc::success);
    //Result signals error
    q_IdIsValid = !q_IdIsValid;
 

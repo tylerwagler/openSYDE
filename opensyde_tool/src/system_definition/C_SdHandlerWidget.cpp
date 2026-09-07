@@ -30,6 +30,7 @@
 #include "C_CieDataPoolListAdapter.hpp"
 #include "C_SdBueBusEditWidget.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_RtfExportWidget.hpp"
 #include "C_PopUtil.hpp"
 #include "C_PuiUtil.hpp"
@@ -700,7 +701,7 @@ void C_SdHandlerWidget::m_SwitchToBusProtocolMessage(const uint32_t ou32_Index, 
       uint32_t u32_ListIndex;
       if (C_OscCanProtocol::h_GetComListIndex(pc_Node->c_DataPools[orc_MessageId.u32_DatapoolIndex],
                                               orc_MessageId.u32_InterfaceIndex, orc_MessageId.q_MessageIsTx,
-                                              u32_ListIndex) == C_NO_ERR)
+                                              u32_ListIndex) == Errc::success)
       {
          Q_EMIT (this->OpenDetail(orc_MessageId.u32_NodeIndex, orc_MessageId.u32_DatapoolIndex,
                                   u32_ListIndex, orc_MessageId.u32_MessageIndex, 2));

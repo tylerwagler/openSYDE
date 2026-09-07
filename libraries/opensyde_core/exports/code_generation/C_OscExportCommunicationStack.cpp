@@ -373,8 +373,8 @@ std::error_code C_OscExportCommunicationStack::mh_CreateImplementationFile(const
    uint32_t u32_TxListIndex;
    uint32_t u32_RxListIndex;
 
-   if ((C_OscCanProtocol::h_GetComListIndex(orc_DataPool, ou8_InterfaceIndex, true, u32_TxListIndex) == C_NO_ERR) &&
-       (C_OscCanProtocol::h_GetComListIndex(orc_DataPool, ou8_InterfaceIndex, false, u32_RxListIndex) == C_NO_ERR))
+   if ((!C_OscCanProtocol::h_GetComListIndex(orc_DataPool, ou8_InterfaceIndex, true, u32_TxListIndex)) &&
+       (!C_OscCanProtocol::h_GetComListIndex(orc_DataPool, ou8_InterfaceIndex, false, u32_RxListIndex)))
    {
       C_SclStringList c_Data;
       const bool q_TxMessagesPresent =

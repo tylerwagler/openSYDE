@@ -18,6 +18,7 @@
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_GiSvDaSliderBase.hpp"
@@ -378,7 +379,7 @@ bool C_GiSvDaSliderBase::CallProperties(void)
                   C_OscNodeDataPoolContentUtil::h_ZeroContent(c_Box.c_Value);
                   tgl_assert(C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(pc_Element->c_MinValue,
                                                                                    pc_Element->c_MaxValue,
-                                                                                   c_Box.c_Value, e_Tmp) == C_NO_ERR);
+                                                                                   c_Box.c_Value, e_Tmp) == Errc::success);
                }
             }
             c_Box.e_ElementWriteMode = pc_Dialog->GetWriteMode();

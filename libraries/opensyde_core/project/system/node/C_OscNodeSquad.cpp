@@ -10,7 +10,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 
 #include "C_OscNodeSquad.hpp"
 
@@ -83,16 +86,16 @@ std::string C_OscNodeSquad::h_CombineNames(const std::string & orc_MainDeviceNam
    \param[in,out]  orc_Nodes           Vector of all available nodes. Sub nodes of node squad must be part of it
    \param[in]      orc_NodeBaseName    New name of squad node
 
-   \retval   C_NO_ERR   Base name and names of all sub nodes updated
-   \retval   C_RANGE    At least one sub node index does not exist in orc_Nodes
-   \retval   C_CONFIG   At least one sub node device definition is not valid
+   \retval   Errc::success   Base name and names of all sub nodes updated
+   \retval   Errc::range     At least one sub node index does not exist in orc_Nodes
+   \retval   Errc::config    At least one sub node device definition is not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeSquad::SetBaseName(std::vector<C_OscNode> & orc_Nodes, const std::string & orc_NodeBaseName)
+std::error_code C_OscNodeSquad::SetBaseName(std::vector<C_OscNode> & orc_Nodes, const std::string & orc_NodeBaseName)
 {
    // Check the indexes first
    uint32_t u32_NodeIndexCounter;
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    this->c_BaseName = orc_NodeBaseName;
 
@@ -101,12 +104,12 @@ int32_t C_OscNodeSquad::SetBaseName(std::vector<C_OscNode> & orc_Nodes, const st
       if (this->c_SubNodeIndexes[u32_NodeIndexCounter] >= orc_Nodes.size())
       {
          // At least one index is not valid
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
          break;
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       for (u32_NodeIndexCounter = 0U; u32_NodeIndexCounter < this->c_SubNodeIndexes.size(); ++u32_NodeIndexCounter)
       {
@@ -128,14 +131,14 @@ int32_t C_OscNodeSquad::SetBaseName(std::vector<C_OscNode> & orc_Nodes, const st
             else
             {
                // Should not happen
-               s32_Return = C_CONFIG;
+               c_Return = Errc::config;
                break;
             }
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

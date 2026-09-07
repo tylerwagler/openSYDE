@@ -252,7 +252,7 @@ std::error_code C_OscDataDealer::DataPoolWrite(const uint8_t ou8_DataPoolIndex, 
          std::vector<uint8_t> c_Data;
 
          //is the value within the defines min/max ranges ?
-         c_Return = make_error_code_from_stw(pc_Element->CheckValueRange());
+         c_Return = pc_Element->CheckValueRange();
          if (c_Return)
          {
             c_Return = Errc::overflow;
@@ -418,7 +418,7 @@ std::error_code C_OscDataDealer::NvmWrite(const uint8_t ou8_DataPoolIndex, const
          std::vector<uint8_t> c_Data;
 
          //is the value within the defined min/max ranges ?
-         c_Return = make_error_code_from_stw(pc_Element->CheckNvmValueRange());
+         c_Return = pc_Element->CheckNvmValueRange();
          if (c_Return)
          {
             c_Return = Errc::overflow;

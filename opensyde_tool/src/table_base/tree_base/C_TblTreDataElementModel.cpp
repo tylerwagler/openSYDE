@@ -15,6 +15,7 @@
 #include "TglUtils.hpp"
 #include "C_SdUtil.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_PuiSvHandler.hpp"
@@ -664,7 +665,7 @@ C_PuiSvDbNodeDataPoolListElementId C_TblTreDataElementModel::mh_Translate(
    {
       uint32_t u32_ListIndex;
       if (C_OscCanProtocol::h_GetComListIndex(*pc_DataPool, orc_Indices.u32_InterfaceIndex, orc_Indices.q_MessageIsTx,
-                                              u32_ListIndex) == C_NO_ERR)
+                                              u32_ListIndex) == Errc::success)
       {
          const C_OscCanMessageContainer * const pc_Container =
             C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainer(orc_Indices.u32_NodeIndex,

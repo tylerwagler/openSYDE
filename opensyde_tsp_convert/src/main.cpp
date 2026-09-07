@@ -377,7 +377,8 @@ int main(const int argc, char_t * const opacn_Argv[])
    {
       std::vector<std::string> c_Roots;
       c_Roots.push_back(c_DeviceLibPath);
-      const int32_t s32_LoadRc = c_DeviceManager.LoadFromPaths(c_Roots);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      const int32_t s32_LoadRc = c_DeviceManager.LoadFromPaths(c_Roots).value();
       if (s32_LoadRc == C_NO_ERR)
       {
          pc_DeviceDef = c_DeviceManager.LookForDevice(c_V2.c_DeviceName, "", u32_SubDeviceIndex);

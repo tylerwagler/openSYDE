@@ -14,6 +14,7 @@
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiUtil.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -225,7 +226,7 @@ void C_SdNdeDbWidget::CheckProcessIdError(void) const
 
    if (pc_Node != nullptr)
    {
-      tgl_assert(pc_Node->CheckApplicationProcessIdValid(this->mu32_ApplicationIndex, q_Valid) == C_NO_ERR);
+      tgl_assert(pc_Node->CheckApplicationProcessIdValid(this->mu32_ApplicationIndex, q_Valid) == Errc::success);
       c_Info =
          C_SdUtil::h_InitUsedIdsString(c_UsedIds, pc_Node->c_Properties.c_Name.c_str(), "node");
    }

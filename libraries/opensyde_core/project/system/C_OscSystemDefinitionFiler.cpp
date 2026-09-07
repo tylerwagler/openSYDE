@@ -586,7 +586,7 @@ std::error_code C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
       // orc_PathDeviceDefinitions is interpreted as a device-bundle root directory
       // for the filesystem scanner.
       const std::vector<std::string> c_Roots = {orc_PathDeviceDefinitions};
-      c_Retval = make_error_code_from_stw(C_OscSystemDefinition::hc_Devices.LoadFromPaths(c_Roots));
+      c_Retval = C_OscSystemDefinition::hc_Devices.LoadFromPaths(c_Roots);
       if (c_Retval)
       {
          osc_write_log_error("Loading System Definition", "Could not load Device definitions.");

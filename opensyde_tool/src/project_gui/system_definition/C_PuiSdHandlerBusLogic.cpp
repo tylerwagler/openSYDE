@@ -17,6 +17,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglUtils.hpp"
 #include "C_OscCanUtil.hpp"
 #include "C_OscUtils.hpp"
@@ -384,7 +385,7 @@ const
 
    //Check bus errors
    if (this->mc_CoreDefinition.CheckErrorBus(ou32_BusIndex, opq_NameConflict, opq_NameEmpty, opq_IdInvalid,
-                                             nullptr) == C_NO_ERR)
+                                             nullptr) == Errc::success)
    {
       if ((opc_InvalidNodesForBitRate != nullptr) ||
           (opc_InvalidProtocols != nullptr))
@@ -701,7 +702,7 @@ void C_PuiSdHandlerBusLogic::AddConnection(const uint32_t ou32_NodeIndex, const 
             if (pc_CurComInterface != nullptr)
             {
                if (this->mc_CoreDefinition.AddConnection(u32_CurIndex, ou32_BusIndex,
-                                                         pc_CurComInterface->u8_InterfaceNumber) == C_NO_ERR)
+                                                         pc_CurComInterface->u8_InterfaceNumber) == Errc::success)
                {
                   //Adapt node ID
                   C_OscNodeComInterfaceSettings c_CurComInterface = *pc_CurComInterface;
@@ -1083,7 +1084,7 @@ const C_PuiSdNodeDataPoolList * C_PuiSdHandlerBusLogic::GetUiCanDataPoolList(con
          const C_PuiSdNodeDataPool & rc_UiDataPool = rc_UiNode.c_UiDataPools[pc_CanProtocol->u32_DataPoolIndex];
          uint32_t u32_ListIndex = 0UL;
          if (C_OscCanProtocol::h_GetComListIndex(rc_OscDataPool, ou32_InterfaceIndex, oq_MessageIsTx,
-                                                 u32_ListIndex) == C_NO_ERR)
+                                                 u32_ListIndex) == Errc::success)
          {
             if (u32_ListIndex < rc_UiDataPool.c_DataPoolLists.size())
             {
@@ -1696,10 +1697,11 @@ int32_t C_PuiSdHandlerBusLogic::SetCanMessageProperties(const C_OscCanMessageIde
                const uint32_t u32_Index = u32_SignalStartIndex + u32_ItSignals;
                c_Signals.push_back(pc_List->c_Elements[u32_Index]);
             }
+            //the core class reports std::error_code now; this class keeps the STW int32_t convention
             s32_Retval = rc_Node.SetMessage(orc_MessageId.e_ComProtocol, orc_MessageId.u32_InterfaceIndex,
                                             orc_MessageId.u32_DatapoolIndex,
                                             orc_MessageId.q_MessageIsTx, orc_MessageId.u32_MessageIndex,
-                                            orc_Message, orq_NewMessageIsTx, c_Signals);
+                                            orc_Message, orq_NewMessageIsTx, c_Signals).value();
             if ((orc_MessageId.q_MessageIsTx != orq_NewMessageIsTx) && (s32_Retval == C_NO_ERR))
             {
                //Sync ui data
@@ -1850,10 +1852,11 @@ int32_t C_PuiSdHandlerBusLogic::SetCanSignal(const C_OscCanMessageIdentification
                                                                               orc_MessageId.e_ComProtocol,
                                                                               orc_MessageId.u32_DatapoolIndex);
       C_OscNodeDataPoolListElementId c_Id;
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = rc_OscNode.SetSignal(orc_MessageId.e_ComProtocol, orc_MessageId.u32_InterfaceIndex,
                                         orc_MessageId.u32_DatapoolIndex,
                                         orc_MessageId.q_MessageIsTx, orc_MessageId.u32_MessageIndex,
-                                        oru32_SignalIndex, orc_OscSignal, orc_OscSignalCommon);
+                                        oru32_SignalIndex, orc_OscSignal, orc_OscSignalCommon).value();
       //Signal changed signal to the sync engine
       if (C_PuiSdUtil::h_ConvertFromSignalIndex(orc_MessageId, oru32_SignalIndex, c_Id) == C_NO_ERR)
       {
@@ -1892,7 +1895,7 @@ int32_t C_PuiSdHandlerBusLogic::SetCanSignal(const C_OscCanMessageIdentification
                         uint32_t u32_ListIndex;
                         if (C_OscCanProtocol::h_GetComListIndex(*pc_OscDataPool, orc_MessageId.u32_InterfaceIndex,
                                                                 orc_MessageId.q_MessageIsTx,
-                                                                u32_ListIndex) == C_NO_ERR)
+                                                                u32_ListIndex) == Errc::success)
                         {
                            C_PuiSdNodeDataPool & rc_UiDataPool =
                               rc_UiNode.c_UiDataPools[pc_Protocol->u32_DataPoolIndex];
@@ -1963,10 +1966,11 @@ int32_t C_PuiSdHandlerBusLogic::SetCanSignalMuxValue(const C_OscCanMessageIdenti
    if (orc_MessageId.u32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_OscNode = this->mc_CoreDefinition.c_Nodes[orc_MessageId.u32_NodeIndex];
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = rc_OscNode.SetSignalMuxValue(orc_MessageId.e_ComProtocol, orc_MessageId.u32_InterfaceIndex,
                                                 orc_MessageId.u32_DatapoolIndex,
                                                 orc_MessageId.q_MessageIsTx, orc_MessageId.u32_MessageIndex,
-                                                oru32_SignalIndex, ou16_MultiplexValue);
+                                                oru32_SignalIndex, ou16_MultiplexValue).value();
    }
    else
    {
@@ -2062,11 +2066,12 @@ int32_t C_PuiSdHandlerBusLogic::InsertCanMessage(const C_OscCanMessageIdentifica
             this->m_GetExistingMessageNames(orc_MessageId.u32_NodeIndex, orc_MessageId.u32_InterfaceIndex),
             orc_Message.c_Name, this->GetNameMaxCharLimit());
       }
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = rc_OscNode.InsertMessage(orc_MessageId.e_ComProtocol, orc_MessageId.u32_InterfaceIndex,
                                             orc_MessageId.u32_DatapoolIndex,
                                             orc_MessageId.q_MessageIsTx, orc_MessageId.u32_MessageIndex,
                                             c_AdaptedMessage,
-                                            orc_OscSignalCommons);
+                                            orc_OscSignalCommons).value();
       //Signal each new signal to the sync engine (ascending order is important)
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < orc_Message.c_Signals.size(); ++u32_ItSig)
       {
@@ -2125,7 +2130,7 @@ int32_t C_PuiSdHandlerBusLogic::DeleteCanMessage(const C_OscCanMessageIdentifica
       tgl_assert(rc_OscNode.DeleteMessage(orc_MessageId.e_ComProtocol, orc_MessageId.u32_InterfaceIndex,
                                           orc_MessageId.u32_DatapoolIndex,
                                           orc_MessageId.q_MessageIsTx,
-                                          orc_MessageId.u32_MessageIndex) == C_NO_ERR);
+                                          orc_MessageId.u32_MessageIndex) == Errc::success);
    }
    return s32_Retval;
 }
@@ -2199,12 +2204,13 @@ int32_t C_PuiSdHandlerBusLogic::InsertCanSignal(const C_OscCanMessageIdentificat
       //Get unique name
       c_OscAdaptedSignalCommon.c_Name = C_OscUtils::h_GetUniqueName(
          this->m_GetExistingSignalNames(orc_MessageId), orc_OscSignalCommon.c_Name, this->GetNameMaxCharLimit());
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = rc_OscNode.InsertSignal(orc_MessageId.e_ComProtocol, orc_MessageId.u32_InterfaceIndex,
                                            orc_MessageId.u32_DatapoolIndex,
                                            orc_MessageId.q_MessageIsTx, orc_MessageId.u32_MessageIndex,
                                            oru32_SignalIndex,
                                            orc_Signal,
-                                           c_OscAdaptedSignalCommon);
+                                           c_OscAdaptedSignalCommon).value();
 
       //Signal new signal to the sync engine
       if (C_PuiSdUtil::h_ConvertFromSignalIndex(orc_MessageId, oru32_SignalIndex, c_Id) == C_NO_ERR)
@@ -2241,7 +2247,7 @@ int32_t C_PuiSdHandlerBusLogic::InsertCanSignal(const C_OscCanMessageIdentificat
                      uint32_t u32_ListIndex;
                      if (C_OscCanProtocol::h_GetComListIndex(*pc_OscDataPool, orc_MessageId.u32_InterfaceIndex,
                                                              orc_MessageId.q_MessageIsTx,
-                                                             u32_ListIndex) == C_NO_ERR)
+                                                             u32_ListIndex) == Errc::success)
                      {
                         C_PuiSdNodeDataPool & rc_UiDataPool = rc_UiNode.c_UiDataPools[pc_Protocol->u32_DataPoolIndex];
                         if (u32_ListIndex < rc_UiDataPool.c_DataPoolLists.size())
@@ -2361,10 +2367,11 @@ int32_t C_PuiSdHandlerBusLogic::DeleteCanSignal(const C_OscCanMessageIdentificat
                                                              c_Id.u32_ListIndex, c_Id.u32_ElementIndex);
       }
 
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = rc_OscNode.DeleteSignal(orc_MessageId.e_ComProtocol, orc_MessageId.u32_InterfaceIndex,
                                            orc_MessageId.u32_DatapoolIndex,
                                            orc_MessageId.q_MessageIsTx, orc_MessageId.u32_MessageIndex,
-                                           oru32_SignalIndex);
+                                           oru32_SignalIndex).value();
       if (s32_Retval == C_NO_ERR)
       {
          const C_OscCanProtocol * const pc_Protocol = rc_OscNode.GetCanProtocolConst(orc_MessageId.e_ComProtocol,
@@ -2394,7 +2401,7 @@ int32_t C_PuiSdHandlerBusLogic::DeleteCanSignal(const C_OscCanMessageIdentificat
                      uint32_t u32_ListIndex;
                      if (C_OscCanProtocol::h_GetComListIndex(*pc_OscDataPool, orc_MessageId.u32_InterfaceIndex,
                                                              orc_MessageId.q_MessageIsTx,
-                                                             u32_ListIndex) == C_NO_ERR)
+                                                             u32_ListIndex) == Errc::success)
                      {
                         C_PuiSdNodeDataPool & rc_UiDataPool = rc_UiNode.c_UiDataPools[pc_Protocol->u32_DataPoolIndex];
                         if (u32_ListIndex < rc_UiDataPool.c_DataPoolLists.size())
@@ -2590,8 +2597,9 @@ int32_t C_PuiSdHandlerBusLogic::CheckMessageMatch(const C_OscCanMessageIdentific
                                                   const C_OscCanMessageIdentificationIndices & orc_MessageId2,
                                                   bool & orq_IsMatch, const bool oq_IgnoreMessageDirection) const
 {
+   //the core class reports std::error_code now; this class keeps the STW int32_t convention
    int32_t s32_Retval = this->mc_CoreDefinition.CheckMessageMatch(orc_MessageId1, orc_MessageId2, orq_IsMatch,
-                                                                  oq_IgnoreMessageDirection);
+                                                                  oq_IgnoreMessageDirection).value();
 
    //Check Ui part
    if ((s32_Retval == C_NO_ERR) && (orq_IsMatch == true))
@@ -3059,7 +3067,7 @@ const C_PuiSdNodeDataPoolList * C_PuiSdHandlerBusLogic::m_GetUiCanDataPoolList(c
       uint32_t u32_Index;
 
       if (C_OscCanProtocol::h_GetComListIndex(*pc_OscDataPool, oru32_InterfaceIndex, orq_MessageIsTx,
-                                              u32_Index) == C_NO_ERR)
+                                              u32_Index) == Errc::success)
       {
          const C_PuiSdNodeDataPool * const pc_UiDataPool = this->GetUiCanDataPool(oru32_NodeIndex, ore_ComType,
                                                                                   ou32_DatapoolIndex);
@@ -3124,7 +3132,7 @@ int32_t C_PuiSdHandlerBusLogic::m_InsertUiCanMessage(const C_OscCanMessageIdenti
                   uint32_t u32_ListIndex;
                   if (C_OscCanProtocol::h_GetComListIndex(*pc_OscDataPool, orc_MessageId.u32_InterfaceIndex,
                                                           orc_MessageId.q_MessageIsTx,
-                                                          u32_ListIndex) == C_NO_ERR)
+                                                          u32_ListIndex) == Errc::success)
                   {
                      C_PuiSdNodeDataPool & rc_UiDataPool = rc_UiNode.c_UiDataPools[pc_Protocol->u32_DataPoolIndex];
                      if (u32_ListIndex < rc_UiDataPool.c_DataPoolLists.size())
@@ -3252,7 +3260,7 @@ int32_t C_PuiSdHandlerBusLogic::m_DeleteUiCanMessage(const C_OscCanMessageIdenti
                   uint32_t u32_ListIndex;
                   if (C_OscCanProtocol::h_GetComListIndex(*pc_OscDataPool, orc_MessageId.u32_InterfaceIndex,
                                                           orc_MessageId.q_MessageIsTx,
-                                                          u32_ListIndex) == C_NO_ERR)
+                                                          u32_ListIndex) == Errc::success)
                   {
                      C_PuiSdNodeDataPool & rc_UiDataPool = rc_UiNode.c_UiDataPools[pc_Protocol->u32_DataPoolIndex];
                      if (u32_ListIndex < rc_UiDataPool.c_DataPoolLists.size())

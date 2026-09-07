@@ -14,6 +14,7 @@
 #include "C_SclStringCompat.hpp"
 
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscHalcMagicianUtil.hpp"
@@ -390,7 +391,7 @@ int32_t C_PuiSdUtil::h_ConvertFromSignalIndex(const C_OscCanMessageIdentificatio
       //List
       if (((C_OscCanProtocol::h_GetComListIndex(*pc_DataPool, orc_MessageId.u32_InterfaceIndex,
                                                 orc_MessageId.q_MessageIsTx,
-                                                orc_ElementId.u32_ListIndex) == C_NO_ERR) && (pc_Message != nullptr)) &&
+                                                orc_ElementId.u32_ListIndex) == Errc::success) && (pc_Message != nullptr)) &&
           (ou32_SignalIndex < pc_Message->c_Signals.size()))
       {
          const C_OscCanSignal & rc_Signal = pc_Message->c_Signals[ou32_SignalIndex];

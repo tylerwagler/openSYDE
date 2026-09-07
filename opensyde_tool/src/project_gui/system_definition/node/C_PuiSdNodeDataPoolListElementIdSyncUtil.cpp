@@ -14,6 +14,7 @@
 
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscNodeDataPoolContentUtil.hpp"
@@ -460,7 +461,7 @@ void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeDataPoolListElementRa
                                                                        orc_MaxElement,
                                                                        orc_Value, e_Unused,
                                                                        C_OscNodeDataPoolContentUtil::eLEAVE_VALUE) ==
-                 C_NO_ERR);
+                 Errc::success);
    }
 }
 

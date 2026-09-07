@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <iostream>
+#include <system_error>
 #include <vector>
 #include "stwtypes.hpp"
 #include <string>
@@ -39,6 +40,8 @@ public:
    void RecalculateAddress(void);
    void MoveElement(const uint32_t & oru32_Start, const uint32_t & oru32_Target);
    uint32_t GetNumBytesUsed(void) const;
+   ///< Returns a byte count, not a status: negative means the list overflows its NvM size.
+   ///< Intentionally left on int32_t during the std::error_code migration.
    int32_t GetFreeBytes(void) const;
    void CheckErrorDataSet(const uint32_t & oru32_DataSetIndex, bool * const opq_NameConflict,
                           bool * const opq_NameInvalid) const;
@@ -52,8 +55,8 @@ public:
    void HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
                                std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
 
-   int32_t SetCrcFromBigEndianBlob(const std::vector<uint8_t> & orc_Data);
-   int32_t SetCrcFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data);
+   std::error_code SetCrcFromBigEndianBlob(const std::vector<uint8_t> & orc_Data);
+   std::error_code SetCrcFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data);
    void GetCrcAsBigEndianBlob(std::vector<uint8_t> & orc_Data) const;
    void GetCrcAsLittleEndianBlob(std::vector<uint8_t> & orc_Data) const;
 

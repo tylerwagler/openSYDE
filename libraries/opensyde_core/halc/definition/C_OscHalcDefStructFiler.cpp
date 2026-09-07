@@ -1283,10 +1283,10 @@ std::error_code C_OscHalcDefStructFiler::mh_LoadDataElement(
       {
          C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_Tmp;
          //Check if value in range
-         c_Retval = make_error_code_from_stw(
+         c_Retval =
             C_OscNodeDataPoolContentUtil::h_SetValueInMinMaxRange(orc_Element.c_MinValue, orc_Element.c_MaxValue,
                                                                   orc_Element.c_InitialValue, e_Tmp,
-                                                                  C_OscNodeDataPoolContentUtil::eLEAVE_VALUE));
+                                                                  C_OscNodeDataPoolContentUtil::eLEAVE_VALUE);
          if (c_Retval)
          {
             orc_XmlParser.ReportErrorForAttributeContentStartingWithXmlContext("initial-value",

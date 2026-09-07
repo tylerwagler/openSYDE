@@ -1214,8 +1214,9 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationPath(const uint32_t ou32_ViewInd
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = rc_View.SetNodeUpdateInformationPath(ou32_NodeIndex, ou32_Index,
-                                                        orc_Value.toStdString().c_str(), oe_Type);
+                                                        orc_Value.toStdString().c_str(), oe_Type).value();
    }
    else
    {
@@ -1246,7 +1247,8 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationParamInfo(const uint32_t ou32_Vi
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationParamInfo(ou32_NodeIndex, ou32_Index, orc_Value);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.SetNodeUpdateInformationParamInfo(ou32_NodeIndex, ou32_Index, orc_Value).value();
    }
    else
    {
@@ -1275,7 +1277,8 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationPemFilePath(ou32_NodeIndex, orc_Value.toStdString().c_str());
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.SetNodeUpdateInformationPemFilePath(ou32_NodeIndex, orc_Value.toStdString().c_str()).value();
    }
    else
    {
@@ -1308,7 +1311,8 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationSkipUpdateOfPath(const uint32_t 
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfPath(ou32_NodeIndex, ou32_Index, oq_SkipFile, oe_Type);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfPath(ou32_NodeIndex, ou32_Index, oq_SkipFile, oe_Type).value();
    }
    else
    {
@@ -1339,7 +1343,8 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationSkipUpdateOfParamInfo(const uint
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfParamInfo(ou32_NodeIndex, ou32_Index, oq_SkipFile);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfParamInfo(ou32_NodeIndex, ou32_Index, oq_SkipFile).value();
    }
    else
    {
@@ -1369,7 +1374,8 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationSkipUpdateOfPemFile(const uint32
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfPemFile(ou32_NodeIndex, oq_SkipFile);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.SetNodeUpdateInformationSkipUpdateOfPemFile(ou32_NodeIndex, oq_SkipFile).value();
    }
    else
    {
@@ -1401,9 +1407,10 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationStates(const uint32_t ou32_ViewI
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       s32_Retval = rc_View.SetNodeUpdateInformationStates(ou32_NodeIndex, oe_StateSecureAuthentication,
                                                           oe_StateDebugger,
-                                                          oe_StateTrafficEncryption);
+                                                          oe_StateTrafficEncryption).value();
    }
    else
    {
@@ -1438,8 +1445,9 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationParamInfoContent(const uint32_t 
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
       s32_Retval =
+         //the core class reports std::error_code now; this class keeps the STW int32_t convention
          rc_View.SetNodeUpdateInformationParamInfoContent(ou32_NodeIndex, ou32_Index,
-                                                          orc_FilePath.toStdString().c_str(), ou32_LastKnownCrc);
+                                                          orc_FilePath.toStdString().c_str(), ou32_LastKnownCrc).value();
    }
    else
    {
@@ -1581,7 +1589,8 @@ int32_t C_PuiSvHandler::AddNodeUpdateInformationPath(const uint32_t ou32_ViewInd
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.AddNodeUpdateInformationPath(ou32_NodeIndex, orc_Value.toStdString().c_str(), oe_Type);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.AddNodeUpdateInformationPath(ou32_NodeIndex, orc_Value.toStdString().c_str(), oe_Type).value();
    }
    else
    {
@@ -1610,7 +1619,8 @@ int32_t C_PuiSvHandler::AddNodeUpdateInformationParamInfo(const uint32_t ou32_Vi
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.AddNodeUpdateInformationParamInfo(ou32_NodeIndex, orc_Value);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.AddNodeUpdateInformationParamInfo(ou32_NodeIndex, orc_Value).value();
    }
    else
    {
@@ -2058,7 +2068,8 @@ int32_t C_PuiSvHandler::RemoveNodeUpdateInformationPath(const uint32_t ou32_View
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.RemoveNodeUpdateInformationPath(ou32_NodeIndex, ou32_Index, oe_Type);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.RemoveNodeUpdateInformationPath(ou32_NodeIndex, ou32_Index, oe_Type).value();
    }
    else
    {
@@ -2087,7 +2098,8 @@ int32_t C_PuiSvHandler::RemoveNodeUpdateInformationParamInfo(const uint32_t ou32
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.RemoveNodeUpdateInformationParamInfo(ou32_NodeIndex, ou32_Index);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.RemoveNodeUpdateInformationParamInfo(ou32_NodeIndex, ou32_Index).value();
    }
    else
    {
@@ -2115,7 +2127,8 @@ int32_t C_PuiSvHandler::RemoveNodeUpdateInformationPemFilePath(const uint32_t ou
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.RemoveNodeUpdateInformationPemFilePath(ou32_NodeIndex);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.RemoveNodeUpdateInformationPemFilePath(ou32_NodeIndex).value();
    }
    else
    {
@@ -2145,7 +2158,8 @@ int32_t C_PuiSvHandler::ClearNodeUpdateInformationAsAppropriate(const uint32_t o
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.ClearNodeUpdateInformationAsAppropriate(ou32_NodeIndex, oe_Type);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.ClearNodeUpdateInformationAsAppropriate(ou32_NodeIndex, oe_Type).value();
    }
    else
    {
@@ -2173,7 +2187,8 @@ int32_t C_PuiSvHandler::ClearNodeUpdateInformationParamPaths(const uint32_t ou32
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.ClearNodeUpdateInformationParamPaths(ou32_NodeIndex);
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
+      s32_Retval = rc_View.ClearNodeUpdateInformationParamPaths(ou32_NodeIndex).value();
    }
    else
    {

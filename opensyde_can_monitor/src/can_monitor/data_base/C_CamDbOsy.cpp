@@ -14,6 +14,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_CamDbOsy.hpp"
 #include "C_CamGenSigUtil.hpp"
 
@@ -118,7 +119,7 @@ void C_CamDbOsy::FindAllMessages(void)
                      //Id
                      c_CurId.c_Id.u32_InterfaceIndex = c_InterfaceIndexes[u32_ItFoundItem];
                      if ((C_OscCanProtocol::h_GetComListIndex(rc_Datapool, c_InterfaceIndexes[u32_ItFoundItem], false,
-                                                              c_CurListId.c_Id.u32_ListIndex) == C_NO_ERR) &&
+                                                              c_CurListId.c_Id.u32_ListIndex) == Errc::success) &&
                          (c_CurListId.c_Id.u32_ListIndex < rc_Datapool.c_Lists.size()))
                      {
                         //Each Rx message
@@ -142,7 +143,7 @@ void C_CamDbOsy::FindAllMessages(void)
                         }
                      }
                      if ((C_OscCanProtocol::h_GetComListIndex(rc_Datapool, c_InterfaceIndexes[u32_ItFoundItem], true,
-                                                              c_CurListId.c_Id.u32_ListIndex) == C_NO_ERR) &&
+                                                              c_CurListId.c_Id.u32_ListIndex) == Errc::success) &&
                          (c_CurListId.c_Id.u32_ListIndex < rc_Datapool.c_Lists.size()))
                      {
                         //Each Tx message
@@ -319,7 +320,7 @@ int32_t C_CamDbOsy::FindMessage(const QString & orc_Message)
                            c_CurId.c_Id.u32_MessageIndex = u32_ItMsg;
                            if ((C_OscCanProtocol::h_GetComListIndex(rc_Datapool, c_InterfaceIndexes[u32_ItFoundItem],
                                                                     c_CurId.c_Id.q_MessageIsTx,
-                                                                    c_CurListId.c_Id.u32_ListIndex) == C_NO_ERR) &&
+                                                                    c_CurListId.c_Id.u32_ListIndex) == Errc::success) &&
                                (c_CurListId.c_Id.u32_ListIndex < rc_Datapool.c_Lists.size()))
                            {
                               const uint32_t u32_Hash =
@@ -345,7 +346,7 @@ int32_t C_CamDbOsy::FindMessage(const QString & orc_Message)
                            c_CurId.c_Id.u32_MessageIndex = u32_ItMsg;
                            if ((C_OscCanProtocol::h_GetComListIndex(rc_Datapool, c_InterfaceIndexes[u32_ItFoundItem],
                                                                     c_CurId.c_Id.q_MessageIsTx,
-                                                                    c_CurListId.c_Id.u32_ListIndex) == C_NO_ERR) &&
+                                                                    c_CurListId.c_Id.u32_ListIndex) == Errc::success) &&
                                (c_CurListId.c_Id.u32_ListIndex < rc_Datapool.c_Lists.size()))
                            {
                               const uint32_t u32_Hash =

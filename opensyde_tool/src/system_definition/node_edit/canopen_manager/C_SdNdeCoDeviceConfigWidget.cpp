@@ -356,9 +356,10 @@ void C_SdNdeCoDeviceConfigWidget::m_CheckCoNodeId(void) const
    {
       bool q_NodeIdInvalid;
       bool q_NodeIdConflict;
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       const int32_t s32_FuncReturn = pc_CanOpenManagerInfo->CheckErrorDeviceCoNodeId(this->mc_DeviceInterfaceId,
                                                                                      &q_NodeIdConflict,
-                                                                                     &q_NodeIdInvalid, true);
+                                                                                     &q_NodeIdInvalid, true).value();
 
       tgl_assert(s32_FuncReturn == C_NO_ERR);
       if (s32_FuncReturn == C_NO_ERR)
@@ -467,8 +468,9 @@ void C_SdNdeCoDeviceConfigWidget::m_CheckHeartbeatConsumerTime(void) const
    if (pc_CanOpenManagerInfo != nullptr)
    {
       bool q_TimeError;
+      //the core class reports std::error_code now; this class keeps the STW int32_t convention
       const int32_t s32_FuncReturn = pc_CanOpenManagerInfo->CheckErrorDeviceHeartbeat(this->mc_DeviceInterfaceId,
-                                                                                      &q_TimeError);
+                                                                                      &q_TimeError).value();
 
       tgl_assert(s32_FuncReturn == C_NO_ERR);
       if (s32_FuncReturn == C_NO_ERR)

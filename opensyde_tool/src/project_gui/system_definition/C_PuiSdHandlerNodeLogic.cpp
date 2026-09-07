@@ -15,6 +15,7 @@
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SclStringCompat.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -712,7 +713,7 @@ void C_PuiSdHandlerNodeLogic::RemoveNode(const uint32_t ou32_NodeIndex)
       this->m_HandleSyncNodeAboutToBeDeleted(c_AllNodeIndexToRemove[static_cast<uint32_t>(s32_NodeIndexCounter)]);
    }
 
-   tgl_assert(this->mc_CoreDefinition.DeleteNode(ou32_NodeIndex) == C_NO_ERR);
+   tgl_assert(this->mc_CoreDefinition.DeleteNode(ou32_NodeIndex) == Errc::success);
 
    for (s32_NodeIndexCounter = (static_cast<int32_t>(c_AllNodeIndexToRemove.size()) - 1); s32_NodeIndexCounter >= 0;
         --s32_NodeIndexCounter)
@@ -768,7 +769,7 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeConflict(const uint32_t & oru32_NodeIndex
                                                  &q_CommMinSignalCountInvalid,
                                                  &q_CommMaxSignalCountInvalid, &q_CoPdoCountInvalid,
                                                  &q_CoNodeIdInvalid, &q_CoHeartbeatInvalid,
-                                                 true, nullptr, nullptr, nullptr, nullptr, nullptr) == C_NO_ERR)
+                                                 true, nullptr, nullptr, nullptr, nullptr, nullptr) == Errc::success)
       {
          const bool q_NvmSizeConflict = this->CheckNodeNvmDataPoolsSizeConflict(oru32_NodeIndex);
          if ((q_NameConflict == true) || (q_NodeIdInvalid == true) || (q_IpInvalid == true) ||
@@ -815,7 +816,7 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeConflict(const uint32_t & oru32_NodeIndex
 
       if (this->mc_CoreDefinition.CheckErrorNode(oru32_NodeIndex, &q_NameConflict, nullptr, &q_NodeIdInvalid, &q_IpInvalid,
                                                  nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-                                                 nullptr, true, nullptr, nullptr, nullptr, nullptr, nullptr) == C_NO_ERR)
+                                                 nullptr, true, nullptr, nullptr, nullptr, nullptr, nullptr) == Errc::success)
       {
          if ((q_NameConflict == true) || (q_NodeIdInvalid == true) || (q_IpInvalid == true))
          {
@@ -1111,7 +1112,8 @@ std::vector<uint32_t> C_PuiSdHandlerNodeLogic::GetAllNodeGroupIndicesUsingNodeIn
 int32_t C_PuiSdHandlerNodeLogic::GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex,
                                                                 uint32_t & oru32_NodeSquadIndex) const
 {
-   return this->mc_CoreDefinition.GetNodeSquadIndexWithNodeIndex(ou32_NodeIndex, oru32_NodeSquadIndex);
+   //the core class reports std::error_code now; this class keeps the STW int32_t convention
+   return this->mc_CoreDefinition.GetNodeSquadIndexWithNodeIndex(ou32_NodeIndex, oru32_NodeSquadIndex).value();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1138,7 +1140,7 @@ void C_PuiSdHandlerNodeLogic::GetNodeToNodeSquadMapping(std::vector<int32_t> & o
    for (u32_NodeCounter = 0U; u32_NodeCounter < this->mc_CoreDefinition.c_Nodes.size(); ++u32_NodeCounter)
    {
       uint32_t u32_NodeSquadIndex = 0U;
-      if (this->mc_CoreDefinition.GetNodeSquadIndexWithNodeIndex(u32_NodeCounter, u32_NodeSquadIndex) == C_NO_ERR)
+      if (this->mc_CoreDefinition.GetNodeSquadIndexWithNodeIndex(u32_NodeCounter, u32_NodeSquadIndex) == Errc::success)
       {
          // Node is part of an node squad
          orc_Mapping[u32_NodeCounter] = static_cast<int32_t>(u32_NodeSquadIndex);
@@ -1649,7 +1651,8 @@ int32_t C_PuiSdHandlerNodeLogic::RemoveDataPool(const uint32_t & oru32_NodeIndex
          //Handle COMM
          m_CleanUpComDataPool(oru32_NodeIndex, oru32_DataPoolIndex);
          rc_UiNode.c_UiDataPools.erase(rc_UiNode.c_UiDataPools.begin() + oru32_DataPoolIndex);
-         s32_Retval = rc_OscNode.DeleteDataPool(oru32_DataPoolIndex);
+         //the core class reports std::error_code now; this class keeps the STW int32_t convention
+         s32_Retval = rc_OscNode.DeleteDataPool(oru32_DataPoolIndex).value();
          //Handle NVM
          rc_OscNode.RecalculateAddress();
 
@@ -2050,7 +2053,8 @@ int32_t C_PuiSdHandlerNodeLogic::MoveDataPool(const uint32_t ou32_NodeIndex, con
           (ou32_TargetIndex < rc_UiNode.c_UiDataPools.size()))
       {
          // adapt core node
-         s32_Retval = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex].MoveDataPool(ou32_SourceIndex, ou32_TargetIndex);
+         //the core class reports std::error_code now; this class keeps the STW int32_t convention
+         s32_Retval = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex].MoveDataPool(ou32_SourceIndex, ou32_TargetIndex).value();
 
          // adapt ui node
          if (s32_Retval == C_NO_ERR)

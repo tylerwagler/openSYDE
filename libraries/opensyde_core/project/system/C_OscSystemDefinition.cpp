@@ -17,7 +17,10 @@
 #include <algorithm>
 
 #include "stwtypes.hpp"
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
 #include "C_OscSystemDefinition.hpp"
 #include "TglUtils.hpp"
@@ -99,7 +102,7 @@ void C_OscSystemDefinition::CalcHash(uint32_t & oru32_HashValue) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinition::AddBus(const C_OscSystemBus & orc_Bus)
 {
-   tgl_assert(this->InsertBus(static_cast<uint32_t>(this->c_Buses.size()), orc_Bus) == C_NO_ERR);
+   tgl_assert(!this->InsertBus(static_cast<uint32_t>(this->c_Buses.size()), orc_Bus));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -109,13 +112,13 @@ void C_OscSystemDefinition::AddBus(const C_OscSystemBus & orc_Bus)
    \param[in]  orc_Bus        Bus value
 
    \return
-   C_NO_ERR Done
-   C_RANGE  Bus index invalid
+   Errc::success Done
+   Errc::range   Bus index invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::InsertBus(const uint32_t ou32_BusIndex, const C_OscSystemBus & orc_Bus)
+std::error_code C_OscSystemDefinition::InsertBus(const uint32_t ou32_BusIndex, const C_OscSystemBus & orc_Bus)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    //Smaller and equal because append is also valid
    if (ou32_BusIndex <= this->c_Buses.size())
@@ -146,9 +149,9 @@ int32_t C_OscSystemDefinition::InsertBus(const uint32_t ou32_BusIndex, const C_O
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -157,13 +160,13 @@ int32_t C_OscSystemDefinition::InsertBus(const uint32_t ou32_BusIndex, const C_O
    \param[in]  ou32_BusIndex  Bus index
 
    \return
-   C_NO_ERR Done
-   C_RANGE  Bus index invalid
+   Errc::success Done
+   Errc::range   Bus index invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::DeleteBus(const uint32_t ou32_BusIndex)
+std::error_code C_OscSystemDefinition::DeleteBus(const uint32_t ou32_BusIndex)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_BusIndex < this->c_Buses.size())
    {
@@ -198,9 +201,9 @@ int32_t C_OscSystemDefinition::DeleteBus(const uint32_t ou32_BusIndex)
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -211,14 +214,14 @@ int32_t C_OscSystemDefinition::DeleteBus(const uint32_t ou32_BusIndex)
    \param[in]  ou8_Interface     Interface number to use
 
    \return
-   C_NO_ERR Done
-   C_RANGE  Either node or bus or both do not exist
+   Errc::success Done
+   Errc::range   Either node or bus or both do not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::AddConnection(const uint32_t ou32_NodeIndex, const uint32_t ou32_BusIndex,
-                                             const uint8_t ou8_Interface)
+std::error_code C_OscSystemDefinition::AddConnection(const uint32_t ou32_NodeIndex, const uint32_t ou32_BusIndex,
+                                                     const uint8_t ou8_Interface)
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if ((ou32_NodeIndex < this->c_Nodes.size()) && (ou32_BusIndex < this->c_Buses.size()))
    {
@@ -235,10 +238,10 @@ int32_t C_OscSystemDefinition::AddConnection(const uint32_t ou32_NodeIndex, cons
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -419,13 +422,13 @@ bool C_OscSystemDefinition::CheckBusIdAvailable(const uint8_t ou8_BusId,
    \param[out]  oru8_BusId    Bus id result value
 
    \return
-   C_NO_ERR Valid bus id found
-   C_NOACT  No valid bus id found
+   Errc::success Valid bus id found
+   Errc::noact   No valid bus id found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::GetNextFreeBusId(uint8_t & oru8_BusId) const
+std::error_code C_OscSystemDefinition::GetNextFreeBusId(uint8_t & oru8_BusId) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
    bool q_Continue = true;
 
    for (oru8_BusId = 0; (oru8_BusId <= 15) && (q_Continue == true); ++oru8_BusId)
@@ -440,9 +443,9 @@ int32_t C_OscSystemDefinition::GetNextFreeBusId(uint8_t & oru8_BusId) const
    //Check result
    if (q_Continue == true)
    {
-      s32_Retval = C_NOACT;
+      c_Retval = Errc::noact;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -469,27 +472,29 @@ int32_t C_OscSystemDefinition::GetNextFreeBusId(uint8_t & oru8_BusId) const
    \param[in,out]  opc_InvalidProtocolTypes        Optional storage for invalid COMM protocol types
 
    \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
+   Errc::success Operation success
+   Errc::range   Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::CheckErrorNode(const uint32_t ou32_NodeIndex, bool * const opq_NameConflict,
-                                              bool * const opq_NameInvalid, bool * const opq_NodeIdInvalid,
-                                              bool * const opq_IpInvalid, bool * const opq_DataPoolsInvalid,
-                                              bool * const opq_ApplicationsInvalid, bool * const opq_DomainsInvalid,
-                                              bool * const opq_CommMinSignalCountInvalid,
-                                              bool * const opq_CommMaxSignalCountInvalid,
-                                              bool * const opq_CoPdoCountInvalid, bool * const opq_CoNodeIdInvalid,
-                                              bool * const opq_CoHearbeatTimeInvalid,
-                                              const bool & orq_AllowComDataPoolException,
-                                              std::vector<uint32_t> * const opc_InvalidInterfaceIndices,
-                                              std::vector<uint32_t> * const opc_InvalidDataPoolIndices,
-                                              std::vector<uint32_t> * const opc_InvalidApplicationIndices,
-                                              std::vector<uint32_t> * const opc_InvalidDomainIndices,
-                                              std::vector<C_OscCanProtocol::E_Type> * const opc_InvalidProtocolTypes)
+std::error_code C_OscSystemDefinition::CheckErrorNode(const uint32_t ou32_NodeIndex, bool * const opq_NameConflict,
+                                                      bool * const opq_NameInvalid, bool * const opq_NodeIdInvalid,
+                                                      bool * const opq_IpInvalid, bool * const opq_DataPoolsInvalid,
+                                                      bool * const opq_ApplicationsInvalid,
+                                                      bool * const opq_DomainsInvalid,
+                                                      bool * const opq_CommMinSignalCountInvalid,
+                                                      bool * const opq_CommMaxSignalCountInvalid,
+                                                      bool * const opq_CoPdoCountInvalid,
+                                                      bool * const opq_CoNodeIdInvalid,
+                                                      bool * const opq_CoHearbeatTimeInvalid,
+                                                      const bool & orq_AllowComDataPoolException,
+                                                      std::vector<uint32_t> * const opc_InvalidInterfaceIndices,
+                                                      std::vector<uint32_t> * const opc_InvalidDataPoolIndices,
+                                                      std::vector<uint32_t> * const opc_InvalidApplicationIndices,
+                                                      std::vector<uint32_t> * const opc_InvalidDomainIndices,
+                                                      std::vector<C_OscCanProtocol::E_Type> * const opc_InvalidProtocolTypes)
 const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_NodeIndex < this->c_Nodes.size())
    {
@@ -796,7 +801,7 @@ const
          for (uint32_t u32_ItApp = 0; u32_ItApp < rc_CheckedNode.c_Applications.size(); ++u32_ItApp)
          {
             bool q_Valid;
-            if (rc_CheckedNode.CheckApplicationProcessIdValid(u32_ItApp, q_Valid) == C_NO_ERR)
+            if (rc_CheckedNode.CheckApplicationProcessIdValid(u32_ItApp, q_Valid) == Errc::success)
             {
                if (q_Valid == false)
                {
@@ -940,10 +945,10 @@ const
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
 
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -956,15 +961,15 @@ const
    \param[out]  opq_DataPoolsInvalid   An error found for a data pool
 
    \return
-   C_NO_ERR Done
-   C_RANGE  Bus does not exist
+   Errc::success Done
+   Errc::range   Bus does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool * const opq_NameConflict,
-                                             bool * const opq_NameInvalid, bool * const opq_IdInvalid,
-                                             bool * const opq_DataPoolsInvalid) const
+std::error_code C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool * const opq_NameConflict,
+                                                     bool * const opq_NameInvalid, bool * const opq_IdInvalid,
+                                                     bool * const opq_DataPoolsInvalid) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (opq_NameConflict != nullptr)
    {
@@ -1026,10 +1031,10 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
       else
       {
          *opq_IdInvalid = false;
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
-   if ((opq_DataPoolsInvalid != nullptr) && (s32_Retval == C_NO_ERR))
+   if ((opq_DataPoolsInvalid != nullptr) && (!c_Retval))
    {
       std::vector<uint32_t> c_NodeIndexes;
       std::vector<uint32_t> c_InterfaceIndexes;
@@ -1038,7 +1043,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
       if (c_NodeIndexes.size() == c_InterfaceIndexes.size())
       {
          for (uint32_t u32_ItNode = 0U;
-              ((u32_ItNode < c_NodeIndexes.size()) && (*opq_DataPoolsInvalid == false)) && (s32_Retval == C_NO_ERR);
+              ((u32_ItNode < c_NodeIndexes.size()) && (*opq_DataPoolsInvalid == false)) && (!c_Retval);
               ++u32_ItNode)
          {
             if (c_NodeIndexes[u32_ItNode] < this->c_Nodes.size())
@@ -1055,7 +1060,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
                   {
                      for (uint32_t u32_ItProtocol = 0;
                           ((u32_ItProtocol < rc_Node.c_ComProtocols.size()) && (*opq_DataPoolsInvalid == false)) &&
-                          (s32_Retval == C_NO_ERR);
+                          (!c_Retval);
                           ++u32_ItProtocol)
                      {
                         const C_OscCanProtocol & rc_Protocol = rc_Node.c_ComProtocols[u32_ItProtocol];
@@ -1125,19 +1130,19 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
                                        for (uint32_t u32_ItMessage = 0;
                                             ((u32_ItMessage < rc_MessageContainer.c_TxMessages.size()) &&
                                              (q_MessageValid == true)) &&
-                                            (s32_Retval == C_NO_ERR);
+                                            (!c_Retval);
                                             ++u32_ItMessage)
                                        {
                                           c_MessageId.u32_MessageIndex = u32_ItMessage;
                                           const C_OscCanMessage & rc_Message =
                                              rc_MessageContainer.c_TxMessages[u32_ItMessage];
                                           //Name
-                                          s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name,
+                                          c_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name,
                                                                                  q_MessageValid, &c_MessageId);
                                           //Id
-                                          if ((s32_Retval == C_NO_ERR) && (q_MessageValid == true))
+                                          if ((!c_Retval) && (q_MessageValid == true))
                                           {
-                                             s32_Retval = this->CheckMessageIdBus(ou32_BusIndex,
+                                             c_Retval = this->CheckMessageIdBus(ou32_BusIndex,
                                                                                   C_OscCanMessageUniqueId(rc_Message.
                                                                                                           u32_CanId,
                                                                                                           rc_Message.
@@ -1150,18 +1155,18 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
                                        for (uint32_t u32_ItMessage = 0;
                                             ((u32_ItMessage < rc_MessageContainer.c_RxMessages.size()) &&
                                              (q_MessageValid == true)) &&
-                                            (s32_Retval == C_NO_ERR);
+                                            (!c_Retval);
                                             ++u32_ItMessage)
                                        {
                                           const C_OscCanMessage & rc_Message =
                                              rc_MessageContainer.c_RxMessages[u32_ItMessage];
                                           //Name
-                                          s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name,
+                                          c_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name,
                                                                                  q_MessageValid, &c_MessageId);
                                           //Id
-                                          if ((s32_Retval == C_NO_ERR) && (q_MessageValid == true))
+                                          if ((!c_Retval) && (q_MessageValid == true))
                                           {
-                                             s32_Retval = this->CheckMessageIdBus(ou32_BusIndex,
+                                             c_Retval = this->CheckMessageIdBus(ou32_BusIndex,
                                                                                   C_OscCanMessageUniqueId(rc_Message.
                                                                                                           u32_CanId,
                                                                                                           rc_Message.
@@ -1185,7 +1190,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1198,16 +1203,17 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
                                  (Use-case: skip current message to avoid conflict with itself)
 
    \return
-   C_NO_ERR Done
-   C_RANGE  Bus does not exist
+   Errc::success Done
+   Errc::range   Bus does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::CheckMessageIdBus(const uint32_t ou32_BusIndex,
-                                                 const C_OscCanMessageUniqueId & orc_MessageId, bool & orq_Valid,
-                                                 const C_OscCanMessageIdentificationIndices * const opc_SkipMessage)
+std::error_code C_OscSystemDefinition::CheckMessageIdBus(const uint32_t ou32_BusIndex,
+                                                         const C_OscCanMessageUniqueId & orc_MessageId,
+                                                         bool & orq_Valid,
+                                                         const C_OscCanMessageIdentificationIndices * const opc_SkipMessage)
 const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_BusIndex < this->c_Buses.size())
    {
@@ -1250,14 +1256,14 @@ const
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1270,16 +1276,16 @@ const
                                  (Use-case: skip current message to avoid conflict with itself)
 
    \return
-   C_NO_ERR Done
-   C_RANGE  Bus does not exist
+   Errc::success Done
+   Errc::range   Bus does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::CheckMessageNameBus(const uint32_t ou32_BusIndex, const std::string & orc_MessageName,
-                                                   bool & orq_Valid,
-                                                   const C_OscCanMessageIdentificationIndices * const opc_SkipMessage)
+std::error_code C_OscSystemDefinition::CheckMessageNameBus(const uint32_t ou32_BusIndex,
+                                                           const std::string & orc_MessageName, bool & orq_Valid,
+                                                           const C_OscCanMessageIdentificationIndices * const opc_SkipMessage)
 const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    if (ou32_BusIndex < this->c_Buses.size())
    {
@@ -1322,14 +1328,14 @@ const
       }
       else
       {
-         s32_Retval = C_RANGE;
+         c_Retval = Errc::range;
       }
    }
    else
    {
-      s32_Retval = C_RANGE;
+      c_Retval = Errc::range;
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1341,15 +1347,15 @@ const
    \param[in]   oq_IgnoreMessageDirection    Flag to compare messages without message direction check
 
    \return
-   C_NO_ERR Done
-   C_RANGE  Nodes or Datapools or Lists or Messages do not exist
+   Errc::success Done
+   Errc::range   Nodes or Datapools or Lists or Messages do not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::CheckMessageMatch(const C_OscCanMessageIdentificationIndices & orc_MessageId1,
-                                                 const C_OscCanMessageIdentificationIndices & orc_MessageId2,
-                                                 bool & orq_IsMatch, const bool oq_IgnoreMessageDirection) const
+std::error_code C_OscSystemDefinition::CheckMessageMatch(const C_OscCanMessageIdentificationIndices & orc_MessageId1,
+                                                         const C_OscCanMessageIdentificationIndices & orc_MessageId2,
+                                                         bool & orq_IsMatch, const bool oq_IgnoreMessageDirection) const
 {
-   int32_t s32_Retval = C_NO_ERR;
+   std::error_code c_Retval = Errc::success;
 
    orq_IsMatch = true;
    //Compare tx first
@@ -1537,26 +1543,26 @@ int32_t C_OscSystemDefinition::CheckMessageMatch(const C_OscCanMessageIdentifica
                   }
                   else
                   {
-                     s32_Retval = C_RANGE;
+                     c_Retval = Errc::range;
                   }
                }
                else
                {
-                  s32_Retval = C_RANGE;
+                  c_Retval = Errc::range;
                }
             }
             else
             {
-               s32_Retval = C_RANGE;
+               c_Retval = Errc::range;
             }
          }
          else
          {
-            s32_Retval = C_RANGE;
+            c_Retval = Errc::range;
          }
       }
    }
-   return s32_Retval;
+   return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1712,13 +1718,13 @@ void C_OscSystemDefinition::AddNodeSquad(std::vector<C_OscNode> & orc_Nodes,
    \param[in]  ou32_NodeIndex    Node index (0 -> first node)
 
    \return
-   C_NO_ERR Done
-   C_RANGE  Node index invalid
+   Errc::success Done
+   Errc::range   Node index invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::DeleteNode(const uint32_t ou32_NodeIndex)
+std::error_code C_OscSystemDefinition::DeleteNode(const uint32_t ou32_NodeIndex)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->c_Nodes.size())
    {
@@ -1727,11 +1733,11 @@ int32_t C_OscSystemDefinition::DeleteNode(const uint32_t ou32_NodeIndex)
       int32_t s32_NodeIndexToDeleteCounter;
 
       std::vector<uint32_t> c_AllNodeIndexToRemove;
-      const int32_t s32_ReturnSquadNode = this->GetNodeSquadIndexWithNodeIndex(
+      const std::error_code c_ReturnSquadNode = this->GetNodeSquadIndexWithNodeIndex(
          ou32_NodeIndex,
          u32_SquadNodeIndexToDelete);
 
-      if (s32_ReturnSquadNode == C_NO_ERR)
+      if (!c_ReturnSquadNode)
       {
          // Get all node indexes of all sub nodes of the node squad
          c_AllNodeIndexToRemove = this->c_NodeSquads[u32_SquadNodeIndexToDelete].c_SubNodeIndexes;
@@ -1757,7 +1763,7 @@ int32_t C_OscSystemDefinition::DeleteNode(const uint32_t ou32_NodeIndex)
          for (u32_NodeSquadCounter = 0U; u32_NodeSquadCounter < this->c_NodeSquads.size(); ++u32_NodeSquadCounter)
          {
             // No adaption of the node squad which will be deleted necessary
-            if ((s32_ReturnSquadNode != C_NO_ERR) ||
+            if ((c_ReturnSquadNode) ||
                 (u32_NodeSquadCounter != u32_SquadNodeIndexToDelete))
             {
                uint32_t u32_NodexIndexToSyncCounter;
@@ -1777,16 +1783,16 @@ int32_t C_OscSystemDefinition::DeleteNode(const uint32_t ou32_NodeIndex)
          }
       }
 
-      if (s32_ReturnSquadNode == C_NO_ERR)
+      if (!c_ReturnSquadNode)
       {
          // Remove the node squad if the node to delete is part of a node squad
          this->c_NodeSquads.erase(this->c_NodeSquads.begin() + u32_SquadNodeIndexToDelete);
       }
 
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1798,24 +1804,24 @@ int32_t C_OscSystemDefinition::DeleteNode(const uint32_t ou32_NodeIndex)
    \param[in]  ou32_NodeIndex    Index of node which gets a new name
    \param[in]  orc_NodeName      New name of node
 
-   \retval   C_NO_ERR   Node squad with specific sub node with node index found
-   \retval   C_RANGE    No node squad found
+   \retval   Errc::success Node squad with specific sub node with node index found
+   \retval   Errc::range   No node squad found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::SetNodeName(const uint32_t ou32_NodeIndex, const std::string & orc_NodeName)
+std::error_code C_OscSystemDefinition::SetNodeName(const uint32_t ou32_NodeIndex, const std::string & orc_NodeName)
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (ou32_NodeIndex < this->c_Nodes.size())
    {
       uint32_t u32_SquadIndex = 0U;
-      const int32_t s32_SquadReturn = this->GetNodeSquadIndexWithNodeIndex(ou32_NodeIndex, u32_SquadIndex);
+      const std::error_code c_SquadReturn = this->GetNodeSquadIndexWithNodeIndex(ou32_NodeIndex, u32_SquadIndex);
 
-      if (s32_SquadReturn == C_NO_ERR)
+      if (!c_SquadReturn)
       {
          // Node is sub node of a squad. Name will be set for all sub nodes based on the new base name and the node
          // specific part
-         s32_Return = this->c_NodeSquads[u32_SquadIndex].SetBaseName(this->c_Nodes, orc_NodeName);
+         c_Return = this->c_NodeSquads[u32_SquadIndex].SetBaseName(this->c_Nodes, orc_NodeName);
       }
       else
       {
@@ -1824,30 +1830,30 @@ int32_t C_OscSystemDefinition::SetNodeName(const uint32_t ou32_NodeIndex, const 
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Search the node squad with a specific node index as potential sub node
 
    \param[in]   ou32_NodeIndex         Searched node index of a sub node of a squad node
-   \param[out]  oru32_NodeSquadIndex   Found squad node index if return value is C_NO_ERR
+   \param[out]  oru32_NodeSquadIndex   Found squad node index if return value is Errc::success
 
-   \retval   C_NO_ERR   Node squad with specific sub node with node index found
-   \retval   C_RANGE    No node squad found
+   \retval   Errc::success Node squad with specific sub node with node index found
+   \retval   Errc::range   No node squad found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex,
-                                                              uint32_t & oru32_NodeSquadIndex) const
+std::error_code C_OscSystemDefinition::GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex,
+                                                                      uint32_t & oru32_NodeSquadIndex) const
 {
-   int32_t s32_Return = C_RANGE;
+   std::error_code c_Return = Errc::range;
 
    if (C_OscNodeSquad::h_CheckIsMultiDevice(ou32_NodeIndex, this->c_NodeSquads, &oru32_NodeSquadIndex))
    {
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2015,9 +2021,9 @@ void C_OscSystemDefinition::m_HandleNameMaxCharLimitNodeName(const uint32_t ou32
 {
    //Name
    uint32_t u32_SquadIndex;
-   const int32_t s32_SquadReturn = this->GetNodeSquadIndexWithNodeIndex(ou32_NodeIndex, u32_SquadIndex);
+   const std::error_code c_SquadReturn = this->GetNodeSquadIndexWithNodeIndex(ou32_NodeIndex, u32_SquadIndex);
 
-   if (s32_SquadReturn == C_NO_ERR)
+   if (!c_SquadReturn)
    {
       C_OscNodeSquad & rc_Squad = this->c_NodeSquads[u32_SquadIndex];
       const std::string c_OldName = rc_Squad.c_BaseName;

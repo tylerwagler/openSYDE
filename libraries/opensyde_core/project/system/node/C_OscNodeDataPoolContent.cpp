@@ -22,10 +22,12 @@
 #include "precomp_headers.hpp"
 
 #include <cstring>
+#include <system_error>
 #include <sstream>
 #include <limits>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <string>
 #include "C_SclStringCompat.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
@@ -3369,13 +3371,13 @@ void C_OscNodeDataPoolContent::m_GetBaseTypeArray(const uint32_t & oru32_Index, 
    \param[in]  orc_Data    data to set
 
    \return
-   C_NO_ERR   value set
-   C_CONFIG   size of orc_Data does not match our size
+   Errc::success   value set
+   Errc::config    size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<uint8_t> & orc_Data)
+std::error_code C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    //using unions is not nice but more portable than reinterpret_casting
    //lint -e{9018}  //cf. comment above
    union U_Union32
@@ -3394,7 +3396,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
    //is size correct ?
    if (this->GetSizeByte() != orc_Data.size())
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -3552,7 +3554,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -3564,13 +3566,13 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
    \param[in]  orc_Data    data to set
 
    \return
-   C_NO_ERR   value set
-   C_CONFIG   size of orc_Data does not match our size
+   Errc::success   value set
+   Errc::config    size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data)
+std::error_code C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    //using unions is not nice but more portable than reinterpret_casting
    //lint -e{9018}  //cf. comment above
@@ -3590,7 +3592,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
    //is size correct ?
    if (this->GetSizeByte() != orc_Data.size())
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -3751,7 +3753,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

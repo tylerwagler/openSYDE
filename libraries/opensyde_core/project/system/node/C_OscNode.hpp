@@ -12,6 +12,7 @@
 #define C_OSCNODE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
 #include <vector>
 #include "stwtypes.hpp"
 #include <string>
@@ -45,45 +46,50 @@ public:
    //lint -sem(stw::opensyde_core::C_OscNode::Initialize,initializer)
    void Initialize(void);
 
-   int32_t InsertDataPool(const uint32_t ou32_DataPoolIndex, const C_OscNodeDataPool & orc_DataPool);
-   int32_t DeleteDataPool(const uint32_t ou32_DataPoolIndex);
-   int32_t MoveDataPool(const uint32_t ou32_Start, const uint32_t ou32_Target);
-   int32_t InsertMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                         const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
-                         const C_OscCanMessage & orc_Message,
-                         const std::vector<C_OscNodeDataPoolListElement> & orc_SignalData);
-   int32_t SetMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                      const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
-                      const C_OscCanMessage & orc_Message, const bool oq_NewMessageIsTx,
-                      const std::vector<C_OscNodeDataPoolListElement> & orc_SignalData);
-   int32_t DeleteMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                         const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
-                         const uint32_t ou32_MessageIndex);
-   int32_t InsertSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                        const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
-                        const uint32_t ou32_SignalIndex, const C_OscCanSignal & orc_Signal,
-                        const C_OscNodeDataPoolListElement & orc_SignalData);
-   int32_t SetSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                     const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
-                     const uint32_t ou32_SignalIndex, const C_OscCanSignal & orc_Signal,
-                     const C_OscNodeDataPoolListElement & orc_SignalData);
-   int32_t SetSignalPosition(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
+   std::error_code InsertDataPool(const uint32_t ou32_DataPoolIndex, const C_OscNodeDataPool & orc_DataPool);
+   std::error_code DeleteDataPool(const uint32_t ou32_DataPoolIndex);
+   std::error_code MoveDataPool(const uint32_t ou32_Start, const uint32_t ou32_Target);
+   std::error_code InsertMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
+                                 const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
+                                 const uint32_t ou32_MessageIndex, const C_OscCanMessage & orc_Message,
+                                 const std::vector<C_OscNodeDataPoolListElement> & orc_SignalData);
+   std::error_code SetMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
+                              const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
+                              const uint32_t ou32_MessageIndex, const C_OscCanMessage & orc_Message,
+                              const bool oq_NewMessageIsTx,
+                              const std::vector<C_OscNodeDataPoolListElement> & orc_SignalData);
+   std::error_code DeleteMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
+                                 const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
+                                 const uint32_t ou32_MessageIndex);
+   std::error_code InsertSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
+                                const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
+                                const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex,
+                                const C_OscCanSignal & orc_Signal, const C_OscNodeDataPoolListElement & orc_SignalData);
+   std::error_code SetSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
                              const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
                              const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex,
-                             const C_OscCanSignal & orc_Signal);
-   int32_t SetSignalMuxValue(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                             const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
-                             const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex,
-                             const uint16_t ou16_MultiplexValue);
-   int32_t DeleteSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
-                        const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
-                        const uint32_t ou32_SignalIndex);
+                             const C_OscCanSignal & orc_Signal, const C_OscNodeDataPoolListElement & orc_SignalData);
+   std::error_code SetSignalPosition(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
+                                     const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
+                                     const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex,
+                                     const C_OscCanSignal & orc_Signal);
+   std::error_code SetSignalMuxValue(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
+                                     const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
+                                     const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex,
+                                     const uint16_t ou16_MultiplexValue);
+   std::error_code DeleteSignal(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
+                                const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
+                                const uint32_t ou32_MessageIndex, const uint32_t ou32_SignalIndex);
 
    void CalcHash(uint32_t & oru32_HashValue) const;
 
    std::vector<C_OscNodeApplication> GetHexApplications(void) const;
+   ///< Returns a Datapool index or -1, not a status.
+   ///< Intentionally left on int32_t during the std::error_code migration.
    int32_t GetDataPoolIndex(const C_OscNodeDataPool::E_Type oe_DataPoolType,
                             const uint32_t ou32_DataPoolTypeIndex) const;
+   ///< Returns a type-relative Datapool index or -1, not a status.
+   ///< Intentionally left on int32_t during the std::error_code migration.
    int32_t GetDataPoolTypeIndex(const uint32_t ou32_DataPoolIndex) const;
    uint32_t GetDataPoolCount(const stw::opensyde_core::C_OscNodeDataPool::E_Type oe_DataPoolType) const;
 
@@ -132,7 +138,7 @@ public:
                          const uint32_t * const opu32_SkipInterfaceIndex = nullptr,
                          const bool * const opq_SkipMessageIsTxFlag = nullptr,
                          const uint32_t * const opu32_SkipMessageIndex = nullptr) const;
-   int32_t CheckApplicationProcessIdValid(const uint32_t ou32_ApplicationIndex, bool & orq_Valid) const;
+   std::error_code CheckApplicationProcessIdValid(const uint32_t ou32_ApplicationIndex, bool & orq_Valid) const;
    void CheckHalcConfigValid(bool * const opq_ConfigInvalid,
                              std::vector<uint32_t> * const opc_InvalidDomainIndices) const;
    void ReCalcCanProtocolDataPoolIndices(void);
