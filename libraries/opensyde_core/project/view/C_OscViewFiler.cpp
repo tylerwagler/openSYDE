@@ -353,15 +353,15 @@ std::error_code C_OscViewFiler::h_StringToSecurityOptionDebugger(const std::stri
 {
    std::error_code c_Retval = Errc::success;
 
-   if (orc_String == "activate" == 0)
+   if (orc_String == "activate")
    {
       ore_State = C_OscViewNodeUpdate::eST_DEB_ACTIVATE;
    }
-   else if (orc_String == "deactivate" == 0)
+   else if (orc_String == "deactivate")
    {
       ore_State = C_OscViewNodeUpdate::eST_DEB_DEACTIVATE;
    }
-   else if (orc_String == "no-change" == 0)
+   else if (orc_String == "no-change")
    {
       ore_State = C_OscViewNodeUpdate::eST_DEB_NO_CHANGE;
    }
@@ -390,15 +390,15 @@ std::error_code C_OscViewFiler::h_StringToSecurityOptionAuthentication(
 {
    std::error_code c_Retval = Errc::success;
 
-   if (orc_String == "activate" == 0)
+   if (orc_String == "activate")
    {
       ore_State = C_OscViewNodeUpdate::eST_SEC_ACTIVATE;
    }
-   else if (orc_String == "deactivate" == 0)
+   else if (orc_String == "deactivate")
    {
       ore_State = C_OscViewNodeUpdate::eST_SEC_DEACTIVATE;
    }
-   else if (orc_String == "no-change" == 0)
+   else if (orc_String == "no-change")
    {
       ore_State = C_OscViewNodeUpdate::eST_SEC_NO_CHANGE;
    }
@@ -427,15 +427,15 @@ std::error_code C_OscViewFiler::h_StringToSecurityOptionEncryption(
 {
    std::error_code c_Retval = Errc::success;
 
-   if (orc_String == "activate" == 0)
+   if (orc_String == "activate")
    {
       ore_State = C_OscViewNodeUpdate::eST_TEN_ACTIVATE;
    }
-   else if (orc_String == "deactivate" == 0)
+   else if (orc_String == "deactivate")
    {
       ore_State = C_OscViewNodeUpdate::eST_TEN_DEACTIVATE;
    }
-   else if (orc_String == "no-change" == 0)
+   else if (orc_String == "no-change")
    {
       ore_State = C_OscViewNodeUpdate::eST_TEN_NO_CHANGE;
    }
