@@ -83,23 +83,27 @@ if [[ ${#TOOLS[@]} -eq 0 ]]; then
 fi
 
 # --- Tool definitions ---
-# Each tool: name|pjt_dir|toolchain|needs_qt|deploy_src|deploy_dst
-#   deploy_src: path under result/$BUILD_TYPE/ of the built binary
-#   deploy_dst: path under $INSTALL_DIR where it should land
+# Each tool: name|cmake_target|needs_qt|deploy_src|deploy_dst
+#   cmake_target: the target name inside the root project
+#   deploy_src:   path under result/$BUILD_TYPE/ of the built binary
+#   deploy_dst:   path under $INSTALL_DIR where it should land
+#
+# The tool name is also its subdirectory inside the root build tree (set by the
+# root CMakeLists), which is what lets a single tool be installed on its own.
 TOOL_DEFS=(
-    "opensyde|opensyde_tool/pjt/openSYDE|opensyde_tool/pjt/toolchain_linux.cmake|yes|openSYDE/openSYDE|tool/openSYDE"
-    "canmonitor|opensyde_can_monitor/pjt|opensyde_can_monitor/pjt/toolchain_linux.cmake|yes|openSYDE_CAN_Monitor/openSYDE_CAN_Monitor|tool/CAN_Monitor/openSYDE_CAN_Monitor"
-    "sydeflash|opensyde_syde_flash/pjt|opensyde_syde_flash/pjt/toolchain_linux.cmake|yes|SYDEflash/SYDEflash|utilities/SYDEflash/SYDEflash"
-    "sydesup|opensyde_syde_sup/pjt|opensyde_syde_sup/pjt/toolchain_ubuntu.cmake|no|SYDEsup/SYDEsup|utilities/SYDEsup/SYDEsup"
-    "syde_x_gen|opensyde_syde_x_gen/pjt||no|syde_x_gen/syde_x_gen|connectors/syde_x_gen/syde_x_gen"
-    "syde_coder_c|opensyde_syde_coder_c/pjt||no|syde_coder_c/osy_syde_coder_c|connectors/syde_coder_c/osy_syde_coder_c"
-    "flash_tool|opensyde_cmd_line_flash_tool/pjt||no|cmd_line_flash_tool/osy_cmd_line_flash_tool|utilities/cmd_line_flash_tool/osy_cmd_line_flash_tool"
-    "tsp_convert|opensyde_tsp_convert/pjt||no|tsp_convert/osy_tsp_convert|utilities/tsp_convert/osy_tsp_convert"
+    "opensyde|openSYDE|yes|openSYDE/openSYDE|tool/openSYDE"
+    "canmonitor|openSYDE_CAN_Monitor|yes|openSYDE_CAN_Monitor/openSYDE_CAN_Monitor|tool/CAN_Monitor/openSYDE_CAN_Monitor"
+    "sydeflash|SYDEflash|yes|SYDEflash/SYDEflash|utilities/SYDEflash/SYDEflash"
+    "sydesup|SYDEsup|no|SYDEsup/SYDEsup|utilities/SYDEsup/SYDEsup"
+    "syde_x_gen|syde_x_gen|no|syde_x_gen/syde_x_gen|connectors/syde_x_gen/syde_x_gen"
+    "syde_coder_c|osy_syde_coder_c|no|syde_coder_c/osy_syde_coder_c|connectors/syde_coder_c/osy_syde_coder_c"
+    "flash_tool|osy_cmd_line_flash_tool|no|cmd_line_flash_tool/osy_cmd_line_flash_tool|utilities/cmd_line_flash_tool/osy_cmd_line_flash_tool"
+    "tsp_convert|osy_tsp_convert|no|tsp_convert/osy_tsp_convert|utilities/tsp_convert/osy_tsp_convert"
 )
 
 ALL_TOOL_NAMES=()
 for def in "${TOOL_DEFS[@]}"; do
-    IFS='|' read -r name _ _ _ _ _ <<< "$def"
+    IFS='|' read -r name _ _ _ _ <<< "$def"
     ALL_TOOL_NAMES+=("$name")
 done
 
@@ -175,18 +179,67 @@ check_prerequisites() {
     echo "  GCC:   $(g++ --version | head -1)"
 }
 
-# --- Build a single tool ---
+# --- Configure the root project (once) -------------------------------------------
+# Everything is one CMake project now. opensyde_core is compiled a single time and
+# every tool links that archive, instead of each tool configuring and building its
+# own copy: a clean `all` build went from 1,139 core objects across eight archives
+# to 220 objects in one, and from roughly three minutes to 2m23s on a 48-core host.
+#
+# The SKIP options are pure source selection and core is a static library, so the
+# shared core is a superset and each tool still links only what it references.
+# Verified by dumping ldd for all eight binaries before and after: every tool links
+# exactly the same libraries, and CAN Monitor still has no libcrypto.
+#
+# GUI tools are configured only when one was asked for, so `build.sh sydesup` on a
+# machine without Qt6 keeps working.
+ROOT_BUILD_DIR="$REPO_ROOT/build/$BUILD_TYPE"
+
+configure_root() {
+    local want_qt="$1"
+
+    if [[ "$CLEAN" == "true" ]] && [[ -d "$ROOT_BUILD_DIR" ]]; then
+        write_step "Cleaning $ROOT_BUILD_DIR..."
+        rm -rf "$ROOT_BUILD_DIR"
+    fi
+    mkdir -p "$ROOT_BUILD_DIR"
+
+    local gui_flag="OFF"
+    [[ "$want_qt" == "yes" ]] && gui_flag="ON"
+
+    write_step "Configuring root project (GUI tools: $gui_flag)..."
+    local cmake_args=(
+        -S "$REPO_ROOT" -B "$ROOT_BUILD_DIR" -G Ninja
+        "-DCMAKE_BUILD_TYPE=$BUILD_TYPE"
+        "-DOPENSYDE_BUILD_GUI_TOOLS=$gui_flag"
+        "-DCMAKE_TOOLCHAIN_FILE=$REPO_ROOT/opensyde_tool/pjt/toolchain_linux.cmake"
+    )
+    if [[ "$want_qt" == "yes" ]] && [[ -n "${Qt6_DIR:-}" ]]; then
+        cmake_args+=("-DQt6_DIR=$Qt6_DIR")
+    fi
+    # ccache still helps across Debug/Release and across branches, though it no
+    # longer has eight duplicate core builds to collapse.
+    if [[ -z "${NO_CCACHE:-}" ]] && command -v ccache &>/dev/null; then
+        cmake_args+=(
+            "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
+            "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
+        )
+    fi
+    if ! cmake "${cmake_args[@]}"; then
+        write_error "Root configuration failed"
+        return 1
+    fi
+}
+
+# --- Build a single tool from the root project -----------------------------------
 build_tool() {
     local tool_name="$1"
 
-    # Find tool definition
-    local pjt_dir toolchain needs_qt deploy_src deploy_dst
+    local cmake_target needs_qt deploy_src deploy_dst
     local found=false
     for def in "${TOOL_DEFS[@]}"; do
-        IFS='|' read -r name pjt tc qt dsrc ddst <<< "$def"
+        IFS='|' read -r name tgt qt dsrc ddst <<< "$def"
         if [[ "$name" == "$tool_name" ]]; then
-            pjt_dir="$pjt"
-            toolchain="$tc"
+            cmake_target="$tgt"
             needs_qt="$qt"
             deploy_src="$dsrc"
             deploy_dst="$ddst"
@@ -201,66 +254,22 @@ build_tool() {
         return 1
     fi
 
-    local build_dir="$REPO_ROOT/build/$BUILD_TYPE/$tool_name"
-    local source_dir="$REPO_ROOT/$pjt_dir"
-
     write_header "Building $tool_name ($BUILD_TYPE)"
 
-    # Clean if requested
-    if [[ "$CLEAN" == "true" ]] && [[ -d "$build_dir" ]]; then
-        write_step "Cleaning $build_dir..."
-        rm -rf "$build_dir"
-    fi
-    mkdir -p "$build_dir"
-
-    # Configure
-    if [[ ! -f "$build_dir/build.ninja" ]]; then
-        write_step "Configuring..."
-        local cmake_args=(
-            -S "$source_dir" -B "$build_dir" -G Ninja
-            "-DCMAKE_BUILD_TYPE=$BUILD_TYPE"
-        )
-        if [[ -n "$toolchain" ]]; then
-            cmake_args+=("-DCMAKE_TOOLCHAIN_FILE=$REPO_ROOT/$toolchain")
-        fi
-        if [[ "$needs_qt" == "yes" ]] && [[ -n "${Qt6_DIR:-}" ]]; then
-            cmake_args+=("-DQt6_DIR=$Qt6_DIR")
-        fi
-        # Each tool configures opensyde_core with its own OPENSYDE_CORE_SKIP_*
-        # set, so every tool builds core into its own tree — eight times for
-        # `all`. The skip sets differ, so the targets cannot simply be shared,
-        # but the translation units they do have in common are identical, and
-        # ccache collapses those rebuilds into cache hits. Opt-in: used only
-        # when ccache is installed, and suppressed by NO_CCACHE=1.
-        if [[ -z "${NO_CCACHE:-}" ]] && command -v ccache &>/dev/null; then
-            cmake_args+=(
-                "-DCMAKE_C_COMPILER_LAUNCHER=ccache"
-                "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache"
-            )
-        fi
-        if ! cmake "${cmake_args[@]}"; then
-            write_error "$tool_name: configuration failed"
-            return 1
-        fi
-    else
-        write_step "Using existing configuration (use -c to reconfigure)"
-    fi
-
-    # Build
-    write_step "Building (jobs=$JOBS)..."
-    if ! cmake --build "$build_dir" -j"$JOBS"; then
+    write_step "Building target $cmake_target (jobs=$JOBS)..."
+    if ! cmake --build "$ROOT_BUILD_DIR" --target "$cmake_target" -j"$JOBS"; then
         write_error "$tool_name: build failed"
         return 1
     fi
 
-    # Install
+    # Each tool is added at ${CMAKE_BINARY_DIR}/<tool_name>, so it carries its own
+    # cmake_install.cmake and can be installed without installing its siblings.
     write_step "Installing..."
-    if ! cmake --install "$build_dir"; then
+    if ! cmake --install "$ROOT_BUILD_DIR/$tool_name"; then
         write_error "$tool_name: install failed"
         return 1
     fi
 
-    # Optional deploy to $INSTALL_DIR
     if [[ "$DEPLOY" == "true" ]]; then
         local src="$REPO_ROOT/result/$BUILD_TYPE/$deploy_src"
         local dst="$INSTALL_DIR/$deploy_dst"
@@ -338,12 +347,20 @@ fi
 check_prerequisites
 
 # Detect Qt6 if any GUI tool is being built
+NEEDS_QT="no"
 for t in "${RESOLVED_TOOLS[@]}"; do
     if [[ "$t" == "opensyde" || "$t" == "canmonitor" || "$t" == "sydeflash" ]]; then
+        NEEDS_QT="yes"
         find_qt6
         break
     fi
 done
+
+# One configure for the whole repository, then one target per requested tool.
+if ! configure_root "$NEEDS_QT"; then
+    write_error "Configuration failed"
+    exit 1
+fi
 
 # Build each tool
 FAILED=()

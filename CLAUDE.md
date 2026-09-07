@@ -37,9 +37,28 @@ Tool names: `opensyde`, `canmonitor`, `sydeflash`, `sydesup`, `syde_x_gen`,
 `build.sh` requires plain `cmake`, `ninja`, and `g++` on `PATH` — it never pins a
 compiler version.
 
-There is **no root `CMakeLists.txt`**. `CMakePresets.json` exists at the root but
-therefore configures nothing on its own; each tool is configured from its own `pjt/`
-directory, and the core library from `libraries/opensyde_core`.
+The root `CMakeLists.txt` builds everything as one project: `opensyde_core` once,
+then each tool linking that single archive. `build.sh` drives it — one configure,
+then one `--target` per requested tool.
+
+This replaced eight separate per-tool builds, each compiling its own core copy.
+A clean `all` went from **1,139 core object files across eight archives** to 220 in
+one, and from roughly three minutes to **2m23s** on the 48-core host.
+
+It is safe because `OPENSYDE_CORE_SKIP_*` are pure source selection — no
+preprocessor defines, no `#ifdef` on them anywhere — and core is a static library,
+so each tool still links only what it references. Verified by comparing `ldd` for
+all eight binaries before and after: every tool links exactly the same libraries,
+and CAN Monitor still has no `libcrypto` despite core now compiling with security
+enabled. **That is the invariant to re-check if this changes.**
+
+Each tool's own `pjt/CMakeLists.txt` still works standalone: it guards its core
+`add_subdirectory` with `if(NOT TARGET opensyde_core)`, so configuring a tool
+directly takes the old path with its own `SKIP_*` set.
+
+`build.sh` configures GUI tools only when one is requested, so `./build.sh sydesup`
+still works on a machine without Qt6. Switching between GUI and non-GUI tool sets
+re-runs CMake, which is why an alternating sequence reconfigures each time.
 
 ### Building the core library directly
 

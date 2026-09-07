@@ -1,9 +1,10 @@
 # Remote build machine
 
-A full eight-tool build takes **~18 minutes** on the dev laptop (8 cores) and
-**~3 minutes** on the build machine (48 cores). That difference is what makes it
-practical to verify every tool before pushing, instead of discovering breakage in
-CI.
+A full eight-tool build takes **~2m23s** on the build machine (48 cores) since the
+root CMakeLists made `opensyde_core` build once rather than once per tool. It was
+~3 minutes before that, and ~18 minutes on the dev laptop (8 cores). That
+difference is what makes it practical to verify every tool before pushing,
+instead of discovering breakage in CI.
 
 ```
 host    claude@claude
@@ -128,7 +129,8 @@ ssh claude@claude 'cd ~/Projects/openSYDE && cmake --build build/Debug/opensyde 
 
 | | |
 |---|---|
-| Dev laptop, 8 cores, `build.sh all` | ~18 min |
-| Build host, 48 cores, `build.sh -j 48 all` | **3 min 1 s** (`user` 73 min) |
+| Dev laptop, 8 cores, `build.sh all` | ~18 min (pre-unification) |
+| Build host, 48 cores, `build.sh -j 48 all` | **2 min 23 s** — one shared core |
+| Build host, same, before unification | 3 min 1 s — eight core builds |
 | Core library only, either machine | ~1–2 min |
 | CI (GitHub Actions) | core ~1.5 min, GUI tools ~13–18 min |
