@@ -25,6 +25,7 @@
 #include <gtest/gtest.h>
 
 #include <string>
+#include <stdexcept>
 
 #include "stwtypes.hpp"
 #include "C_SclStringCompat.hpp"
@@ -155,4 +156,73 @@ TEST(HexStringParsing, DifferentPasswordsDeriveDifferentKeys)
       }
    }
    EXPECT_FALSE(q_Identical) << "distinct passwords derived identical keys";
+}
+
+/// ToIntCompat has to throw as well as honour the base. C_SclString::ToInt() did
+/// both: callers wrapped it in try/catch to answer "is this field a number?".
+/// The migration split that in two and lost one half at every site - std::stoi()
+/// throws but ignores the base, std::strtol() honours the base but never throws.
+TEST(HexStringParsing, ToIntCompatThrowsOnNonNumericInput)
+{
+   EXPECT_THROW(ToIntCompat(""), std::invalid_argument);
+   EXPECT_THROW(ToIntCompat("not a number"), std::invalid_argument);
+   EXPECT_THROW(ToIntCompat("0x"), std::invalid_argument);
+   EXPECT_THROW(ToIntCompat("-"), std::invalid_argument);
+}
+
+/// A partial parse answers the caller's question wrongly: std::stoi("1000junk")
+/// is 1000 with no complaint, so a malformed field reads as valid.
+TEST(HexStringParsing, ToIntCompatRejectsTrailingCharacters)
+{
+   EXPECT_THROW(ToIntCompat("1000junk"), std::invalid_argument);
+   EXPECT_THROW(ToIntCompat("0x10ZZ"), std::invalid_argument);
+   EXPECT_THROW(ToIntCompat("12 34"), std::invalid_argument);
+
+   // sanity: std::stoi is the lax behaviour being rejected here
+   EXPECT_EQ(1000, std::stoi("1000junk"));
+}
+
+TEST(HexStringParsing, ToIntCompatThrowsOnOverflow)
+{
+   EXPECT_THROW(ToIntCompat("99999999999999999999"), std::out_of_range);
+   EXPECT_THROW(ToIntCompat("0xFFFFFFFFFFFFFFFFFF"), std::out_of_range);
+
+   // the boundaries themselves must still parse
+   EXPECT_EQ(2147483647, ToIntCompat("2147483647"));
+   EXPECT_EQ(-2147483648, ToIntCompat("-2147483648"));
+}
+
+TEST(HexStringParsing, ToInt64CompatThrowsOnNonNumericInput)
+{
+   EXPECT_THROW(ToInt64Compat(""), std::invalid_argument);
+   EXPECT_THROW(ToInt64Compat("nope"), std::invalid_argument);
+   EXPECT_THROW(ToInt64Compat("123abc"), std::invalid_argument);
+}
+
+/// CiA 306 writes object indices in the MandatoryObjects / OptionalObjects /
+/// ManufacturerObjects blocks as "0x"-prefixed hex:
+///
+///   [MandatoryObjects]
+///   SupportedObjects=2
+///   1=0x1000
+///   2=0x1018
+///
+/// C_OscCanOpenObjectDictionary keys its object map by hex-parsed section names,
+/// then cross-checks those entries. Under std::stoi every entry resolved to 0,
+/// so the lookup missed and a conforming EDS file was reported as referencing a
+/// non-existent object.
+TEST(HexStringParsing, EdsSupportedObjectIndicesParseAsHex)
+{
+   EXPECT_EQ(0x1000, ToIntCompat("0x1000"));
+   EXPECT_EQ(0x1018, ToIntCompat("0x1018"));
+   EXPECT_EQ(0x6040, ToIntCompat("0x6040"));
+
+   // EDS DataType fields are hex too, e.g. DataType=0x0007 (UNSIGNED32)
+   EXPECT_EQ(7, ToIntCompat("0x0007"));
+
+   // decimal spellings must keep working - both appear in the wild
+   EXPECT_EQ(4096, ToIntCompat("4096"));
+
+   // and this is what the defect produced for every one of them
+   EXPECT_EQ(0, std::stoi("0x1018"));
 }

@@ -240,7 +240,8 @@ std::error_code C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & o
             //Pattern: [<4 hex digits>sub<1 or 2 hex digits>, e.g. [12AB]
             try
             {
-               const uint16_t u16_Index = static_cast<uint16_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 1, 4), nullptr, 16));
+                const uint16_t u16_Index =
+                   static_cast<uint16_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 1, 4), nullptr, 16));
                //create new map entry or use existing depending on sequence of sections in EDS file
                C_OscCanOpenObject & rc_Object = c_OdObjects[u16_Index];
 
@@ -256,9 +257,11 @@ std::error_code C_OscCanOpenObjectDictionary::LoadFromFile(const std::string & o
             //Pattern: [<4 hex digits>sub<1 or 2 hex digits>, e.g. [12ABsubCD]
             try
             {
-               const uint16_t u16_Index = static_cast<uint16_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 1, 4), nullptr, 16));
+                const uint16_t u16_Index =
+                   static_cast<uint16_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 1, 4), nullptr, 16));
                //1 or 2 characters:
-                const uint8_t u8_SubIndex = static_cast<uint8_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 8, 2), nullptr, 16));
+                const uint8_t u8_SubIndex =
+                   static_cast<uint8_t>(std::stoi("0x" + SubStringCompat(rc_SectionName, 8, 2), nullptr, 16));
 
                //create new map entry or use existing
                C_OscCanOpenObject & rc_Object = c_OdObjects[u16_Index];
@@ -359,7 +362,7 @@ std::error_code C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const st
          //is the index numeric as expected?
          try
          {
-            u16_Index = static_cast<uint16_t>(std::stoi(c_Index));
+            u16_Index = static_cast<uint16_t>(ToIntCompat(c_Index));
          }
          catch (...)
          {
@@ -477,20 +480,20 @@ std::error_code C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint1
             case 2:
                try
                {
-orc_Object.u8_NumSubs = static_cast<uint8_t>(std::stoi(rc_Value));
-                }
-                catch (...)
-                {
-                   mc_LastError = PrintFormattedCompat("File contains non-numeric SubNumber for object %04X.%02X !",
-                                               static_cast<uint32_t>(ou16_Index),
-                                               static_cast<uint32_t>(ou8_SubIndex));
-                   c_Return = Errc::config;
-                }
-                break;
-             case 3:
-                try
-                {
-                   orc_Object.u8_DataType = static_cast<uint8_t>(std::stoi(rc_Value));
+                  orc_Object.u8_NumSubs = static_cast<uint8_t>(ToIntCompat(rc_Value));
+               }
+               catch (...)
+               {
+                  mc_LastError = PrintFormattedCompat("File contains non-numeric SubNumber for object %04X.%02X !",
+                                              static_cast<uint32_t>(ou16_Index),
+                                              static_cast<uint32_t>(ou8_SubIndex));
+                  c_Return = Errc::config;
+               }
+               break;
+            case 3:
+               try
+               {
+                  orc_Object.u8_DataType = static_cast<uint8_t>(ToIntCompat(rc_Value));
                }
                catch (...)
                {
@@ -512,7 +515,7 @@ orc_Object.u8_NumSubs = static_cast<uint8_t>(std::stoi(rc_Value));
             case 7:
                try
                {
-                  const int32_t s32_Value = std::stoi(rc_Value);
+                  const int32_t s32_Value = ToIntCompat(rc_Value);
                   if (s32_Value == 0)
                   {
                      orc_Object.q_IsMappableIntoPdo = false;

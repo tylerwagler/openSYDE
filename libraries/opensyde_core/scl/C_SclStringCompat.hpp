@@ -23,6 +23,9 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cstdarg>
+#include <cerrno>
+#include <climits>
+#include <stdexcept>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -262,10 +265,40 @@ inline int ScanBaseCompat(const std::string & orc_Str)
    return x_Base;
 }
 
-/// Replacement for str.ToInt(). Accepts decimal and "0x"-prefixed hex.
+/// Replacement for str.ToInt(). Accepts decimal and "0x"-prefixed hex, and
+/// throws when the string is not an integer.
+///
+/// Both halves of that matter, and the migration lost one of them at every call
+/// site. C_SclString::ToInt() was hex-aware *and* threw on bad input, so callers
+/// wrapped it in try/catch to validate. It was replaced in two different ways:
+/// std::stoi(), which throws but is hard-wired to base 10 and so silently
+/// returned 0 for every "0x..." string; and std::strtol(), which honours a base
+/// but never throws and so silently returned 0 for outright garbage. Neither is
+/// a faithful stand-in, and each failure is quiet. This is the faithful one.
+///
+/// Trailing characters are rejected rather than ignored. std::stoi() accepts
+/// "1000junk" as 1000, but the call sites wrapping this are asking "is this
+/// field a number?", and a partial parse answers that wrongly.
+///
+/// \throws std::invalid_argument  string is empty or not wholly an integer
+/// \throws std::out_of_range      value does not fit in int32_t
 inline int32_t ToIntCompat(const std::string & orc_Str)
 {
-   return static_cast<int32_t>(std::strtol(orc_Str.c_str(), nullptr, ScanBaseCompat(orc_Str)));
+   const char_t * const opcn_Str = orc_Str.c_str();
+   char_t * pcn_End = nullptr;
+
+   errno = 0;
+   const long x_Value = std::strtol(opcn_Str, &pcn_End, ScanBaseCompat(orc_Str));
+
+   if ((pcn_End == opcn_Str) || ((*pcn_End) != '\0'))
+   {
+      throw std::invalid_argument("ToIntCompat: string does not contain an integer");
+   }
+   if ((errno == ERANGE) || (x_Value < INT32_MIN) || (x_Value > INT32_MAX))
+   {
+      throw std::out_of_range("ToIntCompat: integer out of range");
+   }
+   return static_cast<int32_t>(x_Value);
 }
 
 /// Replacement for str.ToIntDef(default). Accepts decimal and "0x"-prefixed hex.
@@ -281,10 +314,28 @@ inline int32_t ToIntDefCompat(const std::string & orc_Str, const int32_t os32_De
    return s32_Val;
 }
 
-/// Replacement for str.ToInt64(). Accepts decimal and "0x"-prefixed hex.
+/// Replacement for str.ToInt64(). Accepts decimal and "0x"-prefixed hex, and
+/// throws when the string is not an integer. See ToIntCompat for why.
+///
+/// \throws std::invalid_argument  string is empty or not wholly an integer
+/// \throws std::out_of_range      value does not fit in int64_t
 inline int64_t ToInt64Compat(const std::string & orc_Str)
 {
-   return static_cast<int64_t>(std::strtoll(orc_Str.c_str(), nullptr, ScanBaseCompat(orc_Str)));
+   const char_t * const opcn_Str = orc_Str.c_str();
+   char_t * pcn_End = nullptr;
+
+   errno = 0;
+   const long long x_Value = std::strtoll(opcn_Str, &pcn_End, ScanBaseCompat(orc_Str));
+
+   if ((pcn_End == opcn_Str) || ((*pcn_End) != '\0'))
+   {
+      throw std::invalid_argument("ToInt64Compat: string does not contain an integer");
+   }
+   if (errno == ERANGE)
+   {
+      throw std::out_of_range("ToInt64Compat: integer out of range");
+   }
+   return static_cast<int64_t>(x_Value);
 }
 
 /// Replacement for str.ToDouble().
