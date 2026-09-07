@@ -97,12 +97,25 @@ The unit is the abstraction, not the router:
 
 33 functions, 38 caller files, `C_CanDispatcher` alone accounting for 35.
 
-Two things make this different from the other waves. `C_CanBase` sits on the
-boundary with the vendored `can-libraries` submodule, so check what crosses that
-line before changing anything. And its status values are **not** the STW
-convention — waves 4B and 4C both had to keep `CAN_Send_Msg` and `CAN_Init`
-results in plain `int32_t` locals rather than bridging them. Whatever this wave
-returns, it is not simply `Errc`.
+**Correction to an earlier version of this note:** I previously wrote that these
+classes do not use the STW convention. They do. `C_CanBase`'s own doc comments
+specify `C_NO_ERR`, `C_CanDispatcher` documents `C_NO_ERR`, and
+`C_OscLibcanBackendAdapter` returns `C_CONFIG` / `C_COM` / `C_NO_ERR` throughout.
+So this is an ordinary `Errc` migration, not a new category.
+
+The reason waves 4B, 4C and 4D kept `CAN_Send_Msg` / `CAN_Init` results in plain
+`int32_t` locals was different: their signatures are fixed by `C_CanBase`, which
+was outside those waves' scope, and in several cases the value was discarded and
+overwritten with `C_COM` anyway. That is a scoping constraint, not a convention
+mismatch.
+
+The one real boundary is inside `C_OscLibcanBackendAdapter`, which wraps
+`can::ICanBackend` from the vendored `can-libraries` submodule. Whatever libcan
+returns is genuinely foreign and must not be bridged with
+`make_error_code_from_stw`; the adapter already translates it into STW codes, and
+that translation is the line to preserve. `C_CanBase` and `C_CanDispatcher`
+themselves are pure core and touch the submodule only through `stw_can.hpp`
+types.
 
 ### Phase 5 — sizing the xml_parser wave
 
