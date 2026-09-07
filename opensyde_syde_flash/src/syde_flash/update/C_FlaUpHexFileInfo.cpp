@@ -58,7 +58,6 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
 {
    const QFileInfo c_FileInfo(orc_File);
    C_OscHexFile c_HexFile;
-   std::error_code c_Result = stw::errors::Errc::success;
 
    std::vector<stw::opensyde_core::C_OscApplicationInfoBlock> c_InfoBlocks;
 
@@ -66,7 +65,7 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
    c_HexFileInfo.s32_NumberOfBlocks = 0;
    c_HexFileInfo.c_FileName = c_FileInfo.fileName();
 
-   c_Result = c_HexFile.LoadFromFile(orc_File.toStdString().c_str());
+   const std::error_code c_Result = c_HexFile.LoadFromFile(orc_File.toStdString().c_str());
    c_HexFile.GetApplicationInformationBlocks(c_InfoBlocks, 0UL, false, false, false);
 
    if (!c_Result)

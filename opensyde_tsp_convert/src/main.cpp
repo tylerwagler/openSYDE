@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <system_error>
 #include <cstdio>
 #include <fstream>
 #include <iostream>
@@ -444,7 +445,9 @@ int main(const int argc, char_t * const opacn_Argv[])
    }
 
    std::string c_ZipError;
-   s32_Retval = C_OscZipFile::h_CreateZipFile(c_StageDirWithSep, c_FilesToZip, c_NodeZipPath, &c_ZipError);
+   //C_OscZipFile now reports std::error_code; this local is shared with unmigrated calls
+   s32_Retval = C_OscZipFile::h_CreateZipFile(c_StageDirWithSep, c_FilesToZip, c_NodeZipPath,
+                                              &c_ZipError).value();
    if (s32_Retval != C_NO_ERR)
    {
       std::cerr << mhc_TOOL_NAME.c_str() << ": zip creation failed (rc=" << s32_Retval << "): "

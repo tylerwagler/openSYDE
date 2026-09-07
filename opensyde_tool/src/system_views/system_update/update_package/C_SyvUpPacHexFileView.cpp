@@ -106,9 +106,8 @@ void C_SyvUpPacHexFileView::m_LoadInfo(void) const
 {
    QString c_Text = "<html><body>";
    C_OscHexFile c_HexFile;
-   std::error_code c_Result = stw::errors::Errc::success;
 
-   c_Result = c_HexFile.LoadFromFile(this->mc_AbsoluteFilePath.toStdString().c_str());
+   const std::error_code c_Result = c_HexFile.LoadFromFile(this->mc_AbsoluteFilePath.toStdString().c_str());
    if (!c_Result)
    {
       mh_AddFileSection(this->mc_AbsoluteFilePath, c_Text);

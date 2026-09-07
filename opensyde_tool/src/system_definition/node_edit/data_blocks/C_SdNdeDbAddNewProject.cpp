@@ -360,7 +360,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
                if (C_OscZipFile::h_UnpackZipFile(c_Path.toStdString().c_str(),
                                                  C_PuiUtil::h_GetAbsolutePathFromProject(
                                                     this->mpc_Ui->pc_LineEditCreateIn->GetPath()).toStdString().c_str(),
-                                                 &c_ErrorText) == C_NO_ERR)
+                                                 &c_ErrorText) == stw::errors::Errc::success)
                {
                   this->mrc_ParentDialog.accept();
                   QApplication::restoreOverrideCursor();

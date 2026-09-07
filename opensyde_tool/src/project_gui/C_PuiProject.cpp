@@ -259,7 +259,7 @@ bool C_PuiProject::IsPasswordNecessary(void)
 
    if (this->m_IsServiceModeProject() == true)
    {
-      if (C_OscZipFile::h_IsZipFile(this->GetPath().toStdString().c_str()) != C_NO_ERR)
+      if (C_OscZipFile::h_IsZipFile(this->GetPath().toStdString().c_str()))
       {
          // Not a zip file, so it is encrypted
          q_Return = true;

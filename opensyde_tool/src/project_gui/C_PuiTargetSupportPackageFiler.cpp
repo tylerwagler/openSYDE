@@ -120,9 +120,11 @@ int32_t C_PuiTargetSupportPackageFiler::mh_DoUnzip(const QString & orc_ZipFilePa
    s32_Retval = mh_DeleteFolder(orc_FolderPath);
    if (s32_Retval == C_NO_ERR)
    {
+      //C_OscZipFile now reports std::error_code; this local is shared with
+      //mh_DeleteFolder above, which still uses the STW int32_t convention
       s32_Retval = C_OscZipFile::h_UnpackZipFile(
          orc_ZipFilePath.toStdString().c_str(), orc_FolderPath.toStdString().c_str(),
-         &c_ErrorText);
+         &c_ErrorText).value();
    }
    return s32_Retval;
 }

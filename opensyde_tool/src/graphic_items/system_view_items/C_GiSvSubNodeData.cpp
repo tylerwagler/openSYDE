@@ -930,9 +930,8 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
       const std::string c_Path = orc_FinalFilePaths[u32_ItFile].toStdString().c_str();
       // c_Path is already absolute and placeholder variables got resolved!
       C_OscHexFile c_HexFile;
-      std::error_code c_Result = stw::errors::Errc::success;
 
-      c_Result = c_HexFile.LoadFromFile(c_Path.c_str());
+      const std::error_code c_Result = c_HexFile.LoadFromFile(c_Path.c_str());
       if (!c_Result)
       {
          stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
