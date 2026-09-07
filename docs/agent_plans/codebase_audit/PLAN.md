@@ -28,12 +28,53 @@ that do not regress existing functionality.
 | 2 — Remove `C_SclDynamicArray` | ✅ **Complete** | Zero references remain. |
 | 3 — Retire `C_SclString` | ✅ **Complete** | Class deleted; `C_SclStringCompat.hpp` helpers remain, ~94 files still call them. `C_SclStringList` / `C_SclIniFile` still exist. See `PHASE3_PLAN.md`. |
 | 4 — Replace homegrown AES | ✅ **Complete for files; wire protocol out of scope** | File encryption is now AES-256-GCM + PBKDF2, with a versioned header and key wiping. The protocol sub-layer is deliberately unchanged — see below. |
-| 5 — Error handling | 🔶 **Started** | `C_OscErrorCategory` (`Errc` + `STWErrorCategory`) exists; the security API returns `std::error_code`. The bulk of the int32_t call sites are unmigrated. |
+| 5 — Error handling | 🔶 **Started** | `C_OscErrorCategory` (`Errc` + `STWErrorCategory`) exists; the security API returns `std::error_code`. The bulk of the int32_t call sites are unmigrated. 16 sites bridge with the wrong idiom — see below. |
 | 6.1 — Singletons | ✅ **Complete, deviating from plan** | Meyer's singleton **rejected** — see below. Race fixed with `std::call_once`; `h_Destroy()` and teardown ordering kept. |
 | 6.2 — Standard mutex | ✅ **Complete** | `C_TglCriticalSection` and all four `TglTasks` files deleted; 52 call sites on `std::mutex`. |
 | 6.3 — Smart pointers | 🚫 **Closed, no defect found** | Exit criterion is wrong as written, and the hazards it implies do not exist here — see below. |
 | 7 — Performance | 🚫 **Blocked on its own criteria** | Prescribes `std::format` (C++20) in a C++17 codebase, and its exit criteria require benchmarks that do not exist — see below. |
 | 8 — Build system | 🔶 **Partial** | CMake minimum raised to 3.25 across the Vector submodules; CI matrix reworked; ccache added. The unified root build remains open — see below. |
+
+### Phase 5 — two bridging idioms are in the tree, only one is right
+
+Migrated code has to call unmigrated code, so a legacy `int32_t` return has to
+become a `std::error_code` somewhere. There are two spellings of that in the tree
+and they are not equivalent:
+
+```cpp
+c_Retval = make_error_code_from_stw(Legacy());   // correct
+c_Retval = static_cast<Errc>(Legacy());          // wrong idiom
+```
+
+`static_cast<Errc>` names no conversion and asserts "this integer is an STW error
+code" without checking. Any value outside the 13-member set becomes an enumerator
+that does not exist, and a foreign status code — one where 0 also means success,
+so the mistake is invisible in testing — is silently relabelled as an STW code.
+That exact conflation has already been introduced and fixed twice in this
+migration (`TglRemoveDirectory`, `mz_compress`).
+
+**16 sites still use the wrong idiom**, all left by wave 2 in
+`libraries/opensyde_core/system_update_package/`:
+
+| File | Lines |
+|---|---|
+| `C_OscSupNodeDefinitionFiler.cpp` | 154, 257, 380, 461, 465, 469, 475 |
+| `C_OscSupServiceUpdatePackageLoad.cpp` | 253, 572 |
+| `C_OscSupServiceUpdatePackageCreate.cpp` | 146, 263 |
+| `C_OscSupSignatureFiler.cpp` | 84, 111 |
+| `C_OscSupDefinitionFiler.cpp` | 109, 152, 158 |
+
+None currently produces a wrong value: every bridged callee returns either an STW
+code or, in the case of `TglCreateDirectory` (`Load.cpp:572`), only 0 and -1,
+which happen to map onto `success` and `unknown_err`. So this is idiom debt, not
+a live defect — but it is the shape the two real bugs took, and it should be
+converted when that directory is next touched.
+
+Five of them (`C_OscSupNodeDefinitionFiler.cpp:380,461,465,469,475`) wrap
+`C_OscXmlParserBase`'s `*Error` methods, which still return `int32_t`. If those
+are ever migrated to return `std::error_code`, these sites are part of the blast
+radius, and the parser is shared by every tree — so that is its own wave, not a
+rider on someone else's.
 
 ### Phase 6.1 — why Meyer's singleton was rejected
 
