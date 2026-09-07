@@ -55,6 +55,30 @@ Both large waves have to run alone. `protocol_drivers` and `project` overlap
 heavily in callers, and the two-agent parallelism that worked for halc + security
 depended on their caller sets being disjoint — which these are not.
 
+### Phase 5 — the remaining counts are upper bounds, and some are mostly noise
+
+Every "remaining" figure in this plan comes from counting `int32_t`-returning
+declarations in headers. That counts functions that return a **value**, not a
+status, and those must not be migrated — converting them loses the value. Wave 4A
+hit this with `C_OscApplicationInfoBlock::GetInfoLevel`, which returns 0..9 or
+`C_RANGE` in one integer and was deliberately left alone with a note in the
+header.
+
+`scl` is the clearest example. It reports 4, of which **at most 1 is an error
+return**:
+
+| Declaration | Reality |
+|---|---|
+| `C_SclIniFile::ReadInteger` | a value read from the file |
+| `C_SclStringList::IndexOf` | an index |
+| `C_SclStringList::IndexOfName` | an index |
+| `C_SclChecksums::CalcCRC32TriCore` | a status — but documented `0` / `-1`, so a **foreign** convention like `TglCreateDirectory`, not STW. Needs an explicit mapping (`Errc::range` matches its meaning), never `make_error_code_from_stw`. |
+
+So treat the table figures as a ceiling. `project`'s 213 and `protocol_drivers`'
+original 317 both included some number of value-returning functions; the waves
+found and skipped them case by case rather than up front, which worked, but it
+means progress looks slower than it is.
+
 ### Phase 5 — the CAN dispatcher wave, surfaced by wave 4A
 
 Wave 4A stopped on `C_OscCanDispatcherOsyRouter` rather than forcing it, and was
