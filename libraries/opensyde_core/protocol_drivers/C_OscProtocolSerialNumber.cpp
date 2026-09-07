@@ -16,7 +16,10 @@
 
 #include <cstring>
 #include <string>
+#include <system_error>
+
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscUtils.hpp"
@@ -173,14 +176,14 @@ void C_OscProtocolSerialNumber::SetPosSerialNumber(const uint8_t (&orau8_SerialN
    \param[in]    ou8_SerialNumberManufacturerFormat   manufacturer format of serial number
 
    \return
-   C_NO_ERR    Serial number set
-   C_RANGE     Serial number has zero length or is to long
+   Errc::success   Serial number set
+   Errc::range     Serial number has zero length or is to long
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const std::vector<uint8_t> & orc_SerialNumber,
-                                                      const uint8_t ou8_SerialNumberManufacturerFormat)
+std::error_code C_OscProtocolSerialNumber::SetExtSerialNumber(const std::vector<uint8_t> & orc_SerialNumber,
+                                                              const uint8_t ou8_SerialNumberManufacturerFormat)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if ((ou8_SerialNumberManufacturerFormat == 0U) &&
        (orc_SerialNumber.size() == 6))
@@ -202,10 +205,10 @@ int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const std::vector<uint8_t>
    }
    else
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       this->q_IsValid = true;
       this->q_ExtFormatUsed = true;
@@ -213,7 +216,7 @@ int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const std::vector<uint8_t>
       this->u8_SerialNumberByteLength = static_cast<uint8_t>(orc_SerialNumber.size());
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -228,14 +231,14 @@ int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const std::vector<uint8_t>
    \param[in]    ou8_SerialNumberManufacturerFormat   manufacturer format of serial number
 
    \return
-   C_NO_ERR    Serial number set
-   C_RANGE     Serial number has zero length or is to long
+   Errc::success   Serial number set
+   Errc::range     Serial number has zero length or is to long
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const std::string & orc_SerialNumber,
-                                                      const uint8_t ou8_SerialNumberManufacturerFormat)
+std::error_code C_OscProtocolSerialNumber::SetExtSerialNumber(const std::string & orc_SerialNumber,
+                                                              const uint8_t ou8_SerialNumberManufacturerFormat)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (ou8_SerialNumberManufacturerFormat == 0U)
    {
@@ -245,7 +248,7 @@ int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const std::string & orc_Se
       if (h_SerialNumberFromStringToArray(orc_SerialNumber, this->au8_SerialNumber) == false)
       {
          // String is not compatible to POS
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
    }
    else
@@ -258,18 +261,18 @@ int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(const std::string & orc_Se
       }
       else
       {
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       this->q_IsValid = true;
       this->q_ExtFormatUsed = true;
       this->u8_SerialNumberManufacturerFormat = ou8_SerialNumberManufacturerFormat;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

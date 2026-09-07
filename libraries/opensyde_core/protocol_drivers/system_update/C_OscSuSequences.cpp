@@ -305,7 +305,8 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(const std::vector<std::string> 
          orc_StateHexFiles[u32_File].e_FileLoaded = eSUSEQ_STATE_NO_ERR;
 
          //try to find signature address in hex file:
-         s32_Return = c_Files[u32_File]->GetSignatureBlockAddress(c_SignatureAddresses[u32_File]);
+         //boundary: this function still reports the integer convention
+         s32_Return = c_Files[u32_File]->GetSignatureBlockAddress(c_SignatureAddresses[u32_File]).value();
          if (s32_Return != C_NO_ERR)
          {
             (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_HEX_SIGNATURE_ERROR, s32_Return, 0U, mc_CurrentNode,
@@ -346,7 +347,8 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(const std::vector<std::string> 
             std::string c_DeviceNameHexFile;
 
             //get device ID from hex file
-            s32_Return = c_Files[u32_File]->ScanDeviceIdFromHexFile(c_DeviceNameHexFile);
+            //boundary: this function still reports the integer convention
+            s32_Return = c_Files[u32_File]->ScanDeviceIdFromHexFile(c_DeviceNameHexFile).value();
             if (s32_Return != C_NO_ERR)
             {
                std::string c_ErrorText = "Could not read device name from file " + orc_FilesToFlash[u32_File] +

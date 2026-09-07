@@ -194,7 +194,8 @@ int32_t C_OscProtocolDriverOsy::IsConnected(void)
    }
    else
    {
-      s32_Return = this->mpc_TransportProtocol->IsConnected();
+      //boundary: this caller still uses the integer convention
+      s32_Return = this->mpc_TransportProtocol->IsConnected().value();
    }
    return s32_Return;
 }
@@ -221,7 +222,8 @@ int32_t C_OscProtocolDriverOsy::ReConnect(void)
    }
    else
    {
-      s32_Return = this->mpc_TransportProtocol->ReConnect();
+      //boundary: this caller still uses the integer convention
+      s32_Return = this->mpc_TransportProtocol->ReConnect().value();
    }
    return s32_Return;
 }
@@ -247,7 +249,8 @@ int32_t C_OscProtocolDriverOsy::Disconnect(void)
    }
    else
    {
-      s32_Return = this->mpc_TransportProtocol->Disconnect();
+      //boundary: this caller still uses the integer convention
+      s32_Return = this->mpc_TransportProtocol->Disconnect().value();
    }
    return s32_Return;
 }
@@ -313,7 +316,8 @@ int32_t C_OscProtocolDriverOsy::m_Cycle(const bool oq_CheckForSpecificServiceId,
    }
    else
    {
-      s32_Return = mpc_TransportProtocol->Cycle();
+      //boundary: this caller still uses the integer convention
+      s32_Return = mpc_TransportProtocol->Cycle().value();
       if (s32_Return == C_NO_ERR)
       {
          bool q_ExpectedServiceReceived = false;
@@ -1456,7 +1460,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadEcuSerialNumberExt(C_OscProtocolSerialNum
             const uint8_t u8_SerialNumberManufacturerFormat = c_Data[0];
             // Erase the first two bytes to have the serial number data only
             c_Data.erase(c_Data.begin(), c_Data.begin() + 2);
-            s32_Return = orc_SerialNumberExt.SetExtSerialNumber(c_Data, u8_SerialNumberManufacturerFormat);
+            //boundary: this function still reports the integer convention
+            s32_Return = orc_SerialNumberExt.SetExtSerialNumber(c_Data, u8_SerialNumberManufacturerFormat).value();
          }
          else
          {
@@ -3585,7 +3590,8 @@ int32_t C_OscProtocolDriverOsy::SetTransportProtocol(C_OscProtocolDriverOsyTpBas
    mpc_TransportProtocol = opc_TransportProtocol;
    if (mpc_TransportProtocol != nullptr)
    {
-      s32_Return = mpc_TransportProtocol->SetNodeIdentifiers(mc_ClientId, mc_ServerId);
+      //boundary: this caller still uses the integer convention
+      s32_Return = mpc_TransportProtocol->SetNodeIdentifiers(mc_ClientId, mc_ServerId).value();
       if (s32_Return != C_NO_ERR)
       {
          s32_Return = C_CONFIG;
@@ -3627,7 +3633,8 @@ int32_t C_OscProtocolDriverOsy::SetNodeIdentifiers(const C_OscProtocolDriverOsyN
    //propagate to installed transport protocol:
    if (mpc_TransportProtocol != nullptr)
    {
-      s32_Return = mpc_TransportProtocol->SetNodeIdentifiers(mc_ClientId, mc_ServerId);
+      //boundary: this caller still uses the integer convention
+      s32_Return = mpc_TransportProtocol->SetNodeIdentifiers(mc_ClientId, mc_ServerId).value();
       if (s32_Return != C_NO_ERR)
       {
          s32_Return = C_CONFIG;
@@ -4829,7 +4836,8 @@ int32_t C_OscProtocolDriverOsy::m_SendRequest(const C_OscProtocolDriverOsyServic
    if (s32_Return == C_NO_ERR)
    {
       //pass on the original or encrypted request to the installed TP
-      s32_Return = mpc_TransportProtocol->SendRequest(*pc_Request);
+      //boundary: this caller still uses the integer convention
+      s32_Return = mpc_TransportProtocol->SendRequest(*pc_Request).value();
       if (s32_Return != C_NO_ERR)
       {
          s32_Return = C_NOACT;
@@ -4857,7 +4865,8 @@ int32_t C_OscProtocolDriverOsy::m_SendRequest(const C_OscProtocolDriverOsyServic
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::m_ReadResponse(C_OscProtocolDriverOsyService & orc_Service)
 {
-   int32_t s32_Return = mpc_TransportProtocol->ReadResponse(orc_Service);
+   //boundary: this caller still uses the integer convention
+   int32_t s32_Return = mpc_TransportProtocol->ReadResponse(orc_Service).value();
 
    tgl_assert(this->pc_SecuritySubLayer != nullptr);
 
@@ -5833,7 +5842,8 @@ int32_t C_OscProtocolDriverOsy::OsyTesterPresent(const uint8_t ou8_SuppressRespo
          // no response message expected, only send single frame message
          else
          {
-            s32_Return = mpc_TransportProtocol->Cycle();
+            //boundary: this caller still uses the integer convention
+            s32_Return = mpc_TransportProtocol->Cycle().value();
             if (opu8_NrCode != nullptr)
             {
                (*opu8_NrCode) = 0U;
@@ -5893,7 +5903,8 @@ int32_t C_OscProtocolDriverOsy::OsyEcuReset(const uint8_t ou8_ResetType)
       }
       else
       {
-         s32_Return = mpc_TransportProtocol->Cycle();
+         //boundary: this caller still uses the integer convention
+         s32_Return = mpc_TransportProtocol->Cycle().value();
       }
    }
    if (s32_Return != C_NO_ERR)

@@ -12,6 +12,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include <system_error>
 #include <string>
 #include "C_SclStringCompat.hpp"
@@ -935,12 +936,12 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
       if (!c_Result)
       {
          stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
-         const int32_t s32_Result = c_HexFile.ScanApplicationInformationBlockFromHexFile(
+         const std::error_code c_ScanResult = c_HexFile.ScanApplicationInformationBlockFromHexFile(
             c_FileApplicationInfo);
-         if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
+         if ((!c_ScanResult) || (c_ScanResult == Errc::warn))
          {
             this->mc_HexFileInfos.push_back(c_FileApplicationInfo);
-            this->mc_HexAppInfoAmbiguous.push_back(s32_Result == C_WARN);
+            this->mc_HexAppInfoAmbiguous.push_back(c_ScanResult == Errc::warn);
          }
       }
       else

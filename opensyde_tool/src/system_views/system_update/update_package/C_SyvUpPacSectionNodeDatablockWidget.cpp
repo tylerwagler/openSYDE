@@ -27,6 +27,7 @@
 #include "C_SyvUpPacListNodeItemDatablockWidget.hpp"
 #include "C_SyvUpPacListNodeItemParamSetWidget.hpp"
 #include "C_OgeWiCustomMessage.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscHexFile.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -129,9 +130,10 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(const QString & orc_File,
             if (!pc_HexFile->LoadFromFile(c_AbsoluteFilePath.toStdString().c_str()))
             {
                stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
-               const int32_t s32_Result = pc_HexFile->ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo);
+               const std::error_code c_ScanResult =
+                  pc_HexFile->ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo);
 
-               if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
+               if ((!c_ScanResult) || (c_ScanResult == Errc::warn))
                {
                   const QString c_AppDeviceType = UpperCaseCompat(TrimCompat(c_FileApplicationInfo.GetDeviceID())).c_str();
                   // No check with Alias necessary due to check with real device type defined with target integration
@@ -182,7 +184,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(const QString & orc_File,
                   // HEX file application block information is invalid
                   C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
                   c_Message.SetHeading("Update Package Configuration");
-                  if (s32_Result == C_OVERFLOW)
+                  if (c_ScanResult == Errc::overflow)
                   {
                      c_Message.SetDescription("HEX file has multiple application information "
                                                                      "blocks with non-equal device names!");

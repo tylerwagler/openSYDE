@@ -15,8 +15,10 @@
 
 #include <cstring>
 #include <iostream>
+#include <system_error>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "TglTime.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscProtocolDriverOsyTpCan.hpp"
@@ -102,15 +104,15 @@ C_OscProtocolDriverOsyTpCan::~C_OscProtocolDriverOsyTpCan(void)
    \param[in]  orc_CanMessage   incoming CAN message
 
    \return
-   C_NO_ERR     no problems; service added to Rx queue
-   C_CONFIG     frame invalid (DLC does not match length in PCI byte)
-   C_OVERFLOW   could not add incoming service to Rx queue
+   Errc::success    no problems; service added to Rx queue
+   Errc::config     frame invalid (DLC does not match length in PCI byte)
+   Errc::overflow   could not add incoming service to Rx queue
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingSingleFrame(const T_STWCAN_Msg_RX & orc_CanMessage)
+std::error_code C_OscProtocolDriverOsyTpCan::m_HandleIncomingSingleFrame(const T_STWCAN_Msg_RX & orc_CanMessage)
 {
    C_OscProtocolDriverOsyService c_Service;
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    const uint8_t u8_Size = orc_CanMessage.au8_Data[0] & 0x0FU;
 
    c_Service.c_Data.resize(u8_Size);
@@ -122,20 +124,20 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingSingleFrame(const T_STWCAN_
          (void)std::memcpy(&c_Service.c_Data[0], &orc_CanMessage.au8_Data[1], c_Service.c_Data.size());
       }
       //add to queue:
-      s32_Return = m_AddToRxQueue(c_Service);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_AddToRxQueue(c_Service);
+      if (c_Return)
       {
          m_LogWarningWithHeader("Rx Queue overflow. Incoming single frame dumped.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_OVERFLOW;
+         c_Return = Errc::overflow;
       }
    }
    else
    {
       //malformed service -> ignore
       m_LogWarningWithHeader("Single frame with invalid DLC received. Ignoring.", TGL_UTIL_FUNC_ID);
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -152,14 +154,15 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingSingleFrame(const T_STWCAN_
    \param[in]  orc_CanMessage   incoming CAN message
 
    \return
-   C_NO_ERR     no problems; service added to Rx queue
-   C_OVERFLOW   could not add incoming service to Rx queue
+   Errc::success    no problems; service added to Rx queue
+   Errc::overflow   could not add incoming service to Rx queue
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificSingleFrame(const T_STWCAN_Msg_RX & orc_CanMessage)
+std::error_code C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificSingleFrame(
+   const T_STWCAN_Msg_RX & orc_CanMessage)
 {
    C_OscProtocolDriverOsyService c_Service;
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    const uint8_t u8_Size = orc_CanMessage.u8_DLC;
 
    // message without request SID 0xFA
@@ -177,11 +180,11 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificSingleFrame(cons
       }
 
       //add to queue:
-      s32_Return = m_AddToRxQueue(c_Service);
-      if (s32_Return != C_NO_ERR)
+      c_Return = m_AddToRxQueue(c_Service);
+      if (c_Return)
       {
          m_LogWarningWithHeader("Rx Queue overflow. Incoming single frame dumped.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_OVERFLOW;
+         c_Return = Errc::overflow;
       }
    }
    else
@@ -189,7 +192,7 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificSingleFrame(cons
       m_LogWarningWithHeader("Unexpected openSYDE single frame message type received. Ignoring.", TGL_UTIL_FUNC_ID);
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -209,14 +212,14 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificSingleFrame(cons
    \param[in]  orc_CanMessage   incoming CAN message
 
    \return
-   C_NO_ERR     no problems
-   C_CONFIG     frame invalid (DLC is not 8)
-   C_COM        could not send out flow control
+   Errc::success   no problems
+   Errc::config    frame invalid (DLC is not 8)
+   Errc::com       could not send out flow control
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingFirstFrame(const T_STWCAN_Msg_RX & orc_CanMessage)
+std::error_code C_OscProtocolDriverOsyTpCan::m_HandleIncomingFirstFrame(const T_STWCAN_Msg_RX & orc_CanMessage)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (mc_RxService.e_Status != C_ServiceState::eIDLE)
    {
@@ -245,11 +248,11 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingFirstFrame(const T_STWCAN_M
       c_TxMsg.au8_Data[1] = 0U; //no block limits (BS)
       c_TxMsg.au8_Data[2] = 0U; //no separation time (STmin)
 
-      s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg); //lint !e613  //caller is responsible for valid dispatcher
-      if (s32_Return != C_NO_ERR)
+      //lint -e{613}  //caller is responsible for valid dispatcher
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != C_NO_ERR)
       {
          m_LogWarningWithHeader("Could not send flow control CAN message.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
       else
       {
@@ -260,9 +263,9 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingFirstFrame(const T_STWCAN_M
    {
       //malformed service -> ignore
       m_LogWarningWithHeader("First frame with invalid DLC received. Ignoring.", TGL_UTIL_FUNC_ID);
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -275,14 +278,14 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingFirstFrame(const T_STWCAN_M
    Only to be called when the state machine is in state eMORE_CONSECUTIVE_FRAMES_TO_SEND
 
    \return
-   C_NO_ERR     no problems: all pending CFs sent; Tx state machine set to eIDLE again
-   C_COM        could not send out consecutive frame (one/some might have been sent, however)
+   Errc::success   no problems: all pending CFs sent; Tx state machine set to eIDLE again
+   Errc::com       could not send out consecutive frame (one/some might have been sent, however)
                 Tx state machine still at eMORE_CONSECUTIVE_FRAMES_TO_SEND
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::m_SendNextConsecutiveFrames(void)
+std::error_code C_OscProtocolDriverOsyTpCan::m_SendNextConsecutiveFrames(void)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    //continue where we left:
    for (; mc_TxService.u16_TransmissionIndex < mc_TxService.c_ServiceData.c_Data.size();
@@ -306,12 +309,11 @@ int32_t C_OscProtocolDriverOsyTpCan::m_SendNextConsecutiveFrames(void)
 
       //send message:
       //lint -e{613}  //caller is responsible for valid dispatcher
-      s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg);
-      if (s32_Return != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != C_NO_ERR)
       {
          //most likely Tx buffer is full; but we cannot be 100% sure, so write a log entry
          m_LogWarningWithHeader("Could not send consecutive frame CAN message (Tx buffer full ?).", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM; //probably the Tx queue is full, we'll retry later
+         c_Return = Errc::com; //probably the Tx queue is full, we'll retry later
          break;
       }
 
@@ -323,11 +325,11 @@ int32_t C_OscProtocolDriverOsyTpCan::m_SendNextConsecutiveFrames(void)
       }
    }
    //finished with this transfer ?
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       mc_TxService.e_Status = C_ServiceState::eIDLE;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -344,16 +346,16 @@ int32_t C_OscProtocolDriverOsyTpCan::m_SendNextConsecutiveFrames(void)
    \param[in]  orc_CanMessage   incoming CAN message
 
    \return
-   C_NO_ERR     no problems
-   C_NOACT      unexpected flow control
-   C_CONFIG     frame invalid (DLC is not 3)
-   C_OVERFLOW   invalid STmin or BS (only 0 supported for each)
-   C_COM        could not send out following consecutive frames
+   Errc::success    no problems
+   Errc::noact      unexpected flow control
+   Errc::config     frame invalid (DLC is not 3)
+   Errc::overflow   invalid STmin or BS (only 0 supported for each)
+   Errc::com        could not send out following consecutive frames
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingFlowControl(const T_STWCAN_Msg_RX & orc_CanMessage)
+std::error_code C_OscProtocolDriverOsyTpCan::m_HandleIncomingFlowControl(const T_STWCAN_Msg_RX & orc_CanMessage)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    //are we in a segmented Tx transfer ?
    if (mc_TxService.e_Status == C_ServiceState::eWAITING_FOR_FLOW_CONTROL)
@@ -379,27 +381,27 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingFlowControl(const T_STWCAN_
             mc_TxService.u32_SendCfTimeout += TglGetTickCount();
             mc_TxService.e_Status = C_ServiceState::eMORE_CONSECUTIVE_FRAMES_TO_SEND;
 
-            s32_Return = m_SendNextConsecutiveFrames();
+            c_Return = m_SendNextConsecutiveFrames();
          }
          else
          {
             m_LogWarningWithHeader("Flow control with unsupported STmin or BS received. Ignoring.", TGL_UTIL_FUNC_ID);
-            s32_Return = C_OVERFLOW;
+            c_Return = Errc::overflow;
          }
       }
       else
       {
          m_LogWarningWithHeader("Flow control with incorrect DLC received. Ignoring.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
    else
    {
       //this was unexpected -> ignore
       m_LogWarningWithHeader("Unexpected flow control received. Ignoring.", TGL_UTIL_FUNC_ID);
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -420,16 +422,16 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingFlowControl(const T_STWCAN_
    \param[in]  orc_CanMessage   incoming CAN message
 
    \return
-   C_NO_ERR     no problems
-   C_NOACT      unexpected consecutive frame
-   C_CONFIG     frame invalid (DLC is too little)
-   C_RANGE      invalid sequence number
-   C_OVERFLOW   could not add full service to Rx queue
+   Errc::success    no problems
+   Errc::noact      unexpected consecutive frame
+   Errc::config     frame invalid (DLC is too little)
+   Errc::range      invalid sequence number
+   Errc::overflow   could not add full service to Rx queue
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingConsecutiveFrame(const T_STWCAN_Msg_RX & orc_CanMessage)
+std::error_code C_OscProtocolDriverOsyTpCan::m_HandleIncomingConsecutiveFrame(const T_STWCAN_Msg_RX & orc_CanMessage)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (mc_RxService.e_Status == C_ServiceState::eWAITING_FOR_CONSECUTIVE_FRAME)
    {
@@ -444,11 +446,11 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingConsecutiveFrame(const T_ST
                               &orc_CanMessage.au8_Data[1],
                               mc_RxService.c_ServiceData.c_Data.size() - mc_RxService.u16_TransmissionIndex);
             //add to Rx queue:
-            s32_Return = m_AddToRxQueue(mc_RxService.c_ServiceData);
-            if (s32_Return != C_NO_ERR)
+            c_Return = m_AddToRxQueue(mc_RxService.c_ServiceData);
+            if (c_Return)
             {
                m_LogWarningWithHeader("Rx Queue overflow. Incoming consecutive frame dumped.", TGL_UTIL_FUNC_ID);
-               s32_Return = C_OVERFLOW;
+               c_Return = Errc::overflow;
             }
             mc_RxService.e_Status = C_ServiceState::eIDLE;
          }
@@ -470,7 +472,7 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingConsecutiveFrame(const T_ST
             //not all data available but DLC < 8; this is messed up: abort
             mc_RxService.e_Status = C_ServiceState::eIDLE;
             m_LogWarningWithHeader("Consecutive frame with incorrect DLC received.", TGL_UTIL_FUNC_ID);
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
       }
       else
@@ -482,16 +484,16 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingConsecutiveFrame(const T_ST
                               static_cast<uint32_t>(mc_RxService.u8_SequenceNumber),
                               orc_CanMessage.au8_Data[0] & 0x0FU);
          m_LogWarningWithHeader(c_Tmp.c_str(), TGL_UTIL_FUNC_ID);
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
    }
    else
    {
       //this was unexpected -> ignore
       m_LogWarningWithHeader("Unexpected consecutive frame received. Ignoring.", TGL_UTIL_FUNC_ID);
-      s32_Return = C_NOACT;
+      c_Return = Errc::noact;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -511,14 +513,15 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingConsecutiveFrame(const T_ST
    \param[in]  orc_CanMessage   incoming CAN message
 
    \return
-   C_NO_ERR     no problems
-   C_CONFIG     frame invalid (DLC is not 8)
-   C_OVERFLOW   Rx Queue overflow. Incoming consecutive frame dumped
+   Errc::success    no problems
+   Errc::config     frame invalid (DLC is not 8)
+   Errc::overflow   Rx Queue overflow. Incoming consecutive frame dumped
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificMultiFrame(const T_STWCAN_Msg_RX & orc_CanMessage)
+std::error_code C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificMultiFrame(
+   const T_STWCAN_Msg_RX & orc_CanMessage)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    if (mc_RxService.e_Status != C_ServiceState::eIDLE)
    {
@@ -542,7 +545,7 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificMultiFrame(const
       {
          //malformed service -> ignore
          m_LogWarningWithHeader("OMF: First frame with invalid DLC received. Ignoring.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
    }
    // consecutive frame
@@ -559,11 +562,11 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificMultiFrame(const
                          &orc_CanMessage.au8_Data[1],
                          mc_RxService.c_ServiceData.c_Data.size() - mc_RxService.u16_TransmissionIndex);
             //add to Rx queue:
-            s32_Return = m_AddToRxQueue(mc_RxService.c_ServiceData);
-            if (s32_Return != C_NO_ERR)
+            c_Return = m_AddToRxQueue(mc_RxService.c_ServiceData);
+            if (c_Return)
             {
                m_LogWarningWithHeader("OMF: Rx Queue overflow. Incoming consecutive frame dumped.", TGL_UTIL_FUNC_ID);
-               s32_Return = C_OVERFLOW;
+               c_Return = Errc::overflow;
             }
             mc_RxService.e_Status = C_ServiceState::eIDLE;
             mc_RxService.u8_SequenceNumber = 0U;
@@ -586,7 +589,7 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificMultiFrame(const
             mc_RxService.e_Status = C_ServiceState::eIDLE;
             mc_RxService.u8_SequenceNumber = 0U;
             m_LogWarningWithHeader("OMF: Consecutive frame with incorrect DLC received.", TGL_UTIL_FUNC_ID);
-            s32_Return = C_CONFIG;
+            c_Return = Errc::config;
          }
       }
       else
@@ -595,11 +598,11 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificMultiFrame(const
          mc_RxService.e_Status = C_ServiceState::eIDLE;
          mc_RxService.u8_SequenceNumber = 0U;
          m_LogWarningWithHeader("OMF: Consecutive frame with incorrect sequence number received.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_RANGE;
+         c_Return = Errc::range;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -611,18 +614,18 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingOsySpecificMultiFrame(const
    The suppressPosRspMsgIndicationBit will be set to avoid flooding the bus with response messages.
 
    \return
-   C_NO_ERR   no problems
-   C_COM      could not send request
-   C_CONFIG   no dispatcher installed
+   Errc::success   no problems
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::m_BroadcastSendDiagnosticSessionControl(const uint8_t ou8_Session) const
+std::error_code C_OscProtocolDriverOsyTpCan::m_BroadcastSendDiagnosticSessionControl(const uint8_t ou8_Session) const
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (mpc_CanDispatcher == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -635,15 +638,14 @@ int32_t C_OscProtocolDriverOsyTpCan::m_BroadcastSendDiagnosticSessionControl(con
       c_Service.c_Data[1] = ou8_Session | 0x80U;
       mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-      s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_Msg);
-      if (s32_Return != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
       {
          m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -683,20 +685,19 @@ void C_OscProtocolDriverOsyTpCan::mh_ComposeSingleFrame(const C_OscProtocolDrive
 
    \param[in]    ou8_RoutineIdMsb     MSB part of the last sent routine identifier for matching the correct response
    \param[in]    ou8_RoutineIdLsb     LSB part of the last sent routine identifier for matching the correct response
-   \param[out]   opu8_NrCode          if not NULL: negative response code (if C_WARN is returned)
+   \param[out]   opu8_NrCode          if not NULL: negative response code (if Errc::warn is returned)
 
    \return
-   C_NO_ERR    no problems; one positive response received
-   C_WARN      negative response received and no positive response received
-   C_TIMEOUT   no response within timeout (was SetNodeIdentifiersForBroadcasts() called ?)
-   C_OVERFLOW  multiple positive responses received
+   Errc::success    no problems; one positive response received
+   Errc::warn       negative response received and no positive response received
+   Errc::timeout    no response within timeout (was SetNodeIdentifiersForBroadcasts() called ?)
+   Errc::overflow   multiple positive responses received
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::m_HandleBroadcastSetNodeIdBySerialNumberResponse(const uint8_t ou8_RoutineIdMsb,
-                                                                                      const uint8_t ou8_RoutineIdLsb,
-                                                                                      uint8_t * const opu8_NrCode) const
+std::error_code C_OscProtocolDriverOsyTpCan::m_HandleBroadcastSetNodeIdBySerialNumberResponse(
+   const uint8_t ou8_RoutineIdMsb, const uint8_t ou8_RoutineIdLsb, uint8_t * const opu8_NrCode) const
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    //check for responses
    const uint32_t u32_StartTime = TglGetTickCount();
    T_STWCAN_Msg_RX c_Response;
@@ -766,25 +767,25 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleBroadcastSetNodeIdBySerialNumberRes
    if (q_MultiplePositiveResponsesReceived == true)
    {
       // Multiple positive responses received. At least two nodes with same SN. Error case.
-      s32_Return = C_OVERFLOW;
+      c_Return = Errc::overflow;
    }
    else if (q_PositiveResponseReceived == true)
    {
       // One positive response received. All negative responses can be ignored
-      s32_Return = C_NO_ERR;
+      c_Return = Errc::success;
    }
    else if (q_NegativeResponseReceived == true)
    {
       // No positive, only negative responses. Error case.
-      s32_Return = C_WARN;
+      c_Return = Errc::warn;
    }
    else
    {
       // No relevant response received
-      s32_Return = C_TIMEOUT;
+      c_Return = Errc::timeout;
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -800,30 +801,31 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleBroadcastSetNodeIdBySerialNumberRes
    Ongoing communication problems will be written to the class's log text.
 
    \return
-   C_NO_ERR   cycle finished
-   C_CONFIG   no dispatcher installed
-   C_COM      communication driver reported error
+   Errc::success   cycle finished
+   Errc::config    no dispatcher installed
+   Errc::com       communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::Cycle(void)
+std::error_code C_OscProtocolDriverOsyTpCan::Cycle(void)
 {
-   int32_t s32_ReturnFunc = C_NO_ERR;
+   std::error_code c_ReturnFunc = Errc::success;
 
    if (mpc_CanDispatcher == nullptr)
    {
-      s32_ReturnFunc = C_CONFIG;
+      c_ReturnFunc = Errc::config;
    }
    else
    {
-      int32_t s32_Return;
       if (mc_TxService.e_Status == C_ServiceState::eIDLE)
       {
+         //doubles as the loop control: a failed send stops the loop just as an empty queue does
+         std::error_code c_Return = Errc::success;
+
          //do we have more to send ?
-         s32_Return = C_NO_ERR;
-         while (s32_Return == C_NO_ERR)
+         while (!c_Return)
          {
-            s32_Return = this->m_GetFromTxQueue(mc_TxService.c_ServiceData);
-            if (s32_Return == C_NO_ERR)
+            c_Return = this->m_GetFromTxQueue(mc_TxService.c_ServiceData);
+            if (!c_Return)
             {
                if (mc_TxService.c_ServiceData.c_Data.size() <= 7)
                {
@@ -831,12 +833,11 @@ int32_t C_OscProtocolDriverOsyTpCan::Cycle(void)
                   T_STWCAN_Msg_TX c_Msg;
                   mh_ComposeSingleFrame(mc_TxService.c_ServiceData, m_GetTxIdentifier(), c_Msg);
 
-                  s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_Msg);
-                  if (s32_Return != C_NO_ERR)
+                  if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
                   {
                      m_LogWarningWithHeader("Could not send single frame CAN message.", TGL_UTIL_FUNC_ID);
-                     s32_Return = C_COM; //terminate loop
-                     s32_ReturnFunc = C_COM;
+                     c_Return = Errc::com; //terminate loop
+                     c_ReturnFunc = Errc::com;
                   }
                }
                else if (mc_TxService.c_ServiceData.q_CanTransferWithoutFlowControl == true)
@@ -858,11 +859,11 @@ int32_t C_OscProtocolDriverOsyTpCan::Cycle(void)
                   c_TxMsg.au8_Data[0] = mhu8_ISO15765_N_PCI_OMF;
                   c_TxMsg.au8_Data[1] = static_cast<uint8_t>(u32_CountBytes & 0xFFU);
                   (void)std::memcpy(&c_TxMsg.au8_Data[2], &mc_TxService.c_ServiceData.c_Data[0], 6U);
-                  s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg);
 
-                  if (s32_Return != C_NO_ERR)
+                  if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != C_NO_ERR)
                   {
                      m_LogWarningWithHeader("Could not send first frame CAN message.", TGL_UTIL_FUNC_ID);
+                     c_Return = Errc::com; //terminate loop, as the shared status used to
                   }
                   else
                   {
@@ -889,14 +890,14 @@ int32_t C_OscProtocolDriverOsyTpCan::Cycle(void)
                                           u32_BytesForNextMessage);
 
                         c_TxMsg.u8_DLC = static_cast<uint8_t>(u32_BytesForNextMessage + 1U);
-                        s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg);
-                        if (s32_Return != C_NO_ERR)
+                        if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != C_NO_ERR)
                         {
                            //We do not handle Tx buffer issues with the OMF-CFs (like we do with regular CFs)
                            //The OMF mechanism is only used for smaller services with low numbers of messages without
                            // handshakes (typical maximum: STW Flashloader flashing -> 37 * 3 messages)
                            //Assumption: this number of Tx buffers is available on all targets
                            m_LogWarningWithHeader("Could not send consecutive CAN message.", TGL_UTIL_FUNC_ID);
+                           c_Return = Errc::com; //terminate outer loop, as the shared status used to
                            break;
                         }
 
@@ -921,10 +922,10 @@ int32_t C_OscProtocolDriverOsyTpCan::Cycle(void)
                   (void)std::memcpy(&c_TxMsg.au8_Data[2], &mc_TxService.c_ServiceData.c_Data[0], 6U);
                   mc_TxService.u16_TransmissionIndex = 6U;
                   mc_TxService.u8_SequenceNumber = 1U;
-                  s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg);
-                  if (s32_Return != C_NO_ERR)
+                  if (mpc_CanDispatcher->CAN_Send_Msg(c_TxMsg) != C_NO_ERR)
                   {
                      m_LogWarningWithHeader("Could not send first frame CAN message.", TGL_UTIL_FUNC_ID);
+                     c_Return = Errc::com;
                   }
                   else
                   {
@@ -977,11 +978,12 @@ int32_t C_OscProtocolDriverOsyTpCan::Cycle(void)
       (void)mpc_CanDispatcher->DispatchIncoming();
 
       //read all incoming messages:
-      s32_Return = C_NO_ERR;
-      while (s32_Return == C_NO_ERR)
+      //the dispatcher reports the integer convention; this local stays on it
+      int32_t s32_CanResult = C_NO_ERR;
+      while (s32_CanResult == C_NO_ERR)
       {
-         s32_Return = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Msg);
-         if ((s32_Return == C_NO_ERR) && (c_Msg.u8_DLC > 0U))
+         s32_CanResult = mpc_CanDispatcher->ReadFromQueue(mu16_DispatcherClientHandle, c_Msg);
+         if ((s32_CanResult == C_NO_ERR) && (c_Msg.u8_DLC > 0U))
          {
             //return values of frame handler functions are ignored
             //- problem details are reported there in the log
@@ -1014,7 +1016,7 @@ int32_t C_OscProtocolDriverOsyTpCan::Cycle(void)
       }
    }
 
-   return s32_ReturnFunc;
+   return c_ReturnFunc;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1028,27 +1030,27 @@ int32_t C_OscProtocolDriverOsyTpCan::Cycle(void)
    \param[in]  orc_ServerIdentifier   new server identifier
 
    \return
-   C_NO_ERR   no problems
-   C_RANGE    client and/or server identifier out of range
-   C_NOACT    could not reconfigure Rx filters
+   Errc::success   no problems
+   Errc::range     client and/or server identifier out of range
+   Errc::noact     could not reconfigure Rx filters
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::SetNodeIdentifiers(const C_OscProtocolDriverOsyNode & orc_ClientIdentifier,
-                                                        const C_OscProtocolDriverOsyNode & orc_ServerIdentifier)
+std::error_code C_OscProtocolDriverOsyTpCan::SetNodeIdentifiers(
+   const C_OscProtocolDriverOsyNode & orc_ClientIdentifier, const C_OscProtocolDriverOsyNode & orc_ServerIdentifier)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
-   s32_Return = C_OscProtocolDriverOsyTpBase::SetNodeIdentifiers(orc_ClientIdentifier, orc_ServerIdentifier);
-   if ((s32_Return == C_NO_ERR) && (mpc_CanDispatcher != nullptr))
+   c_Return = C_OscProtocolDriverOsyTpBase::SetNodeIdentifiers(orc_ClientIdentifier, orc_ServerIdentifier);
+   if ((!c_Return) && (mpc_CanDispatcher != nullptr))
    {
       //Clear Rx queue; we are no longer interested in that old stuff:
       mpc_CanDispatcher->ClearQueue(mu16_DispatcherClientHandle);
 
       //reconfigure Rx filter:
-      s32_Return = this->m_SetRxFilter(false);
-      if (s32_Return != C_NO_ERR)
+      c_Return = this->m_SetRxFilter(false);
+      if (c_Return)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
    else
@@ -1056,7 +1058,7 @@ int32_t C_OscProtocolDriverOsyTpCan::SetNodeIdentifiers(const C_OscProtocolDrive
       //finished ...
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1070,31 +1072,31 @@ int32_t C_OscProtocolDriverOsyTpCan::SetNodeIdentifiers(const C_OscProtocolDrive
    \param[in]  orc_ClientIdentifier   new client (i.e.: our own) identifier
 
    \return
-   C_NO_ERR   no problems
-   C_RANGE    client and/or server identifier out of range
-   C_NOACT    could not reconfigure Rx filters
+   Errc::success   no problems
+   Errc::range     client and/or server identifier out of range
+   Errc::noact     could not reconfigure Rx filters
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::SetNodeIdentifiersForBroadcasts(
+std::error_code C_OscProtocolDriverOsyTpCan::SetNodeIdentifiersForBroadcasts(
    const C_OscProtocolDriverOsyNode & orc_ClientIdentifier)
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
    C_OscProtocolDriverOsyNode c_ServerId;
 
    c_ServerId.u8_BusIdentifier = orc_ClientIdentifier.u8_BusIdentifier;
    c_ServerId.u8_NodeIdentifier = C_OscProtocolDriverOsyNode::mhu8_NODE_ID_BROADCASTS;
 
-   s32_Return = C_OscProtocolDriverOsyTpBase::SetNodeIdentifiers(orc_ClientIdentifier, c_ServerId);
-   if ((s32_Return == C_NO_ERR) && (mpc_CanDispatcher != nullptr))
+   c_Return = C_OscProtocolDriverOsyTpBase::SetNodeIdentifiers(orc_ClientIdentifier, c_ServerId);
+   if ((!c_Return) && (mpc_CanDispatcher != nullptr))
    {
       //Clear Rx queue; we are no longer interested in that old stuff:
       mpc_CanDispatcher->ClearQueue(mu16_DispatcherClientHandle);
 
       //reconfigure Rx filter:
-      s32_Return = this->m_SetRxFilter(true);
-      if (s32_Return != C_NO_ERR)
+      c_Return = this->m_SetRxFilter(true);
+      if (c_Return)
       {
-         s32_Return = C_NOACT;
+         c_Return = Errc::noact;
       }
    }
    else
@@ -1102,7 +1104,7 @@ int32_t C_OscProtocolDriverOsyTpCan::SetNodeIdentifiersForBroadcasts(
       //finished ...
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1172,11 +1174,11 @@ uint32_t C_OscProtocolDriverOsyTpCan::m_GetTxBroadcastIdentifier(void) const
    Precondition: installed dispatcher must be valid
 
    \return
-   C_NO_ERR   no problems
-   C_RANGE    invalid dispatcher handle
+   Errc::success   no problems
+   Errc::range     invalid dispatcher handle
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::m_SetRxFilter(const bool oq_ForBroadcast)
+std::error_code C_OscProtocolDriverOsyTpCan::m_SetRxFilter(const bool oq_ForBroadcast)
 {
    C_CanRxFilter c_Filter;
 
@@ -1214,8 +1216,9 @@ int32_t C_OscProtocolDriverOsyTpCan::m_SetRxFilter(const bool oq_ForBroadcast)
                           (static_cast<uint32_t>(mc_ClientId.u8_NodeIdentifier) << 8U);
       c_Filter.u32_Mask = 0x1FFFFF80U; //must be exactly for us; but sender may be anyone
    }
+   //the dispatcher reports the integer STW convention; bridge it into this category
    //lint -e{613}  //caller is responsible for valid dispatcher
-   return mpc_CanDispatcher->SetRXFilter(mu16_DispatcherClientHandle, c_Filter);
+   return make_error_code_from_stw(mpc_CanDispatcher->SetRXFilter(mu16_DispatcherClientHandle, c_Filter));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1227,14 +1230,14 @@ int32_t C_OscProtocolDriverOsyTpCan::m_SetRxFilter(const bool oq_ForBroadcast)
    \param[in]    opc_Dispatcher  CAN dispatcher to use for communication
 
    \return
-   C_NO_ERR   no problems
-   C_CONFIG   could not register with dispatcher
-   C_NOACT    could not configure Rx filter
+   Errc::success   no problems
+   Errc::config    could not register with dispatcher
+   Errc::noact     could not configure Rx filter
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::SetDispatcher(C_CanDispatcher * const opc_Dispatcher)
+std::error_code C_OscProtocolDriverOsyTpCan::SetDispatcher(C_CanDispatcher * const opc_Dispatcher)
 {
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
 
    //was there a dispatcher installed previously ?
    if (mpc_CanDispatcher != nullptr)
@@ -1248,24 +1251,23 @@ int32_t C_OscProtocolDriverOsyTpCan::SetDispatcher(C_CanDispatcher * const opc_D
    //register with new dispatcher:
    if (mpc_CanDispatcher != nullptr)
    {
-      s32_Return = mpc_CanDispatcher->RegisterClient(mu16_DispatcherClientHandle);
-      if (s32_Return != C_NO_ERR)
+      if (mpc_CanDispatcher->RegisterClient(mu16_DispatcherClientHandle) != C_NO_ERR)
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
          //set reception filters:
-         s32_Return = m_SetRxFilter(
+         c_Return = m_SetRxFilter(
             (mc_ServerId.u8_NodeIdentifier == C_OscProtocolDriverOsyNode::mhu8_NODE_ID_BROADCASTS) ? true : false);
-         if (s32_Return != C_NO_ERR)
+         if (c_Return)
          {
-            s32_Return = C_NOACT;
+            c_Return = Errc::noact;
          }
       }
    }
 
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1283,22 +1285,22 @@ int32_t C_OscProtocolDriverOsyTpCan::SetDispatcher(C_CanDispatcher * const opc_D
    \param[out]    orc_ExtendedResponses   information about all nodes that sent an extended response
 
    \return
-   C_NO_ERR   no problems; zero or more responses received; data placed in orc_Responses
-   C_COM      could not send request
-   C_CONFIG   no dispatcher installed
+   Errc::success   no problems; zero or more responses received; data placed in orc_Responses
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
+std::error_code C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
    std::vector<C_BroadcastReadEcuSerialNumberResults> & orc_Responses,
    std::vector<C_BroadcastReadEcuSerialNumberExtendedResults> & orc_ExtendedResponses) const
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    orc_Responses.clear();
    orc_ExtendedResponses.clear();
    if (mpc_CanDispatcher == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -1312,11 +1314,10 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
       c_Service.c_Data[0] = mhu8_OSY_BC_SI_READ_SERIAL_NUMBER;
       mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-      s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_Msg);
-      if (s32_Return != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
       {
          m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
       else
       {
@@ -1365,7 +1366,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
          }
       }
 
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
          bool q_Continue = false;
          std::map<uint32_t, C_BroadcastReadEcuSerialNumberExtendedResults> c_UniqueIdToResult;
@@ -1380,11 +1381,10 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
          {
             q_Continue = false;
 
-            s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_Msg);
-            if (s32_Return != C_NO_ERR)
+            if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
             {
                m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
-               s32_Return = C_COM;
+               c_Return = Errc::com;
             }
             else
             {
@@ -1629,10 +1629,10 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
                }
             }
          }
-         while ((q_Continue == true) && (s32_Return == C_NO_ERR));
+         while ((q_Continue == true) && (!c_Return));
 
          // Add the extended results to the output
-         if (s32_Return == C_NO_ERR)
+         if (!c_Return)
          {
             std::map<uint32_t, C_BroadcastReadEcuSerialNumberExtendedResults>::iterator c_ItResult;
 
@@ -1664,7 +1664,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
          }
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1680,20 +1680,20 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
    \param[out]    orc_Results   information about all nodes that sent a response
 
    \return
-   C_NO_ERR   no problems; zero or more responses received; data placed in orc_Results
-   C_COM      could not send request
-   C_CONFIG   no dispatcher installed
+   Errc::success   no problems; zero or more responses received; data placed in orc_Results
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::BroadcastRequestProgramming(
+std::error_code C_OscProtocolDriverOsyTpCan::BroadcastRequestProgramming(
    std::vector<C_BroadcastRequestProgrammingResults> & orc_Results) const
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    orc_Results.clear();
    if (mpc_CanDispatcher == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -1707,11 +1707,10 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastRequestProgramming(
       c_Service.c_Data[3] = static_cast<uint8_t>(mhu16_OSY_BC_RC_SID_REQUEST_PROGRAMMING & 0xFFU);
       mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-      s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_Msg);
-      if (s32_Return != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
       {
          m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
       else
       {
@@ -1764,10 +1763,10 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastRequestProgramming(
                }
             }
          }
-         s32_Return = C_NO_ERR;
+         c_Return = Errc::success;
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1789,36 +1788,36 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastRequestProgramming(
 
    \param[in]    orc_SerialNumber     serial number of node to address
    \param[in]    orc_NewNodeId        node ID to set
-   \param[out]   opu8_NrCode          if not NULL: negative response code (if C_WARN is returned)
+   \param[out]   opu8_NrCode          if not NULL: negative response code (if Errc::warn is returned)
 
    \return
-   C_NO_ERR    no problems; one positive response received
-   C_RANGE     invalid node ID (bus ID or node-ID out of range); "0x7F" is not permitted as node ID as it's reserved for
+   Errc::success   no problems; one positive response received
+   Errc::range     invalid node ID (bus ID or node-ID out of range); "0x7F" is not permitted as node ID as reserved for
                 broadcasts
                invalid serial number
-   C_WARN      negative response received and no positive response received
-   C_COM       could not send requests
-   C_CONFIG    no dispatcher installed
-   C_TIMEOUT   no response within timeout (was SetNodeIdentifiersForBroadcasts() called ?)
-   C_OVERFLOW  multiple positive responses received
+   Errc::warn       negative response received and no positive response received
+   Errc::com        could not send requests
+   Errc::config     no dispatcher installed
+   Errc::timeout    no response within timeout (was SetNodeIdentifiersForBroadcasts() called ?)
+   Errc::overflow   multiple positive responses received
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
+std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
    const C_OscProtocolSerialNumber & orc_SerialNumber, const C_OscProtocolDriverOsyNode & orc_NewNodeId,
    uint8_t * const opu8_NrCode) const
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (mpc_CanDispatcher == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else if ((orc_NewNodeId.u8_BusIdentifier > C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) ||
             (orc_NewNodeId.u8_NodeIdentifier >= C_OscProtocolDriverOsyNode::mhu8_MAX_NODE) ||
             (orc_SerialNumber.q_IsValid == false) ||
             (orc_SerialNumber.q_ExtFormatUsed == true))
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -1835,11 +1834,10 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
       c_Service.c_Data[6] = orc_SerialNumber.au8_SerialNumber[2];
       mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-      s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_Msg);
-      if (s32_Return != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
       {
          m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
       else
       {
@@ -1850,11 +1848,10 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
          c_Service.c_Data[6] = orc_SerialNumber.au8_SerialNumber[5];
          mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-         s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_Msg);
-         if (s32_Return != C_NO_ERR)
+         if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
          {
             m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
-            s32_Return = C_COM;
+            c_Return = Errc::com;
          }
          else
          {
@@ -1867,23 +1864,22 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
             c_Service.c_Data[5] = orc_NewNodeId.u8_NodeIdentifier;
             mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-            s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_Msg);
-            if (s32_Return != C_NO_ERR)
+            if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
             {
                m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
-               s32_Return = C_COM;
+               c_Return = Errc::com;
             }
          }
       }
 
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
-         s32_Return = this->m_HandleBroadcastSetNodeIdBySerialNumberResponse(c_Service.c_Data[2],
+         c_Return = this->m_HandleBroadcastSetNodeIdBySerialNumberResponse(c_Service.c_Data[2],
                                                                              c_Service.c_Data[3],
                                                                              opu8_NrCode);
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1907,36 +1903,36 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumber(
    \param[in]    orc_SerialNumber                     serial number of node to address (1 to 29 bytes allowed)
    \param[in]    ou8_SubNodeId                        sub node id of sub node to address (in case of a device without sub nodes: 0)
    \param[in]    orc_NewNodeId                        node ID to set
-   \param[out]   opu8_NrCode                          if not NULL: negative response code (if C_WARN is returned)
+   \param[out]   opu8_NrCode                          if not NULL: negative response code (if Errc::warn is returned)
 
    \return
-   C_NO_ERR    no problems; one positive response received
-   C_RANGE     invalid node ID (bus ID or node-ID out of range); "0x7F" is not permitted as node ID as it's reserved for
+   Errc::success   no problems; one positive response received
+   Errc::range     invalid node ID (bus ID or node-ID out of range); "0x7F" is not permitted as node ID as reserved for
                 broadcasts
                Serial number is empty or has more than 29 bytes
-   C_WARN      negative response received and no positive response received
-   C_COM       could not send requests
-   C_CONFIG    no dispatcher installed
-   C_TIMEOUT   no response within timeout (was SetNodeIdentifiersForBroadcasts() called ?)
-   C_OVERFLOW  multiple positive responses received
+   Errc::warn       negative response received and no positive response received
+   Errc::com        could not send requests
+   Errc::config     no dispatcher installed
+   Errc::timeout    no response within timeout (was SetNodeIdentifiersForBroadcasts() called ?)
+   Errc::overflow   multiple positive responses received
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumberExtended(
+std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumberExtended(
    const C_OscProtocolSerialNumber & orc_SerialNumber, const uint8_t ou8_SubNodeId,
    const C_OscProtocolDriverOsyNode & orc_NewNodeId, uint8_t * const opu8_NrCode) const
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (mpc_CanDispatcher == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else if ((orc_NewNodeId.u8_BusIdentifier > C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) ||
             (orc_NewNodeId.u8_NodeIdentifier >= C_OscProtocolDriverOsyNode::mhu8_MAX_NODE) ||
             (orc_SerialNumber.q_IsValid == false) ||
             (orc_SerialNumber.q_ExtFormatUsed == false))
    {
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
    }
    else
    {
@@ -1998,11 +1994,10 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumberExtended(
 
          mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-         s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_Msg);
-         if (s32_Return != C_NO_ERR)
+         if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
          {
             m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
-            s32_Return = C_COM;
+            c_Return = Errc::com;
          }
          else
          {
@@ -2021,16 +2016,16 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumberExtended(
             ++u16_PartCounter;
          }
       }
-      while (s32_Return == C_NO_ERR);
+      while (!c_Return);
 
-      if (s32_Return == C_NO_ERR)
+      if (!c_Return)
       {
-         s32_Return = this->m_HandleBroadcastSetNodeIdBySerialNumberResponse(c_Service.c_Data[2],
+         c_Return = this->m_HandleBroadcastSetNodeIdBySerialNumberResponse(c_Service.c_Data[2],
                                                                              c_Service.c_Data[3],
                                                                              opu8_NrCode);
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2042,18 +2037,18 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumberExtended(
    \param[in]  ou8_ResetType        Reset type (0x02: keyOffOnReset, 0x60: resetToFlashloader)
 
    \return
-   C_NO_ERR   no problems
-   C_COM      could not send request
-   C_CONFIG   no dispatcher installed
+   Errc::success   no problems
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::BroadcastEcuReset(const uint8_t ou8_ResetType) const
+std::error_code C_OscProtocolDriverOsyTpCan::BroadcastEcuReset(const uint8_t ou8_ResetType) const
 {
-   int32_t s32_Return;
+   std::error_code c_Return = Errc::success;
 
    if (mpc_CanDispatcher == nullptr)
    {
-      s32_Return = C_CONFIG;
+      c_Return = Errc::config;
    }
    else
    {
@@ -2065,14 +2060,13 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastEcuReset(const uint8_t ou8_ResetTy
       c_Service.c_Data[1] = ou8_ResetType;
       mh_ComposeSingleFrame(c_Service, m_GetTxBroadcastIdentifier(), c_Msg);
 
-      s32_Return = mpc_CanDispatcher->CAN_Send_Msg(c_Msg);
-      if (s32_Return != C_NO_ERR)
+      if (mpc_CanDispatcher->CAN_Send_Msg(c_Msg) != C_NO_ERR)
       {
          m_LogWarningWithHeader("Could not send single frame broadcast CAN message.", TGL_UTIL_FUNC_ID);
-         s32_Return = C_COM;
+         c_Return = Errc::com;
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2084,12 +2078,12 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastEcuReset(const uint8_t ou8_ResetTy
    The suppressPosRspMsgIndicationBit will be set to avoid flooding the bus with response messages.
 
    \return
-   C_NO_ERR   no problems
-   C_COM      could not send request
-   C_CONFIG   no dispatcher installed
+   Errc::success   no problems
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::BroadcastSendEnterPreProgrammingSession(void) const
+std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSendEnterPreProgrammingSession(void) const
 {
    return this->m_BroadcastSendDiagnosticSessionControl(0x60U);
 }
@@ -2103,12 +2097,12 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSendEnterPreProgrammingSession(voi
    The suppressPosRspMsgIndicationBit will be set to avoid flooding the bus with response messages.
 
    \return
-   C_NO_ERR   no problems
-   C_COM      could not send request
-   C_CONFIG   no dispatcher installed
+   Errc::success   no problems
+   Errc::com       could not send request
+   Errc::config    no dispatcher installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsyTpCan::BroadcastSendEnterDefaultSession(void) const
+std::error_code C_OscProtocolDriverOsyTpCan::BroadcastSendEnterDefaultSession(void) const
 {
    return this->m_BroadcastSendDiagnosticSessionControl(0x01U);
 }

@@ -98,7 +98,8 @@ int32_t C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatch
 
    if (s32_Return == C_NO_ERR)
    {
-      s32_Return = mc_TpCan.SetDispatcher(this->mpc_CanDispatcher);
+      //boundary: this caller still uses the integer convention
+      s32_Return = mc_TpCan.SetDispatcher(this->mpc_CanDispatcher).value();
       if (s32_Return != C_NO_ERR)
       {
          osc_write_log_error(c_LogActivity, "Setting CAN dispatcher for CAN transport protocol failed!");
@@ -201,7 +202,8 @@ int32_t C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_FlashloaderRes
    do
    {
       // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast
-      s32_Return = mc_TpCan.BroadcastSendEnterPreProgrammingSession();
+      //boundary: this caller still uses the integer convention
+      s32_Return = mc_TpCan.BroadcastSendEnterPreProgrammingSession().value();
       if (s32_Return != C_NO_ERR)
       {
          osc_write_log_error(c_LogActivity,
@@ -818,7 +820,8 @@ int32_t C_OscBuSequences::h_ReadHexFile(const std::string & orc_HexFilePath, C_O
          }
       }
 
-      s32_Return = orc_HexFile.GetSignatureBlockAddress(oru32_SignatureBlockAddress);
+      //boundary: this function still reports the integer convention
+      s32_Return = orc_HexFile.GetSignatureBlockAddress(oru32_SignatureBlockAddress).value();
       if (s32_Return != C_NO_ERR)
       {
          osc_write_log_error(c_LogActivity, "Could not find a signature block in the HEX file data!");

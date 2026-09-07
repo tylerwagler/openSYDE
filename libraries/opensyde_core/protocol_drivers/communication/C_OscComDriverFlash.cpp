@@ -270,7 +270,8 @@ int32_t C_OscComDriverFlash::EthConnectNode(const C_OscProtocolDriverOsyNode & o
    int32_t s32_Return;
 
    // Prepare the temporary protocol and its tp
-   s32_Return = orc_TpIp.SetNodeIdentifiers(this->GetClientId(), orc_ServerId);
+   //boundary: this caller still uses the integer convention
+   s32_Return = orc_TpIp.SetNodeIdentifiers(this->GetClientId(), orc_ServerId).value();
    if (s32_Return == C_NO_ERR)
    {
       uint32_t u32_Handle;
@@ -278,7 +279,8 @@ int32_t C_OscComDriverFlash::EthConnectNode(const C_OscProtocolDriverOsyNode & o
       s32_Return = pc_IpDispatcher->InitTcp(orau8_IpAddress, u32_Handle);
       if (s32_Return == C_NO_ERR)
       {
-         s32_Return = orc_TpIp.SetDispatcher(pc_IpDispatcher, u32_Handle);
+         //boundary: this caller still uses the integer convention
+         s32_Return = orc_TpIp.SetDispatcher(pc_IpDispatcher, u32_Handle).value();
       }
 
       if (s32_Return == C_NO_ERR)
@@ -342,7 +344,8 @@ int32_t C_OscComDriverFlash::SendOsyBroadcastRequestProgramming(bool & orq_NotAc
    if (this->mpc_CanTransportProtocolBroadcast != nullptr)
    {
       std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastRequestProgrammingResults> c_Results;
-      s32_Return = this->mpc_CanTransportProtocolBroadcast->BroadcastRequestProgramming(c_Results);
+      //boundary: this caller still uses the integer convention
+      s32_Return = this->mpc_CanTransportProtocolBroadcast->BroadcastRequestProgramming(c_Results).value();
       if (s32_Return == C_NO_ERR)
       {
          for (uint32_t u32_ResponseIndex = 0U; u32_ResponseIndex < c_Results.size(); u32_ResponseIndex++)
@@ -358,7 +361,8 @@ int32_t C_OscComDriverFlash::SendOsyBroadcastRequestProgramming(bool & orq_NotAc
    else
    {
       std::vector<C_OscProtocolDriverOsyTpIp::C_BroadcastRequestProgrammingResults> c_Results;
-      s32_Return = this->mpc_IpTransportProtocolBroadcast->BroadcastRequestProgramming(c_Results);
+      //boundary: this caller still uses the integer convention
+      s32_Return = this->mpc_IpTransportProtocolBroadcast->BroadcastRequestProgramming(c_Results).value();
       if (s32_Return == C_NO_ERR)
       {
          for (uint32_t u32_ResponseIndex = 0U; u32_ResponseIndex < c_Results.size(); u32_ResponseIndex++)
@@ -400,11 +404,13 @@ int32_t C_OscComDriverFlash::SendOsyBroadcastEcuReset(const uint8_t ou8_ResetTyp
    {
       if (this->mpc_CanTransportProtocolBroadcast != nullptr)
       {
-         s32_Return = this->mpc_CanTransportProtocolBroadcast->BroadcastEcuReset(ou8_ResetType);
+         //boundary: this caller still uses the integer convention
+         s32_Return = this->mpc_CanTransportProtocolBroadcast->BroadcastEcuReset(ou8_ResetType).value();
       }
       else
       {
-         s32_Return = this->mpc_IpTransportProtocolBroadcast->BroadcastNetReset(ou8_ResetType);
+         //boundary: this caller still uses the integer convention
+         s32_Return = this->mpc_IpTransportProtocolBroadcast->BroadcastNetReset(ou8_ResetType).value();
       }
    }
 
@@ -433,7 +439,8 @@ int32_t C_OscComDriverFlash::SendOsyCanBroadcastEnterPreProgrammingSession(void)
    }
    else
    {
-      s32_Return = this->mpc_CanTransportProtocolBroadcast->BroadcastSendEnterPreProgrammingSession();
+      //boundary: this caller still uses the integer convention
+      s32_Return = this->mpc_CanTransportProtocolBroadcast->BroadcastSendEnterPreProgrammingSession().value();
    }
 
    return s32_Return;
@@ -461,7 +468,8 @@ int32_t C_OscComDriverFlash::SendOsyCanBroadcastEnterDefaultSession(void) const
    }
    else
    {
-      s32_Return = this->mpc_CanTransportProtocolBroadcast->BroadcastSendEnterDefaultSession();
+      //boundary: this caller still uses the integer convention
+      s32_Return = this->mpc_CanTransportProtocolBroadcast->BroadcastSendEnterDefaultSession().value();
    }
 
    return s32_Return;
@@ -491,8 +499,9 @@ const
    }
    else
    {
+      //boundary: this caller still uses the integer convention
       s32_Return = this->mpc_CanTransportProtocolBroadcast->BroadcastReadSerialNumber(orc_Responses,
-                                                                                      orc_ExtendedResponses);
+                                                                                      orc_ExtendedResponses).value();
    }
 
    return s32_Return;
@@ -650,9 +659,10 @@ const
    }
    else
    {
+      //boundary: this caller still uses the integer convention
       s32_Return = this->mpc_CanTransportProtocolBroadcast->BroadcastSetNodeIdBySerialNumber(orc_SerialNumber,
                                                                                              orc_NewNodeId,
-                                                                                             opu8_NrCode);
+                                                                                             opu8_NrCode).value();
    }
 
    return s32_Return;
@@ -691,11 +701,12 @@ int32_t C_OscComDriverFlash::SendOsyCanBroadcastSetNodeIdBySerialNumberExtended(
    }
    else
    {
+      //boundary: this caller still uses the integer convention
       s32_Return = this->mpc_CanTransportProtocolBroadcast->BroadcastSetNodeIdBySerialNumberExtended(
          orc_SerialNumber,
          ou8_SubNodeId,
          orc_NewNodeId,
-         opu8_NrCode);
+         opu8_NrCode).value();
    }
 
    return s32_Return;
@@ -726,8 +737,9 @@ const
    }
    else
    {
+      //boundary: this caller still uses the integer convention
       s32_Return = this->mpc_IpTransportProtocolBroadcast->BroadcastGetDeviceInfo(orc_ReadDeviceInfoResults,
-                                                                                  orc_ReadDeviceInfoExtendedResults);
+                                                                                  orc_ReadDeviceInfoExtendedResults).value();
    }
 
    return s32_Return;
@@ -781,13 +793,14 @@ int32_t C_OscComDriverFlash::SendOsyEthBroadcastSetIpAddress(const C_OscProtocol
    }
    else
    {
+      //boundary: this caller still uses the integer convention
       s32_Return = this->mpc_IpTransportProtocolBroadcast->BroadcastSetIpAddress(orc_SerialNumber,
                                                                                  orau8_NewIpAddress,
                                                                                  orau8_NetMask,
                                                                                  orau8_DefaultGateway,
                                                                                  orc_NewNodeId,
                                                                                  orau8_ResponseIp,
-                                                                                 opu8_ErrorResult);
+                                                                                 opu8_ErrorResult).value();
    }
 
    return s32_Return;
@@ -838,6 +851,7 @@ int32_t C_OscComDriverFlash::SendOsyEthBroadcastSetIpAddressExtended(const C_Osc
    }
    else
    {
+      //boundary: this caller still uses the integer convention
       s32_Return = this->mpc_IpTransportProtocolBroadcast->BroadcastSetIpAddressExtended(
          orc_SerialNumber,
          orau8_NewIpAddress,
@@ -846,7 +860,7 @@ int32_t C_OscComDriverFlash::SendOsyEthBroadcastSetIpAddressExtended(const C_Osc
          orc_NewNodeId,
          ou8_SubNodeId,
          orau8_ResponseIp,
-         opu8_ErrorResult);
+         opu8_ErrorResult).value();
    }
 
    return s32_Return;
@@ -2378,10 +2392,12 @@ int32_t C_OscComDriverFlash::m_PrepareTemporaryOsyProtocol(const C_OscProtocolDr
 {
    int32_t s32_Return;
 
-   s32_Return = orc_CanTransportProtocol.SetNodeIdentifiers(this->GetClientId(), orc_ServerId);
+   //boundary: this caller still uses the integer convention
+   s32_Return = orc_CanTransportProtocol.SetNodeIdentifiers(this->GetClientId(), orc_ServerId).value();
    if (s32_Return == C_NO_ERR)
    {
-      s32_Return = orc_CanTransportProtocol.SetDispatcher(this->m_GetCanDispatcher());
+      //boundary: this caller still uses the integer convention
+      s32_Return = orc_CanTransportProtocol.SetDispatcher(this->m_GetCanDispatcher()).value();
 
       if (s32_Return == C_NO_ERR)
       {

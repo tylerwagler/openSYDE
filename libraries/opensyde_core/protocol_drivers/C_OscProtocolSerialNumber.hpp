@@ -12,6 +12,8 @@
 #define C_OSCPROTOCOLSERIALNUMBER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include <string>
 
@@ -33,10 +35,10 @@ public:
    bool operator <(const C_OscProtocolSerialNumber & orc_Cmp) const;
 
    void SetPosSerialNumber(const uint8_t (&orau8_SerialNumber)[6]);
-   int32_t SetExtSerialNumber(const std::vector<uint8_t> & orc_SerialNumber,
-                              const uint8_t ou8_SerialNumberManufacturerFormat);
-   int32_t SetExtSerialNumber(const std::string & orc_SerialNumber,
-                              const uint8_t ou8_SerialNumberManufacturerFormat);
+   std::error_code SetExtSerialNumber(const std::vector<uint8_t> & orc_SerialNumber,
+                                      const uint8_t ou8_SerialNumberManufacturerFormat);
+   std::error_code SetExtSerialNumber(const std::string & orc_SerialNumber,
+                                      const uint8_t ou8_SerialNumberManufacturerFormat);
    std::vector<uint8_t> GetSerialNumberAsRawData(void) const;
    std::string GetSerialNumberAsFormattedString(void) const;
    std::string GetSerialNumberAsPlainString(void) const;

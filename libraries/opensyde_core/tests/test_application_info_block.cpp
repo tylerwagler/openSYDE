@@ -22,10 +22,12 @@
 
 #include <cstring>
 #include <string>
+#include <system_error>
 #include <vector>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscApplicationInfoBlock.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -72,7 +74,7 @@ TEST(ApplicationInfoBlock, RejectsBlobShorterThanHeader)
 
    for (uint16_t u16_Length = 0U; u16_Length < 9U; u16_Length++)
    {
-      EXPECT_EQ(C_OVERFLOW, c_Block.ParseFromBLOB(c_Data.data(), u16_Length))
+      EXPECT_EQ(Errc::overflow, c_Block.ParseFromBLOB(c_Data.data(), u16_Length))
          << "accepted a " << u16_Length << "-byte blob";
    }
 }
@@ -83,7 +85,7 @@ TEST(ApplicationInfoBlock, RejectsUnknownMagic)
    std::vector<uint8_t> c_Data = h_MakeV2Header(0x00U);
 
    c_Data[0] = 'X';
-   EXPECT_EQ(C_CONFIG, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
+   EXPECT_EQ(Errc::config, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
 }
 
 TEST(ApplicationInfoBlock, RejectsUnknownStructVersion)
@@ -92,7 +94,7 @@ TEST(ApplicationInfoBlock, RejectsUnknownStructVersion)
    std::vector<uint8_t> c_Data = h_MakeV2Header(0x00U);
 
    c_Data[APPLICATION_INFO_MAGIC_LENGTH_V2] = 9U; //not 1, 2 or 3
-   EXPECT_EQ(C_CONFIG, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
+   EXPECT_EQ(Errc::config, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
 }
 
 /// An empty content map means no optional field is present, so the header alone
@@ -102,7 +104,7 @@ TEST(ApplicationInfoBlock, ParsesHeaderOnlyBlockWithEmptyContentMap)
    C_OscApplicationInfoBlock c_Block;
    const std::vector<uint8_t> c_Data = h_MakeV2Header(0x00U);
 
-   ASSERT_EQ(C_NO_ERR, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
+   ASSERT_EQ(Errc::success, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
    EXPECT_EQ(2U, c_Block.u8_StructVersion);
    EXPECT_FALSE(c_Block.ContainsDeviceID());
    EXPECT_FALSE(c_Block.ContainsProjectName());
@@ -124,10 +126,10 @@ TEST(ApplicationInfoBlock, ParsesDeviceIdWhenPresent)
    //Every length check in m_ParsePayload is "remaining <= field length", so a block that ends exactly on the
    //last byte of its final field is rejected - one spare byte is required. That is inherited from upstream
    //(CXFLECUInformation has the identical comparisons), so it is recorded here rather than treated as a defect.
-   EXPECT_EQ(C_OVERFLOW, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
+   EXPECT_EQ(Errc::overflow, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
 
    c_Data.push_back(0x00U);
-   ASSERT_EQ(C_NO_ERR, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
+   ASSERT_EQ(Errc::success, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
    EXPECT_TRUE(c_Block.ContainsDeviceID());
    EXPECT_EQ(c_DeviceId, c_Block.GetDeviceID());
 }
@@ -145,7 +147,7 @@ TEST(ApplicationInfoBlock, RejectsTruncatedDeviceIdField)
       c_Data.push_back(static_cast<uint8_t>('A'));
    }
 
-   EXPECT_EQ(C_OVERFLOW, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
+   EXPECT_EQ(Errc::overflow, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
 }
 
 TEST(ApplicationInfoBlock, ParsesV1Header)
@@ -153,7 +155,7 @@ TEST(ApplicationInfoBlock, ParsesV1Header)
    C_OscApplicationInfoBlock c_Block;
    const std::vector<uint8_t> c_Data = h_MakeV1Header(0x00U);
 
-   ASSERT_EQ(C_NO_ERR, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
+   ASSERT_EQ(Errc::success, c_Block.ParseFromBLOB(c_Data.data(), static_cast<uint16_t>(c_Data.size())));
    EXPECT_EQ(1U, c_Block.u8_StructVersion);
 }
 
@@ -180,9 +182,9 @@ TEST(ApplicationInfoBlock, RejectsV2BlobTruncatedBeforeContentMap)
    c_Data.resize(200U, static_cast<uint8_t>('Z'));
 
    //but the hex file only actually supplied 9 bytes
-   const int32_t s32_Result = c_Block.ParseFromBLOB(c_Data.data(), 9U);
+   const std::error_code c_Result = c_Block.ParseFromBLOB(c_Data.data(), 9U);
 
-   EXPECT_EQ(C_OVERFLOW, s32_Result)
+   EXPECT_EQ(Errc::overflow, c_Result)
       << "a 9-byte V2 blob was accepted; the content map and payload came from past the end of the data";
    EXPECT_NE("ZZZZZZZZZZZZZZZZZ", c_Block.GetDeviceID()) << "device ID was filled from beyond the supplied data";
 }
@@ -202,6 +204,6 @@ TEST(ApplicationInfoBlock, V3HeaderOfNineBytesStillRejectsMissingPayload)
    c_Data.resize(200U, static_cast<uint8_t>('Z'));
 
    //V3 declares every field mandatory, and none of them are present in 9 bytes
-   EXPECT_EQ(C_OVERFLOW, c_Block.ParseFromBLOB(c_Data.data(), 9U));
+   EXPECT_EQ(Errc::overflow, c_Block.ParseFromBLOB(c_Data.data(), 9U));
    EXPECT_NE("ZZZZZZZZZZZZZZZZZ", c_Block.GetDeviceID());
 }

@@ -12,6 +12,8 @@
 #define C_OSCAPPLICATIONINFOBLOCK_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include <string>
 #include "C_SclStringList.hpp"
@@ -37,8 +39,8 @@ class C_OscApplicationInfoBlock
 private:
    std::string m_GetNonTerminatedString(const char_t * opcn_Chars, const uint8_t ou8_MaxLength) const;
 
-   int32_t m_ParsePayload(const uint8_t * const opu8_Data, const uint16_t ou16_NumBytesAvailable,
-                          const uint8_t ou8_BlockVersion);
+   std::error_code m_ParsePayload(const uint8_t * const opu8_Data, const uint16_t ou16_NumBytesAvailable,
+                                  const uint8_t ou8_BlockVersion);
 
 public:
    //sizes of content fields by version (1st element: V1, 2nd element: V2, 3rd element: V3)
@@ -53,7 +55,7 @@ public:
    void ClearContents(void);
    uint16_t GetMaxSizeOnECU(void) const;
 
-   int32_t ParseFromBLOB(const uint8_t * const opu8_Data, const uint16_t ou16_NumBytesAvailable);
+   std::error_code ParseFromBLOB(const uint8_t * const opu8_Data, const uint16_t ou16_NumBytesAvailable);
 
    char_t acn_Magic[APPLICATION_INFO_MAGIC_LENGTH_V2]; //Maximum length ...
    uint8_t u8_StructVersion;                           ///< = 1
@@ -80,6 +82,8 @@ public:
 
    void AddInfoToList(stw::scl::C_SclStringList & orc_List) const;
 
+   ///< 0..9 on success, C_RANGE if the content map is not a defined combination. This is a value, not a status,
+   ///< so it deliberately stays on the integer convention.
    int32_t GetInfoLevel(void) const;
    std::string GetInfoLevelAsString(void) const;
 

@@ -75,7 +75,15 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString & orc_File)
       c_HexFileInfo.c_Size = static_cast<QString>("%1 bytes").arg(c_FileInfo.size());
       c_HexFileInfo.c_Checksum = mh_GetMd5Hex(orc_File);
       c_HexFileInfo.c_NumberOfBytes = QString::number(c_HexFile.ByteCount());
-      c_HexFileInfo.c_BitCrc = static_cast<QString>("0x%1").arg(c_HexFile.CalcFileChecksum(u32_Crc), 0, 16);
+      //the checksum is the out-parameter; the return value only says whether it could be calculated
+      if (!c_HexFile.CalcFileChecksum(u32_Crc))
+      {
+         c_HexFileInfo.c_BitCrc = static_cast<QString>("0x%1").arg(u32_Crc, 0, 16);
+      }
+      else
+      {
+         c_HexFileInfo.c_BitCrc = "";
+      }
       if (c_InfoBlocks.size() > 0)
       {
          c_HexFileInfo.s32_NumberOfBlocks = c_InfoBlocks.size();

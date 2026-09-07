@@ -84,7 +84,8 @@ int32_t C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const opc_CanDis
 
    if (s32_Return == C_NO_ERR)
    {
-      s32_Return = mc_TpCan.SetDispatcher(this->mpc_CanDispatcher);
+      //boundary: this caller still uses the integer convention
+      s32_Return = mc_TpCan.SetDispatcher(this->mpc_CanDispatcher).value();
       if (s32_Return != C_NO_ERR)
       {
          osc_write_log_error(c_LogActivity, "Setting CAN dispatcher for CAN transport protocol failed!");
@@ -106,7 +107,8 @@ int32_t C_OscDcBasicSequences::Init(stw::can::C_CanDispatcher * const opc_CanDis
       c_Client.u8_NodeIdentifier = 126;
       c_Client.u8_BusIdentifier = 0U;
 
-      s32_Return = mc_TpCan.SetNodeIdentifiersForBroadcasts(c_Client);
+      //boundary: this caller still uses the integer convention
+      s32_Return = mc_TpCan.SetNodeIdentifiersForBroadcasts(c_Client).value();
 
       if (s32_Return != C_NO_ERR)
       {
@@ -153,7 +155,8 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
       u32_WaitTime = u32_SCAN_TIME_MS;
    }
 
-   s32_Return = this->mc_TpCan.BroadcastRequestProgramming(c_Results);
+   //boundary: this caller still uses the integer convention
+   s32_Return = this->mc_TpCan.BroadcastRequestProgramming(c_Results).value();
 
    m_ReportProgress(C_NO_ERR, "Broadcasting \"request programming\" flag: " +
                     std::to_string(c_Results.size()) + " device(s) answered. ");
@@ -184,7 +187,8 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
    else
    {
       //broadcast "ResetToFlashloader"
-      s32_Return = mc_TpCan.BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER);
+      //boundary: this caller still uses the integer convention
+      s32_Return = mc_TpCan.BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_RESET_TO_FLASHLOADER).value();
 
       if (s32_Return != C_NO_ERR)
       {
@@ -208,7 +212,8 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(const uint32_t ou32_Flashloa
    do
    {
       // openSYDE "DiagnosticSessionControl(PreProgramming)" broadcast
-      s32_Return = mc_TpCan.BroadcastSendEnterPreProgrammingSession();
+      //boundary: this caller still uses the integer convention
+      s32_Return = mc_TpCan.BroadcastSendEnterPreProgrammingSession().value();
       if (s32_Return != C_NO_ERR)
       {
          osc_write_log_error(c_LogActivity,
@@ -267,7 +272,8 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void)
    m_ReportProgress(s32_Return, "Starting the scan for getting devices information ... ");
 
    // broadcast: "ReadSerialNumber"
-   s32_Return = this->mc_TpCan.BroadcastReadSerialNumber(c_ReadSnResult, c_ReadSnResultExt);
+   //boundary: this caller still uses the integer convention
+   s32_Return = this->mc_TpCan.BroadcastReadSerialNumber(c_ReadSnResult, c_ReadSnResultExt).value();
 
    if (s32_Return != C_NO_ERR)
    {
@@ -430,7 +436,8 @@ int32_t C_OscDcBasicSequences::ResetSystem(void)
 
    m_ReportProgress(s32_Return, "Starting system reset broadcast...");
 
-   s32_Return = mc_TpCan.BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON);
+   //boundary: this caller still uses the integer convention
+   s32_Return = mc_TpCan.BroadcastEcuReset(C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON).value();
 
    m_ReportProgress(s32_Return, "System reset broadcast finished.");
 

@@ -19,10 +19,12 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <gtest/gtest.h>
 
+#include <system_error>
 #include <vector>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscUpdateUtil.hpp"
 
@@ -45,28 +47,28 @@ public:
    {
    }
 
-   int32_t Cycle(void) override
+   std::error_code Cycle(void) override
    {
-      return C_NO_ERR;
+      return make_error_code(Errc::success);
    }
 
-   int32_t IsConnected(void) override
+   std::error_code IsConnected(void) override
    {
-      return C_NO_ERR;
+      return make_error_code(Errc::success);
    }
 
-   int32_t ReConnect(void) override
+   std::error_code ReConnect(void) override
    {
-      return C_NO_ERR;
+      return make_error_code(Errc::success);
    }
 
-   int32_t Disconnect(void) override
+   std::error_code Disconnect(void) override
    {
-      return C_NO_ERR;
+      return make_error_code(Errc::success);
    }
 
    /// expose the protected queue entry point so a response can be staged
-   int32_t StageResponse(const C_OscProtocolDriverOsyService & orc_Service)
+   std::error_code StageResponse(const C_OscProtocolDriverOsyService & orc_Service)
    {
       return this->m_AddToRxQueue(orc_Service);
    }
@@ -132,8 +134,8 @@ TEST(ProtocolDriverTpBase, SendRequestAcceptsServiceUpToMaximumSize)
 {
    C_TestTp c_Tp(10U);
 
-   EXPECT_EQ(C_NO_ERR, c_Tp.SendRequest(h_MakeService(1U)));
-   EXPECT_EQ(C_NO_ERR,
+   EXPECT_EQ(Errc::success, c_Tp.SendRequest(h_MakeService(1U)));
+   EXPECT_EQ(Errc::success,
              c_Tp.SendRequest(h_MakeService(C_OscProtocolDriverOsyTpBase::hu16_OSY_MAXIMUM_SERVICE_SIZE)));
 }
 
@@ -143,7 +145,7 @@ TEST(ProtocolDriverTpBase, SendRequestRejectsOversizedService)
 {
    C_TestTp c_Tp(10U);
 
-   EXPECT_EQ(C_RANGE,
+   EXPECT_EQ(Errc::range,
              c_Tp.SendRequest(h_MakeService(C_OscProtocolDriverOsyTpBase::hu16_OSY_MAXIMUM_SERVICE_SIZE + 1U)));
 }
 
@@ -157,10 +159,10 @@ TEST(ProtocolDriverTpBase, SendRequestReportsQueueOverflow)
 
    for (uint16_t u16_Index = 0U; u16_Index < u16_QueueSize; u16_Index++)
    {
-      EXPECT_EQ(C_NO_ERR, c_Tp.SendRequest(h_MakeService(4U))) << "entry " << u16_Index;
+      EXPECT_EQ(Errc::success, c_Tp.SendRequest(h_MakeService(4U))) << "entry " << u16_Index;
    }
 
-   EXPECT_EQ(C_OVERFLOW, c_Tp.SendRequest(h_MakeService(4U)));
+   EXPECT_EQ(Errc::overflow, c_Tp.SendRequest(h_MakeService(4U)));
 }
 
 TEST(ProtocolDriverTpBase, ReadResponseReportsEmptyQueue)
@@ -168,7 +170,7 @@ TEST(ProtocolDriverTpBase, ReadResponseReportsEmptyQueue)
    C_TestTp c_Tp(10U);
    C_OscProtocolDriverOsyService c_Response;
 
-   EXPECT_NE(C_NO_ERR, c_Tp.ReadResponse(c_Response)) << "an empty queue reported a response";
+   EXPECT_NE(std::error_code(Errc::success), c_Tp.ReadResponse(c_Response)) << "an empty queue reported a response";
 }
 
 TEST(ProtocolDriverTpBase, ReadResponseReturnsStagedServiceFifo)
@@ -180,17 +182,17 @@ TEST(ProtocolDriverTpBase, ReadResponseReturnsStagedServiceFifo)
    c_First.c_Data[0] = 0x11U;
    c_Second.c_Data[0] = 0x22U;
 
-   ASSERT_EQ(C_NO_ERR, c_Tp.StageResponse(c_First));
-   ASSERT_EQ(C_NO_ERR, c_Tp.StageResponse(c_Second));
+   ASSERT_EQ(Errc::success, c_Tp.StageResponse(c_First));
+   ASSERT_EQ(Errc::success, c_Tp.StageResponse(c_Second));
 
    C_OscProtocolDriverOsyService c_Read;
-   ASSERT_EQ(C_NO_ERR, c_Tp.ReadResponse(c_Read));
+   ASSERT_EQ(Errc::success, c_Tp.ReadResponse(c_Read));
    EXPECT_EQ(0x11U, c_Read.c_Data[0]) << "responses came back out of order";
 
-   ASSERT_EQ(C_NO_ERR, c_Tp.ReadResponse(c_Read));
+   ASSERT_EQ(Errc::success, c_Tp.ReadResponse(c_Read));
    EXPECT_EQ(0x22U, c_Read.c_Data[0]);
 
-   EXPECT_NE(C_NO_ERR, c_Tp.ReadResponse(c_Read)) << "queue should now be empty";
+   EXPECT_NE(std::error_code(Errc::success), c_Tp.ReadResponse(c_Read)) << "queue should now be empty";
 }
 
 // -- flash transfer timeout --------------------------------------------------

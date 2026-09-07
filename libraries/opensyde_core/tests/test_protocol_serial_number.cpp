@@ -23,12 +23,15 @@
 #include <gtest/gtest.h>
 
 #include <string>
+#include <system_error>
 #include <vector>
 
 #include "stwtypes.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
+using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
@@ -69,9 +72,9 @@ TEST(ProtocolSerialNumber, ExtSerialNumberParsesHexDigitsNotZeros)
    C_OscProtocolSerialNumber c_Serial;
 
    // manufacturer format 0 selects the old STW POS layout, parsed from 12 hex chars
-   const int32_t s32_Result = c_Serial.SetExtSerialNumber(std::string("012345678912"), 0U);
+   const std::error_code c_Result = c_Serial.SetExtSerialNumber(std::string("012345678912"), 0U);
 
-   EXPECT_EQ(0, s32_Result);
+   EXPECT_EQ(Errc::success, c_Result);
    EXPECT_TRUE(c_Serial.q_IsValid);
 
    const uint8_t au8_Expected[6] = {0x01U, 0x23U, 0x45U, 0x67U, 0x89U, 0x12U};
@@ -100,8 +103,8 @@ TEST(ProtocolSerialNumber, DistinctSerialNumbersDoNotCompareEqual)
    C_OscProtocolSerialNumber c_First;
    C_OscProtocolSerialNumber c_Second;
 
-   EXPECT_EQ(0, c_First.SetExtSerialNumber(std::string("001122334455"), 0U));
-   EXPECT_EQ(0, c_Second.SetExtSerialNumber(std::string("AABBCCDDEEFF"), 0U));
+   EXPECT_EQ(Errc::success, c_First.SetExtSerialNumber(std::string("001122334455"), 0U));
+   EXPECT_EQ(Errc::success, c_Second.SetExtSerialNumber(std::string("AABBCCDDEEFF"), 0U));
 
    EXPECT_FALSE(c_First == c_Second) << "two different devices reported the same serial number";
 }
@@ -111,8 +114,8 @@ TEST(ProtocolSerialNumber, ParsesUppercaseAndLowercaseHex)
    C_OscProtocolSerialNumber c_Upper;
    C_OscProtocolSerialNumber c_Lower;
 
-   EXPECT_EQ(0, c_Upper.SetExtSerialNumber(std::string("AABBCCDDEEFF"), 0U));
-   EXPECT_EQ(0, c_Lower.SetExtSerialNumber(std::string("aabbccddeeff"), 0U));
+   EXPECT_EQ(Errc::success, c_Upper.SetExtSerialNumber(std::string("AABBCCDDEEFF"), 0U));
+   EXPECT_EQ(Errc::success, c_Lower.SetExtSerialNumber(std::string("aabbccddeeff"), 0U));
 
    EXPECT_TRUE(c_Upper == c_Lower) << "hex case affected the parsed value";
    EXPECT_EQ(0xAAU, c_Upper.au8_SerialNumber[0]);
@@ -124,7 +127,7 @@ TEST(ProtocolSerialNumber, ByteVectorOverloadRoundTrips)
    C_OscProtocolSerialNumber c_Serial;
    const std::vector<uint8_t> c_Bytes = {0x01U, 0x23U, 0x45U, 0x67U, 0x89U, 0x12U};
 
-   EXPECT_EQ(0, c_Serial.SetExtSerialNumber(c_Bytes, 0U));
+   EXPECT_EQ(Errc::success, c_Serial.SetExtSerialNumber(c_Bytes, 0U));
    EXPECT_TRUE(c_Serial.q_IsValid);
 
    for (uint8_t u8_Index = 0U; u8_Index < 6U; u8_Index++)
@@ -140,8 +143,8 @@ TEST(ProtocolSerialNumber, OrderingIsConsistent)
    C_OscProtocolSerialNumber c_Low;
    C_OscProtocolSerialNumber c_High;
 
-   EXPECT_EQ(0, c_Low.SetExtSerialNumber(std::string("000000000001"), 0U));
-   EXPECT_EQ(0, c_High.SetExtSerialNumber(std::string("000000000002"), 0U));
+   EXPECT_EQ(Errc::success, c_Low.SetExtSerialNumber(std::string("000000000001"), 0U));
+   EXPECT_EQ(Errc::success, c_High.SetExtSerialNumber(std::string("000000000002"), 0U));
 
    EXPECT_TRUE(c_Low < c_High);
    EXPECT_FALSE(c_High < c_Low);
@@ -152,7 +155,7 @@ TEST(ProtocolSerialNumber, PlainStringIsNonEmptyForValidSerial)
 {
    C_OscProtocolSerialNumber c_Serial;
 
-   EXPECT_EQ(0, c_Serial.SetExtSerialNumber(std::string("0123456789AB"), 0U));
+   EXPECT_EQ(Errc::success, c_Serial.SetExtSerialNumber(std::string("0123456789AB"), 0U));
 
    const std::string c_Plain = c_Serial.GetSerialNumberAsPlainString();
    EXPECT_FALSE(c_Plain.empty());
@@ -165,7 +168,7 @@ TEST(ProtocolSerialNumber, NonZeroManufacturerFormatKeepsStringForm)
 {
    C_OscProtocolSerialNumber c_Serial;
 
-   EXPECT_EQ(0, c_Serial.SetExtSerialNumber(std::string("SN-12345"), 1U));
+   EXPECT_EQ(Errc::success, c_Serial.SetExtSerialNumber(std::string("SN-12345"), 1U));
 
    EXPECT_TRUE(c_Serial.q_IsValid);
    EXPECT_TRUE(c_Serial.q_FsnSerialNumber);

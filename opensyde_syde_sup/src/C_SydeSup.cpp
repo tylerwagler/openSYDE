@@ -1492,7 +1492,9 @@ int32_t C_SydeSup::m_UpdateSystem(C_SupSuSequences & orc_Sequence, const C_OscSy
                   if (!c_Result)
                   {
                      stw::opensyde_core::C_OscApplicationInfoBlock c_FileApplicationInfo;
-                     s32_Result = c_HexFile.ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo);
+                     //boundary: s32_Result is threaded through the rest of this function as an integer
+                     s32_Result =
+                        c_HexFile.ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo).value();
                      if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
                      {
                         C_OscSuSequences::C_ApplicationProperties c_Temp;

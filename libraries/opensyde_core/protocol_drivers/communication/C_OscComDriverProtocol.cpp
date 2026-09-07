@@ -3059,11 +3059,13 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
               ++u32_ItActiveNode)
          {
             pc_TransportProtocol = new C_OscProtocolDriverOsyTpCan();
+            //boundary: this caller still uses the integer convention
             s32_Retval = pc_TransportProtocol->SetNodeIdentifiers(this->mc_ClientId,
-                                                                  this->mc_ServerIds[u32_ItActiveNode]);
+                                                                  this->mc_ServerIds[u32_ItActiveNode]).value();
             if (s32_Retval == C_NO_ERR)
             {
-               s32_Retval = pc_TransportProtocol->SetDispatcher(this->mpc_CanDispatcher);
+               //boundary: this caller still uses the integer convention
+               s32_Retval = pc_TransportProtocol->SetDispatcher(this->mpc_CanDispatcher).value();
                if (s32_Retval != C_NO_ERR)
                {
                   std::string c_Text = "Node \"";
@@ -3093,10 +3095,12 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
          {
             //Broadcast
             mpc_CanTransportProtocolBroadcast = new C_OscProtocolDriverOsyTpCan();
-            s32_Retval = this->mpc_CanTransportProtocolBroadcast->SetNodeIdentifiersForBroadcasts(this->mc_ClientId);
+            //boundary: this caller still uses the integer convention
+            s32_Retval = this->mpc_CanTransportProtocolBroadcast->SetNodeIdentifiersForBroadcasts(this->mc_ClientId).value();
             if (s32_Retval == C_NO_ERR)
             {
-               s32_Retval = this->mpc_CanTransportProtocolBroadcast->SetDispatcher(this->mpc_CanDispatcher);
+               //boundary: this caller still uses the integer convention
+               s32_Retval = this->mpc_CanTransportProtocolBroadcast->SetDispatcher(this->mpc_CanDispatcher).value();
                if (s32_Retval != C_NO_ERR)
                {
                   std::string c_Text = "Broadcast - SetDispatcher - error: ";
@@ -3302,12 +3306,14 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
                     ++u32_ItActiveNode)
                {
                   pc_TransportProtocol = new C_OscProtocolDriverOsyTpIp();
+                  //boundary: this caller still uses the integer convention
                   s32_Retval = pc_TransportProtocol->SetNodeIdentifiers(this->mc_ClientId,
-                                                                        this->mc_ServerIds[u32_ItActiveNode]);
+                                                                        this->mc_ServerIds[u32_ItActiveNode]).value();
                   if (s32_Retval == C_NO_ERR)
                   {
+                     //boundary: this caller still uses the integer convention
                      s32_Retval = pc_TransportProtocol->SetDispatcher(this->mpc_IpDispatcher,
-                                                                      c_IpDispatcherHandles[u32_ItActiveNode]);
+                                                                      c_IpDispatcherHandles[u32_ItActiveNode]).value();
                      if (s32_Retval != C_NO_ERR)
                      {
                         osc_write_log_error("Ethernet initialization", "Could not set IP dispatcher. Error Code: " +
@@ -3331,7 +3337,8 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
                {
                   //Broadcast
                   mpc_IpTransportProtocolBroadcast = new C_OscProtocolDriverOsyTpIp();
-                  s32_Retval = this->mpc_IpTransportProtocolBroadcast->SetDispatcher(this->mpc_IpDispatcher, 0U);
+                  //boundary: this caller still uses the integer convention
+                  s32_Retval = this->mpc_IpTransportProtocolBroadcast->SetDispatcher(this->mpc_IpDispatcher, 0U).value();
                   if (s32_Retval != C_NO_ERR)
                   {
                      //Invalid configuration = programming error

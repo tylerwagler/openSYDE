@@ -20,6 +20,7 @@
 #include <mutex>
 #include <vector>
 #include <deque>
+#include <system_error>
 #include "stwtypes.hpp"
 #include <string>
 
@@ -87,10 +88,10 @@ protected:
    C_OscProtocolDriverOsyNode mc_ServerId; ///< ID of server node to communicate with
    uint32_t mu32_BroadcastTimeoutMs;       ///< timeout for collecting responses to broadcasts
 
-   int32_t m_AddToTxQueue(const C_OscProtocolDriverOsyService & orc_Service);
-   int32_t m_AddToRxQueue(const C_OscProtocolDriverOsyService & orc_Service);
-   int32_t m_GetFromTxQueue(C_OscProtocolDriverOsyService & orc_Service);
-   int32_t m_GetFromRxQueue(C_OscProtocolDriverOsyService & orc_Service);
+   std::error_code m_AddToTxQueue(const C_OscProtocolDriverOsyService & orc_Service);
+   std::error_code m_AddToRxQueue(const C_OscProtocolDriverOsyService & orc_Service);
+   std::error_code m_GetFromTxQueue(C_OscProtocolDriverOsyService & orc_Service);
+   std::error_code m_GetFromRxQueue(C_OscProtocolDriverOsyService & orc_Service);
 
 public:
    ///common parameters for the different transport protocols
@@ -101,12 +102,12 @@ public:
    explicit C_OscProtocolDriverOsyTpBase(const uint16_t ou16_MaxServiceQueueSize);
    virtual ~C_OscProtocolDriverOsyTpBase(void);
 
-   virtual int32_t IsConnected(void);
-   virtual int32_t ReConnect(void);
-   virtual int32_t Disconnect(void);
+   virtual std::error_code IsConnected(void);
+   virtual std::error_code ReConnect(void);
+   virtual std::error_code Disconnect(void);
 
-   int32_t SendRequest(const C_OscProtocolDriverOsyService & orc_Request);
-   int32_t ReadResponse(C_OscProtocolDriverOsyService & orc_Response);
+   std::error_code SendRequest(const C_OscProtocolDriverOsyService & orc_Request);
+   std::error_code ReadResponse(C_OscProtocolDriverOsyService & orc_Response);
    void ClearServiceQueues(void);
 
    void SetBroadcastTimeout(const uint32_t ou32_TimeoutMs);
@@ -123,14 +124,14 @@ public:
       Ongoing communication problems will be written to the class's log text.
 
       \return
-      C_NO_ERR   cycle finished
-      C_CONFIG   no dispatcher installed
-      C_COM      communication driver reported error
+      Errc::success   cycle finished
+      Errc::config    no dispatcher installed
+      Errc::com       communication driver reported error
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t Cycle(void) = 0;
-   virtual int32_t SetNodeIdentifiers(const C_OscProtocolDriverOsyNode & orc_ClientIdentifier,
-                                      const C_OscProtocolDriverOsyNode & orc_ServerIdentifier);
+   virtual std::error_code Cycle(void) = 0;
+   virtual std::error_code SetNodeIdentifiers(const C_OscProtocolDriverOsyNode & orc_ClientIdentifier,
+                                              const C_OscProtocolDriverOsyNode & orc_ServerIdentifier);
    virtual void GetNodeIdentifiers(C_OscProtocolDriverOsyNode & orc_ClientIdentifier,
                                    C_OscProtocolDriverOsyNode & orc_ServerIdentifier);
 };

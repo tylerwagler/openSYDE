@@ -15,8 +15,11 @@
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include <cstring>
+#include <system_error>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscErrorCategory.hpp"
 #include "C_OscApplicationInfoBlock.hpp"
 #include "C_SclStringCompat.hpp"
 
@@ -116,17 +119,17 @@ uint16_t C_OscApplicationInfoBlock::GetMaxSizeOnECU(void) const
    \param[in]     ou16_NumBytesAvailable    number of bytes available in opu8_Data
 
    \return
-   C_NO_ERR           no errors, information stored in class members
+   Errc::success      no errors, information stored in class members
    else               error parsing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscApplicationInfoBlock::m_ParsePayload(const uint8_t * const opu8_Data,
-                                                  const uint16_t ou16_NumBytesAvailable,
-                                                  const uint8_t ou8_BlockVersion)
+std::error_code C_OscApplicationInfoBlock::m_ParsePayload(const uint8_t * const opu8_Data,
+                                                          const uint16_t ou16_NumBytesAvailable,
+                                                          const uint8_t ou8_BlockVersion)
 {
    uint16_t u16_Index = 0U;
    uint16_t u16_Length;
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    uint8_t u8_VersionIndex = 0U;
 
    switch (ou8_BlockVersion)
@@ -141,16 +144,16 @@ int32_t C_OscApplicationInfoBlock::m_ParsePayload(const uint8_t * const opu8_Dat
       u8_VersionIndex = 2U;
       break;
    default:
-      s32_Return = C_RANGE;
+      c_Return = Errc::range;
       break;
    }
 
-   if ((s32_Return == C_NO_ERR) && (this->ContainsDeviceID() == true))
+   if ((!c_Return) && (this->ContainsDeviceID() == true))
    {
       u16_Length = hau8_LENGTHS_DEVICE_ID[u8_VersionIndex];
       if ((ou16_NumBytesAvailable - u16_Index)  <= u16_Length)
       {
-         s32_Return = C_OVERFLOW;
+         c_Return = Errc::overflow;
       }
       else
       {
@@ -160,13 +163,13 @@ int32_t C_OscApplicationInfoBlock::m_ParsePayload(const uint8_t * const opu8_Dat
       }
    }
 
-   if ((s32_Return == C_NO_ERR) && (this->ContainsDateAndTime() == true))
+   if ((!c_Return) && (this->ContainsDateAndTime() == true))
    {
       //extract date:
       u16_Length = hau8_LENGTHS_DATE[u8_VersionIndex];
       if ((ou16_NumBytesAvailable - u16_Index)  <= u16_Length)
       {
-         s32_Return = C_OVERFLOW;
+         c_Return = Errc::overflow;
       }
       else
       {
@@ -179,7 +182,7 @@ int32_t C_OscApplicationInfoBlock::m_ParsePayload(const uint8_t * const opu8_Dat
       u16_Length = hau8_LENGTHS_TIME[u8_VersionIndex];
       if ((ou16_NumBytesAvailable - u16_Index)  <= u16_Length)
       {
-         s32_Return = C_OVERFLOW;
+         c_Return = Errc::overflow;
       }
       else
       {
@@ -189,12 +192,12 @@ int32_t C_OscApplicationInfoBlock::m_ParsePayload(const uint8_t * const opu8_Dat
       }
    }
 
-   if ((s32_Return == C_NO_ERR) && (this->ContainsProjectName() == true))
+   if ((!c_Return) && (this->ContainsProjectName() == true))
    {
       u16_Length = hau8_LENGTHS_PROJECT_NAME[u8_VersionIndex];
       if ((ou16_NumBytesAvailable - u16_Index)  <= u16_Length)
       {
-         s32_Return = C_OVERFLOW;
+         c_Return = Errc::overflow;
       }
       else
       {
@@ -204,14 +207,14 @@ int32_t C_OscApplicationInfoBlock::m_ParsePayload(const uint8_t * const opu8_Dat
       }
    }
 
-   if ((s32_Return == C_NO_ERR) && (this->ContainsProjectName() == true))
+   if ((!c_Return) && (this->ContainsProjectName() == true))
    {
       if (this->ContainsProjectVersion() == true)
       {
          u16_Length = hau8_LENGTHS_PROJECT_VERSION[u8_VersionIndex];
          if ((ou16_NumBytesAvailable - u16_Index)  <= u16_Length)
          {
-            s32_Return = C_OVERFLOW;
+            c_Return = Errc::overflow;
          }
          else
          {
@@ -222,12 +225,12 @@ int32_t C_OscApplicationInfoBlock::m_ParsePayload(const uint8_t * const opu8_Dat
       }
    }
 
-   if ((s32_Return == C_NO_ERR) && (this->ContainsAdditionalInfo() == true))
+   if ((!c_Return) && (this->ContainsAdditionalInfo() == true))
    {
       u16_Length = 1;
       if ((ou16_NumBytesAvailable - u16_Index) <= u16_Length)
       {
-         s32_Return = C_OVERFLOW;
+         c_Return = Errc::overflow;
       }
       else
       {
@@ -238,7 +241,7 @@ int32_t C_OscApplicationInfoBlock::m_ParsePayload(const uint8_t * const opu8_Dat
       u16_Length = this->u8_LenAdditionalInfo;
       if ((ou16_NumBytesAvailable - u16_Index)  < u16_Length)
       {
-         s32_Return = C_OVERFLOW;
+         c_Return = Errc::overflow;
       }
       else
       {
@@ -246,7 +249,7 @@ int32_t C_OscApplicationInfoBlock::m_ParsePayload(const uint8_t * const opu8_Dat
          //            u16_Index = static_cast<uint16_t>(u16_Index + u16_Length);
       }
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -260,15 +263,15 @@ int32_t C_OscApplicationInfoBlock::m_ParsePayload(const uint8_t * const opu8_Dat
                                              occupied by the information block itseld)
 
    \return
-   C_NO_ERR           no errors, information stored in class members
+   Errc::success      no errors, information stored in class members
    else               error parsing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const opu8_Data,
-                                                 const uint16_t ou16_NumBytesAvailable)
+std::error_code C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const opu8_Data,
+                                                         const uint16_t ou16_NumBytesAvailable)
 {
    C_OscApplicationInfoBlock c_Temp;
-   int32_t s32_Return = C_NO_ERR;
+   std::error_code c_Return = Errc::success;
    bool q_V2OrV3Detected = false;
    uint16_t u16_Length;
    uint16_t u16_Index = 0U;
@@ -276,23 +279,27 @@ int32_t C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const opu8_Data
    //We need at least the magic + version + content map (or at least a few bytes of valid data for V3)
    if (ou16_NumBytesAvailable < (APPLICATION_INFO_MAGIC_LENGTH_V1 + 2))
    {
-      s32_Return = C_OVERFLOW;
+      c_Return = Errc::overflow;
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
+      //memcmp reports "differs", not a status code, so it gets its own local rather than being
+      //funnelled through the error_code.
+      int32_t s32_MagicDiffers;
+
       //don't compare block type indicator ...
-      s32_Return = memcmp(&opu8_Data[0], APPLICATION_INFO_MAGIC_V1, APPLICATION_INFO_MAGIC_LENGTH_V1 - 1);
-      if (s32_Return != 0)
+      s32_MagicDiffers = memcmp(&opu8_Data[0], APPLICATION_INFO_MAGIC_V1, APPLICATION_INFO_MAGIC_LENGTH_V1 - 1);
+      if (s32_MagicDiffers != 0)
       {
          //try V2/V3:
-         s32_Return = memcmp(&opu8_Data[0], APPLICATION_INFO_MAGIC_V2, APPLICATION_INFO_MAGIC_LENGTH_V2 - 2);
-         if (s32_Return == 0)
+         s32_MagicDiffers = memcmp(&opu8_Data[0], APPLICATION_INFO_MAGIC_V2, APPLICATION_INFO_MAGIC_LENGTH_V2 - 2);
+         if (s32_MagicDiffers == 0)
          {
             //final byte zero ?
             if (opu8_Data[APPLICATION_INFO_MAGIC_LENGTH_V2 - 1] != 0U)
             {
-               s32_Return = -1;
+               s32_MagicDiffers = -1;
             }
             else
             {
@@ -300,14 +307,12 @@ int32_t C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const opu8_Data
             }
          }
       }
-      if (s32_Return != 0)
+      if (s32_MagicDiffers != 0)
       {
-         s32_Return = C_CONFIG;
+         c_Return = Errc::config;
       }
       else
       {
-         s32_Return = C_NO_ERR;
-
          c_Temp.acn_Magic[APPLICATION_INFO_MAGIC_LENGTH_V1] = '\0';
          u16_Length =
             (static_cast<uint16_t>(APPLICATION_INFO_MAGIC_LENGTH_V1) + ((q_V2OrV3Detected == true) ? 1 : 0));
@@ -316,22 +321,22 @@ int32_t C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const opu8_Data
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       //the length check above only covers the shortest header (V1: 7 magic bytes). A V2/V3 magic is one byte
       //longer, so re-check before every read rather than assuming the header fits.
       if (u16_Index >= ou16_NumBytesAvailable)
       {
-         s32_Return = C_OVERFLOW;
+         c_Return = Errc::overflow;
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       c_Temp.u8_StructVersion = opu8_Data[u16_Index];
       if ((c_Temp.u8_StructVersion != 1U) && (c_Temp.u8_StructVersion != 2U) && (c_Temp.u8_StructVersion != 3U))
       {
-         s32_Return = C_CONFIG; //nothing we can handle ...
+         c_Return = Errc::config; //nothing we can handle ...
       }
 
       u16_Index += 1U; //skip version
@@ -342,7 +347,7 @@ int32_t C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const opu8_Data
       case 2:
          if (u16_Index >= ou16_NumBytesAvailable)
          {
-            s32_Return = C_OVERFLOW; //content map byte is not there
+            c_Return = Errc::overflow; //content map byte is not there
          }
          else
          {
@@ -354,25 +359,25 @@ int32_t C_OscApplicationInfoBlock::ParseFromBLOB(const uint8_t * const opu8_Data
          c_Temp.u8_ContentMap = 0x1FU; //all data mandatory here
          break;
       default:
-         s32_Return = C_CONFIG; //nothing we can handle ...
+         c_Return = Errc::config; //nothing we can handle ...
          break;
       }
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       //m_ParsePayload takes the remaining length as uint16_t, so an index past the end would wrap to a huge
       //value and defeat every bounds check inside it. The guards above are what keep that from happening.
-      s32_Return = c_Temp.m_ParsePayload(&opu8_Data[u16_Index],
-                                         static_cast<uint16_t>(ou16_NumBytesAvailable - u16_Index),
-                                         c_Temp.u8_StructVersion);
+      c_Return = c_Temp.m_ParsePayload(&opu8_Data[u16_Index],
+                                       static_cast<uint16_t>(ou16_NumBytesAvailable - u16_Index),
+                                       c_Temp.u8_StructVersion);
    }
 
-   if (s32_Return == C_NO_ERR)
+   if (!c_Return)
    {
       (*this) = c_Temp;
    }
-   return s32_Return;
+   return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
