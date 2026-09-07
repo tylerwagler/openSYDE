@@ -205,3 +205,38 @@ Option 1 is preferred, done a directory at a time.
   path and rests on CI.
 - `opensyde_tool`, `opensyde_can_monitor`, `opensyde_syde_flash` — outstanding,
   434 sites.
+
+## Windows-only code paths are never compiled
+
+CI runs `ubuntu-26.04` only, and the remote build host is Debian, so anything
+behind `#ifdef _WIN32` is not compiled by anything we run. 23 files in our own
+trees carry `_WIN32` conditionals. Most guard a few lines (a Win32 API call with
+a POSIX sibling), which is low risk.
+
+One is not:
+
+- `opensyde_tool/src/system_definition/node_edit/data_logger/C_SdNdeDalTriggerCheckHelper.cpp`
+  is `#ifndef _WIN32` → a stub returning `true`, `#else` → the real
+  implementation. About **1,124 of its 1,167 lines are Windows-only** and have
+  never been compiled here. The Linux stub comment says the
+  `osy_git_data_model_monitor` library is unavailable, so data logger trigger
+  validation does not run on Linux at all — the expression is only checked on
+  the device.
+
+This bit during the `ToDouble` locale fix: the `std::stod` call and its exception
+handler both live in that branch, so the edit went in unverified by any compiler.
+
+Options, cheapest first:
+
+1. **Accept and flag it.** Note in review that edits to that file are unbuilt.
+   Free, and unreliable.
+2. **Add a Windows CI job.** `windows-latest` with the MinGW toolchain the tool
+   targets. Real coverage, but the Qt install is the slow part and the job would
+   dominate CI time.
+3. **Make the Linux stub compile the parseable parts.** Split the file so the
+   pure logic (token parsing, constant conversion, syntax checks) builds
+   everywhere and only the `osy_git_data_model_monitor` calls stay guarded.
+   Best coverage per minute of CI, but it is a real refactor of a 1,167-line
+   file.
+
+Option 3 is the one worth doing if that file gets touched again.
