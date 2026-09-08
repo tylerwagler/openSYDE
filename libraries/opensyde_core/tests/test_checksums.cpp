@@ -1,5 +1,7 @@
 #include <cstring>
+#include <cstddef>
 #include <cstdint>
+#include <vector>
 #include "gtest/gtest.h"
 #include "C_SclChecksums.hpp"
 
@@ -113,3 +115,67 @@ TEST(Checksums, NullPointer_DoesNotCrash)
    EXPECT_NO_FATAL_FAILURE(stw::scl::C_SclChecksums::CalcCRC16(nullptr, 0, u16_Crc16));
    EXPECT_NO_FATAL_FAILURE(stw::scl::C_SclChecksums::CalcCRC16STW(nullptr, 0, u16_Crc16));
 }
+
+// CRC-32C (Castagnoli): init 0xFFFFFFFF, NO final XOR -- the CalcCRC32C convention
+// that matches the SSE4.2 _mm_crc32 primitive.
+TEST(Checksums, CalcCRC32C_CheckValue)
+{
+   uint32_t u32_Crc = 0xFFFFFFFFU;
+   stw::scl::C_SclChecksums::CalcCRC32C(kac_TestString, ku32_TestStringLen, u32_Crc);
+   EXPECT_EQ(0x1CF96D7CU, u32_Crc);
+}
+
+TEST(Checksums, CalcCRC32C_Empty)
+{
+   uint32_t u32_Crc = 0xFFFFFFFFU;
+   stw::scl::C_SclChecksums::CalcCRC32C("", 0, u32_Crc);
+   EXPECT_EQ(0xFFFFFFFFU, u32_Crc);
+}
+
+TEST(Checksums, CalcCRC32C_Incremental)
+{
+   uint32_t u32_Crc = 0xFFFFFFFFU;
+   stw::scl::C_SclChecksums::CalcCRC32C(kac_TestString, 4, u32_Crc);
+   stw::scl::C_SclChecksums::CalcCRC32C(kac_TestString + 4, 5, u32_Crc);
+   EXPECT_EQ(0x1CF96D7CU, u32_Crc);
+}
+
+namespace
+{
+//Independent reference CRC-32C so HW==SW==expected is checked regardless of path.
+uint32_t mh_ReferenceCRC32C(const void * const opv_Data, const uint32_t ou32_Len, uint32_t u32_Crc)
+{
+   const uint8_t * const pu8_Data = static_cast<const uint8_t *>(opv_Data);
+   uint32_t au32_Table[256];
+   for (uint32_t u32_I = 0U; u32_I < 256U; u32_I++)
+   {
+      uint32_t u32_C = u32_I;
+      for (uint32_t u32_Bit = 0U; u32_Bit < 8U; u32_Bit++)
+      {
+         u32_C = (u32_C & 1U) ? ((u32_C >> 1U) ^ 0x82F63B78U) : (u32_C >> 1U);
+      }
+      au32_Table[u32_I] = u32_C;
+   }
+   for (uint32_t u32_I = 0U; u32_I < ou32_Len; u32_I++)
+   {
+      u32_Crc = (u32_Crc >> 8U) ^ au32_Table[(u32_Crc ^ pu8_Data[u32_I]) & 0xFFU];
+   }
+   return u32_Crc;
+}
+}
+
+TEST(Checksums, CalcCRC32C_MatchesReference)
+{
+   std::vector<uint8_t> c_Buffer(1024);
+   for (std::size_t u32_I = 0U; u32_I < c_Buffer.size(); u32_I++)
+   {
+      c_Buffer[u32_I] = static_cast<uint8_t>((u32_I * 37U) & 0xFFU);
+   }
+   for (const uint32_t u32_Len : {0U, 1U, 4U, 5U, 16U, 63U, 64U, 1024U})
+   {
+      uint32_t u32_Crc = 0xFFFFFFFFU;
+      stw::scl::C_SclChecksums::CalcCRC32C(c_Buffer.data(), u32_Len, u32_Crc);
+      EXPECT_EQ(mh_ReferenceCRC32C(c_Buffer.data(), u32_Len, 0xFFFFFFFFU), u32_Crc) << "len=" << u32_Len;
+   }
+}
+

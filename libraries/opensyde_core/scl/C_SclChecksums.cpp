@@ -15,6 +15,12 @@
 #include "stwtypes.hpp"
 #include "C_SclChecksums.hpp"
 
+#include <array>
+#include <cstring>
+#if (defined(__x86_64__) || defined(__i386__)) && (defined(__GNUC__) || defined(__clang__))
+#include <nmmintrin.h>
+#endif
+
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::scl;
@@ -173,6 +179,77 @@ void C_SclChecksums::CalcCRC16(const void * const opv_Start, const uint32_t ou32
    \param[in,out] oru32_Crc      start checksum / resulting checksum
 */
 //----------------------------------------------------------------------------------------------------------------------
+//CRC-32C (Castagnoli) 32-bit lookup table, reflected poly 0x82F63B78.
+namespace
+{
+#if (defined(__x86_64__) || defined(__i386__)) && (defined(__GNUC__) || defined(__clang__))
+//SSE4.2 CRC-32C helper. target()-scoped so no global -msse4.2 flag is needed;
+//only this function can emit _mm_crc32 instructions. Caller must have verified
+//__builtin_cpu_supports("sse4.2").
+__attribute__((target("sse4.2")))
+uint32_t mh_CalcCRC32CHardware(const uint8_t * const opu8_Data, const uint32_t ou32_NumBytes, uint32_t u32_Crc)
+{
+   const uint8_t * pu8_Pos = opu8_Data;
+   const uint8_t * const pu8_End = opu8_Data + ou32_NumBytes;
+   //4-byte chunks where possible, byte-wise tail (matches the software path bit for bit)
+   while ((pu8_Pos + 4U) <= pu8_End)
+   {
+      uint32_t u32_Chunk;
+      std::memcpy(&u32_Chunk, pu8_Pos, 4U);
+      u32_Crc = _mm_crc32_u32(u32_Crc, u32_Chunk);
+      pu8_Pos += 4U;
+   }
+   while (pu8_Pos < pu8_End)
+   {
+      u32_Crc = _mm_crc32_u8(u32_Crc, *pu8_Pos);
+      pu8_Pos++;
+   }
+   return u32_Crc;
+}
+#endif
+
+constexpr uint32_t mh_CalcCRC32CTableEntry(const uint8_t ou8_Index)
+{
+   uint32_t u32_Crc = static_cast<uint32_t>(ou8_Index);
+   for (uint32_t u32_Bit = 0U; u32_Bit < 8U; u32_Bit++)
+   {
+      u32_Crc = ((u32_Crc & 1U) != 0U) ? ((u32_Crc >> 1U) ^ 0x82F63B78U) : (u32_Crc >> 1U);
+   }
+   return u32_Crc;
+}
+
+constexpr std::array<uint32_t, 256> hc_CRC32C_TABLE = []()
+{
+   std::array<uint32_t, 256> c_Table = {};
+   for (uint32_t u32_Index = 0U; u32_Index < 256U; u32_Index++)
+   {
+      c_Table[u32_Index] = mh_CalcCRC32CTableEntry(static_cast<uint8_t>(u32_Index));
+   }
+   return c_Table;
+}();
+}
+
+void C_SclChecksums::CalcCRC32C(const void * const opv_Start, const uint32_t ou32_NumBytes, uint32_t & oru32_Crc)
+{
+   const uint8_t * const pu8_Data = reinterpret_cast<const uint8_t *>(opv_Start); //lint !e925 we need to parse
+
+#if (defined(__x86_64__) || defined(__i386__)) && (defined(__GNUC__) || defined(__clang__)) && !defined(__OPTIMIZE_SIZE__)
+   //Runtime-detect SSE4.2; the helper is attribute-scoped so the intrinsic compiles
+   //without a TU-wide -msse4.2 (which would poison the precompiled header and could
+   //emit SSE4.2 instructions into unrelated, unguarded functions).
+   if (__builtin_cpu_supports("sse4.2"))
+   {
+      oru32_Crc = mh_CalcCRC32CHardware(pu8_Data, ou32_NumBytes, oru32_Crc);
+      return;
+   }
+#endif
+
+   //Software fallback; results are identical to the SSE4.2 path.
+   for (uint32_t u32_Index = 0U; u32_Index < ou32_NumBytes; u32_Index++)
+   {
+      oru32_Crc = (hc_CRC32C_TABLE[((oru32_Crc) ^ (pu8_Data[u32_Index])) & 0xFFU] ^ ((oru32_Crc) >> 8U));
+   }
+}
 void C_SclChecksums::CalcCRC32(const void * const opv_Start, const uint32_t ou32_NumBytes, uint32_t & oru32_Crc)
 {
    const uint8_t * const pu8_Data = reinterpret_cast<const uint8_t *>(opv_Start); //lint !e925 we need to parse

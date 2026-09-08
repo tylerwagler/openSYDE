@@ -1,22 +1,19 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       openSYDE core benchmark: CRC32 software vs SSE4.2 hardware
+   \brief       openSYDE core benchmark: CRC32 vs CRC-32C (hardware-accelerated)
 
-   Phase 7.2 target. Compares the core's software table-based CRC32
-   (C_SclChecksums::CalcCRC32, reflected poly 0xEDB88320) against a bench-local
-   SSE4.2 _mm_crc32 reference, so the hardware acceleration claim can be measured
-   before anything is landed in the core.
-
-   NOTE for when 7.2 lands: _mm_crc32_u32/_u64 implement CRC-32C (Castagnoli,
-   poly 0x1EDC6F41), which produces DIFFERENT values than the STW software CRC.
-   The throughput win shown here is the motivation; the fix must either switch the
-   checksum semantics or accept a new CRC (and invalidate stored values).
+   Phase 7.2 target. Compares the core's table-driven software CRC32
+   (C_SclChecksums::CalcCRC32, poly 0xEDB88320) against the new
+   C_SclChecksums::CalcCRC32C, which auto-selects an SSE4.2 _mm_crc32 fast path at
+   runtime when the CPU supports it. Both produce identical bus traffic for their
+   own polynomial; note the polynomials DIFFER (CalcCRC32C is Castagnoli / CRC-32C
+   per its documentation), so the numbers here are the cost comparison, not proof
+   of interchangeable results.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <cstdint>
-#include <cstring>
 #include <vector>
 
 #include "benchmark/benchmark.h"
@@ -35,6 +32,12 @@ std::vector<uint8_t> mh_MakeBuffer(benchmark::State & orc_State)
    }
    return c_Buffer;
 }
+
+void mh_ReportRate(benchmark::State & orc_State)
+{
+   orc_State.SetBytesProcessed(static_cast<int64_t>(orc_State.iterations()) *
+                               static_cast<int64_t>(orc_State.range(0)));
+}
 }
 
 static void BM_CRC32_Software(benchmark::State & orc_State)
@@ -47,43 +50,24 @@ static void BM_CRC32_Software(benchmark::State & orc_State)
       stw::scl::C_SclChecksums::CalcCRC32(c_Buffer.data(), static_cast<uint32_t>(c_Buffer.size()), u32_Crc);
       benchmark::DoNotOptimize(u32_Crc);
    }
-   orc_State.SetBytesProcessed(static_cast<int64_t>(orc_State.iterations()) * static_cast<int64_t>(orc_State.range(0)));
+   mh_ReportRate(orc_State);
 }
 BENCHMARK(BM_CRC32_Software)
    ->RangeMultiplier(4)
    ->Range(1 << 10, 1 << 20);
 
-#ifdef __SSE4_2__
-#include <nmmintrin.h>
-
-static void BM_CRC32_SSE4_2(benchmark::State & orc_State)
+static void BM_CRC32C_Auto(benchmark::State & orc_State)
 {
    const std::vector<uint8_t> c_Buffer = mh_MakeBuffer(orc_State);
+   uint32_t u32_Crc = 0xFFFFFFFFU;
 
    for (auto _ : orc_State)
    {
-      uint32_t u32_Crc = 0xFFFFFFFFU;
-      const uint8_t * pu8_Pos = c_Buffer.data();
-      const uint8_t * const pu8_End = pu8_Pos + c_Buffer.size();
-
-      // 8 bytes per _mm_crc32_u64 (unaligned load via memcpy to stay well-defined).
-      while ((pu8_Pos + 8) <= pu8_End)
-      {
-         uint64_t u64_Chunk;
-         std::memcpy(&u64_Chunk, pu8_Pos, 8U);
-         u32_Crc = _mm_crc32_u64(u32_Crc, u64_Chunk);
-         pu8_Pos += 8U;
-      }
-      while (pu8_Pos < pu8_End)
-      {
-         u32_Crc = _mm_crc32_u8(u32_Crc, *pu8_Pos);
-         pu8_Pos++;
-      }
+      stw::scl::C_SclChecksums::CalcCRC32C(c_Buffer.data(), static_cast<uint32_t>(c_Buffer.size()), u32_Crc);
       benchmark::DoNotOptimize(u32_Crc);
    }
-   orc_State.SetBytesProcessed(static_cast<int64_t>(orc_State.iterations()) * static_cast<int64_t>(orc_State.range(0)));
+   mh_ReportRate(orc_State);
 }
-BENCHMARK(BM_CRC32_SSE4_2)
+BENCHMARK(BM_CRC32C_Auto)
    ->RangeMultiplier(4)
    ->Range(1 << 10, 1 << 20);
-#endif
