@@ -165,7 +165,7 @@ void C_CieExportReportWidget::m_BuildReport(void)
       for (uint32_t u32_Pos = 0; u32_Pos < this->mc_Warnings.size(); u32_Pos++)
       {
          c_Warnings += "<br/>";
-         c_Warnings += this->mc_Warnings.Strings[u32_Pos];
+         c_Warnings += this->mc_Warnings[u32_Pos];
       }
    }
 

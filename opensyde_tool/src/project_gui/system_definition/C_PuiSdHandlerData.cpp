@@ -344,9 +344,9 @@ void C_PuiSdHandlerData::Clear(const bool oq_TriggerSyncSignals)
    this->mc_CoreDefinition.c_NodeSquads.clear();
    this->mc_CoreDefinition.c_Buses.clear();
    this->mc_CoreDefinition.c_Nodes.clear();
-   this->c_Elements.clear();
+   this->c_Elements.Clear();
    this->c_BusTextElements.clear();
-   this->mc_SharedDatapools.clear();
+   this->mc_SharedDatapools.Clear();
    this->mc_LastKnownHalcCrcs.clear();
 
    //Reset hash

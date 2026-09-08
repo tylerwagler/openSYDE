@@ -20,6 +20,7 @@
 #include "C_OscNode.hpp"
 
 #include "constants.hpp"
+#include "C_SclStringCompat.hpp"
 #include "TglUtils.hpp"
 #include "C_HeHandler.hpp"
 #include "C_UsHandler.hpp"
@@ -44,6 +45,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::tgl;
 using namespace stw::errors;
+using namespace stw::scl;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;

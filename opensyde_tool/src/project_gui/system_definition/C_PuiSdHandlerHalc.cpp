@@ -514,7 +514,7 @@ int32_t C_PuiSdHandlerHalc::ClearHalcConfig(const uint32_t ou32_NodeIndex)
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      rc_Node.c_HalcConfig.clear();
+      rc_Node.c_HalcConfig.Clear();
 
       // reset hash for this node's halc config if there already exists a hash value for this node's halc config
       // [] sets the value if key was found, otherwise creates a new key value pair

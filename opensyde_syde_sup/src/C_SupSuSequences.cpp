@@ -211,7 +211,7 @@ void C_SupSuSequences::m_ReportOpenSydeFlashloaderInformationRead(
    h_OpenSydeFlashloaderInformationToText(orc_Info, c_Text);
    for (uint32_t u32_Line = 0U; u32_Line < c_Text.size(); u32_Line++)
    {
-      c_Message += c_Text.Strings[u32_Line] + "\n";
+      c_Message += c_Text[u32_Line] + "\n";
    }
 
    this->m_WriteLog(c_Message);

@@ -203,7 +203,7 @@ void C_CieDataPoolListAdapter::mh_FillUpCoreStructureByDbcValues(
          std::string c_Tmp;
          for (uint32_t u32_Pos = 0; u32_Pos < c_CanMessageIter->c_Warnings.size(); u32_Pos++)
          {
-            c_Tmp += c_CanMessageIter->c_Warnings.Strings[u32_Pos];
+            c_Tmp += c_CanMessageIter->c_Warnings[u32_Pos];
             c_Tmp += mc_MessageLineBreak;
          }
          orc_WarningMessages.emplace_back(c_Tmp.c_str());

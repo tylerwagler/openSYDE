@@ -18,7 +18,6 @@
 #include <cmath>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
@@ -371,12 +370,12 @@ void C_FlaUpSequences::m_ReportFlashloaderInformationRead(const std::string & or
    for (uint32_t u32_Line = 0U; u32_Line < c_Lines.size(); u32_Line++)
    {
       c_ProgressText += "  ";
-      c_ProgressText += c_Lines.Strings[u32_Line].c_str();
+      c_ProgressText += c_Lines[u32_Line].c_str();
       if (u32_Line != (c_Lines.size() - 1))
       {
          c_ProgressText += "\n";
       }
-      osc_write_log_info("Flashloader Info", c_Lines.Strings[u32_Line]);
+      osc_write_log_info("Flashloader Info", c_Lines[u32_Line]);
    }
 
    Q_EMIT (this->SigReportFlashloaderInformationText(c_ProgressText));

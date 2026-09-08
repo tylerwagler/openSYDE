@@ -151,7 +151,7 @@ void C_CamCanTpDecoder::m_CleanupStaleSessions(void)
 void C_CamCanTpDecoder::m_ClassifyFrame(const stw::can::T_STWCAN_Msg_RX & orc_Msg,
                                          C_CamCanTpResult & orc_Result)
 {
-   orc_Result.clear();
+   orc_Result.Clear();
 
    // Minimum DLC check
    if (orc_Msg.u8_DLC < mhu8_MIN_TP_DLC)
@@ -376,7 +376,7 @@ void C_CamCanTpDecoder::m_HandleFlowControl(const stw::can::T_STWCAN_Msg_RX & or
 void C_CamCanTpDecoder::ProcessFrame(const stw::can::T_STWCAN_Msg_RX & orc_Msg,
                                       C_CamCanTpResult & orc_Result)
 {
-   orc_Result.clear();
+   orc_Result.Clear();
 
    if (!this->mq_Enabled)
    {

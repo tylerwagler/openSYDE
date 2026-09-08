@@ -695,7 +695,7 @@ int32_t C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex, const C_OscCan
             QString c_Warnings;
             for (uint32_t u32_Pos = 0; u32_Pos < c_WarningMessages.size(); u32_Pos++)
             {
-               c_Warnings += c_WarningMessages.Strings[u32_Pos].c_str();
+               c_Warnings += c_WarningMessages[u32_Pos].c_str();
                c_Warnings += "\n";
             }
             C_OgeWiCustomMessage c_ImportWarnings(opc_Parent, C_OgeWiCustomMessage::E_Type::eWARNING);

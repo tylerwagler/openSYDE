@@ -19,7 +19,6 @@
 #include "C_BasicUpdateSequence.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -95,7 +94,7 @@ void C_BasicUpdateSequence::m_ReportFlashloaderInformationRead(const std::string
    std::cout << "openSYDE device information read: " << "\n";
    for (uint32_t u32_Line = 0U; u32_Line < c_Text.size(); u32_Line++)
    {
-      std::cout << "  " << c_Text.Strings[u32_Line].c_str() << "\n";
-      osc_write_log_info("Flashloader Info", c_Text.Strings[u32_Line]);
+      std::cout << "  " << c_Text[u32_Line].c_str() << "\n";
+      osc_write_log_info("Flashloader Info", c_Text[u32_Line]);
    }
 }

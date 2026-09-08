@@ -1139,7 +1139,7 @@ void C_CamProHandler::Clear(const bool oq_UpdateUserSettings)
    this->mc_Databases.clear();
    this->mc_File = "";
    this->mc_AdapterConfig = stw::opensyde_core::C_OscCanAdapterConfig::h_GetPlatformDefault();
-   this->mc_LoggingData.clear();
+   this->mc_LoggingData.Clear();
 
    this->mu32_FileHash = this->m_GetHash();
    if (oq_UpdateUserSettings)

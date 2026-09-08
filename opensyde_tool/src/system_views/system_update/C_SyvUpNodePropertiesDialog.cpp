@@ -848,14 +848,14 @@ void C_SyvUpNodePropertiesDialog::mh_InitFlashloaderTableForNode(const C_GiSvSub
    {
       C_OscSuSequences::h_OpenSydeFlashloaderInformationToText(*c_DeviceInfo.pc_OpenSydeDevice, c_List);
    }
-   if (c_List.Strings.size() > 1)
+   if (c_List.size() > 1)
    {
       c_NewContent +=
          static_cast<QString>("Note: Flashloader data is read during \"Enter Update Mode\"");
       c_NewContent += "<p>";
-      for (uint32_t u32_ItString = 0UL; u32_ItString < c_List.Strings.size(); ++u32_ItString)
+      for (uint32_t u32_ItString = 0UL; u32_ItString < c_List.size(); ++u32_ItString)
       {
-         c_NewContent += static_cast<QString>(c_List.Strings[u32_ItString].c_str()) + "<br/>";
+         c_NewContent += static_cast<QString>(c_List[u32_ItString].c_str()) + "<br/>";
       }
       c_NewContent += "</p>";
    }
