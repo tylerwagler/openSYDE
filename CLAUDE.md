@@ -290,7 +290,7 @@ detail.
 | 3 — Retire `C_SclString` → `std::string` | Done |
 | 3x — Retire `C_SclStringList` → `std::vector` (phase 3 follow-up) | Done |
 | 4 — Replace homegrown AES | Done for files; wire protocol deliberately out of scope. `C_OscSecurityAesFile` is AES-256-GCM + PBKDF2 (600k) with a versioned 56-byte header and key wiping. `C_OscSecurityAesCbc` remains AES-128-CBC and is still used by `C_OscProtocolSecuritySubLayer` — changing that is an ECU-side protocol change, not a PC-side one |
-| 5 — Error handling modernization | In progress — `C_OscErrorCategory` (`Errc` + `STWErrorCategory`), `hex_file` has its own category. Waves done: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc. Remaining: `protocol_drivers` (~292) and `project` (~204, ~640 caller files) — each large enough to run alone |
+| 5 — Error handling modernization | Done — every STW `int32_t` error return in `opensyde_core` is `std::error_code` (9 waves: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc, protocol_drivers, dispatchers/xml_parser/project plus a final six). Bridging scaffolding fell 238 → 8; 19 functions stay `int32_t` on purpose (foreign conventions). No `static_cast<Errc>` misuse remains |
 | 6 — Concurrency & singletons | 6.1 done (`std::call_once`; Meyer's singleton rejected). 6.2 done (`C_TglCriticalSection` and `TglTasks` deleted, 52 sites on `std::mutex`). 6.3 closed — no defect found |
 | 7 — Performance | Not started |
 | 8 — Build system modernization | Done — CMake minimum 3.25, CI reworked, ccache added, unified root build (one opensyde_core, all eight tools). C++23 adopted tree-wide (root + core + tool toolchains) on 2026-09-08 |
