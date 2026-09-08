@@ -981,9 +981,12 @@ void C_PuiBsElementsFiler::mh_PixmapToString(const QPixmap & orc_Pixmap, const Q
    // use PNG as default image format as we had PNG hard-coded in previous implementation
    const QByteArray c_Format = orc_Format.isEmpty() ? "png" : orc_Format;
 
-   c_PixmapBuffer.open(QIODevice::WriteOnly);
-   orc_Pixmap.save(&c_PixmapBuffer, c_Format);
-   c_PixmapBuffer.close();
+     if (c_PixmapBuffer.open(QIODevice::WriteOnly))
+   {
+      orc_Pixmap.save(&c_PixmapBuffer, c_Format);
+      c_PixmapBuffer.close();
+   }
+
 
    orc_String = QString::fromUtf8(c_PixmapAsByteArray.toBase64());
 }
