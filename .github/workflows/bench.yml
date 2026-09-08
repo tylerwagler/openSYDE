@@ -1,0 +1,55 @@
+# -------------------------------------------------------------------------------------------------------------------
+# Phase 7 benchmark run on the production toolchain.
+#
+# The opensyde_core bench harness (OPENSYDE_CORE_BUILD_BENCHMARKS, Google Benchmark)
+# measures the Phase 7.1/7.2 exit criteria. Local measurements use the dev box's
+# libstdc++-14; the code ships built with whatever the runner has (GCC 15 on
+# ubuntu-26.04). This job reports the numbers that actually count.
+#
+# Run manually: gh workflow run bench.yml --ref develop
+# -------------------------------------------------------------------------------------------------------------------
+
+name: Benchmarks
+
+on:
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+  core-bench:
+    name: Core Bench (ubuntu-26.04)
+    runs-on: ubuntu-26.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            cmake ninja-build g++ \
+            libssl-dev \
+            flex bison libfl-dev
+
+      - name: Configure (benchmarks on)
+        run: >
+          cmake
+          -S libraries/opensyde_core
+          -B build/bench
+          -G Ninja
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          -DOPENSYDE_CORE_BUILD_BENCHMARKS=ON
+          -DOPENSYDE_CORE_SKIP_WINDOWS_DRIVERS=ON
+          -DOPENSYDE_CORE_SKIP_WINDOWS_TARGET=ON
+
+      - name: Build benchmark binary
+        run: cmake --build build/bench -j $(nproc) --target bench_opensyde
+
+      - name: Run benchmarks
+        run: |
+          g++ --version | head -1
+          ./build/bench/bench_opensyde --benchmark_min_time=1.0s
