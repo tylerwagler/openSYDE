@@ -324,6 +324,7 @@ Two problems, neither about effort:
    criteria either way.
 
 Prerequisite for Phase 7: add a benchmark harness, then decide on the C++20
+(C++ standard decision RESOLVED 2026-09-08: C++23 adopted tree-wide, all Linux lanes)
 question. Neither is performance work as such.
 
 ### Phase 8 — the unified root build is not a refactor, and here is why

@@ -12,10 +12,10 @@ set(CMAKE_SYSTEM_PROCESSOR "${_host_arch}")
 set(CMAKE_C_COMPILER gcc)
 set(CMAKE_C_FLAGS "-Wall -Wextra -Wpedantic")
 set(CMAKE_CXX_COMPILER g++)
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -std=c++17")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -std=c++23")
 
 # Enable C++17 standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Linker flags

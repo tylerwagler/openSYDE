@@ -45,6 +45,12 @@
 cmake_minimum_required(VERSION 3.24)
 project("opensyde_core")
 
+# This library ships as part of the eight tools and is also configured standalone
+# (the CI core job); pin the C++23 standard like the consuming toolchains do so
+# every build lane compiles the same language mode.
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # --- libcan dependency -----------------------------------------------------------------------------------------------
 # opensyde_core's CAN abstraction (C_CanDispatcher) is now backed by libcan from the
 # can-libraries project, vendored as a git submodule at libraries/can-libraries. The

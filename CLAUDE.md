@@ -293,7 +293,7 @@ detail.
 | 5 — Error handling modernization | In progress — `C_OscErrorCategory` (`Errc` + `STWErrorCategory`), `hex_file` has its own category. Waves done: security, imports, data_dealer, zip, cmon_protocols, system_package_handling, halc. Remaining: `protocol_drivers` (~292) and `project` (~204, ~640 caller files) — each large enough to run alone |
 | 6 — Concurrency & singletons | 6.1 done (`std::call_once`; Meyer's singleton rejected). 6.2 done (`C_TglCriticalSection` and `TglTasks` deleted, 52 sites on `std::mutex`). 6.3 closed — no defect found |
 | 7 — Performance | Not started |
-| 8 — Build system modernization | Partial — CMake minimum 3.25, CI reworked, ccache added. Unified root build still open |
+| 8 — Build system modernization | Done — CMake minimum 3.25, CI reworked, ccache added, unified root build (one opensyde_core, all eight tools). C++23 adopted tree-wide (root + core + tool toolchains) on 2026-09-08 |
 
 Cross-cutting follow-ups (dark mode, Linux version string, About dialog) live in
 `docs/TODO.md`; in-code `TODO`/`FIXME` markers are catalogued in
